@@ -1,0 +1,27 @@
+<html>
+<body>
+
+Provides classes and interfaces for the template engine.
+<p>
+Almost all template engines start out with a desire to seperate design from logic, they allow users to push or pull values into the template and then they get stuck. Design is far more complex than setting a couple of values, so they start providing simple logical constructs and loops, maybe even variables, blocks and scopes, functions to reuse code, etc etc ... and in the end run incorporate an entire language (JSP) or create a new one (PHP). All this is based on the assumption that the logic provides data to the design which is then decorated and rendered from within the template. Imho, a fundamental last step is missing which creates an overly complex model to try to simulate it.
+<p>
+When data has been integrated into a design, a template engine should allow the logic to retrieve the result and use the concrete version of the templated layout for real output and manipulation. This means that together with incorporating data, a template engine should also provide results and thus be able to work in a bidirectional fashion instead of the limited common unidirectional approach.</p>
+<p>
+All of a sudden the template engine then becomes extremely simple, no need to integrate any kind of logical constructs or loops, the same logic that provided the data is able to select or repeat results easily. It can extract and combine them and if the template engine is powerful enough, use it as a scratchpad to assemble all the pieces of the layout in an efficient manner. All the required information is already available in the logic. You also don't have to worry anymore about just how much logic bleeds into a template. The entire template becomes totally language independent and designer-friendly.
+
+<h2>Related Documentation</h2>
+
+For overviews, tutorials, examples, guides, and documentation, please see:
+<ul>
+	<li><a href="http://rifers.org/docs/usersguide/ch04.html">[User's guide] Chapter 4. Templates</a></li>
+	<li><a href="http://rifers.org/docs/usersguide/ch09.html#sect1_templates_adv_construction">[User's guide] Chapter 9. Cookbook: Filling out templates using beans</a></li>
+	<li><a href="http://rifers.org/wiki/display/RIFE/Templates">[Wiki] Templates</a></li>
+	<li><a href="http://rifers.org/examples/#D.2">[Examples] Recursive templating</a></li>
+	<li><a href="http://rifers.org/examples/#D.3">[Examples] Number guess game</a></li>
+	<li><a href="http://rifers.org/examples/#D.4">[Examples] Number guess game with continuations</a></li>
+	<li><a href="http://rifers.org/examples/#D.5">[Examples] Friends listing</a></li>
+	<li><a href="http://rifers.org/examples/#D.6">[Examples] Frames through inheritance</a></li>
+</ul>
+
+</body>
+</html>

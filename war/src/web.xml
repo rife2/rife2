@@ -1,0 +1,19 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+
+	<filter>
+		<filter-name>RIFE2</filter-name>
+		<filter-class>rife.servlet.RifeFilter</filter-class>
+		<init-param>
+			<param-name>rifeSiteClass</param-name>
+			<param-value>rife.TestSite</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>RIFE2</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+</web-app>

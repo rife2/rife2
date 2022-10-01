@@ -1,0 +1,29 @@
+plugins {
+    `java-library`
+}
+
+base {
+    archivesName.set("rife-site")
+    version = 1.0
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    implementation(project(":lib"))
+}
+
+tasks.named<Test>("test") {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}

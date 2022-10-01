@@ -1,0 +1,13 @@
+/*
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ */
+package rife.template;
+
+public class Parsed {
+    private final Parser parser_;
+
+    Parsed(Parser parser) {
+        parser_ = parser;
+    }
+}

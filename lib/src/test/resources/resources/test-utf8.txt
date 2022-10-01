@@ -1,0 +1,10 @@
+This just contains some text to
+verify if
+
+resources can be found
+
+and
+read
+
+correctly.
+Here are some encoding-specific chars : ¡¢£¤¥¦§¨©ª«¬­®.
