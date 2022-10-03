@@ -203,7 +203,7 @@ public class TestTemplateFactory {
             }
 
             // overwrite the template file with new content
-            URL template2_resource = TemplateFactory.HTML.getParser().resolve("test_package.noblocks_in");
+            URL template2_resource = TemplateFactory.HTML.getParser().resolve("noblocks_in");
             try {
                 FileUtils.copy(template2_resource.openStream(), template1_file);
             } catch (FileUtilsErrorException | IOException e) {

@@ -29,4 +29,12 @@ class ParsedBlockData extends ArrayList<ParsedBlockPart> {
 
         return get(index);
     }
+
+    ParsedBlockPart getLastPart() {
+        if (isEmpty()) {
+            return null;
+        }
+
+        return get(size()-1);
+    }
 }

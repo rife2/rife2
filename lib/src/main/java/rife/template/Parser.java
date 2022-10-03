@@ -106,6 +106,18 @@ public class Parser implements Cloneable {
         return true;
     }
 
+    public Parsed parse(String name, String encoding, TemplateTransformer transformer)
+    throws TemplateException {
+        if (null == name) throw new IllegalArgumentException("name can't be null.");
+
+        URL resource = resolve(name);
+        if (null == resource) {
+            throw new TemplateNotFoundException(name, null);
+        }
+
+        return parse(prepare(name, resource), encoding, transformer);
+    }
+
     public URL resolve(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
 
@@ -347,12 +359,22 @@ public class Parser implements Cloneable {
         }
 
         @Override
-        public void enterContent(TemplateHtmlParser.ContentContext ctx) {
+        public void enterBlockContent(TemplateHtmlParser.BlockContentContext ctx) {
 
         }
 
         @Override
-        public void exitContent(TemplateHtmlParser.ContentContext ctx) {
+        public void exitBlockContent(TemplateHtmlParser.BlockContentContext ctx) {
+
+        }
+
+        @Override
+        public void enterValueContent(TemplateHtmlParser.ValueContentContext ctx) {
+
+        }
+
+        @Override
+        public void exitValueContent(TemplateHtmlParser.ValueContentContext ctx) {
 
         }
 
@@ -456,8 +478,7 @@ public class Parser implements Cloneable {
             blockIds_.push(block_id);
 
             var current_block = blocks_.get(block_id);
-            if (null == current_block)
-            {
+            if (null == current_block) {
                 current_block = new ParsedBlockData();
                 blocks_.put(block_id, current_block);
             }
@@ -486,7 +507,14 @@ public class Parser implements Cloneable {
         public void exitBlockData(TemplateHtmlParser.BlockDataContext ctx) {
             String block_id = blockIds_.peek();
             if (block_id != null) {
-                blocks_.get(block_id).add(new ParsedBlockText(ctx.getText()));
+                var data = blocks_.get(block_id);
+                var last = data.getLastPart();
+                if (last != null && last.getType() == ParsedBlockPart.Type.TEXT) {
+                    var text_part = (ParsedBlockText) last;
+                    text_part.setData(text_part.getData() + ctx.getText());
+                } else {
+                    data.add(new ParsedBlockText(ctx.getText()));
+                }
             }
         }
 

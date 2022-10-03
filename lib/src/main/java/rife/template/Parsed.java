@@ -234,9 +234,9 @@ method.visitLabel              (internal_labels[i]);
 					while (block_data_it.hasNext()) {
 						block_part = block_data_it.next();
 
-						if (ParsedBlockPart.TEXT == block_part.getType()) {
+						if (ParsedBlockPart.Type.TEXT == block_part.getType()) {
 							text_count++;
-						} else if (ParsedBlockPart.VALUE == block_part.getType()) {
+						} else if (ParsedBlockPart.Type.VALUE == block_part.getType()) {
 							value_count++;
 						}
 					}
@@ -281,9 +281,9 @@ method.visitJumpInsn           (IFEQ, after_key_label);
 						while (block_data_it.hasNext()) {
 							block_part = block_data_it.next();
 
-							if (ParsedBlockPart.TEXT == block_part.getType()) {
+							if (ParsedBlockPart.Type.TEXT == block_part.getType()) {
 								text_count++;
-							} else if (ParsedBlockPart.VALUE == block_part.getType()) {
+							} else if (ParsedBlockPart.Type.VALUE == block_part.getType()) {
 								value_count++;
 							}
 						}

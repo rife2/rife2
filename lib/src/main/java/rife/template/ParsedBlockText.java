@@ -7,6 +7,8 @@ package rife.template;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 
+import static rife.template.ParsedBlockPart.Type.TEXT;
+
 class ParsedBlockText extends ParsedBlockPart {
     private String text_ = null;
 
@@ -17,11 +19,15 @@ class ParsedBlockText extends ParsedBlockPart {
         text_ = text;
     }
 
+    void setData(String text) {
+        text_ = text;
+    }
+
     String getData() {
         return text_;
     }
 
-    int getType() {
+    Type getType() {
         return TEXT;
     }
 

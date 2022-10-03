@@ -9,12 +9,13 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 abstract class ParsedBlockPart implements Opcodes {
-    public static final int TEXT = 0;
-    public static final int VALUE = 1;
+    public enum Type {
+        TEXT, VALUE
+    }
 
     abstract String getData();
 
-    abstract int getType();
+    abstract Type getType();
 
     abstract void visitByteCodeExternalForm(MethodVisitor visitor, String className, String staticIdentifier);
 

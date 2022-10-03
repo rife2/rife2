@@ -5,29 +5,29 @@ parser grammar TemplateHtmlParser;
 
 options { tokenVocab=TemplateHtmlLexer; }
 
-document    :   content EOF ;
+document        :   blockContent EOF ;
 
-content     :   blockData*
-                ((tagV|tagVDefault|tagB|tagBV|tagBA|tagI) blockData*)* ;
+blockContent    :   blockData* ((tagV|tagVDefault|tagB|tagBV|tagBA|tagI) blockData*)* ;
+valueContent    :   valueData* ((tagB|tagBV|tagBA|tagI) valueData*)* ;
 
 tagV        :   TSTART_V TS TTagName TS? TSTERM
             |   CSTART_V CS CTagName CS? CSTERM
             ;
 
-tagVDefault :   TSTART_V TS TTagName TS? TENDI valueData? TCLOSE_V
-            |   CSTART_V CS CTagName CS? CENDI valueData? CCLOSE_V
+tagVDefault :   TSTART_V TS TTagName TS? TENDI valueContent TCLOSE_V
+            |   CSTART_V CS CTagName CS? CENDI valueContent CCLOSE_V
             ;
 
-tagB        :   TSTART_B TS TTagName TS? TENDI content TCLOSE_B
-            |   CSTART_B CS CTagName CS? CENDI content CCLOSE_B
+tagB        :   TSTART_B TS TTagName TS? TENDI blockContent TCLOSE_B
+            |   CSTART_B CS CTagName CS? CENDI blockContent CCLOSE_B
             ;
 
-tagBV       :   TSTART_BV TS TTagName TS? TENDI content TCLOSE_BV
-            |   CSTART_BV CS CTagName CS? CENDI content CCLOSE_BV
+tagBV       :   TSTART_BV TS TTagName TS? TENDI blockContent TCLOSE_BV
+            |   CSTART_BV CS CTagName CS? CENDI blockContent CCLOSE_BV
             ;
 
-tagBA       :   TSTART_BA TS TTagName TS? TENDI content TCLOSE_BA
-            |   CSTART_BA CS CTagName CS? CENDI content CCLOSE_BA
+tagBA       :   TSTART_BA TS TTagName TS? TENDI blockContent TCLOSE_BA
+            |   CSTART_BA CS CTagName CS? CENDI blockContent CCLOSE_BA
             ;
 
 tagI        :   TSTART_I TS TTagName TS? TSTERM

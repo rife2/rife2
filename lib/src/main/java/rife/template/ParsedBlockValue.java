@@ -7,6 +7,8 @@ package rife.template;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 
+import static rife.template.ParsedBlockPart.Type.VALUE;
+
 public class ParsedBlockValue extends ParsedBlockPart {
     private String valueKey_ = null;
     private String valueTag_ = null;
@@ -29,7 +31,7 @@ public class ParsedBlockValue extends ParsedBlockPart {
         return valueTag_;
     }
 
-    int getType() {
+    Type getType() {
         return VALUE;
     }
 
