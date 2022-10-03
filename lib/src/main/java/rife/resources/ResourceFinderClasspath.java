@@ -29,7 +29,6 @@ import java.net.URLConnection;
  * the same instance as a singleton.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @version $Revision$
  * @see rife.resources.ResourceFinder
  * @since 1.0
  */

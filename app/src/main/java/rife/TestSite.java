@@ -9,6 +9,7 @@ import rife.engine.Element;
 import rife.engine.Site;
 import rife.engine.annotations.Parameter;
 import rife.server.Server;
+import rife.template.Template;
 
 public class TestSite extends Site {
     public static void main(String[] args) {
@@ -28,7 +29,10 @@ public class TestSite extends Site {
 
         @Override
         public void process(Context context) {
-            context.print("test2 " + one + " " + two);
+            Template template = context.getHtmlTemplate("Example");
+            template.setValue("one", one);
+            template.setValue("two", two);
+            context.print(template);
         }
     }
 }

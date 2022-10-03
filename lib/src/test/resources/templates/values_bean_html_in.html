@@ -1,0 +1,11 @@
+<!--v PARAM:firstname/-->, <!--bv value1--><!--v PARAM:lastname--><!--/v--><!--/bv-->{{v value1/}}
+<input type="checkbox" name="wantsupdates"{{v PARAM:wantsupdates:CHECKED}}{{/v}}> I want updates<br />
+<input type="checkbox" name="colors" value="orange"{{v PARAM:colors:orange:CHECKED}}{{/v}}>orange<br />
+<input type="checkbox" name="colors" value="blue"{{v PARAM:colors:blue:CHECKED}}{{/v}}>blue<br />
+<input type="checkbox" name="colors" value="red"{{v PARAM:colors:red:CHECKED}}{{/v}}>red<br />
+<input type="radio" name="firstname"{{v PARAM:firstname:Geert:CHECKED}}{{/v}}> Geert
+<input type="radio" name="firstname"<!--bv value2--><!--v PARAM:firstname:Angela:CHECKED--><!--/v--><!--/bv--><!--v value2/-->> Angela
+<select name="lastname">
+	<option value="Bevin"<!--v PARAM:lastname:Bevin:SELECTED--><!--/v-->>Bevin</option>
+	<option value="Kramer"<!--bv value3--><!--v PARAM:lastname:Kramer:SELECTED--><!--/v--><!--/bv--><!--v value3/-->>Kramer</option>
+</select>

@@ -10,6 +10,7 @@ import rife.tools.InputStreamUser;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Allows a group of resource finders to acts as if they are one single
@@ -21,7 +22,7 @@ import java.util.ArrayList;
  * @since 1.0
  */
 public class ResourceFinderGroup extends AbstractResourceFinder {
-    private final ArrayList<ResourceFinder> resourceFinders_ = new ArrayList<ResourceFinder>();
+    private final List<ResourceFinder> resourceFinders_ = new ArrayList<ResourceFinder>();
 
     public ResourceFinderGroup add(ResourceFinder resourceFinder) {
         resourceFinders_.add(resourceFinder);
@@ -30,9 +31,11 @@ public class ResourceFinderGroup extends AbstractResourceFinder {
     }
 
     public URL getResource(String name) {
-        URL result = null;
-        for (ResourceFinder resource_finder : resourceFinders_) {
+        System.out.println(">>> " + name);
+        URL result;
+        for (var resource_finder : resourceFinders_) {
             result = resource_finder.getResource(name);
+            System.out.println(name + " : " + resource_finder + " " + result);
             if (result != null) {
                 return result;
             }

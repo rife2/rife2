@@ -8,6 +8,7 @@ import rife.config.RifeConfig;
 import rife.engine.exceptions.EngineException;
 import rife.engine.exceptions.ResponseOutputStreamRetrievalErrorException;
 import rife.template.InternalString;
+import rife.template.Template;
 import rife.tools.HttpUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -115,12 +116,12 @@ public abstract class AbstractResponse implements Response {
         return textBufferEnabled_;
     }
 
-//	public void print(Template template) throws EngineException
-//	{
-//		if (null == template) return;
-//
-//		print(template.getDeferredContent());
-//	}
+	public void print(Template template) throws EngineException
+	{
+		if (null == template) return;
+
+		print(template.getDeferredContent());
+	}
 
     public void print(Collection<CharSequence> deferredContent) throws EngineException {
         if (!isContentTypeSet()) {

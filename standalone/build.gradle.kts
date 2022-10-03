@@ -7,12 +7,12 @@ application {
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
 dependencies {
     implementation(project(":app"))
+    runtimeOnly("org.slf4j:slf4j-simple:2.0.3")
     runtimeOnly("org.eclipse.jetty:jetty-server:11.0.12")
     runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.12")
 }

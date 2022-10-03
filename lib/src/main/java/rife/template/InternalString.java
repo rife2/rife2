@@ -42,7 +42,7 @@ public class InternalString implements CharSequence {
             if (null == bytes) {
                 bytes = toString().getBytes(charsetName);
                 if (null == mBytesValue_ISO_8859_1) {
-                    mBytesValue_ISO_8859_1 = new SoftReference<byte[]>(bytes);
+                    mBytesValue_ISO_8859_1 = new SoftReference<>(bytes);
                 }
             }
         } else if (StringUtils.ENCODING_UTF_8.equals(charsetName)) {
@@ -52,7 +52,7 @@ public class InternalString implements CharSequence {
             if (null == bytes) {
                 bytes = toString().getBytes(charsetName);
                 if (null == mBytesValue_UTF_8) {
-                    mBytesValue_UTF_8 = new SoftReference<byte[]>(bytes);
+                    mBytesValue_UTF_8 = new SoftReference<>(bytes);
                 }
             }
         } else if (StringUtils.ENCODING_US_ASCII.equals(charsetName)) {
@@ -62,7 +62,7 @@ public class InternalString implements CharSequence {
             if (null == bytes) {
                 bytes = toString().getBytes(charsetName);
                 if (null == mBytesValue_US_ASCII) {
-                    mBytesValue_US_ASCII = new SoftReference<byte[]>(bytes);
+                    mBytesValue_US_ASCII = new SoftReference<>(bytes);
                 }
             }
         } else if (StringUtils.ENCODING_UTF_16.equals(charsetName)) {
@@ -72,7 +72,7 @@ public class InternalString implements CharSequence {
             if (null == bytes) {
                 bytes = toString().getBytes(charsetName);
                 if (null == mBytesValue_UTF_16) {
-                    mBytesValue_UTF_16 = new SoftReference<byte[]>(bytes);
+                    mBytesValue_UTF_16 = new SoftReference<>(bytes);
                 }
             }
         } else if (StringUtils.ENCODING_UTF_16BE.equals(charsetName)) {
@@ -82,7 +82,7 @@ public class InternalString implements CharSequence {
             if (null == bytes) {
                 bytes = toString().getBytes(charsetName);
                 if (null == mBytesValue_UTF_16BE) {
-                    mBytesValue_UTF_16BE = new SoftReference<byte[]>(bytes);
+                    mBytesValue_UTF_16BE = new SoftReference<>(bytes);
                 }
             }
         } else if (StringUtils.ENCODING_UTF_16LE.equals(charsetName)) {
@@ -92,7 +92,7 @@ public class InternalString implements CharSequence {
             if (null == bytes) {
                 bytes = toString().getBytes(charsetName);
                 if (null == mBytesValue_UTF_16LE) {
-                    mBytesValue_UTF_16LE = new SoftReference<byte[]>(bytes);
+                    mBytesValue_UTF_16LE = new SoftReference<>(bytes);
                 }
             }
         } else {

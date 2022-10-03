@@ -34,7 +34,7 @@ public class UploadedFile implements Cloneable {
     }
 
     protected void finalize()
-        throws Throwable {
+    throws Throwable {
         if (tempFile_ != null) {
             tempFile_.delete();
         }

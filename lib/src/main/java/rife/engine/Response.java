@@ -14,6 +14,7 @@ import java.util.Locale;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import rife.template.Template;
 
 /**
  * This interface contains all the methods that the web engine needs to be
@@ -53,7 +54,7 @@ public interface Response {
      * @see #print(Object)
      * @since 1.1
      */
-//    public void print(Template template) throws EngineException;
+    public void print(Template template) throws EngineException;
 
     /**
      * Prints a list of text snippets to the request text output.

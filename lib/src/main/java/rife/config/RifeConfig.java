@@ -4,11 +4,13 @@
  */
 package rife.config;
 
+import rife.template.TemplateFactory;
 import rife.tools.StringUtils;
 
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -40,6 +42,10 @@ public class RifeConfig {
         return instance().server;
     }
 
+    public static Template template() {
+        return instance().template;
+    }
+
     public static Tools tools() {
         return instance().tools;
     }
@@ -47,6 +53,7 @@ public class RifeConfig {
     public final Global global = new Global();
     public final Engine engine = new Engine();
     public final Server server = new Server();
+    public final Template template = new Template();
     public final Tools tools = new Tools();
 
     public class Global {
@@ -266,6 +273,94 @@ public class RifeConfig {
         }
     }
 
+    public class Template {
+        private boolean autoReload_ = DEFAULT_TEMPLATE_AUTO_RELOAD;
+        private String generationPath_ = null;
+        private boolean generateClasses_ = DEFAULT_GENERATE_CLASSES;
+        private String defaultEncoding_ = null;
+        private HashMap<String, Collection<String>> defaultResourceBundles_ = null;
+
+        public static final boolean DEFAULT_TEMPLATE_AUTO_RELOAD = true;
+        public static final String DEFAULT_TEMPLATES_RIFE_FOLDER = "rife_templates";
+        public static final boolean DEFAULT_GENERATE_CLASSES = false;
+
+        public boolean autoReload() {
+            return autoReload_;
+        }
+
+        public Template autoReload(boolean flag) {
+            autoReload_ = flag;
+            return this;
+        }
+
+        public String generationPath() {
+            String generation_path = generationPath_;
+
+            if (null == generation_path) {
+                return RifeConfig.this.global.tempPath() + File.separator + DEFAULT_TEMPLATES_RIFE_FOLDER;
+            }
+
+            generation_path += File.separator;
+
+            return generation_path;
+        }
+
+        public Template generationPath(String path) {
+            if (null == path) throw new IllegalArgumentException("path can't be null.");
+            if (path.isEmpty()) throw new IllegalArgumentException("path can't be empty.");
+            generationPath_ = path;
+            return this;
+        }
+
+        public boolean generateClasses() {
+            return generateClasses_;
+        }
+
+        public Template generateClasses(boolean generate) {
+            generateClasses_ = generate;
+            return this;
+        }
+
+        public String defaultEncoding() {
+            return defaultEncoding_;
+        }
+
+        public Template defaultEncoding(String encoding) {
+            if (null == encoding) throw new IllegalArgumentException("encoding can't be null.");
+            if (encoding.isEmpty()) throw new IllegalArgumentException("encoding can't be empty.");
+            defaultEncoding_ = encoding;
+            return this;
+        }
+
+        public Collection<String> defaultResourceBundles(TemplateFactory factory) {
+            Collection<String> result = null;
+
+            if (defaultResourceBundles_ != null) {
+                result = defaultResourceBundles_.get(factory.getIdentifierUppercase());
+            }
+
+            return result;
+        }
+
+        public String defaultResourceBundle(TemplateFactory factory) {
+            Collection<String> result = defaultResourceBundles(factory);
+            if (null == result || 0 == result.size()) {
+                return null;
+            }
+            return result.iterator().next();
+        }
+
+        public Template defaultResourceBundles(TemplateFactory factory, Collection<String> bundles) {
+            if (null == defaultResourceBundles_) {
+                defaultResourceBundles_ = new HashMap<>();
+            }
+
+            defaultResourceBundles_.put(factory.getIdentifierUppercase(), bundles);
+
+            return this;
+        }
+    }
+
     public class Tools {
         private boolean resourceBundleAutoReload_ = DEFAULT_RESOURCE_BUNDLE_AUTO_RELOAD;
         private String defaultResourceBundle_ = DEFAULT_RESOURCE_BUNDLE;
@@ -279,7 +374,7 @@ public class RifeConfig {
         public static final String DEFAULT_RESOURCE_BUNDLE = null;
         public static final String DEFAULT_DEFAULT_LANGUAGE = "en";
         public static final String DEFAULT_DEFAULT_COUNTRY = null;
-        public static final TimeZone DEFAULT_DEFAULT_TIMEZONE = null;
+        public static final TimeZone DEFAULT_DEFAULT_TIMEZONE = TimeZone.getTimeZone("EST");
         public static final String DEFAULT_INPUT_DATE_FORMAT = "yyyy-MM-dd HH:mm";
         public static final int DEFAULT_MAX_VISUAL_URL_LENGTH = 70;
 
