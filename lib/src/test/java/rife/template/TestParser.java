@@ -26,8 +26,8 @@ public class TestParser {
     public void testClone() {
         Parser parser_clone = parser_.clone();
         assertNotNull(parser_clone);
-        assertTrue(parser_ != parser_clone);
-        assertTrue(parser_.equals(parser_clone));
+        assertNotSame(parser_, parser_clone);
+        assertEquals(parser_, parser_clone);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class TestParser {
             assertEquals(template_parsed.getContent().countParts(), 1);
             assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("test_package" + File.separator + "noblocks_out_content"));
         } catch (TemplateException e) {
-            assertTrue(false, ExceptionUtils.getExceptionStackTrace(e));
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
     }
 
@@ -64,34 +64,31 @@ public class TestParser {
             assertEquals(template_parsed.getContent().getPart(5).getData(), parser_.getTemplateContent("defaultvalues_out_content_5"));
             assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), parser_.getTemplateContent("defaultvalues_out_block1"));
         } catch (TemplateException e) {
-            assertTrue(false, ExceptionUtils.getExceptionStackTrace(e));
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
     }
 
-    /*
-    @Test public void testParseComments()
-    {
-        try
-        {
+    @Test
+    public void testParseComments() {
+        try {
             Parsed template_parsed = parser_.parse("comments_in", null, null);
             assertEquals(template_parsed.getBlocks().size(), 2);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
             assertEquals(template_parsed.getContent().countParts(), 3);
             assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 1);
-            assertEquals(template_parsed.getDefaultValue("VALUE1"), getTemplateContent("comments_out_default1", parser_));
+            assertEquals(template_parsed.getDefaultValue("VALUE1"), parser_.getTemplateContent("comments_out_default1"));
             assertNull(template_parsed.getDefaultValue("VALUE2"));
-            assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("comments_out_content_0", parser_));
-            assertEquals(template_parsed.getContent().getPart(1).getData(), getTemplateContent("comments_out_content_1", parser_));
-            assertEquals(template_parsed.getContent().getPart(2).getData(), getTemplateContent("comments_out_content_2", parser_));
-            assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), getTemplateContent("comments_out_block1", parser_));
-        }
-        catch (TemplateException e)
-        {
-            assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("comments_out_content_0"));
+            assertEquals(template_parsed.getContent().getPart(1).getData(), parser_.getTemplateContent("comments_out_content_1"));
+            assertEquals(template_parsed.getContent().getPart(2).getData(), parser_.getTemplateContent("comments_out_content_2"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), parser_.getTemplateContent("comments_out_block1"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
     }
 
+    /*
     @Test public void testParseCommentsSuccessiveEscaped()
     {
         try

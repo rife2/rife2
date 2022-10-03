@@ -324,9 +324,9 @@ public class Parser implements Cloneable {
         assert content != null;
 
         var input = CharStreams.fromString(content);
-        var lexer = new TemplateHtmlIncludeLexer(input);
+        var lexer = new TemplateHtmlPreProcessLexer(input);
         var tokens = new CommonTokenStream(lexer);
-        var parser = new TemplateHtmlIncludeParser(tokens);
+        var parser = new TemplateHtmlPreProcessParser(tokens);
         parser.setBuildParseTree(true);
 
         var walker = new ParseTreeWalker();
@@ -353,7 +353,7 @@ public class Parser implements Cloneable {
         assert parsed.getBlocks().size() >= 1;
     }
 
-    class AntlrIncludeListener extends TemplateHtmlIncludeParserBaseListener {
+    class AntlrIncludeListener extends TemplateHtmlPreProcessParserBaseListener {
         final Parsed parsed_;
         final String content_;
         final Stack<String> previousIncludes_;
@@ -374,12 +374,12 @@ public class Parser implements Cloneable {
         }
 
         @Override
-        public void exitDocData(TemplateHtmlIncludeParser.DocDataContext ctx) {
+        public void exitDocData(TemplateHtmlPreProcessParser.DocDataContext ctx) {
             result_.append(ctx.getText());
         }
 
         @Override
-        public void enterTagI(TemplateHtmlIncludeParser.TagIContext ctx) {
+        public void enterTagI(TemplateHtmlPreProcessParser.TagIContext ctx) {
             var name = ctx.TTagName();
             if (name == null) {
                 name = ctx.CTagName();

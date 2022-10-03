@@ -1,13 +1,16 @@
-lexer grammar TemplateHtmlIncludeLexer;
+lexer grammar TemplateHtmlPreProcessLexer;
 @lexer::header {
     package rife.template.antlr;
 }
-// -------------------------------------------------------------------
-// MODE: Everything OUTSIDE of a tag
 
 fragment I      :   'i' ;
+fragment C      :   'c' ;
 fragment TSTART :   '<!--' ;
+fragment TTERM  :   '<!--/' ;
+fragment TEND   :   '-->' ;
 fragment CSTART :   '{{' ;
+fragment CEND   :   '}}' ;
+fragment CTERM  :   '{{/' ;
 fragment DIGIT  :   [0-9] ;
 
 fragment
@@ -34,10 +37,13 @@ NameStartChar
             |   '\uFDF0'..'\uFFFD'
             ;
 
-//WS          :   (' '|'\t'|'\r'? '\n')+ ;
+TSTART_I    :   TSTART I                    -> pushMode(TINSIDE_I) ;
+CSTART_I    :   CSTART I                    -> pushMode(CINSIDE_I) ;
 
-TSTART_I    :   TSTART I                    -> pushMode(TINSIDE) ;
-CSTART_I    :   CSTART I                    -> pushMode(CINSIDE) ;
+TCLOSE_C    :   TTERM C TEND ;
+TSTART_C    :   TSTART C                    -> pushMode(TINSIDE_C) ;
+CCLOSE_C    :   CTERM C CEND ;
+CSTART_C    :   CSTART C                    -> pushMode(CINSIDE_C) ;
 
 TEXT        :   ~[<{]+
             |   '<' ~'!'
@@ -48,20 +54,29 @@ TEXT        :   ~[<{]+
             |   '{{' ~('i')
             ;
 
-// -------------------------------------------------------------------
-// MODE: Everything INSIDE of a regular tag
-
-mode TINSIDE;
+mode TINSIDE_I;
 
 TSTERM      :   '/-->'                      -> popMode ;
 TS          :   [ \t\r\n]+ ;
 TTagName    :   NameStartChar | NameStartChar NameChar* NameEndChar ;
 
-// -------------------------------------------------------------------
-// MODE: Everything INSIDE of a compact tag
-
-mode CINSIDE;
+mode CINSIDE_I;
 
 CSTERM      :   '/}}'                       -> popMode ;
 CS          :   [ \t\r\n]+ ;
 CTagName    :   NameStartChar | NameStartChar NameChar* NameEndChar ;
+
+mode TINSIDE_C;
+
+TENDI       :   TEND                        -> popMode ;
+TComment    :   ~[-]*
+            |   '-' ~'-'
+            |   '--' ~'>'
+            ;
+
+mode CINSIDE_C;
+
+CENDI       :   CEND                        -> popMode ;
+CComment    :   ~[}]*
+            |   '}' ~'-'
+            ;
