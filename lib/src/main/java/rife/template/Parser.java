@@ -7,16 +7,14 @@ package rife.template;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.*;
 import rife.config.RifeConfig;
+import rife.datastructures.DocumentPosition;
 import rife.resources.ResourceFinder;
 import rife.resources.exceptions.ResourceFinderErrorException;
-import rife.template.antlr.TemplateHtmlLexer;
-import rife.template.antlr.TemplateHtmlParser;
-import rife.template.antlr.TemplateHtmlParserListener;
+import rife.template.antlr.*;
 import rife.template.exceptions.*;
+import rife.tools.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -182,10 +180,10 @@ public class Parser implements Cloneable {
 
         var class_name = template_name;
         var subpackage = "";
-        int package_seperator = template_name.lastIndexOf(".");
-        if (package_seperator != -1) {
-            subpackage = "." + template_name.substring(0, package_seperator);
-            class_name = template_name.substring(package_seperator + 1);
+        int package_separator = template_name.lastIndexOf(".");
+        if (package_separator != -1) {
+            subpackage = "." + template_name.substring(0, package_separator);
+            class_name = template_name.substring(package_separator + 1);
         }
         template_parsed.setTemplateName(template_name);
         template_parsed.setPackage(getPackage().substring(0, getPackage().length() - 1) + subpackage);
@@ -206,29 +204,17 @@ public class Parser implements Cloneable {
         // obtain the content of the template file
         String content = getContent(parsed.getTemplateName(), parsed, resource, encoding, transformer);
 
-        var input = CharStreams.fromString(content);
-        var lexer = new TemplateHtmlLexer(input);
-        var tokens = new CommonTokenStream(lexer);
-        var parser = new TemplateHtmlParser(tokens);
-        parser.setBuildParseTree(true);
+        // replace the included templates
+        Stack<String> previous_includes = new Stack<>();
+        previous_includes.push(parsed.getFullClassName());
+        content = replaceIncludeTags(parsed, content, previous_includes, encoding, transformer);
+        previous_includes.pop();
 
-        var walker = new ParseTreeWalker();
-        var listener = new AntlrListener(parsed);
-        walker.walk(listener, parser.document());
-
-//        // replace the included templates
-//        Stack<String> previous_includes = new Stack<String>();
-//        previous_includes.push(parsed.getFullClassName());
-//        replaceIncludeTags(parsed, content_buffer, previous_includes, encoding, transformer);
-//        previous_includes.pop();
-//
-//        // process the blocks and values
-//        String content = content_buffer.toString();
-//        parseBlocks(parsed, content);
+        // process the blocks and values
+        parseBlocksAndValues(parsed, content);
+        // TODO
 //        parsed.setFilteredBlocks(filterTags(mBlockFilters, parsed.getBlockIds()));
 //        parsed.setFilteredValues(filterTags(mValueFilters, parsed.getValueIds()));
-//
-//        assert parsed.getBlocks().size() >= 1;
 
         return parsed;
     }
@@ -332,14 +318,133 @@ public class Parser implements Cloneable {
         return modification_time;
     }
 
-    static class AntlrListener implements TemplateHtmlParserListener {
+    private String replaceIncludeTags(Parsed parsed, String content, Stack<String> previousIncludes, String encoding, TemplateTransformer transformer)
+    throws TemplateException {
+        assert parsed != null;
+        assert content != null;
+
+        var input = CharStreams.fromString(content);
+        var lexer = new TemplateHtmlIncludeLexer(input);
+        var tokens = new CommonTokenStream(lexer);
+        var parser = new TemplateHtmlIncludeParser(tokens);
+        parser.setBuildParseTree(true);
+
+        var walker = new ParseTreeWalker();
+        var listener = new AntlrIncludeListener(parsed, content, previousIncludes, encoding, transformer);
+        walker.walk(listener, parser.document());
+
+        return listener.getContent();
+    }
+
+    private void parseBlocksAndValues(Parsed parsed, String content) {
+        assert parsed != null;
+        assert content != null;
+
+        var input = CharStreams.fromString(content);
+        var lexer = new TemplateHtmlLexer(input);
+        var tokens = new CommonTokenStream(lexer);
+        var parser = new TemplateHtmlParser(tokens);
+        parser.setBuildParseTree(true);
+
+        var walker = new ParseTreeWalker();
+        var listener = new AntlrParserListener(parsed);
+        walker.walk(listener, parser.document());
+
+        assert parsed.getBlocks().size() >= 1;
+    }
+
+    class AntlrIncludeListener extends TemplateHtmlIncludeParserBaseListener {
+        final Parsed parsed_;
+        final String content_;
+        final Stack<String> previousIncludes_;
+        final String encoding_;
+        final TemplateTransformer transformer_;
+        final StringBuilder result_ = new StringBuilder();
+
+        AntlrIncludeListener(Parsed parsed, String content, Stack<String> previousIncludes, String encoding, TemplateTransformer transformer) {
+            parsed_ = parsed;
+            content_ = content;
+            previousIncludes_ = previousIncludes;
+            encoding_ = encoding;
+            transformer_ = transformer;
+        }
+
+        String getContent() {
+            return result_.toString();
+        }
+
+        @Override
+        public void exitDocData(TemplateHtmlIncludeParser.DocDataContext ctx) {
+            result_.append(ctx.getText());
+        }
+
+        @Override
+        public void enterTagI(TemplateHtmlIncludeParser.TagIContext ctx) {
+            var name = ctx.TTagName();
+            if (name == null) {
+                name = ctx.CTagName();
+            }
+            final String included_template_name = name.getText();
+            // obtain the parser that will be used to get the included content
+            Parser include_parser = Parser.this;
+            // TODO
+            // check if the included template references another template type
+//            int doublecolon_index = included_template_name.indexOf(':');
+//            if (doublecolon_index != -1)
+//            {
+//                String template_type = included_template_name.substring(0, doublecolon_index);
+//                if (!template_type.equals(mTemplateFactory.toString()))
+//                {
+//                    TemplateFactory factory = TemplateFactory.getFactory(template_type);
+//                    include_parser = factory.getParser();
+//                    included_template_name = included_template_name.substring(doublecolon_index + 1);
+//                }
+//            }
+
+            URL included_template_resource = include_parser.resolve(included_template_name);
+
+            if (null == included_template_resource) {
+                // TODO : this should return the line itself
+                var position = new DocumentPosition(ctx.getStart().getText(), ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
+                throw new IncludeNotFoundException(parsed_.getClassName(), position, included_template_name);
+            }
+            Parsed included_template_parsed = include_parser.prepare(included_template_name, included_template_resource);
+
+            // check for circular references
+            if (previousIncludes_.contains(included_template_parsed.getFullClassName())) {
+                // TODO : this should return the line itself
+                var position = new DocumentPosition(ctx.getStart().getText(), ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
+                throw new CircularIncludesException(parsed_.getClassName(), position, included_template_name, previousIncludes_);
+            }
+
+            // parse the included template's include tags too
+            String included_template_content = include_parser.getContent(included_template_name, parsed_, included_template_parsed.getResource(), encoding_, transformer_);
+            previousIncludes_.push(included_template_parsed.getFullClassName());
+            String replaced_content = replaceIncludeTags(included_template_parsed, included_template_content, previousIncludes_, encoding_, transformer_);
+            previousIncludes_.pop();
+
+            // retain the link to this include file for optional later modification time checking
+            parsed_.addDependency(included_template_parsed);
+
+            // add the dependencies of the included template too
+            Map<URL, Long> included_dependencies = included_template_parsed.getDependencies();
+            for (Map.Entry<URL, Long> included_dependency : included_dependencies.entrySet()) {
+                parsed_.addDependency(included_dependency.getKey(), included_dependency.getValue());
+            }
+
+            // add the replaced content
+            result_.append(replaced_content);
+        }
+    }
+
+    static class AntlrParserListener extends TemplateHtmlParserBaseListener {
         final Parsed parsed_;
 
         final Map<String, ParsedBlockData> blocks_ = new LinkedHashMap<>();
         final Stack<String> blockIds_ = new Stack<>();
         StringBuilder currentValueData_ = null;
 
-        AntlrListener(Parsed parsed) {
+        AntlrParserListener(Parsed parsed) {
             parsed_ = parsed;
         }
 
@@ -356,30 +461,6 @@ public class Parser implements Cloneable {
             for (var block : blocks_.entrySet()) {
                 parsed_.setBlock(block.getKey(), block.getValue());
             }
-        }
-
-        @Override
-        public void enterBlockContent(TemplateHtmlParser.BlockContentContext ctx) {
-
-        }
-
-        @Override
-        public void exitBlockContent(TemplateHtmlParser.BlockContentContext ctx) {
-
-        }
-
-        @Override
-        public void enterValueContent(TemplateHtmlParser.ValueContentContext ctx) {
-
-        }
-
-        @Override
-        public void exitValueContent(TemplateHtmlParser.ValueContentContext ctx) {
-
-        }
-
-        @Override
-        public void enterTagV(TemplateHtmlParser.TagVContext ctx) {
         }
 
         @Override
@@ -490,20 +571,6 @@ public class Parser implements Cloneable {
         }
 
         @Override
-        public void enterTagI(TemplateHtmlParser.TagIContext ctx) {
-
-        }
-
-        @Override
-        public void exitTagI(TemplateHtmlParser.TagIContext ctx) {
-
-        }
-
-        @Override
-        public void enterBlockData(TemplateHtmlParser.BlockDataContext ctx) {
-        }
-
-        @Override
         public void exitBlockData(TemplateHtmlParser.BlockDataContext ctx) {
             String block_id = blockIds_.peek();
             if (block_id != null) {
@@ -516,10 +583,6 @@ public class Parser implements Cloneable {
                     data.add(new ParsedBlockText(ctx.getText()));
                 }
             }
-        }
-
-        @Override
-        public void enterValueData(TemplateHtmlParser.ValueDataContext ctx) {
         }
 
         @Override

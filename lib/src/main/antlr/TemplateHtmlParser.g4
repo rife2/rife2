@@ -7,8 +7,8 @@ options { tokenVocab=TemplateHtmlLexer; }
 
 document        :   blockContent EOF ;
 
-blockContent    :   blockData* ((tagV|tagVDefault|tagB|tagBV|tagBA|tagI) blockData*)* ;
-valueContent    :   valueData* ((tagB|tagBV|tagBA|tagI) valueData*)* ;
+blockContent    :   (blockData|tagV|tagVDefault|tagB|tagBV|tagBA)* ;
+valueContent    :   (valueData|tagB|tagBV|tagBA)*;
 
 tagV        :   TSTART_V TS TTagName TS? TSTERM
             |   CSTART_V CS CTagName CS? CSTERM
@@ -30,10 +30,6 @@ tagBA       :   TSTART_BA TS TTagName TS? TENDI blockContent TCLOSE_BA
             |   CSTART_BA CS CTagName CS? CENDI blockContent CCLOSE_BA
             ;
 
-tagI        :   TSTART_I TS TTagName TS? TSTERM
-            |   CSTART_I CS CTagName TS? CSTERM
-            ;
-
 // Character data in the document not part of the tags
-blockData   :   TEXT+ | WS ;
-valueData   :   TEXT+ | WS ;
+blockData   :   TEXT+;
+valueData   :   TEXT+;

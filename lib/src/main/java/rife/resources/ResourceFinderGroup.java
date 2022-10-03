@@ -31,11 +31,9 @@ public class ResourceFinderGroup extends AbstractResourceFinder {
     }
 
     public URL getResource(String name) {
-        System.out.println(">>> " + name);
         URL result;
         for (var resource_finder : resourceFinders_) {
             result = resource_finder.getResource(name);
-            System.out.println(name + " : " + resource_finder + " " + result);
             if (result != null) {
                 return result;
             }

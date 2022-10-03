@@ -555,75 +555,70 @@ public class TestParser {
                 assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
             }
         }
-
-        @Test public void testParseIncludes()
-        {
-            try
-            {
-                Parsed template_parsed = parser_.parse("includes_master_in", null, null);
-                assertEquals(template_parsed.getBlocks().size(), 1);
-                assertNotNull(template_parsed.getContent());
-                assertEquals(template_parsed.getContent().countParts(), 1);
-                assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("includes_out_content", parser_));
-            }
-            catch (TemplateException e)
-            {
-                assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-            }
+*/
+    @Test
+    public void testParseIncludes() {
+        try {
+            Parsed template_parsed = parser_.parse("includes_master_in", null, null);
+            assertEquals(template_parsed.getBlocks().size(), 1);
+            assertNotNull(template_parsed.getContent());
+            assertEquals(template_parsed.getContent().countParts(), 1);
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("includes_out_content"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
+    }
 
-        @Test public void testParseIncludesUnquoted()
-        {
-            try
-            {
-                Parsed template_parsed = parser_.parse("includes_unquoted_in", null, null);
-                assertEquals(template_parsed.getBlocks().size(), 1);
-                assertNotNull(template_parsed.getContent());
-                assertEquals(template_parsed.getContent().countParts(), 1);
-                assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("includes_unquoted_out_content", parser_));
-            }
-            catch (TemplateException e)
-            {
-                assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-            }
+    @Test
+    public void testParseIncludesMultiple() {
+        try {
+            Parsed template_parsed = parser_.parse("includes_multiple_in", null, null);
+            assertEquals(template_parsed.getBlocks().size(), 1);
+            assertNotNull(template_parsed.getContent());
+            assertEquals(template_parsed.getContent().countParts(), 1);
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("includes_multiple_out_content"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
+    }
 
-        @Test public void testParseIncludesOtherType()
-        {
-            try
+    /*
+           @Test public void testParseIncludesOtherType()
             {
-                Parsed template_parsed = parser_.parse("includes_othertype_in", null, null);
-                assertEquals(template_parsed.getBlocks().size(), 2);
-                assertNotNull(template_parsed.getContent());
-                assertEquals(template_parsed.getContent().countParts(), 5);
-                assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("includes_othertype_out_content_0", parser_));
-                assertEquals(template_parsed.getContent().getPart(1).getData(), getTemplateContent("includes_othertype_out_content_1", parser_));
-                assertEquals(template_parsed.getContent().getPart(2).getData(), getTemplateContent("includes_othertype_out_content_2", parser_));
-                assertEquals(template_parsed.getContent().getPart(3).getData(), getTemplateContent("includes_othertype_out_content_3", parser_));
-                assertEquals(template_parsed.getContent().getPart(4).getData(), getTemplateContent("includes_othertype_out_content_4", parser_));
+                try
+                {
+                    Parsed template_parsed = parser_.parse("includes_othertype_in", null, null);
+                    assertEquals(template_parsed.getBlocks().size(), 2);
+                    assertNotNull(template_parsed.getContent());
+                    assertEquals(template_parsed.getContent().countParts(), 5);
+                    assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("includes_othertype_out_content_0", parser_));
+                    assertEquals(template_parsed.getContent().getPart(1).getData(), getTemplateContent("includes_othertype_out_content_1", parser_));
+                    assertEquals(template_parsed.getContent().getPart(2).getData(), getTemplateContent("includes_othertype_out_content_2", parser_));
+                    assertEquals(template_parsed.getContent().getPart(3).getData(), getTemplateContent("includes_othertype_out_content_3", parser_));
+                    assertEquals(template_parsed.getContent().getPart(4).getData(), getTemplateContent("includes_othertype_out_content_4", parser_));
+                }
+                catch (TemplateException e)
+                {
+                    assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+                }
             }
-            catch (TemplateException e)
-            {
-                assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-            }
-        }
 
-        @Test public void testParseIncludesEscaped()
-        {
-            try
+            @Test public void testParseIncludesEscaped()
             {
-                Parsed template_parsed = parser_.parse("includes_escaped_master_in", null, null);
-                assertEquals(template_parsed.getBlocks().size(), 1);
-                assertNotNull(template_parsed.getContent());
-                assertEquals(template_parsed.getContent().countParts(), 1);
-                assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("includes_escaped_out_content", parser_));
+                try
+                {
+                    Parsed template_parsed = parser_.parse("includes_escaped_master_in", null, null);
+                    assertEquals(template_parsed.getBlocks().size(), 1);
+                    assertNotNull(template_parsed.getContent());
+                    assertEquals(template_parsed.getContent().countParts(), 1);
+                    assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("includes_escaped_out_content", parser_));
+                }
+                catch (TemplateException e)
+                {
+                    assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+                }
             }
-            catch (TemplateException e)
-            {
-                assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-            }
-        }
-    */
+        */
     @Test
     public void testEncodingLatin() {
         try {

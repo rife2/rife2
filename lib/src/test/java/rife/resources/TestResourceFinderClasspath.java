@@ -19,10 +19,8 @@ import rife.tools.exceptions.FileUtilsErrorException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestResourceFinderClasspath {
-
     @Test
     public void testInstantiation() {
-        System.out.println(System.getProperties().toString());
         var resource_finder1 = ResourceFinderClasspath.instance();
         var resource_finder2 = ResourceFinderClasspath.instance();
         assertNotNull(resource_finder1);
