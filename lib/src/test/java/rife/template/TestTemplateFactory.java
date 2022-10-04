@@ -168,23 +168,23 @@ public class TestTemplateFactory {
         var bundles = new ArrayList<String>();
         bundles.add("localization/filtered-tags-l10n");
         bundles.add("rife.template.TestResourceBundleClass");
-        RifeConfig.template().defaultResourceBundles(TemplateFactory.HTML, bundles);
+        RifeConfig.template().setDefaultResourceBundles(TemplateFactory.HTML, bundles);
 
         try {
-            RifeConfig.tools().defaultLanguage("en");
+            RifeConfig.tools().setDefaultLanguage("en");
             template_html = TemplateFactory.HTML.get("filtered_tags_l10n");
             assertEquals("This is the localized key 'The English text'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key 'list key class'.\nThis is a key with a bundle 'The English text'.\n", template_html.getContent());
 
-            RifeConfig.tools().defaultLanguage("nl");
+            RifeConfig.tools().setDefaultLanguage("nl");
             template_html = TemplateFactory.HTML.get("filtered_tags_l10n");
             assertEquals("This is the localized key 'De Nederlandse tekst'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key 'list key class'.\nThis is a key with a bundle 'De Nederlandse tekst'.\n", template_html.getContent());
 
-            RifeConfig.tools().defaultLanguage("fr");
+            RifeConfig.tools().setDefaultLanguage("fr");
             template_html = TemplateFactory.HTML.get("filtered_tags_l10n");
             assertEquals("This is the localized key 'Le texte Francais'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key 'list key class'.\nThis is a key with a bundle 'Le texte Francais'.\n", template_html.getContent());
         } finally {
-            RifeConfig.template().defaultResourceBundles(TemplateFactory.HTML, null);
-            RifeConfig.tools().defaultLanguage("en");
+            RifeConfig.template().setDefaultResourceBundles(TemplateFactory.HTML, null);
+            RifeConfig.tools().setDefaultLanguage("en");
         }
     }
 
@@ -234,14 +234,14 @@ public class TestTemplateFactory {
         assertEquals("This expression is Dutch '<!--v lang:value1/-->'.\nThis expression is French or English 'yes yes'.\n\n\n\n", template_html.getContent());
 
         template_html = TemplateFactory.HTML.get("filtered_tags_lang");
-        RifeConfig.tools().defaultLanguage("nl");
+        RifeConfig.tools().setDefaultLanguage("nl");
         assertEquals("This expression is Dutch 'ja ja'.\nThis expression is French or English '{{v lang:value2/}}'.\n\n\n\n", template_html.getContent());
 
         template_html = TemplateFactory.HTML.get("filtered_tags_lang");
-        RifeConfig.tools().defaultLanguage("fr");
+        RifeConfig.tools().setDefaultLanguage("fr");
         assertEquals("This expression is Dutch '<!--v lang:value1/-->'.\nThis expression is French or English 'oui oui'.\n\n\n\n", template_html.getContent());
 
-        RifeConfig.tools().defaultLanguage(null);
+        RifeConfig.tools().setDefaultLanguage(null);
 
         template_html = TemplateFactory.HTML.get("filtered_tags_lang");
         template_html.setLanguage("en");
@@ -332,7 +332,7 @@ public class TestTemplateFactory {
 
         try {
             // set up the temporary directory
-            String template_dir = RifeConfig.global().tempPath();
+            String template_dir = RifeConfig.global().getTempPath();
             File template_dir_file = new File(template_dir);
             template_dir_file.mkdirs();
 
@@ -404,7 +404,7 @@ public class TestTemplateFactory {
 
         try {
             // set up the temporary directory
-            var template_dir = RifeConfig.global().tempPath();
+            var template_dir = RifeConfig.global().getTempPath();
             var template_dir_file = new File(template_dir);
             template_dir_file.mkdirs();
 
@@ -486,7 +486,7 @@ public class TestTemplateFactory {
 
         try {
             // set up the temporary directory
-            var template_dir = RifeConfig.global().tempPath();
+            var template_dir = RifeConfig.global().getTempPath();
             var template_dir_file = new File(template_dir);
             template_dir_file.mkdirs();
 

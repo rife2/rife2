@@ -2200,7 +2200,7 @@ public abstract class StringUtils {
     }
 
     private static String convertUrl(String source, Pattern pattern, boolean shorten, boolean sanitize, boolean no_follow) {
-        int max_length = RifeConfig.tools().maxVisualUrlLength();
+        int max_length = RifeConfig.tools().getMaxVisualUrlLength();
 
         var result = source;
 

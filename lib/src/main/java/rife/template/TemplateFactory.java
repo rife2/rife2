@@ -148,7 +148,7 @@ public class TemplateFactory extends EnumClass<String> {
             template.setInitializer(initializer_);
             template.setDefaultContentType(defaultContentType_);
 
-            Collection<String> default_resource_bundles = RifeConfig.template().defaultResourceBundles(this);
+            Collection<String> default_resource_bundles = RifeConfig.template().getDefaultResourceBundles(this);
             if (default_resource_bundles != null) {
                 var default_bundles = new ArrayList<ResourceBundle>();
                 for (String bundle_name : default_resource_bundles) {

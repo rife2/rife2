@@ -79,7 +79,7 @@ class MultipartRequest {
     }
 
     private void checkUploadDirectory() throws MultipartRequestException {
-        uploadDirectory_ = new File(RifeConfig.engine().fileUploadPath());
+        uploadDirectory_ = new File(RifeConfig.engine().getFileUploadPath());
         uploadDirectory_.mkdirs();
 
         if (!uploadDirectory_.exists() ||
@@ -480,17 +480,17 @@ class MultipartRequest {
 
                 // increase size count
                 if (output != null &&
-                    RifeConfig.engine().fileUploadSizeCheck()) {
+                    RifeConfig.engine().getFileUploadSizeCheck()) {
                     downloaded_size += line_length;
 
-                    if (downloaded_size > RifeConfig.engine().fileUploadSizeLimit()) {
+                    if (downloaded_size > RifeConfig.engine().getFileUploadSizeLimit()) {
                         file.setSizeExceeded(true);
                         output.close();
                         output = null;
                         tmp_file.delete();
                         tmp_file = null;
-                        if (RifeConfig.engine().fileUploadSizeException()) {
-                            throw new MultipartFileTooBigException(name, RifeConfig.engine().fileUploadSizeLimit());
+                        if (RifeConfig.engine().getFileUploadSizeException()) {
+                            throw new MultipartFileTooBigException(name, RifeConfig.engine().getFileUploadSizeLimit());
                         }
                     }
                 }

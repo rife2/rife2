@@ -40,7 +40,7 @@ public class Context {
         if (!response_.isContentTypeSet()) {
             String content_type = template.getDefaultContentType();
             if (null == content_type) {
-                content_type = RifeConfig.engine().defaultContentType();
+                content_type = RifeConfig.engine().getDefaultContentType();
             }
 
             response_.setContentType(content_type);

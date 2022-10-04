@@ -7,11 +7,8 @@ package rife.tools;
 import org.junit.jupiter.api.Test;
 import rife.config.RifeConfig;
 
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -150,7 +147,7 @@ public class TestArrayUtils {
         assertNull(ArrayUtils.createStringArray((Date) null, null));
 
         Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(RifeConfig.tools().defaultTimeZone());
+        cal.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
         cal.set(2005, 7, 18, 9, 27, 13);
         cal.set(Calendar.MILLISECOND, 552);
         String[] converted = ArrayUtils.createStringArray(cal.getTime(), null);

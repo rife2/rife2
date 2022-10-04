@@ -21,7 +21,7 @@ public class BeanImpl {
 
     public BeanImpl() {
         Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(RifeConfig.tools().defaultTimeZone());
+        cal.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
         cal.set(2005, 7, 18, 10, 36, 31);
         cal.set(Calendar.MILLISECOND, 874);
         propertyDate_ = cal.getTime();

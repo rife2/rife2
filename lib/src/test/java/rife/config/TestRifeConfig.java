@@ -19,28 +19,28 @@ public class TestRifeConfig {
     throws Exception {
         switchLocale("US", "EN");
 
-        DateFormat sf = RifeConfig.tools().defaultShortDateFormat();
+        DateFormat sf = RifeConfig.tools().getDefaultShortDateFormat();
         String formatted = sf.format(new GregorianCalendar(2004, 7, 31, 15, 53).getTime());
 
         assertEquals(formatted, "8/31/04");
 
         switchLocale("BE", "NL");
 
-        sf = RifeConfig.tools().defaultShortDateFormat();
+        sf = RifeConfig.tools().getDefaultShortDateFormat();
         formatted = sf.format(new GregorianCalendar(2004, 7, 31, 15, 53).getTime());
 
         assertEquals(formatted, "31/08/2004");
 
         switchLocale(null, "ES");
 
-        sf = RifeConfig.tools().defaultShortDateFormat();
+        sf = RifeConfig.tools().getDefaultShortDateFormat();
         formatted = sf.format(new GregorianCalendar(2004, 7, 31, 15, 53).getTime());
 
         assertEquals(formatted, "31/8/04");
 
         switchDates("EEE, MMM d, yyyy", "EEE, d MMM yyyy HH:mm:ss");
 
-        sf = RifeConfig.tools().defaultShortDateFormat();
+        sf = RifeConfig.tools().getDefaultShortDateFormat();
         formatted = sf.format(new GregorianCalendar(2004, 7, 31, 15, 53).getTime());
 
         assertEquals(formatted, "mar, ago 31, 2004");
@@ -48,7 +48,7 @@ public class TestRifeConfig {
         try {
             switchDates("vvvv 999 uuuu", "vvvv, 82.2 cccc");
 
-            sf = RifeConfig.tools().defaultShortDateFormat();
+            sf = RifeConfig.tools().getDefaultShortDateFormat();
             formatted = sf.format(new GregorianCalendar(2004, 7, 31, 15, 53).getTime());
             fail();
         } catch (DateFormatInitializationException e) {
@@ -64,28 +64,28 @@ public class TestRifeConfig {
     throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         switchLocale("US", "EN");
 
-        DateFormat sf = RifeConfig.tools().defaultLongDateFormat();
+        DateFormat sf = RifeConfig.tools().getDefaultLongDateFormat();
         String formatted = sf.format(new GregorianCalendar(2004, 7, 31, 15, 53).getTime());
 
         assertEquals(formatted, "Aug 31, 2004, 3:53 PM");
 
         switchLocale("BE", "NL");
 
-        sf = RifeConfig.tools().defaultLongDateFormat();
+        sf = RifeConfig.tools().getDefaultLongDateFormat();
         formatted = sf.format(new GregorianCalendar(2004, 7, 31, 15, 53).getTime());
 
         assertEquals(formatted, "31 aug. 2004 15:53");
 
         switchLocale(null, "ES");
 
-        sf = RifeConfig.tools().defaultLongDateFormat();
+        sf = RifeConfig.tools().getDefaultLongDateFormat();
         formatted = sf.format(new GregorianCalendar(2004, 7, 31, 15, 53).getTime());
 
         assertEquals(formatted, "31 ago 2004 15:53");
 
         switchDates("EEE, MMM d, yyyy", "EEE, d MMM yyyy HH:mm:ss");
 
-        sf = RifeConfig.tools().defaultLongDateFormat();
+        sf = RifeConfig.tools().getDefaultLongDateFormat();
         formatted = sf.format(new GregorianCalendar(2004, 7, 31, 15, 53).getTime());
 
         assertEquals(formatted, "mar, 31 ago 2004 14:53:00");
@@ -93,7 +93,7 @@ public class TestRifeConfig {
         try {
             switchDates("wwww 999 uuuu", "vvvv, 82.2 cccc");
 
-            sf = RifeConfig.tools().defaultLongDateFormat();
+            sf = RifeConfig.tools().getDefaultLongDateFormat();
             formatted = sf.format(new GregorianCalendar(2004, 7, 31, 15, 53).getTime());
             fail();
         } catch (DateFormatInitializationException e) {
@@ -105,14 +105,14 @@ public class TestRifeConfig {
     }
 
     public static void switchLocale(String country, String language) {
-        RifeConfig.tools().defaultCountry(country);
+        RifeConfig.tools().setDefaultCountry(country);
         if (language != null) {
-            RifeConfig.tools().defaultLanguage(language);
+            RifeConfig.tools().setDefaultLanguage(language);
         }
     }
 
     public static void switchDates(String shortDate, String longDate) {
-        RifeConfig.tools().defaultShortDateFormat(shortDate);
-        RifeConfig.tools().defaultLongDateFormat(longDate);
+        RifeConfig.tools().setDefaultShortDateFormat(shortDate);
+        RifeConfig.tools().setDefaultLongDateFormat(longDate);
     }
 }

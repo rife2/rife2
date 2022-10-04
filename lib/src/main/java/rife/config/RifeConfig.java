@@ -63,22 +63,22 @@ public class RifeConfig {
 
         public static final int DEFAULT_AUTO_RELOAD_DELAY = 10 * 1000;
 
-        public String tempPath() {
+        public String getTempPath() {
             return tempPath_;
         }
 
-        public GlobalConfig tempPath(String path) {
+        public GlobalConfig setTempPath(String path) {
             if (null == path) throw new IllegalArgumentException("path can't be null.");
             if (path.isEmpty()) throw new IllegalArgumentException("path can't be empty.");
             tempPath_ = path;
             return this;
         }
 
-        public int autoReloadDelay() {
+        public int getAutoReloadDelay() {
             return autoReloadDelay_;
         }
 
-        public GlobalConfig autoReloadDelay(int delay) {
+        public GlobalConfig setAutoReloadDelay(int delay) {
             autoReloadDelay_ = delay;
             return this;
         }
@@ -108,7 +108,7 @@ public class RifeConfig {
         public static final long DEFAULT_FILE_UPLOAD_SIZE_LIMIT = 1024 * 1024 * 2;    // 2MB
         public static final boolean DEFAULT_FILE_UPLOAD_SIZE_CHECK = true;
         public static final boolean DEFAULT_FILE_UPLOAD_SIZE_EXCEPTION = false;
-        public static final boolean DEFAULT_GZIP_COMPRESSION = false;
+        public static final boolean DEFAULT_GZIP_COMPRESSION = true;
         public static final Collection<String> DEFAULT_GZIP_COMPRESSION_TYPES = List.of(
             "text/html",
             "text/xml",
@@ -124,136 +124,136 @@ public class RifeConfig {
         public static final Charset DEFAULT_REQUEST_ENCODING = StandardCharsets.UTF_8;
         public static final Charset DEFAULT_RESPONSE_ENCODING = StandardCharsets.UTF_8;
 
-        public String defaultContentType() {
+        public String getDefaultContentType() {
             return defaultContentType_;
         }
 
-        public EngineConfig defaultContentType(String type) {
+        public EngineConfig setDefaultContentType(String type) {
             if (null == type) throw new IllegalArgumentException("type can't be null.");
             if (type.isEmpty()) throw new IllegalArgumentException("type can't be empty.");
             defaultContentType_ = type;
             return this;
         }
 
-        public boolean prettyEngineExceptions() {
+        public boolean getPrettyEngineExceptions() {
             return prettyEngineExceptions_;
         }
 
-        public EngineConfig prettyEngineExceptions(boolean flag) {
+        public EngineConfig setPrettyEngineExceptions(boolean flag) {
             prettyEngineExceptions_ = flag;
             return this;
         }
 
-        public boolean logEngineExceptions() {
+        public boolean getLogEngineExceptions() {
             return logEngineExceptions_;
         }
 
-        public EngineConfig logEngineExceptions(boolean flag) {
+        public EngineConfig setLogEngineExceptions(boolean flag) {
             logEngineExceptions_ = flag;
             return this;
         }
 
-        public String fileUploadPath() {
+        public String getFileUploadPath() {
             if (null == fileUploadPath_) {
-                return RifeConfig.this.global.tempPath() + File.separator + DEFAULT_FILE_UPLOAD_RIFE_FOLDER;
+                return RifeConfig.this.global.getTempPath() + File.separator + DEFAULT_FILE_UPLOAD_RIFE_FOLDER;
             }
             return fileUploadPath_;
         }
 
-        public EngineConfig fileUploadPath(String path) {
+        public EngineConfig setFileUploadPath(String path) {
             if (path != null &&
                 path.isEmpty()) throw new IllegalArgumentException("path can't be empty.");
             fileUploadPath_ = path;
             return this;
         }
 
-        public long fileUploadSizeLimit() {
+        public long getFileUploadSizeLimit() {
             return fileUploadSizeLimit_;
         }
 
-        public EngineConfig fileUploadSizeLimit(long limit) {
+        public EngineConfig setFileUploadSizeLimit(long limit) {
             fileUploadSizeLimit_ = limit;
             return this;
         }
 
-        public boolean fileUploadSizeCheck() {
+        public boolean getFileUploadSizeCheck() {
             return fileUploadSizeCheck_;
         }
 
-        public EngineConfig fileUploadSizeCheck(boolean flag) {
+        public EngineConfig setFileUploadSizeCheck(boolean flag) {
             fileUploadSizeCheck_ = flag;
             return this;
         }
 
-        public boolean fileUploadSizeException() {
+        public boolean getFileUploadSizeException() {
             return fileUploadSizeException_;
         }
 
-        public EngineConfig fileUploadSizeException(boolean flag) {
+        public EngineConfig setFileUploadSizeException(boolean flag) {
             fileUploadSizeException_ = flag;
             return this;
         }
 
-        public boolean gzipCompression() {
+        public boolean getGzipCompression() {
             return gzipCompression_;
         }
 
-        public EngineConfig gzipCompression(boolean flag) {
+        public EngineConfig setGzipCompression(boolean flag) {
             gzipCompression_ = flag;
             return this;
         }
 
-        public Collection<String> gzipCompressionTypes() {
+        public Collection<String> getGzipCompressionTypes() {
             return gzipCompressionTypes_;
         }
 
-        public EngineConfig gzipCompressionTypes(Collection<String> types) {
+        public EngineConfig setGzipCompressionTypes(Collection<String> types) {
             gzipCompressionTypes_ = types;
             return this;
         }
 
-        public int localForwardPort() {
+        public int getLocalForwardPort() {
             return localForwardPort_;
         }
 
-        public EngineConfig localForwardPort(int port) {
+        public EngineConfig setLocalForwardPort(int port) {
             if (port <= 0) port = -1;
             localForwardPort_ = port;
             return this;
         }
 
-        public String proxyRootUrl() {
+        public String getProxyRootUrl() {
             return proxyRootUrl_;
         }
 
-        public EngineConfig proxyRootUrl(String url) {
+        public EngineConfig setProxyRootUrl(String url) {
             proxyRootUrl_ = url;
             return this;
         }
 
-        public String webappContextPath() {
+        public String getWebappContextPath() {
             return webappContextPath_;
         }
 
-        public EngineConfig webappContextPath(String path) {
+        public EngineConfig setWebappContextPath(String path) {
             webappContextPath_ = path;
             return this;
         }
 
-        public Charset requestEncoding() {
+        public Charset getRequestEncoding() {
             return requestEncoding_;
         }
 
-        public EngineConfig requestEncoding(Charset encoding) {
+        public EngineConfig setRequestEncoding(Charset encoding) {
             requestEncoding_ = encoding;
             return this;
         }
 
-        public Charset responseEncoding() {
+        public Charset getResponseEncoding() {
             return responseEncoding_;
         }
 
-        public EngineConfig responseEncoding(Charset encoding) {
+        public EngineConfig setResponseEncoding(Charset encoding) {
             responseEncoding_ = encoding;
             return this;
         }
@@ -264,11 +264,11 @@ public class RifeConfig {
 
         public static final int DEFAULT_PORT = 4567;
 
-        public int port() {
+        public int getPort() {
             return port_;
         }
 
-        public ServerConfig port(int port) {
+        public ServerConfig setPort(int port) {
             port_ = port;
             return this;
         }
@@ -285,20 +285,20 @@ public class RifeConfig {
         public static final String DEFAULT_TEMPLATES_RIFE_FOLDER = "rife_templates";
         public static final boolean DEFAULT_GENERATE_CLASSES = false;
 
-        public boolean autoReload() {
+        public boolean getAutoReload() {
             return autoReload_;
         }
 
-        public TemplateConfig autoReload(boolean flag) {
+        public TemplateConfig setAutoReload(boolean flag) {
             autoReload_ = flag;
             return this;
         }
 
-        public String generationPath() {
+        public String getGenerationPath() {
             String generation_path = generationPath_;
 
             if (null == generation_path) {
-                return RifeConfig.this.global.tempPath() + File.separator + DEFAULT_TEMPLATES_RIFE_FOLDER;
+                return RifeConfig.this.global.getTempPath() + File.separator + DEFAULT_TEMPLATES_RIFE_FOLDER;
             }
 
             generation_path += File.separator;
@@ -306,34 +306,34 @@ public class RifeConfig {
             return generation_path;
         }
 
-        public TemplateConfig generationPath(String path) {
+        public TemplateConfig setGenerationPath(String path) {
             if (null == path) throw new IllegalArgumentException("path can't be null.");
             if (path.isEmpty()) throw new IllegalArgumentException("path can't be empty.");
             generationPath_ = path;
             return this;
         }
 
-        public boolean generateClasses() {
+        public boolean getGenerateClasses() {
             return generateClasses_;
         }
 
-        public TemplateConfig generateClasses(boolean generate) {
+        public TemplateConfig setGenerateClasses(boolean generate) {
             generateClasses_ = generate;
             return this;
         }
 
-        public String defaultEncoding() {
+        public String getDefaultEncoding() {
             return defaultEncoding_;
         }
 
-        public TemplateConfig defaultEncoding(String encoding) {
+        public TemplateConfig setDefaultEncoding(String encoding) {
             if (null == encoding) throw new IllegalArgumentException("encoding can't be null.");
             if (encoding.isEmpty()) throw new IllegalArgumentException("encoding can't be empty.");
             defaultEncoding_ = encoding;
             return this;
         }
 
-        public Collection<String> defaultResourceBundles(TemplateFactory factory) {
+        public Collection<String> getDefaultResourceBundles(TemplateFactory factory) {
             Collection<String> result = null;
 
             if (defaultResourceBundles_ != null) {
@@ -343,15 +343,15 @@ public class RifeConfig {
             return result;
         }
 
-        public String defaultResourceBundle(TemplateFactory factory) {
-            Collection<String> result = defaultResourceBundles(factory);
+        public String getDefaultResourceBundle(TemplateFactory factory) {
+            Collection<String> result = getDefaultResourceBundles(factory);
             if (null == result || 0 == result.size()) {
                 return null;
             }
             return result.iterator().next();
         }
 
-        public TemplateConfig defaultResourceBundles(TemplateFactory factory, Collection<String> bundles) {
+        public TemplateConfig setDefaultResourceBundles(TemplateFactory factory, Collection<String> bundles) {
             if (null == defaultResourceBundles_) {
                 defaultResourceBundles_ = new HashMap<>();
             }
@@ -381,31 +381,31 @@ public class RifeConfig {
         public static final String DEFAULT_INPUT_DATE_FORMAT = "yyyy-MM-dd HH:mm";
         public static final int DEFAULT_MAX_VISUAL_URL_LENGTH = 70;
 
-        public boolean resourceBundleAutoReload() {
+        public boolean getResourceBundleAutoReload() {
             return resourceBundleAutoReload_;
         }
 
-        public ToolsConfig resourceBundleAutoReload(boolean flag) {
+        public ToolsConfig setResourceBundleAutoReload(boolean flag) {
             resourceBundleAutoReload_ = flag;
             return this;
         }
 
-        public String defaultResourceBundle() {
+        public String getDefaultResourceBundle() {
             return defaultResourceBundle_;
         }
 
-        public ToolsConfig defaultResourceBundle(String name) {
+        public ToolsConfig setDefaultResourceBundle(String name) {
             if (name != null &&
                 name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
             defaultResourceBundle_ = name;
             return this;
         }
 
-        public String defaultLanguage() {
+        public String getDefaultLanguage() {
             return defaultLanguage_;
         }
 
-        public ToolsConfig defaultLanguage(String abbreviation) {
+        public ToolsConfig setDefaultLanguage(String abbreviation) {
             if (abbreviation != null &&
                 abbreviation.isEmpty()) throw new IllegalArgumentException("abbreviation can't be empty.");
 
@@ -417,18 +417,18 @@ public class RifeConfig {
             return this;
         }
 
-        public String defaultCountry() {
+        public String getDefaultCountry() {
             return defaultCountry_;
         }
 
-        public ToolsConfig defaultCountry(String countryCode) {
+        public ToolsConfig setDefaultCountry(String countryCode) {
             if (null != countryCode &&
                 countryCode.isEmpty()) throw new IllegalArgumentException("countryCode can't be empty.");
             defaultCountry_ = countryCode;
             return this;
         }
 
-        public TimeZone defaultTimeZone() {
+        public TimeZone getDefaultTimeZone() {
             TimeZone result = defaultTimeZone_;
 
             if (null == result) {
@@ -438,24 +438,24 @@ public class RifeConfig {
             return result;
         }
 
-        public ToolsConfig defaultTimeZone(TimeZone timeZone) {
+        public ToolsConfig setDefaultTimeZone(TimeZone timeZone) {
             defaultTimeZone_ = timeZone;
             return this;
         }
 
-        public DateFormat defaultShortDateFormat() {
+        public DateFormat getDefaultShortDateFormat() {
             if (defaultShortDateFormat_ != null) {
                 SimpleDateFormat sf;
                 try {
                     sf = new SimpleDateFormat(defaultShortDateFormat_, Localization.getLocale());
-                    sf.setTimeZone(defaultTimeZone());
+                    sf.setTimeZone(getDefaultTimeZone());
                 } catch (IllegalArgumentException e) {
                     throw new DateFormatInitializationException(e.getMessage());
                 }
 
                 return sf;
             } else {
-                if (0 != defaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
+                if (0 != getDefaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
                     return DateFormat.getDateInstance(DateFormat.SHORT, Localization.getLocale());
                 }
 
@@ -463,26 +463,26 @@ public class RifeConfig {
             }
         }
 
-        public ToolsConfig defaultShortDateFormat(String format) {
+        public ToolsConfig setDefaultShortDateFormat(String format) {
             if (null != format &&
                 format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
             defaultShortDateFormat_ = format;
             return this;
         }
 
-        public DateFormat defaultLongDateFormat() {
+        public DateFormat getDefaultLongDateFormat() {
             if (defaultLongDateFormat_ != null) {
                 SimpleDateFormat sf;
                 try {
                     sf = new SimpleDateFormat(defaultLongDateFormat_, Localization.getLocale());
-                    sf.setTimeZone(defaultTimeZone());
+                    sf.setTimeZone(getDefaultTimeZone());
                 } catch (IllegalArgumentException e) {
                     throw new DateFormatInitializationException(e.getMessage());
                 }
 
                 return sf;
             } else {
-                if (0 != defaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
+                if (0 != getDefaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
                     return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Localization.getLocale());
                 }
 
@@ -490,31 +490,31 @@ public class RifeConfig {
             }
         }
 
-        public ToolsConfig defaultLongDateFormat(String format) {
+        public ToolsConfig setDefaultLongDateFormat(String format) {
             if (null != format &&
                 format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
             defaultLongDateFormat_ = format;
             return this;
         }
 
-        public DateFormat defaultInputDateFormat() {
+        public DateFormat getDefaultInputDateFormat() {
             SimpleDateFormat sf = new SimpleDateFormat(defaultInputDateFormat_);
-            sf.setTimeZone(defaultTimeZone());
+            sf.setTimeZone(getDefaultTimeZone());
             return sf;
         }
 
-        public ToolsConfig defaultInputDateFormat(String format) {
+        public ToolsConfig setDefaultInputDateFormat(String format) {
             if (null != format &&
                 format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
             defaultInputDateFormat_ = format;
             return this;
         }
 
-        public int maxVisualUrlLength() {
+        public int getMaxVisualUrlLength() {
             return maxVisualUrlLength_;
         }
 
-        public ToolsConfig maxVisualUrlLength(int length) {
+        public ToolsConfig setMaxVisualUrlLength(int length) {
             maxVisualUrlLength_ = length;
             return this;
         }

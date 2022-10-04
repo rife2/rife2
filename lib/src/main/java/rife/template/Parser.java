@@ -293,7 +293,7 @@ public class Parser implements Cloneable {
         assert resource != null;
 
         if (null == encoding) {
-            encoding = RifeConfig.template().defaultEncoding();
+            encoding = RifeConfig.template().getDefaultEncoding();
         }
 
         String content;
@@ -312,7 +312,7 @@ public class Parser implements Cloneable {
         assert resource != null;
 
         if (null == encoding) {
-            encoding = RifeConfig.template().defaultEncoding();
+            encoding = RifeConfig.template().getDefaultEncoding();
         }
 
         ByteArrayOutputStream result = new ByteArrayOutputStream();

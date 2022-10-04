@@ -887,7 +887,7 @@ public abstract class AbstractTemplate implements Template {
 
     public String getLanguage() {
         if (null == language_) {
-            return RifeConfig.tools().defaultLanguage();
+            return RifeConfig.tools().getDefaultLanguage();
         }
 
         return language_;

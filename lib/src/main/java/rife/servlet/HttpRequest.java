@@ -46,7 +46,7 @@ public class HttpRequest implements Request {
             parameters_ = new HashMap<String, String[]>();
 
             try {
-                request_.setCharacterEncoding(RifeConfig.engine().requestEncoding().toString());
+                request_.setCharacterEncoding(RifeConfig.engine().getRequestEncoding().toString());
             } catch (UnsupportedEncodingException e) {
                 // should never happen
             }

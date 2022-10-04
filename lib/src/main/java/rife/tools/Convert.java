@@ -318,7 +318,7 @@ public class Convert {
                     return BeanUtils.getConcisePreciseDateFormat().parse((String) value);
                 } catch (ParseException e2) {
                     try {
-                        return RifeConfig.tools().defaultInputDateFormat().parse((String) value);
+                        return RifeConfig.tools().getDefaultInputDateFormat().parse((String) value);
                     } catch (ParseException e3) {
                         throw new ConversionException(value, Date.class, e2);
                     }

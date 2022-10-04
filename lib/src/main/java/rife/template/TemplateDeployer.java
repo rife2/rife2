@@ -131,14 +131,14 @@ public class TemplateDeployer {
                         if (arguments[i].startsWith("-")) {
                             valid_arguments = false;
                         } else {
-                            RifeConfig.template().generationPath(arguments[i]);
+                            RifeConfig.template().setGenerationPath(arguments[i]);
                         }
                     } else if (arguments[i].equals("-encoding")) {
                         i++;
                         if (arguments[i].startsWith("-")) {
                             valid_arguments = false;
                         } else {
-                            RifeConfig.template().defaultEncoding(arguments[i]);
+                            RifeConfig.template().setDefaultEncoding(arguments[i]);
                         }
                     } else if (arguments[i].equals("-preload")) {
                         i++;
@@ -212,7 +212,7 @@ public class TemplateDeployer {
             System.exit(1);
         }
 
-        RifeConfig.template().generateClasses(true);
+        RifeConfig.template().setGenerateClasses(true);
         TemplateDeployer deployer = new TemplateDeployer(verbose, directory_paths, factory, include, exclude);
         deployer.execute();
     }

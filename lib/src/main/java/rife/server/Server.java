@@ -10,7 +10,6 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHandler;
 import rife.config.RifeConfig;
 import rife.engine.Site;
-import rife.engine.SiteInit;
 import rife.servlet.RifeFilter;
 
 import java.util.EnumSet;
@@ -20,13 +19,13 @@ public class Server {
     private final ServletHandler handler_ = new ServletHandler();
 
     public Server port(int port) {
-        RifeConfig.server().port(port);
+        RifeConfig.server().setPort(port);
         return this;
     }
 
     public void start(Site site) {
         try (var connector = new ServerConnector(server_)) {
-            connector.setPort(RifeConfig.server().port());
+            connector.setPort(RifeConfig.server().getPort());
             server_.setConnectors(new Connector[]{connector});
         }
 

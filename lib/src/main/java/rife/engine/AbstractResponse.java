@@ -59,7 +59,8 @@ public abstract class AbstractResponse implements Response {
      * @see Response#getOutputStream()
      * @since 1.1
      */
-    protected abstract OutputStream _getOutputStream() throws IOException;
+    protected abstract OutputStream _getOutputStream()
+    throws IOException;
 
     /**
      * Constructor that needs to be called by all the constructors of the
@@ -116,16 +117,17 @@ public abstract class AbstractResponse implements Response {
         return textBufferEnabled_;
     }
 
-	public void print(Template template) throws EngineException
-	{
-		if (null == template) return;
+    public void print(Template template)
+    throws EngineException {
+        if (null == template) return;
 
-		print(template.getDeferredContent());
-	}
+        print(template.getDeferredContent());
+    }
 
-    public void print(Collection<CharSequence> deferredContent) throws EngineException {
+    public void print(Collection<CharSequence> deferredContent)
+    throws EngineException {
         if (!isContentTypeSet()) {
-            setContentType(RifeConfig.engine().defaultContentType());
+            setContentType(RifeConfig.engine().getDefaultContentType());
         }
 
         if (null == deferredContent ||
@@ -151,9 +153,10 @@ public abstract class AbstractResponse implements Response {
         }
     }
 
-    public void print(Object value) throws EngineException {
+    public void print(Object value)
+    throws EngineException {
         if (!isContentTypeSet()) {
-            setContentType(RifeConfig.engine().defaultContentType());
+            setContentType(RifeConfig.engine().getDefaultContentType());
         }
 
         if (null == value) {
@@ -187,7 +190,8 @@ public abstract class AbstractResponse implements Response {
         }
     }
 
-    private void writeDeferredContent(Collection<CharSequence> deferredContent) throws EngineException {
+    private void writeDeferredContent(Collection<CharSequence> deferredContent)
+    throws EngineException {
         // create a string version of each char sequence so that any state operation happens
         // before any content is actually being written
         for (CharSequence charsequence : deferredContent) {
@@ -223,7 +227,8 @@ public abstract class AbstractResponse implements Response {
         }
     }
 
-    public void flush() throws EngineException {
+    public void flush()
+    throws EngineException {
         if (textBuffer_ != null &&
             textBuffer_.size() > 0) {
             writeDeferredContent(textBuffer_);
@@ -241,7 +246,8 @@ public abstract class AbstractResponse implements Response {
         }
     }
 
-    public void close() throws EngineException {
+    public void close()
+    throws EngineException {
         flush();
 
         if (outputStream_ != null) {
@@ -277,23 +283,15 @@ public abstract class AbstractResponse implements Response {
         }
     }
 
-    public OutputStream getOutputStream() throws EngineException {
+    public OutputStream getOutputStream()
+    throws EngineException {
         ensureOutputStream();
 
         return outputStream_;
     }
 
-    private static final boolean DEFAULT_GZIP_COMPRESSION = false;
-    private static final Collection<String> DEFAULT_GZIP_COMPRESSION_TYPES = List.of(
-        "text/html",
-        "text/xml",
-        "text/plain",
-        "text/css",
-        "text/javascript",
-        "application/xml",
-        "application/xhtml+xml");
-
-    private void ensureOutputStream() throws EngineException {
+    private void ensureOutputStream()
+    throws EngineException {
         if (null == outputStream_) {
             if (null == responseOutputStream_) {
                 try {
@@ -303,8 +301,8 @@ public abstract class AbstractResponse implements Response {
                         String content_type = HttpUtils.extractMimeTypeFromContentType(contentType_);
 
                         // check if the content type should be gzip encoded
-                        if (RifeConfig.engine().gzipCompression() &&
-                            RifeConfig.engine().gzipCompressionTypes().contains(content_type)) {
+                        if (RifeConfig.engine().getGzipCompression() &&
+                            RifeConfig.engine().getGzipCompressionTypes().contains(content_type)) {
                             String accept_encoding = request_.getHeader("Accept-Encoding");
                             if (accept_encoding != null &&
                                 accept_encoding.contains("gzip")) {
