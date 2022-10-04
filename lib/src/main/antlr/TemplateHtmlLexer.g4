@@ -5,16 +5,31 @@ lexer grammar TemplateHtmlLexer;
 // -------------------------------------------------------------------
 // MODE: Everything OUTSIDE of a tag
 
+fragment TSTART :   '<!--' ;
+fragment TEND   :   '-->' ;
+fragment TTERM  :   '<!--/' ;
+fragment STTERM :   '/-->' ;
+fragment TTEXT  :   '<' ~'!'
+                |   '<!' ~'-'
+                |   '<!-' ~'-'
+                |   '<!--' ~('v'|'b'|'/')
+                |   '<!--/' ~('v'|'b')
+                ;
+
 fragment V      :   'v' ;
 fragment B      :   'b' ;
 fragment BV     :   'bv' ;
 fragment BA     :   'ba' ;
-fragment TSTART :   '<!--' ;
-fragment TEND   :   '-->' ;
-fragment TTERM  :   '<!--/' ;
+
 fragment CSTART :   '{{' ;
 fragment CEND   :   '}}' ;
 fragment CTERM  :   '{{/' ;
+fragment CTTERM :   '/}}' ;
+fragment CTEXT  :   '{' ~'{'
+                |   '{{' ~('v'|'b'|'/')
+                |   '{{/' ~('v'|'b')
+                ;
+
 fragment DIGIT  :   [0-9] ;
 
 fragment
@@ -62,14 +77,8 @@ CCLOSE_BA   :   CTERM BA CEND ;
 CSTART_BA   :   CSTART BA                   -> pushMode(CINSIDE) ;
 
 TEXT        :   ~[<{]+
-            |   '<' ~'!'
-            |   '<!' ~'-'
-            |   '<!-' ~'-'
-            |   '<!--' ~('v'|'b'|'/')
-            |   '<!--/' ~('v'|'b')
-            |   '{' ~'{'
-            |   '{{' ~('v'|'b'|'/')
-            |   '{{/' ~('v'|'b')
+            |   TTEXT
+            |   CTEXT
             ;
 
 // -------------------------------------------------------------------
@@ -78,7 +87,7 @@ TEXT        :   ~[<{]+
 mode TINSIDE;
 
 TENDI       :   TEND                        -> popMode ;
-TSTERM      :   '/-->'                      -> popMode ;
+TSTERM      :   STTERM                      -> popMode ;
 TS          :   [ \t\r\n]+ ;
 TTagName    :   NameStartChar | NameStartChar NameChar* NameEndChar ;
 
@@ -88,6 +97,6 @@ TTagName    :   NameStartChar | NameStartChar NameChar* NameEndChar ;
 mode CINSIDE;
 
 CENDI       :   CEND                        -> popMode ;
-CSTERM      :   '/}}'                       -> popMode ;
+CSTERM      :   CTTERM                      -> popMode ;
 CS          :   [ \t\r\n]+ ;
 CTagName    :   NameStartChar | NameStartChar NameChar* NameEndChar ;

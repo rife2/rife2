@@ -3,14 +3,32 @@ lexer grammar TemplateHtmlPreProcessLexer;
     package rife.template.antlr;
 }
 
+fragment TSTART :   '<!--' ;
+fragment TEND   :   '-->' ;
+fragment TTERM  :   '<!--/' ;
+fragment STTERM :   '/-->' ;
+fragment TTEXT  :   '<' ~'!'
+                |   '<!' ~'-'
+                |   '<!-' ~'-'
+                |   '<!--' ~('i')
+                ;
+fragment TCOMM  : '-' ~'-'
+                |   '--' ~'>'
+                ;
+
 fragment I      :   'i' ;
 fragment C      :   'c' ;
-fragment TSTART :   '<!--' ;
-fragment TTERM  :   '<!--/' ;
-fragment TEND   :   '-->' ;
+
 fragment CSTART :   '{{' ;
 fragment CEND   :   '}}' ;
 fragment CTERM  :   '{{/' ;
+fragment CTTERM :   '/}}' ;
+fragment CTEXT  :   '{' ~'{'
+                |   '{{' ~('i')
+                ;
+fragment CCOMM  :   '}' ~'}' ;
+
+
 fragment DIGIT  :   [0-9] ;
 
 fragment
@@ -46,37 +64,28 @@ CCLOSE_C    :   CTERM C CEND ;
 CSTART_C    :   CSTART C                    -> pushMode(CINSIDE_C) ;
 
 TEXT        :   ~[<{]+
-            |   '<' ~'!'
-            |   '<!' ~'-'
-            |   '<!-' ~'-'
-            |   '<!--' ~('i')
-            |   '{' ~'{'
-            |   '{{' ~('i')
+            |   TTEXT
+            |   CTEXT
             ;
 
 mode TINSIDE_I;
 
-TSTERM      :   '/-->'                      -> popMode ;
+TSTERM      :   STTERM                      -> popMode ;
 TS          :   [ \t\r\n]+ ;
 TTagName    :   NameStartChar | NameStartChar NameChar* NameEndChar ;
 
 mode CINSIDE_I;
 
-CSTERM      :   '/}}'                       -> popMode ;
+CSTERM      :   CTTERM                       -> popMode ;
 CS          :   [ \t\r\n]+ ;
 CTagName    :   NameStartChar | NameStartChar NameChar* NameEndChar ;
 
 mode TINSIDE_C;
 
 TENDI       :   TEND                        -> popMode ;
-TComment    :   ~[-]*
-            |   '-' ~'-'
-            |   '--' ~'>'
-            ;
+TComment    :   ~[-]* | TCOMM ;
 
 mode CINSIDE_C;
 
 CENDI       :   CEND                        -> popMode ;
-CComment    :   ~[}]*
-            |   '}' ~'-'
-            ;
+CComment    :   ~[}]* | CCOMM ;
