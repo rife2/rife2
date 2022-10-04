@@ -119,7 +119,7 @@ public class ObjectUtils {
                         return (T) ((double[]) object).clone();
                     ///CLOVER:OFF
                     default:
-                        Logger.getLogger("com.uwyn.rife.tools").severe("Unknown primitive array class: " + classname);
+                        Logger.getLogger("rife.tools").severe("Unknown primitive array class: " + classname);
                         return null;
                     ///CLOVER:ON
                 }
@@ -139,7 +139,7 @@ public class ObjectUtils {
                 }
                 ///CLOVER:OFF
                 catch (ClassNotFoundException e) {
-                    Logger.getLogger("com.uwyn.rife.tools").severe("Internal error: class definition inconsistency: " + classname);
+                    Logger.getLogger("rife.tools").severe("Internal error: class definition inconsistency: " + classname);
                     return null;
                 }
                 ///CLOVER:ON

@@ -6,10 +6,12 @@ package rife.template.exceptions;
 
 import rife.datastructures.DocumentPosition;
 
-public class IncludeNotFoundException extends ProcessingException {
-    private static final long serialVersionUID = -8132650494489046526L;
+import java.io.Serial;
 
-    private final String templateName_ ;
+public class IncludeNotFoundException extends ProcessingException {
+    @Serial private static final long serialVersionUID = -8132650494489046526L;
+
+    private final String templateName_;
     private final DocumentPosition errorLocation_;
     private final String included_;
 

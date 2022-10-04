@@ -5,19 +5,24 @@
 package rife.template;
 
 import org.junit.jupiter.api.Test;
+import rife.config.Config;
 import rife.config.RifeConfig;
 import rife.resources.ResourceFinderClasspath;
 import rife.resources.ResourceFinderDirectories;
 import rife.resources.ResourceFinderGroup;
 import rife.template.exceptions.AmbiguousTemplateNameException;
+import rife.template.exceptions.ResourceBundleNotFoundException;
 import rife.template.exceptions.TemplateException;
 import rife.tools.ExceptionUtils;
 import rife.tools.FileUtils;
+import rife.tools.Localization;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.ListResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -107,6 +112,166 @@ public class TestTemplateFactory {
     }
 
     @Test
+    public void testFilteredTagsRenderHtml()
+    throws Exception {
+        Template t = TemplateFactory.HTML.get("filtered_tags_render");
+        assertEquals("This is the render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
+            "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
+            "This is the render value with a differentiator 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:DIFFERENT:different:2'.\n", t.getContent());
+    }
+
+    @Test
+    public void testFilteredTagsConfigHtml()
+    throws Exception
+    {
+        Config.instance().setParameter("TEMPLATE_CONFIG_VALUE", "the config value");
+        Template template_html = TemplateFactory.HTML.get("filtered_tags_config");
+        assertEquals("This is the config value 'the config value'.\nThis is an unknown config value '{{v config:TEMPLATE_CONFIG_VALUE_UNKNOWN/}}'.\n", template_html.getContent());
+    }
+
+    @Test
+    public void testFilteredTagsL10nHtml()
+    throws Exception {
+        Template template_html = TemplateFactory.HTML.get("filtered_tags_l10n");
+        assertEquals("This is the localized key 'default value'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template_html.getContent());
+
+        template_html.addResourceBundle(Localization.getResourceBundle("localization/filtered-tags-l10n", "en"));
+        assertEquals("This is the localized key 'The English text'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template_html.getContent());
+
+        template_html.clear();
+        template_html.addResourceBundle(Localization.getResourceBundle("localization/filtered-tags-l10n", "nl"));
+        assertEquals("This is the localized key 'De Nederlandse tekst'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template_html.getContent());
+
+        template_html.clear();
+        template_html.addResourceBundle(Localization.getResourceBundle("localization/filtered-tags-l10n", "fr"));
+        assertEquals("This is the localized key 'Le texte Francais'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template_html.getContent());
+    }
+
+    @Test
+    public void testFilteredTagsL10nHtmlResourceBundleNotFound()
+    throws Exception {
+        try {
+            TemplateFactory.HTML.get("filtered_tags_l10n_bundlenotfound");
+            fail();
+        } catch (ResourceBundleNotFoundException e) {
+            assertEquals(e.getTemplateName(), "filtered_tags_l10n_bundlenotfound");
+            assertEquals(e.getValueTag(), "l10n:loc/bundlenotpresent-l10n:THE_KEY");
+            assertEquals(e.getBundleName(), "loc/bundlenotpresent-l10n");
+        }
+    }
+
+    @Test
+    public void testFilteredTagsL10nHtmlDefaultResourceBundles()
+    throws Exception {
+        Template template_html;
+
+        var bundles = new ArrayList<String>();
+        bundles.add("localization/filtered-tags-l10n");
+        bundles.add("rife.template.TestResourceBundleClass");
+        RifeConfig.template().defaultResourceBundles(TemplateFactory.HTML, bundles);
+
+        try {
+            RifeConfig.tools().defaultLanguage("en");
+            template_html = TemplateFactory.HTML.get("filtered_tags_l10n");
+            assertEquals("This is the localized key 'The English text'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key 'list key class'.\nThis is a key with a bundle 'The English text'.\n", template_html.getContent());
+
+            RifeConfig.tools().defaultLanguage("nl");
+            template_html = TemplateFactory.HTML.get("filtered_tags_l10n");
+            assertEquals("This is the localized key 'De Nederlandse tekst'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key 'list key class'.\nThis is a key with a bundle 'De Nederlandse tekst'.\n", template_html.getContent());
+
+            RifeConfig.tools().defaultLanguage("fr");
+            template_html = TemplateFactory.HTML.get("filtered_tags_l10n");
+            assertEquals("This is the localized key 'Le texte Francais'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key 'list key class'.\nThis is a key with a bundle 'Le texte Francais'.\n", template_html.getContent());
+        } finally {
+            RifeConfig.template().defaultResourceBundles(TemplateFactory.HTML, null);
+            RifeConfig.tools().defaultLanguage("en");
+        }
+    }
+
+    @Test
+    public void testFilteredTagsL10nHtmlSeveralResourceBundles()
+    throws Exception {
+        Template template_html = TemplateFactory.HTML.get("filtered_tags_l10n");
+        assertEquals("This is the localized key 'default value'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template_html.getContent());
+
+        template_html.addResourceBundle(new ListResourceBundle() {
+            public Object[][] getContents() {
+                return new Object[][]{
+                    {"THE_KEY", "list key"}
+                };
+            }
+        });
+        template_html.addResourceBundle(Localization.getResourceBundle("localization/filtered-tags-l10n", "en"));
+        assertEquals("This is the localized key 'list key'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template_html.getContent());
+
+        template_html.clear();
+        template_html.addResourceBundle(Localization.getResourceBundle("localization/filtered-tags-l10n", "en"));
+        template_html.addResourceBundle(new ListResourceBundle() {
+            public Object[][] getContents() {
+                return new Object[][]{
+                    {"THE_KEY", "list key"}
+                };
+            }
+        });
+        assertEquals("This is the localized key 'The English text'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template_html.getContent());
+
+        template_html.clear();
+        template_html.addResourceBundle(new ListResourceBundle() {
+            public Object[][] getContents() {
+                return new Object[][]{
+                    {"THE_OTHER_KEY", "list key"}
+                };
+            }
+        });
+        template_html.addResourceBundle(Localization.getResourceBundle("localization/filtered-tags-l10n", "en"));
+        assertEquals("This is the localized key 'The English text'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template_html.getContent());
+    }
+
+    @Test
+    public void testFilteredTagsLangHtml()
+    throws Exception {
+        Template template_html = TemplateFactory.HTML.get("filtered_tags_lang");
+        assertEquals("This expression is Dutch '<!--v lang:value1/-->'.\nThis expression is French or English 'yes yes'.\n\n\n\n", template_html.getContent());
+
+        template_html = TemplateFactory.HTML.get("filtered_tags_lang");
+        RifeConfig.tools().defaultLanguage("nl");
+        assertEquals("This expression is Dutch 'ja ja'.\nThis expression is French or English '{{v lang:value2/}}'.\n\n\n\n", template_html.getContent());
+
+        template_html = TemplateFactory.HTML.get("filtered_tags_lang");
+        RifeConfig.tools().defaultLanguage("fr");
+        assertEquals("This expression is Dutch '<!--v lang:value1/-->'.\nThis expression is French or English 'oui oui'.\n\n\n\n", template_html.getContent());
+
+        RifeConfig.tools().defaultLanguage(null);
+
+        template_html = TemplateFactory.HTML.get("filtered_tags_lang");
+        template_html.setLanguage("en");
+        assertEquals("This expression is Dutch '<!--v lang:value1/-->'.\nThis expression is French or English 'yes yes'.\n\n\n\n", template_html.getContent());
+
+        template_html = TemplateFactory.HTML.get("filtered_tags_lang");
+        template_html.setLanguage("nl");
+        assertEquals("This expression is Dutch 'ja ja'.\nThis expression is French or English '{{v lang:value2/}}'.\n\n\n\n", template_html.getContent());
+
+        template_html = TemplateFactory.HTML.get("filtered_tags_lang");
+        template_html.setLanguage("fr");
+        assertEquals("This expression is Dutch '<!--v lang:value1/-->'.\nThis expression is French or English 'oui oui'.\n\n\n\n", template_html.getContent());
+    }
+
+    @Test
+    public void testEncoding() {
+        Template template_iso8859_1;
+        Template template_utf_8;
+        try {
+            template_iso8859_1 = TemplateFactory.HTML.get("encoding_latin1_iso88591", "ISO8859-1");
+            assertNotNull(template_iso8859_1);
+            template_utf_8 = TemplateFactory.HTML.get("encoding_latin1_utf8", "UTF-8");
+            assertNotNull(template_utf_8);
+            assertEquals(template_iso8859_1.getContent(), template_utf_8.getContent());
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
     public void testCaching() {
         Template template1;
         Template template2;
@@ -167,7 +332,7 @@ public class TestTemplateFactory {
 
         try {
             // set up the temporary directory
-            String template_dir = RifeConfig.instance().global.tempPath();
+            String template_dir = RifeConfig.global().tempPath();
             File template_dir_file = new File(template_dir);
             template_dir_file.mkdirs();
 
@@ -239,7 +404,7 @@ public class TestTemplateFactory {
 
         try {
             // set up the temporary directory
-            var template_dir = RifeConfig.instance().global.tempPath();
+            var template_dir = RifeConfig.global().tempPath();
             var template_dir_file = new File(template_dir);
             template_dir_file.mkdirs();
 
@@ -321,7 +486,7 @@ public class TestTemplateFactory {
 
         try {
             // set up the temporary directory
-            var template_dir = RifeConfig.instance().global.tempPath();
+            var template_dir = RifeConfig.global().tempPath();
             var template_dir_file = new File(template_dir);
             template_dir_file.mkdirs();
 

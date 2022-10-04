@@ -197,7 +197,7 @@ public class TestBeanUtils {
 
         bean = new BeanImpl2();
         BeanUtils.setUppercasedBeanProperty("propertyDate", new String[]{"2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl2());
-        assertEquals(bean.getPropertyDate(), RifeConfig.instance().tools.defaultInputDateFormat().parse("2006-08-04 10:45"));
+        assertEquals(bean.getPropertyDate(), RifeConfig.tools().defaultInputDateFormat().parse("2006-08-04 10:45"));
 
         bean = new BeanImpl2();
         BeanImpl2.SerializableType serializable = new BeanImpl2.SerializableType(5686, "Testing");
@@ -287,7 +287,7 @@ public class TestBeanUtils {
 
         bean = new BeanImpl2();
         BeanUtils.setUppercasedBeanProperty("propertyDateArray", new String[]{"2006-08-04 10:45", "2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl2());
-        assertArrayEquals(bean.getPropertyDateArray(), new Date[]{RifeConfig.instance().tools.defaultInputDateFormat().parse("2006-08-04 10:45"), RifeConfig.instance().tools.defaultInputDateFormat().parse("2006-07-08 11:05")});
+        assertArrayEquals(bean.getPropertyDateArray(), new Date[]{RifeConfig.tools().defaultInputDateFormat().parse("2006-08-04 10:45"), RifeConfig.tools().defaultInputDateFormat().parse("2006-07-08 11:05")});
 
         bean = new BeanImpl2();
         BeanImpl2.SerializableType serializable1 = new BeanImpl2.SerializableType(5682, "AnotherTest");
@@ -305,7 +305,7 @@ public class TestBeanUtils {
 //
 //        bean = new BeanImpl3();
 //        BeanUtils.setUppercasedBeanProperty("propertyDate", new String[]{"custom format 2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyDate(), RifeConfig.instance().tools.defaultInputDateFormat().parse("2006-08-04 10:45"));
+//        assertEquals(bean.getPropertyDate(), RifeConfig.tools().defaultInputDateFormat().parse("2006-08-04 10:45"));
 //
 //        bean = new BeanImpl3();
 //        BeanUtils.setUppercasedBeanProperty("propertyInt", new String[]{"$438", "two"}, null, bean_properties, bean, new BeanImpl3());
@@ -362,7 +362,7 @@ public class TestBeanUtils {
 //
 //        bean = new BeanImpl3();
 //        BeanUtils.setUppercasedBeanProperty("propertyDateArray", new String[]{"custom format 2006-08-04 10:45", "custom format 2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyDateArray(), new Date[]{RifeConfig.instance().tools.defaultInputDateFormat().parse("2006-08-04 10:45"), RifeConfig.instance().tools.defaultInputDateFormat().parse("2006-07-08 11:05")}));
+//        assertTrue(Arrays.equals(bean.getPropertyDateArray(), new Date[]{RifeConfig.tools().defaultInputDateFormat().parse("2006-08-04 10:45"), RifeConfig.tools().defaultInputDateFormat().parse("2006-07-08 11:05")}));
 //
 //        bean = new BeanImpl3();
 //        BeanUtils.setUppercasedBeanProperty("propertyIntArray", new String[]{"$438", "$98455", "$711"}, null, bean_properties, bean, new BeanImpl3());

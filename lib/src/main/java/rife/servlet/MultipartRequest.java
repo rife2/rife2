@@ -79,7 +79,7 @@ class MultipartRequest {
     }
 
     private void checkUploadDirectory() throws MultipartRequestException {
-        uploadDirectory_ = new File(RifeConfig.instance().engine().fileUploadPath());
+        uploadDirectory_ = new File(RifeConfig.engine().fileUploadPath());
         uploadDirectory_.mkdirs();
 
         if (!uploadDirectory_.exists() ||
@@ -480,7 +480,7 @@ class MultipartRequest {
 
                 // increase size count
                 if (output != null &&
-                    RifeConfig.instance().engine().fileUploadSizeCheck()) {
+                    RifeConfig.engine().fileUploadSizeCheck()) {
                     downloaded_size += line_length;
 
                     if (downloaded_size > RifeConfig.engine().fileUploadSizeLimit()) {

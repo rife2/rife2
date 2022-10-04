@@ -4,13 +4,14 @@
  */
 package rife.config;
 
+import rife.config.exceptions.DateFormatInitializationException;
 import rife.template.TemplateFactory;
+import rife.tools.Localization;
 import rife.tools.StringUtils;
 
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -30,33 +31,33 @@ public class RifeConfig {
         return RifeConfigSingleton.INSTANCE;
     }
 
-    public static Global global() {
+    public static GlobalConfig global() {
         return instance().global;
     }
 
-    public static Engine engine() {
+    public static EngineConfig engine() {
         return instance().engine;
     }
 
-    public static Server server() {
+    public static ServerConfig server() {
         return instance().server;
     }
 
-    public static Template template() {
+    public static TemplateConfig template() {
         return instance().template;
     }
 
-    public static Tools tools() {
+    public static ToolsConfig tools() {
         return instance().tools;
     }
 
-    public final Global global = new Global();
-    public final Engine engine = new Engine();
-    public final Server server = new Server();
-    public final Template template = new Template();
-    public final Tools tools = new Tools();
+    public final GlobalConfig global = new GlobalConfig();
+    public final EngineConfig engine = new EngineConfig();
+    public final ServerConfig server = new ServerConfig();
+    public final TemplateConfig template = new TemplateConfig();
+    public final ToolsConfig tools = new ToolsConfig();
 
-    public class Global {
+    public class GlobalConfig {
         private String tempPath_ = StringUtils.stripFromEnd(System.getProperty("java.io.tmpdir"), File.separator);
         private int autoReloadDelay_ = DEFAULT_AUTO_RELOAD_DELAY;
 
@@ -66,7 +67,7 @@ public class RifeConfig {
             return tempPath_;
         }
 
-        public Global tempPath(String path) {
+        public GlobalConfig tempPath(String path) {
             if (null == path) throw new IllegalArgumentException("path can't be null.");
             if (path.isEmpty()) throw new IllegalArgumentException("path can't be empty.");
             tempPath_ = path;
@@ -77,13 +78,13 @@ public class RifeConfig {
             return autoReloadDelay_;
         }
 
-        public Global autoReloadDelay(int delay) {
+        public GlobalConfig autoReloadDelay(int delay) {
             autoReloadDelay_ = delay;
             return this;
         }
     }
 
-    public class Engine {
+    public class EngineConfig {
         private String defaultContentType_ = DEFAULT_DEFAULT_CONTENT_TYPE;
         private boolean prettyEngineExceptions_ = DEFAULT_PRETTY_ENGINE_EXCEPTIONS;
         private boolean logEngineExceptions_ = DEFAULT_LOG_ENGINE_EXCEPTIONS;
@@ -127,7 +128,7 @@ public class RifeConfig {
             return defaultContentType_;
         }
 
-        public Engine defaultContentType(String type) {
+        public EngineConfig defaultContentType(String type) {
             if (null == type) throw new IllegalArgumentException("type can't be null.");
             if (type.isEmpty()) throw new IllegalArgumentException("type can't be empty.");
             defaultContentType_ = type;
@@ -138,7 +139,7 @@ public class RifeConfig {
             return prettyEngineExceptions_;
         }
 
-        public Engine prettyEngineExceptions(boolean flag) {
+        public EngineConfig prettyEngineExceptions(boolean flag) {
             prettyEngineExceptions_ = flag;
             return this;
         }
@@ -147,7 +148,7 @@ public class RifeConfig {
             return logEngineExceptions_;
         }
 
-        public Engine logEngineExceptions(boolean flag) {
+        public EngineConfig logEngineExceptions(boolean flag) {
             logEngineExceptions_ = flag;
             return this;
         }
@@ -159,7 +160,7 @@ public class RifeConfig {
             return fileUploadPath_;
         }
 
-        public Engine fileUploadPath(String path) {
+        public EngineConfig fileUploadPath(String path) {
             if (path != null &&
                 path.isEmpty()) throw new IllegalArgumentException("path can't be empty.");
             fileUploadPath_ = path;
@@ -170,7 +171,7 @@ public class RifeConfig {
             return fileUploadSizeLimit_;
         }
 
-        public Engine fileUploadSizeLimit(long limit) {
+        public EngineConfig fileUploadSizeLimit(long limit) {
             fileUploadSizeLimit_ = limit;
             return this;
         }
@@ -179,7 +180,7 @@ public class RifeConfig {
             return fileUploadSizeCheck_;
         }
 
-        public Engine fileUploadSizeCheck(boolean flag) {
+        public EngineConfig fileUploadSizeCheck(boolean flag) {
             fileUploadSizeCheck_ = flag;
             return this;
         }
@@ -188,7 +189,7 @@ public class RifeConfig {
             return fileUploadSizeException_;
         }
 
-        public Engine fileUploadSizeException(boolean flag) {
+        public EngineConfig fileUploadSizeException(boolean flag) {
             fileUploadSizeException_ = flag;
             return this;
         }
@@ -197,7 +198,7 @@ public class RifeConfig {
             return gzipCompression_;
         }
 
-        public Engine gzipCompression(boolean flag) {
+        public EngineConfig gzipCompression(boolean flag) {
             gzipCompression_ = flag;
             return this;
         }
@@ -206,7 +207,7 @@ public class RifeConfig {
             return gzipCompressionTypes_;
         }
 
-        public Engine gzipCompressionTypes(Collection<String> types) {
+        public EngineConfig gzipCompressionTypes(Collection<String> types) {
             gzipCompressionTypes_ = types;
             return this;
         }
@@ -215,7 +216,7 @@ public class RifeConfig {
             return localForwardPort_;
         }
 
-        public Engine localForwardPort(int port) {
+        public EngineConfig localForwardPort(int port) {
             if (port <= 0) port = -1;
             localForwardPort_ = port;
             return this;
@@ -225,7 +226,7 @@ public class RifeConfig {
             return proxyRootUrl_;
         }
 
-        public Engine proxyRootUrl(String url) {
+        public EngineConfig proxyRootUrl(String url) {
             proxyRootUrl_ = url;
             return this;
         }
@@ -234,7 +235,7 @@ public class RifeConfig {
             return webappContextPath_;
         }
 
-        public Engine webappContextPath(String path) {
+        public EngineConfig webappContextPath(String path) {
             webappContextPath_ = path;
             return this;
         }
@@ -243,7 +244,7 @@ public class RifeConfig {
             return requestEncoding_;
         }
 
-        public Engine requestEncoding(Charset encoding) {
+        public EngineConfig requestEncoding(Charset encoding) {
             requestEncoding_ = encoding;
             return this;
         }
@@ -252,13 +253,13 @@ public class RifeConfig {
             return responseEncoding_;
         }
 
-        public Engine responseEncoding(Charset encoding) {
+        public EngineConfig responseEncoding(Charset encoding) {
             responseEncoding_ = encoding;
             return this;
         }
     }
 
-    public class Server {
+    public class ServerConfig {
         private int port_ = DEFAULT_PORT;
 
         public static final int DEFAULT_PORT = 4567;
@@ -267,13 +268,13 @@ public class RifeConfig {
             return port_;
         }
 
-        public Server port(int port) {
+        public ServerConfig port(int port) {
             port_ = port;
             return this;
         }
     }
 
-    public class Template {
+    public class TemplateConfig {
         private boolean autoReload_ = DEFAULT_TEMPLATE_AUTO_RELOAD;
         private String generationPath_ = null;
         private boolean generateClasses_ = DEFAULT_GENERATE_CLASSES;
@@ -288,7 +289,7 @@ public class RifeConfig {
             return autoReload_;
         }
 
-        public Template autoReload(boolean flag) {
+        public TemplateConfig autoReload(boolean flag) {
             autoReload_ = flag;
             return this;
         }
@@ -305,7 +306,7 @@ public class RifeConfig {
             return generation_path;
         }
 
-        public Template generationPath(String path) {
+        public TemplateConfig generationPath(String path) {
             if (null == path) throw new IllegalArgumentException("path can't be null.");
             if (path.isEmpty()) throw new IllegalArgumentException("path can't be empty.");
             generationPath_ = path;
@@ -316,7 +317,7 @@ public class RifeConfig {
             return generateClasses_;
         }
 
-        public Template generateClasses(boolean generate) {
+        public TemplateConfig generateClasses(boolean generate) {
             generateClasses_ = generate;
             return this;
         }
@@ -325,7 +326,7 @@ public class RifeConfig {
             return defaultEncoding_;
         }
 
-        public Template defaultEncoding(String encoding) {
+        public TemplateConfig defaultEncoding(String encoding) {
             if (null == encoding) throw new IllegalArgumentException("encoding can't be null.");
             if (encoding.isEmpty()) throw new IllegalArgumentException("encoding can't be empty.");
             defaultEncoding_ = encoding;
@@ -350,7 +351,7 @@ public class RifeConfig {
             return result.iterator().next();
         }
 
-        public Template defaultResourceBundles(TemplateFactory factory, Collection<String> bundles) {
+        public TemplateConfig defaultResourceBundles(TemplateFactory factory, Collection<String> bundles) {
             if (null == defaultResourceBundles_) {
                 defaultResourceBundles_ = new HashMap<>();
             }
@@ -361,13 +362,15 @@ public class RifeConfig {
         }
     }
 
-    public class Tools {
+    public class ToolsConfig {
         private boolean resourceBundleAutoReload_ = DEFAULT_RESOURCE_BUNDLE_AUTO_RELOAD;
         private String defaultResourceBundle_ = DEFAULT_RESOURCE_BUNDLE;
         private String defaultLanguage_ = DEFAULT_DEFAULT_LANGUAGE;
         private String defaultCountry_ = DEFAULT_DEFAULT_COUNTRY;
         private TimeZone defaultTimeZone_ = DEFAULT_DEFAULT_TIMEZONE;
+        private String defaultShortDateFormat_;
         private String defaultInputDateFormat_ = DEFAULT_INPUT_DATE_FORMAT;
+        private String defaultLongDateFormat_;
         private int maxVisualUrlLength_ = DEFAULT_MAX_VISUAL_URL_LENGTH;
 
         public static final boolean DEFAULT_RESOURCE_BUNDLE_AUTO_RELOAD = true;
@@ -378,11 +381,11 @@ public class RifeConfig {
         public static final String DEFAULT_INPUT_DATE_FORMAT = "yyyy-MM-dd HH:mm";
         public static final int DEFAULT_MAX_VISUAL_URL_LENGTH = 70;
 
-        public boolean resourcebundleAutoReload() {
+        public boolean resourceBundleAutoReload() {
             return resourceBundleAutoReload_;
         }
 
-        public Tools resourcebundleAutoReload(boolean flag) {
+        public ToolsConfig resourceBundleAutoReload(boolean flag) {
             resourceBundleAutoReload_ = flag;
             return this;
         }
@@ -391,7 +394,7 @@ public class RifeConfig {
             return defaultResourceBundle_;
         }
 
-        public Tools defaultResourceBundle(String name) {
+        public ToolsConfig defaultResourceBundle(String name) {
             if (name != null &&
                 name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
             defaultResourceBundle_ = name;
@@ -402,10 +405,15 @@ public class RifeConfig {
             return defaultLanguage_;
         }
 
-        public Tools defaultLanguage(String abbreviation) {
-            if (null == abbreviation) throw new IllegalArgumentException("abbreviation can't be null.");
-            if (abbreviation.isEmpty()) throw new IllegalArgumentException("abbreviation can't be empty.");
-            defaultLanguage_ = abbreviation;
+        public ToolsConfig defaultLanguage(String abbreviation) {
+            if (abbreviation != null &&
+                abbreviation.isEmpty()) throw new IllegalArgumentException("abbreviation can't be empty.");
+
+            if (null == abbreviation) {
+                defaultLanguage_ = DEFAULT_DEFAULT_LANGUAGE;
+            } else {
+                defaultLanguage_ = abbreviation;
+            }
             return this;
         }
 
@@ -413,9 +421,9 @@ public class RifeConfig {
             return defaultCountry_;
         }
 
-        public Tools defaultCountry(String countryCode) {
-            if (null == countryCode) throw new IllegalArgumentException("countryCode can't be null.");
-            if (countryCode.isEmpty()) throw new IllegalArgumentException("countryCode can't be empty.");
+        public ToolsConfig defaultCountry(String countryCode) {
+            if (null != countryCode &&
+                countryCode.isEmpty()) throw new IllegalArgumentException("countryCode can't be empty.");
             defaultCountry_ = countryCode;
             return this;
         }
@@ -430,8 +438,62 @@ public class RifeConfig {
             return result;
         }
 
-        public Tools defaultTimeZone(TimeZone timeZone) {
+        public ToolsConfig defaultTimeZone(TimeZone timeZone) {
             defaultTimeZone_ = timeZone;
+            return this;
+        }
+
+        public DateFormat defaultShortDateFormat() {
+            if (defaultShortDateFormat_ != null) {
+                SimpleDateFormat sf;
+                try {
+                    sf = new SimpleDateFormat(defaultShortDateFormat_, Localization.getLocale());
+                    sf.setTimeZone(defaultTimeZone());
+                } catch (IllegalArgumentException e) {
+                    throw new DateFormatInitializationException(e.getMessage());
+                }
+
+                return sf;
+            } else {
+                if (0 != defaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
+                    return DateFormat.getDateInstance(DateFormat.SHORT, Localization.getLocale());
+                }
+
+                return DateFormat.getDateInstance(DateFormat.SHORT, Locale.ENGLISH);
+            }
+        }
+
+        public ToolsConfig defaultShortDateFormat(String format) {
+            if (null != format &&
+                format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
+            defaultShortDateFormat_ = format;
+            return this;
+        }
+
+        public DateFormat defaultLongDateFormat() {
+            if (defaultLongDateFormat_ != null) {
+                SimpleDateFormat sf;
+                try {
+                    sf = new SimpleDateFormat(defaultLongDateFormat_, Localization.getLocale());
+                    sf.setTimeZone(defaultTimeZone());
+                } catch (IllegalArgumentException e) {
+                    throw new DateFormatInitializationException(e.getMessage());
+                }
+
+                return sf;
+            } else {
+                if (0 != defaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
+                    return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Localization.getLocale());
+                }
+
+                return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.ENGLISH);
+            }
+        }
+
+        public ToolsConfig defaultLongDateFormat(String format) {
+            if (null != format &&
+                format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
+            defaultLongDateFormat_ = format;
             return this;
         }
 
@@ -441,9 +503,9 @@ public class RifeConfig {
             return sf;
         }
 
-        public Tools defaultInputDateFormat(String format) {
-            if (null == format) throw new IllegalArgumentException("format can't be null.");
-            if (format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
+        public ToolsConfig defaultInputDateFormat(String format) {
+            if (null != format &&
+                format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
             defaultInputDateFormat_ = format;
             return this;
         }
@@ -452,7 +514,7 @@ public class RifeConfig {
             return maxVisualUrlLength_;
         }
 
-        public Tools maxVisualUrlLength(int length) {
+        public ToolsConfig maxVisualUrlLength(int length) {
             maxVisualUrlLength_ = length;
             return this;
         }

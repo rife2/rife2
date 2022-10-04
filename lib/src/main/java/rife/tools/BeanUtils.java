@@ -41,7 +41,7 @@ public abstract class BeanUtils {
 
     public static DateFormat getConcisePreciseDateFormat() {
         SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddHHmmssSSSZ", Localization.getLocale());
-        sf.setTimeZone(RifeConfig.instance().tools.defaultTimeZone());
+        sf.setTimeZone(RifeConfig.tools().defaultTimeZone());
         return sf;
     }
 
@@ -463,7 +463,7 @@ public abstract class BeanUtils {
                 result = BeanUtils.getConcisePreciseDateFormat().parseObject(date);
             } catch (ParseException e) {
                 try {
-                    result = RifeConfig.instance().tools.defaultInputDateFormat().parseObject(date);
+                    result = RifeConfig.tools().defaultInputDateFormat().parseObject(date);
                 } catch (ParseException e2) {
                     throw e;
                 }
@@ -804,7 +804,7 @@ public abstract class BeanUtils {
                                                 parameter_value_typed = used_format.parseObject(propertyValues[i]);
                                             } catch (ParseException e) {
                                                 try {
-                                                    used_format = RifeConfig.instance().tools.defaultInputDateFormat();
+                                                    used_format = RifeConfig.tools().defaultInputDateFormat();
                                                     parameter_value_typed = used_format.parseObject(propertyValues[i]);
                                                 } catch (ParseException e2) {
                                                     throw e;
@@ -957,7 +957,7 @@ public abstract class BeanUtils {
                                         parameter_value_typed = used_format.parseObject(propertyValues[0]);
                                     } catch (ParseException e) {
                                         try {
-                                            used_format = RifeConfig.instance().tools.defaultInputDateFormat();
+                                            used_format = RifeConfig.tools().defaultInputDateFormat();
                                             parameter_value_typed = used_format.parseObject(propertyValues[0]);
                                         } catch (ParseException e2) {
                                             throw e;

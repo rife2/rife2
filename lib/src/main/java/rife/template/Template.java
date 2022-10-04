@@ -11,6 +11,7 @@ import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import rife.template.exceptions.TemplateException;
 
@@ -928,112 +929,111 @@ public interface Template extends Cloneable {
      */
     public boolean hasDefaultValue(String id);
 
-    // TODO
-//    /**
-//     * Each template type supports a set of special block tags that are used
-//     * for adding automated features like localization, block value scripting,
-//     * config value setting, ... Instead of having to parse all template block
-//     * identifiers each time these features are used, RIFE filters them out at
-//     * template compilation and keeps them available in a separate collection.
-//     * <p>This method is mainly used by the framework itself, the supported
-//     * filter regular expressions are available from {@link TemplateFactory}
-//     * and {@link TemplateFactoryEngineTypes}.
-//     *
-//     * @param filter a template factory regular expression
-//     * @return a list of captured groups for matching block ID's
-//     * @see #hasFilteredBlocks
-//     * @since 1.0
-//     */
-//    public List<String[]> getFilteredBlocks(String filter);
-//
-//    /**
-//     * Returns whether any block matched a particular filter at template
-//     * compilation.
-//     *
-//     * @param filter a template factory regular expression
-//     * @return whether any matching blocks exist in this template
-//     * @see #getFilteredBlocks
-//     * @since 1.0
-//     */
-//    public boolean hasFilteredBlocks(String filter);
-//
-//    /**
-//     * Each template type supports a set of special value tags that are used
-//     * for adding automated features like embedded elements, localization,
-//     * block value scripting, config value setting, ... Instead of having to
-//     * parse all template value identifiers each time these features are used,
-//     * RIFE filters them out at template compilation and keeps them available
-//     * in a separate collection.
-//     * <p>This method is mainly used by the framework itself, the supported
-//     * filter regular expressions are available from {@link TemplateFactory}
-//     * and {@link TemplateFactoryEngineTypes}.
-//     *
-//     * @param filter a template factory regular expression
-//     * @return a list of captured groups for matching value ID's
-//     * @see #hasFilteredValues
-//     * @since 1.0
-//     */
-//    public List<String[]> getFilteredValues(String filter);
-//
-//    /**
-//     * Returns whether any value matched a particular filter at template
-//     * compilation.
-//     *
-//     * @param filter a template factory regular expression
-//     * @return whether any matching values exist in this template
-//     * @see #getFilteredValues
-//     * @since 1.0
-//     */
-//    public boolean hasFilteredValues(String filter);
-//
-//    /**
-//     * Fills all values in this template which match "<code>L10N:<em>key</em></code>",
-//     * where "<code>key</code>" is a {@linkplain
-//     * ResourceBundle#getObject(String) key} in a {@linkplain
-//     * #addResourceBundle(ResourceBundle) resource bundle} registered for this
-//     * template. Each value will be filled with the value in the resource
-//     * bundle with the corresponding key.
-//     * <p>This method is normally called automatically during template
-//     * initialization. You should call it if you wish to re-evaluate the tags
-//     * at any time during the template's life.
-//     *
-//     * @return the list of names of the template values that were generated
-//     * @since 1.0
-//     */
-//    public List<String> evaluateL10nTags();
-//
-//    /**
-//     * Fills all values in this template which match "<code>CONFIG:<em>key</em></code>",
-//     * where "<code>key</code>" is a configuration value name in the {@link
-//     * Config} instance returned by {@link Config#getRepInstance()}. Each
-//     * valuev will be filled with the value of the configuration option with
-//     * the corresponding key.
-//     * <p>This method is normally called automatically during template
-//     * initialization. You should call it if you wish to re-evaluate the tags
-//     * at any time during the template's life.
-//     *
-//     * @return the list of names of the template values that were generated
-//     * @since 1.0
-//     */
-//    public List<String> evaluateConfigTags();
-//
-//    /**
-//     * Fills the value "<code>LANG:<em>id</em></code>" with the value of the
-//     * block "<code>LANG:<em>id</em>:<em>langid</em></code>", where "<code>id</code>"
-//     * is the given ID, and "<code>langid</code>" is this template's
-//     * {@linkplain #getLanguage() current language ID}.
-//     * <p>If no matching block for the current language is found, the content
-//     * of the specified value will not be modified.
-//     * <p>This method is called automatically when the output is generated
-//     * (such as when calling {@link #getContent()}). You can manually call
-//     * this method to force evaluation of the tags earlier than that.
-//     *
-//     * @param id the ID whose language tag should be filled with the
-//     *           appropriate block
-//     * @return the list of names of the template values that were generated
-//     * @since 1.0
-//     */
-//    public List<String> evaluateLangTags(String id);
+    /**
+     * Each template type supports a set of special block tags that are used
+     * for adding automated features like localization, block value scripting,
+     * config value setting, ... Instead of having to parse all template block
+     * identifiers each time these features are used, RIFE filters them out at
+     * template compilation and keeps them available in a separate collection.
+     * <p>This method is mainly used by the framework itself, the supported
+     * filter regular expressions are available from {@link TemplateFactory}
+     * and {@link TemplateFactoryEngineTypes}.
+     *
+     * @param filter a template factory regular expression
+     * @return a list of captured groups for matching block ID's
+     * @see #hasFilteredBlocks
+     * @since 1.0
+     */
+    public List<String[]> getFilteredBlocks(String filter);
+
+    /**
+     * Returns whether any block matched a particular filter at template
+     * compilation.
+     *
+     * @param filter a template factory regular expression
+     * @return whether any matching blocks exist in this template
+     * @see #getFilteredBlocks
+     * @since 1.0
+     */
+    public boolean hasFilteredBlocks(String filter);
+
+    /**
+     * Each template type supports a set of special value tags that are used
+     * for adding automated features like embedded elements, localization,
+     * block value scripting, config value setting, ... Instead of having to
+     * parse all template value identifiers each time these features are used,
+     * RIFE filters them out at template compilation and keeps them available
+     * in a separate collection.
+     * <p>This method is mainly used by the framework itself, the supported
+     * filter regular expressions are available from {@link TemplateFactory}
+     * and {@link TemplateFactoryEngineTypes}.
+     *
+     * @param filter a template factory regular expression
+     * @return a list of captured groups for matching value ID's
+     * @see #hasFilteredValues
+     * @since 1.0
+     */
+    public List<String[]> getFilteredValues(String filter);
+
+    /**
+     * Returns whether any value matched a particular filter at template
+     * compilation.
+     *
+     * @param filter a template factory regular expression
+     * @return whether any matching values exist in this template
+     * @see #getFilteredValues
+     * @since 1.0
+     */
+    public boolean hasFilteredValues(String filter);
+
+    /**
+     * Fills all values in this template which match "<code>L10N:<em>key</em></code>",
+     * where "<code>key</code>" is a {@linkplain
+     * ResourceBundle#getObject(String) key} in a {@linkplain
+     * #addResourceBundle(ResourceBundle) resource bundle} registered for this
+     * template. Each value will be filled with the value in the resource
+     * bundle with the corresponding key.
+     * <p>This method is normally called automatically during template
+     * initialization. You should call it if you wish to re-evaluate the tags
+     * at any time during the template's life.
+     *
+     * @return the list of names of the template values that were generated
+     * @since 1.0
+     */
+    public List<String> evaluateL10nTags();
+
+    /**
+     * Fills all values in this template which match "<code>CONFIG:<em>key</em></code>",
+     * where "<code>key</code>" is a configuration value name in the {@link
+     * Config} instance returned by {@link Config#getRepInstance()}. Each
+     * valuev will be filled with the value of the configuration option with
+     * the corresponding key.
+     * <p>This method is normally called automatically during template
+     * initialization. You should call it if you wish to re-evaluate the tags
+     * at any time during the template's life.
+     *
+     * @return the list of names of the template values that were generated
+     * @since 1.0
+     */
+    public List<String> evaluateConfigTags();
+
+    /**
+     * Fills the value "<code>LANG:<em>id</em></code>" with the value of the
+     * block "<code>LANG:<em>id</em>:<em>langid</em></code>", where "<code>id</code>"
+     * is the given ID, and "<code>langid</code>" is this template's
+     * {@linkplain #getLanguage() current language ID}.
+     * <p>If no matching block for the current language is found, the content
+     * of the specified value will not be modified.
+     * <p>This method is called automatically when the output is generated
+     * (such as when calling {@link #getContent()}). You can manually call
+     * this method to force evaluation of the tags earlier than that.
+     *
+     * @param id the ID whose language tag should be filled with the
+     *           appropriate block
+     * @return the list of names of the template values that were generated
+     * @since 1.0
+     */
+    public List<String> evaluateLangTags(String id);
 //
 //    /**
 //     * Evaluates the specified OGNL, Groovy, or Janino expression tag. For
@@ -1077,33 +1077,33 @@ public interface Template extends Cloneable {
 //     * @since 1.0
 //     */
 //    public List<String> evaluateExpressionConfigTags(String id);
-//
-//    /**
-//     * Evalutes all values in this template with ID's of the form "<code>RENDER:<em>class</em></code>"
-//     * or "<code>RENDER:<em>class</em>:<em>differentiato</em></code><em>r</em>",
-//     * where "<code>class</code>" is the fully-qualified name of a class which
-//     * extends {@link ValueRenderer}, the result of calling {@link
-//     * ValueRenderer#render(Template, String, String) ValueRenderer.render} on
-//     * a new instance of the class. The class must contain a zero-argument
-//     * ("no-arg") constructor.
-//     * <p>For example, given a class <code>MyRenderer</code> in the package "<code>org.rifers.something</code>",
-//     * which extends {@link ValueRenderer}, a value "<code>RENDER:org.rifers.something.MyRenderer:test</code>"
-//     * would create a new instance of <code>MyRenderer</code> (using its
-//     * no-arg constructor), call <code>render(this,
-//     * "RENDER:org.rifers.something.MyRenderer:test", "test")</code>, and set
-//     * the value in this template to whatever value the call returns.
-//     * <p>Value renderer tags are evaluated automatically when the output is
-//     * generated (such as when calling {@link #getContent()}). You can
-//     * manually call this method to force evaluation of the tags earlier than
-//     * that.
-//     *
-//     * @return the list of names of the template values that were generated
-//     * @throws TemplateException if a class in a render tag cannot be
-//     *                           instantiated
-//     * @since 1.0
-//     */
-//    public List<String> evaluateRenderTags()
-//    throws TemplateException;
+
+    /**
+     * Evalutes all values in this template with ID's of the form "<code>render:<em>class</em></code>"
+     * or "<code>render:<em>class</em>:<em>differentiator</em></code><em>r</em>",
+     * where "<code>class</code>" is the fully-qualified name of a class which
+     * extends {@link ValueRenderer}, the result of calling {@link
+     * ValueRenderer#render(Template, String, String) ValueRenderer.render} on
+     * a new instance of the class. The class must contain a zero-argument
+     * ("no-arg") constructor.
+     * <p>For example, given a class <code>MyRenderer</code> in the package "<code>org.rifers.something</code>",
+     * which extends {@link ValueRenderer}, a value "<code>render:org.rifers.something.MyRenderer:test</code>"
+     * would create a new instance of <code>MyRenderer</code> (using its
+     * no-arg constructor), call <code>render(this,
+     * "render:org.rifers.something.MyRenderer:test", "test")</code>, and set
+     * the value in this template to whatever value the call returns.
+     * <p>Value renderer tags are evaluated automatically when the output is
+     * generated (such as when calling {@link #getContent()}). You can
+     * manually call this method to force evaluation of the tags earlier than
+     * that.
+     *
+     * @return the list of names of the template values that were generated
+     * @throws TemplateException if a class in a render tag cannot be
+     *                           instantiated
+     * @since 1.0
+     */
+    public List<String> evaluateRenderTags()
+    throws TemplateException;
 
     /**
      * Returns whether this template contains a block with the given ID.
@@ -1237,17 +1237,15 @@ public interface Template extends Cloneable {
      */
     public long getModificationTime();
 
-    // TODO
-//    /**
-//     * Returns this template's {@linkplain BeanHandler bean handler}. The bean
-//     * handler is used for filling bean values into template values, and for
-//     * building forms.
-//     *
-//     * @return this template's bean handler
-//     * @since 1.0
-//     */
-//    public BeanHandler getBeanHandler();
-//
+    /**
+     * Returns this template's {@linkplain BeanHandler bean handler}. The bean
+     * handler is used for filling bean values into template values, and for
+     * building forms.
+     *
+     * @return this template's bean handler
+     * @since 1.0
+     */
+    public BeanHandler getBeanHandler();
 
     /**
      * Returns the encoder that this template uses to convert strings to
@@ -1260,66 +1258,66 @@ public interface Template extends Cloneable {
      * @since 1.0
      */
     public TemplateEncoder getEncoder();
-//
-//    /**
-//     * Adds a resource bundle to this template. Resource bundles are used in
-//     * many places, including when generating labels for forms, generating
-//     * options for <code>&lt;select&gt;</code> tags, and {@linkplain
-//     * #evaluateL10nTags() using localized text}.
-//     *
-//     * @param resourceBundle a resource bundle
-//     * @see #getResourceBundles
-//     * @see #hasResourceBundles
-//     * @since 1.0
-//     */
-//    public void addResourceBundle(ResourceBundle resourceBundle);
-//
-//    /**
-//     * Returns a list of the resource bundles used by this template. This will
-//     * contain any bundles added through {@link #addResourceBundle
-//     * addResourceBundle} as well as any default resource bundles.
-//     *
-//     * @return a list of this template's resource bundles
-//     * @see #addResourceBundle
-//     * @see #hasResourceBundles
-//     * @since 1.0
-//     */
-//    public Collection<ResourceBundle> getResourceBundles();
-//
-//    /**
-//     * Returns whether this template has any resource bundles {@linkplain
-//     * #addResourceBundle registered}.
-//     *
-//     * @return whether this template contains any resource bundles
-//     * @see #addResourceBundle
-//     * @see #getResourceBundles
-//     * @since 1.0
-//     */
-//    public boolean hasResourceBundles();
-//
-//    /**
-//     * Sets this template's current language code, such as "en".
-//     * <p>This is used when {@link #evaluateL10nTags filling localized text
-//     * values}.
-//     *
-//     * @param lang a 2-letter language code for the language to be used by
-//     *             this template
-//     * @see #getLanguage
-//     * @since 1.0
-//     */
-//    public void setLanguage(String lang);
-//
-//    /**
-//     * Returns this template's current 2-letter language code. This code is
-//     * used when {@link #evaluateL10nTags filling localized text values}. If
-//     * the language has not been {@linkplain #setLanguage set}, it defaults to
-//     * the language set by the RIFE configuration parameter "<code>L10N_DEFAULT_LANGUAGE</code>".
-//     *
-//     * @return the 2-letter language code currently used by this template
-//     * @see #setLanguage
-//     * @since 1.0
-//     */
-//    public String getLanguage();
+
+    /**
+     * Adds a resource bundle to this template. Resource bundles are used in
+     * many places, including when generating labels for forms, generating
+     * options for <code>&lt;select&gt;</code> tags, and {@linkplain
+     * #evaluateL10nTags() using localized text}.
+     *
+     * @param resourceBundle a resource bundle
+     * @see #getResourceBundles
+     * @see #hasResourceBundles
+     * @since 1.0
+     */
+    public void addResourceBundle(ResourceBundle resourceBundle);
+
+    /**
+     * Returns a list of the resource bundles used by this template. This will
+     * contain any bundles added through {@link #addResourceBundle
+     * addResourceBundle} as well as any default resource bundles.
+     *
+     * @return a list of this template's resource bundles
+     * @see #addResourceBundle
+     * @see #hasResourceBundles
+     * @since 1.0
+     */
+    public Collection<ResourceBundle> getResourceBundles();
+
+    /**
+     * Returns whether this template has any resource bundles {@linkplain
+     * #addResourceBundle registered}.
+     *
+     * @return whether this template contains any resource bundles
+     * @see #addResourceBundle
+     * @see #getResourceBundles
+     * @since 1.0
+     */
+    public boolean hasResourceBundles();
+
+    /**
+     * Sets this template's current language code, such as "en".
+     * <p>This is used when {@link #evaluateL10nTags filling localized text
+     * values}.
+     *
+     * @param lang a 2-letter language code for the language to be used by
+     *             this template
+     * @see #getLanguage
+     * @since 1.0
+     */
+    public void setLanguage(String lang);
+
+    /**
+     * Returns this template's current 2-letter language code. This code is
+     * used when {@link #evaluateL10nTags filling localized text values}. If
+     * the language has not been {@linkplain #setLanguage set}, it defaults to
+     * the language set by the RIFE configuration parameter "<code>L10N_DEFAULT_LANGUAGE</code>".
+     *
+     * @return the 2-letter language code currently used by this template
+     * @see #setLanguage
+     * @since 1.0
+     */
+    public String getLanguage();
 //
 //    /**
 //     * Sets a variable which can be accessed by {@linkplain

@@ -83,7 +83,7 @@ public interface BeanHandler {
     // TODO
 //    /**
 //     * Returns a form builder which will be used to {@linkplain
-//     * com.uwyn.rife.engine.Element#generateForm(Template, Object) generate
+//     * rife.engine.Element#generateForm(Template, Object) generate
 //     * forms} in the corresponding template.
 //     *
 //     * @return a form builder for use with the corresponding template

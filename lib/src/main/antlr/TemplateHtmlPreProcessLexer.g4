@@ -16,7 +16,7 @@ fragment DIGIT  :   [0-9] ;
 fragment
 NameChar    :   NameStartChar
             |   NameEndChar
-            |   '-'
+            |   '-' | '/'
             ;
 
 fragment

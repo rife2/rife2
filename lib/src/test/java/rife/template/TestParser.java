@@ -11,6 +11,7 @@ import rife.template.exceptions.TemplateException;
 import rife.tools.ExceptionUtils;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -394,9 +395,9 @@ public class TestParser {
     @Test
     public void testParseBlocksNameHashcodeConflicts() {
         try {
-            assertTrue("DMn0".hashCode() == "Cln0".hashCode());
-            assertTrue("DMn0".hashCode() == "DNNO".hashCode());
-            assertTrue("FMmO".hashCode() == "EmMn".hashCode());
+            assertEquals("DMn0".hashCode(), "Cln0".hashCode());
+            assertEquals("DMn0".hashCode(), "DNNO".hashCode());
+            assertEquals("FMmO".hashCode(), "EmMn".hashCode());
             assertTrue("DMn0".hashCode() != "FMmO".hashCode());
             assertTrue("DMn0".hashCode() != "HNMn".hashCode());
             assertTrue("FMmO".hashCode() != "HNMn".hashCode());
@@ -663,403 +664,355 @@ public class TestParser {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
     }
-/*
-	@Test public void testParseFilteredBlocks()
-	{
-		try
-		{
-			Parser			parser = null;
-			Parsed			template_parsed = null;
-			FilteredTagsMap	filtered_blocks_map = null;
 
-			String 			filter1 = "^FILTER1:(\\w+):CONST:(\\w+)$";
-			String 			filter2 = "^FILTER2:(\\w+)$";
-			String 			filter3 = "^CONST-FILTER3:(\\w+)$";
-			String 			filter4 = "(\\w+)";
-			FilteredTags	filtered_blocks = null;
+    @Test
+    public void testParseFilteredBlocks() {
+        try {
+            Parser parser;
+            Parsed template_parsed;
+            FilteredTagsMap filtered_blocks_map;
 
-			parser = new Parser(TemplateFactory.HTML, "html", new Parser.Config[] {TemplateFactory.CONFIG_INVISIBLE_XML}, ".html", (Pattern[])null, (Pattern[])null);
-			template_parsed = parser.parse("blocks_filtered_in", null, null);
-			filtered_blocks_map = template_parsed.getFilteredBlocksMap();
-			assertNull(filtered_blocks_map);
+            String filter1 = "^FILTER1:(\\w+):CONST:(\\w+)$";
+            String filter2 = "^FILTER2:(\\w+)$";
+            String filter3 = "^CONST-FILTER3:(\\w+)$";
+            String filter4 = "(\\w+)";
+            FilteredTags filtered_blocks = null;
 
-			parser = new Parser(TemplateFactory.HTML, "html", new Parser.Config[] {TemplateFactory.CONFIG_INVISIBLE_XML}, ".html", new Pattern[] {Pattern.compile(filter1), Pattern.compile(filter2), Pattern.compile(filter3), Pattern.compile(filter4)}, null);
-			template_parsed = parser.parse("blocks_filtered_in", null, null);
-			filtered_blocks_map = template_parsed.getFilteredBlocksMap();
-			assertNotNull(filtered_blocks_map);
+            parser = new Parser(TemplateFactory.HTML, "html", ".html", (Pattern[]) null, (Pattern[]) null);
+            template_parsed = parser.parse("blocks_filtered_in", null, null);
+            filtered_blocks_map = template_parsed.getFilteredBlocksMap();
+            assertNull(filtered_blocks_map);
 
-			assertTrue(filtered_blocks_map.containsFilter(filter1));
-			assertTrue(filtered_blocks_map.containsFilter(filter2));
-			assertTrue(filtered_blocks_map.containsFilter(filter3));
-			assertFalse(filtered_blocks_map.containsFilter(filter4));
+            parser = new Parser(TemplateFactory.HTML, "html", ".html", new Pattern[]{Pattern.compile(filter1), Pattern.compile(filter2), Pattern.compile(filter3), Pattern.compile(filter4)}, null);
+            template_parsed = parser.parse("blocks_filtered_in", null, null);
+            filtered_blocks_map = template_parsed.getFilteredBlocksMap();
+            assertNotNull(filtered_blocks_map);
 
-			filtered_blocks = filtered_blocks_map.getFilteredTag(filter1);
-			assertEquals(3, filtered_blocks.size());
+            assertTrue(filtered_blocks_map.containsFilter(filter1));
+            assertTrue(filtered_blocks_map.containsFilter(filter2));
+            assertTrue(filtered_blocks_map.containsFilter(filter3));
+            assertFalse(filtered_blocks_map.containsFilter(filter4));
 
-			boolean filter1_got_block1 = false;
-			boolean filter1_got_block2 = false;
-			boolean filter1_got_block3 = false;
-			for (String[] block_groups : filtered_blocks)
-			{
-				assertEquals(3, block_groups.length);
-				if (block_groups[0].equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
-					block_groups[1].equals("BLOCK1a") &&
-					block_groups[2].equals("BLOCK1b"))
-				{
-					filter1_got_block1 = true;
-				}
-				else if (block_groups[0].equals("FILTER1:BLOCK2a:CONST:BLOCK2b") &&
-					block_groups[1].equals("BLOCK2a") &&
-					block_groups[2].equals("BLOCK2b"))
-				{
-					filter1_got_block2 = true;
-				}
-				else if (block_groups[0].equals("FILTER1:BLOCK3a:CONST:BLOCK3b") &&
-					block_groups[1].equals("BLOCK3a") &&
-					block_groups[2].equals("BLOCK3b"))
-				{
-					filter1_got_block3 = true;
-				}
-			}
-			assertTrue(filter1_got_block1 && filter1_got_block2 && filter1_got_block3);
+            filtered_blocks = filtered_blocks_map.getFilteredTag(filter1);
+            assertEquals(3, filtered_blocks.size());
 
-			filtered_blocks = filtered_blocks_map.getFilteredTag(filter2);
-			assertEquals(2, filtered_blocks.size());
+            boolean filter1_got_block1 = false;
+            boolean filter1_got_block2 = false;
+            boolean filter1_got_block3 = false;
+            for (String[] block_groups : filtered_blocks) {
+                assertEquals(3, block_groups.length);
+                if (block_groups[0].equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
+                    block_groups[1].equals("BLOCK1a") &&
+                    block_groups[2].equals("BLOCK1b")) {
+                    filter1_got_block1 = true;
+                } else if (block_groups[0].equals("FILTER1:BLOCK2a:CONST:BLOCK2b") &&
+                    block_groups[1].equals("BLOCK2a") &&
+                    block_groups[2].equals("BLOCK2b")) {
+                    filter1_got_block2 = true;
+                } else if (block_groups[0].equals("FILTER1:BLOCK3a:CONST:BLOCK3b") &&
+                    block_groups[1].equals("BLOCK3a") &&
+                    block_groups[2].equals("BLOCK3b")) {
+                    filter1_got_block3 = true;
+                }
+            }
+            assertTrue(filter1_got_block1 && filter1_got_block2 && filter1_got_block3);
 
-			boolean filter2_got_block1 = false;
-			boolean filter2_got_block2 = false;
-			for (String[] block_groups : filtered_blocks)
-			{
-				assertEquals(2, block_groups.length);
-				if (block_groups[0].equals("FILTER2:BLOCK1") &&
-					block_groups[1].equals("BLOCK1"))
-				{
-					filter2_got_block1 = true;
-				}
-				else if (block_groups[0].equals("FILTER2:BLOCK2") &&
-					block_groups[1].equals("BLOCK2"))
-				{
-					filter2_got_block2 = true;
-				}
-			}
-			assertTrue(filter2_got_block1 && filter2_got_block2);
+            filtered_blocks = filtered_blocks_map.getFilteredTag(filter2);
+            assertEquals(2, filtered_blocks.size());
 
-			filtered_blocks = filtered_blocks_map.getFilteredTag(filter3);
-			assertEquals(2, filtered_blocks.size());
+            boolean filter2_got_block1 = false;
+            boolean filter2_got_block2 = false;
+            for (String[] block_groups : filtered_blocks) {
+                assertEquals(2, block_groups.length);
+                if (block_groups[0].equals("FILTER2:BLOCK1") &&
+                    block_groups[1].equals("BLOCK1")) {
+                    filter2_got_block1 = true;
+                } else if (block_groups[0].equals("FILTER2:BLOCK2") &&
+                    block_groups[1].equals("BLOCK2")) {
+                    filter2_got_block2 = true;
+                }
+            }
+            assertTrue(filter2_got_block1 && filter2_got_block2);
 
-			boolean filter3_got_block1 = false;
-			boolean filter3_got_block2 = false;
-			for (String[] block_groups : filtered_blocks)
-			{
-				assertEquals(2, block_groups.length);
-				if (block_groups[0].equals("CONST-FILTER3:BLOCK1") &&
-					block_groups[1].equals("BLOCK1"))
-				{
-					filter3_got_block1 = true;
-				}
-				else if (block_groups[0].equals("CONST-FILTER3:BLOCK2") &&
-					block_groups[1].equals("BLOCK2"))
-				{
-					filter3_got_block2 = true;
-				}
-			}
-			assertTrue(filter3_got_block1 && filter3_got_block2);
+            filtered_blocks = filtered_blocks_map.getFilteredTag(filter3);
+            assertEquals(2, filtered_blocks.size());
 
-			parser = new Parser(TemplateFactory.HTML, "html", new Parser.Config[] {TemplateFactory.CONFIG_INVISIBLE_XML}, ".html", new Pattern[] {Pattern.compile(filter4), Pattern.compile(filter1), Pattern.compile(filter2), Pattern.compile(filter3)}, null);
-			template_parsed = parser.parse("blocks_filtered_in", null, null);
-			filtered_blocks_map = template_parsed.getFilteredBlocksMap();
-			assertNotNull(filtered_blocks_map);
+            boolean filter3_got_block1 = false;
+            boolean filter3_got_block2 = false;
+            for (String[] block_groups : filtered_blocks) {
+                assertEquals(2, block_groups.length);
+                if (block_groups[0].equals("CONST-FILTER3:BLOCK1") &&
+                    block_groups[1].equals("BLOCK1")) {
+                    filter3_got_block1 = true;
+                } else if (block_groups[0].equals("CONST-FILTER3:BLOCK2") &&
+                    block_groups[1].equals("BLOCK2")) {
+                    filter3_got_block2 = true;
+                }
+            }
+            assertTrue(filter3_got_block1 && filter3_got_block2);
 
-			assertFalse(filtered_blocks_map.containsFilter(filter1));
-			assertFalse(filtered_blocks_map.containsFilter(filter2));
-			assertFalse(filtered_blocks_map.containsFilter(filter3));
-			assertTrue(filtered_blocks_map.containsFilter(filter4));
+            parser = new Parser(TemplateFactory.HTML, "html", ".html", new Pattern[]{Pattern.compile(filter4), Pattern.compile(filter1), Pattern.compile(filter2), Pattern.compile(filter3)}, null);
+            template_parsed = parser.parse("blocks_filtered_in", null, null);
+            filtered_blocks_map = template_parsed.getFilteredBlocksMap();
+            assertNotNull(filtered_blocks_map);
 
-			filtered_blocks = filtered_blocks_map.getFilteredTag(filter4);
-			assertEquals(7, filtered_blocks.size());
+            assertFalse(filtered_blocks_map.containsFilter(filter1));
+            assertFalse(filtered_blocks_map.containsFilter(filter2));
+            assertFalse(filtered_blocks_map.containsFilter(filter3));
+            assertTrue(filtered_blocks_map.containsFilter(filter4));
 
-			boolean filter4_got_block1 = false;
-			boolean filter4_got_block2 = false;
-			boolean filter4_got_block3 = false;
-			boolean filter4_got_block4 = false;
-			boolean filter4_got_block5 = false;
-			boolean filter4_got_block6 = false;
-			boolean filter4_got_block7 = false;
-			for (String[] block_groups : filtered_blocks)
-			{
-				if (block_groups[0].equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
-					block_groups[1].equals("FILTER1") &&
-					block_groups[2].equals("BLOCK1a") &&
-					block_groups[3].equals("CONST") &&
-					block_groups[4].equals("BLOCK1b"))
-				{
-					assertEquals(5, block_groups.length);
-					filter4_got_block1 = true;
-					continue;
-				}
-				if (block_groups[0].equals("FILTER1:BLOCK2a:CONST:BLOCK2b") &&
-					block_groups[1].equals("FILTER1") &&
-					block_groups[2].equals("BLOCK2a") &&
-					block_groups[3].equals("CONST") &&
-					block_groups[4].equals("BLOCK2b"))
-				{
-					assertEquals(5, block_groups.length);
-					filter4_got_block2 = true;
-					continue;
-				}
-				if (block_groups[0].equals("FILTER1:BLOCK3a:CONST:BLOCK3b") &&
-					block_groups[1].equals("FILTER1") &&
-					block_groups[2].equals("BLOCK3a") &&
-					block_groups[3].equals("CONST") &&
-					block_groups[4].equals("BLOCK3b"))
-				{
-					assertEquals(5, block_groups.length);
-					filter4_got_block3 = true;
-					continue;
-				}
-				if (block_groups[0].equals("FILTER2:BLOCK1") &&
-					block_groups[1].equals("FILTER2") &&
-					block_groups[2].equals("BLOCK1"))
-				{
-					assertEquals(3, block_groups.length);
-					filter4_got_block4 = true;
-					continue;
-				}
-				if (block_groups[0].equals("FILTER2:BLOCK2") &&
-					block_groups[1].equals("FILTER2") &&
-					block_groups[2].equals("BLOCK2"))
-				{
-					assertEquals(3, block_groups.length);
-					filter4_got_block5 = true;
-					continue;
-				}
-				if (block_groups[0].equals("CONST-FILTER3:BLOCK1") &&
-					block_groups[1].equals("CONST") &&
-					block_groups[2].equals("FILTER3") &&
-					block_groups[3].equals("BLOCK1"))
-				{
-					assertEquals(4, block_groups.length);
-					filter4_got_block6 = true;
-					continue;
-				}
-				if (block_groups[0].equals("CONST-FILTER3:BLOCK2") &&
-					block_groups[1].equals("CONST") &&
-					block_groups[2].equals("FILTER3") &&
-					block_groups[3].equals("BLOCK2"))
-				{
-					assertEquals(4, block_groups.length);
-					filter4_got_block7 = true;
-					continue;
-				}
-			}
-			assertTrue(filter4_got_block1 && filter4_got_block2 && filter4_got_block3 &&
-				filter4_got_block4 && filter4_got_block5 && filter4_got_block6 &&
-				filter4_got_block7);
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+            filtered_blocks = filtered_blocks_map.getFilteredTag(filter4);
+            assertEquals(7, filtered_blocks.size());
 
-	@Test public void testParseFilteredValues()
-	{
-		try
-		{
-			Parser			parser = null;
-			Parsed			template_parsed = null;
-			FilteredTagsMap	filtered_values_map = null;
+            boolean filter4_got_block1 = false;
+            boolean filter4_got_block2 = false;
+            boolean filter4_got_block3 = false;
+            boolean filter4_got_block4 = false;
+            boolean filter4_got_block5 = false;
+            boolean filter4_got_block6 = false;
+            boolean filter4_got_block7 = false;
+            for (String[] block_groups : filtered_blocks) {
+                if (block_groups[0].equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
+                    block_groups[1].equals("FILTER1") &&
+                    block_groups[2].equals("BLOCK1a") &&
+                    block_groups[3].equals("CONST") &&
+                    block_groups[4].equals("BLOCK1b")) {
+                    assertEquals(5, block_groups.length);
+                    filter4_got_block1 = true;
+                    continue;
+                }
+                if (block_groups[0].equals("FILTER1:BLOCK2a:CONST:BLOCK2b") &&
+                    block_groups[1].equals("FILTER1") &&
+                    block_groups[2].equals("BLOCK2a") &&
+                    block_groups[3].equals("CONST") &&
+                    block_groups[4].equals("BLOCK2b")) {
+                    assertEquals(5, block_groups.length);
+                    filter4_got_block2 = true;
+                    continue;
+                }
+                if (block_groups[0].equals("FILTER1:BLOCK3a:CONST:BLOCK3b") &&
+                    block_groups[1].equals("FILTER1") &&
+                    block_groups[2].equals("BLOCK3a") &&
+                    block_groups[3].equals("CONST") &&
+                    block_groups[4].equals("BLOCK3b")) {
+                    assertEquals(5, block_groups.length);
+                    filter4_got_block3 = true;
+                    continue;
+                }
+                if (block_groups[0].equals("FILTER2:BLOCK1") &&
+                    block_groups[1].equals("FILTER2") &&
+                    block_groups[2].equals("BLOCK1")) {
+                    assertEquals(3, block_groups.length);
+                    filter4_got_block4 = true;
+                    continue;
+                }
+                if (block_groups[0].equals("FILTER2:BLOCK2") &&
+                    block_groups[1].equals("FILTER2") &&
+                    block_groups[2].equals("BLOCK2")) {
+                    assertEquals(3, block_groups.length);
+                    filter4_got_block5 = true;
+                    continue;
+                }
+                if (block_groups[0].equals("CONST-FILTER3:BLOCK1") &&
+                    block_groups[1].equals("CONST") &&
+                    block_groups[2].equals("FILTER3") &&
+                    block_groups[3].equals("BLOCK1")) {
+                    assertEquals(4, block_groups.length);
+                    filter4_got_block6 = true;
+                    continue;
+                }
+                if (block_groups[0].equals("CONST-FILTER3:BLOCK2") &&
+                    block_groups[1].equals("CONST") &&
+                    block_groups[2].equals("FILTER3") &&
+                    block_groups[3].equals("BLOCK2")) {
+                    assertEquals(4, block_groups.length);
+                    filter4_got_block7 = true;
+                    continue;
+                }
+            }
+            assertTrue(filter4_got_block1 && filter4_got_block2 && filter4_got_block3 &&
+                filter4_got_block4 && filter4_got_block5 && filter4_got_block6 &&
+                filter4_got_block7);
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-			String 			filter1 = "^FILTER1:(\\w+):CONST:(\\w+)$";
-			String 			filter2 = "^FILTER2:(\\w+)$";
-			String 			filter3 = "^CONST-FILTER3:(\\w+)$";
-			String 			filter4 = "(\\w+)";
-			FilteredTags	filtered_values = null;
+    @Test
+    public void testParseFilteredValues() {
+        try {
+            Parser parser;
+            Parsed template_parsed;
+            FilteredTagsMap filtered_values_map;
 
-			parser = new Parser(TemplateFactory.HTML, "html", new Parser.Config[] {TemplateFactory.CONFIG_INVISIBLE_XML}, ".html", (Pattern[])null, (Pattern[])null);
-			template_parsed = parser.parse("values_filtered_in", null, null);
-			filtered_values_map = template_parsed.getFilteredValuesMap();
-			assertNull(filtered_values_map);
+            String filter1 = "^FILTER1:(\\w+):CONST:(\\w+)$";
+            String filter2 = "^FILTER2:(\\w+)$";
+            String filter3 = "^CONST-FILTER3:(\\w+)$";
+            String filter4 = "(\\w+)";
+            FilteredTags filtered_values = null;
 
-			parser = new Parser(TemplateFactory.HTML, "html", new Parser.Config[] {TemplateFactory.CONFIG_INVISIBLE_XML}, ".html", null, new Pattern[] {Pattern.compile(filter1), Pattern.compile(filter2), Pattern.compile(filter3), Pattern.compile(filter4)});
-			template_parsed = parser.parse("values_filtered_in", null, null);
-			filtered_values_map = template_parsed.getFilteredValuesMap();
-			assertNotNull(filtered_values_map);
+            parser = new Parser(TemplateFactory.HTML, "html", ".html", (Pattern[]) null, (Pattern[]) null);
+            template_parsed = parser.parse("values_filtered_in", null, null);
+            filtered_values_map = template_parsed.getFilteredValuesMap();
+            assertNull(filtered_values_map);
 
-			assertTrue(filtered_values_map.containsFilter(filter1));
-			assertTrue(filtered_values_map.containsFilter(filter2));
-			assertTrue(filtered_values_map.containsFilter(filter3));
-			assertFalse(filtered_values_map.containsFilter(filter4));
+            parser = new Parser(TemplateFactory.HTML, "html", ".html", null, new Pattern[]{Pattern.compile(filter1), Pattern.compile(filter2), Pattern.compile(filter3), Pattern.compile(filter4)});
+            template_parsed = parser.parse("values_filtered_in", null, null);
+            filtered_values_map = template_parsed.getFilteredValuesMap();
+            assertNotNull(filtered_values_map);
 
-			filtered_values = filtered_values_map.getFilteredTag(filter1);
-			assertEquals(3, filtered_values.size());
+            assertTrue(filtered_values_map.containsFilter(filter1));
+            assertTrue(filtered_values_map.containsFilter(filter2));
+            assertTrue(filtered_values_map.containsFilter(filter3));
+            assertFalse(filtered_values_map.containsFilter(filter4));
 
-			boolean filter1_got_value1 = false;
-			boolean filter1_got_value2 = false;
-			boolean filter1_got_value3 = false;
-			for (String[] value_groups : filtered_values)
-			{
-				assertEquals(3, value_groups.length);
-				if (value_groups[0].equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
-					value_groups[1].equals("VALUE1a") &&
-					value_groups[2].equals("VALUE1b"))
-				{
-					filter1_got_value1 = true;
-				}
-				else if (value_groups[0].equals("FILTER1:VALUE2a:CONST:VALUE2b") &&
-					value_groups[1].equals("VALUE2a") &&
-					value_groups[2].equals("VALUE2b"))
-				{
-					filter1_got_value2 = true;
-				}
-				else if (value_groups[0].equals("FILTER1:VALUE3a:CONST:VALUE3b") &&
-					value_groups[1].equals("VALUE3a") &&
-					value_groups[2].equals("VALUE3b"))
-				{
-					filter1_got_value3 = true;
-				}
-			}
-			assertTrue(filter1_got_value1 && filter1_got_value2 && filter1_got_value3);
+            filtered_values = filtered_values_map.getFilteredTag(filter1);
+            assertEquals(3, filtered_values.size());
 
-			filtered_values = filtered_values_map.getFilteredTag(filter2);
-			assertEquals(2, filtered_values.size());
+            boolean filter1_got_value1 = false;
+            boolean filter1_got_value2 = false;
+            boolean filter1_got_value3 = false;
+            for (String[] value_groups : filtered_values) {
+                assertEquals(3, value_groups.length);
+                if (value_groups[0].equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
+                    value_groups[1].equals("VALUE1a") &&
+                    value_groups[2].equals("VALUE1b")) {
+                    filter1_got_value1 = true;
+                } else if (value_groups[0].equals("FILTER1:VALUE2a:CONST:VALUE2b") &&
+                    value_groups[1].equals("VALUE2a") &&
+                    value_groups[2].equals("VALUE2b")) {
+                    filter1_got_value2 = true;
+                } else if (value_groups[0].equals("FILTER1:VALUE3a:CONST:VALUE3b") &&
+                    value_groups[1].equals("VALUE3a") &&
+                    value_groups[2].equals("VALUE3b")) {
+                    filter1_got_value3 = true;
+                }
+            }
+            assertTrue(filter1_got_value1 && filter1_got_value2 && filter1_got_value3);
 
-			boolean filter2_got_value1 = false;
-			boolean filter2_got_value2 = false;
-			for (String[] value_groups : filtered_values)
-			{
-				assertEquals(2, value_groups.length);
-				if (value_groups[0].equals("FILTER2:VALUE1") &&
-					value_groups[1].equals("VALUE1"))
-				{
-					filter2_got_value1 = true;
-				}
-				else if (value_groups[0].equals("FILTER2:VALUE2") &&
-					value_groups[1].equals("VALUE2"))
-				{
-					filter2_got_value2 = true;
-				}
-			}
-			assertTrue(filter2_got_value1 && filter2_got_value2);
+            filtered_values = filtered_values_map.getFilteredTag(filter2);
+            assertEquals(2, filtered_values.size());
 
-			filtered_values = filtered_values_map.getFilteredTag(filter3);
-			assertEquals(2, filtered_values.size());
+            boolean filter2_got_value1 = false;
+            boolean filter2_got_value2 = false;
+            for (String[] value_groups : filtered_values) {
+                assertEquals(2, value_groups.length);
+                if (value_groups[0].equals("FILTER2:VALUE1") &&
+                    value_groups[1].equals("VALUE1")) {
+                    filter2_got_value1 = true;
+                } else if (value_groups[0].equals("FILTER2:VALUE2") &&
+                    value_groups[1].equals("VALUE2")) {
+                    filter2_got_value2 = true;
+                }
+            }
+            assertTrue(filter2_got_value1 && filter2_got_value2);
 
-			boolean filter3_got_value1 = false;
-			boolean filter3_got_value2 = false;
-			for (String[] value_groups : filtered_values)
-			{
-				assertEquals(2, value_groups.length);
-				if (value_groups[0].equals("CONST-FILTER3:VALUE1") &&
-					value_groups[1].equals("VALUE1"))
-				{
-					filter3_got_value1 = true;
-				}
-				else if (value_groups[0].equals("CONST-FILTER3:VALUE2") &&
-					value_groups[1].equals("VALUE2"))
-				{
-					filter3_got_value2 = true;
-				}
-			}
-			assertTrue(filter3_got_value1 && filter3_got_value2);
+            filtered_values = filtered_values_map.getFilteredTag(filter3);
+            assertEquals(2, filtered_values.size());
 
-			parser = new Parser(TemplateFactory.HTML, "html", new Parser.Config[] {TemplateFactory.CONFIG_INVISIBLE_XML}, ".html", null, new Pattern[] {Pattern.compile(filter4), Pattern.compile(filter1), Pattern.compile(filter2), Pattern.compile(filter3)});
-			template_parsed = parser.parse("values_filtered_in", null, null);
-			filtered_values_map = template_parsed.getFilteredValuesMap();
-			assertNotNull(filtered_values_map);
+            boolean filter3_got_value1 = false;
+            boolean filter3_got_value2 = false;
+            for (String[] value_groups : filtered_values) {
+                assertEquals(2, value_groups.length);
+                if (value_groups[0].equals("CONST-FILTER3:VALUE1") &&
+                    value_groups[1].equals("VALUE1")) {
+                    filter3_got_value1 = true;
+                } else if (value_groups[0].equals("CONST-FILTER3:VALUE2") &&
+                    value_groups[1].equals("VALUE2")) {
+                    filter3_got_value2 = true;
+                }
+            }
+            assertTrue(filter3_got_value1 && filter3_got_value2);
 
-			assertFalse(filtered_values_map.containsFilter(filter1));
-			assertFalse(filtered_values_map.containsFilter(filter2));
-			assertFalse(filtered_values_map.containsFilter(filter3));
-			assertTrue(filtered_values_map.containsFilter(filter4));
+            parser = new Parser(TemplateFactory.HTML, "html", ".html", null, new Pattern[]{Pattern.compile(filter4), Pattern.compile(filter1), Pattern.compile(filter2), Pattern.compile(filter3)});
+            template_parsed = parser.parse("values_filtered_in", null, null);
+            filtered_values_map = template_parsed.getFilteredValuesMap();
+            assertNotNull(filtered_values_map);
 
-			filtered_values = filtered_values_map.getFilteredTag(filter4);
-			assertEquals(7, filtered_values.size());
+            assertFalse(filtered_values_map.containsFilter(filter1));
+            assertFalse(filtered_values_map.containsFilter(filter2));
+            assertFalse(filtered_values_map.containsFilter(filter3));
+            assertTrue(filtered_values_map.containsFilter(filter4));
 
-			boolean filter4_got_value1 = false;
-			boolean filter4_got_value2 = false;
-			boolean filter4_got_value3 = false;
-			boolean filter4_got_value4 = false;
-			boolean filter4_got_value5 = false;
-			boolean filter4_got_value6 = false;
-			boolean filter4_got_value7 = false;
-			for (String[] value_groups : filtered_values)
-			{
-				if (value_groups[0].equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
-					value_groups[1].equals("FILTER1") &&
-					value_groups[2].equals("VALUE1a") &&
-					value_groups[3].equals("CONST") &&
-					value_groups[4].equals("VALUE1b"))
-				{
-					assertEquals(5, value_groups.length);
-					filter4_got_value1 = true;
-					continue;
-				}
-				if (value_groups[0].equals("FILTER1:VALUE2a:CONST:VALUE2b") &&
-					value_groups[1].equals("FILTER1") &&
-					value_groups[2].equals("VALUE2a") &&
-					value_groups[3].equals("CONST") &&
-					value_groups[4].equals("VALUE2b"))
-				{
-					assertEquals(5, value_groups.length);
-					filter4_got_value2 = true;
-					continue;
-				}
-				if (value_groups[0].equals("FILTER1:VALUE3a:CONST:VALUE3b") &&
-					value_groups[1].equals("FILTER1") &&
-					value_groups[2].equals("VALUE3a") &&
-					value_groups[3].equals("CONST") &&
-					value_groups[4].equals("VALUE3b"))
-				{
-					assertEquals(5, value_groups.length);
-					filter4_got_value3 = true;
-					continue;
-				}
-				if (value_groups[0].equals("FILTER2:VALUE1") &&
-					value_groups[1].equals("FILTER2") &&
-					value_groups[2].equals("VALUE1"))
-				{
-					assertEquals(3, value_groups.length);
-					filter4_got_value4 = true;
-					continue;
-				}
-				if (value_groups[0].equals("FILTER2:VALUE2") &&
-					value_groups[1].equals("FILTER2") &&
-					value_groups[2].equals("VALUE2"))
-				{
-					assertEquals(3, value_groups.length);
-					filter4_got_value5 = true;
-					continue;
-				}
-				if (value_groups[0].equals("CONST-FILTER3:VALUE1") &&
-					value_groups[1].equals("CONST") &&
-					value_groups[2].equals("FILTER3") &&
-					value_groups[3].equals("VALUE1"))
-				{
-					assertEquals(4, value_groups.length);
-					filter4_got_value6 = true;
-					continue;
-				}
-				if (value_groups[0].equals("CONST-FILTER3:VALUE2") &&
-					value_groups[1].equals("CONST") &&
-					value_groups[2].equals("FILTER3") &&
-					value_groups[3].equals("VALUE2"))
-				{
-					assertEquals(4, value_groups.length);
-					filter4_got_value7 = true;
-					continue;
-				}
-			}
-			assertTrue(filter4_got_value1 && filter4_got_value2 && filter4_got_value3 &&
-				filter4_got_value4 && filter4_got_value5 && filter4_got_value6 &&
-				filter4_got_value7);
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+            filtered_values = filtered_values_map.getFilteredTag(filter4);
+            assertEquals(7, filtered_values.size());
 
+            boolean filter4_got_value1 = false;
+            boolean filter4_got_value2 = false;
+            boolean filter4_got_value3 = false;
+            boolean filter4_got_value4 = false;
+            boolean filter4_got_value5 = false;
+            boolean filter4_got_value6 = false;
+            boolean filter4_got_value7 = false;
+            for (String[] value_groups : filtered_values) {
+                if (value_groups[0].equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
+                    value_groups[1].equals("FILTER1") &&
+                    value_groups[2].equals("VALUE1a") &&
+                    value_groups[3].equals("CONST") &&
+                    value_groups[4].equals("VALUE1b")) {
+                    assertEquals(5, value_groups.length);
+                    filter4_got_value1 = true;
+                    continue;
+                }
+                if (value_groups[0].equals("FILTER1:VALUE2a:CONST:VALUE2b") &&
+                    value_groups[1].equals("FILTER1") &&
+                    value_groups[2].equals("VALUE2a") &&
+                    value_groups[3].equals("CONST") &&
+                    value_groups[4].equals("VALUE2b")) {
+                    assertEquals(5, value_groups.length);
+                    filter4_got_value2 = true;
+                    continue;
+                }
+                if (value_groups[0].equals("FILTER1:VALUE3a:CONST:VALUE3b") &&
+                    value_groups[1].equals("FILTER1") &&
+                    value_groups[2].equals("VALUE3a") &&
+                    value_groups[3].equals("CONST") &&
+                    value_groups[4].equals("VALUE3b")) {
+                    assertEquals(5, value_groups.length);
+                    filter4_got_value3 = true;
+                    continue;
+                }
+                if (value_groups[0].equals("FILTER2:VALUE1") &&
+                    value_groups[1].equals("FILTER2") &&
+                    value_groups[2].equals("VALUE1")) {
+                    assertEquals(3, value_groups.length);
+                    filter4_got_value4 = true;
+                    continue;
+                }
+                if (value_groups[0].equals("FILTER2:VALUE2") &&
+                    value_groups[1].equals("FILTER2") &&
+                    value_groups[2].equals("VALUE2")) {
+                    assertEquals(3, value_groups.length);
+                    filter4_got_value5 = true;
+                    continue;
+                }
+                if (value_groups[0].equals("CONST-FILTER3:VALUE1") &&
+                    value_groups[1].equals("CONST") &&
+                    value_groups[2].equals("FILTER3") &&
+                    value_groups[3].equals("VALUE1")) {
+                    assertEquals(4, value_groups.length);
+                    filter4_got_value6 = true;
+                    continue;
+                }
+                if (value_groups[0].equals("CONST-FILTER3:VALUE2") &&
+                    value_groups[1].equals("CONST") &&
+                    value_groups[2].equals("FILTER3") &&
+                    value_groups[3].equals("VALUE2")) {
+                    assertEquals(4, value_groups.length);
+                    filter4_got_value7 = true;
+                    continue;
+                }
+            }
+            assertTrue(filter4_got_value1 && filter4_got_value2 && filter4_got_value3 &&
+                filter4_got_value4 && filter4_got_value5 && filter4_got_value6 &&
+                filter4_got_value7);
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    /*
+    TODO
 	@Test public void testErrorTerminatingUnopenedValue()
 	{
 		try
@@ -1593,8 +1546,8 @@ public class TestParser {
 		}
 		catch (GetContentErrorException e)
 		{
-			assertTrue(e.getCause() instanceof com.uwyn.rife.resources.exceptions.ResourceFinderErrorException);
-			assertTrue(e.getCause().getCause() instanceof com.uwyn.rife.tools.exceptions.FileUtilsErrorException);
+			assertTrue(e.getCause() instanceof rife.resources.exceptions.ResourceFinderErrorException);
+			assertTrue(e.getCause().getCause() instanceof rife.tools.exceptions.FileUtilsErrorException);
 			assertTrue(e.getCause().getCause().getCause() instanceof java.io.UnsupportedEncodingException);
 		}
 	}

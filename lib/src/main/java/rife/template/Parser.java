@@ -14,15 +14,13 @@ import rife.resources.ResourceFinder;
 import rife.resources.exceptions.ResourceFinderErrorException;
 import rife.template.antlr.*;
 import rife.template.exceptions.*;
-import rife.tools.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Parser implements Cloneable {
 
@@ -39,19 +37,30 @@ public class Parser implements Cloneable {
     private String extension_ = null;
     private int extensionLength_ = -1;
 
-    Parser(TemplateFactory templateFactory, String identifier, String extension) {
-        init(templateFactory, identifier, extension);
+    private Pattern[] blockFilters_ = null;
+    private Pattern[] valueFilters_ = null;
+
+    Parser(TemplateFactory templateFactory, String identifier, String extension, Pattern[] blockFilters, Pattern[] valueFilters) {
+        init(templateFactory, identifier, extension, blockFilters, valueFilters);
     }
 
     String getExtension() {
         return extension_;
     }
 
+    Pattern[] getBlockFilters() {
+        return blockFilters_;
+    }
+
+    Pattern[] getValueFilters() {
+        return valueFilters_;
+    }
+
     TemplateFactory getTemplateFactory() {
         return templateFactory_;
     }
 
-    private void init(TemplateFactory templateFactory, String identifier, String extension) {
+    private void init(TemplateFactory templateFactory, String identifier, String extension, Pattern[] blockFilters, Pattern[] valueFilters) {
         assert templateFactory != null;
         assert identifier != null;
         assert extension != null;
@@ -65,6 +74,9 @@ public class Parser implements Cloneable {
         extensionLength_ = extension_.length();
         ambiguousName_ = (extension_ + extension_).substring(1);
 
+        blockFilters_ = blockFilters;
+        valueFilters_ = valueFilters;
+
         assert extensionLength_ > 0;
     }
 
@@ -76,7 +88,17 @@ public class Parser implements Cloneable {
         }
 
         assert new_parser != null;
-        new_parser.init(templateFactory_, identifier_, extension_);
+
+        Pattern[] new_block_filters = null;
+        if (blockFilters_ != null) {
+            new_block_filters = blockFilters_.clone();
+        }
+        Pattern[] new_value_filters = null;
+        if (valueFilters_ != null) {
+            new_value_filters = valueFilters_.clone();
+        }
+
+        new_parser.init(templateFactory_, identifier_, extension_, new_block_filters, new_value_filters);
 
         return new_parser;
     }
@@ -99,6 +121,38 @@ public class Parser implements Cloneable {
         }
         if (!other_parser.extension_.equals(this.extension_)) {
             return false;
+        }
+
+        if (null == other_parser.blockFilters_ && this.blockFilters_ != null ||
+            other_parser.blockFilters_ != null && null == this.blockFilters_) {
+            return false;
+        }
+        if (other_parser.blockFilters_ != null) {
+            if (other_parser.blockFilters_.length != this.blockFilters_.length) {
+                return false;
+            }
+
+            for (int i = 0; i < other_parser.blockFilters_.length; i++) {
+                if (!other_parser.blockFilters_[i].pattern().equals(this.blockFilters_[i].pattern())) {
+                    return false;
+                }
+            }
+        }
+
+        if (null == other_parser.valueFilters_ && this.valueFilters_ != null ||
+            other_parser.valueFilters_ != null && null == this.valueFilters_) {
+            return false;
+        }
+        if (other_parser.valueFilters_ != null) {
+            if (other_parser.valueFilters_.length != this.valueFilters_.length) {
+                return false;
+            }
+
+            for (int i = 0; i < other_parser.valueFilters_.length; i++) {
+                if (!other_parser.valueFilters_[i].pattern().equals(this.valueFilters_[i].pattern())) {
+                    return false;
+                }
+            }
         }
 
         return true;
@@ -212,9 +266,10 @@ public class Parser implements Cloneable {
 
         // process the blocks and values
         parseBlocksAndValues(parsed, content);
-        // TODO
-//        parsed.setFilteredBlocks(filterTags(mBlockFilters, parsed.getBlockIds()));
-//        parsed.setFilteredValues(filterTags(mValueFilters, parsed.getValueIds()));
+
+        // process block and value filters
+        parsed.setFilteredBlocks(filterTags(blockFilters_, parsed.getBlockIds()));
+        parsed.setFilteredValues(filterTags(valueFilters_, parsed.getValueIds()));
 
         return parsed;
     }
@@ -238,7 +293,7 @@ public class Parser implements Cloneable {
         assert resource != null;
 
         if (null == encoding) {
-            encoding = RifeConfig.instance().template.defaultEncoding();
+            encoding = RifeConfig.template().defaultEncoding();
         }
 
         String content;
@@ -257,7 +312,7 @@ public class Parser implements Cloneable {
         assert resource != null;
 
         if (null == encoding) {
-            encoding = RifeConfig.instance().template.defaultEncoding();
+            encoding = RifeConfig.template().defaultEncoding();
         }
 
         ByteArrayOutputStream result = new ByteArrayOutputStream();
@@ -612,4 +667,65 @@ public class Parser implements Cloneable {
 
         }
     }
+
+    private FilteredTagsMap filterTags(Pattern[] filters, Collection<String> tags) {
+        FilteredTagsMap result = null;
+
+        if (filters != null) {
+            result = new FilteredTagsMap();
+
+            Matcher filter_matcher = null;
+            ArrayList<String> captured_groups = null;
+            String pattern = null;
+            String[] captured_groups_array = null;
+
+            ArrayList<String> filtered_tags = new ArrayList<String>();
+
+            // iterate over the tag filters
+            for (Pattern filter_pattern : filters) {
+                // go over all the tags and try to match them against the current filter
+                for (String tag : tags) {
+                    // skip over tags that have already been filtered
+                    if (filtered_tags.contains(tag)) {
+                        continue;
+                    }
+
+                    // create the filter matcher
+                    filter_matcher = filter_pattern.matcher(tag);
+
+                    // if the filter matches, and it returned capturing groups,
+                    // add the returned groups to the filtered tag mapping
+                    while (filter_matcher.find()) {
+                        if (null == captured_groups) {
+                            captured_groups = new ArrayList<String>();
+                            captured_groups.add(tag);
+                        }
+
+                        if (filter_matcher.groupCount() > 0) {
+                            // store the captured groups
+                            for (int j = 1; j <= filter_matcher.groupCount(); j++) {
+                                captured_groups.add(filter_matcher.group(j));
+                            }
+                        }
+                    }
+
+                    if (captured_groups != null) {
+                        pattern = filter_pattern.pattern();
+
+                        captured_groups_array = new String[captured_groups.size()];
+                        captured_groups.toArray(captured_groups_array);
+
+                        result.addFilteredTag(pattern, captured_groups_array);
+                        filtered_tags.add(tag);
+
+                        captured_groups_array = null;
+                        captured_groups = null;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
 }

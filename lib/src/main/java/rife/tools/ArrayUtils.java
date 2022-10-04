@@ -58,7 +58,7 @@ public class ArrayUtils {
                         return ArrayType.DOUBLE_ARRAY;
                     ///CLOVER:OFF
                     default:
-                        Logger.getLogger("com.uwyn.rife.tools").severe("Unknown primitive array class: " + classname);
+                        Logger.getLogger("rife.tools").severe("Unknown primitive array class: " + classname);
                         return null;
                     ///CLOVER:ON
                 }

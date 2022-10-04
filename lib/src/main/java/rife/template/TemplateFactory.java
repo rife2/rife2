@@ -5,8 +5,11 @@
 package rife.template;
 
 import rife.config.RifeConfig;
+import rife.datastructures.EnumClass;
 import rife.resources.ResourceFinder;
 import rife.resources.ResourceFinderClasspath;
+import rife.template.exceptions.InvalidBlockFilterException;
+import rife.template.exceptions.InvalidValueFilterException;
 import rife.template.exceptions.TemplateException;
 import rife.template.exceptions.TemplateNotFoundException;
 import rife.tools.Localization;
@@ -16,9 +19,20 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public enum TemplateFactory {
-    HTML(ResourceFinderClasspath.instance(),
+public class TemplateFactory extends EnumClass<String> {
+    public static TemplateFactory HTML = new TemplateFactory(ResourceFinderClasspath.instance(),
         "html", "text/html", ".html",
+        new String[]
+            {
+                TemplateFactoryFilters.TAG_LANG
+            },
+        new String[]
+            {
+                TemplateFactoryFilters.TAG_CONFIG,
+                TemplateFactoryFilters.TAG_L10N,
+                TemplateFactoryFilters.TAG_RENDER
+            },
+
         BeanHandlerXhtml.getInstance(), EncoderHtmlSingleton.INSTANCE,
         null);
 
@@ -33,27 +47,28 @@ public enum TemplateFactory {
 
     TemplateFactory(ResourceFinder resourceFinder, String identifier,
                     String defaultContentType,
-                    String extension, /* TODO String[] blockFilters, String[] valueFilters,  */
+                    String extension, String[] blockFilters, String[] valueFilters,
                     BeanHandler beanHandler,
                     TemplateEncoder encoder,
                     TemplateInitializer initializer) {
-        // TODO
-//        Pattern[] block_filter_patterns = null;
-//        try {
-//            block_filter_patterns = compileFilters(blockFilters);
-//        } catch (PatternSyntaxException e) {
-//            throw new InvalidBlockFilterException(e.getPattern());
-//        }
-//
-//        Pattern[] value_filter_patterns = null;
-//        try {
-//            value_filter_patterns = compileFilters(valueFilters);
-//        } catch (PatternSyntaxException e) {
-//            throw new InvalidValueFilterException(e.getPattern());
-//        }
+        super(TemplateFactory.class, identifier);
+
+        Pattern[] block_filter_patterns = null;
+        try {
+            block_filter_patterns = compileFilters(blockFilters);
+        } catch (PatternSyntaxException e) {
+            throw new InvalidBlockFilterException(e.getPattern());
+        }
+
+        Pattern[] value_filter_patterns = null;
+        try {
+            value_filter_patterns = compileFilters(valueFilters);
+        } catch (PatternSyntaxException e) {
+            throw new InvalidValueFilterException(e.getPattern());
+        }
 
         identifierUppercase_ = identifier.toUpperCase();
-        parser_ = new Parser(this, identifier, extension);
+        parser_ = new Parser(this, identifier, extension, block_filter_patterns, value_filter_patterns);
         resourceFinder_ = resourceFinder;
         beanHandler_ = beanHandler;
         encoder_ = encoder;
@@ -76,19 +91,19 @@ public enum TemplateFactory {
         return null;
     }
 
-//    public TemplateFactory(String identifier, TemplateFactory base) {
-//        super(TemplateFactory.class, identifier);
-//
-//        mIdentifierUppercase = identifier.toUpperCase();
-//        mParser = new Parser(this, identifier, base.getParser().getConfigs(), base.getParser().getExtension(), base.getParser().getBlockFilters(), base.getParser().getValueFilters());
-//        mResourceFinder = base.getResourceFinder();
-//        beanHandler_ = base.getBeanHandler();
-//        mEncoder = base.getEncoder();
-//        mInitializer = base.getInitializer();
-//        mDefaultContentType = base.getDefaultContentType();
-//
-//        assert mParser != null;
-//    }
+    public TemplateFactory(String identifier, TemplateFactory base) {
+        super(TemplateFactory.class, identifier);
+
+        identifierUppercase_ = identifier.toUpperCase();
+        parser_ = new Parser(this, identifier, base.getParser().getExtension(), base.getParser().getBlockFilters(), base.getParser().getValueFilters());
+        resourceFinder_ = base.getResourceFinder();
+        beanHandler_ = base.getBeanHandler();
+        encoder_ = base.getEncoder();
+        initializer_ = base.getInitializer();
+        defaultContentType_ = base.getDefaultContentType();
+
+        assert parser_ != null;
+    }
 
     public String getIdentifierUppercase() {
         return identifierUppercase_;
@@ -99,15 +114,11 @@ public enum TemplateFactory {
     }
 
     public static Collection<String> getFactoryTypes() {
-        var types = new HashSet<String>();
-        for (var v : TemplateFactory.values()) {
-            types.add(v.getIdentifierUppercase());
-        }
-        return types;
+        return (Collection<String>) getIdentifiers(TemplateFactory.class);
     }
 
     public static TemplateFactory getFactory(String identifier) {
-        return TemplateFactory.valueOf(identifier);
+        return getMember(TemplateFactory.class, identifier);
     }
 
     public Template get(String name)
@@ -137,9 +148,9 @@ public enum TemplateFactory {
             template.setInitializer(initializer_);
             template.setDefaultContentType(defaultContentType_);
 
-            var default_resource_bundles = RifeConfig.instance().template.defaultResourceBundles(this);
+            Collection<String> default_resource_bundles = RifeConfig.template().defaultResourceBundles(this);
             if (default_resource_bundles != null) {
-                ArrayList<ResourceBundle> default_bundles = new ArrayList<ResourceBundle>();
+                var default_bundles = new ArrayList<ResourceBundle>();
                 for (String bundle_name : default_resource_bundles) {
                     // try to look it up as a filename in the classpath
                     ResourceBundle bundle = Localization.getResourceBundle(bundle_name);

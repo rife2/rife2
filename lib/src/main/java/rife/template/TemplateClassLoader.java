@@ -39,7 +39,7 @@ class TemplateClassLoader extends ClassLoader {
             // if an already loaded version was found, check whether it's outdated or not
             // this can only be Template classes since those are the only ones that are
             // handled by this classloader
-            if (RifeConfig.instance().template.autoReload()) {
+            if (RifeConfig.template().autoReload()) {
                 // if the template was modified, don't use the cached class
                 // otherwise, just take the previous template class
                 if (isTemplateModified(c, transformer)) {
@@ -66,7 +66,7 @@ class TemplateClassLoader extends ClassLoader {
                     // class was found in the parent classloader. If that class came from a jar
                     // file, make sure it's returned immediately and don't try to recompile it
                     if (c != null &&
-                        RifeConfig.instance().template.autoReload()) {
+                        RifeConfig.template().autoReload()) {
                         URL resource = parent.getResource(classname.replace('.', '/') + ".class");
                         if (resource != null &&
                             resource.getPath().indexOf('!') != -1) {
@@ -98,7 +98,7 @@ class TemplateClassLoader extends ClassLoader {
                 !classname.startsWith("sun.") &&
                 Template.class.isAssignableFrom(c)) {
                 // verify if the template in the classpath has been updated
-                if (RifeConfig.instance().template.autoReload() &&
+                if (RifeConfig.template().autoReload() &&
                     isTemplateModified(c, transformer)) {
                     c = null;
                 }
@@ -158,7 +158,7 @@ class TemplateClassLoader extends ClassLoader {
         }
 
         byte[] byte_code = template_parsed.getByteCode();
-        if (RifeConfig.instance().template.generateClasses()) {
+        if (RifeConfig.template().generateClasses()) {
             // get the package and the short classname of the template
             String template_package = template_parsed.getPackage();
             template_package = template_package.replace('.', File.separatorChar);
@@ -166,7 +166,7 @@ class TemplateClassLoader extends ClassLoader {
 
             // setup everything to perform the conversion of the template to java sources
             // and to compile it into a java class
-            String generation_path = RifeConfig.instance().template.generationPath() + File.separatorChar;
+            String generation_path = RifeConfig.template().generationPath() + File.separatorChar;
             String packagedir = generation_path + template_package;
             String filename_class = packagedir + File.separator + template_classname + ".class";
             File file_packagedir = new File(packagedir);

@@ -36,7 +36,7 @@ public class Localization {
             var matcher = URL_PATTERN.matcher(url);
             String localized_url = null;
 
-            var default_lang = RifeConfig.instance().tools().defaultLanguage();
+            var default_lang = RifeConfig.tools().defaultLanguage();
             String fallback_url = null;
 
             String group_lang = null;
@@ -156,11 +156,11 @@ public class Localization {
 
     public static Locale getLocale(String language, String country) {
         if (null == language) {
-            language = RifeConfig.instance().tools().defaultLanguage();
+            language = RifeConfig.tools().defaultLanguage();
         }
 
         if (null == country) {
-            country = RifeConfig.instance().tools().defaultCountry();
+            country = RifeConfig.tools().defaultCountry();
         }
 
         Locale locale = null;
@@ -185,7 +185,7 @@ public class Localization {
 
     public static ResourceBundle getResourceBundle(String basename, String language, String country) {
         if (null == basename) {
-            basename = RifeConfig.instance().tools().defaultResourceBundle();
+            basename = RifeConfig.tools().defaultResourceBundle();
         }
 
         var locale = getLocale(language, country);
@@ -205,8 +205,8 @@ public class Localization {
 
             // see if the resource bundle reload is deactivated and thus fetch a previous copy without
             // looking up the resource
-            if (!RifeConfig.instance().tools().resourcebundleAutoReload() ||
-                System.currentTimeMillis() - sLastModificationCheck <= RifeConfig.instance().global().autoReloadDelay()) {
+            if (!RifeConfig.tools().resourceBundleAutoReload() ||
+                System.currentTimeMillis() - sLastModificationCheck <= RifeConfig.global().autoReloadDelay()) {
                 result = resourceBundlesOpened_.get(most_detailed_candidate);
 
                 if (result != null) {
@@ -214,7 +214,7 @@ public class Localization {
                 }
             }
 
-            if (RifeConfig.instance().tools().resourcebundleAutoReload()) {
+            if (RifeConfig.tools().resourceBundleAutoReload()) {
                 sLastModificationCheck = System.currentTimeMillis();
             }
 
@@ -315,7 +315,7 @@ public class Localization {
                         var previous_modification = resourceBundleModificationTimes_.get(most_detailed_candidate);
 
                         long modification_time = -1;
-                        if (RifeConfig.instance().tools().resourcebundleAutoReload()) {
+                        if (RifeConfig.tools().resourceBundleAutoReload()) {
                             try {
                                 modification_time = ResourceFinderClasspath.instance().getModificationTime(resource);
                             } catch (ResourceFinderErrorException e) {

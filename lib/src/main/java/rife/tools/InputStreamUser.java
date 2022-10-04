@@ -69,7 +69,7 @@ public abstract class InputStreamUser<ResultType, DataType> implements Cloneable
             return super.clone();
         } catch (CloneNotSupportedException e) {
             // this should never happen
-            Logger.getLogger("com.uwyn.rife.database").severe(ExceptionUtils.getExceptionStackTrace(e));
+            Logger.getLogger("rife.database").severe(ExceptionUtils.getExceptionStackTrace(e));
             return null;
         }
     }

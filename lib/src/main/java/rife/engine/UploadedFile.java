@@ -4,6 +4,7 @@
  */
 package rife.engine;
 
+import rife.config.RifeConfig;
 import rife.tools.ExceptionUtils;
 
 import java.io.File;
@@ -90,7 +91,7 @@ public class UploadedFile implements Cloneable {
 
     /**
      * Indicates whether the uploaded file exceeded the file {@link
-     * rife.config.RifeConfig.Engine#getFileuploadSizeLimit upload
+     * RifeConfig.EngineConfig#getFileuploadSizeLimit upload
      * size limit}.
      * <p>If the limit was exceeded, the temporary file will be
      * <code>null</code> and deleted from the server.

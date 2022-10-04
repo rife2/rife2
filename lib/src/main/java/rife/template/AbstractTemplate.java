@@ -4,12 +4,11 @@
  */
 package rife.template;
 
+import rife.config.Config;
 import rife.config.RifeConfig;
 import rife.resources.ResourceFinder;
-import rife.template.exceptions.BeanHandlerUnsupportedException;
-import rife.template.exceptions.BlockUnknownException;
-import rife.template.exceptions.TemplateException;
-import rife.template.exceptions.ValueUnknownException;
+import rife.template.exceptions.*;
+import rife.tools.Localization;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -195,9 +194,9 @@ public abstract class AbstractTemplate implements Template {
     private List<String> processLateTags() {
         var set_values = new ArrayList<String>();
 
-//        _evaluateL10nTags(set_values);
-//        _evaluateRenderTags(set_values);
-//        _evaluateLangTags(set_values, null);
+        _evaluateL10nTags(set_values);
+        _evaluateRenderTags(set_values);
+        _evaluateLangTags(set_values, null);
 //        _evaluateOgnlTags(set_values, null);
 //        _evaluateOgnlConfigTags(set_values, null);
 //        _evaluateMvelTags(set_values, null);
@@ -210,183 +209,182 @@ public abstract class AbstractTemplate implements Template {
         return set_values;
     }
 
-    // TODO
-//    public List<String> evaluateRenderTags()
-//    throws TemplateException {
-//        List<String> set_values = new ArrayList<String>();
-//        _evaluateRenderTags(set_values);
-//        return set_values;
-//    }
-//
-//    private void _evaluateRenderTags(List<String> setValues)
-//    throws TemplateException {
-//        if (hasFilteredValues(TemplateFactory.TAG_RENDER)) {
-//            List<String[]> render_tags = getFilteredValues(TemplateFactory.TAG_RENDER);
-//            for (String[] captured_groups : render_tags) {
-//                // only execute the renderer if the value hasn't been set in the
-//                // template yet
-//                if (!isValueSet(captured_groups[0])) {
-//                    String classname = captured_groups[1];
-//                    try {
-//                        Class klass = Class.forName(classname);
-//                        if (!ValueRenderer.class.isAssignableFrom(klass)) {
-//                            throw new RendererWrongTypeException(this, classname);
-//                        }
-//
-//                        ValueRenderer renderer = null;
-//                        try {
-//                            renderer = (ValueRenderer) klass.newInstance();
-//                        } catch (Exception e) {
-//                            throw new RendererInstantiationException(this, classname, e);
-//                        }
-//
-//                        setValue(captured_groups[0], renderer.render(this, captured_groups[0], captured_groups[2]));
-//                        if (setValues != null) {
-//                            setValues.add(captured_groups[0]);
-//                        }
-//                    } catch (ClassNotFoundException e) {
-//                        throw new RendererNotFoundException(this, classname, e);
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    public List<String> evaluateConfigTags() {
-//        List<String> set_values = new ArrayList<String>();
-//        _evaluateConfigTags(set_values);
-//        return set_values;
-//    }
-//
-//    private void _evaluateConfigTags(List<String> setValues) {
-//        // process the config tags
-//        List<String[]> config_tags = getFilteredValues(TemplateFactory.TAG_CONFIG);
-//        if (config_tags != null &&
-//            Config.hasRepInstance()) {
-//            String config_key = null;
-//            String config_value = null;
-//
-//            for (String[] captured_groups : config_tags) {
-//                // only set the config value if the value hasn't been set in the
-//                // template yet
-//                if (!isValueSet(captured_groups[0])) {
-//                    config_key = captured_groups[1];
-//
-//                    // obtain the configuration value
-//                    config_value = Config.getRepInstance().getString(config_key);
-//
-//                    // don't continue if the config parameter doesn't exist
-//                    if (config_value != null) {
-//                        // set the config value in the template
-//                        setValue(captured_groups[0], getEncoder().encode(config_value));
-//                        if (setValues != null) {
-//                            setValues.add(captured_groups[0]);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    public List<String> evaluateL10nTags() {
-//        List<String> set_values = new ArrayList<String>();
-//        _evaluateL10nTags(set_values);
-//        return set_values;
-//    }
-//
-//    private void _evaluateL10nTags(List<String> setValues) {
-//        // process the localization keys
-//        List<String[]> l10n_tags = getFilteredValues(TemplateFactory.TAG_L10N);
-//        if (l10n_tags != null && l10n_tags.size() > 0) {
-//            String l10n_key = null;
-//            String l10n_value = null;
-//            String l10n_bundle = null;
-//
-//            for (String[] captured_groups : l10n_tags) {
-//                // only set the config value if the value hasn't been set in the
-//                // template yet
-//                if (!isValueSet(captured_groups[0])) {
-//                    l10n_value = null;
-//
-//                    // check if an explicit bundle name was provided
-//                    // if not go through all the bundles that have been registered
-//                    // for this template instance
-//                    if (null == captured_groups[2]) {
-//                        if (hasResourceBundles()) {
-//                            l10n_key = captured_groups[1];
-//
-//                            for (ResourceBundle bundle : mResourceBundles) {
-//                                // obtain the configuration value
-//                                try {
-//                                    l10n_value = bundle.getString(l10n_key);
-//                                    break;
-//                                } catch (MissingResourceException e) {
-//                                    // no-op, go to the next resource bundle
-//                                }
-//                            }
-//                        }
-//                    } else {
-//                        l10n_bundle = captured_groups[1];
-//                        l10n_key = captured_groups[2];
-//
-//                        ResourceBundle bundle = Localization.getResourceBundle(l10n_bundle);
-//                        if (bundle != null) {
-//                            l10n_value = bundle.getString(l10n_key);
-//                        } else {
-//                            throw new ResourceBundleNotFoundException(getName(), captured_groups[0], l10n_bundle);
-//                        }
-//                    }
-//
-//                    // don't continue if the config parameter doesn't exist
-//                    if (l10n_value != null) {
-//                        // set the config value in the template
-//                        setValue(captured_groups[0], getEncoder().encodeDefensive(l10n_value));
-//                        if (setValues != null) {
-//                            setValues.add(captured_groups[0]);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    public List<String> evaluateLangTags(String id) {
-//        if (null == id) throw new IllegalArgumentException("id can't be null.");
-//
-//        List<String> set_values = new ArrayList<String>();
-//        _evaluateLangTags(set_values, TemplateFactory.PREFIX_LANG + id);
-//        return set_values;
-//    }
-//
-//    private void _evaluateLangTags(List<String> setValues, String id) {
-//        // process the lang keys
-//        List<String[]> lang_blocks = getFilteredBlocks(TemplateFactory.TAG_LANG);
-//        String language = getLanguage();
-//        if (lang_blocks != null &&
-//            language != null) {
-//
-//            for (String[] lang_block : lang_blocks) {
-//                if (id != null &&
-//                    !id.equals(lang_block[1])) {
-//                    continue;
-//                }
-//
-//                if (null == id &&
-//                    isValueSet(lang_block[1])) {
-//                    continue;
-//                }
-//
-//                String block_lang = lang_block[lang_block.length - 1];
-//                if (block_lang.equals(language)) {
-//                    setBlock(lang_block[1], lang_block[0]);
-//                    if (setValues != null) {
-//                        setValues.add(lang_block[1]);
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
+    public List<String> evaluateRenderTags()
+    throws TemplateException {
+        List<String> set_values = new ArrayList<String>();
+        _evaluateRenderTags(set_values);
+        return set_values;
+    }
+
+    private void _evaluateRenderTags(List<String> setValues)
+    throws TemplateException {
+        if (hasFilteredValues(TemplateFactoryFilters.TAG_RENDER)) {
+            List<String[]> render_tags = getFilteredValues(TemplateFactoryFilters.TAG_RENDER);
+            for (String[] captured_groups : render_tags) {
+                // only execute the renderer if the value hasn't been set in the
+                // template yet
+                if (!isValueSet(captured_groups[0])) {
+                    String classname = captured_groups[1];
+                    try {
+                        Class klass = Class.forName(classname);
+                        if (!ValueRenderer.class.isAssignableFrom(klass)) {
+                            throw new RendererWrongTypeException(this, classname);
+                        }
+
+                        ValueRenderer renderer = null;
+                        try {
+                            renderer = (ValueRenderer) klass.getDeclaredConstructor().newInstance();
+                        } catch (Exception e) {
+                            throw new RendererInstantiationException(this, classname, e);
+                        }
+
+                        setValue(captured_groups[0], renderer.render(this, captured_groups[0], captured_groups[2]));
+                        if (setValues != null) {
+                            setValues.add(captured_groups[0]);
+                        }
+                    } catch (ClassNotFoundException e) {
+                        throw new RendererNotFoundException(this, classname, e);
+                    }
+                }
+            }
+        }
+    }
+
+    public List<String> evaluateConfigTags() {
+        List<String> set_values = new ArrayList<String>();
+        _evaluateConfigTags(set_values);
+        return set_values;
+    }
+
+    private void _evaluateConfigTags(List<String> setValues) {
+        // process the config tags
+        // TODO
+        List<String[]> config_tags = getFilteredValues(TemplateFactoryFilters.TAG_CONFIG);
+        if (config_tags != null) {
+            String config_key = null;
+            String config_value = null;
+
+            for (String[] captured_groups : config_tags) {
+                // only set the config value if the value hasn't been set in the
+                // template yet
+                if (!isValueSet(captured_groups[0])) {
+                    config_key = captured_groups[1];
+
+                    // obtain the configuration value
+                    config_value = Config.instance().getString(config_key);
+
+                    // don't continue if the config parameter doesn't exist
+                    if (config_value != null) {
+                        // set the config value in the template
+                        setValue(captured_groups[0], getEncoder().encode(config_value));
+                        if (setValues != null) {
+                            setValues.add(captured_groups[0]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public List<String> evaluateL10nTags() {
+        var set_values = new ArrayList<String>();
+        _evaluateL10nTags(set_values);
+        return set_values;
+    }
+
+    private void _evaluateL10nTags(List<String> setValues) {
+        // process the localization keys
+        var l10n_tags = getFilteredValues(TemplateFactoryFilters.TAG_L10N);
+        if (l10n_tags != null && l10n_tags.size() > 0) {
+            String l10n_key;
+            String l10n_value;
+            String l10n_bundle;
+
+            for (var captured_groups : l10n_tags) {
+                // only set the config value if the value hasn't been set in the
+                // template yet
+                if (!isValueSet(captured_groups[0])) {
+                    l10n_value = null;
+
+                    // check if an explicit bundle name was provided
+                    // if not go through all the bundles that have been registered
+                    // for this template instance
+                    if (null == captured_groups[2]) {
+                        if (hasResourceBundles()) {
+                            l10n_key = captured_groups[1];
+
+                            for (ResourceBundle bundle : resourceBundles_) {
+                                // obtain the configuration value
+                                try {
+                                    l10n_value = bundle.getString(l10n_key);
+                                    break;
+                                } catch (MissingResourceException e) {
+                                    // no-op, go to the next resource bundle
+                                }
+                            }
+                        }
+                    } else {
+                        l10n_bundle = captured_groups[1];
+                        l10n_key = captured_groups[2];
+
+                        var bundle = Localization.getResourceBundle(l10n_bundle);
+                        if (bundle != null) {
+                            l10n_value = bundle.getString(l10n_key);
+                        } else {
+                            throw new ResourceBundleNotFoundException(getName(), captured_groups[0], l10n_bundle);
+                        }
+                    }
+
+                    // don't continue if the config parameter doesn't exist
+                    if (l10n_value != null) {
+                        // set the config value in the template
+                        setValue(captured_groups[0], getEncoder().encodeDefensive(l10n_value));
+                        if (setValues != null) {
+                            setValues.add(captured_groups[0]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public List<String> evaluateLangTags(String id) {
+        if (null == id) throw new IllegalArgumentException("id can't be null.");
+
+        var set_values = new ArrayList<String>();
+        _evaluateLangTags(set_values, TemplateFactoryFilters.PREFIX_LANG + id);
+        return set_values;
+    }
+
+    private void _evaluateLangTags(List<String> setValues, String id) {
+        // process the lang keys
+        var lang_blocks = getFilteredBlocks(TemplateFactoryFilters.TAG_LANG);
+        var language = getLanguage();
+        if (lang_blocks != null &&
+            language != null) {
+
+            for (var lang_block : lang_blocks) {
+                if (id != null &&
+                    !id.equals(lang_block[1])) {
+                    continue;
+                }
+
+                if (null == id &&
+                    isValueSet(lang_block[1])) {
+                    continue;
+                }
+
+                var block_lang = lang_block[lang_block.length - 1];
+                if (block_lang.equals(language)) {
+                    setBlock(lang_block[1], lang_block[0]);
+                    if (setValues != null) {
+                        setValues.add(lang_block[1]);
+                    }
+                }
+            }
+        }
+    }
+
 //    public List<String> evaluateExpressionTags(String id) {
 //        if (null == id) throw new IllegalArgumentException("id can't be null.");
 //
@@ -693,14 +691,13 @@ public abstract class AbstractTemplate implements Template {
         return true;
     }
 
-    // TODO
-//    public abstract List<String[]> getFilteredBlocks(String filter);
-//
-//    public abstract boolean hasFilteredBlocks(String filter);
-//
-//    public abstract List<String[]> getFilteredValues(String filter);
-//
-//    public abstract boolean hasFilteredValues(String filter);
+    public abstract List<String[]> getFilteredBlocks(String filter);
+
+    public abstract boolean hasFilteredBlocks(String filter);
+
+    public abstract List<String[]> getFilteredValues(String filter);
+
+    public abstract boolean hasFilteredValues(String filter);
 
     public final boolean hasBlock(String id) {
         if (null == id ||
@@ -914,9 +911,8 @@ public abstract class AbstractTemplate implements Template {
 
     final void initialize()
     throws TemplateException {
-        // TODO
-//        _evaluateConfigTags(null);
-//        _evaluateL10nTags(null);
+        _evaluateConfigTags(null);
+        _evaluateL10nTags(null);
 
         if (null == initializer_) {
             return;

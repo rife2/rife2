@@ -150,7 +150,7 @@ public class TestArrayUtils {
         assertNull(ArrayUtils.createStringArray((Date) null, null));
 
         Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(RifeConfig.instance().tools.defaultTimeZone());
+        cal.setTimeZone(RifeConfig.tools().defaultTimeZone());
         cal.set(2005, 7, 18, 9, 27, 13);
         cal.set(Calendar.MILLISECOND, 552);
         String[] converted = ArrayUtils.createStringArray(cal.getTime(), null);
