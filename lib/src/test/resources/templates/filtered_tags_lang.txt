@@ -1,0 +1,5 @@
+This expression is Dutch '<!v lang:value1/>'.
+This expression is French or English '{{v lang:value2/}}'.
+<!b lang:value1:nl >ja ja<!/b>
+{{b lang:value2:fr}}oui oui{{/b}}
+{{b lang:value2:en }}yes yes{{/b}}

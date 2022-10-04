@@ -1,21 +1,36 @@
-lexer grammar TemplateHtmlLexer;
+lexer grammar TemplateMainLexer;
 @lexer::header {
     package rife.template.antlr;
+
+    import rife.template.TemplateConfig;
+    import static rife.template.TemplateConfig.*;
+
 }
+@lexer::members {
+    public TemplateConfig tc = TemplateConfig.XML;
+}
+
 // -------------------------------------------------------------------
 // MODE: Everything OUTSIDE of a tag
 
-fragment TSTART :   '<!--' ;
-fragment TEND   :   '-->' ;
-fragment TTERM  :   '<!--/' ;
-fragment STTERM :   '/-->' ;
-fragment TTEXT  :   '<' ~'!'
-                |   '<!' ~'-'
-                |   '<!-' ~'-'
-                |   '<!--' ~('v'|'b'|'/')
-                |   '<!--/' ~('v'|'b')
+fragment TSTART :   '<!--'  { tc == XML }? | '<!'  { tc == TXT }? | '/*'  { tc == SQL }? ;
+fragment TEND   :   '-->'   { tc == XML }? | '>'   { tc == TXT }? | '*/'  { tc == SQL }? ;
+fragment TTERM  :   '<!--/' { tc == XML }? | '<!/' { tc == TXT }? | '/*-' { tc == SQL }? ;
+fragment STTERM :   '/-->'  { tc == XML }? | '/>'  { tc == TXT }? | '-*/' { tc == SQL }? ;
+fragment FTEXT  :   ~[<{]+ { tc == XML }?
+                |   ~[<{]+ { tc == TXT }?
+                |   ~[/{]+ { tc == SQL }?
                 ;
-
+fragment TTEXT  :   ( ('<' ~'!' | '<!' ~'-' | '<!-' ~'-') { tc == XML }? |
+                      '<' ~'!' { tc == TXT }? |
+                      '/' ~'*' { tc == SQL }? )
+                |   ( '<!--' ~('v'|'b'|'/') { tc == XML }? |
+                      '<!'   ~('v'|'b'|'/') { tc == TXT }? |
+                      '/*'   ~('v'|'b'|'-') { tc == SQL }? )
+                |   ( '<!--/' ~('v'|'b') { tc == XML }? |
+                      '<!/'   ~('v'|'b') { tc == TXT }? |
+                      '/*-'   ~('v'|'b') { tc == SQL }? )
+                ;
 fragment V      :   'v' ;
 fragment B      :   'b' ;
 fragment BV     :   'bv' ;
@@ -76,7 +91,7 @@ TSTART_BA   :   TSTART BA                   -> pushMode(TINSIDE) ;
 CCLOSE_BA   :   CTERM BA CEND ;
 CSTART_BA   :   CSTART BA                   -> pushMode(CINSIDE) ;
 
-TEXT        :   ~[<{]+
+TEXT        :   FTEXT
             |   TTEXT
             |   CTEXT
             ;

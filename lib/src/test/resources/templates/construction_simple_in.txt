@@ -1,0 +1,9 @@
+<!b BLOCK1>first <!v VALUE1>value 1 default<!/v> block
+<!/b>
+<!b BLOCK2>second <!v VALUE2>value 2 default<!/v> block
+	<!b BLOCK3>third <!v VALUE3/> block
+<!/b>
+	<!b BLOCK4>fourth <!v VALUE4	 /> block
+<!/b>
+<!/b>
+<!v CONTENT/>

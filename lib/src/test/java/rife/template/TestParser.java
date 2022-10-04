@@ -617,8 +617,9 @@ public class TestParser {
                 }
             }
         */
+
     @Test
-    public void testEncodingLatin() {
+    public void testEncodingLatinHtml() {
         try {
             Parsed template_ascii = TemplateFactory.HTML.getParser().parse("encoding_latin_ascii", "US-ASCII", null);
             Parsed template_utf_16le = TemplateFactory.HTML.getParser().parse("encoding_latin_utf16le", "UTF-16LE", null);
@@ -634,7 +635,23 @@ public class TestParser {
     }
 
     @Test
-    public void testEncodingLatin1() {
+    public void testEncodingLatinTxt() {
+        try {
+            Parsed template_ascii = TemplateFactory.TXT.getParser().parse("encoding_latin_ascii", "US-ASCII", null);
+            Parsed template_utf_16le = TemplateFactory.TXT.getParser().parse("encoding_latin_utf16le", "UTF-16LE", null);
+            Parsed template_ascii_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin_ascii", "UTF-16LE", null);
+            Parsed template_utf_16le_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin_utf16le", "US-ASCII", null);
+
+            assertEquals(template_ascii.getContent().getPart(0).getData(), template_utf_16le.getContent().getPart(0).getData());
+            assertNotEquals(template_utf_16le.getContent().getPart(0).getData(), template_utf_16le_wrong.getContent().getPart(0).getData());
+            assertNotEquals(template_ascii.getContent().getPart(0).getData(), template_ascii_wrong.getContent().getPart(0).getData());
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
+    public void testEncodingLatin1Html() {
         try {
             Parsed template_iso8859_1 = TemplateFactory.HTML.getParser().parse("encoding_latin1_iso88591", "ISO8859-1", null);
             Parsed template_utf_8 = TemplateFactory.HTML.getParser().parse("encoding_latin1_utf8", "UTF-8", null);
@@ -650,12 +667,44 @@ public class TestParser {
     }
 
     @Test
-    public void testEncodingNonLatin() {
+    public void testEncodingLatin1Txt() {
+        try {
+            Parsed template_iso8859_1 = TemplateFactory.TXT.getParser().parse("encoding_latin1_iso88591", "ISO8859-1", null);
+            Parsed template_utf_8 = TemplateFactory.TXT.getParser().parse("encoding_latin1_utf8", "UTF-8", null);
+            Parsed template_iso8859_1_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin1_iso88591", "UTF-8", null);
+            Parsed template_utf_8_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin1_utf8", "ISO8859-1", null);
+
+            assertEquals(template_iso8859_1.getContent().getPart(0).getData(), template_utf_8.getContent().getPart(0).getData());
+            assertNotEquals(template_iso8859_1.getContent().getPart(0).getData(), template_iso8859_1_wrong.getContent().getPart(0).getData());
+            assertNotEquals(template_utf_8.getContent().getPart(0).getData(), template_utf_8_wrong.getContent().getPart(0).getData());
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
+    public void testEncodingNonLatinHtml() {
         try {
             Parsed template_utf_8 = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf8", "UTF-8", null);
             Parsed template_utf_8_wrong = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf8", "ISO8859-1", null);
             Parsed template_utf_16be = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf16be", "UTF-16BE", null);
             Parsed template_utf_16be_wrong = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf16be", "UTF-16LE", null);
+
+            assertEquals(template_utf_8.getContent().getPart(0).getData(), template_utf_16be.getContent().getPart(0).getData());
+            assertNotEquals(template_utf_8.getContent().getPart(0).getData(), template_utf_8_wrong.getContent().getPart(0).getData());
+            assertNotEquals(template_utf_16be.getContent().getPart(0).getData(), template_utf_16be_wrong.getContent().getPart(0).getData());
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
+    public void testEncodingNonLatinTxt() {
+        try {
+            Parsed template_utf_8 = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "UTF-8", null);
+            Parsed template_utf_8_wrong = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "ISO8859-1", null);
+            Parsed template_utf_16be = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf16be", "UTF-16BE", null);
+            Parsed template_utf_16be_wrong = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf16be", "UTF-16LE", null);
 
             assertEquals(template_utf_8.getContent().getPart(0).getData(), template_utf_16be.getContent().getPart(0).getData());
             assertNotEquals(template_utf_8.getContent().getPart(0).getData(), template_utf_8_wrong.getContent().getPart(0).getData());

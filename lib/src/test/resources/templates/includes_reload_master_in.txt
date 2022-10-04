@@ -1,0 +1,5 @@
+Template with included templates
+================================
+
+This is a template with included templates.
+<!i includes_reload_included_in/>

@@ -20,7 +20,8 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 public class TemplateFactory extends EnumClass<String> {
-    public static TemplateFactory HTML = new TemplateFactory(ResourceFinderClasspath.instance(),
+    public static TemplateFactory HTML = new TemplateFactory(TemplateConfig.XML,
+        ResourceFinderClasspath.instance(),
         "html", "text/html", ".html",
         new String[]
             {
@@ -32,20 +33,40 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_RENDER
             },
-
-        BeanHandlerXhtml.getInstance(), EncoderHtmlSingleton.INSTANCE,
+        BeanHandlerXhtml.getInstance(),
+        EncoderHtmlSingleton.INSTANCE,
         null);
 
-    private TemplateClassLoader lastClassloader_ = null;
-    private final Parser parser_;
+    public static TemplateFactory TXT = new TemplateFactory(TemplateConfig.TXT,
+        ResourceFinderClasspath.instance(),
+        "txt", "text/plain", ".txt",
+        new String[]
+            {
+                TemplateFactoryFilters.TAG_LANG
+            },
+        new String[]
+            {
+                TemplateFactoryFilters.TAG_CONFIG,
+                TemplateFactoryFilters.TAG_L10N,
+                TemplateFactoryFilters.TAG_RENDER
+            },
+        BeanHandlerPlain.getInstance(),
+        null,
+        null);
+
+    private final TemplateConfig config_;
+    private ResourceFinder resourceFinder_;
+    private final String defaultContentType_;
     private BeanHandler beanHandler_;
     private TemplateEncoder encoder_;
-    private ResourceFinder resourceFinder_;
     private TemplateInitializer initializer_;
-    private final String identifierUppercase_;
-    private final String defaultContentType_;
 
-    TemplateFactory(ResourceFinder resourceFinder, String identifier,
+    private final Parser parser_;
+    private final String identifierUppercase_;
+
+    private TemplateClassLoader lastClassloader_ = null;
+
+    TemplateFactory(TemplateConfig config, ResourceFinder resourceFinder, String identifier,
                     String defaultContentType,
                     String extension, String[] blockFilters, String[] valueFilters,
                     BeanHandler beanHandler,
@@ -67,6 +88,7 @@ public class TemplateFactory extends EnumClass<String> {
             throw new InvalidValueFilterException(e.getPattern());
         }
 
+        config_ = config;
         identifierUppercase_ = identifier.toUpperCase();
         parser_ = new Parser(this, identifier, extension, block_filter_patterns, value_filter_patterns);
         resourceFinder_ = resourceFinder;
@@ -91,9 +113,10 @@ public class TemplateFactory extends EnumClass<String> {
         return null;
     }
 
-    public TemplateFactory(String identifier, TemplateFactory base) {
+    public TemplateFactory(TemplateConfig config, String identifier, TemplateFactory base) {
         super(TemplateFactory.class, identifier);
 
+        config_ = config;
         identifierUppercase_ = identifier.toUpperCase();
         parser_ = new Parser(this, identifier, base.getParser().getExtension(), base.getParser().getBlockFilters(), base.getParser().getValueFilters());
         resourceFinder_ = base.getResourceFinder();
@@ -101,8 +124,6 @@ public class TemplateFactory extends EnumClass<String> {
         encoder_ = base.getEncoder();
         initializer_ = base.getInitializer();
         defaultContentType_ = base.getDefaultContentType();
-
-        assert parser_ != null;
     }
 
     public String getIdentifierUppercase() {
@@ -190,6 +211,10 @@ public class TemplateFactory extends EnumClass<String> {
         } catch (ClassNotFoundException e) {
             throw new TemplateNotFoundException(name, e);
         }
+    }
+
+    public TemplateConfig getConfig() {
+        return config_;
     }
 
     public TemplateFactory setResourceFinder(ResourceFinder resourceFinder) {

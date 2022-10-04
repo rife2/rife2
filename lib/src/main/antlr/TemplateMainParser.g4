@@ -1,9 +1,9 @@
-parser grammar TemplateHtmlParser;
+parser grammar TemplateMainParser;
 @parser::header {
     package rife.template.antlr;
 }
 
-options { tokenVocab=TemplateHtmlLexer; }
+options { tokenVocab=TemplateMainLexer; }
 
 document        :   blockContent EOF ;
 

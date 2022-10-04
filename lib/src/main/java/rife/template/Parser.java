@@ -379,9 +379,9 @@ public class Parser implements Cloneable {
         assert content != null;
 
         var input = CharStreams.fromString(content);
-        var lexer = new TemplateHtmlPreProcessLexer(input);
+        var lexer = new TemplatePreLexer(input);
         var tokens = new CommonTokenStream(lexer);
-        var parser = new TemplateHtmlPreProcessParser(tokens);
+        var parser = new TemplatePreParser(tokens);
         parser.setBuildParseTree(true);
 
         var walker = new ParseTreeWalker();
@@ -396,9 +396,10 @@ public class Parser implements Cloneable {
         assert content != null;
 
         var input = CharStreams.fromString(content);
-        var lexer = new TemplateHtmlLexer(input);
+        var lexer = new TemplateMainLexer(input);
+        lexer.tc = templateFactory_.getConfig();
         var tokens = new CommonTokenStream(lexer);
-        var parser = new TemplateHtmlParser(tokens);
+        var parser = new TemplateMainParser(tokens);
         parser.setBuildParseTree(true);
 
         var walker = new ParseTreeWalker();
@@ -408,7 +409,7 @@ public class Parser implements Cloneable {
         assert parsed.getBlocks().size() >= 1;
     }
 
-    class AntlrIncludeListener extends TemplateHtmlPreProcessParserBaseListener {
+    class AntlrIncludeListener extends TemplatePreParserBaseListener {
         final Parsed parsed_;
         final String content_;
         final Stack<String> previousIncludes_;
@@ -429,12 +430,12 @@ public class Parser implements Cloneable {
         }
 
         @Override
-        public void exitDocData(TemplateHtmlPreProcessParser.DocDataContext ctx) {
+        public void exitDocData(TemplatePreParser.DocDataContext ctx) {
             result_.append(ctx.getText());
         }
 
         @Override
-        public void enterTagI(TemplateHtmlPreProcessParser.TagIContext ctx) {
+        public void enterTagI(TemplatePreParser.TagIContext ctx) {
             var name = ctx.TTagName();
             if (name == null) {
                 name = ctx.CTagName();
@@ -492,7 +493,7 @@ public class Parser implements Cloneable {
         }
     }
 
-    static class AntlrParserListener extends TemplateHtmlParserBaseListener {
+    static class AntlrParserListener extends TemplateMainParserBaseListener {
         final Parsed parsed_;
 
         final Map<String, ParsedBlockData> blocks_ = new LinkedHashMap<>();
@@ -504,13 +505,13 @@ public class Parser implements Cloneable {
         }
 
         @Override
-        public void enterDocument(TemplateHtmlParser.DocumentContext ctx) {
+        public void enterDocument(TemplateMainParser.DocumentContext ctx) {
             blocks_.put("", new ParsedBlockData());
             blockIds_.push("");
         }
 
         @Override
-        public void exitDocument(TemplateHtmlParser.DocumentContext ctx) {
+        public void exitDocument(TemplateMainParser.DocumentContext ctx) {
             blockIds_.pop();
 
             for (var block : blocks_.entrySet()) {
@@ -519,7 +520,7 @@ public class Parser implements Cloneable {
         }
 
         @Override
-        public void exitTagV(TemplateHtmlParser.TagVContext ctx) {
+        public void exitTagV(TemplateMainParser.TagVContext ctx) {
             var name = ctx.TTagName();
             final String value_id;
             final String tag;
@@ -541,12 +542,12 @@ public class Parser implements Cloneable {
         }
 
         @Override
-        public void enterTagVDefault(TemplateHtmlParser.TagVDefaultContext ctx) {
+        public void enterTagVDefault(TemplateMainParser.TagVDefaultContext ctx) {
             currentValueData_ = new StringBuilder();
         }
 
         @Override
-        public void exitTagVDefault(TemplateHtmlParser.TagVDefaultContext ctx) {
+        public void exitTagVDefault(TemplateMainParser.TagVDefaultContext ctx) {
             var name = ctx.TTagName();
             final String value_id;
             final String tag;
@@ -571,7 +572,7 @@ public class Parser implements Cloneable {
         }
 
         @Override
-        public void enterTagB(TemplateHtmlParser.TagBContext ctx) {
+        public void enterTagB(TemplateMainParser.TagBContext ctx) {
             var name = ctx.TTagName();
             if (name == null) {
                 name = ctx.CTagName();
@@ -582,12 +583,12 @@ public class Parser implements Cloneable {
         }
 
         @Override
-        public void exitTagB(TemplateHtmlParser.TagBContext ctx) {
+        public void exitTagB(TemplateMainParser.TagBContext ctx) {
             blockIds_.pop();
         }
 
         @Override
-        public void enterTagBV(TemplateHtmlParser.TagBVContext ctx) {
+        public void enterTagBV(TemplateMainParser.TagBVContext ctx) {
             var name = ctx.TTagName();
             if (name == null) {
                 name = ctx.CTagName();
@@ -599,12 +600,12 @@ public class Parser implements Cloneable {
         }
 
         @Override
-        public void exitTagBV(TemplateHtmlParser.TagBVContext ctx) {
+        public void exitTagBV(TemplateMainParser.TagBVContext ctx) {
             blockIds_.pop();
         }
 
         @Override
-        public void enterTagBA(TemplateHtmlParser.TagBAContext ctx) {
+        public void enterTagBA(TemplateMainParser.TagBAContext ctx) {
             var name = ctx.TTagName();
             if (name == null) {
                 name = ctx.CTagName();
@@ -621,12 +622,12 @@ public class Parser implements Cloneable {
         }
 
         @Override
-        public void exitTagBA(TemplateHtmlParser.TagBAContext ctx) {
+        public void exitTagBA(TemplateMainParser.TagBAContext ctx) {
             blockIds_.pop();
         }
 
         @Override
-        public void exitBlockData(TemplateHtmlParser.BlockDataContext ctx) {
+        public void exitBlockData(TemplateMainParser.BlockDataContext ctx) {
             String block_id = blockIds_.peek();
             if (block_id != null) {
                 var data = blocks_.get(block_id);
@@ -641,7 +642,7 @@ public class Parser implements Cloneable {
         }
 
         @Override
-        public void exitValueData(TemplateHtmlParser.ValueDataContext ctx) {
+        public void exitValueData(TemplateMainParser.ValueDataContext ctx) {
             if (currentValueData_ != null) {
                 currentValueData_.append(ctx.getText());
             }

@@ -1,9 +1,9 @@
-parser grammar TemplateHtmlPreProcessParser;
+parser grammar TemplatePreParser;
 @parser::header {
     package rife.template.antlr;
 }
 
-options { tokenVocab=TemplateHtmlPreProcessLexer; }
+options { tokenVocab=TemplatePreLexer; }
 
 document    :   (docData|tagI|tagC)* ;
 

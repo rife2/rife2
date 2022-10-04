@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import rife.template.exceptions.BlockUnknownException;
 import rife.template.exceptions.TemplateException;
 import rife.template.exceptions.ValueUnknownException;
+import rife.tools.ArrayUtils;
 import rife.tools.ExceptionUtils;
+import rife.tools.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -458,7 +460,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionSimple() {
+    public void testConstructionSimpleHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("construction_simple_in");
@@ -482,7 +484,31 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionRepeated() {
+    public void testConstructionSimpleTxt() {
+        Template template;
+        try {
+            template = TemplateFactory.TXT.get("construction_simple_in");
+            template.appendBlock("CONTENT", "BLOCK1");
+            template.appendBlock("CONTENT", "BLOCK3");
+            template.appendBlock("CONTENT", "BLOCK2");
+            template.appendBlock("CONTENT", "BLOCK4");
+            template.appendBlock("CONTENT", "BLOCK1");
+            template.setValue("VALUE3", "value 3 early");    // will be overridden
+            template.appendBlock("CONTENT", "BLOCK3");
+            template.appendBlock("CONTENT", "BLOCK2");
+            template.setValue("VALUE4", "value 4 early");    // will be removed
+            template.appendBlock("CONTENT", "BLOCK4");
+            template.removeValue("VALUE4");
+            template.setValue("VALUE1", "value 1 late");    // late setting
+            template.setValue("VALUE3", "value 3 late");    // late setting
+            assertEquals(template.getContent(), TemplateFactory.TXT.getParser().getTemplateContent("construction_simple_out"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
+    public void testConstructionRepeatedHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("construction_repeated_in");
@@ -501,7 +527,26 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionOverriding() {
+    public void testConstructionRepeatedTxt() {
+        Template template;
+        try {
+            template = TemplateFactory.TXT.get("construction_repeated_in");
+            template.setBlock("VALUE2", "BLOCK1");
+            template.setBlock("VALUE3", "BLOCK2");
+            template.setBlock("VALUE4", "BLOCK3");
+            template.setBlock("CONTENT", "BLOCK4");
+            template.setValue("VALUE1", "value 1 late");
+            template.setValue("VALUE2", "value 2 late");    // has no influence
+            template.setValue("VALUE3", "value 3 late");    // has no influence
+            template.setValue("VALUE4", "value 4 late");    // has no influence
+            assertEquals(template.getContent(), TemplateFactory.TXT.getParser().getTemplateContent("construction_repeated_out"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
+    public void testConstructionOverridingHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("construction_overriding_in");
@@ -547,7 +592,53 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionDefaultValue() {
+    public void testConstructionOverridingTxt() {
+        Template template;
+        try {
+            template = TemplateFactory.TXT.get("construction_overriding_in");
+
+            assertFalse(template.isValueSet("VALUE2"));
+            template.setValue("VALUE2", "value2");
+            assertTrue(template.isValueSet("VALUE2"));
+            template.setBlock("VALUE2", "BLOCK1");
+            assertTrue(template.isValueSet("VALUE2"));
+            template.setValue("VALUE1", "value1");
+            assertEquals(template.getBlock("BLOCK2"), TemplateFactory.TXT.getParser().getTemplateContent("construction_overriding_out_1"));
+            template.clear();
+
+            assertFalse(template.isValueSet("VALUE2"));
+            template.setBlock("VALUE2", "BLOCK1");
+            assertTrue(template.isValueSet("VALUE2"));
+            template.setValue("VALUE2", "value2");
+            assertTrue(template.isValueSet("VALUE2"));
+            template.setValue("VALUE1", "value1");
+            assertEquals(template.getBlock("BLOCK2"), TemplateFactory.TXT.getParser().getTemplateContent("construction_overriding_out_2"));
+            template.clear();
+
+            assertFalse(template.isValueSet("VALUE2"));
+            template.setValue("VALUE2", "value2 ");
+            assertTrue(template.isValueSet("VALUE2"));
+            template.appendBlock("VALUE2", "BLOCK1");
+            assertTrue(template.isValueSet("VALUE2"));
+            template.setValue("VALUE1", "value1");
+            assertEquals(template.getBlock("BLOCK2"), TemplateFactory.TXT.getParser().getTemplateContent("construction_overriding_out_3"));
+            template.clear();
+
+            assertFalse(template.isValueSet("VALUE2"));
+            template.setBlock("VALUE2", "BLOCK1");
+            assertTrue(template.isValueSet("VALUE2"));
+            template.appendValue("VALUE2", " value2");
+            assertTrue(template.isValueSet("VALUE2"));
+            template.setValue("VALUE1", "value1");
+            assertEquals(template.getBlock("BLOCK2"), TemplateFactory.TXT.getParser().getTemplateContent("construction_overriding_out_4"));
+            template.clear();
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
+    public void testConstructionDefaultValueHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("construction_defaultvalue_in");
@@ -560,7 +651,20 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionEmbedded() {
+    public void testConstructionDefaultValueText() {
+        Template template;
+        try {
+            template = TemplateFactory.TXT.get("construction_defaultvalue_in");
+
+            template.setValue("VALUE1", "value1");
+            assertEquals(template.getBlock("BLOCK2"), TemplateFactory.TXT.getParser().getTemplateContent("construction_defaultvalue_out"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
+    public void testConstructionEmbeddedHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("construction_embedded_in");
@@ -576,6 +680,28 @@ public class TestTemplate {
             template.appendBlock("rows", "row_first");
             template.setValue("member_value2", 5);
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("construction_embedded_out"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
+    public void testConstructionEmbeddedTxt() {
+        Template template;
+        try {
+            template = TemplateFactory.TXT.get("construction_embedded_in");
+
+             template.setValue("member_value1", 1);
+            template.appendBlock("rows", "row_first");
+            template.setValue("member_value1", 2);
+            template.appendBlock("rows", "row_second");
+            template.setValue("member_value1", 3);
+            template.appendBlock("rows", "row_first");
+            template.setValue("member_value1", 4);
+            template.appendBlock("rows", "row_second");
+            template.appendBlock("rows", "row_first");
+            template.setValue("member_value2", 5);
+            assertEquals(template.getContent(), TemplateFactory.TXT.getParser().getTemplateContent("construction_embedded_out"));
         } catch (TemplateException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -659,7 +785,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionInternalValues() {
+    public void testConstructionInternalValuesHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("construction_internalvalues_in");
@@ -680,6 +806,33 @@ public class TestTemplate {
 
             tree.output();
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("construction_internalvalues_out"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
+    public void testConstructionInternalValuesTxt() {
+        Template template;
+        try {
+            template = TemplateFactory.TXT.get("construction_internalvalues_in");
+
+            var tree = new TreeNode(template);
+            var node1 = new TreeNode(tree, "node1");
+            var node2 = new TreeNode(tree, "node2");
+            var node3 = new TreeNode(tree, "node3");
+            new TreeNode(node1, "node1a");
+            new TreeNode(node1, "node1b");
+            new TreeNode(node1, "node1c");
+            var node2a = new TreeNode(node2, "node2a");
+            new TreeNode(node2, "node2b");
+            new TreeNode(node3, "node3a");
+            new TreeNode(node3, "node3b");
+            new TreeNode(node2a, "node2a1");
+            new TreeNode(node2a, "node2a2");
+
+            tree.output();
+            assertEquals(template.getContent(), TemplateFactory.TXT.getParser().getTemplateContent("construction_internalvalues_out"));
         } catch (TemplateException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -716,10 +869,24 @@ public class TestTemplate {
     }
 
     @Test
-    public void testHasValues() {
+    public void testHasValuesHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("defaultvalues_in");
+            assertTrue(template.hasValueId("VALUE1"));
+            assertTrue(template.hasValueId("VALUE2"));
+            assertTrue(template.hasValueId("VALUE3"));
+            assertFalse(template.hasValueId("VALUE4"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
+    public void testHasValuesTxt() {
+        Template template;
+        try {
+            template = TemplateFactory.TXT.get("defaultvalues_in");
             assertTrue(template.hasValueId("VALUE1"));
             assertTrue(template.hasValueId("VALUE2"));
             assertTrue(template.hasValueId("VALUE3"));

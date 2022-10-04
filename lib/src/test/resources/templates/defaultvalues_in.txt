@@ -1,0 +1,14 @@
+{{v VALUE1}}default1{{/v}}
+<html>
+	<head>
+		<title>Template with default value tags</title>
+	</head>
+
+	<body>
+		{{v VALUE2}}default2<!b BLOCK1>block content<!/b>
+		{{/v}}
+		<h1>This is a template with long value tags.</h1>
+		<h2>Some more text.</h2>
+		{{v VALUE3}}default3{{/v}}
+	</body>
+</html>

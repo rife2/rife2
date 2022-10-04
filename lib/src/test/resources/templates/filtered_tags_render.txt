@@ -1,0 +1,3 @@
+This is the render value '<!v render:rife.template.RendererImpl/>'.
+This is another render value '{{v render:rife.template.RendererImpl/}}'.
+This is the render value with a differentiator '<!v render:rife.template.RendererImpl:different/>'.
