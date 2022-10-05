@@ -1,0 +1,8 @@
+2022-10-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+
+  * Re-implemented template engine using ANTLR for faster parsing.
+  * Changed template engine tags formats to align better with modern
+    conventions.
+  * Proof of concept re-design of site and element infrastructure
+  * Integrated embedded Jetty server for standalone use.
+  * Set up Gradle build system.
