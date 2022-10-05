@@ -6,3 +6,4 @@ build
 *.tokens
 lib/src/generated
 lib/src/main/gen
+.idea
