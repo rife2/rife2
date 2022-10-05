@@ -61,6 +61,11 @@ public abstract class AbstractTemplate implements Template {
         }
     }
 
+    public final void setBlock(String valueBlockId)
+    throws TemplateException {
+        setBlock(valueBlockId, valueBlockId);
+    }
+
     public final void setBlock(String valueId, String blockId)
     throws TemplateException {
         if (null == valueId ||

@@ -4,10 +4,14 @@
  */
 package rife.engine;
 
-import rife.engine.exceptions.EngineException;
-
 public interface Route {
-    void process(Context context) throws EngineException;
     RequestMethod method();
+
     String path();
+
+    Element getElementInstance(Context context);
+
+    String getDefaultElementId();
+
+    String getDefaultElementPath();
 }

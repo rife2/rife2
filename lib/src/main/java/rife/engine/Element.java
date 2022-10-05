@@ -6,5 +6,5 @@ package rife.engine;
 
 @FunctionalInterface
 public interface Element {
-    void process(Context context);
+    void process(Context c) throws Exception;
 }

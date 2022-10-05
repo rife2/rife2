@@ -4,16 +4,28 @@
  */
 package rife.engine;
 
+import rife.engine.annotations.Body;
 import rife.engine.annotations.Parameter;
 import rife.engine.exceptions.EngineException;
+import rife.tools.ClassUtils;
 import rife.tools.Convert;
+import rife.tools.StringUtils;
 import rife.tools.exceptions.ConversionException;
 
 import java.lang.reflect.Modifier;
 
-public record RouteClass(RequestMethod method, String path, Class<? extends Element> elementClass) implements Route {
+public record RouteClass(Class<? extends Element> elementClass, RequestMethod method, String path) implements Route {
+    public RouteClass(Class<? extends Element> elementClass, RequestMethod method, String path) {
+        this.method = method;
+        this.elementClass = elementClass;
+        if (path == null) {
+            path = getDefaultElementPath();
+        }
+        this.path = path;
+    }
+
     @Override
-    public void process(Context context) throws EngineException {
+    public Element getElementInstance(Context context) {
         try {
             var element = elementClass().getDeclaredConstructor().newInstance();
 
@@ -28,25 +40,49 @@ public record RouteClass(RequestMethod method, String path, Class<? extends Elem
                     continue;
                 }
 
+                var name = field.getName();
+                var type = field.getType();
                 if (field.isAnnotationPresent(Parameter.class)) {
-                    var name = field.getName();
+                    var annotation_name = field.getAnnotation(Parameter.class).name();
+                    if (annotation_name != null && !annotation_name.isEmpty()) {
+                        name = annotation_name;
+                    }
                     var values = params.get(name);
                     if (values != null && values.length > 0) {
-                        var type = field.getType();
                         Object value;
                         try {
                             value = Convert.toType(values[0], type);
-                        }
-            			catch (ConversionException e) {
+                        } catch (ConversionException e) {
                             value = Convert.getDefaultValue(type);
                         }
                         field.set(element, value);
                     }
                 }
+                if (field.isAnnotationPresent(Body.class)) {
+                    var body = context.request().getBody();
+                    Object value;
+                    try {
+                        value = Convert.toType(body, type);
+                    } catch (ConversionException e) {
+                        value = Convert.getDefaultValue(type);
+                    }
+                    field.set(element, value);
+                }
             }
-            element.process(context);
+
+            return element;
         } catch (Exception e) {
             throw new EngineException(e);
         }
+    }
+
+    @Override
+    public String getDefaultElementId() {
+        return StringUtils.uncapitalize(ClassUtils.shortenClassName(elementClass));
+    }
+
+    @Override
+    public String getDefaultElementPath() {
+        return "/" + getDefaultElementId();
     }
 }

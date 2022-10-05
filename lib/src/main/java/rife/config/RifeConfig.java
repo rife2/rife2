@@ -261,8 +261,10 @@ public class RifeConfig {
 
     public class ServerConfig {
         private int port_ = DEFAULT_PORT;
+        private String staticResourceBase_ = DEFAULT_STATIC_RESOURCE_BASE;
 
         public static final int DEFAULT_PORT = 4567;
+        public static final String DEFAULT_STATIC_RESOURCE_BASE = null;
 
         public int getPort() {
             return port_;
@@ -270,6 +272,15 @@ public class RifeConfig {
 
         public ServerConfig setPort(int port) {
             port_ = port;
+            return this;
+        }
+
+        public String getStaticResourceBase() {
+            return staticResourceBase_;
+        }
+
+        public ServerConfig setStaticResourceBase(String base) {
+            staticResourceBase_ = base;
             return this;
         }
     }

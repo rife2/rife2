@@ -4,11 +4,21 @@
  */
 package rife.engine;
 
-import rife.engine.exceptions.EngineException;
+import rife.tools.StringUtils;
 
-public record RouteInstance(RequestMethod method, String path, Element element) implements Route {
+public record RouteInstance(Element element, RequestMethod method, String path) implements Route {
     @Override
-    public void process(Context context) throws EngineException {
-        element.process(context);
+    public Element getElementInstance(Context context) {
+        return element;
+    }
+
+    @Override
+    public String getDefaultElementId() {
+        return StringUtils.stripFromFront(path, "/");
+    }
+
+    @Override
+    public String getDefaultElementPath() {
+        return path;
     }
 }

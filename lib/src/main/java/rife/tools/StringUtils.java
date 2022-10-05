@@ -1509,6 +1509,29 @@ public abstract class StringUtils {
     }
 
     /**
+     * Creates a <code>String</code> for the provided byte array and encoding
+     *
+     * @param bytes The byte array to convert.
+     * @param encoding The encoding to use for the string conversion.
+     * @return The converted <code>String</code>.
+     * @since 2.0
+     */
+    public static String toString(byte[] bytes, String encoding) {
+        String string;
+        if (encoding != null && Charset.isSupported(encoding)) {
+            try {
+                string = new String(bytes, encoding);
+            } catch (UnsupportedEncodingException e) {
+                string = new String(bytes);
+            }
+        } else {
+            string = new String(bytes);
+        }
+
+        return string;
+    }
+
+    /**
      * Creates a new array of <code>String</code> objects, containing the
      * elements of a supplied <code>Iterator</code>.
      *

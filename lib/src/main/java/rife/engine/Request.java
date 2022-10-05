@@ -12,6 +12,7 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import rife.tools.StringUtils;
 
 /**
  * This interface contains all the methods that the web engine needs to be
@@ -46,6 +47,24 @@ public interface Request {
      * @since 1.1
      */
     Map<String, UploadedFile[]> getFiles();
+
+    /**
+     * Retrieves the body of this request as a string.
+     *
+     * @return the string of the request body
+     * @see #getBodyAsBytes()
+     * @since 2.0
+     */
+    String getBody();
+
+    /**
+     * Retrieves the body of this request as a byte array.
+     *
+     * @return the byte array of the request body
+     * @see #getBody()
+     * @since 2.0
+     */
+    byte[] getBodyAsBytes();
 
     /**
      * Checks if a particular file has been uploaded in this request.

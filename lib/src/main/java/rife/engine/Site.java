@@ -9,19 +9,44 @@ import rife.engine.exceptions.EngineException;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Site {
+public class Site {
     private final Map<String, Route> routes_ = new HashMap<>();
 
-    public abstract void setup();
+    public void setup() {
+    }
 
-    public Route get(String path, Class<? extends Element> element) {
-        var route = new RouteClass(RequestMethod.GET, path, element);
+    public Route get(String path, Class<? extends Element> elementClass) {
+        var route = new RouteClass(elementClass, RequestMethod.GET, path);
         routes_.put(path, route);
         return route;
     }
 
+    public Route get(Class<? extends Element> elementClass) {
+        var route = new RouteClass(elementClass, RequestMethod.GET, null);
+        routes_.put(route.path(), route);
+        return route;
+    }
+
     public Route get(String path, Element element) {
-        var route = new RouteInstance(RequestMethod.GET, path, element);
+        var route = new RouteInstance(element, RequestMethod.GET, path);
+        routes_.put(path, route);
+        return route;
+    }
+
+    public Route post(String path, Class<? extends Element> elementClass) {
+        var route = new RouteClass(elementClass, RequestMethod.POST, path);
+        routes_.put(path, route);
+        return route;
+    }
+
+    public Route post(Class<? extends Element> elementClass) {
+        var route = new RouteClass(elementClass, RequestMethod.POST, null);
+        routes_.put(route.path(), route);
+        return route;
+    }
+
+    public Route post(String path, Element element) {
+        var route = new RouteInstance(element, RequestMethod.POST, path);
         routes_.put(path, route);
         return route;
     }
@@ -48,8 +73,8 @@ public abstract class Site {
             return false;
         }
 
-        var context = new Context(request, response);
-        route.process(context);
+        var context = new Context(gateUrl, request, response, route);
+        context.process();
         response.close();
 
         return true;
@@ -74,29 +99,26 @@ public abstract class Site {
             url = "/";
         }
 
-        Route route = null;
-
         if (null == pathInfo) {
-            route = routes_.get(url);
+            Route route = routes_.get(url);
             if (route != null && request.getMethod() == route.method()) {
                 return route;
             }
 
-            if (url.length() > 0 &&
-                '/' == url.charAt(url.length() - 1)) {
+            if ('/' == url.charAt(url.length() - 1)) {
                 String stripped_url = url.substring(0, url.length() - 1);
                 // if the url contains a dot in the last part, it shouldn't be
                 // seen as simulating a directory
                 if (stripped_url.lastIndexOf('.') <= stripped_url.lastIndexOf('/')) {
                     route = routes_.get(stripped_url);
-                    if (route != null) {
+                    if (route != null && request.getMethod() == route.method()) {
                         return route;
                     }
                 }
             }
         }
 
-        return route;
+        return null;
     }
 
     /**
@@ -115,7 +137,7 @@ public abstract class Site {
      */
     public Route findRouteForRequest(Request request, String elementUrl) {
         // obtain the element info that mapped to the requested path info
-        Route route = null;
+        Route route;
         StringBuilder element_url_buffer = new StringBuilder(elementUrl);
         int element_url_location = -1;
         String element_path_info = "";

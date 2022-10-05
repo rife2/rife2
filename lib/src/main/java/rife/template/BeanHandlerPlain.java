@@ -30,7 +30,7 @@ public class BeanHandlerPlain extends AbstractBeanHandler {
 
     protected Map<String, Object> getPropertyValues(Template template, Object bean, String prefix)
     throws BeanUtilsException {
-        return BeanUtils.getPropertyValues(bean, template.getAvailableValueIds(), null, prefix);
+        return BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, bean, template.getAvailableValueIds(), null, prefix);
     }
 }
 

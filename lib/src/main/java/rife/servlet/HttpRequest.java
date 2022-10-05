@@ -10,8 +10,10 @@ import rife.engine.Request;
 import rife.engine.RequestMethod;
 import rife.engine.UploadedFile;
 import rife.engine.exceptions.EngineException;
+import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -22,15 +24,18 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import rife.tools.exceptions.FileUtilsErrorException;
 
 public class HttpRequest implements Request {
     private final HttpServletRequest request_;
 
     private Map<String, String[]> parameters_ = null;
     private Map<String, UploadedFile[]> files_ = null;
+    private String body_ = null;
+    private byte[] bodyAsBytes_ = null;
 
     public HttpRequest(HttpServletRequest request)
-        throws EngineException {
+    throws EngineException {
         assert request != null;
         request_ = request;
     }
@@ -85,6 +90,28 @@ public class HttpRequest implements Request {
     @Override
     public Map<String, UploadedFile[]> getFiles() {
         return files_;
+    }
+
+    @Override
+    public String getBody() {
+        if (body_== null) {
+            body_ = StringUtils.toString(getBodyAsBytes(), request_.getCharacterEncoding());
+        }
+
+        return body_;
+    }
+
+    @Override
+    public byte[] getBodyAsBytes() {
+        if (bodyAsBytes_ == null) {
+            try {
+                bodyAsBytes_ = FileUtils.readBytes(request_.getInputStream());
+            } catch (FileUtilsErrorException | IOException e) {
+                throw new EngineException(e);
+            }
+        }
+
+        return bodyAsBytes_;
     }
 
     @Override
@@ -330,7 +357,7 @@ public class HttpRequest implements Request {
         if (port <= -1) {
             port = getServerPort();
         }
-        if (port != 80) {
+        if (port != 80 && port != 433) {
             server_root.append(":");
             server_root.append(port);
         }
