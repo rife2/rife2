@@ -2,6 +2,12 @@ plugins {
     application
 }
 
+sourceSets {
+    main {
+        runtimeClasspath = files(file("../app/src/main/resources"), runtimeClasspath);
+    }
+}
+
 application {
     mainClass.set("rife.TestSite")
 }
