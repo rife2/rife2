@@ -35,6 +35,24 @@ public interface Template extends Cloneable {
      * template values will not affect text which was appended when this
      * method is called.
      *
+     * @param valueBlockId the ID of the value and the block
+     * @throws TemplateException when the <code>valueId</code> or
+     *                           <code>blockId</code> aren't known
+     * @see #setBlock
+     * @see #getBlock
+     * @see #getContent
+     * @see #hasBlock
+     * @since 1.0
+     */
+    public void appendBlock(String valueBlockId)
+    throws TemplateException;
+
+    /**
+     * Appends the content of a block to a value. The values used by the block
+     * will be captured when this method is called, so any future changes to
+     * template values will not affect text which was appended when this
+     * method is called.
+     *
      * @param valueId the ID of the value
      * @param blockId the ID of the block
      * @throws TemplateException when the <code>valueId</code> or

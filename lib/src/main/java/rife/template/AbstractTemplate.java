@@ -28,6 +28,10 @@ public abstract class AbstractTemplate implements Template {
     protected Map<String, Object> cache_ = null;
     protected String defaultContentType_ = null;
 
+    public final void appendBlock(String valueBlockId) {
+        appendBlock(valueBlockId, valueBlockId);
+    }
+
     public final void appendBlock(String valueId, String blockId)
     throws TemplateException {
         if (null == valueId ||
