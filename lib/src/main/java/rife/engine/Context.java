@@ -1,10 +1,11 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
 
 import rife.config.RifeConfig;
+import rife.engine.exceptions.DeferException;
 import rife.engine.exceptions.EngineException;
 import rife.template.Template;
 import rife.template.TemplateFactory;
@@ -120,4 +121,24 @@ public class Context {
     public String getUrlFor(Route route) {
         return getWebappRootUrl(-1) + StringUtils.stripFromFront(route.path(), "/");
     }
+
+
+    /**
+     * Interrupts the execution in RIFE completely and defers it to the
+     * servlet container.
+     * <p>If RIFE is being run as a filter, it will execute the next filter in
+     * the chain.
+     * <p>If RIFE is being run as a servlet, the status code {@code 404: Not
+     * Found} will be sent to the client.
+     *
+     * @throws rife.engine.exceptions.EngineException a runtime
+     *                                                exception that is used to immediately interrupt the execution, don't
+     *                                                catch this exception
+     * @since 1.0
+     */
+    public void defer()
+    throws EngineException {
+        throw new DeferException();
+    }
+
 }

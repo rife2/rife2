@@ -28,6 +28,12 @@ dependencies {
     compileOnly("org.eclipse.jetty:jetty-servlet:11.0.12")
     compileOnly("jakarta.servlet:jakarta.servlet-api:5.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    testImplementation("org.postgresql:postgresql:42.5.0")
+    testImplementation("mysql:mysql-connector-java:8.0.30")
+    testImplementation("org.hsqldb:hsqldb:2.7.0")
+    testImplementation("com.h2database:h2:2.1.214")
+    testImplementation("org.apache.derby:derby:10.16.1.1")
+    testImplementation("org.apache.derby:derbytools:10.16.1.1")
 }
 
 tasks.generateGrammarSource {

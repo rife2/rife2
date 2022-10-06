@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.template;
@@ -37,6 +37,23 @@ public class TemplateFactory extends EnumClass<String> {
         EncoderHtmlSingleton.INSTANCE,
         null);
 
+    public static TemplateFactory XML = new TemplateFactory(TemplateConfig.XML,
+        ResourceFinderClasspath.instance(),
+        "xml", "application/xml", ".xml",
+        new String[]
+            {
+                TemplateFactoryFilters.TAG_LANG
+            },
+        new String[]
+            {
+                TemplateFactoryFilters.TAG_CONFIG,
+                TemplateFactoryFilters.TAG_L10N,
+                TemplateFactoryFilters.TAG_RENDER
+            },
+        BeanHandlerXml.getInstance(),
+        EncoderXmlSingleton.INSTANCE,
+        null);
+
     public static TemplateFactory TXT = new TemplateFactory(TemplateConfig.TXT,
         ResourceFinderClasspath.instance(),
         "txt", "text/plain", ".txt",
@@ -52,6 +69,23 @@ public class TemplateFactory extends EnumClass<String> {
             },
         BeanHandlerPlain.getInstance(),
         null,
+        null);
+
+    public static TemplateFactory SQL = new TemplateFactory(TemplateConfig.SQL,
+        ResourceFinderClasspath.instance(),
+        "txt", "text/plain", ".sql",
+        new String[]
+            {
+                TemplateFactoryFilters.TAG_LANG
+            },
+        new String[]
+            {
+                TemplateFactoryFilters.TAG_CONFIG,
+                TemplateFactoryFilters.TAG_L10N,
+                TemplateFactoryFilters.TAG_RENDER
+            },
+        BeanHandlerPlain.getInstance(),
+        EncoderHtmlSingleton.INSTANCE,
         null);
 
     private final TemplateConfig config_;

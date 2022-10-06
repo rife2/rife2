@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.config;
@@ -35,8 +35,16 @@ public class RifeConfig {
         return instance().global;
     }
 
+    public static DatabaseConfig database() {
+        return instance().database;
+    }
+
     public static EngineConfig engine() {
         return instance().engine;
+    }
+
+    public static SchedulerConfig scheduler() {
+        return instance().scheduler;
     }
 
     public static ServerConfig server() {
@@ -52,7 +60,9 @@ public class RifeConfig {
     }
 
     public final GlobalConfig global = new GlobalConfig();
+    public final DatabaseConfig database = new DatabaseConfig();
     public final EngineConfig engine = new EngineConfig();
+    public final SchedulerConfig scheduler = new SchedulerConfig();
     public final ServerConfig server = new ServerConfig();
     public final TemplateConfig template = new TemplateConfig();
     public final ToolsConfig tools = new ToolsConfig();
@@ -80,6 +90,32 @@ public class RifeConfig {
 
         public GlobalConfig setAutoReloadDelay(int delay) {
             autoReloadDelay_ = delay;
+            return this;
+        }
+    }
+
+    public class DatabaseConfig {
+        private int transactionTimeout_ = DEFAULT_TRANSACTION_TIMEOUT;
+        private boolean sqlDebugTrace_ = DEFAULT_SQL_DEBUG_TRACE;
+
+        private static final int DEFAULT_TRANSACTION_TIMEOUT = 0;    // 0 seconds : turned off
+        private static final boolean DEFAULT_SQL_DEBUG_TRACE = false;
+
+        public int getTransactionTimeout() {
+            return transactionTimeout_;
+        }
+
+        public DatabaseConfig setTransactionTimeout(int timeout) {
+            transactionTimeout_ = timeout;
+            return this;
+        }
+
+        public boolean getSqlDebugTrace() {
+            return DEFAULT_SQL_DEBUG_TRACE;
+        }
+
+        public DatabaseConfig setSqlDebugTrace(boolean flag) {
+            sqlDebugTrace_ = flag;
             return this;
         }
     }
@@ -256,6 +292,44 @@ public class RifeConfig {
         public EngineConfig setResponseEncoding(Charset encoding) {
             responseEncoding_ = encoding;
             return this;
+        }
+    }
+
+    public class SchedulerConfig {
+        public static final String DEFAULT_TABLE_TASK = "SchedTask";
+        public static final String DEFAULT_SEQUENCE_TASK = "SEQ_SCHEDTASK";
+        public static final String DEFAULT_TABLE_TASKOPTION = "SchedTaskoption";
+        public static final int DEFAULT_TASKOPTION_NAME_MAXIMUM_LENGTH = 255;
+        public static final int DEFAULT_TASKOPTION_VALUE_MAXIMUM_LENGTH = 255;
+        public static final int DEFAULT_TASK_TYPE_MAXIMUM_LENGTH = 255;
+        public static final int DEFAULT_TASK_FREQUENCY_MAXIMUM_LENGTH = 255;
+
+        public int getTaskTypeMaximumLength() {
+            return DEFAULT_TASK_TYPE_MAXIMUM_LENGTH;
+        }
+
+        public int getTaskFrequencyMaximumLength() {
+            return DEFAULT_TASK_FREQUENCY_MAXIMUM_LENGTH;
+        }
+
+        public int getTaskoptionValueMaximumLength() {
+            return DEFAULT_TASKOPTION_VALUE_MAXIMUM_LENGTH;
+        }
+
+        public int getTaskoptionNameMaximumLength() {
+            return DEFAULT_TASKOPTION_NAME_MAXIMUM_LENGTH;
+        }
+
+        public String getTableTask() {
+            return DEFAULT_TABLE_TASK;
+        }
+
+        public String getSequenceTask() {
+            return DEFAULT_SEQUENCE_TASK;
+        }
+
+        public String getTableTaskoption() {
+            return DEFAULT_TABLE_TASKOPTION;
         }
     }
 

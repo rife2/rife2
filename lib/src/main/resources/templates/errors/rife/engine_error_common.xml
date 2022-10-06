@@ -1,0 +1,32 @@
+<!--
+  -  Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+  -  Licensed under the Apache License, Version 2.0 (the "License")
+  -->
+<errors>
+	<product>Uwyn RIFE <!--v RIFE_VERSION/--></product>
+	<exceptions>
+		<!--v exceptions--><!--/v-->
+		
+		<!--b stack_trace_line-->
+				<frame>
+					<classname><!--v class_name-->class_name<!--/v--></classname>
+					<methodname><!--v method_name-->method_name<!--/v--></methodname>
+<!--v details--><!--/v-->
+<!--b file_name-->
+					<filename><!--v file_name-->file_name<!--/v--></filename>
+<!--/b-->
+<!--b line_number-->
+					<line><!--v line_number-->line<!--/v--></line>
+<!--/b-->
+				</frame>
+		<!--/b-->
+		
+<!--b more_stack_trace-->
+				<moreframes><!--v count-->11<!--/v--></moreframes>
+<!--/b-->
+<!--b more_exceptions-->
+		<moreexceptions/>
+<!--/b-->
+	</exceptions>
+	
+</errors>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
@@ -25,7 +25,7 @@ import java.util.zip.GZIPOutputStream;
  * <p>Additional abstract methods have been provided to integrate with the
  * concrete back-end classes that extend <code>AbstractResponse</code>.
  *
- * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @author Geert Bevin <gbevin[remove] at uwyn dot com>
  * @since 1.1
  */
 public abstract class AbstractResponse implements Response {

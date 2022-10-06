@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
@@ -20,10 +20,10 @@ import java.util.logging.Logger;
  * want to make sure that the file is deleted, you should call {@link
  * File#delete} yourself when you're finished with the uploaded file.
  *
- * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @author Geert Bevin <gbevin[remove] at uwyn dot com>
  * @since 1.0
  */
-public class UploadedFile implements Cloneable {
+public class UploadedFile implements Cloneable, AutoCloseable {
     private File tempFile_ = null;
     private String filename_ = null;
     private String type_ = null;
@@ -34,13 +34,12 @@ public class UploadedFile implements Cloneable {
         type_ = type;
     }
 
-    protected void finalize()
-    throws Throwable {
+    @Override
+    public void close()
+    throws Exception {
         if (tempFile_ != null) {
             tempFile_.delete();
         }
-
-        super.finalize();
     }
 
     public void setTempFile(File tempFile) {

@@ -13,7 +13,7 @@ package rife.template;
  * no-arg constructor.
  *
  * @author Keith Lea (keith[remove] at cs dot oswego dot edu)
- * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @author Geert Bevin <gbevin[remove] at uwyn dot com>
  * @since 1.0
  */
 public interface ValueRenderer {

@@ -1,0 +1,11 @@
+<!--i errors.rife.engine_error_common/-->
+<!--b exception-->
+		<exception>
+			<classname><!--v exception_class_name-->class_name<!--/v--></classname>
+			<message><!--v exception_message-->exception_message<!--/v--></message>
+			<stacktrace>
+				<!--v exception_stack_trace--><!--/v-->
+			</stacktrace>
+		</exception>
+<!--/b-->
+

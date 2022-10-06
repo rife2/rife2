@@ -1,0 +1,106 @@
+/*
+ * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ */
+package rife.database.queries;
+
+import org.junit.jupiter.api.Test;
+import rife.database.exceptions.SequenceNameRequiredException;
+import rife.database.exceptions.SequenceOperationRequiredException;
+import rife.database.exceptions.UnsupportedSqlFeatureException;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TestSequenceValueHsqldb extends TestSequenceValue {
+    @Test
+    public void testInstantiationHsqldb() {
+        SequenceValue query = new SequenceValue(mHsqldb);
+        assertNotNull(query);
+        try {
+            query.getSql();
+            fail();
+        } catch (SequenceNameRequiredException e) {
+            assertEquals(e.getQueryName(), "SequenceValue");
+        }
+    }
+
+    @Test
+    public void testInvalidHsqldb() {
+        SequenceValue query = new SequenceValue(mHsqldb);
+        try {
+            query.getSql();
+            fail();
+        } catch (SequenceNameRequiredException e) {
+            assertEquals(e.getQueryName(), "SequenceValue");
+        }
+        query.name("sequencename");
+        try {
+            query.getSql();
+            fail();
+        } catch (SequenceOperationRequiredException e) {
+            assertEquals(e.getQueryName(), "SequenceValue");
+        }
+        query.clear();
+        query.next();
+        try {
+            query.getSql();
+            fail();
+        } catch (SequenceNameRequiredException e) {
+            assertEquals(e.getQueryName(), "SequenceValue");
+        }
+        query.clear();
+    }
+
+    @Test
+    public void testClearHsqldb() {
+        SequenceValue query = new SequenceValue(mHsqldb);
+        query
+            .name("sequencename")
+            .next();
+        assertNotNull(query.getSql());
+        query
+            .clear();
+        try {
+            query.getSql();
+            fail();
+        } catch (SequenceNameRequiredException e) {
+            assertEquals(e.getQueryName(), "SequenceValue");
+        }
+    }
+
+    @Test
+    public void testNextHsqldb() {
+        SequenceValue query = new SequenceValue(mHsqldb);
+        query
+            .name("sequencename")
+            .next();
+        assertEquals(query.getSql(), "CALL NEXT VALUE FOR sequencename");
+        assertTrue(execute(mHsqldb, query) >= 0);
+    }
+
+    @Test
+    public void testCurrentHsqldb() {
+        SequenceValue query = new SequenceValue(mHsqldb);
+        query
+            .name("sequencename")
+            .current();
+        try {
+            query.getSql();
+            fail();
+        } catch (UnsupportedSqlFeatureException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testCloneHsqldb() {
+        SequenceValue query = new SequenceValue(mHsqldb);
+        query
+            .name("sequencename")
+            .next();
+        SequenceValue query_clone = query.clone();
+        assertEquals(query.getSql(), query_clone.getSql());
+        assertTrue(query != query_clone);
+        assertTrue(execute(mHsqldb, query_clone) >= 0);
+    }
+}

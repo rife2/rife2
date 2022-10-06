@@ -7,3 +7,5 @@ build
 lib/src/generated
 lib/src/main/gen
 .idea
+lib/embedded_dbs
+derby.log
