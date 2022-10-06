@@ -16,7 +16,6 @@ import java.lang.reflect.Method;
  * them to not be captured.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @version $Revision$
  * @since 1.6
  */
 public class LightweightError extends Error {

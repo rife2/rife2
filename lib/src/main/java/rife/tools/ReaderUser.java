@@ -16,7 +16,6 @@ import java.util.logging.Logger;
  * cumbersome to change to <code>final</code> in the enclosing class.
  *
  * @author Geert Bevin <gbevin[remove] at uwyn dot com>
- * @version $Revision$
  * @since 1.0
  */
 public abstract class ReaderUser<ResultType, DataType> implements Cloneable {

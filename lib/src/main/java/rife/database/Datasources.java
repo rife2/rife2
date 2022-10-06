@@ -13,7 +13,6 @@ import java.util.HashMap;
  * Contains a collection of <code>Datasource</code> instances.
  *
  * @author Geert Bevin <gbevin[remove] at uwyn dot com>
- * @version $Revision$
  * @see rife.database.Datasource
  * @since 1.0
  */
