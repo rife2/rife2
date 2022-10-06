@@ -32,7 +32,6 @@ public class TestSite extends Site {
             Template template = context.getHtmlTemplate("Example");
             template.setValue("one", one);
             template.setValue("two", two);
-            template.setValue("three", two);
             context.print(template);
         }
     }
