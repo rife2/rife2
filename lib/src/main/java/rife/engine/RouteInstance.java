@@ -6,7 +6,11 @@ package rife.engine;
 
 import rife.tools.StringUtils;
 
-public record RouteInstance(Element element, RequestMethod method, String path) implements Route {
+public record RouteInstance(Element element, RequestMethod method, String path, PathInfoHandling pathInfoHandling) implements Route {
+    public RouteInstance(Element element, RequestMethod method, String path) {
+        this(element, method, path, PathInfoHandling.NONE);
+    }
+
     @Override
     public Element getElementInstance(Context context) {
         return element;

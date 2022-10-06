@@ -9,6 +9,8 @@ public interface Route {
 
     String path();
 
+    PathInfoHandling pathInfoHandling();
+
     Element getElementInstance(Context context);
 
     String getDefaultElementId();

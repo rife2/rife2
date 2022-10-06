@@ -6,6 +6,7 @@ package rife.engine;
 
 import rife.engine.annotations.Body;
 import rife.engine.annotations.Parameter;
+import rife.engine.annotations.PathInfo;
 import rife.engine.exceptions.EngineException;
 import rife.tools.ClassUtils;
 import rife.tools.Convert;
@@ -14,14 +15,28 @@ import rife.tools.exceptions.ConversionException;
 
 import java.lang.reflect.Modifier;
 
-public record RouteClass(Class<? extends Element> elementClass, RequestMethod method, String path) implements Route {
+public record RouteClass(Class<? extends Element> elementClass, RequestMethod method, String path,
+                         PathInfoHandling pathInfoHandling) implements Route {
+    public RouteClass(Class<? extends Element> elementClass, RequestMethod method) {
+        this(elementClass, method, null, null);
+    }
+
     public RouteClass(Class<? extends Element> elementClass, RequestMethod method, String path) {
+        this(elementClass, method, path, null);
+    }
+
+    public RouteClass(Class<? extends Element> elementClass, RequestMethod method, String path, PathInfoHandling pathInfoHandling) {
         this.method = method;
         this.elementClass = elementClass;
         if (path == null) {
             path = getDefaultElementPath();
         }
         this.path = path;
+        if (pathInfoHandling == null) {
+            // TODO : instead this should detect whether a PathInfo annotation is present and handle it
+            pathInfoHandling = PathInfoHandling.NONE;
+        }
+        this.pathInfoHandling = pathInfoHandling;
     }
 
     @Override
@@ -63,6 +78,16 @@ public record RouteClass(Class<? extends Element> elementClass, RequestMethod me
                     Object value;
                     try {
                         value = Convert.toType(body, type);
+                    } catch (ConversionException e) {
+                        value = Convert.getDefaultValue(type);
+                    }
+                    field.set(element, value);
+                }
+                if (field.isAnnotationPresent(PathInfo.class)) {
+                    var path_info = context.pathInfo();
+                    Object value;
+                    try {
+                        value = Convert.toType(path_info, type);
                     } catch (ConversionException e) {
                         value = Convert.getDefaultValue(type);
                     }

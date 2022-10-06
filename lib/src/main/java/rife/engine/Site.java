@@ -15,51 +15,75 @@ import rife.tools.ExceptionFormattingUtils;
 import rife.tools.ExceptionUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 public class Site {
+    record RouteMatch(Route route, String pathInfo) {
+    }
+
     public final static String REQUEST_ATTRIBUTE_RIFE_ENGINE_EXCEPTION = "rife.engine.exception";
 
-    private final Map<String, Route> routes_ = new HashMap<>();
+    private final Map<String, List<Route>> routes_ = new HashMap<>();
+    private final Map<String, List<Route>> pathInfoRoutes_ = new HashMap<>();
 
     public void setup() {
     }
 
-    public Route get(String path, Class<? extends Element> elementClass) {
-        var route = new RouteClass(elementClass, RequestMethod.GET, path);
-        routes_.put(path, route);
-        return route;
+    public Route get(Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(elementClass, RequestMethod.GET));
     }
 
-    public Route get(Class<? extends Element> elementClass) {
-        var route = new RouteClass(elementClass, RequestMethod.GET, null);
-        routes_.put(route.path(), route);
-        return route;
+    public Route get(String path, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(elementClass, RequestMethod.GET, path));
+    }
+
+    public Route get(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(elementClass, RequestMethod.GET, path, pathInfo));
     }
 
     public Route get(String path, Element element) {
-        var route = new RouteInstance(element, RequestMethod.GET, path);
-        routes_.put(path, route);
-        return route;
+        return registerRoute(new RouteInstance(element, RequestMethod.GET, path));
     }
 
-    public Route post(String path, Class<? extends Element> elementClass) {
-        var route = new RouteClass(elementClass, RequestMethod.POST, path);
-        routes_.put(path, route);
-        return route;
+    public Route get(String path, PathInfoHandling pathInfo, Element element) {
+        return registerRoute(new RouteInstance(element, RequestMethod.GET, path, pathInfo));
     }
 
     public Route post(Class<? extends Element> elementClass) {
-        var route = new RouteClass(elementClass, RequestMethod.POST, null);
-        routes_.put(route.path(), route);
-        return route;
+        return registerRoute(new RouteClass(elementClass, RequestMethod.POST));
+    }
+
+    public Route post(String path, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(elementClass, RequestMethod.POST, path));
+    }
+
+    public Route post(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(elementClass, RequestMethod.POST, path, pathInfo));
     }
 
     public Route post(String path, Element element) {
-        var route = new RouteInstance(element, RequestMethod.POST, path);
-        routes_.put(path, route);
+        return registerRoute(new RouteInstance(element, RequestMethod.POST, path));
+    }
+
+    public Route post(String path, PathInfoHandling pathInfo, Element element) {
+        return registerRoute(new RouteInstance(element, RequestMethod.POST, path, pathInfo));
+    }
+
+    public Route registerRoute(Route route) {
+        switch (route.pathInfoHandling()) {
+            case NONE -> {
+                List<Route> routes = routes_.computeIfAbsent(route.path(), k -> new ArrayList<>());
+                routes.add(route);
+            }
+            case CAPTURE -> {
+                List<Route> routes = pathInfoRoutes_.computeIfAbsent(route.path(), k -> new ArrayList<>());
+                routes.add(route);
+            }
+        }
         return route;
     }
 
@@ -78,15 +102,15 @@ public class Site {
 
         try {
             // Set up the element request and process it.
-            Route route = findRouteForRequest(request, elementUrl);
+            RouteMatch match = findRouteForRequest(request, elementUrl);
 
             // If no element was found, don't continue executing the gate logic.
             // This could allow a next filter in the chain to be executed.
-            if (null == route) {
+            if (null == match) {
                 return false;
             }
 
-            var context = new Context(gateUrl, request, response, route);
+            var context = new Context(gateUrl, request, response, match);
             context.process();
             response.close();
         } catch (DeferException e) {
@@ -181,9 +205,13 @@ public class Site {
         }
 
         if (null == pathInfo) {
-            Route route = routes_.get(url);
-            if (route != null && request.getMethod() == route.method()) {
-                return route;
+            List<Route> routes = routes_.get(url);
+            if (routes != null && !routes.isEmpty()) {
+                for (Route route : routes) {
+                    if (request.getMethod() == route.method()) {
+                        return route;
+                    }
+                }
             }
 
             if ('/' == url.charAt(url.length() - 1)) {
@@ -191,16 +219,66 @@ public class Site {
                 // if the url contains a dot in the last part, it shouldn't be
                 // seen as simulating a directory
                 if (stripped_url.lastIndexOf('.') <= stripped_url.lastIndexOf('/')) {
-                    route = routes_.get(stripped_url);
-                    if (route != null && request.getMethod() == route.method()) {
-                        return route;
+                    if (routes != null && !routes.isEmpty()) {
+                        for (Route route : routes) {
+                            if (request.getMethod() == route.method()) {
+                                return route;
+                            }
+                        }
                     }
                 }
             }
         }
 
+        return resolvePathInfoUrl(request, url, pathInfo);
+    }
+
+    private Route resolvePathInfoUrl(Request request, String url, String pathinfo)
+    throws EngineException {
+        List<Route> routes = pathInfoRoutes_.get(url);
+        if (null == routes ||
+            0 == routes.size()) {
+            return null;
+        }
+
+        // TODO
+//        // if a path info was provided, check the path info mappings
+//        // for the first that matches
+//        if (pathinfo != null)
+//        {
+//            for (Route route : routes)
+//            {
+//                if (element.hasPathInfoMappings() && request.getMethod() == route.method())
+//                {
+//                    for (PathInfoMapping mapping : element.getPathInfoMappings())
+//                    {
+//                        Matcher matcher = mapping.getRegexp().matcher(pathinfo);
+//                        if (matcher.matches())
+//                        {
+//                            return element;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+
+        // return the first route that handles the url and doesn't have
+        // any path info mappings
+        for (Route route : routes) {
+            if (request.getMethod() == route.method()) {
+                return route;
+            }
+
+//            if (!element.hasPathInfoMappings() ||
+//                PathInfoMode.LOOSE.equals(element.getPathInfoMode()))
+//            {
+            return route;
+//            }
+        }
+
         return null;
     }
+
 
     /**
      * Looks for an element that corresponds to a particular request URL.
@@ -216,7 +294,7 @@ public class Site {
      * <p><code>null</code> if no suitable element could be found.
      * @since 1.6
      */
-    public Route findRouteForRequest(Request request, String elementUrl) {
+    public RouteMatch findRouteForRequest(Request request, String elementUrl) {
         // obtain the element info that mapped to the requested path info
         Route route;
         StringBuilder element_url_buffer = new StringBuilder(elementUrl);
@@ -262,17 +340,18 @@ public class Site {
 //                    return null;
 //                }
 //            } else if (route.isPathInfoUsed()) {
-//                // construct the element path info
-//                element_path_info = elementUrl.substring(element_url_buffer.length());
-//                // always ensure that the path info starts with a slash
-//                // this can not be present if the concerned element is
-//                // an arrival for instance
-//                if (!element_path_info.startsWith("/")) {
-//                    element_path_info = "/" + element_path_info;
-//                }
-//            }
+        if (route.pathInfoHandling() != PathInfoHandling.NONE) {
+            // construct the element path info
+            element_path_info = elementUrl.substring(element_url_buffer.length());
+            // always ensure that the path info starts with a slash
+            // this can not be present if the concerned element is
+            // an arrival for instance
+            if (!element_path_info.startsWith("/")) {
+                element_path_info = "/" + element_path_info;
+            }
+        }
 //        }
 
-        return route;
+        return new RouteMatch(route, element_path_info);
     }
 }

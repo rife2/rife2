@@ -10,7 +10,6 @@ import rife.engine.exceptions.EngineException;
 import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.template.exceptions.TemplateException;
-import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
 public class Context {
@@ -20,15 +19,15 @@ public class Context {
     private final String gateUrl_;
     private final Request request_;
     private final Response response_;
-    private final Route route_;
+    private final Site.RouteMatch route_;
     private final Element element_;
 
-    public Context(String gateUrl, Request request, Response response, Route route) {
+    public Context(String gateUrl, Request request, Response response, Site.RouteMatch route) {
         gateUrl_ = gateUrl;
         request_ = request;
         response_ = response;
         route_ = route;
-        element_ = route_.getElementInstance(this);
+        element_ = route_.route().getElementInstance(this);
     }
 
     public void process() {
@@ -45,6 +44,14 @@ public class Context {
 
     public Response response() {
         return response_;
+    }
+
+    public String pathInfo() {
+        if (route_.pathInfo() != null) {
+            return route_.pathInfo();
+        }
+
+        return null;
     }
 
     public void print(Object o) {
@@ -74,7 +81,7 @@ public class Context {
 
     public Template getHtmlTemplate()
     throws TemplateException, EngineException {
-        return getHtmlTemplate(route_.getDefaultElementId(), null);
+        return getHtmlTemplate(route_.route().getDefaultElementId(), null);
     }
 
     public Template getHtmlTemplate(String name)
@@ -118,7 +125,7 @@ public class Context {
         return webapp_root.toString();
     }
 
-    public String getUrlFor(Route route) {
+    public String urlFor(Route route) {
         return getWebappRootUrl(-1) + StringUtils.stripFromFront(route.path(), "/");
     }
 
