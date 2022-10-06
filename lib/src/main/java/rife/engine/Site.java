@@ -8,6 +8,7 @@ import rife.Version;
 import rife.config.RifeConfig;
 import rife.engine.exceptions.DeferException;
 import rife.engine.exceptions.EngineException;
+import rife.engine.exceptions.RedirectException;
 import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.template.exceptions.SyntaxErrorException;
@@ -113,6 +114,8 @@ public class Site {
             var context = new Context(gateUrl, request, response, match);
             context.process();
             response.close();
+        } catch (RedirectException e) {
+            response.sendRedirect(e.getUrl());
         } catch (DeferException e) {
             return false;
         } catch (Throwable e) {

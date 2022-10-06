@@ -7,6 +7,7 @@ package rife.engine;
 import rife.config.RifeConfig;
 import rife.engine.exceptions.DeferException;
 import rife.engine.exceptions.EngineException;
+import rife.engine.exceptions.RedirectException;
 import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.template.exceptions.TemplateException;
@@ -148,4 +149,18 @@ public class Context {
         throw new DeferException();
     }
 
+    /**
+     * Interrupts the execution in this element and redirects the client to
+     * another URL.
+     *
+     * @param url the URL to which the request will be redirected
+     * @throws rife.engine.exceptions.EngineException a runtime
+     *                                                exception that is used to immediately interrupt the execution, don't
+     *                                                catch this exception
+     * @since 1.0
+     */
+    public void redirect(String url)
+    throws EngineException {
+        throw new RedirectException(url);
+    }
 }
