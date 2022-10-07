@@ -31,7 +31,9 @@ public class TemplateFactory extends EnumClass<String> {
             {
                 TemplateFactoryFilters.TAG_CONFIG,
                 TemplateFactoryFilters.TAG_L10N,
-                TemplateFactoryFilters.TAG_RENDER
+                TemplateFactoryFilters.TAG_PARAM,
+                TemplateFactoryFilters.TAG_RENDER,
+                TemplateFactoryFilters.TAG_ROUTE
             },
         BeanHandlerXhtml.getInstance(),
         EncoderHtmlSingleton.INSTANCE,

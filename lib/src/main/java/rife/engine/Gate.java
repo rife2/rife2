@@ -65,7 +65,7 @@ public class Gate {
             return false;
         }
 
-        var context = new Context(gateUrl, request, response, match);
+        var context = new Context(gateUrl, site_, request, response, match);
         try {
             context.process();
             response.close();

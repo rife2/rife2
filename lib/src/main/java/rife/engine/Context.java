@@ -13,18 +13,23 @@ import rife.template.TemplateFactory;
 import rife.template.exceptions.TemplateException;
 import rife.tools.StringUtils;
 
+import java.util.Map;
+
 public class Context {
     public static final String ID_WEBAPP_ROOT_URL = "webapp:rootUrl";
     public static final String ID_SERVER_ROOT_URL = "server:rootUrl";
+    public static final String ID_CONTEXT_PATH_INFO = "context:pathInfo";
 
     private final String gateUrl_;
+    private final Site site_;
     private final Request request_;
     private final Response response_;
     private final Site.RouteMatch route_;
     private final Element element_;
 
-    public Context(String gateUrl, Request request, Response response, Site.RouteMatch route) {
+    public Context(String gateUrl, Site site, Request request, Response response, Site.RouteMatch route) {
         gateUrl_ = gateUrl;
+        site_ = site;
         request_ = request;
         response_ = response;
         route_ = route;
@@ -37,6 +42,10 @@ public class Context {
         } catch (Exception e) {
             throw new EngineException(e);
         }
+    }
+
+    public Site site() {
+        return site_;
     }
 
     public Request request() {
