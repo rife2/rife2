@@ -368,7 +368,7 @@ public interface GenericQueryManager<BeanType> // extends ValidationContext
      * @param listener the listener that has to be added
      * @since 1.5
      */
-    void addListener(GenericQueryManagerListener listener);
+    void addListener(GenericQueryManagerListener<BeanType> listener);
 
     /**
      * Remove all the listeners that are registered to the manager.

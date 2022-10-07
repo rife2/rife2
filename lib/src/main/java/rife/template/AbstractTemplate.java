@@ -963,7 +963,7 @@ public abstract class AbstractTemplate implements Template {
     }
 
     protected static boolean isTemplateClassModified(URL templateResource, long templateModificationTime,
-                                                     Map templateDependencies, String templateModificationState,
+                                                     Map<URL, Long> templateDependencies, String templateModificationState,
                                                      ResourceFinder resourceFinder, String modificationState) {
         try {
             if (Parser.getModificationTime(resourceFinder, templateResource) > templateModificationTime) {

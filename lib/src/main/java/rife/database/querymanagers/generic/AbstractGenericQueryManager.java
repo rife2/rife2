@@ -8,6 +8,7 @@ package rife.database.querymanagers.generic;
 import rife.database.*;
 import rife.database.queries.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import rife.database.exceptions.DatabaseException;
@@ -28,7 +29,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     protected Method setPrimaryKeyMethod_ = null;
     protected boolean sparseIdentifier_ = false;
 
-    protected List<GenericQueryManagerListener> mListeners = null;
+    protected List<GenericQueryManagerListener<BeanType>> listeners_ = null;
 
     public AbstractGenericQueryManager(Datasource datasource, Class<BeanType> beanClass, String primaryKey)
     throws DatabaseException {
@@ -429,21 +430,21 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 //		}
 //	}
 
-    protected Callbacks getCallbacks(BeanType bean) {
+    protected Callbacks<BeanType> getCallbacks(BeanType bean) {
         if (null == bean) return null;
 
-        Callbacks callbacks = null;
+        Callbacks<BeanType> callbacks = null;
         if (bean instanceof CallbacksProvider) {
-            callbacks = ((CallbacksProvider) bean).getCallbacks();
+            callbacks = ((CallbacksProvider<BeanType>) bean).getCallbacks();
         } else if (bean instanceof Callbacks) {
-            callbacks = (Callbacks) bean;
+            callbacks = (Callbacks<BeanType>) bean;
         }
         return callbacks;
     }
 
     protected int _update(final Update saveUpdate, final BeanType bean) {
         // handle before callback
-        Callbacks callbacks = getCallbacks(bean);
+        Callbacks<BeanType> callbacks = getCallbacks(bean);
         if (callbacks != null &&
             !callbacks.beforeUpdate(bean)) {
             return -1;
@@ -464,14 +465,14 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         assert saveUpdate != null;
 
         final int identifier_value = getIdentifierValue(bean);
-        int result = (Integer) inTransaction(new DbTransactionUser() {
+        int result = (Integer) inTransaction(new DbTransactionUser<>() {
             public Integer useTransaction()
             throws InnerClassException {
                 int result = identifier_value;
 
                 storeManyToOne(bean);
 
-                if (0 == executeUpdate(saveUpdate, new DbPreparedStatementHandler() {
+                if (0 == executeUpdate(saveUpdate, new DbPreparedStatementHandler<>() {
                     public void setParameters(final DbPreparedStatement statement) {
                         statement
                             .setBean(bean);
@@ -499,7 +500,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
     protected int _insert(final SequenceValue nextId, final Insert save, final BeanType bean) {
         // handle before callback
-        Callbacks callbacks = getCallbacks(bean);
+        Callbacks<BeanType> callbacks = getCallbacks(bean);
         if (callbacks != null &&
             !callbacks.beforeInsert(bean)) {
             return -1;
@@ -522,7 +523,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
         int value = -1;
 
-        value = (Integer) inTransaction(new DbTransactionUser() {
+        value = inTransaction(new DbTransactionUser<>() {
             public Integer useTransaction()
             throws InnerClassException {
                 storeManyToOne(bean);
@@ -533,7 +534,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                 }
 
                 final int primary_key_id = result;
-                executeUpdate(save, new DbPreparedStatementHandler() {
+                executeUpdate(save, new DbPreparedStatementHandler<>() {
                     public void setParameters(final DbPreparedStatement statement) {
                         statement
                             .setBean(bean)
@@ -793,7 +794,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         int value = -1;
 
         // handle before callback
-        final Callbacks callbacks = getCallbacks(bean);
+        final Callbacks<BeanType> callbacks = getCallbacks(bean);
         if (callbacks != null &&
             !callbacks.beforeSave(bean)) {
             return -1;
@@ -803,7 +804,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         final boolean[] is_cancelled = new boolean[]{false};
 
         // perform save
-        value = (Integer) inTransaction(new DbTransactionUser() {
+        value = (Integer) inTransaction(new DbTransactionUser<>() {
             public Integer useTransaction()
             throws InnerClassException {
                 int result = getIdentifierValue(bean);
@@ -918,17 +919,17 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         assert delete != null;
 
         // handle before callback
-        Callbacks callbacks = null;
+        Callbacks<BeanType> callbacks = null;
         if (CallbacksProvider.class.isAssignableFrom(baseClass_)) {
             try {
-                callbacks = ((CallbacksProvider) baseClass_.newInstance()).getCallbacks();
-            } catch (IllegalAccessException | InstantiationException e) {
+                callbacks = ((CallbacksProvider<BeanType>) baseClass_.getDeclaredConstructor().newInstance()).getCallbacks();
+            } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
                 callbacks = null;
             }
         } else if (Callbacks.class.isAssignableFrom(baseClass_)) {
             try {
-                callbacks = (Callbacks) baseClass_.newInstance();
-            } catch (IllegalAccessException | InstantiationException e) {
+                callbacks = (Callbacks<BeanType>) baseClass_.getDeclaredConstructor().newInstance();
+            } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
                 callbacks = null;
             }
         }
@@ -938,7 +939,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         }
 
         // perform delete
-        Boolean result = inTransaction(new DbTransactionUser() {
+        Boolean result = inTransaction(new DbTransactionUser<>() {
             public Boolean useTransaction()
             throws InnerClassException {
                 // remove all many-to-one mappings for this object ID
@@ -948,7 +949,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                 deleteManyToMany(objectId);
 
                 // perform the actual deletion of the object from the database
-                if (0 == executeUpdate(delete, new DbPreparedStatementHandler() {
+                if (0 == executeUpdate(delete, new DbPreparedStatementHandler<>() {
                     public void setParameters(DbPreparedStatement statement) {
                         statement
                             .setInt(primaryKey_, objectId);
@@ -1028,7 +1029,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
         BeanType result = null;
 
-        result = executeFetchFirstBean(restore, baseClass_, new DbPreparedStatementHandler() {
+        result = executeFetchFirstBean(restore, baseClass_, new DbPreparedStatementHandler<>() {
             public void setParameters(DbPreparedStatement statement) {
                 statement
                     .setInt(primaryKey_, objectId);
@@ -1045,7 +1046,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         }
 
         // handle after callback
-        Callbacks callbacks = getCallbacks(result);
+        Callbacks<BeanType> callbacks = getCallbacks(result);
         if (callbacks != null &&
             !callbacks.afterRestore(result)) {
             return null;
@@ -1071,7 +1072,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         }
 
         // handle after callback
-        Callbacks callbacks = getCallbacks(result);
+        Callbacks<BeanType> callbacks = getCallbacks(result);
         if (callbacks != null &&
             !callbacks.afterRestore(result)) {
             return null;
@@ -1097,7 +1098,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                 }
 
                 // handle after callback
-                Callbacks callbacks = getCallbacks(instance);
+                Callbacks<BeanType> callbacks = getCallbacks(instance);
                 return !(callbacks != null && !callbacks.afterRestore(instance));
             }
         };
@@ -1263,7 +1264,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         assert createSequence != null;
         assert createTable != null;
 
-        inTransaction(new DbTransactionUserWithoutResult() {
+        inTransaction(new DbTransactionUserWithoutResult<>() {
             public void useTransactionWithoutResult()
             throws InnerClassException {
                 if (!isIdentifierSparse()) {
@@ -1320,7 +1321,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         assert dropTable != null;
         assert dropSequence != null;
 
-        inTransaction(new DbTransactionUserWithoutResult() {
+        inTransaction(new DbTransactionUserWithoutResult<>() {
             public void useTransactionWithoutResult()
             throws InnerClassException {
                 removeManyToMany();
@@ -1356,24 +1357,24 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 //		}
     }
 
-    public void addListener(GenericQueryManagerListener listener) {
+    public void addListener(GenericQueryManagerListener<BeanType> listener) {
         if (null == listener) {
             return;
         }
 
-        if (null == mListeners) {
-            mListeners = new ArrayList<>();
+        if (null == listeners_) {
+            listeners_ = new ArrayList<>();
         }
 
-        mListeners.add(listener);
+        listeners_.add(listener);
     }
 
     public void removeListeners() {
-        if (null == mListeners) {
+        if (null == listeners_) {
             return;
         }
 
-        mListeners.clear();
+        listeners_.clear();
     }
 
     public <OtherBeanType> GenericQueryManager<OtherBeanType> createNewManager(Class<OtherBeanType> beanClass) {
@@ -1381,61 +1382,61 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     }
 
     protected void fireInstalled() {
-        if (null == mListeners) {
+        if (null == listeners_) {
             return;
         }
 
-        for (GenericQueryManagerListener listener : mListeners) {
+        for (GenericQueryManagerListener<BeanType> listener : listeners_) {
             listener.installed();
         }
     }
 
     protected void fireRemoved() {
-        if (null == mListeners) {
+        if (null == listeners_) {
             return;
         }
 
-        for (GenericQueryManagerListener listener : mListeners) {
+        for (GenericQueryManagerListener<BeanType> listener : listeners_) {
             listener.removed();
         }
     }
 
     protected void fireInserted(BeanType bean) {
-        if (null == mListeners) {
+        if (null == listeners_) {
             return;
         }
 
-        for (GenericQueryManagerListener listener : mListeners) {
+        for (GenericQueryManagerListener<BeanType> listener : listeners_) {
             listener.inserted(bean);
         }
     }
 
     protected void fireUpdated(BeanType bean) {
-        if (null == mListeners) {
+        if (null == listeners_) {
             return;
         }
 
-        for (GenericQueryManagerListener listener : mListeners) {
+        for (GenericQueryManagerListener<BeanType> listener : listeners_) {
             listener.updated(bean);
         }
     }
 
     protected void fireRestored(BeanType bean) {
-        if (null == mListeners) {
+        if (null == listeners_) {
             return;
         }
 
-        for (GenericQueryManagerListener listener : mListeners) {
+        for (GenericQueryManagerListener<BeanType> listener : listeners_) {
             listener.restored(bean);
         }
     }
 
     protected void fireDeleted(int objectId) {
-        if (null == mListeners) {
+        if (null == listeners_) {
             return;
         }
 
-        for (GenericQueryManagerListener listener : mListeners) {
+        for (GenericQueryManagerListener<BeanType> listener : listeners_) {
             listener.deleted(objectId);
         }
     }
