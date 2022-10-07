@@ -166,7 +166,7 @@ public class Site {
 //            if (!element.hasPathInfoMappings() ||
 //                PathInfoMode.LOOSE.equals(element.getPathInfoMode()))
 //            {
-            return route;
+//            return route;
 //            }
         }
 
