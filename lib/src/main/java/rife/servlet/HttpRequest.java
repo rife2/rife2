@@ -356,7 +356,7 @@ public class HttpRequest implements Request {
         if (port <= -1) {
             port = getServerPort();
         }
-        if (port != 80 && port != 433) {
+        if (port != 80 && port != 443) {
             server_root.append(":");
             server_root.append(port);
         }
