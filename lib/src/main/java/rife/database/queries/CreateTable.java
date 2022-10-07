@@ -272,6 +272,20 @@ public class CreateTable extends AbstractQuery implements Cloneable {
         return this;
     }
 
+    public CreateTable column(String name, String customType) {
+        return column(name, customType, null);
+    }
+
+    public CreateTable column(String name, String customType, Nullable nullable) {
+        if (null == name) throw new IllegalArgumentException("name can't be null.");
+        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (null == customType) throw new IllegalArgumentException("customType can't be null.");
+
+        columnMapping_.put(name, new Column(name, customType, nullable));
+        clearGenerated();
+        return this;
+    }
+
     public CreateTable columns(Object[] keyValues) {
         if (null == keyValues) throw new IllegalArgumentException("keyValues can't be null.");
 
@@ -719,9 +733,9 @@ public class CreateTable extends AbstractQuery implements Cloneable {
     }
 
     public class ForeignKey extends ColumnsConstraint implements Cloneable {
-        private String mForeignTable = null;
-        private ViolationAction mOnUpdate = null;
-        private ViolationAction mOnDelete = null;
+        private String foreignTable_ = null;
+        private ViolationAction onUpdate_ = null;
+        private ViolationAction onDelete_ = null;
 
         ForeignKey(String name, String foreignTable, String[] columnsMapping, ViolationAction onUpdate, ViolationAction onDelete) {
             super(name, columnsMapping);
@@ -792,30 +806,30 @@ public class CreateTable extends AbstractQuery implements Cloneable {
         }
 
         public String getForeignTable() {
-            return mForeignTable;
+            return foreignTable_;
         }
 
         void setForeignTable(String foreignTable) {
             assert foreignTable != null;
             assert foreignTable.length() > 0;
 
-            mForeignTable = foreignTable;
+            foreignTable_ = foreignTable;
         }
 
         public ViolationAction getOnUpdate() {
-            return mOnUpdate;
+            return onUpdate_;
         }
 
         void setOnUpdate(ViolationAction onUpdate) {
-            mOnUpdate = onUpdate;
+            onUpdate_ = onUpdate;
         }
 
         public ViolationAction getOnDelete() {
-            return mOnDelete;
+            return onDelete_;
         }
 
         void setOnDelete(ViolationAction onDelete) {
-            mOnDelete = onDelete;
+            onDelete_ = onDelete;
         }
 
         public ForeignKey clone() {
@@ -855,7 +869,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
     }
 
     public class CheckConstraint extends Constraint implements Cloneable {
-        private String mExpression = null;
+        private String rxpression_ = null;
 
         CheckConstraint(String name, String expression) {
             super(name);
@@ -887,11 +901,11 @@ public class CreateTable extends AbstractQuery implements Cloneable {
         }
 
         public String getExpression() {
-            return mExpression;
+            return rxpression_;
         }
 
         void setExpression(String expression) {
-            mExpression = expression;
+            rxpression_ = expression;
         }
 
         public CheckConstraint clone() {
@@ -900,7 +914,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
     }
 
     public abstract class ColumnsConstraint extends Constraint implements Cloneable {
-        private String[] mColumns = null;
+        private String[] columns_ = null;
 
         ColumnsConstraint(String name, String[] columns) {
             super(name);
@@ -909,14 +923,14 @@ public class CreateTable extends AbstractQuery implements Cloneable {
         }
 
         public String[] getColumns() {
-            return mColumns;
+            return columns_;
         }
 
         void setColumns(String[] columns) {
             assert columns != null;
             assert columns.length > 0;
 
-            mColumns = columns;
+            columns_ = columns;
         }
 
         public ColumnsConstraint clone() {
@@ -925,7 +939,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
     }
 
     public abstract class Constraint implements Cloneable {
-        private String mName = null;
+        private String name_ = null;
 
         Constraint(String name) {
             setName(name);
@@ -935,13 +949,13 @@ public class CreateTable extends AbstractQuery implements Cloneable {
         throws DbQueryException;
 
         public String getName() {
-            return mName;
+            return name_;
         }
 
         void setName(String name) {
             assert null == name || name.length() > 0;
 
-            mName = name;
+            name_ = name;
         }
 
         public Constraint clone() {
@@ -957,14 +971,15 @@ public class CreateTable extends AbstractQuery implements Cloneable {
     }
 
     public class Column implements Cloneable {
-        private String mName = null;
-        private Class mType = null;
-        private int mPrecision = -1;
-        private int mScale = -1;
-        private String mTypeAttribute = null;
-        private Nullable mNullable = null;
-        private String mDefault = null;
-        private ArrayList<String> mCustomAttributes = new ArrayList<String>();
+        private String name_ = null;
+        private Class type_ = null;
+        private int precision_ = -1;
+        private int scale_ = -1;
+        private String typeAttribute_ = null;
+        private Nullable nullable_ = null;
+        private String default_ = null;
+        private String customType_ = null;
+        private ArrayList<String> customAttributes_ = new ArrayList<String>();
 
         Column(String name, Class type) {
             setName(name);
@@ -980,6 +995,12 @@ public class CreateTable extends AbstractQuery implements Cloneable {
             setNullable(nullable);
         }
 
+        Column(String name, String customType, Nullable nullable) {
+            setName(name);
+            setCustomType(customType);
+            setNullable(nullable);
+        }
+
         String getSql(Template template)
         throws DbQueryException {
             assert template != null;
@@ -988,10 +1009,14 @@ public class CreateTable extends AbstractQuery implements Cloneable {
             String result = null;
 
             template.setValue("NAME", getName());
-            template.setValue("TYPE", datasource_.getSqlConversion().getSqlType(getType(), getPrecision(), getScale()));
-            if (mTypeAttribute != null) {
+            String type = customType_;
+            if (type == null) {
+                type = datasource_.getSqlConversion().getSqlType(getType(), getPrecision(), getScale());
+            }
+            template.setValue("TYPE", type);
+            if (typeAttribute_ != null) {
                 template.appendValue("TYPE", " ");
-                template.appendValue("TYPE", mTypeAttribute);
+                template.appendValue("TYPE", typeAttribute_);
             }
 
             if (getNullable() != null) {
@@ -1035,79 +1060,89 @@ public class CreateTable extends AbstractQuery implements Cloneable {
         }
 
         public String getName() {
-            return mName;
+            return name_;
         }
 
         void setName(String name) {
             assert name != null;
             assert name.length() > 0;
 
-            mName = name;
+            name_ = name;
         }
 
         public Class getType() {
-            return mType;
+            return type_;
         }
 
         void setType(Class type) {
             assert type != null;
 
-            mType = type;
+            type_ = type;
+        }
+
+        public String getCustomType() {
+            return customType_;
+        }
+
+        void setCustomType(String type) {
+            assert type != null;
+
+            customType_ = type;
         }
 
         public int getPrecision() {
-            return mPrecision;
+            return precision_;
         }
 
         void setPrecision(int precision) {
             assert precision >= -1;
 
-            mPrecision = precision;
+            precision_ = precision;
         }
 
         public int getScale() {
-            return mScale;
+            return scale_;
         }
 
         void setScale(int scale) {
             assert scale >= -1;
 
-            mScale = scale;
+            scale_ = scale;
         }
 
         public String getTypeAttribute() {
-            return mTypeAttribute;
+            return typeAttribute_;
         }
 
         void setTypeAttribute(String typeAttribute) {
-            mTypeAttribute = typeAttribute;
+            typeAttribute_ = typeAttribute;
         }
 
         public Nullable getNullable() {
-            return mNullable;
+            return nullable_;
         }
 
         void setNullable(Nullable nullable) {
-            mNullable = nullable;
+            nullable_ = nullable;
         }
 
         public String getDefault() {
-            return mDefault;
+            return default_;
         }
 
         void setDefault(String defaultStatement) {
-            mDefault = defaultStatement;
+            default_ = defaultStatement;
         }
 
         void addCustomAttribute(String attribute) {
             assert attribute != null;
             assert attribute.length() > 0;
 
-            mCustomAttributes.add(attribute);
+            customAttributes_.add(attribute);
         }
 
         public ArrayList<String> getCustomAttributes() {
-            return mCustomAttributes;
+            return customAttributes_;
         }
 
         public Column clone() {
@@ -1115,9 +1150,9 @@ public class CreateTable extends AbstractQuery implements Cloneable {
             try {
                 new_instance = (Column) super.clone();
 
-                if (mCustomAttributes != null) {
-                    new_instance.mCustomAttributes = new ArrayList<String>();
-                    new_instance.mCustomAttributes.addAll(mCustomAttributes);
+                if (customAttributes_ != null) {
+                    new_instance.customAttributes_ = new ArrayList<String>();
+                    new_instance.customAttributes_.addAll(customAttributes_);
                 }
             } catch (CloneNotSupportedException e) {
                 new_instance = null;
