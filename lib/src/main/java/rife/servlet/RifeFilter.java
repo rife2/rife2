@@ -8,6 +8,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import rife.config.RifeConfig;
+import rife.engine.Gate;
 import rife.engine.Site;
 import rife.tools.FileUtils;
 
@@ -16,15 +17,11 @@ import java.io.IOException;
 public class RifeFilter implements Filter {
     public static String RIFE_SITE_CLASS_NAME = "rifeSiteClass";
 
+    private final Gate gate_ = new Gate();
     private String gateUrl_ = null;
-    private Site site_ = null;
-
-    public Site site() {
-        return site_;
-    }
 
     public void site(Site site) {
-        site_ = site;
+        gate_.setup(site);
     }
 
     @Override
@@ -36,14 +33,10 @@ public class RifeFilter implements Filter {
         if (site_classname != null) {
             try {
                 var site_class = classloader.loadClass(site_classname);
-                site_ = (Site) site_class.getDeclaredConstructor().newInstance();
+                gate_.setup((Site) site_class.getDeclaredConstructor().newInstance());
             } catch (Throwable e) {
                 throw new ServletException(e);
             }
-        }
-
-        if (site_ != null) {
-            site_.setup();
         }
     }
 
@@ -80,7 +73,7 @@ public class RifeFilter implements Filter {
                     final var http_request = new HttpRequest(http_servlet_request);
                     final var http_response = new HttpResponse(http_request, http_servlet_response);
                     http_request.init();
-                    if (site_.process(gateUrl_, element_url, http_request, http_response)) {
+                    if (gate_.handleRequest(gateUrl_, element_url, http_request, http_response)) {
                         return;
                     }
                 }
