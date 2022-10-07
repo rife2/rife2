@@ -133,6 +133,7 @@ public class RifeConfig {
         private int localForwardPort_ = DEFAULT_LOCAL_FORWARD_PORT;
         private String proxyRootUrl_ = DEFAULT_PROXY_ROOT_URL;
         private String webappContextPath_ = DEFAULT_WEBAPP_CONTEXT_PATH;
+        private Set<String> passThroughSuffixes = DEFAULT_PASS_THROUGH_SUFFIXES;
         private Charset requestEncoding_ = DEFAULT_REQUEST_ENCODING;
         private Charset responseEncoding_ = DEFAULT_RESPONSE_ENCODING;
 
@@ -157,6 +158,34 @@ public class RifeConfig {
         public static final int DEFAULT_LOCAL_FORWARD_PORT = -1;
         public static final String DEFAULT_PROXY_ROOT_URL = null;
         public static final String DEFAULT_WEBAPP_CONTEXT_PATH = null;
+        public static final Set<String> DEFAULT_PASS_THROUGH_SUFFIXES = new HashSet<>() {{
+            add("gif");
+            add("png");
+            add("jpg");
+            add("jpeg");
+            add("bmp");
+            add("ico");
+            add("css");
+            add("js");
+            add("swf");
+            add("html");
+            add("htm");
+            add("htc");
+            add("class");
+            add("jar");
+            add("zip");
+            add("arj");
+            add("gz");
+            add("z");
+            add("wav");
+            add("mp3");
+            add("wma");
+            add("mpg");
+            add("avi");
+            add("ogg");
+            add("txt");
+        }};
+
         public static final Charset DEFAULT_REQUEST_ENCODING = StandardCharsets.UTF_8;
         public static final Charset DEFAULT_RESPONSE_ENCODING = StandardCharsets.UTF_8;
 
@@ -273,6 +302,15 @@ public class RifeConfig {
 
         public EngineConfig setWebappContextPath(String path) {
             webappContextPath_ = path;
+            return this;
+        }
+
+        public Set<String> getPassThroughSuffixes() {
+            return passThroughSuffixes;
+        }
+
+        public EngineConfig setPassThroughSuffixes(Set<String> suffixes) {
+            passThroughSuffixes = suffixes;
             return this;
         }
 

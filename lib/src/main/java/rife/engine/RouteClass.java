@@ -25,6 +25,10 @@ public record RouteClass(Class<? extends Element> elementClass, RequestMethod me
         this(elementClass, method, path, null);
     }
 
+    public RouteClass(Class<? extends Element> elementClass, RequestMethod method, PathInfoHandling pathInfoHandling) {
+        this(elementClass, method, null, pathInfoHandling);
+    }
+
     public RouteClass(Class<? extends Element> elementClass, RequestMethod method, String path, PathInfoHandling pathInfoHandling) {
         this.method = method;
         this.elementClass = elementClass;

@@ -16,10 +16,7 @@ import rife.tools.ExceptionFormattingUtils;
 import rife.tools.ExceptionUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class Site {
@@ -36,6 +33,10 @@ public class Site {
 
     public Route get(Class<? extends Element> elementClass) {
         return registerRoute(new RouteClass(elementClass, RequestMethod.GET));
+    }
+
+    public Route get(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(elementClass, RequestMethod.GET, pathInfo));
     }
 
     public Route get(String path, Class<? extends Element> elementClass) {
@@ -56,6 +57,10 @@ public class Site {
 
     public Route post(Class<? extends Element> elementClass) {
         return registerRoute(new RouteClass(elementClass, RequestMethod.POST));
+    }
+
+    public Route post(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(elementClass, RequestMethod.POST, pathInfo));
     }
 
     public Route post(String path, Class<? extends Element> elementClass) {
@@ -101,17 +106,17 @@ public class Site {
             elementUrl = elementUrl.substring(0, path_parameters_index);
         }
 
+        // Set up the element request and process it.
+        RouteMatch match = findRouteForRequest(request, elementUrl);
+
+        // If no element was found, don't continue executing the gate logic.
+        // This could allow a next filter in the chain to be executed.
+        if (null == match) {
+            return false;
+        }
+
+        var context = new Context(gateUrl, request, response, match);
         try {
-            // Set up the element request and process it.
-            RouteMatch match = findRouteForRequest(request, elementUrl);
-
-            // If no element was found, don't continue executing the gate logic.
-            // This could allow a next filter in the chain to be executed.
-            if (null == match) {
-                return false;
-            }
-
-            var context = new Context(gateUrl, request, response, match);
             context.process();
             response.close();
         } catch (RedirectException e) {
