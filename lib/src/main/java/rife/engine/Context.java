@@ -127,7 +127,58 @@ public class Context {
     }
 
     public String urlFor(Route route) {
-        return getWebappRootUrl(-1) + StringUtils.stripFromFront(route.path(), "/");
+        return urlFor(route, null, null);
+    }
+
+    public String urlFor(Route route, String pathInfo) {
+        return urlFor(route, pathInfo, null);
+    }
+
+    public String urlFor(Route route, Map<String, String[]> parameters) {
+        return urlFor(route, null, parameters);
+    }
+
+    public String urlFor(Route route, String pathInfo, Map<String, String[]> parameters) {
+        StringBuilder url = new StringBuilder(getWebappRootUrl(-1));
+
+        url.append(StringUtils.stripFromFront(route.path(), "/"));
+
+        if (pathInfo != null) {
+            url.append(pathInfo);
+        }
+
+        if (parameters != null &&
+            parameters.size() > 0) {
+            StringBuilder query_parameters = new StringBuilder("?");
+
+            for (var parameter_entry : parameters.entrySet()) {
+                String parameter_name = parameter_entry.getKey();
+                String[] parameter_values = parameter_entry.getValue();
+                if (null == parameter_values) {
+                    continue;
+                }
+
+                boolean added_separator = false;
+                if (query_parameters.length() > 1 &&
+                    !added_separator) {
+                    added_separator = true;
+                    query_parameters.append("&");
+                }
+
+                for (int i = 0; i < parameter_values.length; i++) {
+                    query_parameters.append(StringUtils.encodeUrl(parameter_name));
+                    query_parameters.append("=");
+                    query_parameters.append(StringUtils.encodeUrl(parameter_values[i]));
+                    if (i + 1 < parameter_values.length) {
+                        query_parameters.append("&");
+                    }
+                }
+            }
+
+            url.append(query_parameters);
+        }
+
+        return url.toString();
     }
 
 
