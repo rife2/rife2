@@ -8,6 +8,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+import static rife.tools.StringUtils.encodeHex;
+
 public enum StringEncryptor {
     OBF,
     MD5,
@@ -40,14 +42,6 @@ public enum StringEncryptor {
 
     private static String encodeBase64(byte[] bytes) {
         return Base64.getEncoder().encodeToString(bytes);
-    }
-
-    private static String encodeHex(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < bytes.length; ++i) {
-            sb.append(Integer.toHexString((bytes[i] & 0xFF) | 0x100), 1, 3);
-        }
-        return sb.toString();
     }
 
     public static String autoEncrypt(String value)

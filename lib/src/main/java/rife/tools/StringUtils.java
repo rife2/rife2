@@ -1119,6 +1119,15 @@ public abstract class StringUtils {
         return buffer.toString();
     }
 
+
+    public static String encodeHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < bytes.length; ++i) {
+            sb.append(Integer.toHexString((bytes[i] & 0xFF) | 0x100), 1, 3);
+        }
+        return sb.toString();
+    }
+
     /**
      * Counts the number of times a substring occures in a provided string in
      * a case-sensitive manner.
