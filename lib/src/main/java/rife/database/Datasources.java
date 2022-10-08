@@ -5,6 +5,7 @@
 package rife.database;
 
 import rife.database.exceptions.*;
+import rife.selector.NameSelector;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -57,26 +58,21 @@ public class Datasources {
     }
 
     /**
-     * Retrieves the <code>Datasource</code> that corresponds this machine's
-     * hostname, or a fallback datasource of none could be found that matches
-     * the hostname.
+     * Retrieves the <code>Datasource</code> that corresponds an automatically
+     * selected name, or a fallback datasource of none could be found that matches
+     * the selected name.
      *
+     * @param selector     a <code>NameSelector</code> that will automatically select
+     *                     a name based on the current environment
      * @param fallbackName a <code>String</code> that identifies the
      *                     fallback <code>Datasource</code> that has to be used
      * @return the requested <code>Datasource</code> instance; or
      * <p>
      * <code>null</code> if no <code>Datasource</code> could be found
-     * @since w.0
+     * @since 2.0
      */
-    public Datasource getDatasourceForHostname(String fallbackName) {
-        String hostname;
-        try {
-            hostname = InetAddress.getLocalHost().getHostName().toLowerCase();
-        } catch (UnknownHostException e) {
-            hostname = fallbackName;
-        }
-
-        Datasource datasource = Datasources.instance().getDatasource(hostname);
+    public Datasource getDatasourceForSelector(NameSelector selector, String fallbackName) {
+        Datasource datasource = Datasources.instance().getDatasource(selector.getActiveName());
         if (datasource == null) {
             datasource = Datasources.instance().getDatasource(fallbackName);
         }

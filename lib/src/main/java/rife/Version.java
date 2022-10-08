@@ -8,26 +8,26 @@ import rife.resources.ResourceFinderClasspath;
 import rife.resources.exceptions.ResourceFinderErrorException;
 
 public class Version {
-    private String mVersion = null;
+    private String version_;
 
     Version() {
         ResourceFinderClasspath resource_finder = ResourceFinderClasspath.instance();
         try {
-            mVersion = resource_finder.getContent("RIFE_VERSION");
+            version_ = resource_finder.getContent("RIFE_VERSION");
         } catch (ResourceFinderErrorException e) {
-            mVersion = null;
+            version_ = null;
         }
 
-        if (mVersion != null) {
-            mVersion = mVersion.trim();
+        if (version_ != null) {
+            version_ = version_.trim();
         }
-        if (null == mVersion) {
-            mVersion = "unknown version";
+        if (null == version_) {
+            version_ = "unknown version";
         }
     }
 
     private String getVersionString() {
-        return mVersion;
+        return version_;
     }
 
     public static String getVersion() {
