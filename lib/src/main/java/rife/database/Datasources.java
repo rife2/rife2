@@ -6,6 +6,8 @@ package rife.database;
 
 import rife.database.exceptions.*;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -52,6 +54,34 @@ public class Datasources {
      */
     public Datasource getDatasource(String name) {
         return map_.get(name);
+    }
+
+    /**
+     * Retrieves the <code>Datasource</code> that corresponds this machine's
+     * hostname, or a fallback datasource of none could be found that matches
+     * the hostname.
+     *
+     * @param fallbackName a <code>String</code> that identifies the
+     *                     fallback <code>Datasource</code> that has to be used
+     * @return the requested <code>Datasource</code> instance; or
+     * <p>
+     * <code>null</code> if no <code>Datasource</code> could be found
+     * @since w.0
+     */
+    public Datasource getDatasourceForHostname(String fallbackName) {
+        String hostname;
+        try {
+            hostname = InetAddress.getLocalHost().getHostName().toLowerCase();
+        } catch (UnknownHostException e) {
+            hostname = fallbackName;
+        }
+
+        Datasource datasource = Datasources.instance().getDatasource(hostname);
+        if (datasource == null) {
+            datasource = Datasources.instance().getDatasource(fallbackName);
+        }
+
+        return datasource;
     }
 
     /**
