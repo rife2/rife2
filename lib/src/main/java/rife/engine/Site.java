@@ -5,6 +5,7 @@
 package rife.engine;
 
 import rife.engine.exceptions.EngineException;
+import rife.tools.StringUtils;
 
 import java.util.*;
 
@@ -237,12 +238,7 @@ public class Site {
         if (route.pathInfoHandling() != PathInfoHandling.NONE) {
             // construct the element path info
             element_path_info = elementUrl.substring(element_url_buffer.length());
-            // always ensure that the path info starts with a slash
-            // this can not be present if the concerned element is
-            // an arrival for instance
-            if (!element_path_info.startsWith("/")) {
-                element_path_info = "/" + element_path_info;
-            }
+            element_path_info = StringUtils.stripFromFront(element_path_info, "/");
         }
 //        }
 

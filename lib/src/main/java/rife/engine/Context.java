@@ -153,7 +153,10 @@ public class Context {
         url.append(StringUtils.stripFromFront(route.path(), "/"));
 
         if (pathInfo != null) {
-            url.append(pathInfo);
+            if (url.charAt(url.length() - 1) != '/') {
+                url.append("/");
+            }
+            url.append(StringUtils.stripFromFront(pathInfo, "/"));
         }
 
         if (parameters != null &&
