@@ -218,12 +218,13 @@ public class Site {
         while (true);
 
         // no target element, get the fallback element
-//        if (null == route) {
+        if (null == route) {
+            // TODO
 //            route = searchFallback(elementUrl);
 //            if (null == route) {
-//                return null;
+                return null;
 //            }
-//        }
+        }
 //        // otherwise get the target element's path info
 //        else {
 //            // only accept pathinfo if the element accepts it
