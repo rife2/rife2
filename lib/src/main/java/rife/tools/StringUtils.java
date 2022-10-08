@@ -439,6 +439,7 @@ public abstract class StringUtils {
      * @see #encodeSql(String)
      * @see #encodeLatex(String)
      * @see #encodeRegexp(String)
+     * @see #encodeJson(String)
      * @since 1.0
      */
     public static String encodeClassname(String name) {
@@ -493,6 +494,7 @@ public abstract class StringUtils {
      * @see #encodeSql(String)
      * @see #encodeLatex(String)
      * @see #encodeRegexp(String)
+     * @see #encodeJson(String)
      * @since 1.0
      */
     public static String encodeUrl(String source) {
@@ -529,6 +531,7 @@ public abstract class StringUtils {
      * @see #encodeSql(String)
      * @see #encodeLatex(String)
      * @see #encodeRegexp(String)
+     * @see #encodeJson(String)
      * @since 1.0
      */
     public static String encodeUrlValue(String source) {
@@ -735,6 +738,7 @@ public abstract class StringUtils {
      * @see #encodeString(String)
      * @see #encodeLatex(String)
      * @see #encodeRegexp(String)
+     * @see #encodeJson(String)
      * @since 1.0
      */
     public static String encodeHtml(String source) {
@@ -785,6 +789,7 @@ public abstract class StringUtils {
      * @see #encodeString(String)
      * @see #encodeLatex(String)
      * @see #encodeRegexp(String)
+     * @see #encodeJson(String)
      * @since 1.0
      */
     public static String encodeXml(String source) {
@@ -806,6 +811,7 @@ public abstract class StringUtils {
      * @see #encodeSql(String)
      * @see #encodeLatex(String)
      * @see #encodeRegexp(String)
+     * @see #encodeJson(String)
      * @since 1.0
      */
     public static String encodeString(String source) {
@@ -864,6 +870,7 @@ public abstract class StringUtils {
      * @see #encodeString(String)
      * @see #encodeLatex(String)
      * @see #encodeRegexp(String)
+     * @see #encodeJson(String)
      * @since 1.0
      */
     public static String encodeSql(String source) {
@@ -885,6 +892,7 @@ public abstract class StringUtils {
      * @see #encodeSql(String)
      * @see #encodeString(String)
      * @see #encodeRegexp(String)
+     * @see #encodeJson(String)
      * @since 1.0
      */
     public static String encodeLatex(String source) {
@@ -988,9 +996,85 @@ public abstract class StringUtils {
 
         public void appendFallback(StringBuilder encodedBuffer, char character) {
             encodedBuffer.append(PREFIX);
-            encodedBuffer.append((int) character);
+            encodedBuffer.append((int)character);
             encodedBuffer.append(SUFFIX);
         }
+    }
+
+    /**
+     * Transforms a provided <code>String</code> object into a new string,
+     * containing only valid Json characters.
+     *
+     * @param source The string that has to be transformed into a valid LaTeX
+     *               string.
+     * @return The encoded <code>String</code> object.
+     * @see #encodeClassname(String)
+     * @see #encodeUrl(String)
+     * @see #encodeUrlValue(String)
+     * @see #encodeHtml(String)
+     * @see #encodeXml(String)
+     * @see #encodeSql(String)
+     * @see #encodeString(String)
+     * @see #encodeRegexp(String)
+     * @since 2.0
+     */
+    public static String encodeJson(String source) {
+        if (source == null || source.isEmpty()) {
+            return source;
+        }
+
+        StringBuilder encoded_string = new StringBuilder();
+
+        char b;
+        char c = 0;
+        String hhhh;
+        int i;
+        int len = source.length();
+
+        for (i = 0; i < len; i += 1) {
+            b = c;
+            c = source.charAt(i);
+            switch (c) {
+                case '\\':
+                case '"':
+                    encoded_string.append('\\');
+                    encoded_string.append(c);
+                    break;
+                case '/':
+                    if (b == '<') {
+                        encoded_string.append('\\');
+                    }
+                    encoded_string.append(c);
+                    break;
+                case '\b':
+                    encoded_string.append("\\b");
+                    break;
+                case '\t':
+                    encoded_string.append("\\t");
+                    break;
+                case '\n':
+                    encoded_string.append("\\n");
+                    break;
+                case '\f':
+                    encoded_string.append("\\f");
+                    break;
+                case '\r':
+                    encoded_string.append("\\r");
+                    break;
+                default:
+                    if (c < ' ' || (c >= '\u0080' && c < '\u00a0')
+                        || (c >= '\u2000' && c < '\u2100')) {
+                        encoded_string.append("\\u");
+                        hhhh = Integer.toHexString(c);
+                        encoded_string.append("0000", 0, 4 - hhhh.length());
+                        encoded_string.append(hhhh);
+                    } else {
+                        encoded_string.append(c);
+                    }
+            }
+        }
+
+        return encoded_string.toString();
     }
 
     /**
@@ -1008,6 +1092,7 @@ public abstract class StringUtils {
      * @see #encodeSql(String)
      * @see #encodeString(String)
      * @see #encodeLatex(String)
+     * @see #encodeJson(String)
      * @since 1.3
      */
     public static String encodeRegexp(String source) {
@@ -1511,7 +1596,7 @@ public abstract class StringUtils {
     /**
      * Creates a <code>String</code> for the provided byte array and encoding
      *
-     * @param bytes The byte array to convert.
+     * @param bytes    The byte array to convert.
      * @param encoding The encoding to use for the string conversion.
      * @return The converted <code>String</code>.
      * @since 2.0

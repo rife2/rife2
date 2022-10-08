@@ -90,6 +90,23 @@ public class TemplateFactory extends EnumClass<String> {
         EncoderHtmlSingleton.INSTANCE,
         null);
 
+    public static TemplateFactory JSON = new TemplateFactory(TemplateConfig.TXT,
+        ResourceFinderClasspath.instance(),
+        "json", "application/json", ".json",
+        new String[]
+            {
+                TemplateFactoryFilters.TAG_LANG
+            },
+        new String[]
+            {
+                TemplateFactoryFilters.TAG_CONFIG,
+                TemplateFactoryFilters.TAG_L10N,
+                TemplateFactoryFilters.TAG_RENDER
+            },
+        BeanHandlerPlain.getInstance(),
+        EncoderJsonSingleton.INSTANCE,
+        null);
+
     private final TemplateConfig config_;
     private ResourceFinder resourceFinder_;
     private final String defaultContentType_;

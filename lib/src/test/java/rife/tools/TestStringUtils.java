@@ -122,6 +122,16 @@ public class TestStringUtils {
     }
 
     @Test
+    public void testEncodeJson() {
+        assertNull(StringUtils.encodeJson(null));
+        assertEquals(StringUtils.encodeJson("""
+            abcd"
+            a\\wx/y\bz
+            fde\fde\rjk\tos\\u218Foi"""), """
+            abcd\\"\\na\\\\wx/y\\bz\\nfde\\fde\\rjk\\tos\\\\u218Foi""");
+    }
+
+    @Test
     public void testCountCase() {
         assertEquals(StringUtils.count("ONEtwooNethreefourone", "onE", false), 3);
     }
