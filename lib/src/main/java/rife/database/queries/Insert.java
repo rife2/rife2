@@ -202,6 +202,25 @@ public class Insert extends AbstractParametrizedQuery implements Cloneable {
         return _field(field, "?");
     }
 
+    public Insert fieldParameterCustom(String field, String expression) {
+        return fieldParameterCustom(field, field, expression);
+    }
+
+    public Insert fieldParameterCustom(String field, String alias, String expression) {
+        if (null == field) throw new IllegalArgumentException("field can't be null.");
+        if (0 == field.length()) throw new IllegalArgumentException("field can't be empty.");
+
+        clearGenerated();
+
+        addFieldParameter(alias);
+
+        if (null == expression) {
+            return _field(field, null);
+        } else {
+            return _field(field, expression);
+        }
+    }
+
     public Insert field(String field, boolean value) {
         return field(field, Boolean.valueOf(value));
     }
@@ -289,6 +308,7 @@ public class Insert extends AbstractParametrizedQuery implements Cloneable {
         return this;
     }
 
+    // TODO : handle records
     public Insert fieldsParameters(Class beanClass)
     throws DbQueryException {
         return fieldsParametersExcluded(beanClass, null);
