@@ -852,7 +852,7 @@ public class TestTemplateFactory {
         }
     }
 
-    // TODO
+    // TODO : TXT includes not reloading
 //    @Test
 //    public void testReloadIncludesTxt() {
 //        var resource_finder = TemplateFactory.TXT.getResourceFinder();

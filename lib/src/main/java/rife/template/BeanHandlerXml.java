@@ -10,7 +10,7 @@ import rife.tools.exceptions.BeanUtilsException;
 import java.util.Map;
 
 public class BeanHandlerXml extends AbstractBeanHandler {
-    // TODO
+    // TODO : form builder
 //    private FormBuilder mFormBuilder = new FormBuilderXml();
 
     BeanHandlerXml() {
@@ -20,7 +20,7 @@ public class BeanHandlerXml extends AbstractBeanHandler {
         return BeanHandlerXmlSingleton.INSTANCE;
     }
 
-    // TODO
+    // TODO : cmf
 //    public MimeType getMimeType() {
 //        return MimeType.TEXT_XML;
 //    }

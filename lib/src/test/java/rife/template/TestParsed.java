@@ -105,31 +105,30 @@ public class TestParsed {
         assertNull(tp.getDefaultValue("defaultvalue3"));
     }
 
-    // TODO
-//    @Test
-//    public void testIncludes() {
-//        Parsed tp = new Parsed(paser_);
-//
-//        String include1_name = "noblocks_in";
-//        Parsed include1 = paser_.prepare(include1_name, paser_.resolve(include1_name));
-//        String include2_name = "defaultvalues_in";
-//        Parsed include2 = paser_.prepare(include2_name, paser_.resolve(include2_name));
-//        String include3_name = "blocks_successive_in";
-//        Parsed include3 = paser_.prepare(include3_name, paser_.resolve(include3_name));
-//
-//        try {
-//            tp.addDependency(include1);
-//            assertEquals(tp.getDependencies().size(), 1);
-//            tp.addDependency(include2);
-//            assertEquals(tp.getDependencies().size(), 2);
-//            tp.addDependency(include3);
-//            assertEquals(tp.getDependencies().size(), 3);
-//        } catch (TemplateException e) {
-//            fail(ExceptionUtils.getExceptionStackTrace(e));
-//        }
-//
-//        assertEquals(include1_name.indexOf(include1.getClassName()), 0);
-//        assertEquals(include2_name.indexOf(include2.getClassName()), 0);
-//        assertEquals(include3_name.indexOf(include3.getClassName()), 0);
-//    }
+    @Test
+    public void testIncludes() {
+        Parsed tp = new Parsed(paser_);
+
+        String include1_name = "noblocks_in";
+        Parsed include1 = paser_.prepare(include1_name, paser_.resolve(include1_name));
+        String include2_name = "defaultvalues_in";
+        Parsed include2 = paser_.prepare(include2_name, paser_.resolve(include2_name));
+        String include3_name = "blocks_successive_in";
+        Parsed include3 = paser_.prepare(include3_name, paser_.resolve(include3_name));
+
+        try {
+            tp.addDependency(include1);
+            assertEquals(tp.getDependencies().size(), 1);
+            tp.addDependency(include2);
+            assertEquals(tp.getDependencies().size(), 2);
+            tp.addDependency(include3);
+            assertEquals(tp.getDependencies().size(), 3);
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }/**/
+
+        assertEquals(include1_name.indexOf(include1.getClassName()), 0);
+        assertEquals(include2_name.indexOf(include2.getClassName()), 0);
+        assertEquals(include3_name.indexOf(include3.getClassName()), 0);
+    }
 }

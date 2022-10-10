@@ -13,6 +13,10 @@ import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.tools.ClassUtils;
 import rife.tools.StringUtils;
+import rife.validation.Constrained;
+import rife.validation.ConstrainedBean;
+import rife.validation.ConstrainedProperty;
+import rife.validation.ConstrainedUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -388,37 +392,30 @@ public class CreateTable extends AbstractQuery implements Cloneable {
     throws DbQueryException {
         if (null == beanClass) throw new IllegalArgumentException("beanClass can't be null.");
 
-        // TODO
-//		Constrained constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
-//
-//		// handle constrained bean
-//		if (constrained != null)
-//		{
-//			ConstrainedBean constrained_bean = constrained.getConstrainedBean();
-//			if (constrained_bean != null)
-//			{
-//				// handle multi-column uniques
-//				if (constrained_bean.hasUniques())
-//				{
-//					for (String[] o : (List<String[]>)constrained_bean.getUniques())
-//					{
-//						unique(o);
-//					}
-//				}
-//			}
-//		}
-//
-//		// handle properties
-//		ConstrainedProperty	constrained_property = null;
+        Constrained constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
+
+        // handle constrained bean
+        if (constrained != null) {
+            ConstrainedBean constrained_bean = constrained.getConstrainedBean();
+            if (constrained_bean != null) {
+                // handle multi-column uniques
+                if (constrained_bean.hasUniques()) {
+                    for (String[] o : (List<String[]>) constrained_bean.getUniques()) {
+                        unique(o);
+                    }
+                }
+            }
+        }
+
+        // handle properties
+        ConstrainedProperty constrained_property = null;
         Map<String, Class> column_types = QueryHelper.getBeanPropertyTypes(beanClass, includedFields, excludedFields);
         Class column_type = null;
         Column column = null;
         for (String column_name : column_types.keySet()) {
-            // TODO
-//			if (!ConstrainedUtils.persistConstrainedProperty(constrained, column_name, null))
-//			{
-//				continue;
-//			}
+            if (!ConstrainedUtils.persistConstrainedProperty(constrained, column_name, null)) {
+                continue;
+            }
 
             column_type = column_types.get(column_name);
             column = new Column(column_name, column_type);
@@ -428,92 +425,69 @@ public class CreateTable extends AbstractQuery implements Cloneable {
 
             in_list_values = ClassUtils.getEnumClassValues(column_type);
 
-            // TODO
-//			if (constrained != null)
-//			{
-//				constrained_property = constrained.getConstrainedProperty(column_name);
-//				if (constrained_property != null)
-//				{
-//					if (constrained_property.isNotNull())
-//					{
-//						nullable(column_name, NOTNULL);
-//					}
-//
-//					if (constrained_property.isIdentifier())
-//					{
-//						primaryKey(column_name);
-//					}
-//
-//					if (constrained_property.isUnique())
-//					{
-//						unique(column_name);
-//					}
-//
-//					if (constrained_property.isNotEmpty())
-//					{
-//						if (ClassUtils.isNumeric(column_type))
-//						{
-//							check(column_name+" != 0");
-//						}
-//						else if (ClassUtils.isText(column_type))
-//						{
-//							check(column_name+" != ''");
-//						}
-//					}
-//
-//					if (constrained_property.isNotEqual())
-//					{
-//						if (ClassUtils.isNumeric(column_type))
-//						{
-//							check(column_name+" != "+constrained_property.getNotEqual());
-//						}
-//						else if (ClassUtils.isText(column_type))
-//						{
-//							check(column_name+" != '"+StringUtils.encodeSql(constrained_property.getNotEqual().toString())+"'");
-//						}
-//					}
-//
-//					if (constrained_property.hasPrecision())
-//					{
-//						if (constrained_property.hasScale())
-//						{
-//							precision(column_name, constrained_property.getPrecision(), constrained_property.getScale());
-//						}
-//						else
-//						{
-//							precision(column_name, constrained_property.getPrecision());
-//						}
-//					}
-//
-//					if (constrained_property.isInList())
-//					{
-//						in_list_values = constrained_property.getInList().clone();
-//					}
-//
-//					if (constrained_property.hasDefaultValue())
-//					{
-//						defaultValue(column_name, constrained_property.getDefaultValue());
-//					}
-//
-//					if (constrained_property.hasManyToOne() &&
-//						ClassUtils.isBasic(column_type))
-//					{
-//						ConstrainedProperty.ManyToOne many_to_one = constrained_property.getManyToOne();
-//
-//						if (null == many_to_one.getDerivedTable())
-//						{
-//							throw new MissingManyToOneTableException(beanClass, constrained_property.getPropertyName());
-//						}
-//
-//						if (null == many_to_one.getColumn())
-//						{
-//							throw new MissingManyToOneColumnException(beanClass, constrained_property.getPropertyName());
-//						}
-//
-//						foreignKey(many_to_one.getDerivedTable(), constrained_property.getPropertyName(), many_to_one.getColumn(), many_to_one.getOnUpdate(), many_to_one.getOnDelete());
-//					}
-//				}
-//			}
+            if (constrained != null) {
+                constrained_property = constrained.getConstrainedProperty(column_name);
+                if (constrained_property != null) {
+                    if (constrained_property.isNotNull()) {
+                        nullable(column_name, NOTNULL);
+                    }
+
+                    if (constrained_property.isIdentifier()) {
+                        primaryKey(column_name);
+                    }
+
+                    if (constrained_property.isUnique()) {
+                        unique(column_name);
+                    }
+
+                    if (constrained_property.isNotEmpty()) {
+                        if (ClassUtils.isNumeric(column_type)) {
+                            check(column_name + " != 0");
+                        } else if (ClassUtils.isText(column_type)) {
+                            check(column_name + " != ''");
+                        }
+                    }
+
+                    if (constrained_property.isNotEqual()) {
+                        if (ClassUtils.isNumeric(column_type)) {
+                            check(column_name + " != " + constrained_property.getNotEqual());
+                        } else if (ClassUtils.isText(column_type)) {
+                            check(column_name + " != '" + StringUtils.encodeSql(constrained_property.getNotEqual().toString()) + "'");
+                        }
+                    }
+
+                    if (constrained_property.hasPrecision()) {
+                        if (constrained_property.hasScale()) {
+                            precision(column_name, constrained_property.getPrecision(), constrained_property.getScale());
+                        } else {
+                            precision(column_name, constrained_property.getPrecision());
+                        }
+                    }
+
+                    if (constrained_property.isInList()) {
+                        in_list_values = constrained_property.getInList().clone();
+                    }
+
+                    if (constrained_property.hasDefaultValue()) {
+                        defaultValue(column_name, constrained_property.getDefaultValue());
+                    }
+
+                    if (constrained_property.hasManyToOne() &&
+                        ClassUtils.isBasic(column_type)) {
+                        ConstrainedProperty.ManyToOne many_to_one = constrained_property.getManyToOne();
+
+                        if (null == many_to_one.getDerivedTable()) {
+                            throw new MissingManyToOneTableException(beanClass, constrained_property.getPropertyName());
+                        }
+
+                        if (null == many_to_one.getColumn()) {
+                            throw new MissingManyToOneColumnException(beanClass, constrained_property.getPropertyName());
+                        }
+
+                        foreignKey(many_to_one.getDerivedTable(), constrained_property.getPropertyName(), many_to_one.getColumn(), many_to_one.getOnUpdate(), many_to_one.getOnDelete());
+                    }
+                }
+            }
 
             // handle in list constraints
             if (in_list_values != null) {

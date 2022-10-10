@@ -17,12 +17,12 @@ public class BeanHandlerPlain extends AbstractBeanHandler {
         return BeanHandlerPlainSingleton.INSTANCE;
     }
 
-    // TODO
+    // TODO : cmf
 //	public MimeType getMimeType()
 //	{
 //		return MimeType.TEXT_PLAIN;
 //	}
-//
+    // TODO : form builder
 //	public FormBuilder getFormBuilder()
 //	{
 //		return null;

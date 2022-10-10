@@ -4,7 +4,9 @@
  */
 package rife.template;
 
-public class HtmlBeanImpl { // TODO extends Validation {
+import rife.validation.Validation;
+
+public class HtmlBeanImpl extends Validation {
     private boolean wantsupdates_ = false;
     private String[] colors_ = null;
     private String firstname_ = null;

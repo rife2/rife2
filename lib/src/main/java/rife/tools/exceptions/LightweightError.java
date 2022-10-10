@@ -34,17 +34,7 @@ public class LightweightError extends Error {
     }
 
     private void init() {
-        // TODO
-//        if (useFastExceptions_ != null) return;
-//        try {
-//            // detect the presence of RifeConfig and use that if possible, otherwise
-//            // use the static flag of this class
-//            Class global_class = Class.forName("rife.config.RifeConfig$Global");
-//            Method get_use_fast_exceptions = global_class.getDeclaredMethod("getUseFastExceptions", new Class[0]);
-//            useFastExceptions_ = ((Boolean) get_use_fast_exceptions.invoke(null, new Object[0])).booleanValue();
-//        } catch (Exception e) {
-            useFastExceptions_ = sUseFastExceptions;
-//        }
+        useFastExceptions_ = sUseFastExceptions;
     }
 
     public LightweightError() {

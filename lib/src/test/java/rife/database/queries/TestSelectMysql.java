@@ -11,6 +11,7 @@ import java.util.Calendar;
 
 import org.junit.jupiter.api.Test;
 import rife.database.BeanImpl;
+import rife.database.BeanImplConstrained;
 import rife.database.DbPreparedStatement;
 import rife.database.DbPreparedStatementHandler;
 import rife.database.exceptions.TableNameOrFieldsRequiredException;
@@ -113,20 +114,19 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    // TODO
-//    @Test
-//    public void testBeanConstrainedMysql() {
-//        Select query = new Select(mMysql, BeanImplConstrained.class);
-//        query.from("tablename");
-//        assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyString ASC, propertyInt DESC");
-//        assertTrue(execute(query));
-//
-//        query = new Select(mMysql, BeanImplConstrained.class);
-//        query.from("tablename")
-//            .orderBy("propertyByte");
-//        assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyByte ASC");
-//        assertTrue(execute(query));
-//    }
+    @Test
+    public void testBeanConstrainedMysql() {
+        Select query = new Select(MYSQL, BeanImplConstrained.class);
+        query.from("tablename");
+        assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyString ASC, propertyInt DESC");
+        assertTrue(execute(query));
+
+        query = new Select(MYSQL, BeanImplConstrained.class);
+        query.from("tablename")
+            .orderBy("propertyByte");
+        assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyByte ASC");
+        assertTrue(execute(query));
+    }
 
     @Test
     public void testBeanExcludedMysql() {
@@ -332,15 +332,14 @@ public class TestSelectMysql extends TestSelect {
         // mysql doesn't compare correctly on floats, thus don't execute
     }
 
-    // TODO
-//    @Test
-//    public void testWhereBeanConstrainedMysql() {
-//        Select query = new Select(mMysql);
-//        query.from("tablename")
-//            .where(BeanImplConstrained.getPopulatedBean());
-//        assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = 1 AND propertyBooleanObject = 0 AND propertyByte = 89 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.0' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.0' AND propertyDouble = 53348.34 AND propertyDoubleObject = 143298.692 AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLongObject = 66875 AND propertyShort = 43 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14' AND propertyTimestamp = '2002-06-18 15:26:14.0'");
-//        // mysql doesn't compare correctly on floats, thus don't execute
-//    }
+    @Test
+    public void testWhereBeanConstrainedMysql() {
+        Select query = new Select(MYSQL);
+        query.from("tablename")
+            .where(BeanImplConstrained.getPopulatedBean());
+        assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = 1 AND propertyBooleanObject = 0 AND propertyByte = 89 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.0' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.0' AND propertyDouble = 53348.34 AND propertyDoubleObject = 143298.692 AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLongObject = 66875 AND propertyShort = 43 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14' AND propertyTimestamp = '2002-06-18 15:26:14.0'");
+        // mysql doesn't compare correctly on floats, thus don't execute
+    }
 
     @Test
     public void testWhereBeanNullValuesMysql() {
@@ -378,10 +377,10 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    // TODO
+    // TODO : test fails
 //    @Test
 //    public void testWhereParametersBeanMysql() {
-//        Select query = new Select(mMysql);
+//        Select query = new Select(MYSQL);
 //        query.from("tablename")
 //            .whereParameters(BeanImpl.class);
 //        assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBigDecimal = ? AND propertyBoolean = ? AND propertyBooleanObject = ? AND propertyByte = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyChar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDouble = ? AND propertyDoubleObject = ? AND propertyEnum = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInt = ? AND propertyIntegerObject = ? AND propertyLong = ? AND propertyLongObject = ? AND propertyShort = ? AND propertyShortObject = ? AND propertySqlDate = ? AND propertyString = ? AND propertyStringbuffer = ? AND propertyTime = ? AND propertyTimestamp = ?");
@@ -449,77 +448,76 @@ public class TestSelectMysql extends TestSelect {
 //        }));
 //    }
 
-    // TODO
-//    @Test
-//    public void testWhereParametersBeanConstrainedMysql() {
-//        Select query = new Select(mMysql);
-//        query.from("tablename")
-//            .whereParameters(BeanImplConstrained.class);
-//        assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBigDecimal = ? AND propertyBoolean = ? AND propertyBooleanObject = ? AND propertyByte = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyChar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDouble = ? AND propertyDoubleObject = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInt = ? AND propertyIntegerObject = ? AND propertyLongObject = ? AND propertyShort = ? AND propertySqlDate = ? AND propertyString = ? AND propertyStringbuffer = ? AND propertyTime = ? AND propertyTimestamp = ?");
-//
-//        assertEquals(query.getParameters().getOrderedNames().size(), 22);
-//        assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
-//        assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
-//        assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(3), "propertyByte");
-//        assertEquals(query.getParameters().getOrderedNames().get(4), "propertyByteObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(5), "propertyCalendar");
-//        assertEquals(query.getParameters().getOrderedNames().get(6), "propertyChar");
-//        assertEquals(query.getParameters().getOrderedNames().get(7), "propertyCharacterObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(8), "propertyDate");
-//        assertEquals(query.getParameters().getOrderedNames().get(9), "propertyDouble");
-//        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyDoubleObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyFloat");
-//        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyFloatObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyInt");
-//        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyIntegerObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyLongObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyShort");
-//        assertEquals(query.getParameters().getOrderedNames().get(17), "propertySqlDate");
-//        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyString");
-//        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyStringbuffer");
-//        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyTime");
-//        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyTimestamp");
-//        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"});
-//
-//        // don't check if actual rows were returned, since Mysql doesn't
-//        // match on the float
-//        execute(query, new DbPreparedStatementHandler() {
-//            public void setParameters(DbPreparedStatement statement) {
-//                Calendar cal = Calendar.getInstance();
-//                cal.set(2002, 5, 18, 15, 26, 14);
-//                cal.set(Calendar.MILLISECOND, 764);
-//                statement
-//                    .setBigDecimal(1, new BigDecimal("219038743.392874"))
-//                    .setBoolean(2, true)
-//                    .setBoolean(3, false)
-//                    .setByte(4, (byte) 89)
-//                    .setByte(5, (byte) 34)
-//                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
-//                    .setString(7, "v")
-//                    .setString(8, "r")
-//                    .setTimestamp(9, new java.sql.Timestamp(cal.getTime().getTime()))
-//                    .setDouble(10, 53348.34d)
-//                    .setDouble(11, 143298.692d)
-//                    .setFloat(12, 98634.2f)
-//                    .setFloat(13, 8734.7f)
-//                    .setInt(14, 545)
-//                    .setInt(15, 968)
-//                    .setLong(16, 66875L)
-//                    .setShort(17, (short) 43)
-//                    .setDate(18, new java.sql.Date(cal.getTime().getTime()))
-//                    .setString(19, "someotherstring")
-//                    .setString(20, "someotherstringbuff")
-//                    .setTime(21, new Time(cal.getTime().getTime()))
-//                    .setTimestamp(22, new Timestamp(cal.getTime().getTime()));
-//            }
-//        });
-//    }
+    @Test
+    public void testWhereParametersBeanConstrainedMysql() {
+        Select query = new Select(MYSQL);
+        query.from("tablename")
+            .whereParameters(BeanImplConstrained.class);
+        assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBigDecimal = ? AND propertyBoolean = ? AND propertyBooleanObject = ? AND propertyByte = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyChar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDouble = ? AND propertyDoubleObject = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInt = ? AND propertyIntegerObject = ? AND propertyLongObject = ? AND propertyShort = ? AND propertySqlDate = ? AND propertyString = ? AND propertyStringbuffer = ? AND propertyTime = ? AND propertyTimestamp = ?");
 
-    // TODO
+        assertEquals(query.getParameters().getOrderedNames().size(), 22);
+        assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
+        assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
+        assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
+        assertEquals(query.getParameters().getOrderedNames().get(3), "propertyByte");
+        assertEquals(query.getParameters().getOrderedNames().get(4), "propertyByteObject");
+        assertEquals(query.getParameters().getOrderedNames().get(5), "propertyCalendar");
+        assertEquals(query.getParameters().getOrderedNames().get(6), "propertyChar");
+        assertEquals(query.getParameters().getOrderedNames().get(7), "propertyCharacterObject");
+        assertEquals(query.getParameters().getOrderedNames().get(8), "propertyDate");
+        assertEquals(query.getParameters().getOrderedNames().get(9), "propertyDouble");
+        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyDoubleObject");
+        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyFloat");
+        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyFloatObject");
+        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyInt");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertySqlDate");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyStringbuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyTime");
+        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyTimestamp");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"});
+
+        // don't check if actual rows were returned, since Mysql doesn't
+        // match on the float
+        execute(query, new DbPreparedStatementHandler() {
+            public void setParameters(DbPreparedStatement statement) {
+                Calendar cal = Calendar.getInstance();
+                cal.set(2002, 5, 18, 15, 26, 14);
+                cal.set(Calendar.MILLISECOND, 764);
+                statement
+                    .setBigDecimal(1, new BigDecimal("219038743.392874"))
+                    .setBoolean(2, true)
+                    .setBoolean(3, false)
+                    .setByte(4, (byte) 89)
+                    .setByte(5, (byte) 34)
+                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setString(7, "v")
+                    .setString(8, "r")
+                    .setTimestamp(9, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setDouble(10, 53348.34d)
+                    .setDouble(11, 143298.692d)
+                    .setFloat(12, 98634.2f)
+                    .setFloat(13, 8734.7f)
+                    .setInt(14, 545)
+                    .setInt(15, 968)
+                    .setLong(16, 66875L)
+                    .setShort(17, (short) 43)
+                    .setDate(18, new java.sql.Date(cal.getTime().getTime()))
+                    .setString(19, "someotherstring")
+                    .setString(20, "someotherstringbuff")
+                    .setTime(21, new Time(cal.getTime().getTime()))
+                    .setTimestamp(22, new Timestamp(cal.getTime().getTime()));
+            }
+        });
+    }
+
+    // TODO : test fails
 //    @Test
 //    public void testWhereParametersBeanExcludedMysql() {
-//        Select query = new Select(mMysql);
+//        Select query = new Select(MYSQL);
 //        query.from("tablename")
 //            .whereParametersExcluded(BeanImpl.class,
 //                new String[]{"propertyBoolean", "propertyByte", "propertyChar",
@@ -811,10 +809,10 @@ public class TestSelectMysql extends TestSelect {
         // mysql doesn't do subqueries
     }
 
-    // TODO
+    // TODO : test fails
 //    @Test
 //    public void testCloneMysql() {
-//        Select unionquery1 = new Select(mMysql);
+//        Select unionquery1 = new Select(MYSQL);
 //        unionquery1
 //            .from("table2")
 //            .field("table2.propertyString")
@@ -824,7 +822,7 @@ public class TestSelectMysql extends TestSelect {
 //            .field("max(table2.propertyByte)")
 //            .whereParameter("propertyByte", "=")
 //            .groupBy("propertyString");
-//        Select unionquery2 = new Select(mMysql);
+//        Select unionquery2 = new Select(MYSQL);
 //        unionquery2
 //            .from("table2")
 //            .field("table2.propertyStringbuffer")
@@ -834,7 +832,7 @@ public class TestSelectMysql extends TestSelect {
 //            .field("min(table2.propertyByte)")
 //            .whereParameter("propertyByte", ">")
 //            .groupBy("propertyString");
-//        Select query = new Select(mMysql);
+//        Select query = new Select(MYSQL);
 //        query
 //            .hint("SQL_CACHE")
 //            .from("tablename")

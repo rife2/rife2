@@ -266,8 +266,6 @@ public abstract class AbstractTemplate implements Template {
     }
 
     private void _evaluateConfigTags(List<String> setValues) {
-        // process the config tags
-        // TODO
         List<String[]> config_tags = getFilteredValues(TemplateFactoryFilters.TAG_CONFIG);
         if (config_tags != null) {
             String config_key = null;

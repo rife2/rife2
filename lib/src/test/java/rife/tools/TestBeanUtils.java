@@ -14,10 +14,7 @@ import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -295,126 +292,125 @@ public class TestBeanUtils {
         assertArrayEquals(bean.getPropertySerializableTypeArray(), new BeanImpl2.SerializableType[]{serializable1, serializable2});
     }
 
-    // TODO
-//    @Test
-//    public void testSetUppercaseBeanPropertyConstrained()
-//    throws BeanUtilsException, ParseException, SerializationUtilsErrorException {
-//        BeanImpl3 bean;
-//        Map<String, PropertyDescriptor> bean_properties = BeanUtils.getUppercasedBeanProperties(BeanImpl3.class);
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyDate", new String[]{"custom format 2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyDate(), RifeConfig.tools().defaultInputDateFormat().parse("2006-08-04 10:45"));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyInt", new String[]{"$438", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyInt(), 438);
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyByte", new String[]{"2,700%", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyByte(), 27);
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyDouble", new String[]{"80,756.6287", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyDouble(), 80756.6287d);
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyFloat", new String[]{"435,557", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyFloat(), 435.557f);
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyLong", new String[]{"122875 €", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyLong(), 122875);
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyShort", new String[]{"¤3285", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyShort(), 3285);
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyBigDecimal", new String[]{"4353344987349830948394893,55709384093", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyBigDecimal(), new BigDecimal("435334498734983094839489355709384093E-11"));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyIntegerObject", new String[]{"$438", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyIntegerObject(), new Integer(438));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyByteObject", new String[]{"2,700%", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyByteObject(), new Byte((byte) 27));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyDoubleObject", new String[]{"80,756.6287", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyDoubleObject(), new Double(80756.6287d));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyFloatObject", new String[]{"435,557", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyFloatObject(), new Float(435.557f));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyLongObject", new String[]{"122875 €", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyLongObject(), new Long(122875));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyShortObject", new String[]{"¤3285", "two"}, null, bean_properties, bean, new BeanImpl3());
-//        assertEquals(bean.getPropertyShortObject(), new Short((short) 3285));
-//
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyDateArray", new String[]{"custom format 2006-08-04 10:45", "custom format 2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyDateArray(), new Date[]{RifeConfig.tools().defaultInputDateFormat().parse("2006-08-04 10:45"), RifeConfig.tools().defaultInputDateFormat().parse("2006-07-08 11:05")}));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyIntArray", new String[]{"$438", "$98455", "$711"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyIntArray(), new int[]{438, 98455, 711}));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyByteArray", new String[]{"2,700%", "7,800%"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyByteArray(), new byte[]{27, 78}));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyDoubleArray", new String[]{"80,756.6287", "3,214.75", "85,796.6237"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyDoubleArray(), new double[]{80756.6287d, 3214.75d, 85796.6237d}));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyFloatArray", new String[]{"435,557", "589,5"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyFloatArray(), new float[]{435.557f, 589.5f}));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyLongArray", new String[]{"122875 €", "8526780 €", "3826589 €"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyLongArray(), new long[]{122875, 8526780, 3826589}));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyShortArray", new String[]{"¤3285", "¤58"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyShortArray(), new short[]{3285, 58}));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyIntegerObjectArray", new String[]{"$438", "$7865", "$475"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyIntegerObjectArray(), new Integer[]{438, 7865, 475}));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyByteObjectArray", new String[]{"2,700%", "7,800%"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyByteObjectArray(), new Byte[]{(byte) 27, (byte) 78}));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyDoubleObjectArray", new String[]{"80,756.6287", "5,876.14", "3,268.57"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyDoubleObjectArray(), new Double[]{80756.6287d, 5876.14d, 3268.57d}));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyFloatObjectArray", new String[]{"435,557", "7865,66"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyFloatObjectArray(), new Float[]{435.557f, 7865.66f}));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyLongObjectArray", new String[]{"122875 €", "5687621 €", "66578 €"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyLongObjectArray(), new Long[]{122875L, 5687621L, 66578L}));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyShortObjectArray", new String[]{"¤3285", "¤6588"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyShortObjectArray(), new Short[]{(short) 3285, (short) 6588}));
-//
-//        bean = new BeanImpl3();
-//        BeanUtils.setUppercasedBeanProperty("propertyBigDecimalArray", new String[]{"97687687998978673545669789,0000000000001", "34353"}, null, bean_properties, bean, new BeanImpl3());
-//        assertTrue(Arrays.equals(bean.getPropertyBigDecimalArray(), new BigDecimal[]{new BigDecimal("976876879989786735456697890000000000001E-13"), new BigDecimal("3.4353E4")}));
-//    }
+    @Test
+    public void testSetUppercaseBeanPropertyConstrained()
+    throws BeanUtilsException, ParseException, SerializationUtilsErrorException {
+        BeanImpl3 bean;
+        Map<String, PropertyDescriptor> bean_properties = BeanUtils.getUppercasedBeanProperties(BeanImpl3.class);
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyDate", new String[]{"custom format 2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyDate(), RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45"));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyInt", new String[]{"$438", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyInt(), 438);
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyByte", new String[]{"2,700%", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyByte(), 27);
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyDouble", new String[]{"80,756.6287", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyDouble(), 80756.6287d);
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyFloat", new String[]{"435,557", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyFloat(), 435.557f);
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyLong", new String[]{"122875 €", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyLong(), 122875);
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyShort", new String[]{"¤3285", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyShort(), 3285);
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyBigDecimal", new String[]{"4353344987349830948394893,55709384093", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyBigDecimal(), new BigDecimal("435334498734983094839489355709384093E-11"));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyIntegerObject", new String[]{"$438", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyIntegerObject(), 438);
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyByteObject", new String[]{"2,700%", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyByteObject(), (byte) 27);
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyDoubleObject", new String[]{"80,756.6287", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyDoubleObject(), 80756.6287d);
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyFloatObject", new String[]{"435,557", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyFloatObject(), 435.557f);
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyLongObject", new String[]{"122875 €", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyLongObject(), 122875);
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyShortObject", new String[]{"¤3285", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyShortObject(), (short) 3285);
+
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyDateArray", new String[]{"custom format 2006-08-04 10:45", "custom format 2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyDateArray(), new Date[]{RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45"), RifeConfig.tools().getDefaultInputDateFormat().parse("2006-07-08 11:05")}));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyIntArray", new String[]{"$438", "$98455", "$711"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyIntArray(), new int[]{438, 98455, 711}));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyByteArray", new String[]{"2,700%", "7,800%"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyByteArray(), new byte[]{27, 78}));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyDoubleArray", new String[]{"80,756.6287", "3,214.75", "85,796.6237"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyDoubleArray(), new double[]{80756.6287d, 3214.75d, 85796.6237d}));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyFloatArray", new String[]{"435,557", "589,5"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyFloatArray(), new float[]{435.557f, 589.5f}));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyLongArray", new String[]{"122875 €", "8526780 €", "3826589 €"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyLongArray(), new long[]{122875, 8526780, 3826589}));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyShortArray", new String[]{"¤3285", "¤58"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyShortArray(), new short[]{3285, 58}));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyIntegerObjectArray", new String[]{"$438", "$7865", "$475"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyIntegerObjectArray(), new Integer[]{438, 7865, 475}));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyByteObjectArray", new String[]{"2,700%", "7,800%"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyByteObjectArray(), new Byte[]{(byte) 27, (byte) 78}));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyDoubleObjectArray", new String[]{"80,756.6287", "5,876.14", "3,268.57"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyDoubleObjectArray(), new Double[]{80756.6287d, 5876.14d, 3268.57d}));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyFloatObjectArray", new String[]{"435,557", "7865,66"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyFloatObjectArray(), new Float[]{435.557f, 7865.66f}));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyLongObjectArray", new String[]{"122875 €", "5687621 €", "66578 €"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyLongObjectArray(), new Long[]{122875L, 5687621L, 66578L}));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyShortObjectArray", new String[]{"¤3285", "¤6588"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyShortObjectArray(), new Short[]{(short) 3285, (short) 6588}));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyBigDecimalArray", new String[]{"97687687998978673545669789,0000000000001", "34353"}, null, bean_properties, bean, new BeanImpl3());
+        assertTrue(Arrays.equals(bean.getPropertyBigDecimalArray(), new BigDecimal[]{new BigDecimal("976876879989786735456697890000000000001E-13"), new BigDecimal("3.4353E4")}));
+    }
 
     @Test
     public void testPropertyNamesIllegal() {

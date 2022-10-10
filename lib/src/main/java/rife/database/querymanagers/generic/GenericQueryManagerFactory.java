@@ -12,9 +12,13 @@ import rife.database.exceptions.UnsupportedJdbcDriverException;
 import rife.database.querymanagers.generic.exceptions.MissingDefaultConstructorException;
 import rife.tools.ClassUtils;
 import rife.tools.StringUtils;
+import rife.validation.Constrained;
+import rife.validation.ConstrainedProperty;
+import rife.validation.ConstrainedUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 
 public class GenericQueryManagerFactory {
     private final static String GENERIC_DRIVER = "generic";
@@ -45,20 +49,16 @@ public class GenericQueryManagerFactory {
         String primary_key = null;
 
         boolean has_identifier = false;
-        // TODO
-//		Constrained constrained_bean = ConstrainedUtils.getConstrainedInstance(beanClass);
-//		if (constrained_bean != null)
-//		{
-//			for (ConstrainedProperty property : (Collection<ConstrainedProperty>)constrained_bean.getConstrainedProperties())
-//			{
-//				if (property.isIdentifier())
-//				{
-//					primary_key = property.getPropertyName();
-//					has_identifier = true;
-//					break;
-//				}
-//			}
-//		}
+        Constrained constrained_bean = ConstrainedUtils.getConstrainedInstance(beanClass);
+        if (constrained_bean != null) {
+            for (ConstrainedProperty property : (Collection<ConstrainedProperty>) constrained_bean.getConstrainedProperties()) {
+                if (property.isIdentifier()) {
+                    primary_key = property.getPropertyName();
+                    has_identifier = true;
+                    break;
+                }
+            }
+        }
 
         if (null == primary_key) {
             primary_key = "id";

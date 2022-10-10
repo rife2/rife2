@@ -14,6 +14,8 @@ import rife.database.types.SqlNull;
 import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.tools.StringUtils;
+import rife.validation.Constrained;
+import rife.validation.ConstrainedUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -245,15 +247,13 @@ public class Update extends AbstractWhereQuery<Update> implements Cloneable {
     throws DbQueryException {
         if (null == bean) throw new IllegalArgumentException("bean can't be null.");
 
-//		Constrained			constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+        Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
         Map<String, String> property_values = QueryHelper.getBeanPropertyValues(bean, includedFields, excludedFields, getDatasource());
 
         for (String property_name : property_values.keySet()) {
-            // TODO
-//			if (!ConstrainedUtils.saveConstrainedProperty(constrained, property_name, null))
-//			{
-//				continue;
-//			}
+            if (!ConstrainedUtils.saveConstrainedProperty(constrained, property_name, null)) {
+                continue;
+            }
 
             _field(property_name, property_values.get(property_name));
         }
@@ -272,15 +272,13 @@ public class Update extends AbstractWhereQuery<Update> implements Cloneable {
 
         clearGenerated();
 
-//		Constrained	constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
+        Constrained constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
         Set<String> property_names = QueryHelper.getBeanPropertyNames(beanClass, excludedFields);
 
         for (String property_name : property_names) {
-            // TODO
-//			if (!ConstrainedUtils.saveConstrainedProperty(constrained, property_name, null))
-//			{
-//				continue;
-//			}
+            if (!ConstrainedUtils.saveConstrainedProperty(constrained, property_name, null)) {
+                continue;
+            }
 
             addFieldParameter(property_name);
             _field(property_name, "?");

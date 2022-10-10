@@ -27,6 +27,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -2358,117 +2359,120 @@ public class TestDbQueryManager {
         }
     }
 
-    // TODO
-//    @ParameterizedTest
-//    @ArgumentsSource(TestDatasources.class)
-//    public void testExecuteFetchFirstBean(Datasource datasource) {
-//        DbQueryManager manager = new DbQueryManager(datasource);
-//        try {
-//            CreateTable create_query = new CreateTable(datasource);
-//            create_query.table("tbltest").columns(BeanImplConstrained.class);
-//            manager.executeUpdate(create_query);
-//
-//            Insert insert_query = new Insert(datasource);
-//            insert_query.into("tbltest").fields(BeanImplConstrained.getPopulatedBean());
-//            assertEquals(1, manager.executeUpdate(insert_query));
-//
-//            Select select_query = new Select(datasource);
-//            select_query.from("tbltest");
-//
-//            BeanImplConstrained bean = null;
-//
-//            bean = manager.executeFetchFirstBean(select_query, BeanImplConstrained.class);
-//            assertNotNull(bean);
-//
-//            BeanImplConstrained bean_populated = BeanImplConstrained.getPopulatedBean();
-//            assertEquals(bean.getPropertyString(), bean_populated.getPropertyString());
-//            assertEquals(bean.getPropertyStringbuffer().toString(), bean_populated.getPropertyStringbuffer().toString());
-//            // don't compare milliseconds since each db stores it differently
-//            assertEquals((bean.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
-//            assertEquals((bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
-//            assertEquals((bean.getPropertyTimestamp().getTime() / 1000) * 1000, (bean_populated.getPropertyTimestamp().getTime() / 1000) * 1000);
-//            assertEquals(bean.getPropertySqlDate().toString(), bean_populated.getPropertySqlDate().toString());
-//            assertEquals(bean.getPropertyTime().toString(), bean_populated.getPropertyTime().toString());
-//            assertEquals(bean.isPropertyBoolean(), bean_populated.isPropertyBoolean());
-//            assertEquals(bean.getPropertyChar(), bean_populated.getPropertyChar());
-//            assertFalse(bean.getPropertyByte() == bean_populated.getPropertyByte()); // byte is not saved
-//            assertEquals(bean.getPropertyDouble(), bean_populated.getPropertyDouble(), 0.001);
-//            assertEquals(bean.getPropertyFloat(), bean_populated.getPropertyFloat(), 0.001);
-//            assertEquals(bean.getPropertyDoubleObject().doubleValue(), bean_populated.getPropertyDoubleObject().doubleValue(), 0.01);
-//            assertEquals(bean.getPropertyFloatObject().floatValue(), bean_populated.getPropertyFloatObject().floatValue(), 0.01);
-//            assertEquals(bean.getPropertyInt(), bean_populated.getPropertyInt());
-//            assertFalse(bean.getPropertyLong() == bean_populated.getPropertyLong()); // long is not persistent
-//            assertEquals(bean.getPropertyShort(), bean_populated.getPropertyShort());
-//            assertEquals(bean.getPropertyBigDecimal(), bean_populated.getPropertyBigDecimal());
-//
-//            select_query
-//                .whereParameter("propertyString", "=");
-//
-//            bean = manager.executeFetchFirstBean(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler() {
-//                public void setParameters(DbPreparedStatement statement) {
-//                    statement
-//                        .setString("propertyString", "someotherstring");
-//                }
-//            });
-//            assertNotNull(bean);
-//            assertEquals(bean.getPropertyString(), bean_populated.getPropertyString());
-//            assertEquals(bean.getPropertyStringbuffer().toString(), bean_populated.getPropertyStringbuffer().toString());
-//            assertEquals((bean.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
-//            assertEquals((bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
-//            assertEquals((bean.getPropertyTimestamp().getTime() / 1000) * 1000, (bean_populated.getPropertyTimestamp().getTime() / 1000) * 1000);
-//            assertEquals(bean.getPropertySqlDate().toString(), bean_populated.getPropertySqlDate().toString());
-//            assertEquals(bean.getPropertyTime().toString(), bean_populated.getPropertyTime().toString());
-//            assertEquals(bean.isPropertyBoolean(), bean_populated.isPropertyBoolean());
-//            assertEquals(bean.getPropertyChar(), bean_populated.getPropertyChar());
-//            assertFalse(bean.getPropertyByte() == bean_populated.getPropertyByte()); // byte is not saved
-//            assertEquals(bean.getPropertyDouble(), bean_populated.getPropertyDouble(), 0.001);
-//            assertEquals(bean.getPropertyFloat(), bean_populated.getPropertyFloat(), 0.001);
-//            assertEquals(bean.getPropertyDoubleObject().doubleValue(), bean_populated.getPropertyDoubleObject().doubleValue(), 0.01);
-//            assertEquals(bean.getPropertyFloatObject().floatValue(), bean_populated.getPropertyFloatObject().floatValue(), 0.01);
-//            assertEquals(bean.getPropertyInt(), bean_populated.getPropertyInt());
-//            assertFalse(bean.getPropertyLong() == bean_populated.getPropertyLong()); // long is not persistent
-//            assertEquals(bean.getPropertyShort(), bean_populated.getPropertyShort());
-//            assertEquals(bean.getPropertyBigDecimal(), bean_populated.getPropertyBigDecimal());
-//
-//            bean = manager.executeFetchFirstBean(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler() {
-//                public void setParameters(DbPreparedStatement statement) {
-//                    statement
-//                        .setString("propertyString", "not present");
-//                }
-//            });
-//            assertNull(bean);
-//        } catch (DatabaseException e) {
-//            fail(ExceptionUtils.getExceptionStackTrace(e));
-//        }
-//    }
-//
-//    @ParameterizedTest
-//    @ArgumentsSource(TestDatasources.class)
-//    public void testExecuteFetchFirstBeanConcludeError(Datasource datasource) {
-//        DbQueryManager manager = new DbQueryManager(datasource);
-//        try {
-//            CreateTable create_query = new CreateTable(datasource);
-//            create_query.table("tbltest").columns(BeanImplConstrained.class);
-//            manager.executeUpdate(create_query);
-//
-//            Select select_query = new Select(datasource);
-//            select_query.from("tbltest");
-//
-//            try {
-//                manager.executeFetchFirstBean(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler() {
-//                    public Object concludeResults(DbResultSet resultSet)
-//                    throws SQLException {
-//                        return resultSet.getString("unknown");
-//                    }
-//                });
-//                fail();
-//            } catch (DatabaseException e) {
-//                assertTrue(true);
-//            }
-//        } catch (DatabaseException e) {
-//            fail(ExceptionUtils.getExceptionStackTrace(e));
-//        }
-//    }
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    public void testExecuteFetchFirstBean(Datasource datasource) {
+        DbQueryManager manager = new DbQueryManager(datasource);
+        try {
+            CreateTable create_query = new CreateTable(datasource);
+            create_query.table("tbltest").columns(BeanImplConstrained.class);
+            manager.executeUpdate(create_query);
+
+            Insert insert_query = new Insert(datasource);
+            insert_query.into("tbltest").fields(BeanImplConstrained.getPopulatedBean());
+            assertEquals(1, manager.executeUpdate(insert_query));
+
+            Select select_query = new Select(datasource);
+            select_query.from("tbltest");
+
+            BeanImplConstrained bean = null;
+
+            bean = manager.executeFetchFirstBean(select_query, BeanImplConstrained.class);
+            assertNotNull(bean);
+
+            BeanImplConstrained bean_populated = BeanImplConstrained.getPopulatedBean();
+            assertEquals(bean.getPropertyString(), bean_populated.getPropertyString());
+            assertEquals(bean.getPropertyStringbuffer().toString(), bean_populated.getPropertyStringbuffer().toString());
+            // don't compare milliseconds since each db stores it differently
+            assertEquals((bean.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
+            assertEquals((bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
+            assertEquals((bean.getPropertyTimestamp().getTime() / 1000) * 1000, (bean_populated.getPropertyTimestamp().getTime() / 1000) * 1000);
+            assertEquals(bean.getPropertySqlDate().toString(), bean_populated.getPropertySqlDate().toString());
+            assertEquals(bean.getPropertyTime().toString(), bean_populated.getPropertyTime().toString());
+            assertEquals(bean.isPropertyBoolean(), bean_populated.isPropertyBoolean());
+            assertEquals(bean.getPropertyChar(), bean_populated.getPropertyChar());
+            assertFalse(bean.getPropertyByte() == bean_populated.getPropertyByte()); // byte is not saved
+            assertEquals(bean.getPropertyDouble(), bean_populated.getPropertyDouble(), 0.001);
+            assertEquals(bean.getPropertyFloat(), bean_populated.getPropertyFloat(), 0.001);
+            assertEquals(bean.getPropertyDoubleObject().doubleValue(), bean_populated.getPropertyDoubleObject().doubleValue(), 0.01);
+            assertEquals(bean.getPropertyFloatObject().floatValue(), bean_populated.getPropertyFloatObject().floatValue(), 0.01);
+            assertEquals(bean.getPropertyInt(), bean_populated.getPropertyInt());
+            assertFalse(bean.getPropertyLong() == bean_populated.getPropertyLong()); // long is not persistent
+            assertEquals(bean.getPropertyShort(), bean_populated.getPropertyShort());
+            assertEquals(bean.getPropertyBigDecimal(), bean_populated.getPropertyBigDecimal());
+
+            select_query
+                .whereParameter("propertyString", "=");
+
+            bean = manager.executeFetchFirstBean(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler() {
+                public void setParameters(DbPreparedStatement statement) {
+                    statement
+                        .setString("propertyString", "someotherstring");
+                }
+            });
+            assertNotNull(bean);
+            assertEquals(bean.getPropertyString(), bean_populated.getPropertyString());
+            assertEquals(bean.getPropertyStringbuffer().toString(), bean_populated.getPropertyStringbuffer().toString());
+            assertEquals((bean.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
+            assertEquals((bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
+            assertEquals((bean.getPropertyTimestamp().getTime() / 1000) * 1000, (bean_populated.getPropertyTimestamp().getTime() / 1000) * 1000);
+            assertEquals(bean.getPropertySqlDate().toString(), bean_populated.getPropertySqlDate().toString());
+            assertEquals(bean.getPropertyTime().toString(), bean_populated.getPropertyTime().toString());
+            assertEquals(bean.isPropertyBoolean(), bean_populated.isPropertyBoolean());
+            assertEquals(bean.getPropertyChar(), bean_populated.getPropertyChar());
+            assertFalse(bean.getPropertyByte() == bean_populated.getPropertyByte()); // byte is not saved
+            assertEquals(bean.getPropertyDouble(), bean_populated.getPropertyDouble(), 0.001);
+            assertEquals(bean.getPropertyFloat(), bean_populated.getPropertyFloat(), 0.001);
+            assertEquals(bean.getPropertyDoubleObject().doubleValue(), bean_populated.getPropertyDoubleObject().doubleValue(), 0.01);
+            assertEquals(bean.getPropertyFloatObject().floatValue(), bean_populated.getPropertyFloatObject().floatValue(), 0.01);
+            assertEquals(bean.getPropertyInt(), bean_populated.getPropertyInt());
+            assertFalse(bean.getPropertyLong() == bean_populated.getPropertyLong()); // long is not persistent
+            assertEquals(bean.getPropertyShort(), bean_populated.getPropertyShort());
+            assertEquals(bean.getPropertyBigDecimal(), bean_populated.getPropertyBigDecimal());
+
+            bean = manager.executeFetchFirstBean(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler() {
+                public void setParameters(DbPreparedStatement statement) {
+                    statement
+                        .setString("propertyString", "not present");
+                }
+            });
+            assertNull(bean);
+        } catch (DatabaseException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        } finally {
+            tearDown(datasource);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    public void testExecuteFetchFirstBeanConcludeError(Datasource datasource) {
+        DbQueryManager manager = new DbQueryManager(datasource);
+        try {
+            CreateTable create_query = new CreateTable(datasource);
+            create_query.table("tbltest").columns(BeanImplConstrained.class);
+            manager.executeUpdate(create_query);
+
+            Select select_query = new Select(datasource);
+            select_query.from("tbltest");
+
+            try {
+                manager.executeFetchFirstBean(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler() {
+                    public Object concludeResults(DbResultSet resultSet)
+                    throws SQLException {
+                        return resultSet.getString("unknown");
+                    }
+                });
+                fail();
+            } catch (DatabaseException e) {
+                assertTrue(true);
+            }
+        } catch (DatabaseException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        } finally {
+            tearDown(datasource);
+        }
+    }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
@@ -2596,139 +2600,142 @@ public class TestDbQueryManager {
         }
     }
 
-    // TODO
-//    @ParameterizedTest
-//    @ArgumentsSource(TestDatasources.class)
-//    public void testExecuteFetchAllBeans(Datasource datasource) {
-//        DbQueryManager manager = new DbQueryManager(datasource);
-//        try {
-//            CreateTable create_query = new CreateTable(datasource);
-//            create_query.table("tbltest").columns(BeanImplConstrained.class);
-//            manager.executeUpdate(create_query);
-//
-//            BeanImplConstrained bean = null;
-//            Insert insert_query = new Insert(datasource);
-//            bean = BeanImplConstrained.getPopulatedBean();
-//            bean.setPropertyString("someotherstring");
-//            bean.setPropertyStringbuffer(new StringBuffer("someotherstringbuf1"));
-//            insert_query.into("tbltest").fields(bean);
-//            assertEquals(1, manager.executeUpdate(insert_query));
-//            insert_query.clear();
-//            bean = BeanImplConstrained.getPopulatedBean();
-//            bean.setPropertyString("one");
-//            bean.setPropertyStringbuffer(new StringBuffer("someotherstringbuf2"));
-//            insert_query.into("tbltest").fields(bean);
-//            assertEquals(1, manager.executeUpdate(insert_query));
-//            insert_query.clear();
-//            bean = BeanImplConstrained.getPopulatedBean();
-//            bean.setPropertyString("tw''o");
-//            bean.setPropertyStringbuffer(new StringBuffer("someotherstringbuf3"));
-//            insert_query.into("tbltest").fields(bean);
-//            assertEquals(1, manager.executeUpdate(insert_query));
-//
-//            Select select_query = new Select(datasource);
-//            select_query.from("tbltest");
-//
-//            BeanImplConstrained bean_populated = BeanImplConstrained.getPopulatedBean();
-//            List<BeanImplConstrained> beans = null;
-//
-//            beans = manager.executeFetchAllBeans(select_query, BeanImplConstrained.class);
-//            assertNotNull(beans);
-//            assertEquals(beans.size(), 3);
-//            for (BeanImplConstrained bean2 : beans) {
-//                assertTrue(bean2.getPropertyString().equals("someotherstring") || bean2.getPropertyString().equals("one") || bean2.getPropertyString().equals("tw''o"));
-//                assertTrue(bean2.getPropertyStringbuffer().toString().equals("someotherstringbuf1") || bean2.getPropertyStringbuffer().toString().equals("someotherstringbuf2") || bean2.getPropertyStringbuffer().toString().equals("someotherstringbuf3"));
-//                // don't compare milliseconds since each db stores it differently
-//                assertEquals((bean2.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
-//                assertEquals((bean2.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
-//                assertEquals((bean2.getPropertyTimestamp().getTime() / 1000) * 1000, (bean_populated.getPropertyTimestamp().getTime() / 1000) * 1000);
-//                assertEquals(bean2.getPropertySqlDate().toString(), bean_populated.getPropertySqlDate().toString());
-//                assertEquals(bean2.getPropertyTime().toString(), bean_populated.getPropertyTime().toString());
-//                assertEquals(bean2.isPropertyBoolean(), bean_populated.isPropertyBoolean());
-//                assertEquals(bean2.getPropertyChar(), bean_populated.getPropertyChar());
-//                assertFalse(bean2.getPropertyByte() == bean_populated.getPropertyByte()); // byte is not saved
-//                assertEquals(bean2.getPropertyDouble(), bean_populated.getPropertyDouble(), 0.001);
-//                assertEquals(bean2.getPropertyFloat(), bean_populated.getPropertyFloat(), 0.001);
-//                assertEquals(bean2.getPropertyDoubleObject().doubleValue(), bean_populated.getPropertyDoubleObject().doubleValue(), 0.01);
-//                assertEquals(bean2.getPropertyFloatObject().floatValue(), bean_populated.getPropertyFloatObject().floatValue(), 0.01);
-//                assertEquals(bean2.getPropertyInt(), bean_populated.getPropertyInt());
-//                assertFalse(bean2.getPropertyLong() == bean_populated.getPropertyLong()); // long is not persistent
-//                assertEquals(bean2.getPropertyShort(), bean_populated.getPropertyShort());
-//                assertEquals(bean2.getPropertyBigDecimal(), bean_populated.getPropertyBigDecimal());
-//            }
-//
-//            select_query
-//                .whereParameter("propertyString", "=");
-//
-//            beans = manager.executeFetchAllBeans(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler() {
-//                public void setParameters(DbPreparedStatement statement) {
-//                    statement
-//                        .setString("propertyString", "one");
-//                }
-//            });
-//            assertNotNull(beans);
-//            assertEquals(beans.size(), 1);
-//            BeanImplConstrained bean2 = beans.get(0);
-//            assertEquals(bean2.getPropertyString(), "one");
-//            assertEquals(bean2.getPropertyStringbuffer().toString(), "someotherstringbuf2");
-//            // don't compare milliseconds since each db stores it differently
-//            assertEquals((bean2.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
-//            assertEquals((bean2.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
-//            assertEquals((bean2.getPropertyTimestamp().getTime() / 1000) * 1000, (bean_populated.getPropertyTimestamp().getTime() / 1000) * 1000);
-//            assertEquals(bean2.getPropertySqlDate().toString(), bean_populated.getPropertySqlDate().toString());
-//            assertEquals(bean2.getPropertyTime().toString(), bean_populated.getPropertyTime().toString());
-//            assertEquals(bean2.isPropertyBoolean(), bean_populated.isPropertyBoolean());
-//            assertEquals(bean2.getPropertyChar(), bean_populated.getPropertyChar());
-//            assertFalse(bean2.getPropertyByte() == bean_populated.getPropertyByte()); // byte is not saved
-//            assertEquals(bean2.getPropertyDouble(), bean_populated.getPropertyDouble(), 0.001);
-//            assertEquals(bean2.getPropertyFloat(), bean_populated.getPropertyFloat(), 0.001);
-//            assertEquals(bean2.getPropertyDoubleObject().doubleValue(), bean_populated.getPropertyDoubleObject().doubleValue(), 0.01);
-//            assertEquals(bean2.getPropertyFloatObject().floatValue(), bean_populated.getPropertyFloatObject().floatValue(), 0.01);
-//            assertEquals(bean2.getPropertyInt(), bean_populated.getPropertyInt());
-//            assertFalse(bean2.getPropertyLong() == bean_populated.getPropertyLong()); // long is not persistent
-//            assertEquals(bean2.getPropertyShort(), bean_populated.getPropertyShort());
-//            assertEquals(bean2.getPropertyBigDecimal(), bean_populated.getPropertyBigDecimal());
-//
-//            beans = manager.executeFetchAllBeans(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler() {
-//                public void setParameters(DbPreparedStatement statement) {
-//                    statement
-//                        .setString("propertyString", "not present");
-//                }
-//            });
-//            assertNotNull(beans);
-//            assertEquals(beans.size(), 0);
-//        } catch (DatabaseException e) {
-//            fail(ExceptionUtils.getExceptionStackTrace(e));
-//        }
-//    }
-//
-//    @ParameterizedTest
-//    @ArgumentsSource(TestDatasources.class)
-//    public void testExecuteFetchAllBeansConcludeError(Datasource datasource) {
-//        DbQueryManager manager = new DbQueryManager(datasource);
-//        try {
-//            CreateTable create_query = new CreateTable(datasource);
-//            create_query.table("tbltest").columns(BeanImplConstrained.class);
-//            manager.executeUpdate(create_query);
-//
-//            Select select_query = new Select(datasource);
-//            select_query.from("tbltest");
-//
-//            try {
-//                manager.executeFetchAllBeans(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler() {
-//                    public Object concludeResults(DbResultSet resultSet)
-//                    throws SQLException {
-//                        return resultSet.getString("unknown");
-//                    }
-//                });
-//                fail();
-//            } catch (DatabaseException e) {
-//                assertTrue(true);
-//            }
-//        } catch (DatabaseException e) {
-//            fail(ExceptionUtils.getExceptionStackTrace(e));
-//        }
-//    }
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    public void testExecuteFetchAllBeans(Datasource datasource) {
+        DbQueryManager manager = new DbQueryManager(datasource);
+        try {
+            CreateTable create_query = new CreateTable(datasource);
+            create_query.table("tbltest").columns(BeanImplConstrained.class);
+            manager.executeUpdate(create_query);
+
+            BeanImplConstrained bean = null;
+            Insert insert_query = new Insert(datasource);
+            bean = BeanImplConstrained.getPopulatedBean();
+            bean.setPropertyString("someotherstring");
+            bean.setPropertyStringbuffer(new StringBuffer("someotherstringbuf1"));
+            insert_query.into("tbltest").fields(bean);
+            assertEquals(1, manager.executeUpdate(insert_query));
+            insert_query.clear();
+            bean = BeanImplConstrained.getPopulatedBean();
+            bean.setPropertyString("one");
+            bean.setPropertyStringbuffer(new StringBuffer("someotherstringbuf2"));
+            insert_query.into("tbltest").fields(bean);
+            assertEquals(1, manager.executeUpdate(insert_query));
+            insert_query.clear();
+            bean = BeanImplConstrained.getPopulatedBean();
+            bean.setPropertyString("tw''o");
+            bean.setPropertyStringbuffer(new StringBuffer("someotherstringbuf3"));
+            insert_query.into("tbltest").fields(bean);
+            assertEquals(1, manager.executeUpdate(insert_query));
+
+            Select select_query = new Select(datasource);
+            select_query.from("tbltest");
+
+            BeanImplConstrained bean_populated = BeanImplConstrained.getPopulatedBean();
+            List<BeanImplConstrained> beans = null;
+
+            beans = manager.executeFetchAllBeans(select_query, BeanImplConstrained.class);
+            assertNotNull(beans);
+            assertEquals(beans.size(), 3);
+            for (BeanImplConstrained bean2 : beans) {
+                assertTrue(bean2.getPropertyString().equals("someotherstring") || bean2.getPropertyString().equals("one") || bean2.getPropertyString().equals("tw''o"));
+                assertTrue(bean2.getPropertyStringbuffer().toString().equals("someotherstringbuf1") || bean2.getPropertyStringbuffer().toString().equals("someotherstringbuf2") || bean2.getPropertyStringbuffer().toString().equals("someotherstringbuf3"));
+                // don't compare milliseconds since each db stores it differently
+                assertEquals((bean2.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
+                assertEquals((bean2.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
+                assertEquals((bean2.getPropertyTimestamp().getTime() / 1000) * 1000, (bean_populated.getPropertyTimestamp().getTime() / 1000) * 1000);
+                assertEquals(bean2.getPropertySqlDate().toString(), bean_populated.getPropertySqlDate().toString());
+                assertEquals(bean2.getPropertyTime().toString(), bean_populated.getPropertyTime().toString());
+                assertEquals(bean2.isPropertyBoolean(), bean_populated.isPropertyBoolean());
+                assertEquals(bean2.getPropertyChar(), bean_populated.getPropertyChar());
+                assertFalse(bean2.getPropertyByte() == bean_populated.getPropertyByte()); // byte is not saved
+                assertEquals(bean2.getPropertyDouble(), bean_populated.getPropertyDouble(), 0.001);
+                assertEquals(bean2.getPropertyFloat(), bean_populated.getPropertyFloat(), 0.001);
+                assertEquals(bean2.getPropertyDoubleObject(), bean_populated.getPropertyDoubleObject(), 0.01);
+                assertEquals(bean2.getPropertyFloatObject(), bean_populated.getPropertyFloatObject(), 0.01);
+                assertEquals(bean2.getPropertyInt(), bean_populated.getPropertyInt());
+                assertNotEquals(bean2.getPropertyLong(), bean_populated.getPropertyLong()); // long is not persistent
+                assertEquals(bean2.getPropertyShort(), bean_populated.getPropertyShort());
+                assertEquals(bean2.getPropertyBigDecimal(), bean_populated.getPropertyBigDecimal());
+            }
+
+            select_query
+                .whereParameter("propertyString", "=");
+
+            beans = manager.executeFetchAllBeans(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler() {
+                public void setParameters(DbPreparedStatement statement) {
+                    statement
+                        .setString("propertyString", "one");
+                }
+            });
+            assertNotNull(beans);
+            assertEquals(beans.size(), 1);
+            BeanImplConstrained bean2 = beans.get(0);
+            assertEquals(bean2.getPropertyString(), "one");
+            assertEquals(bean2.getPropertyStringbuffer().toString(), "someotherstringbuf2");
+            // don't compare milliseconds since each db stores it differently
+            assertEquals((bean2.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
+            assertEquals((bean2.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
+            assertEquals((bean2.getPropertyTimestamp().getTime() / 1000) * 1000, (bean_populated.getPropertyTimestamp().getTime() / 1000) * 1000);
+            assertEquals(bean2.getPropertySqlDate().toString(), bean_populated.getPropertySqlDate().toString());
+            assertEquals(bean2.getPropertyTime().toString(), bean_populated.getPropertyTime().toString());
+            assertEquals(bean2.isPropertyBoolean(), bean_populated.isPropertyBoolean());
+            assertEquals(bean2.getPropertyChar(), bean_populated.getPropertyChar());
+            assertFalse(bean2.getPropertyByte() == bean_populated.getPropertyByte()); // byte is not saved
+            assertEquals(bean2.getPropertyDouble(), bean_populated.getPropertyDouble(), 0.001);
+            assertEquals(bean2.getPropertyFloat(), bean_populated.getPropertyFloat(), 0.001);
+            assertEquals(bean2.getPropertyDoubleObject(), bean_populated.getPropertyDoubleObject(), 0.01);
+            assertEquals(bean2.getPropertyFloatObject(), bean_populated.getPropertyFloatObject(), 0.01);
+            assertEquals(bean2.getPropertyInt(), bean_populated.getPropertyInt());
+            assertNotEquals(bean2.getPropertyLong(), bean_populated.getPropertyLong()); // long is not persistent
+            assertEquals(bean2.getPropertyShort(), bean_populated.getPropertyShort());
+            assertEquals(bean2.getPropertyBigDecimal(), bean_populated.getPropertyBigDecimal());
+
+            beans = manager.executeFetchAllBeans(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler() {
+                public void setParameters(DbPreparedStatement statement) {
+                    statement
+                        .setString("propertyString", "not present");
+                }
+            });
+            assertNotNull(beans);
+            assertEquals(beans.size(), 0);
+        } catch (DatabaseException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        } finally {
+            tearDown(datasource);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    public void testExecuteFetchAllBeansConcludeError(Datasource datasource) {
+        DbQueryManager manager = new DbQueryManager(datasource);
+        try {
+            CreateTable create_query = new CreateTable(datasource);
+            create_query.table("tbltest").columns(BeanImplConstrained.class);
+            manager.executeUpdate(create_query);
+
+            Select select_query = new Select(datasource);
+            select_query.from("tbltest");
+
+            try {
+                manager.executeFetchAllBeans(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler() {
+                    public Object concludeResults(DbResultSet resultSet)
+                    throws SQLException {
+                        return resultSet.getString("unknown");
+                    }
+                });
+                fail();
+            } catch (DatabaseException e) {
+                assertTrue(true);
+            }
+        } catch (DatabaseException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        } finally {
+            tearDown(datasource);
+        }
+    }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)

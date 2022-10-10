@@ -8,11 +8,12 @@ import rife.config.RifeConfig;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.scheduler.exceptions.SchedulerException;
 import rife.tools.Localization;
+import rife.validation.*;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class Task /*extends Validation*/ implements Cloneable {
+public class Task extends Validation implements Cloneable {
     private int id_ = -1;
     private String type_ = null;
     private long planned_ = 0;
@@ -24,13 +25,11 @@ public class Task /*extends Validation*/ implements Cloneable {
     public Task() {
     }
 
-    // TODO
-//	protected void activateValidation()
-//	{
-//		addRule(new ValidationRuleNotNull("type"));
-//		addRule(new ValidationRuleNotEmpty("planned"));
-//		addRule(new InvalidPlanned());
-//	}
+    protected void activateValidation() {
+        addRule(new ValidationRuleNotNull("type"));
+        addRule(new ValidationRuleNotEmpty("planned"));
+        addRule(new InvalidPlanned());
+    }
 
     public void setTaskManager(TaskManager taskManager) {
         taskManager_ = taskManager;
@@ -178,45 +177,36 @@ public class Task /*extends Validation*/ implements Cloneable {
         return false;
     }
 
-    // TODO
-//	public class InvalidPlanned implements ValidationRule
-//	{
-//		public boolean validate()
-//		{
-//			if (0 == mPlanned)
-//			{
-//				return true;
-//			}
-//
-//			Calendar current_calendar = Calendar.getInstance(RifeConfig.Tools.getDefaultTimeZone(), Localization.getLocale());
-//			current_calendar.set(Calendar.SECOND, 0);
-//			current_calendar.set(Calendar.MILLISECOND, 0);
-//			return mPlanned >= current_calendar.getTimeInMillis();
-//		}
-//
-//		public String getSubject()
-//		{
-//			return "planned";
-//		}
-//
-//		public ValidationError getError()
-//		{
-//			return new ValidationError.INVALID(getSubject());
-//		}
-//
-//		public Object getBean()
-//		{
-//			return null;
-//		}
-//
-//		public <T extends ValidationRule> T setBean(Object bean)
-//		{
-//			return (T)this;
-//		}
-//
-//		public Object clone()
-//		{
-//			return this;
-//		}
-//	}
+    public class InvalidPlanned implements ValidationRule {
+        public boolean validate() {
+            if (0 == planned_) {
+                return true;
+            }
+
+            Calendar current_calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            current_calendar.set(Calendar.SECOND, 0);
+            current_calendar.set(Calendar.MILLISECOND, 0);
+            return planned_ >= current_calendar.getTimeInMillis();
+        }
+
+        public String getSubject() {
+            return "planned";
+        }
+
+        public ValidationError getError() {
+            return new ValidationError.INVALID(getSubject());
+        }
+
+        public Object getBean() {
+            return null;
+        }
+
+        public <T extends ValidationRule> T setBean(Object bean) {
+            return (T) this;
+        }
+
+        public Object clone() {
+            return this;
+        }
+    }
 }

@@ -136,7 +136,7 @@ public class Site {
             return null;
         }
 
-        // TODO
+        // TODO : path info mapping
 //        // if a path info was provided, check the path info mappings
 //        // for the first that matches
 //        if (pathinfo != null)
@@ -219,7 +219,7 @@ public class Site {
 
         // no target element, get the fallback element
         if (null == route) {
-            // TODO
+            // TODO : fallback
 //            route = searchFallback(elementUrl);
 //            if (null == route) {
                 return null;

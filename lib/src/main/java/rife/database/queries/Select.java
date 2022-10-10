@@ -16,6 +16,9 @@ import rife.datastructures.EnumClass;
 import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.tools.StringUtils;
+import rife.validation.Constrained;
+import rife.validation.ConstrainedBean;
+import rife.validation.ConstrainedUtils;
 
 /**
  * Object representation of a SQL "SELECT" query.
@@ -45,8 +48,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
 
     private Capabilities capabilities_ = null;
 
-    // TODO
-//    private Class mConstrainedClass = null;
+    private Class constrainedClass_ = null;
 
     public static final JoinCondition NATURAL = new JoinCondition("NATURAL");
     public static final JoinCondition ON = new JoinCondition("ON");
@@ -68,8 +70,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
 
         if (null == datasource) throw new IllegalArgumentException("datasource can't be null.");
 
-        // TODO
-//        mConstrainedClass = constrainedClass;
+        constrainedClass_ = constrainedClass;
 
         clear();
     }
@@ -194,31 +195,26 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
 
     public String getSql()
     throws DbQueryException {
-        // TODO
-//		Constrained constrained = ConstrainedUtils.getConstrainedInstance(mConstrainedClass);
-//
-//		// handle constrained beans meta-data that needs to be handled after all the
-//		// rest
-//		if (constrained != null)
-//		{
-//			ConstrainedBean constrained_bean = constrained.getConstrainedBean();
-//			if (constrained_bean != null)
-//			{
-//				// handle default ordering if no order statements have been
-//				// defined yet
-//				if (constrained_bean.hasDefaultOrdering() &&
-//					0 == mOrderBy.size())
-//				{
-//					Iterator<ConstrainedBean.Order> ordering_it = constrained_bean.getDefaultOrdering().iterator();
-//					ConstrainedBean.Order order = null;
-//					while (ordering_it.hasNext())
-//					{
-//						order = ordering_it.next();
-//						orderBy(order.getPropertyName(), OrderByDirection.getDirection(order.getDirection().toString()));
-//					}
-//				}
-//			}
-//		}
+        Constrained constrained = ConstrainedUtils.getConstrainedInstance(constrainedClass_);
+
+        // handle constrained beans meta-data that needs to be handled after all the
+        // rest
+        if (constrained != null) {
+            ConstrainedBean constrained_bean = constrained.getConstrainedBean();
+            if (constrained_bean != null) {
+                // handle default ordering if no order statements have been
+                // defined yet
+                if (constrained_bean.hasDefaultOrdering() &&
+                    0 == orderBy_.size()) {
+                    Iterator<ConstrainedBean.Order> ordering_it = constrained_bean.getDefaultOrdering().iterator();
+                    ConstrainedBean.Order order = null;
+                    while (ordering_it.hasNext()) {
+                        order = ordering_it.next();
+                        orderBy(order.getPropertyName(), OrderByDirection.getDirection(order.getDirection().toString()));
+                    }
+                }
+            }
+        }
 
         if (null == from_ &&
             0 == fields_.size()) {
@@ -455,15 +451,13 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
 
         Set<String> property_names = QueryHelper.getBeanPropertyNames(beanClass, excludedFields);
 
-        // TODO
-//		Constrained constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
+        Constrained constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
 
         // handle the properties
         for (String property_name : property_names) {
-//			if (!ConstrainedUtils.persistConstrainedProperty(constrained, property_name, null))
-//			{
-//				continue;
-//			}
+            if (!ConstrainedUtils.persistConstrainedProperty(constrained, property_name, null)) {
+                continue;
+            }
 
             if (null == table) {
                 field(property_name);

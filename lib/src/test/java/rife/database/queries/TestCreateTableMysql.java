@@ -6,6 +6,7 @@ package rife.database.queries;
 
 import org.junit.jupiter.api.Test;
 import rife.database.BeanImpl;
+import rife.database.BeanImplConstrained;
 import rife.database.exceptions.ColumnsRequiredException;
 import rife.database.exceptions.TableNameRequiredException;
 
@@ -191,15 +192,14 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    // TODO
-//    @Test
-//    public void testColumnsBeanConstrainedMysql() {
-//        CreateTable query = new CreateTable(mMysql);
-//        query.table("tablename")
-//            .columns(BeanImplConstrained.class);
-//        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(17,6), propertyBoolean BIT, propertyBooleanObject BIT, propertyByte TINYINT, propertyByteObject TINYINT NOT NULL, propertyCalendar DATETIME, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATETIME, propertyDouble DOUBLE, propertyDoubleObject DOUBLE, propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INT DEFAULT 23, propertyIntegerObject INT, propertyLongObject BIGINT, propertyShort SMALLINT, propertySqlDate DATE, propertyString VARCHAR(30) DEFAULT 'one' NOT NULL, propertyStringbuffer VARCHAR(20) NOT NULL, propertyTime TIME, propertyTimestamp DATETIME, PRIMARY KEY (propertyString), UNIQUE (propertyStringbuffer, propertyByteObject), UNIQUE (propertyStringbuffer), CHECK (propertyByteObject != -1), CHECK (propertyInt != 0), CHECK (propertyLongObject IS NULL OR propertyLongObject IN (89,1221,66875,878)), CHECK (propertyString IS NULL OR propertyString IN ('one','tw''''o','someotherstring')), CHECK (propertyStringbuffer != ''), CHECK (propertyStringbuffer != 'some''blurp'))");
-//        execute(query);
-//    }
+    @Test
+    public void testColumnsBeanConstrainedMysql() {
+        CreateTable query = new CreateTable(MYSQL);
+        query.table("tablename")
+            .columns(BeanImplConstrained.class);
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(17,6), propertyBoolean BIT, propertyBooleanObject BIT, propertyByte TINYINT, propertyByteObject TINYINT NOT NULL, propertyCalendar DATETIME, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATETIME, propertyDouble DOUBLE, propertyDoubleObject DOUBLE, propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INT DEFAULT 23, propertyIntegerObject INT, propertyLongObject BIGINT, propertyShort SMALLINT, propertySqlDate DATE, propertyString VARCHAR(30) DEFAULT 'one' NOT NULL, propertyStringbuffer VARCHAR(20) NOT NULL, propertyTime TIME, propertyTimestamp DATETIME, PRIMARY KEY (propertyString), UNIQUE (propertyStringbuffer, propertyByteObject), UNIQUE (propertyStringbuffer), CHECK (propertyByteObject != -1), CHECK (propertyInt != 0), CHECK (propertyLongObject IS NULL OR propertyLongObject IN (89,1221,66875,878)), CHECK (propertyString IS NULL OR propertyString IN ('one','tw''''o','someotherstring')), CHECK (propertyStringbuffer != ''), CHECK (propertyStringbuffer != 'some''blurp'))");
+        execute(query);
+    }
 
     @Test
     public void testNullableMysql() {
@@ -536,10 +536,10 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    // TODO
+    // TODO : test fails
 //    @Test
 //    public void testCloneMysql() {
-//        CreateTable query = new CreateTable(mMysql);
+//        CreateTable query = new CreateTable(MYSQL);
 //        query.table("tablename")
 //            .columns(BeanImpl.class)
 //            .precision("propertyBigDecimal", 19, 9)

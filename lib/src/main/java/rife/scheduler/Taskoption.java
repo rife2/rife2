@@ -4,7 +4,11 @@
  */
 package rife.scheduler;
 
-public class Taskoption /*extends Validation*/ implements Cloneable {
+import rife.validation.Validation;
+import rife.validation.ValidationRuleNotNull;
+import rife.validation.ValidationRuleRange;
+
+public class Taskoption extends Validation implements Cloneable {
     private int mTaskId = -1;
     private String mName = null;
     private String mValue = null;
@@ -12,13 +16,11 @@ public class Taskoption /*extends Validation*/ implements Cloneable {
     public Taskoption() {
     }
 
-    // TODO
-//	protected void activateValidation()
-//	{
-//		addRule(new ValidationRuleRange("taskId", new Integer(0), null));
-//		addRule(new ValidationRuleNotNull("name"));
-//		addRule(new ValidationRuleNotNull("value"));
-//	}
+    protected void activateValidation() {
+        addRule(new ValidationRuleRange("taskId", 0, null));
+        addRule(new ValidationRuleNotNull("name"));
+        addRule(new ValidationRuleNotNull("value"));
+    }
 
     public void setTaskId(int taskid) {
         mTaskId = taskid;

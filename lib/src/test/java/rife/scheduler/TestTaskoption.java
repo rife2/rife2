@@ -6,6 +6,9 @@ package rife.scheduler;
 
 import org.junit.jupiter.api.Test;
 import rife.tools.ExceptionUtils;
+import rife.validation.ValidationError;
+
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -55,21 +58,21 @@ public class TestTaskoption {
         }
     }
 
-    // TODO
-//    public void testTaskoptionValidation() {
-//        Taskoption taskoption = new Taskoption();
-//        assertEquals(false, taskoption.validate());
-//        assertEquals(3, taskoption.countValidationErrors());
-//        ValidationError error = null;
-//        Iterator<ValidationError> it = taskoption.getValidationErrors().iterator();
-//        error = it.next();
-//        assertEquals(error.getIdentifier(), "INVALID");
-//        assertEquals(error.getSubject(), "taskId");
-//        error = it.next();
-//        assertEquals(error.getIdentifier(), "MANDATORY");
-//        assertEquals(error.getSubject(), "name");
-//        error = it.next();
-//        assertEquals(error.getIdentifier(), "MANDATORY");
-//        assertEquals(error.getSubject(), "value");
-//    }
+    @Test
+    public void testTaskoptionValidation() {
+        Taskoption taskoption = new Taskoption();
+        assertEquals(false, taskoption.validate());
+        assertEquals(3, taskoption.countValidationErrors());
+        ValidationError error = null;
+        Iterator<ValidationError> it = taskoption.getValidationErrors().iterator();
+        error = it.next();
+        assertEquals(error.getIdentifier(), "INVALID");
+        assertEquals(error.getSubject(), "taskId");
+        error = it.next();
+        assertEquals(error.getIdentifier(), "MANDATORY");
+        assertEquals(error.getSubject(), "name");
+        error = it.next();
+        assertEquals(error.getIdentifier(), "MANDATORY");
+        assertEquals(error.getSubject(), "value");
+    }
 }

@@ -9,6 +9,7 @@ import rife.database.Datasource;
 import rife.database.DbRowProcessor;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.CreateTable;
+import rife.validation.Validated;
 
 import java.util.List;
 
@@ -48,11 +49,10 @@ public class GenericQueryManagerDelegate<T> implements GenericQueryManager<T> {
         return delegate_.getIdentifierValue(bean);
     }
 
-    // TODO
-//	public void validate(Validated validated)
-//	{
-//		mDelegate.validate(validated);
-//	}
+	public void validate(Validated validated)
+	{
+		delegate_.validate(validated);
+	}
 
     public String getTable() {
         return delegate_.getTable();

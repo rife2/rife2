@@ -7,6 +7,8 @@ package rife.database.queries;
 import rife.database.Datasource;
 import rife.database.exceptions.DbQueryException;
 import rife.tools.StringUtils;
+import rife.validation.Constrained;
+import rife.validation.ConstrainedUtils;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -302,17 +304,15 @@ public abstract class AbstractWhereQuery<QueryType extends AbstractWhereQuery> e
     throws DbQueryException {
         if (null == bean) throw new IllegalArgumentException("bean can't be null.");
 
-        // TODO
-//		Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+        Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
 
         ArrayList<String> where_parts = new ArrayList<String>();
         Map<String, String> property_values = QueryHelper.getBeanPropertyValues(bean, includedFields, excludedFields, getDatasource());
 
         for (String property_name : property_values.keySet()) {
-//			if (!ConstrainedUtils.persistConstrainedProperty(constrained, property_name, null))
-//			{
-//				continue;
-//			}
+            if (!ConstrainedUtils.persistConstrainedProperty(constrained, property_name, null)) {
+                continue;
+            }
 
             where_parts.add(property_name + " = " + property_values.get(property_name));
         }
@@ -333,16 +333,14 @@ public abstract class AbstractWhereQuery<QueryType extends AbstractWhereQuery> e
 
         clearGenerated();
 
-        // TODO
-//		Constrained constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
+        Constrained constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
 
         Set<String> property_names = QueryHelper.getBeanPropertyNames(beanClass, excludedFields);
 
         for (String property_name : property_names) {
-//			if (!ConstrainedUtils.persistConstrainedProperty(constrained, property_name, null))
-//			{
-//				continue;
-//			}
+            if (!ConstrainedUtils.persistConstrainedProperty(constrained, property_name, null)) {
+                continue;
+            }
 
             if (null == getWhereParameters()) {
                 whereParameter(property_name, "=");

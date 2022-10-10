@@ -12,6 +12,8 @@ import rife.database.queries.Query;
 import rife.tools.ArrayUtils;
 import rife.tools.BeanUtils;
 import rife.tools.exceptions.BeanUtilsException;
+import rife.validation.Constrained;
+import rife.validation.ConstrainedUtils;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -427,13 +429,13 @@ public class DbPreparedStatement extends DbStatement {
             Class property_type = null;
             Object property_value = null;
             int parameter_counter = 1;
-//			Constrained			constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+			Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
             for (String parameter_name : parameterNames_) {
                 if (property_types.containsKey(parameter_name)) {
                     property_type = property_types.get(parameter_name);
                     property_value = property_values.get(parameter_name);
 
-                    getConnection().getDatasource().getSqlConversion().setTypedParameter(this, parameter_counter, property_type, parameter_name, property_value/*, constrained*/);
+                    getConnection().getDatasource().getSqlConversion().setTypedParameter(this, parameter_counter, property_type, parameter_name, property_value, constrained);
                 }
 
                 parameter_counter++;

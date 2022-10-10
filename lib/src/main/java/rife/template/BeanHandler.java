@@ -80,7 +80,6 @@ public interface BeanHandler {
     public void removeBean(Template template, Object bean, String prefix)
     throws TemplateException;
 
-    // TODO
 //    /**
 //     * Returns a form builder which will be used to {@linkplain
 //     * rife.engine.Element#generateForm(Template, Object) generate

@@ -9,6 +9,7 @@ import java.sql.Blob;
 
 import org.junit.jupiter.api.Test;
 import rife.database.BeanImpl;
+import rife.database.BeanImplConstrained;
 import rife.database.exceptions.ColumnsRequiredException;
 import rife.database.exceptions.TableNameRequiredException;
 
@@ -189,15 +190,14 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    // TODO
-//    @Test
-//    public void testColumnsBeanConstrainedH2() {
-//        CreateTable query = new CreateTable(mH2);
-//        query.table("tablename")
-//            .columns(BeanImplConstrained.class);
-//        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(17,6), propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByte SMALLINT, propertyByteObject SMALLINT NOT NULL, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INTEGER DEFAULT 23, propertyIntegerObject INTEGER, propertyLongObject BIGINT, propertyShort SMALLINT, propertySqlDate DATE, propertyString VARCHAR(30) DEFAULT 'one' NOT NULL, propertyStringbuffer VARCHAR(20) NOT NULL, propertyTime TIME, propertyTimestamp TIMESTAMP, PRIMARY KEY (propertyString), UNIQUE (propertyStringbuffer, propertyByteObject), UNIQUE (propertyStringbuffer), CHECK (propertyByteObject != -1), CHECK (propertyInt != 0), CHECK (propertyLongObject IS NULL OR propertyLongObject IN (89,1221,66875,878)), CHECK (propertyString IS NULL OR propertyString IN ('one','tw''''o','someotherstring')), CHECK (propertyStringbuffer != ''), CHECK (propertyStringbuffer != 'some''blurp'))");
-//        execute(query);
-//    }
+    @Test
+    public void testColumnsBeanConstrainedH2() {
+        CreateTable query = new CreateTable(H2);
+        query.table("tablename")
+            .columns(BeanImplConstrained.class);
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(17,6), propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByte SMALLINT, propertyByteObject SMALLINT NOT NULL, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INTEGER DEFAULT 23, propertyIntegerObject INTEGER, propertyLongObject BIGINT, propertyShort SMALLINT, propertySqlDate DATE, propertyString VARCHAR(30) DEFAULT 'one' NOT NULL, propertyStringbuffer VARCHAR(20) NOT NULL, propertyTime TIME, propertyTimestamp TIMESTAMP, PRIMARY KEY (propertyString), UNIQUE (propertyStringbuffer, propertyByteObject), UNIQUE (propertyStringbuffer), CHECK (propertyByteObject != -1), CHECK (propertyInt != 0), CHECK (propertyLongObject IS NULL OR propertyLongObject IN (89,1221,66875,878)), CHECK (propertyString IS NULL OR propertyString IN ('one','tw''''o','someotherstring')), CHECK (propertyStringbuffer != ''), CHECK (propertyStringbuffer != 'some''blurp'))");
+        execute(query);
+    }
 
     @Test
     public void testNullableH2() {

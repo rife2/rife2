@@ -8,6 +8,7 @@ package rife.database.querymanagers.generic;
 import rife.database.DbRowProcessor;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.CreateTable;
+import rife.validation.ValidationContext;
 //import rife.site.ValidationContext;
 import java.util.List;
 
@@ -25,8 +26,7 @@ import java.util.List;
  * @see rife.database.querymanagers.generic.Callbacks
  * @since 1.0
  */
-public interface GenericQueryManager<BeanType> // extends ValidationContext
-{
+public interface GenericQueryManager<BeanType> extends ValidationContext {
     /**
      * Get the handled class
      *

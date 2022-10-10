@@ -202,7 +202,7 @@ public class Validation<B extends ConstrainedBean, P extends ConstrainedProperty
         if (constrainedProperty.isFormatted()) {
             rules.add(new ValidationRuleFormat(constrainedProperty.getPropertyName(), constrainedProperty.getFormat()));
         }
-        // TODO
+        // TODO : cmf
 //        if (constrainedProperty.hasMimeType()) {
 //            PropertyValidationRule rule = constrainedProperty.getMimeType().getValidationRule(constrainedProperty);
 //            if (rule != null) {

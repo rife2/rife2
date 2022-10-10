@@ -11,6 +11,8 @@ package rife.tools;
  * @since 1.0
  */
 
+import rife.validation.ConstrainedProperty;
+
 import java.util.logging.Logger;
 
 public class ArrayUtils {
@@ -80,7 +82,7 @@ public class ArrayUtils {
      * <code>null</code> if <code>source</code> is <code>null</code>.
      * @since 1.0
      */
-    public static String[] createStringArray(Object source, Object dummy) { // TODO, ConstrainedProperty constrainedProperty) {
+    public static String[] createStringArray(Object source, ConstrainedProperty constrainedProperty) {
         if (null == source) {
             return null;
         }
@@ -90,9 +92,9 @@ public class ArrayUtils {
         ArrayType type = getArrayType(source);
 
         if (type == ArrayType.NO_ARRAY) {
-            result = new String[]{BeanUtils.formatPropertyValue(source, null)}; // TODO, constrainedProperty)};
+            result = new String[]{BeanUtils.formatPropertyValue(source, constrainedProperty)};
         } else if (type == ArrayType.BYTE_ARRAY) {
-            // explicitely don't convert byte arrays since they are often used
+            // explicitly don't convert byte arrays since they are often used
             // to store binary data and converting them to a string array
             // would result in an OutOfMemoryError exception easily
             result = null;
@@ -253,7 +255,7 @@ public class ArrayUtils {
         boolean converted_boolean = false;
         for (Object element : array) {
             if (element != null) {
-                converted_boolean = Boolean.valueOf(String.valueOf(element)).booleanValue();
+                converted_boolean = Boolean.parseBoolean(String.valueOf(element));
                 new_array = join(new_array, converted_boolean);
             }
         }

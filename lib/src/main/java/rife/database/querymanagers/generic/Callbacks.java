@@ -28,18 +28,17 @@ package rife.database.querymanagers.generic;
  * @since 1.0
  */
 public interface Callbacks<BeanType> {
-    // TODO
-//    /**
-//     * Is called before {@link
-//     * rife.database.querymanagers.generic.GenericQueryManager#validate(Validated)}.
-//     *
-//     * @param object the bean instance that will be validated
-//     * @return <code>true</code> if the execution should continue as normal;
-//     * or
-//     * <p><code>false</code> if the execution should be interrupted
-//     * @since 1.3
-//     */
-//    public boolean beforeValidate(BeanType object);
+    /**
+     * Is called before {@link
+     * rife.database.querymanagers.generic.GenericQueryManager#validate(Validated)}.
+     *
+     * @param object the bean instance that will be validated
+     * @return <code>true</code> if the execution should continue as normal;
+     * or
+     * <p><code>false</code> if the execution should be interrupted
+     * @since 1.3
+     */
+    boolean beforeValidate(BeanType object);
 
     /**
      * Is called before {@link
@@ -54,7 +53,7 @@ public interface Callbacks<BeanType> {
      * <p><code>false</code> if the execution should be interrupted
      * @since 1.0
      */
-    public boolean beforeInsert(BeanType object);
+    boolean beforeInsert(BeanType object);
 
     /**
      * Is called before {@link
@@ -66,7 +65,7 @@ public interface Callbacks<BeanType> {
      * <p><code>false</code> if the execution should be interrupted
      * @since 1.0
      */
-    public boolean beforeDelete(int objectId);
+    boolean beforeDelete(int objectId);
 
     /**
      * Is called before {@link
@@ -78,7 +77,7 @@ public interface Callbacks<BeanType> {
      * <p><code>false</code> if the execution should be interrupted
      * @since 1.0
      */
-    public boolean beforeSave(BeanType object);
+    boolean beforeSave(BeanType object);
 
     /**
      * Is called before {@link
@@ -93,20 +92,19 @@ public interface Callbacks<BeanType> {
      * <p><code>false</code> if the execution should be interrupted
      * @since 1.0
      */
-    public boolean beforeUpdate(BeanType object);
+    boolean beforeUpdate(BeanType object);
 
-    // TODO
-//    /**
-//     * Is called after {@link
-//     * rife.database.querymanagers.generic.GenericQueryManager#validate(Validated)}.
-//     *
-//     * @param object the bean instance that was validated
-//     * @return <code>true</code> if the execution should continue as normal;
-//     * or
-//     * <p><code>false</code> if the execution should be interrupted
-//     * @since 1.3
-//     */
-//    public boolean afterValidate(BeanType object);
+    /**
+     * Is called after {@link
+     * rife.database.querymanagers.generic.GenericQueryManager#validate(Validated)}.
+     *
+     * @param object the bean instance that was validated
+     * @return <code>true</code> if the execution should continue as normal;
+     * or
+     * <p><code>false</code> if the execution should be interrupted
+     * @since 1.3
+     */
+    boolean afterValidate(BeanType object);
 
     /**
      * Is called after {@link
@@ -123,7 +121,7 @@ public interface Callbacks<BeanType> {
      * <p><code>false</code> if the execution should be interrupted
      * @since 1.0
      */
-    public boolean afterInsert(BeanType object, boolean success);
+    boolean afterInsert(BeanType object, boolean success);
 
     /**
      * Is called after {@link
@@ -137,7 +135,7 @@ public interface Callbacks<BeanType> {
      * <p><code>false</code> if the execution should be interrupted
      * @since 1.0
      */
-    public boolean afterDelete(int objectId, boolean success);
+    boolean afterDelete(int objectId, boolean success);
 
     /**
      * Is called after {@link
@@ -151,7 +149,7 @@ public interface Callbacks<BeanType> {
      * <p><code>false</code> if the execution should be interrupted
      * @since 1.0
      */
-    public boolean afterSave(BeanType object, boolean success);
+    boolean afterSave(BeanType object, boolean success);
 
     /**
      * Is called after {@link
@@ -168,7 +166,7 @@ public interface Callbacks<BeanType> {
      * <p><code>false</code> if the execution should be interrupted
      * @since 1.0
      */
-    public boolean afterUpdate(BeanType object, boolean success);
+    boolean afterUpdate(BeanType object, boolean success);
 
     /**
      * Is called after {@link
@@ -186,5 +184,5 @@ public interface Callbacks<BeanType> {
      * <p><code>false</code> if the execution should be interrupted
      * @since 1.0
      */
-    public boolean afterRestore(BeanType object);
+    boolean afterRestore(BeanType object);
 }

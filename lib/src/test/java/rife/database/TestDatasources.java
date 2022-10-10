@@ -13,8 +13,8 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 public class TestDatasources implements ArgumentsProvider {
-    // TODO
     public static Datasource PGSQL = new Datasource("org.postgresql.Driver", "jdbc:postgresql://localhost:5432/unittests", "unittests", "password", 5);
+    // TODO : oracle database
     public static Datasource ORACLE = null;
     public static Datasource HSQLDB = new Datasource("org.hsqldb.jdbcDriver", "jdbc:hsqldb:.", "sa", "", 5);
     public static Datasource H2 = new Datasource("org.h2.Driver", "jdbc:h2:./embedded_dbs/h2/unittests", "sa", "", 5);

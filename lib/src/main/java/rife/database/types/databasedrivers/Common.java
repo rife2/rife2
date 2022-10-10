@@ -4,6 +4,7 @@
  */
 package rife.database.types.databasedrivers;
 
+import java.io.StringReader;
 import java.sql.*;
 
 import rife.database.DbPreparedStatement;
@@ -12,6 +13,8 @@ import rife.database.types.SqlConversion;
 import rife.tools.FileUtils;
 import rife.tools.JavaSpecificationUtils;
 import rife.tools.StringUtils;
+import rife.validation.Constrained;
+import rife.validation.ConstrainedProperty;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -158,7 +161,7 @@ public abstract class Common implements SqlConversion {
         }
     }
 
-    public void setTypedParameter(DbPreparedStatement statement, int parameterIndex, Class targetType, String name, Object value/*, Constrained constrained*/)
+    public void setTypedParameter(DbPreparedStatement statement, int parameterIndex, Class targetType, String name, Object value, Constrained constrained)
     throws DatabaseException {
         if (null == statement) throw new IllegalArgumentException("statement can't be null.");
         if (parameterIndex < 1) throw new IllegalArgumentException("parameterIndex must be at least 1.");
@@ -169,23 +172,16 @@ public abstract class Common implements SqlConversion {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.VARCHAR);
             } else {
-                // TODO
-//				if (constrained != null)
-//				{
-//					ConstrainedProperty property = constrained.getConstrainedProperty(name);
-//					if (property != null &&
-//						!property.hasMaxLength())
-//					{
-//						String string_value = value.toString();
-//						statement.setCharacterStream(parameterIndex, new StringReader(string_value), string_value.length());
-//					}
-//					else
-//					{
-//						statement.setString(parameterIndex, value.toString());
-//					}
-//				}
-//				else
-                {
+                if (constrained != null) {
+                    ConstrainedProperty property = constrained.getConstrainedProperty(name);
+                    if (property != null &&
+                        !property.hasMaxLength()) {
+                        String string_value = value.toString();
+                        statement.setCharacterStream(parameterIndex, new StringReader(string_value), string_value.length());
+                    } else {
+                        statement.setString(parameterIndex, value.toString());
+                    }
+                } else {
                     statement.setString(parameterIndex, value.toString());
                 }
             }

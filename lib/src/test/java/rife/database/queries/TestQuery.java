@@ -8,8 +8,8 @@ import rife.database.Datasource;
 import rife.database.TestDatasources;
 
 public class TestQuery {
-    // TODO
     protected static Datasource PGSQL = TestDatasources.PGSQL;
+    // TODO : oracle database
     protected static Datasource ORACLE = null;
     protected static Datasource HSQLDB = TestDatasources.HSQLDB;
     protected static Datasource H2 = TestDatasources.H2;

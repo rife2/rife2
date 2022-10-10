@@ -1060,8 +1060,8 @@ public class TestParser {
         }
     }
 
+    // TODO : template parsing error reporting
     /*
-    TODO
 	@Test public void testErrorTerminatingUnopenedValue()
 	{
 		try

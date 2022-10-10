@@ -440,22 +440,23 @@ public class Parser implements Cloneable {
             if (name == null) {
                 name = ctx.CTagName();
             }
-            final String included_template_name = name.getText();
+
+            String included_template_name = name.getText();
             // obtain the parser that will be used to get the included content
             Parser include_parser = Parser.this;
-            // TODO
+
             // check if the included template references another template type
-//            int doublecolon_index = included_template_name.indexOf(':');
-//            if (doublecolon_index != -1)
-//            {
-//                String template_type = included_template_name.substring(0, doublecolon_index);
-//                if (!template_type.equals(mTemplateFactory.toString()))
-//                {
-//                    TemplateFactory factory = TemplateFactory.getFactory(template_type);
-//                    include_parser = factory.getParser();
-//                    included_template_name = included_template_name.substring(doublecolon_index + 1);
-//                }
-//            }
+            int doublecolon_index = included_template_name.indexOf(':');
+            if (doublecolon_index != -1)
+            {
+                String template_type = included_template_name.substring(0, doublecolon_index);
+                if (!template_type.equals(templateFactory_.toString()))
+                {
+                    TemplateFactory factory = TemplateFactory.getFactory(template_type);
+                    include_parser = factory.getParser();
+                    included_template_name = included_template_name.substring(doublecolon_index + 1);
+                }
+            }
 
             URL included_template_resource = include_parser.resolve(included_template_name);
 

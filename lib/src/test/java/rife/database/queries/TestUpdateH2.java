@@ -5,6 +5,7 @@
 package rife.database.queries;
 
 import rife.database.BeanImpl;
+import rife.database.BeanImplConstrained;
 import rife.database.DbPreparedStatement;
 import rife.database.DbPreparedStatementHandler;
 import rife.database.exceptions.FieldsRequiredException;
@@ -531,15 +532,14 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    // TODO
-//    public void testFieldsBeanConstrainedH2() {
-//        Update query = new Update(mH2);
-//        query.table("tablename")
-//            .where("propertyInt = 545")
-//            .fields(BeanImplConstrained.getPopulatedBean());
-//        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = 219038743.392874, propertyBoolean = true, propertyBooleanObject = false, propertyByteObject = 34, propertyCalendar = '2002-06-18 15:26:14.764', propertyChar = 'v', propertyCharacterObject = 'r', propertyDate = '2002-06-18 15:26:14.764', propertyDouble = 53348.34, propertyDoubleObject = 143298.692, propertyFloat = 98634.2, propertyFloatObject = 8734.7, propertyInt = 545, propertyIntegerObject = 968, propertyLongObject = 66875, propertyShort = 43, propertySqlDate = '2002-06-18', propertyString = 'someotherstring', propertyStringbuffer = 'someotherstringbuff', propertyTime = '15:26:14', propertyTimestamp = '2002-06-18 15:26:14.764' WHERE propertyInt = 545");
-//        assertTrue(execute(query));
-//    }
+    public void testFieldsBeanConstrainedH2() {
+        Update query = new Update(H2);
+        query.table("tablename")
+            .where("propertyInt = 545")
+            .fields(BeanImplConstrained.getPopulatedBean());
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = 219038743.392874, propertyBoolean = true, propertyBooleanObject = false, propertyByteObject = 34, propertyCalendar = '2002-06-18 15:26:14.764', propertyChar = 'v', propertyCharacterObject = 'r', propertyDate = '2002-06-18 15:26:14.764', propertyDouble = 53348.34, propertyDoubleObject = 143298.692, propertyFloat = 98634.2, propertyFloatObject = 8734.7, propertyInt = 545, propertyIntegerObject = 968, propertyLongObject = 66875, propertyShort = 43, propertySqlDate = '2002-06-18', propertyString = 'someotherstring', propertyStringbuffer = 'someotherstringbuff', propertyTime = '15:26:14', propertyTimestamp = '2002-06-18 15:26:14.764' WHERE propertyInt = 545");
+        assertTrue(execute(query));
+    }
 
     public void testFieldsBeanNullValuesH2() {
         Update query = new Update(H2);
@@ -646,67 +646,66 @@ public class TestUpdateH2 extends TestUpdate {
         }));
     }
 
-    // TODO
-//    public void testFieldsParametersBeanConstrainedH2() {
-//        Update query = new Update(mH2);
-//        query.table("tablename")
-//            .fieldsParameters(BeanImplConstrained.class);
-//        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = ?, propertyBoolean = ?, propertyBooleanObject = ?, propertyByteObject = ?, propertyCalendar = ?, propertyChar = ?, propertyCharacterObject = ?, propertyDate = ?, propertyDouble = ?, propertyDoubleObject = ?, propertyFloat = ?, propertyFloatObject = ?, propertyInt = ?, propertyIntegerObject = ?, propertyLongObject = ?, propertyShort = ?, propertySqlDate = ?, propertyString = ?, propertyStringbuffer = ?, propertyTime = ?, propertyTimestamp = ?");
-//
-//        assertEquals(query.getParameters().getOrderedNames().size(), 21);
-//        assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
-//        assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
-//        assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(3), "propertyByteObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(4), "propertyCalendar");
-//        assertEquals(query.getParameters().getOrderedNames().get(5), "propertyChar");
-//        assertEquals(query.getParameters().getOrderedNames().get(6), "propertyCharacterObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(7), "propertyDate");
-//        assertEquals(query.getParameters().getOrderedNames().get(8), "propertyDouble");
-//        assertEquals(query.getParameters().getOrderedNames().get(9), "propertyDoubleObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyFloat");
-//        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyFloatObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyInt");
-//        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyIntegerObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyLongObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyShort");
-//        assertEquals(query.getParameters().getOrderedNames().get(16), "propertySqlDate");
-//        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyString");
-//        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyStringbuffer");
-//        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyTime");
-//        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyTimestamp");
-//        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"});
-//
-//        assertTrue(execute(query, new DbPreparedStatementHandler() {
-//            public void setParameters(DbPreparedStatement statement) {
-//                Calendar cal = Calendar.getInstance();
-//                cal.set(2002, 7, 19, 12, 17, 52);
-//                cal.set(Calendar.MILLISECOND, 462);
-//                statement
-//                    .setBigDecimal(1, new BigDecimal("98347.876438637"))
-//                    .setBoolean(2, false)
-//                    .setBoolean(3, true)
-//                    .setByte(4, (byte) 72)
-//                    .setTimestamp(5, new java.sql.Timestamp(cal.getTime().getTime()))
-//                    .setString(6, "M")
-//                    .setString(7, "p")
-//                    .setTimestamp(8, new java.sql.Timestamp(cal.getTime().getTime()))
-//                    .setDouble(9, 12.3d)
-//                    .setDouble(10, 68.7d)
-//                    .setFloat(11, 13.4f)
-//                    .setFloat(12, 42.1f)
-//                    .setInt(13, 92)
-//                    .setInt(14, 34)
-//                    .setLong(15, 92)
-//                    .setShort(16, (short) 7)
-//                    .setDate(17, new java.sql.Date(cal.getTime().getTime()))
-//                    .setString(18, "string'value")
-//                    .setString(19, "string'value2")
-//                    .setTime(20, new Time(cal.getTime().getTime()))
-//                    .setTimestamp(21, new Timestamp(cal.getTime().getTime()));
-//            }
-//        }));
-//    }
+    public void testFieldsParametersBeanConstrainedH2() {
+        Update query = new Update(H2);
+        query.table("tablename")
+            .fieldsParameters(BeanImplConstrained.class);
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = ?, propertyBoolean = ?, propertyBooleanObject = ?, propertyByteObject = ?, propertyCalendar = ?, propertyChar = ?, propertyCharacterObject = ?, propertyDate = ?, propertyDouble = ?, propertyDoubleObject = ?, propertyFloat = ?, propertyFloatObject = ?, propertyInt = ?, propertyIntegerObject = ?, propertyLongObject = ?, propertyShort = ?, propertySqlDate = ?, propertyString = ?, propertyStringbuffer = ?, propertyTime = ?, propertyTimestamp = ?");
+
+        assertEquals(query.getParameters().getOrderedNames().size(), 21);
+        assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
+        assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
+        assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
+        assertEquals(query.getParameters().getOrderedNames().get(3), "propertyByteObject");
+        assertEquals(query.getParameters().getOrderedNames().get(4), "propertyCalendar");
+        assertEquals(query.getParameters().getOrderedNames().get(5), "propertyChar");
+        assertEquals(query.getParameters().getOrderedNames().get(6), "propertyCharacterObject");
+        assertEquals(query.getParameters().getOrderedNames().get(7), "propertyDate");
+        assertEquals(query.getParameters().getOrderedNames().get(8), "propertyDouble");
+        assertEquals(query.getParameters().getOrderedNames().get(9), "propertyDoubleObject");
+        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyFloat");
+        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyFloatObject");
+        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyInt");
+        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertySqlDate");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyStringbuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyTime");
+        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyTimestamp");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"});
+
+        assertTrue(execute(query, new DbPreparedStatementHandler() {
+            public void setParameters(DbPreparedStatement statement) {
+                Calendar cal = Calendar.getInstance();
+                cal.set(2002, 7, 19, 12, 17, 52);
+                cal.set(Calendar.MILLISECOND, 462);
+                statement
+                    .setBigDecimal(1, new BigDecimal("98347.876438637"))
+                    .setBoolean(2, false)
+                    .setBoolean(3, true)
+                    .setByte(4, (byte) 72)
+                    .setTimestamp(5, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setString(6, "M")
+                    .setString(7, "p")
+                    .setTimestamp(8, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setDouble(9, 12.3d)
+                    .setDouble(10, 68.7d)
+                    .setFloat(11, 13.4f)
+                    .setFloat(12, 42.1f)
+                    .setInt(13, 92)
+                    .setInt(14, 34)
+                    .setLong(15, 92)
+                    .setShort(16, (short) 7)
+                    .setDate(17, new java.sql.Date(cal.getTime().getTime()))
+                    .setString(18, "string'value")
+                    .setString(19, "string'value2")
+                    .setTime(20, new Time(cal.getTime().getTime()))
+                    .setTimestamp(21, new Timestamp(cal.getTime().getTime()));
+            }
+        }));
+    }
 
     public void testFieldsParametersBeanExcludedH2() {
         Update query = new Update(H2);
@@ -772,16 +771,15 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    // TODO
-//    public void testWhereBeanConstrainedH2() {
-//        Update query = new Update(mH2);
-//        query.table("tablename")
-//            .field("propertyBoolean", true)
-//            .field("propertyByte", (byte) 16)
-//            .where(BeanImplConstrained.getPopulatedBean());
-//        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = true AND propertyBooleanObject = false AND propertyByte = 89 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.764' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.764' AND propertyDouble = 53348.34 AND propertyDoubleObject = 143298.692 AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLongObject = 66875 AND propertyShort = 43 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14' AND propertyTimestamp = '2002-06-18 15:26:14.764'");
-//        assertTrue(execute(query));
-//    }
+    public void testWhereBeanConstrainedH2() {
+        Update query = new Update(H2);
+        query.table("tablename")
+            .field("propertyBoolean", true)
+            .field("propertyByte", (byte) 16)
+            .where(BeanImplConstrained.getPopulatedBean());
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = true AND propertyBooleanObject = false AND propertyByte = 89 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.764' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.764' AND propertyDouble = 53348.34 AND propertyDoubleObject = 143298.692 AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLongObject = 66875 AND propertyShort = 43 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14' AND propertyTimestamp = '2002-06-18 15:26:14.764'");
+        assertTrue(execute(query));
+    }
 
     public void testWhereBeanNullValuesH2() {
         Update query = new Update(H2);
@@ -894,71 +892,70 @@ public class TestUpdateH2 extends TestUpdate {
         }));
     }
 
-    // TODO
-//    public void testWhereParametersBeanConstrainedH2() {
-//        Update query = new Update(mH2);
-//        query.table("tablename")
-//            .field("propertyBoolean", true)
-//            .field("propertyByte", (byte) 16)
-//            .whereParameters(BeanImplConstrained.class);
-//        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = ? AND propertyBoolean = ? AND propertyBooleanObject = ? AND propertyByte = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyChar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDouble = ? AND propertyDoubleObject = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInt = ? AND propertyIntegerObject = ? AND propertyLongObject = ? AND propertyShort = ? AND propertySqlDate = ? AND propertyString = ? AND propertyStringbuffer = ? AND propertyTime = ? AND propertyTimestamp = ?");
-//
-//        assertEquals(query.getParameters().getOrderedNames().size(), 22);
-//        assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
-//        assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
-//        assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(3), "propertyByte");
-//        assertEquals(query.getParameters().getOrderedNames().get(4), "propertyByteObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(5), "propertyCalendar");
-//        assertEquals(query.getParameters().getOrderedNames().get(6), "propertyChar");
-//        assertEquals(query.getParameters().getOrderedNames().get(7), "propertyCharacterObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(8), "propertyDate");
-//        assertEquals(query.getParameters().getOrderedNames().get(9), "propertyDouble");
-//        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyDoubleObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyFloat");
-//        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyFloatObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyInt");
-//        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyIntegerObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyLongObject");
-//        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyShort");
-//        assertEquals(query.getParameters().getOrderedNames().get(17), "propertySqlDate");
-//        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyString");
-//        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyStringbuffer");
-//        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyTime");
-//        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyTimestamp");
-//        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"});
-//
-//        assertTrue(execute(query, new DbPreparedStatementHandler() {
-//            public void setParameters(DbPreparedStatement statement) {
-//                Calendar cal = Calendar.getInstance();
-//                cal.set(2002, 5, 18, 15, 26, 14);
-//                cal.set(Calendar.MILLISECOND, 764);
-//                statement
-//                    .setBigDecimal(1, new BigDecimal("219038743.392874"))
-//                    .setBoolean(2, true)
-//                    .setBoolean(3, false)
-//                    .setByte(4, (byte) 89)
-//                    .setByte(5, (byte) 34)
-//                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
-//                    .setString(7, "v")
-//                    .setString(8, "r")
-//                    .setTimestamp(9, new java.sql.Timestamp(cal.getTime().getTime()))
-//                    .setDouble(10, 53348.34d)
-//                    .setDouble(11, 143298.692d)
-//                    .setDouble(12, 98634.2d)
-//                    .setDouble(13, 8734.7d)
-//                    .setInt(14, 545)
-//                    .setInt(15, 968)
-//                    .setLong(16, 66875L)
-//                    .setShort(17, (short) 43)
-//                    .setDate(18, new java.sql.Date(cal.getTime().getTime()))
-//                    .setString(19, "someotherstring")
-//                    .setString(20, "someotherstringbuff")
-//                    .setTime(21, new Time(15, 26, 14))
-//                    .setTimestamp(22, new Timestamp(cal.getTime().getTime()));
-//            }
-//        }));
-//    }
+    public void testWhereParametersBeanConstrainedH2() {
+        Update query = new Update(H2);
+        query.table("tablename")
+            .field("propertyBoolean", true)
+            .field("propertyByte", (byte) 16)
+            .whereParameters(BeanImplConstrained.class);
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = ? AND propertyBoolean = ? AND propertyBooleanObject = ? AND propertyByte = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyChar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDouble = ? AND propertyDoubleObject = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInt = ? AND propertyIntegerObject = ? AND propertyLongObject = ? AND propertyShort = ? AND propertySqlDate = ? AND propertyString = ? AND propertyStringbuffer = ? AND propertyTime = ? AND propertyTimestamp = ?");
+
+        assertEquals(query.getParameters().getOrderedNames().size(), 22);
+        assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
+        assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
+        assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
+        assertEquals(query.getParameters().getOrderedNames().get(3), "propertyByte");
+        assertEquals(query.getParameters().getOrderedNames().get(4), "propertyByteObject");
+        assertEquals(query.getParameters().getOrderedNames().get(5), "propertyCalendar");
+        assertEquals(query.getParameters().getOrderedNames().get(6), "propertyChar");
+        assertEquals(query.getParameters().getOrderedNames().get(7), "propertyCharacterObject");
+        assertEquals(query.getParameters().getOrderedNames().get(8), "propertyDate");
+        assertEquals(query.getParameters().getOrderedNames().get(9), "propertyDouble");
+        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyDoubleObject");
+        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyFloat");
+        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyFloatObject");
+        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyInt");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertySqlDate");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyStringbuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyTime");
+        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyTimestamp");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"});
+
+        assertTrue(execute(query, new DbPreparedStatementHandler() {
+            public void setParameters(DbPreparedStatement statement) {
+                Calendar cal = Calendar.getInstance();
+                cal.set(2002, 5, 18, 15, 26, 14);
+                cal.set(Calendar.MILLISECOND, 764);
+                statement
+                    .setBigDecimal(1, new BigDecimal("219038743.392874"))
+                    .setBoolean(2, true)
+                    .setBoolean(3, false)
+                    .setByte(4, (byte) 89)
+                    .setByte(5, (byte) 34)
+                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setString(7, "v")
+                    .setString(8, "r")
+                    .setTimestamp(9, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setDouble(10, 53348.34d)
+                    .setDouble(11, 143298.692d)
+                    .setDouble(12, 98634.2d)
+                    .setDouble(13, 8734.7d)
+                    .setInt(14, 545)
+                    .setInt(15, 968)
+                    .setLong(16, 66875L)
+                    .setShort(17, (short) 43)
+                    .setDate(18, new java.sql.Date(cal.getTime().getTime()))
+                    .setString(19, "someotherstring")
+                    .setString(20, "someotherstringbuff")
+                    .setTime(21, new Time(15, 26, 14))
+                    .setTimestamp(22, new Timestamp(cal.getTime().getTime()));
+            }
+        }));
+    }
 
     public void testWhereParametersBeanExcludedH2() {
         Update query = new Update(H2);

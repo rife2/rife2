@@ -519,7 +519,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public void setPersistent(boolean persistent) {
-        // TODO
+        // TODO : cmf
 //        if (hasMimeType() && persistent) {
 //            throw new IllegalArgumentException("Can't make a property persistent that has a content mime type assigned to it.");
 //        }
@@ -552,7 +552,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public void setDisplayedRaw(boolean displayedRaw) {
-        // TODO
+        // TODO : cmf
 //        if (hasMimeType() && !displayedRaw) {
 //            throw new IllegalArgumentException("Can't make a property not being displayed raw that has a content mime type assigned to it.");
 //        }
@@ -1432,7 +1432,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
         return Convert.toInt(mConstraints.get(POSITION), -1);
     }
 
-    // TODO
+    // TODO : cmf
 //    /**
 //     * Sets the mime type of the property.
 //     * <p>Setting this constraint will make the {@link
@@ -1603,70 +1603,69 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //        return Convert.toBoolean(mConstraints.get(FRAGMENT), false);
 //    }
 //
-//    /**
-//     * Sets the name of the content data of this property.
-//     * <p>This is only useful when the property also has a mime type
-//     * constraint.
-//     *
-//     * @param name the name
-//     * @return the current <code>ConstrainedProperty</code> instance
-//     * @see #mimeType(MimeType)
-//     * @see #setName(String)
-//     * @see #getName()
-//     * @see #hasName()
-//     * @since 1.0
-//     */
-//    public T name(String name) {
-//        setName(name);
-//
-//        return (T) this;
-//    }
-//
-//    /**
-//     * Sets the name of the content data of this property.
-//     *
-//     * @param name the name
-//     * @see #name(String)
-//     * @see #getName()
-//     * @see #hasName()
-//     * @since 1.0
-//     */
-//    public void setName(String name) {
-//        if (null == name) {
-//            mConstraints.remove(NAME);
-//        } else {
-//            setConstraint(NAME, name);
-//        }
-//    }
-//
-//    /**
-//     * Retrieves the name of this property.
-//     *
-//     * @return <code>null</code> if the content data has no name; or
-//     * <p>the name of the content
-//     * @see #name(String)
-//     * @see #setName(String)
-//     * @see #hasName()
-//     * @since 1.0
-//     */
-//    public String getName() {
-//        return (String) mConstraints.get(NAME);
-//    }
-//
-//    /**
-//     * Indicates whether this property has a name.
-//     *
-//     * @return <code>true</code> if the property has a name; or
-//     * <p><code>false</code> otherwise
-//     * @see #name(String)
-//     * @see #setName(String)
-//     * @see #getName()
-//     * @since 1.0
-//     */
-//    public boolean hasName() {
-//        return mConstraints.containsKey(NAME);
-//    }
-//
+    /**
+     * Sets the name of the content data of this property.
+     * <p>This is only useful when the property also has a mime type
+     * constraint.
+     *
+     * @param name the name
+     * @return the current <code>ConstrainedProperty</code> instance
+     * @see #setName(String)
+     * @see #getName()
+     * @see #hasName()
+     * @since 1.0
+     */
+    public T name(String name) {
+        setName(name);
+
+        return (T) this;
+    }
+
+    /**
+     * Sets the name of the content data of this property.
+     *
+     * @param name the name
+     * @see #name(String)
+     * @see #getName()
+     * @see #hasName()
+     * @since 1.0
+     */
+    public void setName(String name) {
+        if (null == name) {
+            mConstraints.remove(NAME);
+        } else {
+            setConstraint(NAME, name);
+        }
+    }
+
+    /**
+     * Retrieves the name of this property.
+     *
+     * @return <code>null</code> if the content data has no name; or
+     * <p>the name of the content
+     * @see #name(String)
+     * @see #setName(String)
+     * @see #hasName()
+     * @since 1.0
+     */
+    public String getName() {
+        return (String) mConstraints.get(NAME);
+    }
+
+    /**
+     * Indicates whether this property has a name.
+     *
+     * @return <code>true</code> if the property has a name; or
+     * <p><code>false</code> otherwise
+     * @see #name(String)
+     * @see #setName(String)
+     * @see #getName()
+     * @since 1.0
+     */
+    public boolean hasName() {
+        return mConstraints.containsKey(NAME);
+    }
+
 //    /**
 //     * Sets the repository where the content data of this property will be
 //     * stored.

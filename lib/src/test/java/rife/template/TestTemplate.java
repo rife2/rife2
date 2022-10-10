@@ -11,6 +11,7 @@ import rife.template.exceptions.ValueUnknownException;
 import rife.tools.ArrayUtils;
 import rife.tools.ExceptionUtils;
 import rife.tools.StringUtils;
+import rife.validation.ConstrainedProperty;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,8 +42,7 @@ public class TestTemplate {
         }
         assertEquals(template.countValues(), 0);
         assertEquals(template.getAvailableValueIds().length, 0);
-        // TODO
-//        assertEquals(template.getFilteredValues("empty").size(), 0);
+        assertEquals(template.getFilteredValues("empty").size(), 0);
         assertEquals(template.getUnsetValueIds().size(), 0);
     }
 
@@ -691,7 +691,7 @@ public class TestTemplate {
         try {
             template = TemplateFactory.TXT.get("construction_embedded_in");
 
-             template.setValue("member_value1", 1);
+            template.setValue("member_value1", 1);
             template.appendBlock("rows", "row_first");
             template.setValue("member_value1", 2);
             template.appendBlock("rows", "row_second");
@@ -973,7 +973,7 @@ public class TestTemplate {
             template.setBean(bean, "PARAM:");
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_emptyproperty"));
 
-            // TODO
+            // TODO : form builder
 //            bean = new HtmlBeanImpl();
 //            bean.setColors(new String[]{"red", "blue", "yellow"});
 //            bean.setWantsupdates(true);
@@ -991,8 +991,7 @@ public class TestTemplate {
 //            template = TemplateFactory.HTML.get("values_bean_html_in");
 //            template.setBean(bean, "PARAM:");
 //            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content2"));
-
-            // TODO
+//
 //            bean.addConstraint(new ConstrainedProperty("lastname").displayedRaw(true));
 //            template = TemplateFactory.HTML.get("values_bean_html_in");
 //            template.setBean(bean, "PARAM:");
@@ -1002,7 +1001,7 @@ public class TestTemplate {
         }
     }
 
-    // TODO
+    // TODO : form builder
 //    @Test
 //    public void testRemoveBeanValuesHtml() {
 //        try {

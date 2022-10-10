@@ -7,8 +7,11 @@ package rife.scheduler;
 import org.junit.jupiter.api.Test;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.tools.ExceptionUtils;
+import rife.validation.ValidationError;
 
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -77,46 +80,46 @@ public class TestTask {
         }
     }
 
-    // TODO
-//    public void testTaskValidation() {
-//        try {
-//            Task task = new Task();
-//            assertTrue(false == task.validate());
-//            assertTrue(2 == task.countValidationErrors());
-//            ValidationError error = null;
-//            Iterator<ValidationError> it = task.getValidationErrors().iterator();
-//            error = it.next();
-//            assertEquals(error.getIdentifier(), "MANDATORY");
-//            assertEquals(error.getSubject(), "type");
-//            error = it.next();
-//            assertEquals(error.getIdentifier(), "MANDATORY");
-//            assertEquals(error.getSubject(), "planned");
-//
-//            task.setType(TestTasktypes.UPLOAD_GROUPS);
-//            task.setPlanned(System.currentTimeMillis() + 2000);
-//            task.setFrequency("* * * * *");
-//            task.setBusy(false);
-//            task.resetValidation();
-//            assertTrue(true == task.validate());
-//
-//            Calendar cal = Calendar.getInstance();
-//            cal.set(1970, 10, 25);
-//            task.setPlanned(cal.getTime());
-//            task.resetValidation();
-//            assertTrue(false == task.validate());
-//            assertTrue(1 == task.countValidationErrors());
-//            Set<ValidationError> set = task.getValidationErrors();
-//            error = set.iterator().next();
-//            assertEquals(error.getIdentifier(), "INVALID");
-//            assertEquals(error.getSubject(), "planned");
-//            task.setPlanned(System.currentTimeMillis() + 2000);
-//
-//            task.setFrequency(null);
-//            task.resetValidation();
-//            assertTrue(true == task.validate());
-//            task.setFrequency("* * * * *");
-//        } catch (FrequencyException e) {
-//            fail(ExceptionUtils.getExceptionStackTrace(e));
-//        }
-//    }
+    @Test
+    public void testTaskValidation() {
+        try {
+            Task task = new Task();
+            assertTrue(false == task.validate());
+            assertTrue(2 == task.countValidationErrors());
+            ValidationError error = null;
+            Iterator<ValidationError> it = task.getValidationErrors().iterator();
+            error = it.next();
+            assertEquals(error.getIdentifier(), "MANDATORY");
+            assertEquals(error.getSubject(), "type");
+            error = it.next();
+            assertEquals(error.getIdentifier(), "MANDATORY");
+            assertEquals(error.getSubject(), "planned");
+
+            task.setType(TestTasktypes.UPLOAD_GROUPS);
+            task.setPlanned(System.currentTimeMillis() + 2000);
+            task.setFrequency("* * * * *");
+            task.setBusy(false);
+            task.resetValidation();
+            assertTrue(true == task.validate());
+
+            Calendar cal = Calendar.getInstance();
+            cal.set(1970, 10, 25);
+            task.setPlanned(cal.getTime());
+            task.resetValidation();
+            assertTrue(false == task.validate());
+            assertTrue(1 == task.countValidationErrors());
+            Set<ValidationError> set = task.getValidationErrors();
+            error = set.iterator().next();
+            assertEquals(error.getIdentifier(), "INVALID");
+            assertEquals(error.getSubject(), "planned");
+            task.setPlanned(System.currentTimeMillis() + 2000);
+
+            task.setFrequency(null);
+            task.resetValidation();
+            assertTrue(true == task.validate());
+            task.setFrequency("* * * * *");
+        } catch (FrequencyException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 }

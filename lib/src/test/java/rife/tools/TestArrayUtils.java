@@ -6,9 +6,13 @@ package rife.tools;
 
 import org.junit.jupiter.api.Test;
 import rife.config.RifeConfig;
+import rife.validation.ConstrainedProperty;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -154,23 +158,21 @@ public class TestArrayUtils {
         assertEquals(1, converted.length);
         assertEquals("20050818092713552-0500", converted[0]);
 
-        // TODO
-//        SimpleDateFormat sf = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss", Locale.ENGLISH);
-//        sf.setTimeZone(RifeConfig.Tools.getDefaultTimeZone());
-//        converted = ArrayUtils.createStringArray(cal.getTime(), new ConstrainedProperty("someProperty").format(sf));
-//        assertEquals(1, converted.length);
-//        assertEquals("2005.08.18 AD at 09:27:13", converted[0]);
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss", Locale.ENGLISH);
+        sf.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+        converted = ArrayUtils.createStringArray(cal.getTime(), new ConstrainedProperty("someProperty").format(sf));
+        assertEquals(1, converted.length);
+        assertEquals("2005.08.18 AD at 09:27:13", converted[0]);
     }
 
-    // TODO
-//    @Test
-//    public void testCreateStringArrayDoubleFormat() {
-//        assertNull(ArrayUtils.createStringArray((Double) null, null));
-//
-//        String[] converted = ArrayUtils.createStringArray(6782.349876675, new ConstrainedProperty("someProperty").format(NumberFormat.getCurrencyInstance(Locale.US)));
-//        assertEquals(1, converted.length);
-//        assertEquals("$6,782.35", converted[0]);
-//    }
+    @Test
+    public void testCreateStringArrayDoubleFormat() {
+        assertNull(ArrayUtils.createStringArray((Double) null, null));
+
+        String[] converted = ArrayUtils.createStringArray(6782.349876675, new ConstrainedProperty("someProperty").format(NumberFormat.getCurrencyInstance(Locale.US)));
+        assertEquals(1, converted.length);
+        assertEquals("$6,782.35", converted[0]);
+    }
 
     @Test
     public void testCreateStringArrayBoolean() {
