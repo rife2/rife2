@@ -30,7 +30,7 @@ public class TestFrequency {
 
     @BeforeEach
     public void tearDown() {
-        RifeConfig.tools().setDefaultTimeZone(RifeConfig.tools().DEFAULT_DEFAULT_TIMEZONE);
+        RifeConfig.tools().setDefaultTimeZone(RifeConfig.ToolsConfig.DEFAULT_DEFAULT_TIMEZONE);
     }
 
     @Test

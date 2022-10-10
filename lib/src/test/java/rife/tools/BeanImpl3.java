@@ -54,7 +54,7 @@ public class BeanImpl3 extends MetaData<ConstrainedBean, ConstrainedProperty> {
         NumberFormat double_format = NumberFormat.getNumberInstance(Locale.US);
         NumberFormat byte_format = NumberFormat.getPercentInstance(Locale.US);
         NumberFormat float_format = NumberFormat.getNumberInstance(Locale.FRANCE);
-        NumberFormat long_format = NumberFormat.getCurrencyInstance(Locale.FRANCE);
+        NumberFormat long_format = NumberFormat.getCurrencyInstance(Locale.US);
         NumberFormat short_format = NumberFormat.getCurrencyInstance(Locale.ENGLISH);
         DecimalFormat bigdecimal_format = (DecimalFormat) NumberFormat.getNumberInstance(Locale.FRANCE);
         bigdecimal_format.setParseBigDecimal(true);
