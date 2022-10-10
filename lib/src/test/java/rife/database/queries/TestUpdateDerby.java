@@ -16,7 +16,6 @@ import rife.database.types.SqlNull;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestUpdateDerby extends TestUpdate {
     @Test
     public void testInstantiationDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         assertNotNull(query);
         try {
             query.getSql();
@@ -36,7 +35,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testIncompleteQueryDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         try {
             query.getSql();
             fail();
@@ -56,7 +55,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testClearDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename4")
             .field("col1", "val1");
         assertNotNull(query.getSql());
@@ -71,7 +70,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testHintDerby() {
-        Update query = new Update(mDerby)
+        Update query = new Update(DERBY)
             .hint("NO_INDEX")
             .table("tablename")
             .field("propertyByte", (byte) 16);
@@ -88,7 +87,7 @@ public class TestUpdateDerby extends TestUpdate {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .where("propertyByte = 89")
             .field("nullColumn", SqlNull.NULL)
@@ -114,7 +113,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testFieldCustomDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .fieldCustom("propertySqlDate", "CURRENT_DATE");
         assertEquals(query.getSql(), "UPDATE tablename SET propertySqlDate = CURRENT_DATE");
@@ -123,7 +122,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testFieldParametersDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename");
 
         assertNull(query.getParameters());
@@ -214,7 +213,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testFieldParametersMixedDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename");
 
         assertNull(query.getParameters());
@@ -284,7 +283,7 @@ public class TestUpdateDerby extends TestUpdate {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .where("propertyByte = 89")
             .fields(new Object[]{
@@ -312,7 +311,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testWhereConstructionDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -325,7 +324,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testWhereConstructionGroupDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -358,7 +357,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testWhereTypedDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16);
@@ -391,7 +390,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testWhereTypedMixedDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16);
@@ -430,7 +429,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testWhereParametersDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16);
@@ -464,7 +463,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testWhereParametersMixedDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -493,7 +492,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testFieldWhereParametersDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename");
 
         assertNull(query.getParameters());
@@ -542,7 +541,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testFieldsBeanDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .where("propertyInt = 545")
             .fields(BeanImpl.getPopulatedBean());
@@ -563,7 +562,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testFieldsBeanNullValuesDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .where("propertyInt = 545")
             .fields(BeanImpl.getNullBean());
@@ -573,7 +572,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testFieldsBeanIncludedDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .where("propertyInt = 545")
             .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -583,7 +582,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testFieldsBeanExcludedDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .where("propertyInt = 545")
             .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -593,7 +592,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testFieldsBeanFilteredDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .where("propertyInt = 545")
             .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -603,7 +602,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testFieldsParametersBeanDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .fieldsParameters(BeanImpl.class);
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = ?, propertyBoolean = ?, propertyBooleanObject = ?, propertyByte = ?, propertyByteObject = ?, propertyCalendar = ?, propertyChar = ?, propertyCharacterObject = ?, propertyDate = ?, propertyDouble = ?, propertyDoubleObject = ?, propertyEnum = ?, propertyFloat = ?, propertyFloatObject = ?, propertyInt = ?, propertyIntegerObject = ?, propertyLong = ?, propertyLongObject = ?, propertyShort = ?, propertyShortObject = ?, propertySqlDate = ?, propertyString = ?, propertyStringbuffer = ?, propertyTime = ?, propertyTimestamp = ?");
@@ -736,7 +735,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testFieldsParametersBeanExcludedDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
@@ -791,7 +790,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testWhereBeanDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -814,7 +813,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testWhereBeanNullValuesDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -825,7 +824,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testWhereBeanIncludedDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -836,7 +835,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testWhereBeanExcludedDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -847,7 +846,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testWhereBeanFilteredDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -858,7 +857,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testWhereParametersBeanDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -999,7 +998,7 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testWhereParametersBeanExcludedDerby() {
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -1056,19 +1055,19 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testSubselectParamsDerby() {
-        Select fieldquery = new Select(mDerby);
+        Select fieldquery = new Select(DERBY);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
-        Select wherequery = new Select(mDerby);
+        Select wherequery = new Select(DERBY);
         wherequery
             .from("table2")
             .field("max(propertyShort)")
             .whereParameter("propertyShort", "!=");
 
         // Manual subselect creation
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         // shuffled the structure around a bit to test the correct order usage
         query
             .where("propertyShort >= (" + wherequery + ")")
@@ -1096,16 +1095,16 @@ public class TestUpdateDerby extends TestUpdate {
         }));
 
         // Automated subselect creation
-        query = new Update(mDerby);
+        query = new Update(DERBY);
         // shuffled the structure around a bit to test the correct order usage
         query
             .where("propertyShort", ">=", wherequery)
             .whereParameterOr("propertyString", "propertyString2", "=")
-            .whereOr("tablename.propertyFloat", ">", new Select(mDerby)
+            .whereOr("tablename.propertyFloat", ">", new Select(DERBY)
                 .from("table2")
                 .field("max(propertyLong)")
                 .whereParameter("propertyLong", "!="))
-            .whereAnd("tablename.propertyDouble", "<=", new Select(mDerby)
+            .whereAnd("tablename.propertyDouble", "<=", new Select(DERBY)
                 .from("table2")
                 .field("max(propertyFloat)")
                 .whereParameter("propertyFloat", "!="))
@@ -1134,12 +1133,12 @@ public class TestUpdateDerby extends TestUpdate {
 
     @Test
     public void testCloneDerby() {
-        Select fieldquery = new Select(mDerby);
+        Select fieldquery = new Select(DERBY);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
-        Select wherequery = new Select(mDerby);
+        Select wherequery = new Select(DERBY);
         wherequery
             .from("table2")
             .field("max(propertyShort)")
@@ -1148,7 +1147,7 @@ public class TestUpdateDerby extends TestUpdate {
         final Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Update query = new Update(mDerby);
+        Update query = new Update(DERBY);
         query.table("tablename")
             .fieldParameter("nullColumn")
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))

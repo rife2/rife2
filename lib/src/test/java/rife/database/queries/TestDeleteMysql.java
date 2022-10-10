@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDeleteMysql extends TestDelete {
     @Test
     public void testInstantiationMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -33,7 +33,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testIncompleteQueryMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         try {
             query.getSql();
             fail();
@@ -53,7 +53,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testClearMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where("this = that");
         assertNotNull(query.getSql());
@@ -68,7 +68,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testFromMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename");
         assertEquals(query.getSql(), "DELETE FROM tablename");
         assertTrue(execute(query));
@@ -76,7 +76,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testHintMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query
             .hint("LOW_PRIORITY")
             .from("tablename");
@@ -86,7 +86,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testWhereMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where("propertyByte = 89");
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyByte = 89");
@@ -95,7 +95,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testWhereTypedMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename");
 
         Calendar cal = Calendar.getInstance();
@@ -126,7 +126,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testWhereTypedMixedMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename");
 
         final Calendar cal = Calendar.getInstance();
@@ -163,7 +163,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testWhereParametersMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename");
 
         assertNull(query.getParameters());
@@ -196,7 +196,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testWhereParametersMixedMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where("propertyInt = 545")
             .whereParameterAnd("propertyLong", "<")
@@ -223,7 +223,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testWhereConstructionMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where("propertyInt = 545")
             .whereAnd("propertyLong < 50000")
@@ -234,7 +234,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testWhereConstructionGroupMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where("propertyInt = 545")
             .whereAnd("propertyLong < 50000")
@@ -265,7 +265,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testWhereBeanMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = 1 AND propertyBooleanObject = 0 AND propertyByte = 89 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.0' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.0' AND propertyDouble = 53348.34 AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShort = 43 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14' AND propertyTimestamp = '2002-06-18 15:26:14.0'");
@@ -284,7 +284,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testWhereBeanNullValuesMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyBoolean = 0 AND propertyBooleanObject = 0 AND propertyByte = 0 AND propertyByteObject = 0 AND propertyDouble = 0.0 AND propertyDoubleObject = 0.0 AND propertyFloat = 0.0 AND propertyFloatObject = 0.0 AND propertyInt = 0 AND propertyIntegerObject = 0 AND propertyLong = 0 AND propertyLongObject = 0 AND propertyShort = 0 AND propertyShortObject = 0");
@@ -293,7 +293,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testWhereBeanIncludedMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyByte = 89 AND propertyDouble = 53348.34 AND propertyShort = 43 AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14'");
@@ -302,7 +302,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testWhereBeanExcludedMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = 1 AND propertyBooleanObject = 0 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.0' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.0' AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyTimestamp = '2002-06-18 15:26:14.0'");
@@ -311,7 +311,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testWhereBeanFilteredMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyDouble = 53348.34 AND propertyStringbuffer = 'someotherstringbuff'");
@@ -320,7 +320,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testWhereParametersBeanMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyBigDecimal = ? AND propertyBoolean = ? AND propertyBooleanObject = ? AND propertyByte = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyChar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDouble = ? AND propertyDoubleObject = ? AND propertyEnum = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInt = ? AND propertyIntegerObject = ? AND propertyLong = ? AND propertyLongObject = ? AND propertyShort = ? AND propertyShortObject = ? AND propertySqlDate = ? AND propertyString = ? AND propertyStringbuffer = ? AND propertyTime = ? AND propertyTimestamp = ?");
@@ -514,7 +514,7 @@ public class TestDeleteMysql extends TestDelete {
 
     @Test
     public void testCloneMysql() {
-        Delete query = new Delete(mMysql);
+        Delete query = new Delete(MYSQL);
         query
             .hint("LOW_PRIORITY")
             .from("tablename")

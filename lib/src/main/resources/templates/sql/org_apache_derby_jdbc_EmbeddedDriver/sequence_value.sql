@@ -1,2 +1,2 @@
-/*b OPERATION_NEXT*//*-b*/
-/*b OPERATION_CURRENT*//*-b*/
+{{b OPERATION_NEXT}}{{/b}}
+{{b OPERATION_CURRENT}}{{/b}}

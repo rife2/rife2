@@ -189,7 +189,7 @@ public class TestDatasource {
 
     @Test
     public void testConnection() {
-        Datasource datasource = TestDatasources.mPgsql;
+        Datasource datasource = TestDatasources.PGSQL;
         if (null == datasource) {
             System.out.println("WARNING : Datasource testConnection test not executed (postgresql missing)");
             return;
@@ -211,7 +211,7 @@ public class TestDatasource {
 
     @Test
     public void testConnectionDataSource1() {
-        Datasource declared_datasource = TestDatasources.mPgsql;
+        Datasource declared_datasource = TestDatasources.PGSQL;
         if (null == declared_datasource) {
             System.out.println("WARNING : Datasource testConnectionDataSource test not executed (postgresql missing)");
             return;
@@ -240,7 +240,7 @@ public class TestDatasource {
 
     @Test
     public void testConnectionDataSource2() {
-        Datasource declared_datasource = TestDatasources.mPgsql;
+        Datasource declared_datasource = TestDatasources.PGSQL;
         if (null == declared_datasource) {
             System.out.println("WARNING : Datasource testConnectionDataSource test not executed (postgresql missing)");
             return;
@@ -291,7 +291,7 @@ public class TestDatasource {
 
     @Test
     public void testConnectionPreservation() {
-        Datasource datasource = TestDatasources.mPgsql;
+        Datasource datasource = TestDatasources.PGSQL;
         if (null == datasource) {
             System.out.println("WARNING : Datasource testConnectionPreservation test not executed (postgresql missing)");
             return;
@@ -320,7 +320,7 @@ public class TestDatasource {
 
     @Test
     public void testConnectionPreservationDatasource1() {
-        Datasource declared_datasource = TestDatasources.mPgsql;
+        Datasource declared_datasource = TestDatasources.PGSQL;
         if (null == declared_datasource) {
             System.out.println("WARNING : Datasource testConnectionPreservationDatasource test not executed (postgresql missing)");
             return;
@@ -356,7 +356,7 @@ public class TestDatasource {
 
     @Test
     public void testConnectionPreservationDatasource2() {
-        Datasource declared_datasource = TestDatasources.mPgsql;
+        Datasource declared_datasource = TestDatasources.PGSQL;
         if (null == declared_datasource) {
             System.out.println("WARNING : Datasource testConnectionPreservationDatasource test not executed (postgresql missing)");
             return;

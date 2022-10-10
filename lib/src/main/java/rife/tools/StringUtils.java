@@ -505,12 +505,10 @@ public abstract class StringUtils {
         try {
             return URLEncoder.encode(source, ENCODING_ISO_8859_1);
         }
-        ///CLOVER:OFF
         catch (UnsupportedEncodingException e) {
             // this should never happen, ISO-8859-1 is a standard encoding
             throw new RuntimeException(e);
         }
-        ///CLOVER:ON
     }
 
     /**
@@ -564,12 +562,10 @@ public abstract class StringUtils {
                 return encoded.toString();
             }
         }
-        ///CLOVER:OFF
         catch (UnsupportedEncodingException e) {
             // this should never happen, ISO-8859-1 is a standard encoding
             throw new RuntimeException(e);
         }
-        ///CLOVER:ON
     }
 
     /**
@@ -594,12 +590,10 @@ public abstract class StringUtils {
                 return new String(decoded, StringUtils.ENCODING_UTF_8);
             }
         }
-        ///CLOVER:OFF
         catch (UnsupportedEncodingException e) {
             // this should never happen, UTF-8 is a standard encoding
             throw new RuntimeException(e);
         }
-        ///CLOVER:ON
     }
 
     /**

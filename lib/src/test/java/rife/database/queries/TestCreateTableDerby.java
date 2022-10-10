@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCreateTableDerby extends TestCreateTable {
     @Test
     public void testInstantiationDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         assertNotNull(query);
         try {
             query.getSql();
@@ -30,7 +30,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testIncompleteQueryDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         try {
             query.getSql();
             fail();
@@ -51,7 +51,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testClearDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("string", String.class);
         assertNotNull(query.getSql());
@@ -66,7 +66,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testColumnDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename1")
             .column("string", String.class)
             .column("stringbuffer", StringBuffer.class)
@@ -94,7 +94,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testColumnPrecisionDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -122,7 +122,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testColumnsBeanDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .columns(BeanImpl.class);
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyBoolean NUMERIC(1), propertyBooleanObject NUMERIC(1), propertyByte SMALLINT, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString VARCHAR(32672), propertyStringbuffer VARCHAR(32672), propertyTime TIME, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
@@ -131,7 +131,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testColumnsBeanIncludedDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyByte SMALLINT, propertyFloat FLOAT, propertyStringbuffer VARCHAR(32672), propertyTime TIME)");
@@ -140,7 +140,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testColumnsBeanExcludedDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBoolean NUMERIC(1), propertyBooleanObject NUMERIC(1), propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloatObject FLOAT, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString VARCHAR(32672), propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
@@ -149,7 +149,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testColumnsBeanFilteredDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringbuffer"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyFloat FLOAT, propertyTime TIME)");
@@ -158,7 +158,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testColumnsBeanPrecisionDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)
@@ -202,7 +202,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testNullableDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn1", int.class, CreateTable.NULL)
             .column("stringColumn", String.class, 12, CreateTable.NOTNULL)
@@ -218,7 +218,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testDefaultDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -264,7 +264,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testDefaultFunctionDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename1")
             .column("dateobject", java.sql.Date.class)
             .defaultFunction("dateobject", "CURRENT_DATE");
@@ -274,7 +274,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testCustomAttributeDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename1")
             .column("intColumn", Integer.class)
             .customAttribute("intColumn", "CHECK (intColumn > 0)");
@@ -284,7 +284,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testTemporaryDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .temporary(true)
             .column("boolColumn", boolean.class);
@@ -298,7 +298,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testPrimaryKeySimpleDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("intColumn");
@@ -308,7 +308,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testPrimaryKeyMultipleDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -319,7 +319,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testPrimaryKeyNamedDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("constraint_name", "intColumn");
@@ -329,7 +329,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testPrimaryKeyMultipleNamedDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -340,7 +340,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testUniqueSimpleDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class, CreateTable.NOTNULL)
             .unique("intColumn");
@@ -350,7 +350,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testUniqueMultipleDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class, CreateTable.NOTNULL)
             .column("stringColumn", String.class, 50, CreateTable.NOTNULL)
@@ -361,7 +361,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testUniqueNamedDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class, CreateTable.NOTNULL)
             .unique("constraint_name", "intColumn");
@@ -371,7 +371,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testUniqueMultipleNamedDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class, CreateTable.NOTNULL)
             .column("stringColumn", String.class, 50, CreateTable.NOTNULL)
@@ -382,7 +382,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testForeignKeySimpleDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn");
@@ -392,7 +392,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testForeignKeyMultipleDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -403,7 +403,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testForeignKeySimpleNamedDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("constraint_name", "foreigntable", "intColumn", "foreignIntColumn");
@@ -413,7 +413,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testForeignKeyMultipleNamedDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -424,7 +424,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testForeignKeyViolationsSingleDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, null);
@@ -514,7 +514,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testForeignKeyViolationsDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.RESTRICT, CreateTable.NOACTION);
@@ -524,7 +524,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testForeignKeyMultipleViolationsDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -535,7 +535,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testCheckSimpleDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("intColumn > 0");
@@ -545,7 +545,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testCheckNamedDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("NAME_CK", "intColumn > 0");
@@ -555,7 +555,7 @@ public class TestCreateTableDerby extends TestCreateTable {
 
     @Test
     public void testCloneDerby() {
-        CreateTable query = new CreateTable(mDerby);
+        CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)

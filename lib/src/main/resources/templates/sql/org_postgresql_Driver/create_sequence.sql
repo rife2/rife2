@@ -1,1 +1,1 @@
-/*b QUERY*/CREATE SEQUENCE /*v NAME-*//*-b*/
+{{b QUERY}}CREATE SEQUENCE {{v NAME/}}{{/b}}

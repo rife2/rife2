@@ -56,11 +56,9 @@ public class ArrayUtils {
                         return ArrayType.FLOAT_ARRAY;
                     case 'D':
                         return ArrayType.DOUBLE_ARRAY;
-                    ///CLOVER:OFF
                     default:
                         Logger.getLogger("rife.tools").severe("Unknown primitive array class: " + classname);
                         return null;
-                    ///CLOVER:ON
                 }
             }
             return null;

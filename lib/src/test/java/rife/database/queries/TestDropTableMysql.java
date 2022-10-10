@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDropTableMysql extends TestDropTable {
     @Test
     public void testInstantiationMysql() {
-        DropTable query = new DropTable(mMysql);
+        DropTable query = new DropTable(MYSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -23,7 +23,7 @@ public class TestDropTableMysql extends TestDropTable {
     }
 
     @Test public void testIncompleteQueryMysql() {
-        DropTable query = new DropTable(mMysql);
+        DropTable query = new DropTable(MYSQL);
         try {
             query.getSql();
             fail();
@@ -35,7 +35,7 @@ public class TestDropTableMysql extends TestDropTable {
     }
 
     @Test public void testClearMysql() {
-        DropTable query = new DropTable(mMysql);
+        DropTable query = new DropTable(MYSQL);
         query.table("tablename");
         assertNotNull(query.getSql());
         query.clear();
@@ -48,14 +48,14 @@ public class TestDropTableMysql extends TestDropTable {
     }
 
     @Test public void testOneTableMysql() {
-        DropTable query = new DropTable(mMysql);
+        DropTable query = new DropTable(MYSQL);
         query.table("tabletodrop");
         assertEquals(query.getSql(), "DROP TABLE tabletodrop");
         execute(query);
     }
 
     @Test public void testMultipleTablesMysql() {
-        DropTable query = new DropTable(mMysql);
+        DropTable query = new DropTable(MYSQL);
         query.table("tabletodrop1")
             .table("tabletodrop2")
             .table("tabletodrop3");
@@ -64,7 +64,7 @@ public class TestDropTableMysql extends TestDropTable {
     }
 
     @Test public void testCloneMysql() {
-        DropTable query = new DropTable(mMysql);
+        DropTable query = new DropTable(MYSQL);
         query.table("tabletodrop1")
             .table("tabletodrop2")
             .table("tabletodrop3");

@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestUpdatePgsql extends TestUpdate {
     @Test
     public void testInstantiationPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -36,7 +36,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testIncompleteQueryPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         try {
             query.getSql();
             fail();
@@ -56,7 +56,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testClearPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename4")
             .field("col1", "val1");
         assertNotNull(query.getSql());
@@ -71,7 +71,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testHintPgsql() {
-        Update query = new Update(mPgsql)
+        Update query = new Update(PGSQL)
             .hint("NO_INDEX")
             .table("tablename")
             .field("propertyByte", (byte) 16);
@@ -88,7 +88,7 @@ public class TestUpdatePgsql extends TestUpdate {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyByte = 89")
             .field("nullColumn", SqlNull.NULL)
@@ -114,7 +114,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testFieldCustomPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .fieldCustom("propertySqlDate", "now()");
         assertEquals(query.getSql(), "UPDATE tablename SET propertySqlDate = now()");
@@ -123,7 +123,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testFieldParametersPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename");
 
         assertNull(query.getParameters());
@@ -214,7 +214,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testFieldParametersMixedPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename");
 
         assertNull(query.getParameters());
@@ -284,7 +284,7 @@ public class TestUpdatePgsql extends TestUpdate {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyByte = 89")
             .fields(new Object[]{
@@ -312,7 +312,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testWhereConstructionPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -325,7 +325,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testWhereConstructionGroupPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -358,7 +358,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testWhereTypedPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16);
@@ -391,7 +391,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testWhereTypedMixedPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16);
@@ -430,7 +430,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testWhereParametersPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16);
@@ -464,7 +464,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testWhereParametersMixedPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -493,7 +493,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testFieldWhereParametersPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename");
 
         assertNull(query.getParameters());
@@ -542,7 +542,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testFieldsBeanPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyInt = 545")
             .fields(BeanImpl.getPopulatedBean());
@@ -562,7 +562,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testFieldsBeanNullValuesPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyInt = 545")
             .fields(BeanImpl.getNullBean());
@@ -572,7 +572,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testFieldsBeanIncludedPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyInt = 545")
             .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -582,7 +582,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testFieldsBeanExcludedPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyInt = 545")
             .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -592,7 +592,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testFieldsBeanFilteredPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyInt = 545")
             .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -602,7 +602,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testFieldsParametersBeanPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .fieldsParameters(BeanImpl.class);
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = ?, propertyBoolean = ?, propertyBooleanObject = ?, propertyByte = ?, propertyByteObject = ?, propertyCalendar = ?, propertyChar = ?, propertyCharacterObject = ?, propertyDate = ?, propertyDouble = ?, propertyDoubleObject = ?, propertyEnum = ?, propertyFloat = ?, propertyFloatObject = ?, propertyInt = ?, propertyIntegerObject = ?, propertyLong = ?, propertyLongObject = ?, propertyShort = ?, propertyShortObject = ?, propertySqlDate = ?, propertyString = ?, propertyStringbuffer = ?, propertyTime = ?, propertyTimestamp = ?");
@@ -734,7 +734,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testFieldsParametersBeanExcludedPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
@@ -789,7 +789,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testWhereBeanPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -811,7 +811,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testWhereBeanNullValuesPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -822,7 +822,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testWhereBeanIncludedPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -833,7 +833,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testWhereBeanExcludedPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -844,7 +844,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testWhereBeanFilteredPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -855,7 +855,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testWhereParametersBeanPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -993,7 +993,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testWhereParametersBeanExcludedPgsql() {
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -1050,19 +1050,19 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testSubselectParamsPgsql() {
-        Select fieldquery = new Select(mPgsql);
+        Select fieldquery = new Select(PGSQL);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
-        Select wherequery = new Select(mPgsql);
+        Select wherequery = new Select(PGSQL);
         wherequery
             .from("table2")
             .field("max(propertyShort)")
             .whereParameter("propertyShort", "!=");
 
         // Manual subselect creation
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         // shuffled the structure around a bit to test the correct order usage
         query
             .where("propertyShort >= (" + wherequery + ")")
@@ -1090,16 +1090,16 @@ public class TestUpdatePgsql extends TestUpdate {
         }));
 
         // Automated subselect creation
-        query = new Update(mPgsql);
+        query = new Update(PGSQL);
         // shuffled the structure around a bit to test the correct order usage
         query
             .where("propertyShort", ">=", wherequery)
             .whereParameterOr("propertyString", "propertyString2", "=")
-            .whereOr("tablename.propertyFloat", ">", new Select(mPgsql)
+            .whereOr("tablename.propertyFloat", ">", new Select(PGSQL)
                 .from("table2")
                 .field("max(propertyLong)")
                 .whereParameter("propertyLong", "!="))
-            .whereAnd("tablename.propertyDouble", "<=", new Select(mPgsql)
+            .whereAnd("tablename.propertyDouble", "<=", new Select(PGSQL)
                 .from("table2")
                 .field("max(propertyFloat)")
                 .whereParameter("propertyFloat", "!="))
@@ -1128,12 +1128,12 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @Test
     public void testClonePgsql() {
-        Select fieldquery = new Select(mPgsql);
+        Select fieldquery = new Select(PGSQL);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
-        Select wherequery = new Select(mPgsql);
+        Select wherequery = new Select(PGSQL);
         wherequery
             .from("table2")
             .field("max(propertyShort)")
@@ -1142,7 +1142,7 @@ public class TestUpdatePgsql extends TestUpdate {
         final Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Update query = new Update(mPgsql);
+        Update query = new Update(PGSQL);
         query.table("tablename")
             .fieldParameter("nullColumn")
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))

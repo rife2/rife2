@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestSequenceValueH2 extends TestSequenceValue {
     @Test
     public void testInstantiationH2() {
-        SequenceValue query = new SequenceValue(mH2);
+        SequenceValue query = new SequenceValue(H2);
         assertNotNull(query);
         try {
             query.getSql();
@@ -25,7 +25,7 @@ public class TestSequenceValueH2 extends TestSequenceValue {
 
     @Test
     public void testInvalidH2() {
-        SequenceValue query = new SequenceValue(mH2);
+        SequenceValue query = new SequenceValue(H2);
         try {
             query.getSql();
             fail();
@@ -52,7 +52,7 @@ public class TestSequenceValueH2 extends TestSequenceValue {
 
     @Test
     public void testClearH2() {
-        SequenceValue query = new SequenceValue(mH2);
+        SequenceValue query = new SequenceValue(H2);
         query
             .name("sequencename")
             .next();
@@ -69,33 +69,33 @@ public class TestSequenceValueH2 extends TestSequenceValue {
 
     @Test
     public void testNextH2() {
-        SequenceValue query = new SequenceValue(mH2);
+        SequenceValue query = new SequenceValue(H2);
         query
             .name("sequencename")
             .next();
         assertEquals(query.getSql(), "SELECT nextval('sequencename')");
-        assertTrue(execute(mH2, query) >= 0);
+        assertTrue(execute(H2, query) >= 0);
     }
 
     @Test
     public void testCurrentH2() {
-        SequenceValue query = new SequenceValue(mH2);
+        SequenceValue query = new SequenceValue(H2);
         query
             .name("sequencename")
             .current();
         assertEquals(query.getSql(), "SELECT currval('sequencename')");
-        assertTrue(execute(mH2, query) >= 0);
+        assertTrue(execute(H2, query) >= 0);
     }
 
     @Test
     public void testCloneH2() {
-        SequenceValue query = new SequenceValue(mH2);
+        SequenceValue query = new SequenceValue(H2);
         query
             .name("sequencename")
             .next();
         SequenceValue query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
-        assertTrue(execute(mH2, query_clone) >= 0);
+        assertTrue(execute(H2, query_clone) >= 0);
     }
 }

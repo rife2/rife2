@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestInsertHsqldb extends TestInsert {
     @Test
     public void testInstantiationHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         assertNotNull(query);
         try {
             query.getSql();
@@ -35,7 +35,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testIncompleteQueryHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         try {
             query.getSql();
             fail();
@@ -55,7 +55,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testClearHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .field("col1", "val1");
         assertNotNull(query.getSql());
@@ -70,7 +70,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testHintHsqldb() {
-        Insert query = new Insert(mHsqldb)
+        Insert query = new Insert(HSQLDB)
             .hint("NO_INDEX")
             .into("tablename")
             .fieldParameter("col1");
@@ -84,7 +84,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testParameterHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldParameter("col1");
         assertEquals(query.getSql(), "INSERT INTO tablename (col1) VALUES (?)");
@@ -95,7 +95,7 @@ public class TestInsertHsqldb extends TestInsert {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .field("nullColumn", SqlNull.NULL)
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))
@@ -120,7 +120,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testFieldCustomHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldCustom("propertySqlDate", "now()");
         assertEquals(query.getSql(), "INSERT INTO tablename (propertySqlDate) VALUES (now())");
@@ -132,7 +132,7 @@ public class TestInsertHsqldb extends TestInsert {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fields(new Object[]{
                 "nullColumn", SqlNull.NULL,
@@ -159,7 +159,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testFieldParametersHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename");
 
         assertNull(query.getParameters());
@@ -250,7 +250,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testFieldParametersMixedHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename");
 
         assertNull(query.getParameters());
@@ -317,7 +317,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testFieldsBeanHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fields(BeanImpl.getPopulatedBean());
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (219038743.392874, true, false, 89, 34, '2002-06-18 15:26:14.764', 'v', 'r', '2002-06-18 15:26:14.764', 53348.34, 143298.692, 'VALUE_THREE', 98634.2, 8734.7, 545, 968, 34563, 66875, 43, 68, '2002-06-18', 'someotherstring', 'someotherstringbuff', '15:26:14', '2002-06-18 15:26:14.764')");
@@ -336,7 +336,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testFieldsBeanNullValuesHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fields(BeanImpl.getNullBean());
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject) VALUES (false, false, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0)");
@@ -345,7 +345,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testFieldsBeanIncludedHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyByte, propertyDouble, propertyShort, propertyStringbuffer, propertyTime) VALUES (89, 53348.34, 43, 'someotherstringbuff', '15:26:14')");
@@ -354,7 +354,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testFieldsBeanExcludedHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShortObject, propertySqlDate, propertyString, propertyTimestamp) VALUES (219038743.392874, true, false, 34, '2002-06-18 15:26:14.764', 'v', 'r', '2002-06-18 15:26:14.764', 143298.692, 'VALUE_THREE', 98634.2, 8734.7, 545, 968, 34563, 66875, 68, '2002-06-18', 'someotherstring', '2002-06-18 15:26:14.764')");
@@ -363,7 +363,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testFieldsBeanFilteredHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyDouble, propertyStringbuffer) VALUES (53348.34, 'someotherstringbuff')");
@@ -372,7 +372,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testMultipleRowsHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .field("propertyChar", 'M')
             .field("propertyDouble", 12.3d)
@@ -392,7 +392,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testFieldsParametersBeanHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldsParameters(BeanImpl.class);
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -526,7 +526,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testFieldsParametersBeanExcludedHsqldb() {
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
@@ -581,14 +581,14 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testInsertSubselectParamsHsqldb() {
-        Select fieldquery = new Select(mHsqldb);
+        Select fieldquery = new Select(HSQLDB);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
 
         // Manual subselect creation
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         // shuffled the structure around a bit to test the correct order usage
         query
             .into("tablename")
@@ -609,7 +609,7 @@ public class TestInsertHsqldb extends TestInsert {
         }));
 
         // Automated subselect creation
-        query = new Insert(mHsqldb);
+        query = new Insert(HSQLDB);
         // shuffled the structure around a bit to test the correct order usage
         query
             .into("tablename")
@@ -631,7 +631,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     @Test
     public void testCloneHsqldb() {
-        Select fieldquery = new Select(mHsqldb);
+        Select fieldquery = new Select(HSQLDB);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
@@ -640,7 +640,7 @@ public class TestInsertHsqldb extends TestInsert {
         final Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Insert query = new Insert(mHsqldb);
+        Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldParameter("nullColumn")
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))

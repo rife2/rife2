@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCreateSequenceMysql extends TestCreateSequence {
     @Test
     public void testInstantiationMysql() {
-        CreateSequence query = new CreateSequence(mMysql);
+        CreateSequence query = new CreateSequence(MYSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -25,7 +25,7 @@ public class TestCreateSequenceMysql extends TestCreateSequence {
 
     @Test
     public void testClearMysql() {
-        CreateSequence query = new CreateSequence(mMysql);
+        CreateSequence query = new CreateSequence(MYSQL);
         query.name("sequencename");
         try {
             query.getSql();
@@ -37,7 +37,7 @@ public class TestCreateSequenceMysql extends TestCreateSequence {
 
     @Test
     public void testCreateMysql() {
-        CreateSequence query = new CreateSequence(mMysql);
+        CreateSequence query = new CreateSequence(MYSQL);
         query.name("sequencename");
         try {
             query.getSql();

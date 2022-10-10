@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDropSequenceDerby extends TestDropSequence {
     @Test
     public void testInstantiationDerby() {
-        DropSequence query = new DropSequence(mDerby);
+        DropSequence query = new DropSequence(DERBY);
         assertNotNull(query);
         try {
             query.getSql();
@@ -25,7 +25,7 @@ public class TestDropSequenceDerby extends TestDropSequence {
 
     @Test
     public void testClearDerby() {
-        DropSequence query = new DropSequence(mDerby);
+        DropSequence query = new DropSequence(DERBY);
         query.name("sequencename");
         try {
             query.getSql();
@@ -37,7 +37,7 @@ public class TestDropSequenceDerby extends TestDropSequence {
 
     @Test
     public void testCreateDerby() {
-        DropSequence query = new DropSequence(mDerby);
+        DropSequence query = new DropSequence(DERBY);
         query.name("sequencename");
         try {
             query.getSql();

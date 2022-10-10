@@ -7,7 +7,7 @@ package rife.selector;
 /**
  * Selects a name according to the current user.
  *
- * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @author Geert Bevin <gbevin[remove] at uwyn dot com>
  * @see NameSelector
  * @since 2.0
  */

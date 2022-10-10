@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDropSequenceHsqldb extends TestDropSequence {
     @Test
     public void testInstantiationHsqldb() {
-        DropSequence query = new DropSequence(mHsqldb);
+        DropSequence query = new DropSequence(HSQLDB);
         assertNotNull(query);
         try {
             query.getSql();
@@ -24,7 +24,7 @@ public class TestDropSequenceHsqldb extends TestDropSequence {
 
     @Test
     public void testClearHsqldb() {
-        DropSequence query = new DropSequence(mHsqldb);
+        DropSequence query = new DropSequence(HSQLDB);
         query.name("sequencename");
         assertNotNull(query.getSql());
         query.clear();
@@ -38,19 +38,19 @@ public class TestDropSequenceHsqldb extends TestDropSequence {
 
     @Test
     public void testCreateHsqldb() {
-        DropSequence query = new DropSequence(mHsqldb);
+        DropSequence query = new DropSequence(HSQLDB);
         query.name("sequencename");
         assertEquals(query.getSql(), "DROP SEQUENCE sequencename");
-        execute(mHsqldb, query);
+        execute(HSQLDB, query);
     }
 
     @Test
     public void testCloneHsqldb() {
-        DropSequence query = new DropSequence(mHsqldb);
+        DropSequence query = new DropSequence(HSQLDB);
         query.name("sequencename");
         DropSequence query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
-        execute(mHsqldb, query_clone);
+        execute(HSQLDB, query_clone);
     }
 }

@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
 /**
  * Selects a name according to the current hostname.
  *
- * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @author Geert Bevin <gbevin[remove] at uwyn dot com>
  * @see NameSelector
  * @since 2.0
  */

@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCreateTableMysql extends TestCreateTable {
     @Test
     public void testInstantiationMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         try {
             query.getSql();
             fail();
@@ -28,7 +28,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testIncompleteQueryMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         try {
             query.getSql();
             fail();
@@ -49,7 +49,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testClearMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("string", String.class);
         assertNotNull(query.getSql());
@@ -64,7 +64,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testColumnMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename1")
             .column("string", String.class)
             .column("stringbuffer", StringBuffer.class)
@@ -93,7 +93,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testColumnPrecisionMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -121,7 +121,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testColumnsBeanMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .columns(BeanImpl.class);
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyBoolean BIT, propertyBooleanObject BIT, propertyByte TINYINT, propertyByteObject TINYINT, propertyCalendar DATETIME, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATETIME, propertyDouble DOUBLE, propertyDoubleObject DOUBLE, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INT, propertyIntegerObject INT, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString LONGTEXT, propertyStringbuffer LONGTEXT, propertyTime TIME, propertyTimestamp DATETIME, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
@@ -131,7 +131,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testColumnsBeanIncludedMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyByte TINYINT, propertyFloat FLOAT, propertyStringbuffer LONGTEXT, propertyTime TIME)");
@@ -140,7 +140,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testColumnsBeanExcludedMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBoolean BIT, propertyBooleanObject BIT, propertyByteObject TINYINT, propertyCalendar DATETIME, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATETIME, propertyDouble DOUBLE, propertyDoubleObject DOUBLE, propertyEnum VARCHAR(255), propertyFloatObject FLOAT, propertyInt INT, propertyIntegerObject INT, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString LONGTEXT, propertyTimestamp DATETIME, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
@@ -150,7 +150,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testColumnsBeanFilteredMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringbuffer"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyFloat FLOAT, propertyTime TIME)");
@@ -159,7 +159,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testColumnsBeanPrecisionMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)
@@ -203,7 +203,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testNullableMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn1", int.class, CreateTable.NULL)
             .column("stringColumn", String.class, 12, CreateTable.NOTNULL)
@@ -219,7 +219,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testDefaultMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -265,7 +265,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testDefaultFunctionMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename1")
             .column("dateobject", java.sql.Date.class)
             .defaultFunction("dateobject", "now()");
@@ -276,7 +276,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testCustomAttributeMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename1")
             .column("intColumn", Integer.class)
             .customAttribute("intColumn", "AUTO_INCREMENT")
@@ -287,7 +287,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testTemporaryMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .temporary(true)
             .column("boolColumn", boolean.class);
@@ -297,7 +297,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testPrimaryKeySimpleMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("intColumn");
@@ -307,7 +307,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testPrimaryKeyMultipleMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -318,7 +318,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testPrimaryKeyNamedMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("constraint_name", "intColumn");
@@ -328,7 +328,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testPrimaryKeyMultipleNamedMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -339,7 +339,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testUniqueSimpleMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .unique("intColumn");
@@ -349,7 +349,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testUniqueMultipleMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -360,7 +360,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testUniqueNamedMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .unique("constraint_name", "intColumn");
@@ -370,7 +370,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testUniqueMultipleNamedMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -381,7 +381,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testForeignKeySimpleMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn");
@@ -391,7 +391,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testForeignKeyMultipleMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -402,7 +402,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testForeignKeySimpleNamedMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("constraint_name", "foreigntable", "intColumn", "foreignIntColumn");
@@ -412,7 +412,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testForeignKeyMultipleNamedMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -423,7 +423,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testForeignKeyViolationsSingleMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, null);
@@ -497,7 +497,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testForeignKeyViolationsMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, CreateTable.NOACTION);
@@ -507,7 +507,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testForeignKeyMultipleViolationsMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -518,7 +518,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testCheckSimpleMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("intColumn > 0");
@@ -528,7 +528,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @Test
     public void testCheckNamedMysql() {
-        CreateTable query = new CreateTable(mMysql);
+        CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("NAME_CK", "intColumn > 0");

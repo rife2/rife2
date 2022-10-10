@@ -13,6 +13,7 @@ import rife.template.exceptions.InvalidValueFilterException;
 import rife.template.exceptions.TemplateException;
 import rife.template.exceptions.TemplateNotFoundException;
 import rife.tools.Localization;
+import rife.validation.ValidationBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -25,10 +26,14 @@ public class TemplateFactory extends EnumClass<String> {
         "html", "text/html", ".html",
         new String[]
             {
+                ValidationBuilder.TAG_ERRORS,
+                ValidationBuilder.TAG_ERRORMESSAGE,
                 TemplateFactoryFilters.TAG_LANG
             },
         new String[]
             {
+                ValidationBuilder.TAG_MARK,
+                ValidationBuilder.TAG_ERRORS,
                 TemplateFactoryFilters.TAG_CONFIG,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
@@ -73,7 +78,7 @@ public class TemplateFactory extends EnumClass<String> {
         null,
         null);
 
-    public static TemplateFactory SQL = new TemplateFactory(TemplateConfig.SQL,
+    public static TemplateFactory SQL = new TemplateFactory(TemplateConfig.TXT,
         ResourceFinderClasspath.instance(),
         "txt", "text/plain", ".sql",
         new String[]

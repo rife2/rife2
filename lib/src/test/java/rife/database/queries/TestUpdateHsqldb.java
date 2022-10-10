@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestUpdateHsqldb extends TestUpdate {
     @Test
     public void testInstantiationHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         assertNotNull(query);
         try {
             query.getSql();
@@ -35,7 +35,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testIncompleteQueryHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         try {
             query.getSql();
             fail();
@@ -55,7 +55,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testClearHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename4")
             .field("col1", "val1");
         assertNotNull(query.getSql());
@@ -70,7 +70,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testHintHsqldb() {
-        Update query = new Update(mHsqldb)
+        Update query = new Update(HSQLDB)
             .hint("NO_INDEX")
             .table("tablename")
             .field("propertyByte", (byte) 16);
@@ -87,7 +87,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .where("propertyByte = 89")
             .field("nullColumn", SqlNull.NULL)
@@ -113,7 +113,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testFieldCustomHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .fieldCustom("propertySqlDate", "now()");
         assertEquals(query.getSql(), "UPDATE tablename SET propertySqlDate = now()");
@@ -122,7 +122,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testFieldParametersHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename");
 
         assertNull(query.getParameters());
@@ -213,7 +213,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testFieldParametersMixedHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename");
 
         assertNull(query.getParameters());
@@ -282,7 +282,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .where("propertyByte = 89")
             .fields(new Object[]{
@@ -310,7 +310,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testWhereConstructionHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -323,7 +323,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testWhereConstructionGroupHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -356,7 +356,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testWhereTypedHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16);
@@ -389,7 +389,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testWhereTypedMixedHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16);
@@ -428,7 +428,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testWhereParametersHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16);
@@ -463,7 +463,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testWhereParametersMixedHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -492,7 +492,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testFieldWhereParametersHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename");
 
         assertNull(query.getParameters());
@@ -541,7 +541,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testFieldsBeanHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .where("propertyInt = 545")
             .fields(BeanImpl.getPopulatedBean());
@@ -562,7 +562,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testFieldsBeanNullValuesHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .where("propertyInt = 545")
             .fields(BeanImpl.getNullBean());
@@ -572,7 +572,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testFieldsBeanIncludedHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .where("propertyInt = 545")
             .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -582,7 +582,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testFieldsBeanExcludedHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .where("propertyInt = 545")
             .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -592,7 +592,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testFieldsBeanFilteredHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .where("propertyInt = 545")
             .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -602,7 +602,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testFieldsParametersBeanHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .fieldsParameters(BeanImpl.class);
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = ?, propertyBoolean = ?, propertyBooleanObject = ?, propertyByte = ?, propertyByteObject = ?, propertyCalendar = ?, propertyChar = ?, propertyCharacterObject = ?, propertyDate = ?, propertyDouble = ?, propertyDoubleObject = ?, propertyEnum = ?, propertyFloat = ?, propertyFloatObject = ?, propertyInt = ?, propertyIntegerObject = ?, propertyLong = ?, propertyLongObject = ?, propertyShort = ?, propertyShortObject = ?, propertySqlDate = ?, propertyString = ?, propertyStringbuffer = ?, propertyTime = ?, propertyTimestamp = ?");
@@ -735,7 +735,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testFieldsParametersBeanExcludedHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
@@ -790,7 +790,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testWhereBeanHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -813,7 +813,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testWhereBeanNullValuesHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -824,7 +824,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testWhereBeanIncludedHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -835,7 +835,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testWhereBeanExcludedHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -846,7 +846,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testWhereBeanFilteredHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -857,7 +857,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testWhereParametersBeanHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -998,7 +998,7 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testWhereParametersBeanExcludedHsqldb() {
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -1050,17 +1050,17 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testSubselectParamsHsqldb() {
-        Select fieldquery = new Select(mHsqldb);
+        Select fieldquery = new Select(HSQLDB);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
-        Select wherequery = new Select(mHsqldb);
+        Select wherequery = new Select(HSQLDB);
         wherequery
             .from("table2")
             .field("max(propertyShort)")
             .whereParameter("propertyShort", "!=");
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         // shuffled the structure around a bit to test the correct order usage
         query
             .where("propertyShort >= (" + wherequery + ")")
@@ -1088,16 +1088,16 @@ public class TestUpdateHsqldb extends TestUpdate {
         }));
 
         // Automated subselect creation
-        query = new Update(mHsqldb);
+        query = new Update(HSQLDB);
         // shuffled the structure around a bit to test the correct order usage
         query
             .where("propertyShort", ">=", wherequery)
             .whereParameterOr("propertyString", "propertyString2", "=")
-            .whereOr("tablename.propertyFloat", ">", new Select(mHsqldb)
+            .whereOr("tablename.propertyFloat", ">", new Select(HSQLDB)
                 .from("table2")
                 .field("max(propertyLong)")
                 .whereParameter("propertyLong", "!="))
-            .whereAnd("tablename.propertyDouble", "<=", new Select(mHsqldb)
+            .whereAnd("tablename.propertyDouble", "<=", new Select(HSQLDB)
                 .from("table2")
                 .field("max(propertyFloat)")
                 .whereParameter("propertyFloat", "!="))
@@ -1126,12 +1126,12 @@ public class TestUpdateHsqldb extends TestUpdate {
 
     @Test
     public void testCloneHsqldb() {
-        Select fieldquery = new Select(mHsqldb);
+        Select fieldquery = new Select(HSQLDB);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
-        Select wherequery = new Select(mHsqldb);
+        Select wherequery = new Select(HSQLDB);
         wherequery
             .from("table2")
             .field("max(propertyShort)")
@@ -1140,7 +1140,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         final Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Update query = new Update(mHsqldb);
+        Update query = new Update(HSQLDB);
         query.table("tablename")
             .fieldParameter("nullColumn")
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))

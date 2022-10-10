@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestInsertMysql extends TestInsert {
     @Test
     public void testInstantiationMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -34,7 +34,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testIncompleteQueryMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         try {
             query.getSql();
             fail();
@@ -54,7 +54,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testClearMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename")
             .field("col1", "val1");
         assertNotNull(query.getSql());
@@ -69,7 +69,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testParameterMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldParameter("col1");
         assertEquals(query.getSql(), "INSERT INTO tablename (col1) VALUES (?)");
@@ -77,7 +77,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testHintMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query
             .hint("DELAYED")
             .into("tablename")
@@ -90,7 +90,7 @@ public class TestInsertMysql extends TestInsert {
     public void testFieldMysql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename")
             .field("nullColumn", SqlNull.NULL)
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))
@@ -115,7 +115,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testFieldCustomMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldCustom("propertySqlDate", "now()");
         assertEquals(query.getSql(), "INSERT INTO tablename (propertySqlDate) VALUES (now())");
@@ -126,7 +126,7 @@ public class TestInsertMysql extends TestInsert {
     public void testFieldsMysql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fields(new Object[]{
                 "nullColumn", SqlNull.NULL,
@@ -153,7 +153,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testFieldParametersMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename");
 
         assertNull(query.getParameters());
@@ -244,7 +244,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testFieldParametersMixedMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename");
 
         assertNull(query.getParameters());
@@ -310,7 +310,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testFieldsBeanMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fields(BeanImpl.getPopulatedBean());
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (219038743.392874, 1, 0, 89, 34, '2002-06-18 15:26:14.0', 'v', 'r', '2002-06-18 15:26:14.0', 53348.34, 143298.692, 'VALUE_THREE', 98634.2, 8734.7, 545, 968, 34563, 66875, 43, 68, '2002-06-18', 'someotherstring', 'someotherstringbuff', '15:26:14', '2002-06-18 15:26:14.0')");
@@ -329,7 +329,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testFieldsBeanNullValuesMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fields(BeanImpl.getNullBean());
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject) VALUES (0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0)");
@@ -338,7 +338,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testFieldsBeanIncludedMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyByte, propertyDouble, propertyShort, propertyStringbuffer, propertyTime) VALUES (89, 53348.34, 43, 'someotherstringbuff', '15:26:14')");
@@ -347,7 +347,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testFieldsBeanExcludedMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShortObject, propertySqlDate, propertyString, propertyTimestamp) VALUES (219038743.392874, 1, 0, 34, '2002-06-18 15:26:14.0', 'v', 'r', '2002-06-18 15:26:14.0', 143298.692, 'VALUE_THREE', 98634.2, 8734.7, 545, 968, 34563, 66875, 68, '2002-06-18', 'someotherstring', '2002-06-18 15:26:14.0')");
@@ -356,7 +356,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testFieldsBeanFilteredMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyDouble, propertyStringbuffer) VALUES (53348.34, 'someotherstringbuff')");
@@ -365,7 +365,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testMultipleRowsMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename")
             .field("propertyChar", 'M')
             .field("propertyDouble", 12.3d)
@@ -381,7 +381,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testFieldsParametersBeanMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsParameters(BeanImpl.class);
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -514,7 +514,7 @@ public class TestInsertMysql extends TestInsert {
 
     @Test
     public void testFieldsParametersBeanExcludedMysql() {
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
@@ -577,7 +577,7 @@ public class TestInsertMysql extends TestInsert {
         final Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Insert query = new Insert(mMysql);
+        Insert query = new Insert(MYSQL);
         query
             .hint("DELAYED")
             .into("tablename")

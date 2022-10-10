@@ -5,6 +5,6 @@
 package rife.template;
 
 public enum TemplateConfig {
-    XML, TXT, SQL
+    XML, TXT
 
 }

@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCreateTableHsqldb extends TestCreateTable {
     @Test
     public void testInstantiationHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         assertNotNull(query);
         try {
             query.getSql();
@@ -29,7 +29,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testIncompleteQueryHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         try {
             query.getSql();
             fail();
@@ -50,7 +50,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testClearHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("string", String.class);
         assertNotNull(query.getSql());
@@ -65,7 +65,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testColumnHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
             .column("string", String.class)
             .column("stringbuffer", StringBuffer.class)
@@ -93,7 +93,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testColumnPrecisionHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -121,7 +121,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testColumnsBeanHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .columns(BeanImpl.class);
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByte SMALLINT, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString LONGVARCHAR, propertyStringbuffer LONGVARCHAR, propertyTime TIME, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
@@ -130,7 +130,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testColumnsBeanIncludedHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyByte SMALLINT, propertyFloat FLOAT, propertyStringbuffer LONGVARCHAR, propertyTime TIME)");
@@ -139,7 +139,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testColumnsBeanExcludedHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloatObject FLOAT, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString LONGVARCHAR, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
@@ -148,7 +148,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testColumnsBeanFilteredHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringbuffer"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyFloat FLOAT, propertyTime TIME)");
@@ -157,7 +157,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testColumnsBeanPrecisionHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)
@@ -200,7 +200,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testNullableHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn1", int.class, CreateTable.NULL)
             .column("stringColumn", String.class, 12, CreateTable.NOTNULL)
@@ -216,7 +216,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testDefaultHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -262,7 +262,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testDefaultFunctionHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
             .column("dateobject", java.sql.Date.class)
             .defaultFunction("dateobject", "CURRENT_TIMESTAMP");
@@ -272,7 +272,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testCustomAttributeHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
             .column("intColumn", Integer.class)
             .customAttribute("intColumn", "IDENTITY");
@@ -282,7 +282,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testTemporaryHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .temporary(true)
             .column("boolColumn", boolean.class);
@@ -292,7 +292,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testPrimaryKeySimpleHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("intColumn");
@@ -302,7 +302,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testPrimaryKeyMultipleHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -313,7 +313,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testPrimaryKeyNamedHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("constraint_name", "intColumn");
@@ -323,7 +323,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testPrimaryKeyMultipleNamedHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -334,7 +334,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testUniqueSimpleHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .unique("intColumn");
@@ -344,7 +344,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testUniqueMultipleHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -355,7 +355,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testUniqueNamedHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .unique("constraint_name", "intColumn");
@@ -365,7 +365,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testUniqueMultipleNamedHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -376,7 +376,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testForeignKeySimpleHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn");
@@ -386,7 +386,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testForeignKeyMultipleHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -397,7 +397,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testForeignKeySimpleNamedHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("constraint_name", "foreigntable", "intColumn", "foreignIntColumn");
@@ -407,7 +407,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testForeignKeyMultipleNamedHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -418,7 +418,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testForeignKeyViolationsSingleHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, null);
@@ -494,7 +494,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testForeignKeyViolationsHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, CreateTable.NOACTION);
@@ -504,7 +504,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testForeignKeyMultipleViolationsHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -517,7 +517,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testCheckSimpleHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("intColumn > 0");
@@ -527,7 +527,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testCheckNamedHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("NAME_CK", "intColumn > 0");
@@ -537,7 +537,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
 
     @Test
     public void testCloneHsqldb() {
-        CreateTable query = new CreateTable(mHsqldb);
+        CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)

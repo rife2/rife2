@@ -36,7 +36,6 @@ import rife.scheduler.Task;
  * </dl>
  *
  * @author Steven Grimm (koreth[remove] at midwinter dot com)
- * @version $Revision: $
  * @since 1.6
  */
 public class DbProbeExecutor extends Executor {

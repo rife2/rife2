@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDeletePgsql extends TestDelete {
     @Test
     public void testInstantiationPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -34,7 +34,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testIncompleteQueryPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         try {
             query.getSql();
             fail();
@@ -54,7 +54,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testClearPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where("this = that");
         assertNotNull(query.getSql());
@@ -69,7 +69,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testFromPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename");
         assertEquals(query.getSql(), "DELETE FROM tablename");
         assertTrue(execute(query));
@@ -77,7 +77,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testHintPgsql() {
-        Delete query = new Delete(mPgsql)
+        Delete query = new Delete(PGSQL)
             .hint("NO_INDEX")
             .from("tablename");
         try {
@@ -90,7 +90,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWherePgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where("propertyByte = 89");
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyByte = 89");
@@ -99,7 +99,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWhereTypedPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename");
 
         Calendar cal = Calendar.getInstance();
@@ -130,7 +130,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWhereTypedMixedPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename");
 
         final Calendar cal = Calendar.getInstance();
@@ -167,7 +167,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWhereParametersPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename");
 
         assertNull(query.getParameters());
@@ -200,7 +200,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWhereParametersMixedPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where("propertyInt = 545")
             .whereParameterAnd("propertyLong", "<")
@@ -227,7 +227,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWhereConstructionPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where("propertyInt = 545")
             .whereAnd("propertyLong < 50000")
@@ -238,7 +238,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWhereConstructionGroupPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where("propertyInt = 545")
             .whereAnd("propertyLong < 50000")
@@ -269,7 +269,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWhereBeanPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = true AND propertyBooleanObject = false AND propertyByte = 89 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.764' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.764' AND propertyDouble = 53348.34 AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShort = 43 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14' AND propertyTimestamp = '2002-06-18 15:26:14.764'");
@@ -287,7 +287,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWhereBeanNullValuesPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyBoolean = false AND propertyBooleanObject = false AND propertyByte = 0 AND propertyByteObject = 0 AND propertyDouble = 0.0 AND propertyDoubleObject = 0.0 AND propertyFloat = 0.0 AND propertyFloatObject = 0.0 AND propertyInt = 0 AND propertyIntegerObject = 0 AND propertyLong = 0 AND propertyLongObject = 0 AND propertyShort = 0 AND propertyShortObject = 0");
@@ -296,7 +296,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWhereBeanIncludedPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyByte = 89 AND propertyDouble = 53348.34 AND propertyShort = 43 AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14'");
@@ -305,7 +305,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWhereBeanExcludedPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = true AND propertyBooleanObject = false AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.764' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.764' AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyTimestamp = '2002-06-18 15:26:14.764'");
@@ -314,7 +314,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWhereBeanFilteredPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyDouble = 53348.34 AND propertyStringbuffer = 'someotherstringbuff'");
@@ -323,7 +323,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWhereParametersBeanPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyBigDecimal = ? AND propertyBoolean = ? AND propertyBooleanObject = ? AND propertyByte = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyChar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDouble = ? AND propertyDoubleObject = ? AND propertyEnum = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInt = ? AND propertyIntegerObject = ? AND propertyLong = ? AND propertyLongObject = ? AND propertyShort = ? AND propertyShortObject = ? AND propertySqlDate = ? AND propertyString = ? AND propertyStringbuffer = ? AND propertyTime = ? AND propertyTimestamp = ?");
@@ -457,7 +457,7 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testWhereParametersBeanExcludedPgsql() {
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename")
             .whereParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
@@ -511,14 +511,14 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testDeleteSubselectParamsPgsql() {
-        Select wherequery = new Select(mPgsql);
+        Select wherequery = new Select(PGSQL);
         wherequery
             .from("table2")
             .field("max(propertyShort)")
             .whereParameter("propertyShort", "!=");
 
         // Manual subselect creation
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query
             .where("propertyShort >= (" + wherequery + ")")
             .whereSubselect(wherequery)
@@ -538,15 +538,15 @@ public class TestDeletePgsql extends TestDelete {
         }));
 
         // Automated subselect creation
-        query = new Delete(mPgsql);
+        query = new Delete(PGSQL);
         query
             .where("propertyShort", ">=", wherequery)
             .whereParameterOr("propertyString", "=")
-            .whereOr("tablename.propertyFloat", ">", new Select(mPgsql)
+            .whereOr("tablename.propertyFloat", ">", new Select(PGSQL)
                 .from("table2")
                 .field("max(propertyLong)")
                 .whereParameter("propertyLong", "!="))
-            .whereAnd("tablename.propertyDouble", "<=", new Select(mPgsql)
+            .whereAnd("tablename.propertyDouble", "<=", new Select(PGSQL)
                 .from("table2")
                 .field("max(propertyFloat)")
                 .whereParameter("propertyFloat", "!="))
@@ -571,13 +571,13 @@ public class TestDeletePgsql extends TestDelete {
 
     @Test
     public void testClonePgsql() {
-        Select wherequery = new Select(mPgsql);
+        Select wherequery = new Select(PGSQL);
         wherequery
             .from("table2")
             .field("max(propertyShort)")
             .whereParameter("propertyShort", "!=");
 
-        Delete query = new Delete(mPgsql);
+        Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where("propertyShort >= (" + wherequery + ")")
             .whereSubselect(wherequery)

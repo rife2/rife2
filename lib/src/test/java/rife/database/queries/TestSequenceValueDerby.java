@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestSequenceValueDerby extends TestSequenceValue {
     @Test
     public void testInstantiationDerby() {
-        SequenceValue query = new SequenceValue(mDerby);
+        SequenceValue query = new SequenceValue(DERBY);
         assertNotNull(query);
         try {
             query.getSql();
@@ -26,7 +26,7 @@ public class TestSequenceValueDerby extends TestSequenceValue {
 
     @Test
     public void testInvalidDerby() {
-        SequenceValue query = new SequenceValue(mDerby);
+        SequenceValue query = new SequenceValue(DERBY);
         try {
             query.getSql();
             fail();
@@ -53,7 +53,7 @@ public class TestSequenceValueDerby extends TestSequenceValue {
 
     @Test
     public void testClearDerby() {
-        SequenceValue query = new SequenceValue(mDerby);
+        SequenceValue query = new SequenceValue(DERBY);
         query
             .name("sequencename")
             .next();
@@ -75,7 +75,7 @@ public class TestSequenceValueDerby extends TestSequenceValue {
 
     @Test
     public void testNextDerby() {
-        SequenceValue query = new SequenceValue(mDerby);
+        SequenceValue query = new SequenceValue(DERBY);
         query
             .name("sequencename")
             .next();
@@ -89,7 +89,7 @@ public class TestSequenceValueDerby extends TestSequenceValue {
 
     @Test
     public void testCurrentDerby() {
-        SequenceValue query = new SequenceValue(mDerby);
+        SequenceValue query = new SequenceValue(DERBY);
         query
             .name("sequencename")
             .current();
@@ -103,7 +103,7 @@ public class TestSequenceValueDerby extends TestSequenceValue {
 
     @Test
     public void testCloneDerby() {
-        SequenceValue query = new SequenceValue(mDerby);
+        SequenceValue query = new SequenceValue(DERBY);
         query
             .name("sequencename")
             .next();

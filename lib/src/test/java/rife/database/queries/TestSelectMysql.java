@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestSelectMysql extends TestSelect {
     @Test
     public void testInstantiationMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -33,7 +33,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testIncompleteQueryMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         try {
             query.getSql();
             fail();
@@ -43,7 +43,7 @@ public class TestSelectMysql extends TestSelect {
         query.from("tablename");
         assertNotNull(query.getSql());
 
-        query = new Select(mMysql);
+        query = new Select(MYSQL);
         try {
             query.getSql();
             fail();
@@ -56,7 +56,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testClearMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename");
         assertNotNull(query.getSql());
         query.clear();
@@ -70,7 +70,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testBasicMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename");
         assertTrue(execute(query));
@@ -78,7 +78,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testHintMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query
             .hint("SQL_NO_CACHE")
             .from("tablename");
@@ -88,7 +88,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testOrderByAscendingMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .orderBy("propertyInt", Select.ASC);
         assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyInt ASC");
@@ -97,7 +97,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testOrderByDescendingMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .orderBy("propertyInt", Select.DESC);
         assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyInt DESC");
@@ -106,7 +106,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testBeanMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .fields(BeanImpl.class);
         assertEquals(query.getSql(), "SELECT propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp FROM tablename");
@@ -130,7 +130,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testBeanExcludedMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
         assertEquals(query.getSql(), "SELECT propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp FROM tablename");
@@ -139,7 +139,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testBeanTableMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .fields("tablename", BeanImpl.class);
         assertEquals(query.getSql(), "SELECT tablename.propertyBigDecimal, tablename.propertyBoolean, tablename.propertyBooleanObject, tablename.propertyByte, tablename.propertyByteObject, tablename.propertyCalendar, tablename.propertyChar, tablename.propertyCharacterObject, tablename.propertyDate, tablename.propertyDouble, tablename.propertyDoubleObject, tablename.propertyEnum, tablename.propertyFloat, tablename.propertyFloatObject, tablename.propertyInt, tablename.propertyIntegerObject, tablename.propertyLong, tablename.propertyLongObject, tablename.propertyShort, tablename.propertyShortObject, tablename.propertySqlDate, tablename.propertyString, tablename.propertyStringbuffer, tablename.propertyTime, tablename.propertyTimestamp FROM tablename");
@@ -148,7 +148,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testBeanExcludedTableMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .fieldsExcluded("tablename", BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
         assertEquals(query.getSql(), "SELECT tablename.propertyBigDecimal, tablename.propertyBoolean, tablename.propertyBooleanObject, tablename.propertyByte, tablename.propertyByteObject, tablename.propertyChar, tablename.propertyCharacterObject, tablename.propertyDate, tablename.propertyDouble, tablename.propertyDoubleObject, tablename.propertyEnum, tablename.propertyFloatObject, tablename.propertyInt, tablename.propertyIntegerObject, tablename.propertyLong, tablename.propertyLongObject, tablename.propertyShortObject, tablename.propertySqlDate, tablename.propertyString, tablename.propertyStringbuffer, tablename.propertyTime, tablename.propertyTimestamp FROM tablename");
@@ -157,7 +157,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testWhereTypedMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename");
 
         Calendar cal = Calendar.getInstance();
@@ -188,7 +188,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testWhereTypedMixedMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename");
 
         final Calendar cal = Calendar.getInstance();
@@ -225,7 +225,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testWhereParametersMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename");
 
         assertNull(query.getParameters());
@@ -258,7 +258,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testWhereParametersMixedMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .where("propertyInt = 545")
             .whereParameterAnd("propertyLong", "<")
@@ -280,7 +280,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testWhereConstructionMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .where("propertyInt = 545")
             .whereAnd("propertyLong < 50000")
@@ -291,7 +291,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testWhereConstructionGroupMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .startWhere()
             .where("propertyInt", "=", 545)
@@ -325,7 +325,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testWhereBeanMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = 1 AND propertyBooleanObject = 0 AND propertyByte = 89 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.0' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.0' AND propertyDouble = 53348.34 AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShort = 43 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14' AND propertyTimestamp = '2002-06-18 15:26:14.0'");
@@ -344,7 +344,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testWhereBeanNullValuesMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBoolean = 0 AND propertyBooleanObject = 0 AND propertyByte = 0 AND propertyByteObject = 0 AND propertyDouble = 0.0 AND propertyDoubleObject = 0.0 AND propertyFloat = 0.0 AND propertyFloatObject = 0.0 AND propertyInt = 0 AND propertyIntegerObject = 0 AND propertyLong = 0 AND propertyLongObject = 0 AND propertyShort = 0 AND propertyShortObject = 0");
@@ -353,7 +353,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testWhereBeanIncludedMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyByte = 89 AND propertyDouble = 53348.34 AND propertyShort = 43 AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14'");
@@ -362,7 +362,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testWhereBeanExcludedMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = 1 AND propertyBooleanObject = 0 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.0' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.0' AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyTimestamp = '2002-06-18 15:26:14.0'");
@@ -371,7 +371,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testWhereBeanFilteredMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyDouble = 53348.34 AND propertyStringbuffer = 'someotherstringbuff'");
@@ -568,7 +568,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testDistinctMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .distinct()
             .where("propertyByte = 89")
@@ -581,7 +581,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testDistinctOnMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .distinctOn("propertyDouble")
             .distinctOn("propertyShort")
@@ -600,7 +600,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testComplexMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .field("field1")
             .field("field2")
@@ -622,7 +622,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testGroupByBeanMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .fields(BeanImpl.class)
             .groupBy(BeanImpl.class);
@@ -632,7 +632,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testGroupByBeanExcludedMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort")
             .groupByExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
@@ -642,7 +642,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testJoinMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .join("table2")
             .join("table3");
@@ -652,7 +652,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testJoinCustomMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .joinCustom("INNER JOIN table3 USING (propertyInt)")
             .joinCustom("CROSS JOIN table2");
@@ -662,7 +662,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testJoinCrossMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .joinCross("table2")
             .joinCross("table3");
@@ -672,7 +672,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testJoinInnerMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .joinInner("table2", Select.NATURAL, null);
         try {
@@ -696,7 +696,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testJoinOuterMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
 
         query.from("tablename")
             .joinOuter("table2", Select.FULL, Select.NATURAL, null);
@@ -761,7 +761,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testLimitMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .limit(3);
         assertEquals(query.getSql(), "SELECT * FROM tablename LIMIT 3");
@@ -778,7 +778,7 @@ public class TestSelectMysql extends TestSelect {
 
     @Test
     public void testLimitParameterMysql() {
-        Select query = new Select(mMysql);
+        Select query = new Select(MYSQL);
         query.from("tablename")
             .limitParameter("limit");
         assertEquals(query.getSql(), "SELECT * FROM tablename LIMIT ?");

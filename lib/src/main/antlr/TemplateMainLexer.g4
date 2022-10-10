@@ -13,23 +13,19 @@ lexer grammar TemplateMainLexer;
 // -------------------------------------------------------------------
 // MODE: Everything OUTSIDE of a tag
 
-fragment TSTART :   '<!--'  { tc == XML }? | '<!'  { tc == TXT }? | '/*'  { tc == SQL }? ;
-fragment TEND   :   '-->'   { tc == XML }? | '>'   { tc == TXT }? | '*/'  { tc == SQL }? ;
-fragment TTERM  :   '<!--/' { tc == XML }? | '<!/' { tc == TXT }? | '/*-' { tc == SQL }? ;
-fragment STTERM :   '/-->'  { tc == XML }? | '/>'  { tc == TXT }? | '-*/' { tc == SQL }? ;
+fragment TSTART :   '<!--'  { tc == XML }? | '<!'  { tc == TXT }? ;
+fragment TEND   :   '-->'   { tc == XML }? | '>'   { tc == TXT }? ;
+fragment TTERM  :   '<!--/' { tc == XML }? | '<!/' { tc == TXT }? ;
+fragment STTERM :   '/-->'  { tc == XML }? | '/>'  { tc == TXT }? ;
 fragment FTEXT  :   ~[<{]+ { tc == XML }?
                 |   ~[<{]+ { tc == TXT }?
-                |   ~[/{]+ { tc == SQL }?
                 ;
 fragment TTEXT  :   ( ('<' ~'!' | '<!' ~'-' | '<!-' ~'-') { tc == XML }? |
-                      '<' ~'!' { tc == TXT }? |
-                      '/' ~'*' { tc == SQL }? )
+                      ('<' ~'!')                          { tc == TXT }? )
                 |   ( '<!--' ~('v'|'b'|'/') { tc == XML }? |
-                      '<!'   ~('v'|'b'|'/') { tc == TXT }? |
-                      '/*'   ~('v'|'b'|'-') { tc == SQL }? )
+                      '<!'   ~('v'|'b'|'/') { tc == TXT }? )
                 |   ( '<!--/' ~('v'|'b') { tc == XML }? |
-                      '<!/'   ~('v'|'b') { tc == TXT }? |
-                      '/*-'   ~('v'|'b') { tc == SQL }? )
+                      '<!/'   ~('v'|'b') { tc == TXT }? )
                 ;
 fragment V      :   'v' ;
 fragment B      :   'b' ;
@@ -55,7 +51,7 @@ NameChar    :   NameStartChar
 
 fragment
 NameEndChar :   NameStartChar
-            |   '_' | '.' | '[' | ']' | DIGIT
+            |   '[' | ']' | ',' | '*'
             |   '\u00B7'
             |   '\u0300'..'\u036F'
             |   '\u203F'..'\u2040'
@@ -64,6 +60,7 @@ NameEndChar :   NameStartChar
 fragment
 NameStartChar
             :   [:a-zA-Z]
+            |   DIGIT | '_' | '.'
             |   '\u2070'..'\u218F'
             |   '\u2C00'..'\u2FEF'
             |   '\u3001'..'\uD7FF'

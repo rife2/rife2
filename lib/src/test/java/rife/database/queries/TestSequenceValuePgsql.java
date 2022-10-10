@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestSequenceValuePgsql extends TestSequenceValue {
     @Test
     public void testInstantiationPgsql() {
-        SequenceValue query = new SequenceValue(mPgsql);
+        SequenceValue query = new SequenceValue(PGSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -25,7 +25,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
 
     @Test
     public void testInvalidPgsql() {
-        SequenceValue query = new SequenceValue(mPgsql);
+        SequenceValue query = new SequenceValue(PGSQL);
         try {
             query.getSql();
             fail();
@@ -52,7 +52,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
 
     @Test
     public void testClearPgsql() {
-        SequenceValue query = new SequenceValue(mPgsql);
+        SequenceValue query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
             .next();
@@ -69,33 +69,33 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
 
     @Test
     public void testNextPgsql() {
-        SequenceValue query = new SequenceValue(mPgsql);
+        SequenceValue query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
             .next();
         assertEquals(query.getSql(), "SELECT nextval('sequencename')");
-        assertTrue(execute(mPgsql, query) >= 0);
+        assertTrue(execute(PGSQL, query) >= 0);
     }
 
     @Test
     public void testCurrentPgsql() {
-        SequenceValue query = new SequenceValue(mPgsql);
+        SequenceValue query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
             .current();
         assertEquals(query.getSql(), "SELECT currval('sequencename')");
-        assertTrue(execute(mPgsql, query) >= 0);
+        assertTrue(execute(PGSQL, query) >= 0);
     }
 
     @Test
     public void testClonePgsql() {
-        SequenceValue query = new SequenceValue(mPgsql);
+        SequenceValue query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
             .next();
         SequenceValue query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertTrue(query != query_clone);
-        assertTrue(execute(mPgsql, query_clone) >= 0);
+        assertTrue(execute(PGSQL, query_clone) >= 0);
     }
 }

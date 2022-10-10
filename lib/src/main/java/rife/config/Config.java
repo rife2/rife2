@@ -950,10 +950,8 @@ public class Config implements Cloneable {
             new_config.lists_ = ObjectUtils.deepClone(lists_);
             new_config.finalLists_ = ObjectUtils.deepClone(finalLists_);
         } catch (CloneNotSupportedException e) {
-            ///CLOVER:OFF
             // this should never happen
             Logger.getLogger("rife.config").severe(ExceptionUtils.getExceptionStackTrace(e));
-            ///CLOVER:ON
         }
 
         return new_config;

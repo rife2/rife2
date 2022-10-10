@@ -7,7 +7,6 @@ package rife.database.queries;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Calendar;
 
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestSelectDerby extends TestSelect {
     @Test
     public void testInstantiationDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         assertNotNull(query);
         try {
             query.getSql();
@@ -34,7 +33,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testIncompleteQueryDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         try {
             query.getSql();
             fail();
@@ -44,7 +43,7 @@ public class TestSelectDerby extends TestSelect {
         query.from("tablename");
         assertNotNull(query.getSql());
 
-        query = new Select(mDerby);
+        query = new Select(DERBY);
         try {
             query.getSql();
             fail();
@@ -57,7 +56,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testClearDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename");
         assertNotNull(query.getSql());
         query.clear();
@@ -71,7 +70,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testBasicDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename");
         assertTrue(execute(query));
@@ -79,7 +78,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testHintDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query
             .hint("NO_INDEX")
             .from("tablename");
@@ -93,7 +92,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testOrderByAscendingDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .orderBy("propertyInt", Select.ASC);
         assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyInt ASC");
@@ -102,7 +101,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testOrderByDescendingDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .orderBy("propertyInt", Select.DESC);
         assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyInt DESC");
@@ -111,7 +110,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testBeanDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .fields(BeanImpl.class);
         assertEquals(query.getSql(), "SELECT propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp FROM tablename");
@@ -135,7 +134,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testBeanExcludedDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
         assertEquals(query.getSql(), "SELECT propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp FROM tablename");
@@ -144,7 +143,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testBeanTableDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .fields("tablename", BeanImpl.class);
         assertEquals(query.getSql(), "SELECT tablename.propertyBigDecimal, tablename.propertyBoolean, tablename.propertyBooleanObject, tablename.propertyByte, tablename.propertyByteObject, tablename.propertyCalendar, tablename.propertyChar, tablename.propertyCharacterObject, tablename.propertyDate, tablename.propertyDouble, tablename.propertyDoubleObject, tablename.propertyEnum, tablename.propertyFloat, tablename.propertyFloatObject, tablename.propertyInt, tablename.propertyIntegerObject, tablename.propertyLong, tablename.propertyLongObject, tablename.propertyShort, tablename.propertyShortObject, tablename.propertySqlDate, tablename.propertyString, tablename.propertyStringbuffer, tablename.propertyTime, tablename.propertyTimestamp FROM tablename");
@@ -153,7 +152,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testBeanExcludedTableDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .fieldsExcluded("tablename", BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
         assertEquals(query.getSql(), "SELECT tablename.propertyBigDecimal, tablename.propertyBoolean, tablename.propertyBooleanObject, tablename.propertyByte, tablename.propertyByteObject, tablename.propertyChar, tablename.propertyCharacterObject, tablename.propertyDate, tablename.propertyDouble, tablename.propertyDoubleObject, tablename.propertyEnum, tablename.propertyFloatObject, tablename.propertyInt, tablename.propertyIntegerObject, tablename.propertyLong, tablename.propertyLongObject, tablename.propertyShortObject, tablename.propertySqlDate, tablename.propertyString, tablename.propertyStringbuffer, tablename.propertyTime, tablename.propertyTimestamp FROM tablename");
@@ -162,7 +161,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testWhereTypedDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename");
 
         Calendar cal = Calendar.getInstance();
@@ -193,7 +192,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testWhereTypedMixedDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename");
 
         final Calendar cal = Calendar.getInstance();
@@ -230,7 +229,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testWhereParametersDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename");
 
         assertNull(query.getParameters());
@@ -263,7 +262,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testWhereParametersMixedDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .where("propertyInt = 545")
             .whereParameterAnd("propertyLong", "<")
@@ -285,7 +284,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testWhereConstructionDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .where("propertyInt = 545")
             .whereAnd("propertyLong < 50000")
@@ -296,7 +295,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testWhereConstructionGroupDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .startWhere()
             .where("propertyInt", "=", 545)
@@ -330,7 +329,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testWhereBeanDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = 1 AND propertyBooleanObject = 0 AND propertyByte = 89 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.764' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.764' AND propertyDouble = 53348.34 AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShort = 43 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14' AND propertyTimestamp = '2002-06-18 15:26:14.764'");
@@ -349,7 +348,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testWhereBeanNullValuesDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBoolean = 0 AND propertyBooleanObject = 0 AND propertyByte = 0 AND propertyByteObject = 0 AND propertyDouble = 0.0 AND propertyDoubleObject = 0.0 AND propertyFloat = 0.0 AND propertyFloatObject = 0.0 AND propertyInt = 0 AND propertyIntegerObject = 0 AND propertyLong = 0 AND propertyLongObject = 0 AND propertyShort = 0 AND propertyShortObject = 0");
@@ -358,7 +357,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testWhereBeanIncludedDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyByte = 89 AND propertyDouble = 53348.34 AND propertyShort = 43 AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14'");
@@ -367,7 +366,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testWhereBeanExcludedDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = 1 AND propertyBooleanObject = 0 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.764' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.764' AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyTimestamp = '2002-06-18 15:26:14.764'");
@@ -376,7 +375,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testWhereBeanFilteredDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyDouble = 53348.34 AND propertyStringbuffer = 'someotherstringbuff'");
@@ -385,7 +384,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testWhereParametersBeanDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBigDecimal = ? AND propertyBoolean = ? AND propertyBooleanObject = ? AND propertyByte = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyChar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDouble = ? AND propertyDoubleObject = ? AND propertyEnum = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInt = ? AND propertyIntegerObject = ? AND propertyLong = ? AND propertyLongObject = ? AND propertyShort = ? AND propertyShortObject = ? AND propertySqlDate = ? AND propertyString = ? AND propertyStringbuffer = ? AND propertyTime = ? AND propertyTimestamp = ?");
@@ -522,7 +521,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testWhereParametersBeanExcludedDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .whereParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
@@ -576,7 +575,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testDistinctDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .distinct()
             .where("propertyByte = 89")
@@ -589,7 +588,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testDistinctOnDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .distinctOn("propertyDouble")
             .distinctOn("propertyShort")
@@ -608,7 +607,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testComplexDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .field("field1")
             .field("field2")
@@ -630,7 +629,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testGroupByBeanDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .fields(BeanImpl.class)
             .groupBy(BeanImpl.class);
@@ -640,7 +639,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testGroupByBeanExcludedDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort")
             .groupByExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
@@ -650,7 +649,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testJoinDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .join("table2")
             .join("table3");
@@ -660,7 +659,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testJoinCustomDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .joinCustom("INNER JOIN table3 ON (tablename.propertyInt = table3.propertyInt)")
             .joinCustom("LEFT OUTER JOIN table2 ON (table3.propertyInt = table2.propertyInt)");
@@ -670,7 +669,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testJoinCrossDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .joinCross("table2")
             .joinCross("table3");
@@ -684,7 +683,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testJoinInnerDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .joinInner("table2", Select.NATURAL, null);
         try {
@@ -711,7 +710,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testJoinOuterDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
 
         query.from("tablename")
             .joinOuter("table2", Select.FULL, Select.NATURAL, null);
@@ -793,7 +792,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testLimitDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .limit(3);
         try {
@@ -818,7 +817,7 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testLimitParameterDerby() {
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query.from("tablename")
             .limitParameter("limit");
         try {
@@ -845,28 +844,28 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testSubselectParamsDerby() {
-        Select fieldquery = new Select(mDerby);
+        Select fieldquery = new Select(DERBY);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
-        Select tablequery = new Select(mDerby);
+        Select tablequery = new Select(DERBY);
         tablequery
             .from("table2")
             .whereParameter("propertyLong", "<");
-        Select wherequery = new Select(mDerby);
+        Select wherequery = new Select(DERBY);
         wherequery
             .from("table3")
             .field("max(propertyShort)")
             .whereParameter("propertyShort", "!=");
-        Select unionquery1 = new Select(mDerby);
+        Select unionquery1 = new Select(DERBY);
         unionquery1
             .from("table2")
             .field("propertyString")
             .field("max(propertyByte)")
             .whereParameter("propertyByte", "=")
             .groupBy("propertyString");
-        Select unionquery2 = new Select(mDerby);
+        Select unionquery2 = new Select(DERBY);
         unionquery2
             .from("table2")
             .field("propertyStringbuffer")
@@ -875,7 +874,7 @@ public class TestSelectDerby extends TestSelect {
             .groupBy("propertyStringbuffer");
 
         // Manual subselect creation
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         // shuffled the structure around a bit to test the correct order usage
         query
             .unionAll(unionquery1)
@@ -911,20 +910,20 @@ public class TestSelectDerby extends TestSelect {
         }));
 
         //Automated subselect creation
-        query = new Select(mDerby);
+        query = new Select(DERBY);
         query
             .union(unionquery1)
             .union(unionquery2)
             .where("tablename.propertyShort", ">=", wherequery)
             .whereParameterOr("tablename.propertyString", "propertyString", "=")
-            .whereOr("tablename.propertyFloat", ">", new Select(mDerby)
+            .whereOr("tablename.propertyFloat", ">", new Select(DERBY)
                 .from("table3")
                 .field("max(propertyLong)")
                 .whereParameter("propertyLong", "!="))
-            .from("tablename", new Select(mDerby)
+            .from("tablename", new Select(DERBY)
                 .from("tablename"))
             .join("tablesubselect", tablequery)
-            .whereAnd("tablename.propertyDouble", "<=", new Select(mDerby)
+            .whereAnd("tablename.propertyDouble", "<=", new Select(DERBY)
                 .from("table2")
                 .field("max(propertyFloat)")
                 .whereParameter("propertyFloat", "!="))
@@ -957,35 +956,35 @@ public class TestSelectDerby extends TestSelect {
 
     @Test
     public void testCloneDerby() {
-        Select fieldquery = new Select(mDerby);
+        Select fieldquery = new Select(DERBY);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
-        Select tablequery = new Select(mDerby);
+        Select tablequery = new Select(DERBY);
         tablequery
             .from("table2")
             .whereParameter("propertyLong", "<");
-        Select wherequery = new Select(mDerby);
+        Select wherequery = new Select(DERBY);
         wherequery
             .from("table3")
             .field("max(propertyShort)")
             .whereParameter("propertyShort", "!=");
-        Select unionquery1 = new Select(mDerby);
+        Select unionquery1 = new Select(DERBY);
         unionquery1
             .from("table2")
             .field("propertyString")
             .field("max(propertyByte)")
             .whereParameter("propertyByte", "=")
             .groupBy("propertyString");
-        Select unionquery2 = new Select(mDerby);
+        Select unionquery2 = new Select(DERBY);
         unionquery2
             .from("table2")
             .field("propertyStringbuffer")
             .field("min(propertyByte)")
             .whereParameter("propertyByte", ">")
             .groupBy("propertyStringbuffer");
-        Select query = new Select(mDerby);
+        Select query = new Select(DERBY);
         query
             .from("tablename")
             .join("(" + tablequery + ") AS tablesubselect")

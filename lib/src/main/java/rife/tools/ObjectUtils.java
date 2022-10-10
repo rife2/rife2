@@ -117,11 +117,9 @@ public class ObjectUtils {
                         return (T) ((float[]) object).clone();
                     case 'D':
                         return (T) ((double[]) object).clone();
-                    ///CLOVER:OFF
                     default:
                         Logger.getLogger("rife.tools").severe("Unknown primitive array class: " + classname);
                         return null;
-                    ///CLOVER:ON
                 }
             }
 
@@ -137,12 +135,10 @@ public class ObjectUtils {
                 try {
                     baseClass = Class.forName(classname.substring(dimension_count + 1, classname.length() - 1));
                 }
-                ///CLOVER:OFF
                 catch (ClassNotFoundException e) {
                     Logger.getLogger("rife.tools").severe("Internal error: class definition inconsistency: " + classname);
                     return null;
                 }
-                ///CLOVER:ON
             }
 
             // instantiate the array but make all but the first dimension 0.

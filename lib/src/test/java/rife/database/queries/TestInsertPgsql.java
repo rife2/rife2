@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestInsertPgsql extends TestInsert {
     @Test
     public void testInstantiationPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -36,7 +36,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testIncompleteQueryPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         try {
             query.getSql();
             fail();
@@ -56,7 +56,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testClearPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .field("col1", "val1");
         assertNotNull(query.getSql());
@@ -71,7 +71,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testParameterPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldParameter("col1");
         assertEquals(query.getSql(), "INSERT INTO tablename (col1) VALUES (?)");
@@ -79,7 +79,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testHintPgsql() {
-        Insert query = new Insert(mPgsql)
+        Insert query = new Insert(PGSQL)
             .hint("NO_INDEX")
             .into("tablename")
             .fieldParameter("col1");
@@ -96,7 +96,7 @@ public class TestInsertPgsql extends TestInsert {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .field("nullColumn", SqlNull.NULL)
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))
@@ -121,7 +121,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testFieldCustomPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldCustom("propertySqlDate", "now()");
         assertEquals(query.getSql(), "INSERT INTO tablename (propertySqlDate) VALUES (now())");
@@ -133,7 +133,7 @@ public class TestInsertPgsql extends TestInsert {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fields(new Object[]{
                 "nullColumn", SqlNull.NULL,
@@ -160,7 +160,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testFieldParametersPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename");
 
         assertNull(query.getParameters());
@@ -251,7 +251,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testFieldParametersMixedPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename");
 
         assertNull(query.getParameters());
@@ -317,7 +317,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testFieldsBeanPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fields(BeanImpl.getPopulatedBean());
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (219038743.392874, true, false, 89, 34, '2002-06-18 15:26:14.764', 'v', 'r', '2002-06-18 15:26:14.764', 53348.34, 143298.692, 'VALUE_THREE', 98634.2, 8734.7, 545, 968, 34563, 66875, 43, 68, '2002-06-18', 'someotherstring', 'someotherstringbuff', '15:26:14', '2002-06-18 15:26:14.764')");
@@ -335,7 +335,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testFieldsBeanNullValuesPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fields(BeanImpl.getNullBean());
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject) VALUES (false, false, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0)");
@@ -344,7 +344,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testFieldsBeanIncludedPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyByte, propertyDouble, propertyShort, propertyStringbuffer, propertyTime) VALUES (89, 53348.34, 43, 'someotherstringbuff', '15:26:14')");
@@ -353,7 +353,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testFieldsBeanExcludedPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShortObject, propertySqlDate, propertyString, propertyTimestamp) VALUES (219038743.392874, true, false, 34, '2002-06-18 15:26:14.764', 'v', 'r', '2002-06-18 15:26:14.764', 143298.692, 'VALUE_THREE', 98634.2, 8734.7, 545, 968, 34563, 66875, 68, '2002-06-18', 'someotherstring', '2002-06-18 15:26:14.764')");
@@ -362,7 +362,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testFieldsBeanFilteredPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyDouble, propertyStringbuffer) VALUES (53348.34, 'someotherstringbuff')");
@@ -371,7 +371,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testMultipleRowsPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .field("propertyChar", 'M')
             .field("propertyDouble", 12.3d)
@@ -391,7 +391,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testFieldsParametersBeanPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldsParameters(BeanImpl.class);
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -523,7 +523,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testFieldsParametersBeanExcludedPgsql() {
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
@@ -578,14 +578,14 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testInsertSubselectParamsPgsql() {
-        Select fieldquery = new Select(mPgsql);
+        Select fieldquery = new Select(PGSQL);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
 
         // Manual subselect creation
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         // shuffled the structure around a bit to test the correct order usage
         query
             .into("tablename")
@@ -606,7 +606,7 @@ public class TestInsertPgsql extends TestInsert {
         }));
 
         // Automated subselect creation
-        query = new Insert(mPgsql);
+        query = new Insert(PGSQL);
         // shuffled the structure around a bit to test the correct order usage
         query
             .into("tablename")
@@ -628,7 +628,7 @@ public class TestInsertPgsql extends TestInsert {
 
     @Test
     public void testClonePgsql() {
-        Select fieldquery = new Select(mPgsql);
+        Select fieldquery = new Select(PGSQL);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
@@ -637,7 +637,7 @@ public class TestInsertPgsql extends TestInsert {
         final Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Insert query = new Insert(mPgsql);
+        Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldParameter("nullColumn")
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))

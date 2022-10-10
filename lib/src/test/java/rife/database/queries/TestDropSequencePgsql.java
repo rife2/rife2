@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDropSequencePgsql extends TestDropSequence {
     @Test
     public void testInstantiationPgsql() {
-        DropSequence query = new DropSequence(mPgsql);
+        DropSequence query = new DropSequence(PGSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -24,7 +24,7 @@ public class TestDropSequencePgsql extends TestDropSequence {
 
     @Test
     public void testClearPgsql() {
-        DropSequence query = new DropSequence(mPgsql);
+        DropSequence query = new DropSequence(PGSQL);
         query.name("sequencename");
         assertNotNull(query.getSql());
         query.clear();
@@ -38,19 +38,19 @@ public class TestDropSequencePgsql extends TestDropSequence {
 
     @Test
     public void testCreatePgsql() {
-        DropSequence query = new DropSequence(mPgsql);
+        DropSequence query = new DropSequence(PGSQL);
         query.name("sequencename");
         assertEquals(query.getSql(), "DROP SEQUENCE sequencename");
-        execute(mPgsql, query);
+        execute(PGSQL, query);
     }
 
     @Test
     public void testClonePgsql() {
-        DropSequence query = new DropSequence(mPgsql);
+        DropSequence query = new DropSequence(PGSQL);
         query.name("sequencename");
         DropSequence query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertTrue(query != query_clone);
-        execute(mPgsql, query_clone);
+        execute(PGSQL, query_clone);
     }
 }

@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDropSequenceMysql extends TestDropSequence {
     @Test
     public void testInstantiationMysql() {
-        DropSequence query = new DropSequence(mMysql);
+        DropSequence query = new DropSequence(MYSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -25,7 +25,7 @@ public class TestDropSequenceMysql extends TestDropSequence {
 
     @Test
     public void testClearMysql() {
-        DropSequence query = new DropSequence(mMysql);
+        DropSequence query = new DropSequence(MYSQL);
         query.name("sequencename");
         try {
             query.getSql();
@@ -37,7 +37,7 @@ public class TestDropSequenceMysql extends TestDropSequence {
 
     @Test
     public void testCreateMysql() {
-        DropSequence query = new DropSequence(mMysql);
+        DropSequence query = new DropSequence(MYSQL);
         query.name("sequencename");
         try {
             query.getSql();

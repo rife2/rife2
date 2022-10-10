@@ -10,7 +10,7 @@ import java.util.Objects;
  * Selects a name according to the <code>rife.application</code>
  * application property.
  *
- * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @author Geert Bevin <gbevin[remove] at uwyn dot com>
  * @see NameSelector
  * @since 2.0
  */

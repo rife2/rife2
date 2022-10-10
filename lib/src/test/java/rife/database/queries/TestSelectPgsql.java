@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestSelectPgsql extends TestSelect {
     @Test
     public void testInstantiationPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -34,7 +34,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testIncompleteQueryPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         try {
             query.getSql();
             fail();
@@ -44,7 +44,7 @@ public class TestSelectPgsql extends TestSelect {
         query.from("tablename");
         assertNotNull(query.getSql());
 
-        query = new Select(mPgsql);
+        query = new Select(PGSQL);
         try {
             query.getSql();
             fail();
@@ -57,7 +57,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testClearPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename");
         assertNotNull(query.getSql());
         query.clear();
@@ -71,7 +71,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testBasicPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename");
         assertTrue(execute(query));
@@ -79,7 +79,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testHintPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query
             .hint("NO_INDEX")
             .from("tablename");
@@ -93,7 +93,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testOrderByAscendingPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .orderBy("propertyInt", Select.ASC);
         assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyInt ASC");
@@ -102,7 +102,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testOrderByDescendingPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .orderBy("propertyInt", Select.DESC);
         assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyInt DESC");
@@ -111,7 +111,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testBeanPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .fields(BeanImpl.class);
         assertEquals(query.getSql(), "SELECT propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp FROM tablename");
@@ -134,7 +134,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testBeanExcludedPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, new String[]{"propertyCalendar", "propertyFloat", "propertyShort"});
         assertEquals(query.getSql(), "SELECT propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp FROM tablename");
@@ -143,7 +143,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testBeanTablePgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .fields("tablename", BeanImpl.class);
         assertEquals(query.getSql(), "SELECT tablename.propertyBigDecimal, tablename.propertyBoolean, tablename.propertyBooleanObject, tablename.propertyByte, tablename.propertyByteObject, tablename.propertyCalendar, tablename.propertyChar, tablename.propertyCharacterObject, tablename.propertyDate, tablename.propertyDouble, tablename.propertyDoubleObject, tablename.propertyEnum, tablename.propertyFloat, tablename.propertyFloatObject, tablename.propertyInt, tablename.propertyIntegerObject, tablename.propertyLong, tablename.propertyLongObject, tablename.propertyShort, tablename.propertyShortObject, tablename.propertySqlDate, tablename.propertyString, tablename.propertyStringbuffer, tablename.propertyTime, tablename.propertyTimestamp FROM tablename");
@@ -152,7 +152,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testBeanExcludedTablePgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .fieldsExcluded("tablename", BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
         assertEquals(query.getSql(), "SELECT tablename.propertyBigDecimal, tablename.propertyBoolean, tablename.propertyBooleanObject, tablename.propertyByte, tablename.propertyByteObject, tablename.propertyChar, tablename.propertyCharacterObject, tablename.propertyDate, tablename.propertyDouble, tablename.propertyDoubleObject, tablename.propertyEnum, tablename.propertyFloatObject, tablename.propertyInt, tablename.propertyIntegerObject, tablename.propertyLong, tablename.propertyLongObject, tablename.propertyShortObject, tablename.propertySqlDate, tablename.propertyString, tablename.propertyStringbuffer, tablename.propertyTime, tablename.propertyTimestamp FROM tablename");
@@ -161,7 +161,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testWhereTypedPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename");
 
         Calendar cal = Calendar.getInstance();
@@ -192,7 +192,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testWhereTypedMixedPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename");
 
         final Calendar cal = Calendar.getInstance();
@@ -229,7 +229,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testWhereParametersPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename");
 
         assertNull(query.getParameters());
@@ -262,7 +262,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testWhereParametersMixedPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .where("propertyInt = 545")
             .whereParameterAnd("propertyLong", "<")
@@ -284,7 +284,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testWhereConstructionPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .where("propertyInt = 545")
             .whereAnd("propertyLong < 50000")
@@ -295,7 +295,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testWhereConstructionGroupPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .startWhere()
             .where("propertyInt", "=", 545)
@@ -329,7 +329,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testWhereBeanPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = true AND propertyBooleanObject = false AND propertyByte = 89 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.764' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.764' AND propertyDouble = 53348.34 AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShort = 43 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14' AND propertyTimestamp = '2002-06-18 15:26:14.764'");
@@ -347,7 +347,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testWhereBeanNullValuesPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBoolean = false AND propertyBooleanObject = false AND propertyByte = 0 AND propertyByteObject = 0 AND propertyDouble = 0.0 AND propertyDoubleObject = 0.0 AND propertyFloat = 0.0 AND propertyFloatObject = 0.0 AND propertyInt = 0 AND propertyIntegerObject = 0 AND propertyLong = 0 AND propertyLongObject = 0 AND propertyShort = 0 AND propertyShortObject = 0");
@@ -356,7 +356,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testWhereBeanIncludedPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyByte = 89 AND propertyDouble = 53348.34 AND propertyShort = 43 AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14'");
@@ -365,7 +365,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testWhereBeanExcludedPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = true AND propertyBooleanObject = false AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.764' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.764' AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyTimestamp = '2002-06-18 15:26:14.764'");
@@ -374,7 +374,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testWhereBeanFilteredPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyDouble = 53348.34 AND propertyStringbuffer = 'someotherstringbuff'");
@@ -383,7 +383,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testWhereParametersBeanPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyBigDecimal = ? AND propertyBoolean = ? AND propertyBooleanObject = ? AND propertyByte = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyChar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDouble = ? AND propertyDoubleObject = ? AND propertyEnum = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInt = ? AND propertyIntegerObject = ? AND propertyLong = ? AND propertyLongObject = ? AND propertyShort = ? AND propertyShortObject = ? AND propertySqlDate = ? AND propertyString = ? AND propertyStringbuffer = ? AND propertyTime = ? AND propertyTimestamp = ?");
@@ -517,7 +517,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testWhereParametersBeanExcludedPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .whereParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
@@ -571,7 +571,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testDistinctPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .distinct()
             .where("propertyByte = 89")
@@ -584,7 +584,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testDistinctOnPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .distinctOn("propertyDouble")
             .distinctOn("propertyShort")
@@ -599,7 +599,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testComplexPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .field("field1")
             .field("field2")
@@ -621,7 +621,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testGroupByBeanPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .fields(BeanImpl.class)
             .groupBy(BeanImpl.class);
@@ -631,7 +631,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testGroupByBeanExcludedPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, new String[]{"propertyCalendar", "propertyFloat", "propertyShort"})
             .groupByExcluded(BeanImpl.class, new String[]{"propertyCalendar", "propertyFloat", "propertyShort"});
@@ -641,7 +641,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testJoinPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .join("table2")
             .join("table3");
@@ -651,7 +651,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testJoinCustomPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .joinCustom("INNER JOIN table3 USING (propertyInt)")
             .joinCustom("CROSS JOIN table2");
@@ -661,7 +661,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testJoinCrossPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .joinCross("table2")
             .joinCross("table3");
@@ -671,7 +671,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testJoinInnerPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .joinInner("table2", Select.NATURAL, null);
         assertEquals(query.getSql(), "SELECT * FROM tablename NATURAL INNER JOIN table2");
@@ -690,7 +690,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testJoinOuterPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
 
         query.from("tablename")
             .joinOuter("table2", Select.FULL, Select.NATURAL, null);
@@ -743,7 +743,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testLimitPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .limit(3);
         assertEquals(query.getSql(), "SELECT * FROM tablename LIMIT 3");
@@ -760,7 +760,7 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testLimitParameterPgsql() {
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query.from("tablename")
             .limitParameter("limit");
         assertEquals(query.getSql(), "SELECT * FROM tablename LIMIT ?");
@@ -790,29 +790,29 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testSubselectParamsPgsql() {
-        Select fieldquery = new Select(mPgsql);
+        Select fieldquery = new Select(PGSQL);
         fieldquery
             .from("table2")
             .field("propertyLong")
             .whereParameter("propertyInt", ">")
             .limit(1);
-        Select tablequery = new Select(mPgsql);
+        Select tablequery = new Select(PGSQL);
         tablequery
             .from("table2")
             .whereParameter("propertyLong", "<");
-        Select wherequery = new Select(mPgsql);
+        Select wherequery = new Select(PGSQL);
         wherequery
             .from("table3")
             .field("max(propertyShort)")
             .whereParameter("propertyShort", "!=");
-        Select unionquery1 = new Select(mPgsql);
+        Select unionquery1 = new Select(PGSQL);
         unionquery1
             .from("table2")
             .field("propertyString")
             .field("max(propertyByte)")
             .whereParameter("propertyByte", "=")
             .groupBy("propertyString");
-        Select unionquery2 = new Select(mPgsql);
+        Select unionquery2 = new Select(PGSQL);
         unionquery2
             .from("table2")
             .field("propertyStringbuffer")
@@ -821,7 +821,7 @@ public class TestSelectPgsql extends TestSelect {
             .groupBy("propertyStringbuffer");
 
         // Manual subselect creation
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         // shuffled the structure around a bit to test the correct order usage
         query
             .unionAll(unionquery1)
@@ -857,20 +857,20 @@ public class TestSelectPgsql extends TestSelect {
         }));
 
         //Automated subselect creation
-        query = new Select(mPgsql);
+        query = new Select(PGSQL);
         query
             .union(unionquery1)
             .union(unionquery2)
             .where("tablename.propertyShort", ">=", wherequery)
             .whereParameterOr("tablename.propertyString", "propertyString", "=")
-            .whereOr("tablename.propertyFloat", ">", new Select(mPgsql)
+            .whereOr("tablename.propertyFloat", ">", new Select(PGSQL)
                 .from("table3")
                 .field("max(propertyLong)")
                 .whereParameter("propertyLong", "!="))
-            .from("tablename", new Select(mPgsql)
+            .from("tablename", new Select(PGSQL)
                 .from("tablename"))
             .join("tablesubselect", tablequery)
-            .whereAnd("tablename.propertyDouble", "<=", new Select(mPgsql)
+            .whereAnd("tablename.propertyDouble", "<=", new Select(PGSQL)
                 .from("table2")
                 .field("max(propertyFloat)")
                 .whereParameter("propertyFloat", "!="))
@@ -903,36 +903,36 @@ public class TestSelectPgsql extends TestSelect {
 
     @Test
     public void testClonePgsql() {
-        Select fieldquery = new Select(mPgsql);
+        Select fieldquery = new Select(PGSQL);
         fieldquery
             .from("table2")
             .field("propertyLong")
             .whereParameter("propertyInt", ">")
             .limit(1);
-        Select tablequery = new Select(mPgsql);
+        Select tablequery = new Select(PGSQL);
         tablequery
             .from("table2")
             .whereParameter("propertyLong", "<");
-        Select wherequery = new Select(mPgsql);
+        Select wherequery = new Select(PGSQL);
         wherequery
             .from("table3")
             .field("max(propertyShort)")
             .whereParameter("propertyShort", "!=");
-        Select unionquery1 = new Select(mPgsql);
+        Select unionquery1 = new Select(PGSQL);
         unionquery1
             .from("table2")
             .field("propertyString")
             .field("max(propertyByte)")
             .whereParameter("propertyByte", "=")
             .groupBy("propertyString");
-        Select unionquery2 = new Select(mPgsql);
+        Select unionquery2 = new Select(PGSQL);
         unionquery2
             .from("table2")
             .field("propertyStringbuffer")
             .field("min(propertyByte)")
             .whereParameter("propertyByte", ">")
             .groupBy("propertyStringbuffer");
-        Select query = new Select(mPgsql);
+        Select query = new Select(PGSQL);
         query
             .from("tablename")
             .join("(" + tablequery + ") AS tablesubselect")

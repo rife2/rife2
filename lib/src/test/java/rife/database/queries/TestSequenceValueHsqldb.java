@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestSequenceValueHsqldb extends TestSequenceValue {
     @Test
     public void testInstantiationHsqldb() {
-        SequenceValue query = new SequenceValue(mHsqldb);
+        SequenceValue query = new SequenceValue(HSQLDB);
         assertNotNull(query);
         try {
             query.getSql();
@@ -26,7 +26,7 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
 
     @Test
     public void testInvalidHsqldb() {
-        SequenceValue query = new SequenceValue(mHsqldb);
+        SequenceValue query = new SequenceValue(HSQLDB);
         try {
             query.getSql();
             fail();
@@ -53,7 +53,7 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
 
     @Test
     public void testClearHsqldb() {
-        SequenceValue query = new SequenceValue(mHsqldb);
+        SequenceValue query = new SequenceValue(HSQLDB);
         query
             .name("sequencename")
             .next();
@@ -70,17 +70,17 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
 
     @Test
     public void testNextHsqldb() {
-        SequenceValue query = new SequenceValue(mHsqldb);
+        SequenceValue query = new SequenceValue(HSQLDB);
         query
             .name("sequencename")
             .next();
         assertEquals(query.getSql(), "CALL NEXT VALUE FOR sequencename");
-        assertTrue(execute(mHsqldb, query) >= 0);
+        assertTrue(execute(HSQLDB, query) >= 0);
     }
 
     @Test
     public void testCurrentHsqldb() {
-        SequenceValue query = new SequenceValue(mHsqldb);
+        SequenceValue query = new SequenceValue(HSQLDB);
         query
             .name("sequencename")
             .current();
@@ -94,13 +94,13 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
 
     @Test
     public void testCloneHsqldb() {
-        SequenceValue query = new SequenceValue(mHsqldb);
+        SequenceValue query = new SequenceValue(HSQLDB);
         query
             .name("sequencename")
             .next();
         SequenceValue query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertTrue(query != query_clone);
-        assertTrue(execute(mHsqldb, query_clone) >= 0);
+        assertTrue(execute(HSQLDB, query_clone) >= 0);
     }
 }

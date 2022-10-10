@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDropTableHsqldb extends TestDropTable {
     @Test
     public void testInstantiationHsqldb() {
-        DropTable query = new DropTable(mHsqldb);
+        DropTable query = new DropTable(HSQLDB);
         assertNotNull(query);
         try {
             query.getSql();
@@ -25,7 +25,7 @@ public class TestDropTableHsqldb extends TestDropTable {
 
     @Test
     public void testIncompleteQueryHsqldb() {
-        DropTable query = new DropTable(mHsqldb);
+        DropTable query = new DropTable(HSQLDB);
         try {
             query.getSql();
             fail();
@@ -38,7 +38,7 @@ public class TestDropTableHsqldb extends TestDropTable {
 
     @Test
     public void testClearHsqldb() {
-        DropTable query = new DropTable(mHsqldb);
+        DropTable query = new DropTable(HSQLDB);
         query.table("tablename");
         assertNotNull(query.getSql());
         query.clear();
@@ -52,7 +52,7 @@ public class TestDropTableHsqldb extends TestDropTable {
 
     @Test
     public void testOneTableHsqldb() {
-        DropTable query = new DropTable(mHsqldb);
+        DropTable query = new DropTable(HSQLDB);
         query.table("tabletodrop");
         assertEquals(query.getSql(), "DROP TABLE tabletodrop");
         execute(query);
@@ -60,7 +60,7 @@ public class TestDropTableHsqldb extends TestDropTable {
 
     @Test
     public void testMultipleTablesHsqldb() {
-        DropTable query = new DropTable(mHsqldb);
+        DropTable query = new DropTable(HSQLDB);
         query.table("tabletodrop1")
             .table("tabletodrop2")
             .table("tabletodrop3");
@@ -74,7 +74,7 @@ public class TestDropTableHsqldb extends TestDropTable {
 
     @Test
     public void testCloneHsqldb() {
-        DropTable query = new DropTable(mHsqldb);
+        DropTable query = new DropTable(HSQLDB);
         query.table("tabletodrop");
         DropTable query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());

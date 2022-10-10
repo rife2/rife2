@@ -1,1 +1,1 @@
-/*b QUERY*/DROP SEQUENCE /*v NAME-*//*-b*/
+{{b QUERY}}DROP SEQUENCE {{v NAME/}}{{/b}}

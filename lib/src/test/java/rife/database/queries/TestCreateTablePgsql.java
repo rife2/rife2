@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCreateTablePgsql extends TestCreateTable {
     @Test
     public void testInstantiationPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -30,7 +30,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testIncompleteQueryPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         try {
             query.getSql();
             fail();
@@ -51,7 +51,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testClearPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("string", String.class);
         assertNotNull(query.getSql());
@@ -66,7 +66,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testColumnPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename1")
             .column("string", String.class)
             .column("stringbuffer", StringBuffer.class)
@@ -95,7 +95,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testColumnPrecisionPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -124,7 +124,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testColumnsBeanPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .columns(BeanImpl.class);
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByte SMALLINT, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString TEXT, propertyStringbuffer TEXT, propertyTime TIME, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
@@ -133,7 +133,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testColumnsBeanIncludedPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyByte SMALLINT, propertyFloat FLOAT, propertyStringbuffer TEXT, propertyTime TIME)");
@@ -142,7 +142,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testColumnsBeanExcludedPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloatObject FLOAT, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString TEXT, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
@@ -151,7 +151,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testColumnsBeanFilteredPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringbuffer"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyFloat FLOAT, propertyTime TIME)");
@@ -160,7 +160,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testColumnsBeanPrecisionPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)
@@ -202,7 +202,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testNullablePgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn1", int.class, CreateTable.NULL)
             .column("stringColumn", String.class, 12, CreateTable.NOTNULL)
@@ -218,7 +218,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testDefaultPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -264,7 +264,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testDefaultFunctionPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename1")
             .column("dateobject", java.sql.Date.class)
             .defaultFunction("dateobject", "now()");
@@ -274,7 +274,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testCustomAttributePgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename1")
             .column("intColumn", Integer.class)
             .customAttribute("intColumn", "CHECK (intColumn > 0)");
@@ -284,7 +284,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testTemporaryPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .temporary(true)
             .column("boolColumn", boolean.class);
@@ -294,7 +294,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testPrimaryKeySimplePgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("intColumn");
@@ -304,7 +304,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testPrimaryKeyMultiplePgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -315,7 +315,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testPrimaryKeyNamedPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("constraint_name", "intColumn");
@@ -325,7 +325,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testPrimaryKeyMultipleNamedPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -336,7 +336,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testUniqueSimplePgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .unique("intColumn");
@@ -346,7 +346,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testUniqueMultiplePgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -357,7 +357,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testUniqueNamedPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .unique("constraint_name", "intColumn");
@@ -367,7 +367,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testUniqueMultipleNamedPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -378,7 +378,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testForeignKeySimplePgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn");
@@ -388,7 +388,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testForeignKeyMultiplePgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -399,7 +399,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testForeignKeySimpleNamedPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("constraint_name", "foreigntable", "intColumn", "foreignIntColumn");
@@ -409,7 +409,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testForeignKeyMultipleNamedPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -420,7 +420,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testForeignKeyViolationsSinglePgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, null);
@@ -494,7 +494,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testForeignKeyViolationsPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, CreateTable.NOACTION);
@@ -504,7 +504,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testForeignKeyMultipleViolationsPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -515,7 +515,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testCheckSimplePgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("intColumn > 0");
@@ -525,7 +525,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testCheckNamedPgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("NAME_CK", "intColumn > 0");
@@ -535,7 +535,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
 
     @Test
     public void testClonePgsql() {
-        CreateTable query = new CreateTable(mPgsql);
+        CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)

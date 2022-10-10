@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestInsertDerby extends TestInsert {
     @Test
     public void testInstantiationDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         assertNotNull(query);
         try {
             query.getSql();
@@ -35,7 +35,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testIncompleteQueryDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         try {
             query.getSql();
             fail();
@@ -55,7 +55,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testClearDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .field("col1", "val1");
         assertNotNull(query.getSql());
@@ -70,7 +70,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testHintDerby() {
-        Insert query = new Insert(mDerby)
+        Insert query = new Insert(DERBY)
             .hint("NO_INDEX")
             .into("tablename")
             .fieldParameter("col1");
@@ -84,7 +84,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testParameterDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldParameter("col1");
         assertEquals(query.getSql(), "INSERT INTO tablename (col1) VALUES (?)");
@@ -95,7 +95,7 @@ public class TestInsertDerby extends TestInsert {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .field("nullColumn", SqlNull.NULL)
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))
@@ -120,7 +120,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testFieldCustomDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldCustom("propertySqlDate", "CURRENT_DATE");
         assertEquals(query.getSql(), "INSERT INTO tablename (propertySqlDate) VALUES (CURRENT_DATE)");
@@ -132,7 +132,7 @@ public class TestInsertDerby extends TestInsert {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .fields(new Object[]{
                 "nullColumn", SqlNull.NULL,
@@ -159,7 +159,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testFieldParametersDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename");
 
         assertNull(query.getParameters());
@@ -250,7 +250,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testFieldParametersMixedDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename");
 
         assertNull(query.getParameters());
@@ -316,7 +316,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testFieldsBeanDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .fields(BeanImpl.getPopulatedBean());
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (219038743.392874, 1, 0, 89, 34, '2002-06-18 15:26:14.764', 'v', 'r', '2002-06-18 15:26:14.764', 53348.34, 143298.692, 'VALUE_THREE', 98634.2, 8734.7, 545, 968, 34563, 66875, 43, 68, '2002-06-18', 'someotherstring', 'someotherstringbuff', '15:26:14', '2002-06-18 15:26:14.764')");
@@ -335,7 +335,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testFieldsBeanNullValuesDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .fields(BeanImpl.getNullBean());
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject) VALUES (0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0)");
@@ -344,7 +344,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testFieldsBeanIncludedDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyByte, propertyDouble, propertyShort, propertyStringbuffer, propertyTime) VALUES (89, 53348.34, 43, 'someotherstringbuff', '15:26:14')");
@@ -353,7 +353,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testFieldsBeanExcludedDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShortObject, propertySqlDate, propertyString, propertyTimestamp) VALUES (219038743.392874, 1, 0, 34, '2002-06-18 15:26:14.764', 'v', 'r', '2002-06-18 15:26:14.764', 143298.692, 'VALUE_THREE', 98634.2, 8734.7, 545, 968, 34563, 66875, 68, '2002-06-18', 'someotherstring', '2002-06-18 15:26:14.764')");
@@ -362,7 +362,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testFieldsBeanFilteredDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyDouble, propertyStringbuffer) VALUES (53348.34, 'someotherstringbuff')");
@@ -371,7 +371,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testMultipleRowsDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .field("propertyChar", 'M')
             .field("propertyDouble", 12.3d)
@@ -391,7 +391,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testFieldsParametersBeanDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldsParameters(BeanImpl.class);
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -524,7 +524,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testFieldsParametersBeanExcludedDerby() {
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
@@ -579,14 +579,14 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testInsertSubselectParamsDerby() {
-        Select fieldquery = new Select(mDerby);
+        Select fieldquery = new Select(DERBY);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
 
         // Manual subselect creation
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         // shuffled the structure around a bit to test the correct order usage
         query
             .into("tablename")
@@ -607,7 +607,7 @@ public class TestInsertDerby extends TestInsert {
         }));
 
         // Automated subselect creation
-        query = new Insert(mDerby);
+        query = new Insert(DERBY);
         // shuffled the structure around a bit to test the correct order usage
         query
             .into("tablename")
@@ -629,7 +629,7 @@ public class TestInsertDerby extends TestInsert {
 
     @Test
     public void testCloneDerby() {
-        Select fieldquery = new Select(mDerby);
+        Select fieldquery = new Select(DERBY);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
@@ -638,7 +638,7 @@ public class TestInsertDerby extends TestInsert {
         final Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Insert query = new Insert(mDerby);
+        Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldParameter("nullColumn")
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))
