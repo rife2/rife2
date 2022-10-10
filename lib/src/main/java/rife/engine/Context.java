@@ -13,6 +13,7 @@ import rife.template.TemplateFactory;
 import rife.template.exceptions.TemplateException;
 import rife.tools.StringUtils;
 
+import java.util.Collection;
 import java.util.Map;
 
 public class Context {
@@ -193,6 +194,188 @@ public class Context {
         return url.toString();
     }
 
+
+    /**
+     * Sets a select box option, a radio button or a checkbox to selected or
+     * checked.
+     * <p>This method will check the template for certain value tags and set
+     * them to the correct attributes according to the name and the provided
+     * values in this method. This is dependent on the template type and
+     * currently only makes sense for {@code html} templates.
+     * <p>For example for select boxes, consider the name '{@code colors}',
+     * the values '{@code blue}' and '{@code red}', and the
+     * following HTML template excerpt:
+     * <pre>&lt;select name="colors"&gt;
+     * &lt;option value="blue"{{v colors:blue:SELECTED}}{{/v}}&gt;Blue&lt;/option&gt;
+     * &lt;option value="orange"{{v colors:orange:SELECTED}}{{/v}}&gt;Orange&lt;/option&gt;
+     * &lt;option value="red"{{v colors:red:SELECTED}}{{/v}}&gt;Red&lt;/option&gt;
+     * &lt;option value="green"[!V colors:green:SELECTED'}}{{/v}}&gt;Green&lt;/option&gt;
+     * &lt;/select&gt;</pre>
+     * <p>the result will then be:
+     * <pre>&lt;select name="colors"&gt;
+     * &lt;option value="blue" selected="selected"&gt;Blue&lt;/option&gt;
+     * &lt;option value="orange"&gt;Orange&lt;/option&gt;
+     * &lt;option value="red" selected="selected"&gt;Red&lt;/option&gt;
+     * &lt;option value="green"&gt;Green&lt;/option&gt;
+     * &lt;/select&gt;</pre>
+     * <p>For example for radio buttons, consider the name '{@code sex}',
+     * the value '{@code male}' and the following XHTML template excerpt:
+     * <pre>&lt;input type="radio" name="sex" value="male"{{v sex:male:CHECKED}}{{/v}} /&gt;
+     * &lt;input type="radio" name="sex" value="female"{{v sex:female:CHECKED}}{{/v}} /&gt;</pre>
+     * <p>the result will then be:
+     * <pre>&lt;input type="radio" name="sex" value="male" checked="checked" /&gt;
+     * &lt;input type="radio" name="sex" value="female" /&gt;</pre>
+     * <p>For example for checkboxes, consider the name '{@code active}',
+     * the value '{@code true}' and the following XHTML template excerpt:
+     * <pre>&lt;input type="checkbox" name="active"{{v active:CHECKED}}{{/v}} /&gt;
+     * &lt;input type="checkbox" name="senditnow"{{v senditnow:CHECKED}}{{/v}} /&gt;</pre>
+     * <p>the result will then be:
+     * <pre>&lt;input type="checkbox" name="active" checked="checked" /&gt;
+     * &lt;input type="checkbox" name="senditnow" /&gt;</pre>
+     *
+     * @param template the template instance where the selection should happen
+     * @param name     the name of the parameter
+     * @param values   the values that should be selected or checked
+     * @return a list with the identifiers of the template values that have
+     * been set, this is never {@code null}, when no values are set an
+     * empty list is returned
+     * @since 1.0
+     */
+    public Collection<String> selectParameter(Template template, String name, String[] values) {
+        if (null == template) throw new IllegalArgumentException("template can't be null.");
+        if (null == name) throw new IllegalArgumentException("name can't be null.");
+        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+
+        return EngineTemplateHelper.selectParameter(template, name, values);
+    }
+
+    /**
+     * Generates a form that corresponds to a bean instance.
+     *
+     * @param template     the template instance where the generation should
+     *                     happen
+     * @param beanInstance the instance of the bean that should be used to
+     *                     generate the form
+     * @see rife.forms.FormBuilder
+     * @see #generateForm(Template, Object, String)
+     * @see #generateEmptyForm(Template, Class, String)
+     * @see #removeForm(Template, Class)
+     * @since 1.0
+     */
+    public void generateForm(Template template, Object beanInstance) {
+        generateForm(template, beanInstance, null);
+    }
+
+    /**
+     * Generates a form that corresponds to a bean instance.
+     * <p>This method delegates all logic to the {@link
+     * rife.forms.FormBuilder#generateForm(Template, Object, Map, String)}
+     * method of the provided template instance.
+     *
+     * @param template     the template instance where the generation should
+     *                     happen
+     * @param beanInstance the instance of the bean that should be used to
+     *                     generate the form
+     * @param prefix       the prefix that will be prepended to all bean property
+     *                     names
+     * @see rife.forms.FormBuilder
+     * @see #generateEmptyForm(Template, Class, String)
+     * @see #removeForm(Template, Class)
+     * @since 1.0
+     */
+    public void generateForm(Template template, Object beanInstance, String prefix) {
+        if (null == template) throw new IllegalArgumentException("template can't be null.");
+        if (null == beanInstance) throw new IllegalArgumentException("beanInstance can't be null.");
+
+        EngineTemplateHelper.generateForm(template, beanInstance, prefix);
+    }
+
+    /**
+     * Generates a form that corresponds to an empty instance of a bean class.
+     *
+     * @param template  the template instance where the generation should
+     *                  happen
+     * @param beanClass the class of the bean that should be used to generate
+     *                  the form
+     * @see rife.forms.FormBuilder
+     * @see #generateForm(Template, Object, String)
+     * @see #generateEmptyForm(Template, Class, String)
+     * @see #removeForm(Template, Class)
+     * @since 1.0
+     */
+    public void generateEmptyForm(Template template, Class beanClass) {
+        generateEmptyForm(template, beanClass, null);
+    }
+
+    /**
+     * Generates a form that corresponds to an empty instance of a bean class.
+     * <p>An '<em>empty</em>' instance is an object that has been created by
+     * calling the default constructor of the bean class, without making any
+     * additional changes to it afterwards.
+     * <p>This method delegates all logic to the {@link
+     * rife.forms.FormBuilder#generateForm(Template, Class, Map, String)}
+     * method of the provided template instance.
+     *
+     * @param template  the template instance where the generation should
+     *                  happen
+     * @param beanClass the class of the bean that should be used to generate
+     *                  the form
+     * @param prefix    the prefix that will be prepended to all bean property
+     *                  names
+     * @see rife.forms.FormBuilder
+     * @see #generateForm(Template, Object, String)
+     * @see #removeForm(Template, Class)
+     * @since 1.0
+     */
+    public void generateEmptyForm(Template template, Class beanClass, String prefix) {
+        if (null == template) throw new IllegalArgumentException("template can't be null.");
+        if (null == beanClass) throw new IllegalArgumentException("beanClass can't be null.");
+
+        EngineTemplateHelper.generateEmptyForm(template, beanClass, prefix);
+    }
+
+    /**
+     * Removes a generated form, leaving the builder value tags empty again as
+     * if this form had never been generated.
+     *
+     * @param template  the template instance where the form should be removed
+     *                  from
+     * @param beanClass the class of the bean that should be used to remove
+     *                  the form
+     * @see rife.forms.FormBuilder
+     * @see #generateForm(Template, Object, String)
+     * @see #generateEmptyForm(Template, Class, String)
+     * @see #removeForm(Template, Class)
+     * @since 1.0
+     */
+    public void removeForm(Template template, Class beanClass) {
+        removeForm(template, beanClass, null);
+    }
+
+    /**
+     * Removes a generated form, leaving the builder value tags empty again as
+     * if this form had never been generated.
+     * <p>This method delegates all logic to the {@link
+     * rife.forms.FormBuilder#removeForm(Template, Class, String)}
+     * method of the provided template instance.
+     *
+     * @param template  the template instance where the form should be removed
+     *                  from
+     * @param beanClass the class of the bean that should be used to remove
+     *                  the form
+     * @param prefix    the prefix that will be prepended to all bean property
+     *                  names
+     * @see rife.forms.FormBuilder
+     * @see #generateForm(Template, Object, String)
+     * @see #generateEmptyForm(Template, Class, String)
+     * @since 1.0
+     */
+    public void removeForm(Template template, Class beanClass, String prefix) {
+        if (null == template) throw new IllegalArgumentException("template can't be null.");
+        if (null == beanClass) throw new IllegalArgumentException("beanClass can't be null.");
+
+        EngineTemplateHelper.removeForm(template, beanClass, prefix);
+    }
 
     /**
      * Interrupts the execution in RIFE completely and defers it to the

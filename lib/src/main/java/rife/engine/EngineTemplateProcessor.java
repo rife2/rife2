@@ -4,7 +4,6 @@
  */
 package rife.engine;
 
-import rife.config.Config;
 import rife.engine.exceptions.EngineException;
 import rife.template.Template;
 import rife.template.TemplateEncoder;

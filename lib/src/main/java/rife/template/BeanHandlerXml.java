@@ -4,14 +4,15 @@
  */
 package rife.template;
 
+import rife.forms.FormBuilder;
+import rife.forms.FormBuilderXml;
 import rife.tools.BeanUtils;
 import rife.tools.exceptions.BeanUtilsException;
 
 import java.util.Map;
 
 public class BeanHandlerXml extends AbstractBeanHandler {
-    // TODO : form builder
-//    private FormBuilder mFormBuilder = new FormBuilderXml();
+    private FormBuilder formBuilder_ = new FormBuilderXml();
 
     BeanHandlerXml() {
     }
@@ -24,10 +25,10 @@ public class BeanHandlerXml extends AbstractBeanHandler {
 //    public MimeType getMimeType() {
 //        return MimeType.TEXT_XML;
 //    }
-//
-//    public FormBuilder getFormBuilder() {
-//        return mFormBuilder;
-//    }
+
+    public FormBuilder getFormBuilder() {
+        return formBuilder_;
+    }
 
     protected Map<String, Object> getPropertyValues(Template template, Object bean, String prefix)
     throws BeanUtilsException {

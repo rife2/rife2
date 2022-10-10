@@ -91,11 +91,10 @@ public abstract class AbstractBeanHandler implements BeanHandler {
                         template.setValue(property_name, property_values_encoded[0]);
                     }
 
-                    // TODO : form builder
-//                    if (getFormBuilder() != null) {
-//                        // handle form values
-//                        getFormBuilder().selectParameter(template, property_name, property_value_strings);
-//                    }
+                    if (getFormBuilder() != null) {
+                        // handle form values
+                        getFormBuilder().selectParameter(template, property_name, property_value_strings);
+                    }
                 }
             }
         } catch (BeanUtilsException e) {
@@ -111,9 +110,8 @@ public abstract class AbstractBeanHandler implements BeanHandler {
         }
 
         try {
-            // TODO : form builder
-//            Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
-//            ConstrainedProperty constrained_property = null;
+            Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+            ConstrainedProperty constrained_property = null;
 
             Map<String, Object> property_values = getPropertyValues(template, bean, prefix);
             Object property_value = null;
@@ -128,25 +126,24 @@ public abstract class AbstractBeanHandler implements BeanHandler {
                     }
                 }
 
-                // TODO : form builder
-//                if (getFormBuilder() != null) {
-//                    if (property_value != null) {
-//                        // get the constrained property if that's appropriate
-//                        if (constrained != null) {
-//                            if (prefix != null) {
-//                                constrained_property = constrained.getConstrainedProperty(property_name.substring(prefix.length()));
-//                            } else {
-//                                constrained_property = constrained.getConstrainedProperty(property_name);
-//                            }
-//                        }
-//                        // handle multiple values
-//                        property_value_strings = ArrayUtils.createStringArray(property_value, constrained_property);
-//                        if (property_value_strings.length > 0) {
-//                            // handle form values
-//                            getFormBuilder().unselectParameter(template, property_name, property_value_strings);
-//                        }
-//                    }
-//                }
+                if (getFormBuilder() != null) {
+                    if (property_value != null) {
+                        // get the constrained property if that's appropriate
+                        if (constrained != null) {
+                            if (prefix != null) {
+                                constrained_property = constrained.getConstrainedProperty(property_name.substring(prefix.length()));
+                            } else {
+                                constrained_property = constrained.getConstrainedProperty(property_name);
+                            }
+                        }
+                        // handle multiple values
+                        property_value_strings = ArrayUtils.createStringArray(property_value, constrained_property);
+                        if (property_value_strings.length > 0) {
+                            // handle form values
+                            getFormBuilder().unselectParameter(template, property_name, property_value_strings);
+                        }
+                    }
+                }
             }
         } catch (BeanUtilsException e) {
             throw new BeanRemovalErrorException(bean, e);

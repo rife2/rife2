@@ -1,0 +1,60 @@
+<!--v FORM:INPUT:login-->  <size>10</size> <!--/v-->
+<!--v FORM:INPUT:anotherlogin/-->
+<!--v FORM:SECRET:password/--><!--bv FORM:SECRET:password--><size>10</size>     <!--/bv-->
+<!--v FORM:SECRET:anotherpassword/-->
+<!--v FORM:TEXTAREA:comment/--><!--b FORM:TEXTAREA:ATTRIBUTES:comment--><cols>10</cols> <rows>5</rows> <id>{{v FORM:NAME/}}{{v FORM:VALUE/}}</id>   <!--/b-->
+<!--v FORM:TEXTAREA:anothercomment/-->
+<!--v FORM:RADIO:question/--><!--b FORM:RADIO:ATTRIBUTES:question-->  <alt>sometext</alt> <id>{{v FORM:NAME/}}{{v FORM:VALUE/}}</id><!--/b-->
+<!--b FORM:LABEL:question:a0-->answer0<!--/b-->
+<!--b FORM:LABEL:question:a1-->answer1<!--/b-->
+<!--b FORM:LABEL:question:a2-->answer2<!--/b-->
+<!--v FORM:RADIO:anotherquestion/-->
+<!--b FORM:LABEL:anotherquestion:a0-->another answer 0<!--/b-->
+<!--b FORM:LABEL:anotherquestion:a1-->another answer 1<!--/b-->
+<!--b FORM:LABEL:anotherquestion:a2-->another answer 2<!--/b-->
+<!--v FORM:RADIO:customquestion-->  <alt>customtext</alt> <!--/v-->
+<!--b FORM:RADIO:customquestion--><!--v FORM:LABEL-->???<!--/v--> : <!--v FORM:FIELD/--><!--/b-->
+<!--b FORM:LABEL:customquestion:a0-->custom answer 0<!--/b-->
+<!--b FORM:LABEL:customquestion:a1-->custom answer 1<!--/b-->
+<!--b FORM:LABEL:customquestion:a2-->custom answer 2<!--/b-->
+<!--v FORM:RADIO:anothercustomquestion/-->
+<!--b FORM:RADIO:anothercustomquestion--><!--v FORM:NAME/-->-<!--v FORM:VALUE/-->:<!--v FORM:LABEL-->???<!--/v--> : <!--v FORM:FIELD/--><!--/b-->
+<!--b FORM:LABEL:anothercustomquestion:a0-->anothercustom answer 0<!--/b-->
+<!--b FORM:LABEL:anothercustomquestion:a1-->anothercustom answer 1<!--/b-->
+<!--b FORM:LABEL:anothercustomquestion:a2-->anothercustom answer 2<!--/b-->
+<!--v FORM:CHECKBOX:options-->  <alt>someblurp</alt> <!--/v-->
+<!--b FORM:LABEL:options:0-->option0<!--/b-->
+<!--b FORM:LABEL:options:1-->option1<!--/b-->
+<!--b FORM:LABEL:options:2-->option2<!--/b-->
+<!--v FORM:CHECKBOX:otheroptions/-->
+<!--b FORM:LABEL:otheroptions:0-->other option 0<!--/b-->
+<!--b FORM:LABEL:otheroptions:1-->other option 1<!--/b-->
+<!--b FORM:LABEL:otheroptions:2-->other option 2<!--/b-->
+<!--v FORM:CHECKBOX:customoptions-->  <alt>customblurp</alt> <!--/v-->
+<!--b FORM:CHECKBOX:customoptions--><!--v FORM:LABEL-->???<!--/v--> : <!--v FORM:FIELD/--><!--/b-->
+<!--b FORM:LABEL:customoptions:0-->custom option 0<!--/b-->
+<!--b FORM:LABEL:customoptions:1-->custom option 1<!--/b-->
+<!--b FORM:LABEL:customoptions:2-->custom option 2<!--/b-->
+<!--v FORM:CHECKBOX:othercustomoptions/-->
+<!--b FORM:CHECKBOX:othercustomoptions--><!--v FORM:LABEL-->???<!--/v--> : <!--v FORM:FIELD/--><!--/b-->
+<!--b FORM:LABEL:othercustomoptions:0-->othercustom option 0<!--/b-->
+<!--b FORM:LABEL:othercustomoptions:1-->othercustom option 1<!--/b-->
+<!--b FORM:LABEL:othercustomoptions:2-->othercustom option 2<!--/b-->
+<!--v FORM:CHECKBOX:invoice-->  <alt>atext</alt> <!--/v-->I want an invoice
+<!--v FORM:CHECKBOX:onemoreinvoice/-->I want one more invoice
+<!--v FORM:SELECT:colors--><size>3</size><multiple>1</multiple><!--/v-->
+<!--b FORM:LABEL:colors:blue-->blue spots<!--/b-->
+<!--b FORM:LABEL:colors:red-->red spots<!--/b-->
+<!--b FORM:LABEL:colors:green-->green spots<!--/b-->
+<!--v FORM:SELECT:morecolors/-->
+<!--b FORM:LABEL:morecolors:blue-->more blue spots<!--/b-->
+<!--b FORM:LABEL:morecolors:red-->more red spots<!--/b-->
+<!--b FORM:LABEL:morecolors:green-->more green spots<!--/b-->
+<!--v FORM:HIDDEN:hidden-->  <id>thehiddenone</id> <!--/v-->
+<!--v FORM:HIDDEN:anotherhidden/-->
+<!--v FORM:DISPLAY:login-->  <class>thedisplayedone</class> <!--/v-->
+<!--v FORM:DISPLAY:anotherlogin/-->
+<!--v FORM:DISPLAY:question/-->
+<!--v FORM:DISPLAY:otheroptions/--><!--b FORM:DISPLAY:ATTRIBUTES:otheroptions-->  <id>{{v FORM:NAME/}}{{v FORM:VALUE/}}</id> <!--/b-->
+<!--v FORM:DISPLAY:colors/-->
+<!--v FORM:SELECT:yourcolors--><size>2</size> <multiple>1</multiple><!--/v-->

@@ -1,0 +1,60 @@
+<field><name>login</name><type>text</type><size>10</size></field>
+<field><name>anotherlogin</name><type>text</type></field>
+<field><name>password</name><type>secret</type><size>10</size></field>
+<field><name>anotherpassword</name><type>secret</type></field>
+<field><name>comment</name><type>textarea</type><cols>10</cols> <rows>5</rows> <id>comment{{v FORM:VALUE/}}</id></field>
+<field><name>anothercomment</name><type>textarea</type></field>
+<field><name>question</name><type>radio</type><alt>sometext</alt> <id>question{{v FORM:VALUE/}}</id></field>
+
+
+
+<field><name>anotherquestion</name><type>radio</type></field>
+
+
+
+<field><name>customquestion</name><type>radio</type><alt>customtext</alt></field>
+
+
+
+
+<field><name>anothercustomquestion</name><type>radio</type></field>
+
+
+
+
+<field><name>options</name><type>checkbox</type><alt>someblurp</alt></field>
+
+
+
+<field><name>otheroptions</name><type>checkbox</type></field>
+
+
+
+<field><name>customoptions</name><type>checkbox</type><alt>customblurp</alt></field>
+
+
+
+
+<field><name>othercustomoptions</name><type>checkbox</type></field>
+
+
+
+
+<field><name>invoice</name><type>checkbox</type><alt>atext</alt></field>I want an invoice
+<field><name>onemoreinvoice</name><type>checkbox</type></field>I want one more invoice
+<field><name>colors</name><type>select</type><size>3</size><multiple>1</multiple><options><option><value>red</value><label>red spots</label></option><option><value>blue</value><label>blue spots</label></option><option><value>green</value><label>green spots</label></option></options></field>
+
+
+
+<field><name>morecolors</name><type>select</type><options></options></field>
+
+
+
+<field><name>hidden</name><type>hidden</type><id>thehiddenone</id></field>
+<field><name>anotherhidden</name><type>hidden</type></field>
+<field><value></value><class>thedisplayedone</class></field>
+<field><value></value></field>
+<field><value></value></field>
+<field><value></value><id>otheroptions{{v FORM:VALUE/}}</id></field>
+<field><value></value></field>
+<field><name>yourcolors</name><type>select</type><options></options></field>

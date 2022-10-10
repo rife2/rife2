@@ -22,9 +22,9 @@ import java.util.logging.Logger;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.4
  */
-public abstract class MetaData<B extends ConstrainedBean, P extends ConstrainedProperty> implements ValidatedConstrained<P>, Constrained<B, P>, Cloneable {
+public abstract class MetaData implements ValidatedConstrained, Constrained, Cloneable {
     private Validated metaDataBean_ = this;
-    private Validation<B, P> validation_;
+    private Validation validation_;
 
     /**
      * This method is called at least once and maximum once when any meta-data
@@ -54,7 +54,7 @@ public abstract class MetaData<B extends ConstrainedBean, P extends ConstrainedP
 
     private void ensureActivatedMetaData() {
         if (null == validation_) {
-            validation_ = new Validation<B, P>();
+            validation_ = new Validation();
             validation_.provideValidatedBean(metaDataBean_);
             activateMetaData();
         }
@@ -70,22 +70,22 @@ public abstract class MetaData<B extends ConstrainedBean, P extends ConstrainedP
         return validation_.retrieveValidatedBean();
     }
 
-    public void addConstraint(B constrainedBean) {
+    public void addConstraint(ConstrainedBean constrainedBean) {
         ensureActivatedMetaData();
         validation_.addConstraint(constrainedBean);
     }
 
-    public void addConstraint(P constrainedProperty) {
+    public void addConstraint(ConstrainedProperty constrainedProperty) {
         ensureActivatedMetaData();
         validation_.addConstraint(constrainedProperty);
     }
 
-    public B getConstrainedBean() {
+    public ConstrainedBean getConstrainedBean() {
         ensureActivatedMetaData();
         return validation_.getConstrainedBean();
     }
 
-    public Collection<P> getConstrainedProperties() {
+    public Collection<ConstrainedProperty> getConstrainedProperties() {
         ensureActivatedMetaData();
         return validation_.getConstrainedProperties();
     }
@@ -95,7 +95,7 @@ public abstract class MetaData<B extends ConstrainedBean, P extends ConstrainedP
         return validation_.hasPropertyConstraint(name);
     }
 
-    public P getConstrainedProperty(String propertyName) {
+    public ConstrainedProperty getConstrainedProperty(String propertyName) {
         ensureActivatedMetaData();
         return validation_.getConstrainedProperty(propertyName);
     }
@@ -165,7 +165,7 @@ public abstract class MetaData<B extends ConstrainedBean, P extends ConstrainedP
         validation_.makeSubjectValid(subject);
     }
 
-    public ValidationGroup<P> addGroup(String name) {
+    public ValidationGroup addGroup(String name) {
         ensureActivatedMetaData();
         return validation_.addGroup(name);
     }
@@ -185,12 +185,12 @@ public abstract class MetaData<B extends ConstrainedBean, P extends ConstrainedP
         validation_.addRule(rule);
     }
 
-    public List<PropertyValidationRule> addConstrainedPropertyRules(P constrainedProperty) {
+    public List<PropertyValidationRule> addConstrainedPropertyRules(ConstrainedProperty constrainedProperty) {
         ensureActivatedMetaData();
         return validation_.addConstrainedPropertyRules(constrainedProperty);
     }
 
-    public List<PropertyValidationRule> generateConstrainedPropertyRules(P constrainedProperty) {
+    public List<PropertyValidationRule> generateConstrainedPropertyRules(ConstrainedProperty constrainedProperty) {
         ensureActivatedMetaData();
         return validation_.generateConstrainedPropertyRules(constrainedProperty);
     }
@@ -200,12 +200,12 @@ public abstract class MetaData<B extends ConstrainedBean, P extends ConstrainedP
         return validation_.getRules();
     }
 
-    public Collection<ValidationGroup<P>> getGroups() {
+    public Collection<ValidationGroup> getGroups() {
         ensureActivatedMetaData();
         return validation_.getGroups();
     }
 
-    public ValidationGroup<P> getGroup(String name) {
+    public ValidationGroup getGroup(String name) {
         ensureActivatedMetaData();
         return validation_.getGroup(name);
     }

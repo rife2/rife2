@@ -39,7 +39,7 @@ import rife.datastructures.EnumClass;
  * @see ConstrainedProperty
  * @since 1.0
  */
-public class ConstrainedBean<T extends ConstrainedBean> {
+public class ConstrainedBean {
     public static final Direction ASC = new Direction("ASC");
     public static final Direction DESC = new Direction("DESC");
 
@@ -60,10 +60,10 @@ public class ConstrainedBean<T extends ConstrainedBean> {
     public ConstrainedBean() {
     }
 
-    public T associations(Class... associations) {
+    public ConstrainedBean associations(Class... associations) {
         setAssociations(associations);
 
-        return (T) this;
+        return (ConstrainedBean) this;
     }
 
     public void setAssociations(Class... associations) {
@@ -82,7 +82,7 @@ public class ConstrainedBean<T extends ConstrainedBean> {
         return constraints_.containsKey(ASSOCIATIONS) && ((Class[]) constraints_.get(ASSOCIATIONS)).length > 0;
     }
 
-    public T unique(String... unique) {
+    public ConstrainedBean unique(String... unique) {
         if (unique != null) {
             List<String[]> unique_list = (List<String[]>) constraints_.get(UNIQUE);
             if (null == unique_list) {
@@ -93,13 +93,13 @@ public class ConstrainedBean<T extends ConstrainedBean> {
             unique_list.add(unique);
         }
 
-        return (T) this;
+        return (ConstrainedBean) this;
     }
 
-    public T uniques(List<String[]> unique) {
+    public ConstrainedBean uniques(List<String[]> unique) {
         setUniques(unique);
 
-        return (T) this;
+        return (ConstrainedBean) this;
     }
 
     public void setUniques(List<String[]> unique) {
@@ -118,10 +118,10 @@ public class ConstrainedBean<T extends ConstrainedBean> {
         return constraints_.containsKey(UNIQUE) && ((List<String[]>) constraints_.get(UNIQUE)).size() > 0;
     }
 
-    public T textualIdentifier(TextualIdentifierGenerator identifier) {
+    public ConstrainedBean textualIdentifier(TextualIdentifierGenerator identifier) {
         setTextualIdentifier(identifier);
 
-        return (T) this;
+        return (ConstrainedBean) this;
     }
 
     public void setTextualIdentifier(TextualIdentifierGenerator identifier) {
@@ -140,15 +140,15 @@ public class ConstrainedBean<T extends ConstrainedBean> {
         return constraints_.containsKey(TEXTUAL_IDENTIFIER);
     }
 
-    public T defaultOrder(String propertyName) {
+    public ConstrainedBean defaultOrder(String propertyName) {
         return defaultOrder(propertyName, ASC);
     }
 
-    public T defaultOrder(String propertyName, Direction direction) {
+    public ConstrainedBean defaultOrder(String propertyName, Direction direction) {
         return defaultOrder(new Order(propertyName, direction));
     }
 
-    public T defaultOrder(Order order) {
+    public ConstrainedBean defaultOrder(Order order) {
         if (order != null) {
             List<Order> ordering_list = (List<Order>) constraints_.get(DEFAULT_ORDERING);
             if (null == ordering_list) {
@@ -159,13 +159,13 @@ public class ConstrainedBean<T extends ConstrainedBean> {
             ordering_list.add(order);
         }
 
-        return (T) this;
+        return (ConstrainedBean) this;
     }
 
-    public T defaultOrdering(List<Order> ordering) {
+    public ConstrainedBean defaultOrdering(List<Order> ordering) {
         setDefaultOrdering(ordering);
 
-        return (T) this;
+        return (ConstrainedBean) this;
     }
 
     public void setDefaultOrdering(List<Order> ordering) {

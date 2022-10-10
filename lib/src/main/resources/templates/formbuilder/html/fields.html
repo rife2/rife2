@@ -1,0 +1,14 @@
+<!--b VALUE--> value="{{v VALUE}}{{/v}}"<!--/b-->
+<!--b MAXLENGTH--> maxlength="{{v MAXLENGTH/}}"<!--/b-->
+<!--b CHECKED--> checked="checked"<!--/b-->
+<!--b SELECTED--> selected="selected"<!--/b-->
+<!--b DISABLED--> disabled="disabled"<!--/b-->
+<!--b FORM:HIDDEN:--><input type="hidden" name="{{v NAME/}}"{{v ATTRIBUTES}}{{/v}} /><!--/b-->
+<!--b FORM:INPUT:--><input type="text" name="{{v NAME/}}"{{v ATTRIBUTES}}{{/v}} /><!--/b-->
+<!--b FORM:SECRET:--><input type="password" name="{{v NAME/}}"{{v ATTRIBUTES}}{{/v}} /><!--/b-->
+<!--b FORM:TEXTAREA:--><textarea name="{{v NAME/}}"{{v ATTRIBUTES}}{{/v}}><!--v VALUE--><!--/v--></textarea><!--/b-->
+<!--b FORM:RADIO:--><input type="radio" name="{{v NAME/}}"{{v ATTRIBUTES}}{{/v}} /><!--/b-->
+<!--b FORM:CHECKBOX:--><input type="checkbox" name="{{v NAME/}}"{{v ATTRIBUTES}}{{/v}} /><!--/b-->
+<!--b FORM:SELECT:--><select name="{{v NAME/}}"{{v ATTRIBUTES}}{{/v}}><!--v OPTIONS--><!--/v--></select><!--/b-->
+<!--b FORM:OPTION:--><option value="{{v VALUE/}}"{{v ATTRIBUTES}}{{/v}}><!--v LABEL--><!--/v--></option><!--/b-->
+<!--b FORM:DISPLAY:--><div{{v ATTRIBUTES}}{{/v}}><!--v VALUE--><!--/v--></div><!--/b-->

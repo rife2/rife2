@@ -1,0 +1,60 @@
+<field><name>login</name><type>text</type><size>10</size><maxlength>6</maxlength></field>
+<field><name>anotherlogin</name><type>text</type><value>jij</value><maxlength>10</maxlength><disabled>1</disabled></field>
+<field><name>password</name><type>secret</type><size>10</size><maxlength>8</maxlength></field>
+<field><name>anotherpassword</name><type>secret</type><maxlength>12</maxlength><disabled>1</disabled></field>
+<field><name>comment</name><type>textarea</type><cols>10</cols> <rows>5</rows> <id>comment{{v FORM:VALUE/}}</id><disabled>1</disabled></field>
+<field><name>anothercomment</name><type>textarea</type><value>the comment</value></field>
+<field><name>question</name><type>radio</type><alt>sometext</alt> <id>questiona1</id><value>a1</value></field>answer1<field><name>question</name><type>radio</type><alt>sometext</alt> <id>questiona2</id><value>a2</value></field>answer2<field><name>question</name><type>radio</type><alt>sometext</alt> <id>questiona3</id><value>a3</value></field>a3
+
+
+
+<field><name>anotherquestion</name><type>radio</type><value>a1</value><checked>1</checked><disabled>1</disabled></field>another answer 1<field><name>anotherquestion</name><type>radio</type><value>a3</value><disabled>1</disabled></field>a3<field><name>anotherquestion</name><type>radio</type><value>a2</value><disabled>1</disabled></field>another answer 2
+
+
+
+custom answer 1 : <field><name>customquestion</name><type>radio</type><alt>customtext</alt><value>a1</value></field>custom answer 2 : <field><name>customquestion</name><type>radio</type><alt>customtext</alt><value>a2</value></field>
+
+
+
+
+anothercustomquestion-a2:anothercustom answer 2 : <field><name>anothercustomquestion</name><type>radio</type><value>a2</value></field>anothercustomquestion-a3:a3 : <field><name>anothercustomquestion</name><type>radio</type><value>a3</value><checked>1</checked></field>
+
+
+
+
+<field><name>options</name><type>checkbox</type><alt>someblurp</alt><value>0</value></field>option0<field><name>options</name><type>checkbox</type><alt>someblurp</alt><value>2</value></field>option2<field><name>options</name><type>checkbox</type><alt>someblurp</alt><value>3</value></field>3
+
+
+
+<field><name>otheroptions</name><type>checkbox</type><value>0</value><checked>1</checked><disabled>1</disabled></field>other option 0<field><name>otheroptions</name><type>checkbox</type><value>2</value><disabled>1</disabled></field>other option 2
+
+
+
+custom option 1 : <field><name>customoptions</name><type>checkbox</type><alt>customblurp</alt><value>1</value></field>custom option 2 : <field><name>customoptions</name><type>checkbox</type><alt>customblurp</alt><value>2</value></field>
+
+
+
+
+othercustom option 0 : <field><name>othercustomoptions</name><type>checkbox</type><value>0</value><checked>1</checked></field>othercustom option 2 : <field><name>othercustomoptions</name><type>checkbox</type><value>2</value></field>othercustom option 1 : <field><name>othercustomoptions</name><type>checkbox</type><value>1</value></field>
+
+
+
+
+<field><name>invoice</name><type>checkbox</type><alt>atext</alt><disabled>1</disabled></field>I want an invoice
+<field><name>onemoreinvoice</name><type>checkbox</type><checked>1</checked></field>I want one more invoice
+<field><name>colors</name><type>select</type><size>3</size><multiple>1</multiple><options><option><value>red</value><label>red spots</label></option><option><value>blue</value><label>blue spots</label></option><option><value>green</value><label>green spots</label></option></options></field>
+
+
+
+<field><name>morecolors</name><type>select</type><disabled>1</disabled><options><option><value>blue</value><label>more blue spots</label></option><option><value>red</value><label>more red spots</label></option><option><value>black</value><label>black</label></option><option><value>green</value><label>more green spots</label><selected>1</selected></option></options></field>
+
+
+
+<field><name>hidden</name><type>hidden</type><id>thehiddenone</id></field>
+<field><name>anotherhidden</name><type>hidden</type><value>weg</value></field>
+<field><value></value><class>thedisplayedone</class></field>
+<field><value>jij</value></field>
+<field><value></value></field>
+<field><value>other option 0</value><id>otheroptions0</id></field>
+<field><value></value></field>
+<field><name>yourcolors</name><type>select</type><size>2</size> <multiple>1</multiple><options><option><value>orange</value><label>orange</label><selected>1</selected></option><option><value>purple</value><label>purple</label></option><option><value>yellow</value><label>yellow</label></option><option><value>brown</value><label>brown</label></option></options></field>

@@ -4,6 +4,7 @@
  */
 package rife.template;
 
+import rife.forms.FormBuilder;
 import rife.template.exceptions.TemplateException;
 
 /**
@@ -56,7 +57,7 @@ public interface BeanHandler {
      *                           <p>an error occurred during the introspection of the bean
      * @since 1.0
      */
-    public void setBean(Template template, Object bean, String prefix, boolean encode)
+    void setBean(Template template, Object bean, String prefix, boolean encode)
     throws TemplateException;
 
     /**
@@ -77,18 +78,18 @@ public interface BeanHandler {
      *                           <p>an error occurred during the introspection of the bean
      * @since 1.0
      */
-    public void removeBean(Template template, Object bean, String prefix)
+    void removeBean(Template template, Object bean, String prefix)
     throws TemplateException;
 
-//    /**
-//     * Returns a form builder which will be used to {@linkplain
-//     * rife.engine.Element#generateForm(Template, Object) generate
-//     * forms} in the corresponding template.
-//     *
-//     * @return a form builder for use with the corresponding template
-//     * @since 1.0
-//     */
-//    public FormBuilder getFormBuilder();
+    /**
+     * Returns a form builder which will be used to {@linkplain
+     * rife.engine.Context#generateForm(Template, Object) generate
+     * forms} in the corresponding template.
+     *
+     * @return a form builder for use with the corresponding template
+     * @since 1.0
+     */
+    FormBuilder getFormBuilder();
 }
 
 

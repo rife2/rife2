@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class BeanImpl3 extends MetaData<ConstrainedBean, ConstrainedProperty> {
+public class BeanImpl3 extends MetaData {
     private Date propertyDate_ = null;
     private byte propertyByte_ = 0;
     private double propertyDouble_ = 0.0d;

@@ -1,0 +1,60 @@
+<!--v FORM:INPUT:templatenamelogin-->  <size>10</size> <!--/v-->
+
+<!--v FORM:SECRET:templatenamepassword/--><!--bv FORM:SECRET:templatenamepassword--><size>10</size>     <!--/bv-->
+
+<!--v FORM:TEXTAREA:templatenamecomment/--><!--b FORM:TEXTAREA:ATTRIBUTES:templatenamecomment--> <cols>10</cols> <rows>5</rows> <id>{{v FORM:NAME/}}{{v FORM:VALUE/}}</id>   <!--/b-->
+
+<!--v FORM:RADIO:templatenamequestion/--><!--b FORM:RADIO:ATTRIBUTES:templatenamequestion-->  <alt>sometext</alt> <id>{{v FORM:NAME/}}{{v FORM:VALUE/}}</id><!--/b-->
+<!--b FORM:LABEL:templatenamequestion:a0-->answer0<!--/b-->
+<!--b FORM:LABEL:templatenamequestion:a1-->answer1<!--/b-->
+<!--b FORM:LABEL:templatenamequestion:a2-->answer2<!--/b-->
+
+
+
+
+
+
+
+
+
+<!--v FORM:RADIO:templatenameanothercustomquestion/-->
+<!--b FORM:RADIO:templatenameanothercustomquestion--><!--v FORM:NAME/-->-<!--v FORM:VALUE/-->:<!--v FORM:LABEL-->???<!--/v--> : <!--v FORM:FIELD/--><!--/b-->
+<!--b FORM:LABEL:templatenameanothercustomquestion:a0-->anothercustom answer 0<!--/b-->
+<!--b FORM:LABEL:templatenameanothercustomquestion:a1-->anothercustom answer 1<!--/b-->
+<!--b FORM:LABEL:templatenameanothercustomquestion:a2-->anothercustom answer 2<!--/b-->
+<!--v FORM:CHECKBOX:templatenameoptions-->  <alt>someblurp</alt> <!--/v-->
+<!--b FORM:LABEL:templatenameoptions:0-->option0<!--/b-->
+<!--b FORM:LABEL:templatenameoptions:1-->option1<!--/b-->
+<!--b FORM:LABEL:templatenameoptions:2-->option2<!--/b-->
+
+
+
+
+
+
+
+
+
+<!--v FORM:CHECKBOX:templatenameothercustomoptions/-->
+<!--b FORM:CHECKBOX:templatenameothercustomoptions--><!--v FORM:LABEL-->???<!--/v--> : <!--v FORM:FIELD/--><!--/b-->
+<!--b FORM:LABEL:templatenameothercustomoptions:0-->othercustom option 0<!--/b-->
+<!--b FORM:LABEL:templatenameothercustomoptions:1-->othercustom option 1<!--/b-->
+<!--b FORM:LABEL:templatenameothercustomoptions:2-->othercustom option 2<!--/b-->
+<!--v FORM:CHECKBOX:templatenameinvoice-->  <alt>atext</alt> <!--/v-->I want an invoice
+
+<!--v FORM:SELECT:templatenamecolors--><size>3</size><multiple>1</multiple><!--/v-->
+<!--b FORM:LABEL:templatenamecolors:blue-->blue spots<!--/b-->
+<!--b FORM:LABEL:templatenamecolors:red-->red spots<!--/b-->
+<!--b FORM:LABEL:templatenamecolors:green-->green spots<!--/b-->
+
+
+
+
+<!--v FORM:HIDDEN:templatenamehidden-->  <id>thehiddenone</id> <!--/v-->
+
+<!--v FORM:DISPLAY:templatenamelogin-->  <class>thedisplayedone</class> <!--/v-->
+
+<!--v FORM:DISPLAY:templatenamequestion/-->
+<!--v FORM:DISPLAY:templatenameoptions/--><!--b FORM:DISPLAY:ATTRIBUTES:templatenameoptions-->  <id>{{v FORM:NAME/}}{{v FORM:VALUE/}}</id> <!--/b-->
+<!--v FORM:DISPLAY:templatenamecolors/-->
+

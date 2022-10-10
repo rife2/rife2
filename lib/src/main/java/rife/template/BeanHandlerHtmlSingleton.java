@@ -8,7 +8,7 @@ package rife.template;
  * Helper class to avoid Double Check Locking
  * and still have a thread-safe singleton pattern
  */
-class BeanHandlerXhtmlSingleton {
-    static final BeanHandlerXhtml INSTANCE = new BeanHandlerXhtml();
+class BeanHandlerHtmlSingleton {
+    static final BeanHandlerHtml INSTANCE = new BeanHandlerHtml();
 }
 

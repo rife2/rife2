@@ -20,7 +20,7 @@ import java.util.List;
  * @see ValidationGroup
  * @since 1.4
  */
-public interface ValidatedConstrained<P extends ConstrainedProperty> extends Validated {
+public interface ValidatedConstrained extends Validated {
     /**
      * Adds a new validation group.
      *
@@ -29,7 +29,7 @@ public interface ValidatedConstrained<P extends ConstrainedProperty> extends Val
      * @return the newly created <code>ValidationGroup</code>
      * @since 1.4
      */
-    ValidationGroup<P> addGroup(String name);
+    ValidationGroup addGroup(String name);
 
     /**
      * Focuses on one particular validation group, showing only the
@@ -56,7 +56,7 @@ public interface ValidatedConstrained<P extends ConstrainedProperty> extends Val
      * @return the collection of all registered validation groups
      * @since 1.4
      */
-    Collection<ValidationGroup<P>> getGroups();
+    Collection<ValidationGroup> getGroups();
 
     /**
      * Retrieve a particular validation group.
@@ -66,7 +66,7 @@ public interface ValidatedConstrained<P extends ConstrainedProperty> extends Val
      * <p><code>null</code> if no such validation group exists
      * @since 1.4
      */
-    ValidationGroup<P> getGroup(String name);
+    ValidationGroup getGroup(String name);
 
     /**
      * Validate the <code>ValidationRule</code>s of a particular validation
@@ -107,7 +107,7 @@ public interface ValidatedConstrained<P extends ConstrainedProperty> extends Val
      * @return the list of generated {@link ValidationRule}s
      * @since 1.4
      */
-    List<PropertyValidationRule> addConstrainedPropertyRules(P constrainedProperty);
+    List<PropertyValidationRule> addConstrainedPropertyRules(ConstrainedProperty constrainedProperty);
 
     /**
      * Generates the validation rules that are related to a particular {@link
@@ -118,7 +118,7 @@ public interface ValidatedConstrained<P extends ConstrainedProperty> extends Val
      * @return the list of generated {@link ValidationRule}s
      * @since 1.4
      */
-    List<PropertyValidationRule> generateConstrainedPropertyRules(P constrainedProperty);
+    List<PropertyValidationRule> generateConstrainedPropertyRules(ConstrainedProperty constrainedProperty);
 
     /**
      * Returns the collection of error messages that occurred during the

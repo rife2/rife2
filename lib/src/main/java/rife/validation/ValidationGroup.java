@@ -13,7 +13,7 @@ import rife.tools.BeanUtils;
 import rife.tools.ExceptionUtils;
 import rife.tools.exceptions.BeanUtilsException;
 
-public class ValidationGroup<C extends ConstrainedProperty> implements Cloneable {
+public class ValidationGroup implements Cloneable {
     private final String name_;
 
     private ValidatedConstrained validation_;
@@ -77,7 +77,7 @@ public class ValidationGroup<C extends ConstrainedProperty> implements Cloneable
         return validation_;
     }
 
-    public ValidationGroup<C> addSubject(String subject) {
+    public ValidationGroup addSubject(String subject) {
         addPropertyName(subject);
 
         if (subjects_.contains(subject)) {
@@ -103,14 +103,14 @@ public class ValidationGroup<C extends ConstrainedProperty> implements Cloneable
         }
     }
 
-    public ValidationGroup<C> addRule(ValidationRule rule) {
+    public ValidationGroup addRule(ValidationRule rule) {
         validation_.addRule(rule);
         addSubject(rule.getSubject());
 
         return this;
     }
 
-    public ValidationGroup<C> addConstraint(C constrainedProperty) {
+    public ValidationGroup addConstraint(ConstrainedProperty constrainedProperty) {
         addPropertyName(constrainedProperty.getPropertyName());
 
         List<PropertyValidationRule> rules = validation_.addConstrainedPropertyRules(constrainedProperty);
@@ -121,16 +121,16 @@ public class ValidationGroup<C extends ConstrainedProperty> implements Cloneable
         return this;
     }
 
-    public ValidationGroup<C> addGroup(String name) {
-        ValidationGroup<C> group = validation_.addGroup(name);
+    public ValidationGroup addGroup(String name) {
+        ValidationGroup group = validation_.addGroup(name);
         group.setParent(this);
         return group;
     }
 
-    public ValidationGroup<C> clone() {
-        ValidationGroup<C> new_validationgroup = null;
+    public ValidationGroup clone() {
+        ValidationGroup new_validationgroup = null;
         try {
-            new_validationgroup = (ValidationGroup<C>) super.clone();
+            new_validationgroup = (ValidationGroup) super.clone();
 
             if (subjects_ != null) {
                 new_validationgroup.subjects_ = new ArrayList<String>(subjects_);

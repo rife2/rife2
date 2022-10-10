@@ -83,7 +83,7 @@ public class TestTemplate {
             assertEquals("VALUE4", e.getId());
         }
 
-        var value1 = "aaab";
+        var value1 = "één";
         var value2 = "bbbc";
         var value3 = "ccccd";
         try {
@@ -973,68 +973,66 @@ public class TestTemplate {
             template.setBean(bean, "PARAM:");
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_emptyproperty"));
 
-            // TODO : form builder
-//            bean = new HtmlBeanImpl();
-//            bean.setColors(new String[]{"red", "blue", "yellow"});
-//            bean.setWantsupdates(true);
-//            bean.setFirstname("Geert");
-//            bean.setLastname("Bevin");
-//            template = TemplateFactory.HTML.get("values_bean_html_in");
-//            template.setBean(bean, "PARAM:");
-//            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content1"));
-//
-//            bean = new HtmlBeanImpl();
-//            bean.setColors(new String[]{"red", "orange", "white"});
-//            bean.setWantsupdates(false);
-//            bean.setFirstname("Angela");
-//            bean.setLastname("&<>");
-//            template = TemplateFactory.HTML.get("values_bean_html_in");
-//            template.setBean(bean, "PARAM:");
-//            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content2"));
-//
-//            bean.addConstraint(new ConstrainedProperty("lastname").displayedRaw(true));
-//            template = TemplateFactory.HTML.get("values_bean_html_in");
-//            template.setBean(bean, "PARAM:");
-//            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content3"));
+            bean = new HtmlBeanImpl();
+            bean.setColors(new String[]{"red", "blue", "yellow"});
+            bean.setWantsupdates(true);
+            bean.setFirstname("Geert");
+            bean.setLastname("Bevin");
+            template = TemplateFactory.HTML.get("values_bean_html_in");
+            template.setBean(bean, "PARAM:");
+            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content1"));
+
+            bean = new HtmlBeanImpl();
+            bean.setColors(new String[]{"red", "orange", "white"});
+            bean.setWantsupdates(false);
+            bean.setFirstname("Angela");
+            bean.setLastname("&<>");
+            template = TemplateFactory.HTML.get("values_bean_html_in");
+            template.setBean(bean, "PARAM:");
+            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content2"));
+
+            bean.addConstraint(new ConstrainedProperty("lastname").displayedRaw(true));
+            template = TemplateFactory.HTML.get("values_bean_html_in");
+            template.setBean(bean, "PARAM:");
+            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content3"));
         } catch (TemplateException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
     }
 
-    // TODO : form builder
-//    @Test
-//    public void testRemoveBeanValuesHtml() {
-//        try {
-//            Template template;
-//            HtmlBeanImpl bean;
-//
-//            bean = new HtmlBeanImpl();
-//            bean.setColors(new String[]{"red", "blue", "yellow"});
-//            bean.setWantsupdates(true);
-//            bean.setFirstname("Geert");
-//            bean.setLastname("Bevin");
-//            template = TemplateFactory.HTML.get("values_bean_html_in");
-//            template.setBean(bean, "PARAM:");
-//            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content1"));
-//            template.removeBean(bean, "WRONGPARAM:");
-//            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content1"));
-//            template.removeBean(bean, "PARAM:");
-//            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_empty"));
-//
-//            bean = new HtmlBeanImpl();
-//            bean.setColors(new String[]{"red", "orange", "white"});
-//            bean.setWantsupdates(false);
-//            bean.setFirstname("Angela");
-//            bean.setLastname("&<>");
-//            template = TemplateFactory.HTML.get("values_bean_html_in");
-//            template.setBean(bean, "PARAM:");
-//            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content2"));
-//            template.removeBean(bean, "WRONGPARAM:");
-//            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content2"));
-//            template.removeBean(bean, "PARAM:");
-//            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_empty"));
-//        } catch (TemplateException e) {
-//            fail(ExceptionUtils.getExceptionStackTrace(e));
-//        }
-//    }
+    @Test
+    public void testRemoveBeanValuesHtml() {
+        try {
+            Template template;
+            HtmlBeanImpl bean;
+
+            bean = new HtmlBeanImpl();
+            bean.setColors(new String[]{"red", "blue", "yellow"});
+            bean.setWantsupdates(true);
+            bean.setFirstname("Geert");
+            bean.setLastname("Bevin");
+            template = TemplateFactory.HTML.get("values_bean_html_in");
+            template.setBean(bean, "PARAM:");
+            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content1"));
+            template.removeBean(bean, "WRONGPARAM:");
+            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content1"));
+            template.removeBean(bean, "PARAM:");
+            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_empty"));
+
+            bean = new HtmlBeanImpl();
+            bean.setColors(new String[]{"red", "orange", "white"});
+            bean.setWantsupdates(false);
+            bean.setFirstname("Angela");
+            bean.setLastname("&<>");
+            template = TemplateFactory.HTML.get("values_bean_html_in");
+            template.setBean(bean, "PARAM:");
+            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content2"));
+            template.removeBean(bean, "WRONGPARAM:");
+            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content2"));
+            template.removeBean(bean, "PARAM:");
+            assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_empty"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 }

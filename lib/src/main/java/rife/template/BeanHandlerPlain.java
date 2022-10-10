@@ -4,6 +4,7 @@
  */
 package rife.template;
 
+import rife.forms.FormBuilder;
 import rife.tools.BeanUtils;
 import rife.tools.exceptions.BeanUtilsException;
 
@@ -22,11 +23,10 @@ public class BeanHandlerPlain extends AbstractBeanHandler {
 //	{
 //		return MimeType.TEXT_PLAIN;
 //	}
-    // TODO : form builder
-//	public FormBuilder getFormBuilder()
-//	{
-//		return null;
-//	}
+
+    public FormBuilder getFormBuilder() {
+        return null;
+    }
 
     protected Map<String, Object> getPropertyValues(Template template, Object bean, String prefix)
     throws BeanUtilsException {

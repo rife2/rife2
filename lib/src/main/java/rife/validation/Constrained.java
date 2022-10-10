@@ -38,7 +38,7 @@ import java.util.Collection;
  * @see ConstrainedProperty
  * @since 1.0
  */
-public interface Constrained<B extends ConstrainedBean, P extends ConstrainedProperty> {
+public interface Constrained {
     /**
      * Add a new constrained bean.
      * <p>
@@ -52,7 +52,7 @@ public interface Constrained<B extends ConstrainedBean, P extends ConstrainedPro
      * @see ConstrainedBean
      * @since 1.0
      */
-    void addConstraint(B constrainedBean);
+    void addConstraint(ConstrainedBean constrainedBean);
 
     /**
      * Add a new constrained property.
@@ -67,7 +67,7 @@ public interface Constrained<B extends ConstrainedBean, P extends ConstrainedPro
      * @see ConstrainedProperty
      * @since 1.0
      */
-    void addConstraint(P constrainedProperty);
+    void addConstraint(ConstrainedProperty constrainedProperty);
 
     /**
      * Retrieves the constrained bean that has been set for this
@@ -79,7 +79,7 @@ public interface Constrained<B extends ConstrainedBean, P extends ConstrainedPro
      * @see ConstrainedProperty
      * @since 1.0
      */
-    B getConstrainedBean();
+    ConstrainedBean getConstrainedBean();
 
     /**
      * Returns a collection with all the constrained properties that have
@@ -92,7 +92,7 @@ public interface Constrained<B extends ConstrainedBean, P extends ConstrainedPro
      * @see ConstrainedProperty
      * @since 1.0
      */
-    Collection<P> getConstrainedProperties();
+    Collection<ConstrainedProperty> getConstrainedProperties();
 
     /**
      * Indicates whether this constrained bean contains a particular constraint
@@ -118,6 +118,6 @@ public interface Constrained<B extends ConstrainedBean, P extends ConstrainedPro
      * @see ConstrainedProperty
      * @since 1.0
      */
-    P getConstrainedProperty(String propertyName);
+    ConstrainedProperty getConstrainedProperty(String propertyName);
 }
 

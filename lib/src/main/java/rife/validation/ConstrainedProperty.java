@@ -71,7 +71,7 @@ import java.text.Format;
  * @see ConstrainedBean
  * @since 1.0
  */
-public class ConstrainedProperty<T extends ConstrainedProperty> implements Cloneable {
+public class ConstrainedProperty implements Cloneable {
     // standard constraint identifiers
     public static final String NOT_NULL = "NOT_NULL";
     public static final String NOT_EMPTY = "NOT_EMPTY";
@@ -123,10 +123,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     private String subjectName_ = null;
 
     // constraints
-    protected Map<String, Object> mConstraints = new HashMap<>();
+    protected Map<String, Object> constraints_ = new HashMap<>();
 
     // listeners
-    protected List<ConstrainedPropertyListener> mListeners;
+    protected List<ConstrainedPropertyListener> listeners_;
 
     /**
      * Adds a new listener.
@@ -142,13 +142,13 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
             return;
         }
 
-        if (null == mListeners) {
-            mListeners = new ArrayList<ConstrainedPropertyListener>();
+        if (null == listeners_) {
+            listeners_ = new ArrayList<ConstrainedPropertyListener>();
         }
 
-        synchronized (mListeners) {
-            if (!mListeners.contains(listener)) {
-                mListeners.add(listener);
+        synchronized (listeners_) {
+            if (!listeners_.contains(listener)) {
+                listeners_.add(listener);
             }
         }
     }
@@ -164,22 +164,22 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.6
      */
     public boolean removeListener(ConstrainedPropertyListener listener) {
-        if (null == mListeners) {
+        if (null == listeners_) {
             return false;
         }
 
-        synchronized (mListeners) {
-            return mListeners.remove(listener);
+        synchronized (listeners_) {
+            return listeners_.remove(listener);
         }
     }
 
     private void fireConstraintSet(String name, Object constraintData) {
-        if (null == mListeners) {
+        if (null == listeners_) {
             return;
         }
 
-        synchronized (mListeners) {
-            for (ConstrainedPropertyListener listener : mListeners) {
+        synchronized (listeners_) {
+            for (ConstrainedPropertyListener listener : listeners_) {
                 listener.constraintSet(this, name, constraintData);
             }
         }
@@ -207,10 +207,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @return this <code>ConstrainedProperty</code>
      * @since 1.0
      */
-    public T subjectName(String name) {
+    public ConstrainedProperty subjectName(String name) {
         setSubjectName(name);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     /**
@@ -265,10 +265,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @see #isNotNull()
      * @since 1.0
      */
-    public T notNull(boolean notNull) {
+    public ConstrainedProperty notNull(boolean notNull) {
         setNotNull(notNull);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     /**
@@ -291,7 +291,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.0
      */
     public boolean isNotNull() {
-        return Convert.toBoolean(mConstraints.get(NOT_NULL), false);
+        return Convert.toBoolean(constraints_.get(NOT_NULL), false);
     }
 
     /**
@@ -308,10 +308,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @see #isNotEmpty()
      * @since 1.0
      */
-    public T notEmpty(boolean notEmpty) {
+    public ConstrainedProperty notEmpty(boolean notEmpty) {
         setNotEmpty(notEmpty);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     /**
@@ -333,7 +333,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.0
      */
     public boolean isNotEmpty() {
-        return Convert.toBoolean(mConstraints.get(NOT_EMPTY), false);
+        return Convert.toBoolean(constraints_.get(NOT_EMPTY), false);
     }
 
     /**
@@ -345,10 +345,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @see #isNotEqual()
      * @since 1.0
      */
-    public T notEqual(boolean reference) {
+    public ConstrainedProperty notEqual(boolean reference) {
         setNotEqual(reference);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     /**
@@ -358,10 +358,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @see #notEqual(boolean)
      * @since 1.0
      */
-    public T notEqual(Object reference) {
+    public ConstrainedProperty notEqual(Object reference) {
         setNotEqual(reference);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     /**
@@ -384,7 +384,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      */
     public void setNotEqual(Object reference) {
         if (null == reference) {
-            mConstraints.remove(NOT_EQUAL);
+            constraints_.remove(NOT_EQUAL);
         } else {
             setConstraint(NOT_EQUAL, reference);
         }
@@ -400,7 +400,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.0
      */
     public boolean isNotEqual() {
-        return mConstraints.containsKey(NOT_EQUAL);
+        return constraints_.containsKey(NOT_EQUAL);
     }
 
     /**
@@ -413,7 +413,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.0
      */
     public Object getNotEqual() {
-        return mConstraints.get(NOT_EQUAL);
+        return constraints_.get(NOT_EQUAL);
     }
 
     /**
@@ -429,10 +429,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @see #isUnique()
      * @since 1.0
      */
-    public T unique(boolean unique) {
+    public ConstrainedProperty unique(boolean unique) {
         setUnique(unique);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     /**
@@ -454,7 +454,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.0
      */
     public boolean isUnique() {
-        return Convert.toBoolean(mConstraints.get(UNIQUE), false);
+        return Convert.toBoolean(constraints_.get(UNIQUE), false);
     }
 
     /**
@@ -470,10 +470,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @see #isIdentifier()
      * @since 1.0
      */
-    public T identifier(boolean identifier) {
+    public ConstrainedProperty identifier(boolean identifier) {
         setIdentifier(identifier);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     /**
@@ -495,13 +495,13 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.0
      */
     public boolean isIdentifier() {
-        return Convert.toBoolean(mConstraints.get(IDENTIFIER), false);
+        return Convert.toBoolean(constraints_.get(IDENTIFIER), false);
     }
 
-    public T editable(boolean editable) {
+    public ConstrainedProperty editable(boolean editable) {
         setEditable(editable);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setEditable(boolean editable) {
@@ -509,13 +509,13 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public boolean isEditable() {
-        return Convert.toBoolean(mConstraints.get(EDITABLE), true);
+        return Convert.toBoolean(constraints_.get(EDITABLE), true);
     }
 
-    public T persistent(boolean persistent) {
+    public ConstrainedProperty persistent(boolean persistent) {
         setPersistent(persistent);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setPersistent(boolean persistent) {
@@ -528,13 +528,13 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public boolean isPersistent() {
-        return Convert.toBoolean(mConstraints.get(PERSISTENT), true);
+        return Convert.toBoolean(constraints_.get(PERSISTENT), true);
     }
 
-    public T saved(boolean saved) {
+    public ConstrainedProperty saved(boolean saved) {
         setSaved(saved);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setSaved(boolean saved) {
@@ -542,13 +542,13 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public boolean isSaved() {
-        return Convert.toBoolean(mConstraints.get(SAVED), true);
+        return Convert.toBoolean(constraints_.get(SAVED), true);
     }
 
-    public T displayedRaw(boolean displayedRaw) {
+    public ConstrainedProperty displayedRaw(boolean displayedRaw) {
         setDisplayedRaw(displayedRaw);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setDisplayedRaw(boolean displayedRaw) {
@@ -561,65 +561,65 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public boolean isDisplayedRaw() {
-        return Convert.toBoolean(mConstraints.get(DISPLAYED_RAW), false);
+        return Convert.toBoolean(constraints_.get(DISPLAYED_RAW), false);
     }
 
     public boolean hasLimitedLength() {
-        return mConstraints.containsKey(MIN_LENGTH) || mConstraints.containsKey(MAX_LENGTH);
+        return constraints_.containsKey(MIN_LENGTH) || constraints_.containsKey(MAX_LENGTH);
     }
 
     public boolean hasMixLength() {
-        return mConstraints.containsKey(MAX_LENGTH);
+        return constraints_.containsKey(MAX_LENGTH);
     }
 
     public boolean hasMaxLength() {
-        return mConstraints.containsKey(MAX_LENGTH);
+        return constraints_.containsKey(MAX_LENGTH);
     }
 
-    public T minLength(int minLength) {
+    public ConstrainedProperty minLength(int minLength) {
         setMinLength(minLength);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setMinLength(int minLength) {
         if (minLength <= 0) {
-            mConstraints.remove(MIN_LENGTH);
+            constraints_.remove(MIN_LENGTH);
         } else {
             setConstraint(MIN_LENGTH, minLength);
         }
     }
 
     public int getMinLength() {
-        return Convert.toInt(mConstraints.get(MIN_LENGTH), -1);
+        return Convert.toInt(constraints_.get(MIN_LENGTH), -1);
     }
 
-    public T maxLength(int maxLength) {
+    public ConstrainedProperty maxLength(int maxLength) {
         setMaxLength(maxLength);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setMaxLength(int maxLength) {
         if (maxLength < 0) {
-            mConstraints.remove(MAX_LENGTH);
+            constraints_.remove(MAX_LENGTH);
         } else {
             setConstraint(MAX_LENGTH, maxLength);
         }
     }
 
     public int getMaxLength() {
-        return Convert.toInt(mConstraints.get(MAX_LENGTH), -1);
+        return Convert.toInt(constraints_.get(MAX_LENGTH), -1);
     }
 
     public boolean hasPrecision() {
-        return mConstraints.containsKey(MAX_LENGTH);
+        return constraints_.containsKey(MAX_LENGTH);
     }
 
-    public T precision(int precision) {
+    public ConstrainedProperty precision(int precision) {
         setPrecision(precision);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setPrecision(int precision) {
@@ -631,53 +631,53 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public boolean hasScale() {
-        return mConstraints.containsKey(SCALE);
+        return constraints_.containsKey(SCALE);
     }
 
-    public T scale(int scale) {
+    public ConstrainedProperty scale(int scale) {
         setScale(scale);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setScale(int scale) {
         if (scale < 0) {
-            mConstraints.remove(SCALE);
+            constraints_.remove(SCALE);
         } else {
             setConstraint(SCALE, scale);
         }
     }
 
     public int getScale() {
-        return Convert.toInt(mConstraints.get(SCALE), -1);
+        return Convert.toInt(constraints_.get(SCALE), -1);
     }
 
-    public T regexp(String regexp) {
+    public ConstrainedProperty regexp(String regexp) {
         setRegexp(regexp);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setRegexp(String regexp) {
         if (null == regexp) {
-            mConstraints.remove(REGEXP);
+            constraints_.remove(REGEXP);
         } else {
             setConstraint(REGEXP, regexp);
         }
     }
 
     public String getRegexp() {
-        return (String) mConstraints.get(REGEXP);
+        return (String) constraints_.get(REGEXP);
     }
 
     public boolean matchesRegexp() {
-        return mConstraints.containsKey(REGEXP);
+        return constraints_.containsKey(REGEXP);
     }
 
-    public T email(boolean email) {
+    public ConstrainedProperty email(boolean email) {
         setEmail(email);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setEmail(boolean email) {
@@ -685,13 +685,13 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public boolean isEmail() {
-        return Convert.toBoolean(mConstraints.get(EMAIL), false);
+        return Convert.toBoolean(constraints_.get(EMAIL), false);
     }
 
-    public T url(boolean url) {
+    public ConstrainedProperty url(boolean url) {
         setUrl(url);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setUrl(boolean url) {
@@ -699,67 +699,67 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public boolean isUrl() {
-        return Convert.toBoolean(mConstraints.get(URL), false);
+        return Convert.toBoolean(constraints_.get(URL), false);
     }
 
-    public T minDate(Date minDate) {
+    public ConstrainedProperty minDate(Date minDate) {
         setMinDate(minDate);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setMinDate(Date minDate) {
         if (null == minDate) {
-            mConstraints.remove(MIN_DATE);
+            constraints_.remove(MIN_DATE);
         } else {
             setConstraint(MIN_DATE, minDate);
         }
     }
 
     public Date getMinDate() {
-        return (Date) mConstraints.get(MIN_DATE);
+        return (Date) constraints_.get(MIN_DATE);
     }
 
-    public T maxDate(Date maxDate) {
+    public ConstrainedProperty maxDate(Date maxDate) {
         setMaxDate(maxDate);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setMaxDate(Date maxDate) {
         if (null == maxDate) {
-            mConstraints.remove(MAX_DATE);
+            constraints_.remove(MAX_DATE);
         } else {
             setConstraint(MAX_DATE, maxDate);
         }
     }
 
     public Date getMaxDate() {
-        return (Date) mConstraints.get(MAX_DATE);
+        return (Date) constraints_.get(MAX_DATE);
     }
 
     public boolean isLimitedDate() {
-        return mConstraints.containsKey(MIN_DATE) || mConstraints.containsKey(MAX_DATE);
+        return constraints_.containsKey(MIN_DATE) || constraints_.containsKey(MAX_DATE);
     }
 
-    public T inList(String... inList) {
+    public ConstrainedProperty inList(String... inList) {
         setInList(inList);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setInList(String... inList) {
         if (null == inList) {
-            mConstraints.remove(IN_LIST);
+            constraints_.remove(IN_LIST);
         } else {
             setConstraint(IN_LIST, inList);
         }
     }
 
-    public T inList(int... inList) {
+    public ConstrainedProperty inList(int... inList) {
         setInList(inList);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setInList(int... inList) {
@@ -774,10 +774,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
         setInList(list);
     }
 
-    public T inList(byte... inList) {
+    public ConstrainedProperty inList(byte... inList) {
         setInList(inList);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setInList(byte... inList) {
@@ -792,10 +792,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
         setInList(list);
     }
 
-    public T inList(char... inList) {
+    public ConstrainedProperty inList(char... inList) {
         setInList(inList);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setInList(char... inList) {
@@ -810,10 +810,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
         setInList(list);
     }
 
-    public T inList(short... inList) {
+    public ConstrainedProperty inList(short... inList) {
         setInList(inList);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setInList(short... inList) {
@@ -828,10 +828,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
         setInList(list);
     }
 
-    public T inList(long... inList) {
+    public ConstrainedProperty inList(long... inList) {
         setInList(inList);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setInList(long... inList) {
@@ -846,10 +846,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
         setInList(list);
     }
 
-    public T inList(float... inList) {
+    public ConstrainedProperty inList(float... inList) {
         setInList(inList);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setInList(float... inList) {
@@ -864,10 +864,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
         setInList(list);
     }
 
-    public T inList(double... inList) {
+    public ConstrainedProperty inList(double... inList) {
         setInList(inList);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setInList(double... inList) {
@@ -882,10 +882,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
         setInList(list);
     }
 
-    public T inList(Collection inList) {
+    public ConstrainedProperty inList(Collection inList) {
         setInList(inList);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setInList(Collection inList) {
@@ -902,183 +902,183 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public String[] getInList() {
-        return (String[]) mConstraints.get(IN_LIST);
+        return (String[]) constraints_.get(IN_LIST);
     }
 
     public boolean isInList() {
-        return mConstraints.containsKey(IN_LIST) && ((String[]) mConstraints.get(IN_LIST)).length > 0;
+        return constraints_.containsKey(IN_LIST) && ((String[]) constraints_.get(IN_LIST)).length > 0;
     }
 
-    public T rangeBegin(byte value) {
+    public ConstrainedProperty rangeBegin(byte value) {
         setRangeBegin(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeBegin(char value) {
+    public ConstrainedProperty rangeBegin(char value) {
         setRangeBegin(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeBegin(short value) {
+    public ConstrainedProperty rangeBegin(short value) {
         setRangeBegin(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeBegin(int value) {
+    public ConstrainedProperty rangeBegin(int value) {
         setRangeBegin(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeBegin(long value) {
+    public ConstrainedProperty rangeBegin(long value) {
         setRangeBegin(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeBegin(float value) {
+    public ConstrainedProperty rangeBegin(float value) {
         setRangeBegin(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeBegin(double value) {
+    public ConstrainedProperty rangeBegin(double value) {
         setRangeBegin(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeBegin(Comparable value) {
+    public ConstrainedProperty rangeBegin(Comparable value) {
         setRangeBegin(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setRangeBegin(Comparable rangeBegin) {
         if (null == rangeBegin) {
-            mConstraints.remove(RANGE_BEGIN);
+            constraints_.remove(RANGE_BEGIN);
         } else {
             setConstraint(RANGE_BEGIN, rangeBegin);
         }
     }
 
     public Comparable getRangeBegin() {
-        return (Comparable) mConstraints.get(RANGE_BEGIN);
+        return (Comparable) constraints_.get(RANGE_BEGIN);
     }
 
-    public T rangeEnd(char value) {
+    public ConstrainedProperty rangeEnd(char value) {
         setRangeEnd(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeEnd(byte value) {
+    public ConstrainedProperty rangeEnd(byte value) {
         setRangeEnd(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeEnd(double value) {
+    public ConstrainedProperty rangeEnd(double value) {
         setRangeEnd(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeEnd(float value) {
+    public ConstrainedProperty rangeEnd(float value) {
         setRangeEnd(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeEnd(int value) {
+    public ConstrainedProperty rangeEnd(int value) {
         setRangeEnd(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeEnd(long value) {
+    public ConstrainedProperty rangeEnd(long value) {
         setRangeEnd(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeEnd(short value) {
+    public ConstrainedProperty rangeEnd(short value) {
         setRangeEnd(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T rangeEnd(Comparable value) {
+    public ConstrainedProperty rangeEnd(Comparable value) {
         setRangeEnd(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setRangeEnd(Comparable rangeEnd) {
         if (null == rangeEnd) {
-            mConstraints.remove(RANGE_END);
+            constraints_.remove(RANGE_END);
         } else {
             setConstraint(RANGE_END, rangeEnd);
         }
     }
 
     public Comparable getRangeEnd() {
-        return (Comparable) mConstraints.get(RANGE_END);
+        return (Comparable) constraints_.get(RANGE_END);
     }
 
     public boolean isRange() {
-        return mConstraints.containsKey(RANGE_BEGIN) || mConstraints.containsKey(RANGE_END);
+        return constraints_.containsKey(RANGE_BEGIN) || constraints_.containsKey(RANGE_END);
     }
 
-    public T defaultValue(boolean value) {
+    public ConstrainedProperty defaultValue(boolean value) {
         return defaultValue(Boolean.valueOf(value));
     }
 
-    public T defaultValue(Object value) {
+    public ConstrainedProperty defaultValue(Object value) {
         setDefaultValue(value);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setDefaultValue(Object value) {
         if (null == value) {
-            mConstraints.remove(DEFAULT_VALUE);
+            constraints_.remove(DEFAULT_VALUE);
         } else {
             setConstraint(DEFAULT_VALUE, value);
         }
     }
 
     public Object getDefaultValue() {
-        return mConstraints.get(DEFAULT_VALUE);
+        return constraints_.get(DEFAULT_VALUE);
     }
 
     public boolean hasDefaultValue() {
-        return mConstraints.containsKey(DEFAULT_VALUE);
+        return constraints_.containsKey(DEFAULT_VALUE);
     }
 
-    public T sameAs(String reference) {
+    public ConstrainedProperty sameAs(String reference) {
         setSameAs(reference);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setSameAs(String reference) {
         if (null == reference) {
-            mConstraints.remove(SAME_AS);
+            constraints_.remove(SAME_AS);
         } else {
             setConstraint(SAME_AS, reference);
         }
     }
 
     public String getSameAs() {
-        return (String) mConstraints.get(SAME_AS);
+        return (String) constraints_.get(SAME_AS);
     }
 
     public boolean isSameAs() {
-        return mConstraints.containsKey(SAME_AS);
+        return constraints_.containsKey(SAME_AS);
     }
 
     public void setManyToOne() {
@@ -1106,47 +1106,47 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public ManyToOne getManyToOne() {
-        return (ManyToOne) mConstraints.get(MANY_TO_ONE);
+        return (ManyToOne) constraints_.get(MANY_TO_ONE);
     }
 
-    public T manyToOne() {
+    public ConstrainedProperty manyToOne() {
         setManyToOne();
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T manyToOne(Class klass) {
+    public ConstrainedProperty manyToOne(Class klass) {
         setManyToOne(klass);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T manyToOne(Class klass, String columnReference) {
+    public ConstrainedProperty manyToOne(Class klass, String columnReference) {
         setManyToOne(klass, columnReference);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T manyToOne(String table, String columnReference) {
+    public ConstrainedProperty manyToOne(String table, String columnReference) {
         setManyToOne(table, columnReference);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T manyToOne(Class klass, String columnReference, CreateTable.ViolationAction onUpdate, CreateTable.ViolationAction onDelete) {
+    public ConstrainedProperty manyToOne(Class klass, String columnReference, CreateTable.ViolationAction onUpdate, CreateTable.ViolationAction onDelete) {
         setManyToOne(klass, columnReference, onUpdate, onDelete);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T manyToOne(String table, String columnReference, CreateTable.ViolationAction onUpdate, CreateTable.ViolationAction onDelete) {
+    public ConstrainedProperty manyToOne(String table, String columnReference, CreateTable.ViolationAction onUpdate, CreateTable.ViolationAction onDelete) {
         setManyToOne(table, columnReference, onUpdate, onDelete);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public boolean hasManyToOne() {
-        return mConstraints.containsKey(MANY_TO_ONE);
+        return constraints_.containsKey(MANY_TO_ONE);
     }
 
     public void setManyToOneAssociation() {
@@ -1162,29 +1162,29 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public ManyToOneAssociation getManyToOneAssociation() {
-        return (ManyToOneAssociation) mConstraints.get(MANY_TO_ONE_ASSOCIATION);
+        return (ManyToOneAssociation) constraints_.get(MANY_TO_ONE_ASSOCIATION);
     }
 
-    public T manyToOneAssociation() {
+    public ConstrainedProperty manyToOneAssociation() {
         setManyToOneAssociation();
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T manyToOneAssociation(String property) {
+    public ConstrainedProperty manyToOneAssociation(String property) {
         setManyToOneAssociation(property);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T manyToOneAssociation(Class klass, String property) {
+    public ConstrainedProperty manyToOneAssociation(Class klass, String property) {
         setManyToOneAssociation(klass, property);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public boolean hasManyToOneAssociation() {
-        return mConstraints.containsKey(MANY_TO_ONE_ASSOCIATION);
+        return constraints_.containsKey(MANY_TO_ONE_ASSOCIATION);
     }
 
     public void setManyToMany() {
@@ -1204,35 +1204,35 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public ManyToMany getManyToMany() {
-        return (ManyToMany) mConstraints.get(MANY_TO_MANY);
+        return (ManyToMany) constraints_.get(MANY_TO_MANY);
     }
 
-    public T manyToMany() {
+    public ConstrainedProperty manyToMany() {
         setManyToMany();
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T manyToMany(Class klass) {
+    public ConstrainedProperty manyToMany(Class klass) {
         setManyToMany(klass);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T manyToMany(CreateTable.ViolationAction onUpdate, CreateTable.ViolationAction onDelete) {
+    public ConstrainedProperty manyToMany(CreateTable.ViolationAction onUpdate, CreateTable.ViolationAction onDelete) {
         setManyToMany(onUpdate, onDelete);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T manyToMany(Class klass, CreateTable.ViolationAction onUpdate, CreateTable.ViolationAction onDelete) {
+    public ConstrainedProperty manyToMany(Class klass, CreateTable.ViolationAction onUpdate, CreateTable.ViolationAction onDelete) {
         setManyToMany(klass, onUpdate, onDelete);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public boolean hasManyToMany() {
-        return mConstraints.containsKey(MANY_TO_MANY);
+        return constraints_.containsKey(MANY_TO_MANY);
     }
 
     public void setManyToManyAssociation() {
@@ -1248,57 +1248,57 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public ManyToManyAssociation getManyToManyAssociation() {
-        return (ManyToManyAssociation) mConstraints.get(MANY_TO_MANY_ASSOCIATION);
+        return (ManyToManyAssociation) constraints_.get(MANY_TO_MANY_ASSOCIATION);
     }
 
-    public T manyToManyAssociation() {
+    public ConstrainedProperty manyToManyAssociation() {
         setManyToManyAssociation();
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T manyToManyAssociation(String property) {
+    public ConstrainedProperty manyToManyAssociation(String property) {
         setManyToManyAssociation(property);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
-    public T manyToManyAssociation(Class klass, String property) {
+    public ConstrainedProperty manyToManyAssociation(Class klass, String property) {
         setManyToManyAssociation(klass, property);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public boolean hasManyToManyAssociation() {
-        return mConstraints.containsKey(MANY_TO_MANY_ASSOCIATION);
+        return constraints_.containsKey(MANY_TO_MANY_ASSOCIATION);
     }
 
-    public T format(Format format) {
+    public ConstrainedProperty format(Format format) {
         setFormat(format);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setFormat(Format format) {
         if (null == format) {
-            mConstraints.remove(FORMAT);
+            constraints_.remove(FORMAT);
         } else {
             setConstraint(FORMAT, format);
         }
     }
 
     public Format getFormat() {
-        return (Format) mConstraints.get(FORMAT);
+        return (Format) constraints_.get(FORMAT);
     }
 
     public boolean isFormatted() {
-        return mConstraints.containsKey(FORMAT);
+        return constraints_.containsKey(FORMAT);
     }
 
-    public T file(boolean file) {
+    public ConstrainedProperty file(boolean file) {
         setFile(file);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setFile(boolean file) {
@@ -1306,13 +1306,13 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public boolean isFile() {
-        return Convert.toBoolean(mConstraints.get(FILE), false);
+        return Convert.toBoolean(constraints_.get(FILE), false);
     }
 
-    public T sparse(boolean sparse) {
+    public ConstrainedProperty sparse(boolean sparse) {
         setSparse(sparse);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     public void setSparse(boolean sparse) {
@@ -1320,7 +1320,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
     }
 
     public boolean isSparse() {
-        return Convert.toBoolean(mConstraints.get(SPARSE), false);
+        return Convert.toBoolean(constraints_.get(SPARSE), false);
     }
 
     /**
@@ -1335,10 +1335,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @see #isListed()
      * @since 1.0
      */
-    public T listed(boolean listed) {
+    public ConstrainedProperty listed(boolean listed) {
         setListed(listed);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     /**
@@ -1364,7 +1364,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.0
      */
     public boolean isListed() {
-        return Convert.toBoolean(mConstraints.get(LISTED), false);
+        return Convert.toBoolean(constraints_.get(LISTED), false);
     }
 
     /**
@@ -1380,10 +1380,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @see #getPosition()
      * @since 1.0
      */
-    public T position(int position) {
+    public ConstrainedProperty position(int position) {
         setPosition(position);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     /**
@@ -1398,7 +1398,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      */
     public void setPosition(int position) {
         if (position < 0) {
-            mConstraints.remove(POSITION);
+            constraints_.remove(POSITION);
         } else {
             setConstraint(POSITION, position);
         }
@@ -1415,7 +1415,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.0
      */
     public boolean hasPosition() {
-        return mConstraints.containsKey(POSITION);
+        return constraints_.containsKey(POSITION);
     }
 
     /**
@@ -1429,7 +1429,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.0
      */
     public int getPosition() {
-        return Convert.toInt(mConstraints.get(POSITION), -1);
+        return Convert.toInt(constraints_.get(POSITION), -1);
     }
 
     // TODO : cmf
@@ -1448,10 +1448,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #getMimeType()
 //     * @since 1.0
 //     */
-//    public T mimeType(MimeType mimeType) {
+//    public ConstrainedProperty mimeType(MimeType mimeType) {
 //        setMimeType(mimeType);
 //
-//        return (T) this;
+//        return (ConstrainedProperty) this;
 //    }
 //
 //    /**
@@ -1519,10 +1519,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #isAutoRetrieved()
 //     * @since 1.0
 //     */
-//    public T autoRetrieved(boolean autoRetrieved) {
+//    public ConstrainedProperty autoRetrieved(boolean autoRetrieved) {
 //        setAutoRetrieved(autoRetrieved);
 //
-//        return (T) this;
+//        return (ConstrainedProperty) this;
 //    }
 //
 //    /**
@@ -1571,10 +1571,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #isFragment()
 //     * @since 1.0
 //     */
-//    public T fragment(boolean fragment) {
+//    public ConstrainedProperty fragment(boolean fragment) {
 //        setFragment(fragment);
 //
-//        return (T) this;
+//        return (ConstrainedProperty) this;
 //    }
 //
 //    /**
@@ -1615,10 +1615,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @see #hasName()
      * @since 1.0
      */
-    public T name(String name) {
+    public ConstrainedProperty name(String name) {
         setName(name);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     /**
@@ -1632,7 +1632,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      */
     public void setName(String name) {
         if (null == name) {
-            mConstraints.remove(NAME);
+            constraints_.remove(NAME);
         } else {
             setConstraint(NAME, name);
         }
@@ -1649,7 +1649,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.0
      */
     public String getName() {
-        return (String) mConstraints.get(NAME);
+        return (String) constraints_.get(NAME);
     }
 
     /**
@@ -1663,7 +1663,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.0
      */
     public boolean hasName() {
-        return mConstraints.containsKey(NAME);
+        return constraints_.containsKey(NAME);
     }
 
 //    /**
@@ -1680,10 +1680,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #hasRepository()
 //     * @since 1.0
 //     */
-//    public T repository(String repository) {
+//    public ConstrainedProperty repository(String repository) {
 //        setRepository(repository);
 //
-//        return (T) this;
+//        return (ConstrainedProperty) this;
 //    }
 //
 //    /**
@@ -1757,10 +1757,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #isOrdinal()
 //     * @since 1.0
 //     */
-//    public T ordinal(boolean ordinal) {
+//    public ConstrainedProperty ordinal(boolean ordinal) {
 //        setOrdinal(ordinal);
 //
-//        return (T) this;
+//        return (ConstrainedProperty) this;
 //    }
 //
 //    /**
@@ -1779,10 +1779,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #getOrdinalRestriction()
 //     * @since 1.0
 //     */
-//    public T ordinal(boolean ordinal, String restriction) {
+//    public ConstrainedProperty ordinal(boolean ordinal, String restriction) {
 //        setOrdinal(ordinal, restriction);
 //
-//        return (T) this;
+//        return (ConstrainedProperty) this;
 //    }
 //
 //
@@ -1886,7 +1886,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #getContentAttributes()
 //     * @since 1.0
 //     */
-//    public T contentAttribute(String name, boolean value) {
+//    public ConstrainedProperty contentAttribute(String name, boolean value) {
 //        return contentAttribute(name, String.valueOf(value));
 //    }
 //
@@ -1901,7 +1901,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #getContentAttributes()
 //     * @since 1.0
 //     */
-//    public T contentAttribute(String name, char value) {
+//    public ConstrainedProperty contentAttribute(String name, char value) {
 //        return contentAttribute(name, String.valueOf(value));
 //    }
 //
@@ -1916,7 +1916,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #getContentAttributes()
 //     * @since 1.0
 //     */
-//    public T contentAttribute(String name, byte value) {
+//    public ConstrainedProperty contentAttribute(String name, byte value) {
 //        return contentAttribute(name, String.valueOf(value));
 //    }
 //
@@ -1931,7 +1931,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #getContentAttributes()
 //     * @since 1.0
 //     */
-//    public T contentAttribute(String name, short value) {
+//    public ConstrainedProperty contentAttribute(String name, short value) {
 //        return contentAttribute(name, String.valueOf(value));
 //    }
 //
@@ -1946,7 +1946,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #getContentAttributes()
 //     * @since 1.0
 //     */
-//    public T contentAttribute(String name, int value) {
+//    public ConstrainedProperty contentAttribute(String name, int value) {
 //        return contentAttribute(name, String.valueOf(value));
 //    }
 //
@@ -1961,7 +1961,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #getContentAttributes()
 //     * @since 1.0
 //     */
-//    public T contentAttribute(String name, long value) {
+//    public ConstrainedProperty contentAttribute(String name, long value) {
 //        return contentAttribute(name, String.valueOf(value));
 //    }
 //
@@ -1976,7 +1976,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #getContentAttributes()
 //     * @since 1.0
 //     */
-//    public T contentAttribute(String name, float value) {
+//    public ConstrainedProperty contentAttribute(String name, float value) {
 //        return contentAttribute(name, String.valueOf(value));
 //    }
 //
@@ -1991,7 +1991,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #getContentAttributes()
 //     * @since 1.0
 //     */
-//    public T contentAttribute(String name, double value) {
+//    public ConstrainedProperty contentAttribute(String name, double value) {
 //        return contentAttribute(name, String.valueOf(value));
 //    }
 //
@@ -2011,7 +2011,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @since 1.0
 //     */
 //    @SuppressWarnings("unchecked")
-//    public T contentAttribute(String name, String value) {
+//    public ConstrainedProperty contentAttribute(String name, String value) {
 //        HashMap<String, String> content_attributes = (HashMap<String, String>) mConstraints.get(CONTENT_ATTRIBUTES);
 //        if (null == content_attributes) {
 //            content_attributes = new HashMap<String, String>();
@@ -2019,7 +2019,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //        }
 //        content_attributes.put(name, value);
 //
-//        return (T) this;
+//        return (ConstrainedProperty) this;
 //    }
 //
 //    /**
@@ -2048,10 +2048,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
 //     * @see #getTransformer()
 //     * @since 1.0
 //     */
-//    public T transformer(ContentTransformer transformer) {
+//    public ConstrainedProperty transformer(ContentTransformer transformer) {
 //        setTransformer(transformer);
 //
-//        return (T) this;
+//        return (ConstrainedProperty) this;
 //    }
 //
 //    /**
@@ -2147,8 +2147,8 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.4
      */
     public void setConstraint(String name, Object constraintData) {
-        synchronized (mConstraints) {
-            mConstraints.put(name, constraintData);
+        synchronized (constraints_) {
+            constraints_.put(name, constraintData);
         }
         fireConstraintSet(name, constraintData);
     }
@@ -2166,10 +2166,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @see #getConstraints
      * @since 1.4
      */
-    public T constraint(String name, Object constraintData) {
+    public ConstrainedProperty constraint(String name, Object constraintData) {
         setConstraint(name, constraintData);
 
-        return (T) this;
+        return (ConstrainedProperty) this;
     }
 
     /**
@@ -2185,7 +2185,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.4
      */
     public Object getConstraint(String name) {
-        return mConstraints.get(name);
+        return constraints_.get(name);
     }
 
     /**
@@ -2198,7 +2198,7 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
      * @since 1.4
      */
     public Map<String, Object> getConstraints() {
-        return mConstraints;
+        return constraints_;
     }
 
     public ConstrainedProperty clone() {
@@ -2206,10 +2206,10 @@ public class ConstrainedProperty<T extends ConstrainedProperty> implements Clone
         try {
             new_instance = (ConstrainedProperty) super.clone();
 
-            new_instance.mConstraints = new HashMap<String, Object>(mConstraints);
+            new_instance.constraints_ = new HashMap<String, Object>(constraints_);
 
-            if (mListeners != null) {
-                new_instance.mListeners = new ArrayList<ConstrainedPropertyListener>(mListeners);
+            if (listeners_ != null) {
+                new_instance.listeners_ = new ArrayList<ConstrainedPropertyListener>(listeners_);
             }
         } catch (CloneNotSupportedException e) {
             new_instance = null;

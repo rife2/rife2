@@ -40,7 +40,7 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },
-        BeanHandlerXhtml.getInstance(),
+        BeanHandlerHtml.getInstance(),
         EncoderHtmlSingleton.INSTANCE,
         null);
 
