@@ -36,27 +36,27 @@ import java.util.Map;
  * begin and end tags. For example, for the XHTML form builder you can provide
  * custom CSS style information:
  * <pre>
- * &lt;!--v FORM:INPUT:firstname--&gt;style="border: 1px solid black;"&lt;!--/v--&gt;
+ * &lt;!--v form:input:firstname--&gt;style="border: 1px solid black;"&lt;!--/v--&gt;
  * </pre>
  * If the custom attributes are dynamic and contain value tags, then you should
- * use a dedicated block template tag that has an <code>ATTRIBUTES:</code>
+ * use a dedicated block template tag that has an <code>attributes:</code>
  * middle part, for example:
  * <pre>
- * &lt;!--v FORM:INPUT:firstname/--&gt;
- * &lt;!--b FORM:INPUT:ATTRIBUTES:firstname--&gt;style="border: 1px solid {{v color/}};"&lt;!--/b--&gt;
+ * &lt;!--v form:input:firstname/--&gt;
+ * &lt;!--b form:input:attributes:firstname--&gt;style="border: 1px solid {{v color/}};"&lt;!--/b--&gt;
  * </pre>
  * <p>By default, the generation of the form fields only includes the field
  * itself. You can however customize this by specifying a block tag that has
  * the same name as the value tag that will be filled in with the generated
  * form field. This bock tag supports the following value tags:
- * <code>FORM:LABEL</code>, <code>FORM:NAME</code>, <code>FORM:VALUE</code> and
- * <code>FORM:FIELD</code>. If one of these is present, it will be replaced
+ * <code>form:label</code>, <code>form:name</code>, <code>form:value</code> and
+ * <code>form:field</code>. If one of these is present, it will be replaced
  * respectively with: the label of the form field, the name of the property,
  * the current value of the property, and the generated form fields.
  * For example:
  * <pre>
- * &lt;!--b FORM:INPUT:firstname--&gt;
- * &lt;!--v FORM:NAME/--&gt;-&lt;!--v FORM:VALUE/--&gt; : &lt;!--v FORM:FIELD/--&gt;
+ * &lt;!--b form:input:firstname--&gt;
+ * &lt;!--v form:name/--&gt;-&lt;!--v form:value/--&gt; : &lt;!--v form:field/--&gt;
  * &lt;!--/b-->
  * </pre>
  * could be rendered like this with the HTML form builder:
@@ -71,94 +71,94 @@ import java.util.Map;
  */
 public interface FormBuilder extends Cloneable {
     /**
-     * Template values that start with <code>FORM:HIDDEN:</code> will generate
+     * Template values that start with <code>form:hidden:</code> will generate
      * a hidden form field for the property name that follows the prefix.
      *
      * @since 1.0
      */
-    String PREFIX_FORM_HIDDEN = "FORM:HIDDEN:";
+    String PREFIX_FORM_HIDDEN = "form:hidden:";
 
     /**
-     * Template values that start with <code>FORM:INPUT:</code> will generate
+     * Template values that start with <code>form:input:</code> will generate
      * a text input form field for the property name that follows the prefix.
      * The maximum length of the allowed text will be obtained from the
      * <code>maxLength</code> constraint.
      *
      * @since 1.0
      */
-    String PREFIX_FORM_INPUT = "FORM:INPUT:";
+    String PREFIX_FORM_INPUT = "form:input:";
 
     /**
-     * Template values that start with <code>FORM:SECRET:</code> will generate
+     * Template values that start with <code>form:secret:</code> will generate
      * a password input form field for the property name that follows the
      * prefix. The maximum length of the allowed text will be obtained from the
      * <code>maxLength</code> constraint.
      *
      * @since 1.0
      */
-    String PREFIX_FORM_SECRET = "FORM:SECRET:";
+    String PREFIX_FORM_SECRET = "form:secret:";
 
     /**
-     * Template values that start with <code>FORM:TEXTAREA:</code> will
+     * Template values that start with <code>form:textarea:</code> will
      * generate a multi-line text form field for the property name that follows
      * the prefix.
      *
      * @since 1.0
      */
-    String PREFIX_FORM_TEXTAREA = "FORM:TEXTAREA:";
+    String PREFIX_FORM_TEXTAREA = "form:textarea:";
 
     /**
-     * Template values that start with <code>FORM:RADIO:</code> will
+     * Template values that start with <code>form:radio:</code> will
      * generate a radio button group for the property name that follows the
-     * prefix. The possible radio button values will be obtain from the
+     * prefix. The possible radio button values will be obtained from the
      * <code>inList</code> constraint,
      *
      * @since 1.0
      */
-    String PREFIX_FORM_RADIO = "FORM:RADIO:";
+    String PREFIX_FORM_RADIO = "form:radio:";
 
     /**
-     * Template values that start with <code>FORM:CHECKBOX:</code> will
+     * Template values that start with <code>form:checkbox:</code> will
      * generate a checkbox group for the property name that follows the
-     * prefix. The possible checkbox values will be obtain from the
+     * prefix. The possible checkbox values will be obtained from the
      * <code>inList</code> constraint,
      *
      * @since 1.0
      */
-    String PREFIX_FORM_CHECKBOX = "FORM:CHECKBOX:";
+    String PREFIX_FORM_CHECKBOX = "form:checkbox:";
 
     /**
-     * Template values that start with <code>FORM:SELECT:</code> will
+     * Template values that start with <code>form:select:</code> will
      * generate a select list for the property name that follows the
-     * prefix. The possible select list options will be obtain from the
+     * prefix. The possible select list options will be obtained from the
      * <code>inList</code> constraint,
      *
      * @since 1.0
      */
-    String PREFIX_FORM_SELECT = "FORM:SELECT:";
+    String PREFIX_FORM_SELECT = "form:select:";
 
     /**
-     * Template values that start with <code>FORM:DISPLAY:</code> will
+     * Template values that start with <code>form:display:</code> will
      * not actually generate a form field but simply display the current value
      * as text.
      *
      * @since 1.0
      */
-    String PREFIX_FORM_DISPLAY = "FORM:DISPLAY:";
+    String PREFIX_FORM_DISPLAY = "form:display:";
 
     /**
-     * Template blocks that start with <code>FORM:LABEL:</code> provide a
+     * Template blocks that start with <code>form:label:</code> provide a
      * textual label for a specific value for a property name. The format after
      * the prefix is <code>propertyname:propertyvalue</code>.
      * <p>For example:
      * <pre>
-     * &lt;!--b FORM:LABEL:options:1--&gt;the first option&lt;!--/b--&gt;
-     * &lt;!--b FORM:LABEL:options:2--&gt;the second option&lt;!--/b--&gt;
+     * &lt;!--b form:label:options:1--&gt;the first option&lt;!--/b--&gt;
+     * &lt;!--b form:label:options:2--&gt;the second option&lt;!--/b--&gt;
      * </pre>
      *
      * @since 1.0
      */
-    String PREFIX_FORM_LABEL = "FORM:LABEL:";
+    String PREFIX_FORM_LABEL = "form:label:";
 
     /**
      * A template block with an <code>ATTRIBUTES</code> middle part after the
@@ -167,10 +167,10 @@ public interface FormBuilder extends Cloneable {
      *
      * @since 1.0
      */
-    String MIDDLE_ATTRIBUTES = "ATTRIBUTES:";
+    String MIDDLE_ATTRIBUTES = "attributes:";
 
     /**
-     * Template value tags with the <code>FORM:LABEL</code> name will be
+     * Template value tags with the <code>form:label</code> name will be
      * replaced by the label if they are present inside block tags that have
      * the same name as the template value that will contain the generated
      * form field. (More information in the {@link FormBuilder} interface
@@ -178,10 +178,10 @@ public interface FormBuilder extends Cloneable {
      *
      * @since 1.0
      */
-    String ID_FORM_LABEL = "FORM:LABEL";
+    String ID_FORM_LABEL = "form:label";
 
     /**
-     * Template value tags with the <code>FORM:FIELD</code> name will be
+     * Template value tags with the <code>form:field</code> name will be
      * replaced by the actual generated form field if they are present inside
      * block tags that have the same name as the template value that will
      * contain the generated form field. (More information in the
@@ -189,10 +189,10 @@ public interface FormBuilder extends Cloneable {
      *
      * @since 1.0
      */
-    String ID_FORM_FIELD = "FORM:FIELD";
+    String ID_FORM_FIELD = "form:field";
 
     /**
-     * Template value tags with the <code>FORM:NAME</code> name will be
+     * Template value tags with the <code>form:name</code> name will be
      * replaced by the field name if they are present inside block tags that
      * have the same name as the template value that will contain the generated
      * form field. (More information in the {@link FormBuilder} interface
@@ -200,10 +200,10 @@ public interface FormBuilder extends Cloneable {
      *
      * @since 1.0
      */
-    String ID_FORM_NAME = "FORM:NAME";
+    String ID_FORM_NAME = "form:name";
 
     /**
-     * Template value tags with the <code>FORM:VALUE</code> name will be
+     * Template value tags with the <code>form:value</code> name will be
      * replaced by the current field value if they are present inside block
      * tags that have the same name as the template value that will contain
      * the generated form field. (More information in the {@link FormBuilder}
@@ -211,10 +211,10 @@ public interface FormBuilder extends Cloneable {
      *
      * @since 1.0
      */
-    String ID_FORM_VALUE = "FORM:VALUE";
+    String ID_FORM_VALUE = "form:value";
 
-    String SUFFIX_SELECTED = ":SELECTED";
-    String SUFFIX_CHECKED = ":CHECKED";
+    String SUFFIX_SELECTED = ":selected";
+    String SUFFIX_CHECKED = ":checked";
 
     /**
      * The array of standard form field prefixes.
@@ -391,7 +391,7 @@ public interface FormBuilder extends Cloneable {
      * <pre>
      * &lt;!--v answers/--&gt;
      * &lt;!--b answer--&gt;
-     * &lt;!--v FORM:INPUT:answer/--&gt;
+     * &lt;!--v form:input:answer/--&gt;
      * &lt;!--/b--&gt;
      * </pre>
      * By using the <code>replaceField(template, "answer", property, null, null)</code>

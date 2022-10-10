@@ -2,9 +2,9 @@
 <field><name>anotherlogin</name><type>text</type></field>
 <field><name>password</name><type>secret</type><size>10</size></field>
 <field><name>anotherpassword</name><type>secret</type></field>
-<field><name>comment</name><type>textarea</type><cols>10</cols> <rows>5</rows> <id>comment{{v FORM:VALUE/}}</id></field>
+<field><name>comment</name><type>textarea</type><cols>10</cols> <rows>5</rows> <id>comment{{v form:value/}}</id></field>
 <field><name>anothercomment</name><type>textarea</type></field>
-<field><name>question</name><type>radio</type><alt>sometext</alt> <id>question{{v FORM:VALUE/}}</id></field>
+<field><name>question</name><type>radio</type><alt>sometext</alt> <id>question{{v form:value/}}</id></field>
 
 
 
@@ -55,6 +55,6 @@
 <field><value></value><class>thedisplayedone</class></field>
 <field><value></value></field>
 <field><value></value></field>
-<field><value></value><id>otheroptions{{v FORM:VALUE/}}</id></field>
+<field><value></value><id>otheroptions{{v form:value/}}</id></field>
 <field><value></value></field>
 <field><name>yourcolors</name><type>select</type><options></options></field>

@@ -3,12 +3,12 @@
 <!--b CHECKED--><checked>1</checked><!--/b-->
 <!--b SELECTED--><selected>1</selected><!--/b-->
 <!--b DISABLED--><disabled>1</disabled><!--/b-->
-<!--b FORM:HIDDEN:--><field><name><!--v NAME/--></name><type>hidden</type><!--v ATTRIBUTES--><!--/v--></field><!--/b-->
-<!--b FORM:INPUT:--><field><name><!--v NAME/--></name><type>text</type><!--v ATTRIBUTES--><!--/v--></field><!--/b-->
-<!--b FORM:SECRET:--><field><name><!--v NAME/--></name><type>secret</type><!--v ATTRIBUTES--><!--/v--></field><!--/b-->
-<!--b FORM:TEXTAREA:--><field><name><!--v NAME/--></name><type>textarea</type><!--v ATTRIBUTES--><!--/v--></field><!--/b-->
-<!--b FORM:RADIO:--><field><name><!--v NAME/--></name><type>radio</type><!--v ATTRIBUTES--><!--/v--></field><!--/b-->
-<!--b FORM:CHECKBOX:--><field><name><!--v NAME/--></name><type>checkbox</type><!--v ATTRIBUTES--><!--/v--></field><!--/b-->
-<!--b FORM:SELECT:--><field><name><!--v NAME/--></name><type>select</type><!--v ATTRIBUTES--><!--/v--><options><!--v OPTIONS--><!--/v--></options></field><!--/b-->
+<!--b form:hidden:--><field><name><!--v NAME/--></name><type>hidden</type><!--v ATTRIBUTES--><!--/v--></field><!--/b-->
+<!--b form:input:--><field><name><!--v NAME/--></name><type>text</type><!--v ATTRIBUTES--><!--/v--></field><!--/b-->
+<!--b form:secret:--><field><name><!--v NAME/--></name><type>secret</type><!--v ATTRIBUTES--><!--/v--></field><!--/b-->
+<!--b form:textarea:--><field><name><!--v NAME/--></name><type>textarea</type><!--v ATTRIBUTES--><!--/v--></field><!--/b-->
+<!--b form:radio:--><field><name><!--v NAME/--></name><type>radio</type><!--v ATTRIBUTES--><!--/v--></field><!--/b-->
+<!--b form:checkbox:--><field><name><!--v NAME/--></name><type>checkbox</type><!--v ATTRIBUTES--><!--/v--></field><!--/b-->
+<!--b form:select:--><field><name><!--v NAME/--></name><type>select</type><!--v ATTRIBUTES--><!--/v--><options><!--v OPTIONS--><!--/v--></options></field><!--/b-->
 <!--b FORM:OPTION:--><option><value><!--v VALUE/--></value><label><!--v LABEL--><!--/v--></label><!--v ATTRIBUTES--><!--/v--></option><!--/b-->
-<!--b FORM:DISPLAY:--><field><value><!--v VALUE--><!--/v--></value><!--v ATTRIBUTES--><!--/v--></field><!--/b-->
+<!--b form:display:--><field><value><!--v VALUE--><!--/v--></value><!--v ATTRIBUTES--><!--/v--></field><!--/b-->

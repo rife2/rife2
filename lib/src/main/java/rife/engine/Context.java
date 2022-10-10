@@ -206,10 +206,10 @@ public class Context {
      * the values '{@code blue}' and '{@code red}', and the
      * following HTML template excerpt:
      * <pre>&lt;select name="colors"&gt;
-     * &lt;option value="blue"{{v colors:blue:SELECTED}}{{/v}}&gt;Blue&lt;/option&gt;
-     * &lt;option value="orange"{{v colors:orange:SELECTED}}{{/v}}&gt;Orange&lt;/option&gt;
-     * &lt;option value="red"{{v colors:red:SELECTED}}{{/v}}&gt;Red&lt;/option&gt;
-     * &lt;option value="green"[!V colors:green:SELECTED'}}{{/v}}&gt;Green&lt;/option&gt;
+     * &lt;option value="blue"{{v colors:blue:selected}}{{/v}}&gt;Blue&lt;/option&gt;
+     * &lt;option value="orange"{{v colors:orange:selected}}{{/v}}&gt;Orange&lt;/option&gt;
+     * &lt;option value="red"{{v colors:red:selected}}{{/v}}&gt;Red&lt;/option&gt;
+     * &lt;option value="green"[!V colors:green:selected'}}{{/v}}&gt;Green&lt;/option&gt;
      * &lt;/select&gt;</pre>
      * <p>the result will then be:
      * <pre>&lt;select name="colors"&gt;
@@ -220,15 +220,15 @@ public class Context {
      * &lt;/select&gt;</pre>
      * <p>For example for radio buttons, consider the name '{@code sex}',
      * the value '{@code male}' and the following XHTML template excerpt:
-     * <pre>&lt;input type="radio" name="sex" value="male"{{v sex:male:CHECKED}}{{/v}} /&gt;
-     * &lt;input type="radio" name="sex" value="female"{{v sex:female:CHECKED}}{{/v}} /&gt;</pre>
+     * <pre>&lt;input type="radio" name="sex" value="male"{{v sex:male:checked}}{{/v}} /&gt;
+     * &lt;input type="radio" name="sex" value="female"{{v sex:female:checked}}{{/v}} /&gt;</pre>
      * <p>the result will then be:
      * <pre>&lt;input type="radio" name="sex" value="male" checked="checked" /&gt;
      * &lt;input type="radio" name="sex" value="female" /&gt;</pre>
      * <p>For example for checkboxes, consider the name '{@code active}',
      * the value '{@code true}' and the following XHTML template excerpt:
-     * <pre>&lt;input type="checkbox" name="active"{{v active:CHECKED}}{{/v}} /&gt;
-     * &lt;input type="checkbox" name="senditnow"{{v senditnow:CHECKED}}{{/v}} /&gt;</pre>
+     * <pre>&lt;input type="checkbox" name="active"{{v active:checked}}{{/v}} /&gt;
+     * &lt;input type="checkbox" name="senditnow"{{v senditnow:checked}}{{/v}} /&gt;</pre>
      * <p>the result will then be:
      * <pre>&lt;input type="checkbox" name="active" checked="checked" /&gt;
      * &lt;input type="checkbox" name="senditnow" /&gt;</pre>

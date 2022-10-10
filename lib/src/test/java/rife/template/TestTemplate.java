@@ -970,7 +970,7 @@ public class TestTemplate {
             var bean = new HtmlBeanImpl();
 
             template = TemplateFactory.HTML.get("values_bean_html_in");
-            template.setBean(bean, "PARAM:");
+            template.setBean(bean, "param:");
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_emptyproperty"));
 
             bean = new HtmlBeanImpl();
@@ -979,7 +979,7 @@ public class TestTemplate {
             bean.setFirstname("Geert");
             bean.setLastname("Bevin");
             template = TemplateFactory.HTML.get("values_bean_html_in");
-            template.setBean(bean, "PARAM:");
+            template.setBean(bean, "param:");
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content1"));
 
             bean = new HtmlBeanImpl();
@@ -988,12 +988,12 @@ public class TestTemplate {
             bean.setFirstname("Angela");
             bean.setLastname("&<>");
             template = TemplateFactory.HTML.get("values_bean_html_in");
-            template.setBean(bean, "PARAM:");
+            template.setBean(bean, "param:");
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content2"));
 
             bean.addConstraint(new ConstrainedProperty("lastname").displayedRaw(true));
             template = TemplateFactory.HTML.get("values_bean_html_in");
-            template.setBean(bean, "PARAM:");
+            template.setBean(bean, "param:");
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content3"));
         } catch (TemplateException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -1012,11 +1012,11 @@ public class TestTemplate {
             bean.setFirstname("Geert");
             bean.setLastname("Bevin");
             template = TemplateFactory.HTML.get("values_bean_html_in");
-            template.setBean(bean, "PARAM:");
+            template.setBean(bean, "param:");
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content1"));
-            template.removeBean(bean, "WRONGPARAM:");
+            template.removeBean(bean, "wrongparam:");
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content1"));
-            template.removeBean(bean, "PARAM:");
+            template.removeBean(bean, "param:");
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_empty"));
 
             bean = new HtmlBeanImpl();
@@ -1025,11 +1025,11 @@ public class TestTemplate {
             bean.setFirstname("Angela");
             bean.setLastname("&<>");
             template = TemplateFactory.HTML.get("values_bean_html_in");
-            template.setBean(bean, "PARAM:");
+            template.setBean(bean, "param:");
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content2"));
-            template.removeBean(bean, "WRONGPARAM:");
+            template.removeBean(bean, "wrongparam:");
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_content2"));
-            template.removeBean(bean, "PARAM:");
+            template.removeBean(bean, "param:");
             assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("values_bean_html_out_empty"));
         } catch (TemplateException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));

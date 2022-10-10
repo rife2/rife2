@@ -647,7 +647,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
             // set the field name
             builderTemplate.setValue(getIdName(), template.getEncoder().encode(name));
 
-            // setup the active values
+            // set up the active values
             ArrayList<String> active_values = null;
             if (values != null &&
                 values.length > 0) {
