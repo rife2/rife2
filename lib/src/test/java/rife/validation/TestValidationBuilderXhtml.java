@@ -452,7 +452,7 @@ public class TestValidationBuilderXhtml {
             builder.generateErrorMarkings(template, bean.getValidationErrors(), bean.getValidatedSubjects(), null);
             fail("exception not thrown");
         } catch (MissingMarkingBlockException e) {
-            assertEquals("MARK:ERROR", e.getBlockId());
+            assertEquals("mark:error", e.getBlockId());
         }
     }
 

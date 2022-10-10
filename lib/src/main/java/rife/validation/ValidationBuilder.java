@@ -10,18 +10,18 @@ import rife.validation.exceptions.ValidationBuilderException;
 import rife.template.Template;
 
 public interface ValidationBuilder extends Cloneable {
-    String PREFIX_ERROR = "ERROR:";
-    String PREFIX_ERRORMESSAGE = "ERRORMESSAGE:";
-    String PREFIX_ERRORS = "ERRORS:";
-    String PREFIX_MARK = "MARK:";
-    String PREFIX_MARK_ERROR = "MARK:ERROR";
+    String PREFIX_ERROR = "error:";
+    String PREFIX_ERRORMESSAGE = "errormessage:";
+    String PREFIX_ERRORS = "errors:";
+    String PREFIX_MARK = "mark:";
+    String PREFIX_MARK_ERROR = "mark:error";
 
-    String ID_ERROR_WILDCARD = "ERROR:*";
-    String ID_ERRORMESSAGE = "ERRORMESSAGE";
-    String ID_ERRORMESSAGE_WILDCARD = "ERRORMESSAGE:*";
-    String ID_ERRORS = "ERRORS";
-    String ID_ERRORS_FALLBACK = "ERRORS:";
-    String ID_ERRORS_WILDCARD = "ERRORS:*";
+    String ID_ERROR_WILDCARD = "error:*";
+    String ID_ERRORMESSAGE = "errormessage";
+    String ID_ERRORMESSAGE_WILDCARD = "errormessage:*";
+    String ID_ERRORS = "errors";
+    String ID_ERRORS_FALLBACK = "errors:";
+    String ID_ERRORS_WILDCARD = "errors:*";
 
     String TAG_ERRORS = "(?=(?<=^" + PREFIX_ERRORS + ")|\\G(?<!^))\\s*(\\w+)\\s*,?(?=[\\w,]+$|$)";
     String TAG_ERRORMESSAGE = "(?=(?<=^" + PREFIX_ERRORMESSAGE + ")|\\G(?<!^))\\s*(\\w+)\\s*,?(?=[\\w,]+$|$)";
