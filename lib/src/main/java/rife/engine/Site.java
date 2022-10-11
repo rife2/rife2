@@ -10,6 +10,8 @@ import rife.tools.StringUtils;
 import java.util.*;
 
 public class Site extends Router {
+    public final int RND = new Random().nextInt();
+
     /**
      * Looks up the information of the element that is responsible for handling
      * a certain URL and path info.

@@ -54,6 +54,12 @@ public class EngineTemplateProcessor {
             template_.setValue(Context.ID_CONTEXT_PATH_INFO, context_.pathInfo());
             setValues.add(Context.ID_CONTEXT_PATH_INFO);
         }
+
+        if (template_.hasValueId(Context.ID_CONTEXT_PARAM_RANDOM) &&
+            !template_.isValueSet(Context.ID_CONTEXT_PARAM_RANDOM)) {
+            template_.setValue(Context.ID_CONTEXT_PARAM_RANDOM, "rnd="+context_.site().RND);
+            setValues.add(Context.ID_CONTEXT_PARAM_RANDOM);
+        }
     }
 
     private void processParameters(final List<String> setValues) {
