@@ -17,7 +17,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class HttpResponse extends AbstractResponse {
-    private HttpServletResponse response_ = null;
+    private final HttpServletResponse response_;
 
     public HttpResponse(Request request, HttpServletResponse response) {
         super(request);

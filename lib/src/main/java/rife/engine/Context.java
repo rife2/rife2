@@ -25,10 +25,10 @@ public class Context {
     private final Site site_;
     private final Request request_;
     private final Response response_;
-    private final Site.RouteMatch route_;
+    private final RouteMatch route_;
     private final Element element_;
 
-    public Context(String gateUrl, Site site, Request request, Response response, Site.RouteMatch route) {
+    public Context(String gateUrl, Site site, Request request, Response response, RouteMatch route) {
         gateUrl_ = gateUrl;
         site_ = site;
         request_ = request;
@@ -38,6 +38,8 @@ public class Context {
     }
 
     public void process() {
+        response_.setLastElement(element_);
+
         try {
             element_.process(this);
         } catch (Exception e) {

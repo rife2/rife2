@@ -25,6 +25,16 @@ import rife.template.Template;
  */
 public interface Response {
     /**
+     * Sets the latest target element of this response. This method is called
+     * repeatedly by the engine to make it possible to trace which elements
+     * have been processed.
+     *
+     * @param element an element that has been executed in the context of this
+     * response
+     * @since 1.1
+     */
+    public void setLastElement(Element element);
+    /**
      * Enables or disabled the text output buffer.
      * <p>The buffer is enabled by default and its buffered contents will be
      * flushed when the buffer is disabled.
@@ -54,7 +64,7 @@ public interface Response {
      * @see #print(Object)
      * @since 1.1
      */
-    public void print(Template template) throws EngineException;
+    void print(Template template) throws EngineException;
 
     /**
      * Prints a list of text snippets to the request text output.

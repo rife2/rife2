@@ -87,11 +87,6 @@ public class HttpRequest implements Request {
     }
 
     @Override
-    public Map<String, UploadedFile[]> getFiles() {
-        return files_;
-    }
-
-    @Override
     public String getBody() {
         if (body_== null) {
             body_ = StringUtils.toString(getBodyAsBytes(), request_.getCharacterEncoding());
@@ -111,6 +106,11 @@ public class HttpRequest implements Request {
         }
 
         return bodyAsBytes_;
+    }
+
+    @Override
+    public Map<String, UploadedFile[]> getFiles() {
+        return files_;
     }
 
     @Override

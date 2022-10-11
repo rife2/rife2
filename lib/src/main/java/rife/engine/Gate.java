@@ -4,6 +4,7 @@
  */
 package rife.engine;
 
+import org.eclipse.jetty.util.VirtualThreads;
 import rife.Version;
 import rife.config.RifeConfig;
 import rife.engine.exceptions.DeferException;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 public class Gate {
-    public final static String REQUEST_ATTRIBUTE_RIFE_ENGINE_EXCEPTION = "rife.engine.exception";
+    public static final String REQUEST_ATTRIBUTE_RIFE_ENGINE_EXCEPTION = "rife.engine.exception";
 
     private Site site_;
     private Throwable initException_ = null;
@@ -52,13 +53,12 @@ public class Gate {
         // Handle the request
         // check if an exception occurred during the initialization
         if (initException_ != null) {
-            printExceptionDetails(response, initException_);
+            handleRequestException(initException_, request, response);
             return true;
         }
 
         // Set up the element request and process it.
-        Site.RouteMatch match = site_.findRouteForRequest(request, elementUrl);
-
+        RouteMatch match = site_.findRouteForRequest(request, elementUrl);
         // If no element was found, don't continue executing the gate logic.
         // This could allow a next filter in the chain to be executed.
         if (null == match) {
@@ -67,6 +67,7 @@ public class Gate {
 
         var context = new Context(gateUrl, site_, request, response, match);
         try {
+            // TODO : handle before and after routes
             context.process();
             response.close();
         } catch (RedirectException e) {
@@ -74,47 +75,48 @@ public class Gate {
         } catch (DeferException e) {
             return false;
         } catch (Throwable e) {
-            handleRequestException(request, response, e);
+            handleRequestException(e, request, response);
         }
 
         return true;
     }
 
-    private void handleSiteInitException(Throwable e) {
+    private void handleSiteInitException(Throwable exception) {
         // ensure the later init exceptions don't overwrite earlier ones
         if (null == initException_) {
             if (RifeConfig.engine().getPrettyEngineExceptions()) {
-                initException_ = e;
+                initException_ = exception;
             } else {
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
+                if (exception instanceof RuntimeException) {
+                    throw (RuntimeException) exception;
                 } else {
-                    throw new RuntimeException(e);
+                    throw new RuntimeException(exception);
                 }
             }
         }
     }
 
-    private void handleRequestException(Request request, Response response, Throwable e) {
+    private void handleRequestException(Throwable exception, Request request, Response response) {
         String message = "Error on host " + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath();
         if (RifeConfig.engine().getLogEngineExceptions()) {
-            Logger.getLogger("rife.engine").severe(message + "\n" + ExceptionUtils.getExceptionStackTrace(e));
+            Logger.getLogger("rife.engine").severe(message + "\n" + ExceptionUtils.getExceptionStackTrace(exception));
         }
 
+        // TODO : handle custom exception element
         if (!RifeConfig.engine().getPrettyEngineExceptions()) {
-            request.setAttribute(REQUEST_ATTRIBUTE_RIFE_ENGINE_EXCEPTION, e);
+            request.setAttribute(REQUEST_ATTRIBUTE_RIFE_ENGINE_EXCEPTION, exception);
 
-            if (e instanceof RuntimeException) {
-                throw (RuntimeException) e;
+            if (exception instanceof RuntimeException) {
+                throw (RuntimeException) exception;
             } else {
-                throw new RuntimeException(message, e);
+                throw new RuntimeException(message, exception);
             }
         }
 
-        printExceptionDetails(response, e);
+        printExceptionDetails(exception, response);
     }
 
-    private void printExceptionDetails(Response response, Throwable exception) {
+    private void printExceptionDetails(Throwable exception, Response response) {
         TemplateFactory template_factory = null;
         if (response.isContentTypeSet()) {
             String content_type = response.getContentType();

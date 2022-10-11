@@ -15,21 +15,26 @@ import rife.tools.exceptions.ConversionException;
 
 import java.lang.reflect.Modifier;
 
-public record RouteClass(Class<? extends Element> elementClass, RequestMethod method, String path,
-                         PathInfoHandling pathInfoHandling) implements Route {
-    public RouteClass(Class<? extends Element> elementClass, RequestMethod method) {
-        this(elementClass, method, null, null);
+record RouteClass(Router router, RequestMethod method, String path, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass
+) implements Route {
+    public RouteClass(Router router, Class<? extends Element> elementClass) {
+        this(router, null, null, null, elementClass);
     }
 
-    public RouteClass(Class<? extends Element> elementClass, RequestMethod method, String path) {
-        this(elementClass, method, path, null);
+    public RouteClass(Router router, RequestMethod method, Class<? extends Element> elementClass) {
+        this(router, method, null, null, elementClass);
     }
 
-    public RouteClass(Class<? extends Element> elementClass, RequestMethod method, PathInfoHandling pathInfoHandling) {
-        this(elementClass, method, null, pathInfoHandling);
+    public RouteClass(Router router, RequestMethod method, String path, Class<? extends Element> elementClass) {
+        this(router, method, path, null, elementClass);
     }
 
-    public RouteClass(Class<? extends Element> elementClass, RequestMethod method, String path, PathInfoHandling pathInfoHandling) {
+    public RouteClass(Router router, RequestMethod method, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
+        this(router, method, null, pathInfoHandling, elementClass);
+    }
+
+    public RouteClass(Router router, RequestMethod method, String path, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
+        this.router = router;
         this.method = method;
         this.elementClass = elementClass;
         if (path == null) {

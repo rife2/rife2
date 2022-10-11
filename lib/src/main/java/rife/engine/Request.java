@@ -38,17 +38,6 @@ public interface Request {
     Map<String, String[]> getParameters();
 
     /**
-     * Retrieves the files that were uploaded in this request.
-     *
-     * @return a <code>Map</code> with all the uploaded files
-     * @see #hasFile(String)
-     * @see #getFile(String)
-     * @see #getFiles(String)
-     * @since 1.1
-     */
-    Map<String, UploadedFile[]> getFiles();
-
-    /**
      * Retrieves the body of this request as a string.
      *
      * @return the string of the request body
@@ -65,6 +54,17 @@ public interface Request {
      * @since 2.0
      */
     byte[] getBodyAsBytes();
+
+    /**
+     * Retrieves the files that were uploaded in this request.
+     *
+     * @return a <code>Map</code> with all the uploaded files
+     * @see #hasFile(String)
+     * @see #getFile(String)
+     * @see #getFiles(String)
+     * @since 1.1
+     */
+    Map<String, UploadedFile[]> getFiles();
 
     /**
      * Checks if a particular file has been uploaded in this request.

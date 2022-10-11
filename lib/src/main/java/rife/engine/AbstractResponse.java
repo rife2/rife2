@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -31,13 +30,14 @@ import java.util.zip.GZIPOutputStream;
 public abstract class AbstractResponse implements Response {
     private final Request request_;
 
-    private String contentType_ = null;
-    private boolean textBufferEnabled_ = true;
-    private ArrayList<CharSequence> textBuffer_ = null;
-    private OutputStream responseOutputStream_ = null;
-    private ByteArrayOutputStream gzipByteOutputStream_ = null;
-    private GZIPOutputStream gzipOutputStream_ = null;
-    private OutputStream outputStream_ = null;
+    protected String contentType_ = null;
+    protected Element lastElement_ = null;
+    protected boolean textBufferEnabled_ = true;
+    protected ArrayList<CharSequence> textBuffer_ = null;
+    protected OutputStream responseOutputStream_ = null;
+    protected ByteArrayOutputStream gzipByteOutputStream_ = null;
+    protected GZIPOutputStream gzipOutputStream_ = null;
+    protected OutputStream outputStream_ = null;
 
     /**
      * This method needs to be implemented by the extending back-end class and
@@ -82,6 +82,10 @@ public abstract class AbstractResponse implements Response {
      */
     public Request getRequest() {
         return request_;
+    }
+
+    public void setLastElement(Element element) {
+        lastElement_ = element;
     }
 
     public boolean isContentTypeSet() {

@@ -9,78 +9,7 @@ import rife.tools.StringUtils;
 
 import java.util.*;
 
-public class Site {
-    record RouteMatch(Route route, String pathInfo) {
-    }
-
-    private final Map<String, List<Route>> routes_ = new HashMap<>();
-    private final Map<String, List<Route>> pathInfoRoutes_ = new HashMap<>();
-
-    public void setup() {
-    }
-
-    public Route get(Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(elementClass, RequestMethod.GET));
-    }
-
-    public Route get(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(elementClass, RequestMethod.GET, pathInfo));
-    }
-
-    public Route get(String path, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(elementClass, RequestMethod.GET, path));
-    }
-
-    public Route get(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(elementClass, RequestMethod.GET, path, pathInfo));
-    }
-
-    public Route get(String path, Element element) {
-        return registerRoute(new RouteInstance(element, RequestMethod.GET, path));
-    }
-
-    public Route get(String path, PathInfoHandling pathInfo, Element element) {
-        return registerRoute(new RouteInstance(element, RequestMethod.GET, path, pathInfo));
-    }
-
-    public Route post(Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(elementClass, RequestMethod.POST));
-    }
-
-    public Route post(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(elementClass, RequestMethod.POST, pathInfo));
-    }
-
-    public Route post(String path, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(elementClass, RequestMethod.POST, path));
-    }
-
-    public Route post(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(elementClass, RequestMethod.POST, path, pathInfo));
-    }
-
-    public Route post(String path, Element element) {
-        return registerRoute(new RouteInstance(element, RequestMethod.POST, path));
-    }
-
-    public Route post(String path, PathInfoHandling pathInfo, Element element) {
-        return registerRoute(new RouteInstance(element, RequestMethod.POST, path, pathInfo));
-    }
-
-    public Route registerRoute(Route route) {
-        switch (route.pathInfoHandling()) {
-            case NONE -> {
-                List<Route> routes = routes_.computeIfAbsent(route.path(), k -> new ArrayList<>());
-                routes.add(route);
-            }
-            case CAPTURE -> {
-                List<Route> routes = pathInfoRoutes_.computeIfAbsent(route.path(), k -> new ArrayList<>());
-                routes.add(route);
-            }
-        }
-        return route;
-    }
-
+public class Site extends Router {
     /**
      * Looks up the information of the element that is responsible for handling
      * a certain URL and path info.
@@ -89,7 +18,7 @@ public class Site {
      * @param pathInfo the path info that should be taken into account
      * @return the corresponding element information; or
      * <p><code>null</code> if the URL and path info aren't registered in this site
-     * @since 1.4
+     * @since 2.0
      */
     public Route resolveUrl(Request request, String url, String pathInfo)
     throws EngineException {
@@ -187,7 +116,7 @@ public class Site {
      * @return an instance of <code>Route</code> when an element match
      * was found; or
      * <p><code>null</code> if no suitable element could be found.
-     * @since 1.6
+     * @since 2.0
      */
     public RouteMatch findRouteForRequest(Request request, String elementUrl) {
         // obtain the element info that mapped to the requested path info

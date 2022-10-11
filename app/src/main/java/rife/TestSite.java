@@ -4,9 +4,7 @@
  */
 package rife;
 
-import rife.engine.Context;
-import rife.engine.Element;
-import rife.engine.Site;
+import rife.engine.*;
 import rife.engine.annotations.Parameter;
 import rife.server.Server;
 import rife.template.Template;
@@ -16,12 +14,38 @@ public class TestSite extends Site {
         new Server().port(4242).start(new TestSite());
     }
 
+    public class AuthenticatedRoutes extends Router {
+        public Route test = get("/", (Context c) -> {
+
+        });
+    }
+
+    ;
+
     public void setup() {
+        before(BeforeElement.class, AfterElement.class);
+        before((Context c) -> {
+
+        }, (Context c) -> {
+
+        });
+        after(AfterElement.class);
+
         get("/inlined", (Context context) -> {
             context.print("test");
         });
         get("/parameters", Checkout.class);
+
+        group(new Router() {
+            public void setup() {
+
+            }
+        });
+        g.test.path();
+
     }
+
+    AuthenticatedRoutes g = group(new AuthenticatedRoutes());
 
     public static class Checkout implements Element {
         @Parameter String one;
@@ -33,6 +57,20 @@ public class TestSite extends Site {
             template.setValue("one", one);
             template.setValue("two", two);
             context.print(template);
+        }
+    }
+
+    public static class BeforeElement implements Element {
+        public void process(Context c)
+        throws Exception {
+
+        }
+    }
+
+    public static class AfterElement implements Element {
+        public void process(Context c)
+        throws Exception {
+
         }
     }
 }
