@@ -1,7 +1,6 @@
 /*
- * Copyright 2001-2008 Steven Grimm <koreth[remove] at midwinter dot com>
+ * Copyright 2001-2022 Steven Grimm <koreth[remove] at midwinter dot com>
  * Licensed under the Apache License, Version 2.0 (the "License")
- * $Id: DbConnection.java 3442 2006-08-10 09:26:43Z gbevin $
  */
 package rife.database;
 

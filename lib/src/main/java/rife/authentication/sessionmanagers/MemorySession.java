@@ -1,0 +1,85 @@
+/*
+ * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ */
+package rife.authentication.sessionmanagers;
+
+public class MemorySession {
+    private String authId_ = null;
+    private long userId_ = -1;
+    private String hostIp_ = null;
+    private long start_ = -1;
+    private boolean remembered_ = false;
+
+    public MemorySession(String authId, long userId, String hostIp, boolean remembered) {
+        setAuthId(authId);
+        setUserId(userId);
+        setHostIp(hostIp);
+        setRemembered(remembered);
+        start_ = System.currentTimeMillis();
+    }
+
+    public void setAuthId(String authId) {
+        assert authId != null;
+        assert authId.length() > 0;
+
+        authId_ = authId;
+    }
+
+    public String getAuthId() {
+        return authId_;
+    }
+
+    public void setUserId(long userId) {
+        assert userId >= 0;
+
+        userId_ = userId;
+    }
+
+    public long getUserId() {
+        return userId_;
+    }
+
+    public void setHostIp(String hostIp) {
+        assert hostIp != null;
+        assert hostIp.length() > 0;
+
+        hostIp_ = hostIp;
+    }
+
+    public String getHostIp() {
+        return hostIp_;
+    }
+
+    public void setStart(long start) {
+        start_ = start;
+    }
+
+    public long getStart() {
+        return start_;
+    }
+
+    public void setRemembered(boolean remembered) {
+        remembered_ = remembered;
+    }
+
+    public boolean getRemembered() {
+        return remembered_;
+    }
+
+    public int hashCode() {
+        return authId_.hashCode();
+    }
+
+    public boolean equals(Object object) {
+        if (object instanceof MemorySession other_session) {
+            if (null != other_session &&
+                other_session.getAuthId().equals(getAuthId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+

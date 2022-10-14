@@ -209,9 +209,6 @@ class Concurrency extends DbQueryManager implements Runnable {
                 if (getDatasource().getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver")) {
                     return Connection.TRANSACTION_READ_UNCOMMITTED;
                 }
-                if (getDatasource().getAliasedDriver().equals("in.co.daffodil.db.jdbc.DaffodilDBDriver")) {
-                    return Connection.TRANSACTION_SERIALIZABLE;
-                }
 
                 return -1;
             }
@@ -264,9 +261,6 @@ class Concurrency extends DbQueryManager implements Runnable {
                 public int getTransactionIsolation() {
                     if (getDatasource().getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver")) {
                         return Connection.TRANSACTION_READ_UNCOMMITTED;
-                    }
-                    if (getDatasource().getAliasedDriver().equals("in.co.daffodil.db.jdbc.DaffodilDBDriver")) {
-                        return Connection.TRANSACTION_SERIALIZABLE;
                     }
 
                     return -1;

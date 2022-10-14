@@ -187,8 +187,7 @@ public class TestDbConnection {
             prepared_statement_insert = connection.getPreparedStatement("INSERT INTO tbltest VALUES (232, 'somestring')");
             prepared_statement_select = connection.getPreparedStatement("SELECT * FROM tbltest");
 
-            if (connection.supportsTransactions() &&
-                !datasource.getAliasedDriver().equals("com.mysql.jdbc.Driver")) {
+            if (connection.supportsTransactions()) {
                 assertTrue(connection.beginTransaction());
                 assertEquals(1, prepared_statement_insert.executeUpdate());
                 prepared_statement_select.executeQuery();
@@ -240,8 +239,7 @@ public class TestDbConnection {
         DbConnection connection = null;
         try {
             connection = datasource.getConnection();
-            if (connection.supportsTransactions() &&
-                !datasource.getAliasedDriver().equals("com.mysql.jdbc.Driver")) {
+            if (connection.supportsTransactions()) {
                 assertFalse(connection.isTransactionValidForThread());
                 assertTrue(connection.beginTransaction());
                 assertTrue(connection.isTransactionValidForThread());
@@ -293,8 +291,7 @@ public class TestDbConnection {
 //            prepared_statement_insert = connection.getPreparedStatement("INSERT INTO tbltest VALUES (232, 'somestring')");
 //            prepared_statement_select = connection.getPreparedStatement("SELECT * FROM tbltest");
 //
-//            if (connection.supportsTransactions() &&
-//                !datasource.getAliasedDriver().equals("com.mysql.jdbc.Driver")) {
+//            if (connection.supportsTransactions()) {
 //                assertTrue(connection.beginTransaction());
 //                prepared_statement_insert.executeUpdate();
 //                try {
@@ -352,8 +349,7 @@ public class TestDbConnection {
 //			prepared_statement_insert = connection.getPreparedStatement("INSERT INTO tbltest VALUES (232, 'somestring')");
 //			prepared_statement_select = connection.getPreparedStatement("SELECT * FROM tbltest");
 //
-//			if (connection.supportsTransactions() &&
-//				false == datasource.getAliasedDriver().equals("com.mysql.jdbc.Driver"))
+//			if (connection.supportsTransactions())
 //			{
 //				assertTrue(true == connection.beginTransaction());
 //				prepared_statement_insert.executeUpdate();
@@ -430,8 +426,7 @@ public class TestDbConnection {
 //			prepared_statement_insert = connection.getPreparedStatement("INSERT INTO tbltest VALUES (232, 'somestring')");
 //			prepared_statement_select = connection.getPreparedStatement("SELECT * FROM tbltest");
 //
-//			if (connection.supportsTransactions() &&
-//				false == datasource.getAliasedDriver().equals("com.mysql.jdbc.Driver"))
+//			if (connection.supportsTransactions())
 //			{
 //				assertTrue(true == connection.beginTransaction());
 //				prepared_statement_insert.executeUpdate();

@@ -342,9 +342,9 @@ public abstract class AbstractTemplate implements Template {
                         }
                     }
 
-                    // don't continue if the config parameter doesn't exist
+                    // don't continue if the l10n parameter doesn't exist
                     if (l10n_value != null) {
-                        // set the config value in the template
+                        // set the l10n value in the template
                         setValue(captured_groups[0], getEncoder().encodeDefensive(l10n_value));
                         if (setValues != null) {
                             setValues.add(captured_groups[0]);

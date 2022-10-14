@@ -35,6 +35,10 @@ public class RifeConfig {
         return instance().global;
     }
 
+    public static AuthenticationConfig authentication() {
+        return instance().authentication;
+    }
+
     public static DatabaseConfig database() {
         return instance().database;
     }
@@ -60,6 +64,7 @@ public class RifeConfig {
     }
 
     public final GlobalConfig global = new GlobalConfig();
+    public final AuthenticationConfig authentication = new AuthenticationConfig();
     public final DatabaseConfig database = new DatabaseConfig();
     public final EngineConfig engine = new EngineConfig();
     public final SchedulerConfig scheduler = new SchedulerConfig();
@@ -90,6 +95,208 @@ public class RifeConfig {
 
         public GlobalConfig setAutoReloadDelay(int delay) {
             autoReloadDelay_ = delay;
+            return this;
+        }
+    }
+
+    public class AuthenticationConfig {
+        private int loginMinimumLength_ = DEFAULT_LOGIN_MINIMUM_LENGTH;
+        private int loginMaximumLength_ = DEFAULT_LOGIN_MAXIMUM_LENGTH;
+        private int passwordMinimumLength_ = DEFAULT_PASSWORD_MINIMUM_LENGTH;
+        private int passwordMaximumLength_ = DEFAULT_PASSWORD_MAXIMUM_LENGTH;
+        private int roleNameMaximumLength_ = DEFAULT_ROLE_NAME_MAXIMUM_LENGTH;
+        private long sessionDuration_ = DEFAULT_SESSION_DURATION;
+        private int sessionPurgeFrequency_ = DEFAULT_SESSION_PURGE_FREQUENCY;
+        private int sessionPurgeScale_ = DEFAULT_SESSION_PURGE_SCALE;
+        private boolean sessionRestrictHostIp_ = DEFAULT_SESSION_RESTRICT_HOST_IP;
+        private long rememberDuration_ = DEFAULT_REMEMBER_DURATION;
+        private int rememberPurgeFrequency_ = DEFAULT_REMEMBER_PURGE_FREQUENCY;
+        private int rememberPurgeScale_ = DEFAULT_REMEMBER_PURGE_SCALE;
+        private String tableRole_ = DEFAULT_TABLE_ROLE;
+        private String sequenceRole_ = DEFAULT_SEQUENCE_ROLE;
+        private String tableUser_ = DEFAULT_TABLE_USER;
+        private String tableRoleLink_ = DEFAULT_TABLE_ROLELINK;
+        private String tableAuthentication_ = DEFAULT_TABLE_AUTHENTICATION;
+        private String tableRemember_ = DEFAULT_TABLE_REMEMBER;
+
+        public static final int DEFAULT_LOGIN_MINIMUM_LENGTH = 5;
+        public static final int DEFAULT_LOGIN_MAXIMUM_LENGTH = 20;
+        public static final int DEFAULT_PASSWORD_MINIMUM_LENGTH = 5;
+        public static final int DEFAULT_PASSWORD_MAXIMUM_LENGTH = 100;
+        public static final int DEFAULT_ROLE_NAME_MAXIMUM_LENGTH = 20;
+        public static final long DEFAULT_SESSION_DURATION = 1000 * 60 * 20;        // 20 minutes
+        public static final int DEFAULT_SESSION_PURGE_FREQUENCY = 20;              // 20 out of 1000 times, means 1/50th of the time
+        public static final int DEFAULT_SESSION_PURGE_SCALE = 1000;
+        public static final boolean DEFAULT_SESSION_RESTRICT_HOST_IP = false;
+        public static final long DEFAULT_REMEMBER_DURATION = 1000L * 60L * 60L * 24L * 30L * 3L;    // 3 months
+        public static final int DEFAULT_REMEMBER_PURGE_FREQUENCY = 20;             // 20 out of 1000 times, means 1/50th of the time
+        public static final int DEFAULT_REMEMBER_PURGE_SCALE = 1000;
+        public static final String DEFAULT_TABLE_ROLE = "AuthRole";
+        public static final String DEFAULT_SEQUENCE_ROLE = "SEQ_AUTHROLE";
+        public static final String DEFAULT_TABLE_USER = "AuthUser";
+        public static final String DEFAULT_TABLE_ROLELINK = "AuthRoleLink";
+        public static final String DEFAULT_TABLE_AUTHENTICATION = "Authentication";
+        public static final String DEFAULT_TABLE_REMEMBER = "AuthRemember";
+
+        public int getLoginMinimumLength() {
+            return loginMinimumLength_;
+        }
+
+        public AuthenticationConfig setLoginMinimumLength(int length) {
+            loginMinimumLength_ = length;
+            return this;
+        }
+
+        public int getLoginMaximumLength() {
+            return loginMaximumLength_;
+        }
+
+        public AuthenticationConfig setLoginMaximumLength(int length) {
+            loginMaximumLength_ = length;
+            return this;
+        }
+
+        public int getPasswordMinimumLength() {
+            return passwordMinimumLength_;
+        }
+
+        public AuthenticationConfig setPasswordMinimumLength(int length) {
+            passwordMinimumLength_ = length;
+            return this;
+        }
+
+        public int getPasswordMaximumLength() {
+            return passwordMaximumLength_;
+        }
+
+        public AuthenticationConfig setPasswordMaximumLength(int length) {
+            passwordMaximumLength_ = length;
+            return this;
+        }
+
+        public int getRoleNameMaximumLength() {
+            return roleNameMaximumLength_;
+        }
+
+        public AuthenticationConfig setRoleNameMaximumLength(int length) {
+            roleNameMaximumLength_ = length;
+            return this;
+        }
+
+        public long getSessionDuration() {
+            return sessionDuration_;
+        }
+
+        public AuthenticationConfig getSessionDuration(long duration) {
+            sessionDuration_ = duration;
+            return this;
+        }
+
+        public int getSessionPurgeFrequency() {
+            return sessionPurgeFrequency_;
+        }
+
+        public AuthenticationConfig setSessionPurgeFrequency(int frequency) {
+            sessionPurgeFrequency_ = frequency;
+            return this;
+        }
+
+        public int getSessionPurgeScale() {
+            return sessionPurgeScale_;
+        }
+
+        public AuthenticationConfig setSessionPurgeScale(int scale) {
+            sessionPurgeScale_ = scale;
+            return this;
+        }
+
+        public boolean getSessionRestrictHostIp() {
+            return sessionRestrictHostIp_;
+        }
+
+        public AuthenticationConfig setSessionRestrictHostIp(boolean restrict) {
+            sessionRestrictHostIp_ = restrict;
+            return this;
+        }
+
+        public long getRememberDuration() {
+            return rememberDuration_;
+        }
+
+        public AuthenticationConfig setRememberDuration(long duration) {
+            rememberDuration_ = duration;
+            return this;
+        }
+
+        public int getRememberPurgeFrequency() {
+            return rememberPurgeFrequency_;
+        }
+
+        public AuthenticationConfig setRememberPurgeFrequency(int frequency) {
+            rememberPurgeFrequency_ = frequency;
+            return this;
+        }
+
+        public int getRememberPurgeScale() {
+            return rememberPurgeScale_;
+        }
+
+        public AuthenticationConfig setRememberPurgeScale(int scale) {
+            rememberPurgeScale_ = scale;
+            return this;
+        }
+
+        public String getTableRole() {
+            return tableRole_;
+        }
+
+        public AuthenticationConfig setTableRole(String name) {
+            tableRole_ = name;
+            return this;
+        }
+
+        public String getSequenceRole() {
+            return sequenceRole_;
+        }
+
+        public AuthenticationConfig setSequenceRole(String name) {
+            sequenceRole_ = name;
+            return this;
+        }
+
+        public String getTableUser() {
+            return tableUser_;
+        }
+
+        public AuthenticationConfig setTableUser(String name) {
+            tableUser_ = name;
+            return this;
+        }
+
+        public String getTableRoleLink() {
+            return tableRoleLink_;
+        }
+
+        public AuthenticationConfig setTableRoleLink(String name) {
+            tableRoleLink_ = name;
+            return this;
+        }
+
+        public String getTableAuthentication() {
+            return tableAuthentication_;
+        }
+
+        public AuthenticationConfig setTableAuthentication(String name) {
+            tableAuthentication_ = name;
+            return this;
+        }
+
+        public String getTableRemember() {
+            return tableRemember_;
+        }
+
+        public AuthenticationConfig setTableRemember(String name) {
+            tableRemember_ = name;
             return this;
         }
     }
@@ -492,40 +699,83 @@ public class RifeConfig {
     }
 
     public class SchedulerConfig {
+        private int taskTypeMaximumLength_ = DEFAULT_TASK_TYPE_MAXIMUM_LENGTH;
+        private int taskFrequencyMaximumLength_ = DEFAULT_TASK_FREQUENCY_MAXIMUM_LENGTH;
+        private int taskoptionValueMaximumLength_ = DEFAULT_TASKOPTION_VALUE_MAXIMUM_LENGTH;
+        private int taskoptionNameMaximumLength_ = DEFAULT_TASKOPTION_NAME_MAXIMUM_LENGTH;
+        private String tableTask_ = DEFAULT_TABLE_TASK;
+        private String sequenceTask_ = DEFAULT_SEQUENCE_TASK;
+        private String tableTaskoption_ = DEFAULT_TABLE_TASKOPTION;
+
+        public static final int DEFAULT_TASK_TYPE_MAXIMUM_LENGTH = 255;
+        public static final int DEFAULT_TASK_FREQUENCY_MAXIMUM_LENGTH = 255;
+        public static final int DEFAULT_TASKOPTION_VALUE_MAXIMUM_LENGTH = 255;
+        public static final int DEFAULT_TASKOPTION_NAME_MAXIMUM_LENGTH = 255;
         public static final String DEFAULT_TABLE_TASK = "SchedTask";
         public static final String DEFAULT_SEQUENCE_TASK = "SEQ_SCHEDTASK";
         public static final String DEFAULT_TABLE_TASKOPTION = "SchedTaskoption";
-        public static final int DEFAULT_TASKOPTION_NAME_MAXIMUM_LENGTH = 255;
-        public static final int DEFAULT_TASKOPTION_VALUE_MAXIMUM_LENGTH = 255;
-        public static final int DEFAULT_TASK_TYPE_MAXIMUM_LENGTH = 255;
-        public static final int DEFAULT_TASK_FREQUENCY_MAXIMUM_LENGTH = 255;
 
         public int getTaskTypeMaximumLength() {
-            return DEFAULT_TASK_TYPE_MAXIMUM_LENGTH;
+            return taskTypeMaximumLength_;
+        }
+
+        public SchedulerConfig setTaskTypeMaximumLength(int length) {
+            taskTypeMaximumLength_ = length;
+            return this;
         }
 
         public int getTaskFrequencyMaximumLength() {
-            return DEFAULT_TASK_FREQUENCY_MAXIMUM_LENGTH;
+            return taskFrequencyMaximumLength_;
+        }
+
+        public SchedulerConfig setTaskFrequencyMaximumLength(int length) {
+            taskFrequencyMaximumLength_ = length;
+            return this;
         }
 
         public int getTaskoptionValueMaximumLength() {
-            return DEFAULT_TASKOPTION_VALUE_MAXIMUM_LENGTH;
+            return taskoptionValueMaximumLength_;
+        }
+
+        public SchedulerConfig setTaskoptionValueMaximumLength(int length) {
+            taskoptionValueMaximumLength_ = length;
+            return this;
         }
 
         public int getTaskoptionNameMaximumLength() {
-            return DEFAULT_TASKOPTION_NAME_MAXIMUM_LENGTH;
+            return taskoptionNameMaximumLength_;
+        }
+
+        public SchedulerConfig setTaskoptionNameMaximumLength(int length) {
+            taskoptionNameMaximumLength_ = length;
+            return this;
         }
 
         public String getTableTask() {
-            return DEFAULT_TABLE_TASK;
+            return tableTask_;
+        }
+
+        public SchedulerConfig setTableTask(String name) {
+            tableTask_ = name;
+            return this;
         }
 
         public String getSequenceTask() {
-            return DEFAULT_SEQUENCE_TASK;
+            return sequenceTask_;
+        }
+
+        public SchedulerConfig setSequenceTask(String name) {
+            sequenceTask_ = name;
+            return this;
         }
 
         public String getTableTaskoption() {
-            return DEFAULT_TABLE_TASKOPTION;
+            return tableTaskoption_;
+        }
+
+        public SchedulerConfig setTableTaskoption(String name) {
+            tableTaskoption_ = name;
+            return this;
         }
     }
 

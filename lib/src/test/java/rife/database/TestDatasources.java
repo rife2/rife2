@@ -26,10 +26,9 @@ public class TestDatasources implements ArgumentsProvider {
         return Stream.of(
             arguments(TestDatasources.PGSQL),
             arguments(TestDatasources.DERBY),
-            arguments(TestDatasources.MYSQL)
-// TODO : needs more testing with recent versions
-//            arguments(TestDatasources.HSQLDB),
-//            arguments(TestDatasources.H2),
+            arguments(TestDatasources.MYSQL),
+            arguments(TestDatasources.HSQLDB),
+            arguments(TestDatasources.H2)
         );
     }
 }

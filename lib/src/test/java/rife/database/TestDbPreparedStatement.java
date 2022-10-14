@@ -366,11 +366,6 @@ public class TestDbPreparedStatement {
                     e.getCause().getMessage().contains("statement handle not executed: getMetaData")) {
                     return;
                 }
-                // mckoi
-                if (e.getCause().getClass().getName().equals("com.mckoi.database.jdbc.MSQLException") &&
-                    e.getCause().getMessage().startsWith("Not Supported")) {
-                    return;
-                }
             }
 
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -407,10 +402,6 @@ public class TestDbPreparedStatement {
                 }
                 if (e.getCause().getClass().getName().equals("org.postgresql.util.PSQLException") &&
                     e.getCause().getMessage().equals("This method is not yet implemented.")) {
-                    return;
-                }
-                if (e.getCause().getClass().getName().equals("com.mckoi.database.jdbc.MSQLException") &&
-                    e.getCause().getMessage().startsWith("Not Supported")) {
                     return;
                 }
             }
@@ -555,7 +546,7 @@ public class TestDbPreparedStatement {
                 if (datasource.getDriver().equals("org.postgresql.Driver")) {
                     // postgres doesn't handle null chars
                     null_bean.setPropertyChar(' ');
-                } else if (datasource.getAliasedDriver().equals("com.mysql.jdbc.Driver")) {
+                } else if (datasource.getAliasedDriver().equals("com.mysql.cj.jdbc.Driver")) {
                     // mysql automatically set the current time to timestamps
                     null_bean.setPropertyDate(cal.getTime());
                     null_bean.setPropertyCalendar(cal);
@@ -572,7 +563,7 @@ public class TestDbPreparedStatement {
                 if (datasource.getDriver().equals("org.postgresql.Driver")) {
                     // postgres doesn't handle null chars
                     new_bean.setPropertyChar(' ');
-                } else if (datasource.getAliasedDriver().equals("com.mysql.jdbc.Driver")) {
+                } else if (datasource.getAliasedDriver().equals("com.mysql.cj.jdbc.Driver")) {
                     // mysql automatically set the current time to timestamps
                     new_bean.setPropertyDate(cal.getTime());
                     new_bean.setPropertyCalendar(cal);
@@ -581,7 +572,7 @@ public class TestDbPreparedStatement {
                 assertEquals(retrieved_bean.getPropertyString(), new_bean.getPropertyString());
                 assertEquals(retrieved_bean.getPropertyStringbuffer(), new_bean.getPropertyStringbuffer());
                 // don't compare milliseconds since each db stores it differently
-                if (datasource.getAliasedDriver().equals("com.mysql.jdbc.Driver")) {
+                if (datasource.getAliasedDriver().equals("com.mysql.cj.jdbc.Driver")) {
                     // don't compare milliseconds since each db stores it differently
                     assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, (new_bean.getPropertyDate().getTime() / 1000) * 1000);
                     assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (new_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
