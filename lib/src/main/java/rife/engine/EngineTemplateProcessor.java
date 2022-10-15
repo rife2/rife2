@@ -97,7 +97,7 @@ public class EngineTemplateProcessor {
                         if (!Modifier.isStatic(field.getModifiers()) &&
                             !Modifier.isTransient(field.getModifiers()) &&
                             Route.class.isAssignableFrom(field.getType())) {
-                            String route_value = context_.urlFor((Route) field.get(site));
+                            var route_value = context_.urlFor((Route) field.get(site));
                             template_.setValue(route_value_id, route_value);
                             setValues.add(route_value_id);
                         }

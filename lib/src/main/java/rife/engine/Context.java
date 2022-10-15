@@ -11,6 +11,7 @@ import rife.engine.exceptions.RedirectException;
 import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.template.exceptions.TemplateException;
+import rife.tools.ServletUtils;
 import rife.tools.StringUtils;
 
 import java.util.Collection;
@@ -28,6 +29,7 @@ public class Context {
     private final Response response_;
     private final RouteMatch route_;
     private final Element element_;
+    private Throwable engineException_;
 
     public Context(String gateUrl, Site site, Request request, Response response, RouteMatch route) {
         gateUrl_ = gateUrl;
@@ -35,7 +37,11 @@ public class Context {
         request_ = request;
         response_ = response;
         route_ = route;
-        element_ = route_.route().getElementInstance(this);
+        if (route == null) {
+            element_ = null;
+        } else {
+            element_ = route_.route().getElementInstance(this);
+        }
     }
 
     public void process() {
@@ -139,64 +145,17 @@ public class Context {
         return webapp_root.toString();
     }
 
-    public String urlFor(Route route) {
-        return urlFor(route, null, null);
+    public UrlBuilder urlFor(Route route) {
+        return new UrlBuilder(getWebappRootUrl(-1), route);
     }
 
-    public String urlFor(Route route, String pathInfo) {
-        return urlFor(route, pathInfo, null);
+    void setEngineException(Throwable exception) {
+        engineException_ = exception;
     }
 
-    public String urlFor(Route route, Map<String, String[]> parameters) {
-        return urlFor(route, null, parameters);
+    public Throwable getEngineException() {
+        return engineException_;
     }
-
-    public String urlFor(Route route, String pathInfo, Map<String, String[]> parameters) {
-        StringBuilder url = new StringBuilder(getWebappRootUrl(-1));
-
-        url.append(StringUtils.stripFromFront(route.path(), "/"));
-
-        if (pathInfo != null) {
-            if (url.charAt(url.length() - 1) != '/') {
-                url.append("/");
-            }
-            url.append(StringUtils.stripFromFront(pathInfo, "/"));
-        }
-
-        if (parameters != null &&
-            parameters.size() > 0) {
-            StringBuilder query_parameters = new StringBuilder("?");
-
-            for (var parameter_entry : parameters.entrySet()) {
-                String parameter_name = parameter_entry.getKey();
-                String[] parameter_values = parameter_entry.getValue();
-                if (null == parameter_values) {
-                    continue;
-                }
-
-                boolean added_separator = false;
-                if (query_parameters.length() > 1 &&
-                    !added_separator) {
-                    added_separator = true;
-                    query_parameters.append("&");
-                }
-
-                for (int i = 0; i < parameter_values.length; i++) {
-                    query_parameters.append(StringUtils.encodeUrl(parameter_name));
-                    query_parameters.append("=");
-                    query_parameters.append(StringUtils.encodeUrl(parameter_values[i]));
-                    if (i + 1 < parameter_values.length) {
-                        query_parameters.append("&");
-                    }
-                }
-            }
-
-            url.append(query_parameters);
-        }
-
-        return url.toString();
-    }
-
 
     /**
      * Sets a select box option, a radio button or a checkbox to selected or
@@ -402,14 +361,30 @@ public class Context {
      * Interrupts the execution in this element and redirects the client to
      * another URL.
      *
-     * @param url the URL to which the request will be redirected
+     * @param url the URL to which the request will be redirected, <code>String.valueOf()</code>
+     *            will be called with this object, so a variety of types can be used
      * @throws rife.engine.exceptions.EngineException a runtime
      *                                                exception that is used to immediately interrupt the execution, don't
      *                                                catch this exception
      * @since 1.0
      */
-    public void redirect(String url)
+    public void redirect(Object url)
     throws EngineException {
         throw new RedirectException(url);
     }
+
+
+    /**
+     * Sets up the current request to prevent all caching of the response by
+     * the client.
+     *
+     * @throws rife.engine.exceptions.EngineException if you don't
+     *                                                have access to the request data (eg. you're inside a child trigger)
+     * @since 1.0
+     */
+    public void preventCaching()
+    throws EngineException {
+        ServletUtils.preventCaching(response_);
+    }
+
 }

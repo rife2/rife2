@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 public class Gate {
-    public static final String REQUEST_ATTRIBUTE_RIFE_ENGINE_EXCEPTION = "rife.engine.exception";
-
     private Site site_;
     private Throwable initException_ = null;
 
@@ -50,10 +48,11 @@ public class Gate {
             elementUrl = elementUrl.substring(0, path_parameters_index);
         }
 
+
         // Handle the request
         // check if an exception occurred during the initialization
         if (initException_ != null) {
-            handleRequestException(initException_, request, response);
+            handleRequestException(initException_, new Context(gateUrl, site_, request, response, null));
             return true;
         }
 
@@ -75,7 +74,8 @@ public class Gate {
         } catch (DeferException e) {
             return false;
         } catch (Throwable e) {
-            handleRequestException(e, request, response);
+            handleRequestException(e, context);
+            response.close();
         }
 
         return true;
@@ -96,15 +96,25 @@ public class Gate {
         }
     }
 
-    private void handleRequestException(Throwable exception, Request request, Response response) {
-        String message = "Error on host " + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath();
+    private void handleRequestException(Throwable exception, Context c) {
+        String message = "Error on host " + c.request().getServerName() + ":" + c.request().getServerPort() + "/" + c.request().getContextPath();
         if (RifeConfig.engine().getLogEngineExceptions()) {
             Logger.getLogger("rife.engine").severe(message + "\n" + ExceptionUtils.getExceptionStackTrace(exception));
         }
 
-        // TODO : handle custom exception element
+        c.setEngineException(exception);
+
+        Route exception_route = site_.getExceptionRoute();
+        if (exception_route != null) {
+            try {
+                exception_route.getElementInstance(c).process(c);
+                return;
+            } catch (Exception ignored) {
+            }
+        }
+
         if (!RifeConfig.engine().getPrettyEngineExceptions()) {
-            request.setAttribute(REQUEST_ATTRIBUTE_RIFE_ENGINE_EXCEPTION, exception);
+            c.setEngineException(exception);
 
             if (exception instanceof RuntimeException) {
                 throw (RuntimeException) exception;
@@ -113,7 +123,7 @@ public class Gate {
             }
         }
 
-        printExceptionDetails(exception, response);
+        printExceptionDetails(exception, c.response());
     }
 
     private void printExceptionDetails(Throwable exception, Response response) {

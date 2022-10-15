@@ -39,9 +39,7 @@ public abstract class SerializationUtils {
             gzip_is = new GZIPInputStream(bytes_is);
             object_is = new ObjectInputStream(gzip_is);
             return (TargetType) object_is.readObject();
-        } catch (IOException e) {
-            throw new DeserializationErrorException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new DeserializationErrorException(e);
         }
     }

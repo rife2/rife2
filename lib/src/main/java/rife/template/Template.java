@@ -44,7 +44,7 @@ public interface Template extends Cloneable {
      * @see #hasBlock
      * @since 1.0
      */
-    public void appendBlock(String valueBlockId)
+    void appendBlock(String valueBlockId)
     throws TemplateException;
 
     /**
@@ -63,7 +63,7 @@ public interface Template extends Cloneable {
      * @see #hasBlock
      * @since 1.0
      */
-    public void appendBlock(String valueId, String blockId)
+    void appendBlock(String valueId, String blockId)
     throws TemplateException;
 
     /**
@@ -81,7 +81,7 @@ public interface Template extends Cloneable {
      * @see #hasBlock
      * @since 2.0
      */
-    public void setBlock(String valueBlockId)
+    void setBlock(String valueBlockId)
     throws TemplateException;
 
     /**
@@ -100,7 +100,7 @@ public interface Template extends Cloneable {
      * @see #hasBlock
      * @since 1.0
      */
-    public void setBlock(String valueId, String blockId)
+    void setBlock(String valueId, String blockId)
     throws TemplateException;
 
     /**
@@ -115,7 +115,7 @@ public interface Template extends Cloneable {
      * @see #hasBlock
      * @since 1.0
      */
-    public String getBlock(String id)
+    String getBlock(String id)
     throws TemplateException;
 
     /**
@@ -137,7 +137,7 @@ public interface Template extends Cloneable {
      * @see #hasBlock
      * @since 1.0
      */
-    public String getContent()
+    String getContent()
     throws TemplateException;
 
     /**
@@ -155,7 +155,7 @@ public interface Template extends Cloneable {
      * @see #write
      * @since 1.0
      */
-    public void writeBlock(String id, OutputStream out)
+    void writeBlock(String id, OutputStream out)
     throws IOException, TemplateException;
 
     /**
@@ -172,7 +172,7 @@ public interface Template extends Cloneable {
      * @see #write
      * @since 1.0
      */
-    public void writeContent(OutputStream out)
+    void writeContent(OutputStream out)
     throws IOException, TemplateException;
 
     /**
@@ -192,7 +192,7 @@ public interface Template extends Cloneable {
      * @since 1.0
      */
 
-    public void writeContent(OutputStream out, String charsetName)
+    void writeContent(OutputStream out, String charsetName)
     throws IOException, TemplateException;
 
     /**
@@ -209,7 +209,7 @@ public interface Template extends Cloneable {
      * @see #writeContent(OutputStream, String)
      * @since 1.0
      */
-    public void write(OutputStream out)
+    void write(OutputStream out)
     throws IOException, TemplateException;
 
     /**
@@ -227,7 +227,7 @@ public interface Template extends Cloneable {
      * @see #getDeferredContent
      * @since 1.0
      */
-    public List<CharSequence> getDeferredBlock(String id)
+    List<CharSequence> getDeferredBlock(String id)
     throws TemplateException;
 
     /**
@@ -243,7 +243,7 @@ public interface Template extends Cloneable {
      * @see #getDeferredBlock
      * @since 1.0
      */
-    public List<CharSequence> getDeferredContent()
+    List<CharSequence> getDeferredContent()
     throws TemplateException;
 
     /**
@@ -259,7 +259,7 @@ public interface Template extends Cloneable {
      * @see InternalValue
      * @since 1.0
      */
-    public InternalValue createInternalValue();
+    InternalValue createInternalValue();
 
     /**
      * Sets the specified value in this template to content that's structured
@@ -277,7 +277,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void setValue(String id, List<CharSequence> deferredContent)
+    void setValue(String id, List<CharSequence> deferredContent)
     throws TemplateException;
 
     /**
@@ -297,7 +297,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void setValue(String id, InternalValue internalValue)
+    void setValue(String id, InternalValue internalValue)
     throws TemplateException;
 
     /**
@@ -317,7 +317,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void setValue(String id, Object value)
+    void setValue(String id, Object value)
     throws TemplateException;
 
     /**
@@ -336,7 +336,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void setValue(String id, boolean value)
+    void setValue(String id, boolean value)
     throws TemplateException;
 
     /**
@@ -355,7 +355,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void setValue(String id, char value)
+    void setValue(String id, char value)
     throws TemplateException;
 
     /**
@@ -374,7 +374,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void setValue(String id, char[] value)
+    void setValue(String id, char[] value)
     throws TemplateException;
 
     /**
@@ -398,7 +398,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void setValue(String id, char[] value, int offset, int count)
+    void setValue(String id, char[] value, int offset, int count)
     throws TemplateException;
 
     /**
@@ -419,7 +419,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void setValue(String id, double value)
+    void setValue(String id, double value)
     throws TemplateException;
 
     /**
@@ -440,7 +440,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void setValue(String id, float value)
+    void setValue(String id, float value)
     throws TemplateException;
 
     /**
@@ -458,7 +458,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void setValue(String id, int value)
+    void setValue(String id, int value)
     throws TemplateException;
 
     /**
@@ -476,7 +476,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void setValue(String id, long value)
+    void setValue(String id, long value)
     throws TemplateException;
 
     /**
@@ -495,7 +495,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void setValue(String id, String value)
+    void setValue(String id, String value)
     throws TemplateException;
 
     /**
@@ -514,7 +514,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.5
      */
-    public void setValue(String id, CharSequence value)
+    void setValue(String id, CharSequence value)
     throws TemplateException;
 
     /**
@@ -538,7 +538,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void setValue(String id, Template template)
+    void setValue(String id, Template template)
     throws TemplateException;
 
     /**
@@ -583,7 +583,7 @@ public interface Template extends Cloneable {
      * @see #removeBean
      * @since 1.0
      */
-    public void setBean(Object bean)
+    void setBean(Object bean)
     throws TemplateException;
 
     /**
@@ -630,7 +630,7 @@ public interface Template extends Cloneable {
      * @see #removeBean
      * @since 1.0
      */
-    public void setBean(Object bean, String prefix)
+    void setBean(Object bean, String prefix)
     throws TemplateException;
 
     /**
@@ -680,7 +680,7 @@ public interface Template extends Cloneable {
      * @see #removeBean
      * @since 1.0
      */
-    public void setBean(Object bean, String prefix, boolean encode)
+    void setBean(Object bean, String prefix, boolean encode)
     throws TemplateException;
 
     /**
@@ -698,7 +698,7 @@ public interface Template extends Cloneable {
      * @see #setBean
      * @since 1.0
      */
-    public void removeBean(Object bean)
+    void removeBean(Object bean)
     throws TemplateException;
 
     /**
@@ -720,7 +720,7 @@ public interface Template extends Cloneable {
      * @see #setBean
      * @since 1.0
      */
-    public void removeBean(Object bean, String prefix)
+    void removeBean(Object bean, String prefix)
     throws TemplateException;
 
     /**
@@ -740,7 +740,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void appendValue(String id, Object value)
+    void appendValue(String id, Object value)
     throws TemplateException;
 
     /**
@@ -758,7 +758,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void appendValue(String id, boolean value)
+    void appendValue(String id, boolean value)
     throws TemplateException;
 
     /**
@@ -777,7 +777,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void appendValue(String id, char value)
+    void appendValue(String id, char value)
     throws TemplateException;
 
     /**
@@ -796,7 +796,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void appendValue(String id, char[] value)
+    void appendValue(String id, char[] value)
     throws TemplateException;
 
     /**
@@ -820,7 +820,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void appendValue(String id, char[] value, int offset, int count)
+    void appendValue(String id, char[] value, int offset, int count)
     throws TemplateException;
 
     /**
@@ -842,7 +842,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void appendValue(String id, double value)
+    void appendValue(String id, double value)
     throws TemplateException;
 
     /**
@@ -864,7 +864,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void appendValue(String id, float value)
+    void appendValue(String id, float value)
     throws TemplateException;
 
     /**
@@ -882,7 +882,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void appendValue(String id, int value)
+    void appendValue(String id, int value)
     throws TemplateException;
 
     /**
@@ -900,7 +900,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void appendValue(String id, long value)
+    void appendValue(String id, long value)
     throws TemplateException;
 
     /**
@@ -919,7 +919,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void appendValue(String id, String value)
+    void appendValue(String id, String value)
     throws TemplateException;
 
     /**
@@ -937,7 +937,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public String getValue(String id)
+    String getValue(String id)
     throws TemplateException;
 
     /**
@@ -952,7 +952,7 @@ public interface Template extends Cloneable {
      * @see #hasDefaultValue
      * @since 1.0
      */
-    public String getDefaultValue(String id);
+    String getDefaultValue(String id);
 
     /**
      * Returns whether a {@linkplain #getDefaultValue default value} was
@@ -963,7 +963,7 @@ public interface Template extends Cloneable {
      * @see #getDefaultValue
      * @since 1.0
      */
-    public boolean hasDefaultValue(String id);
+    boolean hasDefaultValue(String id);
 
     /**
      * Each template type supports a set of special block tags that are used
@@ -980,7 +980,7 @@ public interface Template extends Cloneable {
      * @see #hasFilteredBlocks
      * @since 1.0
      */
-    public List<String[]> getFilteredBlocks(String filter);
+    List<String[]> getFilteredBlocks(String filter);
 
     /**
      * Returns whether any block matched a particular filter at template
@@ -991,7 +991,7 @@ public interface Template extends Cloneable {
      * @see #getFilteredBlocks
      * @since 1.0
      */
-    public boolean hasFilteredBlocks(String filter);
+    boolean hasFilteredBlocks(String filter);
 
     /**
      * Each template type supports a set of special value tags that are used
@@ -1009,7 +1009,7 @@ public interface Template extends Cloneable {
      * @see #hasFilteredValues
      * @since 1.0
      */
-    public List<String[]> getFilteredValues(String filter);
+    List<String[]> getFilteredValues(String filter);
 
     /**
      * Returns whether any value matched a particular filter at template
@@ -1020,7 +1020,7 @@ public interface Template extends Cloneable {
      * @see #getFilteredValues
      * @since 1.0
      */
-    public boolean hasFilteredValues(String filter);
+    boolean hasFilteredValues(String filter);
 
     /**
      * Fills all values in this template which match "<code>L10N:<em>key</em></code>",
@@ -1036,7 +1036,7 @@ public interface Template extends Cloneable {
      * @return the list of names of the template values that were generated
      * @since 1.0
      */
-    public List<String> evaluateL10nTags();
+    List<String> evaluateL10nTags();
 
     /**
      * Fills all values in this template which match "<code>CONFIG:<em>key</em></code>",
@@ -1051,7 +1051,7 @@ public interface Template extends Cloneable {
      * @return the list of names of the template values that were generated
      * @since 1.0
      */
-    public List<String> evaluateConfigTags();
+    List<String> evaluateConfigTags();
 
     /**
      * Fills the value "<code>LANG:<em>id</em></code>" with the value of the
@@ -1069,7 +1069,7 @@ public interface Template extends Cloneable {
      * @return the list of names of the template values that were generated
      * @since 1.0
      */
-    public List<String> evaluateLangTags(String id);
+    List<String> evaluateLangTags(String id);
 //
 //    /**
 //     * Evaluates the specified OGNL, Groovy, or Janino expression tag. For
@@ -1138,7 +1138,7 @@ public interface Template extends Cloneable {
      *                           instantiated
      * @since 1.0
      */
-    public List<String> evaluateRenderTags()
+    List<String> evaluateRenderTags()
     throws TemplateException;
 
     /**
@@ -1152,7 +1152,7 @@ public interface Template extends Cloneable {
      * @see #getContent
      * @since 1.0
      */
-    public boolean hasBlock(String id);
+    boolean hasBlock(String id);
 
     /**
      * Returns whether the specified value has been set. If this method
@@ -1171,7 +1171,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public boolean isValueSet(String id);
+    boolean isValueSet(String id);
 
     /**
      * Returns the number of values in this template which {@linkplain
@@ -1180,7 +1180,7 @@ public interface Template extends Cloneable {
      * @return the number of values in this template which have been set
      * @since 1.0
      */
-    public int countValues();
+    int countValues();
 
     /**
      * Reverts the specified value back to its default value.
@@ -1192,7 +1192,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public void removeValue(String id);
+    void removeValue(String id);
 
     /**
      * Reverts the specified values back to their default value.
@@ -1205,7 +1205,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.6
      */
-    public void removeValues(List<String> ids);
+    void removeValues(List<String> ids);
 
     /**
      * Set the content of the specified value to an empte string.
@@ -1219,7 +1219,7 @@ public interface Template extends Cloneable {
      * @see #removeValues
      * @since 1.4
      */
-    public void blankValue(String id);
+    void blankValue(String id);
 
     /**
      * Resets all values in this template and removes any resource bundles.
@@ -1227,7 +1227,7 @@ public interface Template extends Cloneable {
      *
      * @since 1.0
      */
-    public void clear();
+    void clear();
 
     /**
      * Returns a list of the ID's of all values present in this template,
@@ -1236,7 +1236,7 @@ public interface Template extends Cloneable {
      * @return a list of ID's of all set and unset value
      * @since 1.0
      */
-    public String[] getAvailableValueIds();
+    String[] getAvailableValueIds();
 
     /**
      * Returns a list of the ID's of all values in this template which
@@ -1246,7 +1246,7 @@ public interface Template extends Cloneable {
      * set
      * @since 1.0
      */
-    public Collection<String> getUnsetValueIds();
+    Collection<String> getUnsetValueIds();
 
     /**
      * Returns whether this template contains a value with the given ID.
@@ -1262,7 +1262,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    public boolean hasValueId(String id);
+    boolean hasValueId(String id);
 
     /**
      * Returns when the file corresponding to this template was modified, in
@@ -1271,7 +1271,7 @@ public interface Template extends Cloneable {
      * @return the time at which the underlying template file was modified
      * @since 1.0
      */
-    public long getModificationTime();
+    long getModificationTime();
 
     /**
      * Returns this template's {@linkplain BeanHandler bean handler}. The bean
@@ -1281,7 +1281,7 @@ public interface Template extends Cloneable {
      * @return this template's bean handler
      * @since 1.0
      */
-    public BeanHandler getBeanHandler();
+    BeanHandler getBeanHandler();
 
     /**
      * Returns the encoder that this template uses to convert strings to
@@ -1293,7 +1293,7 @@ public interface Template extends Cloneable {
      * @return this template's encoder
      * @since 1.0
      */
-    public TemplateEncoder getEncoder();
+    TemplateEncoder getEncoder();
 
     /**
      * Adds a resource bundle to this template. Resource bundles are used in
@@ -1306,7 +1306,7 @@ public interface Template extends Cloneable {
      * @see #hasResourceBundles
      * @since 1.0
      */
-    public void addResourceBundle(ResourceBundle resourceBundle);
+    void addResourceBundle(ResourceBundle resourceBundle);
 
     /**
      * Returns a list of the resource bundles used by this template. This will
@@ -1318,7 +1318,7 @@ public interface Template extends Cloneable {
      * @see #hasResourceBundles
      * @since 1.0
      */
-    public Collection<ResourceBundle> getResourceBundles();
+    Collection<ResourceBundle> getResourceBundles();
 
     /**
      * Returns whether this template has any resource bundles {@linkplain
@@ -1329,7 +1329,7 @@ public interface Template extends Cloneable {
      * @see #getResourceBundles
      * @since 1.0
      */
-    public boolean hasResourceBundles();
+    boolean hasResourceBundles();
 
     /**
      * Sets this template's current language code, such as "en".
@@ -1341,7 +1341,7 @@ public interface Template extends Cloneable {
      * @see #getLanguage
      * @since 1.0
      */
-    public void setLanguage(String lang);
+    void setLanguage(String lang);
 
     /**
      * Returns this template's current 2-letter language code. This code is
@@ -1353,7 +1353,7 @@ public interface Template extends Cloneable {
      * @see #setLanguage
      * @since 1.0
      */
-    public String getLanguage();
+    String getLanguage();
 //
 //    /**
 //     * Sets a variable which can be accessed by {@linkplain
@@ -1427,7 +1427,7 @@ public interface Template extends Cloneable {
      * which this template depends
      * @since 1.0
      */
-    public Map<URL, Long> getDependencies();
+    Map<URL, Long> getDependencies();
 
     /**
      * Returns this template's name, without path information or file
@@ -1437,7 +1437,7 @@ public interface Template extends Cloneable {
      * @return this template's name, without path or file extension
      * @since 1.0
      */
-    public String getName();
+    String getName();
 
     /**
      * Returns this template's full name, as it was used to instantiate it
@@ -1446,7 +1446,7 @@ public interface Template extends Cloneable {
      * @return this template's full name
      * @since 1.6
      */
-    public String getFullName();
+    String getFullName();
 
     /**
      * Returns this template's default content type, for example <code>text/html</code>.
@@ -1455,7 +1455,7 @@ public interface Template extends Cloneable {
      * <p><code>null</code> if no default content type is known for this template instance
      * @since 1.3
      */
-    public String getDefaultContentType();
+    String getDefaultContentType();
 
     /**
      * Returns a shallow copy of this template, with the same values,
@@ -1464,5 +1464,5 @@ public interface Template extends Cloneable {
      * @return a shallow copy of this template
      * @since 1.0
      */
-    public Object clone();
+    Object clone();
 }

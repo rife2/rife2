@@ -12,6 +12,22 @@ import java.util.*;
 public class Site extends Router {
     public final int RND = new Random().nextInt();
 
+    private Route exceptionRoute_ = null;
+
+    public final Route exception(Class<? extends Element> elementClass) {
+        exceptionRoute_ = new RouteClass(this, RequestMethod.GET, elementClass);
+        return exceptionRoute_;
+    }
+
+    public final Route exception(Element element) {
+        exceptionRoute_ = new RouteInstance(this, element);
+        return exceptionRoute_;
+    }
+
+    public Route getExceptionRoute() {
+        return exceptionRoute_;
+    }
+
     /**
      * Looks up the information of the element that is responsible for handling
      * a certain URL and path info.
