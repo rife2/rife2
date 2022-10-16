@@ -68,13 +68,13 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
             return Collections.emptyList();
         }
 
-        ArrayList<String> set_values = new ArrayList<>();
+        var set_values = new ArrayList<String>();
 
         // adapt for subject prefixes
         if (prefix != null &&
             onlySubjectsToClear != null) {
-            ArrayList<String> prefixed_subjects = new ArrayList<>();
-            for (String property : onlySubjectsToClear) {
+            var prefixed_subjects = new ArrayList<String>();
+            for (var property : onlySubjectsToClear) {
                 prefixed_subjects.add(prefix + property);
             }
             onlySubjectsToClear = prefixed_subjects;
@@ -82,10 +82,10 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
 
         // check if validation errors are already present in the bean,
         // and generate the formatted errors
-        boolean has_wildcard_errors_block = template.hasBlock(ID_ERRORS_WILDCARD);
-        boolean has_fallback_errors_block = template.hasBlock(ID_ERRORS_FALLBACK);
+        var has_wildcard_errors_block = template.hasBlock(ID_ERRORS_WILDCARD);
+        var has_fallback_errors_block = template.hasBlock(ID_ERRORS_FALLBACK);
 
-        boolean has_fallback_errors_value = template.hasValueId(ID_ERRORS_WILDCARD);
+        var has_fallback_errors_value = template.hasValueId(ID_ERRORS_WILDCARD);
         InternalValue fallback_errors_construction = null;
         if (has_fallback_errors_value) {
             template.removeValue(ID_ERRORS_WILDCARD);
@@ -94,23 +94,23 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
 
         // Reorder the filtered error values so that they're ordered according
         // to the number of properties they declare. Those with the same
-        // number of properties will be ordered according to the their order
+        // number of properties will be ordered according to their order
         // of declaration.
         // Also, all the content from the filtered values will be cleared to
         // ensure that errors from previous submissions will not prevail.
-        List<String[]> filtered_errorvalues = template.getFilteredValues(TAG_ERRORS);
-        ArrayList<List<String[]>> sorted_errorvalues = null;
-        if (filtered_errorvalues.size() > 0) {
-            sorted_errorvalues = new ArrayList<List<String[]>>();
+        var filtered_error_values = template.getFilteredValues(TAG_ERRORS);
+        ArrayList<List<String[]>> sorted_error_values = null;
+        if (filtered_error_values.size() > 0) {
+            sorted_error_values = new ArrayList<List<String[]>>();
 
-            List<String[]> errorvalues;
-            for (String[] filtered_value : filtered_errorvalues) {
+            List<String[]> error_values;
+            for (var filtered_value : filtered_error_values) {
                 // only clear the filtered value if one of the subjects is
                 // validated
                 if (null == onlySubjectsToClear) {
                     template.removeValue(filtered_value[0]);
                 } else {
-                    for (int i = 1; i < filtered_value.length; i++) {
+                    for (var i = 1; i < filtered_value.length; i++) {
                         if (onlySubjectsToClear.contains(filtered_value[i])) {
                             template.removeValue(filtered_value[0]);
                             break;
@@ -118,46 +118,46 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                     }
                 }
 
-                if (filtered_value.length - 1 < sorted_errorvalues.size()) {
-                    errorvalues = sorted_errorvalues.get(filtered_value.length - 1);
+                if (filtered_value.length - 1 < sorted_error_values.size()) {
+                    error_values = sorted_error_values.get(filtered_value.length - 1);
                 } else {
-                    errorvalues = null;
-                    while (!(filtered_value.length - 1 < sorted_errorvalues.size())) {
-                        sorted_errorvalues.add(null);
+                    error_values = null;
+                    while (!(filtered_value.length - 1 < sorted_error_values.size())) {
+                        sorted_error_values.add(null);
                     }
                 }
-                if (null == errorvalues) {
-                    errorvalues = new ArrayList<String[]>();
-                    sorted_errorvalues.set(filtered_value.length - 1, errorvalues);
+                if (null == error_values) {
+                    error_values = new ArrayList<String[]>();
+                    sorted_error_values.set(filtered_value.length - 1, error_values);
                 }
-                errorvalues.add(filtered_value);
+                error_values.add(filtered_value);
             }
         }
 
         // Reorder the filtered error blocks so that they're ordered according
         // to the number of properties they declare. Those with the same
-        // number of properties will be ordered according to the their order
+        // number of properties will be ordered according to their order
         // of declaration.
-        List<String[]> filtered_errorblocks = template.getFilteredBlocks(TAG_ERRORS);
-        ArrayList<List<String[]>> sorted_errorblocks = null;
-        if (filtered_errorblocks.size() > 0) {
-            sorted_errorblocks = new ArrayList<List<String[]>>();
+        var filtered_error_blocks = template.getFilteredBlocks(TAG_ERRORS);
+        ArrayList<List<String[]>> sorted_error_blocks = null;
+        if (filtered_error_blocks.size() > 0) {
+            sorted_error_blocks = new ArrayList<List<String[]>>();
 
-            List<String[]> errorblocks;
-            for (String[] filtered_block : filtered_errorblocks) {
-                if (filtered_block.length - 1 < sorted_errorblocks.size()) {
-                    errorblocks = sorted_errorblocks.get(filtered_block.length - 1);
+            List<String[]> error_blocks;
+            for (var filtered_block : filtered_error_blocks) {
+                if (filtered_block.length - 1 < sorted_error_blocks.size()) {
+                    error_blocks = sorted_error_blocks.get(filtered_block.length - 1);
                 } else {
-                    errorblocks = null;
-                    while (!(filtered_block.length - 1 < sorted_errorblocks.size())) {
-                        sorted_errorblocks.add(null);
+                    error_blocks = null;
+                    while (!(filtered_block.length - 1 < sorted_error_blocks.size())) {
+                        sorted_error_blocks.add(null);
                     }
                 }
-                if (null == errorblocks) {
-                    errorblocks = new ArrayList<String[]>();
-                    sorted_errorblocks.set(filtered_block.length - 1, errorblocks);
+                if (null == error_blocks) {
+                    error_blocks = new ArrayList<String[]>();
+                    sorted_error_blocks.set(filtered_block.length - 1, error_blocks);
                 }
-                errorblocks.add(filtered_block);
+                error_blocks.add(filtered_block);
             }
         }
 
@@ -172,17 +172,17 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         // latter is defined it will be used even if either property
         // has an error individually.
         LinkedHashMap<String, ArrayList<String>> block_properties_mapping = null;
-        if (sorted_errorblocks != null) {
+        if (sorted_error_blocks != null) {
             block_properties_mapping = new LinkedHashMap<String, ArrayList<String>>();
 
             ArrayList<String> block_properties;
 
-            for (List<String[]> categorized_errorblocks : sorted_errorblocks) {
-                if (null == categorized_errorblocks) {
+            for (var categorized_error_blocks : sorted_error_blocks) {
+                if (null == categorized_error_blocks) {
                     continue;
                 }
 
-                for (String[] filtered_block : categorized_errorblocks) {
+                for (var filtered_block : categorized_error_blocks) {
                     block_properties = new ArrayList<>();
                     block_properties_mapping.put(filtered_block[0], block_properties);
 
@@ -191,7 +191,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
             }
         }
 
-        Collection<String> invalid_subjects = collectSubjects(errors, prefix);
+        var invalid_subjects = collectSubjects(errors, prefix);
 
         // Go over the error values according to their order of importance.
         // Values with a broader scope (more properties) get precedence of
@@ -207,24 +207,24 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         HashMap<String, InternalValue> values_construction = null;
         HashMap<String, String> property_value_mapping = null;
         HashMap<String, String> values_block_mapping = null;
-        if (filtered_errorvalues.size() > 0) {
+        if (filtered_error_values.size() > 0) {
             values_construction = new HashMap<>();
             property_value_mapping = new HashMap<>();
             values_block_mapping = new HashMap<>();
 
             List<String[]> error_values;
 
-            for (int i = sorted_errorvalues.size() - 1; i >= 0; i--) {
-                error_values = sorted_errorvalues.get(i);
+            for (var i = sorted_error_values.size() - 1; i >= 0; i--) {
+                error_values = sorted_error_values.get(i);
                 if (null == error_values) {
                     continue;
                 }
 
-                for (String[] filtered_value : error_values) {
+                for (var filtered_value : error_values) {
                     // check if the filtered value contains only subjects
                     // that are invalid
-                    boolean use_value = true;
-                    for (int j = 1; j < filtered_value.length; j++) {
+                    var use_value = true;
+                    for (var j = 1; j < filtered_value.length; j++) {
                         if (!invalid_subjects.contains(filtered_value[j])) {
                             use_value = false;
                             break;
@@ -235,8 +235,8 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                     // all the declared subjects. If the subject is already
                     // bound to another value, it is simply skipped.
                     if (use_value) {
-                        boolean tied_to_properties = false;
-                        for (int j = 1; j < filtered_value.length; j++) {
+                        var tied_to_properties = false;
+                        for (var j = 1; j < filtered_value.length; j++) {
                             if (!property_value_mapping.containsKey(filtered_value[j])) {
                                 property_value_mapping.put(filtered_value[j], filtered_value[0]);
                                 tied_to_properties = true;
@@ -251,11 +251,11 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                             // same properties as the value
                             ArrayList<String> error_block_properties;
                             if (block_properties_mapping != null) {
-                                for (Map.Entry<String, ArrayList<String>> error_block : block_properties_mapping.entrySet()) {
-                                    boolean matching_block = true;
+                                for (var error_block : block_properties_mapping.entrySet()) {
+                                    var matching_block = true;
 
                                     error_block_properties = error_block.getValue();
-                                    for (int j = 1; j < filtered_value.length; j++) {
+                                    for (var j = 1; j < filtered_value.length; j++) {
                                         if (!error_block_properties.contains(filtered_value[j])) {
                                             matching_block = false;
                                             break;
@@ -276,18 +276,18 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
 
         // Process the sorted error message blocks so that for each
         // property the first occuring block will be used.
-        List<String[]> filtered_errormessages = template.getFilteredBlocks(TAG_ERRORMESSAGE);
-        HashMap<String, String> property_errormessages_mapping = null;
-        if (filtered_errormessages.size() > 0) {
-            property_errormessages_mapping = new HashMap<String, String>();
+        var filtered_error_messages = template.getFilteredBlocks(TAG_ERRORMESSAGE);
+        HashMap<String, String> property_error_messages_mapping = null;
+        if (filtered_error_messages.size() > 0) {
+            property_error_messages_mapping = new HashMap<String, String>();
 
-            for (String[] filtered_errormessage : filtered_errormessages) {
-                for (int i = 1; i < filtered_errormessage.length; i++) {
-                    if (property_errormessages_mapping.containsKey(filtered_errormessage[i])) {
+            for (var filtered_errormessage : filtered_error_messages) {
+                for (var i = 1; i < filtered_errormessage.length; i++) {
+                    if (property_error_messages_mapping.containsKey(filtered_errormessage[i])) {
                         continue;
                     }
 
-                    property_errormessages_mapping.put(filtered_errormessage[i], filtered_errormessage[0]);
+                    property_error_messages_mapping.put(filtered_errormessage[i], filtered_errormessage[0]);
                 }
             }
         }
@@ -297,7 +297,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         String property_value;
         InternalValue value_construction;
         String subject;
-        for (ValidationError error : errors) {
+        for (var error : errors) {
             subject = error.getSubject();
             if (prefix != null) {
                 subject = prefix + subject;
@@ -314,17 +314,17 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                 value_construction = values_construction.get(property_value);
 
                 // generate the error message
-                generateErrorMessage(template, error, prefix, value_construction, property_errormessages_mapping);
+                generateErrorMessage(template, error, prefix, value_construction, property_error_messages_mapping);
             } else if (has_fallback_errors_value) {
                 // generate the error message
-                generateErrorMessage(template, error, prefix, fallback_errors_construction, property_errormessages_mapping);
+                generateErrorMessage(template, error, prefix, fallback_errors_construction, property_error_messages_mapping);
             }
         }
 
         // Now that all the values have been constructed, go over
         // the corresponding blocks to format the content.
         if (values_construction != null) {
-            for (Map.Entry<String, InternalValue> property_value_id : values_construction.entrySet()) {
+            for (var property_value_id : values_construction.entrySet()) {
                 if (values_block_mapping != null &&
                     values_block_mapping.containsKey(property_value_id.getKey())) {
                     template.setValue(ID_ERRORS, property_value_id.getValue());
@@ -366,9 +366,9 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
     private Collection<String> collectSubjects(Collection<ValidationError> errors, String prefix) {
         // Collect the invalid subjects in a seperate collection which
         // only contains their name.
-        ArrayList<String> invalid_subjects = new ArrayList<String>();
+        var invalid_subjects = new ArrayList<String>();
         String subject;
-        for (ValidationError error : errors) {
+        for (var error : errors) {
             subject = error.getSubject();
             if (prefix != null) {
                 subject = prefix + subject;
@@ -382,7 +382,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
     }
 
     private String generateErrorBlockId(ValidationError error, String prefix) {
-        StringBuilder result = new StringBuilder(error.getIdentifier());
+        var result = new StringBuilder(error.getIdentifier());
         result.append(":");
         if (prefix != null) {
             result.append(prefix);
@@ -392,7 +392,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
     }
 
     private String generateFallbackSubjectBlockId(ValidationError error, String prefix) {
-        StringBuilder result = new StringBuilder(PREFIX_ERROR);
+        var result = new StringBuilder(PREFIX_ERROR);
         if (prefix != null) {
             result.append(prefix);
         }
@@ -404,18 +404,18 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         return error.getIdentifier() + ":*";
     }
 
-    private void generateErrorMessage(Template template, ValidationError error, String prefix, InternalValue valueConstruction, HashMap<String, String> errormessagesMapping)
+    private void generateErrorMessage(Template template, ValidationError error, String prefix, InternalValue valueConstruction, HashMap<String, String> error_messagesMapping)
     throws TemplateException {
         // try to obtain the id of a block that formats each error message
         // for the provided error
         String errormessage_block_id = null;
-        String subject = error.getSubject();
+        var subject = error.getSubject();
         if (prefix != null) {
             subject = prefix + subject;
         }
 
-        if (errormessagesMapping != null) {
-            errormessage_block_id = errormessagesMapping.get(subject);
+        if (error_messagesMapping != null) {
+            errormessage_block_id = error_messagesMapping.get(subject);
         }
 
         if (null == errormessage_block_id &&
@@ -428,18 +428,18 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         // error construction
         if (errormessage_block_id != null) {
             if (template.hasValueId(ID_ERRORMESSAGE)) {
-                String errorblock_id = generateErrorBlockId(error, prefix);
+                var errorblock_id = generateErrorBlockId(error, prefix);
                 // support the IDENTIFIER:subject block id
                 if (template.hasBlock(errorblock_id)) {
                     template.setBlock(ID_ERRORMESSAGE, errorblock_id);
                 } else {
-                    String fallback_subject_errorblock_id = generateFallbackSubjectBlockId(error, prefix);
+                    var fallback_subject_errorblock_id = generateFallbackSubjectBlockId(error, prefix);
                     // support the ERROR:subject block id
                     if (template.hasBlock(fallback_subject_errorblock_id)) {
                         template.setBlock(ID_ERRORMESSAGE, fallback_subject_errorblock_id);
                     } else {
                         // support the IDENTIFIER:* block id
-                        String fallback_identifier_errorblock_id = generateFallbackIdentifierBlockId(error);
+                        var fallback_identifier_errorblock_id = generateFallbackIdentifierBlockId(error);
                         if (template.hasBlock(fallback_identifier_errorblock_id)) {
                             template.setBlock(ID_ERRORMESSAGE, fallback_identifier_errorblock_id);
                         } else {
@@ -462,22 +462,22 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         }
         // append a generic error message to the error construction
         else {
-            String error_value_id = generateErrorBlockId(error, prefix);
+            var error_value_id = generateErrorBlockId(error, prefix);
             if (template.hasBlock(error_value_id)) {
                 valueConstruction.appendBlock(error_value_id);
             } else {
-                String errorblock_id = generateErrorBlockId(error, prefix);
+                var errorblock_id = generateErrorBlockId(error, prefix);
                 // support the IDENTIFIER:subject block id
                 if (template.hasBlock(errorblock_id)) {
                     valueConstruction.appendBlock(errorblock_id);
                 } else {
-                    String fallback_subject_errorblock_id = generateFallbackSubjectBlockId(error, prefix);
+                    var fallback_subject_errorblock_id = generateFallbackSubjectBlockId(error, prefix);
                     // support the ERROR:subject block id
                     if (template.hasBlock(fallback_subject_errorblock_id)) {
                         valueConstruction.appendBlock(fallback_subject_errorblock_id);
                     } else {
                         // support the IDENTIFIER:* block id
-                        String fallback_identifier_errorblock_id = generateFallbackIdentifierBlockId(error);
+                        var fallback_identifier_errorblock_id = generateFallbackIdentifierBlockId(error);
                         if (template.hasBlock(fallback_identifier_errorblock_id)) {
                             valueConstruction.appendBlock(fallback_identifier_errorblock_id);
                         } else {
@@ -505,13 +505,13 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
             return Collections.emptyList();
         }
 
-        ArrayList<String> set_values = new ArrayList<String>();
+        var set_values = new ArrayList<String>();
 
         // adapt for subject prefixes
         if (prefix != null &&
             onlySubjectsToClear != null) {
-            ArrayList<String> prefixed_subjects = new ArrayList<String>();
-            for (String property : onlySubjectsToClear) {
+            var prefixed_subjects = new ArrayList<String>();
+            for (var property : onlySubjectsToClear) {
                 prefixed_subjects.add(prefix + property);
             }
             onlySubjectsToClear = prefixed_subjects;
@@ -520,23 +520,23 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         // Reorder the filtered mark so that they're ordered according
         // to the number of subjects they declare for each mark extension.
         // Those with the same number of subjects will be ordered according
-        // to the their order of declaration.
+        // to their order of declaration.
         // Also, all the content from the filtered marks will be cleared to
         // ensure that errors from previous submissions will not prevail.
-        List<String[]> filtered_marks = template.getFilteredValues(TAG_MARK);
+        var filtered_marks = template.getFilteredValues(TAG_MARK);
         HashMap<String, ArrayList<List<String[]>>> sorted_marks_map = null;
         if (filtered_marks.size() > 0) {
             sorted_marks_map = new HashMap<String, ArrayList<List<String[]>>>();
 
             ArrayList<List<String[]>> sorted_marks;
             List<String[]> marks;
-            for (String[] filtered_mark : filtered_marks) {
+            for (var filtered_mark : filtered_marks) {
                 // only clear the filtered mark if one of the subjects is
                 // validated
                 if (null == onlySubjectsToClear) {
                     template.removeValue(filtered_mark[0]);
                 } else {
-                    for (int i = 1; i < filtered_mark.length; i++) {
+                    for (var i = 1; i < filtered_mark.length; i++) {
                         if (onlySubjectsToClear.contains(filtered_mark[i])) {
                             template.removeValue(filtered_mark[0]);
                             break;
@@ -554,7 +554,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
 
                 // setup the collection of marks with the same number of
                 // properties and create a new one if that's needed
-                int number_of_properties = (filtered_mark.length - 2) / 2;
+                var number_of_properties = (filtered_mark.length - 2) / 2;
                 if (number_of_properties < sorted_marks.size()) {
                     marks = sorted_marks.get(number_of_properties);
                 } else {
@@ -574,7 +574,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
             }
         }
 
-        Collection<String> invalid_subjects = collectSubjects(errors, prefix);
+        var invalid_subjects = collectSubjects(errors, prefix);
 
         // Go over the mark extensions according to their order of importance.
         // Marks with a broader scope (more properties) get precedence of
@@ -582,31 +582,30 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         // same scope level they are handled according to their order
         // of declaration.
         if (sorted_marks_map != null) {
-            for (Map.Entry<String, ArrayList<List<String[]>>> sorted_marks_entry : sorted_marks_map.entrySet()) {
+            for (var sorted_marks_entry : sorted_marks_map.entrySet()) {
                 String mark_block_id;
-                String mark_extension = sorted_marks_entry.getKey();
+                var mark_extension = sorted_marks_entry.getKey();
                 if (null == mark_extension) {
                     mark_block_id = PREFIX_MARK_ERROR;
                 } else {
-                    String buffer = PREFIX_MARK_ERROR + ":" + mark_extension;
-                    mark_block_id = buffer;
+                    mark_block_id = PREFIX_MARK_ERROR + ":" + mark_extension;
                 }
 
-                HashMap<String, String> property_mark_mapping = new HashMap<String, String>();
+                var property_mark_mapping = new HashMap<String, String>();
 
-                ArrayList<List<String[]>> sorted_marks = sorted_marks_entry.getValue();
+                var sorted_marks = sorted_marks_entry.getValue();
                 List<String[]> marks;
-                for (int i = sorted_marks.size() - 1; i >= 0; i--) {
+                for (var i = sorted_marks.size() - 1; i >= 0; i--) {
                     marks = sorted_marks.get(i);
                     if (null == marks) {
                         continue;
                     }
 
-                    for (String[] filtered_mark : marks) {
+                    for (var filtered_mark : marks) {
                         // check if the filtered mark contains only subjects
                         // that are invalid
-                        boolean use_mark = true;
-                        for (int j = 2; j < filtered_mark.length; j += 2) {
+                        var use_mark = true;
+                        for (var j = 2; j < filtered_mark.length; j += 2) {
                             if (!invalid_subjects.contains(filtered_mark[j])) {
                                 use_mark = false;
                                 break;
@@ -617,8 +616,8 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                         // all the declared subjects. If the subject is already
                         // bound to another value, it is simply skipped.
                         if (use_mark) {
-                            boolean tied_to_properties = false;
-                            for (int j = 2; j < filtered_mark.length; j += 2) {
+                            var tied_to_properties = false;
+                            for (var j = 2; j < filtered_mark.length; j += 2) {
                                 if (!property_mark_mapping.containsKey(filtered_mark[j])) {
                                     property_mark_mapping.put(filtered_mark[j], filtered_mark[0]);
                                     tied_to_properties = true;
@@ -657,17 +656,17 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         }
 
         if (prefix != null) {
-            ArrayList<String> prefixed_subjects = new ArrayList<String>();
-            for (String property : subjects) {
+            var prefixed_subjects = new ArrayList<String>();
+            for (var property : subjects) {
                 prefixed_subjects.add(prefix + property);
             }
             subjects = prefixed_subjects;
         }
 
-        List<String[]> filtered_error_values = template.getFilteredValues(TAG_ERRORS);
+        var filtered_error_values = template.getFilteredValues(TAG_ERRORS);
         if (filtered_error_values.size() > 0) {
-            for (String[] filtered_value : filtered_error_values) {
-                for (int i = 1; i < filtered_value.length; i++) {
+            for (var filtered_value : filtered_error_values) {
+                for (var i = 1; i < filtered_value.length; i++) {
                     if (subjects.contains(filtered_value[i])) {
                         template.removeValue(filtered_value[0]);
                         break;
@@ -688,17 +687,17 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         }
 
         if (prefix != null) {
-            ArrayList<String> prefixed_subjects = new ArrayList<String>();
-            for (String property : subjects) {
+            var prefixed_subjects = new ArrayList<String>();
+            for (var property : subjects) {
                 prefixed_subjects.add(prefix + property);
             }
             subjects = prefixed_subjects;
         }
 
-        List<String[]> filtered_marks = template.getFilteredValues(TAG_MARK);
+        var filtered_marks = template.getFilteredValues(TAG_MARK);
         if (filtered_marks.size() > 0) {
-            for (String[] filtered_mark : filtered_marks) {
-                for (int i = 2; i < filtered_mark.length; i += 2) {
+            for (var filtered_mark : filtered_marks) {
+                for (var i = 2; i < filtered_mark.length; i += 2) {
                     if (subjects.contains(filtered_mark[i])) {
                         template.removeValue(filtered_mark[0]);
                         break;

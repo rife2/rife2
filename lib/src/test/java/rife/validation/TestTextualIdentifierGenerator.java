@@ -11,13 +11,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestTextualIdentifierGenerator {
     @Test
     public void testGenerate() {
-        TextualIdentifierGenerator<InitializedBeanImpl> identifier = new AbstractTextualIdentifierGenerator<InitializedBeanImpl>() {
+        TextualIdentifierGenerator<InitializedBeanImpl> identifier = new AbstractTextualIdentifierGenerator<>() {
             public String generateIdentifier() {
                 return bean_.getString() + ":" + bean_.getChar();
             }
         };
 
-        InitializedBeanImpl bean = new InitializedBeanImpl();
+        var bean = new InitializedBeanImpl();
         identifier.setBean(bean);
         assertEquals("default:i", identifier.generateIdentifier());
         bean.setString("override");
