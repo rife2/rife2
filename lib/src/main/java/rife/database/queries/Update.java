@@ -100,7 +100,7 @@ public class Update extends AbstractWhereQuery<Update> implements Cloneable {
                         template.setValue("V", fields_.get(field).toString());
                         set_list.add(template.getBlock("SET"));
                     }
-                    template.setValue("SET", StringUtils.join(set_list, template.getBlock("SEPERATOR")));
+                    template.setValue("SET", StringUtils.join(set_list, template.getBlock("SEPARATOR")));
                 }
 
                 if (where_ != null &&

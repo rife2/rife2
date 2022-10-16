@@ -67,7 +67,7 @@ public class DropTable extends AbstractQuery implements Cloneable {
                     template.setValue("EXPRESSION", tables_.get(0));
                 } else {
                     if (template.hasValueId("TABLES")) {
-                        template.setValue("TABLES", StringUtils.join(tables_, template.getBlock("SEPERATOR")));
+                        template.setValue("TABLES", StringUtils.join(tables_, template.getBlock("SEPARATOR")));
                     }
 
                     String block = template.getBlock("TABLES");

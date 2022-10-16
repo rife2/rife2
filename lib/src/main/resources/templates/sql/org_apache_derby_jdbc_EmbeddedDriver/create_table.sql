@@ -1,5 +1,5 @@
 {{b QUERY}}CREATE{{v TEMPORARY}}{{/v}} TABLE {{v TABLE/}} ({{v COLUMNS/}}{{v PRIMARY_KEYS}}{{/v}}{{v FOREIGN_KEYS}}{{/v}}{{v UNIQUE_CONSTRAINTS}}{{/v}}{{v CHECKS}}{{/v}}){{/b}}
-{{b SEPERATOR}}, {{/b}}
+{{b SEPARATOR}}, {{/b}}
 {{b TEMPORARY}}{{/b}}
 {{b COLUMN}}{{v NAME/}} {{v TYPE/}}{{v DEFAULT}}{{/v}}{{v NULLABLE}}{{/v}}{{v CUSTOM_ATTRIBUTES}}{{/v}}{{/b}}
 {{b NULL}} {{/b}}

@@ -1,6 +1,6 @@
 {{b QUERY}}SELECT{{v HINT}}{{/v}}{{v DISTINCT}}{{/v}} {{v FIELDS/}}{{v FROM}}{{/v}}{{v JOINS}}{{/v}}{{v WHERE}}{{/v}}{{v GROUPBY}}{{/v}}{{v HAVING}}{{/v}}{{v UNION}}{{/v}}{{v ORDERBY}}{{/v}}{{v LIMIT}}{{/v}}{{/b}}
 {{b HINT}} {{v EXPRESSION/}}{{/b}}
-{{b SEPERATOR}}, {{/b}}
+{{b SEPARATOR}}, {{/b}}
 {{b FROM}} FROM {{v TABLE/}}{{/b}}
 {{b DISTINCT}} DISTINCT{{/b}}
 {{b DISTINCTON}}{{/b}}

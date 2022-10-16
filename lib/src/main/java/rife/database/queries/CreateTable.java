@@ -122,7 +122,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
                 for (Column column : columnMapping_.values()) {
                     column_list.add(column.getSql(template));
                 }
-                columns = StringUtils.join(column_list, template.getBlock("SEPERATOR"));
+                columns = StringUtils.join(column_list, template.getBlock("SEPARATOR"));
 
                 if (temporary_) {
                     block = template.getBlock("TEMPORARY");
@@ -142,7 +142,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
                         }
                     }
                     if (constraints.size() > 0) {
-                        primary = template.getBlock("SEPERATOR") + StringUtils.join(constraints, template.getBlock("SEPERATOR"));
+                        primary = template.getBlock("SEPARATOR") + StringUtils.join(constraints, template.getBlock("SEPARATOR"));
                     }
                 }
 
@@ -156,7 +156,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
                         }
                     }
                     if (constraints.size() > 0) {
-                        foreign = template.getBlock("SEPERATOR") + StringUtils.join(constraints, template.getBlock("SEPERATOR"));
+                        foreign = template.getBlock("SEPARATOR") + StringUtils.join(constraints, template.getBlock("SEPARATOR"));
                     }
                 }
 
@@ -170,7 +170,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
                         }
                     }
                     if (constraints.size() > 0) {
-                        unique = template.getBlock("SEPERATOR") + StringUtils.join(constraints, template.getBlock("SEPERATOR"));
+                        unique = template.getBlock("SEPARATOR") + StringUtils.join(constraints, template.getBlock("SEPARATOR"));
                     }
                 }
 
@@ -184,7 +184,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
                         }
                     }
                     if (constraints.size() > 0) {
-                        check = template.getBlock("SEPERATOR") + StringUtils.join(constraints, template.getBlock("SEPERATOR"));
+                        check = template.getBlock("SEPARATOR") + StringUtils.join(constraints, template.getBlock("SEPARATOR"));
                     }
                 }
 
@@ -689,7 +689,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
                 template.setValue("PRIMARY_KEY_NAME", template.getBlock("PRIMARY_KEY_NAME"));
             }
 
-            template.setValue("COLUMN_NAMES", StringUtils.join(getColumns(), template.getBlock("SEPERATOR")));
+            template.setValue("COLUMN_NAMES", StringUtils.join(getColumns(), template.getBlock("SEPARATOR")));
 
             result = template.getBlock("PRIMARY_KEY");
             if (0 == result.length()) {
@@ -766,8 +766,8 @@ public class CreateTable extends AbstractQuery implements Cloneable {
                 local_columns[i / 2] = getColumns()[i];
                 foreign_columns[i / 2] = getColumns()[i + 1];
             }
-            template.setValue("LOCAL_COLUMN_NAMES", StringUtils.join(local_columns, template.getBlock("SEPERATOR")));
-            template.setValue("FOREIGN_COLUMN_NAMES", StringUtils.join(foreign_columns, template.getBlock("SEPERATOR")));
+            template.setValue("LOCAL_COLUMN_NAMES", StringUtils.join(local_columns, template.getBlock("SEPARATOR")));
+            template.setValue("FOREIGN_COLUMN_NAMES", StringUtils.join(foreign_columns, template.getBlock("SEPARATOR")));
 
             result = template.getBlock("FOREIGN_KEY");
             if (0 == result.length()) {
@@ -827,7 +827,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
                 template.setValue("UNIQUE_CONSTRAINT_NAME", template.getBlock("UNIQUE_CONSTRAINT_NAME"));
             }
 
-            template.setValue("COLUMN_NAMES", StringUtils.join(getColumns(), template.getBlock("SEPERATOR")));
+            template.setValue("COLUMN_NAMES", StringUtils.join(getColumns(), template.getBlock("SEPARATOR")));
 
             result = template.getBlock("UNIQUE_CONSTRAINT");
             if (0 == result.length()) {

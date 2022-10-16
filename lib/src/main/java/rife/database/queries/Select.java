@@ -241,7 +241,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
                         template.setValue("DISTINCT", block);
                     } else {
                         if (template.hasValueId("COLUMNS")) {
-                            template.setValue("COLUMNS", StringUtils.join(distinctOn_, template.getBlock("SEPERATOR")));
+                            template.setValue("COLUMNS", StringUtils.join(distinctOn_, template.getBlock("SEPARATOR")));
                         }
                         block = template.getBlock("DISTINCTON");
                         if (0 == block.length()) {
@@ -254,7 +254,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
                 if (0 == fields_.size()) {
                     template.setValue("FIELDS", template.getBlock("ALLFIELDS"));
                 } else {
-                    template.setValue("FIELDS", StringUtils.join(fields_, template.getBlock("SEPERATOR")));
+                    template.setValue("FIELDS", StringUtils.join(fields_, template.getBlock("SEPARATOR")));
                 }
 
                 if (null != from_) {
@@ -284,7 +284,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
                 }
 
                 if (groupBy_.size() > 0) {
-                    template.setValue("EXPRESSION", StringUtils.join(groupBy_, template.getBlock("SEPERATOR")));
+                    template.setValue("EXPRESSION", StringUtils.join(groupBy_, template.getBlock("SEPARATOR")));
                     block = template.getBlock("GROUPBY");
                     if (0 == block.length()) {
                         throw new UnsupportedSqlFeatureException("GROUP BY", datasource_.getAliasedDriver());
@@ -293,7 +293,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
                 }
 
                 if (having_.size() > 0) {
-                    template.setValue("EXPRESSION", StringUtils.join(having_, template.getBlock("SEPERATOR")));
+                    template.setValue("EXPRESSION", StringUtils.join(having_, template.getBlock("SEPARATOR")));
                     block = template.getBlock("HAVING");
                     if (0 == block.length()) {
                         throw new UnsupportedSqlFeatureException("HAVING", datasource_.getAliasedDriver());
@@ -325,7 +325,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
                     for (OrderBy order_by : orderBy_) {
                         orderby_list.add(order_by.getSql(template));
                     }
-                    template.setValue("ORDERBY_PARTS", StringUtils.join(orderby_list, template.getBlock("SEPERATOR")));
+                    template.setValue("ORDERBY_PARTS", StringUtils.join(orderby_list, template.getBlock("SEPARATOR")));
                     block = template.getBlock("ORDERBY");
                     if (0 == block.length()) {
                         throw new UnsupportedSqlFeatureException("ORDER BY", datasource_.getAliasedDriver());

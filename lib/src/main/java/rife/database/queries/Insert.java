@@ -117,17 +117,17 @@ public class Insert extends AbstractParametrizedQuery implements Cloneable {
                             value_row.add("NULL");
                         }
                     }
-                    template.setValue("VALUES", StringUtils.join(value_row, template.getBlock("SEPERATOR")));
+                    template.setValue("VALUES", StringUtils.join(value_row, template.getBlock("SEPARATOR")));
                     value_rows.add(template.getBlock("VALUE_ROW"));
                 }
 
                 // create the strings of the columns that values will be inserted into and which values they are
-                template.setValue("COLUMNS", StringUtils.join(column_names, template.getBlock("SEPERATOR")));
+                template.setValue("COLUMNS", StringUtils.join(column_names, template.getBlock("SEPARATOR")));
                 if (1 == value_rows.size()) {
                     template.setValue("DATA", value_rows.get(0));
                 } else {
                     if (template.hasValueId("VALUE_ROWS")) {
-                        template.setValue("VALUE_ROWS", StringUtils.join(value_rows, template.getBlock("SEPERATOR")));
+                        template.setValue("VALUE_ROWS", StringUtils.join(value_rows, template.getBlock("SEPARATOR")));
                     }
 
                     String block = template.getBlock("VALUE_ROWS");
