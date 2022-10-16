@@ -80,7 +80,7 @@ public class TemplateFactory extends EnumClass<String> {
 
     public static TemplateFactory SQL = new TemplateFactory(TemplateConfig.TXT,
         ResourceFinderClasspath.instance(),
-        "txt", "text/plain", ".sql",
+        "sql", "text/plain", ".sql",
         new String[]
             {
                 TemplateFactoryFilters.TAG_LANG

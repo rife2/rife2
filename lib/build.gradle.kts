@@ -36,6 +36,48 @@ dependencies {
     testImplementation("org.apache.derby:derbytools:10.16.1.1")
 }
 
+sourceSets.main {
+    java.srcDirs("${projectDir}/src/generated/java/")
+    resources.exclude("templates/**")
+}
+
+tasks.register<JavaExec>("precompileHtmlTemplates") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("rife.template.TemplateDeployer")
+    args = listOf("-verbose",
+        "-t", "html",
+        "-d", "${projectDir}/build/classes/java/main",
+        "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates")
+}
+
+tasks.register<JavaExec>("precompileXmlTemplates") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("rife.template.TemplateDeployer")
+    args = listOf("-verbose",
+        "-t", "xml",
+        "-d", "${projectDir}/build/classes/java/main",
+        "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates")
+}
+
+tasks.register<JavaExec>("precompileSqlTemplates") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("rife.template.TemplateDeployer")
+    args = listOf("-verbose",
+        "-t", "sql",
+        "-d", "${projectDir}/build/classes/java/main",
+        "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates")
+}
+
+tasks.register("precompileTemplates") {
+    dependsOn("precompileHtmlTemplates")
+    dependsOn("precompileXmlTemplates")
+    dependsOn("precompileSqlTemplates")
+}
+
+tasks.jar {
+    dependsOn("precompileTemplates")
+}
+
 tasks.generateGrammarSource {
     arguments = arguments + listOf(
         "-visitor",
@@ -51,10 +93,6 @@ tasks.clean {
 tasks.named<Test>("test") {
     useJUnitPlatform()
     environment("project.dir", project.projectDir.toString())
-}
-
-sourceSets.main {
-    java.srcDirs("${projectDir}/src/generated/java/")
 }
 
 idea {
