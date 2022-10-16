@@ -4,9 +4,8 @@
  */
 package rife.template;
 
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.InputMismatchException;
 import org.antlr.v4.runtime.tree.*;
 import rife.config.RifeConfig;
 import rife.datastructures.DocumentPosition;
@@ -382,6 +381,8 @@ public class Parser implements Cloneable {
         var lexer = new TemplatePreLexer(input);
         var tokens = new CommonTokenStream(lexer);
         var parser = new TemplatePreParser(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(new AntlrParserErrorListener(parsed));
         parser.setBuildParseTree(true);
 
         var walker = new ParseTreeWalker();
@@ -401,6 +402,8 @@ public class Parser implements Cloneable {
         var tokens = new CommonTokenStream(lexer);
         var parser = new TemplateMainParser(tokens);
         parser.setBuildParseTree(true);
+        parser.removeErrorListeners();
+        parser.addErrorListener(new AntlrParserErrorListener(parsed));
 
         var walker = new ParseTreeWalker();
         var listener = new AntlrParserListener(parsed);
@@ -446,32 +449,26 @@ public class Parser implements Cloneable {
             var include_parser = Parser.this;
 
             // check if the included template references another template type
-            var doublecolon_index = included_template_name.indexOf(':');
-            if (doublecolon_index != -1)
-            {
-                var template_type = included_template_name.substring(0, doublecolon_index);
-                if (!template_type.equals(templateFactory_.toString()))
-                {
+            var double_colon_index = included_template_name.indexOf(':');
+            if (double_colon_index != -1) {
+                var template_type = included_template_name.substring(0, double_colon_index);
+                if (!template_type.equals(templateFactory_.toString())) {
                     var factory = TemplateFactory.getFactory(template_type);
                     include_parser = factory.getParser();
-                    included_template_name = included_template_name.substring(doublecolon_index + 1);
+                    included_template_name = included_template_name.substring(double_colon_index + 1);
                 }
             }
 
             var included_template_resource = include_parser.resolve(included_template_name);
 
             if (null == included_template_resource) {
-                // TODO : this should return the line itself
-                var position = new DocumentPosition(ctx.getStart().getText(), ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
-                throw new IncludeNotFoundException(parsed_.getClassName(), position, included_template_name);
+                throw new IncludeNotFoundException(parsed_.getClassName(), getDocumentPositionForToken(ctx.getStart()), included_template_name);
             }
             var included_template_parsed = include_parser.prepare(included_template_name, included_template_resource);
 
             // check for circular references
             if (previousIncludes_.contains(included_template_parsed.getFullClassName())) {
-                // TODO : this should return the line itself
-                var position = new DocumentPosition(ctx.getStart().getText(), ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
-                throw new CircularIncludesException(parsed_.getClassName(), position, included_template_name, previousIncludes_);
+                throw new CircularIncludesException(parsed_.getClassName(), getDocumentPositionForToken(ctx.getStart()), included_template_name, previousIncludes_);
             }
 
             // parse the included template's include tags too
@@ -491,6 +488,40 @@ public class Parser implements Cloneable {
 
             // add the replaced content
             result_.append(replaced_content);
+        }
+    }
+
+    static DocumentPosition getDocumentPositionForToken(Token token) {
+        final var input = token.getTokenSource().getInputStream().toString();
+        final var lines = input.split("\n");
+        final var error_line = lines[token.getLine() - 1];
+        final var length = Math.max(1, token.getStopIndex() - token.getStartIndex() + 1);
+        return new DocumentPosition(error_line, token.getLine(), token.getCharPositionInLine(), length);
+    }
+
+    static class AntlrParserErrorListener extends BaseErrorListener {
+        private final Parsed parsed_;
+
+        public AntlrParserErrorListener(Parsed parsed) {
+            parsed_ = parsed;
+        }
+
+        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,
+                                int line, int charPositionInLine, String msg, RecognitionException e) {
+            final var tokens = (CommonTokenStream) recognizer.getInputStream();
+            final var input = tokens.getTokenSource().getInputStream().toString();
+            final var lines = input.split("\n");
+            final var error_line = lines[line - 1];
+            final var token = (Token)offendingSymbol;
+            final var length = Math.max(1, token.getStopIndex() - token.getStartIndex() + 1);
+            final var position = new DocumentPosition(error_line, line, charPositionInLine, length);
+            final String message;
+            if (e instanceof InputMismatchException) {
+                message = "Mismatched template tags";
+            } else {
+                message = "Template syntax error";
+            }
+            throw new SyntaxErrorException(parsed_.getTemplateName(), position, message, null);
         }
     }
 
@@ -647,26 +678,6 @@ public class Parser implements Cloneable {
             if (currentValueData_ != null) {
                 currentValueData_.append(ctx.getText());
             }
-        }
-
-        @Override
-        public void visitTerminal(TerminalNode node) {
-
-        }
-
-        @Override
-        public void visitErrorNode(ErrorNode node) {
-
-        }
-
-        @Override
-        public void enterEveryRule(ParserRuleContext ctx) {
-
-        }
-
-        @Override
-        public void exitEveryRule(ParserRuleContext ctx) {
-
         }
     }
 

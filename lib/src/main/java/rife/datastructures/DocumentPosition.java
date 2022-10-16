@@ -4,5 +4,5 @@
  */
 package rife.datastructures;
 
-public record DocumentPosition(String lineContent, int line, int column) {
+public record DocumentPosition(String lineContent, int line, int column, int marking) {
 }

@@ -20,8 +20,6 @@ public class TestSite extends Site {
         });
     }
 
-    ;
-
     public void setup() {
         before(BeforeElement.class, AfterElement.class);
         before((Context c) -> {

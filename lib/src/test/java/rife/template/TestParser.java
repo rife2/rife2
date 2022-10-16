@@ -7,7 +7,7 @@ package rife.template;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import rife.template.exceptions.TemplateException;
+import rife.template.exceptions.*;
 import rife.tools.ExceptionUtils;
 
 import java.io.File;
@@ -102,7 +102,7 @@ public class TestParser {
         }
         catch (TemplateException e)
         {
-            assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
     }
     */
@@ -157,7 +157,7 @@ public class TestParser {
             }
             catch (TemplateException e)
             {
-                assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+                fail(ExceptionUtils.getExceptionStackTrace(e));
             }
         }
     */
@@ -199,7 +199,7 @@ public class TestParser {
             }
             catch (TemplateException e)
             {
-                assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+                fail(ExceptionUtils.getExceptionStackTrace(e));
             }
         }
     */
@@ -241,7 +241,7 @@ public class TestParser {
             }
             catch (TemplateException e)
             {
-                assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+                fail(ExceptionUtils.getExceptionStackTrace(e));
             }
         }
     */
@@ -291,7 +291,7 @@ public class TestParser {
             }
             catch (TemplateException e)
             {
-                assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+                fail(ExceptionUtils.getExceptionStackTrace(e));
             }
         }
     */
@@ -343,7 +343,7 @@ public class TestParser {
             }
             catch (TemplateException e)
             {
-                assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+                fail(ExceptionUtils.getExceptionStackTrace(e));
             }
         }
     */
@@ -388,7 +388,7 @@ public class TestParser {
             }
             catch (TemplateException e)
             {
-                assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+                fail(ExceptionUtils.getExceptionStackTrace(e));
             }
         }
     */
@@ -492,7 +492,7 @@ public class TestParser {
             }
             catch (TemplateException e)
             {
-                assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+                fail(ExceptionUtils.getExceptionStackTrace(e));
             }
         }
     */
@@ -550,7 +550,7 @@ public class TestParser {
             }
             catch (TemplateException e)
             {
-                assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+                fail(ExceptionUtils.getExceptionStackTrace(e));
             }
         }
 */
@@ -597,7 +597,7 @@ public class TestParser {
                 }
                 catch (TemplateException e)
                 {
-                    assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+                    fail(ExceptionUtils.getExceptionStackTrace(e));
                 }
             }
 
@@ -613,7 +613,7 @@ public class TestParser {
                 }
                 catch (TemplateException e)
                 {
-                    assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
+                    fail(ExceptionUtils.getExceptionStackTrace(e));
                 }
             }
         */
@@ -1060,545 +1060,323 @@ public class TestParser {
         }
     }
 
-    // TODO : template parsing error reporting
-    /*
-	@Test public void testErrorTerminatingUnopenedValue()
-	{
-		try
-		{
-			parser_.parse("error_terminating_unopened_value", null, null);
-			fail();
-		}
-		catch (TerminatingUnopenedTagException e)
-		{
-			assertEquals("<!--V 'avalue'/--><!--/V-->", e.getErrorLocation().getLineContent());
-			assertEquals(1, e.getErrorLocation().getLine());
-			assertEquals(19, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_terminating_unopened_value");
-			assertEquals(e.getTagType(), "V");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorTerminatingUnopenedValue() {
+        try {
+            parser_.parse("error_terminating_unopened_value", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("<!--v avalue/--><!--/v-->", e.getErrorLocation().lineContent());
+            assertEquals(1, e.getErrorLocation().line());
+            assertEquals(16, e.getErrorLocation().column());
+            assertEquals(9, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_terminating_unopened_value");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorTerminatingUnopenedBlock()
-	{
-		try
-		{
-			parser_.parse("error_terminating_unopened_block", null, null);
-			fail();
-		}
-		catch (TerminatingUnopenedTagException e)
-		{
-			assertEquals("<!--/B-->", e.getErrorLocation().getLineContent());
-			assertEquals(1, e.getErrorLocation().getLine());
-			assertEquals(1, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_terminating_unopened_block");
-			assertEquals(e.getTagType(), "B");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorTerminatingUnopenedBlock() {
+        try {
+            parser_.parse("error_terminating_unopened_block", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("<!--/b-->", e.getErrorLocation().lineContent());
+            assertEquals(1, e.getErrorLocation().line());
+            assertEquals(0, e.getErrorLocation().column());
+            assertEquals(9, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_terminating_unopened_block");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorTerminatingUnopenedBlockvalue()
-	{
-		try
-		{
-			parser_.parse("error_terminating_unopened_blockvalue", null, null);
-			fail();
-		}
-		catch (TerminatingUnopenedTagException e)
-		{
-			assertEquals("<!--/BV-->", e.getErrorLocation().getLineContent());
-			assertEquals(1, e.getErrorLocation().getLine());
-			assertEquals(1, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_terminating_unopened_blockvalue");
-			assertEquals(e.getTagType(), "BV");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorTerminatingUnopenedBlockvalue() {
+        try {
+            parser_.parse("error_terminating_unopened_blockvalue", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("<!--/bv-->", e.getErrorLocation().lineContent());
+            assertEquals(1, e.getErrorLocation().line());
+            assertEquals(0, e.getErrorLocation().column());
+            assertEquals(10, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_terminating_unopened_blockvalue");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorTerminatingUnopenedComment()
-	{
-		try
-		{
-			parser_.parse("error_terminating_unopened_comment", null, null);
-			fail();
-		}
-		catch (TerminatingUnopenedTagException e)
-		{
-			assertEquals("<!--/C-->", e.getErrorLocation().getLineContent());
-			assertEquals(1, e.getErrorLocation().getLine());
-			assertEquals(1, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_terminating_unopened_comment");
-			assertEquals(e.getTagType(), "C");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorIncludeNotFound() {
+        try {
+            parser_.parse("error_include_not_found", null, null);
+            fail();
+        } catch (IncludeNotFoundException e) {
+            assertEquals("\t\t<!--i error_missing_include/-->", e.getErrorLocation().lineContent());
+            assertEquals(8, e.getErrorLocation().line());
+            assertEquals(2, e.getErrorLocation().column());
+            assertEquals(5, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_include_not_found");
+            assertEquals(e.getIncluded(), "error_missing_include");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorIncludeNotFound()
-	{
-		try
-		{
-			parser_.parse("error_include_not_found", null, null);
-			fail();
-		}
-		catch (IncludeNotFoundException e)
-		{
-			assertEquals("		<!--I 'error_missing_include'/-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(3, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_include_not_found");
-			assertEquals(e.getIncluded(), "error_missing_include");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorCircularIncludes() {
+        try {
+            parser_.parse("error_circular_includes_master", null, null);
+            fail();
+        } catch (CircularIncludesException e) {
+            assertEquals("<!--i error_circular_includes_master/-->", e.getErrorLocation().lineContent());
+            assertEquals(1, e.getErrorLocation().line());
+            assertEquals(0, e.getErrorLocation().column());
+            assertEquals(5, e.getErrorLocation().marking());
+            assertTrue(e.getPreviousIncludes().contains(parser_.getPackage() + "error_circular_includes_master"));
+            assertTrue(e.getPreviousIncludes().contains(parser_.getPackage() + "error_circular_includes_included"));
+            assertEquals(e.getIncluded(), "error_circular_includes_master");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorCircularIncludes()
-	{
-		try
-		{
-			parser_.parse("error_circular_includes_master", null, null);
-			fail();
-		}
-		catch (CircularIncludesException e)
-		{
-			assertEquals("<!--I 'error_circular_includes_master'/-->", e.getErrorLocation().getLineContent());
-			assertEquals(1, e.getErrorLocation().getLine());
-			assertEquals(1, e.getErrorLocation().getColumn());
-			assertTrue(e.getPreviousIncludes().contains(parser_.getPackage() + "error_circular_includes_master"));
-			assertTrue(e.getPreviousIncludes().contains(parser_.getPackage() + "error_circular_includes_included"));
-			assertEquals(e.getIncluded(), "error_circular_includes_master");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorIncludeBadlyTerminated() {
+        try {
+            parser_.parse("error_include_badly_terminated", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("		<!--i error_badly_terminated_include' erzer /-->", e.getErrorLocation().lineContent());
+            assertEquals(8, e.getErrorLocation().line());
+            assertEquals(40, e.getErrorLocation().column());
+            assertEquals(5, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_include_badly_terminated");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorIncludeBadlyTerminated()
-	{
-		try
-		{
-			parser_.parse("error_include_badly_terminated", null, null);
-			fail();
-		}
-		catch (TagBadlyTerminatedException e)
-		{
-			assertEquals("		<!--I 'error_badly_terminated_include' erzer /-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(48, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_include_badly_terminated");
-			assertEquals(e.getTagType(), "I");
-			assertEquals(e.getTagId(), "error_badly_terminated_include");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorValueTagNotTerminated() {
+        try {
+            parser_.parse("error_value_tag_not_terminated", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("</html>", e.getErrorLocation().lineContent());
+            assertEquals(10, e.getErrorLocation().line());
+            assertEquals(7, e.getErrorLocation().column());
+            assertEquals(1, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_value_tag_not_terminated");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorValueNameAttributeNotEnded()
-	{
-		try
-		{
-			parser_.parse("error_value_name_attribute_not_ended", null, null);
-			fail();
-		}
-		catch (AttributeNotEndedException e)
-		{
-			assertEquals("		<!--V 'VALUE1/-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(10, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_value_name_attribute_not_ended");
-			assertEquals(e.getTagType(), "V");
-			assertEquals(e.getAttributeName(), "name");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorValueShortBeginTagBadlyTerminated() {
+        try {
+            parser_.parse("error_valueshort_begin_badly_terminated", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("		<!--v VALUE1'   eff  /-->", e.getErrorLocation().lineContent());
+            assertEquals(8, e.getErrorLocation().line());
+            assertEquals(18, e.getErrorLocation().column());
+            assertEquals(3, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_valueshort_begin_badly_terminated");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorValueNameAttributeNotDelimitedInBegin()
-	{
-		try
-		{
-			parser_.parse("error_value_name_attribute_not_delimited_in_begin", null, null);
-			fail();
-		}
-		catch (AttributeWronglyEndedException e)
-		{
-			assertEquals("		<!--V VALUE1'/-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(15, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_value_name_attribute_not_delimited_in_begin");
-			assertEquals(e.getTagType(), "V");
-			assertEquals(e.getAttributeName(), "name");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorValueLongBeginTagBadlyTerminated() {
+        try {
+            parser_.parse("error_valuelong_begin_badly_terminated", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("		<!--v VALUE1'   eff  --><!--/v-->", e.getErrorLocation().lineContent());
+            assertEquals(8, e.getErrorLocation().line());
+            assertEquals(18, e.getErrorLocation().column());
+            assertEquals(3, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_valuelong_begin_badly_terminated");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorValueTagNotTerminated()
-	{
-		try
-		{
-			parser_.parse("error_value_tag_not_terminated", null, null);
-			fail();
-		}
-		catch (TagNotTerminatedException e)
-		{
-			assertEquals("		<!--V 'VALUE1'-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(3, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_value_tag_not_terminated");
-			assertEquals(e.getTagType(), "V");
-			assertEquals(e.getTagId(), "VALUE1");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorUnsupportedNestedValueTag() {
+        try {
+            parser_.parse("error_unsupported_nested_value_tag", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("		<!--v VALUE2/-->", e.getErrorLocation().lineContent());
+            assertEquals(9, e.getErrorLocation().line());
+            assertEquals(2, e.getErrorLocation().column());
+            assertEquals(5, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_unsupported_nested_value_tag");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorValueShortBeginTagBadlyTerminated()
-	{
-		try
-		{
-			parser_.parse("error_valueshort_begin_badly_terminated", null, null);
-			fail();
-		}
-		catch (BeginTagBadlyTerminatedException e)
-		{
-			assertEquals("		<!--V 'VALUE1'   eff  /-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(17, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_valueshort_begin_badly_terminated");
-			assertEquals(e.getTagType(), "V");
-			assertEquals(e.getTagId(), "VALUE1");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorValueBeginTagNotEnded() {
+        try {
+            parser_.parse("error_value_begin_tag_not_ended", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("" +
+                "\t</body>", e.getErrorLocation().lineContent());
+            assertEquals(9, e.getErrorLocation().line());
+            assertEquals(4, e.getErrorLocation().column());
+            assertEquals(3, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_value_begin_tag_not_ended");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorValueLongBeginTagBadlyTerminated()
-	{
-		try
-		{
-			parser_.parse("error_valuelong_begin_badly_terminated", null, null);
-			fail();
-		}
-		catch (BeginTagBadlyTerminatedException e)
-		{
-			assertEquals("		<!--V 'VALUE1'   eff  --><!--/V-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(17, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_valuelong_begin_badly_terminated");
-			assertEquals(e.getTagType(), "V");
-			assertEquals(e.getTagId(), "VALUE1");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorCommentMissingTerminationTag() {
+        try {
+            parser_.parse("error_comment_missing_termination_tag", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("</html>", e.getErrorLocation().lineContent());
+            assertEquals(10, e.getErrorLocation().line());
+            assertEquals(7, e.getErrorLocation().column());
+            assertEquals(1, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_comment_missing_termination_tag");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorUnsupportedNestedValueTag()
-	{
-		try
-		{
-			parser_.parse("error_unsupported_nested_value_tag", null, null);
-			fail();
-		}
-		catch (UnsupportedNestedTagException e)
-		{
-			assertEquals("		<!--V 'VALUE2'/-->", e.getErrorLocation().getLineContent());
-			assertEquals(9, e.getErrorLocation().getLine());
-			assertEquals(3, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_unsupported_nested_value_tag");
-			assertEquals(e.getTagType(), "V");
-			assertEquals(e.getTagId(), "VALUE1");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorBlockBeginTagNotEnded() {
+        try {
+            parser_.parse("error_block_begin_tag_not_ended", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("\t</body>", e.getErrorLocation().lineContent());
+            assertEquals(9, e.getErrorLocation().line());
+            assertEquals(4, e.getErrorLocation().column());
+            assertEquals(3, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_block_begin_tag_not_ended");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorValueBeginTagNotEnded()
-	{
-		try
-		{
-			parser_.parse("error_value_begin_tag_not_ended", null, null);
-			fail();
-		}
-		catch (BeginTagNotEndedException e)
-		{
-			assertEquals("		<!--V 'VALUE1'", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(17, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_value_begin_tag_not_ended");
-			assertEquals(e.getTagType(), "V");
-			assertEquals(e.getTagId(), "VALUE1");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorBlockMissingTerminationTag() {
+        try {
+            parser_.parse("error_block_missing_termination_tag", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("</html>", e.getErrorLocation().lineContent());
+            assertEquals(10, e.getErrorLocation().line());
+            assertEquals(7, e.getErrorLocation().column());
+            assertEquals(1, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_block_missing_termination_tag");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorCommentMissingTerminationTag()
-	{
-		try
-		{
-			parser_.parse("error_comment_missing_termination_tag", null, null);
-			fail();
-		}
-		catch (MissingTerminationTagsException e)
-		{
-			assertEquals("</html>", e.getErrorLocation().getLineContent());
-			assertEquals(10, e.getErrorLocation().getLine());
-			assertEquals(8, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_comment_missing_termination_tag");
-			assertEquals(e.getTagType(), "C");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorBlockMismatchedTerminationTag1() {
+        try {
+            parser_.parse("error_block_mismatched_termination_tag1", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("		<!--b BLOCK1--><!--/bv-->", e.getErrorLocation().lineContent());
+            assertEquals(8, e.getErrorLocation().line());
+            assertEquals(17, e.getErrorLocation().column());
+            assertEquals(10, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_block_mismatched_termination_tag1");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorBlockNameAttributeNotEnded()
-	{
-		try
-		{
-			parser_.parse("error_block_name_attribute_not_ended", null, null);
-			fail();
-		}
-		catch (AttributeNotEndedException e)
-		{
-			assertEquals("		<!--B 'BLOCK1--><!--/B-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(10, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_block_name_attribute_not_ended");
-			assertEquals(e.getTagType(), "B");
-			assertEquals(e.getAttributeName(), "name");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorBlockMismatchedTerminationTag2() {
+        try {
+            parser_.parse("error_block_mismatched_termination_tag2", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("		<!--bv BLOCK2--><!--/b-->", e.getErrorLocation().lineContent());
+            assertEquals(8, e.getErrorLocation().line());
+            assertEquals(18, e.getErrorLocation().column());
+            assertEquals(9, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_block_mismatched_termination_tag2");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorBlockNameAttributeNotDelimitedInBegin()
-	{
-		try
-		{
-			parser_.parse("error_block_name_attribute_not_delimited_in_begin", null, null);
-			fail();
-		}
-		catch (AttributeWronglyEndedException e)
-		{
-			assertEquals("		<!--B BLOCK1'--><!--/B-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(15, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_block_name_attribute_not_delimited_in_begin");
-			assertEquals(e.getTagType(), "B");
-			assertEquals(e.getAttributeName(), "name");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorBlockMismatchedTerminationTag3() {
+        try {
+            parser_.parse("error_block_mismatched_termination_tag3", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("		<!--bv BLOCK2-->", e.getErrorLocation().lineContent());
+            assertEquals(8, e.getErrorLocation().line());
+            assertEquals(18, e.getErrorLocation().column());
+            assertEquals(1, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_block_mismatched_termination_tag3");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorBlockBeginTagNotEnded()
-	{
-		try
-		{
-			parser_.parse("error_block_begin_tag_not_ended", null, null);
-			fail();
-		}
-		catch (BeginTagNotEndedException e)
-		{
-			assertEquals("		<!--B 'BLOCK1'", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(16, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_block_begin_tag_not_ended");
-			assertEquals(e.getTagType(), "B");
-			assertEquals(e.getTagId(), "BLOCK1");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorBlockBeginTagBadlyTerminated() {
+        try {
+            parser_.parse("error_block_begin_tag_badly_terminated", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("		<!--b BLOCK1' dfsdf -->  <!--/b-->", e.getErrorLocation().lineContent());
+            assertEquals(8, e.getErrorLocation().line());
+            assertEquals(16, e.getErrorLocation().column());
+            assertEquals(5, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_block_begin_tag_badly_terminated");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorBlockMissingTerminationTag()
-	{
-		try
-		{
-			parser_.parse("error_block_missing_termination_tag", null, null);
-			fail();
-		}
-		catch (MissingTerminationTagsException e)
-		{
-			assertEquals("</html>", e.getErrorLocation().getLineContent());
-			assertEquals(10, e.getErrorLocation().getLine());
-			assertEquals(8, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_block_missing_termination_tag");
-			assertEquals(e.getTagType(), "B");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
+    @Test
+    public void testErrorBlockValueBeginTagBadlyTerminated() {
+        try {
+            parser_.parse("error_blockvalue_begin_tag_badly_terminated", null, null);
+            fail();
+        } catch (SyntaxErrorException e) {
+            assertEquals("		<!--bv BLOCK1' dfsdf -->  <!--/b-->", e.getErrorLocation().lineContent());
+            assertEquals(8, e.getErrorLocation().line());
+            assertEquals(17, e.getErrorLocation().column());
+            assertEquals(5, e.getErrorLocation().marking());
+            assertEquals(e.getTemplateName(), "error_blockvalue_begin_tag_badly_terminated");
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
-	@Test public void testErrorBlockMismatchedTerminationTag1()
-	{
-		try
-		{
-			parser_.parse("error_block_mismatched_termination_tag1", null, null);
-			fail();
-		}
-		catch (MismatchedTerminationTagException e)
-		{
-			assertEquals("		<!--B 'BLOCK1'--><!--/BV-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(20, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_block_mismatched_termination_tag1");
-			assertEquals(e.getTagId(), "BLOCK1");
-			assertEquals(e.getExpected(), "B");
-			assertEquals(e.getActual(), "BV");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
-
-	@Test public void testErrorBlockMismatchedTerminationTag2()
-	{
-		try
-		{
-			parser_.parse("error_block_mismatched_termination_tag2", null, null);
-			fail();
-		}
-		catch (MismatchedTerminationTagException e)
-		{
-			assertEquals("		<!--BV 'BLOCK2'--><!--/B-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(21, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_block_mismatched_termination_tag2");
-			assertEquals(e.getTagId(), "BLOCK2");
-			assertEquals(e.getExpected(), "BV");
-			assertEquals(e.getActual(), "B");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
-
-	@Test public void testErrorBlockMismatchedTerminationTag3()
-	{
-		try
-		{
-			parser_.parse("error_block_mismatched_termination_tag3", null, null);
-			fail();
-		}
-		catch (MismatchedTerminationTagException e)
-		{
-			assertEquals("		<!--BV 'BLOCK2'--><!--/C-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(21, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_block_mismatched_termination_tag3");
-			assertEquals(e.getTagId(), "BLOCK2");
-			assertEquals(e.getExpected(), "BV");
-			assertEquals(e.getActual(), "C");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
-
-	@Test public void testErrorBlockBeginTagBadlyTerminated()
-	{
-		try
-		{
-			parser_.parse("error_block_begin_tag_badly_terminated", null, null);
-			fail();
-		}
-		catch (BeginTagBadlyTerminatedException e)
-		{
-			assertEquals("		<!--B 'BLOCK1' dfsdf -->  <!--/B-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(17, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_block_begin_tag_badly_terminated");
-			assertEquals(e.getTagId(), "BLOCK1");
-			assertEquals(e.getTagType(), "B");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
-
-	@Test public void testErrorBlockValueBeginTagBadlyTerminated()
-	{
-		try
-		{
-			parser_.parse("error_blockvalue_begin_tag_badly_terminated", null, null);
-			fail();
-		}
-		catch (BeginTagBadlyTerminatedException e)
-		{
-			assertEquals("		<!--BV 'BLOCK1' dfsdf -->  <!--/B-->", e.getErrorLocation().getLineContent());
-			assertEquals(8, e.getErrorLocation().getLine());
-			assertEquals(18, e.getErrorLocation().getColumn());
-			assertEquals(e.getTemplateName(), "error_blockvalue_begin_tag_badly_terminated");
-			assertEquals(e.getTagId(), "BLOCK1");
-			assertEquals(e.getTagType(), "BV");
-		}
-		catch (TemplateException e)
-		{
-			assertTrue(ExceptionUtils.getExceptionStackTrace(e), false);
-		}
-	}
-
-	@Test public void testErrorUnsupportedEncoding()
-	{
-		try
-		{
-			TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "THIS_ENCODING_DOESNT_EXIST", null);
-			fail();
-		}
-		catch (GetContentErrorException e)
-		{
-			assertTrue(e.getCause() instanceof rife.resources.exceptions.ResourceFinderErrorException);
-			assertTrue(e.getCause().getCause() instanceof rife.tools.exceptions.FileUtilsErrorException);
-			assertTrue(e.getCause().getCause().getCause() instanceof java.io.UnsupportedEncodingException);
-		}
-	}
-	*/
+    @Test
+    public void testErrorUnsupportedEncoding() {
+        try {
+            TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "THIS_ENCODING_DOESNT_EXIST", null);
+            fail();
+        } catch (GetContentErrorException e) {
+            assertTrue(e.getCause() instanceof rife.resources.exceptions.ResourceFinderErrorException);
+            assertTrue(e.getCause().getCause() instanceof rife.tools.exceptions.FileUtilsErrorException);
+            assertTrue(e.getCause().getCause().getCause() instanceof java.io.UnsupportedEncodingException);
+        }
+    }
 }

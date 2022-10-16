@@ -6,7 +6,25 @@
 	<product>Uwyn RIFE <!--v RIFE_VERSION/--></product>
 	<exceptions>
 		<!--v exceptions--><!--/v-->
-		
+		<!--b exception-->
+		<exception>
+			<classname><!--v exception_class_name-->class_name<!--/v--></classname>
+			<message><!--v exception_message-->exception_message<!--/v--></message>
+			<stacktrace>
+				<!--v exception_stack_trace--><!--/v-->
+			</stacktrace>
+		</exception>
+		<!--/b-->
+		<!--b exception_compilation-->
+		<exception>
+			<classname><!--v exception_class_name-->class_name<!--/v--></classname>
+			<message><!--v exception_message-->exception_message<!--/v--></message>
+			<stacktrace>
+				<!--v exception_stack_trace--><!--/v-->
+			</stacktrace>
+		</exception>
+		<!--/b-->
+
 		<!--b stack_trace_line-->
 				<frame>
 					<classname><!--v class_name-->class_name<!--/v--></classname>

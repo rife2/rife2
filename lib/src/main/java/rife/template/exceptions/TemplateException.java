@@ -26,6 +26,6 @@ public class TemplateException extends RuntimeException {
 
         return "\n" + name + ":" + errorLocation.line() + ":" + errorLocation.column() + ": " + message + "\n" +
             StringUtils.repeat("    ", removed_tab_count) + without_tabs + "\n" +
-            StringUtils.repeat("   ", removed_tab_count) + StringUtils.repeat(" ", errorLocation.column() - 1) + "^\n";
+            StringUtils.repeat("   ", removed_tab_count) + StringUtils.repeat(" ", errorLocation.column()) + StringUtils.repeat("^", Math.max(errorLocation.marking(), 1)) + "\n";
     }
 }

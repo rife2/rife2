@@ -100,7 +100,27 @@
 		<div id="title">Errors occurred while processing the request.</div>
 		<div id="exceptions">
 			<!--v exceptions--><!--/v-->
-			
+			<!--b exception-->
+				<i><!--v exception_class_name-->class_name<!--/v--></i><br />
+				<br />
+				<b><!--v exception_message-->exception_message<!--/v--></b><br />
+				<br />
+				<table>
+					<!--v exception_stack_trace--><!--/v-->
+				</table>
+				<br />
+			<!--/b-->
+			<!--b exception_compilation-->
+				<i><!--v exception_class_name-->class_name<!--/v--></i><br />
+				<br />
+				<pre><!--v exception_message-->exception_message<!--/v--></pre>
+				<br />
+				<table>
+					<!--v exception_stack_trace--><!--/v-->
+				</table>
+				<br />
+			<!--/b-->
+
 			<!--b stack_trace_line-->
 				<tr>
 					<td nowrap="nowrap"><span class="at">at</span>&nbsp;&nbsp;<span class="class"><!--v class_name-->class_name<!--/v--></span></td>

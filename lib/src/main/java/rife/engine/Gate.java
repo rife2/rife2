@@ -143,24 +143,7 @@ public class Gate {
 
         // pretty exception formatting and outputting instead of the default servlet
         // engine's formatting
-        Template template = null;
-
-        Throwable cause = exception;
-        while (cause != null && cause.getCause() != cause) {
-
-            if (cause instanceof SyntaxErrorException) {
-                template = template_factory.get("errors.rife.engine_error_compilation");
-                break;
-            }
-
-            cause = cause.getCause();
-        }
-
-        if (null == template) {
-            template = template_factory.get("errors.rife.engine_error_default");
-        }
-
-
+        Template template = template_factory.get("errors.rife.engine_error");
         template.setValue("exceptions", ExceptionFormattingUtils.formatExceptionStackTrace(exception, template));
         template.setValue("RIFE_VERSION", template.getEncoder().encode(Version.getVersion()));
 

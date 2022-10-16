@@ -2708,7 +2708,7 @@ public abstract class StringUtils {
 
         column = characterIndex - last_linebreak_index + 1;
 
-        return new DocumentPosition(document.substring(last_linebreak_index, next_linebreak_index), line, column);
+        return new DocumentPosition(document.substring(last_linebreak_index, next_linebreak_index), line, column, 1);
     }
 
     /**
