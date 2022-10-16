@@ -73,7 +73,7 @@ public class ObjectUtils {
         }
 
         try {
-            Method method = object.getClass().getMethod("clone", (Class[]) null);
+            var method = object.getClass().getMethod("clone", (Class[]) null);
             method.setAccessible(true);
             return (T) method.invoke(object, (Object[]) null);
         } catch (Exception e) {
@@ -94,7 +94,7 @@ public class ObjectUtils {
             return null;
         }
 
-        String classname = object.getClass().getName();
+        var classname = object.getClass().getName();
 
         // check if it's an array
         if ('[' == classname.charAt(0)) {
@@ -124,7 +124,7 @@ public class ObjectUtils {
             }
 
             // get the base type and the dimension count of the array
-            int dimension_count = 1;
+            var dimension_count = 1;
             while (classname.charAt(dimension_count) == '[') {
                 dimension_count += 1;
             }
@@ -134,23 +134,22 @@ public class ObjectUtils {
             } else {
                 try {
                     baseClass = Class.forName(classname.substring(dimension_count + 1, classname.length() - 1));
-                }
-                catch (ClassNotFoundException e) {
+                } catch (ClassNotFoundException e) {
                     Logger.getLogger("rife.tools").severe("Internal error: class definition inconsistency: " + classname);
                     return null;
                 }
             }
 
             // instantiate the array but make all but the first dimension 0.
-            int[] dimensions = new int[dimension_count];
+            var dimensions = new int[dimension_count];
             dimensions[0] = Array.getLength(object);
-            for (int i = 1; i < dimension_count; i += 1) {
+            for (var i = 1; i < dimension_count; i += 1) {
                 dimensions[i] = 0;
             }
-            T copy = (T) Array.newInstance(baseClass, dimensions);
+            var copy = (T) Array.newInstance(baseClass, dimensions);
 
             // now fill in the next level down by recursion.
-            for (int i = 0; i < dimensions[0]; i += 1) {
+            for (var i = 0; i < dimensions[0]; i += 1) {
                 Array.set(copy, i, deepClone(Array.get(object, i)));
             }
 
@@ -161,11 +160,11 @@ public class ObjectUtils {
             object instanceof Cloneable) {
 
             // instantiate the new collection and clear it
-            Collection copy = (Collection) ObjectUtils.genericClone(object);
+            var copy = (Collection) ObjectUtils.genericClone(object);
             copy.clear();
 
             // clone all the values in the collection individually
-            for (Object element : collection) {
+            for (var element : collection) {
                 copy.add(deepClone(element));
             }
 
@@ -176,11 +175,11 @@ public class ObjectUtils {
             object instanceof Cloneable) {
 
             // instantiate the new map and clear it
-            Map copy = (Map) ObjectUtils.genericClone(object);
+            var copy = (Map) ObjectUtils.genericClone(object);
             copy.clear();
 
             // now clone all the keys and values of the entries
-            Iterator collection_it = map.entrySet().iterator();
+            var collection_it = map.entrySet().iterator();
             Map.Entry entry = null;
             while (collection_it.hasNext()) {
                 entry = (Map.Entry) collection_it.next();
@@ -191,7 +190,7 @@ public class ObjectUtils {
         }
         // use the generic clone method
         else {
-            T copy = ObjectUtils.genericClone(object);
+            var copy = ObjectUtils.genericClone(object);
             if (null == copy) {
                 throw new CloneNotSupportedException(object.getClass().getName());
             }
@@ -210,10 +209,10 @@ public class ObjectUtils {
             return Void.TYPE;
         }
 
-        String className = object.getClass().getName();
+        var className = object.getClass().getName();
 
         // skip forward over the array dimensions
-        int dims = 0;
+        var dims = 0;
         while (className.charAt(dims) == '[') {
             dims += 1;
         }

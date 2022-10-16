@@ -8,7 +8,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 
 public interface BeanPropertyValueProcessor {
-    public void gotProperty(String name, PropertyDescriptor descriptor, Object value)
+    void gotProperty(String name, PropertyDescriptor descriptor, Object value)
     throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 }
 

@@ -41,7 +41,7 @@ public class Server {
         rife_filter.site(site);
         var filter_holder = new FilterHolder(rife_filter);
 
-        ServletContextHandler ctx = new ServletContextHandler();
+        var ctx = new ServletContextHandler();
         ctx.setContextPath("/");
 
         var default_servlet = new DefaultServlet();

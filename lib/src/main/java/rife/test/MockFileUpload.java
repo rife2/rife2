@@ -111,19 +111,19 @@ public class MockFileUpload {
     }
 
     private void guessContentType() {
-        String extension = getExtension(getFileName());
+        var extension = getExtension(getFileName());
         if (null == extension) {
             return;
         }
 
-        String content_type = RifeConfig.Mime.getMimeType(extension);
+        var content_type = RifeConfig.Mime.getMimeType(extension);
         if (content_type != null) {
             contentType_ = content_type;
         }
     }
 
     private String getExtension(String fileName) {
-        int last_dot_index = fileName.lastIndexOf('.');
+        var last_dot_index = fileName.lastIndexOf('.');
         if (-1 == last_dot_index) {
             return null;
         }

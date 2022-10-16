@@ -6,5 +6,4 @@ package rife.template;
 
 public enum TemplateConfig {
     XML, TXT
-
 }

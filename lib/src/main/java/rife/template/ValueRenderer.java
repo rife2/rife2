@@ -32,7 +32,7 @@ public interface ValueRenderer {
      * @return the rendered text
      * @since 1.0
      */
-    public String render(Template template, String valueId, String differentiator);
+    String render(Template template, String valueId, String differentiator);
 }
 
 

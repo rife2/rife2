@@ -65,7 +65,7 @@ public class TemplateDeployer {
         String classname;
 
         for (var directory : directories_) {
-            ResourceFinderGroup group = new ResourceFinderGroup()
+            var group = new ResourceFinderGroup()
                 .add(new ResourceFinderDirectories(new File[]{directory}))
                 .add(ResourceFinderClasspath.instance());
             templateFactory_.setResourceFinder(group);
@@ -73,7 +73,7 @@ public class TemplateDeployer {
                 Pattern.compile(".*\\" + templateFactory_.getParser().getExtension() + "$"),
                 Pattern.compile(".*(SCCS|CVS|\\.svn|\\.git).*"));
 
-            for (String file : files) {
+            for (var file : files) {
                 if (!StringUtils.filter(file, include_, exclude_)) {
                     continue;
                 }
@@ -111,7 +111,7 @@ public class TemplateDeployer {
         if (arguments.length < 1) {
             valid_arguments = false;
         } else {
-            for (int i = 0; i < arguments.length; i++) {
+            for (var i = 0; i < arguments.length; i++) {
                 if (arguments[i].startsWith("-")) {
                     if (arguments[i].equals("-t")) {
                         i++;
@@ -145,8 +145,8 @@ public class TemplateDeployer {
                         if (arguments[i].startsWith("-")) {
                             valid_arguments = false;
                         } else {
-                            List<String> class_names = StringUtils.split(arguments[i], ":");
-                            for (String class_name : class_names) {
+                            var class_names = StringUtils.split(arguments[i], ":");
+                            for (var class_name : class_names) {
                                 try {
                                     Class.forName(class_name);
                                 } catch (ClassNotFoundException e) {
@@ -213,7 +213,7 @@ public class TemplateDeployer {
         }
 
         RifeConfig.template().setGenerateClasses(true);
-        TemplateDeployer deployer = new TemplateDeployer(verbose, directory_paths, factory, include, exclude);
+        var deployer = new TemplateDeployer(verbose, directory_paths, factory, include, exclude);
         deployer.execute();
     }
 }

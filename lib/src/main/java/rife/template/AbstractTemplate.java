@@ -45,7 +45,7 @@ public abstract class AbstractTemplate implements Template {
         }
 
         if (fixedValues_.containsKey(valueId)) {
-            InternalValue constructed_value = new InternalValue(this);
+            var constructed_value = new InternalValue(this);
             constructed_value.appendText(fixedValues_.get(valueId));
             if (!appendBlockInternalForm(blockId, constructed_value)) {
                 throw new BlockUnknownException(blockId);
@@ -57,7 +57,7 @@ public abstract class AbstractTemplate implements Template {
                 throw new BlockUnknownException(blockId);
             }
         } else {
-            InternalValue constructed_value = new InternalValue(this);
+            var constructed_value = new InternalValue(this);
             if (!appendBlockInternalForm(blockId, constructed_value)) {
                 throw new BlockUnknownException(blockId);
             }
@@ -84,7 +84,7 @@ public abstract class AbstractTemplate implements Template {
 
         fixedValues_.remove(valueId);
 
-        InternalValue constructed_value = new InternalValue(this);
+        var constructed_value = new InternalValue(this);
         if (!appendBlockInternalForm(blockId, constructed_value)) {
             throw new BlockUnknownException(blockId);
         }
@@ -98,7 +98,7 @@ public abstract class AbstractTemplate implements Template {
             throw new BlockUnknownException(id);
         }
 
-        ExternalValue result = new ExternalValue();
+        var result = new ExternalValue();
 
         if (!appendBlockExternalForm(id, result)) {
             throw new BlockUnknownException(id);
@@ -108,14 +108,14 @@ public abstract class AbstractTemplate implements Template {
 
     public final String getContent()
     throws TemplateException {
-        List<String> set_values = processLateTags();
+        var set_values = processLateTags();
 
-        ExternalValue result = new ExternalValue();
+        var result = new ExternalValue();
 
         if (!appendBlockExternalForm("", result)) {
             throw new BlockUnknownException("");
         }
-        String content = result.toString();
+        var content = result.toString();
         removeValues(set_values);
         return content;
     }
@@ -135,7 +135,7 @@ public abstract class AbstractTemplate implements Template {
             throw new BlockUnknownException(id);
         }
 
-        ExternalValue result = new ExternalValue();
+        var result = new ExternalValue();
 
         if (!appendBlockExternalForm(id, result)) {
             throw new BlockUnknownException(id);
@@ -155,7 +155,7 @@ public abstract class AbstractTemplate implements Template {
             return;
         }
 
-        ExternalValue result = new ExternalValue();
+        var result = new ExternalValue();
 
         if (!appendBlockExternalForm("", result)) {
             throw new BlockUnknownException("");
@@ -176,7 +176,7 @@ public abstract class AbstractTemplate implements Template {
             throw new BlockUnknownException(id);
         }
 
-        ExternalValue result = new ExternalValue();
+        var result = new ExternalValue();
 
         if (!appendBlockExternalForm(id, result)) {
             throw new BlockUnknownException(id);
@@ -187,9 +187,9 @@ public abstract class AbstractTemplate implements Template {
 
     public final List<CharSequence> getDeferredContent()
     throws TemplateException {
-        List<String> set_values = processLateTags();
+        var set_values = processLateTags();
 
-        ExternalValue result = new ExternalValue();
+        var result = new ExternalValue();
 
         if (!appendBlockExternalForm("", result)) {
             throw new BlockUnknownException("");
@@ -228,12 +228,12 @@ public abstract class AbstractTemplate implements Template {
     private void _evaluateRenderTags(List<String> setValues)
     throws TemplateException {
         if (hasFilteredValues(TemplateFactoryFilters.TAG_RENDER)) {
-            List<String[]> render_tags = getFilteredValues(TemplateFactoryFilters.TAG_RENDER);
-            for (String[] captured_groups : render_tags) {
+            var render_tags = getFilteredValues(TemplateFactoryFilters.TAG_RENDER);
+            for (var captured_groups : render_tags) {
                 // only execute the renderer if the value hasn't been set in the
                 // template yet
                 if (!isValueSet(captured_groups[0])) {
-                    String classname = captured_groups[1];
+                    var classname = captured_groups[1];
                     try {
                         Class klass = Class.forName(classname);
                         if (!ValueRenderer.class.isAssignableFrom(klass)) {
@@ -266,12 +266,12 @@ public abstract class AbstractTemplate implements Template {
     }
 
     private void _evaluateConfigTags(List<String> setValues) {
-        List<String[]> config_tags = getFilteredValues(TemplateFactoryFilters.TAG_CONFIG);
+        var config_tags = getFilteredValues(TemplateFactoryFilters.TAG_CONFIG);
         if (config_tags != null) {
             String config_key = null;
             String config_value = null;
 
-            for (String[] captured_groups : config_tags) {
+            for (var captured_groups : config_tags) {
                 // only set the config value if the value hasn't been set in the
                 // template yet
                 if (!isValueSet(captured_groups[0])) {
@@ -320,7 +320,7 @@ public abstract class AbstractTemplate implements Template {
                         if (hasResourceBundles()) {
                             l10n_key = captured_groups[1];
 
-                            for (ResourceBundle bundle : resourceBundles_) {
+                            for (var bundle : resourceBundles_) {
                                 // obtain the configuration value
                                 try {
                                     l10n_value = bundle.getString(l10n_key);
@@ -680,7 +680,7 @@ public abstract class AbstractTemplate implements Template {
             return fixedValues_.get(id).toString();
         }
         if (constructedValues_.containsKey(id)) {
-            ExternalValue result = new ExternalValue();
+            var result = new ExternalValue();
             constructedValues_.get(id).appendExternalForm(result);
             return result.toString();
         }
@@ -712,7 +712,7 @@ public abstract class AbstractTemplate implements Template {
             return false;
         }
 
-        ExternalValue temp_value = new ExternalValue();
+        var temp_value = new ExternalValue();
 
         return appendBlockExternalForm(id, temp_value);
     }
@@ -747,7 +747,7 @@ public abstract class AbstractTemplate implements Template {
             return;
         }
 
-        for (String id : ids) {
+        for (var id : ids) {
             removeValue(id);
         }
     }
@@ -804,7 +804,7 @@ public abstract class AbstractTemplate implements Template {
             return;
         }
 
-        InternalValue constructed_value = constructedValues_.get(id);
+        var constructed_value = constructedValues_.get(id);
         if (constructed_value != null) {
             constructed_value.appendExternalForm(result);
             return;
@@ -824,7 +824,7 @@ public abstract class AbstractTemplate implements Template {
             return;
         }
 
-        InternalValue constructed_value = constructedValues_.get(id);
+        var constructed_value = constructedValues_.get(id);
         if (constructed_value != null) {
             result.appendConstructedValue(constructed_value);
             return;
@@ -1012,13 +1012,13 @@ public abstract class AbstractTemplate implements Template {
 
         new_template.fixedValues_ = new HashMap<>();
 
-        for (String value_id : fixedValues_.keySet()) {
+        for (var value_id : fixedValues_.keySet()) {
             new_template.fixedValues_.put(value_id, fixedValues_.get(value_id));
         }
 
         new_template.constructedValues_ = new HashMap<>();
 
-        for (String constructed_value_id : constructedValues_.keySet()) {
+        for (var constructed_value_id : constructedValues_.keySet()) {
             new_template.constructedValues_.put(constructed_value_id, constructedValues_.get(constructed_value_id));
         }
 

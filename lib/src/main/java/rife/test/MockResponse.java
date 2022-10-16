@@ -6,7 +6,6 @@ package rife.test;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import rife.engine.*;
 
 import java.io.*;
@@ -17,10 +16,8 @@ import rife.template.Template;
 import rife.tools.ExceptionUtils;
 import rife.tools.StringUtils;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.namespace.QName;
-import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
@@ -101,7 +98,7 @@ public class MockResponse extends AbstractResponse {
      * @since 1.1
      */
     public String getText() {
-        String charset = characterEncoding_;
+        var charset = characterEncoding_;
         if (null == charset) {
             charset = StringUtils.ENCODING_ISO_8859_1;
         }
@@ -219,13 +216,13 @@ public class MockResponse extends AbstractResponse {
 
     private Object xpath(String expression, QName returnType)
     throws XPathExpressionException {
-        Matcher matcher = STRIP_XHTML_XMLNS.matcher(getText());
-        String text = matcher.replaceAll("html xmlns=\"\"");
+        var matcher = STRIP_XHTML_XMLNS.matcher(getText());
+        var text = matcher.replaceAll("html xmlns=\"\"");
         Reader reader = new StringReader(text);
 
-        InputSource inputsource = new InputSource(reader);
-        XPath xpath = XPathFactory.newInstance().newXPath();
-        return xpath.evaluate(expression, inputsource, returnType);
+        var input_source = new InputSource(reader);
+        var xpath = XPathFactory.newInstance().newXPath();
+        return xpath.evaluate(expression, input_source, returnType);
     }
 
 
@@ -319,7 +316,7 @@ public class MockResponse extends AbstractResponse {
 
     private Object xpath(String expression, Object context, QName returnType)
     throws XPathExpressionException {
-        XPath xpath = XPathFactory.newInstance().newXPath();
+        var xpath = XPathFactory.newInstance().newXPath();
         return xpath.evaluate(expression, context, returnType);
     }
 
@@ -338,17 +335,17 @@ public class MockResponse extends AbstractResponse {
             }
         } else {
             // Look for encoding in contentType
-            int i0 = contentType.indexOf(';');
+            var i0 = contentType.indexOf(';');
 
             if (i0 > 0) {
                 // Strip params off mimetype
                 contentType_ = contentType.substring(0, i0).trim();
 
                 // Look for charset
-                int i1 = contentType.indexOf("charset=", i0);
+                var i1 = contentType.indexOf("charset=", i0);
                 if (i1 >= 0) {
                     i1 += 8;
-                    int i2 = contentType.indexOf(' ', i1);
+                    var i2 = contentType.indexOf(' ', i1);
                     characterEncoding_ = (0 < i2)
                         ? contentType.substring(i1, i2)
                         : contentType.substring(i1);
@@ -412,8 +409,8 @@ public class MockResponse extends AbstractResponse {
      * @since 1.1
      */
     public List<String> getNewCookieNames() {
-        ArrayList<String> names = new ArrayList<String>();
-        for (Cookie cookie : newCookies_.values()) {
+        var names = new ArrayList<String>();
+        for (var cookie : newCookies_.values()) {
             if (!names.contains(cookie.getName())) {
                 names.add(cookie.getName());
             }
@@ -591,7 +588,7 @@ public class MockResponse extends AbstractResponse {
     }
 
     public String encodeURL(String url) {
-        MockRequest request = (MockRequest) getRequest();
+        var request = (MockRequest) getRequest();
 
         // should not encode if cookies in evidence
         if (null == request ||
@@ -600,7 +597,7 @@ public class MockResponse extends AbstractResponse {
         }
 
         // get session
-        HttpSession session = getRequest().getSession(false);
+        var session = getRequest().getSession(false);
 
         // no session or no url
         if (null == session || null == url) {
@@ -608,15 +605,15 @@ public class MockResponse extends AbstractResponse {
         }
 
         // invalid session
-        String id = session.getId();
+        var id = session.getId();
         if (null == id) {
             return url;
         }
 
         // Already encoded
-        int prefix = url.indexOf(MockConversation.SESSION_URL_PREFIX);
+        var prefix = url.indexOf(MockConversation.SESSION_URL_PREFIX);
         if (prefix != -1) {
-            int suffix = url.indexOf("?", prefix);
+            var suffix = url.indexOf("?", prefix);
             if (suffix < 0) {
                 suffix = url.indexOf("#", prefix);
             }
@@ -629,7 +626,7 @@ public class MockResponse extends AbstractResponse {
         }
 
         // edit the session
-        int suffix = url.indexOf('?');
+        var suffix = url.indexOf('?');
         if (suffix < 0) {
             suffix = url.indexOf('#');
         }
@@ -665,7 +662,7 @@ public class MockResponse extends AbstractResponse {
         /* if there is no writer yet */
         if (mockWriter_ == null) {
             /* get encoding from Content-Type header */
-            String encoding = getCharacterEncoding();
+            var encoding = getCharacterEncoding();
 
             if (encoding == null) {
                 encoding = StringUtils.ENCODING_ISO_8859_1;
@@ -785,10 +782,10 @@ public class MockResponse extends AbstractResponse {
 
             _lastStart = _i;
 
-            int state = 0;
-            boolean escape = false;
+            var state = 0;
+            var escape = false;
             while (_i < _string.length()) {
-                char c = _string.charAt(_i++);
+                var c = _string.charAt(_i++);
 
                 switch (state) {
                     case 0: // Start
@@ -876,7 +873,7 @@ public class MockResponse extends AbstractResponse {
         throws NoSuchElementException {
             if (!hasMoreTokens() || _token == null)
                 throw new NoSuchElementException();
-            String t = _token.toString();
+            var t = _token.toString();
             _token.setLength(0);
             _hasToken = false;
             return t;
@@ -929,13 +926,13 @@ public class MockResponse extends AbstractResponse {
                 return "\"\"";
 
 
-            for (int i = 0; i < s.length(); i++) {
-                char c = s.charAt(i);
+            for (var i = 0; i < s.length(); i++) {
+                var c = s.charAt(i);
                 if (c == '"' ||
                     c == '\\' ||
                     c == '\'' ||
                     delim.indexOf(c) >= 0) {
-                    StringBuilder b = new StringBuilder(s.length() + 8);
+                    var b = new StringBuilder(s.length() + 8);
                     quote(b, s);
                     return b.toString();
                 }
@@ -954,8 +951,8 @@ public class MockResponse extends AbstractResponse {
          */
         public static void quote(StringBuilder buf, String s) {
             buf.append('"');
-            for (int i = 0; i < s.length(); i++) {
-                char c = s.charAt(i);
+            for (var i = 0; i < s.length(); i++) {
+                var c = s.charAt(i);
                 if (c == '"') {
                     buf.append("\\\"");
                     continue;
@@ -984,15 +981,15 @@ public class MockResponse extends AbstractResponse {
             if (s.length() < 2)
                 return s;
 
-            char first = s.charAt(0);
-            char last = s.charAt(s.length() - 1);
+            var first = s.charAt(0);
+            var last = s.charAt(s.length() - 1);
             if (first != last || (first != '"' && first != '\''))
                 return s;
 
-            StringBuilder b = new StringBuilder(s.length() - 2);
-            boolean quote = false;
-            for (int i = 1; i < s.length() - 1; i++) {
-                char c = s.charAt(i);
+            var b = new StringBuilder(s.length() - 2);
+            var quote = false;
+            for (var i = 1; i < s.length() - 1; i++) {
+                var c = s.charAt(i);
 
                 if (c == '\\' && !quote) {
                     quote = true;

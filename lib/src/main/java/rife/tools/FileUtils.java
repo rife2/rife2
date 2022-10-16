@@ -35,11 +35,11 @@ public abstract class FileUtils {
             return new ArrayList<String>();
         }
 
-        var filelist = new ArrayList<String>();
+        var file_list = new ArrayList<String>();
         if (file.isDirectory()) {
             var list = file.list();
             if (null != list) {
-                for (String list_entry : list) {
+                for (var list_entry : list) {
                     var next_file = new File(file.getAbsolutePath() + File.separator + list_entry);
                     var dir = getFileList(next_file, included, excluded, false);
 
@@ -54,15 +54,15 @@ public abstract class FileUtils {
                             file_name = file.getName() + File.separator + file_name;
                         }
 
-                        var filelist_size = filelist.size();
-                        for (int j = 0; j < filelist_size; j++) {
-                            if (filelist.get(j).compareTo(file_name) > 0) {
-                                filelist.add(j, file_name);
+                        var filelist_size = file_list.size();
+                        for (var j = 0; j < filelist_size; j++) {
+                            if (file_list.get(j).compareTo(file_name) > 0) {
+                                file_list.add(j, file_name);
                                 break;
                             }
                         }
-                        if (filelist.size() == filelist_size) {
-                            filelist.add(file_name);
+                        if (file_list.size() == filelist_size) {
+                            file_list.add(file_name);
                         }
                     }
                 }
@@ -72,14 +72,14 @@ public abstract class FileUtils {
 
             if (root) {
                 if (StringUtils.filter(file_name, included, excluded)) {
-                    filelist.add(file_name);
+                    file_list.add(file_name);
                 }
             } else {
-                filelist.add(file_name);
+                file_list.add(file_name);
             }
         }
 
-        return filelist;
+        return file_list;
     }
 
     public static void moveFile(File source, File target)
@@ -113,11 +113,11 @@ public abstract class FileUtils {
             target.mkdirs();
         }
 
-        var filelist = source.list();
+        var file_list = source.list();
 
-        for (var filelist_element : filelist) {
-            var current_file = new File(source.getAbsolutePath() + File.separator + filelist_element);
-            var target_file = new File(target.getAbsolutePath() + File.separator + filelist_element);
+        for (var element : file_list) {
+            var current_file = new File(source.getAbsolutePath() + File.separator + element);
+            var target_file = new File(target.getAbsolutePath() + File.separator + element);
 
             if (current_file.isDirectory()) {
                 moveDirectory(current_file, target_file);
@@ -139,10 +139,10 @@ public abstract class FileUtils {
             throw new FileUtilsErrorException("The directory '" + source.getAbsolutePath() + "' does not exist");
         }
 
-        var filelist = source.list();
+        var file_list = source.list();
 
-        for (var filelist_element : filelist) {
-            File current_file = new File(source.getAbsolutePath() + File.separator + filelist_element);
+        for (var element : file_list) {
+            var current_file = new File(source.getAbsolutePath() + File.separator + element);
 
             if (current_file.isDirectory()) {
                 deleteDirectory(current_file);
@@ -162,7 +162,7 @@ public abstract class FileUtils {
 
         try {
             var buffer = new byte[1024];
-            int return_value = -1;
+            var return_value = -1;
 
             return_value = inputStream.read(buffer);
 
@@ -231,7 +231,7 @@ public abstract class FileUtils {
 
         try {
             var buffer = new byte[1024];
-            int return_value = -1;
+            var return_value = -1;
             var output_stream = new ByteArrayOutputStream(buffer.length);
 
             return_value = inputStream.read(buffer);
@@ -263,10 +263,10 @@ public abstract class FileUtils {
         if (null == reader) throw new IllegalArgumentException("reader can't be null.");
 
         try {
-            char[] buffer = new char[1024];
+            var buffer = new char[1024];
             var result = new StringBuilder();
 
-            int size = reader.read(buffer);
+            var size = reader.read(buffer);
             while (size != -1) {
                 result.append(buffer, 0, size);
                 size = reader.read(buffer);
@@ -448,14 +448,14 @@ public abstract class FileUtils {
             StringBuilder output_file_directoryname = null;
             File output_file_directory = null;
             FileOutputStream file_output_stream = null;
-            byte[] buffer = new byte[1024];
-            int return_value = -1;
+            var buffer = new byte[1024];
+            var return_value = -1;
 
             entry = (ZipEntry) entries.nextElement();
             try {
                 input_stream = zip_file.getInputStream(entry);
             } catch (IOException e) {
-                throw new FileUtilsErrorException("Error while obtaining the inputstream for entry '" + entry.getName() + "'.", e);
+                throw new FileUtilsErrorException("Error while obtaining the input stream for entry '" + entry.getName() + "'.", e);
             }
 
             output_filename = destination.getAbsolutePath() + File.separator + entry.getName().replace('/', File.separatorChar);
@@ -505,7 +505,7 @@ public abstract class FileUtils {
         try {
             zip_file.close();
         } catch (IOException e) {
-            throw new FileUtilsErrorException("Error while closing the zipfile '" + source.getAbsolutePath() + "'.", e);
+            throw new FileUtilsErrorException("Error while closing the zip file '" + source.getAbsolutePath() + "'.", e);
         }
     }
 
@@ -518,7 +518,7 @@ public abstract class FileUtils {
 
         String basename = null;
 
-        int index = fileName.lastIndexOf('.');
+        var index = fileName.lastIndexOf('.');
         if (index > 0 && index < fileName.length() - 1) {
             basename = fileName.substring(0, index);
         }
@@ -535,7 +535,7 @@ public abstract class FileUtils {
 
         String ext = null;
 
-        int index = fileName.lastIndexOf('.');
+        var index = fileName.lastIndexOf('.');
         if (index > 0 && index < fileName.length() - 1) {
             ext = fileName.substring(index + 1).toLowerCase();
         }

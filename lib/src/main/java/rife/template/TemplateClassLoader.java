@@ -43,7 +43,7 @@ class TemplateClassLoader extends ClassLoader {
                 // if the template was modified, don't use the cached class
                 // otherwise, just take the previous template class
                 if (isTemplateModified(c, transformer)) {
-                    TemplateClassLoader new_classloader = new TemplateClassLoader(templateFactory_, this.getParent());
+                    var new_classloader = new TemplateClassLoader(templateFactory_, this.getParent());
                     // register the new classloader as the default templatefactory's
                     // classloader
                     templateFactory_.setClassLoader(new_classloader);
@@ -54,7 +54,7 @@ class TemplateClassLoader extends ClassLoader {
         // try to obtain the class in another way
         else {
             // try to obtain it from the parent classloader or from the system classloader
-            ClassLoader parent = getParent();
+            var parent = getParent();
             if (parent != null) {
                 try {
                     // the parent is never a TemplateClassLoader, it's always the
@@ -67,7 +67,7 @@ class TemplateClassLoader extends ClassLoader {
                     // file, make sure it's returned immediately and don't try to recompile it
                     if (c != null &&
                         RifeConfig.template().getAutoReload()) {
-                        URL resource = parent.getResource(classname.replace('.', '/') + ".class");
+                        var resource = parent.getResource(classname.replace('.', '/') + ".class");
                         if (resource != null &&
                             resource.getPath().indexOf('!') != -1) {
                             // resolve the class if it's needed
@@ -96,6 +96,7 @@ class TemplateClassLoader extends ClassLoader {
                 !classname.startsWith("java.") &&
                 !classname.startsWith("javax.") &&
                 !classname.startsWith("sun.") &&
+                !classname.startsWith("jakarta.") &&
                 Template.class.isAssignableFrom(c)) {
                 // verify if the template in the classpath has been updated
                 if (RifeConfig.template().getAutoReload() &&
@@ -117,7 +118,7 @@ class TemplateClassLoader extends ClassLoader {
                     // reuse the existing class if it has already been defined
                     c = findLoadedClass(classname);
                     if (null == c) {
-                        byte[] raw = compileTemplate(classname, encoding, transformer);
+                        var raw = compileTemplate(classname, encoding, transformer);
 
                         // define the bytes of the class for this classloader
                         c = defineClass(classname, raw, 0, raw.length);
@@ -141,14 +142,14 @@ class TemplateClassLoader extends ClassLoader {
         assert classname != null;
 
         // try to resolve the classname as a template name by resolving the template
-        URL template_url = templateFactory_.getParser().resolve(classname);
+        var template_url = templateFactory_.getParser().resolve(classname);
         if (null == template_url) {
             throw new ClassNotFoundException("Couldn't resolve template: '" + classname + "'.");
         }
 
         // prepare the template with all the information that's needed to be able to identify
         // this template uniquely
-        Parsed template_parsed = templateFactory_.getParser().prepare(classname, template_url);
+        var template_parsed = templateFactory_.getParser().prepare(classname, template_url);
 
         // parse the template
         try {
@@ -157,20 +158,20 @@ class TemplateClassLoader extends ClassLoader {
             throw new ClassNotFoundException("Error while parsing template: '" + classname + "'.", e);
         }
 
-        byte[] byte_code = template_parsed.getByteCode();
+        var byte_code = template_parsed.getByteCode();
         if (RifeConfig.template().getGenerateClasses()) {
             // get the package and the short classname of the template
-            String template_package = template_parsed.getPackage();
+            var template_package = template_parsed.getPackage();
             template_package = template_package.replace('.', File.separatorChar);
-            String template_classname = template_parsed.getClassName();
+            var template_classname = template_parsed.getClassName();
 
             // setup everything to perform the conversion of the template to java sources
             // and to compile it into a java class
-            String generation_path = RifeConfig.template().getGenerationPath() + File.separatorChar;
-            String packagedir = generation_path + template_package;
-            String filename_class = packagedir + File.separator + template_classname + ".class";
-            File file_packagedir = new File(packagedir);
-            File file_class = new File(filename_class);
+            var generation_path = RifeConfig.template().getGenerationPath() + File.separatorChar;
+            var packagedir = generation_path + template_package;
+            var filename_class = packagedir + File.separator + template_classname + ".class";
+            var file_packagedir = new File(packagedir);
+            var file_class = new File(filename_class);
 
             // prepare the package directory
             if (!file_packagedir.exists()) {
@@ -195,7 +196,7 @@ class TemplateClassLoader extends ClassLoader {
     private boolean isTemplateModified(Class c, TemplateTransformer transformer) {
         assert c != null;
 
-        boolean is_modified = true;
+        var is_modified = true;
         Method is_modified_method = null;
         String modification_state = null;
         if (transformer != null) {

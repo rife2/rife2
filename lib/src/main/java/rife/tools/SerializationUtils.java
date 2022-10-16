@@ -24,15 +24,14 @@ public abstract class SerializationUtils {
         byte[] value_bytes_decoded = null;
         try {
             value_bytes_decoded = Base64.getDecoder().decode(value);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             throw new DeserializationErrorException(null);
         }
         if (null == value_bytes_decoded) {
             throw new DeserializationErrorException(null);
         }
 
-        ByteArrayInputStream bytes_is = new ByteArrayInputStream(value_bytes_decoded);
+        var bytes_is = new ByteArrayInputStream(value_bytes_decoded);
         GZIPInputStream gzip_is = null;
         ObjectInputStream object_is = null;
         try {
@@ -48,7 +47,7 @@ public abstract class SerializationUtils {
     throws SerializationUtilsErrorException {
         if (null == value) throw new IllegalArgumentException("value can't be null.");
 
-        ByteArrayOutputStream byte_os = new ByteArrayOutputStream();
+        var byte_os = new ByteArrayOutputStream();
         GZIPOutputStream gzip_os;
         ObjectOutputStream object_os;
         try {
@@ -62,7 +61,7 @@ public abstract class SerializationUtils {
             throw new SerializationErrorException(value, e);
         }
 
-        byte[] value_bytes_decoded = byte_os.toByteArray();
+        var value_bytes_decoded = byte_os.toByteArray();
 
         return Base64.getEncoder().encodeToString(value_bytes_decoded);
     }

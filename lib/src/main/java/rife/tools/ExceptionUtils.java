@@ -20,7 +20,7 @@ public abstract class ExceptionUtils {
             exception.printStackTrace(print_writer);
 
             stack_trace = string_writer.getBuffer().toString();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
 
         return stack_trace;
@@ -30,7 +30,7 @@ public abstract class ExceptionUtils {
         if (null == exception) throw new IllegalArgumentException("exception can't be null;");
 
         var messages = new StringBuilder();
-        Throwable t = exception;
+        var t = exception;
         while (t != null) {
             if (messages.length() > 0) {
                 messages.append("; ");

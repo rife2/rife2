@@ -324,13 +324,13 @@ public abstract class StringUtils {
         DEFENSIVE_HTML_ENCODE_MAP.put('\u2665', "&hearts;");
         DEFENSIVE_HTML_ENCODE_MAP.put('\u2666', "&diams;");
 
-        Set<Map.Entry<Character, String>> aggresive_entries = AGGRESSIVE_HTML_ENCODE_MAP.entrySet();
-        for (Map.Entry<Character, String> entry : aggresive_entries) {
+        var aggresive_entries = AGGRESSIVE_HTML_ENCODE_MAP.entrySet();
+        for (var entry : aggresive_entries) {
             HTML_DECODE_MAP.put(entry.getValue(), entry.getKey());
         }
 
-        Set<Map.Entry<Character, String>> defensive_entries = DEFENSIVE_HTML_ENCODE_MAP.entrySet();
-        for (Map.Entry<Character, String> entry : defensive_entries) {
+        var defensive_entries = DEFENSIVE_HTML_ENCODE_MAP.entrySet();
+        for (var entry : defensive_entries) {
             HTML_DECODE_MAP.put(entry.getValue(), entry.getKey());
         }
 
@@ -447,8 +447,8 @@ public abstract class StringUtils {
             return null;
         }
 
-        Pattern pattern = Pattern.compile("[^\\w]");
-        Matcher matcher = pattern.matcher(name);
+        var pattern = Pattern.compile("[^\\w]");
+        var matcher = pattern.matcher(name);
 
         return matcher.replaceAll("_");
     }
@@ -463,7 +463,7 @@ public abstract class StringUtils {
         // string is returned as-is
         var encode = false;
         char ch;
-        for (int i = 0; i < source.length(); i++) {
+        for (var i = 0; i < source.length(); i++) {
             ch = source.charAt(i);
 
             if (ch >= 'a' && ch <= 'z' ||
@@ -504,8 +504,7 @@ public abstract class StringUtils {
 
         try {
             return URLEncoder.encode(source, ENCODING_ISO_8859_1);
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             // this should never happen, ISO-8859-1 is a standard encoding
             throw new RuntimeException(e);
         }
@@ -561,8 +560,7 @@ public abstract class StringUtils {
 
                 return encoded.toString();
             }
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             // this should never happen, ISO-8859-1 is a standard encoding
             throw new RuntimeException(e);
         }
@@ -583,14 +581,13 @@ public abstract class StringUtils {
      */
     public static String decodeUrlValue(String source) {
         try {
-            byte[] decoded = Base64.getDecoder().decode(source.substring(2));
+            var decoded = Base64.getDecoder().decode(source.substring(2));
             if (null == decoded) {
                 return null;
             } else {
                 return new String(decoded, StringUtils.ENCODING_UTF_8);
             }
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             // this should never happen, UTF-8 is a standard encoding
             throw new RuntimeException(e);
         }
@@ -622,7 +619,7 @@ public abstract class StringUtils {
 
         var encode = false;
         char ch;
-        for (int i = 0; i < source.length(); i++) {
+        for (var i = 0; i < source.length(); i++) {
             ch = source.charAt(i);
 
             if ((defensive || (ch != '\u0022' && ch != '\u0026' && ch != '\u003C' && ch != '\u003E')) &&
@@ -646,9 +643,9 @@ public abstract class StringUtils {
             return source;
         }
 
-        int current_index = 0;
-        int delimiter_start_index = 0;
-        int delimiter_end_index = 0;
+        var current_index = 0;
+        var delimiter_start_index = 0;
+        var delimiter_end_index = 0;
 
         StringBuilder result = null;
 
@@ -668,14 +665,14 @@ public abstract class StringUtils {
                     }
 
                     // add the decoded entity
-                    String entity = source.substring(delimiter_start_index, delimiter_end_index + 1);
+                    var entity = source.substring(delimiter_start_index, delimiter_end_index + 1);
 
                     current_index = delimiter_end_index + 1;
 
                     // try to decoded numeric entities
                     if (entity.charAt(1) == '#') {
-                        int start = 2;
-                        int radix = 10;
+                        var start = 2;
+                        var radix = 10;
                         // check if the number is hexadecimal
                         if (entity.charAt(2) == 'X' || entity.charAt(2) == 'x') {
                             start++;
@@ -691,7 +688,7 @@ public abstract class StringUtils {
                         }
                     } else {
                         // try to decode the entity as a literal
-                        Character decoded = HTML_DECODE_MAP.get(entity);
+                        var decoded = HTML_DECODE_MAP.get(entity);
                         if (decoded != null) {
                             result.append(decoded);
                         }
@@ -836,11 +833,11 @@ public abstract class StringUtils {
 
         var encoded = new StringBuilder();
         String hexstring = null;
-        for (int i = 0; i < source.length(); i++) {
+        for (var i = 0; i < source.length(); i++) {
             hexstring = Integer.toHexString(source.charAt(i)).toUpperCase();
             encoded.append("\\u");
             // fill with zeros
-            for (int j = hexstring.length(); j < 4; j++) {
+            for (var j = hexstring.length(); j < 4; j++) {
                 encoded.append("0");
             }
             encoded.append(hexstring);
@@ -929,9 +926,9 @@ public abstract class StringUtils {
         var string_to_encode_array = source.toCharArray();
         var last_match = -1;
 
-        for (int i = 0; i < string_to_encode_array.length; i++) {
-            char char_to_encode = string_to_encode_array[i];
-            for (Map<Character, String> encoding_table : encodingTables) {
+        for (var i = 0; i < string_to_encode_array.length; i++) {
+            var char_to_encode = string_to_encode_array[i];
+            for (var encoding_table : encodingTables) {
                 if (encoding_table.containsKey(char_to_encode)) {
                     encoded_string = prepareEncodedString(source, encoded_string, i, last_match, string_to_encode_array);
 
@@ -953,7 +950,7 @@ public abstract class StringUtils {
         if (null == encoded_string) {
             return source;
         } else {
-            int difference = string_to_encode_array.length - (last_match + 1);
+            var difference = string_to_encode_array.length - (last_match + 1);
             if (difference > 0) {
                 encoded_string.append(string_to_encode_array, last_match + 1, difference);
             }
@@ -990,7 +987,7 @@ public abstract class StringUtils {
 
         public void appendFallback(StringBuilder encodedBuffer, char character) {
             encodedBuffer.append(PREFIX);
-            encodedBuffer.append((int)character);
+            encodedBuffer.append((int) character);
             encodedBuffer.append(SUFFIX);
         }
     }
@@ -1017,13 +1014,13 @@ public abstract class StringUtils {
             return source;
         }
 
-        StringBuilder encoded_string = new StringBuilder();
+        var encoded_string = new StringBuilder();
 
         char b;
         char c = 0;
         String hhhh;
         int i;
-        int len = source.length();
+        var len = source.length();
 
         for (i = 0; i < len; i += 1) {
             b = c;
@@ -1115,8 +1112,8 @@ public abstract class StringUtils {
 
 
     public static String encodeHex(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < bytes.length; ++i) {
+        var sb = new StringBuilder();
+        for (var i = 0; i < bytes.length; ++i) {
             sb.append(Integer.toHexString((bytes[i] & 0xFF) | 0x100), 1, 3);
         }
         return sb.toString();
@@ -1318,7 +1315,7 @@ public abstract class StringUtils {
         var string_parts = split(source, separator, matchCase);
         var number_of_valid_parts = 0;
 
-        for (String string_part : string_parts) {
+        for (var string_part : string_parts) {
             try {
                 Integer.parseInt(string_part);
                 number_of_valid_parts++;
@@ -1330,7 +1327,7 @@ public abstract class StringUtils {
         var string_parts_int = (int[]) Array.newInstance(int.class, number_of_valid_parts);
         var added_parts = 0;
 
-        for (String string_part : string_parts) {
+        for (var string_part : string_parts) {
             try {
                 string_parts_int[added_parts] = Integer.parseInt(string_part);
                 added_parts++;
@@ -1374,7 +1371,7 @@ public abstract class StringUtils {
     public static byte[] splitToByteArray(String source, String separator, boolean matchCase) {
         var string_parts = split(source, separator, matchCase);
         var number_of_valid_parts = 0;
-        for (String string_part : string_parts) {
+        for (var string_part : string_parts) {
             try {
                 Byte.parseByte(string_part);
                 number_of_valid_parts++;
@@ -1385,7 +1382,7 @@ public abstract class StringUtils {
 
         var string_parts_byte = (byte[]) Array.newInstance(byte.class, number_of_valid_parts);
         var added_parts = 0;
-        for (String string_part : string_parts) {
+        for (var string_part : string_parts) {
             try {
                 string_parts_byte[added_parts] = Byte.parseByte(string_part);
                 added_parts++;
@@ -1487,9 +1484,9 @@ public abstract class StringUtils {
             return source;
         }
 
-        int strip_length = stringToStrip.length();
-        int new_index = 0;
-        int last_index = 0;
+        var strip_length = stringToStrip.length();
+        var new_index = 0;
+        var last_index = 0;
 
         String source_lookup_reference = null;
         if (!matchCase) {
@@ -1562,7 +1559,7 @@ public abstract class StringUtils {
         var new_string = new StringBuilder();
 
         while (string_parts.hasNext()) {
-            String string_part = string_parts.next();
+            var string_part = string_parts.next();
             new_string.append(string_part);
             if (string_parts.hasNext()) {
                 new_string.append(replacementString);
@@ -1690,8 +1687,8 @@ public abstract class StringUtils {
         if (0 == collection.size()) {
             return "";
         } else {
-            StringBuilder result = new StringBuilder();
-            for (Object element : collection) {
+            var result = new StringBuilder();
+            for (var element : collection) {
                 result.append(element);
                 result.append(separator);
             }
@@ -1811,8 +1808,8 @@ public abstract class StringUtils {
         if (0 == array.length) {
             return "";
         } else {
-            int current_index = 0;
-            String result = "";
+            var current_index = 0;
+            var result = "";
             while (current_index < array.length - 1) {
                 result = result + array[current_index] + separator;
                 current_index++;
@@ -1844,8 +1841,8 @@ public abstract class StringUtils {
         if (0 == array.length) {
             return "";
         } else {
-            int current_index = 0;
-            String result = "";
+            var current_index = 0;
+            var result = "";
             while (current_index < array.length - 1) {
                 result = result + array[current_index] + separator;
                 current_index++;
@@ -1877,8 +1874,8 @@ public abstract class StringUtils {
         if (0 == array.length) {
             return "";
         } else {
-            int current_index = 0;
-            String result = "";
+            var current_index = 0;
+            var result = "";
             while (current_index < array.length - 1) {
                 result = result + array[current_index] + separator;
                 current_index++;
@@ -1910,8 +1907,8 @@ public abstract class StringUtils {
         if (0 == array.length) {
             return "";
         } else {
-            int current_index = 0;
-            String result = "";
+            var current_index = 0;
+            var result = "";
             while (current_index < array.length - 1) {
                 result = result + array[current_index] + separator;
                 current_index++;
@@ -1943,8 +1940,8 @@ public abstract class StringUtils {
         if (0 == array.length) {
             return "";
         } else {
-            int current_index = 0;
-            String result = "";
+            var current_index = 0;
+            var result = "";
             while (current_index < array.length - 1) {
                 result = result + array[current_index] + separator;
                 current_index++;
@@ -1976,8 +1973,8 @@ public abstract class StringUtils {
         if (0 == array.length) {
             return "";
         } else {
-            int current_index = 0;
-            String result = "";
+            var current_index = 0;
+            var result = "";
             while (current_index < array.length - 1) {
                 result = result + array[current_index] + separator;
                 current_index++;
@@ -2009,8 +2006,8 @@ public abstract class StringUtils {
         if (0 == array.length) {
             return "";
         } else {
-            int current_index = 0;
-            String result = "";
+            var current_index = 0;
+            var result = "";
             while (current_index < array.length - 1) {
                 result = result + array[current_index] + separator;
                 current_index++;
@@ -2060,8 +2057,8 @@ public abstract class StringUtils {
         if (0 == array.length) {
             return "";
         } else {
-            int current_index = 0;
-            StringBuilder result = new StringBuilder();
+            var current_index = 0;
+            var result = new StringBuilder();
             while (current_index < array.length - 1) {
                 result.append(delimiter);
                 result.append(array[current_index]);
@@ -2156,7 +2153,7 @@ public abstract class StringUtils {
             regexps != null &&
             regexps.size() > 0) {
             Matcher matcher = null;
-            for (Pattern regexp : regexps) {
+            for (var regexp : regexps) {
                 matcher = regexp.matcher(value);
                 if (matcher.matches()) {
                     return matcher;
@@ -2184,7 +2181,7 @@ public abstract class StringUtils {
             values.size() > 0 &&
             regexp != null) {
             Matcher matcher = null;
-            for (String value : values) {
+            for (var value : values) {
                 matcher = regexp.matcher(value);
                 if (matcher.matches()) {
                     return matcher;
@@ -2242,7 +2239,7 @@ public abstract class StringUtils {
         if (null == included) {
             accepted = true;
         } else {
-            for (Pattern pattern : included) {
+            for (var pattern : included) {
                 if (pattern != null &&
                     pattern.matcher(name).matches()) {
                     accepted = true;
@@ -2254,7 +2251,7 @@ public abstract class StringUtils {
         // remove the excludes
         if (accepted &&
             excluded != null) {
-            for (Pattern pattern : excluded) {
+            for (var pattern : excluded) {
                 if (pattern != null &&
                     pattern.matcher(name).matches()) {
                     accepted = false;
@@ -2311,7 +2308,7 @@ public abstract class StringUtils {
     }
 
     private static String convertUrl(String source, Pattern pattern, boolean shorten, boolean sanitize, boolean no_follow) {
-        int max_length = RifeConfig.tools().getMaxVisualUrlLength();
+        var max_length = RifeConfig.tools().getMaxVisualUrlLength();
 
         var result = source;
 
@@ -2320,8 +2317,8 @@ public abstract class StringUtils {
         if (found) {
             String visual_url = null;
             String actual_url = null;
-            int last = 0;
-            StringBuilder sb = new StringBuilder();
+            var last = 0;
+            var sb = new StringBuilder();
             do {
                 actual_url = url_matcher.group(1);
                 if (url_matcher.groupCount() > 1) {
@@ -2360,8 +2357,8 @@ public abstract class StringUtils {
                 if (visual_url.length() <= max_length || !shorten) {
                     sb.append(visual_url);
                 } else {
-                    String ellipsis = "...";
-                    int query_index = visual_url.indexOf("?");
+                    var ellipsis = "...";
+                    var query_index = visual_url.indexOf("?");
 
                     // remove query string but keep '?'
                     if (query_index != -1) {
@@ -2369,8 +2366,8 @@ public abstract class StringUtils {
                     }
 
                     if (visual_url.length() >= max_length) {
-                        int last_slash = visual_url.lastIndexOf("/");
-                        int start_slash = visual_url.indexOf("/", visual_url.indexOf("://") + 3);
+                        var last_slash = visual_url.lastIndexOf("/");
+                        var start_slash = visual_url.indexOf("/", visual_url.indexOf("://") + 3);
 
                         if (last_slash != start_slash) {
                             visual_url = visual_url.substring(0, start_slash + 1) + ellipsis + visual_url.substring(last_slash);
@@ -2430,7 +2427,7 @@ public abstract class StringUtils {
         var convert_bare = false;
         var no_follow_links = false;
         if (options != null) {
-            for (BbcodeOption option : options) {
+            for (var option : options) {
                 switch (option) {
                     case SHORTEN_URL -> shorten = true;
                     case SANITIZE_URL -> sanitize = true;
@@ -2448,7 +2445,7 @@ public abstract class StringUtils {
         int nextCodeIndex;
         while (-1 != (startindex = source_copy.indexOf("[code]"))) {
             // handle parsed
-            String parsed = source_copy.substring(0, startindex);
+            var parsed = source_copy.substring(0, startindex);
             endIndex = source_copy.indexOf("[/code]") + 7;                       // 7 == the sizeof "[/code]"
             nextCodeIndex = source_copy.indexOf("[code]", startindex + 6);       // 6 == the sizeof "[code]"
 
@@ -2463,7 +2460,7 @@ public abstract class StringUtils {
                 /* must end before the next [code]
                  * this will leave a dangling [/code] but the HTML is valid
                  */
-                String sourcecopycopy = source_copy.substring(0, nextCodeIndex) +
+                var sourcecopycopy = source_copy.substring(0, nextCodeIndex) +
                     "[/code]" +
                     source_copy.substring(nextCodeIndex);
                 source_copy = sourcecopycopy;
@@ -2479,7 +2476,7 @@ public abstract class StringUtils {
                 }
             }
 
-            String code = source_copy.substring(startindex, endIndex);
+            var code = source_copy.substring(startindex, endIndex);
 
             parsed = parseBBCode(parsed, shorten, sanitize, convert_bare, no_follow_links);
 
@@ -2517,9 +2514,9 @@ public abstract class StringUtils {
         int startIndex;
         int endIndex;
         while (-1 != (startIndex = resultLowerCopy.indexOf("[*]"))) {
-            int begin = resultLowerCopy.indexOf("[list]", startIndex + 3);
-            int end = resultLowerCopy.indexOf("[/list]", startIndex + 3);
-            int next = resultLowerCopy.indexOf("[*]", startIndex + 3); // 3 == sizeof [*]
+            var begin = resultLowerCopy.indexOf("[list]", startIndex + 3);
+            var end = resultLowerCopy.indexOf("[/list]", startIndex + 3);
+            var next = resultLowerCopy.indexOf("[*]", startIndex + 3); // 3 == sizeof [*]
 
             if (begin == -1) {
                 begin = Integer.MAX_VALUE;
@@ -2559,11 +2556,11 @@ public abstract class StringUtils {
         result = StringUtils.replace(result, "[list]", "<ul>", false);
         result = StringUtils.replace(result, "[/list]", "</ul>", false);
 
-        Matcher color_matcher = BBCODE_COLOR.matcher(result);
+        var color_matcher = BBCODE_COLOR.matcher(result);
         result = color_matcher.replaceAll("<font color=\"$1\">");
         result = StringUtils.replace(result, "[/color]", "</font>", false);
 
-        Matcher size_matcher = BBCODE_SIZE.matcher(result);
+        var size_matcher = BBCODE_SIZE.matcher(result);
         result = size_matcher.replaceAll("<font size=\"$1\">");
         result = StringUtils.replace(result, "[/size]", "</font>", false);
 
@@ -2574,10 +2571,10 @@ public abstract class StringUtils {
             result = convertUrl(result, BBCODE_BAREURL, shorten, sanitize, no_follow);
         }
 
-        Matcher img_matcher = BBCODE_IMG.matcher(result);
+        var img_matcher = BBCODE_IMG.matcher(result);
         result = img_matcher.replaceAll("<div class=\"bbcode_img\"><img src=\"$1\" border=\"0\" alt=\"\" /></div>");
 
-        Matcher quote_matcher_long = BBCODE_QUOTE_LONG.matcher(result);
+        var quote_matcher_long = BBCODE_QUOTE_LONG.matcher(result);
         result = quote_matcher_long.replaceAll("<div class=\"quoteaccount\">$1:</div><div class=\"quotebody\">");
         result = StringUtils.replace(result, "[quote]", "<div class=\"quotebody\">", false);
         result = StringUtils.replace(result, "[/quote]", "</div>", false);
@@ -2694,7 +2691,7 @@ public abstract class StringUtils {
         do {
             line++;
 
-            for (String linebreak : linebreaks) {
+            for (var linebreak : linebreaks) {
                 match = document.indexOf(linebreak, last_linebreak_index);
                 if (match != -1) {
                     if (match >= characterIndex) {
@@ -2778,7 +2775,7 @@ public abstract class StringUtils {
                     // if they were and by removing them the width is not
                     // exceeded, just continue
                     if (Character.isWhitespace(line.charAt(end - 1))) {
-                        for (int j = end - 1; j >= 0; j--) {
+                        for (var j = end - 1; j >= 0; j--) {
                             if (!Character.isWhitespace(line.charAt(j))) {
                                 if (j - line_start < width) {
                                     break_line = false;
@@ -2790,7 +2787,7 @@ public abstract class StringUtils {
                     }
 
                     if (break_line) {
-                        String line_breaked = line.substring(line_start, start);
+                        var line_breaked = line.substring(line_start, start);
                         // this can happen with trailing whitespace
                         if (line_breaked.length() > width) {
                             line_breaked = line_breaked.substring(0, width);

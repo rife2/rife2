@@ -972,8 +972,7 @@ public interface Template extends Cloneable {
      * identifiers each time these features are used, RIFE filters them out at
      * template compilation and keeps them available in a separate collection.
      * <p>This method is mainly used by the framework itself, the supported
-     * filter regular expressions are available from {@link TemplateFactory}
-     * and {@link TemplateFactoryEngineTypes}.
+     * filter regular expressions are available from {@link TemplateFactory}.
      *
      * @param filter a template factory regular expression
      * @return a list of captured groups for matching block ID's
@@ -1001,8 +1000,7 @@ public interface Template extends Cloneable {
      * RIFE filters them out at template compilation and keeps them available
      * in a separate collection.
      * <p>This method is mainly used by the framework itself, the supported
-     * filter regular expressions are available from {@link TemplateFactory}
-     * and {@link TemplateFactoryEngineTypes}.
+     * filter regular expressions are available from {@link TemplateFactory}.
      *
      * @param filter a template factory regular expression
      * @return a list of captured groups for matching value ID's
@@ -1023,7 +1021,7 @@ public interface Template extends Cloneable {
     boolean hasFilteredValues(String filter);
 
     /**
-     * Fills all values in this template which match "<code>L10N:<em>key</em></code>",
+     * Fills all values in this template which match "<code>l10n:<em>key</em></code>",
      * where "<code>key</code>" is a {@linkplain
      * ResourceBundle#getObject(String) key} in a {@linkplain
      * #addResourceBundle(ResourceBundle) resource bundle} registered for this
@@ -1039,10 +1037,10 @@ public interface Template extends Cloneable {
     List<String> evaluateL10nTags();
 
     /**
-     * Fills all values in this template which match "<code>CONFIG:<em>key</em></code>",
+     * Fills all values in this template which match "<code>config:<em>key</em></code>",
      * where "<code>key</code>" is a configuration value name in the {@link
-     * Config} instance returned by {@link Config#getRepInstance()}. Each
-     * valuev will be filled with the value of the configuration option with
+     * rife.config.Config} instance returned by {@link rife.config.Config#instance()}. Each
+     * value will be filled with the value of the configuration option with
      * the corresponding key.
      * <p>This method is normally called automatically during template
      * initialization. You should call it if you wish to re-evaluate the tags
@@ -1054,8 +1052,8 @@ public interface Template extends Cloneable {
     List<String> evaluateConfigTags();
 
     /**
-     * Fills the value "<code>LANG:<em>id</em></code>" with the value of the
-     * block "<code>LANG:<em>id</em>:<em>langid</em></code>", where "<code>id</code>"
+     * Fills the value "<code>lang:<em>id</em></code>" with the value of the
+     * block "<code>lang:<em>id</em>:<em>langid</em></code>", where "<code>id</code>"
      * is the given ID, and "<code>langid</code>" is this template's
      * {@linkplain #getLanguage() current language ID}.
      * <p>If no matching block for the current language is found, the content

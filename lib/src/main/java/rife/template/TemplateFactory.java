@@ -40,7 +40,7 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },
-        BeanHandlerHtml.getInstance(),
+        BeanHandlerHtml.instance(),
         EncoderHtmlSingleton.INSTANCE,
         null);
 
@@ -57,7 +57,7 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_RENDER
             },
-        BeanHandlerXml.getInstance(),
+        BeanHandlerXml.instance(),
         EncoderXmlSingleton.INSTANCE,
         null);
 
@@ -74,7 +74,7 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_RENDER
             },
-        BeanHandlerPlain.getInstance(),
+        BeanHandlerPlain.instance(),
         null,
         null);
 
@@ -91,7 +91,7 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_RENDER
             },
-        BeanHandlerPlain.getInstance(),
+        BeanHandlerPlain.instance(),
         EncoderHtmlSingleton.INSTANCE,
         null);
 
@@ -108,7 +108,7 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_RENDER
             },
-        BeanHandlerPlain.getInstance(),
+        BeanHandlerPlain.instance(),
         EncoderJsonSingleton.INSTANCE,
         null);
 
@@ -159,9 +159,9 @@ public class TemplateFactory extends EnumClass<String> {
     private Pattern[] compileFilters(String[] filters)
     throws PatternSyntaxException {
         if (filters != null) {
-            Pattern[] patterns = new Pattern[filters.length];
+            var patterns = new Pattern[filters.length];
 
-            for (int i = 0; i < filters.length; i++) {
+            for (var i = 0; i < filters.length; i++) {
                 patterns[i] = Pattern.compile(filters[i]);
             }
 
@@ -227,12 +227,12 @@ public class TemplateFactory extends EnumClass<String> {
             template.setInitializer(initializer_);
             template.setDefaultContentType(defaultContentType_);
 
-            Collection<String> default_resource_bundles = RifeConfig.template().getDefaultResourceBundles(this);
+            var default_resource_bundles = RifeConfig.template().getDefaultResourceBundles(this);
             if (default_resource_bundles != null) {
                 var default_bundles = new ArrayList<ResourceBundle>();
-                for (String bundle_name : default_resource_bundles) {
+                for (var bundle_name : default_resource_bundles) {
                     // try to look it up as a filename in the classpath
-                    ResourceBundle bundle = Localization.getResourceBundle(bundle_name);
+                    var bundle = Localization.getResourceBundle(bundle_name);
                     if (bundle != null) {
                         default_bundles.add(bundle);
                         continue;

@@ -14,7 +14,7 @@ public class BeanHandlerPlain extends AbstractBeanHandler {
     BeanHandlerPlain() {
     }
 
-    public static BeanHandlerPlain getInstance() {
+    public static BeanHandlerPlain instance() {
         return BeanHandlerPlainSingleton.INSTANCE;
     }
 

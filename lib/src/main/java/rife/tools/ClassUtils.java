@@ -37,7 +37,7 @@ public abstract class ClassUtils {
     }
 
     public static String simpleClassName(Class klass) {
-        String class_name = klass.getName();
+        var class_name = klass.getName();
         if (klass.getPackage() != null) {
             class_name = class_name.substring(klass.getPackage().getName().length() + 1);
         }
@@ -52,7 +52,7 @@ public abstract class ClassUtils {
     public static String[] getEnumClassValues(Class klass) {
         if (JavaSpecificationUtils.isAtLeastJdk15() &&
             klass.isEnum()) {
-            Object[] values = klass.getEnumConstants();
+            var values = klass.getEnumConstants();
             return ArrayUtils.createStringArray(values);
         }
 

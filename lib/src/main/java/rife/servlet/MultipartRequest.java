@@ -238,7 +238,7 @@ class MultipartRequest {
         while (null != line &&
             line.length() > 0) {
             String next_line = null;
-            boolean obtain_next_line = true;
+            var obtain_next_line = true;
             while (obtain_next_line) {
                 next_line = readLine();
 
@@ -262,11 +262,11 @@ class MultipartRequest {
 
         String fieldname = null;
         String filename = null;
-        String content_type = "text/plain";  // rfc1867 says this is the default
+        var content_type = "text/plain";  // rfc1867 says this is the default
 
         String[] disposition_info = null;
 
-        for (String headerline : headers) {
+        for (var headerline : headers) {
             if (headerline.toLowerCase().startsWith(CONTENT_DISPOSITION_PREFIX)) {
                 // Parse the content-disposition line
                 disposition_info = extractDispositionInfo(headerline);
@@ -275,7 +275,7 @@ class MultipartRequest {
                 filename = disposition_info[1];
             } else if (headerline.toLowerCase().startsWith(CONTENT_TYPE_HEADER)) {
                 // Get the content type, or null if none specified
-                String type = extractContentType(headerline);
+                var type = extractContentType(headerline);
                 if (type != null) {
                     content_type = type;
                 }
@@ -328,8 +328,8 @@ class MultipartRequest {
         String filename_full = null;
 
         // Get the content disposition, should be "form-data"
-        int start = lowcase_line.indexOf(CONTENT_DISPOSITION_PREFIX);
-        int end = lowcase_line.indexOf(";");
+        var start = lowcase_line.indexOf(CONTENT_DISPOSITION_PREFIX);
+        var end = lowcase_line.indexOf(";");
         if (-1 == start ||
             -1 == end) {
             throw new MultipartCorruptContentDispositionException(dispositionLine);
@@ -357,7 +357,7 @@ class MultipartRequest {
             filename = filename_full;
 
             // The filename may contain a full path.  Cut to just the filename.
-            int last_slash = Math.max(filename.lastIndexOf('/'), filename.lastIndexOf('\\'));
+            var last_slash = Math.max(filename.lastIndexOf('/'), filename.lastIndexOf('\\'));
             if (last_slash > -1) {
                 // only take the filename (after the last slash)
                 filename = filename.substring(last_slash + 1);
@@ -379,7 +379,7 @@ class MultipartRequest {
 
         // Get the content type, if any
         if (lowcase_line.startsWith(CONTENT_TYPE_HEADER)) {
-            int seperator_location = lowcase_line.indexOf(" ");
+            var seperator_location = lowcase_line.indexOf(" ");
             if (-1 == seperator_location) {
                 throw new MultipartCorruptContentTypeException(contentTypeLine);
             }
@@ -434,9 +434,9 @@ class MultipartRequest {
         output = new BufferedOutputStream(output_stream, 8 * 1024); // 8K
 
         long downloaded_size = 0;
-        int result = -1;
+        var result = -1;
         String line = null;
-        int line_length = 0;
+        var line_length = 0;
 
         // ServletInputStream.readLine() has the annoying habit of
         // adding a \r\n to the end of the last line.

@@ -42,7 +42,7 @@ final class Parsed implements Opcodes {
 		Map<Integer, ArrayList<String>> hashcode_keys_mapping = new HashMap<>();
 		int hashcode;
 		ArrayList<String> keys;
-		for (String key : stringCollection) {
+		for (var key : stringCollection) {
 			hashcode = key.hashCode();
 			keys = hashcode_keys_mapping.computeIfAbsent(hashcode, k -> new ArrayList<>());
 			keys.add(key);
@@ -73,7 +73,7 @@ final class Parsed implements Opcodes {
 
 		// define the template class
 class_writer.visit(V1_4, ACC_PUBLIC|ACC_SYNCHRONIZED, full_classname, null, "rife/template/AbstractTemplate", null);
-		
+
 		// generate the template constructor
 method = class_writer.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
 method.visitVarInsn            (ALOAD, 0);
@@ -86,13 +86,13 @@ method = class_writer.visitMethod(ACC_PUBLIC, "getName", "()Ljava/lang/String;",
 method.visitLdcInsn            (className_);
 method.visitInsn               (ARETURN);
 method.visitMaxs               (0, 0);
-		
+
 		// define the method that will return the full template name
 method = class_writer.visitMethod(ACC_PUBLIC, "getFullName", "()Ljava/lang/String;", null, null);
 method.visitLdcInsn            (templateName_);
 method.visitInsn               (ARETURN);
 method.visitMaxs               (0, 0);
-		
+
 		// define the methods that will return the modification time
 method = class_writer.visitMethod(ACC_STATIC, "getModificationTimeReal", "()J", null, null);
 method.visitLdcInsn            (getModificationTime());
@@ -103,7 +103,7 @@ method = class_writer.visitMethod(ACC_PUBLIC, "getModificationTime", "()J", null
 method.visitMethodInsn         (INVOKESTATIC, full_classname, "getModificationTimeReal", "()J", false);
 method.visitInsn               (LRETURN);
 method.visitMaxs               (0, 0);
-		
+
 		// define the method that will return the modification state
 method = class_writer.visitMethod(ACC_STATIC, "getModificationState", "()Ljava/lang/String;", null, null);
 		if (null == modificationState_)  {
@@ -125,10 +125,10 @@ method.visitMaxs               (0, 0);
 		hashcode_keys_mapping = getHashcodeKeysMapping(blocks_.keySet());
 		blockparts_order = new LinkedHashMap<>();
 		{
-			Set<Integer> hashcodes_set = hashcode_keys_mapping.keySet();
+            var hashcodes_set = hashcode_keys_mapping.keySet();
 			hashcodes = new int[hashcodes_set.size()];
-			int hashcode_index = 0;
-			for (Integer i : hashcodes_set) {
+            var hashcode_index = 0;
+			for (var i : hashcodes_set) {
 				hashcodes[hashcode_index++] = i;
 			}
 		}
@@ -143,15 +143,15 @@ method.visitMethodInsn         (INVOKEVIRTUAL, "java/lang/String", "hashCode", "
 			var external_default = new Label();
 			var external_found = new Label();
 			var external_labels = new Label[hashcodes.length];
-			for (int i = 0; i < external_labels.length; i++) {
+			for (var i = 0; i < external_labels.length; i++) {
 				external_labels[i] = new Label();
 			}
-			
+
 method.visitLookupSwitchInsn   (external_default, hashcodes, external_labels);
 			var blockdata_static_prefix = "sBlockPart";
 			var blockdata_static_counter = 0L;
 			String static_identifier;
-			for (int i = 0; i < hashcodes.length; i++) {
+			for (var i = 0; i < hashcodes.length; i++) {
 method.visitLabel              (external_labels[i]);
 
 				keys = hashcode_keys_mapping.get(hashcodes[i]);
@@ -164,23 +164,23 @@ method.visitLabel              (external_labels[i]);
 						block_part = block_data_it.next();
 
 						static_identifier = blockdata_static_prefix + (blockdata_static_counter++);
-						
+
 						blockparts_order.put(static_identifier, block_part);
 block_part.visitByteCodeExternalForm(method, full_classname, static_identifier);
 					}
 				} else {
-					for (String key : keys) {
+					for (var key : keys) {
 						var after_key_label = new Label();
 method.visitVarInsn            (ALOAD, 1);
 method.visitLdcInsn            (key);
 method.visitMethodInsn         (INVOKEVIRTUAL, "java/lang/String", "equals", "(Ljava/lang/Object;)Z", false);
 method.visitJumpInsn           (IFEQ, after_key_label);
-					
+
 						block_data = blocks_.get(key);
 
-						for (ParsedBlockPart block_part : block_data) {
+						for (var block_part : block_data) {
 							static_identifier = blockdata_static_prefix + (blockdata_static_counter++);
-							
+
 							blockparts_order.put(static_identifier, block_part);
 block_part.visitByteCodeExternalForm(method, full_classname, static_identifier);
 						}
@@ -200,7 +200,7 @@ method.visitInsn               (ICONST_1);
 method.visitInsn               (IRETURN);
 method.visitMaxs               (0, 0);
 		}
-		
+
 		// generate the method that will append the block parts according to the current set of values
 		// for internal usage
 		{
@@ -210,14 +210,14 @@ method.visitMethodInsn         (INVOKEVIRTUAL, "java/lang/String", "hashCode", "
 			var internal_default = new Label();
 			var internal_found = new Label();
 			var internal_labels = new Label[hashcodes.length];
-			for (int i = 0; i < internal_labels.length; i++) {
+			for (var i = 0; i < internal_labels.length; i++) {
 				internal_labels[i] = new Label();
 			}
-			
+
 method.visitLookupSwitchInsn   (internal_default, hashcodes, internal_labels);
 			String static_identifier = null;
 			var static_identifiers_it = blockparts_order.keySet().iterator();
-			for (int i = 0; i < hashcodes.length; i++) {
+			for (var i = 0; i < hashcodes.length; i++) {
 method.visitLabel              (internal_labels[i]);
 
 				var text_count = 0;
@@ -265,7 +265,7 @@ method.visitMethodInsn         (INVOKEVIRTUAL, full_classname, "increaseValuesCa
 					}
 method.visitJumpInsn           (GOTO, internal_found);
 				} else {
-					for (String key : keys) {
+					for (var key : keys) {
 						var after_key_label = new Label();
 method.visitVarInsn            (ALOAD, 1);
 method.visitLdcInsn            (key);
@@ -287,7 +287,7 @@ method.visitJumpInsn           (IFEQ, after_key_label);
 								value_count++;
 							}
 						}
-					
+
 method.visitVarInsn            (ALOAD, 0);
 method.visitVarInsn            (ALOAD, 2);
 addIntegerConst                (method, text_count+value_count);
@@ -306,7 +306,7 @@ method.visitMethodInsn         (INVOKEVIRTUAL, full_classname, "increaseValuesCa
 
 							block_part.visitByteCodeInternalForm(method, full_classname, static_identifier);
 						}
-						
+
 method.visitJumpInsn           (GOTO, internal_found);
 method.visitLabel              (after_key_label);
 					}
@@ -314,7 +314,7 @@ method.visitInsn               (ICONST_0);
 method.visitInsn               (IRETURN);
 				}
 			}
-			
+
 method.visitLabel              (internal_default);
 method.visitInsn               (ICONST_0);
 method.visitInsn               (IRETURN);
@@ -323,7 +323,7 @@ method.visitInsn               (ICONST_1);
 method.visitInsn               (IRETURN);
 method.visitMaxs               (0, 0);
 		}
-		
+
 		// generate the method that will return the defined default values
 method = class_writer.visitMethod(ACC_PUBLIC, "getDefaultValue", "(Ljava/lang/String;)Ljava/lang/String;", null, null);
 		{
@@ -349,7 +349,7 @@ method.visitLdcInsn            ("id can't be empty.");
 method.visitMethodInsn         (INVOKESPECIAL, "java/lang/IllegalArgumentException", "<init>", "(Ljava/lang/String;)V", false);
 method.visitInsn               (ATHROW);
 method.visitLabel              (after_empty_check);
-		
+
 method.visitInsn               (ACONST_NULL);
 method.visitVarInsn            (ASTORE, 2);
 
@@ -390,7 +390,7 @@ method.visitVarInsn            (ALOAD, 2);
 method.visitInsn               (ARETURN);
 method.visitMaxs               (0, 0);
 		}
-		
+
 		// generate the method that will append defined default values
 		// for external usage
 method = class_writer.visitMethod(ACC_PROTECTED, "appendDefaultValueExternalForm", "(Ljava/lang/String;Lrife/template/ExternalValue;)Z", null, null);
@@ -434,7 +434,7 @@ method.visitVarInsn            (ILOAD, 3);
 method.visitInsn               (IRETURN);
 method.visitMaxs               (0, 0);
 		}
-		
+
 		// generate the method that will append defined default values
 		// for internal usage
 method = class_writer.visitMethod(ACC_PROTECTED, "appendDefaultValueInternalForm", "(Ljava/lang/String;Lrife/template/InternalValue;)Z", null, null);
@@ -458,7 +458,7 @@ method.visitInsn               (ICONST_0);
 method.visitInsn               (IRETURN);
 method.visitMaxs               (0, 0);
 		}
-		
+
 		// generate the method that checks the modification status of this particular template class
 method = class_writer.visitMethod(ACC_PUBLIC|ACC_STATIC, "isModified", "(Lrife/resources/ResourceFinder;Ljava/lang/String;)Z", null, null);
 method.visitFieldInsn          (GETSTATIC, full_classname, "sResource", "Ljava/net/URL;");
@@ -560,7 +560,7 @@ method.visitLdcInsn            ("filter can't be empty.");
 method.visitMethodInsn         (INVOKESPECIAL, "java/lang/IllegalArgumentException", "<init>", "(Ljava/lang/String;)V", false);
 method.visitInsn               (ATHROW);
 method.visitLabel              (after_empty_check);
-				
+
 				if (filteredBlocksMap_ != null) {
 method.visitFieldInsn          (GETSTATIC, full_classname, "sFilteredBlocksMap", "Ljava/util/HashMap;");
 method.visitVarInsn            (ALOAD, 1);
@@ -569,7 +569,7 @@ method.visitTypeInsn           (CHECKCAST, "java/util/List");
 method.visitVarInsn            (ASTORE, 2);
 method.visitInsn               (ACONST_NULL);
 method.visitVarInsn            (ALOAD, 2);
-				Label	list_null_check = new Label();
+                    var list_null_check = new Label();
 method.visitJumpInsn           (IF_ACMPNE, list_null_check);
 method.visitFieldInsn          (GETSTATIC, "java/util/Collections", "EMPTY_LIST", "Ljava/util/List;");
 method.visitVarInsn            (ASTORE, 2);
@@ -608,7 +608,7 @@ method.visitLdcInsn            ("filter can't be empty.");
 method.visitMethodInsn         (INVOKESPECIAL, "java/lang/IllegalArgumentException", "<init>", "(Ljava/lang/String;)V", false);
 method.visitInsn               (ATHROW);
 method.visitLabel              (after_empty_check);
-				
+
 				if (filteredBlocksMap_ != null) {
 method.visitFieldInsn          (GETSTATIC, full_classname, "sFilteredBlocksMap", "Ljava/util/HashMap;");
 method.visitVarInsn            (ALOAD, 1);
@@ -646,7 +646,7 @@ method.visitLdcInsn            ("filter can't be empty.");
 method.visitMethodInsn         (INVOKESPECIAL, "java/lang/IllegalArgumentException", "<init>", "(Ljava/lang/String;)V", false);
 method.visitInsn               (ATHROW);
 method.visitLabel              (after_empty_check);
-				
+
 				if (filteredValuesMap_ != null) {
 method.visitFieldInsn          (GETSTATIC, full_classname, "sFilteredValuesMap", "Ljava/util/HashMap;");
 method.visitVarInsn            (ALOAD, 1);
@@ -693,7 +693,7 @@ method.visitLdcInsn            ("filter can't be empty.");
 method.visitMethodInsn         (INVOKESPECIAL, "java/lang/IllegalArgumentException", "<init>", "(Ljava/lang/String;)V", false);
 method.visitInsn               (ATHROW);
 method.visitLabel              (after_empty_check);
-				
+
 				if (filteredValuesMap_ != null) {
 method.visitFieldInsn          (GETSTATIC, full_classname, "sFilteredValuesMap", "Ljava/util/HashMap;");
 method.visitVarInsn            (ALOAD, 1);
@@ -705,13 +705,13 @@ method.visitInsn               (IRETURN);
 				}
 method.visitMaxs               (0, 0);
 			}
-			
+
 			// generate the method that returns the dependencies
 method = class_writer.visitMethod(1, "getDependencies", "()Ljava/util/Map;", null, null);
 method.visitFieldInsn          (GETSTATIC, full_classname, "sDependencies", "Ljava/util/HashMap;");
 method.visitInsn               (ARETURN);
 method.visitMaxs               (0, 0);
-			
+
 			// performs all the static initialization
 class_writer.visitField(ACC_PRIVATE|ACC_STATIC, "sResource", "Ljava/net/URL;", null, null);
 class_writer.visitField(ACC_PRIVATE|ACC_STATIC, "sDependencies", "Ljava/util/HashMap;", null, null);
@@ -760,7 +760,7 @@ method.visitInsn               (ACONST_NULL);
 method.visitFieldInsn          (PUTSTATIC, full_classname, "sResource", "Ljava/net/URL;");
 method.visitTryCatchBlock      (resource_start_label, resource_end_label, resource_handler_label, "java/net/MalformedURLException");
 method.visitLabel              (after_resource_label);
-			
+
 			// set the file dependencies
 method.visitTypeInsn           (NEW, "java/util/HashMap");
 method.visitInsn               (DUP);
@@ -800,14 +800,14 @@ method.visitLabel              (after_url_label);
 			for (var entry : blockparts_order.entrySet()) {
 entry.getValue().visitByteCodeStaticDefinition(method, full_classname, entry.getKey());
 			}
-		
+
 			// set the default values if they're present
 			if (defaultValues_.size() > 0) {
 method.visitTypeInsn           (NEW, "java/util/HashMap");
 method.visitInsn               (DUP);
 method.visitMethodInsn         (INVOKESPECIAL, "java/util/HashMap", "<init>", "()V", false);
 method.visitFieldInsn          (PUTSTATIC, full_classname, "sDefaultValues", "Ljava/util/HashMap;");
-				for (String key : defaultValues_.keySet()) {
+				for (var key : defaultValues_.keySet()) {
 method.visitFieldInsn          (GETSTATIC, full_classname, "sDefaultValues", "Ljava/util/HashMap;");
 method.visitLdcInsn            (key);
 method.visitLdcInsn            (defaultValues_.get(key));
@@ -815,7 +815,7 @@ method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/HashMap", "put", "(Lja
 method.visitInsn               (POP);
 				}
 			}
-		
+
 			// set the blockvalues if they're present
 			if (blockvalues_.size() > 0) {
 method.visitTypeInsn           (NEW, "java/util/ArrayList");
@@ -829,7 +829,7 @@ method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/ArrayList", "add", "(L
 method.visitInsn               (POP);
 				}
 			}
-		
+
 			// set the values ids if they're present
 			if (valueIds_.size() > 0) {
 method.visitTypeInsn           (NEW, "java/util/HashSet");
@@ -851,7 +851,7 @@ method.visitFieldInsn          (GETSTATIC, full_classname, "sValueIdsArray", "[L
 method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/HashSet", "toArray", "([Ljava/lang/Object;)[Ljava/lang/Object;", false);
 method.visitInsn               (POP);
 			}
-		
+
 			// write the filtered blocks if they're present
 			if (filteredBlocksMap_ != null) {
 method.visitTypeInsn           (NEW, "java/util/HashMap");
@@ -874,7 +874,7 @@ method.visitVarInsn            (ASTORE, 1);
 method.visitVarInsn            (ALOAD, 1);
 addIntegerConst(method, captured_groups.length);
 method.visitTypeInsn           (ANEWARRAY, "java/lang/String");
-						for (int i = 0; i < captured_groups.length; i++) {
+						for (var i = 0; i < captured_groups.length; i++) {
 method.visitInsn               (DUP);
 addIntegerConst(method, i);
 method.visitLdcInsn            (captured_groups[i]);
@@ -891,18 +891,18 @@ method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/HashMap", "put", "(Lja
 method.visitInsn               (POP);
 				}
 			}
-		
+
 			// write the filtered values if they're present
 			if (filteredValuesMap_ != null) {
 method.visitTypeInsn           (NEW, "java/util/HashMap");
 method.visitInsn               (DUP);
 method.visitMethodInsn         (INVOKESPECIAL, "java/util/HashMap", "<init>", "()V", false);
 method.visitFieldInsn          (PUTSTATIC, full_classname, "sFilteredValuesMap", "Ljava/util/HashMap;");
-				
+
 method.visitInsn               (ACONST_NULL);
 method.visitVarInsn            (ASTORE, 1);
 				FilteredTags filtered_values;
-				
+
 				for (var key : filteredValuesMap_.keySet()) {
 					filtered_values = filteredValuesMap_.getFilteredTag(key);
 method.visitTypeInsn           (NEW, "java/util/ArrayList");
@@ -939,7 +939,7 @@ method.visitInsn               (RETURN);
 method.visitMaxs               (0, 0);
 
 class_writer.visitEnd();
-		
+
 		return class_writer.toByteArray();
 	}
 

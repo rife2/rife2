@@ -51,7 +51,7 @@ public enum StringEncryptor {
         if (value.startsWith(OBF.prefix())) {
             return OBF.prefix() + obfuscate(value.substring(OBF.prefix().length()));
         } else {
-            boolean encode_base64 = false;
+            var encode_base64 = false;
             String prefix = null;
             byte[] bytes = null;
             if (value.startsWith(SHA.prefix()) || value.startsWith(SHAHEX.prefix())) {
@@ -62,7 +62,7 @@ public enum StringEncryptor {
                     prefix = SHAHEX.prefix();
                     encode_base64 = false;
                 }
-                MessageDigest digest = MessageDigest.getInstance("SHA");
+                var digest = MessageDigest.getInstance("SHA");
                 digest.update(value.substring(prefix.length()).getBytes());
                 bytes = digest.digest();
             } else if (value.startsWith(WRP.prefix()) || value.startsWith(WRPHEX.prefix())) {
@@ -73,10 +73,10 @@ public enum StringEncryptor {
                     prefix = WRPHEX.prefix();
                     encode_base64 = false;
                 }
-                Whirlpool whirlpool = new Whirlpool();
+                var whirlpool = new Whirlpool();
                 whirlpool.NESSIEinit();
                 whirlpool.NESSIEadd(value.substring(prefix.length()));
-                byte[] digest = new byte[Whirlpool.DIGESTBYTES];
+                var digest = new byte[Whirlpool.DIGESTBYTES];
                 whirlpool.NESSIEfinalize(digest);
                 bytes = digest;
             } else if (value.startsWith(MD5.prefix()) || value.startsWith(MD5HEX.prefix())) {
@@ -87,7 +87,7 @@ public enum StringEncryptor {
                     prefix = MD5HEX.prefix();
                     encode_base64 = false;
                 }
-                MessageDigest digest = MessageDigest.getInstance("MD5");
+                var digest = MessageDigest.getInstance("MD5");
                 digest.update(value.substring(prefix.length()).getBytes());
                 bytes = digest.digest();
             } else {
@@ -141,15 +141,15 @@ public enum StringEncryptor {
     public static String obfuscate(String value) {
         if (null == value) throw new IllegalArgumentException("value can't be null");
 
-        StringBuilder buffer = new StringBuilder();
-        byte[] bytes = value.getBytes();
-        for (int i = 0; i < bytes.length; i++) {
-            byte b1 = bytes[i];
-            byte b2 = bytes[value.length() - (i + 1)];
-            int i1 = (int) b1 + (int) b2 + 127;
-            int i2 = (int) b1 - (int) b2 + 127;
-            int i0 = i1 * 256 + i2;
-            String x = Integer.toString(i0, 36);
+        var buffer = new StringBuilder();
+        var bytes = value.getBytes();
+        for (var i = 0; i < bytes.length; i++) {
+            var b1 = bytes[i];
+            var b2 = bytes[value.length() - (i + 1)];
+            var i1 = (int) b1 + (int) b2 + 127;
+            var i2 = (int) b1 - (int) b2 + 127;
+            var i0 = i1 * 256 + i2;
+            var x = Integer.toString(i0, 36);
 
             switch (x.length()) {
                 case 1:
@@ -173,14 +173,14 @@ public enum StringEncryptor {
             value = value.substring(OBF.prefix().length());
         }
 
-        byte[] bytes = new byte[value.length() / 2];
-        int l = 0;
+        var bytes = new byte[value.length() / 2];
+        var l = 0;
 
-        for (int i = 0; i < value.length(); i += 4) {
-            String x = value.substring(i, i + 4);
-            int i0 = Integer.parseInt(x, 36);
-            int i1 = (i0 / 256);
-            int i2 = (i0 % 256);
+        for (var i = 0; i < value.length(); i += 4) {
+            var x = value.substring(i, i + 4);
+            var i0 = Integer.parseInt(x, 36);
+            var i1 = (i0 / 256);
+            var i2 = (i0 % 256);
             bytes[l++] = (byte) ((i1 + i2 - 254) / 2);
         }
 
@@ -188,7 +188,7 @@ public enum StringEncryptor {
     }
 
     public static void main(String[] arguments) {
-        boolean valid_arguments = true;
+        var valid_arguments = true;
         if (arguments.length < 1 ||
             arguments.length > 3) {
             valid_arguments = false;

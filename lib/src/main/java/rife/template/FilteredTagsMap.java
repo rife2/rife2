@@ -33,7 +33,7 @@ public class FilteredTagsMap extends HashMap<String, FilteredTags> {
         assert filter.length() > 0;
         assert capturedGroups != null;
 
-        FilteredTags filtered_values = getFilteredTag(filter);
+        var filtered_values = getFilteredTag(filter);
         if (null == filtered_values) {
             filtered_values = new FilteredTags();
             put(filter, filtered_values);

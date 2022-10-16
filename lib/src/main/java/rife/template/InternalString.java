@@ -12,12 +12,12 @@ import java.lang.ref.SoftReference;
 public class InternalString implements CharSequence {
     private CharSequence stringValue_;
 
-    private transient SoftReference<byte[]> mBytesValue_US_ASCII = null;
-    private transient SoftReference<byte[]> mBytesValue_ISO_8859_1 = null;
-    private transient SoftReference<byte[]> mBytesValue_UTF_8 = null;
-    private transient SoftReference<byte[]> mBytesValue_UTF_16 = null;
-    private transient SoftReference<byte[]> mBytesValue_UTF_16BE = null;
-    private transient SoftReference<byte[]> mBytesValue_UTF_16LE = null;
+    private transient SoftReference<byte[]> bytesValue_US_ASCII_ = null;
+    private transient SoftReference<byte[]> bytesValue_ISO_8859_1_ = null;
+    private transient SoftReference<byte[]> bytesValue_UTF_8_ = null;
+    private transient SoftReference<byte[]> bytesValue_UTF_16_ = null;
+    private transient SoftReference<byte[]> bytesValue_UTF_16BE_ = null;
+    private transient SoftReference<byte[]> bytesValue_UTF_16LE_ = null;
 
     public InternalString(String value) {
         stringValue_ = value;
@@ -36,63 +36,63 @@ public class InternalString implements CharSequence {
         byte[] bytes = null;
 
         if (StringUtils.ENCODING_ISO_8859_1.equals(charsetName)) {
-            if (mBytesValue_ISO_8859_1 != null) {
-                bytes = mBytesValue_ISO_8859_1.get();
+            if (bytesValue_ISO_8859_1_ != null) {
+                bytes = bytesValue_ISO_8859_1_.get();
             }
             if (null == bytes) {
                 bytes = toString().getBytes(charsetName);
-                if (null == mBytesValue_ISO_8859_1) {
-                    mBytesValue_ISO_8859_1 = new SoftReference<>(bytes);
+                if (null == bytesValue_ISO_8859_1_) {
+                    bytesValue_ISO_8859_1_ = new SoftReference<>(bytes);
                 }
             }
         } else if (StringUtils.ENCODING_UTF_8.equals(charsetName)) {
-            if (mBytesValue_UTF_8 != null) {
-                bytes = mBytesValue_UTF_8.get();
+            if (bytesValue_UTF_8_ != null) {
+                bytes = bytesValue_UTF_8_.get();
             }
             if (null == bytes) {
                 bytes = toString().getBytes(charsetName);
-                if (null == mBytesValue_UTF_8) {
-                    mBytesValue_UTF_8 = new SoftReference<>(bytes);
+                if (null == bytesValue_UTF_8_) {
+                    bytesValue_UTF_8_ = new SoftReference<>(bytes);
                 }
             }
         } else if (StringUtils.ENCODING_US_ASCII.equals(charsetName)) {
-            if (mBytesValue_US_ASCII != null) {
-                bytes = mBytesValue_US_ASCII.get();
+            if (bytesValue_US_ASCII_ != null) {
+                bytes = bytesValue_US_ASCII_.get();
             }
             if (null == bytes) {
                 bytes = toString().getBytes(charsetName);
-                if (null == mBytesValue_US_ASCII) {
-                    mBytesValue_US_ASCII = new SoftReference<>(bytes);
+                if (null == bytesValue_US_ASCII_) {
+                    bytesValue_US_ASCII_ = new SoftReference<>(bytes);
                 }
             }
         } else if (StringUtils.ENCODING_UTF_16.equals(charsetName)) {
-            if (mBytesValue_UTF_16 != null) {
-                bytes = mBytesValue_UTF_16.get();
+            if (bytesValue_UTF_16_ != null) {
+                bytes = bytesValue_UTF_16_.get();
             }
             if (null == bytes) {
                 bytes = toString().getBytes(charsetName);
-                if (null == mBytesValue_UTF_16) {
-                    mBytesValue_UTF_16 = new SoftReference<>(bytes);
+                if (null == bytesValue_UTF_16_) {
+                    bytesValue_UTF_16_ = new SoftReference<>(bytes);
                 }
             }
         } else if (StringUtils.ENCODING_UTF_16BE.equals(charsetName)) {
-            if (mBytesValue_UTF_16BE != null) {
-                bytes = mBytesValue_UTF_16BE.get();
+            if (bytesValue_UTF_16BE_ != null) {
+                bytes = bytesValue_UTF_16BE_.get();
             }
             if (null == bytes) {
                 bytes = toString().getBytes(charsetName);
-                if (null == mBytesValue_UTF_16BE) {
-                    mBytesValue_UTF_16BE = new SoftReference<>(bytes);
+                if (null == bytesValue_UTF_16BE_) {
+                    bytesValue_UTF_16BE_ = new SoftReference<>(bytes);
                 }
             }
         } else if (StringUtils.ENCODING_UTF_16LE.equals(charsetName)) {
-            if (mBytesValue_UTF_16LE != null) {
-                bytes = mBytesValue_UTF_16LE.get();
+            if (bytesValue_UTF_16LE_ != null) {
+                bytes = bytesValue_UTF_16LE_.get();
             }
             if (null == bytes) {
                 bytes = toString().getBytes(charsetName);
-                if (null == mBytesValue_UTF_16LE) {
-                    mBytesValue_UTF_16LE = new SoftReference<>(bytes);
+                if (null == bytesValue_UTF_16LE_) {
+                    bytesValue_UTF_16LE_ = new SoftReference<>(bytes);
                 }
             }
         } else {
@@ -108,29 +108,29 @@ public class InternalString implements CharSequence {
 
     public void append(String value) {
         stringValue_ = stringValue_ + value;
-        if (mBytesValue_ISO_8859_1 != null) {
-            SoftReference<byte[]> reference = mBytesValue_ISO_8859_1;
-            mBytesValue_ISO_8859_1 = null;
+        if (bytesValue_ISO_8859_1_ != null) {
+            SoftReference<byte[]> reference = bytesValue_ISO_8859_1_;
+            bytesValue_ISO_8859_1_ = null;
             reference.clear();
         }
-        if (mBytesValue_UTF_8 != null) {
-            SoftReference<byte[]> reference = mBytesValue_UTF_8;
-            mBytesValue_UTF_8 = null;
+        if (bytesValue_UTF_8_ != null) {
+            SoftReference<byte[]> reference = bytesValue_UTF_8_;
+            bytesValue_UTF_8_ = null;
             reference.clear();
         }
-        if (mBytesValue_UTF_16 != null) {
-            SoftReference<byte[]> reference = mBytesValue_UTF_16;
-            mBytesValue_UTF_16 = null;
+        if (bytesValue_UTF_16_ != null) {
+            SoftReference<byte[]> reference = bytesValue_UTF_16_;
+            bytesValue_UTF_16_ = null;
             reference.clear();
         }
-        if (mBytesValue_UTF_16BE != null) {
-            SoftReference<byte[]> reference = mBytesValue_UTF_16BE;
-            mBytesValue_UTF_16BE = null;
+        if (bytesValue_UTF_16BE_ != null) {
+            SoftReference<byte[]> reference = bytesValue_UTF_16BE_;
+            bytesValue_UTF_16BE_ = null;
             reference.clear();
         }
-        if (mBytesValue_UTF_16LE != null) {
-            SoftReference<byte[]> reference = mBytesValue_UTF_16LE;
-            mBytesValue_UTF_16LE = null;
+        if (bytesValue_UTF_16LE_ != null) {
+            SoftReference<byte[]> reference = bytesValue_UTF_16LE_;
+            bytesValue_UTF_16LE_ = null;
             reference.clear();
         }
     }

@@ -43,7 +43,7 @@ public class HttpRequest implements Request {
 
     public void init() {
         if (MultipartRequest.isValidContentType(request_.getContentType())) {
-            MultipartRequest multipart_request = new MultipartRequest(request_);
+            var multipart_request = new MultipartRequest(request_);
             parameters_ = multipart_request.getParameterMap();
             files_ = multipart_request.getFileMap();
         } else {
@@ -65,7 +65,7 @@ public class HttpRequest implements Request {
                 }
 
                 parameter_values = request_.getParameterValues(parameter_name);
-                for (int i = 0; i < parameter_values.length; i++) {
+                for (var i = 0; i < parameter_values.length; i++) {
                     if (StringUtils.doesUrlValueNeedDecoding(parameter_values[i])) {
                         parameter_values[i] = StringUtils.decodeUrlValue(parameter_values[i]);
                     }
@@ -126,13 +126,13 @@ public class HttpRequest implements Request {
             return false;
         }
 
-        UploadedFile[] uploaded_files = getFiles().get(name);
+        var uploaded_files = getFiles().get(name);
 
         if (0 == uploaded_files.length) {
             return false;
         }
 
-        for (UploadedFile uploaded_file : uploaded_files) {
+        for (var uploaded_file : uploaded_files) {
             if (uploaded_file != null &&
                 uploaded_file.getName() != null) {
                 return true;
@@ -151,7 +151,7 @@ public class HttpRequest implements Request {
             return null;
         }
 
-        UploadedFile[] files = getFiles().get(name);
+        var files = getFiles().get(name);
         if (null == files) {
             return null;
         }
@@ -176,13 +176,13 @@ public class HttpRequest implements Request {
         assert name != null;
         assert name.length() > 0;
 
-        Cookie[] cookies = request_.getCookies();
+        var cookies = request_.getCookies();
 
         if (null == cookies) {
             return false;
         }
 
-        for (Cookie cookie : cookies) {
+        for (var cookie : cookies) {
             if (cookie.getName().equals(name)) {
                 return true;
             }
@@ -196,13 +196,13 @@ public class HttpRequest implements Request {
         assert name != null;
         assert name.length() > 0;
 
-        Cookie[] cookies = request_.getCookies();
+        var cookies = request_.getCookies();
 
         if (null == cookies) {
             return null;
         }
 
-        for (Cookie cookie : cookies) {
+        for (var cookie : cookies) {
             if (cookie.getName().equals(name)) {
                 return cookie;
             }

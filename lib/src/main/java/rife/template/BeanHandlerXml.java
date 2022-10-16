@@ -12,12 +12,12 @@ import rife.tools.exceptions.BeanUtilsException;
 import java.util.Map;
 
 public class BeanHandlerXml extends AbstractBeanHandler {
-    private FormBuilder formBuilder_ = new FormBuilderXml();
+    private final FormBuilder formBuilder_ = new FormBuilderXml();
 
     BeanHandlerXml() {
     }
 
-    public static BeanHandlerXml getInstance() {
+    public static BeanHandlerXml instance() {
         return BeanHandlerXmlSingleton.INSTANCE;
     }
 

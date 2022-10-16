@@ -24,7 +24,7 @@ import java.text.NumberFormat;
  * @since 1.0
  */
 public class InternalValue {
-    private AbstractTemplate template_;
+    private final AbstractTemplate template_;
     private ArrayList<CharSequence> construction_ = new ArrayList<>();
     private ArrayList<CharSequence> valueIds_ = new ArrayList<>();
     private ArrayList<CharSequence> valueTags_ = new ArrayList<>();
@@ -269,17 +269,9 @@ public class InternalValue {
         increasePartsCapacity(constructedValue.partsSize());
         increaseValuesCapacity(constructedValue.valuesSize());
 
-        for (CharSequence charsequence : constructedValue.construction_) {
-            construction_.add(charsequence);
-        }
-
-        for (CharSequence charsequence : constructedValue.valueIds_) {
-            valueIds_.add(charsequence);
-        }
-
-        for (CharSequence charsequence : constructedValue.valueTags_) {
-            valueTags_.add(charsequence);
-        }
+        construction_.addAll(constructedValue.construction_);
+        valueIds_.addAll(constructedValue.valueIds_);
+        valueTags_.addAll(constructedValue.valueTags_);
     }
 
     /**

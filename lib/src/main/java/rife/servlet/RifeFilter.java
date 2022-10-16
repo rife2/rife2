@@ -46,15 +46,15 @@ public class RifeFilter implements Filter {
         if (request instanceof HttpServletRequest http_servlet_request &&
             response instanceof HttpServletResponse http_servlet_response) {
             try {
-                String request_uri = http_servlet_request.getRequestURI();
-                String extension = FileUtils.getExtension(request_uri);
+                var request_uri = http_servlet_request.getRequestURI();
+                var extension = FileUtils.getExtension(request_uri);
 
                 // check if the url matches one of the pass-through suffixes
-                boolean passthrough = extension != null &&
+                var pass_through = extension != null &&
                     RifeConfig.engine().getPassThroughSuffixes().contains(extension);
 
                 // if not passed through, handle the request
-                if (!passthrough) {
+                if (!pass_through) {
                     // create the servlet path
                     if (null == gateUrl_) {
                         var context_path = http_servlet_request.getContextPath();

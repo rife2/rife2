@@ -26,7 +26,7 @@ public interface TemplateEncoder {
      * @return an encoded version of the given string
      * @since 1.0
      */
-    public String encode(String value);
+    String encode(String value);
 
     /**
      * Encodes the given value in a looser fashion than {@link #encode}'s,
@@ -42,7 +42,7 @@ public interface TemplateEncoder {
      * @return a loosely encoded version of the given <code>value</code>
      * @since 1.0
      */
-    public String encodeDefensive(String value);
+    String encodeDefensive(String value);
 }
 
 

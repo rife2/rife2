@@ -34,7 +34,7 @@ public class ArrayUtils {
 
         // check if it's an array
         if ('[' == classname.charAt(0)) {
-            for (int position = 1; position < classname.length(); position++) {
+            for (var position = 1; position < classname.length(); position++) {
                 if ('[' == classname.charAt(position)) {
                     continue;
                 }
@@ -89,7 +89,7 @@ public class ArrayUtils {
 
         String[] result = null;
 
-        ArrayType type = getArrayType(source);
+        var type = getArrayType(source);
 
         if (type == ArrayType.NO_ARRAY) {
             result = new String[]{BeanUtils.formatPropertyValue(source, constrainedProperty)};
@@ -126,7 +126,7 @@ public class ArrayUtils {
 
         var new_array = new String[array.length];
 
-        for (int i = 0; i < array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             new_array[i] = String.valueOf(array[i]);
         }
 
@@ -140,7 +140,7 @@ public class ArrayUtils {
 
         var new_array = new String[array.length];
 
-        for (int i = 0; i < array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             new_array[i] = String.valueOf(array[i]);
         }
 
@@ -154,7 +154,7 @@ public class ArrayUtils {
 
         var new_array = new String[array.length];
 
-        for (int i = 0; i < array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             new_array[i] = String.valueOf(array[i]);
         }
 
@@ -168,7 +168,7 @@ public class ArrayUtils {
 
         var new_array = new String[array.length];
 
-        for (int i = 0; i < array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             new_array[i] = String.valueOf(array[i]);
         }
 
@@ -182,7 +182,7 @@ public class ArrayUtils {
 
         var new_array = new String[array.length];
 
-        for (int i = 0; i < array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             new_array[i] = String.valueOf(array[i]);
         }
 
@@ -196,7 +196,7 @@ public class ArrayUtils {
 
         var new_array = new String[array.length];
 
-        for (int i = 0; i < array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             new_array[i] = String.valueOf(array[i]);
         }
 
@@ -210,7 +210,7 @@ public class ArrayUtils {
 
         var new_array = new String[array.length];
 
-        for (int i = 0; i < array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             new_array[i] = String.valueOf(array[i]);
         }
 
@@ -224,7 +224,7 @@ public class ArrayUtils {
 
         var new_array = new String[array.length];
 
-        for (int i = 0; i < array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             new_array[i] = String.valueOf(array[i]);
         }
 
@@ -238,7 +238,7 @@ public class ArrayUtils {
 
         var new_array = new String[array.length];
 
-        for (int i = 0; i < array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             new_array[i] = String.valueOf(array[i]);
         }
 
@@ -252,8 +252,8 @@ public class ArrayUtils {
 
         var new_array = new boolean[0];
 
-        boolean converted_boolean = false;
-        for (Object element : array) {
+        var converted_boolean = false;
+        for (var element : array) {
             if (element != null) {
                 converted_boolean = Boolean.parseBoolean(String.valueOf(element));
                 new_array = join(new_array, converted_boolean);
@@ -271,7 +271,7 @@ public class ArrayUtils {
         var new_array = new byte[0];
 
         byte converted_byte = -1;
-        for (Object element : array) {
+        for (var element : array) {
             try {
                 if (element != null) {
                     converted_byte = Byte.parseByte(String.valueOf(element));
@@ -292,10 +292,10 @@ public class ArrayUtils {
 
         var new_array = new char[0];
 
-        char converted_char = '\u0000';
-        for (Object element : array) {
+        var converted_char = '\u0000';
+        for (var element : array) {
             if (element != null) {
-                String string_value = String.valueOf(element);
+                var string_value = String.valueOf(element);
                 if (string_value.length() != 1) {
                     continue;
                 }
@@ -315,7 +315,7 @@ public class ArrayUtils {
         var new_array = new short[0];
 
         short converted_short = -1;
-        for (Object element : array) {
+        for (var element : array) {
             try {
                 if (element != null) {
                     converted_short = Short.parseShort(String.valueOf(element));
@@ -336,8 +336,8 @@ public class ArrayUtils {
 
         var new_array = new int[0];
 
-        int converted_int = -1;
-        for (Object element : array) {
+        var converted_int = -1;
+        for (var element : array) {
             try {
                 if (element != null) {
                     converted_int = Integer.parseInt(String.valueOf(element));
@@ -359,7 +359,7 @@ public class ArrayUtils {
         var new_array = new long[0];
 
         long converted_long = -1;
-        for (Object element : array) {
+        for (var element : array) {
             try {
                 if (element != null) {
                     converted_long = Long.parseLong(String.valueOf(element));
@@ -381,7 +381,7 @@ public class ArrayUtils {
         var new_array = new float[0];
 
         float converted_float = -1;
-        for (Object element : array) {
+        for (var element : array) {
             try {
                 if (element != null) {
                     converted_float = Float.parseFloat(String.valueOf(element));
@@ -403,7 +403,7 @@ public class ArrayUtils {
         var new_array = new double[0];
 
         double converted_double = -1;
-        for (Object element : array) {
+        for (var element : array) {
             try {
                 if (element != null) {
                     converted_double = Double.parseDouble(String.valueOf(element));

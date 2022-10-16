@@ -30,7 +30,7 @@ public abstract class ExceptionFormattingUtils {
         String method_name = null;
         String file_name = null;
 
-        StringBuilder exceptions = new StringBuilder();
+        var exceptions = new StringBuilder();
         while (exception != null) {
             exception_name = exception.getClass().getName();
             message = exception.getMessage();
@@ -45,10 +45,10 @@ public abstract class ExceptionFormattingUtils {
             template.setValue("exception_message", template.getEncoder().encode(message));
 
             if (template.hasValueId("exception_stack_trace")) {
-                StackTraceElement[] stack_trace = exception.getStackTrace();
-                StringBuilder stack_trace_out = new StringBuilder();
+                var stack_trace = exception.getStackTrace();
+                var stack_trace_out = new StringBuilder();
                 StringBuilder stack_trace_details = null;
-                for (int i = 0; i < stack_trace.length; i++) {
+                for (var i = 0; i < stack_trace.length; i++) {
                     class_name = stack_trace[i].getClassName();
                     method_name = stack_trace[i].getMethodName();
                     if (null == class_name) {

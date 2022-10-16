@@ -17,7 +17,7 @@ import java.net.UnknownHostException;
 public class NameSelectorHostname implements NameSelector {
     public String getActiveName() {
         try {
-            InetAddress address = InetAddress.getLocalHost();
+            var address = InetAddress.getLocalHost();
             return address.getHostName().toLowerCase();
         } catch (UnknownHostException e) {
             // do nothing

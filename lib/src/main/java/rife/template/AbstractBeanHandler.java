@@ -29,17 +29,17 @@ public abstract class AbstractBeanHandler implements BeanHandler {
             return;
         }
 
-        Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+        var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
 
         try {
-            Map<String, Object> property_values = getPropertyValues(template, bean, prefix);
+            var property_values = getPropertyValues(template, bean, prefix);
             Object property_value = null;
             String[] property_value_strings = null;
             String[] property_values_encoded = null;
-            TemplateEncoder encoder = template.getEncoder();
+            var encoder = template.getEncoder();
 
             ConstrainedProperty constrained_property = null;
-            for (String property_name : property_values.keySet()) {
+            for (var property_name : property_values.keySet()) {
                 property_value = property_values.get(property_name);
                 property_values_encoded = null;
 
@@ -62,7 +62,7 @@ public abstract class AbstractBeanHandler implements BeanHandler {
                         property_value_strings.length > 0) {
                         // encode the value if that's necessary
                         property_values_encoded = new String[property_value_strings.length];
-                        for (int i = 0; i < property_values_encoded.length; i++) {
+                        for (var i = 0; i < property_values_encoded.length; i++) {
                             if (null == encoder ||
                                 !encode) { // TODO : cmf ||
 //                                (constrained_property != null && constrained_property.isDisplayedRaw())) {
@@ -110,13 +110,13 @@ public abstract class AbstractBeanHandler implements BeanHandler {
         }
 
         try {
-            Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+            var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
             ConstrainedProperty constrained_property = null;
 
-            Map<String, Object> property_values = getPropertyValues(template, bean, prefix);
+            var property_values = getPropertyValues(template, bean, prefix);
             Object property_value = null;
             String[] property_value_strings = null;
-            for (String property_name : property_values.keySet()) {
+            for (var property_name : property_values.keySet()) {
                 property_value = property_values.get(property_name);
 
                 if (property_name != null) {

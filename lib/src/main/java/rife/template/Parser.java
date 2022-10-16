@@ -132,7 +132,7 @@ public class Parser implements Cloneable {
                 return false;
             }
 
-            for (int i = 0; i < other_parser.blockFilters_.length; i++) {
+            for (var i = 0; i < other_parser.blockFilters_.length; i++) {
                 if (!other_parser.blockFilters_[i].pattern().equals(this.blockFilters_[i].pattern())) {
                     return false;
                 }
@@ -148,7 +148,7 @@ public class Parser implements Cloneable {
                 return false;
             }
 
-            for (int i = 0; i < other_parser.valueFilters_.length; i++) {
+            for (var i = 0; i < other_parser.valueFilters_.length; i++) {
                 if (!other_parser.valueFilters_[i].pattern().equals(this.valueFilters_[i].pattern())) {
                     return false;
                 }
@@ -162,7 +162,7 @@ public class Parser implements Cloneable {
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
 
-        URL resource = resolve(name);
+        var resource = resolve(name);
         if (null == resource) {
             throw new TemplateNotFoundException(name, null);
         }
@@ -203,7 +203,7 @@ public class Parser implements Cloneable {
 
         var name_chars = name.toCharArray();
         int char_code;
-        for (int i = 0; i < name_chars.length; i++) {
+        for (var i = 0; i < name_chars.length; i++) {
             char_code = name_chars[i];
             if ((char_code >= 48 && char_code <= 57) ||
                 (char_code >= 65 && char_code <= 90) ||
@@ -234,7 +234,7 @@ public class Parser implements Cloneable {
 
         var class_name = template_name;
         var subpackage = "";
-        int package_separator = template_name.lastIndexOf(".");
+        var package_separator = template_name.lastIndexOf(".");
         if (package_separator != -1) {
             subpackage = "." + template_name.substring(0, package_separator);
             class_name = template_name.substring(package_separator + 1);
@@ -253,13 +253,13 @@ public class Parser implements Cloneable {
         assert parsed != null;
 
         // get the resource of the template file
-        URL resource = parsed.getResource();
+        var resource = parsed.getResource();
 
         // obtain the content of the template file
-        String content = getContent(parsed.getTemplateName(), parsed, resource, encoding, transformer);
+        var content = getContent(parsed.getTemplateName(), parsed, resource, encoding, transformer);
 
         // replace the included templates
-        Stack<String> previous_includes = new Stack<>();
+        var previous_includes = new Stack<String>();
         previous_includes.push(parsed.getFullClassName());
         content = replaceIncludeTags(parsed, content, previous_includes, encoding, transformer);
         previous_includes.pop();
@@ -315,16 +315,16 @@ public class Parser implements Cloneable {
             encoding = RifeConfig.template().getDefaultEncoding();
         }
 
-        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        var result = new ByteArrayOutputStream();
 
         // transform the content
         transformer.setResourceFinder(templateFactory_.getResourceFinder());
-        Collection<URL> dependencies = transformer.transform(templateName, resource, result, encoding);
+        var dependencies = transformer.transform(templateName, resource, result, encoding);
         // get the dependencies and their modification times
         if (dependencies != null &&
             dependencies.size() > 0) {
             long modification_time = 0;
-            for (URL dependency_resource : dependencies) {
+            for (var dependency_resource : dependencies) {
                 try {
                     modification_time = transformer.getResourceFinder().getModificationTime(dependency_resource);
                 } catch (ResourceFinderErrorException e) {
@@ -441,31 +441,31 @@ public class Parser implements Cloneable {
                 name = ctx.CTagName();
             }
 
-            String included_template_name = name.getText();
+            var included_template_name = name.getText();
             // obtain the parser that will be used to get the included content
-            Parser include_parser = Parser.this;
+            var include_parser = Parser.this;
 
             // check if the included template references another template type
-            int doublecolon_index = included_template_name.indexOf(':');
+            var doublecolon_index = included_template_name.indexOf(':');
             if (doublecolon_index != -1)
             {
-                String template_type = included_template_name.substring(0, doublecolon_index);
+                var template_type = included_template_name.substring(0, doublecolon_index);
                 if (!template_type.equals(templateFactory_.toString()))
                 {
-                    TemplateFactory factory = TemplateFactory.getFactory(template_type);
+                    var factory = TemplateFactory.getFactory(template_type);
                     include_parser = factory.getParser();
                     included_template_name = included_template_name.substring(doublecolon_index + 1);
                 }
             }
 
-            URL included_template_resource = include_parser.resolve(included_template_name);
+            var included_template_resource = include_parser.resolve(included_template_name);
 
             if (null == included_template_resource) {
                 // TODO : this should return the line itself
                 var position = new DocumentPosition(ctx.getStart().getText(), ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
                 throw new IncludeNotFoundException(parsed_.getClassName(), position, included_template_name);
             }
-            Parsed included_template_parsed = include_parser.prepare(included_template_name, included_template_resource);
+            var included_template_parsed = include_parser.prepare(included_template_name, included_template_resource);
 
             // check for circular references
             if (previousIncludes_.contains(included_template_parsed.getFullClassName())) {
@@ -475,17 +475,17 @@ public class Parser implements Cloneable {
             }
 
             // parse the included template's include tags too
-            String included_template_content = include_parser.getContent(included_template_name, parsed_, included_template_parsed.getResource(), encoding_, transformer_);
+            var included_template_content = include_parser.getContent(included_template_name, parsed_, included_template_parsed.getResource(), encoding_, transformer_);
             previousIncludes_.push(included_template_parsed.getFullClassName());
-            String replaced_content = replaceIncludeTags(included_template_parsed, included_template_content, previousIncludes_, encoding_, transformer_);
+            var replaced_content = replaceIncludeTags(included_template_parsed, included_template_content, previousIncludes_, encoding_, transformer_);
             previousIncludes_.pop();
 
             // retain the link to this include file for optional later modification time checking
             parsed_.addDependency(included_template_parsed);
 
             // add the dependencies of the included template too
-            Map<URL, Long> included_dependencies = included_template_parsed.getDependencies();
-            for (Map.Entry<URL, Long> included_dependency : included_dependencies.entrySet()) {
+            var included_dependencies = included_template_parsed.getDependencies();
+            for (var included_dependency : included_dependencies.entrySet()) {
                 parsed_.addDependency(included_dependency.getKey(), included_dependency.getValue());
             }
 
@@ -535,7 +535,7 @@ public class Parser implements Cloneable {
                 tag = ctx.TSTART_V() + " " + value_id + ctx.TSTERM();
             }
 
-            String block_id = blockIds_.peek();
+            var block_id = blockIds_.peek();
             if (block_id != null) {
                 parsed_.addValue(value_id);
                 blocks_.get(block_id).add(new ParsedBlockValue(value_id, tag));
@@ -562,7 +562,7 @@ public class Parser implements Cloneable {
                 tag = ctx.TSTART_V() + " " + value_id + ctx.TENDI() + ctx.TCLOSE_V();
             }
 
-            String block_id = blockIds_.peek();
+            var block_id = blockIds_.peek();
             if (block_id != null) {
                 parsed_.addValue(value_id);
                 parsed_.setDefaultValue(value_id, currentValueData_.toString());
@@ -578,7 +578,7 @@ public class Parser implements Cloneable {
             if (name == null) {
                 name = ctx.CTagName();
             }
-            final String block_id = name.getText();
+            final var block_id = name.getText();
             blockIds_.push(block_id);
             blocks_.put(block_id, new ParsedBlockData());
         }
@@ -594,7 +594,7 @@ public class Parser implements Cloneable {
             if (name == null) {
                 name = ctx.CTagName();
             }
-            final String block_id = name.getText();
+            final var block_id = name.getText();
             parsed_.setBlockvalue(block_id);
             blockIds_.push(block_id);
             blocks_.put(block_id, new ParsedBlockData());
@@ -611,7 +611,7 @@ public class Parser implements Cloneable {
             if (name == null) {
                 name = ctx.CTagName();
             }
-            final String block_id = name.getText();
+            final var block_id = name.getText();
             parsed_.setBlockvalue(block_id);
             blockIds_.push(block_id);
 
@@ -629,7 +629,7 @@ public class Parser implements Cloneable {
 
         @Override
         public void exitBlockData(TemplateMainParser.BlockDataContext ctx) {
-            String block_id = blockIds_.peek();
+            var block_id = blockIds_.peek();
             if (block_id != null) {
                 var data = blocks_.get(block_id);
                 var last = data.getLastPart();
@@ -681,12 +681,12 @@ public class Parser implements Cloneable {
             String pattern = null;
             String[] captured_groups_array = null;
 
-            ArrayList<String> filtered_tags = new ArrayList<String>();
+            var filtered_tags = new ArrayList<String>();
 
             // iterate over the tag filters
-            for (Pattern filter_pattern : filters) {
+            for (var filter_pattern : filters) {
                 // go over all the tags and try to match them against the current filter
-                for (String tag : tags) {
+                for (var tag : tags) {
                     // skip over tags that have already been filtered
                     if (filtered_tags.contains(tag)) {
                         continue;
@@ -705,7 +705,7 @@ public class Parser implements Cloneable {
 
                         if (filter_matcher.groupCount() > 0) {
                             // store the captured groups
-                            for (int j = 1; j <= filter_matcher.groupCount(); j++) {
+                            for (var j = 1; j <= filter_matcher.groupCount(); j++) {
                                 captured_groups.add(filter_matcher.group(j));
                             }
                         }

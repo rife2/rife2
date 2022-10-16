@@ -488,7 +488,7 @@ public class MockRequest implements Request {
         checkUploadDirectory();
 
         if (null == files_) {
-            files_ = new HashMap<String, UploadedFile[]>();
+            files_ = new HashMap<>();
         }
 
         var uploaded_files = new UploadedFile[files.length];
@@ -677,7 +677,7 @@ public class MockRequest implements Request {
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
 
         if (null == attributes_) {
-            attributes_ = new HashMap<String, Object>();
+            attributes_ = new HashMap<>();
         }
 
         attributes_.put(name, object);
@@ -967,7 +967,7 @@ public class MockRequest implements Request {
         }
 
         if (null == locales_) {
-            locales_ = new ArrayList<Locale>();
+            locales_ = new ArrayList<>();
         }
 
         locales_.add(locale);
