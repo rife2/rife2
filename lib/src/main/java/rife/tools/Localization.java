@@ -20,10 +20,9 @@ import java.util.regex.Pattern;
 public class Localization {
     public static final Pattern URL_PATTERN = Pattern.compile("(?:\\s*(\\w+):((?!//)[^,]+)\\s*)|(?:\\s*([^,]+)\\s*)");
 
-    private static final HashMap<String, ResourceBundle> resourceBundlesOpened_ = new HashMap<String, ResourceBundle>();
-    private static final HashMap<String, Long> resourceBundleModificationTimes_ = new HashMap<String, Long>();
-
-    private static long sLastModificationCheck = 0;
+    private static final HashMap<String, ResourceBundle> resourceBundlesOpened_ = new HashMap<>();
+    private static final HashMap<String, Long> resourceBundleModificationTimes_ = new HashMap<>();
+    private static final HashMap<String, Long> resourceBundleLastChecks_ = new HashMap<>();
 
     public static String extractLocalizedUrl(String url) {
         if (null == url) {
@@ -201,12 +200,13 @@ public class Localization {
     public static ResourceBundle getResourceBundle(String basename, Locale locale) {
         ResourceBundle result = null;
         if (null != locale) {
-            var most_detailed_candidate = basename + locale;
+            var most_detailed_candidate = basename + "_" + locale;
 
             // see if the resource bundle reload is deactivated and thus fetch a previous copy without
             // looking up the resource
             if (!RifeConfig.tools().getResourceBundleAutoReload() ||
-                System.currentTimeMillis() - sLastModificationCheck <= RifeConfig.global().getAutoReloadDelay()) {
+                (resourceBundleLastChecks_.containsKey(most_detailed_candidate) &&
+                    (System.currentTimeMillis() - resourceBundleLastChecks_.get(most_detailed_candidate) <= RifeConfig.global().getAutoReloadDelay()))) {
                 result = resourceBundlesOpened_.get(most_detailed_candidate);
 
                 if (result != null) {
@@ -215,7 +215,7 @@ public class Localization {
             }
 
             if (RifeConfig.tools().getResourceBundleAutoReload()) {
-                sLastModificationCheck = System.currentTimeMillis();
+                resourceBundleLastChecks_.put(most_detailed_candidate, System.currentTimeMillis());
             }
 
             // build the list of possible candidates
@@ -295,10 +295,7 @@ public class Localization {
                                 result = (ResourceBundle) resource_class.newInstance();
 
                                 return result;
-                            } catch (IllegalAccessException e) {
-                                resource_class = null;
-                                result = null;
-                            } catch (InstantiationException e) {
+                            } catch (IllegalAccessException | InstantiationException e) {
                                 resource_class = null;
                                 result = null;
                             }
@@ -357,9 +354,9 @@ class ReloadingBundle extends ResourceBundle {
     ReloadingBundle(URL resource)
     throws IOException {
         properties_ = new Properties();
-        URLConnection connection = resource.openConnection();
+        var connection = resource.openConnection();
         connection.setUseCaches(false);
-        InputStream resourceAsStream = connection.getInputStream();
+        var resourceAsStream = connection.getInputStream();
         properties_.load(resourceAsStream);
     }
 
