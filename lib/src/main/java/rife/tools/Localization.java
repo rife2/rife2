@@ -4,6 +4,8 @@
  */
 package rife.tools;
 
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import rife.config.RifeConfig;
@@ -357,7 +359,8 @@ class ReloadingBundle extends ResourceBundle {
         var connection = resource.openConnection();
         connection.setUseCaches(false);
         var resourceAsStream = connection.getInputStream();
-        properties_.load(resourceAsStream);
+        var read = new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8);
+        properties_.load(read);
     }
 
     protected Object handleGetObject(String key) {
