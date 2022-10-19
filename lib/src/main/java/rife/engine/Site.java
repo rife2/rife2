@@ -50,7 +50,7 @@ public class Site extends Router {
             List<Route> routes = routes_.get(url);
             if (routes != null && !routes.isEmpty()) {
                 for (Route route : routes) {
-                    if (request.getMethod() == route.method()) {
+                    if (route.handlesMethod(request.getMethod())) {
                         return route;
                     }
                 }
@@ -63,7 +63,7 @@ public class Site extends Router {
                 if (stripped_url.lastIndexOf('.') <= stripped_url.lastIndexOf('/')) {
                     if (routes != null && !routes.isEmpty()) {
                         for (Route route : routes) {
-                            if (request.getMethod() == route.method()) {
+                            if (route.handlesMethod(request.getMethod())) {
                                 return route;
                             }
                         }
@@ -90,7 +90,7 @@ public class Site extends Router {
 //        {
 //            for (Route route : routes)
 //            {
-//                if (element.hasPathInfoMappings() && request.getMethod() == route.method())
+//                if (element.hasPathInfoMappings() && route.handlesMethod(request.getMethod()))
 //                {
 //                    for (PathInfoMapping mapping : element.getPathInfoMappings())
 //                    {
@@ -107,7 +107,7 @@ public class Site extends Router {
         // return the first route that handles the url and doesn't have
         // any path info mappings
         for (Route route : routes) {
-            if (request.getMethod() == route.method()) {
+            if (route.handlesMethod(request.getMethod())) {
                 return route;
             }
 

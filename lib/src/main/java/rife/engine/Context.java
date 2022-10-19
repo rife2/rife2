@@ -12,7 +12,6 @@ import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.template.exceptions.TemplateException;
 import rife.tools.ServletUtils;
-import rife.tools.StringUtils;
 
 import java.util.Collection;
 import java.util.Map;
@@ -27,20 +26,20 @@ public class Context {
     private final Site site_;
     private final Request request_;
     private final Response response_;
-    private final RouteMatch route_;
+    private final RouteMatch routeMatch_;
     private final Element element_;
     private Throwable engineException_;
 
-    public Context(String gateUrl, Site site, Request request, Response response, RouteMatch route) {
+    public Context(String gateUrl, Site site, Request request, Response response, RouteMatch routeMatch) {
         gateUrl_ = gateUrl;
         site_ = site;
         request_ = request;
         response_ = response;
-        route_ = route;
-        if (route == null) {
+        routeMatch_ = routeMatch;
+        if (routeMatch == null) {
             element_ = null;
         } else {
-            element_ = route_.route().getElementInstance(this);
+            element_ = routeMatch_.route().getElementInstance(this);
         }
     }
 
@@ -67,12 +66,14 @@ public class Context {
     }
 
     public String pathInfo() {
-        if (route_.pathInfo() != null) {
-            return route_.pathInfo();
+        if (routeMatch_.pathInfo() != null) {
+            return routeMatch_.pathInfo();
         }
 
         return null;
     }
+
+    public Route route() { return routeMatch_.route(); }
 
     public void print(Object o) {
         response_.print(o);
@@ -101,7 +102,7 @@ public class Context {
 
     public Template getHtmlTemplate()
     throws TemplateException, EngineException {
-        return getHtmlTemplate(route_.route().getDefaultElementId(), null);
+        return getHtmlTemplate(routeMatch_.route().getDefaultElementId(), null);
     }
 
     public Template getHtmlTemplate(String name)

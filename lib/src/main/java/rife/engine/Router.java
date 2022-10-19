@@ -103,6 +103,30 @@ public class Router {
         return registerRoute(new RouteInstance(this, RequestMethod.POST, path, pathInfo, element));
     }
 
+    public final Route route(Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, null, elementClass));
+    }
+
+    public final Route route(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, null, pathInfo, elementClass));
+    }
+
+    public final Route route(String path, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, null, path, elementClass));
+    }
+
+    public final Route route(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, null, path, pathInfo, elementClass));
+    }
+
+    public final Route route(String path, Element element) {
+        return registerRoute(new RouteInstance(this, null, path, element));
+    }
+
+    public final Route route(String path, PathInfoHandling pathInfo, Element element) {
+        return registerRoute(new RouteInstance(this, null, path, pathInfo, element));
+    }
+
     public final Route registerRoute(Route route) {
         switch (route.pathInfoHandling()) {
             case NONE -> {

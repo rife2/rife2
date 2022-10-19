@@ -89,20 +89,28 @@ public class EngineTemplateProcessor {
                 var route_value_id = captured_groups[0];
                 if (!template_.isValueSet(route_value_id)) {
                     var route_name = captured_groups[1];
+                    Route route = null;
+                    if (route_name.isEmpty()) {
+                        route = context_.route();
+                    } else {
+                        try {
+                            var field = site.getClass().getDeclaredField(route_name);
+                            field.setAccessible(true);
 
-                    try {
-                        var field = site.getClass().getDeclaredField(route_name);
-                        field.setAccessible(true);
-
-                        if (!Modifier.isStatic(field.getModifiers()) &&
-                            !Modifier.isTransient(field.getModifiers()) &&
-                            Route.class.isAssignableFrom(field.getType())) {
-                            var route_value = context_.urlFor((Route) field.get(site));
-                            template_.setValue(route_value_id, route_value);
-                            setValues.add(route_value_id);
+                            if (!Modifier.isStatic(field.getModifiers()) &&
+                                !Modifier.isTransient(field.getModifiers()) &&
+                                Route.class.isAssignableFrom(field.getType())) {
+                                route = (Route) field.get(site);
+                            }
+                        } catch (IllegalAccessException | NoSuchFieldException e) {
+                            throw new RuntimeException(e);
                         }
-                    } catch (IllegalAccessException | NoSuchFieldException e) {
-                        throw new RuntimeException(e);
+                    }
+
+                    if (route != null) {
+                        var route_value = context_.urlFor(route);
+                        template_.setValue(route_value_id, route_value);
+                        setValues.add(route_value_id);
                     }
                 }
             }

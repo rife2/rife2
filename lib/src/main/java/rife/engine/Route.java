@@ -7,6 +7,10 @@ package rife.engine;
 public interface Route {
     RequestMethod method();
 
+    default boolean handlesMethod(RequestMethod method) {
+        return method() == null || method() == method;
+    }
+
     String path();
 
     PathInfoHandling pathInfoHandling();
