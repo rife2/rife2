@@ -213,7 +213,7 @@ public abstract class DatabaseTaskoptions extends DbQueryManager implements Task
 
             mTaskoption.setTaskId(resultSet.getInt("task_id"));
             mTaskoption.setName(resultSet.getString("name"));
-            mTaskoption.setValue(resultSet.getString("value"));
+            mTaskoption.setValue(resultSet.getString("val"));
 
             if (mCollection != null) {
                 mCollection.add(mTaskoption);

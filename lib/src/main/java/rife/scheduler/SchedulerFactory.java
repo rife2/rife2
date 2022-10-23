@@ -5,5 +5,5 @@
 package rife.scheduler;
 
 public interface SchedulerFactory {
-    public Scheduler getScheduler();
+    Scheduler getScheduler();
 }

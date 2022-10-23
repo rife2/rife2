@@ -34,7 +34,7 @@ public class generic extends DatabaseTaskoptions {
             .table(RifeConfig.scheduler().getTableTaskoption())
             .column("task_id", Integer.class, CreateTable.NOTNULL)
             .column("name", String.class, RifeConfig.scheduler().getTaskoptionNameMaximumLength(), CreateTable.NOTNULL)
-            .column("value", String.class, RifeConfig.scheduler().getTaskoptionValueMaximumLength(), CreateTable.NOTNULL)
+            .column("val", String.class, RifeConfig.scheduler().getTaskoptionValueMaximumLength(), CreateTable.NOTNULL)
             .primaryKey(RifeConfig.scheduler().getTableTaskoption().toUpperCase() + "_PK", new String[]{"task_id", "name"})
             .foreignKey(RifeConfig.scheduler().getTableTaskoption().toUpperCase() + "_TASKID_FK", RifeConfig.scheduler().getTableTask(), "task_id", "id", null, CreateTable.CASCADE);
 
@@ -45,7 +45,7 @@ public class generic extends DatabaseTaskoptions {
             .into(createTableTaskoption_.getTable())
             .fieldParameter("task_id")
             .fieldParameter("name")
-            .fieldParameter("value");
+            .fieldParameter("val");
 
         getTaskoption_ = new Select(getDatasource())
             .from(createTableTaskoption_.getTable())
@@ -58,7 +58,7 @@ public class generic extends DatabaseTaskoptions {
 
         updateTaskoption_ = new Update(getDatasource())
             .table(createTableTaskoption_.getTable())
-            .fieldParameter("value")
+            .fieldParameter("val")
             .whereParameter("task_id", "=")
             .whereParameterAnd("name", "=");
 
@@ -86,7 +86,7 @@ public class generic extends DatabaseTaskoptions {
                     statement
                         .setInt("task_id", taskoption.getTaskId())
                         .setString("name", taskoption.getName())
-                        .setString("value", taskoption.getValue());
+                        .setString("val", taskoption.getValue());
                 }
             }, taskoption);
         } catch (TaskoptionManagerException e) {
@@ -112,7 +112,7 @@ public class generic extends DatabaseTaskoptions {
                     statement
                         .setInt("task_id", taskoption.getTaskId())
                         .setString("name", taskoption.getName())
-                        .setString("value", taskoption.getValue());
+                        .setString("val", taskoption.getValue());
                 }
             }, taskoption);
         } catch (TaskoptionManagerException e) {

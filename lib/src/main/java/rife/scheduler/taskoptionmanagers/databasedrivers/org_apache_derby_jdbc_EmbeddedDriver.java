@@ -16,7 +16,7 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
             .table(RifeConfig.scheduler().getTableTaskoption())
             .column("task_id", Integer.class, CreateTable.NOTNULL)
             .column("name", String.class, RifeConfig.scheduler().getTaskoptionNameMaximumLength(), CreateTable.NOTNULL)
-            .column("value", String.class, RifeConfig.scheduler().getTaskoptionValueMaximumLength(), CreateTable.NOTNULL)
+            .column("val", String.class, RifeConfig.scheduler().getTaskoptionValueMaximumLength(), CreateTable.NOTNULL)
             .primaryKey(RifeConfig.scheduler().getTableTaskoption().toUpperCase() + "_PK", new String[]{"task_id", "name"})
             .foreignKey(RifeConfig.scheduler().getTableTaskoption().toUpperCase() + "_FK", RifeConfig.scheduler().getTableTask(), "task_id", "id", null, CreateTable.CASCADE);
     }

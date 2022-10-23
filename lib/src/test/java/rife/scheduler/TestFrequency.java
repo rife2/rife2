@@ -4,6 +4,7 @@
  */
 package rife.scheduler;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import rife.config.RifeConfig;
@@ -28,7 +29,7 @@ public class TestFrequency {
         RifeConfig.tools().setDefaultTimeZone(TimeZone.getTimeZone("CET"));
     }
 
-    @BeforeEach
+    @AfterEach
     public void tearDown() {
         RifeConfig.tools().setDefaultTimeZone(RifeConfig.ToolsConfig.DEFAULT_DEFAULT_TIMEZONE);
     }

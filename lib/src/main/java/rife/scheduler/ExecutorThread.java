@@ -24,8 +24,7 @@ public class ExecutorThread implements Runnable {
         try {
             manager.activateTask(task_.getId());
             successful_execution = executor_.executeTask(task_);
-        } catch (TaskManagerException e) {
-            successful_execution = false;
+        } catch (TaskManagerException ignored) {
         } finally {
             try {
                 if (!successful_execution) {

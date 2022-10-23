@@ -28,7 +28,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             .table(RifeConfig.scheduler().getTableTaskoption())
             .column("task_id", Integer.class, CreateTable.NOTNULL)
             .column("name", String.class, RifeConfig.scheduler().getTaskoptionNameMaximumLength(), CreateTable.NOTNULL)
-            .column("value", String.class, RifeConfig.scheduler().getTaskoptionValueMaximumLength(), CreateTable.NOTNULL)
+            .column("val", String.class, RifeConfig.scheduler().getTaskoptionValueMaximumLength(), CreateTable.NOTNULL)
             .primaryKey(RifeConfig.scheduler().getTableTaskoption().toUpperCase() + "_PK", new String[]{"task_id", "name"});
 
         taskIdExists_ = new Select(getDatasource())
@@ -60,7 +60,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
                     statement
                         .setInt("task_id", taskoption.getTaskId())
                         .setString("name", taskoption.getName())
-                        .setString("value", taskoption.getValue());
+                        .setString("val", taskoption.getValue());
                 }
             }, taskoption);
         } catch (TaskoptionManagerException e) {
@@ -99,7 +99,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
                     statement
                         .setInt("task_id", taskoption.getTaskId())
                         .setString("name", taskoption.getName())
-                        .setString("value", taskoption.getValue());
+                        .setString("val", taskoption.getValue());
                 }
             }, taskoption);
         } catch (TaskoptionManagerException e) {
