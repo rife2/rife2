@@ -493,12 +493,26 @@ public class TestDbPreparedStatement {
                 assertEquals(retrieved_bean.getPropertyStringbuffer().toString(), new_bean.getPropertyStringbuffer().toString());
 
                 // don't compare milliseconds since each db stores it differently
-                assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, (new_bean.getPropertyDate().getTime() / 1000) * 1000);
-                assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (new_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
-                assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, (new_bean.getPropertyTimestamp().getTime() / 1000) * 1000);
+                if (datasource.getAliasedDriver().equals("com.mysql.cj.jdbc.Driver")) {
+                    // round up MySQL and H2 milliseconds since that's how it behaves
+                    assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, ((new_bean.getPropertyDate().getTime() + 500) / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, ((new_bean.getPropertyCalendar().getTime().getTime() + 500) / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, ((new_bean.getPropertyTimestamp().getTime() + 500) / 1000) * 1000);
+                    assertEquals(new Time((retrieved_bean.getPropertyTime().getTime() / 1000) * 1000).toString(), new Time(((new_bean.getPropertyTime().getTime() + 500) / 1000) * 1000).toString());
+                } else if(datasource.getAliasedDriver().equals("org.h2.Driver")) {
+                    // H2 rounds up the SQL time
+                    assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, (new_bean.getPropertyDate().getTime() / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (new_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, (new_bean.getPropertyTimestamp().getTime() / 1000) * 1000);
+                    assertEquals(new Time((retrieved_bean.getPropertyTime().getTime() / 1000) * 1000).toString(), new Time(((new_bean.getPropertyTime().getTime() + 500) / 1000) * 1000).toString());
+                } else {
+                    assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, (new_bean.getPropertyDate().getTime() / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (new_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, (new_bean.getPropertyTimestamp().getTime() / 1000) * 1000);
+                    assertEquals(retrieved_bean.getPropertyTime().toString(), new_bean.getPropertyTime().toString());
+                }
 
                 assertEquals(retrieved_bean.getPropertySqlDate().toString(), new_bean.getPropertySqlDate().toString());
-                assertEquals(retrieved_bean.getPropertyTime().toString(), new_bean.getPropertyTime().toString());
                 assertEquals(retrieved_bean.getPropertyChar(), new_bean.getPropertyChar());
                 assertEquals(retrieved_bean.getPropertyCharacterObject(), new_bean.getPropertyCharacterObject());
                 assertEquals(retrieved_bean.isPropertyBoolean(), new_bean.isPropertyBoolean());
@@ -571,12 +585,11 @@ public class TestDbPreparedStatement {
                 }
                 assertEquals(retrieved_bean.getPropertyString(), new_bean.getPropertyString());
                 assertEquals(retrieved_bean.getPropertyStringbuffer(), new_bean.getPropertyStringbuffer());
-                // don't compare milliseconds since each db stores it differently
                 if (datasource.getAliasedDriver().equals("com.mysql.cj.jdbc.Driver")) {
-                    // don't compare milliseconds since each db stores it differently
-                    assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, (new_bean.getPropertyDate().getTime() / 1000) * 1000);
-                    assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (new_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
-                    assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, (new_bean.getPropertyTimestamp().getTime() / 1000) * 1000);
+                    // round up MySQL milliseconds since that's how it behaves
+                    assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, ((new_bean.getPropertyDate().getTime() + 500) / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, ((new_bean.getPropertyCalendar().getTime().getTime() + 500) / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, ((new_bean.getPropertyTimestamp().getTime() + 500) / 1000) * 1000);
                 } else {
                     assertEquals(retrieved_bean.getPropertyDate(), new_bean.getPropertyDate());
                     assertEquals(retrieved_bean.getPropertyCalendar(), new_bean.getPropertyCalendar());
@@ -662,12 +675,26 @@ public class TestDbPreparedStatement {
                 assertEquals(retrieved_bean.getPropertyStringbuffer().toString(), new_bean.getPropertyStringbuffer().toString());
 
                 // don't compare milliseconds since each db stores it differently
-                assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, (new_bean.getPropertyDate().getTime() / 1000) * 1000);
-                assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (new_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
-                assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, (new_bean.getPropertyTimestamp().getTime() / 1000) * 1000);
+                if (datasource.getAliasedDriver().equals("com.mysql.cj.jdbc.Driver")) {
+                    // round up MySQL and H2 milliseconds since that's how it behaves
+                    assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, ((new_bean.getPropertyDate().getTime() + 500) / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, ((new_bean.getPropertyCalendar().getTime().getTime() + 500) / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, ((new_bean.getPropertyTimestamp().getTime() + 500) / 1000) * 1000);
+                    assertEquals(new Time((retrieved_bean.getPropertyTime().getTime() / 1000) * 1000).toString(), new Time(((new_bean.getPropertyTime().getTime() + 500) / 1000) * 1000).toString());
+                } else if(datasource.getAliasedDriver().equals("org.h2.Driver")) {
+                    // H2 rounds up the SQL time
+                    assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, (new_bean.getPropertyDate().getTime() / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (new_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, (new_bean.getPropertyTimestamp().getTime() / 1000) * 1000);
+                    assertEquals(new Time((retrieved_bean.getPropertyTime().getTime() / 1000) * 1000).toString(), new Time(((new_bean.getPropertyTime().getTime() + 500) / 1000) * 1000).toString());
+                } else {
+                    assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, (new_bean.getPropertyDate().getTime() / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (new_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
+                    assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, (new_bean.getPropertyTimestamp().getTime() / 1000) * 1000);
+                    assertEquals(retrieved_bean.getPropertyTime().toString(), new_bean.getPropertyTime().toString());
+                }
 
                 assertEquals(retrieved_bean.getPropertySqlDate().toString(), new_bean.getPropertySqlDate().toString());
-                assertEquals(retrieved_bean.getPropertyTime().toString(), new_bean.getPropertyTime().toString());
                 assertEquals(retrieved_bean.getPropertyChar(), new_bean.getPropertyChar());
                 assertEquals(retrieved_bean.getPropertyCharacterObject(), new_bean.getPropertyCharacterObject());
                 assertEquals(retrieved_bean.isPropertyBoolean(), new_bean.isPropertyBoolean());

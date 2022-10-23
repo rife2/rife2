@@ -2099,7 +2099,8 @@ public class TestDbQueryManager {
         DbQueryManager manager = new DbQueryManager(datasource);
         try {
             CreateTable create_query = new CreateTable(datasource);
-            if (datasource.getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver")) {
+            if (datasource.getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver") ||
+                datasource.getAliasedDriver().equals("org.hsqldb.jdbcDriver")) {
                 create_query.table("tbltest").column("firstcol", Blob.class).column("lastcol", String.class, 50);
             } else {
                 create_query.table("tbltest").column("firstcol", String.class).column("lastcol", String.class, 50);
