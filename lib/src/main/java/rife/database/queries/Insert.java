@@ -82,7 +82,7 @@ public class Insert extends AbstractParametrizedQuery implements Cloneable {
             } else if (0 == fields_.size()) {
                 throw new FieldsRequiredException("Insert");
             } else {
-                Template template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".insert");
+                var template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".insert");
 
                 if (hint_ != null) {
                     if (!template.hasValueId("HINT")) {
@@ -95,21 +95,21 @@ public class Insert extends AbstractParametrizedQuery implements Cloneable {
                 template.setValue("INTO", into_);
 
                 // obtain the maximum number of values that are present by counting those of each field
-                int maximum_number_of_value_rows = 0;
-                for (List<Object> values : fields_.values()) {
+                var maximum_number_of_value_rows = 0;
+                for (var values : fields_.values()) {
                     if (values.size() > maximum_number_of_value_rows) {
                         maximum_number_of_value_rows = values.size();
                     }
                 }
 
                 // create the different rows that will be inserted into the database
-                ArrayList<String> value_rows = new ArrayList<String>();
+                var value_rows = new ArrayList<String>();
                 ArrayList<String> value_row = null;
-                Object[] column_names = fields_.keySet().toArray();
+                var column_names = fields_.keySet().toArray();
                 String column_name = null;
-                for (int current_value_row = 0; current_value_row < maximum_number_of_value_rows; current_value_row++) {
+                for (var current_value_row = 0; current_value_row < maximum_number_of_value_rows; current_value_row++) {
                     value_row = new ArrayList<String>();
-                    for (int i = 0; i < column_names.length; i++) {
+                    for (var i = 0; i < column_names.length; i++) {
                         column_name = (String) column_names[i];
                         if (current_value_row <= fields_.get(column_name).size() - 1) {
                             value_row.add(fields_.get(column_name).get(current_value_row).toString());
@@ -130,7 +130,7 @@ public class Insert extends AbstractParametrizedQuery implements Cloneable {
                         template.setValue("VALUE_ROWS", StringUtils.join(value_rows, template.getBlock("SEPARATOR")));
                     }
 
-                    String block = template.getBlock("VALUE_ROWS");
+                    var block = template.getBlock("VALUE_ROWS");
                     if (0 == block.length()) {
                         throw new UnsupportedSqlFeatureException("MULTIPLE INSERT ROWS", datasource_.getAliasedDriver());
                     }
@@ -230,7 +230,7 @@ public class Insert extends AbstractParametrizedQuery implements Cloneable {
     public Insert field(String field, Select query) {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        StringBuilder buffer = new StringBuilder();
+        var buffer = new StringBuilder();
         buffer.append("(");
         buffer.append(query.toString());
         buffer.append(")");
@@ -267,7 +267,7 @@ public class Insert extends AbstractParametrizedQuery implements Cloneable {
         if (null == keyValues) throw new IllegalArgumentException("keyValues can't be null.");
         if (0 == keyValues.length) throw new IllegalArgumentException("keyValues can't be empty.");
 
-        for (int i = 0; i < keyValues.length; i += 2) {
+        for (var i = 0; i < keyValues.length; i += 2) {
             if (null != keyValues[i]) {
                 field(keyValues[i].toString(), keyValues[i + 1]);
             }
@@ -295,9 +295,9 @@ public class Insert extends AbstractParametrizedQuery implements Cloneable {
     throws DbQueryException {
         if (null == bean) throw new IllegalArgumentException("bean can't be null.");
 
-        Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
-        Map<String, String> property_values = QueryHelper.getBeanPropertyValues(bean, includedFields, excludedFields, getDatasource());
-        for (String property_name : property_values.keySet()) {
+        var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+        var property_values = QueryHelper.getBeanPropertyValues(bean, includedFields, excludedFields, getDatasource());
+        for (var property_name : property_values.keySet()) {
             if (!ConstrainedUtils.saveConstrainedProperty(constrained, property_name, null)) {
                 continue;
             }
@@ -320,9 +320,9 @@ public class Insert extends AbstractParametrizedQuery implements Cloneable {
 
         clearGenerated();
 
-        Constrained constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
-        Set<String> property_names = QueryHelper.getBeanPropertyNames(beanClass, excludedFields);
-        for (String property_name : property_names) {
+        var constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
+        var property_names = QueryHelper.getBeanPropertyNames(beanClass, excludedFields);
+        for (var property_name : property_names) {
             if (!ConstrainedUtils.saveConstrainedProperty(constrained, property_name, null)) {
                 continue;
             }
@@ -335,14 +335,14 @@ public class Insert extends AbstractParametrizedQuery implements Cloneable {
     }
 
     public Insert clone() {
-        Insert new_instance = (Insert) super.clone();
+        var new_instance = (Insert) super.clone();
         if (new_instance != null) {
             if (fields_ != null) {
                 new_instance.fields_ = new LinkedHashMap<String, List<Object>>();
 
                 List<Object> values = null;
 
-                for (String field : fields_.keySet()) {
+                for (var field : fields_.keySet()) {
                     values = fields_.get(field);
                     if (values != null) {
                         values = new ArrayList<Object>(values);

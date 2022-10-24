@@ -9,8 +9,7 @@ import rife.database.TestDatasources;
 
 public class TestQuery {
     protected static Datasource PGSQL = TestDatasources.PGSQL;
-    // TODO : oracle database
-    protected static Datasource ORACLE = null;
+    protected static Datasource ORACLE = TestDatasources.ORACLE;
     protected static Datasource HSQLDB = TestDatasources.HSQLDB;
     protected static Datasource H2 = TestDatasources.H2;
     protected static Datasource MYSQL = TestDatasources.MYSQL;

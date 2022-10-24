@@ -33,7 +33,7 @@ public class oracle_jdbc_driver_OracleDriver extends Common implements SqlConver
                 return "'" + StringUtils.encodeSql(value.toString()) + "'";
             }
         } else if (value instanceof Character) {
-            if (((Character) value).charValue() == 0) {
+            if ((Character) value == 0) {
                 return SqlNull.NULL.toString();
             } else {
                 return "'" + StringUtils.encodeSql(value.toString()) + "'";
@@ -48,19 +48,15 @@ public class oracle_jdbc_driver_OracleDriver extends Common implements SqlConver
             return "TO_DATE('" + StringUtils.encodeSql(value.toString()) + "', 'HH24:MI:SS')";
         } else if (value instanceof Timestamp) {
             SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            dateformat.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
             return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(value)) + "', 'YYYY/MM/DD HH24:MI:SS')";
         } else if (value instanceof java.sql.Date) {
             SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd 00:00:00");
-            dateformat.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
             return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(value)) + "', 'YYYY/MM/DD HH24:MI:SS')";
         } else if (value instanceof Date) {
             SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            dateformat.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
             return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(new Timestamp(((Date) value).getTime()))) + "', 'YYYY/MM/DD HH24:MI:SS')";
         } else if (value instanceof Calendar) {
             SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            dateformat.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
             return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(new Timestamp(((Calendar) value).getTime().getTime()))) + "', 'YYYY/MM/DD HH24:MI:SS')";
         }
         // make sure that the Boolean type is correctly caught

@@ -22,3 +22,7 @@ dependencies {
     runtimeOnly("org.eclipse.jetty:jetty-server:11.0.12")
     runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.12")
 }
+
+tasks.test {
+    enabled = false
+}

@@ -34,6 +34,7 @@ dependencies {
     testImplementation("com.h2database:h2:2.1.214")
     testImplementation("org.apache.derby:derby:10.16.1.1")
     testImplementation("org.apache.derby:derbytools:10.16.1.1")
+    testImplementation("com.oracle.database.jdbc:ojdbc11:21.7.0.0")
 }
 
 sourceSets.main {
