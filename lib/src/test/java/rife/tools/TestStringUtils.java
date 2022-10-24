@@ -7,7 +7,6 @@ package rife.tools;
 import org.junit.jupiter.api.Test;
 import rife.datastructures.DocumentPosition;
 
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -42,8 +41,8 @@ public class TestStringUtils {
 
         assertFalse(StringUtils.doesUrlValueNeedDecoding("a+test+%26"));
         assertFalse(StringUtils.doesUrlValueNeedDecoding("%02%02YWJjZGVmw4zDjcOOw4/DkcOSw5PDlMOVw5bDmMOZw5rDm8Ocw5/DoMOhw6I%3D"));
-        assertTrue(StringUtils.doesUrlValueNeedDecoding(URLDecoder.decode("%02%02YWJjZGVmw4zDjcOOw4/DkcOSw5PDlMOVw5bDmMOZw5rDm8Ocw5/DoMOhw6I%3D")));
-        assertEquals("abcdefÌÍÎÏÑÒÓÔÕÖØÙÚÛÜßàáâ", StringUtils.decodeUrlValue(URLDecoder.decode("%02%02YWJjZGVmw4zDjcOOw4/DkcOSw5PDlMOVw5bDmMOZw5rDm8Ocw5/DoMOhw6I%3D")));
+        assertTrue(StringUtils.doesUrlValueNeedDecoding(StringUtils.decodeUrl("%02%02YWJjZGVmw4zDjcOOw4/DkcOSw5PDlMOVw5bDmMOZw5rDm8Ocw5/DoMOhw6I%3D")));
+        assertEquals("abcdefÌÍÎÏÑÒÓÔÕÖØÙÚÛÜßàáâ", StringUtils.decodeUrlValue(StringUtils.decodeUrl("%02%02YWJjZGVmw4zDjcOOw4/DkcOSw5PDlMOVw5bDmMOZw5rDm8Ocw5/DoMOhw6I%3D")));
     }
 
     @Test
@@ -584,80 +583,90 @@ public class TestStringUtils {
         assertNull(StringUtils.convertBbcode(null));
 
         String source =
-            "[B]text[/B]text[b]text[/b]text\n" +
-                "[U]text[/U]text[u]text[/u]text\r\n" +
-                "[I]text[/I]text[i]text[/i]text\n" +
-                "[I]text[/I]text[i]text[/i]text\r\n" +
-                "[pre]text[/pre]text[pre]text[/pre]text\n" +
-                "[LIST]text[/LIST]text[list]text[/list]text\n" +
-                "[*]text\r\n" +
-                "[LIST]\n" +
-                "[*]text\n" +
-                "[/LIST]\n" +
-                "[LIST]\r\n" +
-                "[*]text\r\n" +
-                "[/LIST]\r\n" +
-                "[color= #ffcc00 ]text[/color]text[COLOR=#FFCC00]text[/COLOR]text\n" +
-                "[size= -2 ]text[/size]text[SIZE=3]text[/SIZE]text\r\n" +
-                "[img] http://www.uwyn.com/images/logo.png [/img]\n" +
-                "[url]  www.uwyn.com [/url]\n" +
-                "[url] http://www.uwyn.com [/url]\n" +
-                "[url] /index.html [/url]\n" +
-                "[url=http://www.uwyn.com] The site of Uwyn. [/url]\n" +
-                "[url=www.uwyn.com] The site of Uwyn. [/url]\n" +
-                "[url=index.html] The site of Uwyn. [/url]\n";
+            """
+                [B]text[/B]text[b]text[/b]text
+                [U]text[/U]text[u]text[/u]text\r
+                [I]text[/I]text[i]text[/i]text
+                [I]text[/I]text[i]text[/i]text\r
+                [pre]text[/pre]text[pre]text[/pre]text
+                [LIST]text[/LIST]text[list]text[/list]text
+                [*]text\r
+                [LIST]
+                [*]text
+                [/LIST]
+                [LIST]\r
+                [*]text\r
+                [/LIST]\r
+                [color= #ffcc00 ]text[/color]text[COLOR=#FFCC00]text[/COLOR]text
+                [size= -2 ]text[/size]text[SIZE=3]text[/SIZE]text\r
+                [img] https://www.uwyn.com/images/logo.png [/img]
+                [url]  www.uwyn.com [/url]
+                [url] https://www.uwyn.com [/url]
+                [url] /index.html [/url]
+                [url=https://www.uwyn.com] The site of Uwyn. [/url]
+                [url=www.uwyn.com] The site of Uwyn. [/url]
+                [url=index.html] The site of Uwyn. [/url]
+                """;
 
-        assertEquals("<b>text</b>text<b>text</b>text<br />\n" +
-            "<u>text</u>text<u>text</u>text<br />\r\n" +
-            "<i>text</i>text<i>text</i>text<br />\n" +
-            "<i>text</i>text<i>text</i>text<br />\r\n" +
-            "<pre>text</pre>text<pre>text</pre>text<br />\n" +
-            "<ul>text</ul>text<ul>text</ul>text<br />\n" +
-            "<li>text<br />\r\n" +
-            "</li><ul>\n" +
-            "<li>text<br />\n" +
-            "</li></ul>\n" +
-            "<ul>\r\n" +
-            "<li>text<br />\r\n" +
-            "</li></ul>\r\n" +
-            "<font color=\"#ffcc00\">text</font>text<font color=\"#FFCC00\">text</font>text<br />\n" +
-            "<font size=\"-2\">text</font>text<font size=\"3\">text</font>text<br />\r\n" +
-            "<div class=\"bbcode_img\"><img src=\"http://www.uwyn.com/images/logo.png\" border=\"0\" alt=\"\" /></div><br />\n" +
-            "<a href=\"www.uwyn.com\">www.uwyn.com</a><br />\n" +
-            "<a href=\"http://www.uwyn.com\" target=\"_blank\">http://www.uwyn.com</a><br />\n" +
-            "<a href=\"/index.html\">/index.html</a><br />\n" +
-            "<a href=\"http://www.uwyn.com\" target=\"_blank\"> The site of Uwyn. </a><br />\n" +
-            "<a href=\"www.uwyn.com\"> The site of Uwyn. </a><br />\n" +
-            "<a href=\"index.html\"> The site of Uwyn. </a><br />\n", StringUtils.convertBbcode(source));
+        assertEquals("""
+            <b>text</b>text<b>text</b>text<br />
+            <u>text</u>text<u>text</u>text<br />\r
+            <i>text</i>text<i>text</i>text<br />
+            <i>text</i>text<i>text</i>text<br />\r
+            <pre>text</pre>text<pre>text</pre>text<br />
+            <ul>text</ul>text<ul>text</ul>text<br />
+            <li>text<br />\r
+            </li><ul>
+            <li>text<br />
+            </li></ul>
+            <ul>\r
+            <li>text<br />\r
+            </li></ul>\r
+            <font color="#ffcc00">text</font>text<font color="#FFCC00">text</font>text<br />
+            <font size="-2">text</font>text<font size="3">text</font>text<br />\r
+            <div class="bbcode_img"><img src="https://www.uwyn.com/images/logo.png" border="0" alt="" /></div><br />
+            <a href="www.uwyn.com">www.uwyn.com</a><br />
+            <a href="https://www.uwyn.com" target="_blank">https://www.uwyn.com</a><br />
+            <a href="/index.html">/index.html</a><br />
+            <a href="https://www.uwyn.com" target="_blank"> The site of Uwyn. </a><br />
+            <a href="www.uwyn.com"> The site of Uwyn. </a><br />
+            <a href="index.html"> The site of Uwyn. </a><br />
+            """, StringUtils.convertBbcode(source));
 
-        source = "[url]http://www.uwyn.com/page?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat[/url]\n" +
-            "[url=http://www.uwyn.com/page?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat] The site of Uwyn. [/url]\n" +
-            "[url]http://www.uwyn.com/page/really/long/statement/that/should/be/reduced/dont/you/think/so/blaat[/url]\n" +
-            "[url=http://www.uwyn.com/page/really/long/statement/that/should/be/reduced/dont/you/think/so/blaat] The site of Uwyn. [/url]\n" +
-            "[url]http://www.uwyn.com/other/page?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat[/url]\n" +
-            "[url]http://www.uwyn.com/page/really/long/statement/that/should/be/reduced/dont/you/think/so/blaat?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat[/url]\n" +
-            "[url]http://www.uwyn.com/short?url=true[/url]\n";
+        source = """
+            [url]https://www.uwyn.com/page?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat[/url]
+            [url=https://www.uwyn.com/page?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat] The site of Uwyn. [/url]
+            [url]https://www.uwyn.com/page/really/long/statement/that/should/be/reduced/dont/you/think/so/blaat[/url]
+            [url=https://www.uwyn.com/page/really/long/statement/that/should/be/reduced/dont/you/think/so/blaat] The site of Uwyn. [/url]
+            [url]https://www.uwyn.com/other/page?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat[/url]
+            [url]https://www.uwyn.com/page/really/long/statement/that/should/be/reduced/dont/you/think/so/blaat?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat[/url]
+            [url]https://www.uwyn.com/short?url=true[/url]
+            """;
 
-        assertEquals("<a href=\"http://www.uwyn.com/page?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat\" target=\"_blank\">http://www.uwyn.com/page?...</a><br />\n" +
-                "<a href=\"http://www.uwyn.com/page?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat\" target=\"_blank\"> The site of Uwyn. </a><br />\n" +
-                "<a href=\"http://www.uwyn.com/page/really/long/statement/that/should/be/reduced/dont/you/think/so/blaat\" target=\"_blank\">http://www.uwyn.com/.../blaat</a><br />\n" +
-                "<a href=\"http://www.uwyn.com/page/really/long/statement/that/should/be/reduced/dont/you/think/so/blaat\" target=\"_blank\"> The site of Uwyn. </a><br />\n" +
-                "<a href=\"http://www.uwyn.com/other/page?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat\" target=\"_blank\">http://www.uwyn.com/other/page?...</a><br />\n" +
-                "<a href=\"http://www.uwyn.com/page/really/long/statement/that/should/be/reduced/dont/you/think/so/blaat?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat\" target=\"_blank\">http://www.uwyn.com/.../blaat?...</a><br />\n" +
-                "<a href=\"http://www.uwyn.com/short?url=true\" target=\"_blank\">http://www.uwyn.com/short?url=true</a><br />\n",
+        assertEquals("""
+                <a href="https://www.uwyn.com/page?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat" target="_blank">https://www.uwyn.com/page?...</a><br />
+                <a href="https://www.uwyn.com/page?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat" target="_blank"> The site of Uwyn. </a><br />
+                <a href="https://www.uwyn.com/page/really/long/statement/that/should/be/reduced/dont/you/think/so/blaat" target="_blank">https://www.uwyn.com/.../blaat</a><br />
+                <a href="https://www.uwyn.com/page/really/long/statement/that/should/be/reduced/dont/you/think/so/blaat" target="_blank"> The site of Uwyn. </a><br />
+                <a href="https://www.uwyn.com/other/page?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat" target="_blank">https://www.uwyn.com/other/page?...</a><br />
+                <a href="https://www.uwyn.com/page/really/long/statement/that/should/be/reduced/dont/you/think/so/blaat?really=long&statement=that&should=be&reduced=dont&you=think&so=blaat" target="_blank">https://www.uwyn.com/.../blaat?...</a><br />
+                <a href="https://www.uwyn.com/short?url=true" target="_blank">https://www.uwyn.com/short?url=true</a><br />
+                """,
             StringUtils.convertBbcode(source, StringUtils.BbcodeOption.SHORTEN_URL));
 
         source = "[code]This is code[/code]";
 
         assertEquals("<div class=\"codebody\"><pre>This is code</pre></div>", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.SHORTEN_URL));
 
-        source = "[b]Check out my righteous code[/b]\n" +
-            "[code]This is code[/code]\n" +
-            "[u]VERY COOL[/u]";
+        source = """
+            [b]Check out my righteous code[/b]
+            [code]This is code[/code]
+            [u]VERY COOL[/u]""";
 
-        assertEquals("<b>Check out my righteous code</b><br />\n" +
-            "<div class=\"codebody\"><pre>This is code</pre></div><br />\n" +
-            "<u>VERY COOL</u>", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.SHORTEN_URL));
+        assertEquals("""
+            <b>Check out my righteous code</b><br />
+            <div class="codebody"><pre>This is code</pre></div><br />
+            <u>VERY COOL</u>""", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.SHORTEN_URL));
 
         source = "[url]javascript:self.close();[/url]\n" +
             "[url=javascript:self.close();]Click here[/url]";
@@ -671,46 +680,61 @@ public class TestStringUtils {
         source = "[quote]This is a quote[/quote]\n" +
             "[quote=Bob]This is a quote from Bob[/quote]";
 
-        assertEquals("<div class=\"quotebody\">This is a quote</div><br />\n" +
-            "<div class=\"quoteaccount\">Bob:</div><div class=\"quotebody\">This is a quote from Bob</div>", StringUtils.convertBbcode(source));
+        assertEquals("""
+            <div class="quotebody">This is a quote</div><br />
+            <div class="quoteaccount">Bob:</div><div class="quotebody">This is a quote from Bob</div>""", StringUtils.convertBbcode(source));
 
-        source = "[code]test1[/code]\n\n" +
-            "[b]mijnstijl.css[/b]\n" +
-            "[code]test2[/code]\n\n" +
-            "[b]mijndocument.html[/b]\n" +
-            "[code]test3[/code]";
+        source = """
+            [code]test1[/code]
 
-        assertEquals("<div class=\"codebody\"><pre>test1</pre></div><br />\n<br />\n" +
-            "<b>mijnstijl.css</b><br />\n" +
-            "<div class=\"codebody\"><pre>test2</pre></div><br />\n<br />\n" +
-            "<b>mijndocument.html</b><br />\n" +
-            "<div class=\"codebody\"><pre>test3</pre></div>", StringUtils.convertBbcode(source));
+            [b]mijnstijl.css[/b]
+            [code]test2[/code]
 
-        source = "[code]test1[/code]\n\n" +
-            "[code]test2[/code]\n\n" +
-            "[code]test3[/code]";
+            [b]mijndocument.html[/b]
+            [code]test3[/code]""";
 
-        assertEquals("<div class=\"codebody\"><pre>test1</pre></div><br />\n<br />\n" +
-            "<div class=\"codebody\"><pre>test2</pre></div><br />\n<br />\n" +
-            "<div class=\"codebody\"><pre>test3</pre></div>", StringUtils.convertBbcode(source));
+        assertEquals("""
+            <div class="codebody"><pre>test1</pre></div><br />
+            <br />
+            <b>mijnstijl.css</b><br />
+            <div class="codebody"><pre>test2</pre></div><br />
+            <br />
+            <b>mijndocument.html</b><br />
+            <div class="codebody"><pre>test3</pre></div>""", StringUtils.convertBbcode(source));
 
-        source = "http://www.uwyn.com";
+        source = """
+            [code]test1[/code]
 
-        assertEquals("<a href=\"http://www.uwyn.com\" target=\"_blank\">http://www.uwyn.com</a>", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.CONVERT_BARE_URLS));
+            [code]test2[/code]
 
-        assertEquals("http://www.uwyn.com", StringUtils.convertBbcode(source));
+            [code]test3[/code]""";
 
-        source = "Spacing test http://www.uwyn.com tset gnicapS";
+        assertEquals("""
+            <div class="codebody"><pre>test1</pre></div><br />
+            <br />
+            <div class="codebody"><pre>test2</pre></div><br />
+            <br />
+            <div class="codebody"><pre>test3</pre></div>""", StringUtils.convertBbcode(source));
 
-        assertEquals("Spacing test <a href=\"http://www.uwyn.com\" target=\"_blank\">http://www.uwyn.com</a> tset gnicapS", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.CONVERT_BARE_URLS));
+        source = "https://www.uwyn.com";
 
-        source = "http://www.uwyn.com\n" +
-            "[url]http://www.uwyn.com[/url]\n" +
-            "[url=http://www.uwyn.com]Uwyn[/url]";
+        assertEquals("<a href=\"https://www.uwyn.com\" target=\"_blank\">https://www.uwyn.com</a>", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.CONVERT_BARE_URLS));
 
-        assertEquals("<a href=\"http://www.uwyn.com\" target=\"_blank\" rel=\"nofollow\">http://www.uwyn.com</a><br />\n" +
-            "<a href=\"http://www.uwyn.com\" target=\"_blank\" rel=\"nofollow\">http://www.uwyn.com</a><br />\n" +
-            "<a href=\"http://www.uwyn.com\" target=\"_blank\" rel=\"nofollow\">Uwyn</a>", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.CONVERT_BARE_URLS, StringUtils.BbcodeOption.NO_FOLLOW_LINKS));
+        assertEquals("https://www.uwyn.com", StringUtils.convertBbcode(source));
+
+        source = "Spacing test https://www.uwyn.com tset gnicapS";
+
+        assertEquals("Spacing test <a href=\"https://www.uwyn.com\" target=\"_blank\">https://www.uwyn.com</a> tset gnicapS", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.CONVERT_BARE_URLS));
+
+        source = """
+            https://www.uwyn.com
+            [url]https://www.uwyn.com[/url]
+            [url=https://www.uwyn.com]Uwyn[/url]""";
+
+        assertEquals("""
+            <a href="https://www.uwyn.com" target="_blank" rel="nofollow">https://www.uwyn.com</a><br />
+            <a href="https://www.uwyn.com" target="_blank" rel="nofollow">https://www.uwyn.com</a><br />
+            <a href="https://www.uwyn.com" target="_blank" rel="nofollow">Uwyn</a>""", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.CONVERT_BARE_URLS, StringUtils.BbcodeOption.NO_FOLLOW_LINKS));
 
         source = "[code]" +
             "codepart" +
@@ -745,14 +769,16 @@ public class TestStringUtils {
     public void testGetDocumentPosition() {
         DocumentPosition position;
 
-        String document1 = "0123456789\n" +
-            "9012345678\n" +
-            "\n" +
-            "\n" +
-            "8901234567\n" +
-            "7890123456\n" +
-            "\n" +
-            "6789012345\n";
+        String document1 = """
+            0123456789
+            9012345678
+
+
+            8901234567
+            7890123456
+
+            6789012345
+            """;
 
         assertNull(StringUtils.getDocumentPosition(null, 1));
         assertNull(StringUtils.getDocumentPosition(document1, -2));
@@ -913,14 +939,16 @@ public class TestStringUtils {
 
         assertNull(StringUtils.getDocumentPosition(document2, 59));
 
-        String document3 = "0123456789\r\n" +
-            "9012345678\r\n" +
-            "\r\n" +
-            "\r\n" +
-            "8901234567\r\n" +
-            "7890123456\r\n" +
-            "\r\n" +
-            "6789012345\r\n";
+        String document3 = """
+            0123456789\r
+            9012345678\r
+            \r
+            \r
+            8901234567\r
+            7890123456\r
+            \r
+            6789012345\r
+            """;
 
         position = StringUtils.getDocumentPosition(document3, 0);
         assertEquals("0123456789", position.lineContent());
@@ -1012,39 +1040,41 @@ public class TestStringUtils {
 
     @Test
     public void testWordWrap() {
-        String buffer = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Suspendisse nisi enim, rutrum eget, condimentum quis, malesuada cursus, magna. Fusce suscipit, lorem accumsan hendrerit convallis, purus sem feugiat nulla, a consequat turpis nisi sed ipsum. Duis iaculis suscipit quam. Praesent placerat nibh lobortis nulla. Morbi scelerisque. Etiam et libero. Aliquam viverra tortor eget lectus. Cras quis sem id massa tempor imperdiet. Morbi posuere purus sit amet tortor. Curabitur venenatis ultrices elit. Integer vitae neque. Suspendisse at ipsum sed orci interdum dictum. Praesent condimentum augue et diam. Nunc a neque. Quisque arcu.\n" +
-            "Praesent diam dolor, gravida eget, faucibus in, aliquet sed, elit. Sed lacinia lorem eu leo condimentum lacinia. Proin egestas. Sed porta magna. Nunc ut est. Sed vitae sem. Nunc tempor mattis felis. Nunc urna magna, aliquet quis, consequat ut, ullamcorper eget, libero. Mauris eu dui. Integer ante nibh, lobortis ut, sagittis eu, pretium sed, quam. Praesent fringilla nisi non metus mollis cursus. Ut convallis. Pellentesque imperdiet rhoncus nulla. Fusce tempor. Sed mollis. Fusce feugiat. Proin porttitor nulla sit amet velit.\n" +
-            "\n" +
-            "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed eu est. Duis viverra orci non nisi mollis feugiat. Morbi ut felis. Phasellus placerat elit ac ligula. Vivamus vitae augue. Curabitur pharetra porta risus. Nullam eget est nec arcu bibendum condimentum. Quisque sed pede vitae odio tristique interdum. Aenean magna dolor, sagittis eu, vestibulum ut, varius luctus, erat. Duis tempus libero non lacus. Sed sapien enim, elementum at, laoreet vel, adipiscing sed, purus. Vestibulum magna. Quisque in pede. Proin vitae ligula. Aenean accumsan blandit magna. Nullam cursus tellus in urna. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.";
+        String buffer = """
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Suspendisse nisi enim, rutrum eget, condimentum quis, malesuada cursus, magna. Fusce suscipit, lorem accumsan hendrerit convallis, purus sem feugiat nulla, a consequat turpis nisi sed ipsum. Duis iaculis suscipit quam. Praesent placerat nibh lobortis nulla. Morbi scelerisque. Etiam et libero. Aliquam viverra tortor eget lectus. Cras quis sem id massa tempor imperdiet. Morbi posuere purus sit amet tortor. Curabitur venenatis ultrices elit. Integer vitae neque. Suspendisse at ipsum sed orci interdum dictum. Praesent condimentum augue et diam. Nunc a neque. Quisque arcu.
+            Praesent diam dolor, gravida eget, faucibus in, aliquet sed, elit. Sed lacinia lorem eu leo condimentum lacinia. Proin egestas. Sed porta magna. Nunc ut est. Sed vitae sem. Nunc tempor mattis felis. Nunc urna magna, aliquet quis, consequat ut, ullamcorper eget, libero. Mauris eu dui. Integer ante nibh, lobortis ut, sagittis eu, pretium sed, quam. Praesent fringilla nisi non metus mollis cursus. Ut convallis. Pellentesque imperdiet rhoncus nulla. Fusce tempor. Sed mollis. Fusce feugiat. Proin porttitor nulla sit amet velit.
+
+            Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed eu est. Duis viverra orci non nisi mollis feugiat. Morbi ut felis. Phasellus placerat elit ac ligula. Vivamus vitae augue. Curabitur pharetra porta risus. Nullam eget est nec arcu bibendum condimentum. Quisque sed pede vitae odio tristique interdum. Aenean magna dolor, sagittis eu, vestibulum ut, varius luctus, erat. Duis tempus libero non lacus. Sed sapien enim, elementum at, laoreet vel, adipiscing sed, purus. Vestibulum magna. Quisque in pede. Proin vitae ligula. Aenean accumsan blandit magna. Nullam cursus tellus in urna. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.""";
 
         String result =
-            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Suspendisse nisi enim,\n" +
-                "rutrum eget, condimentum quis, malesuada cursus, magna. Fusce suscipit, lorem \n" +
-                "accumsan hendrerit convallis, purus sem feugiat nulla, a consequat turpis nisi \n" +
-                "sed ipsum. Duis iaculis suscipit quam. Praesent placerat nibh lobortis nulla. \n" +
-                "Morbi scelerisque. Etiam et libero. Aliquam viverra tortor eget lectus. Cras \n" +
-                "quis sem id massa tempor imperdiet. Morbi posuere purus sit amet tortor. \n" +
-                "Curabitur venenatis ultrices elit. Integer vitae neque. Suspendisse at ipsum sed\n" +
-                "orci interdum dictum. Praesent condimentum augue et diam. Nunc a neque. Quisque \n" +
-                "arcu.\n" +
-                "Praesent diam dolor, gravida eget, faucibus in, aliquet sed, elit. Sed lacinia \n" +
-                "lorem eu leo condimentum lacinia. Proin egestas. Sed porta magna. Nunc ut est. \n" +
-                "Sed vitae sem. Nunc tempor mattis felis. Nunc urna magna, aliquet quis, \n" +
-                "consequat ut, ullamcorper eget, libero. Mauris eu dui. Integer ante nibh, \n" +
-                "lobortis ut, sagittis eu, pretium sed, quam. Praesent fringilla nisi non metus \n" +
-                "mollis cursus. Ut convallis. Pellentesque imperdiet rhoncus nulla. Fusce tempor.\n" +
-                "Sed mollis. Fusce feugiat. Proin porttitor nulla sit amet velit.\n" +
-                "\n" +
-                "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia\n" +
-                "Curae; Sed eu est. Duis viverra orci non nisi mollis feugiat. Morbi ut felis. \n" +
-                "Phasellus placerat elit ac ligula. Vivamus vitae augue. Curabitur pharetra porta\n" +
-                "risus. Nullam eget est nec arcu bibendum condimentum. Quisque sed pede vitae \n" +
-                "odio tristique interdum. Aenean magna dolor, sagittis eu, vestibulum ut, varius \n" +
-                "luctus, erat. Duis tempus libero non lacus. Sed sapien enim, elementum at, \n" +
-                "laoreet vel, adipiscing sed, purus. Vestibulum magna. Quisque in pede. Proin \n" +
-                "vitae ligula. Aenean accumsan blandit magna. Nullam cursus tellus in urna. Cum \n" +
-                "sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus \n" +
-                "mus.";
+            """
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Suspendisse nisi enim,
+                rutrum eget, condimentum quis, malesuada cursus, magna. Fusce suscipit, lorem\s
+                accumsan hendrerit convallis, purus sem feugiat nulla, a consequat turpis nisi\s
+                sed ipsum. Duis iaculis suscipit quam. Praesent placerat nibh lobortis nulla.\s
+                Morbi scelerisque. Etiam et libero. Aliquam viverra tortor eget lectus. Cras\s
+                quis sem id massa tempor imperdiet. Morbi posuere purus sit amet tortor.\s
+                Curabitur venenatis ultrices elit. Integer vitae neque. Suspendisse at ipsum sed
+                orci interdum dictum. Praesent condimentum augue et diam. Nunc a neque. Quisque\s
+                arcu.
+                Praesent diam dolor, gravida eget, faucibus in, aliquet sed, elit. Sed lacinia\s
+                lorem eu leo condimentum lacinia. Proin egestas. Sed porta magna. Nunc ut est.\s
+                Sed vitae sem. Nunc tempor mattis felis. Nunc urna magna, aliquet quis,\s
+                consequat ut, ullamcorper eget, libero. Mauris eu dui. Integer ante nibh,\s
+                lobortis ut, sagittis eu, pretium sed, quam. Praesent fringilla nisi non metus\s
+                mollis cursus. Ut convallis. Pellentesque imperdiet rhoncus nulla. Fusce tempor.
+                Sed mollis. Fusce feugiat. Proin porttitor nulla sit amet velit.
+
+                Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
+                Curae; Sed eu est. Duis viverra orci non nisi mollis feugiat. Morbi ut felis.\s
+                Phasellus placerat elit ac ligula. Vivamus vitae augue. Curabitur pharetra porta
+                risus. Nullam eget est nec arcu bibendum condimentum. Quisque sed pede vitae\s
+                odio tristique interdum. Aenean magna dolor, sagittis eu, vestibulum ut, varius\s
+                luctus, erat. Duis tempus libero non lacus. Sed sapien enim, elementum at,\s
+                laoreet vel, adipiscing sed, purus. Vestibulum magna. Quisque in pede. Proin\s
+                vitae ligula. Aenean accumsan blandit magna. Nullam cursus tellus in urna. Cum\s
+                sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus\s
+                mus.""";
 
         assertEquals(result, StringUtils.wordWrap(buffer, 80, null));
     }

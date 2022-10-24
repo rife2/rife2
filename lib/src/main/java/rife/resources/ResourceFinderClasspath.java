@@ -66,7 +66,7 @@ public class ResourceFinderClasspath extends AbstractResourceFinder {
         return resource;
     }
 
-    public <ResultType> ResultType useStream(URL resource, InputStreamUser user)
+    public <ResultType> ResultType useStream(URL resource, InputStreamUser<ResultType, ?> user)
     throws ResourceFinderErrorException, InnerClassException {
         if (null == resource ||
             null == user) {
@@ -75,10 +75,10 @@ public class ResourceFinderClasspath extends AbstractResourceFinder {
 
         InputStream stream = null;
         try {
-            URLConnection connection = resource.openConnection();
+            var connection = resource.openConnection();
             connection.setUseCaches(false);
             stream = connection.getInputStream();
-            return (ResultType) user.useInputStream(stream);
+            return user.useInputStream(stream);
         } catch (IOException e) {
             throw new CantOpenResourceStreamException(resource, e);
         } finally {

@@ -60,7 +60,7 @@ public interface ResourceFinder {
      * @see #useStream(URL, InputStreamUser)
      * @since 1.0
      */
-    <ResultType> ResultType useStream(String name, InputStreamUser user)
+    <ResultType> ResultType useStream(String name, InputStreamUser<ResultType, ?> user)
     throws ResourceFinderErrorException, InnerClassException;
 
     /**
@@ -80,7 +80,7 @@ public interface ResourceFinder {
      * @see #useStream(String, InputStreamUser)
      * @since 1.0
      */
-    <ResultType> ResultType useStream(URL resource, InputStreamUser user)
+    <ResultType> ResultType useStream(URL resource, InputStreamUser<ResultType, ?> user)
     throws ResourceFinderErrorException, InnerClassException;
 
     /**

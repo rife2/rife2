@@ -42,7 +42,7 @@ public class ResourceFinderGroup extends AbstractResourceFinder {
         return null;
     }
 
-    public <ResultType> ResultType useStream(URL resource, InputStreamUser user)
+    public <ResultType> ResultType useStream(URL resource, InputStreamUser<ResultType, ?> user)
     throws ResourceFinderErrorException {
         ResultType result = null;
         for (ResourceFinder resource_finder : resourceFinders_) {

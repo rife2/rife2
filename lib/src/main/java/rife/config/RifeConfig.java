@@ -47,6 +47,10 @@ public class RifeConfig {
         return instance().engine;
     }
 
+    public static ResourcesConfig resources() {
+        return instance().resources;
+    }
+
     public static SchedulerConfig scheduler() {
         return instance().scheduler;
     }
@@ -67,6 +71,7 @@ public class RifeConfig {
     public final AuthenticationConfig authentication = new AuthenticationConfig();
     public final DatabaseConfig database = new DatabaseConfig();
     public final EngineConfig engine = new EngineConfig();
+    public final ResourcesConfig resources = new ResourcesConfig();
     public final SchedulerConfig scheduler = new SchedulerConfig();
     public final ServerConfig server = new ServerConfig();
     public final TemplateConfig template = new TemplateConfig();
@@ -695,6 +700,21 @@ public class RifeConfig {
 
         public static String getMimeType(String extension) {
             return DEFAULT_MIME_MAPPING.get(extension);
+        }
+    }
+
+    public class ResourcesConfig {
+        private String tableResources_ = DEFAULT_TABLE_RESOURCES;
+
+        private static final String DEFAULT_TABLE_RESOURCES = "Resources";
+
+        public String getTableResources() {
+            return tableResources_;
+        }
+
+        public ResourcesConfig setTableResources(String name) {
+            tableResources_ = name;
+            return this;
         }
     }
 

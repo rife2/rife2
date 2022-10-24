@@ -9,6 +9,7 @@ import rife.datastructures.DocumentPosition;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -27,14 +28,14 @@ import java.util.regex.Pattern;
  * @since 1.0
  */
 public abstract class StringUtils {
-    public static String ENCODING_US_ASCII = "US-ASCII";
-    public static String ENCODING_ISO_8859_1 = "ISO-8859-1";
+    public static String ENCODING_US_ASCII = StandardCharsets.US_ASCII.name();
+    public static String ENCODING_ISO_8859_1 = StandardCharsets.ISO_8859_1.name();
     public static String ENCODING_ISO_8859_2 = "ISO-8859-2";
     public static String ENCODING_ISO_8859_5 = "ISO-8859-5";
-    public static String ENCODING_UTF_8 = "UTF-8";
-    public static String ENCODING_UTF_16BE = "UTF-16BE";
-    public static String ENCODING_UTF_16LE = "UTF-16LE";
-    public static String ENCODING_UTF_16 = "UTF-16";
+    public static String ENCODING_UTF_8 = StandardCharsets.UTF_8.name();
+    public static String ENCODING_UTF_16BE = StandardCharsets.UTF_16BE.name();
+    public static String ENCODING_UTF_16LE = StandardCharsets.UTF_16LE.name();
+    public static String ENCODING_UTF_16 = StandardCharsets.UTF_16.name();
 
     public static Charset CHARSET_US_ASCII = Charset.forName(StringUtils.ENCODING_US_ASCII);
 
@@ -482,11 +483,12 @@ public abstract class StringUtils {
 
     /**
      * Transforms a provided <code>String</code> object into a new string,
-     * containing only valid URL characters.
+     * containing only valid URL characters in the UTF-8 encoding.
      *
      * @param source The string that has to be transformed into a valid URL
      *               string.
      * @return The encoded <code>String</code> object.
+     * @see #decodeUrl(String)
      * @see #encodeClassname(String)
      * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
@@ -502,12 +504,20 @@ public abstract class StringUtils {
             return source;
         }
 
-        try {
-            return URLEncoder.encode(source, ENCODING_ISO_8859_1);
-        } catch (UnsupportedEncodingException e) {
-            // this should never happen, ISO-8859-1 is a standard encoding
-            throw new RuntimeException(e);
-        }
+        return URLEncoder.encode(source, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Transforms a provided <code>String</code> URL into a new string,
+     * containing decoded URL characters in the UTF-8 encoding.
+     *
+     * @param source The string URL that has to be decoded
+     * @return The decoded <code>String</code> object.
+     * @see #encodeUrl(String)
+     * @since 2.0
+     */
+    public static String decodeUrl(String source) {
+        return URLDecoder.decode(source, StandardCharsets.UTF_8);
     }
 
     /**

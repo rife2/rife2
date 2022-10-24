@@ -513,21 +513,17 @@ public class MockConversation {
         for (var query_part : query_parts) {
             var parameter = StringUtils.split(query_part, "=");
             if (2 == parameter.size()) {
-                try {
-                    var name = URLDecoder.decode(parameter.get(0), StringUtils.ENCODING_ISO_8859_1);
-                    var value = URLDecoder.decode(parameter.get(1), StringUtils.ENCODING_ISO_8859_1);
+                var name = StringUtils.decodeUrl(parameter.get(0));
+                var value = StringUtils.decodeUrl(parameter.get(1));
 
-                    var values = parameters.get(name);
-                    if (null == values) {
-                        values = new String[]{value};
-                    } else {
-                        values = ArrayUtils.join(values, value);
-                    }
-
-                    parameters.put(name, values);
-                } catch (UnsupportedEncodingException e) {
-                    // can't happen, encoding is always supported
+                var values = parameters.get(name);
+                if (null == values) {
+                    values = new String[]{value};
+                } else {
+                    values = ArrayUtils.join(values, value);
                 }
+
+                parameters.put(name, values);
             }
         }
 

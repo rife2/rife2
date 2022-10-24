@@ -24,7 +24,7 @@ import java.net.URL;
  * @since 1.0
  */
 public abstract class AbstractResourceFinder implements ResourceFinder {
-    public <ResultType> ResultType useStream(String name, InputStreamUser user)
+    public <ResultType> ResultType useStream(String name, InputStreamUser<ResultType, ?> user)
     throws ResourceFinderErrorException, InnerClassException {
         if (null == name ||
             null == user) {

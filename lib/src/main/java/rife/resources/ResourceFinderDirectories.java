@@ -8,6 +8,7 @@ import rife.resources.exceptions.*;
 import rife.tools.FileUtils;
 import rife.tools.InnerClassException;
 import rife.tools.InputStreamUser;
+import rife.tools.StringUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
@@ -45,7 +46,7 @@ public class ResourceFinderDirectories extends AbstractResourceFinder {
         mDirectories = new ArrayList<File>();
 
         if (directories != null) {
-            for (File directory : directories) {
+            for (var directory : directories) {
                 if (directory != null &&
                     directory.canRead() &&
                     directory.isDirectory()) {
@@ -57,8 +58,8 @@ public class ResourceFinderDirectories extends AbstractResourceFinder {
 
     public URL getResource(String name) {
         File resource = null;
-        for (File directory : mDirectories) {
-            String local_name = name.replace('/', File.separatorChar);
+        for (var directory : mDirectories) {
+            var local_name = name.replace('/', File.separatorChar);
             resource = new File(directory.getAbsolutePath() + File.separator + local_name);
             if (resource.exists() &&
                 resource.canRead() &&
@@ -74,7 +75,7 @@ public class ResourceFinderDirectories extends AbstractResourceFinder {
         return null;
     }
 
-    public <ResultType> ResultType useStream(URL resource, InputStreamUser user)
+    public <ResultType> ResultType useStream(URL resource, InputStreamUser<ResultType, ?> user)
     throws ResourceFinderErrorException, InnerClassException {
         if (null == resource ||
             null == user) {
@@ -83,10 +84,10 @@ public class ResourceFinderDirectories extends AbstractResourceFinder {
 
         InputStream stream = null;
         try {
-            URLConnection connection = resource.openConnection();
+            var connection = resource.openConnection();
             connection.setUseCaches(false);
             stream = connection.getInputStream();
-            return (ResultType) user.useInputStream(stream);
+            return user.useInputStream(stream);
         } catch (IOException e) {
             throw new CantOpenResourceStreamException(resource, e);
         } finally {
@@ -123,10 +124,10 @@ public class ResourceFinderDirectories extends AbstractResourceFinder {
 
         long modification_time = -1;
 
-        String resource_protocol = resource.getProtocol();
-        String resource_filename = URLDecoder.decode(resource.getFile());
+        var resource_protocol = resource.getProtocol();
+        var resource_filename = StringUtils.decodeUrl(resource.getFile());
         if (resource_protocol.equals("file")) {
-            File resource_file = new File(resource_filename);
+            var resource_file = new File(resource_filename);
             if (resource_file.exists() &&
                 resource_file.canRead()) {
                 modification_time = resource_file.lastModified();
