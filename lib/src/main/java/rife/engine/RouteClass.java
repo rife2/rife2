@@ -5,6 +5,7 @@
 package rife.engine;
 
 import rife.engine.annotations.Body;
+import rife.engine.annotations.FileUpload;
 import rife.engine.annotations.Parameter;
 import rife.engine.annotations.PathInfo;
 import rife.engine.exceptions.EngineException;
@@ -13,6 +14,7 @@ import rife.tools.Convert;
 import rife.tools.StringUtils;
 import rife.tools.exceptions.ConversionException;
 
+import java.io.File;
 import java.lang.reflect.Modifier;
 
 record RouteClass(Router router, RequestMethod method, String path, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass
@@ -101,6 +103,29 @@ record RouteClass(Router router, RequestMethod method, String path, PathInfoHand
                         value = Convert.getDefaultValue(type);
                     }
                     field.set(element, value);
+                }
+                if (field.isAnnotationPresent(FileUpload.class)) {
+                    var annotation_name = field.getAnnotation(FileUpload.class).name();
+                    if (annotation_name != null && !annotation_name.isEmpty()) {
+                        name = annotation_name;
+                    }
+
+                    var uploaded_file = context.request().getFile(name);
+                    if (uploaded_file != null) {
+                        Object value;
+                        if (UploadedFile.class.isAssignableFrom(type)) {
+                            value = uploaded_file;
+                        } else if (File.class.isAssignableFrom(type)) {
+                            value = uploaded_file.getFile();
+                        } else {
+                            try {
+                                value = Convert.toType(uploaded_file.getFile().getAbsolutePath(), type);
+                            } catch (ConversionException e) {
+                                value = Convert.getDefaultValue(type);
+                            }
+                        }
+                        field.set(element, value);
+                    }
                 }
             }
 
