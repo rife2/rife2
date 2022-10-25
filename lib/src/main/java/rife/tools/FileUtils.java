@@ -115,6 +115,7 @@ public abstract class FileUtils {
 
         var file_list = source.list();
 
+        assert file_list != null;
         for (var element : file_list) {
             var current_file = new File(source.getAbsolutePath() + File.separator + element);
             var target_file = new File(target.getAbsolutePath() + File.separator + element);
@@ -141,6 +142,7 @@ public abstract class FileUtils {
 
         var file_list = source.list();
 
+        assert file_list != null;
         for (var element : file_list) {
             var current_file = new File(source.getAbsolutePath() + File.separator + element);
 

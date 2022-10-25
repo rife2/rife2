@@ -9,8 +9,12 @@ import rife.tools.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -40,8 +44,8 @@ public class ModificationTimeClasspath {
                 var jar_regularfile = new File(jar_filename);
                 if (jar_regularfile.exists() &&
                     jar_regularfile.canRead()) {
-                    try (JarFile jar_file = new JarFile(jar_regularfile)) {
-                        JarEntry jar_entry = jar_file.getJarEntry(jar_entryname);
+                    try (var jar_file = new JarFile(jar_regularfile)) {
+                        var jar_entry = jar_file.getJarEntry(jar_entryname);
                         if (null != jar_entry) {
                             modification_time = jar_entry.getTime();
                         } else {
@@ -54,8 +58,17 @@ public class ModificationTimeClasspath {
                     throw new CouldntAccessResourceJarException(jar_filename, jar_entryname);
                 }
             }
+            case "jrt" -> {
+                FileSystem fs = FileSystems.getFileSystem(URI.create("jrt:/"));
+                var path = fs.getPath("modules", resource_filename);
+                try {
+                    modification_time = Files.getLastModifiedTime(path).toMillis();
+                } catch (IOException e) {
+                    throw new CouldntAccessResourceFileException(resource_filename);
+                }
+            }
             case "file" -> {
-                File resource_file = new File(resource_filename);
+                var resource_file = new File(resource_filename);
                 if (resource_file.exists() &&
                     resource_file.canRead()) {
                     modification_time = resource_file.lastModified();
