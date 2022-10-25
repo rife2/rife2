@@ -15,22 +15,22 @@ public class TestSite extends Site {
     }
 
     public class AuthenticatedRoutes extends Router {
-        public Route test = get("/", (Context c) -> {
+        public Route test = get("/", c -> {
 
         });
     }
 
     public void setup() {
         before(BeforeElement.class, AfterElement.class);
-        before((Context c) -> {
+        before(c -> {
 
-        }, (Context c) -> {
+        }, c -> {
 
         });
         after(AfterElement.class);
 
-        get("/inlined", (Context context) -> {
-            context.print("test");
+        get("/inlined", c -> {
+            c.print("test");
         });
         get("/parameters", Checkout.class);
 

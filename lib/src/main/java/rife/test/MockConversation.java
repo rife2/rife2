@@ -11,10 +11,7 @@ import rife.engine.exceptions.EngineException;
 import rife.tools.ArrayUtils;
 import rife.tools.StringUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -75,7 +72,7 @@ public class MockConversation {
      * Perform a request for a particular URL and request configuration.
      * <p>The request can either be complete with the scheme and hostname, or
      * an absolute path. These two URLs are thus considered the same:
-     * <pre>http://localhost/some/url?name1=value1&amp;name2=value2</pre>
+     * <pre>https://localhost/some/url?name1=value1&amp;name2=value2</pre>
      * <pre>/some/url?name1=value1&amp;name2=value2</pre>
      * <p>Note that when the complete URL form is used, it should correspond
      * to the scheme, hostname and port configuration of this conversation.

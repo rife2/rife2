@@ -23,7 +23,7 @@ class MockHeaders {
 
     private static final SimpleDateFormat[] DATE_FORMATS;
     private static final TimeZone TIMEZONE_GMT = TimeZone.getTimeZone("GMT");
-    private static final ThreadLocal DATE_PARSED_CACHED = new ThreadLocal();
+    private static final ThreadLocal<SimpleDateFormat[]> DATE_PARSED_CACHED = new ThreadLocal<>();
     private static final String SET_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss 'GMT'";
 
     static {
@@ -45,9 +45,9 @@ class MockHeaders {
         }
 
         if (dateFormats_ == null) {
-            dateFormats_ = (SimpleDateFormat[]) DATE_PARSED_CACHED.get();
+            dateFormats_ = DATE_PARSED_CACHED.get();
             if (dateFormats_ == null) {
-                dateFormats_ = (SimpleDateFormat[]) new SimpleDateFormat[DATE_FORMATS.length];
+                dateFormats_ = new SimpleDateFormat[DATE_FORMATS.length];
                 DATE_PARSED_CACHED.set(dateFormats_);
             }
         }
@@ -62,7 +62,7 @@ class MockHeaders {
                 var date = (Date) dateFormats_[i].parseObject(header);
                 return date.getTime();
             } catch (ParseException e) {
-                // IllegalArgumentException will thrown at the end of the method
+                // IllegalArgumentException will be thrown at the end of the method
             }
         }
 
@@ -73,7 +73,7 @@ class MockHeaders {
                     var date = (Date) simpleDateFormat.parseObject(header);
                     return date.getTime();
                 } catch (ParseException e) {
-                    // IllegalArgumentException will thrown at the end of the method
+                    // IllegalArgumentException will be thrown at the end of the method
                 }
             }
         }
@@ -95,23 +95,23 @@ class MockHeaders {
         return headers.get(0);
     }
 
-    public Collection getHeaderNames() {
+    public Set<String> getHeaderNames() {
         if (null == headers_) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptySet();
         }
 
         return headers_.keySet();
     }
 
-    public Collection getHeaders(String name) {
+    public List<String> getHeaders(String name) {
         if (null == headers_) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         var headers = headers_.get(name);
         if (null == headers ||
             0 == headers.size()) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return headers;
@@ -135,12 +135,7 @@ class MockHeaders {
             headers_ = new HashMap<String, List<String>>();
         }
 
-        var headers = headers_.get(name);
-        if (null == headers) {
-            headers = new ArrayList<String>();
-            headers_.put(name, headers);
-        }
-
+        var headers = headers_.computeIfAbsent(name, k -> new ArrayList<>());
         headers.add(value);
     }
 

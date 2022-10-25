@@ -6,6 +6,7 @@ package rife.test;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.xml.sax.SAXException;
 import rife.engine.*;
 
 import java.io.*;
@@ -77,12 +78,13 @@ public class MockResponse extends AbstractResponse {
     }
 
     /**
-     * Retrieves the an array of all the bytes that have been written to this
-     * reponse.
+     * Retrieves an array of all the bytes that have been written to this
+     * response.
      *
      * @return an array of bytes with the response content
      * @see #getText
      * @see #getTemplate
+     * @see #getParsedHtml
      * @since 1.1
      */
     public byte[] getBytes() {
@@ -90,11 +92,12 @@ public class MockResponse extends AbstractResponse {
     }
 
     /**
-     * Retrieves the content of this reponse as text.
+     * Retrieves the content of this response as text.
      *
      * @return the response content as text
      * @see #getBytes
      * @see #getTemplate
+     * @see #getParsedHtml
      * @since 1.1
      */
     public String getText() {
@@ -116,10 +119,24 @@ public class MockResponse extends AbstractResponse {
      * <p><code>null</code> of no template was printed to the response
      * @see #getBytes
      * @see #getText
+     * @see #getParsedHtml
      * @since 1.1
      */
     public Template getTemplate() {
         return template_;
+    }
+
+    /**
+     * Retrieves the content of this response as parsed HTML.
+     *
+     * @return the response content as parsed HTML
+     * @see #getBytes
+     * @see #getText
+     * @see #getTemplate
+     * @since 1.1
+     */
+    public ParsedHtml getParsedHtml() {
+        return ParsedHtml.parse(this);
     }
 
     public String getContentType() {
@@ -402,7 +419,7 @@ public class MockResponse extends AbstractResponse {
     }
 
     /**
-     * Retrieves the list of cookies that have been added in this reponse.
+     * Retrieves the list of cookies that have been added in this response.
      *
      * @return the list of added cookies; or
      * <p>an empty list if no cookies have been added
@@ -445,7 +462,7 @@ public class MockResponse extends AbstractResponse {
 
     /**
      * Returns the value of the specified response header as a
-     * <code>String</code>. If the reponse did not include a header of the
+     * <code>String</code>. If the response did not include a header of the
      * specified name, this method returns <code>null</code>. The header name
      * is case insensitive. You can use this method with any response header.
      *
@@ -462,7 +479,7 @@ public class MockResponse extends AbstractResponse {
 
     /**
      * Returns the value of the specified response header as a
-     * <code>String</code>. If the reponse did not include a header of the
+     * <code>String</code>. If the response did not include a header of the
      * specified name, this method returns <code>null</code>. The header name
      * is case insensitive. You can use this method with any response header.
      *
