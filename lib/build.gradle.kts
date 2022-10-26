@@ -43,6 +43,10 @@ dependencies {
     testImplementation("com.oracle.database.jdbc:ojdbc11:21.7.0.0")
 }
 
+configurations[JavaPlugin.API_CONFIGURATION_NAME].let { apiConfiguration ->
+    apiConfiguration.setExtendsFrom(apiConfiguration.extendsFrom.filter { it.name != "antlr" })
+}
+
 sourceSets.main {
     java.srcDirs("${projectDir}/src/generated/java/")
     resources.exclude("templates/**")
@@ -51,28 +55,34 @@ sourceSets.main {
 tasks.register<JavaExec>("precompileHtmlTemplates") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("rife.template.TemplateDeployer")
-    args = listOf("-verbose",
+    args = listOf(
+        "-verbose",
         "-t", "html",
         "-d", "${projectDir}/build/classes/java/main",
-        "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates")
+        "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates"
+    )
 }
 
 tasks.register<JavaExec>("precompileXmlTemplates") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("rife.template.TemplateDeployer")
-    args = listOf("-verbose",
+    args = listOf(
+        "-verbose",
         "-t", "xml",
         "-d", "${projectDir}/build/classes/java/main",
-        "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates")
+        "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates"
+    )
 }
 
 tasks.register<JavaExec>("precompileSqlTemplates") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("rife.template.TemplateDeployer")
-    args = listOf("-verbose",
+    args = listOf(
+        "-verbose",
         "-t", "sql",
         "-d", "${projectDir}/build/classes/java/main",
-        "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates")
+        "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates"
+    )
 }
 
 tasks.register("precompileTemplates") {
@@ -83,8 +93,14 @@ tasks.register("precompileTemplates") {
 
 tasks.jar {
     dependsOn("precompileTemplates")
-}
 
+    val dependencies = configurations
+        .runtimeClasspath
+        .get()
+        .map(::zipTree)
+    from(dependencies)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 tasks.generateGrammarSource {
     arguments = arguments + listOf(
         "-visitor",
