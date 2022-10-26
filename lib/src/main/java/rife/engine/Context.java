@@ -113,17 +113,17 @@ public class Context {
         template.removeValues(set_values);
     }
 
-    public Template htmlTemplate()
+    public Template templateHtml()
     throws TemplateException, EngineException {
-        return htmlTemplate(routeMatch_.route().getDefaultElementId(), null);
+        return templateHtml(routeMatch_.route().getDefaultElementId(), null);
     }
 
-    public Template htmlTemplate(String name)
+    public Template templateHtml(String name)
     throws TemplateException, EngineException {
-        return htmlTemplate(name, null);
+        return templateHtml(name, null);
     }
 
-    public Template htmlTemplate(String name, String encoding)
+    public Template templateHtml(String name, String encoding)
     throws TemplateException, EngineException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
@@ -131,17 +131,17 @@ public class Context {
         return TemplateFactory.HTML.get(name, encoding);
     }
 
-    public Template txtTemplate()
+    public Template templateTxt()
     throws TemplateException, EngineException {
-        return txtTemplate(routeMatch_.route().getDefaultElementId(), null);
+        return templateTxt(routeMatch_.route().getDefaultElementId(), null);
     }
 
-    public Template txtTemplate(String name)
+    public Template templateTxt(String name)
     throws TemplateException, EngineException {
-        return txtTemplate(name, null);
+        return templateTxt(name, null);
     }
 
-    public Template txtTemplate(String name, String encoding)
+    public Template templateTxt(String name, String encoding)
     throws TemplateException, EngineException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
@@ -149,17 +149,17 @@ public class Context {
         return TemplateFactory.TXT.get(name, encoding);
     }
 
-    public Template xmlTemplate()
+    public Template templateXml()
     throws TemplateException, EngineException {
-        return xmlTemplate(routeMatch_.route().getDefaultElementId(), null);
+        return templateXml(routeMatch_.route().getDefaultElementId(), null);
     }
 
-    public Template xmlTemplate(String name)
+    public Template templateXml(String name)
     throws TemplateException, EngineException {
-        return xmlTemplate(name, null);
+        return templateXml(name, null);
     }
 
-    public Template xmlTemplate(String name, String encoding)
+    public Template templateXml(String name, String encoding)
     throws TemplateException, EngineException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
@@ -167,17 +167,17 @@ public class Context {
         return TemplateFactory.XML.get(name, encoding);
     }
 
-    public Template jsonTemplate()
+    public Template templateJson()
     throws TemplateException, EngineException {
-        return jsonTemplate(routeMatch_.route().getDefaultElementId(), null);
+        return templateJson(routeMatch_.route().getDefaultElementId(), null);
     }
 
-    public Template jsonTemplate(String name)
+    public Template templateJson(String name)
     throws TemplateException, EngineException {
-        return jsonTemplate(name, null);
+        return templateJson(name, null);
     }
 
-    public Template jsonTemplate(String name, String encoding)
+    public Template templateJson(String name, String encoding)
     throws TemplateException, EngineException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");

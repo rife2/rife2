@@ -51,7 +51,7 @@ public class TestSite extends Site {
 
         @Override
         public void process(Context context) {
-            Template template = context.htmlTemplate("Example");
+            Template template = context.templateHtml("Example");
             template.setValue("one", one);
             template.setValue("two", two);
             context.print(template);
