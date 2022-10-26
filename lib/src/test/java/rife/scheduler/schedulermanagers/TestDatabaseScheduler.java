@@ -27,7 +27,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDatabaseScheduler {
-    public void setUp(Datasource datasource) {
+    public void setup(Datasource datasource) {
         DatabaseScheduler scheduler_manager = DatabaseSchedulerFactory.getInstance(datasource);
         try {
             scheduler_manager.install();
@@ -48,7 +48,7 @@ public class TestDatabaseScheduler {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstantiateScheduler(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             Scheduler scheduler = DatabaseSchedulerFactory.getInstance(datasource).getScheduler();
@@ -61,7 +61,7 @@ public class TestDatabaseScheduler {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStartStopScheduler(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         Scheduler scheduler = DatabaseSchedulerFactory.getInstance(datasource).getScheduler();
         try {
@@ -85,7 +85,7 @@ public class TestDatabaseScheduler {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testAddExecutor(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             Scheduler scheduler = DatabaseSchedulerFactory.getInstance(datasource).getScheduler();
             Executor executor = new TestExecutor();
@@ -106,7 +106,7 @@ public class TestDatabaseScheduler {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testOneshotTaskExecution(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int sleep_time = 60 * 1000;
         Scheduler scheduler = DatabaseSchedulerFactory.getInstance(datasource).getScheduler();
@@ -168,7 +168,7 @@ public class TestDatabaseScheduler {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRepeatingTaskExecution(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int scheduler_sleeptime = 30 * 1000;                // 30 seconds
         int task_frequency = 60 * 1000;                    // 1 minute

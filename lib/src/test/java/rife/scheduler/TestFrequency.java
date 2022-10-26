@@ -25,7 +25,7 @@ public class TestFrequency {
     private static final byte[] ALL_WEEKDAYS = new byte[]{1, 2, 3, 4, 5, 6, 7};
 
     @BeforeEach
-    public void setUp() {
+    public void setup() {
         RifeConfig.tools().setDefaultTimeZone(TimeZone.getTimeZone("CET"));
     }
 

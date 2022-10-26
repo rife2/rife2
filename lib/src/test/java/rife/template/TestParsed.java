@@ -18,7 +18,7 @@ public class TestParsed {
     private Parser paser_ = null;
 
     @BeforeEach
-    public void setUp() {
+    public void setup() {
         paser_ = TemplateFactory.HTML.getParser();
     }
 

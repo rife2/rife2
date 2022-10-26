@@ -4,10 +4,7 @@
  */
 package rife.engine;
 
-import rife.engine.annotations.Body;
-import rife.engine.annotations.FileUpload;
-import rife.engine.annotations.Parameter;
-import rife.engine.annotations.PathInfo;
+import rife.engine.annotations.*;
 import rife.engine.exceptions.EngineException;
 import rife.tools.ClassUtils;
 import rife.tools.Convert;
@@ -84,7 +81,7 @@ record RouteClass(Router router, RequestMethod method, String path, PathInfoHand
                         field.set(element, value);
                     }
                 }
-                if (field.isAnnotationPresent(Body.class)) {
+                else if (field.isAnnotationPresent(Body.class)) {
                     var body = context.request().getBody();
                     Object value;
                     try {
@@ -94,7 +91,7 @@ record RouteClass(Router router, RequestMethod method, String path, PathInfoHand
                     }
                     field.set(element, value);
                 }
-                if (field.isAnnotationPresent(PathInfo.class)) {
+                else if (field.isAnnotationPresent(PathInfo.class)) {
                     var path_info = context.pathInfo();
                     Object value;
                     try {
@@ -104,7 +101,7 @@ record RouteClass(Router router, RequestMethod method, String path, PathInfoHand
                     }
                     field.set(element, value);
                 }
-                if (field.isAnnotationPresent(FileUpload.class)) {
+                else if (field.isAnnotationPresent(FileUpload.class)) {
                     var annotation_name = field.getAnnotation(FileUpload.class).name();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
@@ -125,6 +122,24 @@ record RouteClass(Router router, RequestMethod method, String path, PathInfoHand
                             }
                         }
                         field.set(element, value);
+                    }
+                }
+                else if (field.isAnnotationPresent(Cookie.class)) {
+                    var annotation_name = field.getAnnotation(Cookie.class).name();
+                    if (annotation_name != null && !annotation_name.isEmpty()) {
+                        name = annotation_name;
+                    }
+                    var cookie = context.request().getCookie(name);
+                    if (cookie != null) {
+                        if (cookie.getValue() != null) {
+                            Object value;
+                            try {
+                                value = Convert.toType(cookie.getValue(), type);
+                            } catch (ConversionException e) {
+                                value = Convert.getDefaultValue(type);
+                            }
+                            field.set(element, value);
+                        }
                     }
                 }
             }

@@ -47,7 +47,7 @@ public class TestDatabaseResources {
         Here are some encoding-specific chars : ¡¢£¥§¨©ª«¬®.
         """;
 
-    protected void setUp(Datasource datasource) {
+    protected void setup(Datasource datasource) {
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
             resource_finder.install();
@@ -70,7 +70,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstantiation(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             ResourceFinder resource_finder1 = DatabaseResourcesFactory.getInstance(datasource);
             ResourceFinder resource_finder2 = DatabaseResourcesFactory.getInstance(datasource);
@@ -85,7 +85,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstall(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -108,7 +108,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemove(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -132,7 +132,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testAddResource(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -147,7 +147,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetUnknownResource(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
             assertNull(resource_finder.getResource("this/resource/doesnt/exist.txt"));
@@ -159,7 +159,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetResourceByName(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
             assertNotNull(resource_finder.getResource("resources/test.txt"));
@@ -171,7 +171,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUpdateResource(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -201,7 +201,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUpdateMissingResource(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -218,7 +218,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemoveResource(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -236,7 +236,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetUnknownStreamByName(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -258,7 +258,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetUnknownStreamByResource(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -280,7 +280,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetStreamByName(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -306,7 +306,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetStreamByResource(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         var resource = resource_finder.getResource("resources/test.txt");
@@ -333,7 +333,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetUnknownContentByName(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
@@ -350,7 +350,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetUnknownContentByResource(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -366,7 +366,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetContentByName(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -383,7 +383,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetContentByResource(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         var resource = resource_finder.getResource("resources/test.txt");
@@ -401,7 +401,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetContentByNameAndEncoding(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -418,7 +418,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetContentByResourceAndEncoding(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         var resource = resource_finder.getResource("resources/test-utf8.txt");
@@ -436,7 +436,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetUnknownModificationTimeByName(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -452,7 +452,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetUnknownModificationTimeByResource(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -468,7 +468,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetModificationTimeByName(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         try {
@@ -484,7 +484,7 @@ public class TestDatabaseResources {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetModificationTimeByResource(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
         var resource = resource_finder.getResource("resources/test.txt");

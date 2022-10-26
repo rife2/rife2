@@ -27,7 +27,7 @@ import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDatabaseTaskoptions {
-    public void setUp(Datasource datasource) {
+    public void setup(Datasource datasource) {
         DatabaseScheduler manager = DatabaseSchedulerFactory.getInstance(datasource);
 
         try {
@@ -50,7 +50,7 @@ public class TestDatabaseTaskoptions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstantiateTaskoptionManager(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             TaskoptionManager manager = DatabaseTaskoptionsFactory.getInstance(datasource);
             assertNotNull(manager);
@@ -62,7 +62,7 @@ public class TestDatabaseTaskoptions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testAddTaskoptionWithInexistentTaskId(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             Taskoption taskoption = new Taskoption();
             taskoption.setTaskId(0);
@@ -86,7 +86,7 @@ public class TestDatabaseTaskoptions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testAddTaskoption(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int task_id = 0;
         Task task = new Task();
@@ -122,7 +122,7 @@ public class TestDatabaseTaskoptions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testAddDuplicateTaskoption(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int task_id = 0;
         Task task = new Task();
@@ -161,7 +161,7 @@ public class TestDatabaseTaskoptions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetTaskoption(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int task_id = 0;
         Task task = new Task();
@@ -206,7 +206,7 @@ public class TestDatabaseTaskoptions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUpdateTaskoption(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int task_id = 0;
         Task task = new Task();
@@ -258,7 +258,7 @@ public class TestDatabaseTaskoptions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetTaskoptions(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int task_id = 0;
         Task task = new Task();
@@ -302,7 +302,7 @@ public class TestDatabaseTaskoptions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemoveTaskoption(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int task_id = 0;
         Task task = new Task();
@@ -344,7 +344,7 @@ public class TestDatabaseTaskoptions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetNonExistingTaskoption(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         TaskoptionManager manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskoptionManager();
         int task_nonexisting_id = 340;
@@ -360,7 +360,7 @@ public class TestDatabaseTaskoptions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemoveNonExistingTaskoption(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             TaskoptionManager manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskoptionManager();

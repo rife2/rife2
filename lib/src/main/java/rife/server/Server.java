@@ -29,7 +29,7 @@ public class Server {
         return this;
     }
 
-    public void start(Site site) {
+    public Server start(Site site) {
         try (var connector = new ServerConnector(server_)) {
             connector.setPort(RifeConfig.server().getPort());
             server_.setConnectors(new Connector[]{connector});
@@ -55,6 +55,16 @@ public class Server {
 
         try {
             server_.start();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return this;
+    }
+
+    public void stop() {
+        try {
+            server_.stop();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

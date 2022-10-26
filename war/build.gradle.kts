@@ -3,7 +3,7 @@ plugins {
 }
 
 base {
-    archivesName.set("rife-site")
+    archivesName.set("rife2-site")
     version = 1.0
 }
 

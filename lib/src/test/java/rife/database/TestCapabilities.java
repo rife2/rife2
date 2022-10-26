@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestCapabilities {
-    public void setUp(Datasource datasource) {
+    public void setup(Datasource datasource) {
         DbQueryManager manager = new DbQueryManager(datasource);
 
         CreateTable createtable = new CreateTable(datasource);
@@ -90,7 +90,7 @@ public class TestCapabilities {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testLimitOffset(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             DbQueryManager manager = new DbQueryManager(datasource);
 
@@ -158,7 +158,7 @@ public class TestCapabilities {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testLimitOffsetParameters(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             DbQueryManager manager = new DbQueryManager(datasource);
@@ -238,7 +238,7 @@ public class TestCapabilities {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testLimitOffsetParametersMissing(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             DbQueryManager manager = new DbQueryManager(datasource);

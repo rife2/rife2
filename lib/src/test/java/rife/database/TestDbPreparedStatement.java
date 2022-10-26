@@ -21,7 +21,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDbPreparedStatement {
-    public void setUp(Datasource datasource) {
+    public void setup(Datasource datasource) {
         // create the temporary table
         CreateTable query_create = new CreateTable(datasource);
         query_create.table("parametersbean")
@@ -67,7 +67,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstantiationSql(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             String sql = "DELETE FROM parametersbean";
             DbPreparedStatement statement_delete = datasource.getConnection().getPreparedStatement(sql);
@@ -85,7 +85,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstantiationQuery(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             Delete query_delete = new Delete(datasource);
             query_delete
@@ -105,7 +105,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testExecuteQuery(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             Select query_select = new Select(datasource);
             query_select
@@ -124,7 +124,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testExecuteQueryException(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             Select query_select = new Select(datasource);
             query_select
@@ -155,7 +155,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testExecuteUpdate(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             Delete query_delete = new Delete(datasource);
             query_delete
@@ -173,7 +173,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testExecuteUpdateException(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             Delete query_delete = new Delete(datasource);
             query_delete
@@ -202,7 +202,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testNotParametrized(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             String sql = "SELECT * FROM parametersbean WHERE propertyString = ?";
             DbPreparedStatement statement_select = datasource.getConnection().getPreparedStatement(sql);
@@ -224,7 +224,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testNoParameters(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             Select query_select = new Select(datasource);
             query_select.from("parametersbean");
@@ -247,7 +247,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testAddBatch(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         CreateTable query_create = new CreateTable(datasource);
         query_create
@@ -342,7 +342,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetMetaData(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             Select query_select = new Select(datasource);
@@ -377,7 +377,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetParameterMetaData(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             Select query_select = new Select(datasource);
@@ -415,7 +415,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSetBeanNull(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             // insert some data
@@ -441,7 +441,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSetBeanError(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             // insert some data
@@ -465,7 +465,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSetBean(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             // insert some data
@@ -543,7 +543,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSetBeanNulls(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             // insert some data
@@ -627,7 +627,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSetNamedParameters(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             // insert some data
@@ -725,7 +725,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testIllegalParameterName(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             Insert query_insert = new Insert(datasource);
@@ -762,7 +762,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInexistantParameterName(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             Insert query_insert = new Insert(datasource);
@@ -794,7 +794,7 @@ public class TestDbPreparedStatement {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testIllegalArgumentTypedParameters(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         try {
             Insert query_insert = new Insert(datasource);

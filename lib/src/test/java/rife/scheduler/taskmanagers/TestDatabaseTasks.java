@@ -24,7 +24,7 @@ import rife.tools.ExceptionUtils;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDatabaseTasks {
-    public void setUp(Datasource datasource) {
+    public void setup(Datasource datasource) {
         DatabaseScheduler scheduler_manager = DatabaseSchedulerFactory.getInstance(datasource);
         try {
             scheduler_manager.install();
@@ -50,7 +50,7 @@ public class TestDatabaseTasks {
     }
 
     public void testAddTask(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int task_id = -1;
 
@@ -81,7 +81,7 @@ public class TestDatabaseTasks {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetTask(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int task_id = -1;
 
@@ -120,7 +120,7 @@ public class TestDatabaseTasks {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUpdateTask(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int task_id = -1;
 
@@ -175,7 +175,7 @@ public class TestDatabaseTasks {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemoveTask(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int task_id = -1;
 
@@ -206,7 +206,7 @@ public class TestDatabaseTasks {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetNonExistingTask(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
         int task_nonexisting_id = 0;
@@ -222,7 +222,7 @@ public class TestDatabaseTasks {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemoveNonExistingTask(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
         int task_nonexisting_id = 0;
@@ -238,7 +238,7 @@ public class TestDatabaseTasks {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetTasksToProcess(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int one_hour = 1000 * 60 * 60;
 
@@ -291,7 +291,7 @@ public class TestDatabaseTasks {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetScheduledTasks(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int one_hour = 1000 * 60 * 60;
 
@@ -344,7 +344,7 @@ public class TestDatabaseTasks {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testTaskConclusion(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         int one_hour = 1000 * 60 * 60;
 
@@ -414,7 +414,7 @@ public class TestDatabaseTasks {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testTaskActivation(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
 
         TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
         try {
