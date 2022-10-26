@@ -168,7 +168,7 @@ public interface Request {
      *
      * @since 1.1
      */
-    Enumeration getAttributeNames();
+    Enumeration<String> getAttributeNames();
 
     /**
      * See {@link HttpServletRequest#removeAttribute(String)}.
@@ -217,14 +217,14 @@ public interface Request {
      *
      * @since 1.1
      */
-    Enumeration getHeaderNames();
+    Enumeration<String> getHeaderNames();
 
     /**
      * See {@link HttpServletRequest#getHeaders(String)}.
      *
      * @since 1.1
      */
-    Enumeration getHeaders(String name);
+    Enumeration<String> getHeaders(String name);
 
     /**
      * See {@link HttpServletRequest#getIntHeader(String)}.
@@ -245,7 +245,7 @@ public interface Request {
      *
      * @since 1.1
      */
-    Enumeration getLocales();
+    Enumeration<Locale> getLocales();
 
     /**
      * See {@link HttpServletRequest#getProtocol()}.

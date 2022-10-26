@@ -40,7 +40,7 @@ class EngineTemplateHelper {
 //					{
 //						language_id = ElementContext.PREFIX_OGNL_ROLEUSER + language_id;
 //					}
-//					FilteredTagProcessorOgnl.getInstance().processTags(setValues, template, template.getFilteredBlocks(ElementContext.TAG_OGNL_ROLEUSER), language_id, RoleUserAttributes.class, "user", attributes, map);
+//					FilteredTagProcessorOgnl.instance().processTags(setValues, template, template.getFilteredBlocks(ElementContext.TAG_OGNL_ROLEUSER), language_id, RoleUserAttributes.class, "user", attributes, map);
 //				}
 //
 //				if (template.hasFilteredBlocks(ElementContext.TAG_MVEL_ROLEUSER))
@@ -50,7 +50,7 @@ class EngineTemplateHelper {
 //					{
 //						language_id = ElementContext.PREFIX_MVEL_ROLEUSER + language_id;
 //					}
-//					FilteredTagProcessorMvel.getInstance().processTags(setValues, template, template.getFilteredBlocks(ElementContext.TAG_MVEL_ROLEUSER), language_id, RoleUserAttributes.class, "user", attributes, map);
+//					FilteredTagProcessorMvel.instance().processTags(setValues, template, template.getFilteredBlocks(ElementContext.TAG_MVEL_ROLEUSER), language_id, RoleUserAttributes.class, "user", attributes, map);
 //				}
 //
 //				if (template.hasFilteredBlocks(ElementContext.TAG_GROOVY_ROLEUSER))
@@ -60,7 +60,7 @@ class EngineTemplateHelper {
 //					{
 //						language_id = ElementContext.PREFIX_GROOVY_ROLEUSER + language_id;
 //					}
-//					FilteredTagProcessorGroovy.getInstance().processTags(setValues, template, template.getFilteredBlocks(ElementContext.TAG_GROOVY_ROLEUSER), language_id, RoleUserAttributes.class, "user", attributes, map);
+//					FilteredTagProcessorGroovy.instance().processTags(setValues, template, template.getFilteredBlocks(ElementContext.TAG_GROOVY_ROLEUSER), language_id, RoleUserAttributes.class, "user", attributes, map);
 //				}
 //
 //				if (template.hasFilteredBlocks(ElementContext.TAG_JANINO_ROLEUSER))
@@ -70,7 +70,7 @@ class EngineTemplateHelper {
 //					{
 //						language_id = ElementContext.PREFIX_JANINO_ROLEUSER + language_id;
 //					}
-//					FilteredTagProcessorJanino.getInstance().processTags(setValues, template, template.getFilteredBlocks(ElementContext.TAG_JANINO_ROLEUSER), language_id, RoleUserAttributes.class, "user", attributes, map);
+//					FilteredTagProcessorJanino.instance().processTags(setValues, template, template.getFilteredBlocks(ElementContext.TAG_JANINO_ROLEUSER), language_id, RoleUserAttributes.class, "user", attributes, map);
 //				}
 //			}
 //		}

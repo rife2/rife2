@@ -464,7 +464,7 @@ public class MockResponse extends AbstractResponse {
      * Returns the value of the specified response header as a
      * <code>String</code>. If the response did not include a header of the
      * specified name, this method returns <code>null</code>. The header name
-     * is case insensitive. You can use this method with any response header.
+     * is case-insensitive. You can use this method with any response header.
      *
      * @param name the name of the header
      * @return a <code>String</code> containing the value of the response
@@ -516,7 +516,7 @@ public class MockResponse extends AbstractResponse {
      * specified name, this method returns <code>-1</code>. If the header
      * cannot be converted to an <code>integer</code>, this method throws a
      * <code>NumberFormatException</code>.
-     * <p>The header name is case insensitive.
+     * <p>The header name is case-insensitive.
      *
      * @param name the name of the header
      * @return an <code>integer</code> expressing the value of the response

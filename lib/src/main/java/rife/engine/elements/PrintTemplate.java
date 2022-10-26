@@ -16,7 +16,7 @@ public class PrintTemplate implements Element {
     }
 
     public Template getTemplate(Context c) {
-        return c.getHtmlTemplate(templateName_);
+        return c.htmlTemplate(templateName_);
     }
 
     public void process(Context c)

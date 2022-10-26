@@ -653,7 +653,7 @@ public class MockRequest implements Request {
         return attributes_.containsKey(name);
     }
 
-    public Enumeration getAttributeNames() {
+    public Enumeration<String> getAttributeNames() {
         if (null == attributes_) {
             return Collections.enumeration(new ArrayList<String>());
         }
@@ -751,11 +751,11 @@ public class MockRequest implements Request {
         return headers_.getHeader(name);
     }
 
-    public Enumeration getHeaderNames() {
+    public Enumeration<String> getHeaderNames() {
         return Collections.enumeration(headers_.getHeaderNames());
     }
 
-    public Enumeration getHeaders(String name) {
+    public Enumeration<String> getHeaders(String name) {
         return Collections.enumeration(headers_.getHeaders(name));
     }
 
@@ -945,7 +945,7 @@ public class MockRequest implements Request {
         return locales_.get(0);
     }
 
-    public Enumeration getLocales() {
+    public Enumeration<Locale> getLocales() {
         if (null == locales_) {
             return Collections.enumeration(new ArrayList() {{
                 add(Locale.getDefault());

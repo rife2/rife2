@@ -35,8 +35,7 @@ public class UploadedFile implements Cloneable, AutoCloseable {
     }
 
     @Override
-    public void close()
-    throws Exception {
+    public void close() {
         if (tempFile_ != null) {
             tempFile_.delete();
         }

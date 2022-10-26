@@ -39,13 +39,13 @@ public class EngineTemplateProcessor {
     private void processApplicationTags(final List<String> setValues) {
         if (template_.hasValueId(Context.ID_WEBAPP_ROOT_URL) &&
             !template_.isValueSet(Context.ID_WEBAPP_ROOT_URL)) {
-            template_.setValue(Context.ID_WEBAPP_ROOT_URL, context_.getWebappRootUrl(-1));
+            template_.setValue(Context.ID_WEBAPP_ROOT_URL, context_.webappRootUrl(-1));
             setValues.add(Context.ID_WEBAPP_ROOT_URL);
         }
 
         if (template_.hasValueId(Context.ID_SERVER_ROOT_URL) &&
             !template_.isValueSet(Context.ID_SERVER_ROOT_URL)) {
-            template_.setValue(Context.ID_SERVER_ROOT_URL, context_.getServerRootUrl(-1));
+            template_.setValue(Context.ID_SERVER_ROOT_URL, context_.serverRootUrl(-1));
             setValues.add(Context.ID_SERVER_ROOT_URL);
         }
 

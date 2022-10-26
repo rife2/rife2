@@ -4,14 +4,12 @@
  */
 package rife.engine;
 
-import org.eclipse.jetty.util.VirtualThreads;
 import rife.Version;
 import rife.config.RifeConfig;
 import rife.engine.exceptions.DeferException;
 import rife.engine.exceptions.RedirectException;
 import rife.template.Template;
 import rife.template.TemplateFactory;
-import rife.template.exceptions.SyntaxErrorException;
 import rife.tools.ExceptionFormattingUtils;
 import rife.tools.ExceptionUtils;
 
@@ -102,7 +100,7 @@ public class Gate {
             Logger.getLogger("rife.engine").severe(message + "\n" + ExceptionUtils.getExceptionStackTrace(exception));
         }
 
-        c.setEngineException(exception);
+        c.engineException(exception);
 
         Route exception_route = site_.getExceptionRoute();
         if (exception_route != null) {
@@ -114,7 +112,7 @@ public class Gate {
         }
 
         if (!RifeConfig.engine().getPrettyEngineExceptions()) {
-            c.setEngineException(exception);
+            c.engineException(exception);
 
             if (exception instanceof RuntimeException) {
                 throw (RuntimeException) exception;

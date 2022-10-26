@@ -4,6 +4,9 @@
  */
 package rife.engine;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpSession;
 import rife.config.RifeConfig;
 import rife.engine.exceptions.DeferException;
 import rife.engine.exceptions.EngineException;
@@ -11,12 +14,20 @@ import rife.engine.exceptions.RedirectException;
 import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.template.exceptions.TemplateException;
+import rife.tools.ArrayUtils;
 import rife.tools.ServletUtils;
+import rife.tools.StringUtils;
 
-import java.util.Collection;
-import java.util.Map;
+import java.io.OutputStream;
+import java.util.*;
 
 public class Context {
+    public static final boolean DEFAULT_BOOLEAN = false;
+    public static final int DEFAULT_INTEGER = 0;
+    public static final long DEFAULT_LONG = 0L;
+    public static final double DEFAULT_DOUBLE = 0.0d;
+    public static final float DEFAULT_FLOAT = 0.0f;
+
     public static final String ID_WEBAPP_ROOT_URL = "webapp:rootUrl";
     public static final String ID_SERVER_ROOT_URL = "server:rootUrl";
     public static final String ID_CONTEXT_PATH_INFO = "context:pathInfo";
@@ -73,7 +84,9 @@ public class Context {
         return null;
     }
 
-    public Route route() { return routeMatch_.route(); }
+    public Route route() {
+        return routeMatch_.route();
+    }
 
     public void print(Object o) {
         response_.print(o);
@@ -85,7 +98,7 @@ public class Context {
 
         // set the content type
         if (!response_.isContentTypeSet()) {
-            String content_type = template.getDefaultContentType();
+            var content_type = template.getDefaultContentType();
             if (null == content_type) {
                 content_type = RifeConfig.engine().getDefaultContentType();
             }
@@ -100,17 +113,17 @@ public class Context {
         template.removeValues(set_values);
     }
 
-    public Template getHtmlTemplate()
+    public Template htmlTemplate()
     throws TemplateException, EngineException {
-        return getHtmlTemplate(routeMatch_.route().getDefaultElementId(), null);
+        return htmlTemplate(routeMatch_.route().getDefaultElementId(), null);
     }
 
-    public Template getHtmlTemplate(String name)
+    public Template htmlTemplate(String name)
     throws TemplateException, EngineException {
-        return getHtmlTemplate(name, null);
+        return htmlTemplate(name, null);
     }
 
-    public Template getHtmlTemplate(String name, String encoding)
+    public Template htmlTemplate(String name, String encoding)
     throws TemplateException, EngineException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
@@ -118,22 +131,72 @@ public class Context {
         return TemplateFactory.HTML.get(name, encoding);
     }
 
-    public String getGateUrl() {
+    public Template txtTemplate()
+    throws TemplateException, EngineException {
+        return txtTemplate(routeMatch_.route().getDefaultElementId(), null);
+    }
+
+    public Template txtTemplate(String name)
+    throws TemplateException, EngineException {
+        return txtTemplate(name, null);
+    }
+
+    public Template txtTemplate(String name, String encoding)
+    throws TemplateException, EngineException {
+        if (null == name) throw new IllegalArgumentException("name can't be null.");
+        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+
+        return TemplateFactory.TXT.get(name, encoding);
+    }
+
+    public Template xmlTemplate()
+    throws TemplateException, EngineException {
+        return xmlTemplate(routeMatch_.route().getDefaultElementId(), null);
+    }
+
+    public Template xmlTemplate(String name)
+    throws TemplateException, EngineException {
+        return xmlTemplate(name, null);
+    }
+
+    public Template xmlTemplate(String name, String encoding)
+    throws TemplateException, EngineException {
+        if (null == name) throw new IllegalArgumentException("name can't be null.");
+        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+
+        return TemplateFactory.XML.get(name, encoding);
+    }
+
+    public Template jsonTemplate()
+    throws TemplateException, EngineException {
+        return jsonTemplate(routeMatch_.route().getDefaultElementId(), null);
+    }
+
+    public Template jsonTemplate(String name)
+    throws TemplateException, EngineException {
+        return jsonTemplate(name, null);
+    }
+
+    public Template jsonTemplate(String name, String encoding)
+    throws TemplateException, EngineException {
+        if (null == name) throw new IllegalArgumentException("name can't be null.");
+        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+
+        return TemplateFactory.JSON.get(name, encoding);
+    }
+
+    public String gateUrl() {
         return gateUrl_;
     }
 
-    public String getServerRootUrl(int port) {
-        return request_.getServerRootUrl(port);
-    }
-
-    public String getWebappRootUrl(int port) {
+    public String webappRootUrl(int port) {
         if (RifeConfig.engine().getProxyRootUrl() != null) {
             return RifeConfig.engine().getProxyRootUrl();
         }
 
-        StringBuilder webapp_root = new StringBuilder();
-        webapp_root.append(getServerRootUrl(port));
-        String gate_url = getGateUrl();
+        var webapp_root = new StringBuilder();
+        webapp_root.append(serverRootUrl(port));
+        var gate_url = gateUrl();
         if (!gate_url.startsWith("/")) {
             webapp_root.append("/");
         }
@@ -147,14 +210,14 @@ public class Context {
     }
 
     public UrlBuilder urlFor(Route route) {
-        return new UrlBuilder(getWebappRootUrl(-1), route);
+        return new UrlBuilder(webappRootUrl(-1), route);
     }
 
-    void setEngineException(Throwable exception) {
+    void engineException(Throwable exception) {
         engineException_ = exception;
     }
 
-    public Throwable getEngineException() {
+    public Throwable engineException() {
         return engineException_;
     }
 
@@ -172,7 +235,7 @@ public class Context {
      * &lt;option value="blue"{{v colors:blue:selected}}{{/v}}&gt;Blue&lt;/option&gt;
      * &lt;option value="orange"{{v colors:orange:selected}}{{/v}}&gt;Orange&lt;/option&gt;
      * &lt;option value="red"{{v colors:red:selected}}{{/v}}&gt;Red&lt;/option&gt;
-     * &lt;option value="green"[!V colors:green:selected'}}{{/v}}&gt;Green&lt;/option&gt;
+     * &lt;option value="green"{{v colors:green:selected'}}{{/v}}&gt;Green&lt;/option&gt;
      * &lt;/select&gt;</pre>
      * <p>the result will then be:
      * <pre>&lt;select name="colors"&gt;
@@ -182,7 +245,7 @@ public class Context {
      * &lt;option value="green"&gt;Green&lt;/option&gt;
      * &lt;/select&gt;</pre>
      * <p>For example for radio buttons, consider the name '{@code sex}',
-     * the value '{@code male}' and the following XHTML template excerpt:
+     * the value '{@code male}' and the following HTML template excerpt:
      * <pre>&lt;input type="radio" name="sex" value="male"{{v sex:male:checked}}{{/v}} /&gt;
      * &lt;input type="radio" name="sex" value="female"{{v sex:female:checked}}{{/v}} /&gt;</pre>
      * <p>the result will then be:
@@ -353,8 +416,7 @@ public class Context {
      *                                                catch this exception
      * @since 1.0
      */
-    public void defer()
-    throws EngineException {
+    public void defer() {
         throw new DeferException();
     }
 
@@ -369,8 +431,7 @@ public class Context {
      *                                                catch this exception
      * @since 1.0
      */
-    public void redirect(Object url)
-    throws EngineException {
+    public void redirect(Object url) {
         throw new RedirectException(url);
     }
 
@@ -383,9 +444,1279 @@ public class Context {
      *                                                have access to the request data (eg. you're inside a child trigger)
      * @since 1.0
      */
-    public void preventCaching()
-    throws EngineException {
+    public void preventCaching() {
         ServletUtils.preventCaching(response_);
+    }
+
+    /**
+     * See {@link Request#getMethod()}.
+     *
+     * @since 2.0
+     */
+    public RequestMethod method() {
+        return request_.getMethod();
+    }
+
+    /**
+     * See {@link Request#getParameters()}.
+     *
+     * @since 2.0
+     */
+    public Map<String, String[]> parameters() {
+        return request_.getParameters();
+    }
+
+    /**
+     * Checks whether a value has been provided to a parameter.
+     *
+     * @param name the name of the parameter
+     * @return {@code true} if the parameter has a value; or
+     * <p>{@code false} otherwise
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 1.0
+     */
+    public boolean hasParameterValue(String name) {
+        return parameters().containsKey(name);
+    }
+
+    /**
+     * Checks whether a parameter is empty.
+     *
+     * @param name the name of the parameter
+     * @return {@code true} if the parameter is empty; or
+     * <p>{@code false} otherwise
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public boolean isParameterEmpty(String name) {
+        var parameter = parameter(name);
+        return null == parameter ||
+            parameter.trim().equals("");
+    }
+
+    /**
+     * Retrieves the value of a parameter.
+     *
+     * @param name the name of the parameter
+     * @return the value of the parameter; or
+     * <p>{@code null} if no value is present for this parameter
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public String parameter(String name) {
+        var parameters = parameters().get(name);
+        if (null == parameters) {
+            return null;
+        }
+        return parameters[0];
+    }
+
+    /**
+     * Retrieves the value of a parameter and returns a default value if no
+     * parameter value is present
+     *
+     * @param name         the name of the parameter
+     * @param defaultValue the default value that will be used when no
+     *                     parameter value is present
+     * @return the parameter value; or
+     * <p>the default value if no parameter value is present
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public String parameter(String name, String defaultValue) {
+        var value = parameter(name);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value;
+    }
+
+    /**
+     * Retrieves the names of all the parameters that are present.
+     *
+     * @return the list with the parameter names
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @since 2.0
+     */
+    public Set<String> parameterNames() {
+        return parameters().keySet();
+    }
+
+    /**
+     * Retrieves the values of a parameter.
+     *
+     * @param name the name of the parameter
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public String[] parameterValues(String name) {
+        return parameters().get(name);
+    }
+
+    /**
+     * Retrieves the value of a parameter and converts it to a boolean.
+     *
+     * @param name the name of the parameter
+     * @return the converted parameter value; or
+     * <p>{@code false} if no parameter value is present or if the
+     * parameter value is not a valid boolean
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public boolean parameterBoolean(String name) {
+        return parameterBoolean(name, DEFAULT_BOOLEAN);
+    }
+
+    /**
+     * Retrieves the value of a parameter and converts it to a boolean, using
+     * a default value if no parameter value is present.
+     *
+     * @param name         the name of the parameter
+     * @param defaultValue the default value that will be used when no
+     *                     parameter value is present
+     * @return the converted parameter value; or
+     * <p>the default value if no parameter value is present
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public boolean parameterBoolean(String name, boolean defaultValue) {
+        var value = parameter(name);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return StringUtils.convertToBoolean(value);
+    }
+
+    /**
+     * Retrieves the value of a parameter and converts it to an integer.
+     *
+     * @param name the name of the parameter
+     * @return the converted parameter value; or
+     * <p>{@code 0} if no parameter value is present or if the parameter
+     * value is not a valid integer
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public int parameterInt(String name) {
+        return parameterInt(name, DEFAULT_INTEGER);
+    }
+
+    /**
+     * Retrieves the value of a parameter and converts it to an integer, using
+     * a default value if no parameter value is present.
+     *
+     * @param name         the name of the parameter
+     * @param defaultValue the default value that will be used when no
+     *                     parameter value is present
+     * @return the converted parameter value; or
+     * <p>the default value if no parameter value is present
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public int parameterInt(String name, int defaultValue) {
+        var value = parameter(name);
+        if (value == null) {
+            return defaultValue;
+        }
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Retrieves the value of a parameter and converts it to a long.
+     *
+     * @param name the name of the parameter
+     * @return the converted parameter value; or
+     * <p>{@code 0L} if no parameter value is present or if the parameter
+     * value is not a valid long
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public long parameterLong(String name) {
+        return parameterLong(name, DEFAULT_LONG);
+    }
+
+    /**
+     * Retrieves the value of a parameter and converts it to a long, using a
+     * default value if no parameter value is present.
+     *
+     * @param name         the name of the parameter
+     * @param defaultValue the default value that will be used when no
+     *                     parameter value is present
+     * @return the converted parameter value; or
+     * <p>the default value if no parameter value is present
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 1.0
+     */
+    public long parameterLong(String name, long defaultValue) {
+        var value = parameter(name);
+        if (value == null) {
+            return defaultValue;
+        }
+        try {
+            return Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Retrieves the value of a parameter and converts it to a double.
+     *
+     * @param name the name of the parameter
+     * @return the converted parameter value; or
+     * <p>{@code 0.0d} if no parameter value is present or if the
+     * parameter value is not a valid double
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public double parameterDouble(String name) {
+        return parameterDouble(name, DEFAULT_DOUBLE);
+    }
+
+    /**
+     * Retrieves the value of a parameter and converts it to a double, using a
+     * default value if no parameter value is present.
+     *
+     * @param name         the name of the parameter
+     * @param defaultValue the default value that will be used when no
+     *                     parameter value is present
+     * @return the converted parameter value; or
+     * <p>the default value if no parameter value is present
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 1.0
+     */
+    public double parameterDouble(String name, double defaultValue) {
+        var value = parameter(name);
+        if (value == null) {
+            return defaultValue;
+        }
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Retrieves the value of a parameter and converts it to a float.
+     *
+     * @param name the name of the parameter
+     * @return the converted parameter value; or
+     * <p>{@code 0.0f} if no parameter value is present or if the
+     * parameter value is not a valid float
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 1.0
+     */
+    public float parameterFloat(String name) {
+        return parameterFloat(name, DEFAULT_FLOAT);
+    }
+
+    /**
+     * Retrieves the value of a parameter and converts it to a float, using a
+     * default value if no parameter value is present.
+     *
+     * @param name         the name of the parameter
+     * @param defaultValue the default value that will be used when no
+     *                     parameter value is present
+     * @return the converted parameter value; or
+     * <p>the default value if no parameter value is present
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 1.0
+     */
+    public float parameterFloat(String name, float defaultValue) {
+        var value = parameter(name);
+        if (value == null) {
+            return defaultValue;
+        }
+        try {
+            return Float.parseFloat(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Retrieves the values of a parameter as an array of integers.
+     *
+     * @param name the name of the parameter
+     * @return an integer array with all the parameter values; or
+     * <p>{@code null} if no parameter values are present
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 1.0
+     */
+    public int[] parameterInts(String name) {
+        return ArrayUtils.createIntArray(parameterValues(name));
+    }
+
+    /**
+     * Retrieves the values of a parameter as an array of longs.
+     *
+     * @param name the name of the parameter
+     * @return a long array with all the parameter values; or
+     * <p>{@code null} if no parameter values are present
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 1.0
+     */
+    public long[] parameterLongs(String name) {
+        return ArrayUtils.createLongArray(parameterValues(name));
+    }
+
+    /**
+     * Retrieves the values of a parameter as an array of floats.
+     *
+     * @param name the name of the parameter
+     * @return a float array with all the parameter values; or
+     * <p>{@code null} if no parameter values are present
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 1.0
+     */
+    public float[] parameterFloats(String name) {
+        return ArrayUtils.createFloatArray(parameterValues(name));
+    }
+
+    /**
+     * Retrieves the values of a parameter as an array of doubles.
+     *
+     * @param name the name of the parameter
+     * @return a double array with all the parameter values; or
+     * <p>{@code null} if no parameter values are present
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 1.0
+     */
+    public double[] parameterDoubles(String name) {
+        return ArrayUtils.createDoubleArray(parameterValues(name));
+    }
+
+    /**
+     * See {@link Request#getBody()}.
+     *
+     * @since 2.0
+     */
+    public String body() {
+        return request_.getBody();
+    }
+
+    /**
+     * See {@link Request#getBodyAsBytes()}.
+     *
+     * @since 2.0
+     */
+    public byte[] bodyAsBytes() {
+        return request_.getBodyAsBytes();
+    }
+
+    /**
+     * Retrieves the list of uploaded file names.
+     *
+     * @return the list of uploaded file names
+     * @see #hasFile(String)
+     * @see #isFileEmpty(String)
+     * @see #file(String)
+     * @see #files(String)
+     * @since 2.0
+     */
+    public Set<String> fileNames() {
+        return files().keySet();
+    }
+
+    /**
+     * Checks if an uploaded file wasn't sent or if it is empty.
+     *
+     * @param name the name of the file, as declared in the submission
+     * @see #fileNames()
+     * @see #hasFile(String)
+     * @see #file(String)
+     * @see #files(String)
+     * @since 2.0
+     */
+    public boolean isFileEmpty(String name) {
+        try (final var file = file(name)) {
+            return null == file ||
+                null == file.getFile() ||
+                0 == file.getFile().length();
+        }
+    }
+
+    /**
+     * See {@link Request#getFiles()}.
+     *
+     * @since 2.0
+     */
+    public Map<String, UploadedFile[]> files() {
+        return request_.getFiles();
+    }
+
+    /**
+     * See {@link Request#hasFile}.
+     *
+     * @since 2.0
+     */
+    public boolean hasFile(String name) {
+        return request_.hasFile(name);
+    }
+
+    /**
+     * See {@link Request#getFile}.
+     *
+     * @since 2.0
+     */
+    public UploadedFile file(String name) {
+        return request_.getFile(name);
+    }
+
+    /**
+     * See {@link Request#getFiles}.
+     *
+     * @since 2.0
+     */
+    public UploadedFile[] files(String name) {
+        return request_.getFiles(name);
+    }
+
+    /**
+     * See {@link Request#getServerRootUrl}.
+     *
+     * @since 2.0
+     */
+    public String serverRootUrl(int port) {
+        return request_.getServerRootUrl(port);
+    }
+
+    /**
+     * See {@link Request#hasCookie}.
+     *
+     * @since 2.0
+     */
+    public boolean hasCookie(String name) {
+        return request_.hasCookie(name);
+    }
+
+    /**
+     * See {@link Request#getCookie}.
+     *
+     * @since 2.0
+     */
+    public Cookie cookie(String name) {
+        return request_.getCookie(name);
+    }
+
+    /**
+     * See {@link Request#getCookies()}.
+     *
+     * @since 2.0
+     */
+    public Cookie[] cookies() {
+        return request_.getCookies();
+    }
+
+    /**
+     * Retrieves the value of a cookie.
+     *
+     * @param name the name of the cookie
+     * @return the value of the cookie; or
+     * <p>{@code null} if no such cookie is present
+     * @see #hasCookie(String)
+     * @see #cookie(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
+     * @see #cookie(Cookie)
+     * @since 2.0
+     */
+    public String cookieValue(String name) {
+        var cookie = cookie(name);
+        String value = null;
+        if (cookie != null) {
+            value = cookie.getValue();
+        }
+
+        return value;
+    }
+
+    /**
+     * Retrieves all current cookies names with their values.
+     *
+     * @return a new map of all the current cookies names with their values
+     * @see #hasCookie(String)
+     * @see #cookie(String)
+     * @see #cookieValue(String)
+     * @see #cookieValue(String, String)
+     * @see #cookie(Cookie)
+     * @since 2.0
+     */
+    public Map<String, String> cookieValues() {
+        Map<String, String> result = new HashMap<>();
+
+        for (var entry : request_.getCookies()) {
+            result.put(entry.getName(), entry.getValue());
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the value of a named cookie, using a default value as
+     * fallback.
+     *
+     * @param name         the name of the cookie
+     * @param defaultValue the default value that will be used when no cookie
+     *                     value is present
+     * @return the cookie value; or
+     * <p>the default value if no cookie value is present
+     * @see #hasCookie(String)
+     * @see #cookie(String)
+     * @see #cookieValue(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
+     * @see #cookie(Cookie)
+     * @since 2.0
+     */
+    public String cookieValue(String name, String defaultValue) {
+        var value = cookieValue(name);
+        if (value == null) {
+            return defaultValue;
+        }
+        return value;
+    }
+
+    /**
+     * Retrieves the value of a named cookie and converts it to a boolean.
+     *
+     * @param name the name of the cookie
+     * @return the converted cookie value; or
+     * <p>{@code false} if no cookie value is present or if the cookie
+     * value is not a valid boolean
+     * @see #hasCookie(String)
+     * @see #cookie(String)
+     * @see #cookieValue(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
+     * @see #cookie(Cookie)
+     * @since 2.0
+     */
+    public boolean cookieBoolean(String name) {
+        return cookieBoolean(name, DEFAULT_BOOLEAN);
+    }
+
+    /**
+     * Retrieves the value of a named cookie and converts it to a boolean,
+     * using a default value if no input value is present.
+     *
+     * @param name         the name of the cookie
+     * @param defaultValue the default value that will be used when no cookie
+     *                     value is present
+     * @return the converted cookie value; or
+     * <p>the default value if no cookie value is present
+     * @see #hasCookie(String)
+     * @see #cookie(String)
+     * @see #cookieValue(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
+     * @see #cookie(Cookie)
+     * @since 2.0
+     */
+    public boolean cookieBoolean(String name, boolean defaultValue) {
+        var value = cookieValue(name);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return StringUtils.convertToBoolean(value);
+    }
+
+    /**
+     * Retrieves the value of a named cookie and converts it to an integer.
+     *
+     * @param name the name of the cookie
+     * @return the converted cookie value; or
+     * <p>{@code 0} if no cookie value is present or if the cookie value
+     * is not a valid integer
+     * @see #hasCookie(String)
+     * @see #cookie(String)
+     * @see #cookieValue(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
+     * @see #cookie(Cookie)
+     * @since 2.0
+     */
+    public int cookieInt(String name) {
+        return cookieInt(name, DEFAULT_INTEGER);
+    }
+
+    /**
+     * Retrieves the value of a named cookie and converts it to an integer,
+     * using a default value if no input value is present.
+     *
+     * @param name         the name of the cookie
+     * @param defaultValue the default value that will be used when no cookie
+     *                     value is present
+     * @return the converted cookie value; or
+     * <p>the default value if no cookie value is present
+     * @see #hasCookie(String)
+     * @see #cookie(String)
+     * @see #cookieValue(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
+     * @see #cookie(Cookie)
+     * @since 2.0
+     */
+    public int cookieInt(String name, int defaultValue) {
+        var value = cookieValue(name);
+        if (value == null) {
+            return defaultValue;
+        }
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Retrieves the value of a named cookie and converts it to a long.
+     *
+     * @param name the name of the cookie
+     * @return the converted cookie value; or
+     * <p>{@code 0L} if no cookie value is present or if the cookie value
+     * is not a valid long
+     * @see #hasCookie(String)
+     * @see #cookie(String)
+     * @see #cookieValue(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
+     * @see #cookie(Cookie)
+     * @since 2.0
+     */
+    public long cookieLong(String name) {
+        return cookieLong(name, DEFAULT_LONG);
+    }
+
+    /**
+     * Retrieves the value of a named cookie and converts it to a long, using
+     * a default value if no input value is present.
+     *
+     * @param name         the name of the cookie
+     * @param defaultValue the default value that will be used when no cookie
+     *                     value is present
+     * @return the converted cookie value; or
+     * <p>the default value if no cookie value is present
+     * @see #hasCookie(String)
+     * @see #cookie(String)
+     * @see #cookieValue(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
+     * @see #cookie(Cookie)
+     * @since 2.0
+     */
+    public long cookieLong(String name, long defaultValue) {
+        var value = cookieValue(name);
+        if (value == null) {
+            return defaultValue;
+        }
+        try {
+            return Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Retrieves the value of a named cookie and converts it to a double.
+     *
+     * @param name the name of the cookie
+     * @return the converted cookie value; or
+     * <p>{@code 0.0d} if no cookie value is present or if the cookie
+     * value is not a valid double
+     * @see #hasCookie(String)
+     * @see #cookie(String)
+     * @see #cookieValue(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
+     * @see #cookie(Cookie)
+     * @since 2.0
+     */
+    public double cookieDouble(String name) {
+        return cookieDouble(name, DEFAULT_DOUBLE);
+    }
+
+    /**
+     * Retrieves the value of a named cookie and converts it to a double,
+     * using a default value if no input value is present.
+     *
+     * @param name         the name of the cookie
+     * @param defaultValue the default value that will be used when no cookie
+     *                     value is present
+     * @return the converted cookie value; or
+     * <p>the default value if no cookie value is present
+     * @see #hasCookie(String)
+     * @see #cookie(String)
+     * @see #cookieValue(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
+     * @see #cookie(Cookie)
+     * @since 2.0
+     */
+    public double cookieDouble(String name, double defaultValue) {
+        var value = cookieValue(name);
+        if (value == null) {
+            return defaultValue;
+        }
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Retrieves the value of a named cookie and converts it to a float.
+     *
+     * @param name the name of the cookie
+     * @return the converted cookie value; or
+     * <p>{@code 0.0}f if no cookie value is present or if the cookie
+     * value is not a valid float
+     * @see #hasCookie(String)
+     * @see #cookie(String)
+     * @see #cookieValue(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
+     * @see #cookie(Cookie)
+     * @since 2.0
+     */
+    public float cookieFloat(String name) {
+        return cookieFloat(name, DEFAULT_FLOAT);
+    }
+
+    /**
+     * Retrieves the value of a named cookie and converts it to a float, using
+     * a default value if no input value is present.
+     *
+     * @param name         the name of the cookie
+     * @param defaultValue the default value that will be used when no cookie
+     *                     value is present
+     * @return the converted cookie value; or
+     * <p>the default value if no cookie value is present
+     * @see #hasCookie(String)
+     * @see #cookie(String)
+     * @see #cookieValue(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
+     * @see #cookie(Cookie)
+     * @since 2.0
+     */
+    public float cookieFloat(String name, float defaultValue) {
+        var value = cookieValue(name);
+        if (value == null) {
+            return defaultValue;
+        }
+        try {
+            return Float.parseFloat(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * See {@link Request#getAttribute}.
+     *
+     * @since 2.0
+     */
+    public Object attribute(String name) {
+        return request_.getAttribute(name);
+    }
+
+    /**
+     * See {@link Request#hasAttribute}.
+     *
+     * @since 2.0
+     */
+    public boolean hasAttribute(String name) {
+        return request_.hasAttribute(name);
+    }
+
+    /**
+     * See {@link Request#getAttributeNames}.
+     *
+     * @since 2.0
+     */
+    public List<String> attributeNames() {
+        return Collections.list(request_.getAttributeNames());
+    }
+
+    /**
+     * See {@link Request#removeAttribute}.
+     *
+     * @since 2.0
+     */
+    public void removeAttribute(String name) {
+        request_.removeAttribute(name);
+    }
+
+    /**
+     * See {@link Request#setAttribute}.
+     *
+     * @since 2.0
+     */
+    public void attribute(String name, Object object) {
+        request_.setAttribute(name, object);
+    }
+
+    /**
+     * See {@link Request#getCharacterEncoding}.
+     *
+     * @since 2.0
+     */
+    public String characterEncoding() {
+        return request_.getCharacterEncoding();
+    }
+
+    /**
+     * See {@link Request#getContentType}.
+     *
+     * @since 2.0
+     */
+    public String contentType() {
+        return request_.getContentType();
+    }
+
+    /**
+     * See {@link Request#getDateHeader}.
+     *
+     * @since 2.0
+     */
+    public long headerDate(String name) {
+        return request_.getDateHeader(name);
+    }
+
+    /**
+     * See {@link Request#getHeader}.
+     *
+     * @since 2.0
+     */
+    public String header(String name) {
+        return request_.getHeader(name);
+    }
+
+    /**
+     * See {@link Request#getHeaderNames}.
+     *
+     * @since 2.0
+     */
+    public List<String> headerNames() {
+        return Collections.list(request_.getHeaderNames());
+    }
+
+    /**
+     * See {@link Request#getHeaders}.
+     *
+     * @since 2.0
+     */
+    public List<String> headers(String name) {
+        return Collections.list(request_.getHeaders(name));
+    }
+
+    /**
+     * See {@link Request#getIntHeader}.
+     *
+     * @since 2.0
+     */
+    public int headerInt(String name) {
+        return request_.getIntHeader(name);
+    }
+
+    /**
+     * See {@link Request#getLocale}.
+     *
+     * @since 2.0
+     */
+    public Locale locale() {
+        return request_.getLocale();
+    }
+
+    /**
+     * See {@link Request#getLocales}.
+     *
+     * @since 2.0
+     */
+    public List<Locale> locales() {
+        return Collections.list(request_.getLocales());
+    }
+
+    /**
+     * See {@link Request#getProtocol}.
+     *
+     * @since 2.0
+     */
+    public String protocol() {
+        return request_.getProtocol();
+    }
+
+    /**
+     * See {@link Request#getRemoteAddr}.
+     *
+     * @since 2.0
+     */
+    public String remoteAddr() {
+        return request_.getRemoteAddr();
+    }
+
+    /**
+     * See {@link Request#getRemoteUser}.
+     *
+     * @since 2.0
+     */
+    public String remoteUser() {
+        return request_.getRemoteUser();
+    }
+
+    /**
+     * See {@link Request#getRemoteHost}.
+     *
+     * @since 2.0
+     */
+    public String remoteHost() {
+        return request_.getRemoteHost();
+    }
+
+    /**
+     * See {@link Request#getRequestDispatcher}.
+     *
+     * @since 2.0
+     */
+    public RequestDispatcher requestDispatcher(String url) {
+        return request_.getRequestDispatcher(url);
+    }
+
+    /**
+     * See {@link Request#getSession}.
+     *
+     * @since 2.0
+     */
+    public HttpSession session() {
+        return request_.getSession();
+    }
+
+    /**
+     * See {@link Request#getSession(boolean)}.
+     *
+     * @since 2.0
+     */
+    public HttpSession session(boolean create) {
+        return request_.getSession(create);
+    }
+
+    /**
+     * See {@link Request#getServerPort}.
+     *
+     * @since 2.0
+     */
+    public int serverPort() {
+        return request_.getServerPort();
+    }
+
+    /**
+     * See {@link Request#getScheme}.
+     *
+     * @since 2.0
+     */
+    public String scheme() {
+        return request_.getScheme();
+    }
+
+    /**
+     * See {@link Request#getServerName}.
+     *
+     * @since 2.0
+     */
+    public String serverName() {
+        return request_.getServerName();
+    }
+
+    /**
+     * See {@link Request#getContextPath}.
+     *
+     * @since 2.0
+     */
+    public String contextPath() {
+        return request_.getContextPath();
+    }
+
+    /**
+     * See {@link Request#isSecure}.
+     *
+     * @since 2.0
+     */
+    public boolean secure() {
+        return request_.isSecure();
+    }
+
+    /**
+     * Enables or disables the response text buffer. By default, it is
+     * enabled.
+     * <p>Disabling an enabled text buffer, flushes the already buffered
+     * content first.
+     * <p>If the text buffer is disabled, text content will be sent
+     * immediately to the client, this can decrease performance. Unless you
+     * need to stream content in real time, it's best to leave the text buffer
+     * enabled. It will be flushed and sent in one go at the end of the
+     * request.
+     *
+     * @param enabled {@code true} to enable the text buffer; or
+     *                <p>{@code false} to disable it
+     * @see #textBufferEnabled()
+     * @see #flush()
+     * @see #clearBuffer()
+     * @since 2.0
+     */
+    public void enableTextBuffer(boolean enabled) {
+        response_.enableTextBuffer(enabled);
+    }
+
+    /**
+     * Indicates whether the response text buffer is enabled or disabled.
+     *
+     * @return {@code true} if the text buffer is enabled; or
+     * <p>{@code false} if it is disabled
+     * @see #enableTextBuffer(boolean)
+     * @see #flush()
+     * @see #clearBuffer()
+     * @since 1.0
+     */
+    public boolean textBufferEnabled() {
+        return response_.isTextBufferEnabled();
+    }
+
+    /**
+     * See {@link Response#clearBuffer()}.
+     *
+     * @since 2.0
+     */
+    public void clearBuffer() {
+        response_.clearBuffer();
+    }
+
+    /**
+     * See {@link Response#flush()}.
+     *
+     * @since 2.0
+     */
+    public void flush() {
+        response_.flush();
+    }
+
+    /**
+     * See {@link Response#getOutputStream()}.
+     *
+     * @since 2.0
+     */
+    public OutputStream outputStream() {
+        return response_.getOutputStream();
+    }
+
+    /**
+     * See {@link Response#setContentType(String)}.
+     *
+     * @since 2.0
+     */
+    public void contentType(String contentType) {
+        response_.setContentType(contentType);
+    }
+
+    /**
+     * See {@link Response#setLocale(Locale)}.
+     *
+     * @since 2.0
+     */
+    public void locale(Locale locale) {
+        response_.setLocale(locale);
+    }
+
+    /**
+     * See {@link Response#setContentLength(int)}.
+     *
+     * @since 2.0
+     */
+    public void contentLength(int length) {
+        response_.setContentLength(length);
+    }
+
+    /**
+     * See {@link Response#addCookie(Cookie)}.
+     *
+     * @since 2.0
+     */
+    public void cookie(Cookie cookie) {
+        response_.addCookie(cookie);
+    }
+
+    /**
+     * Adds the <code>Cookie</code> created by a <code>CookieBuilder</code> to the response.
+     * This method can be called multiple times to set more than one cookie.
+     *
+     * @param builder the <code>CookieBuilder</code> to use for building the <code>Cookie</code>
+     * @since 2.0
+     */
+    public void cookie(CookieBuilder builder) {
+        response_.addCookie(builder.cookie());
+    }
+
+    /**
+     * Removes a cookie.
+     *
+     * @param name name of the cookie
+     * @since 2.0
+     */
+    public void removeCookie(String name) {
+        removeCookie(null, name);
+    }
+
+    /**
+     * Removes a cookie with given path and name.
+     *
+     * @param path path of the cookie
+     * @param name name of the cookie
+     * @since 2.0
+     */
+    public void removeCookie(String path, String name) {
+        var cookie = new Cookie(name, "");
+        cookie.setPath(path);
+        cookie.setMaxAge(0);
+        cookie(cookie);
+    }
+
+    /**
+     * See {@link Response#addHeader(String, String)}.
+     *
+     * @since 2.0
+     */
+    public void header(String name, String value) {
+        response_.addHeader(name, value);
+    }
+
+    /**
+     * See {@link Response#addDateHeader(String, long)}.
+     *
+     * @since 2.0
+     */
+    public void header(String name, long date) {
+        response_.addDateHeader(name, date);
+    }
+
+    /**
+     * See {@link Response#addIntHeader(String, int)}.
+     *
+     * @since 2.0
+     */
+    public void header(String name, int integer) {
+        response_.addIntHeader(name, integer);
+    }
+
+    /**
+     * See {@link Response#setStatus(int)}.
+     *
+     * @since 2.0
+     */
+    public void status(int statusCode) {
+        response_.setStatus(statusCode);
     }
 
 }

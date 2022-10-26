@@ -10,7 +10,7 @@ public class EncoderXml implements TemplateEncoder {
     EncoderXml() {
     }
 
-    public static EncoderXml getInstance() {
+    public static EncoderXml instance() {
         return EncoderXmlSingleton.INSTANCE;
     }
 

@@ -39,8 +39,6 @@ public class HttpRequest implements Request {
         request_ = request;
     }
 
-    private static final String DEFAULT_REQUEST_ENCODING = StringUtils.ENCODING_UTF_8;
-
     public void init() {
         if (MultipartRequest.isValidContentType(request_.getContentType())) {
             var multipart_request = new MultipartRequest(request_);
@@ -228,7 +226,7 @@ public class HttpRequest implements Request {
     }
 
     @Override
-    public Enumeration getAttributeNames() {
+    public Enumeration<String> getAttributeNames() {
         return request_.getAttributeNames();
     }
 
@@ -253,12 +251,12 @@ public class HttpRequest implements Request {
     }
 
     @Override
-    public Enumeration getHeaderNames() {
+    public Enumeration<String> getHeaderNames() {
         return request_.getHeaderNames();
     }
 
     @Override
-    public Enumeration getHeaders(String name) {
+    public Enumeration<String> getHeaders(String name) {
         return request_.getHeaders(name);
     }
 
@@ -273,7 +271,7 @@ public class HttpRequest implements Request {
     }
 
     @Override
-    public Enumeration getLocales() {
+    public Enumeration<Locale> getLocales() {
         return request_.getLocales();
     }
 

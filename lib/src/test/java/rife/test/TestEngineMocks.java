@@ -6,27 +6,107 @@ package rife.test;
 
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
+import rife.engine.PathInfoHandling;
 import rife.engine.Site;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import java.util.Calendar;
+import java.util.TimeZone;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestEngineMocks {
+    @Test
+    public void testSimplePlain() {
+        MockConversation conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/simple/plain", c -> {
+                    c.contentType("text/plain");
+                    c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
+                });
+            }
+        });
+
+        MockResponse response = conversation.doRequest("http://localhost/simple/plain");
+        assertEquals(200, response.getStatus());
+        assertEquals("text/plain; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:", response.getText());
+    }
+
     @Test
     public void testSimpleHtml() {
         MockConversation conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/simple/html", c -> {
-                    c.print("Just some text " + c.request().getRemoteAddr() + ":" + c.request().getRemoteHost() + ":" + c.pathInfo());
+                    c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
                 });
             }
         });
 
         MockResponse response = conversation.doRequest("http://localhost/simple/html");
         assertEquals(200, response.getStatus());
-
         assertEquals("text/html; charset=UTF-8", response.getContentType());
-        assertEquals("Just some text 127.0.0.1:localhost:", response.getText());
+        assertEquals("Just some text 127.0.0.1:", response.getText());
+    }
+
+    @Test
+    public void testSimplePathInfo() {
+        MockConversation conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/simple/pathinfo", PathInfoHandling.CAPTURE, c -> {
+                    c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
+                });
+            }
+        });
+
+        MockResponse response;
+
+        response = conversation.doRequest("http://localhost/simple/pathinfo/some/path");
+        assertEquals(200, response.getStatus());
+        assertEquals("text/html; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:some/path", response.getText());
+
+        response = conversation.doRequest("http://localhost/simple/pathinfo/");
+        assertEquals(200, response.getStatus());
+        assertEquals("text/html; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:", response.getText());
+
+        response = conversation.doRequest("http://localhost/simple/pathinfo");
+        assertEquals(200, response.getStatus());
+        assertEquals("text/html; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:", response.getText());
+
+        response = conversation.doRequest("http://localhost/simple/pathinfo/another_path_info");
+        assertEquals(200, response.getStatus());
+        assertEquals("text/html; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:another_path_info", response.getText());
+
+        response = conversation.doRequest("http://localhost/simple/pathinfoddd");
+        assertEquals(404, response.getStatus());
+    }
+
+    @Test
+    public void testHeaders() {
+        MockConversation conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/headers", c -> {
+                    c.header("Content-Disposition", "attachment; filename=thefile.zip");
+                    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+                    cal.set(2002, Calendar.OCTOBER, 25, 19, 20, 58);
+                    c.header("DateHeader", cal.getTimeInMillis());
+                    c.header("IntHeader", 1212);
+
+                    c.print("headers");
+                });
+            }
+        });
+
+        MockResponse response = conversation.doRequest("http://localhost/headers");
+        assertEquals(200, response.getStatus());
+
+        assertTrue(response.getHeaderNames().size() > 3);
+        assertEquals("attachment; filename=thefile.zip", response.getHeader("Content-Disposition"));
+        assertEquals("Fri, 25 Oct 2002 19:20:58 GMT", response.getHeader("DateHeader"));
+        assertEquals("1212", response.getHeader("IntHeader"));
     }
 
     @Test
@@ -34,7 +114,7 @@ public class TestEngineMocks {
         MockConversation conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/simple/html", c -> {
-                    c.print("Just some text " + c.request().getRemoteAddr() + ":" + c.request().getRemoteHost() + ":" + c.pathInfo());
+                    c.print("Just some text " + c.remoteAddr() + ":" + c.remoteHost() + ":" + c.pathInfo());
                 });
             }
         });
@@ -47,27 +127,18 @@ public class TestEngineMocks {
         MockConversation conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/cookies1", c -> {
-                    if (c.request().hasCookie("cookie1") &&
-                        c.request().hasCookie("cookie2") &&
-                        c.request().hasCookie("cookie3")) {
-                        Cookie cookie1 = c.request().getCookie("cookie1");
-                        Cookie cookie2 = c.request().getCookie("cookie2");
-                        Cookie cookie3 = new Cookie("cookie3", cookie1.getValue());
-                        Cookie cookie4 = new Cookie("cookie4", cookie2.getValue());
-
-                        c.response().addCookie(cookie3);
-                        c.response().addCookie(cookie4);
+                    if (c.hasCookie("cookie1") &&
+                        c.hasCookie("cookie2") &&
+                        c.hasCookie("cookie3")) {
+                        c.cookie(new Cookie("cookie3", c.cookieValue("cookie1")));
+                        c.cookie(new Cookie("cookie4", c.cookieValue("cookie2")));
                     }
 
                     c.print("source");
                 });
 
                 get("/cookies2", c -> {
-                    Cookie cookie2 = c.request().getCookie("cookie2");
-                    Cookie cookie3 = c.request().getCookie("cookie3");
-                    Cookie cookie4 = c.request().getCookie("cookie4");
-
-                    c.print(cookie2.getValue() + "," + cookie3.getValue() + "," + cookie4.getValue());
+                    c.print(c.cookieValue("cookie2") + "," + c.cookieValue("cookie3") + "," + c.cookieValue("cookie4"));
                 });
             }
         });

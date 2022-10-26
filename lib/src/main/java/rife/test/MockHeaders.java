@@ -161,9 +161,8 @@ class MockHeaders {
 
     private String formatDate(long date) {
         var format = new SimpleDateFormat(SET_DATE_FORMAT);
-        var calendar = new HttpCal();
-        calendar.setTimeInMillis(date);
-        return format.format(calendar.getTime());
+        format.setTimeZone(TIMEZONE_GMT);
+        return format.format(date);
     }
 
     public void setHeader(String name, final String value) {
@@ -186,19 +185,5 @@ class MockHeaders {
         }
 
         headers_.remove(name);
-    }
-
-    private static class HttpCal extends GregorianCalendar {
-        HttpCal() {
-            super(TIMEZONE_GMT);
-        }
-
-        public void setTimeInMillis(long arg0) {
-            super.setTimeInMillis(arg0);
-        }
-
-        public long getTimeInMillis() {
-            return super.getTimeInMillis();
-        }
     }
 }

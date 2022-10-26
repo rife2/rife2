@@ -59,12 +59,12 @@ public class MockLink {
     }
 
     /**
-     * Click this link with its current parameters and returns the response.
+     * Follow this link with its current parameters and returns the response.
      *
      * @return the resulting {@link MockResponse}
      * @since 2.0
      */
-    public MockResponse click() {
+    public MockResponse follow() {
         return response_.getMockConversation().doRequest(getHref(), getRequest());
     }
 

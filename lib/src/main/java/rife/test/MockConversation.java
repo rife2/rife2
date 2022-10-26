@@ -30,7 +30,7 @@ public class MockConversation {
     static final String SESSION_ID_URL = "jsessionid";
     static final String SESSION_URL_PREFIX = ";" + SESSION_ID_URL + "=";
 
-    private Gate mGate = null;
+    private Gate gate_ = null;
 
     private final HashMap<String, Cookie> cookies_ = new HashMap<>();
     private final HashMap<String, MockSession> sessions_ = new HashMap<>();
@@ -48,8 +48,8 @@ public class MockConversation {
      */
     public MockConversation(Site site)
     throws EngineException {
-        mGate = new Gate();
-        mGate.setup(site);
+        gate_ = new Gate();
+        gate_.setup(site);
     }
 
     /**
@@ -131,7 +131,9 @@ public class MockConversation {
         var response = new MockResponse(this, request);
         request.setMockResponse(response);
         request.setRequestedSessionId(path_parameters);
-        mGate.handleRequest("", url, request, response);
+        if (!gate_.handleRequest("", url, request, response)) {
+            response.setStatus(404);
+        }
         return response;
     }
 

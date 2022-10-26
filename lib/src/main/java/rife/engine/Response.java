@@ -30,10 +30,11 @@ public interface Response {
      * have been processed.
      *
      * @param element an element that has been executed in the context of this
-     * response
+     *                response
      * @since 1.1
      */
-    public void setLastElement(Element element);
+    void setLastElement(Element element);
+
     /**
      * Enables or disabled the text output buffer.
      * <p>The buffer is enabled by default and its buffered contents will be
@@ -59,12 +60,13 @@ public interface Response {
      *
      * @param template the template that will be printed
      * @throws rife.engine.exceptions.EngineException if an error
-     *                                                         occurs during the output of the template content
+     *                                                occurs during the output of the template content
      * @see #print(Collection)
      * @see #print(Object)
      * @since 1.1
      */
-    void print(Template template) throws EngineException;
+    void print(Template template)
+    throws EngineException;
 
     /**
      * Prints a list of text snippets to the request text output.
@@ -76,7 +78,8 @@ public interface Response {
      * @see #print(Object)
      * @since 1.1
      */
-    void print(Collection<CharSequence> deferredContent) throws EngineException;
+    void print(Collection<CharSequence> deferredContent)
+    throws EngineException;
 
     /**
      * Prints the string representation of an object to the request text
@@ -90,7 +93,8 @@ public interface Response {
      * @see #print(Collection)
      * @since 1.1
      */
-    void print(Object value) throws EngineException;
+    void print(Object value)
+    throws EngineException;
 
     /**
      * Clears the text buffer is it's enabled.
@@ -107,7 +111,8 @@ public interface Response {
      *
      * @since 1.1
      */
-    void flush() throws EngineException;
+    void flush()
+    throws EngineException;
 
     /**
      * Closed the content output stream.
@@ -115,21 +120,24 @@ public interface Response {
      *
      * @since 1.1
      */
-    void close() throws EngineException;
+    void close()
+    throws EngineException;
 
     /**
      * See {@link HttpServletResponse#getOutputStream()}.
      *
      * @since 1.1
      */
-    OutputStream getOutputStream() throws EngineException;
+    OutputStream getOutputStream()
+    throws EngineException;
 
     /**
      * See {@link HttpServletResponse#getWriter()}.
      *
      * @since 1.1
      */
-    PrintWriter getWriter() throws IOException;
+    PrintWriter getWriter()
+    throws IOException;
 
     /**
      * See {@link HttpServletResponse#setContentType(String)}.
@@ -185,7 +193,8 @@ public interface Response {
      *
      * @since 1.1
      */
-    void setContentLength(int length) throws EngineException;
+    void setContentLength(int length)
+    throws EngineException;
 
     /**
      * See {@link HttpServletResponse#addCookie(Cookie)}.
@@ -227,21 +236,24 @@ public interface Response {
      *
      * @since 1.1
      */
-    void sendError(int statusCode) throws EngineException;
+    void sendError(int statusCode)
+    throws EngineException;
 
     /**
      * See {@link HttpServletResponse#sendError(int, String)}.
      *
      * @since 1.1
      */
-    void sendError(int statusCode, String message) throws EngineException;
+    void sendError(int statusCode, String message)
+    throws EngineException;
 
     /**
      * See {@link HttpServletResponse#sendRedirect(String)}.
      *
      * @since 1.1
      */
-    void sendRedirect(String location) throws EngineException;
+    void sendRedirect(String location)
+    throws EngineException;
 
     /**
      * See {@link HttpServletResponse#setDateHeader(String, long)}.
