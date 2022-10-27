@@ -113,17 +113,17 @@ public class Context {
         template.removeValues(set_values);
     }
 
-    public Template templateHtml()
+    public Template template()
     throws TemplateException, EngineException {
-        return templateHtml(routeMatch_.route().getDefaultElementId(), null);
+        return template(routeMatch_.route().getDefaultElementId(), null);
     }
 
-    public Template templateHtml(String name)
+    public Template template(String name)
     throws TemplateException, EngineException {
-        return templateHtml(name, null);
+        return template(name, null);
     }
 
-    public Template templateHtml(String name, String encoding)
+    public Template template(String name, String encoding)
     throws TemplateException, EngineException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
