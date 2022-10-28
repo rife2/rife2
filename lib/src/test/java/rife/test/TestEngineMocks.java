@@ -6,9 +6,14 @@ package rife.test;
 
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
+import rife.engine.GenerateEmptyFormSite;
+import rife.engine.GenerateFormSite;
 import rife.engine.PathInfoHandling;
 import rife.engine.Site;
+import rife.template.TemplateFactory;
+import rife.tools.IntegerUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -17,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestEngineMocks {
     @Test
     public void testSimplePlain() {
-        MockConversation conversation = new MockConversation(new Site() {
+        var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/simple/plain", c -> {
                     c.contentType("text/plain");
@@ -26,7 +31,7 @@ public class TestEngineMocks {
             }
         });
 
-        MockResponse response = conversation.doRequest("http://localhost/simple/plain");
+        var response = conversation.doRequest("http://localhost/simple/plain");
         assertEquals(200, response.getStatus());
         assertEquals("text/plain; charset=UTF-8", response.getContentType());
         assertEquals("Just some text 127.0.0.1:", response.getText());
@@ -34,7 +39,7 @@ public class TestEngineMocks {
 
     @Test
     public void testSimpleHtml() {
-        MockConversation conversation = new MockConversation(new Site() {
+        var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/simple/html", c -> {
                     c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
@@ -42,7 +47,7 @@ public class TestEngineMocks {
             }
         });
 
-        MockResponse response = conversation.doRequest("http://localhost/simple/html");
+        var response = conversation.doRequest("http://localhost/simple/html");
         assertEquals(200, response.getStatus());
         assertEquals("text/html; charset=UTF-8", response.getContentType());
         assertEquals("Just some text 127.0.0.1:", response.getText());
@@ -50,7 +55,7 @@ public class TestEngineMocks {
 
     @Test
     public void testSimplePathInfo() {
-        MockConversation conversation = new MockConversation(new Site() {
+        var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/simple/pathinfo", PathInfoHandling.CAPTURE, c -> {
                     c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
@@ -86,11 +91,11 @@ public class TestEngineMocks {
 
     @Test
     public void testHeaders() {
-        MockConversation conversation = new MockConversation(new Site() {
+        var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/headers", c -> {
                     c.header("Content-Disposition", "attachment; filename=thefile.zip");
-                    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+                    var cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
                     cal.set(2002, Calendar.OCTOBER, 25, 19, 20, 58);
                     c.header("DateHeader", cal.getTimeInMillis());
                     c.header("IntHeader", 1212);
@@ -100,7 +105,7 @@ public class TestEngineMocks {
             }
         });
 
-        MockResponse response = conversation.doRequest("http://localhost/headers");
+        var response = conversation.doRequest("http://localhost/headers");
         assertEquals(200, response.getStatus());
 
         assertTrue(response.getHeaderNames().size() > 3);
@@ -111,7 +116,7 @@ public class TestEngineMocks {
 
     @Test
     public void testWrongServerRootUrl() {
-        MockConversation conversation = new MockConversation(new Site() {
+        var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/simple/html", c -> {
                     c.print("Just some text " + c.remoteAddr() + ":" + c.remoteHost() + ":" + c.pathInfo());
@@ -124,7 +129,7 @@ public class TestEngineMocks {
 
     @Test
     public void testCookies() {
-        MockConversation conversation = new MockConversation(new Site() {
+        var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/cookies1", c -> {
                     if (c.hasCookie("cookie1") &&
@@ -147,7 +152,7 @@ public class TestEngineMocks {
             .cookie("cookie2", "this is the second cookie")
             .cookie("cookie3", "this is the third cookie");
 
-        MockResponse response = conversation.doRequest("/cookies1");
+        var response = conversation.doRequest("/cookies1");
 
         // check if the correct cookies were returned
         assertEquals(conversation.getCookie("cookie3").getValue(), "this is the first cookie");
@@ -159,4 +164,117 @@ public class TestEngineMocks {
         assertEquals("this is the second cookie,this is the first cookie,this is the fourth cookie", response.getText());
     }
 
+    @Test
+    public void testContentlength() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/contentlength", c -> {
+                    var out = "this goes out";
+                    c.contentLength(out.length());
+                    var outputstream = c.outputStream();
+                    outputstream.write(out.getBytes(StandardCharsets.ISO_8859_1));
+                });
+            }
+        });
+
+        var response = conversation.doRequest("/contentlength");
+        assertEquals(13, response.getContentLength());
+        assertEquals("this goes out", response.getText());
+    }
+
+    @Test
+    public void testDynamicContenttype() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/dynamiccontenttype", c -> {
+                    switch (c.parameter("switch")) {
+                        case "text" -> c.contentType("text/plain");
+                        case "html" -> c.contentType("text/html");
+                    }
+                });
+            }
+        });
+
+        assertEquals(conversation.doRequest("/dynamiccontenttype?switch=text").getContentType(), "text/plain; charset=UTF-8");
+        assertEquals(conversation.doRequest("/dynamiccontenttype?switch=html").getContentType(), "text/html; charset=UTF-8");
+    }
+
+    @Test
+    public void testBinary() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/binary", c -> {
+                    c.outputStream().write(IntegerUtils.intToBytes(87634675));
+                });
+            }
+        });
+
+        var response = conversation.doRequest("/binary");
+        var integer_bytes = response.getBytes();
+        assertEquals(87634675, IntegerUtils.bytesToInt(integer_bytes));
+    }
+
+    @Test
+    public void testPrintAndWriteBuffer() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/printandwrite_buffer", c -> {
+                    c.enableTextBuffer(true);
+
+                    c.print("print1");
+                    c.outputStream().write("write2".getBytes(c.response().getCharacterEncoding()));
+                    c.print("print3");
+                    c.outputStream().write("write4".getBytes(c.response().getCharacterEncoding()));
+                });
+            }
+        });
+
+        assertEquals("write2write4print1print3", conversation.doRequest("/printandwrite_buffer").getText());
+    }
+
+    @Test
+    public void testPrintAndWriteNoBuffer() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/printandwrite_nobuffer", c -> {
+                    c.enableTextBuffer(false);
+
+                    c.print("print1");
+                    c.outputStream().write("write2".getBytes(c.response().getCharacterEncoding()));
+                    c.print("print3");
+                    c.outputStream().write("write4".getBytes(c.response().getCharacterEncoding()));
+                });
+            }
+        });
+
+        assertEquals("print1write2print3write4", conversation.doRequest("/printandwrite_nobuffer").getText());
+    }
+
+    @Test
+    public void testGenerateForm() {
+        var conversation = new MockConversation(new GenerateFormSite());
+        assertEquals(TemplateFactory.HTML.get("formbuilder_fields_out_constrained_values").getContent(), conversation.doRequest("/form").getText());
+        assertEquals(TemplateFactory.HTML.get("formbuilder_fields").getContent(), conversation.doRequest("/form?remove=1").getText());
+    }
+
+    @Test
+    public void testGenerateFormPrefix() {
+        var conversation = new MockConversation(new GenerateFormSite());
+        assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix_out_constrained_values").getContent(), conversation.doRequest("/form?prefix=1").getText());
+        assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix").getContent(), conversation.doRequest("/form?prefix=1&remove=1").getText());
+    }
+
+    @Test
+    public void testGenerateEmptyForm() {
+        var conversation = new MockConversation(new GenerateEmptyFormSite());
+        assertEquals(TemplateFactory.HTML.get("formbuilder_fields_out_constrained_empty").getContent(), conversation.doRequest("/form_empty").getText());
+        assertEquals(TemplateFactory.HTML.get("formbuilder_fields").getContent(), conversation.doRequest("/form_empty?remove=1").getText());
+    }
+
+    @Test
+    public void testGenerateEmptyFormPrefix() {
+        var conversation = new MockConversation(new GenerateEmptyFormSite());
+        assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix_out_constrained_empty").getContent(), conversation.doRequest("/form_empty?prefix=1").getText());
+        assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix").getContent(), conversation.doRequest("/form_empty?prefix=1&remove=1").getText());
+    }
 }

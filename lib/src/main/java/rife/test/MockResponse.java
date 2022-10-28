@@ -398,6 +398,10 @@ public class MockResponse extends AbstractResponse {
         setIntHeader(HEADER_CONTENT_LENGTH, length);
     }
 
+    public int getContentLength() {
+        return getIntHeader(HEADER_CONTENT_LENGTH);
+    }
+
     public void sendRedirect(String location) {
         clearBuffer();
 
