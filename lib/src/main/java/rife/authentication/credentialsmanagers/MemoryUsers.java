@@ -18,11 +18,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public class MemoryUsers implements CredentialsManager, RoleUsersManager, PasswordEncrypting {
-    public final static String DEFAULT_PARTICIPANT_NAME = "ParticipantMemoryUsers";
-
-    private final Map<Long, String> userIdMapping_ = new HashMap<Long, String>();
-    private Map<String, RoleUserAttributes> users_ = new TreeMap<String, RoleUserAttributes>();
-    private Map<String, ArrayList<String>> roles_ = new TreeMap<String, ArrayList<String>>();
+    private final Map<Long, String> userIdMapping_ = new HashMap<>();
+    private Map<String, RoleUserAttributes> users_ = new TreeMap<>();
+    private Map<String, ArrayList<String>> roles_ = new TreeMap<>();
     private long userIdSequence_ = 0;
 
     protected StringEncryptor passwordEncryptor_ = null;

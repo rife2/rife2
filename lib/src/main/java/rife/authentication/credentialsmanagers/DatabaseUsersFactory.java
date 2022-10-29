@@ -17,7 +17,6 @@ import rife.database.DbQueryManagerFactory;
  *
  * @author Steven Grimm (koreth[remove] at midwinter dot com)
  * @author Geert Bevin <gbevin[remove] at uwyn dot com>
- * @version $Revision$
  * @since 1.0
  */
 public class DatabaseUsersFactory extends DbQueryManagerFactory {

@@ -29,10 +29,8 @@ public class RoleUserIdentity implements Cloneable {
         RoleUserIdentity new_identity = null;
         try {
             new_identity = (RoleUserIdentity) super.clone();
-
             new_identity.attributes_ = attributes_.clone();
-        } catch (CloneNotSupportedException e) {
-            new_identity = null;
+        } catch (CloneNotSupportedException ignored) {
         }
 
         return new_identity;
@@ -47,19 +45,15 @@ public class RoleUserIdentity implements Cloneable {
             return true;
         }
 
-        if (!(other instanceof RoleUserIdentity)) {
+        if (!(other instanceof RoleUserIdentity other_identity)) {
             return false;
         }
 
-        var other_identity = (RoleUserIdentity) other;
         if (!getLogin().equals(other_identity.getLogin())) {
             return false;
         }
-        if (!getAttributes().equals(other_identity.getAttributes())) {
-            return false;
-        }
 
-        return true;
+        return getAttributes().equals(other_identity.getAttributes());
     }
 }
 

@@ -8,11 +8,10 @@ import rife.authentication.exceptions.CredentialsManagerException;
 
 /**
  * This interface defines the methods that are needed for the {@link rife.authentication.elements.Identified}
- * element to be able to setup a {@link RoleUserIdentity} instance for each authenticated user for whom the
+ * element to be able to set up a {@link RoleUserIdentity} instance for each authenticated user for whom the
  * {@code Identified} element is executed.
  *
  * @author Geert Bevin <gbevin[remove] at uwyn dot com>
- * @version $Revision$
  * @see rife.authentication.elements.Identified
  * @see RoleUserIdentity
  * @since 1.6

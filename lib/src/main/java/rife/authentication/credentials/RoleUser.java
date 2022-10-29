@@ -16,7 +16,6 @@ import rife.validation.Validation;
  * rife.config.RifeConfig.AuthenticationConfig}.
  *
  * @author Geert Bevin <gbevin[remove] at uwyn dot com>
- * @version $Revision$
  * @since 1.0
  */
 public class RoleUser extends Validation implements RoleUserCredentials, RememberMe {

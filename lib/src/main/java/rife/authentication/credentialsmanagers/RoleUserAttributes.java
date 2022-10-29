@@ -110,13 +110,13 @@ public class RoleUserAttributes implements Cloneable {
     public void setRoles(String[] roles) {
         if (roles != null &&
             roles.length > 0) {
-            setRoles(new HashSet<String>(Arrays.asList(roles)));
+            setRoles(new HashSet<>(Arrays.asList(roles)));
         }
     }
 
     public void addRole(String role) {
         if (null == roles_) {
-            roles_ = new HashSet<String>();
+            roles_ = new HashSet<>();
         }
         roles_.add(role);
     }
@@ -151,8 +151,7 @@ public class RoleUserAttributes implements Cloneable {
         if (null == password) throw new IllegalArgumentException("password can't be null.");
         if (0 == password.length()) throw new IllegalArgumentException("password can't be empty.");
 
-        return password_ != null &&
-            password.equals(password_);
+        return password.equals(password_);
     }
 
     public boolean isValid(String password, String role) {
@@ -173,8 +172,7 @@ public class RoleUserAttributes implements Cloneable {
             if (roles_ != null) {
                 new_attributes.roles_ = new HashSet<String>(roles_);
             }
-        } catch (CloneNotSupportedException e) {
-            new_attributes = null;
+        } catch (CloneNotSupportedException ignored) {
         }
 
         return new_attributes;
@@ -189,11 +187,10 @@ public class RoleUserAttributes implements Cloneable {
             return true;
         }
 
-        if (!(other instanceof RoleUserAttributes)) {
+        if (!(other instanceof RoleUserAttributes other_attributes)) {
             return false;
         }
 
-        var other_attributes = (RoleUserAttributes) other;
         if (getUserId() != other_attributes.getUserId()) {
             return false;
         }
