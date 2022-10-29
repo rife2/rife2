@@ -20,15 +20,13 @@ public class Gate {
     private Site site_;
     private Throwable initException_ = null;
 
-    public void setup(Site site)
-    {
+    public void setup(Site site) {
         site_ = site;
 
         try {
             site_.setup();
-        }
-        catch (Throwable e)
-        {
+            site_.deploy();
+        } catch (Throwable e) {
             handleSiteInitException(e);
         }
     }
@@ -41,7 +39,7 @@ public class Gate {
         }
 
         // strip away the optional path parameters
-        int path_parameters_index = elementUrl.indexOf(";");
+        var path_parameters_index = elementUrl.indexOf(";");
         if (path_parameters_index != -1) {
             elementUrl = elementUrl.substring(0, path_parameters_index);
         }
@@ -55,7 +53,7 @@ public class Gate {
         }
 
         // Set up the element request and process it.
-        RouteMatch match = site_.findRouteForRequest(request, elementUrl);
+        var match = site_.findRouteForRequest(request, elementUrl);
         // If no element was found, don't continue executing the gate logic.
         // This could allow a next filter in the chain to be executed.
         if (null == match) {
@@ -64,7 +62,6 @@ public class Gate {
 
         var context = new Context(gateUrl, site_, request, response, match);
         try {
-            // TODO : handle before and after routes
             context.process();
             response.close();
         } catch (RedirectException e) {
@@ -95,14 +92,14 @@ public class Gate {
     }
 
     private void handleRequestException(Throwable exception, Context c) {
-        String message = "Error on host " + c.request().getServerName() + ":" + c.request().getServerPort() + "/" + c.request().getContextPath();
+        var message = "Error on host " + c.request().getServerName() + ":" + c.request().getServerPort() + "/" + c.request().getContextPath();
         if (RifeConfig.engine().getLogEngineExceptions()) {
             Logger.getLogger("rife.engine").severe(message + "\n" + ExceptionUtils.getExceptionStackTrace(exception));
         }
 
         c.engineException(exception);
 
-        Route exception_route = site_.getExceptionRoute();
+        var exception_route = site_.getExceptionRoute();
         if (exception_route != null) {
             try {
                 exception_route.getElementInstance(c).process(c);
@@ -127,7 +124,7 @@ public class Gate {
     private void printExceptionDetails(Throwable exception, Response response) {
         TemplateFactory template_factory = null;
         if (response.isContentTypeSet()) {
-            String content_type = response.getContentType();
+            var content_type = response.getContentType();
             if (content_type.startsWith("text/xml") ||
                 content_type.startsWith("application/xhtml+xml")) {
                 template_factory = TemplateFactory.XML;
@@ -141,7 +138,7 @@ public class Gate {
 
         // pretty exception formatting and outputting instead of the default servlet
         // engine's formatting
-        Template template = template_factory.get("errors.rife.engine_error");
+        var template = template_factory.get("errors.rife.engine_error");
         template.setValue("exceptions", ExceptionFormattingUtils.formatExceptionStackTrace(exception, template));
         template.setValue("RIFE_VERSION", template.getEncoder().encode(Version.getVersion()));
 

@@ -14,6 +14,7 @@ public class Site extends Router {
 
     private Route exceptionRoute_ = null;
 
+    // TODO: move exception element into router
     public final Route exception(Class<? extends Element> elementClass) {
         exceptionRoute_ = new RouteClass(this, RequestMethod.GET, elementClass);
         return exceptionRoute_;
@@ -38,7 +39,7 @@ public class Site extends Router {
      * <p><code>null</code> if the URL and path info aren't registered in this site
      * @since 2.0
      */
-    public Route resolveUrl(Request request, String url, String pathInfo)
+    private Route resolveUrl(Request request, String url, String pathInfo)
     throws EngineException {
         if (null == url) throw new IllegalArgumentException("url can't be null;");
 

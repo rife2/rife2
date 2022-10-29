@@ -5,6 +5,8 @@
 package rife.engine;
 
 public interface Route {
+    Router router();
+
     RequestMethod method();
 
     default boolean handlesMethod(RequestMethod method) {

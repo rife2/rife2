@@ -7,13 +7,26 @@ package rife.engine;
 import java.util.*;
 
 public class Router {
-    protected final List<Route> before_ = new ArrayList<>();
-    protected final List<Route> after_ = new ArrayList<>();
-    protected final Map<String, List<Route>> routes_ = new HashMap<>();
-    protected final Map<String, List<Route>> pathInfoRoutes_ = new HashMap<>();
-    protected final List<Router> groups_ = new ArrayList<>();
+    final List<Route> before_ = new ArrayList<>();
+    final List<Route> after_ = new ArrayList<>();
+    final Map<String, List<Route>> routes_ = new HashMap<>();
+    final Map<String, List<Route>> pathInfoRoutes_ = new HashMap<>();
+    final List<Router> groups_ = new ArrayList<>();
+
+    Router parent_ = null;
 
     public void setup() {
+    }
+
+    final void deploy() {
+        if (parent_ != null) {
+            before_.addAll(0, parent_.before_);
+            after_.addAll(parent_.after_);
+        }
+
+        for (var router : groups_) {
+            router.deploy();
+        }
     }
 
     @SafeVarargs
@@ -47,10 +60,39 @@ public class Router {
     }
 
     public final <T extends Router> T group(String path, T router) {
-        router.setup();
+        router.parent_ = this;
         groups_.add(router);
 
-        // TODO : consolidate routes
+        router.setup();
+
+        for (var e : router.routes_.entrySet()) {
+            var routes = routes_.computeIfAbsent(path + e.getKey(), k -> new ArrayList<>());
+            if (path.isEmpty()) {
+                routes.addAll(e.getValue());
+            } else {
+                for (var r : e.getValue()) {
+                    if (r instanceof RouteInstance route) {
+                        routes.add(new RouteInstance(r.router(), r.method(), path + r.path(), r.pathInfoHandling(), route.element()));
+                    } else if (r instanceof RouteClass route) {
+                        routes.add(new RouteClass(r.router(), r.method(), path + r.path(), r.pathInfoHandling(), route.elementClass()));
+                    }
+                }
+            }
+        }
+        for (var e : router.pathInfoRoutes_.entrySet()) {
+            var routes = pathInfoRoutes_.computeIfAbsent(path + e.getKey(), k -> new ArrayList<>());
+            if (path.isEmpty()) {
+                routes.addAll(e.getValue());
+            } else {
+                for (var r : e.getValue()) {
+                    if (r instanceof RouteInstance route) {
+                        routes.add(new RouteInstance(r.router(), r.method(), path + r.path(), r.pathInfoHandling(), route.element()));
+                    } else if (r instanceof RouteClass route) {
+                        routes.add(new RouteClass(r.router(), r.method(), path + r.path(), r.pathInfoHandling(), route.elementClass()));
+                    }
+                }
+            }
+        }
 
         return router;
     }
@@ -130,11 +172,11 @@ public class Router {
     public final Route registerRoute(Route route) {
         switch (route.pathInfoHandling()) {
             case NONE -> {
-                List<Route> routes = routes_.computeIfAbsent(route.path(), k -> new ArrayList<>());
+                var routes = routes_.computeIfAbsent(route.path(), k -> new ArrayList<>());
                 routes.add(route);
             }
             case CAPTURE -> {
-                List<Route> routes = pathInfoRoutes_.computeIfAbsent(route.path(), k -> new ArrayList<>());
+                var routes = pathInfoRoutes_.computeIfAbsent(route.path(), k -> new ArrayList<>());
                 routes.add(route);
             }
         }

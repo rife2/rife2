@@ -8,9 +8,7 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpSession;
 import rife.config.RifeConfig;
-import rife.engine.exceptions.DeferException;
-import rife.engine.exceptions.EngineException;
-import rife.engine.exceptions.RedirectException;
+import rife.engine.exceptions.*;
 import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.template.exceptions.TemplateException;
@@ -19,6 +17,7 @@ import rife.tools.ServletUtils;
 import rife.tools.StringUtils;
 
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Context {
@@ -38,7 +37,6 @@ public class Context {
     private final Request request_;
     private final Response response_;
     private final RouteMatch routeMatch_;
-    private final Element element_;
     private Throwable engineException_;
 
     public Context(String gateUrl, Site site, Request request, Response response, RouteMatch routeMatch) {
@@ -47,18 +45,48 @@ public class Context {
         request_ = request;
         response_ = response;
         routeMatch_ = routeMatch;
-        if (routeMatch == null) {
-            element_ = null;
-        } else {
-            element_ = routeMatch_.route().getElementInstance(this);
-        }
     }
 
     public void process() {
-        response_.setLastElement(element_);
+        if (routeMatch_ == null) {
+            return;
+        }
+
+        var route = routeMatch_.route();
 
         try {
-            element_.process(this);
+            for (var before_route : route.router().before_) {
+                var before_element = before_route.getElementInstance(this);
+                response_.setLastElement(before_element);
+                try {
+                    before_element.process(this);
+                } catch (NextException ignored) {
+                    // this element is done processing
+                    // move on to the next one
+                }
+            }
+
+            var element = route.getElementInstance(this);
+            response_.setLastElement(element);
+            try {
+                element.process(this);
+            } catch (NextException ignored) {
+                // this element is done processing
+                // move on to the next one
+            }
+
+            for (var after_route : route.router().after_) {
+                var after_element = after_route.getElementInstance(this);
+                response_.setLastElement(after_element);
+                try {
+                    after_element.process(this);
+                } catch (NextException ignored) {
+                    // this element is done processing
+                    // move on to the next one
+                }
+            }
+        } catch (RespondException ignored) {
+            // processing is over, just send the current response
         } catch (Exception e) {
             throw new EngineException(e);
         }
@@ -244,15 +272,15 @@ public class Context {
      * &lt;option value="red" selected="selected"&gt;Red&lt;/option&gt;
      * &lt;option value="green"&gt;Green&lt;/option&gt;
      * &lt;/select&gt;</pre>
-     * <p>For example for radio buttons, consider the name '{@code sex}',
-     * the value '{@code male}' and the following HTML template excerpt:
-     * <pre>&lt;input type="radio" name="sex" value="male"{{v sex:male:checked}}{{/v}} /&gt;
-     * &lt;input type="radio" name="sex" value="female"{{v sex:female:checked}}{{/v}} /&gt;</pre>
+     * <p>For example for radio buttons, consider the name '{@code size}',
+     * the value '{@code large}' and the following HTML template excerpt:
+     * <pre>&lt;input type="radio" name="size" value="large"{{v size:large:checked}}{{/v}} /&gt;
+     * &lt;input type="radio" name="size" value="small"{{v size:small:checked}}{{/v}} /&gt;</pre>
      * <p>the result will then be:
-     * <pre>&lt;input type="radio" name="sex" value="male" checked="checked" /&gt;
-     * &lt;input type="radio" name="sex" value="female" /&gt;</pre>
+     * <pre>&lt;input type="radio" name="size" value="large" checked="checked" /&gt;
+     * &lt;input type="radio" name="size" value="small" /&gt;</pre>
      * <p>For example for checkboxes, consider the name '{@code active}',
-     * the value '{@code true}' and the following XHTML template excerpt:
+     * the value '{@code true}' and the following HTML template excerpt:
      * <pre>&lt;input type="checkbox" name="active"{{v active:checked}}{{/v}} /&gt;
      * &lt;input type="checkbox" name="senditnow"{{v senditnow:checked}}{{/v}} /&gt;</pre>
      * <p>the result will then be:
@@ -411,12 +439,12 @@ public class Context {
      * <p>If RIFE is being run as a servlet, the status code {@code 404: Not
      * Found} will be sent to the client.
      *
-     * @throws rife.engine.exceptions.EngineException a runtime
-     *                                                exception that is used to immediately interrupt the execution, don't
-     *                                                catch this exception
+     * @throws rife.engine.exceptions.DeferException an exception that is used to immediately interrupt the execution, don't
+     *                                               catch this exception
      * @since 1.0
      */
-    public void defer() {
+    public void defer()
+    throws DeferException {
         throw new DeferException();
     }
 
@@ -426,22 +454,43 @@ public class Context {
      *
      * @param url the URL to which the request will be redirected, <code>String.valueOf()</code>
      *            will be called with this object, so a variety of types can be used
-     * @throws rife.engine.exceptions.EngineException a runtime
-     *                                                exception that is used to immediately interrupt the execution, don't
-     *                                                catch this exception
+     * @throws rife.engine.exceptions.RedirectException an exception that is used to immediately interrupt the execution, don't
+     *                                                  catch this exception
      * @since 1.0
      */
-    public void redirect(Object url) {
+    public void redirect(Object url)
+    throws RedirectException {
         throw new RedirectException(url);
     }
 
+    /**
+     * Interrupts the execution in this element, stops processing any other
+     * element, and sends the current response directly to the client.
+     *
+     * @throws rife.engine.exceptions.RespondException an exception that is used to immediately interrupt the execution, don't
+     *                                                 catch this exception
+     * @since 2.0
+     */
+    public void respond() {
+        throw new RespondException();
+    }
+
+    /**
+     * Interrupts the execution in this element, moving processing on to the
+     * next element in the before/route/after chain
+     *
+     * @throws rife.engine.exceptions.NextException an exception that is used to immediately interrupt the execution, don't
+     *                                              catch this exception
+     * @since 2.0
+     */
+    public void next() {
+        throw new NextException();
+    }
 
     /**
      * Sets up the current request to prevent all caching of the response by
      * the client.
      *
-     * @throws rife.engine.exceptions.EngineException if you don't
-     *                                                have access to the request data (eg. you're inside a child trigger)
      * @since 1.0
      */
     public void preventCaching() {
