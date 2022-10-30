@@ -803,7 +803,7 @@ public class RifeConfig {
         private int port_ = DEFAULT_PORT;
         private String staticResourceBase_ = DEFAULT_STATIC_RESOURCE_BASE;
 
-        public static final int DEFAULT_PORT = 4567;
+        public static final int DEFAULT_PORT = 8080;
         public static final String DEFAULT_STATIC_RESOURCE_BASE = null;
 
         public int getPort() {

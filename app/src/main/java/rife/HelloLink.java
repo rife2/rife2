@@ -13,6 +13,6 @@ public class HelloLink extends Site {
     Route link = get("/link", c-> c.print("<a href='" + c.urlFor(hello) + "'>Hello</a>"));
 
     public static void main(String[] args) {
-        new Server().port(4242).start(new HelloLink());
+        new Server().start(new HelloLink());
     }
 }

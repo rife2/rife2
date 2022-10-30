@@ -13,6 +13,6 @@ public class HelloWorld extends Site {
     }
 
     public static void main(String[] args) {
-        new Server().port(4242).start(new HelloWorld());
+        new Server().start(new HelloWorld());
     }
 }
