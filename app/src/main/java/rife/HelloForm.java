@@ -12,8 +12,8 @@ public class HelloForm extends Site {
     Route hello = route("/hello", c -> {
         var t = c.template("HelloForm");
         switch (c.method()) {
-            case GET -> t.setBlock("content");
-            case POST -> t.setBlock("content", "hello");
+            case GET -> t.setBlock("content", "form");
+            case POST -> t.setBlock("content", "text");
         }
         c.print(t);
     });
