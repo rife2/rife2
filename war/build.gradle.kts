@@ -3,7 +3,7 @@ plugins {
 }
 
 base {
-    archivesName.set("rife2-site")
+    archivesName.set("hello")
     version = 1.0
 }
 
@@ -17,7 +17,8 @@ dependencies {
 
 tasks.war {
     webAppDirectory.set(file("../app/src/main/webapp"))
-    webXml = file("src/web.xml") // copies a file to WEB-INF/web.xml
+    webXml = file("src/web.xml")
+    rootSpec.exclude("**/jetty*.jar", "**/slf4j*.jar")
 }
 
 tasks.test {

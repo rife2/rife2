@@ -93,13 +93,6 @@ tasks.register("precompileTemplates") {
 
 tasks.jar {
     dependsOn("precompileTemplates")
-
-    val dependencies = configurations
-        .runtimeClasspath
-        .get()
-        .map(::zipTree)
-    from(dependencies)
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 tasks.generateGrammarSource {
     arguments = arguments + listOf(

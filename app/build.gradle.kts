@@ -3,7 +3,7 @@ plugins {
 }
 
 base {
-    archivesName.set("rife2-site")
+    archivesName.set("hello")
     version = 1.0
 }
 
@@ -19,6 +19,8 @@ repositories {
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    runtimeOnly("org.eclipse.jetty:jetty-server:11.0.12")
+    runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.12")
     implementation(project(":lib"))
 }
 
