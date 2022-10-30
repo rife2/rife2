@@ -1,3 +1,0 @@
-RIFE is Copyright (C) 2001-2022 Geert Bevin and contributors.
-
-It is licensed under the Apache License, Version 2.0 (the "License")
