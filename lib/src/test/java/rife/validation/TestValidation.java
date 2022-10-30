@@ -174,7 +174,7 @@ public class TestValidation {
         assertTrue(bean.isSubjectValid("theDate"));
         Iterator<ValidationError> set_it = set.iterator();
         ValidationError error = set_it.next();
-        assertEquals(ValidationError.IDENTIFIER_WRONGLENGTH, error.getIdentifier());
+        assertEquals(ValidationError.IDENTIFIER_WRONG_LENGTH, error.getIdentifier());
         assertEquals("property", error.getSubject());
 
         bean.resetValidation();
@@ -248,7 +248,7 @@ public class TestValidation {
         assertTrue(bean.isSubjectValid("theDate"));
         set_it = set.iterator();
         error = set_it.next();
-        assertEquals(ValidationError.IDENTIFIER_WRONGLENGTH, error.getIdentifier());
+        assertEquals(ValidationError.IDENTIFIER_WRONG_LENGTH, error.getIdentifier());
         assertEquals("property", error.getSubject());
     }
 
@@ -286,7 +286,7 @@ public class TestValidation {
         Set<ValidationError> set = bean.getValidationErrors();
         Iterator<ValidationError> set_it = set.iterator();
         ValidationError error = set_it.next();
-        assertEquals(ValidationError.IDENTIFIER_WRONGLENGTH, error.getIdentifier());
+        assertEquals(ValidationError.IDENTIFIER_WRONG_LENGTH, error.getIdentifier());
         assertEquals("property", error.getSubject());
         assertFalse(set_it.hasNext());
 
@@ -297,7 +297,7 @@ public class TestValidation {
         set = bean.getValidationErrors();
         set_it = set.iterator();
         error = set_it.next();
-        assertEquals(ValidationError.IDENTIFIER_WRONGLENGTH, error.getIdentifier());
+        assertEquals(ValidationError.IDENTIFIER_WRONG_LENGTH, error.getIdentifier());
         assertEquals("property", error.getSubject());
         error = set_it.next();
         assertEquals(ValidationError.IDENTIFIER_INVALID, error.getIdentifier());
@@ -402,7 +402,7 @@ public class TestValidation {
         assertTrue(bean.isSubjectValid(null));
         bean.makeErrorValid(null, "blurp");
         assertTrue(bean.isSubjectValid("blurp"));
-        bean.makeErrorValid("INVALID", "blurp");
+        bean.makeErrorValid("invalid", "blurp");
         assertTrue(bean.isSubjectValid("blurp"));
         ValidationRule rule1 = new ValidationRuleNotEqual("property", "");
         ValidationRule rule2 = new ValidationRuleLimitedLength("property", 2, 4);
@@ -410,7 +410,7 @@ public class TestValidation {
         bean.addRule(rule2);
         assertFalse(bean.validate());
 
-        bean.makeErrorValid("INVALID", "property_blah");
+        bean.makeErrorValid("invalid", "property_blah");
         assertEquals(2, bean.countValidationErrors());
         assertEquals(2, bean.getValidationErrors().size());
         assertFalse(bean.isSubjectValid("property"));
@@ -420,16 +420,16 @@ public class TestValidation {
         assertEquals(2, bean.getValidationErrors().size());
         assertFalse(bean.isSubjectValid("property"));
 
-        bean.makeErrorValid("INVALID", "property");
+        bean.makeErrorValid("invalid", "property");
         assertEquals(1, bean.countValidationErrors());
         assertEquals(1, bean.getValidationErrors().size());
         assertFalse(bean.isSubjectValid("property"));
 
         ValidationError error = (ValidationError) bean.getValidationErrors().iterator().next();
         assertEquals("property", error.getSubject());
-        assertEquals("WRONGLENGTH", error.getIdentifier());
+        assertEquals("wrongLength", error.getIdentifier());
 
-        bean.makeErrorValid("WRONGLENGTH", "property");
+        bean.makeErrorValid("wrongLength", "property");
         assertEquals(0, bean.countValidationErrors());
         assertEquals(0, bean.getValidationErrors().size());
         assertTrue(bean.isSubjectValid("property"));

@@ -118,13 +118,13 @@ public class TestBeans {
                 page = page.getHtmlElementById("beanSubmit").click();
 
                 assertEquals("""
-                    INVALID : enum
-                    NOTNUMERIC : int
-                    NOTNUMERIC : double
-                    NOTNUMERIC : longObject
-                    INVALID : datesFormatted
-                    INVALID : serializableParam
-                    INVALID : serializableParams
+                    invalid : enum
+                    notNumeric : int
+                    notNumeric : double
+                    notNumeric : longObject
+                    invalid : datesFormatted
+                    invalid : serializableParam
+                    invalid : serializableParams
                     null,the string,the stringbuffer,0,null,u,null,true,false,0,21,0.0,25435.98,3434.76,6534.8,34347897,null,32,null,,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,null,91:NinetyOne""", page.getWebResponse().getContentAsString());
             }
         }
@@ -230,13 +230,13 @@ public class TestBeans {
                 page = page.getHtmlElementById("beanSubmit").click();
 
                 assertEquals("""
-                    INVALID : enum
-                    NOTNUMERIC : int
-                    NOTNUMERIC : double
-                    NOTNUMERIC : longObject
-                    INVALID : datesFormatted
-                    INVALID : serializableParam
-                    INVALID : serializableParams
+                    invalid : enum
+                    notNumeric : int
+                    notNumeric : double
+                    notNumeric : longObject
+                    invalid : datesFormatted
+                    invalid : serializableParam
+                    invalid : serializableParams
                     null,the string,the stringbuffer,0,null,u,null,true,false,0,21,0.0,25435.98,3434.76,6534.8,34347897,null,32,null,,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,null,91:NinetyOne""", page.getWebResponse().getContentAsString());
             }
         }
@@ -346,13 +346,13 @@ public class TestBeans {
                 page = page.getHtmlElementById("beanSubmit").click();
 
                 assertEquals("""
-                    INVALID : enum
-                    NOTNUMERIC : int
-                    NOTNUMERIC : double
-                    NOTNUMERIC : longObject
-                    INVALID : datesFormatted
-                    INVALID : serializableParam
-                    INVALID : serializableParams
+                    invalid : enum
+                    notNumeric : int
+                    notNumeric : double
+                    notNumeric : longObject
+                    invalid : datesFormatted
+                    invalid : serializableParam
+                    invalid : serializableParams
                     FRIDAY,the string,the stringbuffer,999,null,u,b,true,false,22,21,123.45,25435.98,3434.76,6534.8,34347897,55,32,null,,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,null,91:NinetyOne""", page.getWebResponse().getContentAsString());
             }
         }
@@ -462,13 +462,13 @@ public class TestBeans {
                 page = page.getHtmlElementById("beanSubmit").click();
 
                 assertEquals("""
-                    INVALID : enum
-                    NOTNUMERIC : int
-                    NOTNUMERIC : double
-                    NOTNUMERIC : longObject
-                    INVALID : datesFormatted
-                    INVALID : serializableParam
-                    INVALID : serializableParams
+                    invalid : enum
+                    notNumeric : int
+                    notNumeric : double
+                    notNumeric : longObject
+                    invalid : datesFormatted
+                    invalid : serializableParam
+                    invalid : serializableParams
                     FRIDAY,the string,the stringbuffer,999,null,u,b,true,false,22,21,123.45,25435.98,3434.76,6534.8,34347897,55,32,null,,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,null,91:NinetyOne""", page.getWebResponse().getContentAsString());
             }
         }

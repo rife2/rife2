@@ -61,7 +61,7 @@ public class TestMetaData {
         assertTrue(validated.isSubjectValid("lastname"));
         errors = validated.getValidationErrors();
         assertEquals(1, errors.size());
-        assertEquals(ValidationError.IDENTIFIER_WRONGLENGTH, errors.iterator().next().getIdentifier());
+        assertEquals(ValidationError.IDENTIFIER_WRONG_LENGTH, errors.iterator().next().getIdentifier());
     }
 
     @Test

@@ -235,7 +235,7 @@ public enum StringEncryptor {
                 if (matches(arguments[1], arguments[2])) {
                     System.err.println("VALID: the strings match.");
                 } else {
-                    System.err.println("INVALID: the strings don't match.");
+                    System.err.println("invalid: the strings don't match.");
                 }
                 System.exit(0);
             }

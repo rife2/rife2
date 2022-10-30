@@ -89,10 +89,10 @@ public class TestTask {
             ValidationError error = null;
             Iterator<ValidationError> it = task.getValidationErrors().iterator();
             error = it.next();
-            assertEquals(error.getIdentifier(), "MANDATORY");
+            assertEquals(error.getIdentifier(), "mandatory");
             assertEquals(error.getSubject(), "type");
             error = it.next();
-            assertEquals(error.getIdentifier(), "MANDATORY");
+            assertEquals(error.getIdentifier(), "mandatory");
             assertEquals(error.getSubject(), "planned");
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -110,7 +110,7 @@ public class TestTask {
             assertTrue(1 == task.countValidationErrors());
             Set<ValidationError> set = task.getValidationErrors();
             error = set.iterator().next();
-            assertEquals(error.getIdentifier(), "INVALID");
+            assertEquals(error.getIdentifier(), "invalid");
             assertEquals(error.getSubject(), "planned");
             task.setPlanned(System.currentTimeMillis() + 2000);
 

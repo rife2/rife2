@@ -56,7 +56,7 @@ public class TestValidationRuleLimitedLength {
         Bean bean = new Bean("123456");
         ValidationRuleLimitedLength rule = new ValidationRuleLimitedLength("property", 1, 4).setBean(bean);
         ValidationError error = rule.getError();
-        assertEquals(ValidationError.IDENTIFIER_WRONGLENGTH, error.getIdentifier());
+        assertEquals(ValidationError.IDENTIFIER_WRONG_LENGTH, error.getIdentifier());
         assertEquals("property", error.getSubject());
         assertEquals(rule.getSubject(), error.getSubject());
     }

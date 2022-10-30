@@ -58,7 +58,7 @@ public class TestValidationRuleSameAs {
         Bean bean = new Bean("value", "value2");
         ValidationRuleSameAs rule = new ValidationRuleSameAs("other", "property").setBean(bean);
         ValidationError error = rule.getError();
-        assertEquals(ValidationError.IDENTIFIER_NOTSAME, error.getIdentifier());
+        assertEquals(ValidationError.IDENTIFIER_DIFFERENT, error.getIdentifier());
         assertEquals("other", error.getSubject());
         assertEquals(rule.getSubject(), error.getSubject());
     }

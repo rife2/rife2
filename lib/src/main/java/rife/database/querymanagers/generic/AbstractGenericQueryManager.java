@@ -198,7 +198,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                         }
 
                         if (count(count_query) > 0) {
-                            validated.addValidationError(new ValidationError.UNICITY(property.getPropertyName()));
+                            validated.addValidationError(new ValidationError.UNIQUENESS(property.getPropertyName()));
                         }
                     }
                 }
@@ -327,7 +327,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                     if (count_query != null &&
                         count(count_query) > 0) {
                         for (String unique : uniques) {
-                            validated.addValidationError(new ValidationError.UNICITY(unique));
+                            validated.addValidationError(new ValidationError.UNIQUENESS(unique));
                         }
                     }
                 }

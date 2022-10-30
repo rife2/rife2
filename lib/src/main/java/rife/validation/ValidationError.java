@@ -21,15 +21,15 @@ import java.util.logging.Logger;
  * @since 1.0
  */
 public abstract class ValidationError implements Cloneable {
-    public static final String IDENTIFIER_MANDATORY = "MANDATORY";
-    public static final String IDENTIFIER_UNICITY = "UNICITY";
-    public static final String IDENTIFIER_WRONGLENGTH = "WRONGLENGTH";
-    public static final String IDENTIFIER_WRONGFORMAT = "WRONGFORMAT";
-    public static final String IDENTIFIER_NOTNUMERIC = "NOTNUMERIC";
-    public static final String IDENTIFIER_UNEXPECTED = "UNEXPECTED";
-    public static final String IDENTIFIER_INCOMPLETE = "INCOMPLETE";
-    public static final String IDENTIFIER_INVALID = "INVALID";
-    public static final String IDENTIFIER_NOTSAME = "NOTSAME";
+    public static final String IDENTIFIER_MANDATORY = "mandatory";
+    public static final String IDENTIFIER_UNIQUENESS = "uniqueness";
+    public static final String IDENTIFIER_WRONG_LENGTH = "wrongLength";
+    public static final String IDENTIFIER_WRONG_FORMAT = "wrongFormat";
+    public static final String IDENTIFIER_NOT_NUMERIC = "notNumeric";
+    public static final String IDENTIFIER_UNEXPECTED = "unexpected";
+    public static final String IDENTIFIER_INCOMPLETE = "incomplete";
+    public static final String IDENTIFIER_INVALID = "invalid";
+    public static final String IDENTIFIER_DIFFERENT = "different";
 
     private final String identifier_;
     private final String subject_;
@@ -167,27 +167,27 @@ public abstract class ValidationError implements Cloneable {
         }
     }
 
-    public static class UNICITY extends ValidationError {
-        public UNICITY(String subject) {
-            super(IDENTIFIER_UNICITY, subject);
+    public static class UNIQUENESS extends ValidationError {
+        public UNIQUENESS(String subject) {
+            super(IDENTIFIER_UNIQUENESS, subject);
         }
     }
 
     public static class WRONGLENGTH extends ValidationError {
         public WRONGLENGTH(String subject) {
-            super(IDENTIFIER_WRONGLENGTH, subject);
+            super(IDENTIFIER_WRONG_LENGTH, subject);
         }
     }
 
     public static class WRONGFORMAT extends ValidationError {
         public WRONGFORMAT(String subject) {
-            super(IDENTIFIER_WRONGFORMAT, subject);
+            super(IDENTIFIER_WRONG_FORMAT, subject);
         }
     }
 
     public static class NOTNUMERIC extends ValidationError {
         public NOTNUMERIC(String subject) {
-            super(IDENTIFIER_NOTNUMERIC, subject);
+            super(IDENTIFIER_NOT_NUMERIC, subject);
         }
     }
 
@@ -211,7 +211,7 @@ public abstract class ValidationError implements Cloneable {
 
     public static class NOTSAMEAS extends ValidationError {
         public NOTSAMEAS(String subject) {
-            super(IDENTIFIER_NOTSAME, subject);
+            super(IDENTIFIER_DIFFERENT, subject);
         }
     }
 }

@@ -66,13 +66,13 @@ public class TestTaskoption {
         ValidationError error = null;
         Iterator<ValidationError> it = taskoption.getValidationErrors().iterator();
         error = it.next();
-        assertEquals(error.getIdentifier(), "INVALID");
+        assertEquals(error.getIdentifier(), "invalid");
         assertEquals(error.getSubject(), "taskId");
         error = it.next();
-        assertEquals(error.getIdentifier(), "MANDATORY");
+        assertEquals(error.getIdentifier(), "mandatory");
         assertEquals(error.getSubject(), "name");
         error = it.next();
-        assertEquals(error.getIdentifier(), "MANDATORY");
+        assertEquals(error.getIdentifier(), "mandatory");
         assertEquals(error.getSubject(), "value");
     }
 }

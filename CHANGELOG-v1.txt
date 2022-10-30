@@ -2734,7 +2734,7 @@
   * Changed ordinal manager to work with longs instead of only ints as
   restriction ids.
 
-  * Ignore ContrainedBean unicity validation checks when one property is null
+  * Ignore ContrainedBean uniqueness validation checks when one property is null
 
 2005-02-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
 

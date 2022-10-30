@@ -67,11 +67,11 @@ public class TestRoleUser {
         validationerrors_it = user.getValidationErrors().iterator();
         assertTrue(validationerrors_it.hasNext());
         validationerror = validationerrors_it.next();
-        assertEquals("MANDATORY", validationerror.getIdentifier());
+        assertEquals("mandatory", validationerror.getIdentifier());
         assertEquals("login", validationerror.getSubject());
         assertTrue(validationerrors_it.hasNext());
         validationerror = validationerrors_it.next();
-        assertEquals("MANDATORY", validationerror.getIdentifier());
+        assertEquals("mandatory", validationerror.getIdentifier());
         assertEquals("password", validationerror.getSubject());
         assertFalse(validationerrors_it.hasNext());
 
@@ -85,11 +85,11 @@ public class TestRoleUser {
         validationerrors_it = user.getValidationErrors().iterator();
         assertTrue(validationerrors_it.hasNext());
         validationerror = validationerrors_it.next();
-        assertEquals("WRONGLENGTH", validationerror.getIdentifier());
+        assertEquals("wrongLength", validationerror.getIdentifier());
         assertEquals("login", validationerror.getSubject());
         assertTrue(validationerrors_it.hasNext());
         validationerror = validationerrors_it.next();
-        assertEquals("WRONGLENGTH", validationerror.getIdentifier());
+        assertEquals("wrongLength", validationerror.getIdentifier());
         assertEquals("password", validationerror.getSubject());
         assertFalse(validationerrors_it.hasNext());
 

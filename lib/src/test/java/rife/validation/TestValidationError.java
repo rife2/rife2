@@ -18,29 +18,29 @@ public class TestValidationError {
 
     @Test
     public void testUnicity() {
-        ValidationError error = new ValidationError.UNICITY("subject3");
-        assertEquals(ValidationError.IDENTIFIER_UNICITY, error.getIdentifier());
+        ValidationError error = new ValidationError.UNIQUENESS("subject3");
+        assertEquals(ValidationError.IDENTIFIER_UNIQUENESS, error.getIdentifier());
         assertEquals("subject3", error.getSubject());
     }
 
     @Test
     public void testWrongLength() {
         ValidationError error = new ValidationError.WRONGLENGTH("subject4");
-        assertEquals(ValidationError.IDENTIFIER_WRONGLENGTH, error.getIdentifier());
+        assertEquals(ValidationError.IDENTIFIER_WRONG_LENGTH, error.getIdentifier());
         assertEquals("subject4", error.getSubject());
     }
 
     @Test
     public void testWrongFormat() {
         ValidationError error = new ValidationError.WRONGFORMAT("subject5");
-        assertEquals(ValidationError.IDENTIFIER_WRONGFORMAT, error.getIdentifier());
+        assertEquals(ValidationError.IDENTIFIER_WRONG_FORMAT, error.getIdentifier());
         assertEquals("subject5", error.getSubject());
     }
 
     @Test
     public void testNotNumeric() {
         ValidationError error = new ValidationError.NOTNUMERIC("subject6");
-        assertEquals(ValidationError.IDENTIFIER_NOTNUMERIC, error.getIdentifier());
+        assertEquals(ValidationError.IDENTIFIER_NOT_NUMERIC, error.getIdentifier());
         assertEquals("subject6", error.getSubject());
     }
 
