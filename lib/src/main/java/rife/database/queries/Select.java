@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
@@ -28,7 +28,7 @@ import rife.validation.ConstrainedUtils;
  * one of the query methods on {@link rife.database.DbQueryManager
  * DbQueryManager}.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @author Steven Grimm (koreth[remove] at midwinter dot com)
  * @since 1.0
  */

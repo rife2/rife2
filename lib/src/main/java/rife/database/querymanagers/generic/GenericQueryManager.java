@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com> and
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com) and
  * JR Boyens <gnu-jrb[remove] at gmx dot net>
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
@@ -21,7 +21,7 @@ import java.util.List;
  * persistence actions in a bean-centric way. More information can be found in
  * the {@link Callbacks} interface.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.database.querymanagers.generic.GenericQueryManagerFactory
  * @see rife.database.querymanagers.generic.Callbacks
  * @since 1.0

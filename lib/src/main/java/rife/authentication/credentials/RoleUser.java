@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.credentials;
@@ -15,7 +15,7 @@ import rife.validation.Validation;
  * according to the settings in {@link
  * rife.config.RifeConfig.AuthenticationConfig}.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
 public class RoleUser extends Validation implements RoleUserCredentials, RememberMe {

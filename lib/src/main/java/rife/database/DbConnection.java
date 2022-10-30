@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  * statements, they will be put in a wait state and woken up again after the
  * transaction has finished.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.database.Datasource#getConnection()
  * @see rife.database.DbStatement
  * @see rife.database.DbPreparedStatement

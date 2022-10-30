@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * class when you need to use variables inside the inner class that are
  * cumbersome to change to <code>final</code> in the enclosing class.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see DbQueryManager#inTransaction(DbTransactionUser)
  * @since 1.0
  */

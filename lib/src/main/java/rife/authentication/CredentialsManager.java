@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication;
@@ -15,7 +15,7 @@ import rife.authentication.exceptions.CredentialsManagerException;
  * to take appropriate actions (ie. start a new session, provide informational
  * messages about a user's status, and so on).
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see Credentials
  * @see SessionValidator
  * @since 1.0

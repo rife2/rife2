@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  * General purpose class containing common <code>String</code> manipulation
  * methods.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
 public abstract class StringUtils {
@@ -2722,7 +2722,7 @@ public abstract class StringUtils {
     }
 
     /**
-     * Reformats a string where lines that are longer than <tt>width</tt>
+     * Reformats a string where lines that are longer than <code>width</code>
      * are split apart at the earliest wordbreak or at maxLength, whichever is
      * sooner. If the width specified is less than 5 or greater than the input
      * Strings length the string will be returned as is.

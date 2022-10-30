@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -15,7 +15,7 @@ import java.util.HashMap;
  * operations can be performed safely, securely, and more efficiently.
  *
  * @author JR Boyens (jboyens[remove] at uwyn dot com)
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
 public class ConnectionPool implements AutoCloseable {

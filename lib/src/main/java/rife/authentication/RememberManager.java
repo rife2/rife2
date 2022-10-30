@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication;
@@ -16,7 +16,7 @@ import rife.authentication.exceptions.RememberManagerException;
  * after using it once, create a new one immediately and send it to the
  * client. This ensures that each remember ID can only be used once.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.authentication.credentials.RememberMe
  * @since 1.0
  */

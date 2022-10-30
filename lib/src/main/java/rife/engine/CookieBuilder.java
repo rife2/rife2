@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
@@ -9,7 +9,7 @@ import jakarta.servlet.http.Cookie;
 /**
  * Helper class for building a <code>Cookie</code>.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see Cookie
  * @since 2.0
  */
@@ -114,7 +114,7 @@ public class CookieBuilder {
     }
 
     /**
-     * See {@link Cookie#setHttpOnly
+     * See {@link Cookie#setHttpOnly}
      *
      * @return the <code>CookieBuilder</code> instance
      * @since 2.0

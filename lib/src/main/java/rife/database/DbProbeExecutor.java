@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Steven Grimm <koreth[remove] at midwinter dot com>
+ * Copyright 2001-2022 Steven Grimm (koreth[remove] at midwinter dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -13,23 +13,12 @@ import rife.scheduler.Task;
  * This is primarily useful for MySQL, which closes connections after a
  * period of inactivity.
  *
- * <p>This should be run using a scheduler participant. For example, to
- * probe the "mysql" Datasource once a minute:
- *
- * <pre> &lt;scheduler&gt;
- *   &lt;task classname="rife.database.DbProbeExecutor"
- *         frequency="* * * * *"&gt;
- *     &lt;option name="datasource"&gt;mysql&lt;/option&gt;
- *     &lt;option name="query"&gt;select 1&lt;/option&gt;
- *   &lt;/task&gt;
- * &lt;/scheduler&gt;</pre>
- *
  * <p>There are two optional parameters.
  * <dl>
  * <dt><code>datasource</code></dt>
  * <dd>The name of the Datasource to probe. If not specified, the
  * default is "datasource".</dd>
- * <dt><code>query</code></td>
+ * <dt><code>query</code></dt>
  * <dd>The dummy query to send. If not specified, the default is
  * "select 1".</dd>
  * </dl>

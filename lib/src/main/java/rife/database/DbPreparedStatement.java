@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -45,7 +45,7 @@ import java.util.Map;
  * names instead of column numbers and automatic population of a statement
  * from bean property values is also supported.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see #executeQuery()
  * @see #getResultSet()
  * @see rife.database.DbConnection#getPreparedStatement(String)

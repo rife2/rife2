@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.querymanagers.generic;
@@ -9,7 +9,7 @@ package rife.database.querymanagers.generic;
  * rife.database.querymanagers.generic.Callbacks} interface, or they
  * can be provided by implementing this interface.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.database.querymanagers.generic.Callbacks
  * @since 1.0
  */

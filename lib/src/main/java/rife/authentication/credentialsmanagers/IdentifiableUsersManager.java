@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.credentialsmanagers;
@@ -11,7 +11,7 @@ import rife.authentication.exceptions.CredentialsManagerException;
  * element to be able to set up a {@link RoleUserIdentity} instance for each authenticated user for whom the
  * {@code Identified} element is executed.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.authentication.elements.Identified
  * @see RoleUserIdentity
  * @since 1.6

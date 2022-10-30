@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * want to make sure that the file is deleted, you should call {@link
  * File#delete} yourself when you're finished with the uploaded file.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
 public class UploadedFile implements Cloneable, AutoCloseable {
@@ -89,7 +89,7 @@ public class UploadedFile implements Cloneable, AutoCloseable {
 
     /**
      * Indicates whether the uploaded file exceeded the file {@link
-     * RifeConfig.EngineConfig#getFileuploadSizeLimit upload
+     * RifeConfig.EngineConfig#getFileUploadSizeLimit()}  upload
      * size limit}.
      * <p>If the limit was exceeded, the temporary file will be
      * <code>null</code> and deleted from the server.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -43,7 +43,7 @@ import javax.sql.DataSource;
  * connection parameters is not possible anymore, a new instance has to be
  * created to set the parameters to different values.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.database.Datasources
  * @since 1.0
  */
@@ -392,8 +392,7 @@ public class Datasource implements Cloneable {
     /**
      * Retrieves the user that's used by this <code>Datasource</code>.
      *
-     * @return a <code>String>/code> with the user; or
-     * <p>
+     * @return a <code>String</code> with the user; or
      * <code>null</code> if the user hasn't been set
      * @see #setUser(String)
      * @since 1.0
@@ -421,8 +420,7 @@ public class Datasource implements Cloneable {
     /**
      * Retrieves the password that's used by this <code>Datasource</code>.
      *
-     * @return a <code>String>/code> with the password; or
-     * <p>
+     * @return a <code>String</code> with the password; or
      * <code>null</code> if the password hasn't been set
      * @see #setPassword(String)
      * @since 1.0
@@ -452,7 +450,6 @@ public class Datasource implements Cloneable {
      * <code>Datasource</code>.
      *
      * @return a positive <code>int</code> with the size of the pool; or
-     * <p>
      * <code>0</code> if no pool is being used
      * @see #isPooled()
      * @see #setPoolsize(int)
@@ -468,7 +465,6 @@ public class Datasource implements Cloneable {
      *
      * @return <code>true</code> if a pool is being used by this
      * <code>Datasource</code>; or
-     * <p>
      * <code>false</code> otherwise
      * @see #getPoolsize()
      * @see #setPoolsize(int)
@@ -571,7 +567,6 @@ public class Datasource implements Cloneable {
      * @param object the reference object with which to compare.
      * @return <code>true</code> if this object is the same as the object
      * argument; or
-     * <p>
      * <code>false</code> otherwise
      * @see #hashCode()
      * @since 1.0

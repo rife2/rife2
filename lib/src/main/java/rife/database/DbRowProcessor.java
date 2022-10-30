@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  * abstraction of result processing without having to be burdened with possible
  * large memory usage or large object allocation.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see #processRow(ResultSet resultSet)
  * @see rife.database.DbQueryManager
  * @since 1.0

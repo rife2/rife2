@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication;
@@ -20,7 +20,7 @@ package rife.authentication;
  * presence of this attribute and act accordingly to verify if the user has the
  * authorities of the required role (in this case, administrator rights).
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.authentication.SessionValidator
  * @since 1.0
  */

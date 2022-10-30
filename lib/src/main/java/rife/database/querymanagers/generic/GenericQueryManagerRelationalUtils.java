@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com> and
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com) and
  * JR Boyens <gnu-jrb[remove] at gmx dot net>
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
  * Utility class to provide many-to-many and many-to-one relational
  * capabilities to generic query manager implementations.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.6
  */
 public abstract class GenericQueryManagerRelationalUtils {

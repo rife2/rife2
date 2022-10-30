@@ -1,10 +1,10 @@
-2007-07-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-07-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.6.1
   
   * Added Terracotta support to BasicContinuableClassLoader
 
-2007-07-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-07-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates.
 
@@ -18,11 +18,11 @@
 
   * Added check and test for the ordinal restriction value to be not null.
 
-2007-07-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-07-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for getInputDate to ElementSupport.
 
-2007-07-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-07-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated RIFE version to 1.6.1-snapshot.
 
@@ -32,7 +32,7 @@
 
   * Improved BasicContinuableRunner to make it more flexible.
 
-2007-06-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.6
   
@@ -40,24 +40,24 @@
 
   * Updated and enhanced IDE project files.
 
-2007-06-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor improvement to template deployment to reduce the requirements.
 
-2007-06-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Finished continuations API and javadocs.
 
   * Added byte code instrumentation agent for continuations package.
 
-2007-06-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Simplification of the continuations API by removing the
   ContinuationContextProvider interface.
 
   * Continuations refactoring to remove static setup method calls.
 
-2007-06-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added more javadocs for the continuations package.
   
@@ -67,19 +67,19 @@
   * Radical improvements to memory usage with clustered continuations through
   Terracotta
 
-2007-06-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Changed terracotta detection to use the name tc.active system property.
 
   * Updated syntax highlighting for the examples
 
-2007-06-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Improved javadocs.
 
   * Continuations fixes for Terracotta
 
-2007-06-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Refactored answers to call continuations so that it doesn't rely on too
   much boilerplate logic.
@@ -89,7 +89,7 @@
   * Refactored basic continuable runner into its own package and made the call
   target retrieval customizable.
 
-2007-06-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Reworked call continuation answering so that it doesn't rely on the web
   engine.
@@ -103,18 +103,18 @@
 
   * Further refactorings to continuations package.
 
-2007-06-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Refactorings to make the continuations method names 'pause', 'stepBack'
   and 'call' configurable.
 
   * Cleanups for the basic continuable runner
 
-2007-06-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added tests and support for stepback in continuations package.
 
-2007-06-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Refactorings and cleanups to the continuations package to make it easier
   to use, configure and comprehend.
@@ -122,7 +122,7 @@
   * Removing continuations agent test, since the agent is currently not
   customizable for custom ContinuableObject classes.
 
-2007-06-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added test ant target for agent.
 
@@ -141,7 +141,7 @@
 
   * Upgraded Spring to 2.0.5 and XFire to 1.2.6.
 
-2007-06-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded MVEL to 1.2.0b21, Rhino to 1.6R5 and Janino to 2.5.7
 
@@ -149,7 +149,7 @@
 
   * Upgraded to JRuby 1.0
 
-2007-06-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-06-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor RIFE fix for improved Terracotta compatibility.
 
@@ -158,46 +158,46 @@
   * RIFE-338 : Text that begins with template tag beginnings are now
   incorrectly picked up
 
-2007-05-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-05-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixes to the template parser with regards to the optional quotes.
 
-2007-05-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-05-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded DWR to 2.0.1
 
   * Fixes to manyToOne declaration inspections.
 
-2007-05-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-05-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded to MVEL 1.2
 
-2007-05-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-05-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed regression issue where manyToOne columns with basic data types
   weren't handled as they were before.
 
-2007-05-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-05-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated Javadocs.
 
   * RIFE-307 : Ignore quotes in ${v} template tags
 
-2007-05-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-05-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-325 : No way to set database table name in ContentQueryManager
 
-2007-05-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-05-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-280 : Add support for manyToMany
 
-2007-05-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-05-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Source cleanup with regards to the detection of Terracotta presence.
 
   * Added some synchronization locks.
 
-2007-05-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-05-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added Terracotta tc-config.xml files for all the examples with shared
   state.
@@ -206,7 +206,7 @@
 
   * Made some small fixes to RIFE itself for better Terracotta support.
 
-2007-05-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-05-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded Spring to 2.0.4 and added some missing license texts.
 
@@ -218,46 +218,46 @@
 
   * Upgraded JRuby (including ASM and Backport), Janino, Pnuts, H2
 
-2007-04-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-04-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded H2 support to version 1.0-2007-04-29.
 
   * Added support for saving manyToOne collection associations.
 
-2007-04-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-04-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc fixes
 
-2007-04-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-04-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added IdentifiableUsersManager that contains the methods that are needed
   by the Identified element to identify a user.
 
-2007-04-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-04-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated synchronization for Terracotta compatibility.
 
   * Small fix to field incompatibility reporting when using using annotations
   for declarations.
 
-2007-04-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-04-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added and expanded Jeremy Cowgar's hex version of the string encryption
   schemes.
 
-2007-04-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-04-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Performance improvements to manyToOne and manyToMany so that only
   Constrained classes that have related ConstrainedProperties will be
   further examined. Classes that don't declare relational constraints will run
   just as fast as before with the GenericQueryManager.
 
-2007-04-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-04-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for manyToOne collection associations lazy restoring, still
   needs to support other database operations and validation.
 
-2007-04-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-04-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added another continuations test
 
@@ -267,11 +267,11 @@
 
   * General testcase fixes to correctly run in another timezone.
 
-2007-04-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-04-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated terracotta config
 
-2007-04-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-04-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Regression fix to continuations without agent instrumentation
 
@@ -279,24 +279,24 @@
   so that the continuations instrumentation agent doesn't need to rely on the
   imported runtime classes.
 
-2007-03-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Totally separated continuations from the web engine. Needs javadocs,
   dedicated tests, more cleanup and refactoring to make the API as easy as
   possible
 
-2007-03-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Initial refactoring to put continuations in their own package, not
   entirely separated from RIFE web engine yet.
 
-2007-03-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * A whole collection of minor bugfixes related to the latest added features.
 
   * Much improved example 8, advanced continuations.
 
-2007-03-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fix to meta data merging to support OpenTerracotta
 
@@ -304,18 +304,18 @@
   the initial and the adapted versions of class's bytecode to be dumped to
   files in the user's home directory.
 
-2007-03-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Regression fix for bad imports in some test classes
 
   * RIFE-314 : Need a way to cancel continuations on exit/submission
   declarations
 
-2007-03-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor regression fix to tests
 
-2007-03-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor regression fix to beanutils
 
@@ -330,7 +330,7 @@
 
   * Added Java 5 enum support to database layer
 
-2007-03-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated RetroWeaver to v2.0 and adapted it for inclusion into the RIFE 1.4
   with a dedicated runtime package to prevent conflicts
@@ -339,49 +339,49 @@
 
   * Regression fix to memory authentication session purging
 
-2007-03-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-319 : java.util.Date in named output bean does not get through
 
   * Fixed JDK 1.6 support
 
-2007-03-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-303 : Property name annotations attribute
 
-2007-03-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-306 : Add "comment" template tag
 
-2007-03-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc improvements
 
   * RIFE-332 : Without a ParticipantConfig file upload paths get set to
   "null/"
 
-2007-03-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added fully working version of the RIFE instrumentation agent
 
-2007-03-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added meaningful exceptions for DWR deployment when the config file is
   wrong
 
-2007-03-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Created ClassBytesLoader to provide a dedicated class for class bytes
   loading
 
   * Added agent support for meta data merging
 
-2007-03-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-03-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * First support for a RIFE instrumentation agent, currently only supports
   continuations functionalities
 
-2007-02-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-02-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Merged changes from Terracotta branch r3658:3673 into trunk
 
@@ -390,7 +390,7 @@
   * Added shorthand manyToOne constraint support where association class and
   column are automatically detected.
 
-2007-02-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-02-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for real many to one relationships in the GQM which
   instances can be property values and are lazily loaded. Still need some
@@ -401,24 +401,24 @@
   * Unittest improvements for serialized beans that assumed classes that were
   compiled by X-develop.
 
-2007-02-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-02-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added initial support for manyToOne properties that contain the entities
   itself instead of the identifier values. Lazy loading isn't implemented yet,
   neither is shorthand manyToOne constraint declaration without any arguments.
 
-2007-02-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-02-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates
 
-2007-01-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-01-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for unionAll in Select queries.
 
   * Added support for query hints to Select, Insert, Delete and Update queries
   (only applicable to Oracle and MySQL)
 
-2007-01-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-01-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for ReadQueryTemplate so that custom SQL queries can be
   aggregated into templates as named blocks.
@@ -426,15 +426,15 @@
   * Added ReadQueryString implementation so that any custom SQL query can
   benefit from the RIFE wrappers.
 
-2007-01-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-01-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Small source restructuring in the EngineClassLoader for clarity.
 
-2007-01-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-01-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated MVEL to 1.1.5 and added support for compiled expressions
 
-2007-01-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-01-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Furthered refactored authentication to be fully backwards compatible with
   the earlier release but still be entirely pluggable.
@@ -445,14 +445,14 @@
   * Fixed bug with template printing and cloning when there are expression
   block values present.
 
-2007-01-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-01-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor typo fix in ConstrainedProperty
 
   * Updated Firebird support to use Jaybird 2.1.1 and tested in on
   Firebird 1.5.3 MacOSX Intel
 
-2007-01-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-01-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated copyright year to 2007
 
@@ -467,12 +467,12 @@
   * Small improvement to DWR integration to only allow java identifiers for
   the DWR container properties.
 
-2007-01-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-01-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fix to DWR integration to not included system properties into the DWR
   container that is setup at deployment 
 
-2007-01-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-01-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated DWR to version 2.0RC2
 
@@ -481,7 +481,7 @@
   * Upgraded Hessian to version 3.0.19, which is currently the most recent
   version that works correctly.
 
-2007-01-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-01-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor Javadoc fix
 
@@ -499,7 +499,7 @@
 
   * Updated Groovy to v1.0 final
 
-2007-01-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2007-01-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor fix to HTML entity decoding
 
@@ -508,11 +508,11 @@
   * Improved aggresive HTML encode to use numeric entities for those
   characters that don't have a literal entity declaration.
 
-2006-12-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-12-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor source cleanup for DWR support
 
-2006-12-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-12-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Finished adding support for DWR 2.0RC1.
 
@@ -523,11 +523,11 @@
   * Added support for MVEL as an expression language for template blockvalue
   scripting.
 
-2006-12-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-12-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated Groovy to 1.0RC2
 
-2006-12-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-12-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added additional Ant command line bin items
 
@@ -543,7 +543,7 @@
 
   * Ant build refactoring.
 
-2006-12-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-12-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded and tested Derby to version 10.2.2.0
 
@@ -554,18 +554,18 @@
   * Added fix for running RIFE without a default repository and accessing
   the properties
 
-2006-12-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-12-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added exception that checks for a missing getter for a constrained
   property before using it.
 
-2006-12-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-12-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated continuation manager to enforce a hard timeout on the continuation
   expiration time. When a continuation context is now obtained, it will only
   be retrieved when its time hasn't been expired yet.
 
-2006-12-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-12-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added getFullName() to the Template interface and implementation.
 
@@ -577,23 +577,23 @@
   * Commented out the default empty string datasource property in the database
   authentication element declaration
 
-2006-12-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-12-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * First working version of many-to-many support in the generic query manager
 
-2006-11-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-11-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fix to make the bean handler of text templates behave exactly as the one
   for xhtml template, for the exception of form building
 
-2006-10-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-10-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added @Elem annotation to each standard element implementation so that
   they can be used easily in a default fashion.
 
   * Replaced all assertTrue(false) calls in the tests with fail()
 
-2006-10-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-10-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded XFire to version 1.2.2 and updated the support for the changed
   APIs
@@ -602,7 +602,7 @@
 
   * Upgraded Spring to v2.0
 
-2006-10-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-10-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded to latest revision of Pnuts 1.1.
 
@@ -626,7 +626,7 @@
 
   * Fixed some regression issues with the test suite.
 
-2006-10-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-10-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added better support for element field annotations, they have to be static
   now and don't need an instance of the element to be able to be instantiated,
@@ -635,7 +635,7 @@
   * Added better support for automatic ID and URL generation for annotated
   elements that extend other annotated elements.
 
-2006-10-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-10-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made charset detection more permissive
 
@@ -649,29 +649,29 @@
   * RIFE-313: Scheduler job to probe database connections periodically. Can
   be used to keep MySQL from timing connections out.
 
-2006-09-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-09-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Merged in Steven Grimms authentication refactoring that brings total
   pluggability and loose coupling of all the managers. Merged up to
   revision 3529.
 
-2006-09-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-09-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed the methods that return List from the Participant interface
 
-2006-09-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-09-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added tests for new form builder API methods.
 
   * Cleaned up the source code a bit thanks to IDEA's inspections.
 
-2006-09-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-09-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added different property template name support to FormBuilder.
 
   * Added full FormBuilder javadocs.
 
-2006-09-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-09-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added ValidationContext support to validateGroup.
 
@@ -679,34 +679,34 @@
 
   * Fixed URL encoding bug in CMF ServeContent element.
 
-2006-09-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-09-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed all IllegalArgumentExceptions on names since they are not
   critical, they now just return false or null, which are possible return
   value anyway if a non existing name is provided.
 
-2006-09-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-09-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Workaround to handle Jetty's custom tx resource protocol
 
-2006-08-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-08-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated wrong site DTD System ID
 
-2006-08-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-08-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed Axis configuration params, since we're using XFire now for SOAP
 
-2006-08-14 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-08-14 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.5.1
 
-2006-08-14 Steven Grimm <koreth[remove] at midwinter dot com>
+2006-08-14 Steven Grimm (koreth[remove] at midwinter dot com)
 
   * RIFE-301 : Allow pass-through of unauthenticated users in Authenticated
   element
 
-2006-08-14 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-08-14 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Replaced "since 1.6" by "since 1.5.1"
 
@@ -716,11 +716,11 @@
   database functionalities are used before an actual connection is made
   through the datasource.
 
-2006-08-12 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-08-12 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-269 : New autolink element to simplify datalink definitions
 
-2006-08-10 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-08-10 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added better auto-recompilation support for annotation elements. It now
   works even if they were initially compiled through the IDE.
@@ -731,7 +731,7 @@
   * Added some ensurances to unregister a thread connection at all times
   during cleanup and connection errors
 
-2006-08-09 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-08-09 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added instant modification check in case an exception was thrown, that
   should prevent the 10 second delay each time you want to check if an
@@ -741,12 +741,12 @@
 
   * RIFE-302 : Element declaration annotations from parent classes are ignored
 
-2006-08-07 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-08-07 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Corrected some problems and sub-optimal code after looking at some of
   IDEA's inspections.
 
-2006-08-04 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-08-04 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for BigDecimal in bean property setting.
 
@@ -758,54 +758,54 @@
   * Re-activated finally continuations test since JDK 1.5 is pretty baseline
   nowadays
 
-2006-08-02 Steven Grimm <koreth[remove] at midwinter dot com>
+2006-08-02 Steven Grimm (koreth[remove] at midwinter dot com)
 
   * RIFE-299 : Logout element doesn't work with global rememberid cookie
 
-2006-07-31 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-31 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-297 : Global cookie can't be used for rememberid
 
-2006-07-29 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-29 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fix for the RifeServlet to be usable at other URL mappings than /*.
   Sadly, RifeFilter can't do this, since no distinction is made by the
   servlet spec between the servlet path and the pathinfo when using filters.
 
-2006-07-21 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-21 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support to validate array property values in standard validation
   rules.
 
-2006-07-20 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-20 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixes to element recompilation when using manual site declarations in
   Java.
 
-2006-07-18 Steven Grimm <koreth[remove] at midwinter dot com>
+2006-07-18 Steven Grimm (koreth[remove] at midwinter dot com)
 
   * RIFE-292 : Document that query objects can be passed to DbQueryManager
 
-2006-07-18 Steven Grimm <koreth[remove] at midwinter dot com>
+2006-07-18 Steven Grimm (koreth[remove] at midwinter dot com)
 
   * RIFE-293 : Allow multiple config file selectors
 
-2006-07-17 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-17 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added proper support for submission bean date arrays and serializable
   arrays.
 
-2006-07-13 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-13 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.5
 
-2006-07-12 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-12 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated mime type property for the examples highlighted source code.
 
   * Updated changelog
 
-2006-07-11 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-11 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Placed empty target types on annotations that can only be used nested
   inside enclosing annotations.
@@ -814,7 +814,7 @@
 
   * Ant build file fixes
 
-2006-07-10 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-10 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor refactorings concerning state store extensibility
 
@@ -830,7 +830,7 @@
   * RIFE-291 : Annotation destClass attributes should also support a
   destClassIdPrefix attribute
 
-2006-07-09 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-09 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Compilation fixes for windows and environment setup fixes for windows.
 
@@ -840,7 +840,7 @@
 
   * RIFE-281 : INVALID should suppress/clear MANDATORY message
   
-2006-07-08 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-08 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded Janino to version 2.4.5
 
@@ -857,18 +857,18 @@
   
   * Added tests for HierarchicalProperties
 
-2006-07-07 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-07 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support to hierarchical properties for easily adding a map.
 
   * Convenience API updates to BlockingRepository.
 
-2006-07-06 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-06 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fix to template bean setting where the format constraint wasn't fully
   respected.
   
-2006-07-05 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-05 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Some LightweightEngineException fixes for Rhino engine
 
@@ -877,7 +877,7 @@
   
   * Addition of convenience methods to the BlockRepository.
 
-2006-07-03 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-03 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for setting exceptions as "rife.engine.exception" request
   attributes, so that servlet API 2.4 dispatch rule handlers can use it.
@@ -886,7 +886,7 @@
   
   * Made other returned collections in templates also unmodifiable.
 
-2006-07-02 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-07-02 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Ensured returned lists of Template getFilteredValues and getFilteredBlocks
   into unmodifiable lists.
@@ -894,7 +894,7 @@
   * Bugfix related to the inheritance and precedence order of complex nested
   groups and subsites.
 
-2006-06-30 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-30 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added USE_FAST_EXCEPTIONS configuration parameter to allow people to turn
   on the full strack traces when having to debug weird exception behavior.
@@ -905,7 +905,7 @@
 
   * RIFE-287 : Embedded elements don't inherit parents' authentication data
 
-2006-06-28 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-28 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Changed CMF content serving to call ElementSupport.defer() instead of
   setStatus(HttpServletResponse.SC_NOT_FOUND). This means that the CMF URL
@@ -915,13 +915,13 @@
   * Made LightWeightEngineException an Error instead of a RuntimeException.
   This should reduce the probability of people catching it accidentally.
 
-2006-06-27 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-27 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added fix for relative element ID resolving for arrival elements. Instead
   of using the real ID of the arrival, the resolving now happens against the
   ID of the reference element to where the arrival points.
 
-2006-06-26 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-26 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * API fix to SubmissionBuilder.
   
@@ -933,7 +933,7 @@
   class. This is needed to be able to support elements that are implemented
   through anonymous inner classes.
   
-2006-06-20 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-20 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Performance improvements by caching the injection setter methods for each
   element.
@@ -952,7 +952,7 @@
   value tag processing with explicit late processing of the same value ID and
   element differentiator.
 
-2006-06-16 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-16 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made the embed value of embedded elements now always only use the template
   default value instead of the template value (which can change). To pass data
@@ -961,18 +961,18 @@
 
   * Build file fix for examples
 
-2006-06-15 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-15 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated SVN properties
 
-2006-06-12 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-12 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added some logic to ensure that state stores always have the correct type
   after cloning their container.
 
   * Regression bugfix with form general for exits without outputs.
 
-2006-06-09 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-09 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.5M2 (milestone 2)
 
@@ -982,11 +982,11 @@
 
   * Updated highlighted syntax for the game example
 
-2006-06-08 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-08 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Refactoring of state storage to improve session state handling.
 
-2006-06-07 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-07 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added test for parallel embedded continuation elements.
 
@@ -997,25 +997,25 @@
 
   * Fixes to session state storage.
 
-2006-06-06 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-06 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Refactored state storage strategies to make session state storage much
   more performant.
 
-2006-06-05 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-05 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for simultaneous continuations in different embedded
   elements.
 
-2006-06-02 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-06-02 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor bugfix to game example
 
-2006-05-29 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-29 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed a bug related to embedded element processing with differentiators.
 
-2006-05-26 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-26 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added GenericQueryManager listeners.
   
@@ -1023,40 +1023,40 @@
   stores, so that the content type can always be tailored for content
   serving.
 
-2006-05-23 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-23 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixes to stateful components.
 
-2006-05-19 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-19 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made the advanced continuations example cleaner and easier to look at.
 
-2006-05-17 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-17 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added better support for continuation tree invalidation.
 
-2006-05-16 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-16 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made request and response encoding easily configurable with
   REQUEST_ENCODING and RESPONSE_ENCODING config parameters.
 
-2006-05-13 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-13 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.5M1 (milestone 1)
 
   * Renamed hsqldb jar according to its version number.
 
-2006-05-12 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-12 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added stateful embedded elements explicit processing test.
   
   * Bugfix to stateful embedded elements.
 
-2006-05-11 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-11 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added test for embedded element data passing.
 
-2006-05-09 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-09 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated activation, javamail, dwr, janino, ognl, postgresql jdbc, hsqldb
   and pnuts jars.
@@ -1066,7 +1066,7 @@
 
   * Regression bug fix to CMF ServeContent element.
 
-2006-05-08 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-08 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Restored previous Template.getValue return type and
   ElementSupport.getEmbedValue return type.
@@ -1086,32 +1086,32 @@
   
   * Added hangman example.
 
-2006-05-07 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-07 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * X-develop project file fix
 
   * Added stateful component example
 
-2006-05-06 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-06 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added testcase for stateful embedded elements.
 
-2006-05-03 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-05-03 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Re-implemented stateful component support. It now works exactly as
   expected when coming from other component frameworks.
 
-2006-04-30 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-30 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Code cleanups.
 
   * Added support for stateful embedded element instances.
 
-2006-04-27 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-27 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor fix to defer.xml element and minor code cleanups.
 
-2006-04-24 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-24 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made standard template factories non final.
 
@@ -1119,28 +1119,28 @@
 
   * Updated numberguess example
 
-2006-04-23 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-23 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Finished javadocs for element declaration annotations.
 
-2006-04-22 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-22 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added more javadocs for element declaration annotations.
 
-2006-04-21 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-21 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for reloading manual site declarations through
   notifications of SiteListeners.
 
   * Added javadocs.
 
-2006-04-20 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-20 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc additions for element declaration annotations.
   
   * Refactoring of the Site class internals to make it more maintainable.
 
-2006-04-19 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-19 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc additions
 
@@ -1156,7 +1156,7 @@
   * Made bean property processing use a predictable order, ie. the order in
   which the properties are defined in the source file of the bean class.
 
-2006-04-18 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-18 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * NPE fix to MetaData handling.
 
@@ -1173,18 +1173,18 @@
 
   * Improvements and javadoc additions for element declaration annotations
 
-2006-04-17 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-17 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Improvements and javadoc additions for element declaration annotations
 
-2006-04-15 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-15 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for 'stepBack' continuations.
 
   * Improved error reporting during repository startup in the RIFE servlet
   or filter
 
-2006-04-14 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-14 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bugfix related to annotations and continuations in element
   implementations
@@ -1200,34 +1200,34 @@
   input and target element, only one was taken into account due to incomplete
   hashCode and equals methods.
 
-2006-04-13 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-13 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed to the project and the annotations to make this work with X-develop
 
-2006-04-13 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-13 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor config change for MacOSX
 
-2006-04-12 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-12 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated DWR to 2.0M1.
 
   * Rewrote the DWR integration element and deployer for the new DWR version.
 
-2006-04-06 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-06 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor reconfigurations for running on windows
 
-2006-04-05 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-05 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bugfix related to element tracing and continuations.
 
-2006-04-04 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-04 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added outcookie outjection support, fixes to output outjection. This
   finalizes RIFE element bijection support.
 
-2006-04-03 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-03 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for output value listener notification from getter
   outjection.
@@ -1235,73 +1235,73 @@
   * Added inheritance and child trigger support to output and outbean
   outjection.
 
-2006-04-02 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-02 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added outbean outjection support
 
-2006-04-01 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-04-01 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Performance optimizations for injection into element instances
 
   * Added support for output outjection.
 
-2006-03-30 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-30 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded XFire, Pnuts, Spring, Javamail, Janino, ImageJ, ImageroReader to
   their latest versions
 
-2006-03-28 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-28 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Test suite fixes
 
-2006-03-27 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-27 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for cookie injections. Added also tests for defaults in
   parameter injection.
 
   * Minor bugfix on mail queue for robustness
 
-2006-03-26 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-26 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added injection support of named input beans, named submission beans and
   uploaded files.
 
-2006-03-22 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-22 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added dedicated exceptions for annotations support for element
   declaration.
 
-2006-03-21 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-21 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed bug related to global vars and sibling embedded elements.
 
-2006-03-20 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-20 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated SVN props
 
-2006-03-16 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-16 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added PROPERTY:name filtered value tags
 
-2006-03-15 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-15 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Template auto reload regression fix
 
   * Updated DWR and integrated Joe's patch
 
-2006-03-14 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-14 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added standard rife/defer.xml and com.uwyn.rife.engine.elements.Defer
   element
 
   * Updated example source code syntax highlights
 
-2006-03-12 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-12 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added tests for auto reload delay and minor fixes to template auto reload
   delay.
 
-2006-03-11 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-11 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Replaced uses of Calendar.getInstance() with either new Date() or
   System.currentTimeInMillis() where appropriate.
@@ -1311,7 +1311,7 @@
 
   * Bugfix to element declarations and 'extends'
 
-2006-03-10 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-10 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added classloader magic to hot reload annotations after hotswap.
 
@@ -1326,7 +1326,7 @@
 
   * Removed unnecessary code.
 
-2006-03-10 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-10 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added experimental work in progress support for Element annotations.
 
@@ -1337,40 +1337,40 @@
   Lifecycle in pure Java without relying on XML. With this step, a RIFE
   application can be written without a single line of XML.
 
-2006-03-09 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-09 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixes to IoC properties declarations inside the repository declaration.
 
   * Regression fix to meta data merging.
 
-2006-03-08 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-08 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed meta data merging for classes with annotations.
 
   * Fixed instrumenting of annotations in continuations.
 
-2006-03-06 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-06 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Workaround for bug in MySQL 5 on Windows that reports BIT columns as
   being VARCHAR.
 
-2006-03-04 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-04 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-275 : URLs for pathinfo mappings with globalvars are incorrect
 
-2006-03-02 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-02 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * NPE fix in bean handling.
 
-2006-03-01 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-03-01 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor change to the site.dtd.
 
-2006-02-27 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-27 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * MetaData bugfix with regards to X-develop's debug compilation.
 
-2006-02-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.4
 
@@ -1382,7 +1382,7 @@
 
   * Updated changelog and project files.
 
-2006-02-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added javadocs.
 
@@ -1400,7 +1400,7 @@
 
   * Changed JavaDocs version 1.3.2 into 1.4
 
-2006-02-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added first working version of pure POJO support with automatic meta data
   merging
@@ -1414,7 +1414,7 @@
 
   * Updated all examples to use the Velocity template syntax instead.
 
-2006-02-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added experimental Ajax DWR support
 
@@ -1427,19 +1427,19 @@
   an initial scan is first performed to detect the syntax variationts that are
   in use, and only those will remain for the actual parsing.
 
-2006-02-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Explicit embedded element processing bugfix
 
   * NPE fix
 
-2006-02-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated highlighting of example sources
 
   * Friend example update
 
-2006-02-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor test suite fixes.
 
@@ -1450,7 +1450,7 @@
   * RIFE-193 : Add public API for filling bean with submission values
   (name-value pairs)
 
-2006-02-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-253 : <site> should not require "file" attribute
 
@@ -1466,48 +1466,48 @@
 
   * Added support for several elements with the same pathinfo URL.
 
-2006-02-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Reduced memory usage for wordwrap
 
-2006-02-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added wordWrap method to StringUtils.
 
-2006-02-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Deprecated CmfProperty and CmfValidation, moving all their logic into the
   base classes.
 
-2006-02-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Refactoring to dissociate Gate completely from the servlet api
 
-2006-02-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Incredibly stupid classloader bugfix. The context classloader was only set
   in the init() method of the RIFE servlet/filter, but not in the service and
   destroy methods.
 
-2006-02-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed bug where arrival elements didn't properly rewrite reflective
   datalinks and flowlinks
 
-2006-02-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made the type of the template property not mandatory anymore and defaulted
   it to enginehtml
 
-2006-02-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for flowlink-specific datalinks
 
-2006-02-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added test for raw content storage of byte arrays
 
-2006-02-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Additional tests for embedded element support in OOC testing framework
 
@@ -1529,11 +1529,11 @@
 
   * Added support for embedded element retrieval in MockResponse.
 
-2006-02-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added RAW content store support for byte[] as well as InputStream.
 
-2006-02-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added getResourceFinder() to Site
 
@@ -1557,7 +1557,7 @@
 
   * Fixed callbacks NPE with Derby
 
-2006-02-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added Tyler's mail queue ssl + auth support. Had to re-enable the old way
   of sending the messages without auth, otherwise the socket connection would
@@ -1566,7 +1566,7 @@
 
   * Added blankValue() to Template
 
-2006-02-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-02-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added warning to the log to indicate when auto compilation is not
   supported.
@@ -1577,7 +1577,7 @@
   * Removed TemplateClassLoaderClasspath since Templates have been generated
   directly to bytecode since quite a while.
 
-2006-01-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-01-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed RetroWeaver JDK 1.4 issue.
 
@@ -1588,11 +1588,11 @@
 
   * Trial to support ClassPath for XML entity resolving.
 
-2006-01-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-01-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Set EOL property to LF
 
-2006-01-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-01-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-265: Add a method for width/height/ratio of a scaled image to be
   forced via CmfProperty. The behavior of the CMF content attributes has
@@ -1602,7 +1602,7 @@
 
   * Changed template unittests to use to embedded derby instead
 
-2006-01-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-01-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed performance issue with UniqueIDGenerator
 
@@ -1610,83 +1610,83 @@
   
   * Updated continuations engine for new ASM behaviour.
 
-2006-01-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-01-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Classloader fixed for integration with other libraries and filters that are
   loaded through web.xml
 
-2006-01-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2006-01-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor bugfix to ensure that identified elements continue to prolongue the
   authentication session.
 
-2005-12-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded HttpUnit to 1.6.0
 
-2005-12-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for setting reflexive outputs and globalvars accross
   submissions.
 
-2005-12-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed GQM install(CreateTable) methods for derby and mysql driver support
 
-2005-12-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed dependancy on Sun's JDK in the HTTP tool classes.
 
-2005-12-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.3.1
 
-2005-12-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Workaround to force JDK 1.4 on Windows to correctly interpret
   file://C:/location URL specs.
 
-2005-12-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for Derby network client JDBC driver+
 
   * RIFE-259 : clearOutput pathinfo input doesn't clear the output
   This bug only appeared for flowlinks that targeted their originating element
 
-2005-12-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fix to content syndication framework where the Entry ID property didn't
   have the appropriate meaning.
 
-2005-12-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed auto-templating bug+
 
-2005-12-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added getInputSerialized method to ElementSupport.
 
-2005-12-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor build file fix
 
-2005-12-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.3
 
-2005-12-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor fixes to the validation error marking, in case the same submission
   bean is used in different submissions of the same element
 
   * Removed duplicate code in ClassUtils
 
-2005-12-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-173 : Automatically redirect to URL with trailing slash when user
   visits "url.com/subsiteprefix"
 
-2005-12-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-186 : Add new type of element input: "pathinfo input"
 
@@ -1700,11 +1700,11 @@
   * RIFE-235 : Remove dependency on CodeGuide to have a 1.4 compatible jar.
   Made one build file only that creates both 1.4 and 1.5 packages.
 
-2005-12-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * First phase of adding pathinfo mapping support
 
-2005-12-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Windows-related classpath introspection fixes
 
@@ -1713,7 +1713,7 @@
   * Ensured that all the asm classes are loaded by the parent of the
   EngineClassLoader
 
-2005-12-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-12-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated Netbeans project
 
@@ -1722,26 +1722,26 @@
 
   * Made 1.5 build files the defaults
 
-2005-11-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for JNDI datasources in the datasource XML declaration
 
   * Added better support for javax.sql.DataSource, with auto-detection of
   supported JDBC driver names
 
-2005-11-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor fix to TemplateFactory
 
   * RIFE-251 : Default implementation of pause() should throw exception, not do
   nothing. Also added this for call()
 
-2005-11-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-241 : Make exits and outputs optional. This has been implemented for
   in-lined element declarations.
 
-2005-11-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated HsqlDB
 
@@ -1749,13 +1749,13 @@
 
   * Updated Groovy, ImageJ, Imageroreader, Janino, Pnuts and Rhino
 
-2005-11-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-234 : Feeds should be able to add custom XML namespaces
 
   * Fixed dbcentric ant task
 
-2005-11-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-240 : Add support for UUID Java Datatype to CreateTable Functionality.
   Added support for it to the complete DB abstraction layer too.
@@ -1765,12 +1765,12 @@
 
   * Added support for byte[] property types to the GenericQueryManager.
 
-2005-11-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added getPropertyTyped methods and changed authentication elements to use
   these instead of casting.
 
-2005-11-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-228 : Mailqueue should provide better feedback in presence of incorrect
   datasource option
@@ -1781,36 +1781,36 @@
 
   * RIFE-223 : Allow including XHTML from HTML template
 
-2005-11-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-212 : Elements should set their Content-Type header based on the engine
   of the template printed
 
-2005-11-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for other fixed request methods, and also for any possible
   other request methods
 
-2005-11-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed the Spring participant to support a config location parameter as the
   parameter of the participant.
 
-2005-11-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor 1.5 related fix
 
   * Added support for dynamic embedded element differentiators.
 
-2005-11-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Committed eclipse setup
 
-2005-11-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for javax.sql.DataSource to com.uwyn.rife.database.Datasource
 
-2005-11-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-11-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * More fixes to the EngineClassLoader to behave correctly in a situation of
   hotswap and auto-compiled classes.
@@ -1819,37 +1819,37 @@
 
   * Added beforeValidate and afterValidate callback methods.
 
-2005-10-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-10-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Testing framework fixes
 
-2005-10-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-10-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor memory usage improvements to the engineclassloader
 
-2005-10-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-10-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Another classloader fix, all known Linkage exceptions are now fixed.
 
-2005-10-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-10-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixes for Firebird DB
 
   * Fixes for bad memory usage while streaming large content from the CMF with
   PostgreSQL
 
-2005-10-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-10-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fix for db connection not being closed in the case of an out of memory error
 
-2005-10-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-10-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.2
 
   * Renamed the 'rife.engineclassloader.enabled' init param to
   'engineclassloader.enabled'
 
-2005-10-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-10-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added method to obtain a Site's resource modification times.
 
@@ -1861,27 +1861,27 @@
   * Experimental change to EngineClassLoader to better isolate classloader
   hierarchies, this could break things.
 
-2005-10-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-10-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-231 : Automatic compilation of Java element implementations is broken
 
-2005-10-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-10-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Source cleanups according to Eclipse code inspections.
 
-2005-09-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for declaring everything in a subsite declaration that you can
   in a site specification.
 
-2005-09-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added getStatus method to MockResponse.
 
   * Added static convenience method to ParsedHtml for obtaining the value of a
   node's attribute
 
-2005-09-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-230 : Add to the testing framework the ability to evaluate an xpath
   expression based on a context node
@@ -1891,23 +1891,23 @@
   * Changed MockResponse xpath methods to strip away the HTML root element
   default namespace
 
-2005-09-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Regression fix to the ElementInfo cloning with regards to properties.
 
-2005-09-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.1
 
   * Added dual license for CDDL
 
-2005-09-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Site builder API improvements
 
   * Added easy xpath evaluations to MockResponse
 
-2005-09-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bugfix to RunWithEngineClassLoader
 
@@ -1921,7 +1921,7 @@
 
   * Fixed a regression bug in the exit url generation.
 
-2005-09-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for getProperty(String name, Object defaultValue) in
   ElementSupport
@@ -1929,18 +1929,18 @@
   * RIFE-226 : Allow generation of EXIT:QUERY links to url-less embedded
   elements
 
-2005-09-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Refactored IoC property support into a separate package.
 
   * Implemented RIFE-221 : Support IoC for the repository and its participants
 
-2005-09-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Applied jboyens' patch for making the selected date clickable in
   JDateSelector
 
-2005-09-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-224 : Template engine exceptions should give context information:
   filename, line, colum
@@ -1950,7 +1950,7 @@
 
   * Site DTD update
 
-2005-09-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RIFE-218 : Submissions do not allow unlimited number of file uploads
 
@@ -1960,7 +1960,7 @@
 
   * RIFE-196 : Add RoleUserAttributes.removeRole
 
-2005-09-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Finished the testing framework javadocs.
 
@@ -1975,7 +1975,7 @@
 
   * Minor API fixes.
 
-2005-09-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Source cleanups
 
@@ -1986,7 +1986,7 @@
 
   * Added support for session state storage in test framework.
 
-2005-09-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for file uploads in out of container testing.
 
@@ -2000,27 +2000,27 @@
 
   * Further OOT improvements
 
-2005-09-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Initial working version of out-of-container tests.
 
   * Gate, Request and Response refactoring to make it possible to add support
   for out-of-container testing.
 
-2005-09-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-09-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed RIFE-219 : Strange error message when instantiating
   GenericQueryManager when bean has identifier(true) property which is not
   called "id" and does not have no-arg constructor
 
-2005-08-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.0
   
   * Added fallback icon resolving for swing dialogs if the Images participant
   isn't there.
 
-2005-08-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded XFire to the official 1.0-M5 release
 
@@ -2034,7 +2034,7 @@
   * Minor fix to ValidationBuilder to properly distinguish the fallback from the
   wildcard ERRORS block.
 
-2005-08-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor fix to form building.
 	
@@ -2044,31 +2044,31 @@
 
   * Added JavaMail docs as an javadoc external url.
 
-2005-08-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Finished planned javadocs for 1.0 release
 
-2005-08-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Additional database javadocs
 
-2005-08-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates
 
-2005-08-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for the display of invalid formatter string with a good
   programming design.
 
-2005-08-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Source code refactorings that extract common functionalities to BeanUtils.
 
   * Added support for the format constraint and a default input date format for
   bean properties with the java.util.Date type
 
-2005-08-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Finished engine package javadocs
 
@@ -2079,45 +2079,45 @@
 
   * Minor email validity checking update
 
-2005-08-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates
   
-2005-08-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates.
 
   * Upgraded groovy to final 1.0-jsr-03 release.
 
-2005-08-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates.
 
-2005-08-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added SessionValidatorRetriever utility class.
 
-2005-08-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates.
 
-2005-08-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for SERVER:ROOTURL
 
   * Minor javadocs fixes.
 
-2005-08-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates.
 
-2005-08-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates.
   
   * Minor example changes
 
-2005-08-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated derby.
 
@@ -2125,31 +2125,31 @@
 
   * Javadoc updates.
 
-2005-08-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates.
 
-2005-08-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates.
 
-2005-08-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixes for latest xfire snapshot
 
   * Fixed AbstractCallbacks API skew.
   
-2005-08-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-08-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added some javadocs.
 
-2005-07-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added some javadocs and stubs to ElementSupport.
   
   * Also some consistancy API changes.
 
-2005-07-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added source code highlighting for the new example.
 
@@ -2165,17 +2165,17 @@
 
   * Added all remaining package javadocs.
 
-2005-07-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added some package javadocs.
 
-2005-07-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed all dao packages since we put managers in the dam packages.
 
   * Added a bunch of package javadocs
 
-2005-07-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added ManyToOne information.
 
@@ -2189,7 +2189,7 @@
 
   * Large amount of source code inspection fixes.
 
-2005-07-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Refactored the location of database type conversion drivers.
   
@@ -2197,40 +2197,40 @@
 
   * Javadocs packaging update.
 
-2005-07-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor fixes for javadocs.
 
-2005-07-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated build file for feed integration.
 
-2005-07-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed issue RIFE-182 : Add SelectResourceBundle class for use in templates.
 
-2005-07-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Integrated RIFE/feed.
 
-2005-07-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added property retrieval support to site builder beside only storage.
 
-2005-07-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixes to paged navigation builder.
   
   * Fixes to property propagation through subsites.
   
-2005-07-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made the order of all site declaration artifacts predictable.
 
   * Added check to template parser to detect value tags that are closed when
   they aren't open yet.
 
-2005-07-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fix to sitebuilder resource modification time storage to ensure that the
   auto reload config parameters is always respected even if a site processor
@@ -2238,11 +2238,11 @@
 
   * Added Callbacks javadocs
 
-2005-07-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added callbacks support to the GenericQueryManager, still needs javadocs.
 
-2005-07-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Refactoring to have dedicated exceptions in the site and element builders
   instead of the remnants from the XML-only approach from before.
@@ -2250,7 +2250,7 @@
   * Finished XFire integration and all related tests. Also supports the
   ElementService interface, just like Hessian.
 
-2005-07-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed support for Axis.
   
@@ -2268,7 +2268,7 @@
   * Upgraded postgres jdbc driver to v8.0-311 and made some fixes to correctly
   support it.
 
-2005-07-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Engine continuations instrumentation bugfix.
 
@@ -2279,7 +2279,7 @@
   * Added support for specifying global bean, input beans, output beans and
   submission beans with a class instead of only a classname.
 
-2005-07-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed support for JRuby.
 
@@ -2287,13 +2287,13 @@
 
   * Updated bsh, dumbster, imageroreader and spring
 
-2005-07-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-07-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed issue 179 : Be more forgiving about whitespace in template directives.
 
   * Minor NPE bugfix in template bean handler.
 
-2005-06-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * JDK 5.0 compilation fix.
 
@@ -2307,22 +2307,22 @@
 
   * Upgraded hession to v3.0.13.
 
-2005-06-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Finished unittests of site declaration of bean validation groups.
   
   * Added fillSubmissionBean tests.
 
-2005-06-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Further added bean group support in site declaration and added unittests.
   
-2005-06-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Started adding tests for site structure bean declarations with group
   specification.
 
-2005-06-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added the following config parameters: RESPONSE_REQUIRES_SITE,
   SITE_INITIALIZING_REDIRECT_URL, SITE_INITIALIZING_PASSTHROUGH_SUFFIXES and
@@ -2332,7 +2332,7 @@
   Instead of this, all requests can be redirected to a single URL by setting
   the SITE_INITIALIZING_REDIRECT_URL config parameters.
 
-2005-06-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Mail queue fix to reliably keep messages that couldn't be sent due to an
   SMTP server failure.
@@ -2341,7 +2341,7 @@
   intelligent to only do it when no name has been specified already, and by
   making sure that the maxlength of 100 chars is never exceeded.
 
-2005-06-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Changed the API for getContentForHtml in the CMF so that it uses an active
   element that is able to take the gate url into account
@@ -2349,7 +2349,7 @@
   * Added Validation group support to bean specifications in the engine
   declaration.
 
-2005-06-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added javadocs and tests for queueing of full-blow javamail messages.
   
@@ -2358,7 +2358,7 @@
   childtriggers, deferring, forwarding, redirecting, continuations use that
   lightweight class for performance improvements.
 
-2005-06-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for configuring hostip restriction on authentication sessions,
   it is now disabled by default. The config parameter SESSION_RESTRICT_HOSTIP
@@ -2367,47 +2367,47 @@
   * fillSubmissionBean fixes to correct reset not submitted parameters to the
   default values (ie. unchecked checkboxes).
 
-2005-06-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for queuing complete JavaMail MimeMessage objects in the mail
   queue.
 
-2005-06-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor bugfix for HttpUtils.
   
   * Bugfix for displaying raw CMF property content through bean handler classes.
 
-2005-06-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fix to make circular subsite detection not look at manual subsite processors
 
-2005-06-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added checks to make sure that the pathinfo is only auto-added to submission
   URLs when the element actually supports pathinfo. This could happen when a
   pathinfo element exited to a none pathinfo element with a submission.
 
-2005-06-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-06-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made element ids and urls have a predictable order in the site structure.
 
-2005-05-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for multiple unnamed participants of the same class.
 
-2005-05-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Source code compatibility fixes.
   
   * NPE fix to MemoryUsers.
 
-2005-05-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Localization resourcebundle lookup optimization to prevent going through all
   the candidates all the time.
 
-2005-05-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Performance optimization that detects Sun's proprietary classes and uses
   those when possible to optimize the loading of class bytes.
@@ -2420,26 +2420,26 @@
 
   * Profiling of startup time and 15% speedup.
 
-2005-05-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed utterly stupid mail queue bug
 
-2005-05-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added bbcode img alt attribute
 
-2005-05-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.0rc2
   
   * Added support for ValueRenderer and
   <!--V 'RENDER:classname:differentiator'/--> tags
 
-2005-05-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added the other http request methods to the RequestMethod enum class.
 
-2005-05-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added [pre] support to bbcode parser.
   
@@ -2457,50 +2457,50 @@
   enterSubsiteDeclaration(String declarationName) method before the
   enterSubsite() method.
 
-2005-05-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added optional name to mail queue task that will be shown in the logging.
 
-2005-05-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed RIFE-214 : Pathinfo of the embedding element should be added to the
   URL of embedded submission urls.
   
   * Localization resourcebundle cache improvement.
 
-2005-05-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added jardbcentric ant task and an optional dbdriver property.
 
-2005-05-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made localization resourcebundles redeployable even when they are not
   reloadable. Made the lookup of resourcebundles follow exactly the same
   semantics of the JDK ResourceBundle class.
 
-2005-05-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added missing startWhere() support.
 
-2005-05-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added startWhere() and end() support to query builders.
 
-2005-05-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Integrated jboyens' bbcode [code] patch.
 
-2005-05-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-05-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for submission regexp parameters to getSubmissionBean and
   fillSubmissionBean.
 
-2005-04-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * CMF bugfix where text content was served with missing bytes when non
   iso-8859-1 chars were used.
 
-2005-04-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Typo fixes.
   
@@ -2508,7 +2508,7 @@
   
   * Allow IPV6 to be used with the session manager as the hostIp (40 chars).
 
-2005-04-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Small bugfix where contenttype was overwritten by an extended element, even
   if it wasn't specified.
@@ -2518,35 +2518,35 @@
   * Added extra javadoc for GenericQueryManager.save(BeanType) outlining
   identifier behavior.
 
-2005-04-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Integrated jboyens' GQM patch and fixed a minor thing.
 
-2005-04-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added RIFE XD solution file.
 
-2005-04-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated source code highlighting.
 
-2005-04-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Regenerated highlighted source with JHighlight.
 
-2005-04-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made RIFE-applications re-deployable. This wasn't possible before, since our
   resource loaders and class loaders relied on URL.openStream() which by default
   caches all content. We now disabled all the caches.
 
-2005-04-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made the memory scheduler cleanup at servlet teardown.
   
   * Example updates.
 
-2005-04-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixes to input and parameter injection
 
@@ -2554,7 +2554,7 @@
 
   * Minor example updates.
 
-2005-04-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Don't throw an exception when the conversion fails during the injection of
   inputs and parameters.
@@ -2565,7 +2565,7 @@
 
   * Some work to make RIFE usable without the web engine.
   
-2005-04-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Adapted numberguess examples to show the use of input and parameter
   injection.
@@ -2574,21 +2574,21 @@
   
   * Added submission parameters injection.
 
-2005-04-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added IoC inputs injection.
 
-2005-04-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fix to blocking participant that didn't properly wait for participant
   initialization when getObject() is used.
 
-2005-04-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added a flag to HttpUtils retrieve method to not actually download the
   content of a page
 
-2005-04-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Finished IoC support.
   
@@ -2598,19 +2598,19 @@
   
   * Finished Convert class and tests for use in IoC injection.
 
-2005-04-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for untrusted SSL certificates to HttpUtils
 
   * Work on the Convert class for use in IoC injection
 
-2005-04-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Finished IoC property value reference retrieval and the XML declaration.
 
   * First step of IoC support
 
-2005-04-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed bad constructor.
 
@@ -2618,7 +2618,7 @@
 
   * Made RIFE GUI prototype start up fast again.
 
-2005-04-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed RIFE-209 : embedded elements should be able to cancel the embedding
   context when exiting.
@@ -2626,23 +2626,23 @@
   * Updated config and datasource participants to correctly respond to
   getObject(key) method calls.
 
-2005-04-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-04-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Optimizations to OrdinalManager's tighten method
 
-2005-03-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-03-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added accessor type specification in the BeanUtils.
 
-2005-03-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-03-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for Rep context.
 
-2005-03-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-03-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for Oracle 10g join statements in Select queries
   
-2005-03-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-03-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 1.0rc1
   
@@ -2650,7 +2650,7 @@
 
   * Updated and restructured the examples to show some of the new features
 
-2005-03-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-03-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made some of the elementinfo methods public
 
@@ -2661,7 +2661,7 @@
 
   * Made the logout elements auto-detect which authvar type to clear.
 
-2005-03-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-03-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Reset the RequestState target elementinfo to the current element after a
   call continuation answer, since otherwise it still points to the call exit
@@ -2670,15 +2670,15 @@
   * Added CommittingRuntimeException marker interface to make it possible to
   have 'positive runtime exceptions' inside transaction code.
 
-2005-03-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-03-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed bug where useConnection and inTransaction didn't work well together.
 
-2005-03-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-03-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Applied JR's stringutils patch
 
-2005-03-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-03-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed RIFE-199 : RIFE creates invalid authrolelink rows sometimes
 
@@ -2691,11 +2691,11 @@
   * Fixed RIFE-197 : DB-backed authentication needs to provide better
   diagnostic information when DB connection fails
 
-2005-03-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-03-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added CreateTable.ViolationAction support to manyToOne constraint.
 
-2005-03-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-03-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed table alias support for the ContentQueryManager, but added a
   backend reference class instead which will also be used to construct the
@@ -2703,11 +2703,11 @@
   feature of ConstrainedBean to allow specification of bean/table aliases in a
   central location.
 
-2005-03-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-03-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixes to correctly generate links to elements that are mapped to /*
 
-2005-03-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-03-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded Rhino and reimplemented its integration to embed it directly
   instead of using BSF
@@ -2720,28 +2720,28 @@
 
   * Updated Groovy and Janino
 
-2005-02-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added some convenience Select query statements.
 
-2005-02-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added 'unformatted' content attribute that makes the content stores not
   format or transform content that is stored.
 
-2005-02-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Changed ordinal manager to work with longs instead of only ints as
   restriction ids.
 
   * Ignore ContrainedBean uniqueness validation checks when one property is null
 
-2005-02-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed RIFE-180 : Multiple calls to addConstraint on validation-aware bean
   for given property replace old constraints instead of adding constraints
 
-2005-02-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed accept-charset from the submission:form tag result since all
   browsers seem to use UTF-8 correctly if it's set as the response's charset.
@@ -2754,7 +2754,7 @@
 
   * Thread safety fixes.
 
-2005-02-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added whirlpool encryption support to StringEncryptor
 
@@ -2762,19 +2762,19 @@
 
   * Added support for Firebird and DaffodilDB in the mail queue
 
-2005-02-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Testsuite regression fixes.
 
-2005-02-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Integrated mail queue, still needs javadocs
 
-2005-02-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for PROXY_ROOTURL
 
-2005-02-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Put element initialization back into full context, after submission
   context extraction
@@ -2783,23 +2783,23 @@
 
   * Regression fix where processEmbeddedElements got removed accidently
 
-2005-02-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added getEmbeddingTemplate() to ElementSupport
 
-2005-02-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed numeric overflow
 
   * Enforced "/" between successive subsite prefixes
 
-2005-02-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded DaffodilDB to v4.0
   
   * Added XML FormBuilder, ValidationBuilder and BeanHandler
 
-2005-02-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added LOG_ENGINE_EXCEPTIONS config var which is default and will always
   log with the mention of the server name and port
@@ -2809,16 +2809,16 @@
   * Updated handling of exception in gate to include the server info for
   identification
 
-2005-02-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bugfix for subsite url slash seperation
 
-2005-02-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Regression bugfix regarding arrivals to url-less elements that are part of
   subsites without url prefix.
 
-2005-02-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-02-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented RIFE-176 : Value specified by defaultValue is not shown in
   SELECT form box when that value is not in the inList collection
@@ -2828,7 +2828,7 @@
 
   * Fixed RIFE-175 : Implement manyToOne constraint for form validation
 
-2005-01-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-01-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made template config value tag replacement early, and l10n value tag
   replacement both early and late.
@@ -2846,7 +2846,7 @@
   * Scheduler bugfix to allow the reuse of the same executor with different
   tasks.
 
-2005-01-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-01-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed pathinfo support for arrival elements
 
@@ -2855,7 +2855,7 @@
   * Consistency fix in the OrdinalManager update methods to not rollback a
   transaction, but return false instead.
 
-2005-01-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-01-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added default empty processElement method in Element class. This is handy
   for elements that only handle submissions.
@@ -2868,11 +2868,11 @@
   the name if it's found and the special case ext.ext is reported as
   ambiguous.
 
-2005-01-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-01-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor consistency bugfix to OrdinalManager.
 
-2005-01-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-01-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for getRestoreQuery(id) and getDeleteQuery(id)
 
@@ -2881,25 +2881,25 @@
   * Added support to the OrdinalManager to easily move an ordinal to an
   arbitrary location, useful for drag & drop stuff.
 
-2005-01-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-01-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Formbuilder regression bugfix related to FORM:NAME and FORM:VALUE in
   custom collection fields
 
-2005-01-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-01-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added getServletContext() to ElementSupport
 
-2005-01-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-01-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bugfix for submission inputs preservation over inheritance.
 
-2005-01-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-01-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for configuration values in memory scheduler task option
   definitions.
 
-2005-01-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-01-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.8.2
 
@@ -2918,7 +2918,7 @@
   * Removed contrained bean constructors in query builders that don't support
   them (ie. one Select has one now)
   
-2005-01-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-01-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added constructor parameter to DB query builders that makes the builders
   aware of constrained beans so that they can adapt to ConstrainedBean
@@ -2929,7 +2929,7 @@
   Implemented a ValidationContext on top of the generic query manager to
   check for uniqueness constraints before storing any data.
 
-2005-01-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-01-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for resetGroup to Validation
 
@@ -2937,7 +2937,7 @@
   through output beans (ie. not serialize them but handle them with multiple
   parameters instead)
 
-2005-01-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2005-01-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made fillSubmissionBean correctly set properties to the empty value if
   an empty parameter has been submitted.
@@ -2950,7 +2950,7 @@
 
   * API updates for more flexible site structure introspection
 
-2004-12-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
    * Added support for automatic preservation of serializable bean properties
    through outputs / inputs / exits. Need to evaluate how to integrate a
@@ -2959,24 +2959,24 @@
    * Added detection of URL length overflow with logged warning and automated
    fallback to session state storage.
 
-2004-12-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
    * Implemented RIFE-159 : Implement database capabilities and compensators
 
-2004-12-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
    * Reduced memory using for queries by dynamically putting parameters in a
    HashMap.
 
    * Preparing implementation of parametrized constraints.
 
-2004-12-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
    * Javadocs additions and code cleanups.
 
    * Fix to forward to outsides URLs, some headers are now filtered out.
 
-2004-12-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
    * Implemented a reliable way to pass along internationalized text along
    the query string.
@@ -2984,7 +2984,7 @@
    * Defaulted URL encoding to UTF-8 since all encoding defaults in the
    engine use UTF-8 now.
 
-2004-12-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
    * Added correct handling of internationalized parameters.
    
@@ -2998,14 +2998,14 @@
    * Moved the ValidationError collection to a Set instead of a List to
    ensure that duplicate errors are not listed.
 
-2004-12-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
    * Added support for ConstrainedBean uniques and defaultOrder to the
    database query builders.
 
    * Upgraded One$DB/DaffodilDB to 3.4.1.
 
-2004-12-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Integrated ConstrainedBean in the Constrained interface
 
@@ -3013,23 +3013,23 @@
 
   * Source cleanups.
 
-2004-12-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated Groovy to 1.0 beta8
 
   * Added more ConstrainedBean features
 
-2004-12-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Some fixes to be nicer on the garbage collector and reduce memory usage.
 
-2004-12-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor NPE fix
 
   * Updated debug output a bit
 
-2004-12-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bugfix to fix the fact that element were always checked for auto-reload
   even when the config parameter was set to false.
@@ -3044,17 +3044,17 @@
 
   * Build file updates.
 
-2004-12-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added full support for One$DB/DaffodilDB
 
-2004-12-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added further support for DaffodilDB
 
   * Upgraded to hsqldb 1.7.3
 
-2004-12-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for 'local' and 'global' submission scope attribute.
 
@@ -3062,12 +3062,12 @@
   parameter, taking lists and labels into account. This was needed to make it
   possible to easily build confirmation steps after the actual data entry.
 
-2004-12-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added consistancy check when elements are added without implementations
   or wrong declarations (ie. forgetting .xml for xml element declarations).
 
-2004-12-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Merged submission context and submission target.
 
@@ -3078,19 +3078,19 @@
   * Implemented RIFE-161 : Submissions of embedded elements should only
   arrive at the element that generated the form
 
-2004-12-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-12-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Initial implementation of submission target id.
 
-2004-11-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-11-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Stupid contraint regression bugfix.
 
-2004-11-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-11-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated configuration and build file for Netbeans 4RC1
 
-2004-11-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-11-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated ant build files to not check for cloudscape anymore since derby
   is now included.
@@ -3101,7 +3101,7 @@
 
   * Implemented RIFE-160 : Reimplement ConstrainedProperty and CmfProperty
 
-2004-11-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-11-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Redesigned ConstrainedProperty internally to reduce memory usage.
 
@@ -3113,14 +3113,14 @@
 
   * Upgraded ASM to v2.0alpha
 
-2004-11-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-11-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded ASM to v1.5.2
 
   * Added support for One$Db/DaffodilDb to the core database engine, still
   needs to port to other sub-frameworks.
 
-2004-11-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-11-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added a java to sql type mapping for byte[]
 
@@ -3129,7 +3129,7 @@
   * Removed support for Cloudscape 5.1 and ported the drivers to
   Cloudscape 10 / Derby
 
-2004-11-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-11-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for subsite properties.
 
@@ -3139,7 +3139,7 @@
   * Solved issue RIFE-163: When Rife sees a request for "x", it should check
   to see if a site has a prefix "x/"
 
-2004-11-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-11-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented initial limit/offset capabilities compensator for McKoi.
   Parametrized limits and offsets aren't supported yet.
@@ -3150,73 +3150,73 @@
 
   * Bugfix to not use alpha transparent images with jpeg formats
 
-2004-11-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-11-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * ImageFormatter fix to handle transparent images.
 
-2004-10-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for embedded element differentiators.
 
-2004-10-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bugfix to make the XHtml template bean handler play nice with non XHtml
   CMF text content.
 
-2004-10-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bare URL StringUtils patch.
 
-2004-10-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed long-standing thread conurrancy bug related to named prepared
   statement parameters.
 
-2004-10-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed certain methods from DbQueryManager that stand in its way to
   become a true DB abstraction layer.
 
-2004-10-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * The ContentQueryManager now only refrains from storing null content on
   properties that are not set to autoRetrieved.
 
-2004-10-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Applied JR's bare StringUtils patch.
 
-2004-10-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added WhereGroup support to GQM DeleteQuery, RestoreQuery and CountQuery
   
   * Fixed 5.0 compilation error.
  
-2004-10-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for ResourceFinderGroup
 
-2004-10-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Ensured that fetchSize is 1 for executeGetFirst* DbQueryManager methods.
 
-2004-10-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * L10N and dateformat fix.
 
-2004-10-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Integrated jboyens' BBcode improvements to StringUtils.
 
-2004-10-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor template factory fix.
 
-2004-10-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made some managers cloneable.
 
-2004-10-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Changed GenericQueryManagerDelegate, OrdinalManager and
   ContentQueryManager to not extend DbQueryManager, but use composition
@@ -3225,19 +3225,19 @@
 
   * Updated groovy.
 
-2004-10-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-10-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor GQM fix to make RestoreQuery and CountQuery implement ReadQuery
   instead of Query.
 
   * L10N fix for J2SE 5.0
 
-2004-09-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Dirty hack around an IE bug that incorrectly handles anchors in redirect
   headers.
 
-2004-09-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.8.1
   
@@ -3252,7 +3252,7 @@
   
   * Authentication example fix.
 
-2004-09-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added one more header to preventCaching method to ensure that the page
   is never stored.
@@ -3261,11 +3261,11 @@
   L10N_RESOURCEBUNDLE_AUTO_RELOAD config param to activate/disable it. The
   default is true.
 
-2004-09-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added some more CMF unittests.
 
-2004-09-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added better support for repository to ContentQueryManager and
   CmfProperty.
@@ -3274,7 +3274,7 @@
 
   * Build file fix to correctly run the tests through ant.
 
-2004-09-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for submission bean retrieval without providing the
   submission name.
@@ -3283,13 +3283,13 @@
 
   * Added support for several submissions in one request.
 
-2004-09-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadocs and build file fixes.
 
   * Minor fix to standalone use of StringEncryptor.
 
-2004-09-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated CMF error message reporting to ensure that duplicate errors are
   only reported once.
@@ -3299,19 +3299,19 @@
   * Added better integration to obtain the loading errors of for example
   invalid xhtml.
 
-2004-09-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added raw content stream close check.
 
   * Minor bugfix to allow a global pathinfo element to be used.
 
-2004-09-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added some commented properties to make the element declarations clear.
 
   * Added missing file
 
-2004-09-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added text/plain support to CMF.
 
@@ -3325,7 +3325,7 @@
   instance to create a CMS system that is overlaid by a fixed url
   structure.
 
-2004-09-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * General firebird related fixes
 
@@ -3345,11 +3345,11 @@
 
   * Added initial support for repositories.
 
-2004-09-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * CMF fixes.
 
-2004-09-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Renamed CMF 'contentDataProperties' to 'properties'.
   
@@ -3365,7 +3365,7 @@
   * Added support for content data properties and integrated it with
   getContentForHtml
 
-2004-09-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added some CMF unittests.
 
@@ -3376,7 +3376,7 @@
   * Worked a bit more on DaffodilDB support, but the DB still has too many
    probs to be supported yet.
 
-2004-09-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Concurrancy bugfixes and speedups for the engine and the template
   classloaders.
@@ -3388,7 +3388,7 @@
 
   * CMF raw storage optimization by using as much streams as possible
 
-2004-09-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Trapped IOException in CMF that happens when a client disconnects during
   serving of content.
@@ -3400,7 +3400,7 @@
   * Correctly integrated ordinal support in the ContentQueryManager's delete
   method.
 
-2004-09-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added unittests for CMF delete features.
 
@@ -3408,7 +3408,7 @@
 
   * Initial implementation of content deletion.
 
-2004-09-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added content-disposition header when content has a name
 
@@ -3422,7 +3422,7 @@
 
   * CMF db structure fix
 
-2004-09-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Permission fixes
 
@@ -3430,14 +3430,14 @@
   
   * NPE fix
 
-2004-09-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for 'file' constraint.
   
   * Integrated CMF into the engine and added automatic handling of file
   uploads and bean properties.
 
-2004-09-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented RIFE-148 : It should be possible to group where query parts
   
@@ -3446,7 +3446,7 @@
 
   * Added support for name in contentinfo
 
-2004-09-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added some more unittests.
 
@@ -3462,15 +3462,15 @@
 
   * CMF oracle text storage fix
 
-2004-09-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Additional CMF fixes and support for raw storage.
 
-2004-09-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Further work on raw data storage in the CMF
 
-2004-09-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-09-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added raw content storage to CMF.
   
@@ -3481,40 +3481,40 @@
   * Added check that verifies if participants that are added to a
   BlockingRepository are of the correct type.
 
-2004-08-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for JMagick as image content loader.
   
   * Added support for content emptying.
 
-2004-08-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for ImageIO and JMagick for image loading in the CMF.
 
   * Minor bugfixes, code cleanups and test fixes.
 
-2004-08-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added oracle support to CMF
 
   * Added support for firebird to CMF
 
-2004-08-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added CMF support for HsqlDB, Mckoi, MySQL and Cloudscape.
   Oracle and Firebird are still unsupported.
 
-2004-08-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed sql type bug where TIMESTAMP was used in MySQL instead of DATETIME
 
   * CMF source cleanups and unittests additions.
   
-2004-08-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadocs and unittests updates.
 
-2004-08-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Integrated faster base64 encoder.
 
@@ -3522,21 +3522,21 @@
 
   * Additional CMF unittests and javadocs
   
-2004-08-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Source cleanups and javadocs additions
 
-2004-08-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Source cleanups.
 
   * Added unittests and javadocs.
 
-2004-08-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadocs updates.
 
-2004-08-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Code cleanups.
   
@@ -3545,11 +3545,11 @@
   * Renamed OrdinalManager methods: move -> update and
   insert -> obtainInsertOrdinal.
 
-2004-08-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added some CMF tests and dao bugfixes.
 
-2004-08-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added complete OrdinalManager tests.
   
@@ -3557,19 +3557,19 @@
   
   * Parted OrdinalManager to all supported databases.
 
-2004-08-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added ordinal manager tests for all databases.
 
   * Added PagedNavigation unittests and fixed the implementation a bit.
 
-2004-08-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added licenses of all libs.
   
   * Upgraded some libs.
 
-2004-08-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added missing files from CMF.
   
@@ -3577,7 +3577,7 @@
   
   * Added some javadocs.
 
-2004-08-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Integrated the core features of RIFE/CMF.
   
@@ -3585,11 +3585,11 @@
 
   * Added support for redirect in ElementSupport
 
-2004-08-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Null primitives fix
 
-2004-08-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed some deprecated method calls.
   
@@ -3598,17 +3598,17 @@
 
   * Encoding related bugfix
 
-2004-08-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Internal query source refactoring.
 
-2004-08-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed getDefaultLanguage() bug in RifeConfig
 
   * Fixes and refactoring of WaitingImageObserver
 
-2004-08-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for getEmbedProperties()
 
@@ -3616,17 +3616,17 @@
 
   * Added element declaration conflict tests.
 
-2004-08-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Test updates
 
   * Added IDEA project files
 
-2004-08-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fix for continuations and JDK 1.5
 
-2004-08-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added Xalan to make XML template transformation work with java 5.0.
   
@@ -3650,7 +3650,7 @@
 
   * Added support for Cloudscape.
 
-2004-08-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates
 
@@ -3672,11 +3672,11 @@
   * DbQueryManager executeGetFirst*Stream have been replaced by
   executeUseFirst*Stream.
 
-2004-08-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Deadlock-related bugfixes
 
-2004-08-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Regression bugfixes.
 
@@ -3689,15 +3689,15 @@
   * Added more detailed declaration consistancy checks, still needs to be
   fully unittested.
 
-2004-08-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-08-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for setValue("value", template) in templates
 
-2004-07-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Deadlock bugfix.
 
-2004-07-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * URL shortening fix.
 
@@ -3708,7 +3708,7 @@
 
   * Test fixes and better handling of Config to preferences lists.
 
-2004-07-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Classloader bugfixes
   
@@ -3716,7 +3716,7 @@
 
   * Added support for getServerRootUrl
 
-2004-07-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Engine classloader bugfixes.
 
@@ -3724,7 +3724,7 @@
 
   * Upgraded Firebird JDBC driver.
 
-2004-07-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added silencing IOException catch block when the outputstream is closed
   and flushed. There's no need for this exception to propagate since it's
@@ -3732,13 +3732,13 @@
 
   * Updated HttpUnit
 
-2004-07-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Expression tag processor bugfix.
 
   * Code updates
 
-2004-07-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added site structure declaration with Janino.
 
@@ -3758,7 +3758,7 @@
   * Improved error reporting in the Xml2Site and Xml2ElementInfo builder a
   bit.
 
-2004-07-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added full support for Groovy in evaluate expression tags.
   
@@ -3769,7 +3769,7 @@
 
   * Added support for Groovy template expressions.
 
-2004-07-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Database fixes.
   
@@ -3779,7 +3779,7 @@
 
   * Added full Firebird support
 
-2004-07-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * In-progress support for FirebirdSQL.
   
@@ -3791,11 +3791,11 @@
   they are related to clients disconnecting before the end of the reponse
   stream.
 
-2004-07-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Database fixes.
 
-2004-07-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed some McKoi-related stuff.
   
@@ -3803,7 +3803,7 @@
   
   * Minor fixes to HttpUtils and ElementContext forward()
 
-2004-07-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed post/submission check.
 
@@ -3813,15 +3813,15 @@
 
   * Implemented RIFE-149: Query builders should support subselects better
 
-2004-07-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Restructured query managers and added full support for HypersonicSQL.
 
-2004-07-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * JDK 5.0 related fixes.
 
-2004-07-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for SequenceValue queries.
 
@@ -3829,7 +3829,7 @@
 
   * Started adding specialized subselect methods to query builders.
 
-2004-07-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * DB fixes.
 
@@ -3837,12 +3837,12 @@
   
   * Still need to add drivers to authentication, scheduling and resources.
 
-2004-07-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Initial McKoi SQL support, still experimental since many McKoi flaw still
   need a workaround or to be disabled.
 
-2004-07-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated tests and other files to remove the naming of initparams and
   replace it with static properties.
@@ -3850,65 +3850,65 @@
   * Removed initparams and replaced them by static properties. The <initparam>
   tag has been replaced by the <property> tag.
 
-2004-07-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Retrieve page updates and forward improvements.
 
   * Workaround for Jetty header bug
 
-2004-07-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Optimized identified element.
   * Forward workaround for Jetty.
 
-2004-07-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-07-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added LOCAL_FORWARD_PORT configuration parameter to make it possible to
   forward to a different port when the URL is local.
 
-2004-06-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-06-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for forward() without relying on the servlet API since it
   doesn't take filters into account when doing forward. Implemented it from
   scratch through HttpUtils and updated the latter.
 
-2004-06-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-06-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for defer().
 
-2004-06-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-06-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added redirect support to flowlinks.
 
-2004-06-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-06-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated bbcode url generation for URL shortening.
 
   * Defaulted URL encoding to ISO-8859-1
 
-2004-06-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-06-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.7.2
   
-2004-06-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-06-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for doSubmissionName() methods in an element that get
   called whenever a matching submission occurs.
 
-2004-06-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-06-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed some bugs in WaitingImageObserver
 
-2004-06-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-06-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added makeErrorValid() method to Validation.
 
-2004-06-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-06-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Renamed ContentTransformer to TemplateTransformer to prevent a CMF
   name clash.
 
-2004-06-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-06-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Replaced dateFormat() constraint with a more generic format()
   constraint. It now also ensures that the provided string is not only
@@ -3916,39 +3916,39 @@
   existent, however the resulting formatting of that date would then not
   be the same as the orginal input.
 
-2004-06-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-06-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for redirecting to Element ids
 
-2004-06-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-06-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Build file updates.
 
-2004-05-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * JDK 1.5 beta2 related fixes
 
-2004-05-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated for jdk 1.5.02-beta2
 
-2004-05-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented remember IDs purging.
 
   * Consistancy fix to all proper resource abstraction for Groovy
   scripts.
 
-2004-05-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added ranged users listing to RoleUsersManager.
 
-2004-05-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for custom java compiler arguments through the
   JAVA_COMPILER_ARGS config list.
 
-2004-05-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for knowing if an authentication session was started
   with full credentials or through remembered data.
@@ -3972,24 +3972,24 @@
   ALTER TABLE Authentication ALTER COLUMN remembered SET NOT NULL;
   ALTER TABLE Authentication ALTER COLUMN remembered SET DEFAULT false;
 
-2004-05-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fix for encoded labels.
 
   * Added authenticated(long userId) callback to the Authenticated
   element.
 
-2004-05-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Reduced index name length since Oracle can get in trouble otherwise
 
   * Minor automatic input value replacement fix
 
-2004-05-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated libs.
 
-2004-05-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Simplified drastically authentication element database tests.
 
@@ -3997,17 +3997,17 @@
 
   * Initial remember me support.
 
-2004-05-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for direct template to bytecode compilation.
 
   * Made gzip compression configurable.
 
-2004-05-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented automatic and transparent text content gzip compression.
 
-2004-05-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added exception that is triggered when an unopened tag is closed in
   a template
@@ -4017,36 +4017,36 @@
   * Made datasource connection pools be cleaned up at repository
   cleanup.
 
-2004-05-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-05-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Template bugfix to correctly handle templates classes that are
   loaded from jars where the original source location is also available
   on the filesystem.
 
-2004-04-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-04-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.7.1
   
-2004-04-20 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-04-20 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Examples updates.
 
-2004-04-19 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-04-19 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadocs fixes.
 
-2004-04-16 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-04-16 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for parametrizable limit and offset clauses in Select query
   builder.
 
-2004-04-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-04-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * GQM api additions.
   
   * BBcode fixes.
   
-2004-04-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-04-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added inList constraint support for float and double.
   
@@ -4061,11 +4061,11 @@
   
   * Updated Hessian support
   
-2004-04-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-04-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for defensive html encoding.
   
-2004-04-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-04-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made purging authentication the default authentication method.
   
@@ -4075,57 +4075,57 @@
   
   * Added listSessions to SessionManager.
   
-2004-03-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fix to correctly support relative element ids in site definitions.
 
-2004-03-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for URL localization.
   
-2004-03-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added possibility to evaluation l10n and config tags explicitely.
   
   * Renamed evaluateOgnl to evaluateOgnlTags.
   
-2004-03-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added template factory specific default resource bundles.
   
-2004-03-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * NPE bug.
 
-2004-03-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * GQM cache bugfix.
   
-2004-03-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added getEmbedValue() ElementSupport method.
   
   * Added displayedRaw(boolean) constraint.
   
-2004-03-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for cascading validation groups.
 
-2004-03-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Changed roleusers manager retriever API.
   
-2004-03-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for form field attribute setting through :ATTRIBUTES blocks.
   
-2004-03-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Embedded element triggerlist bugfix.
   
   * Added reinitializeProperties to ValidationGroup.
   
-2004-03-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Reworked transactions and added new recommended way of ensuring that code
   is executed in a transaction.
@@ -4135,7 +4135,7 @@
   * Updated buildfile for cgjavac which should be present in PATH to be
   picked up.
   
-2004-03-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Element injection support and arrival id regression bugfix.
   
@@ -4152,7 +4152,7 @@
   
   * Multipartrequest fixes.
 
-2004-03-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added WaitingImageObserver.
   
@@ -4160,7 +4160,7 @@
   
   * Continuation call fixes.
   
-2004-03-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Various useful little additions.
   
@@ -4169,11 +4169,11 @@
   * Made call continuation answer calls mandatory to resume to original
   continuation.
 
-2004-03-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Optimized String encoding speed, amongst others html encoding.
 
-2004-03-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-03-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Integrated and generified PCJ for speed improvements.
   
@@ -4181,20 +4181,20 @@
   
   * Added support for template dependencies retrieval.
 
-2004-02-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added Element and Sql debug tracing.
   
   * Added template cache map and integrated it with OGNL expression parsing
   caching.
 
-2004-02-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for editable constraints.
   
   * GQM fixes.
 
-2004-02-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added activateValidation() method.
   
@@ -4213,14 +4213,14 @@
   * Added check to ensure that call() verifies that a flowlink is attached to
   the exit.
 
-2004-02-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Some template engine changes to make it easy to construct a new template
   factory from an existing one.
   
   * Small fixes and changes to form building, engine and templates.
 
-2004-02-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for SiteBuilder which allows alternative methods for site
   structure declaration, with immediate support for a java-only api.
@@ -4231,32 +4231,32 @@
 
   * Added a manyToOne constraint to create foreign keys automatically.
   
-2004-02-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added field support to RestoreQuery.
   
-2004-02-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.7.0
   
-2004-02-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for RoleUsersManagerRetriever.
 
-2004-02-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Add [img] support to StringUtils bbcode transformer.
 
-2004-02-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed issue RIFE-144 : Rep file processing is sensitive to whitespace.
 
-2004-02-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
   * Added support for persistent and saved constraints.
 
   * Continuations bugfix and improved control flow analysis.
 
-2004-02-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Engine refactoring and call fixes to restore the element state after an
   answer.
@@ -4266,7 +4266,7 @@
   * Bugfix to Identified element to ensure that users are only recognized if
   they have a valid session going on.
 
-2004-02-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added GenericQueryManagerDelegate class for easy creation of customized
   Generic Query Managers.
@@ -4275,7 +4275,7 @@
 
   * Added support for multi-line OGNL statements.
 
-2004-02-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Embedded input preservation fixes.
 
@@ -4283,7 +4283,7 @@
 
   * Fixed embbedding element problem with preserving embedder's inputs.
 
-2004-02-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed private method continuations bug.
 
@@ -4302,7 +4302,7 @@
 
   * Extracted xml selectors in a common package.
 
-2004-02-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added XmlSelectorProperty to select an XML file according to the
   rife.application property.
@@ -4313,7 +4313,7 @@
 
   * Added Rep tests.
 
-2004-02-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Generic Query Manager fixes.
 
@@ -4329,11 +4329,11 @@
   * Fix for RIFE-141 : The GQM's method for determining table/sequence names
   doesn't work on inner classes
   
-2004-02-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.59
   
-2004-02-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for template initializers that are automatically called when
   the template is instantiated and when it's reset through the clear() method.
@@ -4344,7 +4344,7 @@
                                                                                 
   * Added a small convenience participant abstract base class.
                                                                                 
-2004-02-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed softreferences to store continuation contexts since they cleared
   them away much too early. Another worst case scenario should be investigated
@@ -4354,7 +4354,7 @@
   
   * Bugfix to appropriate create a canonical element id for arrival elements.
 
-2004-02-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made embedded element processing early instead of late.
                                                                                 
@@ -4365,12 +4365,12 @@
 
   * Made the collection of bean instances in DbBeanFetcher optional.
                                                                                 
-2004-02-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made Swing Command classes always being called in seperate threads from
   actions.
                                                                                 
-2004-02-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadocs additions.
 
@@ -4378,7 +4378,7 @@
 
   * Finalized unittests for the generic query manager.
                                                                                 
-2004-02-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for setting expression vars in templates through the
   setExpressionVar method.
@@ -4388,28 +4388,28 @@
   <base href="[!V 'WEBAPP:ROOTURL'/]" /> to make it possible for relative URLs
   to always work.
                                                                                 
-2004-02-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-02-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for a rife.webapp.path system property to force which paths
   are interpreted as rife paths for the classloader.
                                                                                 
-2004-01-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Embedding / inheritance bugfix.
                                                                                 
-2004-01-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for "implementations/" default dir for the element
   implementations. This allows implementation source files to sit in a
   seperate hierarchy from the other application files. Note that this has no
   influence on the loading of already compiled class files.
                                                                                 
-2004-01-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed issue RIFE-138 : Manually evalutating OGNL blocks is not currently
   supported with the addition of a evaluateOgnlUser(Template, String) method.
                                                                                 
-2004-01-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed continuations in an inheritance structure.
 
@@ -4424,11 +4424,11 @@
 
   * Fixed bug RIFE-137 : Arrival declaration can workaround authentication
  
-2004-01-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
  
   * New implementation of new control flow analysis for continuations.
  
-2004-01-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Optimized continuations bytecode instrumentation a bit.
 
@@ -4442,12 +4442,12 @@
   * During submission inputs are now preserved in a serialized form to that they
   can be overridden by newly submitted query parameters.
  
-2004-01-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made continuations work with Codeguide's new back-in-time debugger by
   forcing the processElement method to be debugged in a regular fashion.
  
-2004-01-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made form building and contrained build usage adapt to non-instantiatable
   classes.
@@ -4456,13 +4456,13 @@
  
   * Fixed issue RIFE-135 : Whitespace is significant in template directive(s)
  
-2004-01-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed revalidate method from Validation to prevent confusion.
 
   * Solved issue RIFE-125 : Allow inter-element continuations
  
-2004-01-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Resolved issue RIFE-133 : RIFE needs a confirmation Constraint
  
@@ -4477,13 +4477,13 @@
 
   * Added a way to list all the roles that a user has
  
-2004-01-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Refactored the repository and updated the javadocs. The only incompatible
   difference is that participants that extended RepParticipant before now have
   to extend BlockingParticipant.
  
-2004-01-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added ValidationGroup unittests.
  
@@ -4493,7 +4493,7 @@
   cookies since RIFE doesn't handle the cookies state transfer internally, it's
   done by the browser.
  
-2004-01-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed bug where a global cookie set by an embedded element didn't appear in
   other embedded elements.
@@ -4502,25 +4502,25 @@
 
   * Rep documentation updates.
  
-2004-01-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made target-specific compilation error reporting better.
  
   * Fixes to make things work better on windows.
  
-2004-01-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Resolved issue RIFE-97 : Provide blueprint implementations of common
   approaches by extending the DbQueryManager.
  
   * Implemented ValidationGroup support
 
-2004-01-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Small fixes and trivial changes to make more stuff work with the java 1.5
   alpha release.
  
-2004-01-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updates and hacks to be able to generate javadocs with the gcj v2.2
   pre-release.
@@ -4539,12 +4539,12 @@
   * Added support to the GQM for modifying the underlying queries and still
   retaining integrity.
  
-2004-01-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for auto element id generation when the id is omitted during
   element definition.
 
-2004-01-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented the validation error marking.
  
@@ -4552,31 +4552,31 @@
 
   * Added support for partial queries and merging of said queries.
  
-2004-01-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added further support for groovy.
 
   * Resolved issue RIFE-130 : Add support for FORM:HIDDEN in the form builder.
 
-2004-01-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added OGNL roleuser support.
 
   * Added OGNL support in the template engine to conditionally set values to
   blocks.
  
-2004-01-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented validation error generation in form builder.
  
-2004-01-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Changed template tag filtering to consume all substring matches and don't
   enforce matching a whole line anymore.
 
   * Added support for template block tag filtering.
  
-2004-01-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2004-01-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Validation updates and changes to friends example to integrate the new
   features.
@@ -4584,31 +4584,31 @@
   * Resolved issue RIFE-96 : Integrate validation rules in query builders and
   form formatters
  
-2003-12-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Changed fetchAll of DbQueryManager so that it always returns true when rows
   are found and false if no rows were present in the resultset.
 
-2003-12-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed issue RIFE-127 : MemoryUsers and DatabaseUsers lack the posibility to
   list users by a certain role
  
-2003-12-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added removal of forms and fields to the form builder.
 
-2003-12-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented cloneable for a bunch of classes.
 
-2003-12-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Integrated the form builder into the engine.
  
   * Added formbuilder support for select fields.
  
-2003-12-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added form builder checkbox support.
  
@@ -4616,11 +4616,11 @@
  
   * Added form builder radio button support.
  
-2003-12-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Refactorings for the later implementation of form builders.
  
-2003-12-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for a default value for ConstrainedProperty.
 
@@ -4629,7 +4629,7 @@
  
   * Resolved RIFE-124 : SQL statements may have one or more UNION clauses.
  
-2003-12-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Changed authentication method argument policy, instead of throwing
   IllegalArgumentException the methods now perform a logic default behaviour
@@ -4641,7 +4641,7 @@
                                                                                 
   * Added support for template blocks inside default values.
  
-2003-12-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for continuation cloning to keep previous contids working.
   The downside is that all instances in the element have to be cloneable, if
@@ -4651,27 +4651,27 @@
    
   * Made ElementSupport's initialize and childTriggered methods public.
  
-2003-12-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Interfaced the Template class.
 
   * Integrated constrained properties with CreateTable queries.
  
-2003-12-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgrade asm to 1.4.1
  
-2003-12-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for limited subject errors.
  
-2003-12-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for elements that implement the ElementAware interface,
   element can thus be any class now as long as the correct interface is
   implemented.
  
-2003-12-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated clover script.
  
@@ -4680,19 +4680,19 @@
 
   * Added prepared statement parameter setting chaining.
  
-2003-12-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updates so that state stores are able to encode any RIFE url.
  
-2003-12-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented RIFE-93 : Add support for server-side storage
  
-2003-12-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Started implementing configurable state storage.
  
-2003-12-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented per-request continuation ID instead of per-request continuation
   context.
@@ -4700,7 +4700,7 @@
   * Optimized garbage collection for continuation context by using the
   reference api.
  
-2003-12-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed issue RIFE-122 : Continuation contexts should be unique for each
   request.
@@ -4709,17 +4709,17 @@
 
   * Added ObjectUtils with methods to facilitate deep and shallow cloning.
  
-2003-12-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed RIFE-42 : Don't allow global exit overrides in group hierarchies
  
-2003-12-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added preventCaching() method to Element.
  
   * Fixed issue RIFE-120 : A destid of "." will cause an assertion failure
  
-2003-12-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed issue RIFE-119 : Continuations break when used with embedded elements
  
@@ -4735,7 +4735,7 @@
 
   * Added tests for bean inheritance
  
-2003-12-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-12-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added all required JVM encodings to the ones that are cached by the template
   engine.
@@ -4743,15 +4743,15 @@
   * Fixed issue RIFE-116 : Embedded element contents shouldn't use the response
   encoding
  
-2003-11-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Put ASM in different package to prevent clashes.
  
-2003-11-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.58
 
-2003-11-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.57
 
@@ -4759,7 +4759,7 @@
 
   * Continuation fixes for javac's compiled finally blocks.
 
-2003-11-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made DatabaseExceptions unchecked.
 
@@ -4770,7 +4770,7 @@
 
   * Added a MySQL driver to the GenericQueryManager
 
-2003-11-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Generic query managers updates + oracle driver.
 
@@ -4782,12 +4782,12 @@
 
   * Fixed exception reporting in case of compilation failure.
 
-2003-11-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed issue RIFE-103 : Inheritance related bug breaks embedded element
     submissions
 
-2003-11-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed RIFE-110 : TemplateFactory.TEXT is not consistent with the
     template extension
@@ -4800,7 +4800,7 @@
   * Fixed issue RIFE-109 : Included config files don't have the parameters
     of the including file at their disposal
 
-2003-11-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made exception handling in the filter and servlet better to disregard
     the now top-level InvocationTargetException.
@@ -4822,30 +4822,30 @@
 
   * Refactored some names for consistency
 
-2003-11-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Additional contiuation tests and fixes.
 
-2003-11-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed RIFE-102 : Distribution files should extract to top-level directory
 
-2003-11-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Upgraded postgres jar and added tested postgres 7.4.
 
   * Upgraded ASM and continuations bugfixes.
 
-2003-11-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Re-implementation of continuation engine with better global execution
     flow analysis.
 
-2003-11-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for request element tracing with optional memory info output
 
-2003-11-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Replacement of query initialization pattern with one that works correctly
     in a multi-threaded env.
@@ -4854,7 +4854,7 @@
 
   * Added config params for common unconfigureable options
 
-2003-11-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added boolean initparam test.
 
@@ -4862,12 +4862,12 @@
 
   * Solved issue RIFE-95 : Test DbQueryManager fetchAll method
 
-2003-11-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Integrated jboyens' patch for issue RIFE-63 : Add support for global
     cookies
 
-2003-11-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added configurable template type to the logout element.
 
@@ -4886,7 +4886,7 @@
 
   * Implemented GlobalCookies
 
-2003-11-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added method fillSubmissionBean to fill in submission parameters in an
     already existing bean.
@@ -4906,43 +4906,43 @@
   * Made all Stringutils methods stop throwing exceptions and behave
     reasonably in case of null arguments.
 
-2003-11-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-11-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor change to parameter retrieval in elements. They can now be retrieved
     when there's no submission present, but a check will still
     be made if they are part of one of the available submissions.
 
-2003-10-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-10-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed embedded element bug where it didn't respond well to inheritance
     with cookies and submissions.
 
-2003-10-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-10-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added continuation purging.
 
   * First integration of continuations.
 
-2003-10-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-10-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixes to make it compile with JSR-014 v2.2.
 
   * Build file fixes.
 
-2003-10-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-10-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed issue RIFE-101 : Fall back to handler /foo if /foo/ handler doesn't
     exist.
 
-2003-10-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-10-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed issue RIFE-100: Exit handling in an embedded element is broken.
 
-2003-10-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-10-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bugfix in the cleanup of the DbResultSet resultset.
 
-2003-10-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-10-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Changed default scheduler sleep time to 500 ms instead of 60000 since
     otherwise it's not second-precise and minute-precise frequencies don't work
@@ -4950,13 +4950,13 @@
 
   * Added fetchAll() method in DbQueryManager.
 
-2003-10-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-10-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Adapted dialogs to use JLabel by default instead of JMultiLabel since it
     turns out that JLabel does multiple lines through the use of
     HTML :-/
 
-2003-10-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-10-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added method to get a file's base name to go together with the method to
     get its extension.
@@ -4964,7 +4964,7 @@
   * Renamed database structure installation and removal error exceptions to be
     more specific.
 
-2003-10-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-10-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
   * Made most element methods public, restricting them to protected access was
     a na�ve design decision.
 
@@ -4972,21 +4972,21 @@
     ElementService interface to gain access to the request element inside the
     service.
 
-2003-10-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-10-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * New versions of swing dialogs and JMultiLabel.
 
-2003-10-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-10-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added tests for authenticated web services.
 
   * Implemented first propotype of continuations support.
 
-2003-09-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-09-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.57
 
-2003-09-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-09-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented support for multiple rep participants of the same class but
     with different names.
@@ -4994,43 +4994,43 @@
   * Implemented support for repository cleanup and cleanup of the
     participants in the reverse order of the initialization.
 
-2003-09-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-09-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added more resources unittests.
 
   * Database query bugfixes where classes of primitive types as bean
     properties weren't handled correctly.
 
-2003-09-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-09-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added resources unittests.
 
-2003-09-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-09-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Further resources implementation and wrote javadocs.
 
-2003-09-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-09-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * com.uwyn.rife.tools.FileUtils additions.
 
-2003-09-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-09-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed outdated and unused com.uwyn.rife.client package.
 
   * Initial restructuring of resource finding and writing in a dedicated
     package.
 
-2003-09-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-09-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Re-arranged the template handling to solely rely on resource finders.
     This is the first step to allows templates to be stored in a database.
 
-2003-09-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-09-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   *  Resolved issue RIFE-86 : Authentication and PrintTemplate are limited
     to the use of html Templates.
 
-2003-09-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-09-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bugfix to swing menu builder.
 
@@ -5047,7 +5047,7 @@
 
   * Small scripting languages fixes.
 
-2003-08-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support to Localization tool class to retrieve the Locale that
     is used by the other methods.
@@ -5058,14 +5058,14 @@
 
   * Implemented removeRole().
 
-2003-08-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added scripting engines abstraction to able able to support others
     beside BSF.
 
   * Added support for Hessian web services : http://www.caucho.com/hessian/
 
-2003-08-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.56
 
@@ -5079,7 +5079,7 @@
 
   * Removed docs and put them in seperate repository.
 
-2003-08-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made some minor fixes to the datasources xml file name selector mechanism
     and unittests.
@@ -5091,7 +5091,7 @@
 
   * Implemented a DatasourcesSelector similar to the ConfigSelector
 
-2003-08-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added workaround for swing oversight in the standard API where
     programmatic menu item selections don't trigger associated actions.
@@ -5105,7 +5105,7 @@
   * Updated to a more generics friendly approach. Will allow for no casting
     on the client side.
 
-2003-08-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added LocalizedString class which allows to automatically keep strings
     up-to-date with the active default localization settings.
@@ -5114,7 +5114,7 @@
 
   * Bugfix to support cloning in the AbstractPropertyChangeSupport class.
 
-2003-08-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for custom implementations of RoleUser through the use of
     the RoleUserCredentials class.
@@ -5124,33 +5124,33 @@
     init parameter. It should contain the complete classname of the credentials
     class to use.
 
-2003-08-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed long standing argument validation bug in DatabaseSessions.
 
   * Added convenience class so that it's possible to obtain support for bound
     properties by simply extending the AbstractPropertyChangeSupport class.
 
-2003-08-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Internal RELEASE 0.6.55_pre4
 
   * Bugfix in template engine regarding the new blockvalue tags.
 
-2003-08-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for sorted lists in a descending order.
 
   * Refactored list sorting class to be more generic.
 
-2003-08-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Swing fixes.
 
   * Bugfix to store config lists in a predictable order to  the preferences
     backend.
 
-2003-08-08  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-08  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Put tools exceptions in a dedicated package.
 
@@ -5160,7 +5160,7 @@
 
   * Renamed storeXml() methods to storeToXml().
 
-2003-08-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Internal RELEASE 0.6.55_pre3
 
@@ -5179,7 +5179,7 @@
 
   * Added support for a whole bunch of other look and feels.
 
-2003-08-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added menu-related swing functionalities.
 
@@ -5191,7 +5191,7 @@
 
   * Swing-related code inspections, cleanups and refactorings.
 
-2003-08-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Set correct method permissions.
 
@@ -5205,7 +5205,7 @@
 
   * Added swing config settings.
 
-2003-08-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-08-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Internal RELEASE 0.6.55_pre2
 
@@ -5221,22 +5221,22 @@
   * Added dummy pass-through encoder as default template encoder instead of
     null.
 
-2003-07-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Changed clone() methods to have appropriate covariant return types.
     While this makesnon-generic javadocs generation incorrect, it makes the
     life of generics-enabled developers much easier. In a generics-aware
     javadocs tool this should have been fixed.
 
-2003-07-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Code updates after inspection.
 
-2003-07-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Internal RELEASE 0.6.55_pre1
 
-2003-07-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated for JSR-014 v2.2 release.
 
@@ -5251,7 +5251,7 @@
   * Elements can now have access to the raw element context or http request
     by overriding the prohibitRawAccess() method and returning false.
 
-2003-07-18  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-18  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Integrated axis so that jws files are looked up by RIFE just as the other
     files (classpath)
@@ -5266,17 +5266,17 @@
   * Prohibited almost all element methods now in child trigger context. Only
     getRemote*() will work.
 
-2003-07-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for weblogic 8.1 and orion 2.0.2.
 
-2003-07-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Minor fix to make RIFE work with the latest Resin.
 
   * Updated examples.
 
-2003-07-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc fixes.
 
@@ -5287,13 +5287,13 @@
       now become name for submission too. ie:
       <submission id="..."/> -> <submission name=".."/>
 
-2003-07-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bugfixes and testcases for snapback datalinks.
 
   * Added initial support for snapback datalinks.
 
-2003-07-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * The generateContent() method of the Element class has been replaced by
     processElement().
@@ -5305,11 +5305,11 @@
   * Removed export of genericity in the _getObjects method of Rep
     participants.
 
-2003-07-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Engine precedence fixes.
 
-2003-07-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Correctly implemented manipulation of global vars through outputs in
     embedded or preceding elements.<!--V 'OUTPUT:var2'/-->
@@ -5320,18 +5320,18 @@
 
   * Passthrough logout element updated.
 
-2003-07-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Converted Iterators and iterating for statements to the new foreach syntax
     of the upcoming JDK 1.5 release.
 
-2003-07-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for inheritance and precedence in group declarations.
 
    * First working precedence implementation.
 
-2003-07-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-07-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented support for snapback and inheritance cancellation in global
     exits.
@@ -5339,7 +5339,7 @@
   * Added unittests for passthrough logout elements together with snapback
     flowlinks.
 
-2003-06-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-06-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Created passthrough logout elements and renamed the previous logout
     elements to 'template' elements. Therefore, when having referenced
@@ -5350,21 +5350,21 @@
 
   * Updated Codeguide project files for Sapphire.
 
-2003-06-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-06-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Begun implementation of flowlink snapback support.
 
   * Multiple minor updates.
 
-2003-06-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-06-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
      * Increased testsuite code coverage.
 
-2003-06-17  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-06-17  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented issue RIFE-80 : Support template tag escaping.
 
-2003-06-16  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-06-16  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented issue RIFE-79 : Template reloading when a ContentTransformer
     changes.
@@ -5373,13 +5373,13 @@
 
   * Updated friends example to highlight erroneous fields.
 
-2003-06-15  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-06-15  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added unittests for inheritance cancellation during flowlinks.
 
   * Updated inheritance example some more.
 
-2003-06-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-06-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Examples cleanups and copyright updates.
 
@@ -5390,11 +5390,11 @@
 
   * Engine exceptions code review.
 
-2003-06-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-06-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for post verification disabling in element.
 
-2003-06-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-06-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.53
 
@@ -5403,7 +5403,7 @@
 
   * Fixed bug where the internal buffer was flushed, but the outputstream not.
 
-2003-06-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-06-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Changed license to LGPL.
 
@@ -5414,7 +5414,7 @@
 
   * Api updates.
 
-2003-06-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-06-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Regression fixes to the examples.
 
@@ -5426,7 +5426,7 @@
 
   * Updated ContentTransformerXslt to support output properties setting.
 
-2003-06-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-06-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for multiple template tag syntax configurations within the
     same parser. This is used to provide support for long invisible comment tags
@@ -5441,7 +5441,7 @@
     cumbersome, but at least people are still able to compile RIFE themselves
     without CodeGuide.
 
-2003-05-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Rewrite of XSLT transformer since using an XSLT stylesheet for it
     intervenes too much with the resulting output. It's now implemented as a
@@ -5450,7 +5450,7 @@
     <rife:include> tags will only work with the XSLT engine that ships with
     J2SE 1.4 or a compatible Xalan release.
 
-2003-05-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for explicit processing of embedded elements to make it
     possible to process them in the correct order according to other explicit
@@ -5463,11 +5463,11 @@
 
   * Minor API modifications and test additions.
 
-2003-05-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added unittests for additional embedded behaviour.
 
-2003-05-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for non-url embedded elements that can be perfectly
     integrated in templates. Their submissions will go to the first enclosing
@@ -5480,7 +5480,7 @@
 
   * Xml storage related bugfixes and added unittests.
 
-2003-05-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added convenience methods for storing XML-supporting datastructures to a
     data file. This has been done for MemoryUsers, Config and Datasources.
@@ -5500,7 +5500,7 @@
   * Changed XML inputsource handling to correctly respect the encoding of the
     XML file. This is done both for the XML data file and the entity files.
 
-2003-05-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixed design bug in template engine where setting a bean didn't overwrite
     existing values.
@@ -5510,7 +5510,7 @@
 
   * Added performance enhancements to scripted java elements.
 
-2003-05-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added testcase for externally used internal template values, typically
     used to handle recursion in templates.
@@ -5520,21 +5520,21 @@
 
   * Rearranged examples and added recursive template usage example.
 
-2003-05-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made the ExceptionErrorRedirector the default for all Xml2Data extending
     classes.
 
   * Implemented issue RIFE-77 : Improve XML error reporting.
 
-2003-05-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented issue RIFE-40 'Add support for element groups in the site
     definition'.
 
   * Fixed email validator to accept a '-' char in the domain name.
 
-2003-05-19  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-19  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Template API consistancy regression bug fix.
 
@@ -5542,11 +5542,11 @@
 
   * Internal database thread deadlock bugfixes and performance optimizations.
 
-2003-05-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Rewrote template engine and applied a lot of performance optimizations.
 
-2003-05-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.50
 
@@ -5558,7 +5558,7 @@
   * Unified api to eliminate the difference between regular queries and
     parametrized queries from a user's point of view.
 
-2003-05-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removed 'classname' and 'scriptname' attribute in element definition and
     replaced it by the 'implementation' attribute. This breaks backward
@@ -5569,14 +5569,14 @@
   * Resolved issue RIFE-76 : Error message misleading when class cannot be
     found for element.
 
-2003-05-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates.
 
   * Added very basic friends list tutorial example to demonstrate a website
     that is backed by a database.
 
-2003-05-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-05-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Resolved issue RIFE-70 : Extend com.uwyn.tools.StringUtils convertBbcode()
 
@@ -5586,23 +5586,23 @@
 
   * Added clover.
 
-2003-04-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates.
 
-2003-04-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates.
 
-2003-04-28  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-28  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates.
 
-2003-04-21  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-21  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc updates.
 
-2003-04-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.49
 
@@ -5613,11 +5613,11 @@
     when obtaining a connection in a transaction several times from the same
     thread.
 
-2003-04-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Javadoc additions and minor api updates.
 
-2003-04-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for xhtml and xml templates.
 
@@ -5630,18 +5630,18 @@
   * Added support for disabling transaction timeouts and disabled them by
     default.
 
-2003-04-09  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-09  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.48
 
   * Bugfix for issue RIFE-72 (Parent element of arrival element in subsite
     is wrongly resolved)
 
-2003-04-08 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-08 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Mysql clone create table testcase fixes.
 
-2003-04-07 Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-07 Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bugfix for issue RIFE-74 (Pathinfo is not preserved when the
     childrequest is encoded/decoded)
@@ -5651,45 +5651,45 @@
   * Bugfix for issue RIFE-71 (Wrong exit query url generated in inheritance
     structure when there are no inputs available)
 
-2003-04-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Helloworld example update to include a template.
 
-2003-04-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixes to some access modifiers in the database query builder api.
 
-2003-04-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.47
 
   * Bugfix to Delete query constructor to correctly support where
     parameter aliases.
 
-2003-04-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-04-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bugfix to the obfuscation string encryptor/decryptor.
 
   * Added support for parametrized unions in select query builder.
 
-2003-03-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Bugfix to the configuration of the table and sequence names of
     authentication and scheduler (parallel installation).
 
   * Made query builders cloneable.
 
-2003-03-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Template fix to remove all DCLs.
 
   * Template engine speed optimizations.
 
-2003-03-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added sub select support to all parametrized query builders.
 
-2003-03-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.46
 
@@ -5698,31 +5698,31 @@
 
   * Javadoc updates.
 
-2003-03-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Fixes to remove double-checked locking applications (DCL) since
     it's flawed :
     http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html
 
-2003-03-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated mysql jdbc driver.
 
   * Javadoc and api updates.
 
-2003-03-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Implemented all datasource-related tests.
 
-2003-03-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated jetty to v4.2.9 for the engine tests.
 
-2003-03-14  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-14  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Numberguess example fixes.
 
-2003-03-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Turned the getEncoder method of templates into a public method.
 
@@ -5731,14 +5731,14 @@
 
   * Added support for Oracle under MacOSX in the unittest configuration.
 
-2003-03-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated numberguess example to be more pertinent.
 
   * Added drawing of numberguess structure.
 
 
-2003-03-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.45
 
@@ -5750,7 +5750,7 @@
   * Bugfix to correctly get the classpath of the parent classloader to
     use for the compilation classpath setting.
 
-2003-03-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.44
 
@@ -5774,7 +5774,7 @@
   * Regression bugfix where element generation path wasn't set
     correctly with a missing config file.
 
-2003-03-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Integrated template precompilation in the build and release
     process.
@@ -5794,7 +5794,7 @@
   * Added support for template deployment and precompilation
     through the TemplateDeployer class.
 
-2003-03-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added wasNull() method to the DbStatement class.
 
@@ -5803,7 +5803,7 @@
   * Regression bugfix where element and template generation paths
     were incorrectly set.
 
-2003-03-03  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-03  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.42
 
@@ -5812,16 +5812,16 @@
   * Updated task managers to use typed where statements in query
     builders.
 
-2003-03-02  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-02  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for property value inclusion to config parameter
     definition.
 
-2003-03-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-03-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated email validation rule.
 
-2003-02-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added debugging info to auto-compiled java scripted elements.
 
@@ -5836,7 +5836,7 @@
   * Authentication fix to allow the updating of users without
     providing a password.
 
-2003-02-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Internal scheduler install/remove refactoring for better code
     seperation.
@@ -5844,7 +5844,7 @@
   * Addition of method parameter checks and detection of duplicate
     role addition to authentication framework.
 
-2003-02-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Removal of duplicate classes.
 
@@ -5853,7 +5853,7 @@
   * Scheduler table name changes. Database schedulers will have to
     reinstall the database structure.
 
-2003-02-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Updated for Jetty 4.2.8_01
 
@@ -5863,25 +5863,25 @@
 
   * Renamed getResultset() to getResultSet() in the DbStatement class.
 
-2003-02-20  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-20  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.41
 
-2003-02-13  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-13  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for adding users with already encrypted passwords
     to credentialsmanagers.
 
   * Upgraded and tested postgres jdbc jar v7.3.2
 
-2003-02-12  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-12  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added delegation to other appropriate request methods.
 
   * Added multiple prepared sql statement parameter assignments and
     automatic assignments of all parameters with the same name.
 
-2003-02-11  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-11  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Over-optimization bugfix where xml error redirectors were re-used
     between Xml2Data instances. This caused errors to persist in
@@ -5898,7 +5898,7 @@
   * Refactoring where HtmlFormatter was renamed to
     ValidationFormatter.
 
-2003-02-10  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-10  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for setting template param values of multiple
     checkboxes with the same name.
@@ -5909,14 +5909,14 @@
   * Added more array conversion methods and made the ArrayUtils api
     less restrictive.
 
-2003-02-07  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-07  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added full bean filtering for BeanUtils property count and name
     retrieval methods.
 
   * Added outputs bean clearing.
 
-2003-02-06  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-06  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.39
 
@@ -5928,14 +5928,14 @@
 
   * Added support for config values in the datasource definitions.
 
-2003-02-05  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-05  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added automatic bean-driven declaration of inputs, outputs,
     globalvars and submission parameters.
 
   * Added support for cookies in inheritance and authentication.
 
-2003-02-04  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-04  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Split up authentication tests.
 
@@ -5954,7 +5954,7 @@
 
   * Added setting of bean values as outputs in the engine.
 
-2003-02-01  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-02-01  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.38
 
@@ -5967,7 +5967,7 @@
   * Added support for setting bean in templates with support for
     select, radiobutton and checkbox html input types.
 
-2003-01-31  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-01-31  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.37
 
@@ -5978,24 +5978,24 @@
   * Added HtmlGenerator method to quickly set a collection of
     ValidationError subjects.
 
-2003-01-30  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-01-30  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Made methods public that are useful for runtime element and site
     introspection.
 
-2003-01-29  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-01-29  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added automatic parameter generation for checkbox input fields.
 
   * Added correct handling of bean submission generation from
     checkbox input fields.
 
-2003-01-27  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-01-27  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added addition element parameters / inputs / files / outputs /
     globalvars conflict checks.
 
-2003-01-26  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-01-26  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.36
 
@@ -6013,7 +6013,7 @@
   * Integrated encrypted authentication passwords with
     authentication elements.
 
-2003-01-25  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-01-25  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * General speed optimizations by pre-allocating thread locks for
     repeated StringBuffer operations.
@@ -6030,7 +6030,7 @@
   * Added ArrayUtils methods to convert string arrays to other
     primitive type arrays.
 
-2003-01-24  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-01-24  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added argument validation to HtmlFormatter methods.
 
@@ -6050,10 +6050,10 @@
     authentication. SHA-1, MD5 and Obfuscated algorithms are
     supported.
 
-2003-01-23  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-01-23  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * Added support for inner classes in java scripted elements.
 
-2003-01-22  Geert Bevin  <gbevin[remove] at uwyn dot com>
+2003-01-22  Geert Bevin  (gbevin[remove] at uwyn dot com)
 
   * RELEASE 0.6.34

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
@@ -31,7 +31,7 @@ import java.util.Set;
  * {@link rife.database.DbQueryManager#executeUpdate(Query)
  * DbQueryManager.executeUpdate()}.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @author Steven Grimm (koreth[remove] at midwinter dot com)
  * @since 1.0
  */

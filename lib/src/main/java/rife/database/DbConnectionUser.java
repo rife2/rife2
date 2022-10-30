@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -14,7 +14,7 @@ package rife.database;
  * cumbersome to change to <code>final</code> in the enclosing class.
  *
  * @author JR Boyens (jboyens[remove] at uwyn dot com)
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see DbConnection
  * @see DbQueryManager#reserveConnection(DbConnectionUser)
  * @since 1.0

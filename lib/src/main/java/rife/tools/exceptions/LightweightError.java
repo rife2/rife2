@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools.exceptions;
@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
  * thrown. This is achieved by enforcing the stack traces to be empty, causing
  * them to not be captured.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.6
  */
 public class LightweightError extends Error {

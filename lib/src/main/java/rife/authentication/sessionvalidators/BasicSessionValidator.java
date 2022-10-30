@@ -1,6 +1,6 @@
 /*
- * Copyright 2001-2008 Steven Grimm <koreth[remove] at midwinter dot com> and
- * Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2008 Steven Grimm (koreth[remove] at midwinter dot com) and
+ * Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  * $Id$
  */
@@ -21,7 +21,7 @@ import rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErro
  * need for optimization of session validity checking.
  *
  * @author Steven Grimm (koreth[remove] at midwinter dot com)
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.authentication.SessionValidator
  * @since 1.6
  */

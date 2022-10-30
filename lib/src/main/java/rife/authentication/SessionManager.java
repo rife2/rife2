@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication;
@@ -21,7 +21,7 @@ import rife.authentication.exceptions.SessionManagerException;
  * ip. No assumptions are being made about the actual meaning or structure of
  * a 'user'. A unique numeric identifier is all that's required.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.authentication.SessionValidator
  * @since 1.0
  */

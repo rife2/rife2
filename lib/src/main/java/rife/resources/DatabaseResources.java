@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.resources;
@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 /**
  * This class offers <code>ResourceFinder</code> and <code>ResourceWriter</code>
  * capabilities for resources that are stored in a database. The relevant database
- * is specified through a <code>Datasource/code> instance at construction.
+ * is specified through a <code>Datasource</code> instance at construction.
  * <p>
  * While the table can be configured through the <code>TABLE_RESOURCES</code>
  * configuration setting, the structure of the table is fixed. It can be

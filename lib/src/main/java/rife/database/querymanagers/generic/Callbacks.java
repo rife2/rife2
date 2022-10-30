@@ -1,15 +1,16 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.querymanagers.generic;
+
+import rife.validation.Validated;
 
 /**
  * Callbacks are hooks that are being called when beans are manipulated
  * through the {@link
  * rife.database.querymanagers.generic.GenericQueryManager} or other
- * query managers that are based on it ({@link
- * rife.cmf.dam.ContentQueryManager}, for instance). They can either
+ * query managers that are based on it. They can either
  * be implemented directly by implementing this interface, or they can be
  * provided by a bean by implementing the {@link
  * rife.database.querymanagers.generic.CallbacksProvider} interface.
@@ -23,7 +24,7 @@ package rife.database.querymanagers.generic;
  * <code>false</code>, the execution of the action is interrupted at that step
  * and no further callbacks will be called.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.database.querymanagers.generic.GenericQueryManager
  * @since 1.0
  */

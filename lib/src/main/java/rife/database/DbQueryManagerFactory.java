@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -26,7 +26,7 @@ import java.lang.reflect.InvocationTargetException;
  * re-used on successive calls rather than being re-instantiated.
  *
  * @author JR Boyens (jboyens[remove] at uwyn dot com)
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
 public abstract class DbQueryManagerFactory {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin <gbevin[remove] at uwyn dot com>
+ * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -68,7 +68,7 @@ import java.util.logging.Logger;
  * {@link #fetch(ResultSet, DbRowProcessor) fetch} or {@link
  * #fetchAll(ResultSet, DbRowProcessor) fetchAll} methods.
  *
- * @author Geert Bevin <gbevin[remove] at uwyn dot com>
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.database.DbPreparedStatement
  * @see rife.database.DbStatement
  * @see rife.database.DbRowProcessor
@@ -101,7 +101,7 @@ public class DbQueryManager implements Cloneable {
      * <p>This method is typically used in situations where one static update
      * query needs to be executed without any parametrization or other
      * processing.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * int count = manager.executeUpdate("INSERT INTO person (name) VALUES ('me')");</pre>
      *
@@ -137,7 +137,7 @@ public class DbQueryManager implements Cloneable {
      * <p>This method is typically used in situations where one static update
      * query needs to be executed without any parametrization or other
      * processing.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Insert insert = new Insert(datasource);
      * insert.into("person").field("name", "me");
@@ -193,7 +193,7 @@ public class DbQueryManager implements Cloneable {
      * <p>This method is typically used when you need to fully customize a
      * query at runtime, but still want to benefit of a safety net that
      * ensures that the allocated statement will be closed.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Insert insert = new Insert(datasource);
      * insert.into("person").fieldParameter("name");
@@ -249,7 +249,7 @@ public class DbQueryManager implements Cloneable {
      * Safely and quickly verifies if a select query returns any rows. It
      * relies on the wrapped {@link DbResultSet#hasResultRows()} method, but
      * also automatically closes the statement after its execution.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person");
@@ -278,7 +278,7 @@ public class DbQueryManager implements Cloneable {
      * also automatically closes the statement after its execution and allows
      * customization of the prepared statement through an optional instance of
      * {@link DbPreparedStatementHandler}.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person").whereParameter("name", "=");
@@ -338,7 +338,7 @@ public class DbQueryManager implements Cloneable {
      * from the results of a select query. It relies on the wrapped {@link
      * DbResultSet#getFirstString()} method, but also automatically closes the
      * statement after its execution.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.field("name").from("person");
@@ -367,7 +367,7 @@ public class DbQueryManager implements Cloneable {
      * statement after its execution and allows customization of the prepared
      * statement through an optional instance of {@link
      * DbPreparedStatementHandler}.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.field("first").from("person").whereParameter("last", "=");
@@ -1858,7 +1858,7 @@ public class DbQueryManager implements Cloneable {
      * query. It relies on the wrapped {@link
      * #fetch(ResultSet, DbRowProcessor)} method, but automatically closes the
      * statement after its execution.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person").where("name", "=", "me");
@@ -1889,7 +1889,7 @@ public class DbQueryManager implements Cloneable {
      * closes the statement after its execution and allows customization of
      * the prepared statement through an optional instance of {@link
      * DbPreparedStatementHandler}.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person").whereParameter("name", "=");
@@ -1956,7 +1956,7 @@ public class DbQueryManager implements Cloneable {
      * #executeFetchFirst(ReadQuery, DbRowProcessor)} method, but automatically
      * uses an appropriate {@link DbBeanFetcher} instance and returns the
      * resulting bean.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person").fields(Person.class);
@@ -1984,7 +1984,7 @@ public class DbQueryManager implements Cloneable {
      * uses an appropriate {@link DbBeanFetcher} instance, returns the
      * resulting bean and allows customization of the prepared statement
      * through an optional instance of {@link DbPreparedStatementHandler}.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person").fields(Person.class).whereParameter("name", "=");
@@ -2027,7 +2027,7 @@ public class DbQueryManager implements Cloneable {
      * query. It relies on the wrapped {@link
      * #fetchAll(ResultSet, DbRowProcessor)} method, but automatically closes
      * the statement after its execution.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person").where("gender", "=", "m");
@@ -2058,7 +2058,7 @@ public class DbQueryManager implements Cloneable {
      * closes the statement after its execution and allows customization of
      * the prepared statement through an optional instance of {@link
      * DbPreparedStatementHandler}.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person").whereParameter("gender", "=");
@@ -2123,7 +2123,7 @@ public class DbQueryManager implements Cloneable {
      * #executeFetchAll(ReadQuery, DbRowProcessor)} method, but automatically
      * uses an appropriate {@link DbBeanFetcher} instance and returns the
      * results.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person").fields(Person.class).where("gender", "=", "m");
@@ -2151,7 +2151,7 @@ public class DbQueryManager implements Cloneable {
      * uses an appropriate {@link DbBeanFetcher} instance, returns the results
      * and allows customization of the prepared statement through an optional
      * instance of {@link DbPreparedStatementHandler}.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person").fields(Person.class).whereParameter("gender", "=");
@@ -2198,7 +2198,7 @@ public class DbQueryManager implements Cloneable {
      * ensures that the allocated statement will be closed. Often another more
      * specialized method in this class will already serve your needs, so be
      * sure to verify that you actually need to intervene on every front.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select
@@ -2273,7 +2273,7 @@ public class DbQueryManager implements Cloneable {
      * ensures that the allocated statement will be closed. Often another more
      * specialized method in this class will already serve your needs, so be
      * sure to verify that there isn't another one that's better suited.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select
@@ -2337,7 +2337,7 @@ public class DbQueryManager implements Cloneable {
      * <p>This is typically used to ensure that a series of operations is done
      * with the same connection, even though a database pool is used in the
      * background.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>Person person;
      * final Insert store_data = new Insert(datasource).into("person").fields(person);
      * final Select get_last_id = new Select(datasource).from("person").field("LAST_INSERT_ID()");
@@ -2403,7 +2403,7 @@ public class DbQueryManager implements Cloneable {
      * other transactional code. Correctly using the regular
      * transaction-related methods requires great care and planning and often
      * results in error-prone and not reusable code.
-     * <h3>Example</h3>
+     * <h4>Example</h4>
      * <pre>final Insert insert = new Insert(mDatasource).into("valuelist").field("value", 232);
      * final DbQueryManager manager = new DbQueryManager(datasource);
      * manager.inTransaction(new DbTransactionUserWithoutResult() {
