@@ -469,6 +469,20 @@ public class Context {
     }
 
     /**
+     * Interrupts the execution in this element and redirects the client to
+     * another URL.
+     *
+     * @param route the route to which the request will be redirected
+     * @throws rife.engine.exceptions.RedirectException an exception that is used to immediately interrupt the execution, don't
+     *                                                  catch this exception
+     * @since 2.0
+     */
+    public void redirect(Route route)
+    throws RedirectException {
+        throw new RedirectException(urlFor(route));
+    }
+
+    /**
      * Interrupts the execution in this element, stops processing any other
      * element, and sends the current response directly to the client.
      *
@@ -1055,9 +1069,9 @@ public class Context {
      * Fills the properties of an existing bean with the parameter values that were sent,
      * taking the provided prefix into account.
      *
-     * @param bean the submission bean instance that will be filled
+     * @param bean   the submission bean instance that will be filled
      * @param prefix the prefix that will be put in front of each property
-     * name
+     *               name
      * @see #parametersBean(Class)
      * @see #parametersBean(Class, String)
      * @see #parametersBean(Object)

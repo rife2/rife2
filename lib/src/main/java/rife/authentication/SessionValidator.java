@@ -34,7 +34,7 @@ import rife.authentication.exceptions.SessionValidatorException;
  * {@code SessionManager}, performance would often not be optimal.
  * <p>
  * For example, if the credentials and the session information are stored in the
- * same database. Completely isolating all fuctionalities would cause more
+ * same database. Completely isolating all functionalities would cause more
  * database queries to be executed than what's really needed. By implementing
  * the combined functionality of verifying a valid authentication session in a
  * bridge class that implements the {@code SessionValidator} interface,

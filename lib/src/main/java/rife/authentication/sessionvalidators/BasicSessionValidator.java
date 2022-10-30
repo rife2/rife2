@@ -18,9 +18,7 @@ import rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErro
 /**
  * Non-optimized session validator. This is a naive implementation of the
  * {@link rife.authentication.SessionValidator} interface, suitable for cases where there is no
- * need for optimization of session validity checking. For example, it is
- * used as the session validator for RIFE's built-in "mixed" and "memory"
- * authentication elements.
+ * need for optimization of session validity checking.
  *
  * @author Steven Grimm (koreth[remove] at midwinter dot com)
  * @author Geert Bevin <gbevin[remove] at uwyn dot com>

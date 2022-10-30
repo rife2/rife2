@@ -13,7 +13,7 @@ package rife.authentication;
  * influence whether the access to a secured resource is authorized or
  * prohibited for a particular user.
  * <p>
- * For example, regular users have access to everything besides ithe
+ * For example, regular users have access to everything besides in the
  * administration interface. Resources that are restricted to administrators can
  * for example have a {@code role} attribute that is set to
  * {@code admin}. A {@code SessionValidator} instance can detect the
