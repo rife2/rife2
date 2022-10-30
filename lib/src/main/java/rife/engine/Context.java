@@ -13,12 +13,17 @@ import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.template.exceptions.TemplateException;
 import rife.tools.ArrayUtils;
+import rife.tools.BeanUtils;
 import rife.tools.ServletUtils;
 import rife.tools.StringUtils;
+import rife.tools.exceptions.BeanUtilsException;
 
+import java.beans.PropertyDescriptor;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class Context {
     public static final boolean DEFAULT_BOOLEAN = false;
@@ -936,6 +941,167 @@ public class Context {
         return ArrayUtils.createDoubleArray(parameterValues(name));
     }
 
+    private static <BeanType> BeanType getNewBeanInstance(Class<BeanType> beanClass)
+    throws EngineException {
+        BeanType bean_instance;
+
+        try {
+            bean_instance = beanClass.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            throw new EngineException("Can't instantiate a bean with class '" + beanClass.getName() + "'.", e);
+        } catch (IllegalAccessException e) {
+            throw new EngineException("No permission to instantiate a bean with class '" + beanClass.getName() + "'.", e);
+        }
+
+        return bean_instance;
+    }
+
+    /**
+     * Creates an instance of a bean and populates the properties
+     * with the parameter values.
+     * <p>This bean is not serialized or de-serialized, each property
+     * corresponds to a parameter and is individually sent by the client.
+     *
+     * @param beanClass the class of the submission bean
+     * @return the populated bean instance
+     * @see #parametersBean(Class, String)
+     * @see #parametersBean(Object)
+     * @see #parametersBean(Object, String)
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public <BeanType> BeanType parametersBean(Class<BeanType> beanClass)
+    throws EngineException {
+        return parametersBean(beanClass, null);
+    }
+
+    /**
+     * Creates an instance of a bean and populates the properties
+     * with the parameter values, taking the provided prefix into account.
+     * <p>This bean is not serialized or de-serialized, each property
+     * corresponds to a parameter and is individually sent by the client.
+     *
+     * @param beanClass the class of the submission bean
+     * @param prefix    the prefix that will be put in front of each property
+     *                  name
+     * @return the populated bean instance
+     * @see #parametersBean(Class)
+     * @see #parametersBean(Object)
+     * @see #parametersBean(Object, String)
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public <BeanType> BeanType parametersBean(Class<BeanType> beanClass, String prefix)
+    throws EngineException {
+        assert beanClass != null;
+
+        var bean_instance = getNewBeanInstance(beanClass);
+
+        try {
+            var bean_properties = BeanUtils.getUppercasedBeanProperties(beanClass);
+
+            String[] parameter_values;
+
+            for (var parameter_name : parameterNames()) {
+                parameter_values = parameterValues(parameter_name);
+                if (parameter_values != null &&
+                    parameter_values.length > 0) {
+                    BeanUtils.setUppercasedBeanProperty(parameter_name, parameter_values, prefix, bean_properties, bean_instance, null);
+                }
+            }
+
+            for (var uploaded_file_name : fileNames()) {
+                var file = file(uploaded_file_name);
+                BeanUtils.setUppercasedBeanProperty(uploaded_file_name, file, prefix, bean_properties, bean_instance);
+            }
+        } catch (BeanUtilsException e) {
+            throw new EngineException(e);
+        }
+
+        return bean_instance;
+    }
+
+    /**
+     * Fills the properties of an existing bean with the parameter values.
+     *
+     * @param bean the submission bean instance that will be filled
+     * @see #parametersBean(Class)
+     * @see #parametersBean(Class, String)
+     * @see #parametersBean(Object, String)
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public void parametersBean(Object bean)
+    throws EngineException {
+        parametersBean(bean, null);
+    }
+
+    /**
+     * Fills the properties of an existing bean with the parameter values that were sent,
+     * taking the provided prefix into account.
+     *
+     * @param bean the submission bean instance that will be filled
+     * @param prefix the prefix that will be put in front of each property
+     * name
+     * @see #parametersBean(Class)
+     * @see #parametersBean(Class, String)
+     * @see #parametersBean(Object)
+     * @see #hasParameterValue(String)
+     * @see #isParameterEmpty(String)
+     * @see #parameter(String)
+     * @see #parameter(String, String)
+     * @see #parameterValues(String)
+     * @see #parameterNames()
+     * @since 2.0
+     */
+    public void parametersBean(Object bean, String prefix)
+    throws EngineException {
+        if (null == bean) {
+            return;
+        }
+
+        try {
+            var bean_properties = BeanUtils.getUppercasedBeanProperties(bean.getClass());
+
+            String[] parameter_values;
+
+            Object empty_bean = null;
+
+            for (String parameter_name : parameterNames()) {
+                parameter_values = parameterValues(parameter_name);
+                if (null == empty_bean &&
+                    (null == parameter_values ||
+                        0 == parameter_values[0].length())) {
+                    empty_bean = getNewBeanInstance(bean.getClass());
+                }
+
+                BeanUtils.setUppercasedBeanProperty(parameter_name, parameter_values, prefix, bean_properties, bean, empty_bean);
+            }
+
+            for (String uploaded_file_name : fileNames()) {
+                UploadedFile file = file(uploaded_file_name);
+                BeanUtils.setUppercasedBeanProperty(uploaded_file_name, file, prefix, bean_properties, bean);
+            }
+        } catch (BeanUtilsException e) {
+            throw new EngineException(e);
+        }
+    }
+
     /**
      * See {@link Request#getBody()}.
      *
@@ -992,6 +1158,10 @@ public class Context {
      * @since 2.0
      */
     public Map<String, UploadedFile[]> files() {
+        if (request_.getFiles() == null) {
+            return Collections.emptyMap();
+        }
+
         return request_.getFiles();
     }
 

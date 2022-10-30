@@ -103,7 +103,7 @@ public class TestParsedHtml {
 
         MockForm form2 = forms.get(1);
         assertEquals("/form/url/2", form2.getAction());
-        assertEquals("get", form2.getMethod());
+        assertEquals("GET", form2.getMethod());
         assertEquals("formid2", form2.getId());
         assertEquals("formclass2", form2.getClassName());
         assertEquals("formtitle2", form2.getTitle());

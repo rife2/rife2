@@ -14,10 +14,7 @@ import rife.tools.StringUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.Cookie;
@@ -45,7 +42,7 @@ public class HttpRequest implements Request {
             parameters_ = multipart_request.getParameterMap();
             files_ = multipart_request.getFileMap();
         } else {
-            parameters_ = new HashMap<String, String[]>();
+            parameters_ = new LinkedHashMap<>();
 
             try {
                 request_.setCharacterEncoding(RifeConfig.engine().getRequestEncoding().toString());

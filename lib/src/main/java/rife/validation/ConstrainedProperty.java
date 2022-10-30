@@ -123,7 +123,7 @@ public class ConstrainedProperty implements Cloneable {
     private String subjectName_ = null;
 
     // constraints
-    protected Map<String, Object> constraints_ = new HashMap<>();
+    protected Map<String, Object> constraints_ = new LinkedHashMap<>();
 
     // listeners
     protected List<ConstrainedPropertyListener> listeners_;
@@ -2169,7 +2169,7 @@ public class ConstrainedProperty implements Cloneable {
     public ConstrainedProperty constraint(String name, Object constraintData) {
         setConstraint(name, constraintData);
 
-        return (ConstrainedProperty) this;
+        return this;
     }
 
     /**
@@ -2206,10 +2206,10 @@ public class ConstrainedProperty implements Cloneable {
         try {
             new_instance = (ConstrainedProperty) super.clone();
 
-            new_instance.constraints_ = new HashMap<String, Object>(constraints_);
+            new_instance.constraints_ = new HashMap<>(constraints_);
 
             if (listeners_ != null) {
-                new_instance.listeners_ = new ArrayList<ConstrainedPropertyListener>(listeners_);
+                new_instance.listeners_ = new ArrayList<>(listeners_);
             }
         } catch (CloneNotSupportedException e) {
             new_instance = null;
@@ -2219,12 +2219,12 @@ public class ConstrainedProperty implements Cloneable {
     }
 
     public class ManyToOne implements Cloneable {
-        private String mColumn = null;
-        private String mTable = null;
-        private String mDerivedTable = null;
-        private Class mClass = null;
-        private CreateTable.ViolationAction mOnUpdate = null;
-        private CreateTable.ViolationAction mOnDelete = null;
+        private String column_ = null;
+        private String table_ = null;
+        private String derivedTable_ = null;
+        private Class class_ = null;
+        private CreateTable.ViolationAction onUpdate_ = null;
+        private CreateTable.ViolationAction onDelete_ = null;
 
         public ManyToOne() {
             this((Class) null, null, null, null);
@@ -2235,72 +2235,72 @@ public class ConstrainedProperty implements Cloneable {
         }
 
         public ManyToOne(String table, String column, CreateTable.ViolationAction onUpdate, CreateTable.ViolationAction onDelete) {
-            mColumn = column;
-            mTable = table;
-            mOnUpdate = onUpdate;
-            mOnDelete = onDelete;
+            column_ = column;
+            table_ = table;
+            onUpdate_ = onUpdate;
+            onDelete_ = onDelete;
         }
 
         public ManyToOne(Class klass, String column, CreateTable.ViolationAction onUpdate, CreateTable.ViolationAction onDelete) {
             this((String) null, column, onUpdate, onDelete);
-            mClass = klass;
+            class_ = klass;
         }
 
         public String getDerivedTable() {
-            if (null == mDerivedTable) {
-                if (mTable != null) {
-                    mDerivedTable = mTable;
+            if (null == derivedTable_) {
+                if (table_ != null) {
+                    derivedTable_ = table_;
                 }
 
-                if (mClass != null) {
-                    mDerivedTable = ClassUtils.shortenClassName(mClass);
+                if (class_ != null) {
+                    derivedTable_ = ClassUtils.shortenClassName(class_);
                 }
 
             }
 
-            return mDerivedTable;
+            return derivedTable_;
         }
 
         public void setColumn(String column) {
-            mColumn = column;
+            column_ = column;
         }
 
         public String getColumn() {
-            return mColumn;
+            return column_;
         }
 
         public void setTable(String table) {
-            mDerivedTable = null;
-            mTable = table;
+            derivedTable_ = null;
+            table_ = table;
         }
 
         public String getTable() {
-            return mTable;
+            return table_;
         }
 
         public void setAssociatedClass(Class klass) {
-            mDerivedTable = null;
-            mClass = klass;
+            derivedTable_ = null;
+            class_ = klass;
         }
 
         public Class getAssociatedClass() {
-            return mClass;
+            return class_;
         }
 
         public void setOnUpdate(CreateTable.ViolationAction onUpdate) {
-            mOnUpdate = onUpdate;
+            onUpdate_ = onUpdate;
         }
 
         public CreateTable.ViolationAction getOnUpdate() {
-            return mOnUpdate;
+            return onUpdate_;
         }
 
         public void setOnDelete(CreateTable.ViolationAction onDelete) {
-            mOnDelete = onDelete;
+            onDelete_ = onDelete;
         }
 
         public CreateTable.ViolationAction getOnDelete() {
-            return mOnDelete;
+            return onDelete_;
         }
 
         public ManyToOne clone() {
@@ -2316,35 +2316,35 @@ public class ConstrainedProperty implements Cloneable {
     }
 
     public class ManyToOneAssociation implements Cloneable {
-        private Class mClass = null;
-        private String mProperty = null;
+        private Class class_ = null;
+        private String property_ = null;
 
         public ManyToOneAssociation() {
         }
 
         public ManyToOneAssociation(String property) {
-            mProperty = property;
+            property_ = property;
         }
 
         public ManyToOneAssociation(Class klass, String property) {
             this(property);
-            mClass = klass;
+            class_ = klass;
         }
 
         public void setMainClass(Class klass) {
-            mClass = klass;
+            class_ = klass;
         }
 
         public Class getMainClass() {
-            return mClass;
+            return class_;
         }
 
         public void setMainProperty(String property) {
-            mProperty = property;
+            property_ = property;
         }
 
         public String getMainProperty() {
-            return mProperty;
+            return property_;
         }
 
         public ManyToOneAssociation clone() {
@@ -2360,9 +2360,9 @@ public class ConstrainedProperty implements Cloneable {
     }
 
     public class ManyToMany implements Cloneable {
-        private Class mClass = null;
-        private CreateTable.ViolationAction mOnUpdate = null;
-        private CreateTable.ViolationAction mOnDelete = null;
+        private Class class_ = null;
+        private CreateTable.ViolationAction onUpdate_ = null;
+        private CreateTable.ViolationAction onDelete_ = null;
 
         public ManyToMany() {
             this(null, null, null);
@@ -2374,38 +2374,38 @@ public class ConstrainedProperty implements Cloneable {
 
         public ManyToMany(CreateTable.ViolationAction onUpdate, CreateTable.ViolationAction onDelete) {
             this(null, onUpdate, onDelete);
-            mOnUpdate = onUpdate;
-            mOnDelete = onDelete;
+            onUpdate_ = onUpdate;
+            onDelete_ = onDelete;
         }
 
         public ManyToMany(Class klass, CreateTable.ViolationAction onUpdate, CreateTable.ViolationAction onDelete) {
-            mOnUpdate = onUpdate;
-            mOnDelete = onDelete;
-            mClass = klass;
+            onUpdate_ = onUpdate;
+            onDelete_ = onDelete;
+            class_ = klass;
         }
 
         public void setAssociatedClass(Class klass) {
-            mClass = klass;
+            class_ = klass;
         }
 
         public Class getAssociatedClass() {
-            return mClass;
+            return class_;
         }
 
         public void setOnUpdate(CreateTable.ViolationAction onUpdate) {
-            mOnUpdate = onUpdate;
+            onUpdate_ = onUpdate;
         }
 
         public CreateTable.ViolationAction getOnUpdate() {
-            return mOnUpdate;
+            return onUpdate_;
         }
 
         public void setOnDelete(CreateTable.ViolationAction onDelete) {
-            mOnDelete = onDelete;
+            onDelete_ = onDelete;
         }
 
         public CreateTable.ViolationAction getOnDelete() {
-            return mOnDelete;
+            return onDelete_;
         }
 
         public ManyToMany clone() {
@@ -2421,35 +2421,35 @@ public class ConstrainedProperty implements Cloneable {
     }
 
     public class ManyToManyAssociation implements Cloneable {
-        private Class mClass = null;
-        private String mProperty = null;
+        private Class class_ = null;
+        private String property_ = null;
 
         public ManyToManyAssociation() {
         }
 
         public ManyToManyAssociation(String property) {
-            mProperty = property;
+            property_ = property;
         }
 
         public ManyToManyAssociation(Class klass, String property) {
             this(property);
-            mClass = klass;
+            class_ = klass;
         }
 
         public void setAssociatedClass(Class klass) {
-            mClass = klass;
+            class_ = klass;
         }
 
         public Class getAssociatedClass() {
-            return mClass;
+            return class_;
         }
 
         public void setAssociatedProperty(String property) {
-            mProperty = property;
+            property_ = property;
         }
 
         public String getAssociatedProperty() {
-            return mProperty;
+            return property_;
         }
 
         public ManyToManyAssociation clone() {

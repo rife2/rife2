@@ -11,6 +11,7 @@ import rife.engine.UploadedFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import jakarta.servlet.ServletInputStream;
@@ -41,15 +42,15 @@ class MultipartRequest {
     private ServletInputStream input_ = null;
     private String rncoding_ = DEFAULT_ENCODING;
 
-    private final HashMap<String, String[]> parameters_;
-    private final HashMap<String, UploadedFile[]> files_;
+    private final Map<String, String[]> parameters_;
+    private final Map<String, UploadedFile[]> files_;
 
     MultipartRequest(HttpServletRequest request) throws MultipartRequestException {
         if (null == request) throw new IllegalArgumentException("request can't be null");
 
         request_ = request;
-        parameters_ = new HashMap<String, String[]>();
-        files_ = new HashMap<String, UploadedFile[]>();
+        parameters_ = new LinkedHashMap<>();
+        files_ = new LinkedHashMap<>();
         parameterBuffer_ = new byte[8 * 1024];
         fileBuffer_ = new byte[100 * 1024];
 

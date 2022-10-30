@@ -37,7 +37,7 @@ public class MockRequest implements Request {
         SESSIONID_COOKIE = "cookie",
         SESSIONID_NONE = "none";
 
-    private final Map<String, String[]> parameters_ = new HashMap<>();
+    private final Map<String, String[]> parameters_ = new LinkedHashMap<>();
     private final MockHeaders headers_ = new MockHeaders();
     private RequestMethod requestMethod_ = RequestMethod.GET;
     private Map<String, UploadedFile[]> files_;
@@ -488,7 +488,7 @@ public class MockRequest implements Request {
         checkUploadDirectory();
 
         if (null == files_) {
-            files_ = new HashMap<>();
+            files_ = new LinkedHashMap<>();
         }
 
         var uploaded_files = new UploadedFile[files.length];

@@ -543,6 +543,9 @@ public abstract class BeanUtils {
             ConstrainedProperty constrained_property = null;
             if (constrained != null) {
                 constrained_property = constrained.getConstrainedProperty(property.getName());
+                if (constrained_property != null && !constrained_property.isEditable()) {
+                    return;
+                }
             }
 
             try {

@@ -485,7 +485,7 @@ public class MockForm {
      * @since 2.0
      */
     public String getMethod() {
-        return getAttribute("method");
+        return getAttribute("method").toUpperCase();
     }
 
     /**
