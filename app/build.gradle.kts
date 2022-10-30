@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    testImplementation("org.jsoup:jsoup:1.15.3")
     runtimeOnly("org.eclipse.jetty:jetty-server:11.0.12")
     runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.12")
     implementation(project(":lib"))

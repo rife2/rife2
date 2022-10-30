@@ -10,8 +10,15 @@ import rife.test.MockConversation;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HelloTest {
-    @Test void verifyHello() {
+    @Test void verifyHelloWorld() {
         var m = new MockConversation(new HelloWorld());
         assertEquals("Hello World", m.doRequest("/hello").getText());
+    }
+
+    @Test void verifyHelloLink() {
+        var m = new MockConversation(new HelloLink());
+        assertEquals("Hello World", m.doRequest("/link")
+            .getParsedHtml().getLinkWithText("Hello")
+            .follow().getText());
     }
 }
