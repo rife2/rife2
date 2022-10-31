@@ -1,4 +1,4 @@
-<img src="https://github.com/gbevin/rife2/raw/main/rife2_logo.png" width="300">
+<p style="text-align: center"><img src="https://github.com/gbevin/rife2/raw/main/rife2_logo.png" width="200"></p>
 
 # Welcome
 
