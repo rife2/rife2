@@ -5,7 +5,7 @@
 RIFE2 is a full-stack, no-declaration, framework to quickly and effortlessly create web applications with modern Java.
 
 RIFE2 is built on the foundations of the original RIFE framework that was popular from 2002-2010.
-Since then, the world and Java has changed and many of the original RIFE APIs can finally be replaced with pure Java, no-XML, no-YAML, leaving only type-safe expressive code.  
+Since then, the world and Java have changed and many of the original RIFE APIs can finally be replaced with pure Java, no-XML, no-YAML, leaving only type-safe expressive code.  
 
 **NOTE: The documentation and this readme are work-in-progress**
 
@@ -26,7 +26,7 @@ public class HelloWorld extends Site {
 ```
 
 The `main` method spins up the integrated embedded Jetty server, so that you can immediately start coding. The same `HelloWorld` class can be added as a
-parameter value to your `web.xml`, requiring absolute no changes to your code between development and production packaging.
+parameter value to your `web.xml`, requiring absolute no changes to your code between development and production.
 
 Out-of-container testing is a first-class citizen in RIFE2, directly interacting with your `Site` class to simulate full request-response interactions,
 without having to spin up a servlet container.
@@ -113,6 +113,10 @@ With `HelloTemplate.html` being:
 </html>
 ```
 
+Note that RIFE2 internally transforms your templates into Java classes by generating heavily optimized bytecode.
+
+This happens on-the-fly during development. For production, templates can be pre-compiled, making them incredibly fast. 
+
 ## Template Manipulation
 
 Let's change the example some more and create a single route that can respond to both `get` and `post` requests.
@@ -160,12 +164,12 @@ You can see that the template contains all the pieces to create both pages:
 * the block named `form`
 * the block named `text`
 
-In the Java logic, we simply assign either block to the value, depending on what we want to display.
+In Java, we simply assign either block to the value, depending on what we want to display.
 
-Another nice benefit is that the template tags can be HTML comments, making them completely invisible.
+Another benefit is that RIFE3's template tags can be HTML comments, making them completely invisible.
 This allows you to work on your HTML design as usual and preview the template file with a regular browser.
 
-Let's include a test for this functionality:
+Finally, let's include a test for this functionality:
 
 ```java
 class HelloTest {
