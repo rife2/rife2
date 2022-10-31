@@ -1,6 +1,6 @@
-# Welcome to RIFE2
+<img src="https://github.com/gbevin/rife2/raw/main/rife2_logo.png" width="300">
 
-![RIFE2 Logo](rife2_logo.png|width=400px)
+# Welcome
 
 RIFE2 is a full-stack, no-declaration, framework to quickly and effortlessly create web applications with modern Java.
 
