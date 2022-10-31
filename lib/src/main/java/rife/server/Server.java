@@ -7,12 +7,10 @@ import jakarta.servlet.DispatcherType;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.*;
-import org.eclipse.jetty.util.resource.Resource;
 import rife.config.RifeConfig;
 import rife.engine.Site;
-import rife.servlet.RifeFilter;
+import rife.test.servlet.RifeFilter;
 
-import java.io.File;
 import java.util.EnumSet;
 
 public class Server {

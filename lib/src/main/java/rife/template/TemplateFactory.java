@@ -34,7 +34,6 @@ public class TemplateFactory extends EnumClass<String> {
             {
                 ValidationBuilder.TAG_MARK,
                 ValidationBuilder.TAG_ERRORS,
-                TemplateFactoryFilters.TAG_CONFIG,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
                 TemplateFactoryFilters.TAG_RENDER,
@@ -53,7 +52,6 @@ public class TemplateFactory extends EnumClass<String> {
             },
         new String[]
             {
-                TemplateFactoryFilters.TAG_CONFIG,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_RENDER
             },
@@ -70,7 +68,6 @@ public class TemplateFactory extends EnumClass<String> {
             },
         new String[]
             {
-                TemplateFactoryFilters.TAG_CONFIG,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_RENDER
             },
@@ -87,7 +84,6 @@ public class TemplateFactory extends EnumClass<String> {
             },
         new String[]
             {
-                TemplateFactoryFilters.TAG_CONFIG,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_RENDER
             },
@@ -104,7 +100,6 @@ public class TemplateFactory extends EnumClass<String> {
             },
         new String[]
             {
-                TemplateFactoryFilters.TAG_CONFIG,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_RENDER
             },

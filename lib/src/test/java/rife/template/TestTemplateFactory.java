@@ -5,7 +5,6 @@
 package rife.template;
 
 import org.junit.jupiter.api.Test;
-import rife.config.Config;
 import rife.config.RifeConfig;
 import rife.resources.ResourceFinderClasspath;
 import rife.resources.ResourceFinderDirectories;
@@ -213,24 +212,6 @@ public class TestTemplateFactory {
         assertEquals("This is the render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
             "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
             "This is the render value with a differentiator 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:DIFFERENT:different:2'.\n", t.getContent());
-    }
-
-    @Test
-    public void testFilteredTagsConfigHtml()
-    throws Exception
-    {
-        Config.instance().setParameter("TEMPLATE_CONFIG_VALUE", "the config value");
-        var template = TemplateFactory.HTML.get("filtered_tags_config");
-        assertEquals("This is the config value 'the config value'.\nThis is an unknown config value '{{v config:TEMPLATE_CONFIG_VALUE_UNKNOWN/}}'.\n", template.getContent());
-    }
-
-    @Test
-    public void testFilteredTagsConfigTxt()
-    throws Exception
-    {
-        Config.instance().setParameter("TEMPLATE_CONFIG_VALUE", "the config value");
-        var template = TemplateFactory.TXT.get("filtered_tags_config");
-        assertEquals("This is the config value 'the config value'.\nThis is an unknown config value '{{v config:TEMPLATE_CONFIG_VALUE_UNKNOWN/}}'.\n", template.getContent());
     }
 
     @Test

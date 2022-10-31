@@ -4,7 +4,6 @@
  */
 package rife.template;
 
-import rife.config.Config;
 import rife.config.RifeConfig;
 import rife.resources.ResourceFinder;
 import rife.template.exceptions.*;
@@ -206,14 +205,7 @@ public abstract class AbstractTemplate implements Template {
         _evaluateL10nTags(set_values);
         _evaluateRenderTags(set_values);
         _evaluateLangTags(set_values, null);
-//        _evaluateOgnlTags(set_values, null);
-//        _evaluateOgnlConfigTags(set_values, null);
-//        _evaluateMvelTags(set_values, null);
-//        _evaluateMvelConfigTags(set_values, null);
-//        _evaluateGroovyTags(set_values, null);
-//        _evaluateGroovyConfigTags(set_values, null);
 //        _evaluateJaninoTags(set_values, null);
-//        _evaluateJaninoConfigTags(set_values, null);
 
         return set_values;
     }
@@ -253,40 +245,6 @@ public abstract class AbstractTemplate implements Template {
                         }
                     } catch (ClassNotFoundException e) {
                         throw new RendererNotFoundException(this, classname, e);
-                    }
-                }
-            }
-        }
-    }
-
-    public List<String> evaluateConfigTags() {
-        List<String> set_values = new ArrayList<String>();
-        _evaluateConfigTags(set_values);
-        return set_values;
-    }
-
-    private void _evaluateConfigTags(List<String> setValues) {
-        var config_tags = getFilteredValues(TemplateFactoryFilters.TAG_CONFIG);
-        if (config_tags != null) {
-            String config_key = null;
-            String config_value = null;
-
-            for (var captured_groups : config_tags) {
-                // only set the config value if the value hasn't been set in the
-                // template yet
-                if (!isValueSet(captured_groups[0])) {
-                    config_key = captured_groups[1];
-
-                    // obtain the configuration value
-                    config_value = Config.instance().getString(config_key);
-
-                    // don't continue if the config parameter doesn't exist
-                    if (config_value != null) {
-                        // set the config value in the template
-                        setValue(captured_groups[0], getEncoder().encode(config_value));
-                        if (setValues != null) {
-                            setValues.add(captured_groups[0]);
-                        }
                     }
                 }
             }
@@ -396,69 +354,13 @@ public abstract class AbstractTemplate implements Template {
 //        if (null == id) throw new IllegalArgumentException("id can't be null.");
 //
 //        List<String> set_values = new ArrayList<String>();
-//        _evaluateOgnlTags(set_values, TemplateFactory.PREFIX_OGNL + id);
-//        _evaluateMvelTags(set_values, TemplateFactory.PREFIX_MVEL + id);
-//        _evaluateGroovyTags(set_values, TemplateFactory.PREFIX_GROOVY + id);
 //        _evaluateJaninoTags(set_values, TemplateFactory.PREFIX_JANINO + id);
 //        return set_values;
-//    }
-//
-//    public List<String> evaluateExpressionConfigTags(String id) {
-//        if (null == id) throw new IllegalArgumentException("id can't be null.");
-//
-//        List<String> set_values = new ArrayList<String>();
-//        _evaluateOgnlConfigTags(set_values, TemplateFactory.PREFIX_OGNL_CONFIG + id);
-//        _evaluateMvelConfigTags(set_values, TemplateFactory.PREFIX_MVEL_CONFIG + id);
-//        _evaluateGroovyConfigTags(set_values, TemplateFactory.PREFIX_GROOVY_CONFIG + id);
-//        _evaluateJaninoConfigTags(set_values, TemplateFactory.PREFIX_JANINO_CONFIG + id);
-//        return set_values;
-//    }
-//
-//    private void _evaluateOgnlTags(List<String> setValues, String id) {
-//        if (hasFilteredBlocks(TemplateFactory.TAG_OGNL)) {
-//            FilteredTagProcessorOgnl.instance().processTags(setValues, this, getFilteredBlocks(TemplateFactory.TAG_OGNL), id, Template.class, "template", this, null);
-//        }
-//    }
-//
-//    private void _evaluateOgnlConfigTags(List<String> setValues, String id) {
-//        if (hasFilteredBlocks(TemplateFactory.TAG_OGNL_CONFIG)) {
-//            FilteredTagProcessorOgnl.instance().processTags(setValues, this, getFilteredBlocks(TemplateFactory.TAG_OGNL_CONFIG), id, Config.class, "config", Config.getRepInstance(), null);
-//        }
-//    }
-//
-//    private void _evaluateMvelTags(List<String> setValues, String id) {
-//        if (hasFilteredBlocks(TemplateFactory.TAG_MVEL)) {
-//            FilteredTagProcessorMvel.instance().processTags(setValues, this, getFilteredBlocks(TemplateFactory.TAG_MVEL), id, Template.class, "template", this, null);
-//        }
-//    }
-//
-//    private void _evaluateMvelConfigTags(List<String> setValues, String id) {
-//        if (hasFilteredBlocks(TemplateFactory.TAG_MVEL_CONFIG)) {
-//            FilteredTagProcessorMvel.instance().processTags(setValues, this, getFilteredBlocks(TemplateFactory.TAG_MVEL_CONFIG), id, Config.class, "config", Config.getRepInstance(), null);
-//        }
-//    }
-//
-//    private void _evaluateGroovyTags(List<String> setValues, String id) {
-//        if (hasFilteredBlocks(TemplateFactory.TAG_GROOVY)) {
-//            FilteredTagProcessorGroovy.instance().processTags(setValues, this, getFilteredBlocks(TemplateFactory.TAG_GROOVY), id, Template.class, "template", this, null);
-//        }
-//    }
-//
-//    private void _evaluateGroovyConfigTags(List<String> setValues, String id) {
-//        if (hasFilteredBlocks(TemplateFactory.TAG_GROOVY_CONFIG)) {
-//            FilteredTagProcessorGroovy.instance().processTags(setValues, this, getFilteredBlocks(TemplateFactory.TAG_GROOVY_CONFIG), id, Config.class, "config", Config.getRepInstance(), null);
-//        }
 //    }
 //
 //    private void _evaluateJaninoTags(List<String> setValues, String id) {
 //        if (hasFilteredBlocks(TemplateFactory.TAG_JANINO)) {
 //            FilteredTagProcessorJanino.instance().processTags(setValues, this, getFilteredBlocks(TemplateFactory.TAG_JANINO), id, Template.class, "template", this, null);
-//        }
-//    }
-//
-//    private void _evaluateJaninoConfigTags(List<String> setValues, String id) {
-//        if (hasFilteredBlocks(TemplateFactory.TAG_JANINO_CONFIG)) {
-//            FilteredTagProcessorJanino.instance().processTags(setValues, this, getFilteredBlocks(TemplateFactory.TAG_JANINO_CONFIG), id, Config.class, "config", Config.getRepInstance(), null);
 //        }
 //    }
 
@@ -918,7 +820,6 @@ public abstract class AbstractTemplate implements Template {
 
     final void initialize()
     throws TemplateException {
-        _evaluateConfigTags(null);
         _evaluateL10nTags(null);
 
         if (null == initializer_) {

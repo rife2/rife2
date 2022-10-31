@@ -1037,21 +1037,6 @@ public interface Template extends Cloneable {
     List<String> evaluateL10nTags();
 
     /**
-     * Fills all values in this template which match "<code>config:<em>key</em></code>",
-     * where "<code>key</code>" is a configuration value name in the {@link
-     * rife.config.Config} instance returned by {@link rife.config.Config#instance()}. Each
-     * value will be filled with the value of the configuration option with
-     * the corresponding key.
-     * <p>This method is normally called automatically during template
-     * initialization. You should call it if you wish to re-evaluate the tags
-     * at any time during the template's life.
-     *
-     * @return the list of names of the template values that were generated
-     * @since 1.0
-     */
-    List<String> evaluateConfigTags();
-
-    /**
      * Fills the value "<code>lang:<em>id</em></code>" with the value of the
      * block "<code>lang:<em>id</em>:<em>langid</em></code>", where "<code>id</code>"
      * is the given ID, and "<code>langid</code>" is this template's
@@ -1068,7 +1053,7 @@ public interface Template extends Cloneable {
      * @since 1.0
      */
     List<String> evaluateLangTags(String id);
-//
+
 //    /**
 //     * Evaluates the specified OGNL, Groovy, or Janino expression tag. For
 //     * example, if a value exists with ID "<code>OGNL:<em>id</em>:[[<em>script</em>]]</code>",
@@ -1088,29 +1073,6 @@ public interface Template extends Cloneable {
 //     * @since 1.0
 //     */
 //    public List<String> evaluateExpressionTags(String id);
-//
-//    /**
-//     * Evaluates the specified OGNL, Groovy, or Janino configuration
-//     * expression tag. For example, if a value exists with ID "OGNL:CONFIG:<em>id</em>:[[<em>script</em>]]",
-//     * where "id" is the given ID and "script" is some OGNL expression, this
-//     * method will replace this value with the value of the evaluated OGNL
-//     * expression, using the current set of {@linkplain #getExpressionVars()
-//     * expression variables}.
-//     * <p>The prefix for OGNL is "<code>OGNL:</code>", the prefix for Groovy
-//     * is "<code>GROOVY:</code>" and the prefix for Janino is "<code>JANINO:</code>".
-//     * <p>The context for the expressions will be the {@link Config} object
-//     * returned by {@link Config#getRepInstance()}.
-//     * <p>Expression config tags are evaluated automatically when the output
-//     * is generated (such as when calling {@link #getContent()}). You can
-//     * manually call this method to force evaluation of the tags earlier than
-//     * that.
-//     *
-//     * @param id the ID whose expression tag will be replaced with the value
-//     *           of the evaluated expression in the tag ID
-//     * @return the list of names of the template values that were generated
-//     * @since 1.0
-//     */
-//    public List<String> evaluateExpressionConfigTags(String id);
 
     /**
      * Evalutes all values in this template with ID's of the form "<code>render:<em>class</em></code>"
