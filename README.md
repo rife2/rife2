@@ -45,13 +45,6 @@ class HelloTest {
 Here's an example snippet that should help you compile and run this example with Gradle.
 Please make sure to adapt the artifact versions to the latest ones.
 
-RIFE2 doesn't publish dependencies for _jsoup_ nor _Jetty_ because neither of them should be packaged with a production deployment.
-
-You will want to:
-* depend on `org.jsoup:jsoup` if you want to parse HTML pages in RIFE2's web testing API
-* depend on `org.eclipse.jetty` if you're launching the embedded server like in these examples
-
-
 ```kotlin
 application {
     mainClass.set("HelloWorld")
@@ -65,6 +58,12 @@ dependencies {
     runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.12")
 }
 ```
+
+RIFE2 doesn't publish dependencies for _jsoup_ nor _Jetty_ because neither of them should be packaged with a production deployment.
+
+You will want to:
+* depend on `org.jsoup:jsoup` if you want to parse HTML pages in RIFE2's web testing API
+* depend on `org.eclipse.jetty` if you're launching the embedded server like in these examples
 
 RIFE2 also ships with example Gradle projects that should help you get set up quickly.
 
@@ -199,7 +198,7 @@ You can see that the template contains all the pieces to create both pages:
 
 In Java, we simply assign either block to the value, depending on what we want to display.
 
-Another benefit is that RIFE3's template tags can be HTML comments, making them completely invisible.
+Another benefit is that RIFE2's template tags can be HTML comments, making them completely invisible.
 This allows you to work on your HTML design as usual and preview the template file with a regular browser.
 
 Finally, let's include a test for this functionality:
