@@ -45,16 +45,14 @@ class HelloTest {
 Here's an example snippet that should help you compile and run this example with Gradle.
 Please make sure to adapt the artifact versions to the latest ones.
 
-RIFE2 doesn't publish dependencies for _jsoup_ or _Jetty_ because neither of them should be packaged with a production deployment.
+RIFE2 doesn't publish dependencies for _jsoup_ nor _Jetty_ because neither of them should be packaged with a production deployment.
 
 You will want to:
-* depend on `org.jsoup:jsoup` if you want to parse HTML pages in RIFE2's testing API
+* depend on `org.jsoup:jsoup` if you want to parse HTML pages in RIFE2's web testing API
 * depend on `org.eclipse.jetty` if you're launching the embedded server like in these examples
 
 
 ```kotlin
-...
-
 application {
     mainClass.set("HelloWorld")
 }
@@ -66,13 +64,11 @@ dependencies {
     runtimeOnly("org.eclipse.jetty:jetty-server:11.0.12")
     runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.12")
 }
-
-...
 ```
 
-RIFE2 also ships with example Gradle projects that should have you get set up quickly.
+RIFE2 also ships with example Gradle projects that should help you get set up quickly.
 
-Please take a look at these:
+Please take a look here:
 * Hello World app : https://github.com/gbevin/rife2/tree/main/app
 * Run Hello World standalone : https://github.com/gbevin/rife2/tree/main/standalone
 * Package Hello World war : https://github.com/gbevin/rife2/tree/main/war
