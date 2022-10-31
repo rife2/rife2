@@ -3,14 +3,20 @@ plugins {
     java
     `java-library`
     antlr
+    `maven-publish`
+    signing
 }
+
+group = "com.uwyn.rife2"
+version = "0.5.0"
 
 base {
     archivesName.set("rife2")
-    version = 0.5
 }
 
 java {
+    withJavadocJar()
+    withSourcesJar()
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
@@ -115,5 +121,60 @@ idea {
     module {
         sourceDirs.add(File("${projectDir}/src/generated/java"))
         generatedSourceDirs.add(File("${projectDir}/src/generated/java"))
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            artifactId = "rife2"
+            from(components["java"])
+            pom {
+                name.set("RIFE2")
+                description.set("Full-stack, no-declaration, framework to quickly and effortlessly create web applications with modern Java.")
+                url.set("https://github.com/gbevin/rife2")
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("gbevin")
+                        name.set("Geert Bevin")
+                        email.set("gbevin@uwyn.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:https://github.com/gbevin/rife2.git")
+                    developerConnection.set("scm:git:git@github.com:gbevin/rife2.git")
+                    url.set("https://github.com/gbevin/rife2")
+                }
+            }
+            repositories {
+                maven {
+                    credentials {
+                        username = project.properties["ossrhUsername"].toString()
+                        password = project.properties["ossrhPassword"].toString()
+                    }
+                    val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                    val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                    url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                }
+            }
+
+        }
+    }
+}
+
+signing {
+    sign(publishing.publications["mavenJava"])
+}
+
+tasks.javadoc {
+    title = "RIFE 2"
+    if (JavaVersion.current().isJava9Compatible) {
+        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
     }
 }
