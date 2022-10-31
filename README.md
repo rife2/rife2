@@ -28,6 +28,8 @@ public class HelloWorld extends Site {
 The `main` method spins up the integrated embedded Jetty server, so that you can immediately start coding. The same `HelloWorld` class can be added as a
 parameter value to your `web.xml`, requiring absolute no changes to your code between development and production.
 
+Give it a try and visit [http://localhost:8080/hello](http://localhost:8080/hello)
+
 Out-of-container testing is a first-class citizen in RIFE2, directly interacting with your `Site` class to simulate full request-response interactions,
 without having to spin up a servlet container.
 
