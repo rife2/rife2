@@ -5,14 +5,9 @@
 package rife;
 
 import rife.authentication.credentialsmanagers.RoleUserAttributes;
-import rife.authentication.elements.Authenticated;
-import rife.authentication.elements.AuthenticationConfig;
-import rife.authentication.elements.Login;
+import rife.authentication.elements.*;
 import rife.authentication.sessionvalidators.MemorySessionValidator;
-import rife.engine.Route;
-import rife.engine.Router;
-import rife.engine.Site;
-import rife.server.Server;
+import rife.engine.*;
 import rife.template.TemplateFactory;
 
 public class HelloAuthentication extends Site {

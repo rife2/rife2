@@ -4,8 +4,6 @@
  */
 package rife.engine;
 
-import rife.server.Server;
-
 public class TestServerRunner implements AutoCloseable {
     final Server server_ = new Server().port(8181);
 

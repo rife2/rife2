@@ -4,9 +4,7 @@
  */
 package rife;
 
-import rife.engine.Route;
-import rife.engine.Site;
-import rife.server.Server;
+import rife.engine.*;
 
 public class HelloTemplate extends Site {
     Route hello = get("/hello", c -> c.print("Hello World"));

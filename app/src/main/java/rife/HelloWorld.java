@@ -5,7 +5,6 @@
 package rife;
 
 import rife.engine.*;
-import rife.server.Server;
 
 public class HelloWorld extends Site {
     public void setup() {
