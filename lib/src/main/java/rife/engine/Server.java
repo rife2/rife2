@@ -8,7 +8,7 @@ import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.*;
 import rife.config.RifeConfig;
-import rife.test.servlet.RifeFilter;
+import rife.servlet.RifeFilter;
 
 import java.util.EnumSet;
 
