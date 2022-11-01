@@ -23,7 +23,7 @@ record RouteInstance(Router router, RequestMethod method, String path, PathInfoH
 
     @Override
     public String getDefaultElementId() {
-        return StringUtils.uncapitalize(ClassUtils.shortenClassName(getClass()));
+        return StringUtils.uncapitalize(ClassUtils.shortenClassName(element.getClass()));
     }
 
     @Override
