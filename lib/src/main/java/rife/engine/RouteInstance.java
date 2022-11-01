@@ -4,6 +4,7 @@
  */
 package rife.engine;
 
+import rife.tools.ClassUtils;
 import rife.tools.StringUtils;
 
 record RouteInstance(Router router, RequestMethod method, String path, PathInfoHandling pathInfoHandling, Element element) implements Route {
@@ -22,11 +23,11 @@ record RouteInstance(Router router, RequestMethod method, String path, PathInfoH
 
     @Override
     public String getDefaultElementId() {
-        return StringUtils.stripFromFront(path, "/");
+        return StringUtils.uncapitalize(ClassUtils.shortenClassName(getClass()));
     }
 
     @Override
     public String getDefaultElementPath() {
-        return path;
+        return "/" + getDefaultElementId();
     }
 }
