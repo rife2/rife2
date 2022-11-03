@@ -14,8 +14,11 @@ public class HelloAuthentication extends Site {
     final MemorySessionValidator validator = new MemorySessionValidator();
     final AuthenticationConfig config = new AuthenticationConfig(validator);
 
-    static class AuthenticatedSection extends Router {
-        final Route hello = get("/hello", c -> c.print("Hello World"));
+    class AuthenticatedSection extends Router {
+        Route hello = get("/hello", c -> {
+            c.print(c.template("HelloAuthenticated"));
+        });
+        Route logout = get("/logout", new Logout(config, TemplateFactory.HTML.get("HelloLogout")));
     }
 
     public void setup() {

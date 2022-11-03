@@ -4,6 +4,7 @@
  */
 package rife.engine;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
@@ -214,7 +215,7 @@ public class Router {
                 // do nothing
             } else if (token.equals("^")) {
                 if (route != null) {
-                   route = null;
+                    route = null;
                 } else {
                     if (router.parent_ == null) {
                         return null;
@@ -223,22 +224,38 @@ public class Router {
                     router = router.parent_;
                 }
             } else {
-                try {
-                    var field = router.getClass().getDeclaredField(token);
-                    field.setAccessible(true);
+                Class klass = router.getClass();
+                Field field = null;
+                while (field == null && klass != Site.class && klass != Router.class) {
+                    try {
+                        field = klass.getDeclaredField(token);
+                        field.setAccessible(true);
 
-                    if (!Modifier.isStatic(field.getModifiers()) &&
-                        !Modifier.isTransient(field.getModifiers())) {
-                        if (Route.class.isAssignableFrom(field.getType())) {
-                            if (route != null) {
-                                return null;
-                            }
-                            route = (Route) field.get(router);
-                        } else if (Router.class.isAssignableFrom(field.getType())) {
-                            router = (Router) field.get(router);
+                        if (Modifier.isStatic(field.getModifiers()) ||
+                            Modifier.isTransient(field.getModifiers()) ||
+                            (!Route.class.isAssignableFrom(field.getType()) && !Router.class.isAssignableFrom(field.getType()))) {
+                            field = null;
                         }
+                    } catch (NoSuchFieldException ignored) {
                     }
-                } catch (IllegalAccessException | NoSuchFieldException e) {
+                    
+                    klass = klass.getSuperclass();
+                }
+
+                if (field == null) {
+                    return null;
+                }
+
+                try {
+                    if (Route.class.isAssignableFrom(field.getType())) {
+                        if (route != null) {
+                            return null;
+                        }
+                        route = (Route) field.get(router);
+                    } else if (Router.class.isAssignableFrom(field.getType())) {
+                        router = (Router) field.get(router);
+                    }
+                } catch (IllegalAccessException e) {
                     return null;
                 }
             }
