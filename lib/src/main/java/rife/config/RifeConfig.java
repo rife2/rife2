@@ -125,7 +125,7 @@ public class RifeConfig {
         private String tableRemember_ = DEFAULT_TABLE_REMEMBER;
 
         public static final int DEFAULT_LOGIN_MINIMUM_LENGTH = 5;
-        public static final int DEFAULT_LOGIN_MAXIMUM_LENGTH = 20;
+        public static final int DEFAULT_LOGIN_MAXIMUM_LENGTH = 40;
         public static final int DEFAULT_PASSWORD_MINIMUM_LENGTH = 5;
         public static final int DEFAULT_PASSWORD_MAXIMUM_LENGTH = 100;
         public static final int DEFAULT_ROLE_NAME_MAXIMUM_LENGTH = 20;
