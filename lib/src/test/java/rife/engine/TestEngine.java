@@ -326,4 +326,97 @@ public class TestEngine {
             }
         }
     }
+
+    class Routes extends Router {
+        final Route route = route("/route", c -> {
+        });
+        final Route another = route("/another", c -> {
+        });
+    }
+
+    @Test
+    public void testRouterSite() {
+        var site = new Site() {
+            final Routes routes = group("/routes", new Routes());
+            final Routes moreRoutes = group("/moreRoutes", new Routes());
+        };
+
+        assertSame(site, site.site());
+        assertSame(site, site.routes.site());
+        assertSame(site, site.moreRoutes.site());
+    }
+
+    @Test
+    public void testResolveRoutes() {
+        var site = new Site() {
+            final Route route1 = route("/route1", c -> {
+            });
+            final Route route2 = route("/route2", c -> {
+            });
+            final Routes routes = group("/routes", new Routes());
+            final Routes moreRoutes = group("/moreRoutes", new Routes());
+        };
+
+        assertSame(site.route1, site.resolveRoute(".route1"));
+        assertSame(site.route2, site.resolveRoute(".route2"));
+        assertSame(site.routes.route, site.resolveRoute(".routes.route"));
+        assertSame(site.routes.another, site.resolveRoute(".routes.another"));
+        assertSame(site.moreRoutes.route, site.resolveRoute(".moreRoutes.route"));
+        assertSame(site.moreRoutes.another, site.resolveRoute(".moreRoutes.another"));
+
+        assertSame(site.route1, site.resolveRoute("route1"));
+        assertNull(site.routes.resolveRoute("route1"));
+        assertNull(site.moreRoutes.resolveRoute("route1"));
+
+        assertSame(site.route2, site.resolveRoute("route2"));
+        assertNull(site.routes.resolveRoute("route2"));
+        assertNull(site.moreRoutes.resolveRoute("route2"));
+
+        assertSame(site.routes.route, site.resolveRoute("routes.route"));
+        assertNull(site.routes.resolveRoute("routes.route"));
+        assertNull(site.moreRoutes.resolveRoute("routes.route"));
+
+        assertSame(site.routes.another, site.resolveRoute("routes.another"));
+        assertNull(site.routes.resolveRoute("routes.another"));
+        assertNull(site.moreRoutes.resolveRoute("routes.another"));
+
+        assertSame(site.moreRoutes.route, site.resolveRoute("moreRoutes.route"));
+        assertNull(site.routes.resolveRoute("moreRoutes.route"));
+        assertNull(site.moreRoutes.resolveRoute("moreRoutes.route"));
+
+        assertSame(site.moreRoutes.another, site.resolveRoute("moreRoutes.another"));
+        assertNull(site.routes.resolveRoute("moreRoutes.another"));
+        assertNull(site.moreRoutes.resolveRoute("moreRoutes.another"));
+
+        assertNull(site.resolveRoute("route"));
+        assertSame(site.routes.route, site.routes.resolveRoute("route"));
+        assertSame(site.moreRoutes.route, site.moreRoutes.resolveRoute("route"));
+
+        assertNull(site.resolveRoute("another"));
+        assertSame(site.routes.another, site.routes.resolveRoute("another"));
+        assertSame(site.moreRoutes.another, site.moreRoutes.resolveRoute("another"));
+
+        assertSame(site.route2, site.resolveRoute(".route1^route2"));
+        assertSame(site.route1, site.resolveRoute(".route2^route1"));
+        assertSame(site.routes.another, site.resolveRoute(".routes.route^another"));
+        assertSame(site.routes.route, site.resolveRoute(".routes.another^route"));
+        assertSame(site.route1, site.resolveRoute(".routes.another^^route1"));
+        assertSame(site.route2, site.resolveRoute(".routes.another^^route2"));
+        assertSame(site.moreRoutes.another, site.resolveRoute(".moreRoutes.route^another"));
+        assertSame(site.moreRoutes.route, site.resolveRoute(".moreRoutes.another^route"));
+        assertSame(site.route1, site.resolveRoute(".moreRoutes.route^^route1"));
+        assertSame(site.route2, site.resolveRoute(".moreRoutes.another^^route2"));
+        assertSame(site.moreRoutes.another, site.resolveRoute(".routes.another^^moreRoutes.another"));
+        assertSame(site.moreRoutes.route, site.resolveRoute(".routes.route^^moreRoutes.route"));
+        assertSame(site.routes.another, site.resolveRoute(".moreRoutes.another^^routes.another"));
+        assertSame(site.routes.route, site.resolveRoute(".moreRoutes.route^^routes.route"));
+
+        assertNull(site.resolveRoute("^route1"));
+        assertSame(site.route1, site.routes.resolveRoute("^route1"));
+        assertSame(site.route1, site.moreRoutes.resolveRoute("^route1"));
+
+        assertNull(site.resolveRoute("^route2"));
+        assertSame(site.route2, site.routes.resolveRoute("^route2"));
+        assertSame(site.route2, site.moreRoutes.resolveRoute("^route2"));
+    }
 }

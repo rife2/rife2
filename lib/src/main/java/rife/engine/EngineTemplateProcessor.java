@@ -57,7 +57,7 @@ public class EngineTemplateProcessor {
 
         if (template_.hasValueId(Context.ID_CONTEXT_PARAM_RANDOM) &&
             !template_.isValueSet(Context.ID_CONTEXT_PARAM_RANDOM)) {
-            template_.setValue(Context.ID_CONTEXT_PARAM_RANDOM, "rnd="+context_.site().RND);
+            template_.setValue(Context.ID_CONTEXT_PARAM_RANDOM, "rnd=" + context_.site().RND);
             setValues.add(Context.ID_CONTEXT_PARAM_RANDOM);
         }
     }
@@ -81,30 +81,17 @@ public class EngineTemplateProcessor {
     }
 
     private void processRoutes(final List<String> setValues) {
-        final var site = context_.site();
-
         final var route_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_ROUTE);
         if (route_tags != null) {
             for (var captured_groups : route_tags) {
                 var route_value_id = captured_groups[0];
                 if (!template_.isValueSet(route_value_id)) {
-                    var route_name = captured_groups[1];
-                    Route route = null;
-                    if (route_name.isEmpty()) {
+                    var path = captured_groups[1];
+                    Route route;
+                    if (path.isEmpty()) {
                         route = context_.route();
                     } else {
-                        try {
-                            var field = site.getClass().getDeclaredField(route_name);
-                            field.setAccessible(true);
-
-                            if (!Modifier.isStatic(field.getModifiers()) &&
-                                !Modifier.isTransient(field.getModifiers()) &&
-                                Route.class.isAssignableFrom(field.getType())) {
-                                route = (Route) field.get(site);
-                            }
-                        } catch (IllegalAccessException | NoSuchFieldException e) {
-                            throw new RuntimeException(e);
-                        }
+                        route = context_.route().router().resolveRoute(path);
                     }
 
                     if (route != null) {

@@ -4,6 +4,7 @@
  */
 package rife.engine;
 
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class Router {
@@ -183,4 +184,66 @@ public class Router {
         return route;
     }
 
+    public Site site() {
+        Router router = this;
+        while (router.parent_ != null) {
+            router = router.parent_;
+        }
+        return (Site) router;
+    }
+
+    public Route resolveRoute(String path) {
+        if (null == path || path.isEmpty()) {
+            return null;
+        }
+
+        Route route = null;
+        Router router = null;
+        // if this is an absolute path, start resolving from the top level site
+        if (path.startsWith(".")) {
+            router = site();
+        } else {
+            router = this;
+        }
+
+        var route_tok = new StringTokenizer(path, ".^", true);
+        String token = null;
+        while (route_tok.hasMoreTokens()) {
+            token = route_tok.nextToken();
+            if (token.equals(".")) {
+                // do nothing
+            } else if (token.equals("^")) {
+                if (route != null) {
+                   route = null;
+                } else {
+                    if (router.parent_ == null) {
+                        return null;
+                    }
+
+                    router = router.parent_;
+                }
+            } else {
+                try {
+                    var field = router.getClass().getDeclaredField(token);
+                    field.setAccessible(true);
+
+                    if (!Modifier.isStatic(field.getModifiers()) &&
+                        !Modifier.isTransient(field.getModifiers())) {
+                        if (Route.class.isAssignableFrom(field.getType())) {
+                            if (route != null) {
+                                return null;
+                            }
+                            route = (Route) field.get(router);
+                        } else if (Router.class.isAssignableFrom(field.getType())) {
+                            router = (Router) field.get(router);
+                        }
+                    }
+                } catch (IllegalAccessException | NoSuchFieldException e) {
+                    return null;
+                }
+            }
+        }
+
+        return route;
+    }
 }
