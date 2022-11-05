@@ -83,7 +83,7 @@ public class TemplateDeployer {
                 }
                 classname = file.replace(File.separatorChar, '.');
                 classname = classname.substring(0, classname.length() - templateFactory_.getParser().getExtension().length());
-                templateFactory_.parse(classname, null, null);
+                templateFactory_.parse(classname, null);
                 if (verbose_) {
                     System.out.println("done.");
                 }

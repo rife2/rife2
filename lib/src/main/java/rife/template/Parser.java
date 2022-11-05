@@ -157,7 +157,7 @@ public class Parser implements Cloneable {
         return true;
     }
 
-    public Parsed parse(String name, String encoding, TemplateTransformer transformer)
+    public Parsed parse(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
 
@@ -166,7 +166,7 @@ public class Parser implements Cloneable {
             throw new TemplateNotFoundException(name, null);
         }
 
-        return parse(prepare(name, resource), encoding, transformer);
+        return parse(prepare(name, resource), encoding);
     }
 
     public URL resolve(String name) {
@@ -247,7 +247,7 @@ public class Parser implements Cloneable {
     }
 
 
-    Parsed parse(Parsed parsed, String encoding, TemplateTransformer transformer)
+    Parsed parse(Parsed parsed, String encoding)
     throws TemplateException {
         assert parsed != null;
 
@@ -255,12 +255,12 @@ public class Parser implements Cloneable {
         var resource = parsed.getResource();
 
         // obtain the content of the template file
-        var content = getContent(parsed.getTemplateName(), parsed, resource, encoding, transformer);
+        var content = getContent(parsed.getTemplateName(), parsed, resource, encoding);
 
         // replace the included templates
         var previous_includes = new Stack<String>();
         previous_includes.push(parsed.getFullClassName());
-        content = replaceIncludeTags(parsed, content, previous_includes, encoding, transformer);
+        content = replaceIncludeTags(parsed, content, previous_includes, encoding);
         previous_includes.pop();
 
         // process the blocks and values
@@ -273,13 +273,9 @@ public class Parser implements Cloneable {
         return parsed;
     }
 
-    private String getContent(String templateName, Parsed parsed, URL resource, String encoding, TemplateTransformer transformer)
+    private String getContent(String templateName, Parsed parsed, URL resource, String encoding)
     throws TemplateException {
-        if (null == transformer) {
-            return getFileContent(resource, encoding);
-        } else {
-            return getTransformedContent(templateName, parsed, resource, encoding, transformer);
-        }
+        return getFileContent(resource, encoding);
     }
 
     public String getTemplateContent(String name)
@@ -306,57 +302,6 @@ public class Parser implements Cloneable {
         return content;
     }
 
-    private String getTransformedContent(String templateName, Parsed parsed, URL resource, String encoding, TemplateTransformer transformer)
-    throws TemplateException {
-        assert resource != null;
-
-        if (null == encoding) {
-            encoding = RifeConfig.template().getDefaultEncoding();
-        }
-
-        var result = new ByteArrayOutputStream();
-
-        // transform the content
-        transformer.setResourceFinder(templateFactory_.getResourceFinder());
-        var dependencies = transformer.transform(templateName, resource, result, encoding);
-        // get the dependencies and their modification times
-        if (dependencies != null &&
-            dependencies.size() > 0) {
-            long modification_time = 0;
-            for (var dependency_resource : dependencies) {
-                try {
-                    modification_time = transformer.getResourceFinder().getModificationTime(dependency_resource);
-                } catch (ResourceFinderErrorException e) {
-                    // if there was trouble in obtaining the modification time, just set
-                    // it to 0 so that the dependency will always be outdated
-                    modification_time = 0;
-                }
-
-                if (modification_time > 0) {
-                    parsed.addDependency(dependency_resource, modification_time);
-                }
-            }
-        }
-        // set the modification state so that different filter configurations
-        // will reload the template, not only modifications to the dependencies
-        parsed.setModificationState(transformer.getState());
-
-        // convert the result to a StringBuilder
-        try {
-            if (null == encoding) {
-                if (null == transformer.getEncoding()) {
-                    return result.toString();
-                } else {
-                    return result.toString(transformer.getEncoding());
-                }
-            } else {
-                return result.toString(encoding);
-            }
-        } catch (UnsupportedEncodingException e) {
-            throw new TransformedResultConversionException(resource.toExternalForm(), e);
-        }
-    }
-
     public static long getModificationTime(ResourceFinder resourceFinder, URL resource)
     throws TemplateException {
         if (null == resource) throw new IllegalArgumentException("resource can't be null.");
@@ -372,7 +317,7 @@ public class Parser implements Cloneable {
         return modification_time;
     }
 
-    private String replaceIncludeTags(Parsed parsed, String content, Stack<String> previousIncludes, String encoding, TemplateTransformer transformer)
+    private String replaceIncludeTags(Parsed parsed, String content, Stack<String> previousIncludes, String encoding)
     throws TemplateException {
         assert parsed != null;
         assert content != null;
@@ -386,7 +331,7 @@ public class Parser implements Cloneable {
         parser.setBuildParseTree(true);
 
         var walker = new ParseTreeWalker();
-        var listener = new AntlrIncludeListener(parsed, content, previousIncludes, encoding, transformer);
+        var listener = new AntlrIncludeListener(parsed, content, previousIncludes, encoding);
         walker.walk(listener, parser.document());
 
         return listener.getContent();
@@ -417,15 +362,13 @@ public class Parser implements Cloneable {
         final String content_;
         final Stack<String> previousIncludes_;
         final String encoding_;
-        final TemplateTransformer transformer_;
         final StringBuilder result_ = new StringBuilder();
 
-        AntlrIncludeListener(Parsed parsed, String content, Stack<String> previousIncludes, String encoding, TemplateTransformer transformer) {
+        AntlrIncludeListener(Parsed parsed, String content, Stack<String> previousIncludes, String encoding) {
             parsed_ = parsed;
             content_ = content;
             previousIncludes_ = previousIncludes;
             encoding_ = encoding;
-            transformer_ = transformer;
         }
 
         String getContent() {
@@ -472,9 +415,9 @@ public class Parser implements Cloneable {
             }
 
             // parse the included template's include tags too
-            var included_template_content = include_parser.getContent(included_template_name, parsed_, included_template_parsed.getResource(), encoding_, transformer_);
+            var included_template_content = include_parser.getContent(included_template_name, parsed_, included_template_parsed.getResource(), encoding_);
             previousIncludes_.push(included_template_parsed.getFullClassName());
-            var replaced_content = replaceIncludeTags(included_template_parsed, included_template_content, previousIncludes_, encoding_, transformer_);
+            var replaced_content = replaceIncludeTags(included_template_parsed, included_template_content, previousIncludes_, encoding_);
             previousIncludes_.pop();
 
             // retain the link to this include file for optional later modification time checking

@@ -27,7 +27,7 @@ class TemplateClassLoader extends ClassLoader {
         templateFactory_ = templateFactory;
     }
 
-    protected Class loadClass(String classname, boolean resolve, String encoding, TemplateTransformer transformer)
+    protected Class loadClass(String classname, boolean resolve, String encoding)
     throws ClassNotFoundException {
         assert classname != null;
 
@@ -42,12 +42,12 @@ class TemplateClassLoader extends ClassLoader {
             if (RifeConfig.template().getAutoReload()) {
                 // if the template was modified, don't use the cached class
                 // otherwise, just take the previous template class
-                if (isTemplateModified(c, transformer)) {
+                if (isTemplateModified(c)) {
                     var new_classloader = new TemplateClassLoader(templateFactory_, this.getParent());
-                    // register the new classloader as the default templatefactory's
+                    // register the new classloader as the default template factory's
                     // classloader
                     templateFactory_.setClassLoader(new_classloader);
-                    return new_classloader.loadClass(classname, resolve, encoding, transformer);
+                    return new_classloader.loadClass(classname, resolve, encoding);
                 }
             }
         }
@@ -100,7 +100,7 @@ class TemplateClassLoader extends ClassLoader {
                 Template.class.isAssignableFrom(c)) {
                 // verify if the template in the classpath has been updated
                 if (RifeConfig.template().getAutoReload() &&
-                    isTemplateModified(c, transformer)) {
+                    isTemplateModified(c)) {
                     c = null;
                 }
             }
@@ -118,7 +118,7 @@ class TemplateClassLoader extends ClassLoader {
                     // reuse the existing class if it has already been defined
                     c = findLoadedClass(classname);
                     if (null == c) {
-                        var raw = compileTemplate(classname, encoding, transformer);
+                        var raw = compileTemplate(classname, encoding);
 
                         // define the bytes of the class for this classloader
                         c = defineClass(classname, raw, 0, raw.length);
@@ -137,7 +137,7 @@ class TemplateClassLoader extends ClassLoader {
         return c;
     }
 
-    private byte[] compileTemplate(String classname, String encoding, TemplateTransformer transformer)
+    private byte[] compileTemplate(String classname, String encoding)
     throws ClassNotFoundException {
         assert classname != null;
 
@@ -153,7 +153,7 @@ class TemplateClassLoader extends ClassLoader {
 
         // parse the template
         try {
-            templateFactory_.getParser().parse(template_parsed, encoding, transformer);
+            templateFactory_.getParser().parse(template_parsed, encoding);
         } catch (TemplateException e) {
             throw new ClassNotFoundException("Error while parsing template: '" + classname + "'.", e);
         }
@@ -193,15 +193,12 @@ class TemplateClassLoader extends ClassLoader {
         return byte_code;
     }
 
-    private boolean isTemplateModified(Class c, TemplateTransformer transformer) {
+    private boolean isTemplateModified(Class c) {
         assert c != null;
 
         var is_modified = true;
         Method is_modified_method = null;
         String modification_state = null;
-        if (transformer != null) {
-            modification_state = transformer.getState();
-        }
         try {
             is_modified_method = c.getMethod("isModified", ResourceFinder.class, String.class);
             is_modified = (Boolean) is_modified_method.invoke(null, new Object[]{templateFactory_.getResourceFinder(), modification_state});

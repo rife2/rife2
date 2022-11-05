@@ -34,7 +34,7 @@ public class TestParser {
     @Test
     public void testTemplatePackage() {
         try {
-            Parsed template_parsed = parser_.parse("test_package.noblocks_in", null, null);
+            Parsed template_parsed = parser_.parse("test_package.noblocks_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
             assertNotNull(template_parsed.getContent());
             assertEquals(template_parsed.getContent().countParts(), 1);
@@ -47,7 +47,7 @@ public class TestParser {
     @Test
     public void testParseDefaultValues() {
         try {
-            Parsed template_parsed = parser_.parse("defaultvalues_in", null, null);
+            Parsed template_parsed = parser_.parse("defaultvalues_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -72,7 +72,7 @@ public class TestParser {
     @Test
     public void testParseComments() {
         try {
-            Parsed template_parsed = parser_.parse("comments_in", null, null);
+            Parsed template_parsed = parser_.parse("comments_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -109,7 +109,7 @@ public class TestParser {
     @Test
     public void testParseNoBlocks() {
         try {
-            Parsed template_parsed = parser_.parse("noblocks_in", null, null);
+            Parsed template_parsed = parser_.parse("noblocks_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
             assertNotNull(template_parsed.getContent());
             assertEquals(template_parsed.getContent().countParts(), 1);
@@ -122,7 +122,7 @@ public class TestParser {
     @Test
     public void testParseBlocksSuccessive() {
         try {
-            Parsed template_parsed = parser_.parse("blocks_successive_in", null, null);
+            Parsed template_parsed = parser_.parse("blocks_successive_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -164,7 +164,7 @@ public class TestParser {
     @Test
     public void testParseBlocksSpaced() {
         try {
-            Parsed template_parsed = parser_.parse("blocks_spaced_in", null, null);
+            Parsed template_parsed = parser_.parse("blocks_spaced_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -179,7 +179,7 @@ public class TestParser {
             assertEquals(template_parsed.getBlock("BLOCK2").getPart(0).getData(), parser_.getTemplateContent("blocks_spaced_out_block2"));
             assertEquals(template_parsed.getBlock("BLOCK3").getPart(0).getData(), parser_.getTemplateContent("blocks_spaced_out_block3"));
         } catch (TemplateException e) {
-            assertFalse(true, ExceptionUtils.getExceptionStackTrace(e));
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
     }
 
@@ -206,7 +206,7 @@ public class TestParser {
     @Test
     public void testParseBlocksExtremities() {
         try {
-            Parsed template_parsed = parser_.parse("blocks_extremities_in", null, null);
+            Parsed template_parsed = parser_.parse("blocks_extremities_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -248,7 +248,7 @@ public class TestParser {
     @Test
     public void testParseBlockvalues() {
         try {
-            Parsed template_parsed = parser_.parse("blockvalues_in", null, null);
+            Parsed template_parsed = parser_.parse("blockvalues_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -298,7 +298,7 @@ public class TestParser {
     @Test
     public void testParseBlockappends() {
         try {
-            Parsed template_parsed = parser_.parse("blockappends_in", null, null);
+            Parsed template_parsed = parser_.parse("blockappends_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK"));
@@ -350,7 +350,7 @@ public class TestParser {
     @Test
     public void testParseBlocksNested() {
         try {
-            Parsed template_parsed = parser_.parse("blocks_nested_in", null, null);
+            Parsed template_parsed = parser_.parse("blocks_nested_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -401,7 +401,7 @@ public class TestParser {
             assertTrue("DMn0".hashCode() != "FMmO".hashCode());
             assertTrue("DMn0".hashCode() != "HNMn".hashCode());
             assertTrue("FMmO".hashCode() != "HNMn".hashCode());
-            Parsed template_parsed = parser_.parse("blocks_stringconflicts_in", null, null);
+            Parsed template_parsed = parser_.parse("blocks_stringconflicts_in", null);
             assertEquals(template_parsed.getBlocks().size(), 7);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("DMn0"));
@@ -432,7 +432,7 @@ public class TestParser {
     @Test
     public void testParseValuesLong() {
         try {
-            Parsed template_parsed = parser_.parse("values_long_in", null, null);
+            Parsed template_parsed = parser_.parse("values_long_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -499,7 +499,7 @@ public class TestParser {
     @Test
     public void testParseValuesShort() {
         try {
-            Parsed template_parsed = parser_.parse("values_short_in", null, null);
+            Parsed template_parsed = parser_.parse("values_short_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -557,7 +557,7 @@ public class TestParser {
     @Test
     public void testParseIncludes() {
         try {
-            Parsed template_parsed = parser_.parse("includes_master_in", null, null);
+            Parsed template_parsed = parser_.parse("includes_master_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
             assertNotNull(template_parsed.getContent());
             assertEquals(template_parsed.getContent().countParts(), 1);
@@ -570,7 +570,7 @@ public class TestParser {
     @Test
     public void testParseIncludesMultiple() {
         try {
-            Parsed template_parsed = parser_.parse("includes_multiple_in", null, null);
+            Parsed template_parsed = parser_.parse("includes_multiple_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
             assertNotNull(template_parsed.getContent());
             assertEquals(template_parsed.getContent().countParts(), 1);
@@ -621,10 +621,10 @@ public class TestParser {
     @Test
     public void testEncodingLatinHtml() {
         try {
-            Parsed template_ascii = TemplateFactory.HTML.getParser().parse("encoding_latin_ascii", "US-ASCII", null);
-            Parsed template_utf_16le = TemplateFactory.HTML.getParser().parse("encoding_latin_utf16le", "UTF-16LE", null);
-            Parsed template_ascii_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin_ascii", "UTF-16LE", null);
-            Parsed template_utf_16le_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin_utf16le", "US-ASCII", null);
+            Parsed template_ascii = TemplateFactory.HTML.getParser().parse("encoding_latin_ascii", "US-ASCII");
+            Parsed template_utf_16le = TemplateFactory.HTML.getParser().parse("encoding_latin_utf16le", "UTF-16LE");
+            Parsed template_ascii_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin_ascii", "UTF-16LE");
+            Parsed template_utf_16le_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin_utf16le", "US-ASCII");
 
             assertEquals(template_ascii.getContent().getPart(0).getData(), template_utf_16le.getContent().getPart(0).getData());
             assertNotEquals(template_utf_16le.getContent().getPart(0).getData(), template_utf_16le_wrong.getContent().getPart(0).getData());
@@ -637,10 +637,10 @@ public class TestParser {
     @Test
     public void testEncodingLatinTxt() {
         try {
-            Parsed template_ascii = TemplateFactory.TXT.getParser().parse("encoding_latin_ascii", "US-ASCII", null);
-            Parsed template_utf_16le = TemplateFactory.TXT.getParser().parse("encoding_latin_utf16le", "UTF-16LE", null);
-            Parsed template_ascii_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin_ascii", "UTF-16LE", null);
-            Parsed template_utf_16le_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin_utf16le", "US-ASCII", null);
+            Parsed template_ascii = TemplateFactory.TXT.getParser().parse("encoding_latin_ascii", "US-ASCII");
+            Parsed template_utf_16le = TemplateFactory.TXT.getParser().parse("encoding_latin_utf16le", "UTF-16LE");
+            Parsed template_ascii_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin_ascii", "UTF-16LE");
+            Parsed template_utf_16le_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin_utf16le", "US-ASCII");
 
             assertEquals(template_ascii.getContent().getPart(0).getData(), template_utf_16le.getContent().getPart(0).getData());
             assertNotEquals(template_utf_16le.getContent().getPart(0).getData(), template_utf_16le_wrong.getContent().getPart(0).getData());
@@ -653,10 +653,10 @@ public class TestParser {
     @Test
     public void testEncodingLatin1Html() {
         try {
-            Parsed template_iso8859_1 = TemplateFactory.HTML.getParser().parse("encoding_latin1_iso88591", "ISO8859-1", null);
-            Parsed template_utf_8 = TemplateFactory.HTML.getParser().parse("encoding_latin1_utf8", "UTF-8", null);
-            Parsed template_iso8859_1_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin1_iso88591", "UTF-8", null);
-            Parsed template_utf_8_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin1_utf8", "ISO8859-1", null);
+            Parsed template_iso8859_1 = TemplateFactory.HTML.getParser().parse("encoding_latin1_iso88591", "ISO8859-1");
+            Parsed template_utf_8 = TemplateFactory.HTML.getParser().parse("encoding_latin1_utf8", "UTF-8");
+            Parsed template_iso8859_1_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin1_iso88591", "UTF-8");
+            Parsed template_utf_8_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin1_utf8", "ISO8859-1");
 
             assertEquals(template_iso8859_1.getContent().getPart(0).getData(), template_utf_8.getContent().getPart(0).getData());
             assertNotEquals(template_iso8859_1.getContent().getPart(0).getData(), template_iso8859_1_wrong.getContent().getPart(0).getData());
@@ -669,10 +669,10 @@ public class TestParser {
     @Test
     public void testEncodingLatin1Txt() {
         try {
-            Parsed template_iso8859_1 = TemplateFactory.TXT.getParser().parse("encoding_latin1_iso88591", "ISO8859-1", null);
-            Parsed template_utf_8 = TemplateFactory.TXT.getParser().parse("encoding_latin1_utf8", "UTF-8", null);
-            Parsed template_iso8859_1_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin1_iso88591", "UTF-8", null);
-            Parsed template_utf_8_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin1_utf8", "ISO8859-1", null);
+            Parsed template_iso8859_1 = TemplateFactory.TXT.getParser().parse("encoding_latin1_iso88591", "ISO8859-1");
+            Parsed template_utf_8 = TemplateFactory.TXT.getParser().parse("encoding_latin1_utf8", "UTF-8");
+            Parsed template_iso8859_1_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin1_iso88591", "UTF-8");
+            Parsed template_utf_8_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin1_utf8", "ISO8859-1");
 
             assertEquals(template_iso8859_1.getContent().getPart(0).getData(), template_utf_8.getContent().getPart(0).getData());
             assertNotEquals(template_iso8859_1.getContent().getPart(0).getData(), template_iso8859_1_wrong.getContent().getPart(0).getData());
@@ -685,10 +685,10 @@ public class TestParser {
     @Test
     public void testEncodingNonLatinHtml() {
         try {
-            Parsed template_utf_8 = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf8", "UTF-8", null);
-            Parsed template_utf_8_wrong = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf8", "ISO8859-1", null);
-            Parsed template_utf_16be = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf16be", "UTF-16BE", null);
-            Parsed template_utf_16be_wrong = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf16be", "UTF-16LE", null);
+            Parsed template_utf_8 = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf8", "UTF-8");
+            Parsed template_utf_8_wrong = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf8", "ISO8859-1");
+            Parsed template_utf_16be = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf16be", "UTF-16BE");
+            Parsed template_utf_16be_wrong = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf16be", "UTF-16LE");
 
             assertEquals(template_utf_8.getContent().getPart(0).getData(), template_utf_16be.getContent().getPart(0).getData());
             assertNotEquals(template_utf_8.getContent().getPart(0).getData(), template_utf_8_wrong.getContent().getPart(0).getData());
@@ -701,10 +701,10 @@ public class TestParser {
     @Test
     public void testEncodingNonLatinTxt() {
         try {
-            Parsed template_utf_8 = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "UTF-8", null);
-            Parsed template_utf_8_wrong = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "ISO8859-1", null);
-            Parsed template_utf_16be = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf16be", "UTF-16BE", null);
-            Parsed template_utf_16be_wrong = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf16be", "UTF-16LE", null);
+            Parsed template_utf_8 = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "UTF-8");
+            Parsed template_utf_8_wrong = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "ISO8859-1");
+            Parsed template_utf_16be = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf16be", "UTF-16BE");
+            Parsed template_utf_16be_wrong = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf16be", "UTF-16LE");
 
             assertEquals(template_utf_8.getContent().getPart(0).getData(), template_utf_16be.getContent().getPart(0).getData());
             assertNotEquals(template_utf_8.getContent().getPart(0).getData(), template_utf_8_wrong.getContent().getPart(0).getData());
@@ -728,12 +728,12 @@ public class TestParser {
             FilteredTags filtered_blocks = null;
 
             parser = new Parser(TemplateFactory.HTML, "html", ".html", (Pattern[]) null, (Pattern[]) null);
-            template_parsed = parser.parse("blocks_filtered_in", null, null);
+            template_parsed = parser.parse("blocks_filtered_in", null);
             filtered_blocks_map = template_parsed.getFilteredBlocksMap();
             assertNull(filtered_blocks_map);
 
             parser = new Parser(TemplateFactory.HTML, "html", ".html", new Pattern[]{Pattern.compile(filter1), Pattern.compile(filter2), Pattern.compile(filter3), Pattern.compile(filter4)}, null);
-            template_parsed = parser.parse("blocks_filtered_in", null, null);
+            template_parsed = parser.parse("blocks_filtered_in", null);
             filtered_blocks_map = template_parsed.getFilteredBlocksMap();
             assertNotNull(filtered_blocks_map);
 
@@ -801,7 +801,7 @@ public class TestParser {
             assertTrue(filter3_got_block1 && filter3_got_block2);
 
             parser = new Parser(TemplateFactory.HTML, "html", ".html", new Pattern[]{Pattern.compile(filter4), Pattern.compile(filter1), Pattern.compile(filter2), Pattern.compile(filter3)}, null);
-            template_parsed = parser.parse("blocks_filtered_in", null, null);
+            template_parsed = parser.parse("blocks_filtered_in", null);
             filtered_blocks_map = template_parsed.getFilteredBlocksMap();
             assertNotNull(filtered_blocks_map);
 
@@ -901,12 +901,12 @@ public class TestParser {
             FilteredTags filtered_values = null;
 
             parser = new Parser(TemplateFactory.HTML, "html", ".html", (Pattern[]) null, (Pattern[]) null);
-            template_parsed = parser.parse("values_filtered_in", null, null);
+            template_parsed = parser.parse("values_filtered_in", null);
             filtered_values_map = template_parsed.getFilteredValuesMap();
             assertNull(filtered_values_map);
 
             parser = new Parser(TemplateFactory.HTML, "html", ".html", null, new Pattern[]{Pattern.compile(filter1), Pattern.compile(filter2), Pattern.compile(filter3), Pattern.compile(filter4)});
-            template_parsed = parser.parse("values_filtered_in", null, null);
+            template_parsed = parser.parse("values_filtered_in", null);
             filtered_values_map = template_parsed.getFilteredValuesMap();
             assertNotNull(filtered_values_map);
 
@@ -974,7 +974,7 @@ public class TestParser {
             assertTrue(filter3_got_value1 && filter3_got_value2);
 
             parser = new Parser(TemplateFactory.HTML, "html", ".html", null, new Pattern[]{Pattern.compile(filter4), Pattern.compile(filter1), Pattern.compile(filter2), Pattern.compile(filter3)});
-            template_parsed = parser.parse("values_filtered_in", null, null);
+            template_parsed = parser.parse("values_filtered_in", null);
             filtered_values_map = template_parsed.getFilteredValuesMap();
             assertNotNull(filtered_values_map);
 
@@ -1063,7 +1063,7 @@ public class TestParser {
     @Test
     public void testErrorTerminatingUnopenedValue() {
         try {
-            parser_.parse("error_terminating_unopened_value", null, null);
+            parser_.parse("error_terminating_unopened_value", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("<!--v avalue/--><!--/v-->", e.getErrorLocation().lineContent());
@@ -1079,7 +1079,7 @@ public class TestParser {
     @Test
     public void testErrorTerminatingUnopenedBlock() {
         try {
-            parser_.parse("error_terminating_unopened_block", null, null);
+            parser_.parse("error_terminating_unopened_block", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("<!--/b-->", e.getErrorLocation().lineContent());
@@ -1095,7 +1095,7 @@ public class TestParser {
     @Test
     public void testErrorTerminatingUnopenedBlockvalue() {
         try {
-            parser_.parse("error_terminating_unopened_blockvalue", null, null);
+            parser_.parse("error_terminating_unopened_blockvalue", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("<!--/bv-->", e.getErrorLocation().lineContent());
@@ -1111,7 +1111,7 @@ public class TestParser {
     @Test
     public void testErrorIncludeNotFound() {
         try {
-            parser_.parse("error_include_not_found", null, null);
+            parser_.parse("error_include_not_found", null);
             fail();
         } catch (IncludeNotFoundException e) {
             assertEquals("\t\t<!--i error_missing_include/-->", e.getErrorLocation().lineContent());
@@ -1128,7 +1128,7 @@ public class TestParser {
     @Test
     public void testErrorCircularIncludes() {
         try {
-            parser_.parse("error_circular_includes_master", null, null);
+            parser_.parse("error_circular_includes_master", null);
             fail();
         } catch (CircularIncludesException e) {
             assertEquals("<!--i error_circular_includes_master/-->", e.getErrorLocation().lineContent());
@@ -1146,7 +1146,7 @@ public class TestParser {
     @Test
     public void testErrorIncludeBadlyTerminated() {
         try {
-            parser_.parse("error_include_badly_terminated", null, null);
+            parser_.parse("error_include_badly_terminated", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("		<!--i error_badly_terminated_include' erzer /-->", e.getErrorLocation().lineContent());
@@ -1162,7 +1162,7 @@ public class TestParser {
     @Test
     public void testErrorValueTagNotTerminated() {
         try {
-            parser_.parse("error_value_tag_not_terminated", null, null);
+            parser_.parse("error_value_tag_not_terminated", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("</html>", e.getErrorLocation().lineContent());
@@ -1178,7 +1178,7 @@ public class TestParser {
     @Test
     public void testErrorValueShortBeginTagBadlyTerminated() {
         try {
-            parser_.parse("error_valueshort_begin_badly_terminated", null, null);
+            parser_.parse("error_valueshort_begin_badly_terminated", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("		<!--v VALUE1'   eff  /-->", e.getErrorLocation().lineContent());
@@ -1194,7 +1194,7 @@ public class TestParser {
     @Test
     public void testErrorValueLongBeginTagBadlyTerminated() {
         try {
-            parser_.parse("error_valuelong_begin_badly_terminated", null, null);
+            parser_.parse("error_valuelong_begin_badly_terminated", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("		<!--v VALUE1'   eff  --><!--/v-->", e.getErrorLocation().lineContent());
@@ -1210,7 +1210,7 @@ public class TestParser {
     @Test
     public void testErrorUnsupportedNestedValueTag() {
         try {
-            parser_.parse("error_unsupported_nested_value_tag", null, null);
+            parser_.parse("error_unsupported_nested_value_tag", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("		<!--v VALUE2/-->", e.getErrorLocation().lineContent());
@@ -1226,7 +1226,7 @@ public class TestParser {
     @Test
     public void testErrorValueBeginTagNotEnded() {
         try {
-            parser_.parse("error_value_begin_tag_not_ended", null, null);
+            parser_.parse("error_value_begin_tag_not_ended", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("" +
@@ -1243,7 +1243,7 @@ public class TestParser {
     @Test
     public void testErrorCommentMissingTerminationTag() {
         try {
-            parser_.parse("error_comment_missing_termination_tag", null, null);
+            parser_.parse("error_comment_missing_termination_tag", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("</html>", e.getErrorLocation().lineContent());
@@ -1259,7 +1259,7 @@ public class TestParser {
     @Test
     public void testErrorBlockBeginTagNotEnded() {
         try {
-            parser_.parse("error_block_begin_tag_not_ended", null, null);
+            parser_.parse("error_block_begin_tag_not_ended", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("\t</body>", e.getErrorLocation().lineContent());
@@ -1275,7 +1275,7 @@ public class TestParser {
     @Test
     public void testErrorBlockMissingTerminationTag() {
         try {
-            parser_.parse("error_block_missing_termination_tag", null, null);
+            parser_.parse("error_block_missing_termination_tag", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("</html>", e.getErrorLocation().lineContent());
@@ -1291,7 +1291,7 @@ public class TestParser {
     @Test
     public void testErrorBlockMismatchedTerminationTag1() {
         try {
-            parser_.parse("error_block_mismatched_termination_tag1", null, null);
+            parser_.parse("error_block_mismatched_termination_tag1", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("		<!--b BLOCK1--><!--/bv-->", e.getErrorLocation().lineContent());
@@ -1307,7 +1307,7 @@ public class TestParser {
     @Test
     public void testErrorBlockMismatchedTerminationTag2() {
         try {
-            parser_.parse("error_block_mismatched_termination_tag2", null, null);
+            parser_.parse("error_block_mismatched_termination_tag2", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("		<!--bv BLOCK2--><!--/b-->", e.getErrorLocation().lineContent());
@@ -1323,7 +1323,7 @@ public class TestParser {
     @Test
     public void testErrorBlockMismatchedTerminationTag3() {
         try {
-            parser_.parse("error_block_mismatched_termination_tag3", null, null);
+            parser_.parse("error_block_mismatched_termination_tag3", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("		<!--bv BLOCK2-->", e.getErrorLocation().lineContent());
@@ -1339,7 +1339,7 @@ public class TestParser {
     @Test
     public void testErrorBlockBeginTagBadlyTerminated() {
         try {
-            parser_.parse("error_block_begin_tag_badly_terminated", null, null);
+            parser_.parse("error_block_begin_tag_badly_terminated", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("		<!--b BLOCK1' dfsdf -->  <!--/b-->", e.getErrorLocation().lineContent());
@@ -1355,7 +1355,7 @@ public class TestParser {
     @Test
     public void testErrorBlockValueBeginTagBadlyTerminated() {
         try {
-            parser_.parse("error_blockvalue_begin_tag_badly_terminated", null, null);
+            parser_.parse("error_blockvalue_begin_tag_badly_terminated", null);
             fail();
         } catch (SyntaxErrorException e) {
             assertEquals("		<!--bv BLOCK1' dfsdf -->  <!--/b-->", e.getErrorLocation().lineContent());
@@ -1371,7 +1371,7 @@ public class TestParser {
     @Test
     public void testErrorUnsupportedEncoding() {
         try {
-            TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "THIS_ENCODING_DOESNT_EXIST", null);
+            TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "THIS_ENCODING_DOESNT_EXIST");
             fail();
         } catch (GetContentErrorException e) {
             assertTrue(e.getCause() instanceof rife.resources.exceptions.ResourceFinderErrorException);

@@ -1075,7 +1075,7 @@ public interface Template extends Cloneable {
 //    public List<String> evaluateExpressionTags(String id);
 
     /**
-     * Evalutes all values in this template with ID's of the form "<code>render:<em>class</em></code>"
+     * Evaluates all values in this template with ID's of the form "<code>render:<em>class</em></code>"
      * or "<code>render:<em>class</em>:<em>differentiator</em></code><em>r</em>",
      * where "<code>class</code>" is the fully-qualified name of a class which
      * extends {@link ValueRenderer}, the result of calling {@link
@@ -1232,6 +1232,32 @@ public interface Template extends Cloneable {
      * @since 1.0
      */
     long getModificationTime();
+
+    /**
+     * Creates a new template, using the same factory, name and encoding as
+     * those that were used to create this template instance.
+     *
+     * @return a new template instance with the same parameters as this one
+     * @since 2.0
+     */
+    Template createNewInstance();
+
+    /**
+     * Returns the unique identifier of the factory that was used to instantiate
+     * this template.
+     *
+     * @return the unique identifier of this template's factory
+     * @since 2.0
+     */
+    String getFactoryIdentifier();
+
+    /**
+     * Returns the encoding of this the content of this template.
+     *
+     * @return the encoding that was used when instantiating the template
+     * @since 2.0
+     */
+    String getEncoding();
 
     /**
      * Returns this template's {@linkplain BeanHandler bean handler}. The bean

@@ -15,6 +15,8 @@ import java.net.URL;
 import java.util.*;
 
 public abstract class AbstractTemplate implements Template {
+    protected String factoryIdentifier_ = null;
+    protected String encoding_ = null;
     protected TemplateInitializer initializer_ = null;
     protected Map<String, InternalString> fixedValues_ = new HashMap<>();
     protected Map<String, InternalValue> constructedValues_ = new HashMap<>();
@@ -738,6 +740,26 @@ public abstract class AbstractTemplate implements Template {
     }
 
     protected abstract boolean appendDefaultValueInternalForm(String id, InternalValue result);
+
+    public Template createNewInstance() {
+        return TemplateFactory.getFactory(factoryIdentifier_).get(getFullName(), encoding_);
+    }
+
+    public final String getFactoryIdentifier() {
+        return factoryIdentifier_;
+    }
+
+    final void setFactoryIdentifier(String identifier) {
+        factoryIdentifier_ = identifier;
+    }
+
+    public final String getEncoding() {
+        return encoding_;
+    }
+
+    final void setEncoding(String encoding) {
+        encoding_ = encoding;
+    }
 
     public final BeanHandler getBeanHandler() {
         return beanHandler_;

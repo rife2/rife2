@@ -17,6 +17,12 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    main {
+        runtimeClasspath = files(file("src/main/resources"), runtimeClasspath);
+    }
+}
+
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
     testImplementation("org.jsoup:jsoup:1.15.3")

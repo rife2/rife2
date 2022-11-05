@@ -59,6 +59,10 @@ public class TestTemplateFactory {
     @Test
     public void testTemplateHtml() {
         var template = TemplateFactory.HTML.get("templates.testhtml_in");
+        assertEquals(template.getFactoryIdentifier(), TemplateFactory.HTML.getIdentifier());
+        assertEquals(template.getFullName(), "templates.testhtml_in");
+        assertNull(template.getEncoding());
+
         template.setValue("first", "first1");
         template.setValue("second", "second1");
         template.appendBlock("lines", "line");
@@ -74,6 +78,10 @@ public class TestTemplateFactory {
     @Test
     public void testTemplateTxt() {
         var template = TemplateFactory.TXT.get("templates.testtext_in");
+        assertEquals(template.getFactoryIdentifier(), TemplateFactory.TXT.getIdentifier());
+        assertEquals(template.getFullName(), "templates.testtext_in");
+        assertNull(template.getEncoding());
+
         template.setValue("first", "first1");
         template.setValue("second", "second1");
         template.appendBlock("lines", "line");
@@ -84,6 +92,26 @@ public class TestTemplateFactory {
         template.setValue("second", "second3");
         template.appendBlock("lines", "line");
         assertEquals(template.getContent(), TemplateFactory.TXT.getParser().getTemplateContent("templates.testtext_out"));
+    }
+
+    @Test
+    public void testTemplateHtmlCreateNewInstance() {
+        var template = TemplateFactory.HTML.get("templates.testhtml_in");
+        var instance = template.createNewInstance();
+
+        assertEquals(template.getFactoryIdentifier(), instance.getFactoryIdentifier());
+        assertEquals(template.getFullName(), instance.getFullName());
+        assertEquals(template.getEncoding(), instance.getEncoding());
+    }
+
+    @Test
+    public void testTemplateTxtCreateNewInstance() {
+        var template = TemplateFactory.TXT.get("templates.testtext_in");
+        var instance = template.createNewInstance();
+
+        assertEquals(template.getFactoryIdentifier(), instance.getFactoryIdentifier());
+        assertEquals(template.getFullName(), instance.getFullName());
+        assertEquals(template.getEncoding(), instance.getEncoding());
     }
 
     @Test
@@ -139,7 +167,7 @@ public class TestTemplateFactory {
     @Test
     public void testTemplateInitializerHtml() {
         var factory = TemplateFactory.HTML;
-        var template = factory.get("testhtml_in", null, null);
+        var template = factory.get("testhtml_in", null);
         assertNotEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("testhtml_out"));
 
         factory.setInitializer(template1 -> {
@@ -153,7 +181,7 @@ public class TestTemplateFactory {
             template1.setValue("second", "second3");
             template1.appendBlock("lines", "line");
         });
-        template = factory.get("testhtml_in", null, null);
+        template = factory.get("testhtml_in", null);
         assertEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("testhtml_out"));
         template.setValue("first", "otherfirst1");
         template.setValue("second", "othersecond1");
@@ -168,7 +196,7 @@ public class TestTemplateFactory {
     @Test
     public void testTemplateInitializerTxt() {
         var factory = TemplateFactory.TXT;
-        var template = factory.get("testtext_in", null, null);
+        var template = factory.get("testtext_in", null);
         assertNotEquals(template.getContent(), TemplateFactory.TXT.getParser().getTemplateContent("testtext_out"));
 
         factory.setInitializer(template1 -> {
@@ -182,7 +210,7 @@ public class TestTemplateFactory {
             template1.setValue("second", "second3");
             template1.appendBlock("lines", "line");
         });
-        template = factory.get("testtext_in", null, null);
+        template = factory.get("testtext_in", null);
         assertEquals(template.getContent(), TemplateFactory.TXT.getParser().getTemplateContent("testtext_out"));
         template.setValue("first", "otherfirst1");
         template.setValue("second", "othersecond1");

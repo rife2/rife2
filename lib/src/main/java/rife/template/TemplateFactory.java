@@ -197,26 +197,18 @@ public class TemplateFactory extends EnumClass<String> {
 
     public Template get(String name)
     throws TemplateException {
-        return get(name, null, null);
-    }
-
-    public Template get(String name, TemplateTransformer transformer)
-    throws TemplateException {
-        return get(name, null, transformer);
+        return get(name, null);
     }
 
     public Template get(String name, String encoding)
-    throws TemplateException {
-        return get(name, encoding, null);
-    }
-
-    public Template get(String name, String encoding, TemplateTransformer transformer)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         try {
-            var template = (AbstractTemplate) parse(name, encoding, transformer).getDeclaredConstructor().newInstance();
+            var template = (AbstractTemplate) parse(name, encoding).getDeclaredConstructor().newInstance();
+            template.setFactoryIdentifier(getIdentifier());
+            template.setEncoding(encoding);
             template.setBeanHandler(beanHandler_);
             template.setEncoder(encoder_);
             template.setInitializer(initializer_);
@@ -254,13 +246,13 @@ public class TemplateFactory extends EnumClass<String> {
         }
     }
 
-    public Class parse(String name, String encoding, TemplateTransformer transformer)
+    public Class parse(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
         try {
-            return getClassLoader().loadClass(parser_.getPackage() + parser_.escapeClassname(name), false, encoding, transformer);
+            return getClassLoader().loadClass(parser_.getPackage() + parser_.escapeClassname(name), false, encoding);
         } catch (ClassNotFoundException e) {
             throw new TemplateNotFoundException(name, e);
         }

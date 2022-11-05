@@ -140,7 +140,7 @@ public class Login implements Element, SessionAttributes {
 
         initializeLogin();
 
-        final Template template = (Template) template_.clone();
+        final Template template = template_.createNewInstance();
         entrance(template);
 
         // check if a cookie for remember id is provided

@@ -36,7 +36,7 @@ public class Logout implements Element {
         if (template_ == null) {
             template = null;
         } else {
-            template = (Template) template_.clone();
+            template = template_.createNewInstance();
         }
 
         entrance(template);
