@@ -8,6 +8,7 @@ import rife.authentication.Credentials;
 import rife.authentication.SessionValidator;
 import rife.authentication.credentials.RoleUser;
 import rife.authentication.credentialsmanagers.RoleUserIdentity;
+import rife.engine.Context;
 import rife.engine.Route;
 
 public class AuthenticationConfig {
@@ -69,6 +70,10 @@ public class AuthenticationConfig {
     public AuthenticationConfig identityAttributeName(String identityAttributeName) {
         identityAttributeName_ = identityAttributeName;
         return this;
+    }
+
+    public RoleUserIdentity identityAttribute(Context c) {
+        return (RoleUserIdentity) c.attribute(identityAttributeName());
     }
 
     public String authCookieName() {

@@ -82,6 +82,8 @@ public class Authenticated extends Identified implements SessionAttributes {
                     else {
                         if (session_manager.continueSession(auth_id)) {
                             c.attribute(auth_attribute, true);
+                            setIdentityAttribute(c);
+
                             c.next();
                         }
                     }

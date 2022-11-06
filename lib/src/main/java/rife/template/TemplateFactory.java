@@ -222,7 +222,6 @@ public class TemplateFactory extends EnumClass<String> {
                     var bundle = Localization.getResourceBundle(bundle_name);
                     if (bundle != null) {
                         default_bundles.add(bundle);
-                        continue;
                     }
                 }
                 template.setDefaultResourceBundles(default_bundles);

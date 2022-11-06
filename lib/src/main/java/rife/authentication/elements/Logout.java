@@ -4,7 +4,6 @@
  */
 package rife.authentication.elements;
 
-import jakarta.servlet.http.Cookie;
 import rife.authentication.elements.exceptions.UndefinedLogoutRememberManagerException;
 import rife.engine.Context;
 import rife.engine.Element;

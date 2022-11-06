@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class MemorySessions implements SessionManager {
-    private long mSessionDuration = RifeConfig.authentication().getSessionDuration();
-    private boolean mRestrictHostIp = RifeConfig.authentication().getSessionRestrictHostIp();
+    private long sessionDuration_ = RifeConfig.authentication().getSessionDuration();
+    private boolean restrictHostIp_ = RifeConfig.authentication().getSessionRestrictHostIp();
 
     private final Map<String, MemorySession> sessions_ = new HashMap<String, MemorySession>();
 
@@ -25,19 +25,19 @@ public class MemorySessions implements SessionManager {
     }
 
     public long getSessionDuration() {
-        return mSessionDuration;
+        return sessionDuration_;
     }
 
     public void setSessionDuration(long milliseconds) {
-        mSessionDuration = milliseconds;
+        sessionDuration_ = milliseconds;
     }
 
     public boolean getRestrictHostIp() {
-        return mRestrictHostIp;
+        return restrictHostIp_;
     }
 
     public void setRestrictHostIp(boolean flags) {
-        mRestrictHostIp = flags;
+        restrictHostIp_ = flags;
     }
 
     public void purgeSessions() {
@@ -96,7 +96,7 @@ public class MemorySessions implements SessionManager {
 
         if (session != null) {
             if (session.getStart() > System.currentTimeMillis() - getSessionDuration() &&
-                (!mRestrictHostIp || session.getHostIp().equals(hostIp))) {
+                (!restrictHostIp_ || session.getHostIp().equals(hostIp))) {
                 return true;
             }
         }

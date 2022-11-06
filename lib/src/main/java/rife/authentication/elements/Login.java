@@ -26,12 +26,11 @@ import rife.validation.ValidationError;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 2.0
  */
-public class Login implements Element, SessionAttributes {
-    protected final AuthenticationConfig authConfig_;
+public class Login extends Identified implements SessionAttributes {
     protected final Template template_;
 
     public Login(AuthenticationConfig config, Template template) {
-        authConfig_ = config;
+        super(config);
         template_ = template;
     }
 
@@ -240,6 +239,7 @@ public class Login implements Element, SessionAttributes {
             if (session_validator.isAccessAuthorized(session_validity_id)) {
                 var auth_attribute = Authenticated.createAuthAttributeName(c.route(), authConfig_.authCookieName(), authid);
                 c.attribute(auth_attribute, true);
+                setIdentityAttribute(c);
 
                 // successful login
                 c.redirect(authConfig_.landingRoute());

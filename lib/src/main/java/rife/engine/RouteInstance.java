@@ -6,7 +6,13 @@ package rife.engine;
 
 import rife.tools.StringUtils;
 
-record RouteInstance(Router router, RequestMethod method, String path, PathInfoHandling pathInfoHandling, Element element) implements Route {
+public class RouteInstance implements Route {
+    private final Router router_;
+    private final RequestMethod method_;
+    private String path_;
+    private final PathInfoHandling pathInfoHandling_;
+    private final Element element_;
+
     public RouteInstance(Router router, Element element) {
         this(router, null, null, element);
     }
@@ -15,18 +21,54 @@ record RouteInstance(Router router, RequestMethod method, String path, PathInfoH
         this(router, method, path, PathInfoHandling.NONE, element);
     }
 
+    public RouteInstance(Router router, RequestMethod method, String path, PathInfoHandling pathInfoHandling, Element element) {
+        router_ = router;
+        method_ = method;
+        path_ = path;
+        pathInfoHandling_ = pathInfoHandling;
+        element_ = element;
+    }
+
+    @Override
+    public Router router() {
+        return router_;
+    }
+
+    @Override
+    public RequestMethod method() {
+        return method_;
+    }
+
+    @Override
+    public String path() {
+        return path_;
+    }
+
+    @Override
+    public PathInfoHandling pathInfoHandling() {
+        return pathInfoHandling_;
+    }
+
     @Override
     public Element getElementInstance(Context context) {
-        return element;
+        return element_;
     }
 
     @Override
     public String getDefaultElementId() {
-        return StringUtils.stripFromFront(path, "/");
+        return StringUtils.stripFromFront(path_, "/");
     }
 
     @Override
     public String getDefaultElementPath() {
-        return path;
+        return path_;
+    }
+
+    void prefixPathWith(String prefix) {
+        path_ = prefix + path_;
+    }
+
+    public Element element() {
+        return element_;
     }
 }

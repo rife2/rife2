@@ -14,8 +14,13 @@ import rife.tools.exceptions.ConversionException;
 import java.io.File;
 import java.lang.reflect.Modifier;
 
-record RouteClass(Router router, RequestMethod method, String path, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass
-) implements Route {
+public class RouteClass implements Route {
+    private final Router router_;
+    private final RequestMethod method_;
+    private String path_;
+    private final PathInfoHandling pathInfoHandling_;
+    private final Class<? extends Element> elementClass_;
+
     public RouteClass(Router router, Class<? extends Element> elementClass) {
         this(router, null, null, null, elementClass);
     }
@@ -33,24 +38,44 @@ record RouteClass(Router router, RequestMethod method, String path, PathInfoHand
     }
 
     public RouteClass(Router router, RequestMethod method, String path, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
-        this.router = router;
-        this.method = method;
-        this.elementClass = elementClass;
+        router_ = router;
+        method_ = method;
+        elementClass_ = elementClass;
         if (path == null) {
             path = getDefaultElementPath();
         }
-        this.path = path;
+        path_ = path;
         if (pathInfoHandling == null) {
             // TODO : instead this should detect whether a PathInfo annotation is present and handle it
             pathInfoHandling = PathInfoHandling.NONE;
         }
-        this.pathInfoHandling = pathInfoHandling;
+        pathInfoHandling_ = pathInfoHandling;
+    }
+
+    @Override
+    public Router router() {
+        return router_;
+    }
+
+    @Override
+    public RequestMethod method() {
+        return method_;
+    }
+
+    @Override
+    public String path() {
+        return path_;
+    }
+
+    @Override
+    public PathInfoHandling pathInfoHandling() {
+        return pathInfoHandling_;
     }
 
     @Override
     public Element getElementInstance(Context context) {
         try {
-            var element = elementClass().getDeclaredConstructor().newInstance();
+            var element = elementClass_.getDeclaredConstructor().newInstance();
 
             // auto assign annotated parameters
             var params = context.request().getParameters();
@@ -80,8 +105,7 @@ record RouteClass(Router router, RequestMethod method, String path, PathInfoHand
                         }
                         field.set(element, value);
                     }
-                }
-                else if (field.isAnnotationPresent(Body.class)) {
+                } else if (field.isAnnotationPresent(Body.class)) {
                     var body = context.request().getBody();
                     Object value;
                     try {
@@ -90,8 +114,7 @@ record RouteClass(Router router, RequestMethod method, String path, PathInfoHand
                         value = Convert.getDefaultValue(type);
                     }
                     field.set(element, value);
-                }
-                else if (field.isAnnotationPresent(PathInfo.class)) {
+                } else if (field.isAnnotationPresent(PathInfo.class)) {
                     var path_info = context.pathInfo();
                     Object value;
                     try {
@@ -100,8 +123,7 @@ record RouteClass(Router router, RequestMethod method, String path, PathInfoHand
                         value = Convert.getDefaultValue(type);
                     }
                     field.set(element, value);
-                }
-                else if (field.isAnnotationPresent(FileUpload.class)) {
+                } else if (field.isAnnotationPresent(FileUpload.class)) {
                     var annotation_name = field.getAnnotation(FileUpload.class).name();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
@@ -123,8 +145,7 @@ record RouteClass(Router router, RequestMethod method, String path, PathInfoHand
                         }
                         field.set(element, value);
                     }
-                }
-                else if (field.isAnnotationPresent(Cookie.class)) {
+                } else if (field.isAnnotationPresent(Cookie.class)) {
                     var annotation_name = field.getAnnotation(Cookie.class).name();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
@@ -152,11 +173,19 @@ record RouteClass(Router router, RequestMethod method, String path, PathInfoHand
 
     @Override
     public String getDefaultElementId() {
-        return StringUtils.uncapitalize(ClassUtils.shortenClassName(elementClass));
+        return StringUtils.uncapitalize(ClassUtils.shortenClassName(elementClass_));
     }
 
     @Override
     public String getDefaultElementPath() {
         return "/" + getDefaultElementId();
+    }
+
+    void prefixPathWith(String prefix) {
+        path_ = prefix + path_;
+    }
+
+    public Class<? extends Element> elementClass() {
+        return elementClass_;
     }
 }

@@ -478,7 +478,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             for (var key : users_.keySet()) {
                 var roles = users_.get(key).getRoles();
 
-                if (roles != null && roles.contains(name)) {
+                if (roles != null) {
                     roles.remove(name);
                 }
             }

@@ -9,13 +9,13 @@ public interface Route {
 
     RequestMethod method();
 
-    default boolean handlesMethod(RequestMethod method) {
-        return method() == null || method() == method;
-    }
-
     String path();
 
     PathInfoHandling pathInfoHandling();
+
+    default boolean handlesMethod(RequestMethod method) {
+        return method() == null || method() == method;
+    }
 
     Element getElementInstance(Context context);
 

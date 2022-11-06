@@ -76,6 +76,11 @@ public class RoleUserAttributes implements Cloneable {
         userId_ = userId;
     }
 
+    public RoleUserAttributes userId(long userId) {
+        setUserId(userId);
+        return this;
+    }
+
     public long getUserId() {
         return userId_;
     }
@@ -94,6 +99,11 @@ public class RoleUserAttributes implements Cloneable {
         password_ = password;
     }
 
+    public RoleUserAttributes password(String password) {
+        setPassword(password);
+        return this;
+    }
+
     public String getPassword() {
         return password_;
     }
@@ -104,7 +114,7 @@ public class RoleUserAttributes implements Cloneable {
             return;
         }
 
-        roles_ = new HashSet<String>(roles);
+        roles_ = new HashSet<>(roles);
     }
 
     public void setRoles(String[] roles) {
@@ -114,11 +124,21 @@ public class RoleUserAttributes implements Cloneable {
         }
     }
 
+    public RoleUserAttributes roles(String[] roles) {
+        setRoles(roles);
+        return this;
+    }
+
     public void addRole(String role) {
         if (null == roles_) {
             roles_ = new HashSet<>();
         }
         roles_.add(role);
+    }
+
+    public RoleUserAttributes role(String role) {
+        addRole(role);
+        return this;
     }
 
     public void removeRole(String role) {
@@ -130,7 +150,7 @@ public class RoleUserAttributes implements Cloneable {
 
     public Collection<String> getRoles() {
         if (null == roles_) {
-            roles_ = new HashSet<String>();
+            roles_ = new HashSet<>();
         }
 
         return roles_;
@@ -155,13 +175,7 @@ public class RoleUserAttributes implements Cloneable {
     }
 
     public boolean isValid(String password, String role) {
-        if (isValid(password) &&
-            isInRole(role)) {
-
-            return true;
-        }
-
-        return false;
+        return isValid(password) && isInRole(role);
     }
 
     public synchronized RoleUserAttributes clone() {
@@ -170,7 +184,7 @@ public class RoleUserAttributes implements Cloneable {
             new_attributes = (RoleUserAttributes) super.clone();
 
             if (roles_ != null) {
-                new_attributes.roles_ = new HashSet<String>(roles_);
+                new_attributes.roles_ = new HashSet<>(roles_);
             }
         } catch (CloneNotSupportedException ignored) {
         }

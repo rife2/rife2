@@ -30,7 +30,7 @@ public class HelloAuthentication extends Site {
         });
 
         config.loginRoute(login).landingRoute(auth.hello);
-        validator.getMemoryUsers().addUser("testUser", new RoleUserAttributes("testPassword"));
+        validator.getMemoryUsers().addUser("testUser", new RoleUserAttributes().password("testPassword"));
     }
 
     public static void main(String[] args) {

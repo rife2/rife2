@@ -209,7 +209,7 @@ public enum StringEncryptor {
 
         if (!valid_arguments) {
             System.err.println("Usage : java " + StringEncryptor.class.getName() + " [-edc] string {encrypted}");
-            System.err.println("Encrypts strings for usage with RIFE.");
+            System.err.println("Encrypts strings for usage with RIFE2.");
             System.err.println("  -e  encrypt a string (default)");
             System.err.println("  -d  decrypt a string if the algorithm support it");
             System.err.println("  -c  check the validity of the string against an encrypted version");

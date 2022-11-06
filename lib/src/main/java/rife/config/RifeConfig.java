@@ -192,7 +192,7 @@ public class RifeConfig {
             return sessionDuration_;
         }
 
-        public AuthenticationConfig getSessionDuration(long duration) {
+        public AuthenticationConfig setSessionDuration(long duration) {
             sessionDuration_ = duration;
             return this;
         }

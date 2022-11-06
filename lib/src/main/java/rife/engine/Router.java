@@ -74,9 +74,11 @@ public class Router {
             } else {
                 for (var r : e.getValue()) {
                     if (r instanceof RouteInstance route) {
-                        routes.add(new RouteInstance(r.router(), r.method(), path + r.path(), r.pathInfoHandling(), route.element()));
+                        route.prefixPathWith(path);
+                        routes.add(route);
                     } else if (r instanceof RouteClass route) {
-                        routes.add(new RouteClass(r.router(), r.method(), path + r.path(), r.pathInfoHandling(), route.elementClass()));
+                        route.prefixPathWith(path);
+                        routes.add(route);
                     }
                 }
             }
@@ -88,9 +90,11 @@ public class Router {
             } else {
                 for (var r : e.getValue()) {
                     if (r instanceof RouteInstance route) {
-                        routes.add(new RouteInstance(r.router(), r.method(), path + r.path(), r.pathInfoHandling(), route.element()));
+                        route.prefixPathWith(path);
+                        routes.add(route);
                     } else if (r instanceof RouteClass route) {
-                        routes.add(new RouteClass(r.router(), r.method(), path + r.path(), r.pathInfoHandling(), route.elementClass()));
+                        route.prefixPathWith(path);
+                        routes.add(route);
                     }
                 }
             }
@@ -238,7 +242,7 @@ public class Router {
                         }
                     } catch (NoSuchFieldException ignored) {
                     }
-                    
+
                     klass = klass.getSuperclass();
                 }
 
