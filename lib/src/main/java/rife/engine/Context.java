@@ -222,13 +222,8 @@ public class Context {
         return gateUrl_;
     }
 
-    public String webappRootUrl(int port) {
-        if (RifeConfig.engine().getProxyRootUrl() != null) {
-            return RifeConfig.engine().getProxyRootUrl();
-        }
-
+    public String webappRootUrl() {
         var webapp_root = new StringBuilder();
-        webapp_root.append(serverRootUrl(port));
         var gate_url = gateUrl();
         if (!gate_url.startsWith("/")) {
             webapp_root.append("/");
@@ -243,7 +238,7 @@ public class Context {
     }
 
     public UrlBuilder urlFor(Route route) {
-        return new UrlBuilder(webappRootUrl(-1), route);
+        return new UrlBuilder(webappRootUrl(), route);
     }
 
     void engineException(Throwable exception) {

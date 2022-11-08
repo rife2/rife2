@@ -344,6 +344,10 @@ public class HttpRequest implements Request {
 
     @Override
     public String getServerRootUrl(int port) {
+        if (RifeConfig.engine().getProxyRootUrl() != null) {
+            return RifeConfig.engine().getProxyRootUrl();
+        }
+
         var server_root = new StringBuilder();
         server_root.append(getScheme());
         server_root.append("://");

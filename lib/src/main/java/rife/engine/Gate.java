@@ -8,7 +8,6 @@ import rife.Version;
 import rife.config.RifeConfig;
 import rife.engine.exceptions.DeferException;
 import rife.engine.exceptions.RedirectException;
-import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.tools.ExceptionFormattingUtils;
 import rife.tools.ExceptionUtils;
@@ -19,6 +18,7 @@ import java.util.logging.Logger;
 public class Gate {
     private Site site_;
     private Throwable initException_ = null;
+    private final String webappContextPath_ = RifeConfig.engine().getWebappContextPath();
 
     public void setup(Site site) {
         site_ = site;
@@ -32,6 +32,12 @@ public class Gate {
     }
 
     public boolean handleRequest(String gateUrl, String elementUrl, Request request, Response response) {
+        // check if the gateUrl hasn't been overridden by a webapp context path configuration parameter
+        if (webappContextPath_ != null)
+        {
+            gateUrl = webappContextPath_;
+        }
+
         // ensure a valid element url
         if (null == elementUrl ||
             0 == elementUrl.length()) {

@@ -342,7 +342,6 @@ public class RifeConfig {
         private boolean fileUploadSizeException_ = DEFAULT_FILE_UPLOAD_SIZE_EXCEPTION;
         private boolean gzipCompression_ = DEFAULT_GZIP_COMPRESSION;
         private Collection<String> gzipCompressionTypes_ = DEFAULT_GZIP_COMPRESSION_TYPES;
-        private int localForwardPort_ = DEFAULT_LOCAL_FORWARD_PORT;
         private String proxyRootUrl_ = DEFAULT_PROXY_ROOT_URL;
         private String webappContextPath_ = DEFAULT_WEBAPP_CONTEXT_PATH;
         private Set<String> passThroughSuffixes = DEFAULT_PASS_THROUGH_SUFFIXES;
@@ -367,7 +366,6 @@ public class RifeConfig {
             "application/xml",
             "application/xhtml+xml"
         );
-        public static final int DEFAULT_LOCAL_FORWARD_PORT = -1;
         public static final String DEFAULT_PROXY_ROOT_URL = null;
         public static final String DEFAULT_WEBAPP_CONTEXT_PATH = null;
         public static final Set<String> DEFAULT_PASS_THROUGH_SUFFIXES = new HashSet<>() {{
@@ -486,16 +484,6 @@ public class RifeConfig {
 
         public EngineConfig setGzipCompressionTypes(Collection<String> types) {
             gzipCompressionTypes_ = types;
-            return this;
-        }
-
-        public int getLocalForwardPort() {
-            return localForwardPort_;
-        }
-
-        public EngineConfig setLocalForwardPort(int port) {
-            if (port <= 0) port = -1;
-            localForwardPort_ = port;
             return this;
         }
 
