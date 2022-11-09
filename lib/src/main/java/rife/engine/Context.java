@@ -222,8 +222,9 @@ public class Context {
         return gateUrl_;
     }
 
-    public String webappRootUrl() {
+    public String webappRootUrl(int port) {
         var webapp_root = new StringBuilder();
+        webapp_root.append(serverRootUrl(port));
         var gate_url = gateUrl();
         if (!gate_url.startsWith("/")) {
             webapp_root.append("/");
@@ -238,7 +239,7 @@ public class Context {
     }
 
     public UrlBuilder urlFor(Route route) {
-        return new UrlBuilder(webappRootUrl(), route);
+        return new UrlBuilder(webappRootUrl(-1), route);
     }
 
     void engineException(Throwable exception) {
