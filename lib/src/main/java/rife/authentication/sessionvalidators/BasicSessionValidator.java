@@ -6,8 +6,7 @@
  */
 package rife.authentication.sessionvalidators;
 
-import rife.authentication.SessionAttributes;
-import rife.authentication.SessionManager;
+import rife.authentication.*;
 import rife.authentication.credentialsmanagers.RoleUsersManager;
 import rife.authentication.exceptions.CredentialsManagerException;
 import rife.authentication.exceptions.SessionManagerException;
@@ -25,7 +24,7 @@ import rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErro
  * @see rife.authentication.SessionValidator
  * @since 1.6
  */
-public class BasicSessionValidator extends AbstractSessionValidator {
+public class BasicSessionValidator<C extends CredentialsManager, S extends SessionManager, R extends RememberManager> extends AbstractSessionValidator<C, S, R> {
     public boolean isAccessAuthorized(int id) {
         return SESSION_VALID == id;
     }
@@ -40,7 +39,7 @@ public class BasicSessionValidator extends AbstractSessionValidator {
             return SESSION_INVALID;
         }
 
-        SessionManager sessions = getSessionManager();
+        S sessions = getSessionManager();
 
         try {
             if (!sessions.isSessionValid(authId, hostIp)) {

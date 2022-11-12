@@ -16,6 +16,28 @@ public class MemoryAuthenticatedSite extends Site {
     final AuthenticationConfig configMaint = new AuthenticationConfig(validator);
     final AuthenticationConfig configNotEnforced = new AuthenticationConfig(validator);
 
+    public MemoryAuthenticatedSite() {
+        validator.getCredentialsManager()
+            .addRole("admin")
+            .addRole("maint")
+            .addUser("guest", new RoleUserAttributes()
+                .password("guestpass"))
+            .addUser("jdevin", new RoleUserAttributes("yeolpass")
+                .role("admin")
+                .role("maint"))
+            .addUser("guestencrypted", new RoleUserAttributes()
+                .password("SHA:duH5g2aTTgh6206iakXKII5qs0A="))
+            .addUser("jdevinencrypted", new RoleUserAttributes("MD5:JJSy0mVyeMFG9f21yHQVyg==")
+                .role("admin")
+                .role("maint"))
+            .addUser("johndoe", new RoleUserAttributes()
+                .password("thepassofbass")
+                .role("maint"))
+            .addUser("johndoeencrypted", new RoleUserAttributes()
+                .password("SHA:gQiKJIbndDSD37lfjKG4wFXpf0s=")
+                .role("maint"));
+    }
+
     static class AuthenticatedSection extends Router {
         AuthenticatedSection(AuthenticationConfig config) {
             landing = get("/landing", c -> c.print("Landing"));
@@ -74,25 +96,5 @@ public class MemoryAuthenticatedSite extends Site {
             .enforceAuthentication(false)
             .loginRoute(loginNotEnforced)
             .landingRoute(authNotEnforced.landing);
-
-        validator.getMemoryUsers()
-            .addRole("admin")
-            .addRole("maint")
-            .addUser("guest", new RoleUserAttributes()
-                .password("guestpass"))
-            .addUser("jdevin", new RoleUserAttributes("yeolpass")
-                .role("admin")
-                .role("maint"))
-            .addUser("guestencrypted", new RoleUserAttributes()
-                .password("SHA:duH5g2aTTgh6206iakXKII5qs0A="))
-            .addUser("jdevinencrypted", new RoleUserAttributes("MD5:JJSy0mVyeMFG9f21yHQVyg==")
-                .role("admin")
-                .role("maint"))
-            .addUser("johndoe", new RoleUserAttributes()
-                .password("thepassofbass")
-                .role("maint"))
-            .addUser("johndoeencrypted", new RoleUserAttributes()
-                .password("SHA:gQiKJIbndDSD37lfjKG4wFXpf0s=")
-                .role("maint"));
     }
 }

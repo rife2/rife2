@@ -9,7 +9,12 @@ import rife.authentication.RememberManager;
 import rife.authentication.SessionAttributes;
 import rife.authentication.SessionManager;
 import rife.authentication.SessionValidator;
+import rife.authentication.credentialsmanagers.DatabaseUsers;
+import rife.authentication.credentialsmanagers.DatabaseUsersFactory;
 import rife.authentication.exceptions.SessionValidatorException;
+import rife.authentication.remembermanagers.DatabaseRemember;
+import rife.authentication.sessionmanagers.DatabaseSessions;
+import rife.authentication.sessionmanagers.DatabaseSessionsFactory;
 import rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErrorException;
 import rife.database.Datasource;
 import rife.database.DbPreparedStatement;
@@ -18,46 +23,49 @@ import rife.database.DbQueryManager;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.Select;
 
-public abstract class DatabaseSessionValidator extends DbQueryManager implements SessionValidator {
+public abstract class DatabaseSessionValidator extends DbQueryManager implements SessionValidator<DatabaseUsers, DatabaseSessions, DatabaseRemember> {
     public static final int SESSION_INVALID = 0;
     public static final int SESSION_VALID = 1;
 
-    protected CredentialsManager credentialsManager_ = null;
-    protected SessionManager sessionManager_ = null;
-    protected RememberManager rememberManager_ = null;
+    protected DatabaseUsers credentialsManager_ = null;
+    protected DatabaseSessions sessionManager_ = null;
+    protected DatabaseRemember rememberManager_ = null;
 
     protected DatabaseSessionValidator(Datasource datasource) {
         super(datasource);
+
+        credentialsManager_ = DatabaseUsersFactory.getInstance(datasource);
+        sessionManager_ = DatabaseSessionsFactory.getInstance(datasource);
     }
 
-    public void setCredentialsManager(CredentialsManager credentialsManager) {
+    public void setCredentialsManager(DatabaseUsers credentialsManager) {
         assert credentialsManager != null;
 
         credentialsManager_ = credentialsManager;
     }
 
-    public CredentialsManager getCredentialsManager() {
+    public DatabaseUsers getCredentialsManager() {
         return credentialsManager_;
     }
 
-    public void setSessionManager(SessionManager sessionManager) {
+    public void setSessionManager(DatabaseSessions sessionManager) {
         assert sessionManager != null;
 
         sessionManager_ = sessionManager;
     }
 
-    public void setRememberManager(RememberManager rememberManager) {
+    public DatabaseSessions getSessionManager() {
+        return sessionManager_;
+    }
+
+    public void setRememberManager(DatabaseRemember rememberManager) {
         assert rememberManager != null;
 
         rememberManager_ = rememberManager;
     }
 
-    public RememberManager getRememberManager() {
+    public DatabaseRemember getRememberManager() {
         return rememberManager_;
-    }
-
-    public SessionManager getSessionManager() {
-        return sessionManager_;
     }
 
     public boolean isAccessAuthorized(int id) {
@@ -95,7 +103,7 @@ public abstract class DatabaseSessionValidator extends DbQueryManager implements
 
         // role has been specified, use optimized validity check to limit the amount of db queries
         try {
-            executeFetchFirst(query, processSessionValidity, new DbPreparedStatementHandler() {
+            executeFetchFirst(query, processSessionValidity, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("authId", authId)

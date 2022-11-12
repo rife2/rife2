@@ -20,7 +20,7 @@ import rife.authentication.SessionValidator;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.6
  */
-public abstract class AbstractSessionValidator implements SessionValidator {
+public abstract class AbstractSessionValidator<C extends CredentialsManager, S extends SessionManager, R extends RememberManager> implements SessionValidator<C, S, R> {
     /**
      * Predefined return type for validateSession(): session is invalid
      */
@@ -30,9 +30,9 @@ public abstract class AbstractSessionValidator implements SessionValidator {
      */
     public static final int SESSION_VALID = 1;
 
-    protected CredentialsManager credentialsManager_ = null;
-    protected SessionManager sessionManager_ = null;
-    protected RememberManager rememberManager_ = null;
+    protected C credentialsManager_ = null;
+    protected S sessionManager_ = null;
+    protected R rememberManager_ = null;
 
     /**
      * Set's this validator's credentials manager.
@@ -40,7 +40,7 @@ public abstract class AbstractSessionValidator implements SessionValidator {
      * @param credentialsManager the {@code CredentialsManager} instance
      * @since 1.6
      */
-    public void setCredentialsManager(CredentialsManager credentialsManager) {
+    public void setCredentialsManager(C credentialsManager) {
         credentialsManager_ = credentialsManager;
     }
 
@@ -51,7 +51,7 @@ public abstract class AbstractSessionValidator implements SessionValidator {
      * {@code null} if none has been set up yet
      * @since 1.6
      */
-    public CredentialsManager getCredentialsManager() {
+    public C getCredentialsManager() {
         return credentialsManager_;
     }
 
@@ -61,7 +61,7 @@ public abstract class AbstractSessionValidator implements SessionValidator {
      * @param sessionManager the {@code SessionManager} instance
      * @since 1.6
      */
-    public void setSessionManager(SessionManager sessionManager) {
+    public void setSessionManager(S sessionManager) {
         sessionManager_ = sessionManager;
     }
 
@@ -72,7 +72,7 @@ public abstract class AbstractSessionValidator implements SessionValidator {
      * {@code null} if none has been set up yet
      * @since 1.6
      */
-    public SessionManager getSessionManager() {
+    public S getSessionManager() {
         return sessionManager_;
     }
 
@@ -82,7 +82,7 @@ public abstract class AbstractSessionValidator implements SessionValidator {
      * @param rememberManager the {@code RememberManager} instance
      * @since 1.6
      */
-    public void setRememberManager(RememberManager rememberManager) {
+    public void setRememberManager(R rememberManager) {
         rememberManager_ = rememberManager;
     }
 
@@ -93,7 +93,7 @@ public abstract class AbstractSessionValidator implements SessionValidator {
      * {@code null} if none has been set up yet
      * @since 1.6
      */
-    public RememberManager getRememberManager() {
+    public R getRememberManager() {
         return rememberManager_;
     }
 }

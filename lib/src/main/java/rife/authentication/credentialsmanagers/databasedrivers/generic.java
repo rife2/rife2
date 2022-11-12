@@ -40,6 +40,7 @@ public class generic extends DatabaseUsers {
     protected Select countUsers_;
     protected Select getLogin_;
     protected Select getUserId_;
+    protected Select getPassword_;
     protected Select listUsers_;
     protected Select listUsersRanged_;
     protected Select isUserInRole_;
@@ -172,6 +173,11 @@ public class generic extends DatabaseUsers {
 
         getUserId_ = new Select(getDatasource())
             .field("userId")
+            .from(createTableUser_.getTable())
+            .whereParameter("login", "=");
+
+        getPassword_ = new Select(getDatasource())
+            .field("passwd AS password")
             .from(createTableUser_.getTable())
             .whereParameter("login", "=");
 
@@ -345,6 +351,11 @@ public class generic extends DatabaseUsers {
     public long getUserId(String login)
     throws CredentialsManagerException {
         return _getUserId(getUserId_, login);
+    }
+
+    public String getPassword(String login)
+    throws CredentialsManagerException {
+        return _getPassword(getPassword_, login);
     }
 
     public boolean listUsers(ListUsers processor)

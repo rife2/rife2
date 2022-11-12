@@ -19,7 +19,7 @@ public class MemorySessions implements SessionManager {
     private long sessionDuration_ = RifeConfig.authentication().getSessionDuration();
     private boolean restrictHostIp_ = RifeConfig.authentication().getSessionRestrictHostIp();
 
-    private final Map<String, MemorySession> sessions_ = new HashMap<String, MemorySession>();
+    private final Map<String, MemorySession> sessions_ = new HashMap<>();
 
     public MemorySessions() {
     }
@@ -47,7 +47,7 @@ public class MemorySessions implements SessionManager {
     private class PurgeSessions extends Thread {
         public void run() {
             synchronized (sessions_) {
-                ArrayList<String> stale_sessions = new ArrayList<String>();
+                ArrayList<String> stale_sessions = new ArrayList<>();
                 long expiration = System.currentTimeMillis() - getSessionDuration();
                 for (MemorySession session : sessions_.values()) {
                     if (session.getStart() <= expiration) {
@@ -179,7 +179,7 @@ public class MemorySessions implements SessionManager {
         boolean result = false;
 
         synchronized (sessions_) {
-            ArrayList<String> sessions_to_erase = new ArrayList<String>();
+            ArrayList<String> sessions_to_erase = new ArrayList<>();
 
             // collect the sessions that have to be erased
             for (Map.Entry<String, MemorySession> sessions_entry : sessions_.entrySet()) {

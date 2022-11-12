@@ -56,10 +56,15 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
                 return -1;
             }
 
-            // correctly handle encoded passwords
+            // handle automatic password encoding
             String password = null;
             try {
-                password = StringEncryptor.adaptiveEncrypt(role_user.getPassword(), user_attributes.getPassword());
+                if (null == passwordEncryptor_) {
+                    // correctly handle encoded passwords
+                    password = StringEncryptor.adaptiveEncrypt(role_user.getPassword(), user_attributes.getPassword());
+                } else {
+                    password = passwordEncryptor_.encrypt(role_user.getPassword());
+                }
             } catch (NoSuchAlgorithmException e) {
                 throw new VerifyCredentialsErrorException(credentials, e);
             }

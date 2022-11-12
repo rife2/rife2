@@ -4,18 +4,13 @@
  */
 package rife.authentication.sessionvalidators;
 
+import rife.authentication.RememberManager;
 import rife.authentication.credentialsmanagers.MemoryUsers;
 import rife.authentication.sessionmanagers.MemorySessions;
 
-public class MemorySessionValidator extends BasicSessionValidator {
-    private final MemoryUsers memoryUsers_ = new MemoryUsers();
-
+public class MemorySessionValidator extends BasicSessionValidator<MemoryUsers, MemorySessions, RememberManager> {
     public MemorySessionValidator() {
-        setCredentialsManager(memoryUsers_);
+        setCredentialsManager(new MemoryUsers());
         setSessionManager(new MemorySessions());
-    }
-
-    public MemoryUsers getMemoryUsers() {
-        return memoryUsers_;
     }
 }

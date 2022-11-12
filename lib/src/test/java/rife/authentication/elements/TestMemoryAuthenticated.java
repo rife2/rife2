@@ -4,9 +4,7 @@
  */
 package rife.authentication.elements;
 
-import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
-import rife.config.RifeConfig;
 import rife.test.MockConversation;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,7 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestMemoryAuthenticated {
     @Test
     public void testMemoryAuthenticatedBasic() {
-        var conversation = new MockConversation(new MemoryAuthenticatedSite());
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        var conversation = new MockConversation(site);
 
         var response = conversation.doRequest("http://localhost/landing");
         assertEquals(response.getStatus(), 302);
@@ -38,7 +37,7 @@ public class TestMemoryAuthenticated {
 
         // other login
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/login");
@@ -61,7 +60,7 @@ public class TestMemoryAuthenticated {
 
         // invalid login
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/login");
@@ -80,7 +79,8 @@ public class TestMemoryAuthenticated {
 
     @Test
     public void testMemoryAuthenticatedEncrypted() {
-        var conversation = new MockConversation(new MemoryAuthenticatedSite());
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        var conversation = new MockConversation(site);
 
         var response = conversation.doRequest("http://localhost/landing");
         assertEquals(response.getStatus(), 302);
@@ -104,7 +104,7 @@ public class TestMemoryAuthenticated {
 
         // other login
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/login");
@@ -127,7 +127,7 @@ public class TestMemoryAuthenticated {
 
         // invalid login
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/login");
@@ -146,7 +146,8 @@ public class TestMemoryAuthenticated {
 
     @Test
     public void testMemoryAuthenticatedRole() {
-        var conversation = new MockConversation(new MemoryAuthenticatedSite());
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        var conversation = new MockConversation(site);
 
         // missing role
 
@@ -166,7 +167,7 @@ public class TestMemoryAuthenticated {
 
         // login with role
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/admin/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/loginAdmin");
@@ -189,7 +190,7 @@ public class TestMemoryAuthenticated {
 
         // login without role
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/admin/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/loginAdmin");
@@ -207,7 +208,7 @@ public class TestMemoryAuthenticated {
 
         // invalid login
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/admin/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/loginAdmin");
@@ -226,7 +227,8 @@ public class TestMemoryAuthenticated {
 
     @Test
     public void testMemoryAuthenticatedRoleEncrypted() {
-        var conversation = new MockConversation(new MemoryAuthenticatedSite());
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        var conversation = new MockConversation(site);
 
         // missing role
 
@@ -246,7 +248,7 @@ public class TestMemoryAuthenticated {
 
         // login with role
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/admin/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/loginAdmin");
@@ -269,7 +271,7 @@ public class TestMemoryAuthenticated {
 
         // login without role
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/admin/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/loginAdmin");
@@ -287,7 +289,7 @@ public class TestMemoryAuthenticated {
 
         // invalid login
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/admin/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/loginAdmin");
@@ -306,7 +308,8 @@ public class TestMemoryAuthenticated {
 
     @Test
     public void testMemoryAuthenticatedRole2() {
-        var conversation = new MockConversation(new MemoryAuthenticatedSite());
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        var conversation = new MockConversation(site);
 
         // missing role
 
@@ -326,7 +329,7 @@ public class TestMemoryAuthenticated {
 
         // login with role
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/maint/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/loginMaint");
@@ -349,7 +352,7 @@ public class TestMemoryAuthenticated {
 
         // other login with role
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/maint/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/loginMaint");
@@ -372,7 +375,7 @@ public class TestMemoryAuthenticated {
 
         // invalid login
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/maint/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/loginMaint");
@@ -391,7 +394,8 @@ public class TestMemoryAuthenticated {
 
     @Test
     public void testMemoryAuthenticatedRole2Encrypted() {
-        var conversation = new MockConversation(new MemoryAuthenticatedSite());
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        var conversation = new MockConversation(site);
 
         // missing role
 
@@ -411,7 +415,7 @@ public class TestMemoryAuthenticated {
 
         // login with role
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/maint/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/loginMaint");
@@ -434,7 +438,7 @@ public class TestMemoryAuthenticated {
 
         // other login with role
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/maint/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/loginMaint");
@@ -457,7 +461,7 @@ public class TestMemoryAuthenticated {
 
         // invalid login
 
-        conversation = new MockConversation(new MemoryAuthenticatedSite());
+        conversation = new MockConversation(site);
         response = conversation.doRequest("http://localhost/maint/landing");
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/loginMaint");
@@ -476,7 +480,8 @@ public class TestMemoryAuthenticated {
 
     @Test
     public void testMemoryAuthenticatedRoleIsolation() {
-        var conversation = new MockConversation(new MemoryAuthenticatedSite());
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        var conversation = new MockConversation(site);
 
         // missing role
 
@@ -509,7 +514,8 @@ public class TestMemoryAuthenticated {
 
     @Test
     public void testMemoryAuthenticatedRoleIsolation2() {
-        var conversation = new MockConversation(new MemoryAuthenticatedSite());
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        var conversation = new MockConversation(site);
 
         // missing role
 
@@ -547,45 +553,41 @@ public class TestMemoryAuthenticated {
     @Test
     public void testMemoryAuthenticatedSessionDuration()
     throws Exception {
-        var session_duration = RifeConfig.authentication().getSessionDuration();
-        try {
-            RifeConfig.authentication().setSessionDuration(1000);
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        site.validator.getSessionManager().setSessionDuration(1000);
+        var conversation = new MockConversation(site);
 
-            var conversation = new MockConversation(new MemoryAuthenticatedSite());
+        var response = conversation.doRequest("http://localhost/landing");
+        assertEquals(response.getStatus(), 302);
+        assertEquals(response.getHeader("Location"), "http://localhost/login");
 
-            var response = conversation.doRequest("http://localhost/landing");
-            assertEquals(response.getStatus(), 302);
-            assertEquals(response.getHeader("Location"), "http://localhost/login");
+        response = conversation.doRequest("http://localhost/login");
+        var form = response.getParsedHtml().getFormWithName("credentials");
+        form.setParameter("login", "guest");
+        form.setParameter("password", "guestpass");
+        response = form.submit();
 
-            response = conversation.doRequest("http://localhost/login");
-            var form = response.getParsedHtml().getFormWithName("credentials");
-            form.setParameter("login", "guest");
-            form.setParameter("password", "guestpass");
-            response = form.submit();
+        assertEquals("authId", response.getNewCookieNames().get(0));
+        assertEquals(0, response.getParsedHtml().getForms().size());
+        assertEquals(response.getStatus(), 302);
+        assertEquals(response.getHeader("Location"), "http://localhost/landing");
 
-            assertEquals("authId", response.getNewCookieNames().get(0));
-            assertEquals(0, response.getParsedHtml().getForms().size());
-            assertEquals(response.getStatus(), 302);
-            assertEquals(response.getHeader("Location"), "http://localhost/landing");
+        response = conversation.doRequest("http://localhost/landing");
+        assertEquals(response.getText(), "Landing");
+        response = conversation.doRequest("http://localhost/username");
+        assertEquals(response.getText(), "guest");
 
-            response = conversation.doRequest("http://localhost/landing");
-            assertEquals(response.getText(), "Landing");
-            response = conversation.doRequest("http://localhost/username");
-            assertEquals(response.getText(), "guest");
+        Thread.sleep(2000);
 
-            Thread.sleep(2000);
-
-            response = conversation.doRequest("http://localhost/landing");
-            assertEquals(response.getStatus(), 302);
-            assertEquals(response.getHeader("Location"), "http://localhost/login");
-        } finally {
-            RifeConfig.authentication().setSessionDuration(session_duration);
-        }
+        response = conversation.doRequest("http://localhost/landing");
+        assertEquals(response.getStatus(), 302);
+        assertEquals(response.getHeader("Location"), "http://localhost/login");
     }
 
     @Test
     public void testMemoryAuthenticatedNotEnforce() {
-        var conversation = new MockConversation(new MemoryAuthenticatedSite());
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        var conversation = new MockConversation(site);
 
         var response = conversation.doRequest("http://localhost/notEnforced/landing");
         assertEquals(response.getText(), "Landing");
@@ -629,7 +631,8 @@ public class TestMemoryAuthenticated {
 
     @Test
     public void testMemoryAuthenticatedLogoutTemplate() {
-        var conversation = new MockConversation(new MemoryAuthenticatedSite());
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        var conversation = new MockConversation(site);
 
         var response = conversation.doRequest("http://localhost/login");
         var form = response.getParsedHtml().getFormWithName("credentials");
@@ -662,7 +665,8 @@ public class TestMemoryAuthenticated {
 
     @Test
     public void testMemoryAuthenticatedLogoutBefore() {
-        var conversation = new MockConversation(new MemoryAuthenticatedSite());
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        var conversation = new MockConversation(site);
 
         var response = conversation.doRequest("http://localhost/login");
         var form = response.getParsedHtml().getFormWithName("credentials");

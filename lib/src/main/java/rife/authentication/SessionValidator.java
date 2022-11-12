@@ -48,7 +48,7 @@ import rife.authentication.exceptions.SessionValidatorException;
  * @see rife.authentication.SessionManager
  * @since 1.0
  */
-public interface SessionValidator {
+public interface SessionValidator<C extends CredentialsManager, S extends SessionManager, R extends RememberManager> {
     /**
      * Validates an existing session according to a set of attributes that
      * define the context in which this validation occurs.
@@ -109,7 +109,7 @@ public interface SessionValidator {
      * @param credentialsManager The new {@code CredentialsManager}.
      * @since 1.0
      */
-    void setCredentialsManager(CredentialsManager credentialsManager);
+    void setCredentialsManager(C credentialsManager);
 
     /**
      * Retrieves the currently used {@code CredentialsManager}.
@@ -117,7 +117,7 @@ public interface SessionValidator {
      * @return The current {@code CredentialsManager}.
      * @since 1.0
      */
-    CredentialsManager getCredentialsManager();
+    C getCredentialsManager();
 
     /**
      * Sets the {@code SessionManager} that will be used.
@@ -125,7 +125,7 @@ public interface SessionValidator {
      * @param sessionManager The new {@code SessionManager}.
      * @since 1.0
      */
-    void setSessionManager(SessionManager sessionManager);
+    void setSessionManager(S sessionManager);
 
     /**
      * Retrieves the currently used {@code SessionManager}.
@@ -133,7 +133,7 @@ public interface SessionValidator {
      * @return The current {@code SessionManager}.
      * @since 1.0
      */
-    SessionManager getSessionManager();
+    S getSessionManager();
 
     /**
      * Sets the {@code RememberManager} that will be used.
@@ -141,7 +141,7 @@ public interface SessionValidator {
      * @param rememberManager The new {@code RememberManager}.
      * @since 1.0
      */
-    void setRememberManager(RememberManager rememberManager);
+    void setRememberManager(R rememberManager);
 
     /**
      * Retrieves the currently used {@code RememberManager}.
@@ -149,6 +149,6 @@ public interface SessionValidator {
      * @return The current {@code RememberManager}.
      * @since 1.0
      */
-    RememberManager getRememberManager();
+    R getRememberManager();
 }
 

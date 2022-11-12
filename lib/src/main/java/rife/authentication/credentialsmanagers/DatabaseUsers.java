@@ -82,7 +82,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         return true;
     }
 
-
     protected long _verifyCredentials(Select verifyCredentialsNoRole, Select verifyCredentialsRole, Credentials credentials)
     throws CredentialsManagerException {
         assert verifyCredentialsNoRole != null;
@@ -112,13 +111,26 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
             var process_verify_credentials = new ProcessVerifyCredentials();
 
-            if (executeFetchFirst(query, process_verify_credentials, new DbPreparedStatementHandler<RoleUserCredentials>(role_user) {
+            if (executeFetchFirst(query, process_verify_credentials, new DbPreparedStatementHandler<>(role_user) {
                 public void setParameters(DbPreparedStatement statement) {
                     statement.setString("login", data_.getLogin());
 
                     // handle automatic password encoding
                     if (null == passwordEncryptor_) {
-                        statement.setString("passwd", data_.getPassword());
+                        // correctly handle encoded passwords
+                        String password = data_.getPassword();
+
+                        // get the existing user password
+                        String user_password = getPassword(data_.getLogin());
+                        if (user_password != null) {
+                            try {
+                                password = StringEncryptor.adaptiveEncrypt(data_.getPassword(), user_password);
+                            } catch (NoSuchAlgorithmException e) {
+                                throw new VerifyCredentialsErrorException(credentials, e);
+                            }
+                        }
+
+                        statement.setString("passwd", password);
                     } else {
                         try {
                             statement.setString("passwd", passwordEncryptor_.encrypt(data_.getPassword()));
@@ -464,6 +476,34 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         try {
             result = executeGetFirstLong(getUserId, new DbPreparedStatementHandler<>() {
+                public void setParameters(DbPreparedStatement statement) {
+                    statement
+                        .setString("login", login);
+                }
+            });
+        } catch (DatabaseException e) {
+            throw new GetUserIdErrorException(e, login);
+        }
+
+        return result;
+    }
+
+    public abstract String getPassword(final String login)
+    throws CredentialsManagerException;
+
+    protected String _getPassword(Select getPassword, final String login)
+    throws CredentialsManagerException {
+        assert getPassword != null;
+
+        if (null == login ||
+            0 == login.length()) {
+            return null;
+        }
+
+        String result;
+
+        try {
+            result = executeGetFirstString(getPassword, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("login", login);
