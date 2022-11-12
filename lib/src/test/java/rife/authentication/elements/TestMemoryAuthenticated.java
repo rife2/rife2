@@ -4,12 +4,12 @@
  */
 package rife.authentication.elements;
 
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import rife.config.RifeConfig;
 import rife.test.MockConversation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMemoryAuthenticated {
     @Test
@@ -627,4 +627,69 @@ public class TestMemoryAuthenticated {
         assertEquals(response.getText(), "jdevin");
     }
 
+    @Test
+    public void testMemoryAuthenticatedLogoutTemplate() {
+        var conversation = new MockConversation(new MemoryAuthenticatedSite());
+
+        var response = conversation.doRequest("http://localhost/login");
+        var form = response.getParsedHtml().getFormWithName("credentials");
+        form.setParameter("login", "guest");
+        form.setParameter("password", "guestpass");
+        response = form.submit();
+
+        assertEquals("authId", response.getNewCookieNames().get(0));
+        assertEquals(0, response.getParsedHtml().getForms().size());
+        assertEquals(response.getStatus(), 302);
+        assertEquals(response.getHeader("Location"), "http://localhost/landing");
+
+        response = conversation.doRequest("http://localhost/landing");
+        assertEquals(response.getText(), "Landing");
+        response = conversation.doRequest("http://localhost/username");
+        assertEquals(response.getText(), "guest");
+
+        // log out
+        assertNotEquals(conversation.getCookieValue("authId"), "");
+        response = conversation.doRequest("http://localhost/logout");
+        assertEquals(response.getStatus(), 200);
+        assertTrue(response.getText().contains("Logged out"));
+        assertEquals(conversation.getCookieValue("authId"), "");
+
+        // verify user is logged out
+        response = conversation.doRequest("http://localhost/landing");
+        assertEquals(response.getStatus(), 302);
+        assertEquals(response.getHeader("Location"), "http://localhost/login");
+    }
+
+    @Test
+    public void testMemoryAuthenticatedLogoutBefore() {
+        var conversation = new MockConversation(new MemoryAuthenticatedSite());
+
+        var response = conversation.doRequest("http://localhost/login");
+        var form = response.getParsedHtml().getFormWithName("credentials");
+        form.setParameter("login", "guest");
+        form.setParameter("password", "guestpass");
+        response = form.submit();
+
+        assertEquals("authId", response.getNewCookieNames().get(0));
+        assertEquals(0, response.getParsedHtml().getForms().size());
+        assertEquals(response.getStatus(), 302);
+        assertEquals(response.getHeader("Location"), "http://localhost/landing");
+
+        response = conversation.doRequest("http://localhost/landing");
+        assertEquals(response.getText(), "Landing");
+        response = conversation.doRequest("http://localhost/username");
+        assertEquals(response.getText(), "guest");
+
+        // log out
+        assertNotEquals(conversation.getCookieValue("authId"), "");
+        response = conversation.doRequest("http://localhost/beforelogout");
+        assertEquals(response.getStatus(), 200);
+        assertEquals(response.getText(), "logged out");
+        assertEquals(conversation.getCookieValue("authId"), "");
+
+        // verify user is logged out
+        response = conversation.doRequest("http://localhost/landing");
+        assertEquals(response.getStatus(), 302);
+        assertEquals(response.getHeader("Location"), "http://localhost/login");
+    }
 }

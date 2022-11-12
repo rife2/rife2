@@ -13,6 +13,9 @@ public class Logout implements Element {
     protected final AuthenticationConfig authConfig_;
     protected final Template template_;
 
+    public Logout(AuthenticationConfig config) {
+        this(config, null);
+    }
     public Logout(AuthenticationConfig config, Template template) {
         authConfig_ = config;
         template_ = template;

@@ -5,7 +5,6 @@
 package rife.authentication.elements;
 
 import rife.authentication.credentialsmanagers.RoleUserAttributes;
-import rife.authentication.credentialsmanagers.RoleUserIdentity;
 import rife.authentication.sessionvalidators.MemorySessionValidator;
 import rife.engine.*;
 import rife.template.TemplateFactory;
@@ -22,6 +21,12 @@ public class MemoryAuthenticatedSite extends Site {
             landing = get("/landing", c -> c.print("Landing"));
             logout = get("/logout", new Logout(config, TemplateFactory.HTML.get("authentication.logout")));
             get("/username", c -> c.print(config.identityAttribute(c) != null ? config.identityAttribute(c).getLogin() : "not logged in"));
+            group(new Router() {
+                public void setup() {
+                    before(new Logout(config));
+                    get("/beforelogout", c -> c.print("logged out"));
+                }
+            });
         }
 
         Route landing;
