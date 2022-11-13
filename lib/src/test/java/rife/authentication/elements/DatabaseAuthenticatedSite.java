@@ -28,6 +28,7 @@ public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
 
         validator.getSessionManager().install();
         validator.getCredentialsManager().install();
+        validator.getRememberManager().install();
 
         validator.getCredentialsManager()
             .addRole("admin")
@@ -83,6 +84,10 @@ public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
 
     public void remove() {
         try {
+            validator.getRememberManager().remove();
+        } catch (Exception ignored) {
+        }
+        try {
             validator.getCredentialsManager().remove();
         } catch (Exception ignored) {
         }
@@ -115,6 +120,12 @@ public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
         authNotEnforced = group("/notEnforced", new AuthenticatedSection(configNotEnforced) {
             public void setup() {
                 before(new Authenticated(configNotEnforced));
+            }
+        });
+        Route loginRemember = route("/loginRemember", new Login(config, TemplateFactory.HTML.get("authentication.loginRemember")));
+        MemoryAuthenticatedSite.AuthenticatedSection authRemember = group(new MemoryAuthenticatedSite.AuthenticatedSection(config) {
+            public void setup() {
+                before(new Authenticated(config));
             }
         });
 

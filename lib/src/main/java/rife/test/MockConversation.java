@@ -11,8 +11,7 @@ import rife.engine.exceptions.EngineException;
 import rife.tools.ArrayUtils;
 import rife.tools.StringUtils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Simulates a conversation between a web browser and a servlet container.
@@ -32,7 +31,7 @@ public class MockConversation {
 
     private Gate gate_ = null;
 
-    private final HashMap<String, Cookie> cookies_ = new HashMap<>();
+    private final HashMap<String, MockCookie> cookies_ = new HashMap<>();
     private final HashMap<String, MockSession> sessions_ = new HashMap<>();
     private String scheme_ = "http";
     private String serverName_ = "localhost";
@@ -311,7 +310,7 @@ public class MockConversation {
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
 
         for (var cookie : cookies_.values()) {
-            if (cookie.getName().equals(name)) {
+            if (cookie.getName().equals(name) && !cookie.isExpired()) {
                 return true;
             }
         }
@@ -337,7 +336,7 @@ public class MockConversation {
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
 
         for (var cookie : cookies_.values()) {
-            if (cookie.getName().equals(name)) {
+            if (cookie.getName().equals(name) && !cookie.isExpired()) {
                 return cookie;
             }
         }
@@ -387,8 +386,11 @@ public class MockConversation {
             return null;
         }
 
-        var cookies = new Cookie[cookies_.size()];
-        cookies_.values().toArray(cookies);
+        var active_cookies = new ArrayList<>(cookies_.values());
+        active_cookies.removeIf(MockCookie::isExpired);
+
+        var cookies = new MockCookie[active_cookies.size()];
+        active_cookies.toArray(cookies);
         return cookies;
     }
 
@@ -408,7 +410,7 @@ public class MockConversation {
             return;
         }
 
-        cookies_.put(buildCookieId(cookie), cookie);
+        cookies_.put(buildCookieId(cookie), new MockCookie(cookie));
     }
 
     /**
@@ -428,7 +430,7 @@ public class MockConversation {
         if (null == name) throw new IllegalArgumentException("name can't be null");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
 
-        addCookie(new Cookie(name, value));
+        addCookie(new MockCookie(name, value));
     }
 
     /**

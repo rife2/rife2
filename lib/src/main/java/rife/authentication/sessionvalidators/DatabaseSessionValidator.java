@@ -13,6 +13,7 @@ import rife.authentication.credentialsmanagers.DatabaseUsers;
 import rife.authentication.credentialsmanagers.DatabaseUsersFactory;
 import rife.authentication.exceptions.SessionValidatorException;
 import rife.authentication.remembermanagers.DatabaseRemember;
+import rife.authentication.remembermanagers.DatabaseRememberFactory;
 import rife.authentication.sessionmanagers.DatabaseSessions;
 import rife.authentication.sessionmanagers.DatabaseSessionsFactory;
 import rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErrorException;
@@ -27,15 +28,16 @@ public abstract class DatabaseSessionValidator extends DbQueryManager implements
     public static final int SESSION_INVALID = 0;
     public static final int SESSION_VALID = 1;
 
-    protected DatabaseUsers credentialsManager_ = null;
-    protected DatabaseSessions sessionManager_ = null;
-    protected DatabaseRemember rememberManager_ = null;
+    protected DatabaseUsers credentialsManager_;
+    protected DatabaseSessions sessionManager_;
+    protected DatabaseRemember rememberManager_;
 
     protected DatabaseSessionValidator(Datasource datasource) {
         super(datasource);
 
         credentialsManager_ = DatabaseUsersFactory.getInstance(datasource);
         sessionManager_ = DatabaseSessionsFactory.getInstance(datasource);
+        rememberManager_ = DatabaseRememberFactory.getInstance(datasource);
     }
 
     public void setCredentialsManager(DatabaseUsers credentialsManager) {
@@ -82,9 +84,9 @@ public abstract class DatabaseSessionValidator extends DbQueryManager implements
             return SESSION_INVALID;
         }
 
-        int result = SESSION_INVALID;
+        int result;
 
-        Select query = null;
+        Select query;
 
         // select which query to use according to the role attribute
         if (attributes.hasAttribute("role")) {

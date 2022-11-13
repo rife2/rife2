@@ -144,7 +144,7 @@ public class Login extends Identified implements SessionAttributes {
 
         // check if a cookie for remember id is provided
         var remember_id = c.cookieValue(authConfig_.rememberCookieName());
-        if (remember_id != null) {
+        if (remember_id != null && !authConfig_.prohibitRemember()) {
             var remember_manager = session_validator.getRememberManager();
             if (null == remember_manager) {
                 throw new UndefinedAuthenticationRememberManagerException();

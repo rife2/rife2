@@ -725,4 +725,95 @@ public class TestDatabaseAuthenticated {
             assertEquals(response.getHeader("Location"), "http://localhost/login");
         }
     }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    public void testDatabaseAuthenticatedRemember(Datasource datasource)
+    throws InterruptedException {
+        try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
+            site.validator.getSessionManager().setSessionDuration(1000);
+            site.config.rememberMaxAge(3);
+
+            var conversation = new MockConversation(site);
+
+            var response = conversation.doRequest("http://localhost/loginRemember");
+            var form = response.getParsedHtml().getFormWithName("credentials");
+            form.setParameter("login", "guest");
+            form.setParameter("password", "guestpass");
+            form.setParameter("remember", "on");
+            response = form.submit();
+
+            assertEquals(response.getNewCookieNames().size(), 2);
+            assertTrue(response.getNewCookieNames().contains("authId"));
+            assertTrue(response.getNewCookieNames().contains("rememberId"));
+            assertEquals(0, response.getParsedHtml().getForms().size());
+            assertEquals(response.getStatus(), 302);
+            assertEquals(response.getHeader("Location"), "http://localhost/landing");
+
+            response = conversation.doRequest("http://localhost/landing");
+            assertEquals(response.getText(), "Landing");
+            response = conversation.doRequest("http://localhost/username");
+            assertEquals(response.getText(), "guest");
+
+            Thread.sleep(2000);
+
+            // login session will be expired, let login happen through remember
+
+            response = conversation.doRequest("http://localhost/loginRemember");
+            assertEquals(response.getStatus(), 302);
+            assertEquals(response.getHeader("Location"), "http://localhost/landing");
+
+            response = conversation.doRequest("http://localhost/landing");
+            assertEquals(response.getText(), "Landing");
+            response = conversation.doRequest("http://localhost/username");
+            assertEquals(response.getText(), "guest");
+
+            Thread.sleep(4000);
+
+            // login session and remember cookie will both be expired, verify login flow is triggered again
+
+            response = conversation.doRequest("http://localhost/loginRemember");
+            assertEquals(response.getStatus(), 200);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    public void testDatabaseAuthenticatedRememberProhibited(Datasource datasource)
+    throws InterruptedException {
+        try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
+            site.config.prohibitRemember(true);
+
+            site.validator.getSessionManager().setSessionDuration(1000);
+
+            var conversation = new MockConversation(site);
+
+            var response = conversation.doRequest("http://localhost/loginRemember");
+            var form = response.getParsedHtml().getFormWithName("credentials");
+            form.setParameter("login", "guest");
+            form.setParameter("password", "guestpass");
+            form.setParameter("remember", "on");
+            response = form.submit();
+
+            assertEquals(response.getNewCookieNames().size(), 2);
+            assertTrue(response.getNewCookieNames().contains("authId"));
+            assertTrue(response.getNewCookieNames().contains("rememberId"));
+            assertEquals(0, response.getParsedHtml().getForms().size());
+            assertEquals(response.getStatus(), 302);
+            assertEquals(response.getHeader("Location"), "http://localhost/landing");
+
+            response = conversation.doRequest("http://localhost/landing");
+            assertEquals(response.getText(), "Landing");
+            response = conversation.doRequest("http://localhost/username");
+            assertEquals(response.getText(), "guest");
+
+            Thread.sleep(2000);
+
+            // login session will be expired, since remember is prohibited the login flow will be triggered
+
+            response = conversation.doRequest("http://localhost/loginRemember");
+            assertEquals(response.getStatus(), 200);
+        }
+    }
+
 }

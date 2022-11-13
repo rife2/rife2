@@ -6,7 +6,7 @@ package rife.authentication.exceptions;
 
 import java.io.Serial;
 
-public class SessionValidatorException extends Exception {
+public class SessionValidatorException extends RuntimeException {
     @Serial private static final long serialVersionUID = -6033104555814346647L;
 
     public SessionValidatorException(String message) {

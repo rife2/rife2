@@ -6,7 +6,7 @@ package rife.authentication.exceptions;
 
 import java.io.Serial;
 
-public class RememberManagerException extends Exception {
+public class RememberManagerException extends RuntimeException {
     @Serial private static final long serialVersionUID = 3486027286626106335L;
 
     public RememberManagerException(String message) {
