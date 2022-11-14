@@ -50,7 +50,6 @@ public class Gate {
             elementUrl = elementUrl.substring(0, path_parameters_index);
         }
 
-
         // Handle the request
         // check if an exception occurred during the initialization
         if (initException_ != null) {

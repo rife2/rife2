@@ -151,6 +151,78 @@ public class Router {
         return registerRoute(new RouteInstance(this, RequestMethod.POST, path, pathInfo, element));
     }
 
+    public final Route put(Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, RequestMethod.PUT, elementClass));
+    }
+
+    public final Route put(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, RequestMethod.PUT, pathInfo, elementClass));
+    }
+
+    public final Route put(String path, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, RequestMethod.PUT, path, elementClass));
+    }
+
+    public final Route put(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, RequestMethod.PUT, path, pathInfo, elementClass));
+    }
+
+    public final Route put(String path, Element element) {
+        return registerRoute(new RouteInstance(this, RequestMethod.PUT, path, element));
+    }
+
+    public final Route put(String path, PathInfoHandling pathInfo, Element element) {
+        return registerRoute(new RouteInstance(this, RequestMethod.PUT, path, pathInfo, element));
+    }
+
+    public final Route delete(Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, RequestMethod.DELETE, elementClass));
+    }
+
+    public final Route delete(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, RequestMethod.DELETE, pathInfo, elementClass));
+    }
+
+    public final Route delete(String path, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, RequestMethod.DELETE, path, elementClass));
+    }
+
+    public final Route delete(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, RequestMethod.DELETE, path, pathInfo, elementClass));
+    }
+
+    public final Route delete(String path, Element element) {
+        return registerRoute(new RouteInstance(this, RequestMethod.DELETE, path, element));
+    }
+
+    public final Route delete(String path, PathInfoHandling pathInfo, Element element) {
+        return registerRoute(new RouteInstance(this, RequestMethod.DELETE, path, pathInfo, element));
+    }
+
+    public final Route patch(Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, RequestMethod.PATCH, elementClass));
+    }
+
+    public final Route patch(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, RequestMethod.PATCH, pathInfo, elementClass));
+    }
+
+    public final Route patch(String path, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, RequestMethod.PATCH, path, elementClass));
+    }
+
+    public final Route patch(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, RequestMethod.PATCH, path, pathInfo, elementClass));
+    }
+
+    public final Route patch(String path, Element element) {
+        return registerRoute(new RouteInstance(this, RequestMethod.PATCH, path, element));
+    }
+
+    public final Route patch(String path, PathInfoHandling pathInfo, Element element) {
+        return registerRoute(new RouteInstance(this, RequestMethod.PATCH, path, pathInfo, element));
+    }
+
     public final Route route(Class<? extends Element> elementClass) {
         return registerRoute(new RouteClass(this, null, elementClass));
     }
