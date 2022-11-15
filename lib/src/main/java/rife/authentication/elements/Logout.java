@@ -66,7 +66,7 @@ public class Logout implements Element {
                 remember_cookie.setMaxAge(-1);
                 remember_cookie.setPath("/");
                 remember_cookie.setValue("");
-                c.cookie(remember_cookie);
+                c.addCookie(remember_cookie);
             }
 
             // clear the authentication cookie
@@ -75,7 +75,7 @@ public class Logout implements Element {
                 cookie.setMaxAge(-1);
                 cookie.setPath("/");
                 cookie.setValue("");
-                c.cookie(cookie);
+                c.addCookie(cookie);
             }
         }
 

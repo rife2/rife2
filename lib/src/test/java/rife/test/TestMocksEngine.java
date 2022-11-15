@@ -22,7 +22,7 @@ public class TestMocksEngine {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/simple/plain", c -> {
-                    c.contentType("text/plain");
+                    c.setContentType("text/plain");
                     c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
                 });
             }
@@ -87,11 +87,11 @@ public class TestMocksEngine {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/headers", c -> {
-                    c.header("Content-Disposition", "attachment; filename=thefile.zip");
+                    c.addHeader("Content-Disposition", "attachment; filename=thefile.zip");
                     var cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
                     cal.set(2002, Calendar.OCTOBER, 25, 19, 20, 58);
-                    c.header("DateHeader", cal.getTimeInMillis());
-                    c.header("IntHeader", 1212);
+                    c.addHeader("DateHeader", cal.getTimeInMillis());
+                    c.addHeader("IntHeader", 1212);
 
                     c.print("headers");
                 });
@@ -126,8 +126,8 @@ public class TestMocksEngine {
                     if (c.hasCookie("cookie1") &&
                         c.hasCookie("cookie2") &&
                         c.hasCookie("cookie3")) {
-                        c.cookie(new Cookie("cookie3", c.cookieValue("cookie1")));
-                        c.cookie(new Cookie("cookie4", c.cookieValue("cookie2")));
+                        c.addCookie(new Cookie("cookie3", c.cookieValue("cookie1")));
+                        c.addCookie(new Cookie("cookie4", c.cookieValue("cookie2")));
                     }
 
                     c.print("source");
@@ -159,7 +159,7 @@ public class TestMocksEngine {
             public void setup() {
                 get("/contentlength", c -> {
                     var out = "this goes out";
-                    c.contentLength(out.length());
+                    c.setContentLength(out.length());
                     var outputstream = c.outputStream();
                     outputstream.write(out.getBytes(StandardCharsets.ISO_8859_1));
                 });
@@ -177,8 +177,8 @@ public class TestMocksEngine {
             public void setup() {
                 get("/dynamiccontenttype", c -> {
                     switch (c.parameter("switch")) {
-                        case "text" -> c.contentType("text/plain");
-                        case "html" -> c.contentType("text/html");
+                        case "text" -> c.setContentType("text/plain");
+                        case "html" -> c.setContentType("text/html");
                     }
                 });
             }

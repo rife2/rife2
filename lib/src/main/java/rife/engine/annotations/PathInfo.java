@@ -16,10 +16,4 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Documented
 public @interface PathInfo {
-    /**
-     * The regular expression pattern for the path info.
-     *
-     * @since 2.0
-     */
-    String pattern() default ".*";
 }

@@ -26,7 +26,7 @@ public class Identified implements Element {
     throws Exception {
         var identity = getIdentity(c);
         if (identity != null) {
-            c.attribute(authConfig_.identityAttributeName(), identity);
+            c.setAttribute(authConfig_.identityAttributeName(), identity);
         }
     }
 

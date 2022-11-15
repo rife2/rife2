@@ -18,12 +18,9 @@ import rife.tools.ServletUtils;
 import rife.tools.StringUtils;
 import rife.tools.exceptions.BeanUtilsException;
 
-import java.beans.PropertyDescriptor;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class Context {
     public static final boolean DEFAULT_BOOLEAN = false;
@@ -1248,7 +1245,7 @@ public class Context {
      * @see #cookie(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #cookie(Cookie)
+     * @see #addCookie(Cookie)
      * @since 2.0
      */
     public String cookieValue(String name) {
@@ -1269,7 +1266,7 @@ public class Context {
      * @see #cookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
-     * @see #cookie(Cookie)
+     * @see #addCookie(Cookie)
      * @since 2.0
      */
     public Map<String, String> cookieValues() {
@@ -1296,7 +1293,7 @@ public class Context {
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #cookie(Cookie)
+     * @see #addCookie(Cookie)
      * @since 2.0
      */
     public String cookieValue(String name, String defaultValue) {
@@ -1319,7 +1316,7 @@ public class Context {
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #cookie(Cookie)
+     * @see #addCookie(Cookie)
      * @since 2.0
      */
     public boolean cookieBoolean(String name) {
@@ -1340,7 +1337,7 @@ public class Context {
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #cookie(Cookie)
+     * @see #addCookie(Cookie)
      * @since 2.0
      */
     public boolean cookieBoolean(String name, boolean defaultValue) {
@@ -1364,7 +1361,7 @@ public class Context {
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #cookie(Cookie)
+     * @see #addCookie(Cookie)
      * @since 2.0
      */
     public int cookieInt(String name) {
@@ -1385,7 +1382,7 @@ public class Context {
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #cookie(Cookie)
+     * @see #addCookie(Cookie)
      * @since 2.0
      */
     public int cookieInt(String name, int defaultValue) {
@@ -1412,7 +1409,7 @@ public class Context {
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #cookie(Cookie)
+     * @see #addCookie(Cookie)
      * @since 2.0
      */
     public long cookieLong(String name) {
@@ -1433,7 +1430,7 @@ public class Context {
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #cookie(Cookie)
+     * @see #addCookie(Cookie)
      * @since 2.0
      */
     public long cookieLong(String name, long defaultValue) {
@@ -1460,7 +1457,7 @@ public class Context {
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #cookie(Cookie)
+     * @see #addCookie(Cookie)
      * @since 2.0
      */
     public double cookieDouble(String name) {
@@ -1481,7 +1478,7 @@ public class Context {
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #cookie(Cookie)
+     * @see #addCookie(Cookie)
      * @since 2.0
      */
     public double cookieDouble(String name, double defaultValue) {
@@ -1508,7 +1505,7 @@ public class Context {
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #cookie(Cookie)
+     * @see #addCookie(Cookie)
      * @since 2.0
      */
     public float cookieFloat(String name) {
@@ -1529,7 +1526,7 @@ public class Context {
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #cookie(Cookie)
+     * @see #addCookie(Cookie)
      * @since 2.0
      */
     public float cookieFloat(String name, float defaultValue) {
@@ -1585,7 +1582,7 @@ public class Context {
      *
      * @since 2.0
      */
-    public void attribute(String name, Object object) {
+    public void setAttribute(String name, Object object) {
         request_.setAttribute(name, object);
     }
 
@@ -1846,7 +1843,7 @@ public class Context {
      *
      * @since 2.0
      */
-    public void contentType(String contentType) {
+    public void setContentType(String contentType) {
         response_.setContentType(contentType);
     }
 
@@ -1855,7 +1852,7 @@ public class Context {
      *
      * @since 2.0
      */
-    public void locale(Locale locale) {
+    public void setLocale(Locale locale) {
         response_.setLocale(locale);
     }
 
@@ -1864,7 +1861,7 @@ public class Context {
      *
      * @since 2.0
      */
-    public void contentLength(int length) {
+    public void setContentLength(int length) {
         response_.setContentLength(length);
     }
 
@@ -1873,7 +1870,7 @@ public class Context {
      *
      * @since 2.0
      */
-    public void cookie(Cookie cookie) {
+    public void addCookie(Cookie cookie) {
         response_.addCookie(cookie);
     }
 
@@ -1884,7 +1881,7 @@ public class Context {
      * @param builder the <code>CookieBuilder</code> to use for building the <code>Cookie</code>
      * @since 2.0
      */
-    public void cookie(CookieBuilder builder) {
+    public void addCookie(CookieBuilder builder) {
         response_.addCookie(builder.cookie());
     }
 
@@ -1909,7 +1906,7 @@ public class Context {
         var cookie = new Cookie(name, "");
         cookie.setPath(path);
         cookie.setMaxAge(0);
-        cookie(cookie);
+        addCookie(cookie);
     }
 
     /**
@@ -1917,7 +1914,7 @@ public class Context {
      *
      * @since 2.0
      */
-    public void header(String name, String value) {
+    public void addHeader(String name, String value) {
         response_.addHeader(name, value);
     }
 
@@ -1926,7 +1923,7 @@ public class Context {
      *
      * @since 2.0
      */
-    public void header(String name, long date) {
+    public void addHeader(String name, long date) {
         response_.addDateHeader(name, date);
     }
 
@@ -1935,7 +1932,7 @@ public class Context {
      *
      * @since 2.0
      */
-    public void header(String name, int integer) {
+    public void addHeader(String name, int integer) {
         response_.addIntHeader(name, integer);
     }
 
@@ -1944,7 +1941,7 @@ public class Context {
      *
      * @since 2.0
      */
-    public void status(int statusCode) {
+    public void setStatus(int statusCode) {
         response_.setStatus(statusCode);
     }
 
