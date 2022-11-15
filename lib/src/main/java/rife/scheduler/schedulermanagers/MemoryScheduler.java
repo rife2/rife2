@@ -7,7 +7,7 @@ package rife.scheduler.schedulermanagers;
 import rife.scheduler.Scheduler;
 import rife.scheduler.SchedulerFactory;
 import rife.scheduler.taskmanagers.MemoryTasks;
-import rife.scheduler.taskoptionmanagers.MemoryTaskoptions;
+import rife.scheduler.taskoptionmanagers.MemoryTaskOptions;
 
 public class MemoryScheduler implements SchedulerFactory {
     private Scheduler scheduler_ = null;
@@ -17,7 +17,7 @@ public class MemoryScheduler implements SchedulerFactory {
 
     public Scheduler getScheduler() {
         if (null == scheduler_) {
-            scheduler_ = new Scheduler(new MemoryTasks(), new MemoryTaskoptions());
+            scheduler_ = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
         }
         return scheduler_;
     }

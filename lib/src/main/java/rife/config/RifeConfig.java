@@ -713,7 +713,7 @@ public class RifeConfig {
         private int taskoptionNameMaximumLength_ = DEFAULT_TASKOPTION_NAME_MAXIMUM_LENGTH;
         private String tableTask_ = DEFAULT_TABLE_TASK;
         private String sequenceTask_ = DEFAULT_SEQUENCE_TASK;
-        private String tableTaskoption_ = DEFAULT_TABLE_TASKOPTION;
+        private String tableTaskOption_ = DEFAULT_TABLE_TASKOPTION;
 
         public static final int DEFAULT_TASK_TYPE_MAXIMUM_LENGTH = 255;
         public static final int DEFAULT_TASK_FREQUENCY_MAXIMUM_LENGTH = 255;
@@ -721,7 +721,7 @@ public class RifeConfig {
         public static final int DEFAULT_TASKOPTION_NAME_MAXIMUM_LENGTH = 255;
         public static final String DEFAULT_TABLE_TASK = "SchedTask";
         public static final String DEFAULT_SEQUENCE_TASK = "SEQ_SCHEDTASK";
-        public static final String DEFAULT_TABLE_TASKOPTION = "SchedTaskoption";
+        public static final String DEFAULT_TABLE_TASKOPTION = "SchedTaskOption";
 
         public int getTaskTypeMaximumLength() {
             return taskTypeMaximumLength_;
@@ -741,20 +741,20 @@ public class RifeConfig {
             return this;
         }
 
-        public int getTaskoptionValueMaximumLength() {
+        public int getTaskOptionValueMaximumLength() {
             return taskoptionValueMaximumLength_;
         }
 
-        public SchedulerConfig setTaskoptionValueMaximumLength(int length) {
+        public SchedulerConfig setTaskOptionValueMaximumLength(int length) {
             taskoptionValueMaximumLength_ = length;
             return this;
         }
 
-        public int getTaskoptionNameMaximumLength() {
+        public int getTaskOptionNameMaximumLength() {
             return taskoptionNameMaximumLength_;
         }
 
-        public SchedulerConfig setTaskoptionNameMaximumLength(int length) {
+        public SchedulerConfig setTaskOptionNameMaximumLength(int length) {
             taskoptionNameMaximumLength_ = length;
             return this;
         }
@@ -777,12 +777,12 @@ public class RifeConfig {
             return this;
         }
 
-        public String getTableTaskoption() {
-            return tableTaskoption_;
+        public String getTableTaskOption() {
+            return tableTaskOption_;
         }
 
-        public SchedulerConfig setTableTaskoption(String name) {
-            tableTaskoption_ = name;
+        public SchedulerConfig setTableTaskOption(String name) {
+            tableTaskOption_ = name;
             return this;
         }
     }

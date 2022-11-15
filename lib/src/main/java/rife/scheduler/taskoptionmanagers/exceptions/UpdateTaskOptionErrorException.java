@@ -4,27 +4,27 @@
  */
 package rife.scheduler.taskoptionmanagers.exceptions;
 
-import rife.scheduler.Taskoption;
-import rife.scheduler.exceptions.TaskoptionManagerException;
+import rife.scheduler.TaskOption;
+import rife.scheduler.exceptions.TaskOptionManagerException;
 
 import java.io.Serial;
 
-public class UpdateTaskoptionErrorException extends TaskoptionManagerException {
+public class UpdateTaskOptionErrorException extends TaskOptionManagerException {
     @Serial private static final long serialVersionUID = 4032049075661263762L;
 
-    private final Taskoption taskoption_;
+    private final TaskOption taskoption_;
 
-    public UpdateTaskoptionErrorException(Taskoption taskoption) {
+    public UpdateTaskOptionErrorException(TaskOption taskoption) {
         this(taskoption, null);
     }
 
-    public UpdateTaskoptionErrorException(Taskoption taskoption, Throwable cause) {
+    public UpdateTaskOptionErrorException(TaskOption taskoption, Throwable cause) {
         super("Error while updating taskoption with task id '" + taskoption.getTaskId() + "', name '" + taskoption.getName() + "' and value '" + taskoption.getValue() + "'.", cause);
 
         taskoption_ = taskoption;
     }
 
-    public Taskoption getTaskoption() {
+    public TaskOption getTaskOption() {
         return taskoption_;
     }
 }

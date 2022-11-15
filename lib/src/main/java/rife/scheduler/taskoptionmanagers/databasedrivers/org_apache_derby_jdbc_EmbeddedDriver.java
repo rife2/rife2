@@ -12,12 +12,12 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
     public org_apache_derby_jdbc_EmbeddedDriver(Datasource datasource) {
         super(datasource);
 
-        createTableTaskoption_ = new CreateTable(getDatasource())
-            .table(RifeConfig.scheduler().getTableTaskoption())
+        createTableTaskOption_ = new CreateTable(getDatasource())
+            .table(RifeConfig.scheduler().getTableTaskOption())
             .column("task_id", Integer.class, CreateTable.NOTNULL)
-            .column("name", String.class, RifeConfig.scheduler().getTaskoptionNameMaximumLength(), CreateTable.NOTNULL)
-            .column("val", String.class, RifeConfig.scheduler().getTaskoptionValueMaximumLength(), CreateTable.NOTNULL)
-            .primaryKey(RifeConfig.scheduler().getTableTaskoption().toUpperCase() + "_PK", new String[]{"task_id", "name"})
-            .foreignKey(RifeConfig.scheduler().getTableTaskoption().toUpperCase() + "_FK", RifeConfig.scheduler().getTableTask(), "task_id", "id", null, CreateTable.CASCADE);
+            .column("name", String.class, RifeConfig.scheduler().getTaskOptionNameMaximumLength(), CreateTable.NOTNULL)
+            .column("val", String.class, RifeConfig.scheduler().getTaskOptionValueMaximumLength(), CreateTable.NOTNULL)
+            .primaryKey(RifeConfig.scheduler().getTableTaskOption().toUpperCase() + "_PK", new String[]{"task_id", "name"})
+            .foreignKey(RifeConfig.scheduler().getTableTaskOption().toUpperCase() + "_FK", RifeConfig.scheduler().getTableTask(), "task_id", "id", null, CreateTable.CASCADE);
     }
 }

@@ -8,12 +8,12 @@ import rife.database.Datasource;
 import rife.database.DbQueryManagerCache;
 import rife.database.DbQueryManagerFactory;
 
-public abstract class DatabaseTaskoptionsFactory extends DbQueryManagerFactory {
-    private static final String MANAGER_PACKAGE_NAME = DatabaseTaskoptionsFactory.class.getPackage().getName() + ".databasedrivers.";
+public abstract class DatabaseTaskOptionsFactory extends DbQueryManagerFactory {
+    private static final String MANAGER_PACKAGE_NAME = DatabaseTaskOptionsFactory.class.getPackage().getName() + ".databasedrivers.";
 
     private static final DbQueryManagerCache cache_ = new DbQueryManagerCache();
 
-    public static DatabaseTaskoptions getInstance(Datasource datasource) {
-        return (DatabaseTaskoptions) getInstance(MANAGER_PACKAGE_NAME, cache_, datasource);
+    public static DatabaseTaskOptions getInstance(Datasource datasource) {
+        return (DatabaseTaskOptions) getInstance(MANAGER_PACKAGE_NAME, cache_, datasource);
     }
 }

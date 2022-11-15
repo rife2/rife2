@@ -39,7 +39,7 @@ public class Task extends Validation implements Cloneable {
         return taskManager_;
     }
 
-    public String getTaskoptionValue(String name)
+    public String getTaskOptionValue(String name)
     throws SchedulerException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
@@ -53,12 +53,12 @@ public class Task extends Validation implements Cloneable {
             return null;
         }
 
-        TaskoptionManager taskoption_manager = scheduler.getTaskoptionManager();
+        TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
         if (null == taskoption_manager) {
             return null;
         }
 
-        Taskoption taskoption = taskoption_manager.getTaskoption(getId(), name);
+        TaskOption taskoption = taskoption_manager.getTaskOption(getId(), name);
         if (null == taskoption) {
             return null;
         }

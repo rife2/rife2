@@ -5,18 +5,18 @@
 package rife.scheduler.taskoptionmanagers.exceptions;
 
 import rife.database.exceptions.DatabaseException;
-import rife.scheduler.exceptions.TaskoptionManagerException;
+import rife.scheduler.exceptions.TaskOptionManagerException;
 
 import java.io.Serial;
 
-public class InstallTaskoptionsErrorException extends TaskoptionManagerException {
+public class InstallTaskOptionsErrorException extends TaskOptionManagerException {
     @Serial private static final long serialVersionUID = 3383700445767477585L;
 
-    public InstallTaskoptionsErrorException() {
+    public InstallTaskOptionsErrorException() {
         this(null);
     }
 
-    public InstallTaskoptionsErrorException(DatabaseException cause) {
+    public InstallTaskOptionsErrorException(DatabaseException cause) {
         super("Can't install the taskoption database structure.", cause);
     }
 }

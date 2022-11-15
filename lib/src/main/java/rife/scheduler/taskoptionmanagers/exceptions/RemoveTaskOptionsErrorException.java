@@ -5,18 +5,18 @@
 package rife.scheduler.taskoptionmanagers.exceptions;
 
 import rife.database.exceptions.DatabaseException;
-import rife.scheduler.exceptions.TaskoptionManagerException;
+import rife.scheduler.exceptions.TaskOptionManagerException;
 
 import java.io.Serial;
 
-public class RemoveTaskoptionsErrorException extends TaskoptionManagerException {
+public class RemoveTaskOptionsErrorException extends TaskOptionManagerException {
     @Serial private static final long serialVersionUID = 2096333126507604963L;
 
-    public RemoveTaskoptionsErrorException() {
+    public RemoveTaskOptionsErrorException() {
         this(null);
     }
 
-    public RemoveTaskoptionsErrorException(DatabaseException cause) {
+    public RemoveTaskOptionsErrorException(DatabaseException cause) {
         super("Can't remove the taskoption database structure.", cause);
     }
 }

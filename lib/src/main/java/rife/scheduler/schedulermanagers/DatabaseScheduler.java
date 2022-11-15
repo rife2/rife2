@@ -14,8 +14,8 @@ import rife.scheduler.schedulermanagers.exceptions.InstallSchedulerErrorExceptio
 import rife.scheduler.schedulermanagers.exceptions.RemoveSchedulerErrorException;
 import rife.scheduler.taskmanagers.DatabaseTasks;
 import rife.scheduler.taskmanagers.DatabaseTasksFactory;
-import rife.scheduler.taskoptionmanagers.DatabaseTaskoptions;
-import rife.scheduler.taskoptionmanagers.DatabaseTaskoptionsFactory;
+import rife.scheduler.taskoptionmanagers.DatabaseTaskOptions;
+import rife.scheduler.taskoptionmanagers.DatabaseTaskOptionsFactory;
 
 public abstract class DatabaseScheduler extends DbQueryManager implements SchedulerFactory {
     protected DatabaseScheduler(Datasource datasource) {
@@ -23,7 +23,7 @@ public abstract class DatabaseScheduler extends DbQueryManager implements Schedu
     }
 
     public Scheduler getScheduler() {
-        return new Scheduler(DatabaseTasksFactory.getInstance(getDatasource()), DatabaseTaskoptionsFactory.getInstance(getDatasource()));
+        return new Scheduler(DatabaseTasksFactory.getInstance(getDatasource()), DatabaseTaskOptionsFactory.getInstance(getDatasource()));
     }
 
     public abstract boolean install()
@@ -36,7 +36,7 @@ public abstract class DatabaseScheduler extends DbQueryManager implements Schedu
     throws SchedulerManagerException {
         try {
             DatabaseTasks tasks_manager = DatabaseTasksFactory.getInstance(getDatasource());
-            DatabaseTaskoptions taskoptions_manager = DatabaseTaskoptionsFactory.getInstance(getDatasource());
+            DatabaseTaskOptions taskoptions_manager = DatabaseTaskOptionsFactory.getInstance(getDatasource());
 
             tasks_manager.install();
             taskoptions_manager.install();
@@ -51,7 +51,7 @@ public abstract class DatabaseScheduler extends DbQueryManager implements Schedu
     throws SchedulerManagerException {
         try {
             DatabaseTasks tasks_manager = DatabaseTasksFactory.getInstance(getDatasource());
-            DatabaseTaskoptions taskoptions_manager = DatabaseTaskoptionsFactory.getInstance(getDatasource());
+            DatabaseTaskOptions taskoptions_manager = DatabaseTaskOptionsFactory.getInstance(getDatasource());
 
             taskoptions_manager.remove();
             tasks_manager.remove();

@@ -4,11 +4,11 @@
  */
 package rife.scheduler.taskoptionmanagers.exceptions;
 
-import rife.scheduler.exceptions.TaskoptionManagerException;
+import rife.scheduler.exceptions.TaskOptionManagerException;
 
 import java.io.Serial;
 
-public class InexistentTaskIdException extends TaskoptionManagerException {
+public class InexistentTaskIdException extends TaskOptionManagerException {
     @Serial private static final long serialVersionUID = -8781897352662853904L;
 
     private final int taskID_;

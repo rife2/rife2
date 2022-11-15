@@ -5,20 +5,20 @@
 package rife.scheduler.taskoptionmanagers.exceptions;
 
 import rife.database.exceptions.DatabaseException;
-import rife.scheduler.exceptions.TaskoptionManagerException;
+import rife.scheduler.exceptions.TaskOptionManagerException;
 
 import java.io.Serial;
 
-public class GetTaskoptionsErrorException extends TaskoptionManagerException {
+public class GetTaskOptionsErrorException extends TaskOptionManagerException {
     @Serial private static final long serialVersionUID = -4348602870066135917L;
 
     private final int taskId_;
 
-    public GetTaskoptionsErrorException(int taskId) {
+    public GetTaskOptionsErrorException(int taskId) {
         this(taskId, null);
     }
 
-    public GetTaskoptionsErrorException(int taskId, DatabaseException cause) {
+    public GetTaskOptionsErrorException(int taskId, DatabaseException cause) {
         super("Error while getting the taskoptions for task id '" + taskId + "'.", cause);
 
         taskId_ = taskId;

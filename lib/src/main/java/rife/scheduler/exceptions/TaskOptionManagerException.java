@@ -6,18 +6,18 @@ package rife.scheduler.exceptions;
 
 import java.io.Serial;
 
-public class TaskoptionManagerException extends SchedulerException {
+public class TaskOptionManagerException extends SchedulerException {
     @Serial private static final long serialVersionUID = 4109184135680666647L;
 
-    public TaskoptionManagerException(String message) {
+    public TaskOptionManagerException(String message) {
         super(message);
     }
 
-    public TaskoptionManagerException(String message, Throwable cause) {
+    public TaskOptionManagerException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public TaskoptionManagerException(Throwable cause) {
+    public TaskOptionManagerException(Throwable cause) {
         super(cause);
     }
 }

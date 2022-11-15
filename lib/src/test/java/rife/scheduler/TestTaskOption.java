@@ -12,22 +12,22 @@ import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestTaskoption {
+public class TestTaskOption {
     @Test
-    public void testInstantiateTaskoption() {
-        Taskoption taskoption = null;
+    public void testInstantiateTaskOption() {
+        TaskOption taskoption = null;
         assertNull(taskoption);
-        taskoption = new Taskoption();
+        taskoption = new TaskOption();
         assertNotNull(taskoption);
     }
 
     @Test
-    public void testPopulateTaskoption() {
+    public void testPopulateTaskOption() {
         int taskid = 1;
         String name = "name";
         String value = "value";
 
-        Taskoption taskoption = new Taskoption();
+        TaskOption taskoption = new TaskOption();
         taskoption.setTaskId(taskid);
         taskoption.setName(name);
         taskoption.setValue(value);
@@ -38,18 +38,18 @@ public class TestTaskoption {
     }
 
     @Test
-    public void testCloneTaskoption() {
+    public void testCloneTaskOption() {
         try {
             int taskid = 1;
             String name = "name";
             String value = "value";
 
-            Taskoption taskoption = new Taskoption();
+            TaskOption taskoption = new TaskOption();
             taskoption.setTaskId(taskid);
             taskoption.setName(name);
             taskoption.setValue(value);
 
-            Taskoption taskoption_clone = taskoption.clone();
+            TaskOption taskoption_clone = taskoption.clone();
             assertNotSame(taskoption, taskoption_clone);
             assertNotNull(taskoption_clone);
             assertEquals(taskoption, taskoption_clone);
@@ -59,8 +59,8 @@ public class TestTaskoption {
     }
 
     @Test
-    public void testTaskoptionValidation() {
-        Taskoption taskoption = new Taskoption();
+    public void testTaskOptionValidation() {
+        TaskOption taskoption = new TaskOption();
         assertEquals(false, taskoption.validate());
         assertEquals(3, taskoption.countValidationErrors());
         ValidationError error = null;

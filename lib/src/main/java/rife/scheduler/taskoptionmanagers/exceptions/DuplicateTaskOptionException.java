@@ -4,17 +4,17 @@
  */
 package rife.scheduler.taskoptionmanagers.exceptions;
 
-import rife.scheduler.exceptions.TaskoptionManagerException;
+import rife.scheduler.exceptions.TaskOptionManagerException;
 
 import java.io.Serial;
 
-public class DuplicateTaskoptionException extends TaskoptionManagerException {
+public class DuplicateTaskOptionException extends TaskOptionManagerException {
     @Serial private static final long serialVersionUID = 1952213015727655475L;
 
     private final int taskID_;
     private final String taskoptionName_;
 
-    public DuplicateTaskoptionException(int taskid, String taskoptionName) {
+    public DuplicateTaskOptionException(int taskid, String taskoptionName) {
         super("The task option with task id '" + taskid + "' and name '" + taskoptionName + "' already exists.");
 
         taskID_ = taskid;
@@ -25,7 +25,7 @@ public class DuplicateTaskoptionException extends TaskoptionManagerException {
         return taskID_;
     }
 
-    public String getTaskoptionName() {
+    public String getTaskOptionName() {
         return taskoptionName_;
     }
 }

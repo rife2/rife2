@@ -11,16 +11,16 @@ import java.util.HashMap;
 
 public class Scheduler extends Thread {
     private TaskManager taskManager_ = null;
-    private TaskoptionManager taskoptionManager_ = null;
+    private TaskOptionManager taskoptionManager_ = null;
     private int sleepTime_ = 500;
     private final HashMap<Object, Executor> executors_;
 
-    public Scheduler(TaskManager taskManager, TaskoptionManager taskoptionManager) {
+    public Scheduler(TaskManager taskManager, TaskOptionManager taskoptionManager) {
         super("SCHEDULER_DAEMON");
 
         setDaemon(true);
         setTaskManager(taskManager);
-        setTaskoptionManager(taskoptionManager);
+        setTaskOptionManager(taskoptionManager);
         executors_ = new HashMap<Object, Executor>();
     }
 
@@ -35,14 +35,14 @@ public class Scheduler extends Thread {
         return taskManager_;
     }
 
-    public void setTaskoptionManager(TaskoptionManager taskoptionManager) {
+    public void setTaskOptionManager(TaskOptionManager taskoptionManager) {
         if (null == taskoptionManager) throw new IllegalArgumentException("taskoptionManager can't be null.");
 
         taskoptionManager_ = taskoptionManager;
         taskoptionManager.setScheduler(this);
     }
 
-    public TaskoptionManager getTaskoptionManager() {
+    public TaskOptionManager getTaskOptionManager() {
         return taskoptionManager_;
     }
 

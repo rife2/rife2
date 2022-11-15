@@ -30,12 +30,12 @@ public class DbProbeExecutor extends Executor {
     @Override
     public boolean executeTask(Task task) {
         try {
-            String ds_name = task.getTaskoptionValue("datasource");
+            String ds_name = task.getTaskOptionValue("datasource");
             if (null == ds_name) {
                 ds_name = "datasource";
             }
 
-            String query = task.getTaskoptionValue("query");
+            String query = task.getTaskOptionValue("query");
             if (null == query) {
                 query = "select 1";
             }

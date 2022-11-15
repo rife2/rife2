@@ -11,12 +11,12 @@ import rife.database.DbPreparedStatementHandler;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.CreateTable;
 import rife.database.queries.Select;
-import rife.scheduler.Taskoption;
-import rife.scheduler.exceptions.TaskoptionManagerException;
-import rife.scheduler.taskoptionmanagers.exceptions.AddTaskoptionErrorException;
-import rife.scheduler.taskoptionmanagers.exceptions.DuplicateTaskoptionException;
+import rife.scheduler.TaskOption;
+import rife.scheduler.exceptions.TaskOptionManagerException;
+import rife.scheduler.taskoptionmanagers.exceptions.AddTaskOptionErrorException;
+import rife.scheduler.taskoptionmanagers.exceptions.DuplicateTaskOptionException;
 import rife.scheduler.taskoptionmanagers.exceptions.InexistentTaskIdException;
-import rife.scheduler.taskoptionmanagers.exceptions.UpdateTaskoptionErrorException;
+import rife.scheduler.taskoptionmanagers.exceptions.UpdateTaskOptionErrorException;
 
 public class com_mysql_cj_jdbc_Driver extends generic {
     protected Select taskIdExists_ = null;
@@ -24,20 +24,20 @@ public class com_mysql_cj_jdbc_Driver extends generic {
     public com_mysql_cj_jdbc_Driver(Datasource datasource) {
         super(datasource);
 
-        createTableTaskoption_ = new CreateTable(getDatasource())
-            .table(RifeConfig.scheduler().getTableTaskoption())
+        createTableTaskOption_ = new CreateTable(getDatasource())
+            .table(RifeConfig.scheduler().getTableTaskOption())
             .column("task_id", Integer.class, CreateTable.NOTNULL)
-            .column("name", String.class, RifeConfig.scheduler().getTaskoptionNameMaximumLength(), CreateTable.NOTNULL)
-            .column("val", String.class, RifeConfig.scheduler().getTaskoptionValueMaximumLength(), CreateTable.NOTNULL)
-            .primaryKey(RifeConfig.scheduler().getTableTaskoption().toUpperCase() + "_PK", new String[]{"task_id", "name"});
+            .column("name", String.class, RifeConfig.scheduler().getTaskOptionNameMaximumLength(), CreateTable.NOTNULL)
+            .column("val", String.class, RifeConfig.scheduler().getTaskOptionValueMaximumLength(), CreateTable.NOTNULL)
+            .primaryKey(RifeConfig.scheduler().getTableTaskOption().toUpperCase() + "_PK", new String[]{"task_id", "name"});
 
         taskIdExists_ = new Select(getDatasource())
             .from(RifeConfig.scheduler().getTableTask())
             .whereParameter("id", "=");
     }
 
-    public boolean addTaskoption(final Taskoption taskoption)
-    throws TaskoptionManagerException {
+    public boolean addTaskOption(final TaskOption taskoption)
+    throws TaskOptionManagerException {
         if (null == taskoption) throw new IllegalArgumentException("taskoption can't be null.");
 
         // simulate TaskID foreign key
@@ -51,11 +51,11 @@ public class com_mysql_cj_jdbc_Driver extends generic {
                 throw new InexistentTaskIdException(taskoption.getTaskId());
             }
         } catch (DatabaseException e) {
-            throw new AddTaskoptionErrorException(taskoption, e);
+            throw new AddTaskOptionErrorException(taskoption, e);
         }
 
         try {
-            return _addTaskoption(addTaskoption_, new DbPreparedStatementHandler() {
+            return _addTaskOption(addTaskOption_, new DbPreparedStatementHandler() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setInt("task_id", taskoption.getTaskId())
@@ -63,11 +63,11 @@ public class com_mysql_cj_jdbc_Driver extends generic {
                         .setString("val", taskoption.getValue());
                 }
             }, taskoption);
-        } catch (TaskoptionManagerException e) {
+        } catch (TaskOptionManagerException e) {
             if (null != e.getCause() &&
                 null != e.getCause().getCause()) {
                 if (-1 != e.getCause().getCause().getMessage().toLowerCase().indexOf("duplicate")) {
-                    throw new DuplicateTaskoptionException(taskoption.getTaskId(), taskoption.getName());
+                    throw new DuplicateTaskOptionException(taskoption.getTaskId(), taskoption.getName());
                 }
             }
 
@@ -75,8 +75,8 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         }
     }
 
-    public boolean updateTaskoption(final Taskoption taskoption)
-    throws TaskoptionManagerException {
+    public boolean updateTaskOption(final TaskOption taskoption)
+    throws TaskOptionManagerException {
         if (null == taskoption) throw new IllegalArgumentException("taskoption can't be null.");
 
         // simulate TaskID foreign key
@@ -90,11 +90,11 @@ public class com_mysql_cj_jdbc_Driver extends generic {
                 throw new InexistentTaskIdException(taskoption.getTaskId());
             }
         } catch (DatabaseException e) {
-            throw new UpdateTaskoptionErrorException(taskoption, e);
+            throw new UpdateTaskOptionErrorException(taskoption, e);
         }
 
         try {
-            return _updateTaskoption(updateTaskoption_, new DbPreparedStatementHandler() {
+            return _updateTaskOption(updateTaskOption_, new DbPreparedStatementHandler() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setInt("task_id", taskoption.getTaskId())
@@ -102,11 +102,11 @@ public class com_mysql_cj_jdbc_Driver extends generic {
                         .setString("val", taskoption.getValue());
                 }
             }, taskoption);
-        } catch (TaskoptionManagerException e) {
+        } catch (TaskOptionManagerException e) {
             if (null != e.getCause() &&
                 null != e.getCause().getCause()) {
                 if (e.getCause().getCause().getMessage().toLowerCase().contains("duplicate")) {
-                    throw new DuplicateTaskoptionException(taskoption.getTaskId(), taskoption.getName());
+                    throw new DuplicateTaskOptionException(taskoption.getTaskId(), taskoption.getName());
                 }
             }
 

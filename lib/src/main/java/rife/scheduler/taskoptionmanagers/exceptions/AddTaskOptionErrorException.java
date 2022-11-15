@@ -4,27 +4,27 @@
  */
 package rife.scheduler.taskoptionmanagers.exceptions;
 
-import rife.scheduler.Taskoption;
-import rife.scheduler.exceptions.TaskoptionManagerException;
+import rife.scheduler.TaskOption;
+import rife.scheduler.exceptions.TaskOptionManagerException;
 
 import java.io.Serial;
 
-public class AddTaskoptionErrorException extends TaskoptionManagerException {
+public class AddTaskOptionErrorException extends TaskOptionManagerException {
     @Serial private static final long serialVersionUID = 4905743175691118664L;
 
-    private final Taskoption taskoption_;
+    private final TaskOption taskoption_;
 
-    public AddTaskoptionErrorException(Taskoption taskoption) {
+    public AddTaskOptionErrorException(TaskOption taskoption) {
         this(taskoption, null);
     }
 
-    public AddTaskoptionErrorException(Taskoption taskoption, Throwable cause) {
+    public AddTaskOptionErrorException(TaskOption taskoption, Throwable cause) {
         super("Error while adding taskoption with task id '" + taskoption.getTaskId() + "', name '" + taskoption.getName() + "' and value '" + taskoption.getValue() + "'.", cause);
 
         taskoption_ = taskoption;
     }
 
-    public Taskoption getTaskoption() {
+    public TaskOption getTaskOption() {
         return taskoption_;
     }
 }

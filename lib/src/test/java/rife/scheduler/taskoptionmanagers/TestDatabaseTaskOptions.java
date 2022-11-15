@@ -10,12 +10,12 @@ import rife.database.Datasource;
 import rife.database.TestDatasources;
 import rife.scheduler.Task;
 import rife.scheduler.TaskManager;
-import rife.scheduler.Taskoption;
-import rife.scheduler.TaskoptionManager;
+import rife.scheduler.TaskOption;
+import rife.scheduler.TaskOptionManager;
 import rife.scheduler.TestTasktypes;
 import rife.scheduler.exceptions.SchedulerException;
 import rife.scheduler.exceptions.SchedulerManagerException;
-import rife.scheduler.exceptions.TaskoptionManagerException;
+import rife.scheduler.exceptions.TaskOptionManagerException;
 import rife.scheduler.schedulermanagers.DatabaseScheduler;
 import rife.scheduler.schedulermanagers.DatabaseSchedulerFactory;
 import rife.scheduler.taskoptionmanagers.exceptions.InexistentTaskIdException;
@@ -26,7 +26,7 @@ import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestDatabaseTaskoptions {
+public class TestDatabaseTaskOptions {
     public void setup(Datasource datasource) {
         DatabaseScheduler manager = DatabaseSchedulerFactory.getInstance(datasource);
 
@@ -49,10 +49,10 @@ public class TestDatabaseTaskoptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiateTaskoptionManager(Datasource datasource) {
+    public void testInstantiateTaskOptionManager(Datasource datasource) {
         setup(datasource);
         try {
-            TaskoptionManager manager = DatabaseTaskoptionsFactory.getInstance(datasource);
+            TaskOptionManager manager = DatabaseTaskOptionsFactory.getInstance(datasource);
             assertNotNull(manager);
         } finally {
             tearDown(datasource);
@@ -61,21 +61,21 @@ public class TestDatabaseTaskoptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testAddTaskoptionWithInexistentTaskId(Datasource datasource) {
+    public void testAddTaskOptionWithInexistentTaskId(Datasource datasource) {
         setup(datasource);
         try {
-            Taskoption taskoption = new Taskoption();
+            TaskOption taskoption = new TaskOption();
             taskoption.setTaskId(0);
             taskoption.setName("name");
             taskoption.setValue("value");
 
-            TaskoptionManager manager = DatabaseTaskoptionsFactory.getInstance(datasource);
+            TaskOptionManager manager = DatabaseTaskOptionsFactory.getInstance(datasource);
             try {
-                manager.addTaskoption(taskoption);
+                manager.addTaskOption(taskoption);
                 fail();
             } catch (InexistentTaskIdException e) {
                 assertTrue(true);
-            } catch (TaskoptionManagerException e) {
+            } catch (TaskOptionManagerException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
         } finally {
@@ -85,13 +85,13 @@ public class TestDatabaseTaskoptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testAddTaskoption(Datasource datasource) {
+    public void testAddTaskOption(Datasource datasource) {
         setup(datasource);
 
         int task_id = 0;
         Task task = new Task();
         TaskManager task_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskManager();
-        TaskoptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskoptionManager();
+        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
         try {
             Calendar cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -106,12 +106,12 @@ public class TestDatabaseTaskoptions {
             String taskoption_name = "name";
             String value = "value";
 
-            Taskoption taskoption = new Taskoption();
+            TaskOption taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(value);
 
-            assertTrue(taskoption_manager.addTaskoption(taskoption));
+            assertTrue(taskoption_manager.addTaskOption(taskoption));
         } catch (SchedulerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
@@ -121,13 +121,13 @@ public class TestDatabaseTaskoptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testAddDuplicateTaskoption(Datasource datasource) {
+    public void testAddDuplicateTaskOption(Datasource datasource) {
         setup(datasource);
 
         int task_id = 0;
         Task task = new Task();
         TaskManager task_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskManager();
-        TaskoptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskoptionManager();
+        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
         try {
             Calendar cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -142,14 +142,14 @@ public class TestDatabaseTaskoptions {
             String taskoption_name = "name";
             String value = "value";
 
-            Taskoption taskoption = new Taskoption();
+            TaskOption taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(value);
 
-            assertTrue(taskoption_manager.addTaskoption(taskoption));
+            assertTrue(taskoption_manager.addTaskOption(taskoption));
 
-            taskoption_manager.addTaskoption(taskoption);
+            taskoption_manager.addTaskOption(taskoption);
             fail();
         } catch (SchedulerException e) {
             assertTrue(true);
@@ -160,13 +160,13 @@ public class TestDatabaseTaskoptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetTaskoption(Datasource datasource) {
+    public void testGetTaskOption(Datasource datasource) {
         setup(datasource);
 
         int task_id = 0;
         Task task = new Task();
         TaskManager task_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskManager();
-        TaskoptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskoptionManager();
+        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
         try {
             Calendar cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -180,14 +180,14 @@ public class TestDatabaseTaskoptions {
             String taskoption_name = "name";
             String value = "value";
 
-            Taskoption taskoption = new Taskoption();
+            TaskOption taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(value);
 
-            assertTrue(taskoption_manager.addTaskoption(taskoption));
+            assertTrue(taskoption_manager.addTaskOption(taskoption));
 
-            taskoption = taskoption_manager.getTaskoption(task_id, taskoption_name);
+            taskoption = taskoption_manager.getTaskOption(task_id, taskoption_name);
             assertNotNull(taskoption);
 
             assertEquals(taskoption.getTaskId(), task_id);
@@ -195,7 +195,7 @@ public class TestDatabaseTaskoptions {
             assertEquals(taskoption.getValue(), value);
 
             task = task_manager.getTask(task_id);
-            assertEquals(task.getTaskoptionValue(taskoption_name), value);
+            assertEquals(task.getTaskOptionValue(taskoption_name), value);
         } catch (SchedulerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
@@ -205,13 +205,13 @@ public class TestDatabaseTaskoptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUpdateTaskoption(Datasource datasource) {
+    public void testUpdateTaskOption(Datasource datasource) {
         setup(datasource);
 
         int task_id = 0;
         Task task = new Task();
         TaskManager task_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskManager();
-        TaskoptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskoptionManager();
+        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
         try {
             Calendar cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -226,23 +226,23 @@ public class TestDatabaseTaskoptions {
             String taskoption_name = "name";
             String value = "value";
 
-            Taskoption taskoption = new Taskoption();
+            TaskOption taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(value);
 
-            assertTrue(taskoption_manager.addTaskoption(taskoption));
+            assertTrue(taskoption_manager.addTaskOption(taskoption));
 
             value = "new_value";
 
-            taskoption = new Taskoption();
+            taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(value);
 
-            assertTrue(taskoption_manager.updateTaskoption(taskoption));
+            assertTrue(taskoption_manager.updateTaskOption(taskoption));
 
-            taskoption = taskoption_manager.getTaskoption(task_id, taskoption_name);
+            taskoption = taskoption_manager.getTaskOption(task_id, taskoption_name);
             assertNotNull(taskoption);
 
             assertEquals(taskoption.getTaskId(), task_id);
@@ -257,13 +257,13 @@ public class TestDatabaseTaskoptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetTaskoptions(Datasource datasource) {
+    public void testGetTaskOptions(Datasource datasource) {
         setup(datasource);
 
         int task_id = 0;
         Task task = new Task();
         TaskManager task_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskManager();
-        TaskoptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskoptionManager();
+        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
         try {
             Calendar cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -278,14 +278,14 @@ public class TestDatabaseTaskoptions {
             String taskoption_name = "name";
             String value = "some_value";
 
-            Taskoption taskoption = new Taskoption();
+            TaskOption taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(value);
 
-            assertTrue(taskoption_manager.addTaskoption(taskoption));
+            assertTrue(taskoption_manager.addTaskOption(taskoption));
 
-            Collection<Taskoption> taskoptions = taskoption_manager.getTaskoptions(task_id);
+            Collection<TaskOption> taskoptions = taskoption_manager.getTaskOptions(task_id);
             assertEquals(1, taskoptions.size());
 
             taskoption = taskoptions.iterator().next();
@@ -301,13 +301,13 @@ public class TestDatabaseTaskoptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemoveTaskoption(Datasource datasource) {
+    public void testRemoveTaskOption(Datasource datasource) {
         setup(datasource);
 
         int task_id = 0;
         Task task = new Task();
         TaskManager task_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskManager();
-        TaskoptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskoptionManager();
+        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
         try {
             Calendar cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -322,14 +322,14 @@ public class TestDatabaseTaskoptions {
             String taskoption_name = "name";
             String value = "value";
 
-            Taskoption taskoption = new Taskoption();
+            TaskOption taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(value);
 
-            assertTrue(taskoption_manager.addTaskoption(taskoption));
+            assertTrue(taskoption_manager.addTaskOption(taskoption));
 
-            assertTrue(taskoption_manager.removeTaskoption(task_id, taskoption_name));
+            assertTrue(taskoption_manager.removeTaskOption(task_id, taskoption_name));
 
             assertTrue(task_manager.removeTask(task_id));
             task_id = 0;
@@ -343,14 +343,14 @@ public class TestDatabaseTaskoptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetNonExistingTaskoption(Datasource datasource) {
+    public void testGetNonExistingTaskOption(Datasource datasource) {
         setup(datasource);
 
-        TaskoptionManager manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskoptionManager();
+        TaskOptionManager manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
         int task_nonexisting_id = 340;
         try {
-            assertNull(manager.getTaskoption(task_nonexisting_id, "unknownname"));
-        } catch (TaskoptionManagerException e) {
+            assertNull(manager.getTaskOption(task_nonexisting_id, "unknownname"));
+        } catch (TaskOptionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
             tearDown(datasource);
@@ -359,15 +359,15 @@ public class TestDatabaseTaskoptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemoveNonExistingTaskoption(Datasource datasource) {
+    public void testRemoveNonExistingTaskOption(Datasource datasource) {
         setup(datasource);
 
         try {
-            TaskoptionManager manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskoptionManager();
+            TaskOptionManager manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
             int task_nonexisting_id = 120;
             try {
-                assertFalse(manager.removeTaskoption(task_nonexisting_id, "unknownname"));
-            } catch (TaskoptionManagerException e) {
+                assertFalse(manager.removeTaskOption(task_nonexisting_id, "unknownname"));
+            } catch (TaskOptionManagerException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
         } finally {

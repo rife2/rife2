@@ -8,12 +8,12 @@ import rife.validation.Validation;
 import rife.validation.ValidationRuleNotNull;
 import rife.validation.ValidationRuleRange;
 
-public class Taskoption extends Validation implements Cloneable {
+public class TaskOption extends Validation implements Cloneable {
     private int mTaskId = -1;
     private String mName = null;
     private String mValue = null;
 
-    public Taskoption() {
+    public TaskOption() {
     }
 
     protected void activateValidation() {
@@ -48,9 +48,9 @@ public class Taskoption extends Validation implements Cloneable {
         return mValue;
     }
 
-    public Taskoption clone()
+    public TaskOption clone()
     throws CloneNotSupportedException {
-        return (Taskoption) super.clone();
+        return (TaskOption) super.clone();
     }
 
     public boolean equals(Object object) {
@@ -64,7 +64,7 @@ public class Taskoption extends Validation implements Cloneable {
             return false;
         }
 
-        Taskoption other_taskoption = (Taskoption) object;
+        TaskOption other_taskoption = (TaskOption) object;
 
         return other_taskoption.getTaskId() == getTaskId() &&
             other_taskoption.getName().equals(getName()) &&
