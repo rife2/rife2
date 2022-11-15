@@ -38,9 +38,7 @@ public class TestMocksEngine {
     public void testSimpleHtml() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
-                get("/simple/html", c -> {
-                    c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
-                });
+                get("/simple/html", c -> c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo()));
             }
         });
 
@@ -54,9 +52,7 @@ public class TestMocksEngine {
     public void testSimplePathInfo() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
-                get("/simple/pathinfo", PathInfoHandling.CAPTURE, c -> {
-                    c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
-                });
+                get("/simple/pathinfo", PathInfoHandling.CAPTURE, c -> c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo()));
             }
         });
 
@@ -115,9 +111,7 @@ public class TestMocksEngine {
     public void testWrongServerRootUrl() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
-                get("/simple/html", c -> {
-                    c.print("Just some text " + c.remoteAddr() + ":" + c.remoteHost() + ":" + c.pathInfo());
-                });
+                get("/simple/html", c -> c.print("Just some text " + c.remoteAddr() + ":" + c.remoteHost() + ":" + c.pathInfo()));
             }
         });
 
@@ -139,9 +133,7 @@ public class TestMocksEngine {
                     c.print("source");
                 });
 
-                get("/cookies2", c -> {
-                    c.print(c.cookieValue("cookie2") + "," + c.cookieValue("cookie3") + "," + c.cookieValue("cookie4"));
-                });
+                get("/cookies2", c -> c.print(c.cookieValue("cookie2") + "," + c.cookieValue("cookie3") + "," + c.cookieValue("cookie4")));
             }
         });
         conversation
@@ -200,9 +192,7 @@ public class TestMocksEngine {
     public void testBinary() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
-                get("/binary", c -> {
-                    c.outputStream().write(IntegerUtils.intToBytes(87634675));
-                });
+                get("/binary", c -> c.outputStream().write(IntegerUtils.intToBytes(87634675)));
             }
         });
 

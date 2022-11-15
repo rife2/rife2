@@ -6,16 +6,8 @@ package rife.engine;
 
 public class BeforeSite extends Site {
     public void setup() {
-        get("/one", c -> {
-            c.print(c.route().path());
-        });
-        get("/two", c -> {
-            c.print(c.route().path());
-        });
-        before(c -> {
-            c.print("before1");
-        }, c -> {
-            c.print("before2");
-        });
+        get("/one", c -> c.print(c.route().path()));
+        get("/two", c -> c.print(c.route().path()));
+        before(c -> c.print("before1"), c -> c.print("before2"));
     }
 }

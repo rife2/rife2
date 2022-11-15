@@ -47,9 +47,7 @@ public class TestEngine {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                get("/simple/html", c -> {
-                    c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo());
-                });
+                get("/simple/html", c -> c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo()));
             }
         })) {
             try (final WebClient webClient = new WebClient()) {
@@ -65,9 +63,7 @@ public class TestEngine {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                get("/simple/pathinfo", PathInfoHandling.CAPTURE, c -> {
-                    c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo());
-                });
+                get("/simple/pathinfo", PathInfoHandling.CAPTURE, c -> c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo()));
             }
         })) {
             try (final WebClient webClient = new WebClient()) {
@@ -141,9 +137,7 @@ public class TestEngine {
                     c.print("source");
                 });
 
-                get("/cookies2", c -> {
-                    c.print(c.cookieValue("cookie2") + "," + c.cookieValue("cookie3") + "," + c.cookieValue("cookie4"));
-                });
+                get("/cookies2", c -> c.print(c.cookieValue("cookie2") + "," + c.cookieValue("cookie3") + "," + c.cookieValue("cookie4")));
             }
         })) {
             try (final WebClient webClient = new WebClient()) {
@@ -212,9 +206,7 @@ public class TestEngine {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                get("/binary", c -> {
-                    c.outputStream().write(IntegerUtils.intToBytes(87634675));
-                });
+                get("/binary", c -> c.outputStream().write(IntegerUtils.intToBytes(87634675)));
             }
         })) {
             try (final WebClient webClient = new WebClient()) {

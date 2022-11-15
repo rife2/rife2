@@ -33,8 +33,7 @@ public class Gate {
 
     public boolean handleRequest(String gateUrl, String elementUrl, Request request, Response response) {
         // check if the gateUrl hasn't been overridden by a webapp context path configuration parameter
-        if (webappContextPath_ != null)
-        {
+        if (webappContextPath_ != null) {
             gateUrl = webappContextPath_;
         }
 

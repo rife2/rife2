@@ -6,9 +6,7 @@ package rife.engine;
 
 public class BeforeAfterGroupNextSite extends Site {
     public void setup() {
-        get("/one", c -> {
-            c.print(c.route().path());
-        });
+        get("/one", c -> c.print(c.route().path()));
         group(new Router() {
             public void setup() {
                 get("/three", c -> {
@@ -47,8 +45,6 @@ public class BeforeAfterGroupNextSite extends Site {
                 });
             }
         });
-        get("/two", c -> {
-            c.print(c.route().path());
-        });
+        get("/two", c -> c.print(c.route().path()));
     }
 }

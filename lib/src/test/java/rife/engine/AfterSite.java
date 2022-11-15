@@ -6,16 +6,8 @@ package rife.engine;
 
 public class AfterSite extends Site {
     public void setup() {
-        after(c -> {
-            c.print("after1");
-        }, c -> {
-            c.print("after2");
-        });
-        get("/one", c -> {
-            c.print(c.route().path());
-        });
-        get("/two", c -> {
-            c.print(c.route().path());
-        });
+        after(c -> c.print("after1"), c -> c.print("after2"));
+        get("/one", c -> c.print(c.route().path()));
+        get("/two", c -> c.print(c.route().path()));
     }
 }

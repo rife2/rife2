@@ -8,24 +8,12 @@ public class AfterGroupSite extends Site {
     public void setup() {
         group(new Router() {
             public void setup() {
-                get("/three", c -> {
-                    c.print(c.route().path());
-                });
-                after(c -> {
-                    c.print("after1");
-                }, c -> {
-                    c.print("after2");
-                });
-                get("/four", c -> {
-                    c.print(c.route().path());
-                });
+                get("/three", c -> c.print(c.route().path()));
+                after(c -> c.print("after1"), c -> c.print("after2"));
+                get("/four", c -> c.print(c.route().path()));
             }
         });
-        get("/one", c -> {
-            c.print(c.route().path());
-        });
-        get("/two", c -> {
-            c.print(c.route().path());
-        });
+        get("/one", c -> c.print(c.route().path()));
+        get("/two", c -> c.print(c.route().path()));
     }
 }
