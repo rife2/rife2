@@ -103,7 +103,12 @@ public class Gate {
 
         c.engineException(exception);
 
-        var exception_route = site_.getExceptionRoute();
+        var router = c.route().router();
+        if (router == null) {
+            router = site_;
+        }
+
+        var exception_route = router.getExceptionRoute();
         if (exception_route != null) {
             try {
                 exception_route.getElementInstance(c).process(c);

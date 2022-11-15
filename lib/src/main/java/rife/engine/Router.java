@@ -14,6 +14,7 @@ public class Router {
     final Map<String, List<Route>> routes_ = new HashMap<>();
     final Map<String, List<Route>> pathInfoRoutes_ = new HashMap<>();
     final List<Router> groups_ = new ArrayList<>();
+    Route exceptionRoute_ = null;
 
     Router parent_ = null;
 
@@ -259,6 +260,26 @@ public class Router {
             }
         }
         return route;
+    }
+
+    public final Route exception(Class<? extends Element> elementClass) {
+        exceptionRoute_ = new RouteClass(this, RequestMethod.GET, elementClass);
+        return exceptionRoute_;
+    }
+
+    public final Route exception(Element element) {
+        exceptionRoute_ = new RouteInstance(this, element);
+        return exceptionRoute_;
+    }
+
+    public Route getExceptionRoute() {
+        if (exceptionRoute_ != null) {
+            return exceptionRoute_;
+        }
+        if (parent_ != null) {
+            return parent_.exceptionRoute_;
+        }
+        return null;
     }
 
     public Site site() {

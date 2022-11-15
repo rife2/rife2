@@ -6,6 +6,7 @@ package rife.engine;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import org.junit.jupiter.api.Test;
+import rife.config.RifeConfig;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -205,6 +206,25 @@ public class TestGroups {
                 assertEquals("before1before2after1after2", webClient.getPage("http://localhost:8181/four?next4=true").getWebResponse().getContentAsString());
                 assertEquals("before1before2/fourafter2", webClient.getPage("http://localhost:8181/four?next5=true").getWebResponse().getContentAsString());
                 assertEquals("before1before2/fourafter1", webClient.getPage("http://localhost:8181/four?next6=true").getWebResponse().getContentAsString());
+            }
+        }
+    }
+
+    @Test
+    public void testExceptionElements()
+    throws Exception {
+        try (final var server = new TestServerRunner(new GroupExceptionSite())) {
+            try (final WebClient webClient = new WebClient()) {
+                RifeConfig.engine().setLogEngineExceptions(false);
+
+                assertEquals("/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
+                assertEquals("1: rife.engine.exceptions.EngineException: java.lang.RuntimeException: /two", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
+                assertEquals("/three", webClient.getPage("http://localhost:8181/three").getWebResponse().getContentAsString());
+                assertEquals("1: rife.engine.exceptions.EngineException: java.lang.RuntimeException: /four", webClient.getPage("http://localhost:8181/four").getWebResponse().getContentAsString());
+                assertEquals("2: rife.engine.exceptions.EngineException: java.lang.RuntimeException: /prefix2/five", webClient.getPage("http://localhost:8181/prefix2/five").getWebResponse().getContentAsString());
+                assertEquals("/prefix2/six", webClient.getPage("http://localhost:8181/prefix2/six").getWebResponse().getContentAsString());
+                assertEquals("/prefix2/seven", webClient.getPage("http://localhost:8181/prefix2/seven").getWebResponse().getContentAsString());
+                assertEquals("3: rife.engine.exceptions.EngineException: java.lang.RuntimeException: /prefix2/eight", webClient.getPage("http://localhost:8181/prefix2/eight").getWebResponse().getContentAsString());
             }
         }
     }
