@@ -16,7 +16,9 @@ public class HelloAuthentication extends Site {
 
     class AuthenticatedSection extends Router {
         Route hello = get("/hello", c -> {
-            c.print(c.template("HelloAuthenticated"));
+            var t = c.template("HelloAuthenticated");
+            t.setValue("user", config.identityAttribute(c).getLogin());
+            c.print(t);
         });
         Route logout = get("/logout", new Logout(config, TemplateFactory.HTML.get("HelloLogout")));
     }
