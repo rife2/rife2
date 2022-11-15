@@ -86,6 +86,7 @@ public class TestEngine {
                 assertEquals("Just some text 127.0.0.1:8181:another_path_info", page.asNormalizedText());
 
                 try {
+                    webClient.getOptions().setPrintContentOnFailingStatusCode(false);
                     webClient.getPage("http://localhost:8181/simple/pathinfoddd");
                     fail("Expecting 404");
                 } catch (FailingHttpStatusCodeException e) {
@@ -410,5 +411,38 @@ public class TestEngine {
         assertNull(site.resolveRoute("^route2"));
         assertSame(site.route2, site.routes.resolveRoute("^route2"));
         assertSame(site.route2, site.moreRoutes.resolveRoute("^route2"));
+    }
+
+    @Test
+    public void testFallbacks()
+    throws Exception {
+        try (final var server = new TestServerRunner(new FallbacksSite())) {
+            try (final WebClient webClient = new WebClient()) {
+                assertEquals("/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
+                assertEquals("/two", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
+                assertEquals("fallback1", webClient.getPage("http://localhost:8181/ones").getWebResponse().getContentAsString());
+                assertEquals("/two", webClient.getPage("http://localhost:8181/two/info").getWebResponse().getContentAsString());
+                assertEquals("fallback1", webClient.getPage("http://localhost:8181/twos").getWebResponse().getContentAsString());
+
+                assertEquals("fallback1", webClient.getPage("http://localhost:8181/prefix1").getWebResponse().getContentAsString());
+                assertEquals("/prefix1/three", webClient.getPage("http://localhost:8181/prefix1/three").getWebResponse().getContentAsString());
+                assertEquals("fallback1", webClient.getPage("http://localhost:8181/prefix1/threes").getWebResponse().getContentAsString());
+
+                assertEquals("fallback2", webClient.getPage("http://localhost:8181/prefix1/prefix2").getWebResponse().getContentAsString());
+                assertEquals("/prefix1/prefix2/four", webClient.getPage("http://localhost:8181/prefix1/prefix2/four").getWebResponse().getContentAsString());
+                assertEquals("fallback2", webClient.getPage("http://localhost:8181/prefix1/prefix2/fours").getWebResponse().getContentAsString());
+
+                assertEquals("fallback4", webClient.getPage("http://localhost:8181/prefix1/prefix2/prefix3").getWebResponse().getContentAsString());
+                assertEquals("/prefix1/prefix2/prefix3/five", webClient.getPage("http://localhost:8181/prefix1/prefix2/prefix3/five").getWebResponse().getContentAsString());
+                assertEquals("/prefix1/prefix2/prefix3/five", webClient.getPage("http://localhost:8181/prefix1/prefix2/prefix3/five/info").getWebResponse().getContentAsString());
+                assertEquals("fallback4", webClient.getPage("http://localhost:8181/prefix1/prefix2/prefix3/fives").getWebResponse().getContentAsString());
+
+                assertEquals("/prefix1/prefix2/six", webClient.getPage("http://localhost:8181/prefix1/prefix2/six").getWebResponse().getContentAsString());
+                assertEquals("fallback2", webClient.getPage("http://localhost:8181/prefix1/prefix2/sixs").getWebResponse().getContentAsString());
+
+                assertEquals("/seven", webClient.getPage("http://localhost:8181/seven").getWebResponse().getContentAsString());
+                assertEquals("fallback1", webClient.getPage("http://localhost:8181/sevens").getWebResponse().getContentAsString());
+            }
+        }
     }
 }

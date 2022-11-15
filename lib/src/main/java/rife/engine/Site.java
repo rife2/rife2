@@ -31,9 +31,9 @@ public class Site extends Router {
         }
 
         if (null == pathInfo) {
-            List<Route> routes = routes_.get(url);
+            var routes = routes_.get(url);
             if (routes != null && !routes.isEmpty()) {
-                for (Route route : routes) {
+                for (var route : routes) {
                     if (route.handlesMethod(request.getMethod())) {
                         return route;
                     }
@@ -41,12 +41,12 @@ public class Site extends Router {
             }
 
             if ('/' == url.charAt(url.length() - 1)) {
-                String stripped_url = url.substring(0, url.length() - 1);
+                var stripped_url = url.substring(0, url.length() - 1);
                 // if the url contains a dot in the last part, it shouldn't be
                 // seen as simulating a directory
                 if (stripped_url.lastIndexOf('.') <= stripped_url.lastIndexOf('/')) {
                     if (routes != null && !routes.isEmpty()) {
-                        for (Route route : routes) {
+                        for (var route : routes) {
                             if (route.handlesMethod(request.getMethod())) {
                                 return route;
                             }
@@ -61,7 +61,7 @@ public class Site extends Router {
 
     private Route resolvePathInfoUrl(Request request, String url, String pathinfo)
     throws EngineException {
-        List<Route> routes = pathInfoRoutes_.get(url);
+        var routes = pathInfoRoutes_.get(url);
         if (null == routes ||
             0 == routes.size()) {
             return null;
@@ -90,7 +90,7 @@ public class Site extends Router {
 
         // return the first route that handles the url and doesn't have
         // any path info mappings
-        for (Route route : routes) {
+        for (var route : routes) {
             if (route.handlesMethod(request.getMethod())) {
                 return route;
             }
@@ -105,6 +105,25 @@ public class Site extends Router {
         return null;
     }
 
+    private Route resolveFallback(String url) {
+        String best_match = null;
+        if (0 == url.length()) {
+            url = "/";
+        }
+
+        for (var fallback_url : fallbackRoutes_.keySet()) {
+            if (url.startsWith(fallback_url) &&
+                (null == best_match || fallback_url.length() > best_match.length())) {
+                best_match = fallback_url;
+            }
+        }
+
+        if (best_match != null) {
+            return fallbackRoutes_.get(best_match);
+        } else {
+            return null;
+        }
+    }
 
     /**
      * Looks for an element that corresponds to a particular request URL.
@@ -123,9 +142,9 @@ public class Site extends Router {
     public RouteMatch findRouteForRequest(Request request, String elementUrl) {
         // obtain the element info that mapped to the requested path info
         Route route;
-        StringBuilder element_url_buffer = new StringBuilder(elementUrl);
-        int element_url_location = -1;
-        String element_path_info = "";
+        var element_url_buffer = new StringBuilder(elementUrl);
+        var element_url_location = -1;
+        var element_path_info = "";
         String path_info = null;
         do {
             // if a slash was found in the url, it was stripped away
@@ -150,11 +169,10 @@ public class Site extends Router {
 
         // no target element, get the fallback element
         if (null == route) {
-            // TODO : fallback
-//            route = searchFallback(elementUrl);
-//            if (null == route) {
+            route = resolveFallback(elementUrl);
+            if (null == route) {
                 return null;
-//            }
+            }
         }
 //        // otherwise get the target element's path info
 //        else {
@@ -162,7 +180,7 @@ public class Site extends Router {
 //            if (!route.isPathInfoUsed() &&
 //                elementUrl.length() != element_url_buffer.length()) {
 //                // check for a fallback element
-//                route = searchFallback(elementUrl);
+//                route = resolveFallback(elementUrl);
 //                if (null == route) {
 //                    return null;
 //                }

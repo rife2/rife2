@@ -13,6 +13,7 @@ public class Router {
     final List<Route> after_ = new ArrayList<>();
     final Map<String, List<Route>> routes_ = new HashMap<>();
     final Map<String, List<Route>> pathInfoRoutes_ = new HashMap<>();
+    final Map<String, Route> fallbackRoutes_ = new HashMap<>();
     final List<Router> groups_ = new ArrayList<>();
     Route exceptionRoute_ = null;
 
@@ -68,6 +69,7 @@ public class Router {
 
         router.setup();
 
+        // pull in routes
         for (var e : router.routes_.entrySet()) {
             var routes = routes_.computeIfAbsent(path + e.getKey(), k -> new ArrayList<>());
             if (path.isEmpty()) {
@@ -84,6 +86,8 @@ public class Router {
                 }
             }
         }
+
+        // pull in path info routes
         for (var e : router.pathInfoRoutes_.entrySet()) {
             var routes = pathInfoRoutes_.computeIfAbsent(path + e.getKey(), k -> new ArrayList<>());
             if (path.isEmpty()) {
@@ -97,6 +101,24 @@ public class Router {
                         route.prefixPathWith(path);
                         routes.add(route);
                     }
+                }
+            }
+        }
+
+        // pull in fallback routes
+        if (path.isEmpty()) {
+            for (var e : router.fallbackRoutes_.entrySet()) {
+                fallbackRoutes_.putIfAbsent(e.getKey(), e.getValue());
+            }
+        } else {
+            for (var e : router.fallbackRoutes_.entrySet()) {
+                var r = e.getValue();
+                if (r instanceof RouteInstance route) {
+                    route.prefixPathWith(path);
+                    fallbackRoutes_.putIfAbsent(route.path(), route);
+                } else if (r instanceof RouteClass route) {
+                    route.prefixPathWith(path);
+                    fallbackRoutes_.putIfAbsent(route.path(), route);
                 }
             }
         }
@@ -280,6 +302,19 @@ public class Router {
             return parent_.exceptionRoute_;
         }
         return null;
+    }
+
+    public final Route fallback(Class<? extends Element> elementClass) {
+        return registerFallback(new RouteClass(this, null, "", elementClass));
+    }
+
+    public final Route fallback(Element element) {
+        return registerFallback(new RouteInstance(this, null, "", element));
+    }
+
+    public final Route registerFallback(Route route) {
+        fallbackRoutes_.put("", route);
+        return route;
     }
 
     public Site site() {

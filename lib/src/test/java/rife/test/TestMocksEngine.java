@@ -264,4 +264,35 @@ public class TestMocksEngine {
         assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix_out_constrained_empty").getContent(), conversation.doRequest("/form_empty?prefix=1").getText());
         assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix").getContent(), conversation.doRequest("/form_empty?prefix=1&remove=1").getText());
     }
+
+
+    @Test
+    public void testFallbacks() {
+        var conversation = new MockConversation(new FallbacksSite());
+        
+        assertEquals("/one", conversation.doRequest("/one").getText());
+        assertEquals("/two", conversation.doRequest("/two").getText());
+        assertEquals("fallback1", conversation.doRequest("/ones").getText());
+        assertEquals("/two", conversation.doRequest("/two/info").getText());
+        assertEquals("fallback1", conversation.doRequest("/twos").getText());
+
+        assertEquals("fallback1", conversation.doRequest("/prefix1").getText());
+        assertEquals("/prefix1/three", conversation.doRequest("/prefix1/three").getText());
+        assertEquals("fallback1", conversation.doRequest("/prefix1/threes").getText());
+
+        assertEquals("fallback2", conversation.doRequest("/prefix1/prefix2").getText());
+        assertEquals("/prefix1/prefix2/four", conversation.doRequest("/prefix1/prefix2/four").getText());
+        assertEquals("fallback2", conversation.doRequest("/prefix1/prefix2/fours").getText());
+
+        assertEquals("fallback4", conversation.doRequest("/prefix1/prefix2/prefix3").getText());
+        assertEquals("/prefix1/prefix2/prefix3/five", conversation.doRequest("/prefix1/prefix2/prefix3/five").getText());
+        assertEquals("/prefix1/prefix2/prefix3/five", conversation.doRequest("/prefix1/prefix2/prefix3/five/info").getText());
+        assertEquals("fallback4", conversation.doRequest("/prefix1/prefix2/prefix3/fives").getText());
+
+        assertEquals("/prefix1/prefix2/six", conversation.doRequest("/prefix1/prefix2/six").getText());
+        assertEquals("fallback2", conversation.doRequest("/prefix1/prefix2/sixs").getText());
+
+        assertEquals("/seven", conversation.doRequest("/seven").getText());
+        assertEquals("fallback1", conversation.doRequest("/sevens").getText());
+    }
 }
