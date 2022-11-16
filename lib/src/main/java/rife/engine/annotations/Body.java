@@ -6,6 +6,8 @@ package rife.engine.annotations;
 
 import java.lang.annotation.*;
 
+import static rife.engine.annotations.ContextAction.GET;
+
 /**
  * Declares a request body.
  *
@@ -16,4 +18,11 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Documented
 public @interface Body {
+    /**
+     * Determines which action should be performed when the element is processing this field.
+     *
+     * @return the action that will be performed during the element processing
+     * @since 2.0
+     */
+    ContextAction action() default GET;
 }

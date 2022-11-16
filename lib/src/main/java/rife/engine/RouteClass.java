@@ -72,13 +72,16 @@ public class RouteClass implements Route {
         return pathInfoHandling_;
     }
 
+    private boolean shouldProcessContextAction(ContextAction action) {
+        return action == ContextAction.GET || action == ContextAction.GET_SET;
+    }
+
     @Override
     public Element getElementInstance(Context context) {
         try {
             var element = elementClass_.getDeclaredConstructor().newInstance();
 
             // auto assign annotated parameters
-            var params = context.request().getParameters();
             for (var field : element.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
 
@@ -90,7 +93,9 @@ public class RouteClass implements Route {
 
                 var name = field.getName();
                 var type = field.getType();
+
                 if (field.isAnnotationPresent(Parameter.class)) {
+                    var params = context.request().getParameters();
                     var annotation_name = field.getAnnotation(Parameter.class).name();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
@@ -105,7 +110,24 @@ public class RouteClass implements Route {
                         }
                         field.set(element, value);
                     }
-                } else if (field.isAnnotationPresent(Body.class)) {
+                } else if (field.isAnnotationPresent(Header.class) &&
+                           shouldProcessContextAction(field.getAnnotation(Header.class).action())) {
+                    var annotation_name = field.getAnnotation(Header.class).name();
+                    if (annotation_name != null && !annotation_name.isEmpty()) {
+                        name = annotation_name;
+                    }
+                    var header = context.request().getHeader(name);
+                    if (header != null) {
+                        Object value;
+                        try {
+                            value = Convert.toType(header, type);
+                        } catch (ConversionException e) {
+                            value = Convert.getDefaultValue(type);
+                        }
+                        field.set(element, value);
+                    }
+                } else if (field.isAnnotationPresent(Body.class) &&
+                           shouldProcessContextAction(field.getAnnotation(Body.class).action())) {
                     var body = context.request().getBody();
                     Object value;
                     try {
@@ -114,7 +136,8 @@ public class RouteClass implements Route {
                         value = Convert.getDefaultValue(type);
                     }
                     field.set(element, value);
-                } else if (field.isAnnotationPresent(PathInfo.class)) {
+                } else if (field.isAnnotationPresent(PathInfo.class) &&
+                           pathInfoHandling_ != PathInfoHandling.NONE) {
                     var path_info = context.pathInfo();
                     Object value;
                     try {
@@ -145,7 +168,8 @@ public class RouteClass implements Route {
                         }
                         field.set(element, value);
                     }
-                } else if (field.isAnnotationPresent(Cookie.class)) {
+                } else if (field.isAnnotationPresent(Cookie.class) &&
+                           shouldProcessContextAction(field.getAnnotation(Cookie.class).action())) {
                     var annotation_name = field.getAnnotation(Cookie.class).name();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
@@ -156,6 +180,39 @@ public class RouteClass implements Route {
                             Object value;
                             try {
                                 value = Convert.toType(cookie.getValue(), type);
+                            } catch (ConversionException e) {
+                                value = Convert.getDefaultValue(type);
+                            }
+                            field.set(element, value);
+                        }
+                    }
+                } else if (field.isAnnotationPresent(RequestAttribute.class) &&
+                           shouldProcessContextAction(field.getAnnotation(RequestAttribute.class).action())) {
+                    var annotation_name = field.getAnnotation(RequestAttribute.class).name();
+                    if (annotation_name != null && !annotation_name.isEmpty()) {
+                        name = annotation_name;
+                    }
+                    var value = context.request().getAttribute(name);
+                    if (value != null) {
+                        try {
+                            value = Convert.toType(value, type);
+                        } catch (ConversionException e) {
+                            value = Convert.getDefaultValue(type);
+                        }
+                        field.set(element, value);
+                    }
+                } else if (field.isAnnotationPresent(SessionAttribute.class) &&
+                           shouldProcessContextAction(field.getAnnotation(SessionAttribute.class).action())) {
+                    var annotation_name = field.getAnnotation(SessionAttribute.class).name();
+                    if (annotation_name != null && !annotation_name.isEmpty()) {
+                        name = annotation_name;
+                    }
+                    var session = context.request().getSession(false);
+                    if (session != null) {
+                        var value = session.getAttribute(name);
+                        if (value != null) {
+                            try {
+                                value = Convert.toType(value, type);
                             } catch (ConversionException e) {
                                 value = Convert.getDefaultValue(type);
                             }

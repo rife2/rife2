@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 import static rife.engine.annotations.ContextAction.GET;
 
 /**
- * Declares a request cookie.
+ * Declares a session attribute.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 2.0
@@ -17,9 +17,9 @@ import static rife.engine.annotations.ContextAction.GET;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 @Documented
-public @interface Cookie {
+public @interface SessionAttribute {
     /**
-     * The name of the cookie.
+     * The name of the attribute.
      *
      * @since 2.0
      */
