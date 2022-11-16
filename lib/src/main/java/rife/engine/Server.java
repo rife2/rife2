@@ -4,8 +4,8 @@
 package rife.engine;
 
 import jakarta.servlet.DispatcherType;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.server.session.*;
 import org.eclipse.jetty.servlet.*;
 import rife.config.RifeConfig;
 import rife.servlet.RifeFilter;
@@ -14,6 +14,7 @@ import java.util.EnumSet;
 
 public class Server {
     private final org.eclipse.jetty.server.Server server_ = new org.eclipse.jetty.server.Server();
+    private final SessionIdManager sessions_ = new DefaultSessionIdManager(server_);
     private final ServletContextHandler handler_ = new ServletContextHandler();
 
     public Server port(int port) {
@@ -33,6 +34,11 @@ public class Server {
         }
 
         server_.setHandler(handler_);
+
+        var session_handler = new SessionHandler();
+        session_handler.getSessionCookieConfig().setHttpOnly(true);
+        session_handler.setSessionIdManager(sessions_);
+        handler_.setSessionHandler(session_handler);
 
         var rife_filter = new RifeFilter();
         rife_filter.site(site);
