@@ -4,6 +4,6 @@
  */
 package rife.engine.annotations;
 
-public enum ContextAction {
-    GET, SET, GET_SET
+public enum FlowDirection {
+    IN, OUT, IN_OUT
 }

@@ -6,7 +6,7 @@ package rife.engine.annotations;
 
 import java.lang.annotation.*;
 
-import static rife.engine.annotations.ContextAction.GET;
+import static rife.engine.annotations.FlowDirection.IN;
 
 /**
  * Declares a request attribute.
@@ -26,10 +26,10 @@ public @interface RequestAttribute {
     String name() default "";
 
     /**
-     * Determines which action should be performed when the element is processing this field.
+     * Determines what the direction of the flow is for processing this field
      *
-     * @return the action that will be performed during the element processing
+     * @return the direction of the flow for field processing
      * @since 2.0
      */
-    ContextAction action() default GET;
+    FlowDirection flow() default IN;
 }
