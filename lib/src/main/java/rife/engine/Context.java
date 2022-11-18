@@ -58,39 +58,31 @@ public class Context {
 
         try {
             for (var before_route : route.router().before_) {
-                var before_element = before_route.getElementInstance(this);
-                response_.setLastElement(before_element);
-                try {
-                    before_element.process(this);
-                } catch (NextException ignored) {
-                    // this element is done processing
-                    // move on to the next one
-                }
+                processElement(before_route);
             }
 
-            var element = route.getElementInstance(this);
-            response_.setLastElement(element);
-            try {
-                element.process(this);
-            } catch (NextException ignored) {
-                // this element is done processing
-                // move on to the next one
-            }
+            processElement(route);
 
             for (var after_route : route.router().after_) {
-                var after_element = after_route.getElementInstance(this);
-                response_.setLastElement(after_element);
-                try {
-                    after_element.process(this);
-                } catch (NextException ignored) {
-                    // this element is done processing
-                    // move on to the next one
-                }
+                processElement(after_route);
             }
         } catch (RespondException ignored) {
             // processing is over, just send the current response
         } catch (Exception e) {
             throw new EngineException(e);
+        }
+    }
+
+    private void processElement(Route route)
+    throws Exception {
+        var element = route.getElementInstance(this);
+        response_.setLastElement(element);
+        try {
+            element.process(this);
+            route.finalizeElementInstance(element, this);
+        } catch (NextException ignored) {
+            // this element is done processing
+            // move on to the next one
         }
     }
 

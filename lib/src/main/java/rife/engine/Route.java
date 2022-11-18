@@ -19,6 +19,8 @@ public interface Route {
 
     Element getElementInstance(Context context);
 
+    void finalizeElementInstance(Element element, Context context);
+
     String getDefaultElementId();
 
     String getDefaultElementPath();

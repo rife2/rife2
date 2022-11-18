@@ -34,7 +34,7 @@ public class TestEngine {
                 });
             }
         })) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 final TextPage page = webClient.getPage("http://localhost:8181/simple/plain");
                 assertEquals("text/plain", page.getWebResponse().getContentType());
                 assertEquals("Just some text 127.0.0.1:8181:", page.getContent());
@@ -50,7 +50,7 @@ public class TestEngine {
                 get("/simple/html", c -> c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo()));
             }
         })) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 final HtmlPage page = webClient.getPage("http://localhost:8181/simple/html");
                 assertEquals("text/html", page.getWebResponse().getContentType());
                 assertEquals("Just some text 127.0.0.1:8181:", page.asNormalizedText());
@@ -66,7 +66,7 @@ public class TestEngine {
                 get("/simple/pathinfo", PathInfoHandling.CAPTURE, c -> c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo()));
             }
         })) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 HtmlPage page;
 
                 page = webClient.getPage("http://localhost:8181/simple/pathinfo/some/path");
@@ -112,7 +112,7 @@ public class TestEngine {
                 });
             }
         })) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 final HtmlPage page = webClient.getPage("http://localhost:8181/headers");
                 assertTrue(page.getWebResponse().getResponseHeaders().size() > 4);
                 assertEquals("attachment; filename=thefile.zip", page.getWebResponse().getResponseHeaderValue("CONTENT-DISPOSITION"));
@@ -141,7 +141,7 @@ public class TestEngine {
                 get("/cookies2", c -> c.print(c.cookieValue("cookie2") + "," + c.cookieValue("cookie3") + "," + c.cookieValue("cookie4")));
             }
         })) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 var manager = webClient.getCookieManager();
                 manager.addCookie(new com.gargoylesoftware.htmlunit.util.Cookie("localhost", "cookie1", "firstcookie"));
                 manager.addCookie(new com.gargoylesoftware.htmlunit.util.Cookie("localhost", "cookie2", "secondcookie"));
@@ -174,7 +174,7 @@ public class TestEngine {
                 });
             }
         })) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 final TextPage page = webClient.getPage("http://localhost:8181/contentlength");
                 assertEquals(13, page.getWebResponse().getContentLength());
                 assertEquals("this goes out", page.getWebResponse().getContentAsString());
@@ -195,7 +195,7 @@ public class TestEngine {
                 });
             }
         })) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals(webClient.getPage("http://localhost:8181/dynamiccontenttype?switch=text").getWebResponse().getContentType(), "text/plain");
                 assertEquals(webClient.getPage("http://localhost:8181/dynamiccontenttype?switch=html").getWebResponse().getContentType(), "text/html");
             }
@@ -210,7 +210,7 @@ public class TestEngine {
                 get("/binary", c -> c.outputStream().write(IntegerUtils.intToBytes(87634675)));
             }
         })) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 final UnexpectedPage page = webClient.getPage("http://localhost:8181/binary");
                 InputStream inputstream = page.getWebResponse().getContentAsStream();
                 byte[] integer_bytes = new byte[4];
@@ -235,7 +235,7 @@ public class TestEngine {
                 });
             }
         })) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 final HtmlPage page = webClient.getPage("http://localhost:8181/printandwrite_buffer");
                 assertEquals("write2write4print1print3", page.getWebResponse().getContentAsString());
             }
@@ -257,7 +257,7 @@ public class TestEngine {
                 });
             }
         })) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 final HtmlPage page = webClient.getPage("http://localhost:8181/printandwrite_nobuffer");
                 assertEquals("print1write2print3write4", page.getWebResponse().getContentAsString());
             }
@@ -268,7 +268,7 @@ public class TestEngine {
     public void testGenerateForm()
     throws Exception {
         try (final var server = new TestServerRunner(new GenerateFormSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/form");
                 assertEquals(TemplateFactory.HTML.get("formbuilder_fields_out_constrained_values").getContent(), page.getWebResponse().getContentAsString());
 
@@ -282,7 +282,7 @@ public class TestEngine {
     public void testGenerateFormPrefix()
     throws Exception {
         try (final var server = new TestServerRunner(new GenerateFormSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/form?prefix=1");
                 assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix_out_constrained_values").getContent(), page.getWebResponse().getContentAsString());
 
@@ -296,7 +296,7 @@ public class TestEngine {
     public void testGenerateEmptyForm()
     throws Exception {
         try (final var server = new TestServerRunner(new GenerateEmptyFormSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/form_empty");
                 assertEquals(TemplateFactory.HTML.get("formbuilder_fields_out_constrained_empty").getContent(), page.getWebResponse().getContentAsString());
 
@@ -310,7 +310,7 @@ public class TestEngine {
     public void testGenerateEmptyFormPrefix()
     throws Exception {
         try (final var server = new TestServerRunner(new GenerateEmptyFormSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/form_empty?prefix=1");
                 assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix_out_constrained_empty").getContent(), page.getWebResponse().getContentAsString());
 
@@ -417,7 +417,7 @@ public class TestEngine {
     public void testFallbacks()
     throws Exception {
         try (final var server = new TestServerRunner(new FallbacksSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
                 assertEquals("/two", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
                 assertEquals("fallback1", webClient.getPage("http://localhost:8181/ones").getWebResponse().getContentAsString());

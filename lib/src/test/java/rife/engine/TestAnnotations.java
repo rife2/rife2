@@ -21,8 +21,8 @@ public class TestAnnotations {
     @Test
     public void testDefaultValues()
     throws IOException {
-        try (final var server = new TestServerRunner(new AnnotationSite())) {
-            try (final WebClient webClient = new WebClient()) {
+        try (final var server = new TestServerRunner(new AnnotationInSite())) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("""
                                         
                     0
@@ -62,8 +62,8 @@ public class TestAnnotations {
     @Test
     public void testAnnotationCookiesParamsAttributesHeaders()
     throws IOException {
-        try (final var server = new TestServerRunner(new AnnotationSite())) {
-            try (final WebClient webClient = new WebClient()) {
+        try (final var server = new TestServerRunner(new AnnotationInSite())) {
+            try (final var webClient = new WebClient()) {
                 webClient.getCookieManager().addCookie(new Cookie("localhost", "stringCookie", "cookie1"));
                 webClient.getCookieManager().addCookie(new Cookie("localhost", "intCookie", "2"));
                 webClient.getCookieManager().addCookie(new Cookie("localhost", "cookie2", "cookie3"));
@@ -118,8 +118,8 @@ public class TestAnnotations {
     @Test
     public void testAnnotationBody()
     throws IOException {
-        try (final var server = new TestServerRunner(new AnnotationSite())) {
-            try (final WebClient webClient = new WebClient()) {
+        try (final var server = new TestServerRunner(new AnnotationInSite())) {
+            try (final var webClient = new WebClient()) {
                 var request = new WebRequest(new URL("http://localhost:8181/post"), HttpMethod.POST);
                 request.setHttpMethod(HttpMethod.POST);
                 request.setRequestBody("theBody");
@@ -197,8 +197,8 @@ public class TestAnnotations {
     @Test
     public void testFileUpload()
     throws IOException {
-        try (final var server = new TestServerRunner(new AnnotationSite())) {
-            try (final WebClient webClient = new WebClient()) {
+        try (final var server = new TestServerRunner(new AnnotationInSite())) {
+            try (final var webClient = new WebClient()) {
                 var request = new WebRequest(new URL("http://localhost:8181/form"), HttpMethod.GET);
                 HtmlPage page = webClient.getPage(request);
                 var form = page.getForms().get(0);
@@ -269,4 +269,63 @@ public class TestAnnotations {
             }
         }
     }
+
+    @Test
+    public void testDefaultValuesOut()
+    throws IOException {
+        try (final var server = new TestServerRunner(new AnnotationOutSite())) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page = webClient.getPage(new WebRequest(new URL("http://localhost:8181/get"), HttpMethod.GET));
+                var cookie_manager = webClient.getCookieManager();
+                assertEquals("defaultCookie", cookie_manager.getCookie("stringCookie").getValue());
+                assertEquals("-2", cookie_manager.getCookie("intCookie").getValue());
+                assertEquals("defaultCookie2", cookie_manager.getCookie("cookie2").getValue());
+                assertEquals("-3", cookie_manager.getCookie("cookie3").getValue());
+                assertEquals("defaultHeader", page.getWebResponse().getResponseHeaderValue("stringHeader"));
+                assertEquals("-8", page.getWebResponse().getResponseHeaderValue("intHeader"));
+                assertEquals("defaultHeader2", page.getWebResponse().getResponseHeaderValue("header2"));
+                assertEquals("-9", page.getWebResponse().getResponseHeaderValue("header3"));
+                assertEquals("defaultBody" +
+                             "-1" +
+                             "defaultRequestAttribute" +
+                             "-4" +
+                             "defaultRequestAttribute2" +
+                             "-5" +
+                             "defaultSessionAttribute" +
+                             "-6" +
+                             "defaultSessionAttribute2" +
+                             "-7", page.getWebResponse().getContentAsString());
+            }
+        }
+    }
+
+    @Test
+    public void testGeneratedValuesOut()
+    throws IOException {
+        try (final var server = new TestServerRunner(new AnnotationOutSite())) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page = webClient.getPage(new WebRequest(new URL("http://localhost:8181/get?generate=true"), HttpMethod.GET));
+                var cookie_manager = webClient.getCookieManager();
+                assertEquals("value3", cookie_manager.getCookie("stringCookie").getValue());
+                assertEquals("4", cookie_manager.getCookie("intCookie").getValue());
+                assertEquals("value5", cookie_manager.getCookie("cookie2").getValue());
+                assertEquals("6", cookie_manager.getCookie("cookie3").getValue());
+                assertEquals("value15", page.getWebResponse().getResponseHeaderValue("stringHeader"));
+                assertEquals("16", page.getWebResponse().getResponseHeaderValue("intHeader"));
+                assertEquals("value17", page.getWebResponse().getResponseHeaderValue("header2"));
+                assertEquals("18", page.getWebResponse().getResponseHeaderValue("header3"));
+                assertEquals("value1" +
+                             "2" +
+                             "value7" +
+                             "8" +
+                             "value9" +
+                             "10" +
+                             "value11" +
+                             "12" +
+                             "value13" +
+                             "14", page.getWebResponse().getContentAsString());
+            }
+        }
+    }
+
 }

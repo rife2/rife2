@@ -18,7 +18,7 @@ public class TestRouting {
     public void testRoutingGet()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingGetSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
                 webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 
@@ -85,7 +85,7 @@ public class TestRouting {
     public void testRoutingPost()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingPostSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
                 webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 
@@ -152,7 +152,7 @@ public class TestRouting {
     public void testRoutingPut()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingPutSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
                 webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 
@@ -219,7 +219,7 @@ public class TestRouting {
     public void testRoutingDelete()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingDeleteSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
                 webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 
@@ -286,7 +286,7 @@ public class TestRouting {
     public void testRoutingPatch()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingPatchSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
                 webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 
@@ -353,7 +353,7 @@ public class TestRouting {
     public void testRoutingRoute()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingRouteSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
                 webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 
@@ -420,7 +420,7 @@ public class TestRouting {
     public void testRoutingCombo()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingComboSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
                 webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 

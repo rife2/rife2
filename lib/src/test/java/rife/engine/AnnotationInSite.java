@@ -10,7 +10,7 @@ import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
 
-public class AnnotationSite extends Site {
+public class AnnotationInSite extends Site {
     public static class AnnotatedElement implements Element {
         @Body String stringBody = "defaultBody";
         @Body int intBody = -1;

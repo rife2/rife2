@@ -26,7 +26,7 @@ public class TestBeans {
     public void testParametersBean()
     throws Exception {
         try (final var server = new TestServerRunner(new GetBeanSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 HtmlPage page;
                 HtmlForm form;
 
@@ -138,7 +138,7 @@ public class TestBeans {
     public void testParametersBeanPrefix()
     throws Exception {
         try (final var server = new TestServerRunner(new GetBeanSite("prefix_"))) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 HtmlPage page;
                 HtmlForm form;
 
@@ -250,7 +250,7 @@ public class TestBeans {
     public void testParametersBeanFill()
     throws Exception {
         try (final var server = new TestServerRunner(new FillBeanSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 HtmlPage page;
                 HtmlForm form;
 
@@ -366,7 +366,7 @@ public class TestBeans {
     public void testParametersBeanFillPrefix()
     throws Exception {
         try (final var server = new TestServerRunner(new FillBeanSite("prefix_"))) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 HtmlPage page;
                 HtmlForm form;
 

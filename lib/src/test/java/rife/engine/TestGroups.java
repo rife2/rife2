@@ -15,7 +15,7 @@ public class TestGroups {
     public void testGroup()
     throws Exception {
         try (final var server = new TestServerRunner(new GroupSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
                 assertEquals("/two", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
                 assertEquals("/three", webClient.getPage("http://localhost:8181/three").getWebResponse().getContentAsString());
@@ -28,7 +28,7 @@ public class TestGroups {
     public void testGroupPrefix()
     throws Exception {
         try (final var server = new TestServerRunner(new GroupPrefixSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
                 assertEquals("/two", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
                 assertEquals("/group/three", webClient.getPage("http://localhost:8181/group/three").getWebResponse().getContentAsString());
@@ -41,7 +41,7 @@ public class TestGroups {
     public void testGroupsMultiLevel()
     throws Exception {
         try (final var server = new TestServerRunner(new GroupsMultiLevelSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
                 assertEquals("/two", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
                 assertEquals("/prefix1/three", webClient.getPage("http://localhost:8181/prefix1/three").getWebResponse().getContentAsString());
@@ -64,7 +64,7 @@ public class TestGroups {
     public void testBefore()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("before1before2/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
                 assertEquals("before1before2/two", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
             }
@@ -75,7 +75,7 @@ public class TestGroups {
     public void testAfter()
     throws Exception {
         try (final var server = new TestServerRunner(new AfterSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("/oneafter1after2", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
                 assertEquals("/twoafter1after2", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
             }
@@ -86,7 +86,7 @@ public class TestGroups {
     public void testBeforeAfter()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeAfterSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("before1before2/oneafter1after2", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
                 assertEquals("before1before2/twoafter1after2", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
             }
@@ -97,7 +97,7 @@ public class TestGroups {
     public void testBeforeGroup()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeGroupSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
                 assertEquals("/two", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
                 assertEquals("before1before2/three", webClient.getPage("http://localhost:8181/three").getWebResponse().getContentAsString());
@@ -110,7 +110,7 @@ public class TestGroups {
     public void testAfterGroup()
     throws Exception {
         try (final var server = new TestServerRunner(new AfterGroupSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
                 assertEquals("/two", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
                 assertEquals("/threeafter1after2", webClient.getPage("http://localhost:8181/three").getWebResponse().getContentAsString());
@@ -123,7 +123,7 @@ public class TestGroups {
     public void testBeforeAfterGroup()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeAfterGroupSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
                 assertEquals("/two", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
                 assertEquals("before1before2/threeafter1after2", webClient.getPage("http://localhost:8181/three").getWebResponse().getContentAsString());
@@ -136,7 +136,7 @@ public class TestGroups {
     public void testBeforeAfterGroupsMultiLevel()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeAfterGroupsMultiLevelSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
                 assertEquals("/two", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
 
@@ -160,7 +160,7 @@ public class TestGroups {
     public void testBeforeAfterGroupRespond()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeAfterGroupRespondSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
                 assertEquals("/two", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
 
@@ -187,7 +187,7 @@ public class TestGroups {
     public void testBeforeAfterGroupNext()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeAfterGroupNextSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 assertEquals("/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());
                 assertEquals("/two", webClient.getPage("http://localhost:8181/two").getWebResponse().getContentAsString());
 
@@ -214,7 +214,7 @@ public class TestGroups {
     public void testExceptionElements()
     throws Exception {
         try (final var server = new TestServerRunner(new GroupExceptionSite())) {
-            try (final WebClient webClient = new WebClient()) {
+            try (final var webClient = new WebClient()) {
                 RifeConfig.engine().setLogEngineExceptions(false);
 
                 assertEquals("/one", webClient.getPage("http://localhost:8181/one").getWebResponse().getContentAsString());

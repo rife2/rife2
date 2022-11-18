@@ -55,6 +55,11 @@ public class RouteInstance implements Route {
     }
 
     @Override
+    public void finalizeElementInstance(Element element, Context context) {
+        // no-op
+    }
+
+    @Override
     public String getDefaultElementId() {
         return StringUtils.stripFromFront(path_, "/");
     }
