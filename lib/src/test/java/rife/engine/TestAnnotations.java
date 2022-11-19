@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestAnnotations {
     @Test
-    public void testDefaultValues()
+    public void testDefaultValuesIn()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationInSite())) {
             try (final var webClient = new WebClient()) {
@@ -60,7 +60,7 @@ public class TestAnnotations {
     }
 
     @Test
-    public void testAnnotationCookiesParamsAttributesHeaders()
+    public void testAnnotationInCookiesParamsAttributesHeaders()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationInSite())) {
             try (final var webClient = new WebClient()) {
@@ -116,7 +116,7 @@ public class TestAnnotations {
     }
 
     @Test
-    public void testAnnotationBody()
+    public void testAnnotationBodyIn()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationInSite())) {
             try (final var webClient = new WebClient()) {
@@ -195,7 +195,7 @@ public class TestAnnotations {
     }
 
     @Test
-    public void testFileUpload()
+    public void testFileUploadIn()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationInSite())) {
             try (final var webClient = new WebClient()) {
@@ -324,6 +324,153 @@ public class TestAnnotations {
                              "12" +
                              "value13" +
                              "14", page.getWebResponse().getContentAsString());
+            }
+        }
+    }
+
+    @Test
+    public void testDefaultValuesInOut()
+    throws IOException {
+        try (final var server = new TestServerRunner(new AnnotationInOutSite())) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page = webClient.getPage(new WebRequest(new URL("http://localhost:8181/get"), HttpMethod.GET));
+                var cookie_manager = webClient.getCookieManager();
+                assertEquals("defaultCookie", cookie_manager.getCookie("stringCookie").getValue());
+                assertEquals("-2", cookie_manager.getCookie("intCookie").getValue());
+                assertEquals("defaultCookie2", cookie_manager.getCookie("cookie2").getValue());
+                assertEquals("-3", cookie_manager.getCookie("cookie3").getValue());
+                assertEquals("defaultHeader", page.getWebResponse().getResponseHeaderValue("stringHeader"));
+                assertEquals("-8", page.getWebResponse().getResponseHeaderValue("intHeader"));
+                assertEquals("defaultHeader2", page.getWebResponse().getResponseHeaderValue("header2"));
+                assertEquals("-9", page.getWebResponse().getResponseHeaderValue("header3"));
+                assertEquals("""
+                                        
+                    0
+                    defaultCookie
+                    -2
+                    defaultCookie2
+                    -3
+                    defaultRequestAttribute
+                    -4
+                    defaultRequestAttribute2
+                    -5
+                    defaultSessionAttribute
+                    -6
+                    defaultSessionAttribute2
+                    -7
+                    defaultHeader
+                    -8
+                    defaultHeader2
+                    -9
+                    0defaultRequestAttribute
+                    -4
+                    defaultRequestAttribute2
+                    -5
+                    defaultSessionAttribute
+                    -6
+                    defaultSessionAttribute2
+                    -7
+                    """, page.getWebResponse().getContentAsString());
+            }
+        }
+    }
+
+    @Test
+    public void testGeneratedInValuesInOut()
+    throws IOException {
+        try (final var server = new TestServerRunner(new AnnotationInOutSite())) {
+            try (final var webClient = new WebClient()) {
+                webClient.getCookieManager().addCookie(new Cookie("localhost", "stringCookie", "cookie1"));
+                webClient.getCookieManager().addCookie(new Cookie("localhost", "intCookie", "2"));
+                webClient.getCookieManager().addCookie(new Cookie("localhost", "cookie2", "cookie3"));
+                webClient.getCookieManager().addCookie(new Cookie("localhost", "cookie3", "4"));
+                var request = new WebRequest(new URL("http://localhost:8181/post?generateIn=true"), HttpMethod.POST);
+                request.setHttpMethod(HttpMethod.POST);
+                request.setRequestBody("theBody");
+                request.setAdditionalHeader("Content-Type", "text/plain");
+                request.setAdditionalHeader("stringHeader", "value15");
+                request.setAdditionalHeader("intHeader", "16");
+                request.setAdditionalHeader("header2", "value17");
+                request.setAdditionalHeader("header3", "18");
+                HtmlPage page = webClient.getPage(request);
+                assertEquals("""
+                    theBody
+                    0
+                    cookie1
+                    2
+                    cookie3
+                    4
+                    inValue7
+                    1008
+                    inValue11
+                    1012
+                    inValue13
+                    1014
+                    inValue15
+                    1016
+                    value15
+                    16
+                    value17
+                    18
+                    theBody0inValue7
+                    1008
+                    inValue11
+                    1012
+                    inValue13
+                    1014
+                    inValue15
+                    1016
+                    """, page.getWebResponse().getContentAsString());
+           }
+        }
+    }
+
+    @Test
+    public void testGeneratedOutValuesInOut()
+    throws IOException {
+        try (final var server = new TestServerRunner(new AnnotationInOutSite())) {
+            try (final var webClient = new WebClient()) {
+                webClient.getCookieManager().addCookie(new Cookie("localhost", "stringCookie", "cookie1"));
+                webClient.getCookieManager().addCookie(new Cookie("localhost", "intCookie", "2"));
+                webClient.getCookieManager().addCookie(new Cookie("localhost", "cookie2", "cookie3"));
+                webClient.getCookieManager().addCookie(new Cookie("localhost", "cookie3", "4"));
+                var request = new WebRequest(new URL("http://localhost:8181/post?generateOut=true"), HttpMethod.POST);
+                request.setHttpMethod(HttpMethod.POST);
+                request.setRequestBody("theBody");
+                request.setAdditionalHeader("Content-Type", "text/plain");
+                request.setAdditionalHeader("stringHeader", "value15");
+                request.setAdditionalHeader("intHeader", "16");
+                request.setAdditionalHeader("header2", "value17");
+                request.setAdditionalHeader("header3", "18");
+                HtmlPage page = webClient.getPage(request);
+                assertEquals("""
+                    theBody
+                    0
+                    cookie1
+                    2
+                    cookie3
+                    4
+                    defaultRequestAttribute
+                    -4
+                    defaultRequestAttribute2
+                    -5
+                    defaultSessionAttribute
+                    -6
+                    defaultSessionAttribute2
+                    -7
+                    value15
+                    16
+                    value17
+                    18
+                    outValue12002outValue7
+                    2008
+                    outValue9
+                    2010
+                    outValue11
+                    2012
+                    outValue13
+                    2014
+                    """, page.getWebResponse().getContentAsString());
             }
         }
     }
