@@ -4,13 +4,13 @@
  */
 package rife.engine;
 
+import rife.authentication.elements.AuthConfig;
 import rife.engine.exceptions.EngineException;
 import rife.template.Template;
 import rife.template.TemplateEncoder;
 import rife.template.TemplateFactoryFilters;
 import rife.template.exceptions.TemplateException;
 
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +31,9 @@ public class EngineTemplateProcessor {
 
         processApplicationTags(set_values);
         processParameters(set_values);
+        processCookies(set_values);
         processRoutes(set_values);
+        processAuthentication(set_values);
 
         return set_values;
     }
@@ -80,6 +82,23 @@ public class EngineTemplateProcessor {
         }
     }
 
+    private void processCookies(final List<String> setValues) {
+        final var cookie_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_COOKIE);
+        if (cookie_tags != null) {
+            for (var captured_groups : cookie_tags) {
+                var cookie_value_id = captured_groups[0];
+                if (!template_.isValueSet(cookie_value_id)) {
+                    var cookie_name = captured_groups[1];
+                    var cookie = context_.cookie(cookie_name);
+                    if (cookie != null) {
+                        template_.setValue(cookie_value_id, encoder_.encode(cookie.getValue()));
+                        setValues.add(cookie_value_id);
+                    }
+                }
+            }
+        }
+    }
+
     private void processRoutes(final List<String> setValues) {
         final var route_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_ROUTE);
         if (route_tags != null) {
@@ -98,6 +117,57 @@ public class EngineTemplateProcessor {
                         var route_value = context_.urlFor(route);
                         template_.setValue(route_value_id, route_value);
                         setValues.add(route_value_id);
+                    }
+                }
+            }
+        }
+    }
+
+    private void processAuthentication(final List<String> setValues) {
+        final var identity = AuthConfig.identityAttribute(context_);
+        if (identity != null) {
+            final var auth_value_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_AUTH);
+            final var auth_block_tags = template_.getFilteredBlocks(TemplateFactoryFilters.TAG_AUTH);
+            final var auth_role_block_tags = template_.getFilteredBlocks(TemplateFactoryFilters.TAG_AUTH_ROLE);
+            final var auth_login_block_tags = template_.getFilteredBlocks(TemplateFactoryFilters.TAG_AUTH_LOGIN);
+            if (auth_value_tags != null) {
+                for (var captured_groups : auth_value_tags) {
+                    var auth_value_id = captured_groups[0];
+                    var auth_differentiator = captured_groups[1];
+
+                    // handle authenticated login blocks assignment
+                    if (!template_.isValueSet(auth_value_id)) {
+                         for (var block_groups : auth_login_block_tags) {
+                            var auth_block_id = block_groups[0];
+                            if (block_groups[1].equals(auth_differentiator) &&
+                                identity.getLogin().equals(block_groups[2])) {
+                                template_.setBlock(auth_value_id, auth_block_id);
+                                setValues.add(auth_value_id);
+                            }
+                         }
+                    }
+
+                    // handle authenticated role blocks assignment
+                    if (!template_.isValueSet(auth_value_id)) {
+                         for (var block_groups : auth_role_block_tags) {
+                            var auth_block_id = block_groups[0];
+                            if (block_groups[1].equals(auth_differentiator) &&
+                                identity.getAttributes().isInRole(block_groups[2])) {
+                                template_.setBlock(auth_value_id, auth_block_id);
+                                setValues.add(auth_value_id);
+                            }
+                         }
+                    }
+
+                    // handle authenticated blocks assignment
+                    if (!template_.isValueSet(auth_value_id)) {
+                        for (var block_groups : auth_block_tags) {
+                            var auth_block_id = block_groups[0];
+                            if (block_groups[1].equals(auth_differentiator)) {
+                                template_.setBlock(auth_value_id, auth_block_id);
+                                setValues.add(auth_value_id);
+                            }
+                        }
                     }
                 }
             }

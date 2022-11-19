@@ -11,7 +11,7 @@ import rife.authentication.credentialsmanagers.RoleUserIdentity;
 import rife.engine.Context;
 import rife.engine.Route;
 
-public class AuthenticationConfig {
+public class AuthConfig {
     public static final String DEFAULT_IDENTITY_ATTRIBUTE_NAME = RoleUserIdentity.class.getName();
     public static final String DEFAULT_AUTH_COOKIE_NAME = "authId";
     public static final String DEFAULT_REMEMBER_COOKIE_NAME = "rememberId";
@@ -23,7 +23,6 @@ public class AuthenticationConfig {
     private SessionValidator sessionValidator_;
     private Route loginRoute_;
     private Route landingRoute_;
-    private String identityAttributeName_ = DEFAULT_IDENTITY_ATTRIBUTE_NAME;
     private String authCookieName_ = DEFAULT_AUTH_COOKIE_NAME;
     private String rememberCookieName_ = DEFAULT_REMEMBER_COOKIE_NAME;
     private int rememberMaxAge_ = DEFAULT_REMEMBER_MAX_AGE;
@@ -32,7 +31,7 @@ public class AuthenticationConfig {
     private Class<? extends Credentials> credentialsClass_ = DEFAULT_CREDENTIALS_CLASS;
     private String role_ = null;
 
-    public AuthenticationConfig(SessionValidator sessionValidator) {
+    public AuthConfig(SessionValidator sessionValidator) {
         sessionValidator_ = sessionValidator;
     }
 
@@ -40,7 +39,7 @@ public class AuthenticationConfig {
         return sessionValidator_;
     }
 
-    public AuthenticationConfig sessionValidator(SessionValidator sessionValidator) {
+    public AuthConfig sessionValidator(SessionValidator sessionValidator) {
         sessionValidator_ = sessionValidator;
         return this;
     }
@@ -49,7 +48,7 @@ public class AuthenticationConfig {
         return loginRoute_;
     }
 
-    public AuthenticationConfig loginRoute(Route route) {
+    public AuthConfig loginRoute(Route route) {
         loginRoute_ = route;
         return this;
     }
@@ -58,21 +57,16 @@ public class AuthenticationConfig {
         return landingRoute_;
     }
 
-    public AuthenticationConfig landingRoute(Route route) {
+    public AuthConfig landingRoute(Route route) {
         landingRoute_ = route;
         return this;
     }
 
-    public String identityAttributeName() {
-        return identityAttributeName_;
+    public static String identityAttributeName() {
+        return DEFAULT_IDENTITY_ATTRIBUTE_NAME;
     }
 
-    public AuthenticationConfig identityAttributeName(String identityAttributeName) {
-        identityAttributeName_ = identityAttributeName;
-        return this;
-    }
-
-    public RoleUserIdentity identityAttribute(Context c) {
+    public static RoleUserIdentity identityAttribute(Context c) {
         return (RoleUserIdentity) c.attribute(identityAttributeName());
     }
 
@@ -80,7 +74,7 @@ public class AuthenticationConfig {
         return authCookieName_;
     }
 
-    public AuthenticationConfig authCookieName(String authCookieName) {
+    public AuthConfig authCookieName(String authCookieName) {
         authCookieName_ = authCookieName;
         return this;
     }
@@ -89,7 +83,7 @@ public class AuthenticationConfig {
         return rememberCookieName_;
     }
 
-    public AuthenticationConfig rememberCookieName(String rememberCookieName) {
+    public AuthConfig rememberCookieName(String rememberCookieName) {
         rememberCookieName_ = rememberCookieName;
         return this;
     }
@@ -98,7 +92,7 @@ public class AuthenticationConfig {
         return rememberMaxAge_;
     }
 
-    public AuthenticationConfig rememberMaxAge(int maxAge) {
+    public AuthConfig rememberMaxAge(int maxAge) {
         rememberMaxAge_ = maxAge;
         return this;
     }
@@ -107,7 +101,7 @@ public class AuthenticationConfig {
         return prohibitRemember_;
     }
 
-    public AuthenticationConfig prohibitRemember(boolean prohibitRemember) {
+    public AuthConfig prohibitRemember(boolean prohibitRemember) {
         prohibitRemember_ = prohibitRemember;
         return this;
     }
@@ -116,7 +110,7 @@ public class AuthenticationConfig {
         return enforceAuthentication_;
     }
 
-    public AuthenticationConfig enforceAuthentication(boolean enforceAuthentication) {
+    public AuthConfig enforceAuthentication(boolean enforceAuthentication) {
         enforceAuthentication_ = enforceAuthentication;
         return this;
     }
@@ -125,7 +119,7 @@ public class AuthenticationConfig {
         return credentialsClass_;
     }
 
-    public AuthenticationConfig credentialsClass(Class<? extends Credentials> credentialsClass) {
+    public AuthConfig credentialsClass(Class<? extends Credentials> credentialsClass) {
         credentialsClass_ = credentialsClass;
         return this;
     }
@@ -134,7 +128,7 @@ public class AuthenticationConfig {
         return role_;
     }
 
-    public AuthenticationConfig role(String role) {
+    public AuthConfig role(String role) {
         role_ = role;
         return this;
     }

@@ -11,10 +11,10 @@ import rife.template.TemplateFactory;
 
 public class MemoryAuthenticatedSite extends Site {
     final MemorySessionValidator validator = new MemorySessionValidator();
-    final AuthenticationConfig config = new AuthenticationConfig(validator);
-    final AuthenticationConfig configAdmin = new AuthenticationConfig(validator);
-    final AuthenticationConfig configMaint = new AuthenticationConfig(validator);
-    final AuthenticationConfig configNotEnforced = new AuthenticationConfig(validator);
+    final AuthConfig config = new AuthConfig(validator);
+    final AuthConfig configAdmin = new AuthConfig(validator);
+    final AuthConfig configMaint = new AuthConfig(validator);
+    final AuthConfig configNotEnforced = new AuthConfig(validator);
 
     public MemoryAuthenticatedSite() {
         validator.getCredentialsManager()
@@ -39,10 +39,11 @@ public class MemoryAuthenticatedSite extends Site {
     }
 
     static class AuthenticatedSection extends Router {
-        AuthenticatedSection(AuthenticationConfig config) {
+        AuthenticatedSection(AuthConfig config) {
             landing = get("/landing", c -> c.print("Landing"));
             logout = get("/logout", new Logout(config, TemplateFactory.HTML.get("authentication.logout")));
-            get("/username", c -> c.print(config.identityAttribute(c) != null ? config.identityAttribute(c).getLogin() : "not logged in"));
+            template = get("/template", c -> c.print(c.template("filtered_tags_auth")));
+            get("/username", c -> c.print(AuthConfig.identityAttribute(c) != null ? AuthConfig.identityAttribute(c).getLogin() : "not logged in"));
             group(new Router() {
                 public void setup() {
                     before(new Logout(config));
@@ -53,6 +54,7 @@ public class MemoryAuthenticatedSite extends Site {
 
         Route landing;
         Route logout;
+        Route template;
     }
 
     Route login = route("/login", new Login(config, TemplateFactory.HTML.get("authentication.login")));

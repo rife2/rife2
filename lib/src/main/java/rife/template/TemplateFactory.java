@@ -28,12 +28,17 @@ public class TemplateFactory extends EnumClass<String> {
             {
                 ValidationBuilder.TAG_ERRORS,
                 ValidationBuilder.TAG_ERRORMESSAGE,
+                TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_AUTH_LOGIN,
+                TemplateFactoryFilters.TAG_AUTH_ROLE,
                 TemplateFactoryFilters.TAG_LANG
             },
         new String[]
             {
                 ValidationBuilder.TAG_MARK,
                 ValidationBuilder.TAG_ERRORS,
+                TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
                 TemplateFactoryFilters.TAG_RENDER,
@@ -48,12 +53,19 @@ public class TemplateFactory extends EnumClass<String> {
         "xml", "application/xml", ".xml",
         new String[]
             {
+                TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_AUTH_LOGIN,
+                TemplateFactoryFilters.TAG_AUTH_ROLE,
                 TemplateFactoryFilters.TAG_LANG
             },
         new String[]
             {
+                TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
-                TemplateFactoryFilters.TAG_RENDER
+                TemplateFactoryFilters.TAG_PARAM,
+                TemplateFactoryFilters.TAG_RENDER,
+                TemplateFactoryFilters.TAG_ROUTE
             },
         BeanHandlerXml.instance(),
         EncoderXmlSingleton.INSTANCE,
@@ -64,12 +76,19 @@ public class TemplateFactory extends EnumClass<String> {
         "txt", "text/plain", ".txt",
         new String[]
             {
+                TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_AUTH_LOGIN,
+                TemplateFactoryFilters.TAG_AUTH_ROLE,
                 TemplateFactoryFilters.TAG_LANG
             },
         new String[]
             {
+                TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
-                TemplateFactoryFilters.TAG_RENDER
+                TemplateFactoryFilters.TAG_PARAM,
+                TemplateFactoryFilters.TAG_RENDER,
+                TemplateFactoryFilters.TAG_ROUTE
             },
         BeanHandlerPlain.instance(),
         null,
@@ -96,12 +115,19 @@ public class TemplateFactory extends EnumClass<String> {
         "json", "application/json", ".json",
         new String[]
             {
+                TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_AUTH_LOGIN,
+                TemplateFactoryFilters.TAG_AUTH_ROLE,
                 TemplateFactoryFilters.TAG_LANG
             },
         new String[]
             {
+                TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
-                TemplateFactoryFilters.TAG_RENDER
+                TemplateFactoryFilters.TAG_PARAM,
+                TemplateFactoryFilters.TAG_RENDER,
+                TemplateFactoryFilters.TAG_ROUTE
             },
         BeanHandlerPlain.instance(),
         EncoderJsonSingleton.INSTANCE,

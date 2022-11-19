@@ -9,9 +9,9 @@ import rife.engine.Context;
 import rife.engine.Element;
 
 public class Identified implements Element {
-    protected final AuthenticationConfig authConfig_;
+    protected final AuthConfig authConfig_;
 
-    public Identified(AuthenticationConfig config) {
+    public Identified(AuthConfig config) {
         authConfig_ = config;
     }
 

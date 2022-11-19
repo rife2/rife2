@@ -12,7 +12,7 @@ import rife.template.TemplateFactory;
 
 public class HelloAuthentication extends Site {
     final MemorySessionValidator validator = new MemorySessionValidator();
-    final AuthenticationConfig config = new AuthenticationConfig(validator);
+    final AuthConfig config = new AuthConfig(validator);
 
     class AuthenticatedSection extends Router {
         Route hello = get("/hello", c -> {

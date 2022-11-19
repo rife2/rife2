@@ -17,7 +17,7 @@ import rife.engine.Route;
  * @since 2.0
  */
 public class Authenticated extends Identified implements SessionAttributes {
-    public Authenticated(AuthenticationConfig config) {
+    public Authenticated(AuthConfig config) {
         super(config);
     }
 

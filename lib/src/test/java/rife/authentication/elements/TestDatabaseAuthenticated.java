@@ -4,6 +4,7 @@
  */
 package rife.authentication.elements;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.config.RifeConfig;
@@ -816,4 +817,86 @@ public class TestDatabaseAuthenticated {
         }
     }
 
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    public void testDatabaseAuthenticatedFilteredTagsNotEnforced(Datasource datasource) {
+        DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource);
+        var conversation = new MockConversation(site);
+
+        var response = conversation.doRequest("http://localhost/notEnforced/template");
+        assertEquals(response.getText().trim(), """
+            not authenticated
+            not matching login1
+            not matching login3
+            not matching role1
+            not matching role2
+            not matching role3""");
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    public void testDatabaseAuthenticatedFilteredTags(Datasource datasource) {
+        DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource);
+        var conversation = new MockConversation(site);
+
+        var response = conversation.doRequest("http://localhost/login");
+        var form = response.getParsedHtml().getFormWithName("credentials");
+        form.setParameter("login", "guest");
+        form.setParameter("password", "guestpass");
+        response = form.submit();
+
+        assertEquals("authId", response.getNewCookieNames().get(0));
+        assertEquals(0, response.getParsedHtml().getForms().size());
+        assertEquals(response.getStatus(), 302);
+
+        response = conversation.doRequest("http://localhost/template");
+        assertEquals(response.getText().trim(), """
+            authenticated
+            matching login1
+            not matching login3
+            not matching role1
+            not matching role2
+            not matching role3
+            """ + conversation.getCookieValue("authId"));
+
+        response = conversation.doRequest("http://localhost/login");
+        form = response.getParsedHtml().getFormWithName("credentials");
+        form.setParameter("login", "jdevin");
+        form.setParameter("password", "yeolpass");
+        response = form.submit();
+
+        assertEquals("authId", response.getNewCookieNames().get(0));
+        assertEquals(0, response.getParsedHtml().getForms().size());
+        assertEquals(response.getStatus(), 302);
+
+        response = conversation.doRequest("http://localhost/template");
+        assertEquals(response.getText().trim(), """
+            authenticated
+            matching login2
+            not matching login3
+            matching role1
+            matching role2
+            not matching role3
+            """ + conversation.getCookieValue("authId"));
+
+        response = conversation.doRequest("http://localhost/login");
+        form = response.getParsedHtml().getFormWithName("credentials");
+        form.setParameter("login", "johndoe");
+        form.setParameter("password", "thepassofbass");
+        response = form.submit();
+
+        assertEquals("authId", response.getNewCookieNames().get(0));
+        assertEquals(0, response.getParsedHtml().getForms().size());
+        assertEquals(response.getStatus(), 302);
+
+        response = conversation.doRequest("http://localhost/template");
+        assertEquals(response.getText().trim(), """
+            authenticated
+            not matching login1
+            not matching login3
+            not matching role1
+            matching role2
+            not matching role3
+            """ + conversation.getCookieValue("authId"));
+    }
 }

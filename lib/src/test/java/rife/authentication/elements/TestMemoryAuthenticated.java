@@ -696,4 +696,85 @@ public class TestMemoryAuthenticated {
         assertEquals(response.getStatus(), 302);
         assertEquals(response.getHeader("Location"), "http://localhost/login");
     }
+
+    @Test
+    public void testMemoryAuthenticatedFilteredTagsNotEnforced() {
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        var conversation = new MockConversation(site);
+
+        var response = conversation.doRequest("http://localhost/notEnforced/template");
+        assertEquals(response.getText().trim(), """
+            not authenticated
+            not matching login1
+            not matching login3
+            not matching role1
+            not matching role2
+            not matching role3""");
+    }
+
+    @Test
+    public void testMemoryAuthenticatedFilteredTags() {
+        MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
+        var conversation = new MockConversation(site);
+
+        var response = conversation.doRequest("http://localhost/login");
+        var form = response.getParsedHtml().getFormWithName("credentials");
+        form.setParameter("login", "guest");
+        form.setParameter("password", "guestpass");
+        response = form.submit();
+
+        assertEquals("authId", response.getNewCookieNames().get(0));
+        assertEquals(0, response.getParsedHtml().getForms().size());
+        assertEquals(response.getStatus(), 302);
+
+        response = conversation.doRequest("http://localhost/template");
+        assertEquals(response.getText().trim(), """
+            authenticated
+            matching login1
+            not matching login3
+            not matching role1
+            not matching role2
+            not matching role3
+            """ + conversation.getCookieValue("authId"));
+
+        response = conversation.doRequest("http://localhost/login");
+        form = response.getParsedHtml().getFormWithName("credentials");
+        form.setParameter("login", "jdevin");
+        form.setParameter("password", "yeolpass");
+        response = form.submit();
+
+        assertEquals("authId", response.getNewCookieNames().get(0));
+        assertEquals(0, response.getParsedHtml().getForms().size());
+        assertEquals(response.getStatus(), 302);
+
+        response = conversation.doRequest("http://localhost/template");
+        assertEquals(response.getText().trim(), """
+            authenticated
+            matching login2
+            not matching login3
+            matching role1
+            matching role2
+            not matching role3
+            """ + conversation.getCookieValue("authId"));
+
+        response = conversation.doRequest("http://localhost/login");
+        form = response.getParsedHtml().getFormWithName("credentials");
+        form.setParameter("login", "johndoe");
+        form.setParameter("password", "thepassofbass");
+        response = form.submit();
+
+        assertEquals("authId", response.getNewCookieNames().get(0));
+        assertEquals(0, response.getParsedHtml().getForms().size());
+        assertEquals(response.getStatus(), 302);
+
+        response = conversation.doRequest("http://localhost/template");
+        assertEquals(response.getText().trim(), """
+            authenticated
+            not matching login1
+            not matching login3
+            not matching role1
+            matching role2
+            not matching role3
+            """ + conversation.getCookieValue("authId"));
+    }
 }

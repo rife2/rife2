@@ -10,13 +10,13 @@ import rife.engine.Element;
 import rife.template.Template;
 
 public class Logout implements Element {
-    protected final AuthenticationConfig authConfig_;
+    protected final AuthConfig authConfig_;
     protected final Template template_;
 
-    public Logout(AuthenticationConfig config) {
+    public Logout(AuthConfig config) {
         this(config, null);
     }
-    public Logout(AuthenticationConfig config, Template template) {
+    public Logout(AuthConfig config, Template template) {
         authConfig_ = config;
         template_ = template;
     }

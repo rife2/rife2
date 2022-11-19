@@ -12,17 +12,17 @@ import rife.template.TemplateFactory;
 
 public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
     DatabaseSessionValidator validator;
-    AuthenticationConfig config;
-    AuthenticationConfig configAdmin;
-    AuthenticationConfig configMaint;
-    AuthenticationConfig configNotEnforced;
+    AuthConfig config;
+    AuthConfig configAdmin;
+    AuthConfig configMaint;
+    AuthConfig configNotEnforced;
 
     public DatabaseAuthenticatedSite(Datasource datasource) {
         validator = DatabaseSessionValidatorFactory.getInstance(datasource);
-        config = new AuthenticationConfig(validator);
-        configAdmin = new AuthenticationConfig(validator);
-        configMaint = new AuthenticationConfig(validator);
-        configNotEnforced = new AuthenticationConfig(validator);
+        config = new AuthConfig(validator);
+        configAdmin = new AuthConfig(validator);
+        configMaint = new AuthConfig(validator);
+        configNotEnforced = new AuthConfig(validator);
 
         remove();
 
@@ -57,10 +57,11 @@ public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
     }
 
     static class AuthenticatedSection extends Router {
-        AuthenticatedSection(AuthenticationConfig config) {
+        AuthenticatedSection(AuthConfig config) {
             landing = get("/landing", c -> c.print("Landing"));
             logout = get("/logout", new Logout(config, TemplateFactory.HTML.get("authentication.logout")));
-            get("/username", c -> c.print(config.identityAttribute(c) != null ? config.identityAttribute(c).getLogin() : "not logged in"));
+            template = get("/template", c -> c.print(c.template("filtered_tags_auth")));
+            get("/username", c -> c.print(AuthConfig.identityAttribute(c) != null ? AuthConfig.identityAttribute(c).getLogin() : "not logged in"));
             group(new Router() {
                 public void setup() {
                     before(new Logout(config));
@@ -71,6 +72,7 @@ public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
 
         Route landing;
         Route logout;
+        Route template;
     }
 
     Route login;

@@ -28,7 +28,7 @@ import rife.validation.ValidationError;
 public class Login extends Identified implements SessionAttributes {
     protected final Template template_;
 
-    public Login(AuthenticationConfig config, Template template) {
+    public Login(AuthConfig config, Template template) {
         super(config);
         template_ = template;
     }
