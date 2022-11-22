@@ -1071,11 +1071,9 @@ abstract public class AbstractFormBuilder implements FormBuilder {
         try {
             return super.clone();
         } catch (CloneNotSupportedException e) {
-            ///CLOVER:OFF
             // this should never happen
             Logger.getLogger("rife.forms").severe(ExceptionUtils.getExceptionStackTrace(e));
             return null;
-            ///CLOVER:ON
         }
     }
 }
