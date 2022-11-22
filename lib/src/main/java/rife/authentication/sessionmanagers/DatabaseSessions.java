@@ -17,10 +17,10 @@ import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
 import rife.database.DbRowProcessor;
 import rife.database.exceptions.DatabaseException;
+import rife.tools.UniqueIDGenerator;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.UUID;
 
 public abstract class DatabaseSessions extends DbQueryManager implements SessionManager {
     private long sessionDuration_ = RifeConfig.authentication().getSessionDuration();
@@ -98,7 +98,7 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
             throw new StartSessionErrorException(userId, hostIp);
         }
 
-        final String auth_id_string = UUID.randomUUID().toString();
+        final String auth_id_string = UniqueIDGenerator.generate().toString();
 
         try {
             if (0 == executeUpdate(startSession, new DbPreparedStatementHandler() {

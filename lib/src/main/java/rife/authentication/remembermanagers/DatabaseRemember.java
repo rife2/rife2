@@ -20,9 +20,9 @@ import rife.database.queries.DropTable;
 import rife.database.queries.Insert;
 import rife.database.queries.Select;
 import rife.tools.StringEncryptor;
+import rife.tools.UniqueIDGenerator;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.UUID;
 
 public abstract class DatabaseRemember extends DbQueryManager implements RememberManager {
     private long rememberDuration_ = RifeConfig.authentication().getRememberDuration();
@@ -67,7 +67,7 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
             throw new CreateRememberIdErrorException(userId);
         }
 
-        final String remember_id_string = UUID.randomUUID().toString();
+        final String remember_id_string = UniqueIDGenerator.generate().toString();
 
         try {
             if (0 == executeUpdate(createRememberId, new DbPreparedStatementHandler<>() {

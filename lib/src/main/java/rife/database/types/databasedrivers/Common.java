@@ -11,7 +11,6 @@ import rife.database.DbPreparedStatement;
 import rife.database.exceptions.DatabaseException;
 import rife.database.types.SqlConversion;
 import rife.tools.FileUtils;
-import rife.tools.JavaSpecificationUtils;
 import rife.tools.StringUtils;
 import rife.validation.Constrained;
 import rife.validation.ConstrainedProperty;

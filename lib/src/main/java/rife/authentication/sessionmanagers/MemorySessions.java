@@ -9,11 +9,11 @@ import rife.authentication.SessionManager;
 import rife.authentication.exceptions.SessionManagerException;
 import rife.authentication.sessionmanagers.exceptions.StartSessionErrorException;
 import rife.config.RifeConfig;
+import rife.tools.UniqueIDGenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class MemorySessions implements SessionManager {
     private long sessionDuration_ = RifeConfig.authentication().getSessionDuration();
@@ -72,7 +72,7 @@ public class MemorySessions implements SessionManager {
             throw new StartSessionErrorException(userId, hostIp);
         }
 
-        String auth_id_string = UUID.randomUUID().toString();
+        String auth_id_string = UniqueIDGenerator.generate().toString();
 
         MemorySession session = new MemorySession(auth_id_string, userId, hostIp, remembered);
 
