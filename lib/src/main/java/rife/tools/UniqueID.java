@@ -5,7 +5,6 @@
 package rife.tools;
 
 import java.util.Base64;
-import java.util.UUID;
 
 public class UniqueID {
     private static final Base64.Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();
