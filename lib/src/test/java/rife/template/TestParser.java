@@ -347,6 +347,34 @@ public class TestParser {
             }
         }
     */
+
+    @Test
+    public void testParseBlockoverrides() {
+        try {
+            Parsed template_parsed = parser_.parse("blockoverrides_in", null);
+            assertEquals(template_parsed.getBlocks().size(), 3);
+            assertNotNull(template_parsed.getContent());
+            assertNotNull(template_parsed.getBlock("BLOCK1"));
+            assertNotNull(template_parsed.getBlock("BLOCK2"));
+            assertEquals(template_parsed.getContent().countParts(), 4);
+            assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 1);
+            assertFalse(template_parsed.hasBlockvalue("BLOCK1"));
+            assertEquals(template_parsed.getBlock("BLOCK2").countParts(), 1);
+            assertFalse(template_parsed.hasBlockvalue("BLOCK2"));
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("blockoverrides_out_content_0"));
+            assertEquals(template_parsed.getContent().getPart(1).getType(), ParsedBlockPart.Type.VALUE);
+            assertEquals(template_parsed.getContent().getPart(1).getData(), "BLOCK1");
+            assertEquals(template_parsed.getContent().getPart(2).getType(), ParsedBlockPart.Type.VALUE);
+            assertEquals(template_parsed.getContent().getPart(2).getData(), "BLOCK2");
+            assertEquals(template_parsed.getContent().getPart(3).getData(), parser_.getTemplateContent("blockoverrides_out_content_3"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), "block1");
+
+            assertEquals(parser_.getTemplateFactory().get("blockoverrides_in").getContent(), parser_.getTemplateContent("blockoverrides_content"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
     @Test
     public void testParseBlocksNested() {
         try {

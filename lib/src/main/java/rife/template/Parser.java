@@ -553,6 +553,7 @@ public class Parser implements Cloneable {
                 name = ctx.CTagName();
             }
             final var block_id = name.getText();
+            parsed_.removeBlockvalue(block_id);
             blockIds_.push(block_id);
             blocks_.put(block_id, new ParsedBlockData());
         }

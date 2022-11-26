@@ -1043,6 +1043,13 @@ class_writer.visitEnd();
 		blockvalues_.add(id);
 	}
 
+	void removeBlockvalue(String id) {
+		assert id != null;
+		assert id.length() > 0;
+
+		blockvalues_.remove(id);
+	}
+
 	String getDefaultValue(String id) {
 		assert id != null;
 		assert id.length() > 0;
