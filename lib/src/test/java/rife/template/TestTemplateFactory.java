@@ -861,87 +861,86 @@ public class TestTemplateFactory {
         }
     }
 
-    // TODO : TXT includes not reloading
-//    @Test
-//    public void testReloadIncludesTxt() {
-//        var resource_finder = TemplateFactory.TXT.getResourceFinder();
-//
-//        try {
-//            // set up the temporary directory
-//            var template_dir = RifeConfig.global().getTempPath();
-//            var template_dir_file = new File(template_dir);
-//            template_dir_file.mkdirs();
-//
-//            // set up the first template file
-//            var group = new ResourceFinderGroup()
-//                .add(new ResourceFinderDirectories(new File[]{template_dir_file}))
-//                .add(ResourceFinderClasspath.instance());
-//            TemplateFactory.TXT.setResourceFinder(group);
-//
-//            // set up the first template file with its included file
-//            var template1_resource = TemplateFactory.TXT.getParser().resolve("includes_reload_master_in");
-//            var template1_name = "includes_reload_master";
-//            var template1_file = new File(template_dir + File.separator + template1_name + TemplateFactory.TXT.getParser().getExtension());
-//            template1_file.delete();
-//            var template1_included_resource = TemplateFactory.TXT.getParser().resolve("defaultvalues_in");
-//            var template1_included_name = "includes_reload_included_in";
-//            var template1_included_file = new File(template_dir + File.separator + template1_included_name + TemplateFactory.TXT.getParser().getExtension());
-//            template1_included_file.delete();
-//            try {
-//                FileUtils.copy(template1_resource.openStream(), template1_file);
-//                FileUtils.copy(template1_included_resource.openStream(), template1_included_file);
-//            } catch (FileUtilsErrorException | IOException e) {
-//                fail(ExceptionUtils.getExceptionStackTrace(e));
-//                return;
-//            }
-//            // obtain the original template
-//            Template template1 = null;
-//            try {
-//                template1 = TemplateFactory.TXT.get(template1_name);
-//                assertNotNull(template1);
-//            } catch (TemplateException e) {
-//                fail(ExceptionUtils.getExceptionStackTrace(e));
-//            }
-//
-//            // wait a second
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e) {
-//                fail(ExceptionUtils.getExceptionStackTrace(e));
-//            }
-//
-//            // modify the contents of the included file
-//            var template1_included_resource2 = TemplateFactory.TXT.getParser().resolve("noblocks_in");
-//            try {
-//                FileUtils.copy(template1_included_resource2.openStream(), template1_included_file);
-//            } catch (FileUtilsErrorException | IOException e) {
-//                fail(ExceptionUtils.getExceptionStackTrace(e));
-//                return;
-//            }
-//            // obtain the modified template
-//            Template template2 = null;
-//            try {
-//                template2 = TemplateFactory.TXT.get(template1_name);
-//                assertNotNull(template2);
-//            } catch (TemplateException e) {
-//                fail(ExceptionUtils.getExceptionStackTrace(e));
-//            }
-//
-//            // check if the template was correctly updated
-//            assertNotSame(template1, template2);
-//            assertNotSame(template1.getClass(), template2.getClass());
-//            assertNotEquals(template1.getContent(), template2.getContent());
-//
-//            // clean up the copied files and the created dir
-//            template1_file.delete();
-//            template1_included_file.delete();
-//
-//            // clean up the copied files
-//            template1_file.delete();
-//        } finally {
-//            TemplateFactory.TXT.setResourceFinder(resource_finder);
-//        }
-//    }
+    @Test
+    public void testReloadIncludesTxt() {
+        var resource_finder = TemplateFactory.TXT.getResourceFinder();
+
+        try {
+            // set up the temporary directory
+            var template_dir = RifeConfig.global().getTempPath();
+            var template_dir_file = new File(template_dir);
+            template_dir_file.mkdirs();
+
+            // set up the first template file
+            var group = new ResourceFinderGroup()
+                .add(new ResourceFinderDirectories(new File[]{template_dir_file}))
+                .add(ResourceFinderClasspath.instance());
+            TemplateFactory.TXT.setResourceFinder(group);
+
+            // set up the first template file with its included file
+            var template1_resource = TemplateFactory.TXT.getParser().resolve("includes_reload_master_in");
+            var template1_name = "includes_reload_master";
+            var template1_file = new File(template_dir + File.separator + template1_name + TemplateFactory.TXT.getParser().getExtension());
+            template1_file.delete();
+            var template1_included_resource = TemplateFactory.TXT.getParser().resolve("defaultvalues_in");
+            var template1_included_name = "includes_reload_included_in";
+            var template1_included_file = new File(template_dir + File.separator + template1_included_name + TemplateFactory.TXT.getParser().getExtension());
+            template1_included_file.delete();
+            try {
+                FileUtils.copy(template1_resource.openStream(), template1_file);
+                FileUtils.copy(template1_included_resource.openStream(), template1_included_file);
+            } catch (FileUtilsErrorException | IOException e) {
+                fail(ExceptionUtils.getExceptionStackTrace(e));
+                return;
+            }
+            // obtain the original template
+            Template template1 = null;
+            try {
+                template1 = TemplateFactory.TXT.get(template1_name);
+                assertNotNull(template1);
+            } catch (TemplateException e) {
+                fail(ExceptionUtils.getExceptionStackTrace(e));
+            }
+
+            // wait a second
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                fail(ExceptionUtils.getExceptionStackTrace(e));
+            }
+
+            // modify the contents of the included file
+            var template1_included_resource2 = TemplateFactory.TXT.getParser().resolve("noblocks_in");
+            try {
+                FileUtils.copy(template1_included_resource2.openStream(), template1_included_file);
+            } catch (FileUtilsErrorException | IOException e) {
+                fail(ExceptionUtils.getExceptionStackTrace(e));
+                return;
+            }
+            // obtain the modified template
+            Template template2 = null;
+            try {
+                template2 = TemplateFactory.TXT.get(template1_name);
+                assertNotNull(template2);
+            } catch (TemplateException e) {
+                fail(ExceptionUtils.getExceptionStackTrace(e));
+            }
+
+            // check if the template was correctly updated
+            assertNotSame(template1, template2);
+            assertNotSame(template1.getClass(), template2.getClass());
+            assertNotEquals(template1.getContent(), template2.getContent());
+
+            // clean up the copied files and the created dir
+            template1_file.delete();
+            template1_included_file.delete();
+
+            // clean up the copied files
+            template1_file.delete();
+        } finally {
+            TemplateFactory.TXT.setResourceFinder(resource_finder);
+        }
+    }
 
     @Test
     public void testReloadMultiLevelIncludes()

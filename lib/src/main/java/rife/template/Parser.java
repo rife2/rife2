@@ -322,6 +322,7 @@ public class Parser implements Cloneable {
 
         var input = CharStreams.fromString(content);
         var lexer = new TemplatePreLexer(input);
+        lexer.tc = templateFactory_.getConfig();
         var tokens = new CommonTokenStream(lexer);
         var parser = new TemplatePreParser(tokens);
         parser.removeErrorListeners();
