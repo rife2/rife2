@@ -1,0 +1,15 @@
+<html>
+	<head>
+		<title>Template with escaped short value tags</title>
+	</head>
+
+	<body>
+		\{{v VALUE1/}}
+		<h1>This is a template with escaped short value tags.</h1>
+		\\{{b BLOCK1}}\\one\<!--v VALUE2/-->two\\<!--v VALUE3/-->three\{{/b}}
+		\<!--b BLOCK2-->three\{{v VALUE4/}}\<!--v VALUE5/-->\\{{/b}}
+		\{{v BLOCK3}}\\<!--v VALUE6/-->\<!--/b-->
+		<h2>Some more text.</h2>
+		\\<!--v VALUE7/-->\\
+	</body>
+</html>

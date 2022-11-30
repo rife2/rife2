@@ -25,7 +25,7 @@ public class TestParser {
 
     @Test
     public void testClone() {
-        Parser parser_clone = parser_.clone();
+        var parser_clone = parser_.clone();
         assertNotNull(parser_clone);
         assertNotSame(parser_, parser_clone);
         assertEquals(parser_, parser_clone);
@@ -34,7 +34,7 @@ public class TestParser {
     @Test
     public void testTemplatePackage() {
         try {
-            Parsed template_parsed = parser_.parse("test_package.noblocks_in", null);
+            var template_parsed = parser_.parse("test_package.noblocks_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
             assertNotNull(template_parsed.getContent());
             assertEquals(template_parsed.getContent().countParts(), 1);
@@ -47,7 +47,7 @@ public class TestParser {
     @Test
     public void testParseDefaultValues() {
         try {
-            Parsed template_parsed = parser_.parse("defaultvalues_in", null);
+            var template_parsed = parser_.parse("defaultvalues_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -72,7 +72,7 @@ public class TestParser {
     @Test
     public void testParseComments() {
         try {
-            Parsed template_parsed = parser_.parse("comments_in", null);
+            var template_parsed = parser_.parse("comments_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -89,27 +89,23 @@ public class TestParser {
         }
     }
 
-    /*
-    @Test public void testParseCommentsSuccessiveEscaped()
-    {
-        try
-        {
-            Parsed template_parsed = parser_.parse("comments_successive_escaped_in", null, null);
+    @Test
+    public void testParseCommentsSuccessiveEscaped() {
+        try {
+            var template_parsed = parser_.parse("comments_successive_escaped_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
             assertNotNull(template_parsed.getContent());
             assertEquals(template_parsed.getContent().countParts(), 1);
-            assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("comments_successive_escaped_out", parser_));
-        }
-        catch (TemplateException e)
-        {
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("comments_successive_escaped_out"));
+        } catch (TemplateException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
     }
-    */
+
     @Test
     public void testParseNoBlocks() {
         try {
-            Parsed template_parsed = parser_.parse("noblocks_in", null);
+            var template_parsed = parser_.parse("noblocks_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
             assertNotNull(template_parsed.getContent());
             assertEquals(template_parsed.getContent().countParts(), 1);
@@ -122,7 +118,7 @@ public class TestParser {
     @Test
     public void testParseBlocksSuccessive() {
         try {
-            Parsed template_parsed = parser_.parse("blocks_successive_in", null);
+            var template_parsed = parser_.parse("blocks_successive_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -141,30 +137,26 @@ public class TestParser {
         }
     }
 
-    /*
-        @Test public void testParseBlocksSuccessiveEscaped()
-        {
-            try
-            {
-                Parsed template_parsed = parser_.parse("blocks_successive_escaped_in", null, null);
-                assertEquals(template_parsed.getBlocks().size(), 2);
-                assertNotNull(template_parsed.getContent());
-                assertNotNull(template_parsed.getBlock("BLOCK2"));
-                assertEquals(template_parsed.getContent().countParts(), 1);
-                assertEquals(template_parsed.getBlock("BLOCK2").countParts(), 1);
-                assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("blocks_successive_escaped_out_content", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK2").getPart(0).getData(), getTemplateContent("blocks_successive_escaped_out_block2", parser_));
-            }
-            catch (TemplateException e)
-            {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+    @Test
+    public void testParseBlocksSuccessiveEscaped() {
+        try {
+            var template_parsed = parser_.parse("blocks_successive_escaped_in", null);
+            assertEquals(template_parsed.getBlocks().size(), 2);
+            assertNotNull(template_parsed.getContent());
+            assertNotNull(template_parsed.getBlock("BLOCK2"));
+            assertEquals(template_parsed.getContent().countParts(), 1);
+            assertEquals(template_parsed.getBlock("BLOCK2").countParts(), 1);
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("blocks_successive_escaped_out_content"));
+            assertEquals(template_parsed.getBlock("BLOCK2").getPart(0).getData(), parser_.getTemplateContent("blocks_successive_escaped_out_block2"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
-    */
+    }
+
     @Test
     public void testParseBlocksSpaced() {
         try {
-            Parsed template_parsed = parser_.parse("blocks_spaced_in", null);
+            var template_parsed = parser_.parse("blocks_spaced_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -183,30 +175,26 @@ public class TestParser {
         }
     }
 
-    /*
-        @Test public void testParseBlocksSpacedEscaped()
-        {
-            try
-            {
-                Parsed template_parsed = parser_.parse("blocks_spaced_escaped_in", null, null);
-                assertEquals(template_parsed.getBlocks().size(), 2);
-                assertNotNull(template_parsed.getContent());
-                assertNotNull(template_parsed.getBlock("BLOCK1"));
-                assertEquals(template_parsed.getContent().countParts(), 1);
-                assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 1);
-                assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("blocks_spaced_escaped_out_content", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), getTemplateContent("blocks_spaced_escaped_out_block1", parser_));
-            }
-            catch (TemplateException e)
-            {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+    @Test
+    public void testParseBlocksSpacedEscaped() {
+        try {
+            var template_parsed = parser_.parse("blocks_spaced_escaped_in", null);
+            assertEquals(template_parsed.getBlocks().size(), 2);
+            assertNotNull(template_parsed.getContent());
+            assertNotNull(template_parsed.getBlock("BLOCK1"));
+            assertEquals(template_parsed.getContent().countParts(), 1);
+            assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 1);
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("blocks_spaced_escaped_out_content"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), parser_.getTemplateContent("blocks_spaced_escaped_out_block1"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
-    */
+    }
+
     @Test
     public void testParseBlocksExtremities() {
         try {
-            Parsed template_parsed = parser_.parse("blocks_extremities_in", null);
+            var template_parsed = parser_.parse("blocks_extremities_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -225,30 +213,26 @@ public class TestParser {
         }
     }
 
-    /*
-        @Test public void testParseBlocksExtremitiesEscaped()
-        {
-            try
-            {
-                Parsed template_parsed = parser_.parse("blocks_extremities_escaped_in", null, null);
-                assertEquals(template_parsed.getBlocks().size(), 2);
-                assertNotNull(template_parsed.getContent());
-                assertNotNull(template_parsed.getBlock("BLOCK2"));
-                assertEquals(template_parsed.getContent().countParts(), 1);
-                assertEquals(template_parsed.getBlock("BLOCK2").countParts(), 1);
-                assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("blocks_extremities_escaped_out_content", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK2").getPart(0).getData(), getTemplateContent("blocks_extremities_escaped_out_block2", parser_));
-            }
-            catch (TemplateException e)
-            {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+    @Test
+    public void testParseBlocksExtremitiesEscaped() {
+        try {
+            var template_parsed = parser_.parse("blocks_extremities_escaped_in", null);
+            assertEquals(template_parsed.getBlocks().size(), 2);
+            assertNotNull(template_parsed.getContent());
+            assertNotNull(template_parsed.getBlock("BLOCK2"));
+            assertEquals(template_parsed.getContent().countParts(), 1);
+            assertEquals(template_parsed.getBlock("BLOCK2").countParts(), 1);
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("blocks_extremities_escaped_out_content"));
+            assertEquals(template_parsed.getBlock("BLOCK2").getPart(0).getData(), parser_.getTemplateContent("blocks_extremities_escaped_out_block2"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
-    */
+    }
+
     @Test
     public void testParseBlockvalues() {
         try {
-            Parsed template_parsed = parser_.parse("blockvalues_in", null);
+            var template_parsed = parser_.parse("blockvalues_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -270,35 +254,31 @@ public class TestParser {
         }
     }
 
-    /*
-        @Test public void testParseBlockvaluesEscaped()
-        {
-            try
-            {
-                Parsed template_parsed = parser_.parse("blockvalues_escaped_in", null, null);
-                assertEquals(template_parsed.getBlocks().size(), 3);
-                assertNotNull(template_parsed.getContent());
-                assertNotNull(template_parsed.getBlock("BLOCK1"));
-                assertNotNull(template_parsed.getBlock("BLOCK3"));
-                assertEquals(template_parsed.getContent().countParts(), 1);
-                assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 1);
-                assertEquals(template_parsed.getBlock("BLOCK3").countParts(), 1);
-                assertTrue(template_parsed.hasBlockvalue("BLOCK1"));
-                assertTrue(template_parsed.hasBlockvalue("BLOCK3"));
-                assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("blockvalues_escaped_out_content", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), getTemplateContent("blockvalues_escaped_out_block1", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK3").getPart(0).getData(), getTemplateContent("blockvalues_escaped_out_block3", parser_));
-            }
-            catch (TemplateException e)
-            {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+    @Test
+    public void testParseBlockvaluesEscaped() {
+        try {
+            var template_parsed = parser_.parse("blockvalues_escaped_in", null);
+            assertEquals(template_parsed.getBlocks().size(), 3);
+            assertNotNull(template_parsed.getContent());
+            assertNotNull(template_parsed.getBlock("BLOCK1"));
+            assertNotNull(template_parsed.getBlock("BLOCK3"));
+            assertEquals(template_parsed.getContent().countParts(), 1);
+            assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 1);
+            assertEquals(template_parsed.getBlock("BLOCK3").countParts(), 1);
+            assertTrue(template_parsed.hasBlockvalue("BLOCK1"));
+            assertTrue(template_parsed.hasBlockvalue("BLOCK3"));
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("blockvalues_escaped_out_content"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), parser_.getTemplateContent("blockvalues_escaped_out_block1"));
+            assertEquals(template_parsed.getBlock("BLOCK3").getPart(0).getData(), parser_.getTemplateContent("blockvalues_escaped_out_block3"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
-    */
+    }
+
     @Test
     public void testParseBlockappends() {
         try {
-            Parsed template_parsed = parser_.parse("blockappends_in", null);
+            var template_parsed = parser_.parse("blockappends_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK"));
@@ -322,36 +302,31 @@ public class TestParser {
         }
     }
 
-    /*
-        @Test public void testParseBlockappendsEscaped()
-        {
-            try
-            {
-                Parsed template_parsed = parser_.parse("blockappends_escaped_in", null, null);
-                assertEquals(template_parsed.getBlocks().size(), 3);
-                assertNotNull(template_parsed.getContent());
-                assertNotNull(template_parsed.getBlock("BLOCK1"));
-                assertNotNull(template_parsed.getBlock("BLOCK2"));
-                assertEquals(template_parsed.getContent().countParts(), 1);
-                assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 1);
-                assertEquals(template_parsed.getBlock("BLOCK2").countParts(), 1);
-                assertTrue(template_parsed.hasBlockvalue("BLOCK1"));
-                assertTrue(template_parsed.hasBlockvalue("BLOCK2"));
-                assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("blockappends_escaped_out_content", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), getTemplateContent("blockappends_escaped_out_block1", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK2").getPart(0).getData(), getTemplateContent("blockappends_escaped_out_block2", parser_));
-            }
-            catch (TemplateException e)
-            {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+    @Test
+    public void testParseBlockappendsEscaped() {
+        try {
+            var template_parsed = parser_.parse("blockappends_escaped_in", null);
+            assertEquals(template_parsed.getBlocks().size(), 3);
+            assertNotNull(template_parsed.getContent());
+            assertNotNull(template_parsed.getBlock("BLOCK1"));
+            assertNotNull(template_parsed.getBlock("BLOCK2"));
+            assertEquals(template_parsed.getContent().countParts(), 1);
+            assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 1);
+            assertEquals(template_parsed.getBlock("BLOCK2").countParts(), 1);
+            assertTrue(template_parsed.hasBlockvalue("BLOCK1"));
+            assertTrue(template_parsed.hasBlockvalue("BLOCK2"));
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("blockappends_escaped_out_content"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), parser_.getTemplateContent("blockappends_escaped_out_block1"));
+            assertEquals(template_parsed.getBlock("BLOCK2").getPart(0).getData(), parser_.getTemplateContent("blockappends_escaped_out_block2"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
-    */
+    }
 
     @Test
     public void testParseBlockoverrides() {
         try {
-            Parsed template_parsed = parser_.parse("blockoverrides_in", null);
+            var template_parsed = parser_.parse("blockoverrides_in", null);
             assertEquals(template_parsed.getBlocks().size(), 3);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -378,7 +353,7 @@ public class TestParser {
     @Test
     public void testParseBlocksNested() {
         try {
-            Parsed template_parsed = parser_.parse("blocks_nested_in", null);
+            var template_parsed = parser_.parse("blocks_nested_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -397,29 +372,25 @@ public class TestParser {
         }
     }
 
-    /*
-        @Test public void testParseBlocksNestedEscaped()
-        {
-            try
-            {
-                Parsed template_parsed = parser_.parse("blocks_nested_escaped_in", null, null);
-                assertEquals(template_parsed.getBlocks().size(), 3);
-                assertNotNull(template_parsed.getContent());
-                assertNotNull(template_parsed.getBlock("BLOCK1"));
-                assertNotNull(template_parsed.getBlock("BLOCK3"));
-                assertEquals(template_parsed.getContent().countParts(), 1);
-                assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 1);
-                assertEquals(template_parsed.getBlock("BLOCK3").countParts(), 1);
-                assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("blocks_nested_escaped_out_content", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), getTemplateContent("blocks_nested_escaped_out_block1", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK3").getPart(0).getData(), getTemplateContent("blocks_nested_escaped_out_block3", parser_));
-            }
-            catch (TemplateException e)
-            {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+    @Test
+    public void testParseBlocksNestedEscaped() {
+        try {
+            var template_parsed = parser_.parse("blocks_nested_escaped_in", null);
+            assertEquals(template_parsed.getBlocks().size(), 3);
+            assertNotNull(template_parsed.getContent());
+            assertNotNull(template_parsed.getBlock("BLOCK1"));
+            assertNotNull(template_parsed.getBlock("BLOCK3"));
+            assertEquals(template_parsed.getContent().countParts(), 1);
+            assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 1);
+            assertEquals(template_parsed.getBlock("BLOCK3").countParts(), 1);
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("blocks_nested_escaped_out_content"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), parser_.getTemplateContent("blocks_nested_escaped_out_block1"));
+            assertEquals(template_parsed.getBlock("BLOCK3").getPart(0).getData(), parser_.getTemplateContent("blocks_nested_escaped_out_block3"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
-    */
+    }
+
     @Test
     public void testParseBlocksNameHashcodeConflicts() {
         try {
@@ -429,7 +400,7 @@ public class TestParser {
             assertTrue("DMn0".hashCode() != "FMmO".hashCode());
             assertTrue("DMn0".hashCode() != "HNMn".hashCode());
             assertTrue("FMmO".hashCode() != "HNMn".hashCode());
-            Parsed template_parsed = parser_.parse("blocks_stringconflicts_in", null);
+            var template_parsed = parser_.parse("blocks_stringconflicts_in", null);
             assertEquals(template_parsed.getBlocks().size(), 7);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("DMn0"));
@@ -460,7 +431,7 @@ public class TestParser {
     @Test
     public void testParseValuesLong() {
         try {
-            Parsed template_parsed = parser_.parse("values_long_in", null);
+            var template_parsed = parser_.parse("values_long_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -494,40 +465,36 @@ public class TestParser {
         }
     }
 
-    /*
-        @Test public void testParseValuesLongEscaped()
-        {
-            try
-            {
-                Parsed template_parsed = parser_.parse("values_long_escaped_in", null, null);
-                assertEquals(template_parsed.getBlocks().size(), 2);
-                assertNotNull(template_parsed.getContent());
-                assertNotNull(template_parsed.getBlock("BLOCK1"));
-                assertEquals(template_parsed.getContent().countParts(), 3);
-                assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 6);
-                assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("values_long_escaped_out_content_0", parser_));
-                assertEquals(template_parsed.getContent().getPart(1).getData(), getTemplateContent("values_long_escaped_out_content_1", parser_));
-                assertEquals(template_parsed.getContent().getPart(2).getData(), getTemplateContent("values_long_escaped_out_content_2", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), getTemplateContent("values_long_escaped_out_block1_0", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK1").getPart(1).getData(), getTemplateContent("values_long_escaped_out_block1_1", parser_));
-                assertEquals(template_parsed.getDefaultValue(template_parsed.getBlock("BLOCK1").getPart(1).getData()), getTemplateContent("values_long_escaped_out_block1_1-defaultvalue", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK1").getPart(2).getData(), getTemplateContent("values_long_escaped_out_block1_2", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK1").getPart(3).getData(), getTemplateContent("values_long_escaped_out_block1_3", parser_));
-                assertEquals(template_parsed.getDefaultValue(template_parsed.getBlock("BLOCK1").getPart(3).getData()), getTemplateContent("values_long_escaped_out_block1_3-defaultvalue", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK1").getPart(4).getData(), getTemplateContent("values_long_escaped_out_block1_4", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK1").getPart(5).getData(), getTemplateContent("values_long_escaped_out_block1_5", parser_));
-                assertEquals(template_parsed.getDefaultValue(template_parsed.getBlock("BLOCK1").getPart(5).getData()), getTemplateContent("values_long_escaped_out_block1_5-defaultvalue", parser_));
-            }
-            catch (TemplateException e)
-            {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+    @Test
+    public void testParseValuesLongEscaped() {
+        try {
+            var template_parsed = parser_.parse("values_long_escaped_in", null);
+            assertEquals(template_parsed.getBlocks().size(), 2);
+            assertNotNull(template_parsed.getContent());
+            assertNotNull(template_parsed.getBlock("BLOCK1"));
+            assertEquals(template_parsed.getContent().countParts(), 3);
+            assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 6);
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("values_long_escaped_out_content_0"));
+            assertEquals(template_parsed.getContent().getPart(1).getData(), parser_.getTemplateContent("values_long_escaped_out_content_1"));
+            assertEquals(template_parsed.getContent().getPart(2).getData(), parser_.getTemplateContent("values_long_escaped_out_content_2"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), parser_.getTemplateContent("values_long_escaped_out_block1_0"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(1).getData(), parser_.getTemplateContent("values_long_escaped_out_block1_1"));
+            assertEquals(template_parsed.getDefaultValue(template_parsed.getBlock("BLOCK1").getPart(1).getData()), parser_.getTemplateContent("values_long_escaped_out_block1_1-defaultvalue"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(2).getData(), parser_.getTemplateContent("values_long_escaped_out_block1_2"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(3).getData(), parser_.getTemplateContent("values_long_escaped_out_block1_3"));
+            assertEquals(template_parsed.getDefaultValue(template_parsed.getBlock("BLOCK1").getPart(3).getData()), parser_.getTemplateContent("values_long_escaped_out_block1_3-defaultvalue"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(4).getData(), parser_.getTemplateContent("values_long_escaped_out_block1_4"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(5).getData(), parser_.getTemplateContent("values_long_escaped_out_block1_5"));
+            assertEquals(template_parsed.getDefaultValue(template_parsed.getBlock("BLOCK1").getPart(5).getData()), parser_.getTemplateContent("values_long_escaped_out_block1_5-defaultvalue"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
-    */
+    }
+
     @Test
     public void testParseValuesShort() {
         try {
-            Parsed template_parsed = parser_.parse("values_short_in", null);
+            var template_parsed = parser_.parse("values_short_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
             assertNotNull(template_parsed.getContent());
             assertNotNull(template_parsed.getBlock("BLOCK1"));
@@ -556,36 +523,32 @@ public class TestParser {
         }
     }
 
-    /*
-        @Test public void testParseValuesShortEscaped()
-        {
-            try
-            {
-                Parsed template_parsed = parser_.parse("values_short_escaped_in", null, null);
-                assertEquals(template_parsed.getBlocks().size(), 2);
-                assertNotNull(template_parsed.getContent());
-                assertNotNull(template_parsed.getBlock("BLOCK1"));
-                assertEquals(template_parsed.getContent().countParts(), 5);
-                assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 3);
-                assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("values_short_escaped_out_content_0", parser_));
-                assertEquals(template_parsed.getContent().getPart(1).getData(), getTemplateContent("values_short_escaped_out_content_1", parser_));
-                assertEquals(template_parsed.getContent().getPart(2).getData(), getTemplateContent("values_short_escaped_out_content_2", parser_));
-                assertEquals(template_parsed.getContent().getPart(3).getData(), getTemplateContent("values_short_escaped_out_content_3", parser_));
-                assertEquals(template_parsed.getContent().getPart(4).getData(), getTemplateContent("values_short_escaped_out_content_4", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), getTemplateContent("values_short_escaped_out_block1_0", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK1").getPart(1).getData(), getTemplateContent("values_short_escaped_out_block1_1", parser_));
-                assertEquals(template_parsed.getBlock("BLOCK1").getPart(2).getData(), getTemplateContent("values_short_escaped_out_block1_2", parser_));
-            }
-            catch (TemplateException e)
-            {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+    @Test
+    public void testParseValuesShortEscaped() {
+        try {
+            var template_parsed = parser_.parse("values_short_escaped_in", null);
+            assertEquals(template_parsed.getBlocks().size(), 2);
+            assertNotNull(template_parsed.getContent());
+            assertNotNull(template_parsed.getBlock("BLOCK1"));
+            assertEquals(template_parsed.getContent().countParts(), 5);
+            assertEquals(template_parsed.getBlock("BLOCK1").countParts(), 3);
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("values_short_escaped_out_content_0"));
+            assertEquals(template_parsed.getContent().getPart(1).getData(), parser_.getTemplateContent("values_short_escaped_out_content_1"));
+            assertEquals(template_parsed.getContent().getPart(2).getData(), parser_.getTemplateContent("values_short_escaped_out_content_2"));
+            assertEquals(template_parsed.getContent().getPart(3).getData(), parser_.getTemplateContent("values_short_escaped_out_content_3"));
+            assertEquals(template_parsed.getContent().getPart(4).getData(), parser_.getTemplateContent("values_short_escaped_out_content_4"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(0).getData(), parser_.getTemplateContent("values_short_escaped_out_block1_0"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(1).getData(), parser_.getTemplateContent("values_short_escaped_out_block1_1"));
+            assertEquals(template_parsed.getBlock("BLOCK1").getPart(2).getData(), parser_.getTemplateContent("values_short_escaped_out_block1_2"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
-*/
+    }
+
     @Test
     public void testParseIncludes() {
         try {
-            Parsed template_parsed = parser_.parse("includes_master_in", null);
+            var template_parsed = parser_.parse("includes_master_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
             assertNotNull(template_parsed.getContent());
             assertEquals(template_parsed.getContent().countParts(), 1);
@@ -598,7 +561,7 @@ public class TestParser {
     @Test
     public void testParseIncludesMultiple() {
         try {
-            Parsed template_parsed = parser_.parse("includes_multiple_in", null);
+            var template_parsed = parser_.parse("includes_multiple_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
             assertNotNull(template_parsed.getContent());
             assertEquals(template_parsed.getContent().countParts(), 1);
@@ -617,42 +580,39 @@ public class TestParser {
                     assertEquals(template_parsed.getBlocks().size(), 2);
                     assertNotNull(template_parsed.getContent());
                     assertEquals(template_parsed.getContent().countParts(), 5);
-                    assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("includes_othertype_out_content_0", parser_));
-                    assertEquals(template_parsed.getContent().getPart(1).getData(), getTemplateContent("includes_othertype_out_content_1", parser_));
-                    assertEquals(template_parsed.getContent().getPart(2).getData(), getTemplateContent("includes_othertype_out_content_2", parser_));
-                    assertEquals(template_parsed.getContent().getPart(3).getData(), getTemplateContent("includes_othertype_out_content_3", parser_));
-                    assertEquals(template_parsed.getContent().getPart(4).getData(), getTemplateContent("includes_othertype_out_content_4", parser_));
+                    assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("includes_othertype_out_content_0"));
+                    assertEquals(template_parsed.getContent().getPart(1).getData(), parser_.getTemplateContent("includes_othertype_out_content_1"));
+                    assertEquals(template_parsed.getContent().getPart(2).getData(), parser_.getTemplateContent("includes_othertype_out_content_2"));
+                    assertEquals(template_parsed.getContent().getPart(3).getData(), parser_.getTemplateContent("includes_othertype_out_content_3"));
+                    assertEquals(template_parsed.getContent().getPart(4).getData(), parser_.getTemplateContent("includes_othertype_out_content_4"));
                 }
                 catch (TemplateException e)
                 {
                     fail(ExceptionUtils.getExceptionStackTrace(e));
                 }
             }
+*/
 
-            @Test public void testParseIncludesEscaped()
-            {
-                try
-                {
-                    Parsed template_parsed = parser_.parse("includes_escaped_master_in", null, null);
-                    assertEquals(template_parsed.getBlocks().size(), 1);
-                    assertNotNull(template_parsed.getContent());
-                    assertEquals(template_parsed.getContent().countParts(), 1);
-                    assertEquals(template_parsed.getContent().getPart(0).getData(), getTemplateContent("includes_escaped_out_content", parser_));
-                }
-                catch (TemplateException e)
-                {
-                    fail(ExceptionUtils.getExceptionStackTrace(e));
-                }
-            }
-        */
+    @Test
+    public void testParseIncludesEscaped() {
+        try {
+            var template_parsed = parser_.parse("includes_escaped_master_in", null);
+            assertEquals(template_parsed.getBlocks().size(), 1);
+            assertNotNull(template_parsed.getContent());
+            assertEquals(template_parsed.getContent().countParts(), 1);
+            assertEquals(template_parsed.getContent().getPart(0).getData(), parser_.getTemplateContent("includes_escaped_out_content"));
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
 
     @Test
     public void testEncodingLatinHtml() {
         try {
-            Parsed template_ascii = TemplateFactory.HTML.getParser().parse("encoding_latin_ascii", "US-ASCII");
-            Parsed template_utf_16le = TemplateFactory.HTML.getParser().parse("encoding_latin_utf16le", "UTF-16LE");
-            Parsed template_ascii_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin_ascii", "UTF-16LE");
-            Parsed template_utf_16le_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin_utf16le", "US-ASCII");
+            var template_ascii = TemplateFactory.HTML.getParser().parse("encoding_latin_ascii", "US-ASCII");
+            var template_utf_16le = TemplateFactory.HTML.getParser().parse("encoding_latin_utf16le", "UTF-16LE");
+            var template_ascii_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin_ascii", "UTF-16LE");
+            var template_utf_16le_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin_utf16le", "US-ASCII");
 
             assertEquals(template_ascii.getContent().getPart(0).getData(), template_utf_16le.getContent().getPart(0).getData());
             assertNotEquals(template_utf_16le.getContent().getPart(0).getData(), template_utf_16le_wrong.getContent().getPart(0).getData());
@@ -665,10 +625,10 @@ public class TestParser {
     @Test
     public void testEncodingLatinTxt() {
         try {
-            Parsed template_ascii = TemplateFactory.TXT.getParser().parse("encoding_latin_ascii", "US-ASCII");
-            Parsed template_utf_16le = TemplateFactory.TXT.getParser().parse("encoding_latin_utf16le", "UTF-16LE");
-            Parsed template_ascii_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin_ascii", "UTF-16LE");
-            Parsed template_utf_16le_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin_utf16le", "US-ASCII");
+            var template_ascii = TemplateFactory.TXT.getParser().parse("encoding_latin_ascii", "US-ASCII");
+            var template_utf_16le = TemplateFactory.TXT.getParser().parse("encoding_latin_utf16le", "UTF-16LE");
+            var template_ascii_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin_ascii", "UTF-16LE");
+            var template_utf_16le_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin_utf16le", "US-ASCII");
 
             assertEquals(template_ascii.getContent().getPart(0).getData(), template_utf_16le.getContent().getPart(0).getData());
             assertNotEquals(template_utf_16le.getContent().getPart(0).getData(), template_utf_16le_wrong.getContent().getPart(0).getData());
@@ -681,10 +641,10 @@ public class TestParser {
     @Test
     public void testEncodingLatin1Html() {
         try {
-            Parsed template_iso8859_1 = TemplateFactory.HTML.getParser().parse("encoding_latin1_iso88591", "ISO8859-1");
-            Parsed template_utf_8 = TemplateFactory.HTML.getParser().parse("encoding_latin1_utf8", "UTF-8");
-            Parsed template_iso8859_1_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin1_iso88591", "UTF-8");
-            Parsed template_utf_8_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin1_utf8", "ISO8859-1");
+            var template_iso8859_1 = TemplateFactory.HTML.getParser().parse("encoding_latin1_iso88591", "ISO8859-1");
+            var template_utf_8 = TemplateFactory.HTML.getParser().parse("encoding_latin1_utf8", "UTF-8");
+            var template_iso8859_1_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin1_iso88591", "UTF-8");
+            var template_utf_8_wrong = TemplateFactory.HTML.getParser().parse("encoding_latin1_utf8", "ISO8859-1");
 
             assertEquals(template_iso8859_1.getContent().getPart(0).getData(), template_utf_8.getContent().getPart(0).getData());
             assertNotEquals(template_iso8859_1.getContent().getPart(0).getData(), template_iso8859_1_wrong.getContent().getPart(0).getData());
@@ -697,10 +657,10 @@ public class TestParser {
     @Test
     public void testEncodingLatin1Txt() {
         try {
-            Parsed template_iso8859_1 = TemplateFactory.TXT.getParser().parse("encoding_latin1_iso88591", "ISO8859-1");
-            Parsed template_utf_8 = TemplateFactory.TXT.getParser().parse("encoding_latin1_utf8", "UTF-8");
-            Parsed template_iso8859_1_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin1_iso88591", "UTF-8");
-            Parsed template_utf_8_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin1_utf8", "ISO8859-1");
+            var template_iso8859_1 = TemplateFactory.TXT.getParser().parse("encoding_latin1_iso88591", "ISO8859-1");
+            var template_utf_8 = TemplateFactory.TXT.getParser().parse("encoding_latin1_utf8", "UTF-8");
+            var template_iso8859_1_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin1_iso88591", "UTF-8");
+            var template_utf_8_wrong = TemplateFactory.TXT.getParser().parse("encoding_latin1_utf8", "ISO8859-1");
 
             assertEquals(template_iso8859_1.getContent().getPart(0).getData(), template_utf_8.getContent().getPart(0).getData());
             assertNotEquals(template_iso8859_1.getContent().getPart(0).getData(), template_iso8859_1_wrong.getContent().getPart(0).getData());
@@ -713,10 +673,10 @@ public class TestParser {
     @Test
     public void testEncodingNonLatinHtml() {
         try {
-            Parsed template_utf_8 = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf8", "UTF-8");
-            Parsed template_utf_8_wrong = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf8", "ISO8859-1");
-            Parsed template_utf_16be = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf16be", "UTF-16BE");
-            Parsed template_utf_16be_wrong = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf16be", "UTF-16LE");
+            var template_utf_8 = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf8", "UTF-8");
+            var template_utf_8_wrong = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf8", "ISO8859-1");
+            var template_utf_16be = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf16be", "UTF-16BE");
+            var template_utf_16be_wrong = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf16be", "UTF-16LE");
 
             assertEquals(template_utf_8.getContent().getPart(0).getData(), template_utf_16be.getContent().getPart(0).getData());
             assertNotEquals(template_utf_8.getContent().getPart(0).getData(), template_utf_8_wrong.getContent().getPart(0).getData());
@@ -729,10 +689,10 @@ public class TestParser {
     @Test
     public void testEncodingNonLatinTxt() {
         try {
-            Parsed template_utf_8 = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "UTF-8");
-            Parsed template_utf_8_wrong = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "ISO8859-1");
-            Parsed template_utf_16be = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf16be", "UTF-16BE");
-            Parsed template_utf_16be_wrong = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf16be", "UTF-16LE");
+            var template_utf_8 = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "UTF-8");
+            var template_utf_8_wrong = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "ISO8859-1");
+            var template_utf_16be = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf16be", "UTF-16BE");
+            var template_utf_16be_wrong = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf16be", "UTF-16LE");
 
             assertEquals(template_utf_8.getContent().getPart(0).getData(), template_utf_16be.getContent().getPart(0).getData());
             assertNotEquals(template_utf_8.getContent().getPart(0).getData(), template_utf_8_wrong.getContent().getPart(0).getData());
@@ -749,10 +709,10 @@ public class TestParser {
             Parsed template_parsed;
             FilteredTagsMap filtered_blocks_map;
 
-            String filter1 = "^FILTER1:(\\w+):CONST:(\\w+)$";
-            String filter2 = "^FILTER2:(\\w+)$";
-            String filter3 = "^CONST-FILTER3:(\\w+)$";
-            String filter4 = "(\\w+)";
+            var filter1 = "^FILTER1:(\\w+):CONST:(\\w+)$";
+            var filter2 = "^FILTER2:(\\w+)$";
+            var filter3 = "^CONST-FILTER3:(\\w+)$";
+            var filter4 = "(\\w+)";
             FilteredTags filtered_blocks = null;
 
             parser = new Parser(TemplateFactory.HTML, "html", ".html", (Pattern[]) null, (Pattern[]) null);
@@ -773,10 +733,10 @@ public class TestParser {
             filtered_blocks = filtered_blocks_map.getFilteredTag(filter1);
             assertEquals(3, filtered_blocks.size());
 
-            boolean filter1_got_block1 = false;
-            boolean filter1_got_block2 = false;
-            boolean filter1_got_block3 = false;
-            for (String[] block_groups : filtered_blocks) {
+            var filter1_got_block1 = false;
+            var filter1_got_block2 = false;
+            var filter1_got_block3 = false;
+            for (var block_groups : filtered_blocks) {
                 assertEquals(3, block_groups.length);
                 if (block_groups[0].equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
                     block_groups[1].equals("BLOCK1a") &&
@@ -797,9 +757,9 @@ public class TestParser {
             filtered_blocks = filtered_blocks_map.getFilteredTag(filter2);
             assertEquals(2, filtered_blocks.size());
 
-            boolean filter2_got_block1 = false;
-            boolean filter2_got_block2 = false;
-            for (String[] block_groups : filtered_blocks) {
+            var filter2_got_block1 = false;
+            var filter2_got_block2 = false;
+            for (var block_groups : filtered_blocks) {
                 assertEquals(2, block_groups.length);
                 if (block_groups[0].equals("FILTER2:BLOCK1") &&
                     block_groups[1].equals("BLOCK1")) {
@@ -814,9 +774,9 @@ public class TestParser {
             filtered_blocks = filtered_blocks_map.getFilteredTag(filter3);
             assertEquals(2, filtered_blocks.size());
 
-            boolean filter3_got_block1 = false;
-            boolean filter3_got_block2 = false;
-            for (String[] block_groups : filtered_blocks) {
+            var filter3_got_block1 = false;
+            var filter3_got_block2 = false;
+            for (var block_groups : filtered_blocks) {
                 assertEquals(2, block_groups.length);
                 if (block_groups[0].equals("CONST-FILTER3:BLOCK1") &&
                     block_groups[1].equals("BLOCK1")) {
@@ -841,14 +801,14 @@ public class TestParser {
             filtered_blocks = filtered_blocks_map.getFilteredTag(filter4);
             assertEquals(7, filtered_blocks.size());
 
-            boolean filter4_got_block1 = false;
-            boolean filter4_got_block2 = false;
-            boolean filter4_got_block3 = false;
-            boolean filter4_got_block4 = false;
-            boolean filter4_got_block5 = false;
-            boolean filter4_got_block6 = false;
-            boolean filter4_got_block7 = false;
-            for (String[] block_groups : filtered_blocks) {
+            var filter4_got_block1 = false;
+            var filter4_got_block2 = false;
+            var filter4_got_block3 = false;
+            var filter4_got_block4 = false;
+            var filter4_got_block5 = false;
+            var filter4_got_block6 = false;
+            var filter4_got_block7 = false;
+            for (var block_groups : filtered_blocks) {
                 if (block_groups[0].equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
                     block_groups[1].equals("FILTER1") &&
                     block_groups[2].equals("BLOCK1a") &&
@@ -922,10 +882,10 @@ public class TestParser {
             Parsed template_parsed;
             FilteredTagsMap filtered_values_map;
 
-            String filter1 = "^FILTER1:(\\w+):CONST:(\\w+)$";
-            String filter2 = "^FILTER2:(\\w+)$";
-            String filter3 = "^CONST-FILTER3:(\\w+)$";
-            String filter4 = "(\\w+)";
+            var filter1 = "^FILTER1:(\\w+):CONST:(\\w+)$";
+            var filter2 = "^FILTER2:(\\w+)$";
+            var filter3 = "^CONST-FILTER3:(\\w+)$";
+            var filter4 = "(\\w+)";
             FilteredTags filtered_values = null;
 
             parser = new Parser(TemplateFactory.HTML, "html", ".html", (Pattern[]) null, (Pattern[]) null);
@@ -946,10 +906,10 @@ public class TestParser {
             filtered_values = filtered_values_map.getFilteredTag(filter1);
             assertEquals(3, filtered_values.size());
 
-            boolean filter1_got_value1 = false;
-            boolean filter1_got_value2 = false;
-            boolean filter1_got_value3 = false;
-            for (String[] value_groups : filtered_values) {
+            var filter1_got_value1 = false;
+            var filter1_got_value2 = false;
+            var filter1_got_value3 = false;
+            for (var value_groups : filtered_values) {
                 assertEquals(3, value_groups.length);
                 if (value_groups[0].equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
                     value_groups[1].equals("VALUE1a") &&
@@ -970,9 +930,9 @@ public class TestParser {
             filtered_values = filtered_values_map.getFilteredTag(filter2);
             assertEquals(2, filtered_values.size());
 
-            boolean filter2_got_value1 = false;
-            boolean filter2_got_value2 = false;
-            for (String[] value_groups : filtered_values) {
+            var filter2_got_value1 = false;
+            var filter2_got_value2 = false;
+            for (var value_groups : filtered_values) {
                 assertEquals(2, value_groups.length);
                 if (value_groups[0].equals("FILTER2:VALUE1") &&
                     value_groups[1].equals("VALUE1")) {
@@ -987,9 +947,9 @@ public class TestParser {
             filtered_values = filtered_values_map.getFilteredTag(filter3);
             assertEquals(2, filtered_values.size());
 
-            boolean filter3_got_value1 = false;
-            boolean filter3_got_value2 = false;
-            for (String[] value_groups : filtered_values) {
+            var filter3_got_value1 = false;
+            var filter3_got_value2 = false;
+            for (var value_groups : filtered_values) {
                 assertEquals(2, value_groups.length);
                 if (value_groups[0].equals("CONST-FILTER3:VALUE1") &&
                     value_groups[1].equals("VALUE1")) {
@@ -1014,14 +974,14 @@ public class TestParser {
             filtered_values = filtered_values_map.getFilteredTag(filter4);
             assertEquals(7, filtered_values.size());
 
-            boolean filter4_got_value1 = false;
-            boolean filter4_got_value2 = false;
-            boolean filter4_got_value3 = false;
-            boolean filter4_got_value4 = false;
-            boolean filter4_got_value5 = false;
-            boolean filter4_got_value6 = false;
-            boolean filter4_got_value7 = false;
-            for (String[] value_groups : filtered_values) {
+            var filter4_got_value1 = false;
+            var filter4_got_value2 = false;
+            var filter4_got_value3 = false;
+            var filter4_got_value4 = false;
+            var filter4_got_value5 = false;
+            var filter4_got_value6 = false;
+            var filter4_got_value7 = false;
+            for (var value_groups : filtered_values) {
                 if (value_groups[0].equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
                     value_groups[1].equals("FILTER1") &&
                     value_groups[2].equals("VALUE1a") &&

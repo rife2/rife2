@@ -17,10 +17,12 @@ fragment TSTART :   '<!--'  { tc == XML }? | '<!'  { tc == TXT }? ;
 fragment TEND   :   '-->'   { tc == XML }? | '>'   { tc == TXT }? ;
 fragment TTERM  :   '<!--/' { tc == XML }? | '<!/' { tc == TXT }? ;
 fragment STTERM :   '/-->'  { tc == XML }? | '/>'  { tc == TXT }? ;
-fragment FTEXT  :   ~[<{]+ { tc == XML }?
-                |   ~[<{]+ { tc == TXT }?
+fragment FTEXT  :   ~[\\<{]+ { tc == XML }?
+                |   ~[\\<{]+ { tc == TXT }?
                 ;
-fragment TTEXT  :   ( ('<' ~'!' | '<!' ~'-' | '<!-' ~'-') { tc == XML }? |
+fragment TTEXT  :   ( ('\\<!--' ('i'|'c'|'/c'))           { tc == XML }? |
+                      ('\\<!'   ('i'|'c'|'/c'))           { tc == TXT }? )
+                |   ( ('<' ~'!' | '<!' ~'-' | '<!-' ~'-') { tc == XML }? |
                       ('<' ~'!')                          { tc == TXT }? )
                 |   ( '<!--' ~('i') { tc == XML }? |
                       '<!'   ~('i') { tc == TXT }? )
@@ -36,7 +38,8 @@ fragment CSTART :   '{{' ;
 fragment CEND   :   '}}' ;
 fragment CTERM  :   '{{/' ;
 fragment CTTERM :   '/}}' ;
-fragment CTEXT  :   '{' ~'{'
+fragment CTEXT  :   '\\{{' ('i'|'c'|'/c')
+                |   '{' ~'{'
                 |   '{{' ~('i')
                 ;
 fragment CCOMM  :   ~[}]+ | '}' ~'}' ;
@@ -80,6 +83,8 @@ CSTART_C    :   CSTART C                    -> pushMode(CINSIDE_C) ;
 TEXT        :   FTEXT
             |   TTEXT
             |   CTEXT
+            |   '\\\\'
+            |   '\\'
             ;
 
 // -------------------------------------------------------------------

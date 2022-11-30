@@ -17,15 +17,17 @@ fragment TSTART :   '<!--'  { tc == XML }? | '<!'  { tc == TXT }? ;
 fragment TEND   :   '-->'   { tc == XML }? | '>'   { tc == TXT }? ;
 fragment TTERM  :   '<!--/' { tc == XML }? | '<!/' { tc == TXT }? ;
 fragment STTERM :   '/-->'  { tc == XML }? | '/>'  { tc == TXT }? ;
-fragment FTEXT  :   ~[<{]+ { tc == XML }?
-                |   ~[<{]+ { tc == TXT }?
+fragment FTEXT  :   ~[\\<{]+ { tc == XML }?
+                |   ~[\\<{]+ { tc == TXT }?
                 ;
-fragment TTEXT  :   ( ('<' ~'!' | '<!' ~'-' | '<!-' ~'-') { tc == XML }? |
+fragment TTEXT  :   ( ('\\<!--' ('v'|'b'|'/'))            { tc == XML }? |
+                      ('\\<!'   ('v'|'b'|'/'))            { tc == TXT }? )
+                |   ( ('<' ~'!' | '<!' ~'-' | '<!-' ~'-') { tc == XML }? |
                       ('<' ~'!')                          { tc == TXT }? )
-                |   ( '<!--' ~('v'|'b'|'/') { tc == XML }? |
-                      '<!'   ~('v'|'b'|'/') { tc == TXT }? )
-                |   ( '<!--/' ~('v'|'b') { tc == XML }? |
-                      '<!/'   ~('v'|'b') { tc == TXT }? )
+                |   ( '<!--' ~('v'|'b'|'/')               { tc == XML }? |
+                      '<!'   ~('v'|'b'|'/')               { tc == TXT }? )
+                |   ( '<!--/' ~('v'|'b')                  { tc == XML }? |
+                      '<!/'   ~('v'|'b')                  { tc == TXT }? )
                 ;
 fragment V      :   'v' ;
 fragment B      :   'b' ;
@@ -36,7 +38,8 @@ fragment CSTART :   '{{' ;
 fragment CEND   :   '}}' ;
 fragment CTERM  :   '{{/' ;
 fragment CTTERM :   '/}}' ;
-fragment CTEXT  :   '{' ~'{'
+fragment CTEXT  :   '\\{{' ('v'|'b'|'/')
+                |   '{' ~'{'
                 |   '{{' ~('v'|'b'|'/')
                 |   '{{/' ~('v'|'b')
                 ;
@@ -91,6 +94,8 @@ CSTART_BA   :   CSTART BA                   -> pushMode(CINSIDE) ;
 TEXT        :   FTEXT
             |   TTEXT
             |   CTEXT
+            |   '\\\\'
+            |   '\\'
             ;
 
 // -------------------------------------------------------------------

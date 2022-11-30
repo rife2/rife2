@@ -14,8 +14,6 @@ import rife.resources.exceptions.ResourceFinderErrorException;
 import rife.template.antlr.*;
 import rife.template.exceptions.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -375,13 +373,41 @@ public class Parser implements Cloneable {
             return result_.toString();
         }
 
+        private static final Pattern MATCH_ESCAPED_COMPACT_TAGS = Pattern.compile("\\\\\\{\\{(i|c|/c)");
+        private static final Pattern MATCH_ESCAPED_XML_TAGS = Pattern.compile("\\\\<!--(i|c|/c)");
+        private static final Pattern MATCH_ESCAPED_TXT_TAGS = Pattern.compile("\\\\<!(i|c|/c)");
+
+        private String removeEscapeCharacters(String txt) {
+            txt = MATCH_ESCAPED_COMPACT_TAGS.matcher(txt).replaceAll("{{$1");
+            if (getTemplateFactory().getConfig() == TemplateConfig.XML) {
+                txt = MATCH_ESCAPED_XML_TAGS.matcher(txt).replaceAll("<!--$1");
+            } else {
+                txt = MATCH_ESCAPED_TXT_TAGS.matcher(txt).replaceAll("<!--$1");
+            }
+            return txt;
+        }
+
         @Override
         public void exitDocData(TemplatePreParser.DocDataContext ctx) {
-            result_.append(ctx.getText());
+            result_.append(removeEscapeCharacters(ctx.getText()));
+        }
+
+        private void adaptDocDataForDoubleEscapes() {
+            if (result_.length() >= 2 &&
+                result_.substring(result_.length() - 2, result_.length()).equals("\\\\")) {
+                result_.setLength(result_.length() - 1);
+            }
+        }
+
+        @Override
+        public void enterTagC(TemplatePreParser.TagCContext ctx) {
+            adaptDocDataForDoubleEscapes();
         }
 
         @Override
         public void enterTagI(TemplatePreParser.TagIContext ctx) {
+            adaptDocDataForDoubleEscapes();
+
             var name = ctx.TTagName();
             if (name == null) {
                 name = ctx.CTagName();
@@ -454,8 +480,11 @@ public class Parser implements Cloneable {
             final var tokens = (CommonTokenStream) recognizer.getInputStream();
             final var input = tokens.getTokenSource().getInputStream().toString();
             final var lines = input.split("\n");
-            final var error_line = lines[line - 1];
-            final var token = (Token)offendingSymbol;
+            var error_line = "";
+            if (line <= lines.length) {
+                error_line = lines[line - 1];
+            }
+            final var token = (Token) offendingSymbol;
             final var length = Math.max(1, token.getStopIndex() - token.getStartIndex() + 1);
             final var position = new DocumentPosition(error_line, line, charPositionInLine, length);
             final String message;
@@ -468,7 +497,7 @@ public class Parser implements Cloneable {
         }
     }
 
-    static class AntlrParserListener extends TemplateMainParserBaseListener {
+    class AntlrParserListener extends TemplateMainParserBaseListener {
         final Parsed parsed_;
 
         final Map<String, ParsedBlockData> blocks_ = new LinkedHashMap<>();
@@ -494,8 +523,25 @@ public class Parser implements Cloneable {
             }
         }
 
+        private void adaptBlockDataForDoubleEscapes() {
+            var block_id = blockIds_.peek();
+            if (block_id != null) {
+                var data = blocks_.get(block_id);
+                var last = data.getLastPart();
+                if (last != null && last.getType() == ParsedBlockPart.Type.TEXT) {
+                    var text_part = (ParsedBlockText) last;
+                    var text = text_part.getData();
+                    if (text.endsWith("\\\\")) {
+                        text_part.setData(text.substring(0, text.length() - 1));
+                    }
+                }
+            }
+        }
+
         @Override
         public void exitTagV(TemplateMainParser.TagVContext ctx) {
+            adaptBlockDataForDoubleEscapes();
+
             var name = ctx.TTagName();
             final String value_id;
             final String tag;
@@ -523,6 +569,8 @@ public class Parser implements Cloneable {
 
         @Override
         public void exitTagVDefault(TemplateMainParser.TagVDefaultContext ctx) {
+            adaptBlockDataForDoubleEscapes();
+
             var name = ctx.TTagName();
             final String value_id;
             final String tag;
@@ -539,7 +587,7 @@ public class Parser implements Cloneable {
             var block_id = blockIds_.peek();
             if (block_id != null) {
                 parsed_.addValue(value_id);
-                parsed_.setDefaultValue(value_id, currentValueData_.toString());
+                parsed_.setDefaultValue(value_id, removeEscapeCharacters(currentValueData_.toString()));
                 blocks_.get(block_id).add(new ParsedBlockValue(value_id, tag));
             }
 
@@ -548,6 +596,8 @@ public class Parser implements Cloneable {
 
         @Override
         public void enterTagB(TemplateMainParser.TagBContext ctx) {
+            adaptBlockDataForDoubleEscapes();
+
             var name = ctx.TTagName();
             if (name == null) {
                 name = ctx.CTagName();
@@ -560,11 +610,15 @@ public class Parser implements Cloneable {
 
         @Override
         public void exitTagB(TemplateMainParser.TagBContext ctx) {
+            adaptBlockDataForDoubleEscapes();
+
             blockIds_.pop();
         }
 
         @Override
         public void enterTagBV(TemplateMainParser.TagBVContext ctx) {
+            adaptBlockDataForDoubleEscapes();
+
             var name = ctx.TTagName();
             if (name == null) {
                 name = ctx.CTagName();
@@ -577,11 +631,15 @@ public class Parser implements Cloneable {
 
         @Override
         public void exitTagBV(TemplateMainParser.TagBVContext ctx) {
+            adaptBlockDataForDoubleEscapes();
+
             blockIds_.pop();
         }
 
         @Override
         public void enterTagBA(TemplateMainParser.TagBAContext ctx) {
+            adaptBlockDataForDoubleEscapes();
+
             var name = ctx.TTagName();
             if (name == null) {
                 name = ctx.CTagName();
@@ -599,7 +657,23 @@ public class Parser implements Cloneable {
 
         @Override
         public void exitTagBA(TemplateMainParser.TagBAContext ctx) {
+            adaptBlockDataForDoubleEscapes();
+
             blockIds_.pop();
+        }
+
+        private static final Pattern MATCH_ESCAPED_COMPACT_TAGS = Pattern.compile("\\\\\\{\\{([vb/])");
+        private static final Pattern MATCH_ESCAPED_XML_TAGS = Pattern.compile("\\\\<!--([vb/])");
+        private static final Pattern MATCH_ESCAPED_TXT_TAGS = Pattern.compile("\\\\<!([vb/])");
+
+        private String removeEscapeCharacters(String txt) {
+            txt = MATCH_ESCAPED_COMPACT_TAGS.matcher(txt).replaceAll("{{$1");
+            if (getTemplateFactory().getConfig() == TemplateConfig.XML) {
+                txt = MATCH_ESCAPED_XML_TAGS.matcher(txt).replaceAll("<!--$1");
+            } else {
+                txt = MATCH_ESCAPED_TXT_TAGS.matcher(txt).replaceAll("<!--$1");
+            }
+            return txt;
         }
 
         @Override
@@ -608,11 +682,12 @@ public class Parser implements Cloneable {
             if (block_id != null) {
                 var data = blocks_.get(block_id);
                 var last = data.getLastPart();
+                var txt = removeEscapeCharacters(ctx.getText());
                 if (last != null && last.getType() == ParsedBlockPart.Type.TEXT) {
                     var text_part = (ParsedBlockText) last;
-                    text_part.setData(text_part.getData() + ctx.getText());
+                    text_part.setData(text_part.getData() + txt);
                 } else {
-                    data.add(new ParsedBlockText(ctx.getText()));
+                    data.add(new ParsedBlockText(txt));
                 }
             }
         }
