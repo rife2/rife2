@@ -382,7 +382,7 @@ public class Parser implements Cloneable {
             if (getTemplateFactory().getConfig() == TemplateConfig.XML) {
                 txt = MATCH_ESCAPED_XML_TAGS.matcher(txt).replaceAll("<!--$1");
             } else {
-                txt = MATCH_ESCAPED_TXT_TAGS.matcher(txt).replaceAll("<!--$1");
+                txt = MATCH_ESCAPED_TXT_TAGS.matcher(txt).replaceAll("<!$1");
             }
             return txt;
         }
@@ -671,7 +671,7 @@ public class Parser implements Cloneable {
             if (getTemplateFactory().getConfig() == TemplateConfig.XML) {
                 txt = MATCH_ESCAPED_XML_TAGS.matcher(txt).replaceAll("<!--$1");
             } else {
-                txt = MATCH_ESCAPED_TXT_TAGS.matcher(txt).replaceAll("<!--$1");
+                txt = MATCH_ESCAPED_TXT_TAGS.matcher(txt).replaceAll("<!$1");
             }
             return txt;
         }
