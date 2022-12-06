@@ -8,6 +8,7 @@ import rife.engine.exceptions.EngineException;
 import rife.tools.StringUtils;
 
 import java.util.*;
+import java.util.regex.Matcher;
 
 public class Site extends Router {
     public final int RND = new Random().nextInt();
@@ -59,7 +60,7 @@ public class Site extends Router {
         return resolvePathInfoUrl(request, url, pathInfo);
     }
 
-    private Route resolvePathInfoUrl(Request request, String url, String pathinfo)
+    private Route resolvePathInfoUrl(Request request, String url, String pathInfo)
     throws EngineException {
         var routes = pathInfoRoutes_.get(url);
         if (null == routes ||
@@ -67,39 +68,25 @@ public class Site extends Router {
             return null;
         }
 
-        // TODO : path info mapping
-//        // if a path info was provided, check the path info mappings
-//        // for the first that matches
-//        if (pathinfo != null)
-//        {
-//            for (Route route : routes)
-//            {
-//                if (element.hasPathInfoMappings() && route.handlesMethod(request.getMethod()))
-//                {
-//                    for (PathInfoMapping mapping : element.getPathInfoMappings())
-//                    {
-//                        Matcher matcher = mapping.getRegexp().matcher(pathinfo);
-//                        if (matcher.matches())
-//                        {
-//                            return element;
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        // if a path info was provided, check the path info mappings for the first that matches
+        if (pathInfo != null) {
+            var path_info = StringUtils.stripFromFront(pathInfo, "/");
+            for (var route : routes) {
+                if (route.pathInfoHandling().getType() == PathInfoHandling.Type.MAP && route.handlesMethod(request.getMethod())) {
+                    var mapping = route.pathInfoHandling().getMapping();
+                    var matcher = mapping.getRegexp().matcher(path_info);
+                    if (matcher.matches()) {
+                        return route;
+                    }
+                }
+            }
+        }
 
-        // return the first route that handles the url and doesn't have
-        // any path info mappings
+        // return the first route that handles the url and doesn't have  any path info mappings
         for (var route : routes) {
-            if (route.handlesMethod(request.getMethod())) {
+            if (route.pathInfoHandling().getType() == PathInfoHandling.Type.CAPTURE && route.handlesMethod(request.getMethod())) {
                 return route;
             }
-
-//            if (!element.hasPathInfoMappings() ||
-//                PathInfoMode.LOOSE.equals(element.getPathInfoMode()))
-//            {
-//            return route;
-//            }
         }
 
         return null;
@@ -174,23 +161,22 @@ public class Site extends Router {
                 return null;
             }
         }
-//        // otherwise get the target element's path info
-//        else {
-//            // only accept pathinfo if the element accepts it
-//            if (!route.isPathInfoUsed() &&
-//                elementUrl.length() != element_url_buffer.length()) {
-//                // check for a fallback element
-//                route = resolveFallback(elementUrl);
-//                if (null == route) {
-//                    return null;
-//                }
-//            } else if (route.isPathInfoUsed()) {
-        if (route.pathInfoHandling() != PathInfoHandling.NONE) {
-            // construct the element path info
-            element_path_info = elementUrl.substring(element_url_buffer.length());
-            element_path_info = StringUtils.stripFromFront(element_path_info, "/");
+        // otherwise get the target element's path info
+        else {
+            // only accept path info if the element accepts it
+            if (route.pathInfoHandling() == PathInfoHandling.NONE &&
+                elementUrl.length() != element_url_buffer.length()) {
+                // check for a fallback element
+                route = resolveFallback(elementUrl);
+                if (null == route) {
+                    return null;
+                }
+            } else if (route.pathInfoHandling() != PathInfoHandling.NONE) {
+                // construct the element path info
+                element_path_info = elementUrl.substring(element_url_buffer.length());
+                element_path_info = StringUtils.stripFromFront(element_path_info, "/");
+            }
         }
-//        }
 
         return new RouteMatch(route, element_path_info);
     }

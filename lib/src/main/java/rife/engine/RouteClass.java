@@ -95,7 +95,7 @@ public class RouteClass implements Route {
                 var type = field.getType();
 
                 if (field.isAnnotationPresent(Parameter.class)) {
-                    var params = context.request().getParameters();
+                    var params = context.parameters();
                     var annotation_name = field.getAnnotation(Parameter.class).name();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
@@ -116,7 +116,7 @@ public class RouteClass implements Route {
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
-                    var header = context.request().getHeader(name);
+                    var header = context.header(name);
                     if (header != null) {
                         Object value;
                         try {
@@ -128,7 +128,7 @@ public class RouteClass implements Route {
                     }
                 } else if (field.isAnnotationPresent(Body.class) &&
                            shouldProcessInFlow(field.getAnnotation(Body.class).flow())) {
-                    var body = context.request().getBody();
+                    var body = context.body();
                     Object value;
                     try {
                         value = Convert.toType(body, type);
@@ -152,7 +152,7 @@ public class RouteClass implements Route {
                         name = annotation_name;
                     }
 
-                    var uploaded_file = context.request().getFile(name);
+                    var uploaded_file = context.file(name);
                     if (uploaded_file != null) {
                         Object value;
                         if (UploadedFile.class.isAssignableFrom(type)) {
@@ -174,7 +174,7 @@ public class RouteClass implements Route {
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
-                    var cookie = context.request().getCookie(name);
+                    var cookie = context.cookie(name);
                     if (cookie != null) {
                         if (cookie.getValue() != null) {
                             Object value;
@@ -192,7 +192,7 @@ public class RouteClass implements Route {
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
-                    var value = context.request().getAttribute(name);
+                    var value = context.attribute(name);
                     if (value != null) {
                         try {
                             value = Convert.toType(value, type);
@@ -207,7 +207,7 @@ public class RouteClass implements Route {
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
-                    var session = context.request().getSession(false);
+                    var session = context.session(false);
                     if (session != null) {
                         var value = session.getAttribute(name);
                         if (value != null) {

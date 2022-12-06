@@ -39,6 +39,7 @@ public class Context {
     private final Request request_;
     private final Response response_;
     private final RouteMatch routeMatch_;
+    private final Map<String, String[]> parameters_;
     private Throwable engineException_;
 
     public Context(String gateUrl, Site site, Request request, Response response, RouteMatch routeMatch) {
@@ -47,6 +48,19 @@ public class Context {
         request_ = request;
         response_ = response;
         routeMatch_ = routeMatch;
+
+        var params = new LinkedHashMap<>(request_.getParameters());
+        if (routeMatch_.route().pathInfoHandling().getType() == PathInfoHandling.Type.MAP) {
+            var mapping = routeMatch_.route().pathInfoHandling().getMapping();
+            var matcher = mapping.getRegexp().matcher(pathInfo());
+            if (matcher.matches()) {
+                var i = 1;
+                for (var param : mapping.getParameters()) {
+                    params.put(param, new String[]{matcher.group(i++)});
+                }
+            }
+        }
+        parameters_ = params;
     }
 
     public void process() {
@@ -516,7 +530,7 @@ public class Context {
      * @since 2.0
      */
     public Map<String, String[]> parameters() {
-        return request_.getParameters();
+        return parameters_;
     }
 
     /**
@@ -553,7 +567,7 @@ public class Context {
     public boolean isParameterEmpty(String name) {
         var parameter = parameter(name);
         return null == parameter ||
-            parameter.trim().equals("");
+               parameter.trim().equals("");
     }
 
     /**
@@ -1085,7 +1099,7 @@ public class Context {
                 parameter_values = parameterValues(parameter_name);
                 if (null == empty_bean &&
                     (null == parameter_values ||
-                        0 == parameter_values[0].length())) {
+                     0 == parameter_values[0].length())) {
                     empty_bean = getNewBeanInstance(bean.getClass());
                 }
 
@@ -1146,8 +1160,8 @@ public class Context {
     public boolean isFileEmpty(String name) {
         try (final var file = file(name)) {
             return null == file ||
-                null == file.getFile() ||
-                0 == file.getFile().length();
+                   null == file.getFile() ||
+                   0 == file.getFile().length();
         }
     }
 

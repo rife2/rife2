@@ -271,12 +271,12 @@ public class Router {
     }
 
     public final Route registerRoute(Route route) {
-        switch (route.pathInfoHandling()) {
+        switch (route.pathInfoHandling().getType()) {
             case NONE -> {
                 var routes = routes_.computeIfAbsent(route.path(), k -> new ArrayList<>());
                 routes.add(route);
             }
-            case CAPTURE -> {
+            case CAPTURE, MAP -> {
                 var routes = pathInfoRoutes_.computeIfAbsent(route.path(), k -> new ArrayList<>());
                 routes.add(route);
             }
