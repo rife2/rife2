@@ -58,14 +58,39 @@ public class UrlBuilder {
 
         url.append(StringUtils.stripFromFront(route_.path(), "/"));
 
-        var parameters = new LinkedHashMap<>(parameters_);
+        var parameters = new LinkedHashMap<String, String[]>();
 
+        // detect which parameters are annotation for output and input and retrieve those that correspond
+        if (context_.route() instanceof RouteClass) {
+            var out_params = RouteClass.getAnnotatedOutParameters(context_.response().getLastElement());
+            Set<String> in_params = new HashSet<>();
+            // input parameters
+            if (route_ instanceof RouteClass route) {
+                in_params = route.getAnnotatedInParameters();
+            }
+            // path info parameters
+            if (route_.pathInfoHandling().type() == PathInfoType.MAP) {
+                var mapping = route_.pathInfoHandling().mapping();
+                in_params.addAll(mapping.parameters());
+            }
+            // retain the appropriate output parameters
+            out_params.keySet().retainAll(in_params);
+
+            parameters.putAll(out_params);
+        }
+
+        // use all the explicitly provided parameters
+        parameters.putAll(parameters_);
+
+        // handle an explicit path info
         if (pathInfo_ != null) {
             if (url.charAt(url.length() - 1) != '/') {
                 url.append("/");
             }
             url.append(pathInfo_);
-        } else if (route_.pathInfoHandling().type() == PathInfoType.MAP) {
+        }
+        // handle path info mapping
+        else if (route_.pathInfoHandling().type() == PathInfoType.MAP) {
             var mapping = route_.pathInfoHandling().mapping();
             if (parameters.keySet().containsAll(mapping.parameters())) {
                 var parameters_it = mapping.parameters().iterator();
@@ -114,6 +139,7 @@ public class UrlBuilder {
             }
         }
 
+        // generate the query parameters that are available
         if (parameters.size() > 0) {
             var query_parameters = new StringBuilder("?");
 

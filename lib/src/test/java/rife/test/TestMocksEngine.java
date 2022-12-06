@@ -86,8 +86,7 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testPathInfoMapping()
-    throws Exception {
+    public void testPathInfoMapping() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/pathinfo/map", PathInfoHandling.MAP(m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")), c -> {
@@ -107,6 +106,36 @@ public class TestMocksEngine {
 
         response = conversation.doRequest("http://localhost/pathinfo/map/ddd");
         assertEquals(404, response.getStatus());
+    }
+
+    @Test
+    public void testPathInfoMappingUrlGeneration() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                var path_info = get("/pathinfo/map", PathInfoHandling.MAP(m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")), c -> {
+                    c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
+                    c.print(":" + c.parameter("param1"));
+                    c.print(":" + c.parameter("param2"));
+                });
+                get("/", c -> {
+                    var out = c.urlFor(path_info).param("param1", "v1").param("param2", "412").toString();
+                    System.out.println(out);
+                    c.print(out);
+                });
+            }
+        });
+
+        MockResponse response;
+
+        response = conversation.doRequest("http://localhost/");
+        assertEquals(200, response.getStatus());
+        assertEquals("text/html; charset=UTF-8", response.getContentType());
+        assertEquals("http://localhost/pathinfo/map/text/v1/x412", response.getText());
+
+        response = conversation.doRequest( response.getText());
+        assertEquals(200, response.getStatus());
+        assertEquals("text/html; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:text/v1/x412:v1:412", response.getText());
     }
 
     @Test

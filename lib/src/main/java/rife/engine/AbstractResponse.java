@@ -88,6 +88,10 @@ public abstract class AbstractResponse implements Response {
         lastElement_ = element;
     }
 
+    public Element getLastElement() {
+        return lastElement_;
+    }
+
     public boolean isContentTypeSet() {
         return contentType_ != null;
     }

@@ -68,16 +68,6 @@ public class MockResponse extends AbstractResponse {
     }
 
     /**
-     * Retrieves the element that was last processed with
-     *
-     * @return the last element
-     * @since 2.0
-     */
-    public Element getLastElement() {
-        return lastElement_;
-    }
-
-    /**
      * Retrieves an array of all the bytes that have been written to this
      * response.
      *

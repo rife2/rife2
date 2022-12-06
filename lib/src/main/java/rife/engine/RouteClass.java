@@ -13,6 +13,7 @@ import rife.tools.exceptions.ConversionException;
 
 import java.io.File;
 import java.lang.reflect.Modifier;
+import java.util.*;
 
 public class RouteClass implements Route {
     private final Router router_;
@@ -72,8 +73,79 @@ public class RouteClass implements Route {
         return pathInfoHandling_;
     }
 
-    private boolean shouldProcessInFlow(FlowDirection flow) {
+    private static boolean shouldProcessInFlow(FlowDirection flow) {
         return flow == FlowDirection.IN || flow == FlowDirection.IN_OUT;
+    }
+
+    private static boolean shouldProcessOutFlow(FlowDirection flow) {
+        return flow == FlowDirection.OUT || flow == FlowDirection.IN_OUT;
+    }
+
+    public static Map<String, String[]> getAnnotatedOutParameters(Element element) {
+        try {
+            var parameters = new LinkedHashMap<String, String[]>();
+
+            for (var field : element.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+
+                if (Modifier.isStatic(field.getModifiers()) ||
+                    Modifier.isFinal(field.getModifiers()) ||
+                    Modifier.isTransient(field.getModifiers())) {
+                    continue;
+                }
+
+                var name = field.getName();
+                var value = field.get(element);
+
+                if (field.isAnnotationPresent(Parameter.class) &&
+                    shouldProcessOutFlow(field.getAnnotation(Parameter.class).flow())) {
+                    var annotation_name = field.getAnnotation(Parameter.class).name();
+                    if (annotation_name != null && !annotation_name.isEmpty()) {
+                        name = annotation_name;
+                    }
+
+                    parameters.put(name, new String[] { Convert.toString(value) });
+                }
+            }
+
+            return parameters;
+        } catch (Exception e) {
+            throw new EngineException(e);
+        }
+    }
+
+    public Set<String> getAnnotatedInParameters() {
+        try {
+            var parameters = new HashSet<String>();
+
+            var element = elementClass_.getDeclaredConstructor().newInstance();
+
+            for (var field : element.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+
+                if (Modifier.isStatic(field.getModifiers()) ||
+                    Modifier.isFinal(field.getModifiers()) ||
+                    Modifier.isTransient(field.getModifiers())) {
+                    continue;
+                }
+
+                var name = field.getName();
+
+                if (field.isAnnotationPresent(Parameter.class) &&
+                    shouldProcessInFlow(field.getAnnotation(Parameter.class).flow())) {
+                    var annotation_name = field.getAnnotation(Parameter.class).name();
+                    if (annotation_name != null && !annotation_name.isEmpty()) {
+                        name = annotation_name;
+                    }
+
+                    parameters.add(name);
+                }
+            }
+
+            return parameters;
+        } catch (Exception e) {
+            throw new EngineException(e);
+        }
     }
 
     @Override
@@ -94,7 +166,8 @@ public class RouteClass implements Route {
                 var name = field.getName();
                 var type = field.getType();
 
-                if (field.isAnnotationPresent(Parameter.class)) {
+                if (field.isAnnotationPresent(Parameter.class) &&
+                    shouldProcessInFlow(field.getAnnotation(Parameter.class).flow())) {
                     var params = context.parameters();
                     var annotation_name = field.getAnnotation(Parameter.class).name();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
@@ -228,10 +301,6 @@ public class RouteClass implements Route {
         }
     }
 
-    private boolean shouldProcessOutFlow(FlowDirection flow) {
-        return flow == FlowDirection.OUT || flow == FlowDirection.IN_OUT;
-    }
-
     @Override
     public void finalizeElementInstance(Element element, Context context) {
         try {
@@ -253,7 +322,7 @@ public class RouteClass implements Route {
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
-                    context.addHeader(name, String.valueOf(value));
+                    context.addHeader(name, Convert.toString(value));
                 } else if (field.isAnnotationPresent(Body.class) &&
                            shouldProcessOutFlow(field.getAnnotation(Body.class).flow())) {
                     context.print(value);
@@ -263,7 +332,7 @@ public class RouteClass implements Route {
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
-                    var builder = new CookieBuilder(name, String.valueOf(value));
+                    var builder = new CookieBuilder(name, Convert.toString(value));
                     context.addCookie(builder.cookie());
                 } else if (field.isAnnotationPresent(RequestAttribute.class) &&
                            shouldProcessOutFlow(field.getAnnotation(RequestAttribute.class).flow())) {

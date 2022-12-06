@@ -36,6 +36,14 @@ public interface Response {
     void setLastElement(Element element);
 
     /**
+     * Retrieves the element that was last processed with
+     *
+     * @return the last element
+     * @since 2.0
+     */
+    Element getLastElement();
+
+    /**
      * Enables or disabled the text output buffer.
      * <p>The buffer is enabled by default and its buffered contents will be
      * flushed when the buffer is disabled.

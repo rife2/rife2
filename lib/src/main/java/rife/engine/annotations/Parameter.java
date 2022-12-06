@@ -6,6 +6,8 @@ package rife.engine.annotations;
 
 import java.lang.annotation.*;
 
+import static rife.engine.annotations.FlowDirection.IN;
+
 /**
  * Declares a request parameter.
  *
@@ -22,4 +24,12 @@ public @interface Parameter {
      * @since 2.0
      */
     String name() default "";
+
+    /**
+     * Determines what the direction of the flow is for processing this field
+     *
+     * @return the direction of the flow for field processing
+     * @since 2.0
+     */
+    FlowDirection flow() default IN;
 }
