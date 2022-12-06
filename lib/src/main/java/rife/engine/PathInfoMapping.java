@@ -15,7 +15,7 @@ import java.util.regex.PatternSyntaxException;
 public class PathInfoMapping {
     private final StringBuilder mappingRegexp_ = new StringBuilder();
     private final List<String> parameters_ = new ArrayList<>();
-    private final List<PathInfoMappingSegment> segments_ = new ArrayList<>();
+    private final List<PathInfoSegment> segments_ = new ArrayList<>();
     private Pattern regexp_ = null;
 
     public PathInfoMapping s() {
@@ -25,8 +25,10 @@ public class PathInfoMapping {
     public PathInfoMapping t(String literal) {
         if (literal.length() > 0) {
             mappingRegexp_.append(StringUtils.encodeRegexp(literal));
-            segments_.add(PathInfoMappingSegment.createTextSegment(literal));
+            segments_.add(PathInfoSegment.createTextSegment(literal));
         }
+
+        regexp_ = null;
 
         return this;
     }
@@ -48,23 +50,25 @@ public class PathInfoMapping {
         mappingRegexp_.append("(");
         mappingRegexp_.append(regexp);
         mappingRegexp_.append(")");
-        segments_.add(PathInfoMappingSegment.createRegexpSegment(pattern));
+        segments_.add(PathInfoSegment.createRegexpSegment(pattern));
+
+        regexp_ = null;
+
         return this;
     }
 
-    public List<String> getParameters() {
+    public List<String> parameters() {
         return parameters_;
     }
 
-    public List<PathInfoMappingSegment> getSegments() {
+    public List<PathInfoSegment> segments() {
         return segments_;
     }
 
-    public Pattern getRegexp() {
+    public Pattern regexp() {
+        if (regexp_ == null) {
+            regexp_ = Pattern.compile(mappingRegexp_.toString());
+        }
         return regexp_;
-    }
-
-    void compile() {
-        regexp_ = Pattern.compile(mappingRegexp_.toString());
     }
 }

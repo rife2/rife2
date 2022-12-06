@@ -50,12 +50,12 @@ public class Context {
         routeMatch_ = routeMatch;
 
         var params = new LinkedHashMap<>(request_.getParameters());
-        if (routeMatch_.route().pathInfoHandling().getType() == PathInfoHandling.Type.MAP) {
-            var mapping = routeMatch_.route().pathInfoHandling().getMapping();
-            var matcher = mapping.getRegexp().matcher(pathInfo());
+        if (routeMatch_.route().pathInfoHandling().type() == PathInfoType.MAP) {
+            var mapping = routeMatch_.route().pathInfoHandling().mapping();
+            var matcher = mapping.regexp().matcher(pathInfo());
             if (matcher.matches()) {
                 var i = 1;
-                for (var param : mapping.getParameters()) {
+                for (var param : mapping.parameters()) {
                     params.put(param, new String[]{matcher.group(i++)});
                 }
             }
@@ -225,6 +225,10 @@ public class Context {
         return gateUrl_;
     }
 
+    public String webappRootUrl() {
+        return webappRootUrl(-1);
+    }
+
     public String webappRootUrl(int port) {
         var webapp_root = new StringBuilder();
         webapp_root.append(serverRootUrl(port));
@@ -242,7 +246,7 @@ public class Context {
     }
 
     public UrlBuilder urlFor(Route route) {
-        return new UrlBuilder(webappRootUrl(-1), route);
+        return new UrlBuilder(this, route);
     }
 
     void engineException(Throwable exception) {

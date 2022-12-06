@@ -271,7 +271,7 @@ public class Router {
     }
 
     public final Route registerRoute(Route route) {
-        switch (route.pathInfoHandling().getType()) {
+        switch (route.pathInfoHandling().type()) {
             case NONE -> {
                 var routes = routes_.computeIfAbsent(route.path(), k -> new ArrayList<>());
                 routes.add(route);

@@ -8,7 +8,6 @@ import rife.engine.exceptions.EngineException;
 import rife.tools.StringUtils;
 
 import java.util.*;
-import java.util.regex.Matcher;
 
 public class Site extends Router {
     public final int RND = new Random().nextInt();
@@ -72,9 +71,9 @@ public class Site extends Router {
         if (pathInfo != null) {
             var path_info = StringUtils.stripFromFront(pathInfo, "/");
             for (var route : routes) {
-                if (route.pathInfoHandling().getType() == PathInfoHandling.Type.MAP && route.handlesMethod(request.getMethod())) {
-                    var mapping = route.pathInfoHandling().getMapping();
-                    var matcher = mapping.getRegexp().matcher(path_info);
+                if (route.pathInfoHandling().type() == PathInfoType.MAP && route.handlesMethod(request.getMethod())) {
+                    var mapping = route.pathInfoHandling().mapping();
+                    var matcher = mapping.regexp().matcher(path_info);
                     if (matcher.matches()) {
                         return route;
                     }
@@ -84,7 +83,7 @@ public class Site extends Router {
 
         // return the first route that handles the url and doesn't have  any path info mappings
         for (var route : routes) {
-            if (route.pathInfoHandling().getType() == PathInfoHandling.Type.CAPTURE && route.handlesMethod(request.getMethod())) {
+            if (route.pathInfoHandling().type() == PathInfoType.CAPTURE && route.handlesMethod(request.getMethod())) {
                 return route;
             }
         }

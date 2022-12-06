@@ -5,8 +5,8 @@
 package rife.engine;
 
 public class PathInfoHandling {
-    public static final PathInfoHandling NONE = new PathInfoHandling(Type.NONE);
-    public static final PathInfoHandling CAPTURE = new PathInfoHandling(Type.CAPTURE);
+    public static final PathInfoHandling NONE = new PathInfoHandling(PathInfoType.NONE);
+    public static final PathInfoHandling CAPTURE = new PathInfoHandling(PathInfoType.CAPTURE);
 
     public static PathInfoHandling MAP(PathInfoBuilder builder) {
         var mapping = new PathInfoMapping();
@@ -14,33 +14,27 @@ public class PathInfoHandling {
         return new PathInfoHandling(mapping);
     }
 
-    public enum Type {
-        NONE, CAPTURE, MAP
-    }
-
-    private final Type type_;
+    private final PathInfoType type_;
     private final PathInfoMapping mapping_;
 
-    private PathInfoHandling(Type type) {
+    private PathInfoHandling(PathInfoType type) {
         if (type == null) {
-            type = Type.NONE;
+            type = PathInfoType.NONE;
         }
         type_ = type;
         mapping_ = null;
     }
 
     private PathInfoHandling(PathInfoMapping mapping) {
-        mapping.compile();
-
-        type_ = Type.MAP;
+        type_ = PathInfoType.MAP;
         mapping_ = mapping;
     }
 
-    public Type getType() {
+    public PathInfoType type() {
         return type_;
     }
 
-    public PathInfoMapping getMapping() {
+    public PathInfoMapping mapping() {
         return mapping_;
     }
 }

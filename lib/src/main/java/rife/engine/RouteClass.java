@@ -137,7 +137,7 @@ public class RouteClass implements Route {
                     }
                     field.set(element, value);
                 } else if (field.isAnnotationPresent(PathInfo.class) &&
-                           pathInfoHandling_ != PathInfoHandling.NONE) {
+                           pathInfoHandling_.type() != PathInfoType.NONE) {
                     var path_info = context.pathInfo();
                     Object value;
                     try {

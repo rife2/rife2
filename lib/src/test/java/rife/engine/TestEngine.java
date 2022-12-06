@@ -127,6 +127,39 @@ public class TestEngine {
     }
 
     @Test
+    public void testPathInfoMappingUrlGeneration()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                var path_info = get("/pathinfo/map", PathInfoHandling.MAP(m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")), c -> {
+                    c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo());
+                    c.print(":" + c.parameter("param1"));
+                    c.print(":" + c.parameter("param2"));
+                });
+                get("/", c -> {
+                    var out = c.urlFor(path_info).param("param1", "v1").param("param2", "412").toString();
+                    System.out.println(out);
+                    c.print(out);
+                });
+
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page;
+
+                page = webClient.getPage("http://localhost:8181/");
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("http://localhost:8181/pathinfo/map/text/v1/x412", page.getWebResponse().getContentAsString());
+
+
+                page = webClient.getPage(page.getWebResponse().getContentAsString());
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("Just some text 127.0.0.1:8181:text/v1/x412:v1:412", page.asNormalizedText());
+            }
+        }
+    }
+
+    @Test
     public void testHeaders()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
