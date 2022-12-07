@@ -360,8 +360,7 @@ public class RouteClass implements Route {
         return StringUtils.uncapitalize(ClassUtils.shortenClassName(elementClass_));
     }
 
-    @Override
-    public String defaultElementPath() {
+    private String defaultElementPath() {
         return "/" + defaultElementId();
     }
 

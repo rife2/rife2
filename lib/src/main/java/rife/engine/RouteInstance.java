@@ -55,11 +55,6 @@ public class RouteInstance implements Route {
     }
 
     @Override
-    public String defaultElementPath() {
-        return path_;
-    }
-
-    @Override
     public Element obtainElementInstance(Context context) {
         return element_;
     }
