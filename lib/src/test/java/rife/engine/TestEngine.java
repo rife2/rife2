@@ -137,9 +137,7 @@ public class TestEngine {
                     c.print(":" + c.parameter("param2"));
                 });
                 get("/", c -> {
-                    var out = c.urlFor(path_info).param("param1", "v1").param("param2", "412").toString();
-                    System.out.println(out);
-                    c.print(out);
+                    c.print(c.urlFor(path_info).param("param1", "v1").param("param2", "412"));
                 });
 
             }

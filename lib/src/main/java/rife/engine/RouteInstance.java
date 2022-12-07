@@ -50,7 +50,17 @@ public class RouteInstance implements Route {
     }
 
     @Override
-    public Element getElementInstance(Context context) {
+    public String defaultElementId() {
+        return StringUtils.stripFromFront(path_, "/");
+    }
+
+    @Override
+    public String defaultElementPath() {
+        return path_;
+    }
+
+    @Override
+    public Element obtainElementInstance(Context context) {
         return element_;
     }
 
@@ -59,21 +69,7 @@ public class RouteInstance implements Route {
         // no-op
     }
 
-    @Override
-    public String getDefaultElementId() {
-        return StringUtils.stripFromFront(path_, "/");
-    }
-
-    @Override
-    public String getDefaultElementPath() {
-        return path_;
-    }
-
     void prefixPathWith(String prefix) {
         path_ = prefix + path_;
-    }
-
-    public Element element() {
-        return element_;
     }
 }

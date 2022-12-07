@@ -13,15 +13,11 @@ public interface Route {
 
     PathInfoHandling pathInfoHandling();
 
-    default boolean handlesMethod(RequestMethod method) {
-        return method() == null || method() == method;
-    }
+    String defaultElementId();
 
-    Element getElementInstance(Context context);
+    String defaultElementPath();
+
+    Element obtainElementInstance(Context context);
 
     void finalizeElementInstance(Element element, Context context);
-
-    String getDefaultElementId();
-
-    String getDefaultElementPath();
 }

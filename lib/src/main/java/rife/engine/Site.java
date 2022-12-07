@@ -34,7 +34,7 @@ public class Site extends Router {
             var routes = routes_.get(url);
             if (routes != null && !routes.isEmpty()) {
                 for (var route : routes) {
-                    if (route.handlesMethod(request.getMethod())) {
+                    if (routeHandlesMethod(route, request.getMethod())) {
                         return route;
                     }
                 }
@@ -47,7 +47,7 @@ public class Site extends Router {
                 if (stripped_url.lastIndexOf('.') <= stripped_url.lastIndexOf('/')) {
                     if (routes != null && !routes.isEmpty()) {
                         for (var route : routes) {
-                            if (route.handlesMethod(request.getMethod())) {
+                            if (routeHandlesMethod(route, request.getMethod())) {
                                 return route;
                             }
                         }
@@ -57,6 +57,10 @@ public class Site extends Router {
         }
 
         return resolvePathInfoUrl(request, url, pathInfo);
+    }
+
+    private static boolean routeHandlesMethod(Route route, RequestMethod method) {
+        return route.method() == null || route.method() == method;
     }
 
     private Route resolvePathInfoUrl(Request request, String url, String pathInfo)
@@ -71,7 +75,7 @@ public class Site extends Router {
         if (pathInfo != null) {
             var path_info = StringUtils.stripFromFront(pathInfo, "/");
             for (var route : routes) {
-                if (route.pathInfoHandling().type() == PathInfoType.MAP && route.handlesMethod(request.getMethod())) {
+                if (route.pathInfoHandling().type() == PathInfoType.MAP && routeHandlesMethod(route, request.getMethod())) {
                     var mapping = route.pathInfoHandling().mapping();
                     var matcher = mapping.regexp().matcher(path_info);
                     if (matcher.matches()) {
@@ -83,7 +87,7 @@ public class Site extends Router {
 
         // return the first route that handles the url and doesn't have  any path info mappings
         for (var route : routes) {
-            if (route.pathInfoHandling().type() == PathInfoType.CAPTURE && route.handlesMethod(request.getMethod())) {
+            if (route.pathInfoHandling().type() == PathInfoType.CAPTURE && routeHandlesMethod(route, request.getMethod())) {
                 return route;
             }
         }
@@ -125,7 +129,7 @@ public class Site extends Router {
      * <p><code>null</code> if no suitable element could be found.
      * @since 2.0
      */
-    public RouteMatch findRouteForRequest(Request request, String elementUrl) {
+    RouteMatch findRouteForRequest(Request request, String elementUrl) {
         // obtain the element info that mapped to the requested path info
         Route route;
         var element_url_buffer = new StringBuilder(elementUrl);

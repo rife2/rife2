@@ -43,11 +43,10 @@ public class RouteClass implements Route {
         method_ = method;
         elementClass_ = elementClass;
         if (path == null) {
-            path = getDefaultElementPath();
+            path = defaultElementPath();
         }
         path_ = path;
         if (pathInfoHandling == null) {
-            // TODO : instead this should detect whether a PathInfo annotation is present and handle it
             pathInfoHandling = PathInfoHandling.NONE;
         }
         pathInfoHandling_ = pathInfoHandling;
@@ -149,7 +148,7 @@ public class RouteClass implements Route {
     }
 
     @Override
-    public Element getElementInstance(Context context) {
+    public Element obtainElementInstance(Context context) {
         try {
             var element = elementClass_.getDeclaredConstructor().newInstance();
 
@@ -357,20 +356,16 @@ public class RouteClass implements Route {
     }
 
     @Override
-    public String getDefaultElementId() {
+    public String defaultElementId() {
         return StringUtils.uncapitalize(ClassUtils.shortenClassName(elementClass_));
     }
 
     @Override
-    public String getDefaultElementPath() {
-        return "/" + getDefaultElementId();
+    public String defaultElementPath() {
+        return "/" + defaultElementId();
     }
 
     void prefixPathWith(String prefix) {
         path_ = prefix + path_;
-    }
-
-    public Class<? extends Element> elementClass() {
-        return elementClass_;
     }
 }

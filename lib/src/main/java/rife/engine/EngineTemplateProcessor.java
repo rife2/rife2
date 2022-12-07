@@ -14,7 +14,7 @@ import rife.template.exceptions.TemplateException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EngineTemplateProcessor {
+class EngineTemplateProcessor {
     private final Context context_;
     private final Template template_;
     private final TemplateEncoder encoder_;

@@ -89,7 +89,7 @@ public class Context {
 
     private void processElement(Route route)
     throws Exception {
-        var element = route.getElementInstance(this);
+        var element = route.obtainElementInstance(this);
         response_.setLastElement(element);
         try {
             element.process(this);
@@ -151,7 +151,7 @@ public class Context {
 
     public Template template()
     throws TemplateException, EngineException {
-        return template(routeMatch_.route().getDefaultElementId(), null);
+        return template(routeMatch_.route().defaultElementId(), null);
     }
 
     public Template template(String name)
@@ -169,7 +169,7 @@ public class Context {
 
     public Template templateTxt()
     throws TemplateException, EngineException {
-        return templateTxt(routeMatch_.route().getDefaultElementId(), null);
+        return templateTxt(routeMatch_.route().defaultElementId(), null);
     }
 
     public Template templateTxt(String name)
@@ -187,7 +187,7 @@ public class Context {
 
     public Template templateXml()
     throws TemplateException, EngineException {
-        return templateXml(routeMatch_.route().getDefaultElementId(), null);
+        return templateXml(routeMatch_.route().defaultElementId(), null);
     }
 
     public Template templateXml(String name)
@@ -205,7 +205,7 @@ public class Context {
 
     public Template templateJson()
     throws TemplateException, EngineException {
-        return templateJson(routeMatch_.route().getDefaultElementId(), null);
+        return templateJson(routeMatch_.route().defaultElementId(), null);
     }
 
     public Template templateJson(String name)
