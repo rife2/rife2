@@ -7,11 +7,9 @@ package rife.engine.elements;
 import rife.engine.Context;
 import rife.engine.Element;
 
-public class Defer implements Element
-{
-	public void process(Context c)
-	throws Exception {
-		c.defer();
-	}
+public class Defer implements Element {
+    public void process(Context c)
+    throws Exception {
+        c.defer();
+    }
 }
-
