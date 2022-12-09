@@ -14,7 +14,7 @@ import rife.authentication.exceptions.CredentialsManagerException;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.authentication.elements.Identified
  * @see RoleUserIdentity
- * @since 1.6
+ * @since 1.0
  */
 public interface IdentifiableUsersManager {
     /**
@@ -24,7 +24,7 @@ public interface IdentifiableUsersManager {
      * @return the requested user attributes; or
      * <p>{@code null} if the user couldn't be found
      * @throws CredentialsManagerException when a unexpected error occurred during the retrieval of the user attributes
-     * @since 1.6
+     * @since 1.0
      */
     RoleUserAttributes getAttributes(String login)
     throws CredentialsManagerException;
@@ -36,7 +36,7 @@ public interface IdentifiableUsersManager {
      * @return the requested user login; or
      * <p>{@code null} if the user couldn't be found
      * @throws CredentialsManagerException when a unexpected error occurred during the retrieval of the user login
-     * @since 1.6
+     * @since 1.0
      */
     String getLogin(long userId)
     throws CredentialsManagerException;

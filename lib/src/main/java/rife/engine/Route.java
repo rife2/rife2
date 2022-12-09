@@ -8,14 +8,14 @@ package rife.engine;
  * Interface describing a route that leads to a RIFE2 web execution {@link Element}.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 2.0
+ * @since 1.0
  */
 public interface Route {
     /**
      * The router used to create the route.
      *
      * @return this route's router
-     * @since 2.0
+     * @since 1.0
      */
     Router router();
 
@@ -24,7 +24,7 @@ public interface Route {
      *
      * @return this route's request method; or
      * <code>null</code> if the route should respond to all methods
-     * @since 2.0
+     * @since 1.0
      */
     RequestMethod method();
 
@@ -32,7 +32,7 @@ public interface Route {
      * The URL path that this route responds to.
      *
      * @return this route's path
-     * @since 2.0
+     * @since 1.0
      */
     String path();
 
@@ -40,7 +40,7 @@ public interface Route {
      * The way this route is handling the path info section.
      *
      * @return this route's path info handling
-     * @since 2.0
+     * @since 1.0
      */
     PathInfoHandling pathInfoHandling();
 
@@ -48,7 +48,7 @@ public interface Route {
      * The default identifier that can be used when referring to an element of this route.
      *
      * @return this route's default element ID
-     * @since 2.0
+     * @since 1.0
      */
     String defaultElementId();
 
@@ -63,7 +63,7 @@ public interface Route {
      *
      * @param context the web engine context for which to obtain an element instance for
      * @return an element instance to handle this route
-     * @since 2.0
+     * @since 1.0
      */
     Element obtainElementInstance(Context context);
 
@@ -75,7 +75,7 @@ public interface Route {
      *
      * @param element the element to finalize
      * @param context the context in which the element should be finalized
-     * @since 2.0
+     * @since 1.0
      */
     void finalizeElementInstance(Element element, Context context);
 }

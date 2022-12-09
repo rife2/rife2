@@ -24,7 +24,7 @@ import rife.scheduler.Task;
  * </dl>
  *
  * @author Steven Grimm (koreth[remove] at midwinter dot com)
- * @since 1.6
+ * @since 1.0
  */
 public class DbProbeExecutor extends Executor {
     @Override

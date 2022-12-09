@@ -514,7 +514,7 @@ public abstract class StringUtils {
      * @param source The string URL that has to be decoded
      * @return The decoded <code>String</code> object.
      * @see #encodeUrl(String)
-     * @since 2.0
+     * @since 1.0
      */
     public static String decodeUrl(String source) {
         return URLDecoder.decode(source, StandardCharsets.UTF_8);
@@ -645,7 +645,7 @@ public abstract class StringUtils {
     }
 
     /**
-     * @since 1.6
+     * @since 1.0
      */
     public static String decodeHtml(String source) {
         if (null == source ||
@@ -1017,7 +1017,7 @@ public abstract class StringUtils {
      * @see #encodeSql(String)
      * @see #encodeString(String)
      * @see #encodeRegexp(String)
-     * @since 2.0
+     * @since 1.0
      */
     public static String encodeJson(String source) {
         if (source == null || source.isEmpty()) {
@@ -1094,7 +1094,7 @@ public abstract class StringUtils {
      * @see #encodeString(String)
      * @see #encodeLatex(String)
      * @see #encodeJson(String)
-     * @since 1.3
+     * @since 1.0
      */
     public static String encodeRegexp(String source) {
         var regexp_quote_start = source.indexOf("\\E");
@@ -1609,7 +1609,7 @@ public abstract class StringUtils {
      * @param bytes    The byte array to convert.
      * @param encoding The encoding to use for the string conversion.
      * @return The converted <code>String</code>.
-     * @since 2.0
+     * @since 1.0
      */
     public static String toString(byte[] bytes, String encoding) {
         String string;
@@ -2300,7 +2300,7 @@ public abstract class StringUtils {
      *
      * @param source The <code>String</code> to uncapitalize.
      * @return The uncapitalized <code>String</code>.
-     * @since 1.5
+     * @since 1.0
      */
     public static String uncapitalize(String source) {
         if (source == null || source.length() == 0) {

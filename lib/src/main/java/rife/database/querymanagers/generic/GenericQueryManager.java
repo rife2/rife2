@@ -366,14 +366,14 @@ public interface GenericQueryManager<BeanType> extends ValidationContext {
      * were successful.
      *
      * @param listener the listener that has to be added
-     * @since 1.5
+     * @since 1.0
      */
     void addListener(GenericQueryManagerListener<BeanType> listener);
 
     /**
      * Remove all the listeners that are registered to the manager.
      *
-     * @since 1.5
+     * @since 1.0
      */
     void removeListeners();
 
@@ -384,7 +384,7 @@ public interface GenericQueryManager<BeanType> extends ValidationContext {
      * @param beanClass the class of the bean for which the new generic query
      *                  manager has to be created
      * @return a new generic query manager instance
-     * @since 1.6
+     * @since 1.0
      */
     <OtherBeanType> GenericQueryManager<OtherBeanType> createNewManager(Class<OtherBeanType> beanClass);
 }

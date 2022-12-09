@@ -13,7 +13,7 @@ import java.time.Instant;
  * expiration to be evaluated.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 2.0
+ * @since 1.0
  */
 public class MockCookie extends Cookie {
     private final Instant creationTime_;
@@ -23,7 +23,7 @@ public class MockCookie extends Cookie {
      * @param name the name of the cookie
      * @param value the value of the cookie
      * @see Cookie#Cookie(String, String)
-     * @since 2.0
+     * @since 1.0
      */
     public MockCookie(String name, String value) {
         super(name, value);
@@ -34,7 +34,7 @@ public class MockCookie extends Cookie {
      * Creates a new cookie with the same values as a standard <code>Cookie</code>.
      * @param cookie the cookie that will provide all the values
      * @see Cookie
-     * @since 2.0
+     * @since 1.0
      */
     public MockCookie(Cookie cookie) {
         this(cookie.getName(), cookie.getValue());
@@ -53,7 +53,7 @@ public class MockCookie extends Cookie {
      * @return <code>true</code> when the cookie is expired;
      * <code>false</code> otherwise
      * @see Cookie#setMaxAge(int)
-     * @since 2.0
+     * @since 1.0
      */
     boolean isExpired() {
         if (getMaxAge() < 0) {

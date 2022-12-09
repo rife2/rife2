@@ -26,7 +26,7 @@ public abstract class HttpUtils {
      *
      * @param contentType the Content-Type header
      * @return the content type header without the charset
-     * @since 1.6
+     * @since 1.0
      */
     public static String extractMimeTypeFromContentType(String contentType) {
         var charset_index = contentType.indexOf(CHARSET);

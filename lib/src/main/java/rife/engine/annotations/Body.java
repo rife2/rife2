@@ -12,7 +12,7 @@ import static rife.engine.annotations.FlowDirection.IN;
  * Declares a request body.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 2.0
+ * @since 1.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
@@ -22,7 +22,7 @@ public @interface Body {
      * Determines what the direction of the flow is for processing this field
      *
      * @return the direction of the flow for field processing
-     * @since 2.0
+     * @since 1.0
      */
     FlowDirection flow() default IN;
 }

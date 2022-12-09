@@ -17,7 +17,7 @@ import rife.template.Template;
  * provided by {@link rife.database.DbQueryManager}
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.6
+ * @since 1.0
  */
 public class ReadQueryTemplate implements ReadQuery {
     private Template template_ = null;
@@ -26,7 +26,7 @@ public class ReadQueryTemplate implements ReadQuery {
     /**
      * Creates a new empty instance of <code>ReadQueryTemplate</code>.
      *
-     * @since 1.6
+     * @since 1.0
      */
     public ReadQueryTemplate() {
     }
@@ -37,7 +37,7 @@ public class ReadQueryTemplate implements ReadQuery {
      * executed.
      *
      * @param template the template instance
-     * @since 1.6
+     * @since 1.0
      */
     public ReadQueryTemplate(Template template) {
         setTemplate(template);
@@ -50,7 +50,7 @@ public class ReadQueryTemplate implements ReadQuery {
      *
      * @param template the template instance
      * @param block    the name of the template block
-     * @since 1.6
+     * @since 1.0
      */
     public ReadQueryTemplate(Template template, String block) {
         setTemplate(template);
@@ -64,7 +64,7 @@ public class ReadQueryTemplate implements ReadQuery {
      * @return this <code>ReadQueryTemplate</code> instance.
      * @see #setTemplate
      * @see #getTemplate
-     * @since 1.6
+     * @since 1.0
      */
     public ReadQueryTemplate template(Template template) {
         setTemplate(template);
@@ -77,7 +77,7 @@ public class ReadQueryTemplate implements ReadQuery {
      * @param template the template instance
      * @see #template
      * @see #getTemplate
-     * @since 1.6
+     * @since 1.0
      */
     public void setTemplate(Template template) {
         template_ = template;
@@ -90,7 +90,7 @@ public class ReadQueryTemplate implements ReadQuery {
      * <p><code>null</code> if no template instance was provided
      * @see #template
      * @see #setTemplate
-     * @since 1.6
+     * @since 1.0
      */
     public Template getTemplate() {
         return template_;
@@ -103,7 +103,7 @@ public class ReadQueryTemplate implements ReadQuery {
      * @return this <code>ReadQueryTemplate</code> instance.
      * @see #setBlock
      * @see #getBlock
-     * @since 1.6
+     * @since 1.0
      */
     public ReadQueryTemplate block(String block) {
         setBlock(block);
@@ -116,7 +116,7 @@ public class ReadQueryTemplate implements ReadQuery {
      * @param block the name of the template block
      * @see #block
      * @see #getBlock
-     * @since 1.6
+     * @since 1.0
      */
     public void setBlock(String block) {
         block_ = block;
@@ -129,7 +129,7 @@ public class ReadQueryTemplate implements ReadQuery {
      * <p><code>null</code> if no block name was provided
      * @see #block
      * @see #setBlock
-     * @since 1.6
+     * @since 1.0
      */
     public String getBlock() {
         return block_;

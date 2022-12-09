@@ -12,7 +12,7 @@ package rife.validation;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see ConstrainedProperty#addListener
  * @see ConstrainedProperty#removeListener
- * @since 1.6
+ * @since 1.0
  */
 public interface ConstrainedPropertyListener {
     /**
@@ -23,7 +23,7 @@ public interface ConstrainedPropertyListener {
      *                       constraint has been set
      * @param name           the name of the constraint
      * @param constraintData the data that the constraint has been set to
-     * @since 1.6
+     * @since 1.0
      */
     void constraintSet(ConstrainedProperty property, String name, Object constraintData);
 }

@@ -11,7 +11,7 @@ import jakarta.servlet.http.Cookie;
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see Cookie
- * @since 2.0
+ * @since 1.0
  */
 public class CookieBuilder {
     private final Cookie cookie_;
@@ -30,7 +30,7 @@ public class CookieBuilder {
      * Returns the <code>Cookie</code>
      *
      * @return the <code>Cookie</code> instance that being built
-     * @since 2.0
+     * @since 1.0
      */
     public Cookie cookie() {
         return cookie_;
@@ -40,7 +40,7 @@ public class CookieBuilder {
      * See {@link Cookie#setComment}
      *
      * @return the <code>CookieBuilder</code> instance
-     * @since 2.0
+     * @since 1.0
      */
     public CookieBuilder comment(String purpose) {
         cookie_.setComment(purpose);
@@ -51,7 +51,7 @@ public class CookieBuilder {
      * See {@link Cookie#setDomain}
      *
      * @return the <code>CookieBuilder</code> instance
-     * @since 2.0
+     * @since 1.0
      */
     public CookieBuilder domain(String domain) {
         cookie_.setDomain(domain);
@@ -62,7 +62,7 @@ public class CookieBuilder {
      * See {@link Cookie#setMaxAge}
      *
      * @return the <code>CookieBuilder</code> instance
-     * @since 2.0
+     * @since 1.0
      */
     public CookieBuilder maxAge(int expiry) {
         cookie_.setMaxAge(expiry);
@@ -73,7 +73,7 @@ public class CookieBuilder {
      * See {@link Cookie#setPath}
      *
      * @return the <code>CookieBuilder</code> instance
-     * @since 2.0
+     * @since 1.0
      */
     public CookieBuilder path(String uri) {
         cookie_.setPath(uri);
@@ -84,7 +84,7 @@ public class CookieBuilder {
      * See {@link Cookie#setSecure}
      *
      * @return the <code>CookieBuilder</code> instance
-     * @since 2.0
+     * @since 1.0
      */
     public CookieBuilder secure(boolean flag) {
         cookie_.setSecure(flag);
@@ -95,7 +95,7 @@ public class CookieBuilder {
      * See {@link Cookie#setValue}
      *
      * @return the <code>CookieBuilder</code> instance
-     * @since 2.0
+     * @since 1.0
      */
     public CookieBuilder value(String newValue) {
         cookie_.setValue(newValue);
@@ -106,7 +106,7 @@ public class CookieBuilder {
      * See {@link Cookie#setVersion}
      *
      * @return the <code>CookieBuilder</code> instance
-     * @since 2.0
+     * @since 1.0
      */
     public CookieBuilder version(int v) {
         cookie_.setVersion(v);
@@ -117,7 +117,7 @@ public class CookieBuilder {
      * See {@link Cookie#setHttpOnly}
      *
      * @return the <code>CookieBuilder</code> instance
-     * @since 2.0
+     * @since 1.0
      */
     public CookieBuilder httpOnly(boolean isHttpOnly) {
         cookie_.setHttpOnly(isHttpOnly);

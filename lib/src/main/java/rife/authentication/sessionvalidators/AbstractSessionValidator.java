@@ -18,7 +18,7 @@ import rife.authentication.SessionValidator;
  *
  * @author Steven Grimm (koreth[remove] at midwinter dot com)
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.6
+ * @since 1.0
  */
 public abstract class AbstractSessionValidator<C extends CredentialsManager, S extends SessionManager, R extends RememberManager> implements SessionValidator<C, S, R> {
     /**
@@ -38,7 +38,7 @@ public abstract class AbstractSessionValidator<C extends CredentialsManager, S e
      * Set's this validator's credentials manager.
      *
      * @param credentialsManager the {@code CredentialsManager} instance
-     * @since 1.6
+     * @since 1.0
      */
     public void setCredentialsManager(C credentialsManager) {
         credentialsManager_ = credentialsManager;
@@ -49,7 +49,7 @@ public abstract class AbstractSessionValidator<C extends CredentialsManager, S e
      *
      * @return the requested {@code CredentialsManager}; or
      * {@code null} if none has been set up yet
-     * @since 1.6
+     * @since 1.0
      */
     public C getCredentialsManager() {
         return credentialsManager_;
@@ -59,7 +59,7 @@ public abstract class AbstractSessionValidator<C extends CredentialsManager, S e
      * Set's this validator's session manager.
      *
      * @param sessionManager the {@code SessionManager} instance
-     * @since 1.6
+     * @since 1.0
      */
     public void setSessionManager(S sessionManager) {
         sessionManager_ = sessionManager;
@@ -70,7 +70,7 @@ public abstract class AbstractSessionValidator<C extends CredentialsManager, S e
      *
      * @return the requested {@code SessionManager}; or
      * {@code null} if none has been set up yet
-     * @since 1.6
+     * @since 1.0
      */
     public S getSessionManager() {
         return sessionManager_;
@@ -80,7 +80,7 @@ public abstract class AbstractSessionValidator<C extends CredentialsManager, S e
      * Set's this validator's "remember me" manager.
      *
      * @param rememberManager the {@code RememberManager} instance
-     * @since 1.6
+     * @since 1.0
      */
     public void setRememberManager(R rememberManager) {
         rememberManager_ = rememberManager;
@@ -91,7 +91,7 @@ public abstract class AbstractSessionValidator<C extends CredentialsManager, S e
      *
      * @return the requested {@code RememberManager}; or
      * {@code null} if none has been set up yet
-     * @since 1.6
+     * @since 1.0
      */
     public R getRememberManager() {
         return rememberManager_;

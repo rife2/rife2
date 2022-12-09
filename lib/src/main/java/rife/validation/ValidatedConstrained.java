@@ -18,7 +18,7 @@ import java.util.List;
  * @see Constrained
  * @see ConstrainedProperty
  * @see ValidationGroup
- * @since 1.4
+ * @since 1.0
  */
 public interface ValidatedConstrained extends Validated {
     /**
@@ -27,7 +27,7 @@ public interface ValidatedConstrained extends Validated {
      * @param name the name of the validation group that needs to be created
      *             and added
      * @return the newly created <code>ValidationGroup</code>
-     * @since 1.4
+     * @since 1.0
      */
     ValidationGroup addGroup(String name);
 
@@ -37,7 +37,7 @@ public interface ValidatedConstrained extends Validated {
      * <code>ValidationRule</code>s.
      *
      * @param name the name of the validation group that will be focused
-     * @since 1.4
+     * @since 1.0
      */
     void focusGroup(String name);
 
@@ -46,7 +46,7 @@ public interface ValidatedConstrained extends Validated {
      * validation group.
      *
      * @param name the name of the validation group that will be focused
-     * @since 1.4
+     * @since 1.0
      */
     void resetGroup(String name);
 
@@ -54,7 +54,7 @@ public interface ValidatedConstrained extends Validated {
      * Retrieves all validation groups.
      *
      * @return the collection of all registered validation groups
-     * @since 1.4
+     * @since 1.0
      */
     Collection<ValidationGroup> getGroups();
 
@@ -64,7 +64,7 @@ public interface ValidatedConstrained extends Validated {
      * @param name the name of the validation group that will be retrieved
      * @return the requested <code>ValidationGroup</code>; or
      * <p><code>null</code> if no such validation group exists
-     * @since 1.4
+     * @since 1.0
      */
     ValidationGroup getGroup(String name);
 
@@ -75,7 +75,7 @@ public interface ValidatedConstrained extends Validated {
      * @param name the name of the validation group that will be retrieved
      * @return <code>true</code> if no validation errors were generated; or
      * <p><code>false</code> otherwise
-     * @since 1.4
+     * @since 1.0
      */
     boolean validateGroup(String name);
 
@@ -89,7 +89,7 @@ public interface ValidatedConstrained extends Validated {
      *                instance will be additionally validated
      * @return <code>true</code> if no validation errors were generated; or
      * <p><code>false</code> otherwise
-     * @since 1.6
+     * @since 1.0
      */
     boolean validateGroup(String name, ValidationContext context);
 
@@ -105,7 +105,7 @@ public interface ValidatedConstrained extends Validated {
      * @param constrainedProperty the ConstrainedProperty that will be
      *                            inspected
      * @return the list of generated {@link ValidationRule}s
-     * @since 1.4
+     * @since 1.0
      */
     List<PropertyValidationRule> addConstrainedPropertyRules(ConstrainedProperty constrainedProperty);
 
@@ -116,7 +116,7 @@ public interface ValidatedConstrained extends Validated {
      * @param constrainedProperty the ConstrainedProperty that will be
      *                            inspected
      * @return the list of generated {@link ValidationRule}s
-     * @since 1.4
+     * @since 1.0
      */
     List<PropertyValidationRule> generateConstrainedPropertyRules(ConstrainedProperty constrainedProperty);
 
@@ -129,7 +129,7 @@ public interface ValidatedConstrained extends Validated {
      * @return null if no errors occurred during the loading of the content of
      * the provided property or if the property doesn't exist; or
      * <p>the requested collection of error messages
-     * @since 1.4
+     * @since 1.0
      */
     Collection<String> getLoadingErrors(String propertyName);
 }

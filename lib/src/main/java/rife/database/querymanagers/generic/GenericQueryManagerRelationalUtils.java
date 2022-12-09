@@ -28,7 +28,7 @@ import java.lang.reflect.Method;
  * capabilities to generic query manager implementations.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.6
+ * @since 1.0
  */
 public abstract class GenericQueryManagerRelationalUtils {
     /**
@@ -44,7 +44,7 @@ public abstract class GenericQueryManagerRelationalUtils {
      * @return the value of the property, or
      * <p>{@code null} if the constrained property doesn't exist or if it
      * didn't have the {@code manyToOne} constraint
-     * @since 1.6
+     * @since 1.0
      */
     public static Object restoreLazyManyToOneProperty(GenericQueryManager manager, Constrained constrained, String propertyName, String propertyTypeClassName) {
         Object result = null;

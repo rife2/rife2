@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * isn't used.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.4
+ * @since 1.0
  */
 public abstract class MetaData implements ValidatedConstrained, Constrained, Cloneable {
     private Validated metaDataBean_ = this;
@@ -35,7 +35,7 @@ public abstract class MetaData implements ValidatedConstrained, Constrained, Clo
      * penalty at each object construction like when you do this in the
      * default constructor.
      *
-     * @since 1.4
+     * @since 1.0
      */
     public void activateMetaData() {
     }

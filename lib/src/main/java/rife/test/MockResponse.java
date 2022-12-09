@@ -32,7 +32,7 @@ import org.xml.sax.InputSource;
  * web application outside a servlet container.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.1
+ * @since 1.0
  */
 public class MockResponse extends AbstractResponse {
     private static final String HEADER_CONTENT_TYPE = "Content-Type";
@@ -75,7 +75,7 @@ public class MockResponse extends AbstractResponse {
      * @see #getText
      * @see #getTemplate
      * @see #getParsedHtml
-     * @since 1.1
+     * @since 1.0
      */
     public byte[] getBytes() {
         return mockOutputStream_.toByteArray();
@@ -88,7 +88,7 @@ public class MockResponse extends AbstractResponse {
      * @see #getBytes
      * @see #getTemplate
      * @see #getParsedHtml
-     * @since 1.1
+     * @since 1.0
      */
     public String getText() {
         var charset = characterEncoding_;
@@ -110,7 +110,7 @@ public class MockResponse extends AbstractResponse {
      * @see #getBytes
      * @see #getText
      * @see #getParsedHtml
-     * @since 1.1
+     * @since 1.0
      */
     public Template getTemplate() {
         return template_;
@@ -123,7 +123,7 @@ public class MockResponse extends AbstractResponse {
      * @see #getBytes
      * @see #getText
      * @see #getTemplate
-     * @since 1.1
+     * @since 1.0
      */
     public ParsedHtml getParsedHtml() {
         return ParsedHtml.parse(this);
@@ -146,7 +146,7 @@ public class MockResponse extends AbstractResponse {
      * @see #xpathString(String)
      * @see #xpathBoolean(String)
      * @see #xpathNumber(String)
-     * @since 1.1
+     * @since 1.0
      */
     public NodeList xpathNodeSet(String expression)
     throws XPathExpressionException {
@@ -163,7 +163,7 @@ public class MockResponse extends AbstractResponse {
      * @see #xpathString(String)
      * @see #xpathBoolean(String)
      * @see #xpathNumber(String)
-     * @since 1.1
+     * @since 1.0
      */
     public Node xpathNode(String expression)
     throws XPathExpressionException {
@@ -180,7 +180,7 @@ public class MockResponse extends AbstractResponse {
      * @see #xpathNode(String)
      * @see #xpathBoolean(String)
      * @see #xpathNumber(String)
-     * @since 1.1
+     * @since 1.0
      */
     public String xpathString(String expression)
     throws XPathExpressionException {
@@ -197,7 +197,7 @@ public class MockResponse extends AbstractResponse {
      * @see #xpathNode(String)
      * @see #xpathString(String)
      * @see #xpathNumber(String)
-     * @since 1.1
+     * @since 1.0
      */
     public Boolean xpathBoolean(String expression)
     throws XPathExpressionException {
@@ -214,7 +214,7 @@ public class MockResponse extends AbstractResponse {
      * @see #xpathNode(String)
      * @see #xpathString(String)
      * @see #xpathBoolean(String)
-     * @since 1.1
+     * @since 1.0
      */
     public Double xpathNumber(String expression)
     throws XPathExpressionException {
@@ -246,7 +246,7 @@ public class MockResponse extends AbstractResponse {
      * @see #xpathString(String, Object)
      * @see #xpathBoolean(String, Object)
      * @see #xpathNumber(String, Object)
-     * @since 1.2
+     * @since 1.0
      */
     public NodeList xpathNodeSet(String expression, Object context)
     throws XPathExpressionException {
@@ -263,7 +263,7 @@ public class MockResponse extends AbstractResponse {
      * @see #xpathString(String, Object)
      * @see #xpathBoolean(String, Object)
      * @see #xpathNumber(String, Object)
-     * @since 1.2
+     * @since 1.0
      */
     public Node xpathNode(String expression, Object context)
     throws XPathExpressionException {
@@ -280,7 +280,7 @@ public class MockResponse extends AbstractResponse {
      * @see #xpathNode(String, Object)
      * @see #xpathBoolean(String, Object)
      * @see #xpathNumber(String, Object)
-     * @since 1.2
+     * @since 1.0
      */
     public String xpathString(String expression, Object context)
     throws XPathExpressionException {
@@ -297,7 +297,7 @@ public class MockResponse extends AbstractResponse {
      * @see #xpathNode(String, Object)
      * @see #xpathString(String, Object)
      * @see #xpathNumber(String, Object)
-     * @since 1.2
+     * @since 1.0
      */
     public Boolean xpathBoolean(String expression, Object context)
     throws XPathExpressionException {
@@ -314,7 +314,7 @@ public class MockResponse extends AbstractResponse {
      * @see #xpathNode(String, Object)
      * @see #xpathString(String, Object)
      * @see #xpathBoolean(String, Object)
-     * @since 1.2
+     * @since 1.0
      */
     public Double xpathNumber(String expression, Object context)
     throws XPathExpressionException {
@@ -417,7 +417,7 @@ public class MockResponse extends AbstractResponse {
      *
      * @return the list of added cookies; or
      * <p>an empty list if no cookies have been added
-     * @since 1.1
+     * @since 1.0
      */
     public List<String> getNewCookieNames() {
         var names = new ArrayList<String>();
@@ -448,7 +448,7 @@ public class MockResponse extends AbstractResponse {
      * response
      * @throws java.lang.IllegalArgumentException if the header value can't
      *                                            be converted to a date
-     * @since 1.1
+     * @since 1.0
      */
     public long getDateHeader(String name) {
         return headers_.getDateHeader(name);
@@ -465,7 +465,7 @@ public class MockResponse extends AbstractResponse {
      * header; or
      * <p><code>null</code> if the response does not have a header of that
      * name
-     * @since 1.1
+     * @since 1.0
      */
     public String getHeader(String name) {
         return headers_.getHeader(name);
@@ -480,7 +480,7 @@ public class MockResponse extends AbstractResponse {
      * @return a <code>Collection</code> of all the header names sent with
      * this response; or
      * <p>if the response has no headers, an empty <code>Collection</code>
-     * @since 1.1
+     * @since 1.0
      */
     public Collection getHeaderNames() {
         return headers_.getHeaderNames();
@@ -498,7 +498,7 @@ public class MockResponse extends AbstractResponse {
      * header; or
      * <p>if the response does not have any headers of that name return an
      * empty <code>Collection</code>
-     * @since 1.1
+     * @since 1.0
      */
     public Collection getHeaders(String name) {
         return headers_.getHeaders(name);
@@ -518,7 +518,7 @@ public class MockResponse extends AbstractResponse {
      * <p><code>-1</code> if the response doesn't have a header of this name
      * @throws java.lang.NumberFormatException if the header value can't be
      *                                         converted to an <code>int</code>
-     * @since 1.1
+     * @since 1.0
      */
     public int getIntHeader(String name) {
         return headers_.getIntHeader(name);
@@ -556,7 +556,7 @@ public class MockResponse extends AbstractResponse {
      * Removes a response header with the given name.
      *
      * @param name the name of the header to remove
-     * @since 1.1
+     * @since 1.0
      */
     public void removeHeader(String name) {
         headers_.removeHeader(name);
@@ -567,7 +567,7 @@ public class MockResponse extends AbstractResponse {
      *
      * @return an <code>integer</code> expressing the status code of this
      * response
-     * @since 1.2
+     * @since 1.0
      */
     public int getStatus() {
         return status_;
@@ -577,7 +577,7 @@ public class MockResponse extends AbstractResponse {
      * Returns the error reason of this response.
      *
      * @return an <code>String</code> expressing the reason of this response error
-     * @since 1.2
+     * @since 1.0
      */
     public String getReason() {
         return reason_;

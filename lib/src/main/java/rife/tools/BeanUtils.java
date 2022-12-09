@@ -410,7 +410,7 @@ public abstract class BeanUtils {
      *                                                  occurred while obtaining the bean properties
      * @see #setUppercasedBeanProperty(String, String[], String, Map, Object, Object)
      * @see #setUppercasedBeanProperty(String, UploadedFile, String, Map, Object)
-     * @since 1.4
+     * @since 1.0
      */
     public static HashMap<String, PropertyDescriptor> getUppercasedBeanProperties(Class beanClass)
     throws BeanUtilsException {
@@ -448,7 +448,7 @@ public abstract class BeanUtils {
      *               be used
      * @return the parsed date
      * @throws ParseException if an error occurred when the date was parsed
-     * @since 1.6
+     * @since 1.0
      */
     public Object parseDate(String date, Format format)
     throws ParseException {
@@ -491,7 +491,7 @@ public abstract class BeanUtils {
      *                                                  occurred while setting the bean property
      * @see #getUppercasedBeanProperties(Class)
      * @see #setUppercasedBeanProperty(String, UploadedFile, String, Map, Object)
-     * @since 1.4
+     * @since 1.0
      */
     public static void setUppercasedBeanProperty(String propertyName, String[] propertyValues, String propertyNamePrefix, Map<String, PropertyDescriptor> beanProperties, Object beanInstance, Object emptyBean)
     throws BeanUtilsException {
@@ -1019,7 +1019,7 @@ public abstract class BeanUtils {
      *                                                  occurred while setting the bean property
      * @see #getUppercasedBeanProperties(Class)
      * @see #setUppercasedBeanProperty(String, String[], String, Map, Object, Object)
-     * @since 1.4
+     * @since 1.0
      */
     public static void setUppercasedBeanProperty(String propertyName, UploadedFile propertyFile, String propertyNamePrefix, Map<String, PropertyDescriptor> beanProperties, Object beanInstance)
     throws BeanUtilsException {

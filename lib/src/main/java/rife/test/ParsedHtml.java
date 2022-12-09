@@ -16,7 +16,7 @@ import java.util.List;
  * Retrieves the text content of a {@link MockResponse} and parses it as HTML.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 2.0
+ * @since 1.0
  */
 public class ParsedHtml {
     private final MockResponse response_;
@@ -49,7 +49,7 @@ public class ParsedHtml {
      *
      * @param response the response whose text content will be parsed
      * @return the resulting instance of <code>ParsedHtml</code>
-     * @since 2.0
+     * @since 1.0
      */
     public static ParsedHtml parse(MockResponse response) {
         return parse(response, response.getText());
@@ -63,7 +63,7 @@ public class ParsedHtml {
      * Retrieves the document that corresponds to the parsed HTML.
      *
      * @return the parsed document
-     * @since 2.0
+     * @since 1.0
      */
     public Document getDocument() {
         return document_;
@@ -73,7 +73,7 @@ public class ParsedHtml {
      * Retrieves the text of the <code>title</code> tag.
      *
      * @return the title
-     * @since 2.0
+     * @since 1.0
      */
     public String getTitle() {
         var elements = document_.select("title");
@@ -90,7 +90,7 @@ public class ParsedHtml {
      * @return a list with {@link MockForm} instances
      * @see #getFormWithName
      * @see #getFormWithId
-     * @since 2.0
+     * @since 1.0
      */
     public List<MockForm> getForms() {
         return forms_;
@@ -106,7 +106,7 @@ public class ParsedHtml {
      * <p><code>null</code> if no such form could be found
      * @see #getForms
      * @see #getFormWithId
-     * @since 2.0
+     * @since 1.0
      */
     public MockForm getFormWithName(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -130,7 +130,7 @@ public class ParsedHtml {
      * <p><code>null</code> if no such form could be found
      * @see #getForms
      * @see #getFormWithName
-     * @since 2.0
+     * @since 1.0
      */
     public MockForm getFormWithId(String id) {
         if (null == id) throw new IllegalArgumentException("id can't be null");
@@ -153,7 +153,7 @@ public class ParsedHtml {
      * @see #getLinkWithText
      * @see #getLinkWithImageAlt
      * @see #getLinkWithImageName
-     * @since 2.0
+     * @since 1.0
      */
     public List<MockLink> getLinks() {
         return links_;
@@ -172,7 +172,7 @@ public class ParsedHtml {
      * @see #getLinkWithText
      * @see #getLinkWithImageAlt
      * @see #getLinkWithImageName
-     * @since 2.0
+     * @since 1.0
      */
     public MockLink getLinkWithName(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -199,7 +199,7 @@ public class ParsedHtml {
      * @see #getLinkWithText
      * @see #getLinkWithImageAlt
      * @see #getLinkWithImageName
-     * @since 2.0
+     * @since 1.0
      */
     public MockLink getLinkWithId(String id) {
         if (null == id) throw new IllegalArgumentException("id can't be null");
@@ -225,7 +225,7 @@ public class ParsedHtml {
      * @see #getLinkWithId
      * @see #getLinkWithText
      * @see #getLinkWithImageName
-     * @since 2.0
+     * @since 1.0
      */
     public MockLink getLinkWithText(String text) {
         if (null == text) throw new IllegalArgumentException("text can't be null");
@@ -252,7 +252,7 @@ public class ParsedHtml {
      * @see #getLinkWithId
      * @see #getLinkWithText
      * @see #getLinkWithImageName
-     * @since 2.0
+     * @since 1.0
      */
     public MockLink getLinkWithImageAlt(String alt) {
         if (null == alt) throw new IllegalArgumentException("alt can't be null");
@@ -288,7 +288,7 @@ public class ParsedHtml {
      * @see #getLinkWithId
      * @see #getLinkWithText
      * @see #getLinkWithImageAlt
-     * @since 2.0
+     * @since 1.0
      */
     public MockLink getLinkWithImageName(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -319,7 +319,7 @@ public class ParsedHtml {
      * @param attributeName the name of the attribute
      * @return the value of the attribute; or
      * <p><code>null</code> if no attribute could be found
-     * @since 2.0
+     * @since 1.0
      */
     public static String getElementAttribute(Element element, String attributeName) {
         return getElementAttribute(element, attributeName, null);

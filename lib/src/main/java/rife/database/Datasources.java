@@ -36,7 +36,7 @@ public class Datasources {
      * <code>Datasources</code> class.
      *
      * @return the singleton <code>Datasources</code> instance
-     * @since 2.0
+     * @since 1.0
      */
     public static Datasources instance() {
         return DatasourcesSingleton.INSTANCE;
@@ -69,7 +69,7 @@ public class Datasources {
      * @return the requested <code>Datasource</code> instance; or
      * <p>
      * <code>null</code> if no <code>Datasource</code> could be found
-     * @since 2.0
+     * @since 1.0
      */
     public Datasource getDatasourceForSelector(NameSelector selector, String fallbackName) {
         Datasource datasource = Datasources.instance().getDatasource(selector.getActiveName());

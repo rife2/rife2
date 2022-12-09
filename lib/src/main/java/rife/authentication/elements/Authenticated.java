@@ -14,7 +14,7 @@ import rife.engine.Route;
  * is allowed.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 2.0
+ * @since 1.0
  */
 public class Authenticated extends Identified implements SessionAttributes {
     public Authenticated(AuthConfig config) {
@@ -24,7 +24,7 @@ public class Authenticated extends Identified implements SessionAttributes {
     /**
      * Hook method that is called at the start of the element's execution.
      *
-     * @since 2.0
+     * @since 1.0
      */
     protected void initializeAuthenticated() {
     }
@@ -45,7 +45,7 @@ public class Authenticated extends Identified implements SessionAttributes {
      * @param validityId      a number that indicates the validation state of the
      *                        session, as used by the <code>SessionValidator</code>, more information can
      *                        be found here: {@link SessionValidator#validateSession}
-     * @since 2.0
+     * @since 1.0
      */
     protected void sessionNotValid(String authCookieName, String authCookieValue, int validityId) {
     }
@@ -120,7 +120,7 @@ public class Authenticated extends Identified implements SessionAttributes {
      * @param name  the name of the authentication cookie
      * @param value the value of the authentication cookie
      * @return the created name
-     * @since 2.0
+     * @since 1.0
      */
     public static String createAuthAttributeName(Route route, String name, String value) {
         return route.path() + "\t" + name + "\t" + value;

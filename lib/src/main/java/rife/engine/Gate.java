@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * the out of container testing API.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 2.0
+ * @since 1.0
  */
 public class Gate {
     private Site site_ = null;
@@ -30,7 +30,7 @@ public class Gate {
      * Set up the gate with the provided <code>Site</code>.
      *
      * @param site the site that will handle the requests
-     * @since 2.0
+     * @since 1.0
      */
     public void setup(Site site) {
         site_ = site;
@@ -52,7 +52,7 @@ public class Gate {
      * @param response the response instance of this web request
      * @return <code>true</code> if the request was successfully handled; or
      * <code>false</code> otherwise
-     * @since 2.0
+     * @since 1.0
      */
     public boolean handleRequest(String gateUrl, String elementUrl, Request request, Response response) {
         // check if the gateUrl hasn't been overridden by a webapp context path configuration parameter

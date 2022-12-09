@@ -79,7 +79,7 @@ public interface Template extends Cloneable {
      * @see #getBlock
      * @see #getContent
      * @see #hasBlock
-     * @since 2.0
+     * @since 1.0
      */
     void setBlock(String valueBlockId)
     throws TemplateException;
@@ -512,7 +512,7 @@ public interface Template extends Cloneable {
      * @see #removeValues
      * @see #blankValue
      * @see #hasValueId
-     * @since 1.5
+     * @since 1.0
      */
     void setValue(String id, CharSequence value)
     throws TemplateException;
@@ -1163,7 +1163,7 @@ public interface Template extends Cloneable {
      * @see #isValueSet
      * * @see #removeValue
      * @see #hasValueId
-     * @since 1.6
+     * @since 1.0
      */
     void removeValues(List<String> ids);
 
@@ -1177,7 +1177,7 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @see #removeValue
      * @see #removeValues
-     * @since 1.4
+     * @since 1.0
      */
     void blankValue(String id);
 
@@ -1238,7 +1238,7 @@ public interface Template extends Cloneable {
      * those that were used to create this template instance.
      *
      * @return a new template instance with the same parameters as this one
-     * @since 2.0
+     * @since 1.0
      */
     Template createNewInstance();
 
@@ -1247,7 +1247,7 @@ public interface Template extends Cloneable {
      * this template.
      *
      * @return the unique identifier of this template's factory
-     * @since 2.0
+     * @since 1.0
      */
     String getFactoryIdentifier();
 
@@ -1255,7 +1255,7 @@ public interface Template extends Cloneable {
      * Returns the encoding of this the content of this template.
      *
      * @return the encoding that was used when instantiating the template
-     * @since 2.0
+     * @since 1.0
      */
     String getEncoding();
 
@@ -1430,7 +1430,7 @@ public interface Template extends Cloneable {
      * by a template factory.
      *
      * @return this template's full name
-     * @since 1.6
+     * @since 1.0
      */
     String getFullName();
 
@@ -1439,7 +1439,7 @@ public interface Template extends Cloneable {
      *
      * @return this template's default content type; or
      * <p><code>null</code> if no default content type is known for this template instance
-     * @since 1.3
+     * @since 1.0
      */
     String getDefaultContentType();
 

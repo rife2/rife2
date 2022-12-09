@@ -14,7 +14,7 @@ import java.security.*;
  * it can be a drop-in replacement for the standard UUID string.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 2.0
+ * @since 1.0
  */
 public abstract class UniqueIDGenerator {
     private static final SecureRandom RANDOM = new SecureRandom();

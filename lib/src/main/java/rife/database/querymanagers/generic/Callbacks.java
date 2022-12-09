@@ -37,7 +37,7 @@ public interface Callbacks<BeanType> {
      * @return <code>true</code> if the execution should continue as normal;
      * or
      * <p><code>false</code> if the execution should be interrupted
-     * @since 1.3
+     * @since 1.0
      */
     boolean beforeValidate(BeanType object);
 
@@ -103,7 +103,7 @@ public interface Callbacks<BeanType> {
      * @return <code>true</code> if the execution should continue as normal;
      * or
      * <p><code>false</code> if the execution should be interrupted
-     * @since 1.3
+     * @since 1.0
      */
     boolean afterValidate(BeanType object);
 

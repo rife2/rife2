@@ -9,7 +9,7 @@ package rife.selector;
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see NameSelector
- * @since 2.0
+ * @since 1.0
  */
 public class NameSelectorUser implements NameSelector {
     public String getActiveName() {

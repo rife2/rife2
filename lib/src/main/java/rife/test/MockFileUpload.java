@@ -16,7 +16,7 @@ import java.io.InputStream;
  * a file upload.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.1
+ * @since 1.0
  */
 public class MockFileUpload {
     private File file_;
@@ -32,7 +32,7 @@ public class MockFileUpload {
      * rife.config.RifeConfig.Mime}.
      *
      * @param file the file that will be uploaded
-     * @since 1.1
+     * @since 1.0
      */
     public MockFileUpload(File file) {
         if (null == file) throw new IllegalArgumentException("file can't be null.");
@@ -47,7 +47,7 @@ public class MockFileUpload {
      *
      * @param file        the file that will be uploaded
      * @param contentType the content type of the file
-     * @since 1.1
+     * @since 1.0
      */
     public MockFileUpload(File file, String contentType) {
         if (null == file) throw new IllegalArgumentException("file can't be null.");
@@ -68,7 +68,7 @@ public class MockFileUpload {
      * @param inputStream the input stream that will be read to provide the
      *                    content of the uploaded file
      * @param contentType the content type of the uploaded file
-     * @since 1.1
+     * @since 1.0
      */
     public MockFileUpload(String fileName, InputStream inputStream, String contentType) {
         if (null == fileName) throw new IllegalArgumentException("fileName can't be null.");
@@ -104,7 +104,7 @@ public class MockFileUpload {
      * automatically, then it defaults to <code>text/plain</code>.
      *
      * @return the content type
-     * @since 1.1
+     * @since 1.0
      */
     public String getContentType() {
         return contentType_;

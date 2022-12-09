@@ -22,7 +22,7 @@ import rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErro
  * @author Steven Grimm (koreth[remove] at midwinter dot com)
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.authentication.SessionValidator
- * @since 1.6
+ * @since 1.0
  */
 public class BasicSessionValidator<C extends CredentialsManager, S extends SessionManager, R extends RememberManager> extends AbstractSessionValidator<C, S, R> {
     public boolean isAccessAuthorized(int id) {

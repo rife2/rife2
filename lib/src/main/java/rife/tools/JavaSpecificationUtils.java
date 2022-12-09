@@ -9,14 +9,14 @@ package rife.tools;
  * specification.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.6
+ * @since 1.0
  */
 public abstract class JavaSpecificationUtils {
     /**
      * Retrieves the version of the currently running JVM.
      *
      * @return the version of the current JVM as a double
-     * @since 1.6
+     * @since 1.0
      */
     public static double getVersion() {
         return Double.parseDouble(System.getProperty("java.specification.version"));
@@ -27,7 +27,7 @@ public abstract class JavaSpecificationUtils {
      *
      * @return <code>true</code> if the JVM is complient with JDK 1.5; or
      * <p><code>false</code> otherwise
-     * @since 1.6
+     * @since 1.0
      */
     public static boolean isAtLeastJdk15() {
         return getVersion() >= 1.5;
@@ -38,7 +38,7 @@ public abstract class JavaSpecificationUtils {
      *
      * @return <code>true</code> if the JVM is compliant with JDK 1.6; or
      * <p><code>false</code> otherwise
-     * @since 1.6
+     * @since 1.0
      */
     public static boolean isAtLeastJdk16() {
         return getVersion() >= 1.6;

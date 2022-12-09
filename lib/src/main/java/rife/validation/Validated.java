@@ -77,7 +77,7 @@ public interface Validated {
      * @param rule the rule that will be added
      * @see #validate()
      * @see #getRules()
-     * @since 1.4
+     * @since 1.0
      */
     void addRule(ValidationRule rule);
 
@@ -212,14 +212,14 @@ public interface Validated {
      * <p>By default '<code>this</code>' will be used.
      *
      * @param bean the bean instance that will be validated
-     * @since 1.4
+     * @since 1.0
      */
     void provideValidatedBean(Validated bean);
 
     /**
      * Retrieves the bean instance that will be validated.
      *
-     * @since 1.4
+     * @since 1.0
      */
     Validated retrieveValidatedBean();
 }

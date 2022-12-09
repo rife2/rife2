@@ -16,7 +16,7 @@ import java.lang.reflect.Method;
  * them to not be captured.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.6
+ * @since 1.0
  */
 public class LightweightError extends Error {
     @Serial private static final long serialVersionUID = -6077740593752636392L;

@@ -637,7 +637,7 @@ public class DbConnection implements AutoCloseable {
      * @see rife.database.DbPreparedStatement
      * @see #createStatement()
      * @see #getPreparedStatement(String)
-     * @since 1.2
+     * @since 1.0
      */
     public DbPreparedStatement getPreparedStatement(Query query, int resultSetType, int resultSetConcurrency, int resultSetHoldability)
     throws DatabaseException {

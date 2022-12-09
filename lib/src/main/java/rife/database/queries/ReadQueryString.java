@@ -14,7 +14,7 @@ import rife.database.capabilities.Capabilities;
  * that are provided by {@link rife.database.DbQueryManager}
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.6
+ * @since 1.0
  */
 public class ReadQueryString implements ReadQuery {
     private String sql_ = null;
@@ -22,7 +22,7 @@ public class ReadQueryString implements ReadQuery {
     /**
      * Creates a new empty instance of <code>ReadQueryString</code>.
      *
-     * @since 1.6
+     * @since 1.0
      */
     public ReadQueryString() {
     }
@@ -32,7 +32,7 @@ public class ReadQueryString implements ReadQuery {
      * specified SQL query.
      *
      * @param sql The SQL that should be executed by this query
-     * @since 1.6
+     * @since 1.0
      */
     public ReadQueryString(String sql) {
         setSql(sql);
@@ -43,7 +43,7 @@ public class ReadQueryString implements ReadQuery {
      *
      * @param sql The SQL that should be executed by this query
      * @return this <code>ReadQueryString</code> instance.
-     * @since 1.6
+     * @since 1.0
      */
     public ReadQueryString sql(String sql) {
         setSql(sql);
@@ -54,7 +54,7 @@ public class ReadQueryString implements ReadQuery {
      * Replaces the SQL that is executed by this query.
      *
      * @param sql The SQL that should be executed by this query
-     * @since 1.6
+     * @since 1.0
      */
     public void setSql(String sql) {
         sql_ = sql;

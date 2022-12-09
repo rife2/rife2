@@ -23,7 +23,7 @@ import rife.validation.ValidationError;
  *
  * @author Steven Grimm (koreth[remove] at midwinter dot com)
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 2.0
+ * @since 1.0
  */
 public class Login extends Identified implements SessionAttributes {
     protected final Template template_;
@@ -36,7 +36,7 @@ public class Login extends Identified implements SessionAttributes {
     /**
      * Hook method that is called at the start of the element's execution.
      *
-     * @since 2.0
+     * @since 1.0
      */
     protected void initializeLogin() {
     }
@@ -45,7 +45,7 @@ public class Login extends Identified implements SessionAttributes {
      * Hook method that is called after the template instance has been instantiated.
      *
      * @param template the template instance that has been instantiated
-     * @since 2.0
+     * @since 1.0
      */
     protected void entrance(Template template) {
     }
@@ -56,7 +56,7 @@ public class Login extends Identified implements SessionAttributes {
      *
      * @param template    this authentication element's template
      * @param credentials the credentials object that was invalid
-     * @since 2.0
+     * @since 1.0
      */
     protected void unvalidatedCredentials(Template template, Credentials credentials) {
     }
@@ -66,7 +66,7 @@ public class Login extends Identified implements SessionAttributes {
      * are validated without errors
      *
      * @param credentials the credentials object that was valid
-     * @since 2.0
+     * @since 1.0
      */
     protected void validatedCredentials(Credentials credentials) {
     }
@@ -76,7 +76,7 @@ public class Login extends Identified implements SessionAttributes {
      * <code>CredentialsManager</code> that backs this authentication element.
      *
      * @param credentials the credentials object that was accepted
-     * @since 2.0
+     * @since 1.0
      */
     protected void acceptedCredentials(Credentials credentials) {
     }
@@ -86,7 +86,7 @@ public class Login extends Identified implements SessionAttributes {
      * successfully created.
      *
      * @param userId the user ID of the user that was successfully authenticated
-     * @since 2.0
+     * @since 1.0
      */
     protected void authenticated(long userId) {
     }
@@ -104,7 +104,7 @@ public class Login extends Identified implements SessionAttributes {
      *
      * @param template    this authentication element's template
      * @param credentials the credentials object that was rejected
-     * @since 2.0
+     * @since 1.0
      */
     protected void refusedCredentials(Template template, Credentials credentials) {
         credentials.addValidationError(new ValidationError.INVALID("credentials"));
@@ -122,7 +122,7 @@ public class Login extends Identified implements SessionAttributes {
      * @param template    this authentication element's template
      * @param credentials the credentials object that was used when creating the
      *                    authentication session
-     * @since 2.0
+     * @since 1.0
      */
     protected void sessionCreationError(Template template, Credentials credentials) {
         credentials.addValidationError(new ValidationError.UNEXPECTED("sessioncreation"));

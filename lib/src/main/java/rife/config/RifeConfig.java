@@ -25,7 +25,7 @@ public class RifeConfig {
      * <code>RifeConfig</code> class.
      *
      * @return the singleton <code>RifeConfig</code> instance
-     * @since 2.0
+     * @since 1.0
      */
     public static RifeConfig instance() {
         return RifeConfigSingleton.INSTANCE;

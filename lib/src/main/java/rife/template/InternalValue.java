@@ -187,7 +187,7 @@ public class InternalValue {
      * character sequence cannot be null.
      *
      * @param value a character sequence
-     * @since 1.5
+     * @since 1.0
      */
     public void appendValue(CharSequence value) {
         if (null == value) throw new IllegalArgumentException("value can't be null.");

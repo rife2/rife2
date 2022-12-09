@@ -66,7 +66,7 @@ public abstract class ValidationError implements Cloneable {
      * @param overridable <code>true</code> to make any other error for the same
      *                    subject override this error, <code>false</code> if this error should
      *                    always be shown
-     * @since 1.5
+     * @since 1.0
      */
     public ValidationError(String identifier, String subject, boolean overridable) {
         this(identifier, subject);
@@ -95,7 +95,7 @@ public abstract class ValidationError implements Cloneable {
     /**
      * Returns wether this error is overridable for the same subject.
      *
-     * @since 1.5
+     * @since 1.0
      */
     public final boolean isOverridable() {
         return overridable_;

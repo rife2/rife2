@@ -326,7 +326,7 @@ public interface FormBuilder extends Cloneable {
      *                     are present that use the same bean class or that has overlapping
      *                     property names
      * @return the collection of template value names that have been generated
-     * @since 1.6
+     * @since 1.0
      */
     Collection<String> generateField(Template template, Class propertyType, ConstrainedProperty property, String[] values, String prefix);
 
@@ -373,7 +373,7 @@ public interface FormBuilder extends Cloneable {
      *                     are present that use the same bean class or that has overlapping
      *                     property names
      * @return the collection of template value names that have been generated
-     * @since 1.6
+     * @since 1.0
      */
     Collection<String> generateField(Template template, Class propertyType, String name, String[] values, String prefix);
 
@@ -414,7 +414,7 @@ public interface FormBuilder extends Cloneable {
      *                          are present that use the same bean class or that has overlapping
      *                          property names
      * @return the collection of template value names that have been generated
-     * @since 1.6
+     * @since 1.0
      */
     Collection<String> replaceField(Template template, String templateFieldName, ConstrainedProperty property, String[] values, String prefix);
 
@@ -441,7 +441,7 @@ public interface FormBuilder extends Cloneable {
      *                          are present that use the same bean class or that has overlapping
      *                          property names
      * @return the collection of template value names that have been generated
-     * @since 1.6
+     * @since 1.0
      */
     Collection<String> replaceField(Template template, String templateFieldName, Class propertyType, ConstrainedProperty property, String[] values, String prefix);
 
@@ -468,7 +468,7 @@ public interface FormBuilder extends Cloneable {
      *                          property names
      * @return the collection of template value names that have been generated
      * @see #replaceField(Template, String, ConstrainedProperty, String[], String)
-     * @since 1.6
+     * @since 1.0
      */
     Collection<String> replaceField(Template template, String templateFieldName, String name, String[] values, String prefix);
 
@@ -496,7 +496,7 @@ public interface FormBuilder extends Cloneable {
      *                          property names
      * @return the collection of template value names that have been generated
      * @see #replaceField(Template, String, ConstrainedProperty, String[], String)
-     * @since 1.6
+     * @since 1.0
      */
     Collection<String> replaceField(Template template, String templateFieldName, Class propertyType, String name, String[] values, String prefix);
 
@@ -546,7 +546,7 @@ public interface FormBuilder extends Cloneable {
      * @param templateFieldName the that is use in the template values to
      *                          identify the property that has to be cleared
      * @see #replaceField(Template, String, ConstrainedProperty, String[], String)
-     * @since 1.6
+     * @since 1.0
      */
     void removeField(Template template, String templateFieldName);
 

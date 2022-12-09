@@ -15,7 +15,7 @@ import java.lang.annotation.*;
  * contain the path of the temporary uploaded file.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 2.0
+ * @since 1.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
@@ -24,7 +24,7 @@ public @interface FileUpload {
     /**
      * The name of the uploaded file.
      *
-     * @since 2.0
+     * @since 1.0
      */
     String value() default "";
 }

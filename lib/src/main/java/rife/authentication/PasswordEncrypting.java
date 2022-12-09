@@ -13,7 +13,7 @@ import rife.tools.StringEncryptor;
  *
  * @author Steven Grimm (koreth[remove] at midwinter dot com)
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.6
+ * @since 1.0
  */
 public interface PasswordEncrypting {
     /**
@@ -21,7 +21,7 @@ public interface PasswordEncrypting {
      * manager's passwords.
      *
      * @param passwordEncryptor the password ecryptor that will be used
-     * @since 1.6
+     * @since 1.0
      */
     void setPasswordEncryptor(StringEncryptor passwordEncryptor);
 }

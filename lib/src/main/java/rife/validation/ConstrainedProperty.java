@@ -135,7 +135,7 @@ public class ConstrainedProperty implements Cloneable {
      * {@code ConstrainedPropertyListener} interface.
      *
      * @param listener the listener instance that will be added
-     * @since 1.6
+     * @since 1.0
      */
     public void addListener(ConstrainedPropertyListener listener) {
         if (null == listener) {
@@ -161,7 +161,7 @@ public class ConstrainedProperty implements Cloneable {
      * @param listener the listener instance that will be removed
      * @return {@code true} when the listener could be found and has been removed; or
      * <p>{@code false} when the listener wasn't registered before
-     * @since 1.6
+     * @since 1.0
      */
     public boolean removeListener(ConstrainedPropertyListener listener) {
         if (null == listeners_) {
@@ -2144,7 +2144,7 @@ public class ConstrainedProperty implements Cloneable {
      * @see #constraint
      * @see #getConstraint
      * @see #getConstraints
-     * @since 1.4
+     * @since 1.0
      */
     public void setConstraint(String name, Object constraintData) {
         synchronized (constraints_) {
@@ -2164,7 +2164,7 @@ public class ConstrainedProperty implements Cloneable {
      * @see #setConstraint
      * @see #getConstraint
      * @see #getConstraints
-     * @since 1.4
+     * @since 1.0
      */
     public ConstrainedProperty constraint(String name, Object constraintData) {
         setConstraint(name, constraintData);
@@ -2182,7 +2182,7 @@ public class ConstrainedProperty implements Cloneable {
      * @see #setConstraint
      * @see #constraint
      * @see #getConstraints
-     * @since 1.4
+     * @since 1.0
      */
     public Object getConstraint(String name) {
         return constraints_.get(name);
@@ -2195,7 +2195,7 @@ public class ConstrainedProperty implements Cloneable {
      * @see #setConstraint
      * @see #constraint
      * @see #getConstraint
-     * @since 1.4
+     * @since 1.0
      */
     public Map<String, Object> getConstraints() {
         return constraints_;

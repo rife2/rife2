@@ -16,7 +16,7 @@ import java.util.Map;
  * {@link ParsedHtml#parse}.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 2.0
+ * @since 1.0
  */
 public class MockLink {
     private final MockResponse response_;
@@ -41,7 +41,7 @@ public class MockLink {
      * Retrieves the JSoup element that this link corresponds to.
      *
      * @return the corresponding JSoup element
-     * @since 2.0
+     * @since 1.0
      */
     public Element getElement() {
         return element_;
@@ -52,7 +52,7 @@ public class MockLink {
      * link.
      *
      * @return the created <code>MockRequest</code>
-     * @since 2.0
+     * @since 1.0
      */
     public MockRequest getRequest() {
         return new MockRequest().method(RequestMethod.GET);
@@ -62,7 +62,7 @@ public class MockLink {
      * Follow this link with its current parameters and returns the response.
      *
      * @return the resulting {@link MockResponse}
-     * @since 2.0
+     * @since 1.0
      */
     public MockResponse follow() {
         return response_.getMockConversation().doRequest(getHref(), getRequest());
@@ -81,7 +81,7 @@ public class MockLink {
      * @see #hasParameter
      * @see #getParameterValue
      * @see #getParameterValues
-     * @since 2.0
+     * @since 1.0
      */
     public Map<String, String[]> getParameters() {
         return parameters_;
@@ -95,7 +95,7 @@ public class MockLink {
      * @see #hasParameter
      * @see #getParameterValue
      * @see #getParameterValues
-     * @since 2.0
+     * @since 1.0
      */
     public Collection<String> getParameterNames() {
         return parameters_.keySet();
@@ -111,7 +111,7 @@ public class MockLink {
      * @see #getParameterNames
      * @see #getParameterValue
      * @see #getParameterValues
-     * @since 2.0
+     * @since 1.0
      */
     public boolean hasParameter(String name) {
         return parameters_.containsKey(name);
@@ -127,7 +127,7 @@ public class MockLink {
      * @see #getParameterNames
      * @see #hasParameter
      * @see #getParameterValues
-     * @since 2.0
+     * @since 1.0
      */
     public String getParameterValue(String name) {
         String[] values = getParameterValues(name);
@@ -149,7 +149,7 @@ public class MockLink {
      * @see #getParameterNames
      * @see #hasParameter
      * @see #getParameterValue
-     * @since 2.0
+     * @since 1.0
      */
     public String[] getParameterValues(String name) {
         return parameters_.get(name);
@@ -160,7 +160,7 @@ public class MockLink {
      *
      * @return the content of the <code>id</code> attribute; or
      * <p>null if no such attribute could be found
-     * @since 2.0
+     * @since 1.0
      */
     public String getId() {
         return getAttribute("id");
@@ -171,7 +171,7 @@ public class MockLink {
      *
      * @return the content of the <code>class</code> attribute; or
      * <p>null if no such attribute could be found
-     * @since 2.0
+     * @since 1.0
      */
     public String getClassName() {
         return getAttribute("class");
@@ -182,7 +182,7 @@ public class MockLink {
      *
      * @return the content of the <code>title</code> attribute; or
      * <p>null if no such attribute could be found
-     * @since 2.0
+     * @since 1.0
      */
     public String getTitle() {
         return getAttribute("title");
@@ -193,7 +193,7 @@ public class MockLink {
      *
      * @return the content of the <code>href</code> attribute; or
      * <p>null if no such attribute could be found
-     * @since 2.0
+     * @since 1.0
      */
     public String getHref() {
         return getAttribute("href");
@@ -204,7 +204,7 @@ public class MockLink {
      *
      * @return the content of the <code>target</code> attribute; or
      * <p>null if no such attribute could be found
-     * @since 2.0
+     * @since 1.0
      */
     public String getTarget() {
         return getAttribute("target");
@@ -215,7 +215,7 @@ public class MockLink {
      *
      * @return the content of the <code>name</code> attribute; or
      * <p>null if no such attribute could be found
-     * @since 2.0
+     * @since 1.0
      */
     public String getName() {
         return getAttribute("name");
@@ -225,7 +225,7 @@ public class MockLink {
      * Retrieves the text that this links surrounds.
      *
      * @return the surrounded text
-     * @since 2.0
+     * @since 1.0
      */
     public String getText() {
         return text_;

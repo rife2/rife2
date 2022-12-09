@@ -478,7 +478,7 @@ public class Context {
      * @param route the route to which the request will be redirected
      * @throws rife.engine.exceptions.RedirectException an exception that is used to immediately interrupt the execution, don't
      *                                                  catch this exception
-     * @since 2.0
+     * @since 1.0
      */
     public void redirect(Route route)
     throws RedirectException {
@@ -491,7 +491,7 @@ public class Context {
      *
      * @throws rife.engine.exceptions.RespondException an exception that is used to immediately interrupt the execution, don't
      *                                                 catch this exception
-     * @since 2.0
+     * @since 1.0
      */
     public void respond() {
         throw new RespondException();
@@ -503,7 +503,7 @@ public class Context {
      *
      * @throws rife.engine.exceptions.NextException an exception that is used to immediately interrupt the execution, don't
      *                                              catch this exception
-     * @since 2.0
+     * @since 1.0
      */
     public void next() {
         throw new NextException();
@@ -522,7 +522,7 @@ public class Context {
     /**
      * See {@link Request#getMethod()}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public RequestMethod method() {
         return request_.getMethod();
@@ -531,7 +531,7 @@ public class Context {
     /**
      * See {@link Request#getParameters()}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public Map<String, String[]> parameters() {
         return parameters_;
@@ -566,7 +566,7 @@ public class Context {
      * @see #parameter(String, String)
      * @see #parameterValues(String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public boolean isParameterEmpty(String name) {
         var parameter = parameter(name);
@@ -585,7 +585,7 @@ public class Context {
      * @see #parameter(String, String)
      * @see #parameterValues(String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public String parameter(String name) {
         var parameters = parameters().get(name);
@@ -609,7 +609,7 @@ public class Context {
      * @see #parameter(String)
      * @see #parameterValues(String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public String parameter(String name, String defaultValue) {
         var value = parameter(name);
@@ -628,7 +628,7 @@ public class Context {
      * @see #isParameterEmpty(String)
      * @see #parameter(String)
      * @see #parameter(String, String)
-     * @since 2.0
+     * @since 1.0
      */
     public Set<String> parameterNames() {
         return parameters().keySet();
@@ -643,7 +643,7 @@ public class Context {
      * @see #parameter(String)
      * @see #parameter(String, String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public String[] parameterValues(String name) {
         return parameters().get(name);
@@ -662,7 +662,7 @@ public class Context {
      * @see #parameter(String, String)
      * @see #parameterValues(String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public boolean parameterBoolean(String name) {
         return parameterBoolean(name, DEFAULT_BOOLEAN);
@@ -683,7 +683,7 @@ public class Context {
      * @see #parameter(String, String)
      * @see #parameterValues(String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public boolean parameterBoolean(String name, boolean defaultValue) {
         var value = parameter(name);
@@ -707,7 +707,7 @@ public class Context {
      * @see #parameter(String, String)
      * @see #parameterValues(String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public int parameterInt(String name) {
         return parameterInt(name, DEFAULT_INTEGER);
@@ -728,7 +728,7 @@ public class Context {
      * @see #parameter(String, String)
      * @see #parameterValues(String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public int parameterInt(String name, int defaultValue) {
         var value = parameter(name);
@@ -755,7 +755,7 @@ public class Context {
      * @see #parameter(String, String)
      * @see #parameterValues(String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public long parameterLong(String name) {
         return parameterLong(name, DEFAULT_LONG);
@@ -803,7 +803,7 @@ public class Context {
      * @see #parameter(String, String)
      * @see #parameterValues(String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public double parameterDouble(String name) {
         return parameterDouble(name, DEFAULT_DOUBLE);
@@ -990,7 +990,7 @@ public class Context {
      * @see #parameter(String, String)
      * @see #parameterValues(String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public <BeanType> BeanType parametersBean(Class<BeanType> beanClass)
     throws EngineException {
@@ -1016,7 +1016,7 @@ public class Context {
      * @see #parameter(String, String)
      * @see #parameterValues(String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public <BeanType> BeanType parametersBean(Class<BeanType> beanClass, String prefix)
     throws EngineException {
@@ -1061,7 +1061,7 @@ public class Context {
      * @see #parameter(String, String)
      * @see #parameterValues(String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public void parametersBean(Object bean)
     throws EngineException {
@@ -1084,7 +1084,7 @@ public class Context {
      * @see #parameter(String, String)
      * @see #parameterValues(String)
      * @see #parameterNames()
-     * @since 2.0
+     * @since 1.0
      */
     public void parametersBean(Object bean, String prefix)
     throws EngineException {
@@ -1122,7 +1122,7 @@ public class Context {
     /**
      * See {@link Request#getBody()}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public String body() {
         return request_.getBody();
@@ -1131,7 +1131,7 @@ public class Context {
     /**
      * See {@link Request#getBodyAsBytes()}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public byte[] bodyAsBytes() {
         return request_.getBodyAsBytes();
@@ -1145,7 +1145,7 @@ public class Context {
      * @see #isFileEmpty(String)
      * @see #file(String)
      * @see #files(String)
-     * @since 2.0
+     * @since 1.0
      */
     public Set<String> fileNames() {
         return files().keySet();
@@ -1159,7 +1159,7 @@ public class Context {
      * @see #hasFile(String)
      * @see #file(String)
      * @see #files(String)
-     * @since 2.0
+     * @since 1.0
      */
     public boolean isFileEmpty(String name) {
         try (final var file = file(name)) {
@@ -1172,7 +1172,7 @@ public class Context {
     /**
      * See {@link Request#getFiles()}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public Map<String, UploadedFile[]> files() {
         if (request_.getFiles() == null) {
@@ -1185,7 +1185,7 @@ public class Context {
     /**
      * See {@link Request#hasFile}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public boolean hasFile(String name) {
         return request_.hasFile(name);
@@ -1194,7 +1194,7 @@ public class Context {
     /**
      * See {@link Request#getFile}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public UploadedFile file(String name) {
         return request_.getFile(name);
@@ -1203,7 +1203,7 @@ public class Context {
     /**
      * See {@link Request#getFiles}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public UploadedFile[] files(String name) {
         return request_.getFiles(name);
@@ -1212,7 +1212,7 @@ public class Context {
     /**
      * See {@link Request#getServerRootUrl}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public String serverRootUrl(int port) {
         return request_.getServerRootUrl(port);
@@ -1221,7 +1221,7 @@ public class Context {
     /**
      * See {@link Request#hasCookie}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public boolean hasCookie(String name) {
         return request_.hasCookie(name);
@@ -1230,7 +1230,7 @@ public class Context {
     /**
      * See {@link Request#getCookie}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public Cookie cookie(String name) {
         return request_.getCookie(name);
@@ -1239,7 +1239,7 @@ public class Context {
     /**
      * See {@link Request#getCookies()}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public Cookie[] cookies() {
         return request_.getCookies();
@@ -1256,7 +1256,7 @@ public class Context {
      * @see #cookieValue(String, String)
      * @see #cookieValues()
      * @see #addCookie(Cookie)
-     * @since 2.0
+     * @since 1.0
      */
     public String cookieValue(String name) {
         var cookie = cookie(name);
@@ -1277,7 +1277,7 @@ public class Context {
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #addCookie(Cookie)
-     * @since 2.0
+     * @since 1.0
      */
     public Map<String, String> cookieValues() {
         Map<String, String> result = new HashMap<>();
@@ -1304,7 +1304,7 @@ public class Context {
      * @see #cookieValue(String, String)
      * @see #cookieValues()
      * @see #addCookie(Cookie)
-     * @since 2.0
+     * @since 1.0
      */
     public String cookieValue(String name, String defaultValue) {
         var value = cookieValue(name);
@@ -1327,7 +1327,7 @@ public class Context {
      * @see #cookieValue(String, String)
      * @see #cookieValues()
      * @see #addCookie(Cookie)
-     * @since 2.0
+     * @since 1.0
      */
     public boolean cookieBoolean(String name) {
         return cookieBoolean(name, DEFAULT_BOOLEAN);
@@ -1348,7 +1348,7 @@ public class Context {
      * @see #cookieValue(String, String)
      * @see #cookieValues()
      * @see #addCookie(Cookie)
-     * @since 2.0
+     * @since 1.0
      */
     public boolean cookieBoolean(String name, boolean defaultValue) {
         var value = cookieValue(name);
@@ -1372,7 +1372,7 @@ public class Context {
      * @see #cookieValue(String, String)
      * @see #cookieValues()
      * @see #addCookie(Cookie)
-     * @since 2.0
+     * @since 1.0
      */
     public int cookieInt(String name) {
         return cookieInt(name, DEFAULT_INTEGER);
@@ -1393,7 +1393,7 @@ public class Context {
      * @see #cookieValue(String, String)
      * @see #cookieValues()
      * @see #addCookie(Cookie)
-     * @since 2.0
+     * @since 1.0
      */
     public int cookieInt(String name, int defaultValue) {
         var value = cookieValue(name);
@@ -1420,7 +1420,7 @@ public class Context {
      * @see #cookieValue(String, String)
      * @see #cookieValues()
      * @see #addCookie(Cookie)
-     * @since 2.0
+     * @since 1.0
      */
     public long cookieLong(String name) {
         return cookieLong(name, DEFAULT_LONG);
@@ -1441,7 +1441,7 @@ public class Context {
      * @see #cookieValue(String, String)
      * @see #cookieValues()
      * @see #addCookie(Cookie)
-     * @since 2.0
+     * @since 1.0
      */
     public long cookieLong(String name, long defaultValue) {
         var value = cookieValue(name);
@@ -1468,7 +1468,7 @@ public class Context {
      * @see #cookieValue(String, String)
      * @see #cookieValues()
      * @see #addCookie(Cookie)
-     * @since 2.0
+     * @since 1.0
      */
     public double cookieDouble(String name) {
         return cookieDouble(name, DEFAULT_DOUBLE);
@@ -1489,7 +1489,7 @@ public class Context {
      * @see #cookieValue(String, String)
      * @see #cookieValues()
      * @see #addCookie(Cookie)
-     * @since 2.0
+     * @since 1.0
      */
     public double cookieDouble(String name, double defaultValue) {
         var value = cookieValue(name);
@@ -1516,7 +1516,7 @@ public class Context {
      * @see #cookieValue(String, String)
      * @see #cookieValues()
      * @see #addCookie(Cookie)
-     * @since 2.0
+     * @since 1.0
      */
     public float cookieFloat(String name) {
         return cookieFloat(name, DEFAULT_FLOAT);
@@ -1537,7 +1537,7 @@ public class Context {
      * @see #cookieValue(String, String)
      * @see #cookieValues()
      * @see #addCookie(Cookie)
-     * @since 2.0
+     * @since 1.0
      */
     public float cookieFloat(String name, float defaultValue) {
         var value = cookieValue(name);
@@ -1554,7 +1554,7 @@ public class Context {
     /**
      * See {@link Request#getAttribute}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public Object attribute(String name) {
         return request_.getAttribute(name);
@@ -1563,7 +1563,7 @@ public class Context {
     /**
      * See {@link Request#hasAttribute}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public boolean hasAttribute(String name) {
         return request_.hasAttribute(name);
@@ -1572,7 +1572,7 @@ public class Context {
     /**
      * See {@link Request#getAttributeNames}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public List<String> attributeNames() {
         return Collections.list(request_.getAttributeNames());
@@ -1581,7 +1581,7 @@ public class Context {
     /**
      * See {@link Request#removeAttribute}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void removeAttribute(String name) {
         request_.removeAttribute(name);
@@ -1590,7 +1590,7 @@ public class Context {
     /**
      * See {@link Request#setAttribute}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void setAttribute(String name, Object object) {
         request_.setAttribute(name, object);
@@ -1599,7 +1599,7 @@ public class Context {
     /**
      * See {@link Request#getCharacterEncoding}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public String characterEncoding() {
         return request_.getCharacterEncoding();
@@ -1608,7 +1608,7 @@ public class Context {
     /**
      * See {@link Request#getContentType}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public String contentType() {
         return request_.getContentType();
@@ -1617,7 +1617,7 @@ public class Context {
     /**
      * See {@link Request#getDateHeader}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public long headerDate(String name) {
         return request_.getDateHeader(name);
@@ -1626,7 +1626,7 @@ public class Context {
     /**
      * See {@link Request#getHeader}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public String header(String name) {
         return request_.getHeader(name);
@@ -1635,7 +1635,7 @@ public class Context {
     /**
      * See {@link Request#getHeaderNames}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public List<String> headerNames() {
         return Collections.list(request_.getHeaderNames());
@@ -1644,7 +1644,7 @@ public class Context {
     /**
      * See {@link Request#getHeaders}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public List<String> headers(String name) {
         return Collections.list(request_.getHeaders(name));
@@ -1653,7 +1653,7 @@ public class Context {
     /**
      * See {@link Request#getIntHeader}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public int headerInt(String name) {
         return request_.getIntHeader(name);
@@ -1662,7 +1662,7 @@ public class Context {
     /**
      * See {@link Request#getLocale}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public Locale locale() {
         return request_.getLocale();
@@ -1671,7 +1671,7 @@ public class Context {
     /**
      * See {@link Request#getLocales}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public List<Locale> locales() {
         return Collections.list(request_.getLocales());
@@ -1680,7 +1680,7 @@ public class Context {
     /**
      * See {@link Request#getProtocol}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public String protocol() {
         return request_.getProtocol();
@@ -1689,7 +1689,7 @@ public class Context {
     /**
      * See {@link Request#getRemoteAddr}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public String remoteAddr() {
         return request_.getRemoteAddr();
@@ -1698,7 +1698,7 @@ public class Context {
     /**
      * See {@link Request#getRemoteUser}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public String remoteUser() {
         return request_.getRemoteUser();
@@ -1707,7 +1707,7 @@ public class Context {
     /**
      * See {@link Request#getRemoteHost}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public String remoteHost() {
         return request_.getRemoteHost();
@@ -1716,7 +1716,7 @@ public class Context {
     /**
      * See {@link Request#getRequestDispatcher}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public RequestDispatcher requestDispatcher(String url) {
         return request_.getRequestDispatcher(url);
@@ -1725,7 +1725,7 @@ public class Context {
     /**
      * See {@link Request#getSession}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public HttpSession session() {
         return request_.getSession();
@@ -1734,7 +1734,7 @@ public class Context {
     /**
      * See {@link Request#getSession(boolean)}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public HttpSession session(boolean create) {
         return request_.getSession(create);
@@ -1743,7 +1743,7 @@ public class Context {
     /**
      * See {@link Request#getServerPort}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public int serverPort() {
         return request_.getServerPort();
@@ -1752,7 +1752,7 @@ public class Context {
     /**
      * See {@link Request#getScheme}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public String scheme() {
         return request_.getScheme();
@@ -1761,7 +1761,7 @@ public class Context {
     /**
      * See {@link Request#getServerName}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public String serverName() {
         return request_.getServerName();
@@ -1770,7 +1770,7 @@ public class Context {
     /**
      * See {@link Request#getContextPath}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public String contextPath() {
         return request_.getContextPath();
@@ -1779,7 +1779,7 @@ public class Context {
     /**
      * See {@link Request#isSecure}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public boolean secure() {
         return request_.isSecure();
@@ -1801,7 +1801,7 @@ public class Context {
      * @see #textBufferEnabled()
      * @see #flush()
      * @see #clearBuffer()
-     * @since 2.0
+     * @since 1.0
      */
     public void enableTextBuffer(boolean enabled) {
         response_.enableTextBuffer(enabled);
@@ -1824,7 +1824,7 @@ public class Context {
     /**
      * See {@link Response#clearBuffer()}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void clearBuffer() {
         response_.clearBuffer();
@@ -1833,7 +1833,7 @@ public class Context {
     /**
      * See {@link Response#flush()}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void flush() {
         response_.flush();
@@ -1842,7 +1842,7 @@ public class Context {
     /**
      * See {@link Response#getOutputStream()}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public OutputStream outputStream() {
         return response_.getOutputStream();
@@ -1851,7 +1851,7 @@ public class Context {
     /**
      * See {@link Response#setContentType(String)}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void setContentType(String contentType) {
         response_.setContentType(contentType);
@@ -1860,7 +1860,7 @@ public class Context {
     /**
      * See {@link Response#setLocale(Locale)}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void setLocale(Locale locale) {
         response_.setLocale(locale);
@@ -1869,7 +1869,7 @@ public class Context {
     /**
      * See {@link Response#setContentLength(int)}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void setContentLength(int length) {
         response_.setContentLength(length);
@@ -1878,7 +1878,7 @@ public class Context {
     /**
      * See {@link Response#addCookie(Cookie)}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void addCookie(Cookie cookie) {
         response_.addCookie(cookie);
@@ -1889,7 +1889,7 @@ public class Context {
      * This method can be called multiple times to set more than one cookie.
      *
      * @param builder the <code>CookieBuilder</code> to use for building the <code>Cookie</code>
-     * @since 2.0
+     * @since 1.0
      */
     public void addCookie(CookieBuilder builder) {
         response_.addCookie(builder.cookie());
@@ -1899,7 +1899,7 @@ public class Context {
      * Removes a cookie.
      *
      * @param name name of the cookie
-     * @since 2.0
+     * @since 1.0
      */
     public void removeCookie(String name) {
         removeCookie(null, name);
@@ -1910,7 +1910,7 @@ public class Context {
      *
      * @param path path of the cookie
      * @param name name of the cookie
-     * @since 2.0
+     * @since 1.0
      */
     public void removeCookie(String path, String name) {
         var cookie = new Cookie(name, "");
@@ -1922,7 +1922,7 @@ public class Context {
     /**
      * See {@link Response#addHeader(String, String)}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void addHeader(String name, String value) {
         response_.addHeader(name, value);
@@ -1931,7 +1931,7 @@ public class Context {
     /**
      * See {@link Response#addDateHeader(String, long)}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void addHeader(String name, long date) {
         response_.addDateHeader(name, date);
@@ -1940,7 +1940,7 @@ public class Context {
     /**
      * See {@link Response#addIntHeader(String, int)}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void addHeader(String name, int integer) {
         response_.addIntHeader(name, integer);
@@ -1949,7 +1949,7 @@ public class Context {
     /**
      * See {@link Response#setStatus(int)}.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void setStatus(int statusCode) {
         response_.setStatus(statusCode);

@@ -21,7 +21,7 @@ import rife.template.Template;
  * able to send a response to the client.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.1
+ * @since 1.0
  */
 public interface Response {
     /**
@@ -31,7 +31,7 @@ public interface Response {
      *
      * @param element an element that has been executed in the context of this
      *                response
-     * @since 1.1
+     * @since 1.0
      */
     void setLastElement(Element element);
 
@@ -39,7 +39,7 @@ public interface Response {
      * Retrieves the element that was last processed with
      *
      * @return the last element
-     * @since 2.0
+     * @since 1.0
      */
     Element getLastElement();
 
@@ -50,7 +50,7 @@ public interface Response {
      *
      * @param enabled <code>true</code> to enable the text buffer; or
      *                <p><code>false</code> to disable it
-     * @since 1.1
+     * @since 1.0
      */
     void enableTextBuffer(boolean enabled);
 
@@ -59,7 +59,7 @@ public interface Response {
      *
      * @return <code>true</code> when the text buffer is enabled; or
      * <p><code>false</code> when it is disabled.
-     * @since 1.1
+     * @since 1.0
      */
     boolean isTextBufferEnabled();
 
@@ -71,7 +71,7 @@ public interface Response {
      *                                                occurs during the output of the template content
      * @see #print(Collection)
      * @see #print(Object)
-     * @since 1.1
+     * @since 1.0
      */
     void print(Template template)
     throws EngineException;
@@ -84,7 +84,7 @@ public interface Response {
      *                                                occurs during the output of the text snippets
      *                                                //     * @see #print(Template)
      * @see #print(Object)
-     * @since 1.1
+     * @since 1.0
      */
     void print(Collection<CharSequence> deferredContent)
     throws EngineException;
@@ -99,7 +99,7 @@ public interface Response {
      *                                                occurs during the output of the content
      *                                                //     * @see #print(Template)
      * @see #print(Collection)
-     * @since 1.1
+     * @since 1.0
      */
     void print(Object value)
     throws EngineException;
@@ -108,7 +108,7 @@ public interface Response {
      * Clears the text buffer is it's enabled.
      * <p>If the text buffer is disabled, this method does nothing.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void clearBuffer();
 
@@ -117,7 +117,7 @@ public interface Response {
      * <p>If the text buffer is enabled, this will flush its content to the
      * output stream first.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void flush()
     throws EngineException;
@@ -126,7 +126,7 @@ public interface Response {
      * Closed the content output stream.
      * <p>All content is {@link #flush flushed} first.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void close()
     throws EngineException;
@@ -134,7 +134,7 @@ public interface Response {
     /**
      * See {@link HttpServletResponse#getOutputStream()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     OutputStream getOutputStream()
     throws EngineException;
@@ -142,7 +142,7 @@ public interface Response {
     /**
      * See {@link HttpServletResponse#getWriter()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     PrintWriter getWriter()
     throws IOException;
@@ -150,7 +150,7 @@ public interface Response {
     /**
      * See {@link HttpServletResponse#setContentType(String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void setContentType(String contentType);
 
@@ -161,7 +161,7 @@ public interface Response {
      * @return <code>true</code> if it has been set; or
      * <p><code>false</code> otherwise
      * @see #setContentType
-     * @since 1.3
+     * @since 1.0
      */
     boolean isContentTypeSet();
 
@@ -171,35 +171,35 @@ public interface Response {
      * @return the content type as a String; or
      * <p><code>null</code> if the content type wasn't set
      * @see #setContentType
-     * @since 1.5.1
+     * @since 1.0
      */
     String getContentType();
 
     /**
      * See {@link HttpServletResponse#setLocale(Locale)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void setLocale(Locale locale);
 
     /**
      * See {@link HttpServletResponse#getLocale()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     Locale getLocale();
 
     /**
      * See {@link HttpServletResponse#getCharacterEncoding()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     String getCharacterEncoding();
 
     /**
      * See {@link HttpServletResponse#setContentLength(int)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void setContentLength(int length)
     throws EngineException;
@@ -207,42 +207,42 @@ public interface Response {
     /**
      * See {@link HttpServletResponse#addCookie(Cookie)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void addCookie(Cookie cookie);
 
     /**
      * See {@link HttpServletResponse#addHeader(String, String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void addHeader(String name, String value);
 
     /**
      * See {@link HttpServletResponse#addDateHeader(String, long)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void addDateHeader(String name, long date);
 
     /**
      * See {@link HttpServletResponse#addIntHeader(String, int)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void addIntHeader(String name, int integer);
 
     /**
      * See {@link HttpServletResponse#containsHeader(String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     boolean containsHeader(String name);
 
     /**
      * See {@link HttpServletResponse#sendError(int)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void sendError(int statusCode)
     throws EngineException;
@@ -250,7 +250,7 @@ public interface Response {
     /**
      * See {@link HttpServletResponse#sendError(int, String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void sendError(int statusCode, String message)
     throws EngineException;
@@ -258,7 +258,7 @@ public interface Response {
     /**
      * See {@link HttpServletResponse#sendRedirect(String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void sendRedirect(String location)
     throws EngineException;
@@ -266,35 +266,35 @@ public interface Response {
     /**
      * See {@link HttpServletResponse#setDateHeader(String, long)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void setDateHeader(String name, long date);
 
     /**
      * See {@link HttpServletResponse#setHeader(String, String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void setHeader(String name, String value);
 
     /**
      * See {@link HttpServletResponse#setIntHeader(String, int)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void setIntHeader(String name, int value);
 
     /**
      * See {@link HttpServletResponse#setStatus(int)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void setStatus(int statusCode);
 
     /**
      * See {@link HttpServletResponse#encodeURL(String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     String encodeURL(String url);
 
@@ -304,7 +304,7 @@ public interface Response {
      * @return the underlying <code>HttpServletResponse</code> instance; or
      * <p><code>null</code> if this response isn't backed by
      * <code>HttpServletResponse</code>
-     * @since 1.1
+     * @since 1.0
      */
     HttpServletResponse getHttpServletResponse();
 }

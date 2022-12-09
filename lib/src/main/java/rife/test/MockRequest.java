@@ -28,7 +28,7 @@ import rife.tools.exceptions.FileUtilsErrorException;
  * web application outside a servlet container.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.1
+ * @since 1.0
  */
 public class MockRequest implements Request {
     private static final String
@@ -100,7 +100,7 @@ public class MockRequest implements Request {
      * @param method the method that will be used by this request
      * @see #getMethod
      * @see #method
-     * @since 1.1
+     * @since 1.0
      */
     public void setMethod(RequestMethod method) {
         if (null == method) throw new IllegalArgumentException("method can't be null");
@@ -115,7 +115,7 @@ public class MockRequest implements Request {
      * @return this <code>MockRequest</code> instance
      * @see #getMethod
      * @see #setMethod
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest method(RequestMethod method) {
         setMethod(method);
@@ -133,7 +133,7 @@ public class MockRequest implements Request {
      * @see #setParameters
      * @see #setParameter(String, String[])
      * @see #setParameter(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public boolean hasParameter(String name) {
         return parameters_.containsKey(name);
@@ -148,7 +148,7 @@ public class MockRequest implements Request {
      * @see #setParameters
      * @see #setParameter(String, String[])
      * @see #setParameter(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public Map<String, String[]> getParameters() {
         return parameters_;
@@ -163,7 +163,7 @@ public class MockRequest implements Request {
      * @see #getParameters
      * @see #setParameter(String, String[])
      * @see #setParameter(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public void setParameters(Map<String, String[]> parameters) {
         if (null == parameters) {
@@ -186,7 +186,7 @@ public class MockRequest implements Request {
      * @see #setParameters
      * @see #setParameter(String, String[])
      * @see #setParameter(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest parameters(Map<String, String[]> parameters) {
         setParameters(parameters);
@@ -203,7 +203,7 @@ public class MockRequest implements Request {
      * @see #getParameters
      * @see #setParameters
      * @see #setParameter(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public void setParameter(String name, String[] values) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -227,7 +227,7 @@ public class MockRequest implements Request {
      * @see #setParameters
      * @see #setParameter(String, String[])
      * @see #setParameter(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest parameter(String name, String[] values) {
         setParameter(name, values);
@@ -244,7 +244,7 @@ public class MockRequest implements Request {
      * @see #getParameters
      * @see #setParameters
      * @see #setParameter(String, String[])
-     * @since 1.1
+     * @since 1.0
      */
     public void setParameter(String name, String value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -265,7 +265,7 @@ public class MockRequest implements Request {
      * @see #setParameters
      * @see #setParameter(String, String[])
      * @see #setParameter(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest parameter(String name, String value) {
         setParameter(name, value);
@@ -281,7 +281,7 @@ public class MockRequest implements Request {
      * @see #getBody
      * @see #bodyAsBytes
      * @see #getBodyAsBytes
-     * @since 2.0
+     * @since 1.0
      */
     public void setBody(String body) {
         body_ = body;
@@ -301,7 +301,7 @@ public class MockRequest implements Request {
      * @see #getBody
      * @see #bodyAsBytes
      * @see #getBodyAsBytes
-     * @since 2.0
+     * @since 1.0
      */
     public MockRequest body(String body) {
         setBody(body);
@@ -326,7 +326,7 @@ public class MockRequest implements Request {
      * @see #getBody
      * @see #bodyAsBytes
      * @see #getBodyAsBytes
-     * @since 2.0
+     * @since 1.0
      */
     public void setBodyAsBytes(byte[] bytes) {
         body_ = null;
@@ -343,7 +343,7 @@ public class MockRequest implements Request {
      * @see #getBody
      * @see #setBodyAsBytes
      * @see #getBodyAsBytes
-     * @since 2.0
+     * @since 1.0
      */
     public MockRequest bodyAsBytes(byte[] bytes) {
         setBodyAsBytes(bytes);
@@ -435,7 +435,7 @@ public class MockRequest implements Request {
      * @see #getFiles
      * @see #setFiles(Map)
      * @see #setFiles(String, MockFileUpload[])
-     * @since 1.1
+     * @since 1.0
      */
     public void setFile(String name, MockFileUpload file) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -455,7 +455,7 @@ public class MockRequest implements Request {
      * @see #getFiles
      * @see #setFile(String, MockFileUpload)
      * @see #setFiles(String, MockFileUpload[])
-     * @since 1.1
+     * @since 1.0
      */
     public void setFiles(Map<String, MockFileUpload[]> files) {
         if (null == files ||
@@ -478,7 +478,7 @@ public class MockRequest implements Request {
      * @see #getFiles
      * @see #setFile(String, MockFileUpload)
      * @see #setFiles(Map)
-     * @since 1.1
+     * @since 1.0
      */
     public void setFiles(String name, MockFileUpload[] files) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -562,7 +562,7 @@ public class MockRequest implements Request {
      * @see #setFile(String, MockFileUpload)
      * @see #setFiles(Map)
      * @see #setFiles(String, MockFileUpload[])
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest file(String name, MockFileUpload file) {
         setFile(name, file);
@@ -582,7 +582,7 @@ public class MockRequest implements Request {
      * @see #setFile(String, MockFileUpload)
      * @see #setFiles(Map)
      * @see #setFiles(String, MockFileUpload[])
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest files(Map<String, MockFileUpload[]> files) {
         setFiles(files);
@@ -602,7 +602,7 @@ public class MockRequest implements Request {
      * @see #setFile(String, MockFileUpload)
      * @see #setFiles(Map)
      * @see #setFiles(String, MockFileUpload[])
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest files(String name, MockFileUpload[] files) {
         setFiles(name, files);
@@ -691,7 +691,7 @@ public class MockRequest implements Request {
      * Set the character encoding of this request.
      *
      * @param encoding the name of the character encoding
-     * @since 1.1
+     * @since 1.0
      */
     public void setCharacterEncoding(String encoding) {
         if (null == encoding) throw new IllegalArgumentException("encoding can't be null");
@@ -705,7 +705,7 @@ public class MockRequest implements Request {
      *
      * @param encoding the name of the character encoding
      * @return this <code>MockRequest</code> instance
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest characterEncoding(String encoding) {
         setCharacterEncoding(encoding);
@@ -721,7 +721,7 @@ public class MockRequest implements Request {
      * Set the content type of this request.
      *
      * @param type the content type
-     * @since 1.1
+     * @since 1.0
      */
     public void setContentType(String type) {
         if (null == type) throw new IllegalArgumentException("type can't be null");
@@ -735,7 +735,7 @@ public class MockRequest implements Request {
      *
      * @param type the content type
      * @return this <code>MockRequest</code> instance
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest contentType(String type) {
         setContentType(type);
@@ -770,7 +770,7 @@ public class MockRequest implements Request {
      * @param name  the name of the header to set
      * @param value the additional header value
      * @return this <code>MockRequest</code> instance
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest addHeader(String name, String value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -790,7 +790,7 @@ public class MockRequest implements Request {
      * @param name  the name of the header to set
      * @param value the additional date value
      * @return this <code>MockRequest</code> instance
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest addDateHeader(String name, long value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -808,7 +808,7 @@ public class MockRequest implements Request {
      * @param name  the name of the header to set
      * @param value the additional integer value
      * @return this <code>MockRequest</code> instance
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest addIntHeader(String name, int value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -825,7 +825,7 @@ public class MockRequest implements Request {
      * @param name the name of the header to check
      * @return <code>true</code> if the header was present; or
      * <p><code>false</code> otherwise
-     * @since 1.1
+     * @since 1.0
      */
     public boolean containsHeader(String name) {
         return headers_.containsHeader(name);
@@ -840,7 +840,7 @@ public class MockRequest implements Request {
      *
      * @param name  the name of the header to set
      * @param value the assigned date value
-     * @since 1.1
+     * @since 1.0
      */
     public void setDateHeader(String name, long value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -855,7 +855,7 @@ public class MockRequest implements Request {
      * @param name  the name of the header to set
      * @param value the assigned date value
      * @see #setDateHeader
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest dateHeader(String name, long value) {
         setDateHeader(name, value);
@@ -871,7 +871,7 @@ public class MockRequest implements Request {
      *
      * @param name  the name of the header to set
      * @param value the header value
-     * @since 1.1
+     * @since 1.0
      */
     public void setHeader(String name, String value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -887,7 +887,7 @@ public class MockRequest implements Request {
      * @param name  the name of the header to set
      * @param value the header value
      * @see #setDateHeader
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest header(String name, String value) {
         setHeader(name, value);
@@ -903,7 +903,7 @@ public class MockRequest implements Request {
      *
      * @param name  the name of the header to set
      * @param value the assigned integer value
-     * @since 1.1
+     * @since 1.0
      */
     public void setIntHeader(String name, int value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -918,7 +918,7 @@ public class MockRequest implements Request {
      * @param name  the name of the header to set
      * @param value the assigned integer value
      * @see #setDateHeader
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest intHeader(String name, int value) {
         setIntHeader(name, value);
@@ -930,7 +930,7 @@ public class MockRequest implements Request {
      * Removes a request header with the given name.
      *
      * @param name the name of the header to remove
-     * @since 1.1
+     * @since 1.0
      */
     public void removeHeader(String name) {
         headers_.removeHeader(name);
@@ -959,7 +959,7 @@ public class MockRequest implements Request {
      * Adds a {@link Locale} to this request.
      *
      * @param locale the locale to add
-     * @since 1.1
+     * @since 1.0
      */
     public void addLocale(Locale locale) {
         if (null == locale) {
@@ -978,7 +978,7 @@ public class MockRequest implements Request {
      *
      * @param locale the locale to add
      * @return this <code>MockRequest</code> instance
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest locale(Locale locale) {
         addLocale(locale);
@@ -995,7 +995,7 @@ public class MockRequest implements Request {
      * <p>The default protocol is <code>"HTTP/1.1"</code>.
      *
      * @param protocol the protocol to set
-     * @since 1.1
+     * @since 1.0
      */
     public void setProtocol(String protocol) {
         if (null == protocol) throw new IllegalArgumentException("protocol can't be null");
@@ -1009,7 +1009,7 @@ public class MockRequest implements Request {
      *
      * @param protocol the protocol to set
      * @return this <code>MockRequest</code> instance
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest protocol(String protocol) {
         setProtocol(protocol);
@@ -1026,7 +1026,7 @@ public class MockRequest implements Request {
      * <p>The default remote address is "<code>127.0.0.1"</code>.
      *
      * @param remoteAddr the remote address to set
-     * @since 1.1
+     * @since 1.0
      */
     public void setRemoteAddr(String remoteAddr) {
         if (null == remoteAddr) throw new IllegalArgumentException("remoteAddr can't be null");
@@ -1040,7 +1040,7 @@ public class MockRequest implements Request {
      *
      * @param remoteAddr the remote address to set
      * @return this <code>MockRequest</code> instance
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest remoteAddr(String remoteAddr) {
         setRemoteAddr(remoteAddr);
@@ -1057,7 +1057,7 @@ public class MockRequest implements Request {
      * <p>The default remote user is <code>null</code>.
      *
      * @param remoteUser the remote user to set
-     * @since 1.1
+     * @since 1.0
      */
     public void setRemoteUser(String remoteUser) {
         if (null == remoteUser) throw new IllegalArgumentException("remoteUser can't be null");
@@ -1071,7 +1071,7 @@ public class MockRequest implements Request {
      *
      * @param remoteUser the remote user to set
      * @return this <code>MockRequest</code> instance
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest remoteUser(String remoteUser) {
         setRemoteUser(remoteUser);
@@ -1088,7 +1088,7 @@ public class MockRequest implements Request {
      * <p>The default remote host is "<code>localhost</code>".
      *
      * @param remoteHost the remote host to set
-     * @since 1.1
+     * @since 1.0
      */
     public void setRemoteHost(String remoteHost) {
         if (null == remoteHost) throw new IllegalArgumentException("remoteHost can't be null");
@@ -1102,7 +1102,7 @@ public class MockRequest implements Request {
      *
      * @param remoteHost the remote host to set
      * @return this <code>MockRequest</code> instance
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest remoteHost(String remoteHost) {
         setRemoteHost(remoteHost);
@@ -1136,7 +1136,7 @@ public class MockRequest implements Request {
      *
      * @param secure <code>true</code> if this request is secure; or
      *               <p><code>false</code> otherwise
-     * @since 1.1
+     * @since 1.0
      */
     public void setSecure(boolean secure) {
         secure_ = secure;
@@ -1148,7 +1148,7 @@ public class MockRequest implements Request {
      * @param secure <code>true</code> if this request is secure; or
      *               <p><code>false</code> otherwise
      * @return this <code>MockRequest</code> instance
-     * @since 1.1
+     * @since 1.0
      */
     public MockRequest secure(boolean secure) {
         setSecure(secure);

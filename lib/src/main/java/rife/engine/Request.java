@@ -19,13 +19,13 @@ import rife.tools.StringUtils;
  * able to correctly handle incoming requests.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.1
+ * @since 1.0
  */
 public interface Request {
     /**
      * See {@link HttpServletRequest#getMethod()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     RequestMethod getMethod();
 
@@ -33,7 +33,7 @@ public interface Request {
      * Retrieves the parameters that were sent in this request.
      *
      * @return a <code>Map</code> with all the parameter names and values
-     * @since 1.1
+     * @since 1.0
      */
     Map<String, String[]> getParameters();
 
@@ -42,7 +42,7 @@ public interface Request {
      *
      * @return the string of the request body
      * @see #getBodyAsBytes()
-     * @since 2.0
+     * @since 1.0
      */
     String getBody();
 
@@ -51,7 +51,7 @@ public interface Request {
      *
      * @return the byte array of the request body
      * @see #getBody()
-     * @since 2.0
+     * @since 1.0
      */
     byte[] getBodyAsBytes();
 
@@ -62,7 +62,7 @@ public interface Request {
      * @see #hasFile(String)
      * @see #getFile(String)
      * @see #getFiles(String)
-     * @since 1.1
+     * @since 1.0
      */
     Map<String, UploadedFile[]> getFiles();
 
@@ -75,7 +75,7 @@ public interface Request {
      * @see #getFiles()
      * @see #getFile(String)
      * @see #getFiles(String)
-     * @since 1.1
+     * @since 1.0
      */
     boolean hasFile(String name);
 
@@ -88,7 +88,7 @@ public interface Request {
      * @see #getFiles()
      * @see #hasFile(String)
      * @see #getFiles(String)
-     * @since 1.1
+     * @since 1.0
      */
     UploadedFile getFile(String name);
 
@@ -101,7 +101,7 @@ public interface Request {
      * @see #getFiles()
      * @see #hasFile(String)
      * @see #getFile(String)
-     * @since 1.1
+     * @since 1.0
      */
     UploadedFile[] getFiles(String name);
 
@@ -112,7 +112,7 @@ public interface Request {
      * example: <code>http://www.somehost.com:8080</code>.
      *
      * @return the server's root url
-     * @since 1.1
+     * @since 1.0
      */
     String getServerRootUrl(int port);
 
@@ -124,7 +124,7 @@ public interface Request {
      * <p><code>false</code> otherwise
      * @see #getCookie(String)
      * @see #getCookies()
-     * @since 1.1
+     * @since 1.0
      */
     boolean hasCookie(String name);
 
@@ -136,21 +136,21 @@ public interface Request {
      * <p><code>null</code> if no such cookie is present
      * @see #hasCookie(String)
      * @see #getCookies()
-     * @since 1.1
+     * @since 1.0
      */
     Cookie getCookie(String name);
 
     /**
      * See {@link HttpServletRequest#getCookies()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     Cookie[] getCookies();
 
     /**
      * See {@link HttpServletRequest#getAttribute(String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     Object getAttribute(String name);
 
@@ -159,175 +159,175 @@ public interface Request {
      *
      * @param name a <code>String</code> specifying the name of the attribute
      *             <p><code>false</code> otherwise
-     * @since 1.1
+     * @since 1.0
      */
     boolean hasAttribute(String name);
 
     /**
      * See {@link HttpServletRequest#getAttributeNames()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     Enumeration<String> getAttributeNames();
 
     /**
      * See {@link HttpServletRequest#removeAttribute(String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void removeAttribute(String name);
 
     /**
      * See {@link HttpServletRequest#setAttribute(String, Object)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     void setAttribute(String name, Object object);
 
     /**
      * See {@link HttpServletRequest#getCharacterEncoding()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     String getCharacterEncoding();
 
     /**
      * See {@link HttpServletRequest#getContentType()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     String getContentType();
 
     /**
      * See {@link HttpServletRequest#getDateHeader(String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     long getDateHeader(String name);
 
     /**
      * See {@link HttpServletRequest#getHeader(String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     String getHeader(String name);
 
     /**
      * See {@link HttpServletRequest#getHeaderNames()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     Enumeration<String> getHeaderNames();
 
     /**
      * See {@link HttpServletRequest#getHeaders(String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     Enumeration<String> getHeaders(String name);
 
     /**
      * See {@link HttpServletRequest#getIntHeader(String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     int getIntHeader(String name);
 
     /**
      * See {@link HttpServletRequest#getLocale()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     Locale getLocale();
 
     /**
      * See {@link HttpServletRequest#getLocales()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     Enumeration<Locale> getLocales();
 
     /**
      * See {@link HttpServletRequest#getProtocol()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     String getProtocol();
 
     /**
      * See {@link HttpServletRequest#getRemoteAddr()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     String getRemoteAddr();
 
     /**
      * See {@link HttpServletRequest#getRemoteUser()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     String getRemoteUser();
 
     /**
      * See {@link HttpServletRequest#getRemoteHost()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     String getRemoteHost();
 
     /**
      * See {@link HttpServletRequest#getRequestDispatcher(String)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     RequestDispatcher getRequestDispatcher(String url);
 
     /**
      * See {@link HttpServletRequest#getSession()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     HttpSession getSession();
 
     /**
      * See {@link HttpServletRequest#getSession(boolean)}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     HttpSession getSession(boolean create);
 
     /**
      * See {@link HttpServletRequest#getServerPort()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     int getServerPort();
 
     /**
      * See {@link HttpServletRequest#getScheme()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     String getScheme();
 
     /**
      * See {@link HttpServletRequest#getServerName()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     String getServerName();
 
     /**
      * See {@link HttpServletRequest#getContextPath()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     String getContextPath();
 
     /**
      * See {@link HttpServletRequest#isSecure()}.
      *
-     * @since 1.1
+     * @since 1.0
      */
     boolean isSecure();
 
@@ -337,7 +337,7 @@ public interface Request {
      * @return the underlying <code>HttpServletRequest</code> instance; or
      * <p><code>null</code> if this request isn't backed by
      * <code>HttpServletRequest</code>
-     * @since 1.1
+     * @since 1.0
      */
     HttpServletRequest getHttpServletRequest();
 }

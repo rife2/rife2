@@ -22,7 +22,7 @@ import java.util.*;
  * instance.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.1
+ * @since 1.0
  */
 public class MockConversation {
     static final String SESSION_ID_COOKIE = "JSESSIONID";
@@ -43,7 +43,7 @@ public class MockConversation {
      * site.
      *
      * @param site the site structure that will be tested
-     * @since 1.1
+     * @since 1.0
      */
     public MockConversation(Site site)
     throws EngineException {
@@ -60,7 +60,7 @@ public class MockConversation {
      * <p><code>null</code> if the scheme, hostname and port don't correspond
      * to the conversation setup
      * @see #doRequest(String, MockRequest)
-     * @since 1.1
+     * @since 1.0
      */
     public MockResponse doRequest(String url)
     throws EngineException {
@@ -83,7 +83,7 @@ public class MockConversation {
      * <p><code>null</code> if the scheme, hostname and port don't correspond
      * to the conversation setup
      * @see #doRequest(String)
-     * @since 1.1
+     * @since 1.0
      */
     public MockResponse doRequest(String url, MockRequest request)
     throws EngineException {
@@ -142,7 +142,7 @@ public class MockConversation {
      * @return the scheme of this conversation
      * @see #setScheme
      * @see #scheme
-     * @since 1.1
+     * @since 1.0
      */
     public String getScheme() {
         return scheme_;
@@ -154,7 +154,7 @@ public class MockConversation {
      * @param scheme the scheme
      * @see #getScheme
      * @see #scheme
-     * @since 1.1
+     * @since 1.0
      */
     public void setScheme(String scheme) {
         scheme_ = scheme;
@@ -167,7 +167,7 @@ public class MockConversation {
      * @return this <code>MockConversation</code> instance
      * @see #getScheme
      * @see #setScheme
-     * @since 1.1
+     * @since 1.0
      */
     public MockConversation scheme(String scheme) {
         setScheme(scheme);
@@ -181,7 +181,7 @@ public class MockConversation {
      * @return the server name of this conversation
      * @see #setServerName
      * @see #serverName
-     * @since 1.1
+     * @since 1.0
      */
     public String getServerName() {
         return serverName_;
@@ -193,7 +193,7 @@ public class MockConversation {
      * @param serverName the server name
      * @see #getServerName
      * @see #serverName
-     * @since 1.1
+     * @since 1.0
      */
     public void setServerName(String serverName) {
         serverName_ = serverName;
@@ -206,7 +206,7 @@ public class MockConversation {
      * @return this <code>MockConversation</code> instance
      * @see #getServerName
      * @see #setServerName
-     * @since 1.1
+     * @since 1.0
      */
     public MockConversation serverName(String serverName) {
         setServerName(serverName);
@@ -220,7 +220,7 @@ public class MockConversation {
      * @return the server port of this conversation
      * @see #setServerPort
      * @see #serverPort
-     * @since 1.1
+     * @since 1.0
      */
     public int getServerPort() {
         return serverPort_;
@@ -232,7 +232,7 @@ public class MockConversation {
      * @param serverPort the server port
      * @see #getServerPort
      * @see #serverPort
-     * @since 1.1
+     * @since 1.0
      */
     public void setServerPort(int serverPort) {
         serverPort_ = serverPort;
@@ -245,7 +245,7 @@ public class MockConversation {
      * @return this <code>MockConversation</code> instance
      * @see #getServerPort
      * @see #setServerPort
-     * @since 1.1
+     * @since 1.0
      */
     public MockConversation serverPort(int serverPort) {
         setServerPort(serverPort);
@@ -259,7 +259,7 @@ public class MockConversation {
      * @return the context path of this conversation
      * @see #setContextPath
      * @see #contextPath
-     * @since 1.1
+     * @since 1.0
      */
     public String getContextPath() {
         return contextPath_;
@@ -271,7 +271,7 @@ public class MockConversation {
      * @param contextPath the context path
      * @see #getContextPath
      * @see #contextPath
-     * @since 1.1
+     * @since 1.0
      */
     public void setContextPath(String contextPath) {
         contextPath_ = contextPath;
@@ -284,7 +284,7 @@ public class MockConversation {
      * @return this <code>MockConversation</code> instance
      * @see #getContextPath
      * @see #setContextPath
-     * @since 1.1
+     * @since 1.0
      */
     public MockConversation contextPath(String contextPath) {
         setContextPath(contextPath);
@@ -303,7 +303,7 @@ public class MockConversation {
      * @see #getCookies()
      * @see #addCookie(Cookie)
      * @see #addCookie(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public boolean hasCookie(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -329,7 +329,7 @@ public class MockConversation {
      * @see #getCookies()
      * @see #addCookie(Cookie)
      * @see #addCookie(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public Cookie getCookie(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -355,7 +355,7 @@ public class MockConversation {
      * @see #getCookies()
      * @see #addCookie(Cookie)
      * @see #addCookie(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public String getCookieValue(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -379,7 +379,7 @@ public class MockConversation {
      * @see #getCookieValue(String)
      * @see #addCookie(Cookie)
      * @see #addCookie(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public Cookie[] getCookies() {
         if (0 == cookies_.size()) {
@@ -403,7 +403,7 @@ public class MockConversation {
      * @see #getCookieValue(String)
      * @see #getCookies()
      * @see #addCookie(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public void addCookie(Cookie cookie) {
         if (null == cookie) {
@@ -424,7 +424,7 @@ public class MockConversation {
      * @see #getCookieValue(String)
      * @see #getCookies()
      * @see #addCookie(Cookie)
-     * @since 1.1
+     * @since 1.0
      */
     public void addCookie(String name, String value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -444,7 +444,7 @@ public class MockConversation {
      * @see #getCookies()
      * @see #addCookie(Cookie)
      * @see #addCookie(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public MockConversation cookie(Cookie cookie) {
         addCookie(cookie);
@@ -465,7 +465,7 @@ public class MockConversation {
      * @see #getCookies()
      * @see #addCookie(Cookie)
      * @see #addCookie(String, String)
-     * @since 1.1
+     * @since 1.0
      */
     public MockConversation cookie(String name, String value) {
         addCookie(name, value);

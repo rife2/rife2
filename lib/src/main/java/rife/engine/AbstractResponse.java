@@ -25,7 +25,7 @@ import java.util.zip.GZIPOutputStream;
  * concrete back-end classes that extend <code>AbstractResponse</code>.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.1
+ * @since 1.0
  */
 public abstract class AbstractResponse implements Response {
     private final Request request_;
@@ -46,7 +46,7 @@ public abstract class AbstractResponse implements Response {
      * Response#setContentType(String) counter-part in the Response interface}.
      *
      * @see Response#setContentType(String)
-     * @since 1.1
+     * @since 1.0
      */
     protected abstract void _setContentType(String contentType);
 
@@ -57,7 +57,7 @@ public abstract class AbstractResponse implements Response {
      * Response#getOutputStream() counter-part in the Request interface}.
      *
      * @see Response#getOutputStream()
-     * @since 1.1
+     * @since 1.0
      */
     protected abstract OutputStream _getOutputStream()
     throws IOException;
@@ -68,7 +68,7 @@ public abstract class AbstractResponse implements Response {
      *
      * @param request the {@link Request} that is associated with this
      *                response
-     * @since 1.1
+     * @since 1.0
      */
     protected AbstractResponse(Request request) {
         request_ = request;
@@ -78,7 +78,7 @@ public abstract class AbstractResponse implements Response {
      * Retrieves the request that is associated with this response.
      *
      * @return the associated request
-     * @since 1.1
+     * @since 1.0
      */
     public Request getRequest() {
         return request_;

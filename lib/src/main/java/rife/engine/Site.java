@@ -20,7 +20,7 @@ public class Site extends Router {
      * @param pathInfo the path info that should be taken into account
      * @return the corresponding element information; or
      * <p><code>null</code> if the URL and path info aren't registered in this site
-     * @since 2.0
+     * @since 1.0
      */
     private Route resolveUrl(Request request, String url, String pathInfo)
     throws EngineException {
@@ -127,7 +127,7 @@ public class Site extends Router {
      * @return an instance of <code>Route</code> when an element match
      * was found; or
      * <p><code>null</code> if no suitable element could be found.
-     * @since 2.0
+     * @since 1.0
      */
     RouteMatch findRouteForRequest(Request request, String elementUrl) {
         // obtain the element info that mapped to the requested path info

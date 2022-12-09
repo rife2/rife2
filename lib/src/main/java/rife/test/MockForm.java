@@ -16,7 +16,7 @@ import rife.tools.ArrayUtils;
  * {@link ParsedHtml#parse}.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 2.0
+ * @since 1.0
  */
 public class MockForm {
     private final MockResponse response_;
@@ -138,7 +138,7 @@ public class MockForm {
      * Retrieves the JSoup element that this form corresponds to.
      *
      * @return the corresponding JSoup element
-     * @since 2.0
+     * @since 1.0
      */
     public Element getElement() {
         return element_;
@@ -149,7 +149,7 @@ public class MockForm {
      * parameters and the files of this form.
      *
      * @return the created <code>MockRequest</code>
-     * @since 2.0
+     * @since 1.0
      */
     public MockRequest getRequest() {
         return new MockRequest()
@@ -163,7 +163,7 @@ public class MockForm {
      * response.
      *
      * @return the resulting {@link MockResponse}
-     * @since 2.0
+     * @since 1.0
      */
     public MockResponse submit() {
         return response_.getMockConversation().doRequest(getAction(), getRequest());
@@ -195,7 +195,7 @@ public class MockForm {
      * @see #getParameterValues
      * @see #setParameter(String, String[])
      * @see #setParameter(String, String)
-     * @since 2.0
+     * @since 1.0
      */
     public Map<String, String[]> getParameters() {
         return parameters_;
@@ -211,7 +211,7 @@ public class MockForm {
      * @see #getParameterValues
      * @see #setParameter(String, String[])
      * @see #setParameter(String, String)
-     * @since 2.0
+     * @since 1.0
      */
     public Collection<String> getParameterNames() {
         return parameters_.keySet();
@@ -229,7 +229,7 @@ public class MockForm {
      * @see #getParameterValues
      * @see #setParameter(String, String[])
      * @see #setParameter(String, String)
-     * @since 2.0
+     * @since 1.0
      */
     public boolean hasParameter(String name) {
         return parameters_.containsKey(name);
@@ -247,7 +247,7 @@ public class MockForm {
      * @see #getParameterValues
      * @see #setParameter(String, String[])
      * @see #setParameter(String, String)
-     * @since 2.0
+     * @since 1.0
      */
     public String getParameterValue(String name) {
         var values = getParameterValues(name);
@@ -271,7 +271,7 @@ public class MockForm {
      * @see #getParameterValue
      * @see #setParameter(String, String[])
      * @see #setParameter(String, String)
-     * @since 2.0
+     * @since 1.0
      */
     public String[] getParameterValues(String name) {
         return parameters_.get(name);
@@ -288,7 +288,7 @@ public class MockForm {
      * @see #getParameterValue
      * @see #getParameterValues
      * @see #setParameter(String, String[])
-     * @since 2.0
+     * @since 1.0
      */
     public void setParameter(String name, String value) {
         if (null == name ||
@@ -312,7 +312,7 @@ public class MockForm {
      * @see #getParameterValues
      * @see #setParameter(String, String[])
      * @see #setParameter(String, String)
-     * @since 2.0
+     * @since 1.0
      */
     public MockForm parameter(String name, String value) {
         setParameter(name, value);
@@ -331,7 +331,7 @@ public class MockForm {
      * @see #getParameterValue
      * @see #getParameterValues
      * @see #setParameter(String, String)
-     * @since 2.0
+     * @since 1.0
      */
     public void setParameter(String name, String[] values) {
         if (null == name) {
@@ -358,7 +358,7 @@ public class MockForm {
      * @see #getParameterValues
      * @see #setParameter(String, String[])
      * @see #setParameter(String, String)
-     * @since 2.0
+     * @since 1.0
      */
     public MockForm parameter(String name, String[] values) {
         setParameter(name, values);
@@ -372,7 +372,7 @@ public class MockForm {
      * @param name the parameter name of the file
      * @param file the file specification that will be uploaded
      * @see #setFiles(String, MockFileUpload[])
-     * @since 2.0
+     * @since 1.0
      */
     public void setFile(String name, MockFileUpload file) {
         if (null == name ||
@@ -390,7 +390,7 @@ public class MockForm {
      * @param file the file specification that will be uploaded
      * @return this <code>MockForm</code> instance
      * @see #setFiles(String, MockFileUpload[])
-     * @since 2.0
+     * @since 1.0
      */
     public MockForm file(String name, MockFileUpload file) {
         setFile(name, file);
@@ -404,7 +404,7 @@ public class MockForm {
      * @param name  the parameter name of the file
      * @param files the file specifications that will be uploaded
      * @see #setFile(String, MockFileUpload)
-     * @since 2.0
+     * @since 1.0
      */
     public void setFiles(String name, MockFileUpload[] files) {
         if (null == name) {
@@ -425,7 +425,7 @@ public class MockForm {
      * @param files the file specifications that will be uploaded
      * @return this <code>MockForm</code> instance
      * @see #setFile(String, MockFileUpload)
-     * @since 2.0
+     * @since 1.0
      */
     public MockForm files(String name, MockFileUpload[] files) {
         setFiles(name, files);
@@ -438,7 +438,7 @@ public class MockForm {
      *
      * @return the content of the <code>id</code> attribute; or
      * <p>null if no such attribute could be found
-     * @since 2.0
+     * @since 1.0
      */
     public String getId() {
         return getAttribute("id");
@@ -449,7 +449,7 @@ public class MockForm {
      *
      * @return the content of the <code>class</code> attribute; or
      * <p>null if no such attribute could be found
-     * @since 2.0
+     * @since 1.0
      */
     public String getClassName() {
         return getAttribute("class");
@@ -460,7 +460,7 @@ public class MockForm {
      *
      * @return the content of the <code>title</code> attribute; or
      * <p>null if no such attribute could be found
-     * @since 2.0
+     * @since 1.0
      */
     public String getTitle() {
         return getAttribute("title");
@@ -471,7 +471,7 @@ public class MockForm {
      *
      * @return the content of the <code>action</code> attribute; or
      * <p>null if no such attribute could be found
-     * @since 2.0
+     * @since 1.0
      */
     public String getAction() {
         return getAttribute("action");
@@ -482,7 +482,7 @@ public class MockForm {
      *
      * @return the content of the <code>method</code> attribute; or
      * <p>null if no such attribute could be found
-     * @since 2.0
+     * @since 1.0
      */
     public String getMethod() {
         return getAttribute("method").toUpperCase();
@@ -493,7 +493,7 @@ public class MockForm {
      *
      * @return the content of the <code>name</code> attribute; or
      * <p>null if no such attribute could be found
-     * @since 2.0
+     * @since 1.0
      */
     public String getName() {
         return getAttribute("name");

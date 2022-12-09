@@ -131,7 +131,7 @@ public class Datasource implements Cloneable {
      *                   connection
      * @param poolsize   the size of the connection pool, <code>0</code> means
      *                   that the connections will not be pooled
-     * @since 1.3
+     * @since 1.0
      */
     public Datasource(DataSource dataSource, int poolsize) {
         setDataSource(dataSource);
@@ -153,7 +153,7 @@ public class Datasource implements Cloneable {
      * @param password   the password that will be used to connect to the database
      * @param poolsize   the size of the connection pool, <code>0</code> means
      *                   that the connections will not be pooled
-     * @since 1.3
+     * @since 1.0
      */
     public Datasource(DataSource dataSource, String driver, String user, String password, int poolsize) {
         setDataSource(dataSource);
@@ -339,7 +339,7 @@ public class Datasource implements Cloneable {
      * <p>
      * <code>null</code> if the standard datasource hasn't been set
      * @see #setDataSource(DataSource)
-     * @since 1.3
+     * @since 1.0
      */
     public DataSource getDataSource() {
         return mDataSource;

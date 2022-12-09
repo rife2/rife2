@@ -13,7 +13,7 @@ package rife.tools.exceptions;
  * the exception.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.6
+ * @since 1.0
  */
 public interface ControlFlowRuntimeException {
 }

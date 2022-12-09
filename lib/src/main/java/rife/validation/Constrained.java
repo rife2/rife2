@@ -102,7 +102,7 @@ public interface Constrained {
      * of the properties; or
      * <p><code>false</code> otherwise
      * @see ConstrainedProperty
-     * @since 1.6
+     * @since 1.0
      */
     boolean hasPropertyConstraint(String name);
 
