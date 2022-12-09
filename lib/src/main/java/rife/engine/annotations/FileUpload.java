@@ -26,5 +26,5 @@ public @interface FileUpload {
      *
      * @since 2.0
      */
-    String name() default "";
+    String value() default "";
 }

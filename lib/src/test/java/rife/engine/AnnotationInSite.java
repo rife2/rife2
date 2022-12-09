@@ -17,38 +17,38 @@ public class AnnotationInSite extends Site {
 
         @Cookie String stringCookie = "defaultCookie";
         @Cookie int intCookie = -2;
-        @Cookie(name = "cookie2") String stringCookie2 = "defaultCookie2";
-        @Cookie(name = "cookie3") int intCookie2 = -3;
+        @Cookie("cookie2") String stringCookie2 = "defaultCookie2";
+        @Cookie("cookie3") int intCookie2 = -3;
 
         @FileUpload UploadedFile uploadedFile;
         @FileUpload File file;
         @FileUpload String fileString;
-        @FileUpload(name = "file2") UploadedFile uploadedFile2;
-        @FileUpload(name = "file3") File file2;
-        @FileUpload(name = "file4") String fileString2;
+        @FileUpload("file2") UploadedFile uploadedFile2;
+        @FileUpload("file3") File file2;
+        @FileUpload("file4") String fileString2;
 
         @Parameter String stringParam = "defaultParam";
         @Parameter int intParam = -4;
-        @Parameter(name = "param2") String stringParam2 = "defaultParam2";
-        @Parameter(name = "param3") int intParam2 = -5;
+        @Parameter("param2") String stringParam2 = "defaultParam2";
+        @Parameter("param3") int intParam2 = -5;
 
         @PathInfo String stringPathInfo = "defaultPathInfo";
         @PathInfo int intPathInfo = -6;
 
         @RequestAttribute String stringRequestAttribute = "defaultRequestAttribute";
         @RequestAttribute int intRequestAttribute = -7;
-        @RequestAttribute(name = "requestAttr2") String stringRequestAttribute2 = "defaultRequestAttribute2";
-        @RequestAttribute(name = "requestAttr3") int intRequestAttribute2 = -8;
+        @RequestAttribute("requestAttr2") String stringRequestAttribute2 = "defaultRequestAttribute2";
+        @RequestAttribute("requestAttr3") int intRequestAttribute2 = -8;
 
         @SessionAttribute String stringSessionAttribute = "defaultSessionAttribute";
         @SessionAttribute int intSessionAttribute = -9;
-        @SessionAttribute(name = "sessionAttr2") String stringSessionAttribute2 = "defaultSessionAttribute2";
-        @SessionAttribute(name = "sessionAttr3") int intSessionAttribute2 = -10;
+        @SessionAttribute("sessionAttr2") String stringSessionAttribute2 = "defaultSessionAttribute2";
+        @SessionAttribute("sessionAttr3") int intSessionAttribute2 = -10;
 
         @Header String stringHeader = "defaultHeader";
         @Header int intHeader = -11;
-        @Header(name = "header2") String stringHeader2 = "defaultHeader2";
-        @Header(name = "header3") int intHeader2 = -12;
+        @Header("header2") String stringHeader2 = "defaultHeader2";
+        @Header("header3") int intHeader2 = -12;
 
         public void process(Context c)
         throws FileUtilsErrorException {

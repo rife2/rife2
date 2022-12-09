@@ -63,7 +63,7 @@ public class Context {
         parameters_ = params;
     }
 
-    public void process() {
+    void process() {
         if (routeMatch_ == null) {
             return;
         }

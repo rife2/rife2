@@ -5,10 +5,6 @@
 package rife.engine;
 
 import rife.engine.annotations.*;
-import rife.tools.FileUtils;
-import rife.tools.exceptions.FileUtilsErrorException;
-
-import java.io.File;
 
 import static rife.engine.annotations.FlowDirection.OUT;
 
@@ -19,23 +15,23 @@ public class AnnotationOutSite extends Site {
 
         @Cookie(flow = OUT) String stringCookie = "defaultCookie";
         @Cookie(flow = OUT) int intCookie = -2;
-        @Cookie(name = "cookie2", flow = OUT) String stringCookie2 = "defaultCookie2";
-        @Cookie(name = "cookie3", flow = OUT) int intCookie2 = -3;
+        @Cookie(value = "cookie2", flow = OUT) String stringCookie2 = "defaultCookie2";
+        @Cookie(value = "cookie3", flow = OUT) int intCookie2 = -3;
 
         @RequestAttribute(flow = OUT) String stringRequestAttribute = "defaultRequestAttribute";
         @RequestAttribute(flow = OUT) int intRequestAttribute = -4;
-        @RequestAttribute(name = "requestAttr2", flow = OUT) String stringRequestAttribute2 = "defaultRequestAttribute2";
-        @RequestAttribute(name = "requestAttr3", flow = OUT) int intRequestAttribute2 = -5;
+        @RequestAttribute(value = "requestAttr2", flow = OUT) String stringRequestAttribute2 = "defaultRequestAttribute2";
+        @RequestAttribute(value = "requestAttr3", flow = OUT) int intRequestAttribute2 = -5;
 
         @SessionAttribute(flow = OUT) String stringSessionAttribute = "defaultSessionAttribute";
         @SessionAttribute(flow = OUT) int intSessionAttribute = -6;
-        @SessionAttribute(name = "sessionAttr2", flow = OUT) String stringSessionAttribute2 = "defaultSessionAttribute2";
-        @SessionAttribute(name = "sessionAttr3", flow = OUT) int intSessionAttribute2 = -7;
+        @SessionAttribute(value = "sessionAttr2", flow = OUT) String stringSessionAttribute2 = "defaultSessionAttribute2";
+        @SessionAttribute(value = "sessionAttr3", flow = OUT) int intSessionAttribute2 = -7;
 
         @Header(flow = OUT) String stringHeader = "defaultHeader";
         @Header(flow = OUT) int intHeader = -8;
-        @Header(name = "header2", flow = OUT) String stringHeader2 = "defaultHeader2";
-        @Header(name = "header3", flow = OUT) int intHeader2 = -9;
+        @Header(value = "header2", flow = OUT) String stringHeader2 = "defaultHeader2";
+        @Header(value = "header3", flow = OUT) int intHeader2 = -9;
 
         public void process(Context c) {
             if (c.parameterBoolean("generate")) {

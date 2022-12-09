@@ -23,7 +23,7 @@ public @interface Parameter {
      *
      * @since 2.0
      */
-    String name() default "";
+    String value() default "";
 
     /**
      * Determines what the direction of the flow is for processing this field

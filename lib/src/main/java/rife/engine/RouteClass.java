@@ -98,7 +98,7 @@ public class RouteClass implements Route {
 
                 if (field.isAnnotationPresent(Parameter.class) &&
                     shouldProcessOutFlow(field.getAnnotation(Parameter.class).flow())) {
-                    var annotation_name = field.getAnnotation(Parameter.class).name();
+                    var annotation_name = field.getAnnotation(Parameter.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
@@ -132,7 +132,7 @@ public class RouteClass implements Route {
 
                 if (field.isAnnotationPresent(Parameter.class) &&
                     shouldProcessInFlow(field.getAnnotation(Parameter.class).flow())) {
-                    var annotation_name = field.getAnnotation(Parameter.class).name();
+                    var annotation_name = field.getAnnotation(Parameter.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
@@ -168,7 +168,7 @@ public class RouteClass implements Route {
                 if (field.isAnnotationPresent(Parameter.class) &&
                     shouldProcessInFlow(field.getAnnotation(Parameter.class).flow())) {
                     var params = context.parameters();
-                    var annotation_name = field.getAnnotation(Parameter.class).name();
+                    var annotation_name = field.getAnnotation(Parameter.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
@@ -184,7 +184,7 @@ public class RouteClass implements Route {
                     }
                 } else if (field.isAnnotationPresent(Header.class) &&
                            shouldProcessInFlow(field.getAnnotation(Header.class).flow())) {
-                    var annotation_name = field.getAnnotation(Header.class).name();
+                    var annotation_name = field.getAnnotation(Header.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
@@ -219,7 +219,7 @@ public class RouteClass implements Route {
                     }
                     field.set(element, value);
                 } else if (field.isAnnotationPresent(FileUpload.class)) {
-                    var annotation_name = field.getAnnotation(FileUpload.class).name();
+                    var annotation_name = field.getAnnotation(FileUpload.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
@@ -242,7 +242,7 @@ public class RouteClass implements Route {
                     }
                 } else if (field.isAnnotationPresent(Cookie.class) &&
                            shouldProcessInFlow(field.getAnnotation(Cookie.class).flow())) {
-                    var annotation_name = field.getAnnotation(Cookie.class).name();
+                    var annotation_name = field.getAnnotation(Cookie.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
@@ -260,7 +260,7 @@ public class RouteClass implements Route {
                     }
                 } else if (field.isAnnotationPresent(RequestAttribute.class) &&
                            shouldProcessInFlow(field.getAnnotation(RequestAttribute.class).flow())) {
-                    var annotation_name = field.getAnnotation(RequestAttribute.class).name();
+                    var annotation_name = field.getAnnotation(RequestAttribute.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
@@ -275,7 +275,7 @@ public class RouteClass implements Route {
                     }
                 } else if (field.isAnnotationPresent(SessionAttribute.class) &&
                            shouldProcessInFlow(field.getAnnotation(SessionAttribute.class).flow())) {
-                    var annotation_name = field.getAnnotation(SessionAttribute.class).name();
+                    var annotation_name = field.getAnnotation(SessionAttribute.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
@@ -317,7 +317,7 @@ public class RouteClass implements Route {
 
                 if (field.isAnnotationPresent(Header.class) &&
                     shouldProcessOutFlow(field.getAnnotation(Header.class).flow())) {
-                    var annotation_name = field.getAnnotation(Header.class).name();
+                    var annotation_name = field.getAnnotation(Header.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
@@ -327,7 +327,7 @@ public class RouteClass implements Route {
                     context.print(value);
                 } else if (field.isAnnotationPresent(Cookie.class) &&
                            shouldProcessOutFlow(field.getAnnotation(Cookie.class).flow())) {
-                    var annotation_name = field.getAnnotation(Cookie.class).name();
+                    var annotation_name = field.getAnnotation(Cookie.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
@@ -335,14 +335,14 @@ public class RouteClass implements Route {
                     context.addCookie(builder.cookie());
                 } else if (field.isAnnotationPresent(RequestAttribute.class) &&
                            shouldProcessOutFlow(field.getAnnotation(RequestAttribute.class).flow())) {
-                    var annotation_name = field.getAnnotation(RequestAttribute.class).name();
+                    var annotation_name = field.getAnnotation(RequestAttribute.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
                     context.setAttribute(name, value);
                 } else if (field.isAnnotationPresent(SessionAttribute.class) &&
                            shouldProcessOutFlow(field.getAnnotation(SessionAttribute.class).flow())) {
-                    var annotation_name = field.getAnnotation(SessionAttribute.class).name();
+                    var annotation_name = field.getAnnotation(SessionAttribute.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
