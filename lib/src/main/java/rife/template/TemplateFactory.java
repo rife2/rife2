@@ -71,6 +71,29 @@ public class TemplateFactory extends EnumClass<String> {
         EncoderXmlSingleton.INSTANCE,
         null);
 
+    public static TemplateFactory SVG = new TemplateFactory(TemplateConfig.XML,
+        ResourceFinderClasspath.instance(),
+        "svg", "image/svg+xml", ".svg",
+        new String[]
+            {
+                TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_AUTH_LOGIN,
+                TemplateFactoryFilters.TAG_AUTH_ROLE,
+                TemplateFactoryFilters.TAG_LANG
+            },
+        new String[]
+            {
+                TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_COOKIE,
+                TemplateFactoryFilters.TAG_L10N,
+                TemplateFactoryFilters.TAG_PARAM,
+                TemplateFactoryFilters.TAG_RENDER,
+                TemplateFactoryFilters.TAG_ROUTE
+            },
+        BeanHandlerXml.instance(),
+        EncoderXmlSingleton.INSTANCE,
+        null);
+
     public static TemplateFactory TXT = new TemplateFactory(TemplateConfig.TXT,
         ResourceFinderClasspath.instance(),
         "txt", "text/plain", ".txt",

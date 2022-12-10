@@ -221,6 +221,24 @@ public class Context {
         return TemplateFactory.JSON.get(name, encoding);
     }
 
+    public Template templateSvg()
+    throws TemplateException, EngineException {
+        return templateSvg(routeMatch_.route().defaultElementId(), null);
+    }
+
+    public Template templateSvg(String name)
+    throws TemplateException, EngineException {
+        return templateSvg(name, null);
+    }
+
+    public Template templateSvg(String name, String encoding)
+    throws TemplateException, EngineException {
+        if (null == name) throw new IllegalArgumentException("name can't be null.");
+        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+
+        return TemplateFactory.SVG.get(name, encoding);
+    }
+
     public String gateUrl() {
         return gateUrl_;
     }
