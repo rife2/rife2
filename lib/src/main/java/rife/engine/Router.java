@@ -270,7 +270,7 @@ public class Router {
         return registerRoute(new RouteInstance(this, null, path, pathInfo, element));
     }
 
-    public final Route registerRoute(Route route) {
+    final Route registerRoute(Route route) {
         switch (route.pathInfoHandling().type()) {
             case NONE -> {
                 var routes = routes_.computeIfAbsent(route.path(), k -> new ArrayList<>());
@@ -312,7 +312,7 @@ public class Router {
         return registerFallback(new RouteInstance(this, null, "", element));
     }
 
-    public final Route registerFallback(Route route) {
+    final Route registerFallback(Route route) {
         fallbackRoutes_.put("", route);
         return route;
     }
