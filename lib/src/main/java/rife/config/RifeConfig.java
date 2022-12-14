@@ -364,7 +364,8 @@ public class RifeConfig {
             "text/css",
             "text/javascript",
             "application/xml",
-            "application/xhtml+xml"
+            "application/xhtml+xml",
+            "image/svg+xml"
         );
         public static final String DEFAULT_PROXY_ROOT_URL = null;
         public static final String DEFAULT_WEBAPP_CONTEXT_PATH = null;
