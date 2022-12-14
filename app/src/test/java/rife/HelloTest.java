@@ -22,6 +22,12 @@ class HelloTest {
             .follow().getText());
     }
 
+    @Test void verifyHelloGroup() {
+        var m = new MockConversation(new HelloGroup());
+        assertEquals("before hello inside after", m.doRequest("/group/hello").getText());
+        assertEquals("before bonjour inside after", m.doRequest("/group/bonjour").getText());
+    }
+
     @Test void verifyHelloTemplate() {
         var m = new MockConversation(new HelloTemplate());
         assertEquals("Hello World", m.doRequest("/link")
