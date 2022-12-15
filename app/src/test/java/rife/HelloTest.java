@@ -43,4 +43,10 @@ class HelloTest {
             .getDocument().body()
             .getElementById("greeting").text());
     }
+
+    @Test void verifyHelloErrors() {
+        var m = new MockConversation(new HelloErrors());
+        assertEquals("It's not here!", m.doRequest("/treasure").getText());
+        assertEquals("Oh no: the error", m.doRequest("/error").getText());
+    }
 }
