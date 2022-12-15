@@ -49,4 +49,9 @@ class HelloTest {
         assertEquals("It's not here!", m.doRequest("/treasure").getText());
         assertEquals("Oh no: the error", m.doRequest("/error").getText());
     }
+
+    @Test void verifyHelloPathInfoMapping() {
+        var m = new MockConversation(new HelloPathInfoMapping());
+        assertEquals("Jimmy Joe", m.doRequest("/hello/Jimmy/Joe").getText());
+    }
 }
