@@ -788,6 +788,18 @@ public abstract class AbstractTemplate implements Template {
         }
     }
 
+    public final void addResourceBundles(List<ResourceBundle> resourceBundles) {
+        if (null == resourceBundles) {
+            return;
+        }
+
+        if (null == resourceBundles_) {
+            resourceBundles_ = new ArrayList<>();
+        }
+
+        resourceBundles_.addAll(resourceBundles);
+    }
+
     public final void addResourceBundle(ResourceBundle resourceBundle) {
         if (null == resourceBundle) {
             return;
@@ -800,7 +812,7 @@ public abstract class AbstractTemplate implements Template {
         resourceBundles_.add(resourceBundle);
     }
 
-    public final Collection<ResourceBundle> getResourceBundles() {
+    public final List<ResourceBundle> getResourceBundles() {
         if (null == resourceBundles_) {
             resourceBundles_ = new ArrayList<>();
         }

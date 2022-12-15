@@ -139,6 +139,7 @@ public class Login extends Identified implements SessionAttributes {
         initializeLogin();
 
         final Template template = template_.createNewInstance();
+        template.addResourceBundles(template_.getResourceBundles());
         entrance(template);
 
         // check if a cookie for remember id is provided

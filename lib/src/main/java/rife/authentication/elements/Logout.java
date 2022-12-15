@@ -39,6 +39,7 @@ public class Logout implements Element {
             template = null;
         } else {
             template = template_.createNewInstance();
+            template.addResourceBundles(template_.getResourceBundles());
         }
 
         entrance(template);

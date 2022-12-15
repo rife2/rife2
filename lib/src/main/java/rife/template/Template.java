@@ -1282,12 +1282,27 @@ public interface Template extends Cloneable {
     TemplateEncoder getEncoder();
 
     /**
+     * Adds a list of resource bundles to this template. Resource bundles are used in
+     * many places, including when generating labels for forms, generating
+     * options for <code>&lt;select&gt;</code> tags, and {@linkplain
+     * #evaluateL10nTags() using localized text}.
+     *
+     * @param resourceBundles a list of resource bundle
+     * @see #addResourceBundle
+     * @see #getResourceBundles
+     * @see #hasResourceBundles
+     * @since 1.0
+     */
+    void addResourceBundles(List<ResourceBundle> resourceBundles);
+
+    /**
      * Adds a resource bundle to this template. Resource bundles are used in
      * many places, including when generating labels for forms, generating
      * options for <code>&lt;select&gt;</code> tags, and {@linkplain
      * #evaluateL10nTags() using localized text}.
      *
      * @param resourceBundle a resource bundle
+     * @see #addResourceBundles
      * @see #getResourceBundles
      * @see #hasResourceBundles
      * @since 1.0
@@ -1301,10 +1316,11 @@ public interface Template extends Cloneable {
      *
      * @return a list of this template's resource bundles
      * @see #addResourceBundle
+     * @see #addResourceBundles
      * @see #hasResourceBundles
      * @since 1.0
      */
-    Collection<ResourceBundle> getResourceBundles();
+    List<ResourceBundle> getResourceBundles();
 
     /**
      * Returns whether this template has any resource bundles {@linkplain
@@ -1312,6 +1328,7 @@ public interface Template extends Cloneable {
      *
      * @return whether this template contains any resource bundles
      * @see #addResourceBundle
+     * @see #addResourceBundles
      * @see #getResourceBundles
      * @since 1.0
      */
