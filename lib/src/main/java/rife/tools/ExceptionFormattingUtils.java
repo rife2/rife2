@@ -5,7 +5,7 @@
 package rife.tools;
 
 import rife.template.Template;
-import rife.template.exceptions.SyntaxErrorException;
+import rife.template.exceptions.*;
 
 public abstract class ExceptionFormattingUtils {
     private static final int DEFAULT_STACKTRACELIMIT = 15;
@@ -92,7 +92,9 @@ public abstract class ExceptionFormattingUtils {
                 template.setValue("exception_stack_trace", stack_trace_out.toString());
             }
 
-            if (exception instanceof SyntaxErrorException) {
+            if (exception instanceof SyntaxErrorException ||
+                exception instanceof IncludeNotFoundException ||
+                exception instanceof CircularIncludesException) {
                 exceptions.append(template.getBlock("exception_compilation"));
             } else {
                 exceptions.append(template.getBlock("exception"));
