@@ -52,6 +52,7 @@ class HelloTest {
 
     @Test void verifyHelloPathInfoMapping() {
         var m = new MockConversation(new HelloPathInfoMapping());
+        assertEquals("Jimmy", m.doRequest("/hello/Jimmy").getText());
         assertEquals("Jimmy Joe", m.doRequest("/hello/Jimmy/Joe").getText());
     }
 }
