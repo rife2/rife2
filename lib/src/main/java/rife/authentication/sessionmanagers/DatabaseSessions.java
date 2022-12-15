@@ -16,8 +16,12 @@ import rife.database.DbPreparedStatement;
 import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
 import rife.database.DbRowProcessor;
+import rife.database.DbTransactionUserWithoutResult;
 import rife.database.exceptions.DatabaseException;
+import rife.database.exceptions.ExecutionErrorException;
 import rife.tools.UniqueIDGenerator;
+import rife.tools.ExceptionUtils;
+import rife.tools.InnerClassException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -58,9 +62,20 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
     protected boolean _install(CreateTable createAuthentication, String createAuthenticationSessStartIndex) {
         assert createAuthentication != null;
         assert createAuthenticationSessStartIndex != null;
-
-        executeUpdate(createAuthentication);
-        executeUpdate(createAuthenticationSessStartIndex);
+        try {
+            inTransaction(new DbTransactionUserWithoutResult<>() {
+                public void useTransactionWithoutResult()
+                throws InnerClassException {
+                    executeUpdate(createAuthentication);
+                    executeUpdate(createAuthenticationSessStartIndex);
+                }
+            });
+        } catch (ExecutionErrorException e) {
+            final String trace = ExceptionUtils.getExceptionStackTrace(e);
+            if (!trace.contains("already exists")) {
+                throw new InstallSessionsErrorException(e);
+            }
+        }
 
         return true;
     }
