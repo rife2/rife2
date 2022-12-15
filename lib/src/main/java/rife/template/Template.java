@@ -126,7 +126,7 @@ public interface Template extends Cloneable {
      * been provided, or the tag that was used to declare the value will be
      * output as-is.
      * <p>All specialized tags will also be evaluated (resource bundle
-     * localization, block localization, value renderers, expressions, ...).
+     * localization, block localization, value renderers, ...).
      *
      * @return the entire textual content of the template
      * @throws TemplateException when an error occurred during the
@@ -1054,26 +1054,6 @@ public interface Template extends Cloneable {
      */
     List<String> evaluateLangTags(String id);
 
-//    /**
-//     * Evaluates the specified OGNL, Groovy, or Janino expression tag. For
-//     * example, if a value exists with ID "<code>OGNL:<em>id</em>:[[<em>script</em>]]</code>",
-//     * where "<code>id</code>" is the given ID and "<code>script</code>" is
-//     * some OGNL expression, this method will replace this value with the
-//     * value of the evaluated OGNL expression, using the current set of
-//     * {@linkplain #getExpressionVars() expression variables}.
-//     * <p>The prefix for OGNL is "OGNL:", the prefix for Groovy is "GROOVY:"
-//     * and the prefix for Janino is "JANINO:".
-//     * <p>This method is called automatically when the output is generated
-//     * (such as when calling {@link #getContent()}). You can manually call
-//     * this method to force evaluation of the tags earlier than that.
-//     *
-//     * @param id the ID whose expression tag will be replaced with the value
-//     *           of the evaluated expression in the tag ID
-//     * @return the list of names of the template values that were generated
-//     * @since 1.0
-//     */
-//    public List<String> evaluateExpressionTags(String id);
-
     /**
      * Evaluates all values in this template with ID's of the form "<code>render:<em>class</em></code>"
      * or "<code>render:<em>class</em>:<em>differentiator</em></code><em>r</em>",
@@ -1168,7 +1148,7 @@ public interface Template extends Cloneable {
     void removeValues(List<String> ids);
 
     /**
-     * Set the content of the specified value to an empte string.
+     * Set the content of the specified value to an empty string.
      *
      * @param id the ID of a value in this template
      * @see #appendValue
@@ -1357,68 +1337,6 @@ public interface Template extends Cloneable {
      * @since 1.0
      */
     String getLanguage();
-//
-//    /**
-//     * Sets a variable which can be accessed by {@linkplain
-//     * #evaluateExpressionTags expression tags} in OGNL, Groovy, or Janino.
-//     *
-//     * @param name  the name of the variable
-//     * @param value the value to associate with the given variable name
-//     * @see #setExpressionVars
-//     * @see #getExpressionVars
-//     * @since 1.0
-//     */
-//    public void setExpressionVar(String name, Object value);
-//
-//    /**
-//     * Sets the given variables to the given corresponding values, for use in
-//     * {@linkplain #evaluateExpressionTags expression tags}. Calling this
-//     * method is equivalent to calling {@link #setExpressionVar
-//     * setExpressionVar} for each entry in the given map.
-//     *
-//     * @param map a map from variable name to variable value
-//     * @see #setExpressionVar
-//     * @see #getExpressionVars
-//     * @since 1.0
-//     */
-//    public void setExpressionVars(Map<String, Object> map);
-//
-//    /**
-//     * Returns the name and value of all of the expression variables which
-//     * have been {@linkplain #setExpressionVar set} in this template.
-//     *
-//     * @return the expression variables currently set in this template
-//     * @see #setExpressionVar
-//     * @see #setExpressionVars
-//     * @since 1.0
-//     */
-//    public Map<String, Object> getExpressionVars();
-//
-//    /**
-//     * Stores the given value in a cache, associated with the given key. This
-//     * is mainly used by OGNL, Groovy, and Janino expression evaluation system
-//     * to store caches to classes. You should probably not use the template
-//     * caching system to avoid conflicting with the expression evaluation
-//     * system.
-//     *
-//     * @param key   a name under which the given value should be stored
-//     * @param value an object
-//     * @since 1.0
-//     */
-//    public void cacheObject(String key, Object value);
-//
-//    /**
-//     * Returns the value corresponding to the given key in this template's
-//     * cache, or <code>null</code> if no such cached object exists. As noted
-//     * in {@link #cacheObject}, you should probably not use this method to
-//     * avoid conflicting with RIFE's internal use of the cache.
-//     *
-//     * @param key a key whose associated cached object should be returned
-//     * @return the value associated with the given key, or <code>null</code>
-//     * if none exists
-//     * @since 1.0
-//     */
-//    public Object getCacheObject(String key);
 
     /**
      * Returns a list of URL's that this template depends on, and their last
@@ -1461,8 +1379,7 @@ public interface Template extends Cloneable {
     String getDefaultContentType();
 
     /**
-     * Returns a shallow copy of this template, with the same values,
-     * expression variables, and so on.
+     * Returns a shallow copy of this template, with the same values.
      *
      * @return a shallow copy of this template
      * @since 1.0
