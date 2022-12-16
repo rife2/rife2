@@ -352,20 +352,6 @@ public abstract class AbstractTemplate implements Template {
         }
     }
 
-//    public List<String> evaluateExpressionTags(String id) {
-//        if (null == id) throw new IllegalArgumentException("id can't be null.");
-//
-//        List<String> set_values = new ArrayList<String>();
-//        _evaluateJaninoTags(set_values, TemplateFactory.PREFIX_JANINO + id);
-//        return set_values;
-//    }
-//
-//    private void _evaluateJaninoTags(List<String> setValues, String id) {
-//        if (hasFilteredBlocks(TemplateFactory.TAG_JANINO)) {
-//            FilteredTagProcessorJanino.instance().processTags(setValues, this, getFilteredBlocks(TemplateFactory.TAG_JANINO), id, Template.class, "template", this, null);
-//        }
-//    }
-
     public final InternalValue createInternalValue() {
         return new InternalValue(this);
     }
