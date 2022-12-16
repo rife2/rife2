@@ -50,15 +50,12 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
     throws RememberManagerException;
 
     protected boolean _install(CreateTable createRemember, String createRememberMomentIndex) {
+        assert createRemember != null;
+        assert createRememberMomentIndex != null;
         try {
-            inTransaction(new DbTransactionUserWithoutResult<>() {
-                public void useTransactionWithoutResult()
-                throws InnerClassException {
-                    executeUpdate(createRemember);
-                    executeUpdate(createRememberMomentIndex);
-                }
-            });
-        } catch (ExecutionErrorException e) {
+            executeUpdate(createRemember);
+            executeUpdate(createRememberMomentIndex);
+        } catch (DatabaseException e) {
             final String trace = ExceptionUtils.getExceptionStackTrace(e);
             if (!trace.contains("already exists")) {
                 throw new InstallRememberUserErrorException(e);

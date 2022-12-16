@@ -63,14 +63,9 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
         assert createAuthentication != null;
         assert createAuthenticationSessStartIndex != null;
         try {
-            inTransaction(new DbTransactionUserWithoutResult<>() {
-                public void useTransactionWithoutResult()
-                throws InnerClassException {
-                    executeUpdate(createAuthentication);
-                    executeUpdate(createAuthenticationSessStartIndex);
-                }
-            });
-        } catch (ExecutionErrorException e) {
+            executeUpdate(createAuthentication);
+            executeUpdate(createAuthenticationSessStartIndex);
+        } catch (DatabaseException e) {
             final String trace = ExceptionUtils.getExceptionStackTrace(e);
             if (!trace.contains("already exists")) {
                 throw new InstallSessionsErrorException(e);
