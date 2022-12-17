@@ -24,9 +24,7 @@ public abstract class AbstractTemplate implements Template {
     protected TemplateEncoder encoder_ = EncoderDummy.instance();
     protected List<ResourceBundle> defaultResourceBundles_ = null;
     protected List<ResourceBundle> resourceBundles_ = null;
-    protected Map<String, Object> expressionVars_ = null;
     protected String language_ = null;
-    protected Map<String, Object> cache_ = null;
     protected String defaultContentType_ = null;
 
     public final void appendBlock(String valueBlockId) {
@@ -822,22 +820,6 @@ public abstract class AbstractTemplate implements Template {
         return language_;
     }
 
-    public void setExpressionVar(String name, Object value) {
-        if (null == expressionVars_) {
-            expressionVars_ = new HashMap<>();
-        }
-
-        expressionVars_.put(name, value);
-    }
-
-    public void setExpressionVars(Map<String, Object> map) {
-        expressionVars_ = map;
-    }
-
-    public Map<String, Object> getExpressionVars() {
-        return expressionVars_;
-    }
-
     final void initialize()
     throws TemplateException {
         _evaluateL10nTags(null);
@@ -851,26 +833,6 @@ public abstract class AbstractTemplate implements Template {
 
     final void setInitializer(TemplateInitializer initializer) {
         initializer_ = initializer;
-    }
-
-    public void cacheObject(String key, Object value) {
-        if (null == key) {
-            return;
-        }
-
-        if (null == cache_) {
-            cache_ = new HashMap<>();
-        }
-
-        cache_.put(key, value);
-    }
-
-    public Object getCacheObject(String key) {
-        if (null == cache_) {
-            return null;
-        }
-
-        return cache_.get(key);
     }
 
     public String getDefaultContentType() {
@@ -890,11 +852,8 @@ public abstract class AbstractTemplate implements Template {
             }
 
             if (templateDependencies.size() > 0) {
-                Iterator url_it = templateDependencies.keySet().iterator();
-                URL dependency_resource = null;
-                while (url_it.hasNext()) {
-                    dependency_resource = (URL) url_it.next();
-                    if (Parser.getModificationTime(resourceFinder, dependency_resource) > (Long) templateDependencies.get(dependency_resource)) {
+                for (var dependency_resource : templateDependencies.keySet()) {
+                    if (Parser.getModificationTime(resourceFinder, dependency_resource) > templateDependencies.get(dependency_resource)) {
                         return true;
                     }
                 }
@@ -941,10 +900,6 @@ public abstract class AbstractTemplate implements Template {
 
         for (var constructed_value_id : constructedValues_.keySet()) {
             new_template.constructedValues_.put(constructed_value_id, constructedValues_.get(constructed_value_id));
-        }
-
-        if (expressionVars_ != null) {
-            new_template.expressionVars_ = new HashMap<>(expressionVars_);
         }
 
         return new_template;
