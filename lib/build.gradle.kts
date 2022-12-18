@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.uwyn.rife2"
-version = "0.8.2"
+version = "0.8.3"
 
 base {
     archivesName.set("rife2")
