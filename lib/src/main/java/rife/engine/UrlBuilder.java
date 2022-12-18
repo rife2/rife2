@@ -62,7 +62,7 @@ public class UrlBuilder {
 
         // detect which parameters are annotation for output and input and retrieve those that correspond
         if (context_.route() instanceof RouteClass) {
-            var out_params = RouteClass.getAnnotatedOutParameters(context_.response().getLastElement());
+            var out_params = RouteClass.getAnnotatedOutParameters(context_);
             Set<String> in_params = new HashSet<>();
             // input parameters
             if (route_ instanceof RouteClass route) {

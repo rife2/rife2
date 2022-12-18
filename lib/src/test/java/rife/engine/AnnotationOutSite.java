@@ -9,21 +9,29 @@ import rife.engine.annotations.*;
 import static rife.engine.annotations.FlowDirection.OUT;
 
 public class AnnotationOutSite extends Site {
-    public static class AnnotatedElement implements Element {
-        @Body(flow = OUT) String stringBody = "defaultBody";
+    public static class ParentElement implements Element {
         @Body(flow = OUT) int intBody = -1;
+        @Cookie(value = "cookie2", flow = OUT) String stringCookie2 = "defaultCookie2";
+        @RequestAttribute(flow = OUT) int intRequestAttribute = -4;
+        @SessionAttribute(flow = OUT) String stringSessionAttribute = "defaultSessionAttribute";
+        @Header(value = "header3", flow = OUT) int intHeader2 = -9;
+
+        public void process(Context c)
+        throws Exception {
+        }
+    }
+
+    public static class AnnotatedElement extends ParentElement {
+        @Body(flow = OUT) String stringBody = "defaultBody";
 
         @Cookie(flow = OUT) String stringCookie = "defaultCookie";
         @Cookie(flow = OUT) int intCookie = -2;
-        @Cookie(value = "cookie2", flow = OUT) String stringCookie2 = "defaultCookie2";
         @Cookie(value = "cookie3", flow = OUT) int intCookie2 = -3;
 
         @RequestAttribute(flow = OUT) String stringRequestAttribute = "defaultRequestAttribute";
-        @RequestAttribute(flow = OUT) int intRequestAttribute = -4;
         @RequestAttribute(value = "requestAttr2", flow = OUT) String stringRequestAttribute2 = "defaultRequestAttribute2";
         @RequestAttribute(value = "requestAttr3", flow = OUT) int intRequestAttribute2 = -5;
 
-        @SessionAttribute(flow = OUT) String stringSessionAttribute = "defaultSessionAttribute";
         @SessionAttribute(flow = OUT) int intSessionAttribute = -6;
         @SessionAttribute(value = "sessionAttr2", flow = OUT) String stringSessionAttribute2 = "defaultSessionAttribute2";
         @SessionAttribute(value = "sessionAttr3", flow = OUT) int intSessionAttribute2 = -7;
@@ -31,9 +39,11 @@ public class AnnotationOutSite extends Site {
         @Header(flow = OUT) String stringHeader = "defaultHeader";
         @Header(flow = OUT) int intHeader = -8;
         @Header(value = "header2", flow = OUT) String stringHeader2 = "defaultHeader2";
-        @Header(value = "header3", flow = OUT) int intHeader2 = -9;
 
-        public void process(Context c) {
+        public void process(Context c)
+        throws Exception {
+            super.process(c);
+
             if (c.parameterBoolean("generate")) {
                 stringBody = "value1";
                 intBody = 2;

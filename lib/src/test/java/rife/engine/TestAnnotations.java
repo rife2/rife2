@@ -481,7 +481,7 @@ public class TestAnnotations {
         try (final var server = new TestServerRunner(new AnnotationParametersSite())) {
             try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/out?switchRoute=1");
-                assertEquals("http://localhost:8181/in?stringParam=value1&intParam=222&param2=value3&param3=444", page.getWebResponse().getContentAsString());
+                assertEquals("http://localhost:8181/in?stringParam=value1&intParam=222&param3=444&param2=value3", page.getWebResponse().getContentAsString());
 
                 page = webClient.getPage(page.getWebResponse().getContentAsString());
                 assertEquals("""
