@@ -53,7 +53,11 @@ class EngineTemplateProcessor {
 
         if (template_.hasValueId(Context.ID_CONTEXT_PATH_INFO) &&
             !template_.isValueSet(Context.ID_CONTEXT_PATH_INFO)) {
-            template_.setValue(Context.ID_CONTEXT_PATH_INFO, context_.pathInfo());
+            var path_info = context_.pathInfo();
+            if (!path_info.isEmpty()) {
+                path_info = "/" + path_info;
+            }
+            template_.setValue(Context.ID_CONTEXT_PATH_INFO, path_info);
             setValues.add(Context.ID_CONTEXT_PATH_INFO);
         }
 
