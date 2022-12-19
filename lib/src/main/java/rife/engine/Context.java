@@ -48,13 +48,15 @@ public class Context {
         routeMatch_ = routeMatch;
 
         var params = new LinkedHashMap<>(request_.getParameters());
-        if (routeMatch_.route().pathInfoHandling().type() == PathInfoType.MAP) {
-            var mapping = routeMatch_.route().pathInfoHandling().mapping();
-            var matcher = mapping.regexp().matcher(pathInfo());
-            if (matcher.matches()) {
-                var i = 1;
-                for (var param : mapping.parameters()) {
-                    params.put(param, new String[]{matcher.group(i++)});
+        if (routeMatch_ != null) {
+            if (routeMatch_.route().pathInfoHandling().type() == PathInfoType.MAP) {
+                var mapping = routeMatch_.route().pathInfoHandling().mapping();
+                var matcher = mapping.regexp().matcher(pathInfo());
+                if (matcher.matches()) {
+                    var i = 1;
+                    for (var param : mapping.parameters()) {
+                        params.put(param, new String[]{matcher.group(i++)});
+                    }
                 }
             }
         }
@@ -111,7 +113,7 @@ public class Context {
     }
 
     public String pathInfo() {
-        if (routeMatch_.pathInfo() != null) {
+        if (routeMatch_ != null && routeMatch_.pathInfo() != null) {
             return routeMatch_.pathInfo();
         }
 
@@ -119,6 +121,9 @@ public class Context {
     }
 
     public Route route() {
+        if (routeMatch_ == null) {
+            return null;
+        }
         return routeMatch_.route();
     }
 

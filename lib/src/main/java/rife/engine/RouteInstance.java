@@ -4,7 +4,12 @@
  */
 package rife.engine;
 
+import rife.engine.annotations.*;
+import rife.engine.exceptions.AnnotatedElementInstanceFieldException;
+import rife.engine.exceptions.EngineException;
 import rife.tools.StringUtils;
+
+import java.lang.reflect.Modifier;
 
 public class RouteInstance implements Route {
     private final Router router_;
@@ -27,6 +32,7 @@ public class RouteInstance implements Route {
         path_ = path;
         pathInfoHandling_ = pathInfoHandling;
         element_ = element;
+        preventAnnotatedFields();
     }
 
     @Override
@@ -52,6 +58,38 @@ public class RouteInstance implements Route {
     @Override
     public String defaultElementId() {
         return StringUtils.stripFromFront(path_, "/");
+    }
+
+    private void preventAnnotatedFields() {
+        try {
+            Class klass = element_.getClass();
+            while (klass != null && klass != Element.class) {
+                for (var field : klass.getDeclaredFields()) {
+                    field.setAccessible(true);
+
+                    if (Modifier.isStatic(field.getModifiers()) ||
+                        Modifier.isFinal(field.getModifiers()) ||
+                        Modifier.isTransient(field.getModifiers())) {
+                        continue;
+                    }
+
+                    if (field.isAnnotationPresent(Parameter.class) ||
+                        field.isAnnotationPresent(Header.class) ||
+                        field.isAnnotationPresent(Body.class) ||
+                        field.isAnnotationPresent(PathInfo.class) ||
+                        field.isAnnotationPresent(FileUpload.class) ||
+                        field.isAnnotationPresent(Cookie.class) ||
+                        field.isAnnotationPresent(RequestAttribute.class) ||
+                        field.isAnnotationPresent(SessionAttribute.class)) {
+                        throw new AnnotatedElementInstanceFieldException(this, element_, field.getName());
+                    }
+                }
+
+                klass = klass.getSuperclass();
+            }
+        } catch (Exception e) {
+            throw new EngineException(e);
+        }
     }
 
     @Override

@@ -4,13 +4,14 @@
  */
 package rife.engine;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.TextPage;
-import com.gargoylesoftware.htmlunit.UnexpectedPage;
-import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
+import rife.config.RifeConfig;
+import rife.engine.annotations.Parameter;
+import rife.engine.exceptions.AnnotatedElementInstanceFieldException;
+import rife.engine.exceptions.EngineException;
 import rife.template.TemplateFactory;
 import rife.tools.IntegerUtils;
 
@@ -512,4 +513,29 @@ public class TestEngine {
             }
         }
     }
+
+    @Test
+    public void testPreventElementInstanceAnnotations() {
+        RifeConfig.engine().setPrettyEngineExceptions(false);
+        try {
+            try (final var server = new TestServerRunner(new Site() {
+                public void setup() {
+                    get("/route", new Element() {
+                        @Parameter String parameter;
+                        public void process(Context c) {
+                        }
+                    });
+                }
+            })) {
+                fail("Expected setup exception");
+            }
+        } catch (EngineException e) {
+            assertTrue(e.getCause() instanceof AnnotatedElementInstanceFieldException);
+            assertEquals(((AnnotatedElementInstanceFieldException)e.getCause()).getRoute().path(), "/route");
+            assertEquals(((AnnotatedElementInstanceFieldException)e.getCause()).getField(), "parameter");
+        } finally {
+            RifeConfig.engine().setPrettyEngineExceptions(true);
+        }
+    }
+
 }
