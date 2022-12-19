@@ -109,6 +109,38 @@ public class TestMocksEngine {
     }
 
     @Test
+    public void testPathInfoMappingMultiple() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/pathinfo/map",
+                    PathInfoHandling.MAP(
+                        m -> m.t("text").s().p("param1"),
+                        m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")
+                    ), c -> {
+                        c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
+                        c.print(":" + c.parameter("param1"));
+                        c.print(":" + c.parameter("param2"));
+                    });
+            }
+        });
+
+        MockResponse response;
+
+        response = conversation.doRequest("http://localhost/pathinfo/map/text/val1/x4321");
+        assertEquals(200, response.getStatus());
+        assertEquals("text/html; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:text/val1/x4321:val1:4321", response.getText());
+
+        response = conversation.doRequest("http://localhost/pathinfo/map/text/val1");
+        assertEquals(200, response.getStatus());
+        assertEquals("text/html; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:text/val1:val1:null", response.getText());
+
+        response = conversation.doRequest("http://localhost/pathinfo/map/ddd");
+        assertEquals(404, response.getStatus());
+    }
+
+    @Test
     public void testPathInfoMappingUrlGeneration() {
         var conversation = new MockConversation(new Site() {
             public void setup() {

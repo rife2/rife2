@@ -76,10 +76,11 @@ public class Site extends Router {
             var path_info = StringUtils.stripFromFront(pathInfo, "/");
             for (var route : routes) {
                 if (route.pathInfoHandling().type() == PathInfoType.MAP && routeHandlesMethod(route, request.getMethod())) {
-                    var mapping = route.pathInfoHandling().mapping();
-                    var matcher = mapping.regexp().matcher(path_info);
-                    if (matcher.matches()) {
-                        return route;
+                    for (var mapping : route.pathInfoHandling().mappings()) {
+                        var matcher = mapping.regexp().matcher(path_info);
+                        if (matcher.matches()) {
+                            return route;
+                        }
                     }
                 }
             }

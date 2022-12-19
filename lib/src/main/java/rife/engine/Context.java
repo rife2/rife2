@@ -49,12 +49,14 @@ public class Context {
         var params = new LinkedHashMap<>(request_.getParameters());
         if (routeMatch_ != null) {
             if (routeMatch_.route().pathInfoHandling().type() == PathInfoType.MAP) {
-                var mapping = routeMatch_.route().pathInfoHandling().mapping();
-                var matcher = mapping.regexp().matcher(pathInfo());
-                if (matcher.matches()) {
-                    var i = 1;
-                    for (var param : mapping.parameters()) {
-                        params.put(param, new String[]{matcher.group(i++)});
+                for (var mapping : routeMatch_.route().pathInfoHandling().mappings()) {
+                    var matcher = mapping.regexp().matcher(pathInfo());
+                    if (matcher.matches()) {
+                        var i = 1;
+                        for (var param : mapping.parameters()) {
+                            params.put(param, new String[]{matcher.group(i++)});
+                        }
+                        break;
                     }
                 }
             }

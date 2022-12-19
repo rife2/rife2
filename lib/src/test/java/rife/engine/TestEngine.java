@@ -128,6 +128,44 @@ public class TestEngine {
     }
 
     @Test
+    public void testPathInfoMappingMultiple()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                get("/pathinfo/map",
+                    PathInfoHandling.MAP(
+                        m -> m.t("text").s().p("param1"),
+                        m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")
+                    ), c -> {
+                        c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo());
+                        c.print(":" + c.parameter("param1"));
+                        c.print(":" + c.parameter("param2"));
+                    });
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page;
+
+                page = webClient.getPage("http://localhost:8181/pathinfo/map/text/val1/x4321");
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("Just some text 127.0.0.1:8181:text/val1/x4321:val1:4321", page.asNormalizedText());
+
+                page = webClient.getPage("http://localhost:8181/pathinfo/map/text/val1");
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("Just some text 127.0.0.1:8181:text/val1:val1:null", page.asNormalizedText());
+
+                try {
+                    webClient.getOptions().setPrintContentOnFailingStatusCode(false);
+                    webClient.getPage("http://localhost:8181/pathinfo/map/ddd");
+                    fail("Expecting 404");
+                } catch (FailingHttpStatusCodeException e) {
+                    // success
+                }
+            }
+        }
+    }
+
+    @Test
     public void testPathInfoMappingUrlGeneration()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
