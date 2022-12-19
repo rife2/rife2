@@ -279,12 +279,12 @@ public class RouteClass implements Route {
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
-                    var cookie = context.cookie(name);
-                    if (cookie != null) {
-                        if (cookie.getValue() != null) {
+                    if (context.hasCookie(name)) {
+                        String cookie_value = context.cookieValue(name);
+                        if (cookie_value != null) {
                             Object value;
                             try {
-                                value = Convert.toType(cookie.getValue(), type);
+                                value = Convert.toType(cookie_value, type);
                             } catch (ConversionException e) {
                                 value = Convert.getDefaultValue(type);
                             }
@@ -366,7 +366,7 @@ public class RouteClass implements Route {
                         name = annotation_name;
                     }
                     var builder = new CookieBuilder(name, Convert.toString(value));
-                    context.addCookie(builder.cookie());
+                    context.addCookie(builder);
                 } else if (field.isAnnotationPresent(RequestAttribute.class) &&
                            shouldProcessOutFlow(field.getAnnotation(RequestAttribute.class).flow())) {
                     var annotation_name = field.getAnnotation(RequestAttribute.class).value();

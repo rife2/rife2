@@ -189,11 +189,17 @@ public class TestEngine {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
                 get("/cookies1", c -> {
-                    if (c.hasCookie("cookie1") &&
+                    var names = c.cookieNames();
+
+                    if (names.size() == 3 &&
+                        names.contains("cookie1") &&
+                        names.contains("cookie2") &&
+                        names.contains("cookie3") &&
+                        c.hasCookie("cookie1") &&
                         c.hasCookie("cookie2") &&
                         c.hasCookie("cookie3")) {
-                        c.addCookie(new Cookie("cookie3", c.cookieValue("cookie1")));
-                        c.addCookie(new Cookie("cookie4", c.cookieValue("cookie2")));
+                        c.addCookie(new CookieBuilder("cookie3", c.cookieValue("cookie1")));
+                        c.addCookie(new CookieBuilder("cookie4", c.cookieValue("cookie2")));
                     }
 
                     c.print("source");

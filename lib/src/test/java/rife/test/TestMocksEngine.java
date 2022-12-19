@@ -180,8 +180,8 @@ public class TestMocksEngine {
                     if (c.hasCookie("cookie1") &&
                         c.hasCookie("cookie2") &&
                         c.hasCookie("cookie3")) {
-                        c.addCookie(new Cookie("cookie3", c.cookieValue("cookie1")));
-                        c.addCookie(new Cookie("cookie4", c.cookieValue("cookie2")));
+                        c.addCookie(new CookieBuilder("cookie3", c.cookieValue("cookie1")));
+                        c.addCookie(new CookieBuilder("cookie4", c.cookieValue("cookie2")));
                     }
 
                     c.print("source");

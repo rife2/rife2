@@ -93,9 +93,8 @@ class EngineTemplateProcessor {
                 var cookie_value_id = captured_groups[0];
                 if (!template_.isValueSet(cookie_value_id)) {
                     var cookie_name = captured_groups[1];
-                    var cookie = context_.cookie(cookie_name);
-                    if (cookie != null) {
-                        template_.setValue(cookie_value_id, encoder_.encode(cookie.getValue()));
+                    if (context_.hasCookie(cookie_name)) {
+                        template_.setValue(cookie_value_id, encoder_.encode(context_.cookieValue(cookie_name)));
                         setValues.add(cookie_value_id);
                     }
                 }

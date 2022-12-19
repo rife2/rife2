@@ -5,8 +5,7 @@
 package rife.authentication.elements;
 
 import rife.authentication.elements.exceptions.UndefinedLogoutRememberManagerException;
-import rife.engine.Context;
-import rife.engine.Element;
+import rife.engine.*;
 import rife.template.Template;
 
 public class Logout implements Element {
@@ -47,8 +46,7 @@ public class Logout implements Element {
         String authid = null;
         var auth_cookie_name = authConfig_.authCookieName();
         if (c.hasCookie(authConfig_.authCookieName())) {
-            var auth_cookie = c.cookie(auth_cookie_name);
-            authid = auth_cookie.getValue();
+            authid = c.cookieValue(auth_cookie_name);
         }
 
         if (authid != null) {
@@ -63,24 +61,16 @@ public class Logout implements Element {
                 var remember_cookie_name = authConfig_.rememberCookieName();
                 authConfig_.sessionValidator().getRememberManager().eraseRememberId(c.cookieValue(remember_cookie_name));
 
-                var remember_cookie = c.cookie(remember_cookie_name);
-                remember_cookie.setMaxAge(-1);
-                remember_cookie.setPath("/");
-                remember_cookie.setValue("");
-                c.addCookie(remember_cookie);
+                c.addCookie(new CookieBuilder(remember_cookie_name, "").path("/").maxAge(-1));
             }
 
             // clear the authentication cookie
             if (c.hasCookie(auth_cookie_name)) {
-                var cookie = c.cookie(auth_cookie_name);
-                cookie.setMaxAge(-1);
-                cookie.setPath("/");
-                cookie.setValue("");
-                c.addCookie(cookie);
+                c.addCookie(new CookieBuilder(auth_cookie_name, "").path("/").maxAge(-1));
             }
         }
 
-        c.removeAttribute(authConfig_.identityAttributeName());
+        c.removeAttribute(AuthConfig.identityAttributeName());
 
         loggedOut(template);
 

@@ -10,8 +10,7 @@ import rife.authentication.SessionAttributes;
 import rife.authentication.credentials.RememberMe;
 import rife.authentication.credentials.RoleUserCredentials;
 import rife.authentication.elements.exceptions.UndefinedAuthenticationRememberManagerException;
-import rife.engine.Context;
-import rife.engine.RequestMethod;
+import rife.engine.*;
 import rife.template.Template;
 import rife.validation.ValidationError;
 
@@ -212,10 +211,9 @@ public class Login extends Identified implements SessionAttributes {
             var remember_id = remember_manager.createRememberId(userid, c.remoteAddr());
 
             if (remember_id != null) {
-                var remember_cookie = new Cookie(authConfig_.rememberCookieName(), remember_id);
-                remember_cookie.setPath("/");
-                remember_cookie.setMaxAge(authConfig_.rememberMaxAge());
-                c.addCookie(remember_cookie);
+                c.addCookie(new CookieBuilder(authConfig_.rememberCookieName(), remember_id)
+                    .path("/")
+                    .maxAge(authConfig_.rememberMaxAge()));
             }
         }
 
@@ -225,9 +223,8 @@ public class Login extends Identified implements SessionAttributes {
             authenticated(userid);
 
             // set cookie
-            var auth_cookie = new Cookie(authConfig_.authCookieName(), authid);
-            auth_cookie.setPath("/");
-            c.addCookie(auth_cookie);
+            c.addCookie(new CookieBuilder(authConfig_.authCookieName(), authid)
+                .path("/"));
 
             var session_validator = authConfig_.sessionValidator();
             assert session_validator != null;
