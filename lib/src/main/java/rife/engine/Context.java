@@ -4,7 +4,6 @@
  */
 package rife.engine;
 
-import jakarta.servlet.http.HttpSession;
 import rife.config.RifeConfig;
 import rife.engine.exceptions.*;
 import rife.template.Template;
@@ -1719,21 +1718,39 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getSession}.
+     * Returns the current session associated with this request, or if the request does not have a session, creates one.
      *
+     * @return the <code>Session</code> associated with this request
+     *
+     * @see #session(boolean)
      * @since 1.0
      */
-    public HttpSession session() {
-        return request_.getSession();
+    public Session session() {
+        return session(true);
     }
 
     /**
-     * See {@link Request#getSession(boolean)}.
+     * Returns the current <code>Session</code> associated with this request or, if there is no current session and
+     * <code>create</code> is true, returns a new session.
+     *
+     * <p>
+     * If <code>create</code> is <code>false</code> and the request has no valid <code>Session</code>, this method
+     * returns <code>null</code>.
+     *
+     * @param create <code>true</code> to create a new session for this request if necessary; <code>false</code> to return
+     * <code>null</code> if there's no current session
+     *
+     * @return the <code>Session</code> associated with this request or <code>null</code> if <code>create</code> is
+     * <code>false</code> and the request has no valid session
      *
      * @since 1.0
      */
-    public HttpSession session(boolean create) {
-        return request_.getSession(create);
+    public Session session(boolean create) {
+        var session = request_.getSession(create);
+        if (session == null) {
+            return null;
+        }
+        return new Session(session);
     }
 
     /**

@@ -314,7 +314,7 @@ public class RouteClass implements Route {
                     }
                     var session = context.session(false);
                     if (session != null) {
-                        var value = session.getAttribute(name);
+                        var value = session.attribute(name);
                         if (value != null) {
                             try {
                                 value = Convert.toType(value, type);

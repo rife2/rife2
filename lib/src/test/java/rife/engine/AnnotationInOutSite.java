@@ -108,10 +108,10 @@ public class AnnotationInOutSite extends Site {
             c.print(c.attribute("intRequestAttribute") + "\n");
             c.print(c.attribute("requestAttr2") + "\n");
             c.print(c.attribute("requestAttr3") + "\n");
-            c.print(c.session(false).getAttribute("stringSessionAttribute") + "\n");
-            c.print(c.session(false).getAttribute("intSessionAttribute") + "\n");
-            c.print(c.session(false).getAttribute("sessionAttr2") + "\n");
-            c.print(c.session(false).getAttribute("sessionAttr3") + "\n");
+            c.print(c.session(false).attribute("stringSessionAttribute") + "\n");
+            c.print(c.session(false).attribute("intSessionAttribute") + "\n");
+            c.print(c.session(false).attribute("sessionAttr2") + "\n");
+            c.print(c.session(false).attribute("sessionAttr3") + "\n");
         });
     }
 }
