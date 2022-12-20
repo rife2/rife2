@@ -24,7 +24,7 @@ public class HelloDatabase extends Site {
 
     Route add = get("/add", c -> {
         c.print("""
-            <form action=''' method='post'>
+            <form action='' method='post'>
             <input type='text' name='name'/><input type='submit'/>
             </form>""");
     });
