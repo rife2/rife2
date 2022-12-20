@@ -12,14 +12,14 @@ import java.sql.*;
 public class HelloDatabase extends Site {
     Datasource datasource = new Datasource(
         "org.h2.Driver", "jdbc:h2:./embedded_dbs/h2/hello", "sa", "", 5);
-    CreateTable create = new CreateTable(datasource)
+    CreateTable createQuery = new CreateTable(datasource)
         .table("hello").column("name", String.class, 50);
-    DropTable drop = new DropTable(datasource)
-        .table(create.getTable());
-    Select select = new Select(datasource)
-        .from(create.getTable()).orderBy("name");
-    Insert insert = new Insert(datasource)
-        .into(create.getTable()).fieldParameter("name");
+    DropTable dropQuery = new DropTable(datasource)
+        .table(createQuery.getTable());
+    Select selectQuery = new Select(datasource)
+        .from(createQuery.getTable()).orderBy("name");
+    Insert insertQuery = new Insert(datasource)
+        .into(createQuery.getTable()).fieldParameter("name");
 
     Route add = get("/add", c -> {
         c.print("""
@@ -28,7 +28,7 @@ public class HelloDatabase extends Site {
             </form>""");
     });
     Route list = get("/list", c -> {
-        new DbQueryManager(datasource).executeFetchAll(select,
+        new DbQueryManager(datasource).executeFetchAll(selectQuery,
             new DbRowProcessor() {
                 public boolean processRow(ResultSet resultSet)
                 throws SQLException {
@@ -41,16 +41,16 @@ public class HelloDatabase extends Site {
 
     public void setup() {
         get("/install", c -> {
-            new DbQueryManager(datasource).executeUpdate(create);
+            new DbQueryManager(datasource).executeUpdate(createQuery);
             c.print("Installed");
         });
         get("/remove", c -> {
-            new DbQueryManager(datasource).executeUpdate(drop);
+            new DbQueryManager(datasource).executeUpdate(dropQuery);
             c.print("Removed");
         });
         post("/add", c -> {
             var name = c.parameter("name");
-            new DbQueryManager(datasource).executeUpdate(insert,
+            new DbQueryManager(datasource).executeUpdate(insertQuery,
                 new DbPreparedStatementHandler<>() {
                     public void setParameters(DbPreparedStatement statement) {
                         statement.setString("name", name);
