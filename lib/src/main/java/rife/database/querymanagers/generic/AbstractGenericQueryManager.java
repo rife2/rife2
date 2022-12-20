@@ -179,9 +179,9 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             Map<String, Object> manytomany_property_values = null;
             boolean obtained_manytomany_declarations = false;
 
-            // handle invididual properties
+            // handle individual properties
             for (ConstrainedProperty property : (Collection<ConstrainedProperty>) constrained.getConstrainedProperties()) {
-                // handle the uniqueness of invididual properties
+                // handle the uniqueness of individual properties
                 if (property.isUnique()) {
                     Object property_value = null;
                     try {
