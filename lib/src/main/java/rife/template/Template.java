@@ -269,7 +269,9 @@ public interface Template extends Cloneable {
      * @param deferredContent content in the internal format
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -289,7 +291,9 @@ public interface Template extends Cloneable {
      *                      content to blank content
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -309,7 +313,9 @@ public interface Template extends Cloneable {
      * @param value an object
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -328,7 +334,9 @@ public interface Template extends Cloneable {
      * @param value a boolean value
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -347,7 +355,9 @@ public interface Template extends Cloneable {
      * @param value a character
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -366,7 +376,9 @@ public interface Template extends Cloneable {
      * @param value a string of characters
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -390,7 +402,9 @@ public interface Template extends Cloneable {
      * @param count  the number of characters to use
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -412,7 +426,9 @@ public interface Template extends Cloneable {
      * @param value a floating point value
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #blankValue
@@ -433,7 +449,9 @@ public interface Template extends Cloneable {
      * @param value a floating point value
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #blankValue
@@ -450,7 +468,9 @@ public interface Template extends Cloneable {
      * @param value an integer
      * @throws TemplateException if the specified value does not exist in
      *                           this template
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -468,7 +488,9 @@ public interface Template extends Cloneable {
      * @param value a long
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -487,7 +509,9 @@ public interface Template extends Cloneable {
      * @param value a string, or <code>null</code>
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -506,7 +530,9 @@ public interface Template extends Cloneable {
      * @param value a character sequence, or <code>null</code>
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -530,7 +556,9 @@ public interface Template extends Cloneable {
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template; or
      *                           <p>if an error occurred during the evaluation of the template parameter
+     * @see #setValueEncoded
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -539,6 +567,29 @@ public interface Template extends Cloneable {
      * @since 1.0
      */
     void setValue(String id, Template template)
+    throws TemplateException;
+
+    /**
+     * Sets the specified value in this template to the result of calling
+     * {@link String#valueOf(Object) String.valueOf} on the given
+     * <code>value</code> and encodes it with the {@link TemplateEncoder} that's.
+     * registered for this template
+     *
+     * @param id    the ID of the value in this template
+     * @param value an object to will be encoded
+     * @throws TemplateException if the specified value ID does not exist
+     *                           in this template
+     * @see #setValue
+     * @see #appendValue
+     * @see #appendValueEncoded
+     * @see #isValueSet
+     * @see #removeValue
+     * @see #removeValues
+     * @see #blankValue
+     * @see #hasValueId
+     * @since 1.0
+     */
+    void setValueEncoded(String id, Object value)
     throws TemplateException;
 
     /**
@@ -732,7 +783,9 @@ public interface Template extends Cloneable {
      * @param value an object
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -751,7 +804,9 @@ public interface Template extends Cloneable {
      * @param value a boolean value
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #blankValue
@@ -769,7 +824,9 @@ public interface Template extends Cloneable {
      * @param value a character
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -788,7 +845,9 @@ public interface Template extends Cloneable {
      * @param value a string of characters
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -812,7 +871,9 @@ public interface Template extends Cloneable {
      * @param count  the number of characters to use
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -834,7 +895,9 @@ public interface Template extends Cloneable {
      * @param value a floating point value
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -856,7 +919,9 @@ public interface Template extends Cloneable {
      * @param value a floating point value
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -874,7 +939,9 @@ public interface Template extends Cloneable {
      * @param value an integer
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -892,7 +959,9 @@ public interface Template extends Cloneable {
      * @param value a long
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -911,7 +980,10 @@ public interface Template extends Cloneable {
      * @param value a string, or <code>null</code>
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
+     * @see #appendValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -920,6 +992,29 @@ public interface Template extends Cloneable {
      * @since 1.0
      */
     void appendValue(String id, String value)
+    throws TemplateException;
+
+    /**
+     * Appends the result of calling {@link String#valueOf(Object)
+     * String.valueOf} on the given <code>value</code> to the specified value
+     * in this template and encodes it with the {@link TemplateEncoder} that's.
+     * registered for this template
+     *
+     * @param id    the ID of the value in this template
+     * @param value an object to will be encoded
+     * @throws TemplateException if the specified value ID does not exist
+     *                           in this template
+     * @see #appendValue
+     * @see #setValue
+     * @see #setValueEncoded
+     * @see #isValueSet
+     * @see #removeValue
+     * @see #removeValues
+     * @see #blankValue
+     * @see #hasValueId
+     * @since 1.0
+     */
+    void appendValueEncoded(String id, Object value)
     throws TemplateException;
 
     /**
@@ -1103,7 +1198,9 @@ public interface Template extends Cloneable {
      * @param id the ID of a value in this template
      * @return whether the specified value has been set
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues
@@ -1127,7 +1224,9 @@ public interface Template extends Cloneable {
      *
      * @param id the ID of a value in this template
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
      * @see #hasValueId
      * @since 1.0
@@ -1139,9 +1238,11 @@ public interface Template extends Cloneable {
      *
      * @param ids the IDs of values in this template
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
-     * * @see #removeValue
+     * @see #removeValue
      * @see #hasValueId
      * @since 1.0
      */
@@ -1152,7 +1253,9 @@ public interface Template extends Cloneable {
      *
      * @param id the ID of a value in this template
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
      * @see #hasValueId
      * @see #removeValue
@@ -1194,7 +1297,9 @@ public interface Template extends Cloneable {
      * @param id the potential ID of a value in this template
      * @return whether this template contains a value with the given ID
      * @see #appendValue
+     * @see #appendValueEncoded
      * @see #setValue
+     * @see #setValueEncoded
      * @see #isValueSet
      * @see #removeValue
      * @see #removeValues

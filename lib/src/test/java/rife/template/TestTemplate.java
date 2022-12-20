@@ -102,6 +102,25 @@ public class TestTemplate {
     }
 
     @Test
+    public void testSetValuesEncoded() {
+        var template = TemplateFactory.HTML.get("values");
+        assertNull(template.getValue("VALUE1"));
+        assertNull(template.getValue("VALUE2"));
+        assertNull(template.getValue("VALUE3"));
+        assertEquals(template.countValues(), 0);
+
+        template.setValueEncoded("VALUE1", "één");
+        assertEquals(template.countValues(), 1);
+        template.setValueEncoded("VALUE2", "<>-");
+        assertEquals(template.countValues(), 2);
+        template.setValueEncoded("VALUE3", "çåø");
+        assertEquals(template.countValues(), 3);
+        assertEquals(template.getValue("VALUE1"), "&eacute;&eacute;n");
+        assertEquals(template.getValue("VALUE2"), "&lt;&gt;-");
+        assertEquals(template.getValue("VALUE3"), "&ccedil;&aring;&oslash;");
+    }
+
+    @Test
     public void testSetValuesTyped() {
         var template = TemplateFactory.HTML.get("values_typed");
 
@@ -153,6 +172,32 @@ public class TestTemplate {
         assertEquals(template.getValue("LONG"), "" + value_long);
         assertEquals(template.getValue("OBJECT"), "" + value_object);
         assertEquals(template.getValue("TEMPLATE"), "thevalue1<!--v VALUE2/-->thevalue3\n");
+    }
+
+    @Test
+    public void testAppendValuesEncoded() {
+        var template = TemplateFactory.HTML.get("values");
+        assertNull(template.getValue("VALUE1"));
+        assertNull(template.getValue("VALUE2"));
+        assertNull(template.getValue("VALUE3"));
+        assertEquals(template.countValues(), 0);
+
+        template.setValue("VALUE1", "één");
+        assertEquals(template.countValues(), 1);
+        template.setValue("VALUE2", "<>-");
+        assertEquals(template.countValues(), 2);
+        template.setValue("VALUE3", "çåø");
+        assertEquals(template.countValues(), 3);
+
+        template.appendValueEncoded("VALUE1", "één");
+        assertEquals(template.countValues(), 3);
+        template.appendValueEncoded("VALUE2", "<>-");
+        assertEquals(template.countValues(), 3);
+        template.appendValueEncoded("VALUE3", "çåø");
+        assertEquals(template.countValues(), 3);
+        assertEquals(template.getValue("VALUE1"), "één&eacute;&eacute;n");
+        assertEquals(template.getValue("VALUE2"), "<>-&lt;&gt;-");
+        assertEquals(template.getValue("VALUE3"), "çåø&ccedil;&aring;&oslash;");
     }
 
     @Test

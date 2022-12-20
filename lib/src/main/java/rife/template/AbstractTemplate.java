@@ -458,6 +458,11 @@ public abstract class AbstractTemplate implements Template {
         fixedValues_.put(id, new InternalString(value));
     }
 
+    public final void setValueEncoded(String id, Object value)
+    throws TemplateException {
+        setValue(id, getEncoder().encode(String.valueOf(value)));
+    }
+
     public void setBean(Object bean)
     throws TemplateException {
         setBean(bean, null, true);
@@ -554,6 +559,11 @@ public abstract class AbstractTemplate implements Template {
         } else {
             fixedValues_.put(id, new InternalString(value));
         }
+    }
+
+    public final void appendValueEncoded(String id, Object value)
+    throws TemplateException {
+        appendValue(id, getEncoder().encode(String.valueOf(value)));
     }
 
     public final String getValue(String id)
