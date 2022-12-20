@@ -10,25 +10,25 @@ import rife.engine.*;
 import java.sql.*;
 
 public class HelloDatabase extends Site {
-    final Datasource datasource = new Datasource(
+    Datasource datasource = new Datasource(
         "org.h2.Driver",
         "jdbc:h2:./embedded_dbs/h2/hello", "sa", "", 5);
-    final CreateTable create = new CreateTable(datasource)
+    CreateTable create = new CreateTable(datasource)
         .table("hello").column("name", String.class, 50);
-    final DropTable drop = new DropTable(datasource)
+    DropTable drop = new DropTable(datasource)
         .table(create.getTable());
-    final Select select = new Select(datasource)
+    Select select = new Select(datasource)
         .from(create.getTable()).orderBy("name");
-    final Insert insert = new Insert(datasource)
+    Insert insert = new Insert(datasource)
         .into(create.getTable()).fieldParameter("name");
 
-    final Route add = get("/add", c -> {
+    Route add = get("/add", c -> {
         c.print("""
             <form action=''' method='post'>
             <input type='text' name='name'/><input type='submit'/>
             </form>""");
     });
-    final Route list = get("/list", c -> {
+    Route list = get("/list", c -> {
         new DbQueryManager(datasource).executeFetchAll(select,
             new DbRowProcessor() {
                 public boolean processRow(ResultSet resultSet)
