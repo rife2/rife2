@@ -11,8 +11,7 @@ import java.sql.*;
 
 public class HelloDatabase extends Site {
     Datasource datasource = new Datasource(
-        "org.h2.Driver",
-        "jdbc:h2:./embedded_dbs/h2/hello", "sa", "", 5);
+        "org.h2.Driver", "jdbc:h2:./embedded_dbs/h2/hello", "sa", "", 5);
     CreateTable create = new CreateTable(datasource)
         .table("hello").column("name", String.class, 50);
     DropTable drop = new DropTable(datasource)
@@ -24,8 +23,8 @@ public class HelloDatabase extends Site {
 
     Route add = get("/add", c -> {
         c.print("""
-            <form action='' method='post'>
-            <input type='text' name='name'/><input type='submit'/>
+            <form method='post'>
+            <input name='name'/><input type='submit'/>
             </form>""");
     });
     Route list = get("/list", c -> {
