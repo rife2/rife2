@@ -29,6 +29,7 @@ dependencies {
     runtimeOnly("org.eclipse.jetty:jetty-server:11.0.12")
     runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.12")
     implementation(project(":lib"))
+    runtimeOnly("com.h2database:h2:2.1.214")
 }
 
 tasks.named<Test>("test") {

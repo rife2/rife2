@@ -9,3 +9,4 @@ lib/src/main/gen
 .idea
 lib/embedded_dbs
 derby.log
+embedded_dbs
