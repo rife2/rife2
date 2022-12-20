@@ -134,7 +134,7 @@ public class Context {
 
     public void print(Template template)
     throws TemplateException, EngineException {
-        var set_values = new EngineTemplateProcessor(this, template).processTemplate();
+        new EngineTemplateProcessor(this, template).processTemplate();
 
         // set the content type
         if (!response_.isContentTypeSet()) {
@@ -148,9 +148,6 @@ public class Context {
 
         // print the element contents with the auto-generated values
         response_.print(template);
-
-        // clean up the values that were set
-        template.removeValues(set_values);
     }
 
     public Template template()
