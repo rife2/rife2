@@ -16,11 +16,19 @@ public class HelloDatabase extends Site {
         .table("hello").column("name", String.class, 50);
     DropTable dropQuery = new DropTable(datasource)
         .table(createQuery.getTable());
-    Select selectQuery = new Select(datasource)
-        .from(createQuery.getTable()).orderBy("name");
     Insert insertQuery = new Insert(datasource)
         .into(createQuery.getTable()).fieldParameter("name");
+    Select selectQuery = new Select(datasource)
+        .from(createQuery.getTable()).orderBy("name");
 
+    Route install = get("/install", c -> {
+        manager.executeUpdate(createQuery);
+        c.print("Installed");
+    });
+    Route remove = get("/remove", c -> {
+        manager.executeUpdate(dropQuery);
+        c.print("Removed");
+    });
     Route addForm = get("/add", c -> c.print("""
         <form method='post'>
         <input name='name'/><input type='submit'/>
@@ -30,14 +38,6 @@ public class HelloDatabase extends Site {
         manager.executeFetchAll(selectQuery,
             resultSet -> c.print(resultSet.getString("name") + "<br>"));
         c.print("<br><a href='" + c.urlFor(addForm) + "'>Add more</a><br>");
-    });
-    Route install = get("/install", c -> {
-        manager.executeUpdate(createQuery);
-        c.print("Installed");
-    });
-    Route remove = get("/remove", c -> {
-        manager.executeUpdate(dropQuery);
-        c.print("Removed");
     });
     Route add = post("/add", c -> {
         var name = c.parameter("name");
