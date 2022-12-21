@@ -11,6 +11,7 @@ import rife.database.types.SqlConversion;
 import rife.tools.ExceptionUtils;
 import rife.tools.StringUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -67,14 +68,14 @@ public class Datasource implements Cloneable {
         sDriverNames.put("PostgreSQL JDBC Driver", "org.postgresql.Driver");
     }
 
-    private String mDriver = null;
-    private String mUrl = null;
-    private String mUser = null;
-    private String mPassword = null;
-    private SqlConversion mSqlConversion = null;
-    private CapabilitiesCompensator mCapabilitiesCompensator = null;
-    private ConnectionPool mConnectionPool = new ConnectionPool();
-    private DataSource mDataSource = null;
+    private String driver_ = null;
+    private String url_ = null;
+    private String user_ = null;
+    private String password_ = null;
+    private SqlConversion sqlConversion_ = null;
+    private CapabilitiesCompensator capabilitiesCompensator_ = null;
+    private ConnectionPool connectionPool_ = new ConnectionPool();
+    private DataSource dataSource_ = null;
 
     /**
      * Instantiates a new <code>Datasource</code> object with no connection
@@ -85,7 +86,7 @@ public class Datasource implements Cloneable {
      * @see #setUrl(String)
      * @see #setUser(String)
      * @see #setPassword(String)
-     * @see #setPoolsize(int)
+     * @see #setPoolSize(int)
      * @see #setDataSource(DataSource)
      * @since 1.0
      */
@@ -102,21 +103,21 @@ public class Datasource implements Cloneable {
      *                 connection will be made, this is entirely driver-dependent
      * @param user     the user that will be used to connect to the database
      * @param password the password that will be used to connect to the database
-     * @param poolsize the size of the connection pool, <code>0</code> means
+     * @param poolSize the size of the connection pool, <code>0</code> means
      *                 that the connections will not be pooled
      * @since 1.0
      */
-    public Datasource(String driver, String url, String user, String password, int poolsize) {
+    public Datasource(String driver, String url, String user, String password, int poolSize) {
         setDriver(driver);
         setUrl(url);
         setUser(user);
         setPassword(password);
-        setPoolsize(poolsize);
+        setPoolSize(poolSize);
 
-        assert mDriver != null;
-        assert mDriver.length() > 0;
-        assert mUrl != null;
-        assert mUrl.length() > 0;
+        assert driver_ != null;
+        assert driver_.length() > 0;
+        assert url_ != null;
+        assert url_.length() > 0;
     }
 
     /**
@@ -129,13 +130,13 @@ public class Datasource implements Cloneable {
      *
      * @param dataSource the standard datasource that will be used to obtain the
      *                   connection
-     * @param poolsize   the size of the connection pool, <code>0</code> means
+     * @param poolSize   the size of the connection pool, <code>0</code> means
      *                   that the connections will not be pooled
      * @since 1.0
      */
-    public Datasource(DataSource dataSource, int poolsize) {
+    public Datasource(DataSource dataSource, int poolSize) {
         setDataSource(dataSource);
-        setPoolsize(poolsize);
+        setPoolSize(poolSize);
 
         assert dataSource != null;
     }
@@ -151,17 +152,17 @@ public class Datasource implements Cloneable {
      *                   <code>null</code> will let RIFE try to figure it out by itself
      * @param user       the user that will be used to connect to the database
      * @param password   the password that will be used to connect to the database
-     * @param poolsize   the size of the connection pool, <code>0</code> means
+     * @param poolSize   the size of the connection pool, <code>0</code> means
      *                   that the connections will not be pooled
      * @since 1.0
      */
-    public Datasource(DataSource dataSource, String driver, String user, String password, int poolsize) {
+    public Datasource(DataSource dataSource, String driver, String user, String password, int poolSize) {
         setDataSource(dataSource);
-        mDriver = driver;
-        mSqlConversion = null;
+        driver_ = driver;
+        sqlConversion_ = null;
         setUser(user);
         setPassword(password);
-        setPoolsize(poolsize);
+        setPoolSize(poolSize);
 
         assert dataSource != null;
     }
@@ -179,27 +180,27 @@ public class Datasource implements Cloneable {
     throws DatabaseException {
         Connection connection = null;
 
-        if (this.mDataSource != null) {
+        if (this.dataSource_ != null) {
             // try to create a datasource connection
-            if (null != mUser && null != mPassword) {
+            if (null != user_ && null != password_) {
                 try {
-                    connection = this.mDataSource.getConnection(mUser, mPassword);
+                    connection = this.dataSource_.getConnection(user_, password_);
                 } catch (SQLException e) {
-                    throw new ConnectionOpenErrorException(null, mUser, mPassword, e);
+                    throw new ConnectionOpenErrorException(null, user_, password_, e);
                 }
             } else {
                 try {
-                    connection = this.mDataSource.getConnection();
+                    connection = this.dataSource_.getConnection();
                 } catch (SQLException e) {
                     throw new ConnectionOpenErrorException(null, e);
                 }
             }
 
-            if (null == mDriver) {
+            if (null == driver_) {
                 try {
                     String driver_name = connection.getMetaData().getDriverName();
-                    mDriver = sDriverNames.get(driver_name);
-                    if (null == mDriver) {
+                    driver_ = sDriverNames.get(driver_name);
+                    if (null == driver_) {
                         throw new UnsupportedDriverNameException(driver_name);
                     }
                 } catch (SQLException e) {
@@ -210,28 +211,25 @@ public class Datasource implements Cloneable {
 
             // obtain the jdbc driver instance
             try {
-                Class.forName(mDriver).newInstance();
-            } catch (InstantiationException e) {
-                throw new DriverInstantiationErrorException(mDriver, e);
-            } catch (ClassNotFoundException e) {
-                throw new DriverInstantiationErrorException(mDriver, e);
-            } catch (IllegalAccessException e) {
-                throw new DriverInstantiationErrorException(mDriver, e);
+                Class.forName(driver_).getDeclaredConstructor().newInstance();
+            } catch (InstantiationException | ClassNotFoundException | IllegalAccessException |
+                     NoSuchMethodException | InvocationTargetException e) {
+                throw new DriverInstantiationErrorException(driver_, e);
             }
 
             // try to create a jdbc connection
-            if (null != mUser &&
-                null != mPassword) {
+            if (null != user_ &&
+                null != password_) {
                 try {
-                    connection = DriverManager.getConnection(mUrl, mUser, mPassword);
+                    connection = DriverManager.getConnection(url_, user_, password_);
                 } catch (SQLException e) {
-                    throw new ConnectionOpenErrorException(mUrl, mUser, mPassword, e);
+                    throw new ConnectionOpenErrorException(url_, user_, password_, e);
                 }
             } else {
                 try {
-                    connection = DriverManager.getConnection(mUrl);
+                    connection = DriverManager.getConnection(url_);
                 } catch (SQLException e) {
-                    throw new ConnectionOpenErrorException(mUrl, e);
+                    throw new ConnectionOpenErrorException(url_, e);
                 }
             }
         }
@@ -255,7 +253,7 @@ public class Datasource implements Cloneable {
      */
     public DbConnection getConnection()
     throws DatabaseException {
-        return mConnectionPool.getConnection(this);
+        return connectionPool_.getConnection(this);
     }
 
     /**
@@ -271,12 +269,12 @@ public class Datasource implements Cloneable {
      */
     public String getDriver() {
         // make sure that a JNDI connection has been made first, so that the database name can be looked up
-        if (mDataSource != null &&
-            null == mDriver) {
+        if (dataSource_ != null &&
+            null == driver_) {
             getConnection();
         }
 
-        return mDriver;
+        return driver_;
     }
 
     /**
@@ -324,11 +322,11 @@ public class Datasource implements Cloneable {
     public void setDriver(String driver) {
         if (null == driver) throw new IllegalArgumentException("driver can't be null.");
         if (0 == driver.length()) throw new IllegalArgumentException("driver can't be empty.");
-        if (mConnectionPool.isInitialized())
+        if (connectionPool_.isInitialized())
             throw new IllegalArgumentException("driver can't be changed after the connection pool has been set up.");
 
-        mDriver = driver;
-        mSqlConversion = null;
+        driver_ = driver;
+        sqlConversion_ = null;
     }
 
     /**
@@ -342,7 +340,7 @@ public class Datasource implements Cloneable {
      * @since 1.0
      */
     public DataSource getDataSource() {
-        return mDataSource;
+        return dataSource_;
     }
 
     /**
@@ -354,7 +352,7 @@ public class Datasource implements Cloneable {
      * @since 1.0
      */
     public void setDataSource(DataSource dataSource) {
-        mDataSource = dataSource;
+        dataSource_ = dataSource;
     }
 
     /**
@@ -367,7 +365,7 @@ public class Datasource implements Cloneable {
      * @since 1.0
      */
     public String getUrl() {
-        return mUrl;
+        return url_;
     }
 
     /**
@@ -383,10 +381,10 @@ public class Datasource implements Cloneable {
     public void setUrl(String url) {
         if (null == url) throw new IllegalArgumentException("url can't be null.");
         if (0 == url.length()) throw new IllegalArgumentException("url can't be empty.");
-        if (mConnectionPool.isInitialized())
+        if (connectionPool_.isInitialized())
             throw new IllegalArgumentException("url can't be changed after the connection pool has been set up.");
 
-        mUrl = url;
+        url_ = url;
     }
 
     /**
@@ -398,7 +396,7 @@ public class Datasource implements Cloneable {
      * @since 1.0
      */
     public String getUser() {
-        return mUser;
+        return user_;
     }
 
     /**
@@ -411,10 +409,10 @@ public class Datasource implements Cloneable {
      * @since 1.0
      */
     public void setUser(String user) {
-        if (mConnectionPool.isInitialized())
+        if (connectionPool_.isInitialized())
             throw new IllegalArgumentException("user can't be changed after the connection pool has been set up.");
 
-        mUser = user;
+        user_ = user;
     }
 
     /**
@@ -426,7 +424,7 @@ public class Datasource implements Cloneable {
      * @since 1.0
      */
     public String getPassword() {
-        return mPassword;
+        return password_;
     }
 
     /**
@@ -439,10 +437,10 @@ public class Datasource implements Cloneable {
      * @since 1.0
      */
     public void setPassword(String password) {
-        if (mConnectionPool.isInitialized())
+        if (connectionPool_.isInitialized())
             throw new IllegalArgumentException("password can't be changed after the connection pool has been set up.");
 
-        mPassword = password;
+        password_ = password;
     }
 
     /**
@@ -452,11 +450,11 @@ public class Datasource implements Cloneable {
      * @return a positive <code>int</code> with the size of the pool; or
      * <code>0</code> if no pool is being used
      * @see #isPooled()
-     * @see #setPoolsize(int)
+     * @see #setPoolSize(int)
      * @since 1.0
      */
-    public int getPoolsize() {
-        return mConnectionPool.getPoolSize();
+    public int getPoolSize() {
+        return connectionPool_.getPoolSize();
     }
 
     /**
@@ -466,29 +464,29 @@ public class Datasource implements Cloneable {
      * @return <code>true</code> if a pool is being used by this
      * <code>Datasource</code>; or
      * <code>false</code> otherwise
-     * @see #getPoolsize()
-     * @see #setPoolsize(int)
+     * @see #getPoolSize()
+     * @see #setPoolSize(int)
      * @since 1.0
      */
     public boolean isPooled() {
-        return getPoolsize() > 0;
+        return getPoolSize() > 0;
     }
 
     /**
      * Sets the size of the connection pool that will be used to connect to the
      * database.
      *
-     * @param poolsize a positive <code>int</code> with the size of the pool,
+     * @param poolSize a positive <code>int</code> with the size of the pool,
      *                 providing <code>0</code> will disable the use of a connection pool for
      *                 this <code>Datasource</code>.
-     * @see #getPoolsize()
+     * @see #getPoolSize()
      * @see #isPooled()
      * @since 1.0
      */
-    public void setPoolsize(int poolsize) {
-        if (poolsize < 0) throw new IllegalArgumentException("poolsize can't be negative.");
+    public void setPoolSize(int poolSize) {
+        if (poolSize < 0) throw new IllegalArgumentException("poolSize can't be negative.");
 
-        mConnectionPool.setPoolSize(poolsize);
+        connectionPool_.setPoolSize(poolSize);
     }
 
     /**
@@ -504,16 +502,16 @@ public class Datasource implements Cloneable {
     public SqlConversion getSqlConversion()
     throws UnsupportedJdbcDriverException {
         String driver = getDriver();
-        if (null == mSqlConversion &&
+        if (null == sqlConversion_ &&
             null != driver) {
             try {
-                mSqlConversion = (SqlConversion) Class.forName("rife.database.types.databasedrivers." + StringUtils.encodeClassname(getAliasedDriver())).newInstance();
+                sqlConversion_ = (SqlConversion) Class.forName("rife.database.types.databasedrivers." + StringUtils.encodeClassname(getAliasedDriver())).newInstance();
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
                 throw new UnsupportedJdbcDriverException(driver, e);
             }
         }
 
-        return mSqlConversion;
+        return sqlConversion_;
     }
 
     /**
@@ -528,16 +526,16 @@ public class Datasource implements Cloneable {
     public CapabilitiesCompensator getCapabilitiesCompensator()
     throws UnsupportedJdbcDriverException {
         String driver = getDriver();
-        if (null == mCapabilitiesCompensator &&
+        if (null == capabilitiesCompensator_ &&
             null != driver) {
             try {
-                mCapabilitiesCompensator = (CapabilitiesCompensator) Class.forName("rife.database.capabilities." + StringUtils.encodeClassname(getAliasedDriver())).newInstance();
+                capabilitiesCompensator_ = (CapabilitiesCompensator) Class.forName("rife.database.capabilities." + StringUtils.encodeClassname(getAliasedDriver())).newInstance();
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
                 throw new UnsupportedJdbcDriverException(driver, e);
             }
         }
 
-        return mCapabilitiesCompensator;
+        return capabilitiesCompensator_;
     }
 
     /**
@@ -551,11 +549,11 @@ public class Datasource implements Cloneable {
      * @since 1.0
      */
     public int hashCode() {
-        int dataSourceHash = mDataSource == null ? 1 : mDataSource.hashCode();
-        int driverHash = mDriver == null ? 1 : mDriver.hashCode();
-        int urlHash = mUrl == null ? 1 : mUrl.hashCode();
-        int userHash = mUser == null ? 1 : mUser.hashCode();
-        int passwordHash = mPassword == null ? 1 : mPassword.hashCode();
+        int dataSourceHash = dataSource_ == null ? 1 : dataSource_.hashCode();
+        int driverHash = driver_ == null ? 1 : driver_.hashCode();
+        int urlHash = url_ == null ? 1 : url_.hashCode();
+        int userHash = user_ == null ? 1 : user_.hashCode();
+        int passwordHash = password_ == null ? 1 : password_.hashCode();
         return dataSourceHash * driverHash * urlHash * userHash * passwordHash;
     }
 
@@ -580,11 +578,10 @@ public class Datasource implements Cloneable {
             return false;
         }
 
-        if (!(object instanceof Datasource)) {
+        if (!(object instanceof Datasource other_datasource)) {
             return false;
         }
 
-        Datasource other_datasource = (Datasource) object;
         if (!other_datasource.getDriver().equals(getDriver())) {
             return false;
         }
@@ -643,8 +640,8 @@ public class Datasource implements Cloneable {
             return null;
         }
 
-        other.mSqlConversion = mSqlConversion;
-        other.mConnectionPool = mConnectionPool;
+        other.sqlConversion_ = sqlConversion_;
+        other.connectionPool_ = connectionPool_;
 
         return other;
     }
@@ -657,7 +654,7 @@ public class Datasource implements Cloneable {
      */
     public void cleanup()
     throws DatabaseException {
-        mConnectionPool.cleanup();
+        connectionPool_.cleanup();
     }
 
 
@@ -668,7 +665,7 @@ public class Datasource implements Cloneable {
      * @return the requested instance of <code>ConnectionPool</code>
      */
     public ConnectionPool getPool() {
-        return mConnectionPool;
+        return connectionPool_;
     }
 }
 

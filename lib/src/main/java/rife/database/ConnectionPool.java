@@ -21,7 +21,7 @@ import java.util.HashMap;
 public class ConnectionPool implements AutoCloseable {
     private int poolSize_ = 0;
     private ArrayList<DbConnection> connectionPool_ = new ArrayList<>();
-    private HashMap<Thread, DbConnection> ThreadConnections_ = new HashMap<>();
+    private final HashMap<Thread, DbConnection> threadConnections_ = new HashMap<>();
 
     /**
      * Create a new ConnectionPool
@@ -120,7 +120,7 @@ public class ConnectionPool implements AutoCloseable {
                 previous_pool.clear();
             }
 
-            ThreadConnections_.clear();
+            threadConnections_.clear();
         }
     }
 
@@ -138,7 +138,7 @@ public class ConnectionPool implements AutoCloseable {
      */
     void registerThreadConnection(Thread thread, DbConnection connection) {
         synchronized (this) {
-            ThreadConnections_.put(thread, connection);
+            threadConnections_.put(thread, connection);
         }
     }
 
@@ -151,7 +151,7 @@ public class ConnectionPool implements AutoCloseable {
      */
     void unregisterThreadConnection(Thread thread) {
         synchronized (this) {
-            ThreadConnections_.remove(thread);
+            threadConnections_.remove(thread);
             this.notifyAll();
         }
     }
@@ -165,7 +165,7 @@ public class ConnectionPool implements AutoCloseable {
      */
     boolean hasThreadConnection(Thread thread) {
         synchronized (this) {
-            return ThreadConnections_.containsKey(thread);
+            return threadConnections_.containsKey(thread);
         }
     }
 
@@ -206,8 +206,8 @@ public class ConnectionPool implements AutoCloseable {
             // check if the connection threads contains an entry for the
             // current thread so that transactions are treated in a
             // continuous fashion
-            if (ThreadConnections_.containsKey(Thread.currentThread())) {
-                DbConnection connection = ThreadConnections_.get(Thread.currentThread());
+            if (threadConnections_.containsKey(Thread.currentThread())) {
+                DbConnection connection = threadConnections_.get(Thread.currentThread());
                 if (connection != null) {
                     return connection;
                 }
@@ -238,7 +238,7 @@ public class ConnectionPool implements AutoCloseable {
                             connectionPool_.set(i, connection);
                             break;
                         } else if (null != possible_connection &&
-                            possible_connection.isFree()) {
+                                   possible_connection.isFree()) {
                             connection = possible_connection;
                             break;
                         }

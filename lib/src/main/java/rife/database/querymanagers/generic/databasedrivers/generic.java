@@ -5,11 +5,10 @@
  */
 package rife.database.querymanagers.generic.databasedrivers;
 
+import rife.database.*;
 import rife.database.queries.*;
 import rife.database.querymanagers.generic.*;
 
-import rife.database.Datasource;
-import rife.database.DbRowProcessor;
 import rife.database.exceptions.DatabaseException;
 
 import java.util.List;
@@ -292,12 +291,22 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
         return _restore(getInternalRestoreListQuery(), rowProcessor);
     }
 
+    public boolean restore(RowProcessor rowProcessor)
+    throws DatabaseException {
+        return _restore(getInternalRestoreListQuery(), rowProcessor);
+    }
+
     public List<BeanType> restore(RestoreQuery query)
     throws DatabaseException {
         return _restore(query.getDelegate());
     }
 
     public boolean restore(RestoreQuery query, DbRowProcessor rowProcessor)
+    throws DatabaseException {
+        return _restore(query.getDelegate(), rowProcessor);
+    }
+
+    public boolean restore(RestoreQuery query, RowProcessor rowProcessor)
     throws DatabaseException {
         return _restore(query.getDelegate(), rowProcessor);
     }

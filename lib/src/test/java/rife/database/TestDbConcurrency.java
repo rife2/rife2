@@ -67,7 +67,7 @@ public class TestDbConcurrency {
         ArrayList<Concurrency> threads = new ArrayList<Concurrency>();
         final Object main_lock = new Object();
         Concurrency concurrency = null;
-        for (int i = 1; i <= datasource.getPoolsize() * sConnectionOverload; i++) {
+        for (int i = 1; i <= datasource.getPoolSize() * sConnectionOverload; i++) {
             concurrency = new Concurrency(datasource, main_lock);
 
             Thread thread = new Thread(concurrency, "example " + i);

@@ -38,25 +38,25 @@ import java.util.logging.Logger;
  * following categories of worry-free methods exist:
  * <ul>
  * <li>{@linkplain #executeUpdate(Query) execute an update query directly}
- * <li>{@linkplain #executeUpdate(Query, DbPreparedStatementHandler) execute a
+ * <li>{@linkplain #executeUpdate(Query, PreparedStatementHandler) execute a
  * customizable update query}
- * <li>{@linkplain #executeQuery(ReadQuery, DbPreparedStatementHandler) execute a
+ * <li>{@linkplain #executeQuery(ReadQuery, PreparedStatementHandler) execute a
  * customizable select query}
- * <li>{@linkplain #executeHasResultRows(ReadQuery, DbPreparedStatementHandler)
+ * <li>{@linkplain #executeHasResultRows(ReadQuery, PreparedStatementHandler)
  * check the result rows of a customizable select query}
- * <li>{@linkplain #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
+ * <li>{@linkplain #executeGetFirstString(ReadQuery, PreparedStatementHandler)
  * obtain the first value of a customizable select query}
  * <li>{@linkplain
- * #executeFetchFirst(ReadQuery, DbRowProcessor, DbPreparedStatementHandler) fetch
+ * #executeFetchFirst(ReadQuery, RowProcessor, PreparedStatementHandler) fetch
  * the first row of a customizable select query}
  * <li>{@linkplain
- * #executeFetchFirstBean(ReadQuery, Class, DbPreparedStatementHandler) fetch the
+ * #executeFetchFirstBean(ReadQuery, Class, PreparedStatementHandler) fetch the
  * first bean of a customizable select query}
  * <li>{@linkplain
- * #executeFetchAll(ReadQuery, DbRowProcessor, DbPreparedStatementHandler) fetch
+ * #executeFetchAll(ReadQuery, RowProcessor, PreparedStatementHandler) fetch
  * all rows of a customizable select query}
  * <li>{@linkplain
- * #executeFetchAllBeans(ReadQuery, Class, DbPreparedStatementHandler) fetch all
+ * #executeFetchAllBeans(ReadQuery, Class, PreparedStatementHandler) fetch all
  * beans of a customizable select query}
  * </ul>
  * <p>Lower-level methods are also available for the sake of repetitive
@@ -64,9 +64,9 @@ import java.util.logging.Logger;
  * use the {@link #executeQuery(ReadQuery) executeQuery} method.
  * <p>Finally, <code>since DbStatement</code> and
  * <code>DbPreparedStatement</code> instances preserve a reference to their
- * resultset, it's easy to iterate over the rows of a resultset with the
- * {@link #fetch(ResultSet, DbRowProcessor) fetch} or {@link
- * #fetchAll(ResultSet, DbRowProcessor) fetchAll} methods.
+ * result set, it's easy to iterate over the rows of a result set with the
+ * {@link #fetch(ResultSet, RowProcessor) fetch} or {@link
+ * #fetchAll(ResultSet, RowProcessor) fetchAll} methods.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.database.DbPreparedStatement
@@ -117,9 +117,9 @@ public class DbQueryManager implements Cloneable {
     throws DatabaseException {
         if (null == sql) throw new IllegalArgumentException("sql can't be null.");
 
-        DbConnection connection = getConnection();
+        var connection = getConnection();
         try {
-            DbStatement statement = connection.createStatement();
+            var statement = connection.createStatement();
             try {
                 return statement.executeUpdate(sql);
             } finally {
@@ -155,9 +155,9 @@ public class DbQueryManager implements Cloneable {
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var connection = getConnection();
         try {
-            DbStatement statement = connection.createStatement();
+            var statement = connection.createStatement();
             try {
                 return statement.executeUpdate(query);
             } finally {
@@ -184,52 +184,66 @@ public class DbQueryManager implements Cloneable {
         return datasource_.getCapabilitiesCompensator().getCapableResultSet(statement);
     }
 
+    private static DbPreparedStatementHandler ensureFullPreparedStatementHandler(PreparedStatementHandler handler) {
+        DbPreparedStatementHandler full_handler = null;
+        if (handler != null) {
+            if (handler instanceof DbPreparedStatementHandler h) {
+                full_handler = h;
+            } else {
+                full_handler = new DbPreparedStatementHandler<>() {
+                    public void setParameters(DbPreparedStatement statement) {
+                        handler.setParameters(statement);
+                    }
+                };
+            }
+        }
+        return full_handler;
+    }
+
     /**
      * Safely execute an update statement. It relies on the wrapped {@link
      * DbPreparedStatement#executeUpdate()} method, but also automatically
      * closes the statement after its execution and allows customization of
      * the prepared statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>This method is typically used when you need to fully customize a
      * query at runtime, but still want to benefit of a safety net that
      * ensures that the allocated statement will be closed.
      * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Insert insert = new Insert(datasource);
+     * var insert = new Insert(datasource);
      * insert.into("person").fieldParameter("name");
      * final String name = "me";
-     * int count = manager.executeUpdate(insert, new DbPreparedStatementHandler() {
-     *        public void setParameters(DbPreparedStatement statement)
-     *        {
-     *            statement
-     *                .setString("name", name);
-     *        }
-     *    });</pre>
+     * int count = manager.executeUpdate(insert,
+     *     statement -> statement.setString("name", name));
+     * </pre>
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
      * @return the row count for the executed query
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeUpdate()}
      * @see DbPreparedStatement#executeUpdate()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public int executeUpdate(Query query, DbPreparedStatementHandler handler)
+    public int executeUpdate(Query query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
-                if (null == handler) {
+                if (null == full_handler) {
                     return statement.executeUpdate();
                 }
 
-                return handler.performUpdate(statement);
+                return full_handler.performUpdate(statement);
             } finally {
                 defensiveClose(statement);
             }
@@ -260,10 +274,11 @@ public class DbQueryManager implements Cloneable {
      * @return <code>true</code> when rows were returned by the query; or
      * <p><code>false</code> otherwise
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#hasResultRows()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#hasResultRows()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -277,47 +292,44 @@ public class DbQueryManager implements Cloneable {
      * relies on the wrapped {@link DbResultSet#hasResultRows()} method, but
      * also automatically closes the statement after its execution and allows
      * customization of the prepared statement through an optional instance of
-     * {@link DbPreparedStatementHandler}.
+     * {@link PreparedStatementHandler}.
      * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
+     * var select = new Select(datasource);
      * select.from("person").whereParameter("name", "=");
      * final String name = "you";
-     * boolean result = manager.executeHasResultRows(select, new DbPreparedStatementHandler() {
-     *        public void setParameters(DbPreparedStatement statement)
-     *        {
-     *            statement
-     *                .setString("name", name);
-     *        }
-     *    });</pre>
+     * boolean result = manager.executeHasResultRows(select,
+     *     statement -> statement.setString("name", name));
+     * </pre>
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
-     *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
+     * @param handler an instance of <code>PreparedStatementHandler</code>
+     *                that will be used to customize the query execution
      * @return <code>true</code> when rows were returned by the query; or
      * <p><code>false</code> otherwise
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#hasResultRows()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#hasResultRows()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public boolean executeHasResultRows(ReadQuery query, DbPreparedStatementHandler handler)
+    public boolean executeHasResultRows(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
-                boolean result = executeHasResultRows(statement, handler);
+                var result = executeHasResultRows(statement, full_handler);
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -346,12 +358,13 @@ public class DbQueryManager implements Cloneable {
      * </pre>
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>String</code> in the query's resultset
+     * @return the first <code>String</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstString()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstString()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -366,52 +379,50 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstString()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
      * statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.field("first").from("person").whereParameter("last", "=");
      * final String last = "Smith";
-     * String result = manager.executeGetFirstString(select, new DbPreparedStatementHandler() {
-     *        public void setParameters(DbPreparedStatement statement)
-     *        {
-     *            statement
-     *                .setString("last", last);
-     *        }
-     *    });</pre>
+     * String result = manager.executeGetFirstString(select,
+     *     statement -> statement.setString("name", name));
+     * </pre>
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>String</code> in the query's resultset
+     * @return the first <code>String</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstString()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstString()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public String executeGetFirstString(ReadQuery query, DbPreparedStatementHandler handler)
+    public String executeGetFirstString(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
                 String result = null;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstString();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -433,15 +444,16 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstBoolean()} method, but also automatically closes
      * the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>boolean</code> in the query's resultset
+     * @return the first <code>boolean</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstBoolean()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstBoolean()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -456,43 +468,45 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstBoolean()} method, but also automatically closes
      * the statement after its execution and allows customization of the
      * prepared statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>boolean</code> in the query's resultset
+     * @return the first <code>boolean</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstBoolean()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstBoolean()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public boolean executeGetFirstBoolean(ReadQuery query, DbPreparedStatementHandler handler)
+    public boolean executeGetFirstBoolean(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
-                boolean result = false;
+                var result = false;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstBoolean();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -514,15 +528,16 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstByte()} method, but also automatically closes the
      * statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>byte</code> in the query's resultset
+     * @return the first <code>byte</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstByte()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstByte()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -537,43 +552,45 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstByte()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
      * statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>byte</code> in the query's resultset
+     * @return the first <code>byte</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstByte()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstByte()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public byte executeGetFirstByte(ReadQuery query, DbPreparedStatementHandler handler)
+    public byte executeGetFirstByte(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
                 byte result = -1;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstByte();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -595,15 +612,16 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstShort()} method, but also automatically closes the
      * statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>short</code> in the query's resultset
+     * @return the first <code>short</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstShort()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstShort()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -618,43 +636,45 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstShort()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
      * statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>short</code> in the query's resultset
+     * @return the first <code>short</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstShort()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstShort()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public short executeGetFirstShort(ReadQuery query, DbPreparedStatementHandler handler)
+    public short executeGetFirstShort(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
                 short result = -1;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstShort();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -676,14 +696,15 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstInt()} method, but also automatically closes the
      * statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>int</code> in the query's resultset
+     * @return the first <code>int</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link DbResultSet#getFirstInt()}
+     *                           DbPreparedStatement#executeQuery()} and {@link DbResultSet#getFirstInt()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstInt()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -698,42 +719,44 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstInt()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
      * statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>int</code> in the query's resultset
+     * @return the first <code>int</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link DbResultSet#getFirstInt()}
+     *                           DbPreparedStatement#executeQuery()} and {@link DbResultSet#getFirstInt()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstInt()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public int executeGetFirstInt(ReadQuery query, DbPreparedStatementHandler handler)
+    public int executeGetFirstInt(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
-                int result = -1;
+                var result = -1;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstInt();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -755,15 +778,16 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstLong()} method, but also automatically closes the
      * statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>long</code> in the query's resultset
+     * @return the first <code>long</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstLong()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstLong()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -778,43 +802,45 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstLong()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
      * statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>long</code> in the query's resultset
+     * @return the first <code>long</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstLong()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstLong()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public long executeGetFirstLong(ReadQuery query, DbPreparedStatementHandler handler)
+    public long executeGetFirstLong(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
                 long result = -1;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstLong();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -836,15 +862,16 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstFloat()} method, but also automatically closes the
      * statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>float</code> in the query's resultset
+     * @return the first <code>float</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstFloat()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstFloat()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -859,43 +886,45 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstFloat()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
      * statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>float</code> in the query's resultset
+     * @return the first <code>float</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstFloat()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstFloat()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public float executeGetFirstFloat(ReadQuery query, DbPreparedStatementHandler handler)
+    public float executeGetFirstFloat(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
                 float result = -1;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstFloat();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -917,15 +946,16 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstDouble()} method, but also automatically closes the
      * statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>double</code> in the query's resultset
+     * @return the first <code>double</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstDouble()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstDouble()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -940,43 +970,45 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstDouble()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
      * statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>double</code> in the query's resultset
+     * @return the first <code>double</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstDouble()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstDouble()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public double executeGetFirstDouble(ReadQuery query, DbPreparedStatementHandler handler)
+    public double executeGetFirstDouble(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
                 double result = -1;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstDouble();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -998,15 +1030,16 @@ public class DbQueryManager implements Cloneable {
      * {@link DbResultSet#getFirstBytes()} method, but also automatically
      * closes the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>byte</code> array in the query's resultset
+     * @return the first <code>byte</code> array in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstBytes()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstBytes()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -1021,43 +1054,45 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstBytes()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
      * statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>byte</code> array in the query's resultset
+     * @return the first <code>byte</code> array in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstBytes()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstBytes()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public byte[] executeGetFirstBytes(ReadQuery query, DbPreparedStatementHandler handler)
+    public byte[] executeGetFirstBytes(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
                 byte[] result = null;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstBytes();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -1079,15 +1114,16 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstDate()} method, but also automatically closes the
      * statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first sql <code>Date</code> in the query's resultset
+     * @return the first sql <code>Date</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstDate()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstDate()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -1102,43 +1138,45 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstDate()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
      * statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first sql <code>Date</code> in the query's resultset
+     * @return the first sql <code>Date</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstDate()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstDate()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public java.sql.Date executeGetFirstDate(ReadQuery query, DbPreparedStatementHandler handler)
+    public java.sql.Date executeGetFirstDate(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
                 java.sql.Date result = null;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstDate();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -1160,17 +1198,18 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstDate(Calendar)} method, but also automatically
      * closes the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
      * @param cal   the <code>Calendar</code> object to use in constructing the
      *              date
-     * @return the first sql <code>Date</code> in the query's resultset
+     * @return the first sql <code>Date</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstDate(Calendar)}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstDate(Calendar)
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -1185,45 +1224,47 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstDate(Calendar)} method, but also automatically
      * closes the statement after its execution and allows customization of
      * the prepared statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
      * @param cal     the <code>Calendar</code> object to use in constructing the
      *                date
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first sql <code>Date</code> in the query's resultset
+     * @return the first sql <code>Date</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstDate(Calendar)}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstDate(Calendar)
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public java.sql.Date executeGetFirstDate(ReadQuery query, Calendar cal, DbPreparedStatementHandler handler)
+    public java.sql.Date executeGetFirstDate(ReadQuery query, Calendar cal, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
                 java.sql.Date result = null;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstDate(cal);
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -1245,15 +1286,16 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstTime()} method, but also automatically closes the
      * statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first sql <code>Time</code> in the query's resultset
+     * @return the first sql <code>Time</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTime()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstTime()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -1268,43 +1310,45 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstTime()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
      * statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first sql <code>Time</code> in the query's resultset
+     * @return the first sql <code>Time</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTime()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstTime()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public java.sql.Time executeGetFirstTime(ReadQuery query, DbPreparedStatementHandler handler)
+    public java.sql.Time executeGetFirstTime(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
                 java.sql.Time result = null;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstTime();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -1326,17 +1370,18 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstTime(Calendar)} method, but also automatically
      * closes the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
      * @param cal   the <code>Calendar</code> object to use in constructing the
      *              time
-     * @return the first sql <code>Time</code> in the query's resultset
+     * @return the first sql <code>Time</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTime(Calendar)}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstTime(Calendar)
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -1351,45 +1396,47 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstTime(Calendar)} method, but also automatically
      * closes the statement after its execution and allows customization of
      * the prepared statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
      * @param cal     the <code>Calendar</code> object to use in constructing the
      *                time
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first sql <code>Time</code> in the query's resultset
+     * @return the first sql <code>Time</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTime(Calendar)}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstTime(Calendar)
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public java.sql.Time executeGetFirstTime(ReadQuery query, Calendar cal, DbPreparedStatementHandler handler)
+    public java.sql.Time executeGetFirstTime(ReadQuery query, Calendar cal, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
                 java.sql.Time result = null;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstTime(cal);
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -1411,15 +1458,16 @@ public class DbQueryManager implements Cloneable {
      * the wrapped {@link DbResultSet#getFirstTimestamp()} method, but also
      * automatically closes the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first sql <code>Timestamp</code> in the query's resultset
+     * @return the first sql <code>Timestamp</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTimestamp()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstTimestamp()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -1434,43 +1482,45 @@ public class DbQueryManager implements Cloneable {
      * {@link DbResultSet#getFirstTimestamp()} method, but also automatically
      * closes the statement after its execution and allows customization of
      * the prepared statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first sql <code>Timestamp</code> in the query's resultset
+     * @return the first sql <code>Timestamp</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTimestamp()}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstTimestamp()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public java.sql.Timestamp executeGetFirstTimestamp(ReadQuery query, DbPreparedStatementHandler handler)
+    public java.sql.Timestamp executeGetFirstTimestamp(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
                 java.sql.Timestamp result = null;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstTimestamp();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -1492,17 +1542,18 @@ public class DbQueryManager implements Cloneable {
      * the wrapped {@link DbResultSet#getFirstTimestamp(Calendar)} method, but
      * also automatically closes the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
      * @param cal   the <code>Calendar</code> object to use in constructing the
      *              timestamp
-     * @return the first sql <code>Timestamp</code> in the query's resultset
+     * @return the first sql <code>Timestamp</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTimestamp(Calendar)}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstTimestamp(Calendar)
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -1517,45 +1568,47 @@ public class DbQueryManager implements Cloneable {
      * {@link DbResultSet#getFirstTimestamp(Calendar)} method, but also
      * automatically closes the statement after its execution and allows
      * customization of the prepared statement through an optional instance of
-     * {@link DbPreparedStatementHandler}.
+     * {@link PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
      * @param cal     the <code>Calendar</code> object to use in constructing the
      *                timestamp
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
-     * @return the first sql <code>Timestamp</code> in the query's resultset
+     * @return the first sql <code>Timestamp</code> in the query's result set
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTimestamp(Calendar)}
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstTimestamp(Calendar)
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public java.sql.Timestamp executeGetFirstTimestamp(ReadQuery query, Calendar cal, DbPreparedStatementHandler handler)
+    public java.sql.Timestamp executeGetFirstTimestamp(ReadQuery query, Calendar cal, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
                 java.sql.Timestamp result = null;
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     result = getResultSet(statement).getFirstTimestamp(cal);
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -1577,7 +1630,7 @@ public class DbQueryManager implements Cloneable {
      * on the wrapped {@link DbResultSet#getFirstAsciiStream()} method, but
      * also automatically closes the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
      * @param user  an instance of <code>InputStreamUser</code>
@@ -1585,13 +1638,14 @@ public class DbQueryManager implements Cloneable {
      * @return the return value from the <code>useInputStream</code> method of
      * the provided <code>InputStreamUser</code> instance
      * @throws DatabaseException   see {@link
-     *                             DbPreparedStatement#executeQuery()}and {@link
+     *                             DbPreparedStatement#executeQuery()} and {@link
      *                             DbResultSet#getFirstAsciiStream()}
      * @throws InnerClassException when errors occurs inside the
      *                             <code>InputStreamUser</code>
      * @see InputStreamUser
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstAsciiStream()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -1606,49 +1660,51 @@ public class DbQueryManager implements Cloneable {
      * wrapped {@link DbResultSet#getFirstAsciiStream()} method, but also
      * automatically closes the statement after its execution and allows
      * customization of the prepared statement through an optional instance of
-     * {@link DbPreparedStatementHandler}.
+     * {@link PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
      * @param user    an instance of <code>InputStreamUser</code>
      *                that contains the logic that will be executed with this stream
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
      * @return the return value from the <code>useInputStream</code> method of
      * the provided <code>InputStreamUser</code> instance
      * @throws DatabaseException   see {@link
-     *                             DbPreparedStatement#executeQuery()}and {@link
+     *                             DbPreparedStatement#executeQuery()} and {@link
      *                             DbResultSet#getFirstAsciiStream()}
      * @throws InnerClassException when errors occurs inside the
      *                             <code>InputStreamUser</code>
      * @see InputStreamUser
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstAsciiStream()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public <ResultType> ResultType executeUseFirstAsciiStream(ReadQuery query, InputStreamUser user, DbPreparedStatementHandler handler)
+    public <ResultType> ResultType executeUseFirstAsciiStream(ReadQuery query, InputStreamUser user, PreparedStatementHandler handler)
     throws DatabaseException, InnerClassException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
         if (null == user) throw new IllegalArgumentException("user can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             InputStream stream = null;
             try {
                 statement.setFetchSize(1);
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     stream = getResultSet(statement).getFirstAsciiStream();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -1671,7 +1727,7 @@ public class DbQueryManager implements Cloneable {
      * the wrapped {@link DbResultSet#getFirstCharacterStream()} method, but
      * also automatically closes the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
      * @param user  an instance of <code>ReaderUser</code>
@@ -1679,13 +1735,14 @@ public class DbQueryManager implements Cloneable {
      * @return the return value from the <code>useReader</code> method of
      * the provided <code>ReaderUser</code> instance
      * @throws DatabaseException   see {@link
-     *                             DbPreparedStatement#executeQuery()}and {@link
+     *                             DbPreparedStatement#executeQuery()} and {@link
      *                             DbResultSet#getFirstCharacterStream()}
      * @throws InnerClassException when errors occurs inside the
      *                             <code>ReaderUser</code>
      * @see ReaderUser
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstCharacterStream()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -1700,49 +1757,51 @@ public class DbQueryManager implements Cloneable {
      * wrapped {@link DbResultSet#getFirstCharacterStream()} method, but also
      * automatically closes the statement after its execution and allows
      * customization of the prepared statement through an optional instance of
-     * {@link DbPreparedStatementHandler}.
+     * {@link PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
      * @param user    an instance of <code>ReaderUser</code>
      *                that contains the logic that will be executed with this reader
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
      * @return the return value from the <code>useReader</code> method of
      * the provided <code>ReaderUser</code> instance
      * @throws DatabaseException   see {@link
-     *                             DbPreparedStatement#executeQuery()}and {@link
+     *                             DbPreparedStatement#executeQuery()} and {@link
      *                             DbResultSet#getFirstCharacterStream()}
      * @throws InnerClassException when errors occurs inside the
      *                             <code>ReaderUser</code>
      * @see ReaderUser
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstCharacterStream()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public <ResultType> ResultType executeUseFirstCharacterStream(ReadQuery query, ReaderUser user, DbPreparedStatementHandler handler)
+    public <ResultType> ResultType executeUseFirstCharacterStream(ReadQuery query, ReaderUser user, PreparedStatementHandler handler)
     throws DatabaseException, InnerClassException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
         if (null == user) throw new IllegalArgumentException("user can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             Reader reader = null;
             try {
                 statement.setFetchSize(1);
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     reader = getResultSet(statement).getFirstCharacterStream();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -1765,7 +1824,7 @@ public class DbQueryManager implements Cloneable {
      * on the wrapped {@link DbResultSet#getFirstBinaryStream()} method, but
      * also automatically closes the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
-     * for an example code snippet, it's 100% analogue.
+     * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
      * @param user  an instance of <code>InputStreamUser</code>
@@ -1773,13 +1832,14 @@ public class DbQueryManager implements Cloneable {
      * @return the return value from the <code>useInputStream</code> method of
      * the provided <code>InputStreamUser</code> instance
      * @throws DatabaseException   see {@link
-     *                             DbPreparedStatement#executeQuery()}and {@link
+     *                             DbPreparedStatement#executeQuery()} and {@link
      *                             DbResultSet#getFirstBinaryStream()}
      * @throws InnerClassException when errors occurs inside the
      *                             <code>InputStreamUser</code>
      * @see InputStreamUser
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstBinaryStream()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
@@ -1794,49 +1854,51 @@ public class DbQueryManager implements Cloneable {
      * wrapped {@link DbResultSet#getFirstBinaryStream()} method, but also
      * automatically closes the statement after its execution and allows
      * customization of the prepared statement through an optional instance of
-     * {@link DbPreparedStatementHandler}.
+     * {@link PreparedStatementHandler}.
      * <p>Refer to {@link
-     * #executeGetFirstString(ReadQuery, DbPreparedStatementHandler)
-     * executeGetFirstString} for an example code snippet, it's 100% analogue.
+     * #executeGetFirstString(ReadQuery, PreparedStatementHandler)
+     * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
      * @param user    an instance of <code>InputStreamUser</code>
      *                that contains the logic that will be executed with this stream
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
      * @return the return value from the <code>useInputStream</code> method of
      * the provided <code>InputStreamUser</code> instance
      * @throws DatabaseException   see {@link
-     *                             DbPreparedStatement#executeQuery()}and {@link
+     *                             DbPreparedStatement#executeQuery()} and {@link
      *                             DbResultSet#getFirstBinaryStream()}
      * @throws InnerClassException when errors occurs inside the
      *                             <code>InputStreamUser</code>
      * @see InputStreamUser
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstBinaryStream()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public <ResultType> ResultType executeUseFirstBinaryStream(ReadQuery query, InputStreamUser user, DbPreparedStatementHandler handler)
+    public <ResultType> ResultType executeUseFirstBinaryStream(ReadQuery query, InputStreamUser user, PreparedStatementHandler handler)
     throws DatabaseException, InnerClassException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
         if (null == user) throw new IllegalArgumentException("user can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             InputStream stream = null;
             try {
                 statement.setFetchSize(1);
 
-                if (executeHasResultRows(statement, handler)) {
+                if (executeHasResultRows(statement, full_handler)) {
                     stream = getResultSet(statement).getFirstBinaryStream();
                 }
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -1871,7 +1933,7 @@ public class DbQueryManager implements Cloneable {
      * @return <code>true</code> if a row was retrieved; or
      * <p><code>false</code> if there are no more rows .
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           #fetch(ResultSet, DbRowProcessor)}
      * @see #fetch(ResultSet, DbRowProcessor)
      * @see DbRowProcessor
@@ -1883,58 +1945,76 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
+     * Convenience alternative to {@link #executeFetchFirst(ReadQuery, DbRowProcessor)} that
+     * uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
+     *
+     * @param query        the query builder instance that needs to be executed
+     * @param rowProcessor a <code>RowProcessor</code> instance, if it's
+     *                     <code>null</code> no processing will be performed on the fetched row
+     * @return <code>true</code> if a row was retrieved; or
+     * <p><code>false</code> if there are no more rows .
+     * @throws DatabaseException see {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
+     *                           #fetchAll(ResultSet, DbRowProcessor)}
+     * @see #executeFetchFirst(ReadQuery, DbRowProcessor)
+     * @see RowProcessor
+     * @since 1.0
+     */
+    public boolean executeFetchFirst(ReadQuery query, RowProcessor rowProcessor)
+    throws DatabaseException {
+        return executeFetchFirst(query, rowProcessor, null);
+    }
+
+    /**
      * Safely fetches the first row from the results of a customizable select
      * query. It relies on the wrapped {@link
      * #fetch(ResultSet, DbRowProcessor)} method, but also automatically
      * closes the statement after its execution and allows customization of
      * the prepared statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person").whereParameter("name", "=");
      * DbRowProcessor processor = new YourProcessor();
      * final String name = "you";
-     * boolean result = manager.executeFetchFirst(select, processor, new DbPreparedStatementHandler() {
-     *        public void setParameters(DbPreparedStatement statement)
-     *        {
-     *            statement
-     *                .setString("name", name);
-     *        }
-     *    });</pre>
+     * boolean result = manager.executeFetchFirst(select, processor,
+     *     statement -> statement.setString("name", name));
+     * </pre>
      *
      * @param query        the query builder instance that needs to be executed
      * @param rowProcessor a <code>DbRowProcessor</code> instance, if it's
      *                     <code>null</code> no processing will be performed on the fetched row
-     * @param handler      an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler      an instance of <code>PreparedStatementHandler</code>
      *                     that will be used to customize the query execution; or
      *                     <code>null</code> if you don't want to customize it at all
      * @return <code>true</code> if a row was retrieved; or
      * <p><code>false</code> if there are no more rows .
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           #fetch(ResultSet, DbRowProcessor)}
      * @see #fetch(ResultSet, DbRowProcessor)
      * @see DbRowProcessor
      * @since 1.0
      */
-    public boolean executeFetchFirst(ReadQuery query, DbRowProcessor rowProcessor, DbPreparedStatementHandler handler)
+    public boolean executeFetchFirst(ReadQuery query, DbRowProcessor rowProcessor, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
                 statement.setFetchSize(1);
 
-                executeQuery(statement, handler);
+                executeQuery(statement, full_handler);
 
-                boolean result = fetch(getResultSet(statement), rowProcessor);
+                var result = fetch(getResultSet(statement), rowProcessor);
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -1948,6 +2028,39 @@ public class DbQueryManager implements Cloneable {
         } finally {
             connection.close();
         }
+    }
+
+    /**
+     * Convenience alternative to {@link #executeFetchFirst(ReadQuery, DbRowProcessor, PreparedStatementHandler)}
+     * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
+     *
+     * @param query        the query builder instance that needs to be executed
+     * @param rowProcessor a <code>RowProcessor</code> instance, if it's
+     *                     <code>null</code> no processing will be performed on the fetched row
+     * @param handler      an instance of <code>PreparedStatementHandler</code>
+     *                     that will be used to customize the query execution; or
+     *                     <code>null</code> if you don't want to customize it at all
+     * @return <code>true</code> if a row was retrieved; or
+     * <p><code>false</code> if there are no more rows .
+     * @throws DatabaseException see {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
+     *                           #fetchAll(ResultSet, DbRowProcessor)}
+     * @see #executeFetchFirst(ReadQuery, DbRowProcessor, PreparedStatementHandler)
+     * @see RowProcessor
+     * @since 1.0
+     */
+    public boolean executeFetchFirst(ReadQuery query, RowProcessor rowProcessor, PreparedStatementHandler handler) {
+        if (rowProcessor == null) {
+            return executeFetchFirst(query, (DbRowProcessor) null, handler);
+        }
+
+        return executeFetchFirst(query, new DbRowProcessor() {
+            public boolean processRow(ResultSet resultSet)
+            throws SQLException {
+                rowProcessor.processRow(resultSet);
+                return true;
+            }
+        }, handler);
     }
 
     /**
@@ -1983,23 +2096,19 @@ public class DbQueryManager implements Cloneable {
      * #executeFetchFirst(ReadQuery, DbRowProcessor)} method, but automatically
      * uses an appropriate {@link DbBeanFetcher} instance, returns the
      * resulting bean and allows customization of the prepared statement
-     * through an optional instance of {@link DbPreparedStatementHandler}.
+     * through an optional instance of {@link PreparedStatementHandler}.
      * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person").fields(Person.class).whereParameter("name", "=");
      * final String name = "you";
-     * Person person = manager.executeFetchFirstBean(select, Person.class, new DbPreparedStatementHandler() {
-     *        public void setParameters(DbPreparedStatement statement)
-     *        {
-     *            statement
-     *                .setString("name", name);
-     *        }
-     *    });</pre>
+     * Person person = manager.executeFetchFirstBean(select, Person.class,
+     *     statement -> statement.setString("name", name));
+     * </pre>
      *
      * @param query     the query builder instance that needs to be executed
      * @param beanClass the class of the bean
-     * @param handler   an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler   an instance of <code>PreparedStatementHandler</code>
      *                  that will be used to customize the query execution; or
      *                  <code>null</code> if you don't want to customize it at all
      * @return <code>true</code> if a row was retrieved; or
@@ -2010,12 +2119,13 @@ public class DbQueryManager implements Cloneable {
      * @see DbBeanFetcher
      * @since 1.0
      */
-    public <BeanType> BeanType executeFetchFirstBean(ReadQuery query, Class<BeanType> beanClass, DbPreparedStatementHandler handler)
+    public <BeanType> BeanType executeFetchFirstBean(ReadQuery query, Class<BeanType> beanClass, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbBeanFetcher<BeanType> bean_fetcher = new DbBeanFetcher<BeanType>(getDatasource(), beanClass);
-        if (executeFetchFirst(query, bean_fetcher, handler)) {
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var bean_fetcher = new DbBeanFetcher<>(getDatasource(), beanClass);
+        if (executeFetchFirst(query, bean_fetcher, full_handler)) {
             return bean_fetcher.getBeanInstance();
         }
 
@@ -2040,7 +2150,7 @@ public class DbQueryManager implements Cloneable {
      * @return <code>true</code> if rows were retrieved; or
      * <p><code>false</code> if there are no more rows .
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           #fetchAll(ResultSet, DbRowProcessor)}
      * @see #fetchAll(ResultSet, DbRowProcessor)
      * @see DbRowProcessor
@@ -2052,56 +2162,74 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
+     * Convenience alternative to {@link #executeFetchAll(ReadQuery, DbRowProcessor))}
+     * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
+     *
+     * @param query        the query builder instance that needs to be executed
+     * @param rowProcessor a <code>RowProcessor</code> instance, if it's
+     *                     <code>null</code> no processing will be performed on the fetched rows
+     * @return <code>true</code> if a row was retrieved; or
+     * <p><code>false</code> if there are no more rows .
+     * @throws DatabaseException see {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
+     *                           #fetchAll(ResultSet, DbRowProcessor)}
+     * @see #executeFetchAll(ReadQuery, DbRowProcessor)
+     * @see RowProcessor
+     * @since 1.0
+     */
+    public boolean executeFetchAll(ReadQuery query, RowProcessor rowProcessor)
+    throws DatabaseException {
+        return executeFetchAll(query, rowProcessor, null);
+    }
+
+    /**
      * Safely fetches all the rows from the results of a customizable select
      * query. It relies on the wrapped {@link
      * #fetchAll(ResultSet, DbRowProcessor)} method, but also automatically
      * closes the statement after its execution and allows customization of
      * the prepared statement through an optional instance of {@link
-     * DbPreparedStatementHandler}.
+     * PreparedStatementHandler}.
      * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person").whereParameter("gender", "=");
      * DbRowProcessor processor = new YourProcessor();
      * final String name = "m";
-     * boolean result = manager.executeFetchAll(select, processor, new DbPreparedStatementHandler() {
-     *        public void setParameters(DbPreparedStatement statement)
-     *        {
-     *            statement
-     *                .setString("gender", name);
-     *        }
-     *    });</pre>
+     * boolean result = manager.executeFetchAll(select, processor,
+     *     statement -> statement.setString("name", name));
+     * </pre>
      *
      * @param query        the query builder instance that needs to be executed
      * @param rowProcessor a <code>DbRowProcessor</code> instance, if it's
      *                     <code>null</code> no processing will be performed on the fetched row
-     * @param handler      an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler      an instance of <code>PreparedStatementHandler</code>
      *                     that will be used to customize the query execution; or
      *                     <code>null</code> if you don't want to customize it at all
      * @return <code>true</code> if rows were retrieved; or
      * <p><code>false</code> if there are no more rows .
      * @throws DatabaseException see {@link
-     *                           DbPreparedStatement#executeQuery()}and {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
      *                           #fetchAll(ResultSet, DbRowProcessor)}
      * @see #fetchAll(ResultSet, DbRowProcessor)
      * @see DbRowProcessor
      * @since 1.0
      */
-    public boolean executeFetchAll(ReadQuery query, DbRowProcessor rowProcessor, DbPreparedStatementHandler handler)
+    public boolean executeFetchAll(ReadQuery query, DbRowProcessor rowProcessor, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
-                executeQuery(statement, handler);
+                executeQuery(statement, full_handler);
 
-                boolean result = fetchAll(getResultSet(statement), rowProcessor);
+                var result = fetchAll(getResultSet(statement), rowProcessor);
 
-                if (handler != null) {
+                if (full_handler != null) {
                     try {
-                        handler.concludeResults(getResultSet(statement));
+                        full_handler.concludeResults(getResultSet(statement));
                     } catch (SQLException e) {
                         statement.handleException();
                         throw new DatabaseException(e);
@@ -2115,6 +2243,40 @@ public class DbQueryManager implements Cloneable {
         } finally {
             connection.close();
         }
+    }
+
+    /**
+     * Convenience alternative to {@link #executeFetchAll(ReadQuery, DbRowProcessor, PreparedStatementHandler))}
+     * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
+     *
+     * @param query        the query builder instance that needs to be executed
+     * @param rowProcessor a <code>RowProcessor</code> instance, if it's
+     *                     <code>null</code> no processing will be performed on the fetched rows
+     * @param handler      an instance of <code>PreparedStatementHandler</code>
+     *                     that will be used to customize the query execution; or
+     *                     <code>null</code> if you don't want to customize it at all
+     * @return <code>true</code> if a row was retrieved; or
+     * <p><code>false</code> if there are no more rows .
+     * @throws DatabaseException see {@link
+     *                           DbPreparedStatement#executeQuery()} and {@link
+     *                           #fetchAll(ResultSet, DbRowProcessor)}
+     * @see #executeFetchAll(ReadQuery, DbRowProcessor, PreparedStatementHandler)
+     * @see RowProcessor
+     * @since 1.0
+     */
+    public boolean executeFetchAll(ReadQuery query, RowProcessor rowProcessor, PreparedStatementHandler handler)
+    throws DatabaseException {
+        if (rowProcessor == null) {
+            return executeFetchAll(query, (DbRowProcessor) rowProcessor, handler);
+        }
+
+        return executeFetchAll(query, new DbRowProcessor() {
+            public boolean processRow(ResultSet resultSet)
+            throws SQLException {
+                rowProcessor.processRow(resultSet);
+                return true;
+            }
+        }, handler);
     }
 
     /**
@@ -2150,23 +2312,19 @@ public class DbQueryManager implements Cloneable {
      * #executeFetchAll(ReadQuery, DbRowProcessor)} method, but automatically
      * uses an appropriate {@link DbBeanFetcher} instance, returns the results
      * and allows customization of the prepared statement through an optional
-     * instance of {@link DbPreparedStatementHandler}.
+     * instance of {@link PreparedStatementHandler}.
      * <h4>Example</h4>
      * <pre>DbQueryManager manager = new DbQueryManager(datasource);
      * Select select = new Select(datasource);
      * select.from("person").fields(Person.class).whereParameter("gender", "=");
      * final String name = "m";
-     * List persons = manager.executeFetchAllBeans(select, Person.class, new DbPreparedStatementHandler() {
-     *        public void setParameters(DbPreparedStatement statement)
-     *        {
-     *            statement
-     *                .setString("gender", name);
-     *        }
-     *    });</pre>
+     * List persons = manager.executeFetchAllBeans(select, Person.class,
+     *     statement -> statement.setString("name", name));
+     * </pre>
      *
      * @param query     the query builder instance that needs to be executed
      * @param beanClass the class of the bean
-     * @param handler   an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler   an instance of <code>PreparedStatementHandler</code>
      *                  that will be used to customize the query execution; or
      *                  <code>null</code> if you don't want to customize it at all
      * @return <code>a List instance with all the beans, the list is empty if
@@ -2177,12 +2335,13 @@ public class DbQueryManager implements Cloneable {
      * @see DbBeanFetcher
      * @since 1.0
      */
-    public <BeanType> List<BeanType> executeFetchAllBeans(ReadQuery query, Class<BeanType> beanClass, DbPreparedStatementHandler handler)
+    public <BeanType> List<BeanType> executeFetchAllBeans(ReadQuery query, Class<BeanType> beanClass, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbBeanFetcher<BeanType> bean_fetcher = new DbBeanFetcher<BeanType>(getDatasource(), beanClass, true);
-        executeFetchAll(query, bean_fetcher, handler);
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var bean_fetcher = new DbBeanFetcher<>(getDatasource(), beanClass, true);
+        executeFetchAll(query, bean_fetcher, full_handler);
 
         return bean_fetcher.getCollectedInstances();
     }
@@ -2192,7 +2351,7 @@ public class DbQueryManager implements Cloneable {
      * {@link DbPreparedStatement#executeQuery()} method, but also
      * automatically closes the statement after its execution and allows
      * complete customization of the prepared statement through an optional
-     * instance of {@link DbPreparedStatementHandler}.
+     * instance of {@link PreparedStatementHandler}.
      * <p>This method is typically used when you need to fully customize a
      * query at runtime, but still want to benefit of a safety net that
      * ensures that the allocated statement will be closed. Often another more
@@ -2214,15 +2373,15 @@ public class DbQueryManager implements Cloneable {
      *                .setString("name", name);
      *        }
      *
-     *        public Object concludeResults(DbResultSet resultset)
+     *        public Object concludeResults(DbResultSet result set)
      *        throws SQLException
      *        {
-     *            return resultset.getString("first")+" "+resultset.getString("last");
+     *            return result set.getString("first")+" "+result set.getString("last");
      *        }
      *    });</pre>
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>DbPreparedStatementHandler</code>
+     * @param handler an instance of <code>PreparedStatementHandler</code>
      *                that will be used to customize the query execution; or
      *                <code>null</code> if you don't want to customize it at all
      * @return the object that was returned by the overridden {@link
@@ -2232,24 +2391,26 @@ public class DbQueryManager implements Cloneable {
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()}
      * @see DbPreparedStatement#executeQuery()
+     * @see PreparedStatementHandler
      * @see DbPreparedStatementHandler
      * @since 1.0
      */
-    public <ResultType> ResultType executeQuery(ReadQuery query, DbPreparedStatementHandler handler)
+    public <ResultType> ResultType executeQuery(ReadQuery query, PreparedStatementHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var full_handler = ensureFullPreparedStatementHandler(handler);
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, full_handler, connection);
             try {
-                executeQuery(statement, handler);
-                if (null == handler) {
+                executeQuery(statement, full_handler);
+                if (null == full_handler) {
                     return null;
                 }
 
                 try {
-                    return (ResultType) handler.concludeResults(getResultSet(statement));
+                    return (ResultType) full_handler.concludeResults(getResultSet(statement));
                 } catch (SQLException e) {
                     statement.handleException();
                     throw new DatabaseException(e);
@@ -2266,7 +2427,7 @@ public class DbQueryManager implements Cloneable {
      * Executes a select statement and handle the results in a custom fashion.
      * It relies on the wrapped {@link DbPreparedStatement#executeQuery()}
      * method, but also automatically closes the statement after its execution
-     * and allows interaction with the resultset through an optional instance
+     * and allows interaction with the result set through an optional instance
      * of {@link DbResultSetHandler}.
      * <p>This method is typically used when you need to interact with the
      * results of a query, but still want to benefit of a safety net that
@@ -2280,11 +2441,11 @@ public class DbQueryManager implements Cloneable {
      *    .field("first")
      *    .field("last")
      *    .from("person");
-     * String result = (String)manager.executeQuery(select, new DbResultSetHandler() {
-     *        public Object concludeResults(DbResultSet resultset)
+     * String result = (String)manager.executeResultQuery(select, new DbResultSetHandler() {
+     *        public Object concludeResults(DbResultSet result set)
      *        throws SQLException
      *        {
-     *            return resultset.getString("first")+" "+resultset.getString("last");
+     *            return result set.getString("first")+" "+result set.getString("last");
      *        }
      *    });</pre>
      *
@@ -2302,13 +2463,13 @@ public class DbQueryManager implements Cloneable {
      * @see DbResultSetHandler
      * @since 1.0
      */
-    public <ResultType> ResultType executeQuery(ReadQuery query, DbResultSetHandler handler)
+    public <ResultType> ResultType executeResultQuery(ReadQuery query, DbResultSetHandler handler)
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbConnection connection = getConnection();
+        var connection = getConnection();
         try {
-            DbPreparedStatement statement = getPreparedStatement(query, handler, connection);
+            var statement = getPreparedStatement(query, handler, connection);
             try {
                 executeQuery(statement, null);
 
@@ -2331,7 +2492,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Reserves a database connection for a this particular thread for all the
+     * Reserves a database connection for a particular thread for all the
      * instructions that are executed in the provided {@link DbConnectionUser}
      * instance.
      * <p>This is typically used to ensure that a series of operations is done
@@ -2365,10 +2526,10 @@ public class DbQueryManager implements Cloneable {
     throws InnerClassException, DatabaseException {
         if (null == user) throw new IllegalArgumentException("user can't be null.");
 
-        DbConnection connection = datasource_.getConnection();
-        ConnectionPool pool = datasource_.getPool();
+        var connection = datasource_.getConnection();
+        var pool = datasource_.getPool();
         synchronized (pool) {
-            boolean does_threadconnection_exist = pool.hasThreadConnection(Thread.currentThread());
+            var does_threadconnection_exist = pool.hasThreadConnection(Thread.currentThread());
             try {
                 if (!does_threadconnection_exist) pool.registerThreadConnection(Thread.currentThread(), connection);
 
@@ -2408,15 +2569,14 @@ public class DbQueryManager implements Cloneable {
      * final DbQueryManager manager = new DbQueryManager(datasource);
      * manager.inTransaction(new DbTransactionUserWithoutResult() {
      *        public void useTransactionWithoutResult()
-     *        throws InnerClassException
-     *        {
+     *        throws InnerClassException {
      *            manager.executeUpdate(insert);
      *            manager.executeUpdate(insert);
      *        }
      *    });
      * </pre>
      *
-     * @param user an instance of <code>DbTransactionUser</code> that contains
+     * @param user an instance of <code>TransactionUser</code> that contains
      *             the logic that will be executed
      * @return the return value from the <code>useTransaction</code> method of
      * the provided <code>DbTransactionUser</code> instance
@@ -2428,21 +2588,35 @@ public class DbQueryManager implements Cloneable {
      * @see DbTransactionUserWithoutResult#useTransactionWithoutResult()
      * @since 1.0
      */
-    public <ResultType> ResultType inTransaction(DbTransactionUser user)
+    public <ResultType> ResultType inTransaction(TransactionUser user)
     throws InnerClassException, DatabaseException {
-        boolean started_transaction = false;
+        DbTransactionUser full_user = null;
+        if (user != null) {
+            if (user instanceof DbTransactionUser u) {
+                full_user = u;
+            } else {
+                full_user = new DbTransactionUser<>() {
+                    public Object useTransaction()
+                    throws InnerClassException {
+                        return user.useTransaction();
+                    }
+                };
+            }
+        }
+
+        var started_transaction = false;
         DbConnection connection = null;
         try {
             synchronized (datasource_) {
                 connection = datasource_.getConnection();
-                int isolation = user.getTransactionIsolation();
+                var isolation = full_user.getTransactionIsolation();
                 if (isolation != -1) {
                     connection.setTransactionIsolation(isolation);
                 }
                 started_transaction = connection.beginTransaction();
             }
 
-            ResultType result = (ResultType) user.useTransaction();
+            var result = (ResultType) full_user.useTransaction();
             if (started_transaction) {
                 connection.commit();
                 if (!datasource_.isPooled()) {
@@ -2501,11 +2675,41 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
+     * Convenience method that ensures that all the instructions that are
+     * executed in the provided {@link TransactionUserWithoutResult} instance,
+     * are executed inside a transaction and committed afterwards.
+     * <p>
+     * Everything of {@link #inTransaction(TransactionUser)} applies but instead
+     * of requiring a result to be returned, it's assumed that none will,
+     * making your code cleaner.
+     *
+     * @param user an instance of <code>TransactionUserWithoutResult</code>
+     *             that contains the logic that will be executed
+     * @throws DatabaseException   when errors occurs during the handling of
+     *                             the transaction
+     * @throws InnerClassException when errors occurs inside the
+     *                             <code>DbTransactionUser</code>
+     * @see TransactionUserWithoutResult#useTransaction()
+     * @see #inTransaction(TransactionUser)
+     * @since 1.0
+     */
+    public void inTransaction(TransactionUserWithoutResult user)
+    throws InnerClassException, DatabaseException {
+        inTransaction(new DbTransactionUser<>() {
+            public Object useTransaction()
+            throws InnerClassException {
+                user.useTransaction();
+                return null;
+            }
+        });
+    }
+
+    /**
      * Executes a query statement in a connection of this
      * <code>DbQueryManager</code>'s <code>Datasource</code>. Functions
      * exactly as the wrapped {@link DbStatement#executeQuery(ReadQuery)} method.
      * <p>Note that the statement will not be automatically closed since using
-     * this method implies that you still have to work with the resultset.
+     * this method implies that you still have to work with the result set.
      *
      * @param query the query builder instance that should be executed
      * @return the statement that has been executed
@@ -2517,29 +2721,29 @@ public class DbQueryManager implements Cloneable {
     throws DatabaseException {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        DbStatement statement = getConnection().createStatement();
+        var statement = getConnection().createStatement();
         statement.executeQuery(query);
         return statement;
     }
 
     /**
-     * Fetches the next row of a resultset without processing it in any way.
+     * Fetches the next row of a result set without processing it in any way.
      *
      * @param resultSet a valid <code>ResultSet</code> instance
      * @return <code>true</code> if a new row was retrieved; or
      * <p><code>false</code> if there are no more rows .
      * @throws DatabaseException when an error occurred during the fetch of
-     *                           the next row in the resultset
+     *                           the next row in the result set
      * @see #fetch(ResultSet, DbRowProcessor)
      * @since 1.0
      */
     public boolean fetch(ResultSet resultSet)
     throws DatabaseException {
-        return fetch(resultSet, null);
+        return fetch(resultSet, (DbRowProcessor) null);
     }
 
     /**
-     * Fetches the next row of a resultset and processes it through a
+     * Fetches the next row of a result set and processes it through a
      * <code>DbRowProcessor</code>.
      *
      * @param resultSet    a valid <code>ResultSet</code> instance
@@ -2548,7 +2752,7 @@ public class DbQueryManager implements Cloneable {
      * @return <code>true</code> if a new row was retrieved; or
      * <p><code>false</code> if there are no more rows .
      * @throws DatabaseException when an error occurred during the fetch of
-     *                           the next row in the resultset
+     *                           the next row in the result set
      * @see #fetch(ResultSet)
      * @see DbRowProcessor
      * @since 1.0
@@ -2572,16 +2776,46 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Fetches all the next rows of a resultset and processes it through a
+     * Convenience alternative to {@link #fetch(ResultSet, DbRowProcessor)))}
+     * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
+     *
+     * @param resultSet    a valid <code>ResultSet</code> instance
+     * @param rowProcessor a <code>RowProcessor</code> instance, if it's
+     *                     <code>null</code> no processing will be performed on the fetched row
+     * @return <code>true</code> if a new row was retrieved; or
+     * <p><code>false</code> if there are no more rows .
+     * @throws DatabaseException when an error occurred during the fetch of
+     *                           the next row in the result set
+     * @see #fetch(ResultSet, DbRowProcessor)
+     * @see RowProcessor
+     * @since 1.0
+     */
+    public boolean fetch(ResultSet resultSet, RowProcessor rowProcessor)
+    throws DatabaseException {
+        if (rowProcessor == null) {
+            return fetch(resultSet, (DbRowProcessor) null);
+        }
+
+        return fetch(resultSet, new DbRowProcessor() {
+            public boolean processRow(ResultSet resultSet)
+            throws SQLException {
+                rowProcessor.processRow(resultSet);
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Fetches all the next rows of a result set and processes it through a
      * <code>DbRowProcessor</code>.
      *
      * @param resultSet    a valid <code>ResultSet</code> instance
      * @param rowProcessor a <code>DbRowProcessor</code> instance, if it's
      *                     <code>null</code> no processing will be performed on the fetched rows
      * @return <code>true</code> if rows were fetched; or
-     * <p><code>false</code> if the resultset contained no rows.
+     * <p><code>false</code> if the result set contained no rows.
      * @throws DatabaseException when an error occurred during the fetch of
-     *                           the next rows in the resultset
+     *                           the next rows in the result set
      * @see DbRowProcessor
      * @since 1.0
      */
@@ -2589,7 +2823,7 @@ public class DbQueryManager implements Cloneable {
     throws DatabaseException {
         if (null == rowProcessor) throw new IllegalArgumentException("rowProcessor can't be null.");
 
-        boolean result = false;
+        var result = false;
 
         while (fetch(resultSet, rowProcessor)) {
             result = true;
@@ -2601,6 +2835,36 @@ public class DbQueryManager implements Cloneable {
         }
 
         return result;
+    }
+
+    /**
+     * Convenience alternative to {@link #fetchAll(ResultSet, DbRowProcessor)))}
+     * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
+     *
+     * @param resultSet    a valid <code>ResultSet</code> instance
+     * @param rowProcessor a <code>RowProcessor</code> instance, if it's
+     *                     <code>null</code> no processing will be performed on the fetched rows
+     * @return <code>true</code> if rows were fetched; or
+     * <p><code>false</code> if the result set contained no rows.
+     * @throws DatabaseException when an error occurred during the fetch of
+     *                           the next rows in the result set
+     * @see #fetchAll(ResultSet, DbRowProcessor)
+     * @see RowProcessor
+     * @since 1.0
+     */
+    public boolean fetchAll(ResultSet resultSet, RowProcessor rowProcessor)
+    throws DatabaseException {
+        if (rowProcessor == null) {
+            return fetchAll(resultSet, (DbRowProcessor) null);
+        }
+
+        return fetchAll(resultSet, new DbRowProcessor() {
+            public boolean processRow(ResultSet resultSet)
+            throws SQLException {
+                rowProcessor.processRow(resultSet);
+                return true;
+            }
+        });
     }
 
     /**

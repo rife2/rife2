@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 /**
  * By extending this class it's possible to easily customize the behaviour of
  * some methods in the {@link DbQueryManager} class.
- * <p>You're able to perform custom logic with the resultset of a query by
+ * <p>You're able to perform custom logic with the result set of a query by
  * overriding the {@link #concludeResults(DbResultSet) concludeResults} method
  * and returning an object.
  * <p>You're not supposed to close the resultset in this method.
