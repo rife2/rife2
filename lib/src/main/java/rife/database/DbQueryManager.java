@@ -2162,7 +2162,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Convenience alternative to {@link #executeFetchAll(ReadQuery, DbRowProcessor))}
+     * Convenience alternative to {@link #executeFetchAll(ReadQuery, DbRowProcessor)}
      * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
      *
      * @param query        the query builder instance that needs to be executed
@@ -2246,7 +2246,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Convenience alternative to {@link #executeFetchAll(ReadQuery, DbRowProcessor, PreparedStatementHandler))}
+     * Convenience alternative to {@link #executeFetchAll(ReadQuery, DbRowProcessor, PreparedStatementHandler)}
      * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
      *
      * @param query        the query builder instance that needs to be executed
@@ -2776,7 +2776,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Convenience alternative to {@link #fetch(ResultSet, DbRowProcessor)))}
+     * Convenience alternative to {@link #fetch(ResultSet, DbRowProcessor)}
      * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
      *
      * @param resultSet    a valid <code>ResultSet</code> instance
@@ -2838,7 +2838,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Convenience alternative to {@link #fetchAll(ResultSet, DbRowProcessor)))}
+     * Convenience alternative to {@link #fetchAll(ResultSet, DbRowProcessor)}
      * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
      *
      * @param resultSet    a valid <code>ResultSet</code> instance
