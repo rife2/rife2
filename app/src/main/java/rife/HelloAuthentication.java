@@ -14,24 +14,24 @@ public class HelloAuthentication extends Site {
     final MemorySessionValidator validator = new MemorySessionValidator();
     final AuthConfig config = new AuthConfig(validator);
 
-    class AuthenticatedSection extends Router {
-        Route hello = get("/hello", c -> {
-            var t = c.template("HelloAuthenticated");
-            t.setValue("user", AuthConfig.identityAttribute(c).getLogin());
-            c.print(t);
-        });
-        Route logout = get("/logout", new Logout(config, TemplateFactory.HTML.get("HelloLogout")));
-    }
+    Route landing;
+    Route logout;
 
     public void setup() {
         var login = route("/login", new Login(config, TemplateFactory.HTML.get("HelloLogin")));
-        var auth = group(new AuthenticatedSection() {
+        group(new Router() {
             public void setup() {
                 before(new Authenticated(config));
+                landing = get("/hello", c -> {
+                    var t = c.template("HelloAuthenticated");
+                    t.setValue("user", AuthConfig.identityAttribute(c).getLogin());
+                    c.print(t);
+                });
+                logout = get("/logout", new Logout(config, TemplateFactory.HTML.get("HelloLogout")));
             }
         });
 
-        config.loginRoute(login).landingRoute(auth.hello);
+        config.loginRoute(login).landingRoute(landing);
         validator.getCredentialsManager().addUser("testUser", new RoleUserAttributes().password("testPassword"));
     }
 
