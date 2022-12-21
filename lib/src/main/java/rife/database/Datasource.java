@@ -34,12 +34,6 @@ import javax.sql.DataSource;
  * scheduling, ... The key that identifies a supported type is the class name of
  * the jdbc driver.
  * <p>
- * A <code>Datasource</code> instance can be created through it's constructor,
- * but it's recommended to work with a <code>Datasources</code> collection
- * that is created and populated through XML. This can easily be achieved by
- * using a <code>ParticipantDatasources</code> which participates in the
- * application-wide repository.
- * <p>
  * Once a connection has been obtained from a pooled datasource, modifying its
  * connection parameters is not possible anymore, a new instance has to be
  * created to set the parameters to different values.
