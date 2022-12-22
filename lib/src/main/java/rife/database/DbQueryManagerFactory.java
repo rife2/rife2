@@ -4,7 +4,6 @@
  */
 package rife.database;
 
-import rife.database.Datasource;
 import rife.database.exceptions.UnsupportedJdbcDriverException;
 import rife.tools.StringUtils;
 

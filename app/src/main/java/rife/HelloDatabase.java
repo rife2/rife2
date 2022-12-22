@@ -7,6 +7,7 @@ package rife;
 import rife.database.*;
 import rife.database.queries.*;
 import rife.engine.*;
+import rife.tools.InnerClassException;
 
 public class HelloDatabase extends Site {
     Datasource datasource = new Datasource(
@@ -20,6 +21,8 @@ public class HelloDatabase extends Site {
         .into(createQuery.getTable()).fieldParameter("name");
     Select selectQuery = new Select(datasource)
         .from(createQuery.getTable()).orderBy("name");
+    Select countQuery = new Select(datasource)
+        .from(createQuery.getTable()).field("count(*)");
 
     Route install = get("/install", c -> {
         manager.executeUpdate(createQuery);
@@ -41,9 +44,19 @@ public class HelloDatabase extends Site {
     });
     Route add = post("/add", c -> {
         var name = c.parameter("name");
-        manager.executeUpdate(insertQuery,
-            statement -> statement.setString("name", name));
-        c.print("Added " + name + "<br><br>");
+        manager.inTransaction(new DbTransactionUserWithoutResult<>() {
+            public void useTransactionWithoutResult()
+            throws InnerClassException {
+                manager.executeUpdate(insertQuery,
+                    statement -> statement.setString("name", name));
+                var count = manager.executeGetFirstInt(countQuery);
+                if (count > 5) {
+                    c.print("Maximum number of names reached<br><br>");
+                    rollback();
+                }
+                c.print("Added " + name + " (#" + count+ ")<br><br>");
+            }
+        });
         c.print("<a href='" + c.urlFor(addForm) + "'>Add more</a><br>");
         c.print("<a href='" + c.urlFor(list) + "'>List names</a><br>");
     });
