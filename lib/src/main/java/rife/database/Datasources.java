@@ -112,7 +112,7 @@ public class Datasources {
     /**
      * Cleans up all connections that have been reserved by this datasource.
      *
-     * @throws DatabaseException when an error occured during the cleanup
+     * @throws DatabaseException when an error occurred during the cleanup
      * @since 1.0
      */
     public void cleanup()

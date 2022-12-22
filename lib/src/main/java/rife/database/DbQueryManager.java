@@ -102,8 +102,8 @@ public class DbQueryManager implements Cloneable {
      * query needs to be executed without any parametrization or other
      * processing.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * int count = manager.executeUpdate("INSERT INTO person (name) VALUES ('me')");</pre>
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var count = manager.executeUpdate("INSERT INTO person (name) VALUES ('me')");</pre>
      *
      * @param sql the sql query that has to be executed
      * @return the row count for the executed query
@@ -138,10 +138,10 @@ public class DbQueryManager implements Cloneable {
      * query needs to be executed without any parametrization or other
      * processing.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Insert insert = new Insert(datasource);
-     * insert.into("person").field("name", "me");
-     * int count = manager.executeUpdate(insert);</pre>
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var insert = new Insert(datasource)
+     *     .into("person").field("name", "me");
+     * var count = manager.executeUpdate(insert);</pre>
      *
      * @param query the query builder instance that needs to be executed
      * @return the row count for the executed query
@@ -210,11 +210,11 @@ public class DbQueryManager implements Cloneable {
      * query at runtime, but still want to benefit of a safety net that
      * ensures that the allocated statement will be closed.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * var insert = new Insert(datasource);
-     * insert.into("person").fieldParameter("name");
-     * final String name = "me";
-     * int count = manager.executeUpdate(insert,
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var insert = new Insert(datasource)
+     *     .into("person").fieldParameter("name");
+     * final var name = "me";
+     * var count = manager.executeUpdate(insert,
      *     statement -> statement.setString("name", name));
      * </pre>
      *
@@ -264,10 +264,10 @@ public class DbQueryManager implements Cloneable {
      * relies on the wrapped {@link DbResultSet#hasResultRows()} method, but
      * also automatically closes the statement after its execution.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
-     * select.from("person");
-     * boolean result = manager.executeHasResultRows(select);
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource)
+     *     .from("person");
+     * var result = manager.executeHasResultRows(select);
      * </pre>
      *
      * @param query the query builder instance that needs to be executed
@@ -294,11 +294,11 @@ public class DbQueryManager implements Cloneable {
      * customization of the prepared statement through an optional instance of
      * {@link PreparedStatementHandler}.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * var select = new Select(datasource);
-     * select.from("person").whereParameter("name", "=");
-     * final String name = "you";
-     * boolean result = manager.executeHasResultRows(select,
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource)
+     *     .from("person").whereParameter("name", "=");
+     * var String name = "you";
+     * var result = manager.executeHasResultRows(select,
      *     statement -> statement.setString("name", name));
      * </pre>
      *
@@ -351,10 +351,10 @@ public class DbQueryManager implements Cloneable {
      * DbResultSet#getFirstString()} method, but also automatically closes the
      * statement after its execution.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
-     * select.field("name").from("person");
-     * String result = manager.executeGetFirstString(select);
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource)
+     *      .field("name").from("person");
+     * var result = manager.executeGetFirstString(select);
      * </pre>
      *
      * @param query the query builder instance that needs to be executed
@@ -381,11 +381,11 @@ public class DbQueryManager implements Cloneable {
      * statement through an optional instance of {@link
      * PreparedStatementHandler}.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
-     * select.field("first").from("person").whereParameter("last", "=");
-     * final String last = "Smith";
-     * String result = manager.executeGetFirstString(select,
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource)
+     *     .field("first").from("person").whereParameter("last", "=");
+     * final var last = "Smith";
+     * var result = manager.executeGetFirstString(select,
      *     statement -> statement.setString("name", name));
      * </pre>
      *
@@ -1921,11 +1921,12 @@ public class DbQueryManager implements Cloneable {
      * #fetch(ResultSet, DbRowProcessor)} method, but automatically closes the
      * statement after its execution.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
-     * select.from("person").where("name", "=", "me");
-     * DbRowProcessor processor = new YourProcessor();
-     * boolean result = manager.executeFetchFirst(select, processor);</pre>
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource)
+     *  .from("person").where("name", "=", "me");
+     * var processor = new YourProcessor();
+     * var result = manager.executeFetchFirst(select,
+     *     resultSet -> resultSet.getString("name"));</pre>
      *
      * @param query        the query builder instance that needs to be executed
      * @param rowProcessor a <code>DbRowProcessor</code> instance, if it's
@@ -1973,12 +1974,13 @@ public class DbQueryManager implements Cloneable {
      * the prepared statement through an optional instance of {@link
      * PreparedStatementHandler}.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
-     * select.from("person").whereParameter("name", "=");
-     * DbRowProcessor processor = new YourProcessor();
-     * final String name = "you";
-     * boolean result = manager.executeFetchFirst(select, processor,
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource)
+     *      .from("person").whereParameter("name", "=");
+     * var processor = new YourProcessor();
+     * final var name = "you";
+     * var result = manager.executeFetchFirst(select,
+     *     resultSet -> resultSet.getString("name"),
      *     statement -> statement.setString("name", name));
      * </pre>
      *
@@ -2070,10 +2072,10 @@ public class DbQueryManager implements Cloneable {
      * uses an appropriate {@link DbBeanFetcher} instance and returns the
      * resulting bean.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
-     * select.from("person").fields(Person.class);
-     * Person person = manager.executeFetchFirstBean(select, Person.class);</pre>
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource)
+     *     .from("person").fields(Person.class);
+     * var person = manager.executeFetchFirstBean(select, Person.class);</pre>
      *
      * @param query     the query builder instance that needs to be executed
      * @param beanClass the class of the bean
@@ -2098,11 +2100,11 @@ public class DbQueryManager implements Cloneable {
      * resulting bean and allows customization of the prepared statement
      * through an optional instance of {@link PreparedStatementHandler}.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
-     * select.from("person").fields(Person.class).whereParameter("name", "=");
-     * final String name = "you";
-     * Person person = manager.executeFetchFirstBean(select, Person.class,
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource)
+     *     .from("person").fields(Person.class).whereParameter("name", "=");
+     * final var name = "you";
+     * var person = manager.executeFetchFirstBean(select, Person.class,
      *     statement -> statement.setString("name", name));
      * </pre>
      *
@@ -2138,11 +2140,11 @@ public class DbQueryManager implements Cloneable {
      * #fetchAll(ResultSet, DbRowProcessor)} method, but automatically closes
      * the statement after its execution.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
-     * select.from("person").where("gender", "=", "m");
-     * DbRowProcessor processor = new YourProcessor();
-     * boolean result = manager.executeFetchAll(select, processor);</pre>
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource)
+     *     .from("person").where("gender", "=", "m");
+     * var result = manager.executeFetchAll(select,
+     *     resultSet -> resultSet.getString("name"));</pre>
      *
      * @param query        the query builder instance that needs to be executed
      * @param rowProcessor a <code>DbRowProcessor</code> instance, if it's
@@ -2190,12 +2192,12 @@ public class DbQueryManager implements Cloneable {
      * the prepared statement through an optional instance of {@link
      * PreparedStatementHandler}.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
-     * select.from("person").whereParameter("gender", "=");
-     * DbRowProcessor processor = new YourProcessor();
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource)
+     *     .from("person").whereParameter("gender", "=");
      * final String name = "m";
-     * boolean result = manager.executeFetchAll(select, processor,
+     * var result = manager.executeFetchAll(select,
+     *     resultSet -> resultSet.getString("name"),
      *     statement -> statement.setString("name", name));
      * </pre>
      *
@@ -2286,10 +2288,10 @@ public class DbQueryManager implements Cloneable {
      * uses an appropriate {@link DbBeanFetcher} instance and returns the
      * results.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
-     * select.from("person").fields(Person.class).where("gender", "=", "m");
-     * List persons = manager.executeFetchAllBeans(select, Person.class);</pre>
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource)
+     *     .from("person").fields(Person.class).where("gender", "=", "m");
+     * var people = manager.executeFetchAllBeans(select, Person.class);</pre>
      *
      * @param query     the query builder instance that needs to be executed
      * @param beanClass the class of the bean
@@ -2314,11 +2316,11 @@ public class DbQueryManager implements Cloneable {
      * and allows customization of the prepared statement through an optional
      * instance of {@link PreparedStatementHandler}.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
-     * select.from("person").fields(Person.class).whereParameter("gender", "=");
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource)
+     *     .from("person").fields(Person.class).whereParameter("gender", "=");
      * final String name = "m";
-     * List persons = manager.executeFetchAllBeans(select, Person.class,
+     * var people = manager.executeFetchAllBeans(select, Person.class,
      *     statement -> statement.setString("name", name));
      * </pre>
      *
@@ -2358,14 +2360,14 @@ public class DbQueryManager implements Cloneable {
      * specialized method in this class will already serve your needs, so be
      * sure to verify that you actually need to intervene on every front.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource);
      * select
      *    .field("first")
      *    .field("last")
      *    .from("person")
      *    .whereParameter("name", "=");
-     * final String name = "you";
+     * final var name = "you";
      * String result = (String)manager.executeQuery(select, new DbPreparedStatementHandler() {
      *        public void setParameters(DbPreparedStatement statement)
      *        {
@@ -2435,16 +2437,15 @@ public class DbQueryManager implements Cloneable {
      * specialized method in this class will already serve your needs, so be
      * sure to verify that there isn't another one that's better suited.
      * <h4>Example</h4>
-     * <pre>DbQueryManager manager = new DbQueryManager(datasource);
-     * Select select = new Select(datasource);
+     * <pre>var manager = new DbQueryManager(datasource);
+     * var select = new Select(datasource);
      * select
      *    .field("first")
      *    .field("last")
      *    .from("person");
      * String result = (String)manager.executeResultQuery(select, new DbResultSetHandler() {
      *        public Object concludeResults(DbResultSet result set)
-     *        throws SQLException
-     *        {
+     *        throws SQLException {
      *            return result set.getString("first")+" "+result set.getString("last");
      *        }
      *    });</pre>
@@ -2500,12 +2501,11 @@ public class DbQueryManager implements Cloneable {
      * background.
      * <h4>Example</h4>
      * <pre>Person person;
-     * final Insert store_data = new Insert(datasource).into("person").fields(person);
-     * final Select get_last_id = new Select(datasource).from("person").field("LAST_INSERT_ID()");
-     * final DbQueryManager manager = new DbQueryManager(datasource);
+     * final var store_data = new Insert(datasource).into("person").fields(person);
+     * final var get_last_id = new Select(datasource).from("person").field("LAST_INSERT_ID()");
+     * final var manager = new DbQueryManager(datasource);
      * int id = ((Integer)manager.reserveConnection(new DbConnectionUser() {
-     *        public Integer useConnection(DbConnection connection)
-     *        {
+     *        public Integer useConnection(DbConnection connection) {
      *            manager.executeUpdate(store_data);
      *            return new Integer(manager.executeGetFirstInt(get_last_id));
      *        }
@@ -2565,14 +2565,11 @@ public class DbQueryManager implements Cloneable {
      * transaction-related methods requires great care and planning and often
      * results in error-prone and not reusable code.
      * <h4>Example</h4>
-     * <pre>final Insert insert = new Insert(mDatasource).into("valuelist").field("value", 232);
-     * final DbQueryManager manager = new DbQueryManager(datasource);
-     * manager.inTransaction(new DbTransactionUserWithoutResult() {
-     *        public void useTransactionWithoutResult()
-     *        throws InnerClassException {
-     *            manager.executeUpdate(insert);
-     *            manager.executeUpdate(insert);
-     *        }
+     * <pre>final var insert = new Insert(mDatasource).into("valuelist").field("value", 232);
+     * final var manager = new DbQueryManager(datasource);
+     * manager.inTransaction(() -> {
+     *        manager.executeUpdate(insert);
+     *        manager.executeUpdate(insert);
      *    });
      * </pre>
      *
