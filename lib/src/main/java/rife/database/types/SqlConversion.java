@@ -11,13 +11,13 @@ import rife.validation.Constrained;
 import java.sql.ResultSet;
 
 public interface SqlConversion {
-    public String getSqlValue(Object value);
+    String getSqlValue(Object value);
 
-    public String getSqlType(Class type, int precision, int scale);
+    String getSqlType(Class type, int precision, int scale);
 
-    public Object getTypedObject(ResultSet resultSet, int columnNumber, int type, Class targetType)
+    Object getTypedObject(ResultSet resultSet, int columnNumber, int type, Class targetType)
     throws DatabaseException;
 
-    public void setTypedParameter(DbPreparedStatement statement, int parameterIndex, Class targetType, String name, Object value, Constrained constrained)
+    void setTypedParameter(DbPreparedStatement statement, int parameterIndex, Class targetType, String name, Object value, Constrained constrained)
     throws DatabaseException;
 }
