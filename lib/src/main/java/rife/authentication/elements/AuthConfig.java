@@ -23,6 +23,7 @@ public class AuthConfig {
     private SessionValidator sessionValidator_;
     private Route loginRoute_;
     private Route landingRoute_;
+    private String identityAttributeName_ = DEFAULT_IDENTITY_ATTRIBUTE_NAME;
     private String authCookieName_ = DEFAULT_AUTH_COOKIE_NAME;
     private String rememberCookieName_ = DEFAULT_REMEMBER_COOKIE_NAME;
     private int rememberMaxAge_ = DEFAULT_REMEMBER_MAX_AGE;
@@ -63,7 +64,12 @@ public class AuthConfig {
     }
 
     public String identityAttributeName() {
-        return DEFAULT_IDENTITY_ATTRIBUTE_NAME;
+        return identityAttributeName_;
+    }
+
+    public AuthConfig identityAttributeName(String name) {
+        identityAttributeName_ = name;
+        return this;
     }
 
     public RoleUserIdentity identityAttribute(Context c) {
@@ -74,8 +80,8 @@ public class AuthConfig {
         return authCookieName_;
     }
 
-    public AuthConfig authCookieName(String authCookieName) {
-        authCookieName_ = authCookieName;
+    public AuthConfig authCookieName(String name) {
+        authCookieName_ = name;
         return this;
     }
 
@@ -83,8 +89,8 @@ public class AuthConfig {
         return rememberCookieName_;
     }
 
-    public AuthConfig rememberCookieName(String rememberCookieName) {
-        rememberCookieName_ = rememberCookieName;
+    public AuthConfig rememberCookieName(String name) {
+        rememberCookieName_ = name;
         return this;
     }
 
