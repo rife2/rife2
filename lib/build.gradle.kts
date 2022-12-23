@@ -144,6 +144,7 @@ tasks.test {
     dependsOn("agentJar")
     useJUnitPlatform()
     environment("project.dir", project.projectDir.toString())
+    jvmArgs = listOf("-javaagent:${buildDir}/libs/rife2-agent-${version}.jar")
 }
 
 tasks.clean {

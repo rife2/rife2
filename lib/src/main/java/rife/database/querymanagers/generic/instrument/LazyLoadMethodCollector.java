@@ -10,14 +10,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static rife.asm.Opcodes.V1_4;
+import static rife.asm.Opcodes.ASM9;
 
 class LazyLoadMethodCollector extends ClassVisitor {
     private Map<String, String> methods_ = null;
-    private final AnnotationVisitor annotationVisitor_ = new LazyLoadNoOpAnnotationVisitor();
 
     LazyLoadMethodCollector() {
-        super(V1_4);
+        super(ASM9);
     }
 
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
@@ -50,7 +49,7 @@ class LazyLoadMethodCollector extends ClassVisitor {
 
                 if (add) {
                     if (null == methods_) {
-                        methods_ = new HashMap<String, String>();
+                        methods_ = new HashMap<>();
                     }
 
                     methods_.put(name, desc);
@@ -67,54 +66,5 @@ class LazyLoadMethodCollector extends ClassVisitor {
         }
 
         return methods_;
-    }
-
-    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-    }
-
-    public void visitSource(String source, String debug) {
-    }
-
-    public void visitOuterClass(String owner, String name, String desc) {
-    }
-
-    public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-        return annotationVisitor_;
-    }
-
-    public void visitAttribute(Attribute attr) {
-    }
-
-    public void visitInnerClass(String name, String outerName, String innerName, int access) {
-    }
-
-    public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-        return null;
-    }
-
-    public void visitEnd() {
-    }
-
-    private static class LazyLoadNoOpAnnotationVisitor extends AnnotationVisitor {
-        protected LazyLoadNoOpAnnotationVisitor() {
-            super(V1_4);
-        }
-
-        public void visit(String name, Object value) {
-        }
-
-        public void visitEnum(String name, String desc, String value) {
-        }
-
-        public AnnotationVisitor visitAnnotation(String name, String desc) {
-            return this;
-        }
-
-        public AnnotationVisitor visitArray(String name) {
-            return this;
-        }
-
-        public void visitEnd() {
-        }
     }
 }

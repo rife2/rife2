@@ -16,8 +16,7 @@ import java.security.ProtectionDomain;
  * system property is set.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @version $Revision$
- * @since 1.6
+ * @since 1.0
  */
 public class FinalTransformer extends RifeTransformer {
     protected byte[] transformRife(ClassLoader loader, String classNameInternal, Class<?> classBeingRedefined,

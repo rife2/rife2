@@ -2,14 +2,14 @@
  * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
-package rife.instrument;
+package rife.validation.instrument;
 
 import rife.asm.*;
 import rife.instrument.exceptions.ClassBytesNotFoundException;
 import rife.instrument.exceptions.VisitInterruptionException;
 import rife.tools.ClassBytesLoader;
 
-import static rife.asm.Opcodes.V1_4;
+import static rife.asm.Opcodes.ASM9;
 
 /**
  * Detects whether a class implements the {@code Constrained} interface or not,
@@ -23,7 +23,7 @@ public class ConstrainedDetector {
     private static final String CONSTRAINED_NAME = "rife.validation.Constrained";
     private static final String OBJECT_INTERNAL_NAME = "java/lang/Object";
 
-    private ClassBytesLoader bytesLoader_;
+    private final ClassBytesLoader bytesLoader_;
 
     /**
      * Creates new instance by providing a loader that is able to retrieve the
@@ -32,7 +32,7 @@ public class ConstrainedDetector {
      *
      * @param bytesLoader the loader that will be used to retrieve the bytes
      *                    of the additional classes
-     * @since 1.6
+     * @since 1.0
      */
     public ConstrainedDetector(ClassBytesLoader bytesLoader) {
         bytesLoader_ = bytesLoader;
@@ -51,7 +51,7 @@ public class ConstrainedDetector {
      * <p>{@code false} otherwise
      * @throws ClassBytesNotFoundException when the bytes of a parent class
      *                                     can be found
-     * @since 1.6
+     * @since 1.0
      */
     public boolean isConstrained(String internedClassname, byte[] bytes)
     throws ClassBytesNotFoundException {
@@ -90,63 +90,36 @@ public class ConstrainedDetector {
     }
 
     private class ConstrainedDetectionClassVisitor extends ClassVisitor {
-        private boolean mIsConstrained = false;
-        private String mSuperNameInternal = null;
+        private boolean isConstrained_ = false;
+        private String superNameInternal_ = null;
 
         protected ConstrainedDetectionClassVisitor() {
-            super(V1_4);
+            super(ASM9);
         }
 
         private boolean isConstrained() {
-            return mIsConstrained;
+            return isConstrained_;
         }
 
         private String getSuperNameInternal() {
-            return mSuperNameInternal;
+            return superNameInternal_;
         }
 
         public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
             for (String interface_name : interfaces) {
                 if (CONSTRAINED_INTERNAL_NAME == interface_name.intern()) {
-                    mIsConstrained = true;
+                    isConstrained_ = true;
                     break;
                 }
             }
 
             if (null == superName) {
-                mSuperNameInternal = null;
+                superNameInternal_ = null;
             } else {
-                mSuperNameInternal = superName.intern();
+                superNameInternal_ = superName.intern();
             }
 
             throw new VisitInterruptionException();
-        }
-
-        public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-            return null;
-        }
-
-        public void visitInnerClass(String name, String outerName, String innerName, int access) {
-        }
-
-        public void visitOuterClass(String owner, String name, String desc) {
-        }
-
-        public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-            return null;
-        }
-
-        public void visitSource(String source, String debug) {
-        }
-
-        public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-            return null;
-        }
-
-        public void visitAttribute(Attribute attr) {
-        }
-
-        public void visitEnd() {
         }
     }
 }
