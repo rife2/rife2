@@ -39,6 +39,9 @@ public class Context {
     private final Map<String, String[]> parameters_;
     private Throwable engineException_;
 
+    private Route processingRoute_ = null;
+    private Element processingElement_ = null;
+
     public Context(String gateUrl, Site site, Request request, Response response, RouteMatch routeMatch) {
         gateUrl_ = gateUrl;
         site_ = site;
@@ -88,9 +91,13 @@ public class Context {
         }
     }
 
-    private void processElement(Route route)
+    void processElement(Route route)
     throws Exception {
         var element = route.obtainElementInstance(this);
+
+        processingRoute_ = route;
+        processingElement_ = element;
+
         response_.setLastElement(element);
         try {
             element.process(this);
@@ -98,7 +105,18 @@ public class Context {
         } catch (NextException ignored) {
             // this element is done processing
             // move on to the next one
+        } finally {
+            processingRoute_ = null;
+            processingElement_ = null;
         }
+    }
+
+    Route processingRoute() {
+        return processingRoute_;
+    }
+
+    Element processingElement() {
+        return processingElement_;
     }
 
     public Site site() {

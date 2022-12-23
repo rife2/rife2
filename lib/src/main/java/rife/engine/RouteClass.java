@@ -126,7 +126,7 @@ public class RouteClass implements Route {
         try {
             var parameters = new LinkedHashMap<String, String[]>();
 
-            if (context.route() instanceof RouteClass route) {
+            if (context.processingRoute() instanceof RouteClass route) {
                 for (var field : route.getAnnotatedFields()) {
                     field.setAccessible(true);
 
@@ -137,7 +137,7 @@ public class RouteClass implements Route {
                     }
 
                     var name = field.getName();
-                    var value = field.get(context.response().getLastElement());
+                    var value = field.get(context.processingElement());
 
                     if (field.isAnnotationPresent(Parameter.class) &&
                         shouldProcessOutFlow(field.getAnnotation(Parameter.class).flow())) {

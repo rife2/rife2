@@ -23,6 +23,7 @@ java {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -156,6 +157,8 @@ tasks.javadoc {
     if (JavaVersion.current().isJava9Compatible) {
         (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
     }
+    exclude("rife/antlr/**")
+    exclude("rife/asm/**")
 }
 
 idea {

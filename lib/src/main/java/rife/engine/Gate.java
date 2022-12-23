@@ -138,7 +138,7 @@ public class Gate {
         var exception_route = router.getExceptionRoute();
         if (exception_route != null) {
             try {
-                exception_route.obtainElementInstance(c).process(c);
+                c.processElement(exception_route);
                 return;
             } catch (Exception ignored) {
             }
