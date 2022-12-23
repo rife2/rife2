@@ -7,8 +7,6 @@ package rife.database;
 import rife.database.exceptions.*;
 import rife.selector.NameSelector;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
 

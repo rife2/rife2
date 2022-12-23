@@ -4,8 +4,8 @@
  */
 package rife.template;
 
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.MethodVisitor;
+import rife.asm.ClassVisitor;
+import rife.asm.MethodVisitor;
 
 import static rife.template.ParsedBlockPart.Type.VALUE;
 

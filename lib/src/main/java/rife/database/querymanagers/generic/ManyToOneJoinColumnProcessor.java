@@ -5,6 +5,7 @@
  */
 package rife.database.querymanagers.generic;
 
+@FunctionalInterface
 public interface ManyToOneJoinColumnProcessor {
     boolean processJoinColumn(String columnName, String propertyName, ManyToOneDeclaration declaration);
 }

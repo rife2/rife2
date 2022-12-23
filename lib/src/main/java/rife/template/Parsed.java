@@ -7,10 +7,10 @@ package rife.template;
 import java.net.URL;
 import java.util.*;
 
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
+import rife.asm.ClassWriter;
+import rife.asm.Label;
+import rife.asm.MethodVisitor;
+import rife.asm.Opcodes;
 import rife.template.exceptions.TemplateException;
 
 final class Parsed implements Opcodes {

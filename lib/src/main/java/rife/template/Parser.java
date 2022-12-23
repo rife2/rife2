@@ -4,9 +4,9 @@
  */
 package rife.template;
 
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.InputMismatchException;
-import org.antlr.v4.runtime.tree.*;
+import rife.antlr.v4.runtime.*;
+import rife.antlr.v4.runtime.InputMismatchException;
+import rife.antlr.v4.runtime.tree.*;
 import rife.config.RifeConfig;
 import rife.datastructures.DocumentPosition;
 import rife.resources.ResourceFinder;

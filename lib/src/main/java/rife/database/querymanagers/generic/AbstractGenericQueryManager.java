@@ -10,21 +10,20 @@ import rife.database.exceptions.MissingManyToOneColumnException;
 import rife.database.exceptions.MissingManyToOneTableException;
 import rife.database.queries.*;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.*;
 import java.util.*;
 
 import rife.database.exceptions.DatabaseException;
 import rife.database.exceptions.ExecutionErrorException;
 import rife.database.querymanagers.generic.exceptions.IncompatibleValidationTypeException;
 import rife.database.querymanagers.generic.exceptions.UnsupportedManyToManyValueTypeException;
+import rife.database.querymanagers.generic.instrument.LazyLoadAccessorsBytecodeTransformer;
 import rife.tools.BeanUtils;
 import rife.tools.ClassUtils;
 import rife.tools.InnerClassException;
 import rife.tools.StringUtils;
 import rife.tools.exceptions.BeanUtilsException;
 import rife.validation.*;
-
-import java.lang.reflect.Method;
 
 import static rife.database.querymanagers.generic.GenericQueryManagerRelationalUtils.*;
 
@@ -44,7 +43,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         baseClass_ = beanClass;
         primaryKey_ = primaryKey;
         try {
-            String capitalized_primary_key = StringUtils.capitalize(primaryKey_);
+            var capitalized_primary_key = StringUtils.capitalize(primaryKey_);
             getPrimaryKeyMethod_ = baseClass_.getMethod("get" + capitalized_primary_key, (Class[]) null);
             try {
                 setPrimaryKeyMethod_ = baseClass_.getMethod("set" + capitalized_primary_key, int.class);
@@ -59,9 +58,9 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             throw new DatabaseException(e);
         }
 
-        Constrained constrained_bean = ConstrainedUtils.getConstrainedInstance(getBaseClass());
+        var constrained_bean = ConstrainedUtils.getConstrainedInstance(getBaseClass());
         if (constrained_bean != null) {
-            ConstrainedProperty constrained_property = constrained_bean.getConstrainedProperty(primaryKey);
+            var constrained_property = constrained_bean.getConstrainedProperty(primaryKey);
             if (constrained_property != null) {
                 sparseIdentifier_ = constrained_property.isSparse();
             }
@@ -79,7 +78,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     public int getIdentifierValue(BeanType bean)
     throws DatabaseException {
         try {
-            Integer id = (Integer) getPrimaryKeyMethod_.invoke(bean, (Object[]) null);
+            var id = (Integer) getPrimaryKeyMethod_.invoke(bean, (Object[]) null);
             if (null == id) {
                 return -1;
             }
@@ -101,7 +100,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             throw new IncompatibleValidationTypeException(validated.getClass(), baseClass_);
         }
 
-        BeanType bean = (BeanType) validated;
+        var bean = (BeanType) validated;
 
         // handle before callback
         Callbacks callbacks = getCallbacks(bean);
@@ -120,7 +119,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     private static int getIdentifierValue(Object bean, String propertyName)
     throws DatabaseException {
         try {
-            Integer id = (Integer) BeanUtils.getPropertyValue(bean, propertyName);
+            var id = (Integer) BeanUtils.getPropertyValue(bean, propertyName);
             if (null == id) {
                 return -1;
             }
@@ -137,13 +136,13 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         }
 
         // handle constrained beans
-        final Constrained constrained = ConstrainedUtils.makeConstrainedInstance(validated);
+        final var constrained = ConstrainedUtils.makeConstrainedInstance(validated);
 
         if (constrained != null) {
             // check if the identifier exists or is still undefined (existing or
             // new entry)
-            boolean identifier_exists = false;
-            int identifier_value = getIdentifierValue((BeanType) validated);
+            var identifier_exists = false;
+            var identifier_value = getIdentifierValue((BeanType) validated);
             if (identifier_value >= 0) {
                 identifier_exists = true;
             }
@@ -159,7 +158,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                     }
 
                     if (property_value != null) {
-                        int identifier_value = getIdentifierValue(property_value, declaration.getAssociationColumn());
+                        var identifier_value = getIdentifierValue(property_value, declaration.getAssociationColumn());
                         if (identifier_value >= 0) {
                             if (!executeHasResultRows(declaration.getAssociationManager().getRestoreQuery(identifier_value))) {
                                 validated.addValidationError(new ValidationError.INVALID(propertyName));
@@ -173,14 +172,14 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
             Map<String, ManyToOneAssociationDeclaration> manytoone_association_declarations = null;
             Map<String, Object> manytoone_association_property_values = null;
-            boolean obtained_manytoone_association_declarations = false;
+            var obtained_manytoone_association_declarations = false;
 
             Map<String, ManyToManyDeclaration> manytomany_declarations = null;
             Map<String, Object> manytomany_property_values = null;
-            boolean obtained_manytomany_declarations = false;
+            var obtained_manytomany_declarations = false;
 
             // handle individual properties
-            for (ConstrainedProperty property : (Collection<ConstrainedProperty>) constrained.getConstrainedProperties()) {
+            for (var property : (Collection<ConstrainedProperty>) constrained.getConstrainedProperties()) {
                 // handle the uniqueness of individual properties
                 if (property.isUnique()) {
                     Object property_value = null;
@@ -191,7 +190,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                     }
 
                     if (property_value != null) {
-                        CountQuery count_query = getCountQuery()
+                        var count_query = getCountQuery()
                             .where(property.getPropertyName(), "=", property_value);
                         if (identifier_exists) {
                             count_query.whereAnd(primaryKey_, "!=", identifier_value);
@@ -214,7 +213,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
                     if (property_value != null &&
                         ClassUtils.isBasic(property_value.getClass())) {
-                        ConstrainedProperty.ManyToOne many_to_one = property.getManyToOne();
+                        var many_to_one = property.getManyToOne();
 
                         if (null == many_to_one.getDerivedTable()) {
                             throw new MissingManyToOneTableException(constrained.getClass(), property.getPropertyName());
@@ -240,7 +239,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
                         if (manytoone_association_declarations != null) {
                             // get the property values of those that contain many-to-one association relationships
-                            String[] manytoone_association_property_names = new String[manytoone_association_declarations.size()];
+                            var manytoone_association_property_names = new String[manytoone_association_declarations.size()];
                             manytoone_association_declarations.keySet().toArray(manytoone_association_property_names);
                             try {
                                 manytoone_association_property_values = BeanUtils.getPropertyValues(constrained, manytoone_association_property_names, null, null);
@@ -252,10 +251,10 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                         obtained_manytoone_association_declarations = true;
                     }
 
-                    ManyToOneAssociationDeclaration declaration = manytoone_association_declarations.get(property.getPropertyName());
+                    var declaration = manytoone_association_declarations.get(property.getPropertyName());
                     if (declaration != null) {
-                        Object value = manytoone_association_property_values.get(property.getPropertyName());
-                        Class type = declaration.getMainType();
+                        var value = manytoone_association_property_values.get(property.getPropertyName());
+                        var type = declaration.getMainType();
                         try {
                             checkCollectionRelationshipValidity(validated, property, value, type);
                         } catch (ClassCastException e) {
@@ -273,7 +272,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
                         if (manytomany_declarations != null) {
                             // get the property values of those that contain many-to-many relationships
-                            String[] manytomany_property_names = new String[manytomany_declarations.size()];
+                            var manytomany_property_names = new String[manytomany_declarations.size()];
                             manytomany_declarations.keySet().toArray(manytomany_property_names);
                             try {
                                 manytomany_property_values = BeanUtils.getPropertyValues(constrained, manytomany_property_names, null, null);
@@ -285,9 +284,9 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                         obtained_manytomany_declarations = true;
                     }
 
-                    ManyToManyDeclaration declaration = manytomany_declarations.get(property.getPropertyName());
+                    var declaration = manytomany_declarations.get(property.getPropertyName());
                     if (declaration != null) {
-                        Object value = manytomany_property_values.get(property.getPropertyName());
+                        var value = manytomany_property_values.get(property.getPropertyName());
                         try {
                             checkCollectionRelationshipValidity(validated, property, value, declaration.getAssociationType());
                         } catch (ClassCastException e) {
@@ -299,16 +298,16 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             }
 
             // handle the bean-wide uniqueness
-            ConstrainedBean constrained_bean = constrained.getConstrainedBean();
+            var constrained_bean = constrained.getConstrainedBean();
             if (constrained_bean != null &&
                 constrained_bean.hasUniques()) {
-                for (String[] uniques : (List<String[]>) constrained_bean.getUniques()) {
-                    CountQuery count_query = getCountQuery();
+                for (var uniques : (List<String[]>) constrained_bean.getUniques()) {
+                    var count_query = getCountQuery();
                     if (identifier_exists) {
                         count_query.where(primaryKey_, "!=", identifier_value);
                     }
 
-                    for (String unique : uniques) {
+                    for (var unique : uniques) {
                         Object property_value = null;
                         try {
                             property_value = BeanUtils.getPropertyValue(constrained, unique);
@@ -326,7 +325,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
                     if (count_query != null &&
                         count(count_query) > 0) {
-                        for (String unique : uniques) {
+                        for (var unique : uniques) {
                             validated.addValidationError(new ValidationError.UNIQUENESS(unique));
                         }
                     }
@@ -340,13 +339,13 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         if (elementType != null &&
             propertyValue != null) {
             // cast the property value to a collection
-            Collection value_collection = (Collection) propertyValue;
+            var value_collection = (Collection) propertyValue;
 
             // iterate over all the collection elements to obtain the identifier values
             Set<Integer> identifiers = new HashSet<Integer>();
-            GenericQueryManager element_manager = createNewManager(elementType);
-            for (Object entity : value_collection) {
-                int identifier_value = element_manager.getIdentifierValue(entity);
+            var element_manager = createNewManager(elementType);
+            for (var entity : value_collection) {
+                var identifier_value = element_manager.getIdentifierValue(entity);
                 // only add the identifiers that have a value
                 if (identifier_value != -1) {
                     identifiers.add(identifier_value);
@@ -354,9 +353,9 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             }
 
             // check if the many-to-one associations exist
-            CountQuery count_query = element_manager.getCountQuery()
+            var count_query = element_manager.getCountQuery()
                 .where(element_manager.getIdentifierName() + " IN (" + StringUtils.join(identifiers, ",") + ")");
-            int count = element_manager.count(count_query);
+            var count = element_manager.count(count_query);
             if (count != identifiers.size()) {
                 validated.addValidationError(new ValidationError.INVALID(property.getPropertyName()));
             }
@@ -377,14 +376,14 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
     protected int _update(final Update saveUpdate, final BeanType bean) {
         // handle before callback
-        Callbacks<BeanType> callbacks = getCallbacks(bean);
+        var callbacks = getCallbacks(bean);
         if (callbacks != null &&
             !callbacks.beforeUpdate(bean)) {
             return -1;
         }
 
         // perform update
-        int result = _updateWithoutCallbacks(saveUpdate, bean);
+        var result = _updateWithoutCallbacks(saveUpdate, bean);
 
         // handle after callback
         if (callbacks != null) {
@@ -397,11 +396,11 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     protected int _updateWithoutCallbacks(final Update saveUpdate, final BeanType bean) {
         assert saveUpdate != null;
 
-        final int identifier_value = getIdentifierValue(bean);
+        final var identifier_value = getIdentifierValue(bean);
         int result = (Integer) inTransaction(new DbTransactionUser<>() {
             public Integer useTransaction()
             throws InnerClassException {
-                int result = identifier_value;
+                var result = identifier_value;
 
                 storeManyToOne(bean);
 
@@ -433,14 +432,14 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
     protected int _insert(final SequenceValue nextId, final Insert save, final BeanType bean) {
         // handle before callback
-        Callbacks<BeanType> callbacks = getCallbacks(bean);
+        var callbacks = getCallbacks(bean);
         if (callbacks != null &&
             !callbacks.beforeInsert(bean)) {
             return -1;
         }
 
         // perform insert
-        int result = _insertWithoutCallbacks(nextId, save, bean);
+        var result = _insertWithoutCallbacks(nextId, save, bean);
 
         // handle after callback
         if (callbacks != null) {
@@ -454,19 +453,19 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         assert nextId != null;
         assert save != null;
 
-        int value = -1;
+        var value = -1;
 
         value = inTransaction(new DbTransactionUser<>() {
             public Integer useTransaction()
             throws InnerClassException {
                 storeManyToOne(bean);
 
-                int result = getIdentifierValue(bean);
+                var result = getIdentifierValue(bean);
                 if (!isIdentifierSparse()) {
                     result = executeGetFirstInt(nextId);
                 }
 
-                final int primary_key_id = result;
+                final var primary_key_id = result;
                 executeUpdate(save, new DbPreparedStatementHandler<>() {
                     public void setParameters(final DbPreparedStatement statement) {
                         statement
@@ -499,21 +498,21 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     }
 
     protected void setManyToOneJoinParameters(final DbPreparedStatement statement, final BeanType bean) {
-        final Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+        final var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
 
         // handle many-to-one join column parameters
         processManyToOneJoinColumns(this, new ManyToOneJoinColumnProcessor() {
             public boolean processJoinColumn(String columnName, String propertyName, ManyToOneDeclaration declaration) {
                 try {
-                    Object join_column_property = BeanUtils.getPropertyValue(bean, propertyName);
+                    var join_column_property = BeanUtils.getPropertyValue(bean, propertyName);
                     Object identifier_value = null;
                     if (join_column_property != null) {
                         identifier_value = BeanUtils.getPropertyValue(join_column_property, declaration.getAssociationColumn());
                     }
-                    Class identifier_type = BeanUtils.getPropertyType(declaration.getAssociationType(), declaration.getAssociationColumn());
+                    var identifier_type = BeanUtils.getPropertyType(declaration.getAssociationType(), declaration.getAssociationColumn());
 
-                    int[] indices = statement.getParameterIndices(columnName);
-                    for (int index : indices) {
+                    var indices = statement.getParameterIndices(columnName);
+                    for (var index : indices) {
                         getDatasource().getSqlConversion().setTypedParameter(statement, index, identifier_type, columnName, identifier_value, constrained);
                     }
                 } catch (BeanUtilsException e) {
@@ -526,11 +525,11 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     }
 
     protected void storeManyToOne(final BeanType bean) {
-        final Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
-        final Map<String, ManyToOneDeclaration> declarations = obtainManyToOneDeclarations(this, constrained, null, null);
+        final var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+        final var declarations = obtainManyToOneDeclarations(this, constrained, null, null);
         if (declarations != null) {
             // get the property values of those that contain many-to-one relationships
-            String[] property_names = new String[declarations.size()];
+            var property_names = new String[declarations.size()];
             declarations.keySet().toArray(property_names);
             final Map<String, Object> values;
             try {
@@ -540,16 +539,16 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             }
 
             // iterate over all the many-to-one relationships that have associated classes and instance values
-            for (Map.Entry<String, ManyToOneDeclaration> entry : declarations.entrySet()) {
-                ManyToOneDeclaration declaration = entry.getValue();
+            for (var entry : declarations.entrySet()) {
+                var declaration = entry.getValue();
                 if (!declaration.isBasic()) {
-                    GenericQueryManager association_manager = declaration.getAssociationManager();
-                    String property_name = entry.getKey();
+                    var association_manager = declaration.getAssociationManager();
+                    var property_name = entry.getKey();
 
                     // obtain the property value
-                    Object value = values.get(property_name);
+                    var value = values.get(property_name);
                     if (value != null) {
-                        int identifier_value = association_manager.getIdentifierValue(value);
+                        var identifier_value = association_manager.getIdentifierValue(value);
                         // insert the collection entries that have no identifier value
                         if (identifier_value < 0) {
                             identifier_value = association_manager.insert(value);
@@ -561,11 +560,11 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     }
 
     protected void storeManyToOneAssociations(final BeanType bean, final int objectId) {
-        final Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
-        final Map<String, ManyToOneAssociationDeclaration> declarations = obtainManyToOneAssociationDeclarations(this, constrained);
+        final var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+        final var declarations = obtainManyToOneAssociationDeclarations(this, constrained);
         if (declarations != null) {
             // get the property values of those that contain many-to-one relationships
-            String[] property_names = new String[declarations.size()];
+            var property_names = new String[declarations.size()];
             declarations.keySet().toArray(property_names);
             final Map<String, Object> values;
             try {
@@ -575,19 +574,19 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             }
 
             // iterate over all the many-to-one relationships that have associated classes and instance values
-            for (Map.Entry<String, ManyToOneAssociationDeclaration> entry : declarations.entrySet()) {
-                ManyToOneAssociationDeclaration declaration = entry.getValue();
-                GenericQueryManager main_manager = createNewManager(declaration.getMainType());
-                String property_name = entry.getKey();
+            for (var entry : declarations.entrySet()) {
+                var declaration = entry.getValue();
+                var main_manager = createNewManager(declaration.getMainType());
+                var property_name = entry.getKey();
 
                 // obtain the property value
-                Object value = values.get(property_name);
+                var value = values.get(property_name);
 
-                final String main_table = main_manager.getTable();
-                final String main_identify_column = main_manager.getIdentifierName();
-                final String main_join_column = generateManyToOneJoinColumnName(declaration.getMainProperty(), declaration.getMainDeclaration());
+                final var main_table = main_manager.getTable();
+                final var main_identify_column = main_manager.getIdentifierName();
+                final var main_join_column = generateManyToOneJoinColumnName(declaration.getMainProperty(), declaration.getMainDeclaration());
 
-                Update clear_previous_mappings = new Update(getDatasource())
+                var clear_previous_mappings = new Update(getDatasource())
                     .table(main_table)
                     .fieldCustom(main_join_column, "NULL")
                     .where(main_join_column, "=", objectId);
@@ -596,16 +595,16 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                 if (value != null) {
                     ensureSupportedManyToOneAssociationPropertyValueType(baseClass_, property_name, value);
 
-                    Collection value_collection = (Collection) value;
+                    var value_collection = (Collection) value;
 
-                    Update update_mapping = new Update(getDatasource())
+                    var update_mapping = new Update(getDatasource())
                         .table(main_table)
                         .fieldParameter(main_join_column)
                         .whereParameter(main_identify_column, "=");
 
                     // store the collection entries
-                    for (Object many_to_one_entity : value_collection) {
-                        int identifier_value = main_manager.getIdentifierValue(many_to_one_entity);
+                    for (var many_to_one_entity : value_collection) {
+                        var identifier_value = main_manager.getIdentifierValue(many_to_one_entity);
                         // insert the collection entries that have no identifier value
                         if (identifier_value < 0) {
                             identifier_value = main_manager.insert(many_to_one_entity);
@@ -626,11 +625,11 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     }
 
     protected void storeManyToMany(final BeanType bean, final int objectId) {
-        final Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
-        final Map<String, ManyToManyDeclaration> declarations = obtainManyToManyDeclarations(this, constrained, true);
+        final var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+        final var declarations = obtainManyToManyDeclarations(this, constrained, true);
         if (declarations != null) {
             // get the property values of those that contain many-to-many relationships
-            String[] property_names = new String[declarations.size()];
+            var property_names = new String[declarations.size()];
             declarations.keySet().toArray(property_names);
             final Map<String, Object> values;
             try {
@@ -640,20 +639,20 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             }
 
             // iterate over all the many to many relationships
-            final String column1_name = generateManyToManyJoinColumnName(AbstractGenericQueryManager.this);
-            for (Map.Entry<String, ManyToManyDeclaration> entry : declarations.entrySet()) {
-                ManyToManyDeclaration declaration = entry.getValue();
-                GenericQueryManager association_manager = createNewManager(declaration.getAssociationType());
-                String join_table = generateManyToManyJoinTableName(declaration, AbstractGenericQueryManager.this, association_manager);
-                final String column2_name = generateManyToManyJoinColumnName(association_manager);
-                String property_name = entry.getKey();
+            final var column1_name = generateManyToManyJoinColumnName(AbstractGenericQueryManager.this);
+            for (var entry : declarations.entrySet()) {
+                var declaration = entry.getValue();
+                var association_manager = createNewManager(declaration.getAssociationType());
+                var join_table = generateManyToManyJoinTableName(declaration, AbstractGenericQueryManager.this, association_manager);
+                final var column2_name = generateManyToManyJoinColumnName(association_manager);
+                var property_name = entry.getKey();
 
                 // obtain the property value
-                Object value = values.get(property_name);
+                var value = values.get(property_name);
 
                 // create the delete statement to remove all the possible previous
                 // mappings in the join table for this primary key ID
-                Delete delete_previous_mappings = new Delete(getDatasource())
+                var delete_previous_mappings = new Delete(getDatasource())
                     .from(join_table)
                     .where(column1_name, "=", objectId);
                 executeUpdate(delete_previous_mappings);
@@ -661,15 +660,15 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                 if (value != null) {
                     ensureSupportedManyToManyPropertyValueType(baseClass_, property_name, value);
 
-                    Collection value_collection = (Collection) value;
+                    var value_collection = (Collection) value;
 
-                    Insert insert_mapping = new Insert(getDatasource())
+                    var insert_mapping = new Insert(getDatasource())
                         .into(join_table)
                         .fieldParameter(column1_name)
                         .fieldParameter(column2_name);
                     // store the collection entries
-                    for (Object many_to_many_entity : value_collection) {
-                        int identifier_value = association_manager.getIdentifierValue(many_to_many_entity);
+                    for (var many_to_many_entity : value_collection) {
+                        var identifier_value = association_manager.getIdentifierValue(many_to_many_entity);
                         // insert the collection entries that have no identifier value
                         if (identifier_value < 0) {
                             identifier_value = association_manager.insert(many_to_many_entity);
@@ -694,23 +693,23 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         assert save != null;
         assert saveUpdate != null;
 
-        int value = -1;
+        var value = -1;
 
         // handle before callback
-        final Callbacks<BeanType> callbacks = getCallbacks(bean);
+        final var callbacks = getCallbacks(bean);
         if (callbacks != null &&
             !callbacks.beforeSave(bean)) {
             return -1;
         }
 
         // cancel indicator
-        final boolean[] is_cancelled = new boolean[]{false};
+        final var is_cancelled = new boolean[]{false};
 
         // perform save
-        value = (Integer) inTransaction(new DbTransactionUser<>() {
+        value = inTransaction(new DbTransactionUser<>() {
             public Integer useTransaction()
             throws InnerClassException {
-                int result = getIdentifierValue(bean);
+                var result = getIdentifierValue(bean);
                 if (isIdentifierSparse()) {
                     // handle before callback
                     if (callbacks != null &&
@@ -808,7 +807,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     throws DatabaseException {
         assert delete != null;
 
-        boolean result = true;
+        var result = true;
 
         if (0 == executeUpdate(delete)) {
             result = false;
@@ -879,18 +878,18 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     }
 
     protected void deleteManyToOne(final int objectId) {
-        final Constrained constrained = ConstrainedUtils.getConstrainedInstance(getBaseClass());
-        final Map<String, ManyToOneAssociationDeclaration> declarations = obtainManyToOneAssociationDeclarations(this, constrained);
+        final var constrained = ConstrainedUtils.getConstrainedInstance(getBaseClass());
+        final var declarations = obtainManyToOneAssociationDeclarations(this, constrained);
         if (declarations != null) {
-            // iterate over all the many to one assocation relationships
-            for (Map.Entry<String, ManyToOneAssociationDeclaration> entry : declarations.entrySet()) {
-                ManyToOneAssociationDeclaration declaration = entry.getValue();
-                String column_name = generateManyToOneJoinColumnName(declaration.getMainProperty(), declaration.getMainDeclaration());
-                GenericQueryManager main_manager = createNewManager(declaration.getMainType());
+            // iterate over all the many-to-one association relationships
+            for (var entry : declarations.entrySet()) {
+                var declaration = entry.getValue();
+                var column_name = generateManyToOneJoinColumnName(declaration.getMainProperty(), declaration.getMainDeclaration());
+                var main_manager = createNewManager(declaration.getMainType());
 
                 // create an update statement that will set all the columns that
                 // point to the deleted entity to NULL
-                Update clear_references = new Update(getDatasource())
+                var clear_references = new Update(getDatasource())
                     .table(main_manager.getTable())
                     .fieldCustom(column_name, "NULL")
                     .where(column_name, "=", objectId);
@@ -900,19 +899,19 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     }
 
     protected void deleteManyToMany(final int objectId) {
-        final Constrained constrained = ConstrainedUtils.getConstrainedInstance(getBaseClass());
-        final Map<String, ManyToManyDeclaration> declarations = obtainManyToManyDeclarations(this, constrained, true);
+        final var constrained = ConstrainedUtils.getConstrainedInstance(getBaseClass());
+        final var declarations = obtainManyToManyDeclarations(this, constrained, true);
         if (declarations != null) {
-            // iterate over all the many to many relationships
-            final String column1_name = generateManyToManyJoinColumnName(AbstractGenericQueryManager.this);
-            for (Map.Entry<String, ManyToManyDeclaration> entry : declarations.entrySet()) {
-                ManyToManyDeclaration declaration = entry.getValue();
-                GenericQueryManager association_manager = createNewManager(declaration.getAssociationType());
-                String join_table = generateManyToManyJoinTableName(declaration, AbstractGenericQueryManager.this, association_manager);
+            // iterate over all the many-to-many relationships
+            final var column1_name = generateManyToManyJoinColumnName(AbstractGenericQueryManager.this);
+            for (var entry : declarations.entrySet()) {
+                var declaration = entry.getValue();
+                var association_manager = createNewManager(declaration.getAssociationType());
+                var join_table = generateManyToManyJoinTableName(declaration, AbstractGenericQueryManager.this, association_manager);
 
                 // create the delete statement to remove all the possible previous
                 // mappings in the join table for this primary key ID
-                Delete delete_previous_mappings = new Delete(getDatasource())
+                var delete_previous_mappings = new Delete(getDatasource())
                     .from(join_table)
                     .where(column1_name, "=", objectId);
                 executeUpdate(delete_previous_mappings);
@@ -943,7 +942,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         }
 
         // handle after callback
-        Callbacks<BeanType> callbacks = getCallbacks(result);
+        var callbacks = getCallbacks(result);
         if (callbacks != null &&
             !callbacks.afterRestore(result)) {
             return null;
@@ -956,12 +955,12 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     throws DatabaseException {
         assert restore != null;
 
-        BeanType result = executeFetchFirstBean(restore, baseClass_);
+        var result = executeFetchFirstBean(restore, baseClass_);
 
         // handle listeners
         if (result != null) {
             restoreManyToOne(result);
-            int identifier_value = getIdentifierValue(result);
+            var identifier_value = getIdentifierValue(result);
             restoreManyToOneAssociations(result, identifier_value);
             restoreManyToMany(result, identifier_value);
 
@@ -969,7 +968,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         }
 
         // handle after callback
-        Callbacks<BeanType> callbacks = getCallbacks(result);
+        var callbacks = getCallbacks(result);
         if (callbacks != null &&
             !callbacks.afterRestore(result)) {
             return null;
@@ -982,12 +981,12 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     throws DatabaseException {
         assert restore != null;
 
-        DbBeanFetcher<BeanType> bean_fetcher = new DbBeanFetcher<BeanType>(getDatasource(), baseClass_, true) {
+        var bean_fetcher = new DbBeanFetcher<>(getDatasource(), baseClass_, true) {
             public boolean gotBeanInstance(BeanType instance) {
                 // handle listeners
                 if (instance != null) {
                     restoreManyToOne(instance);
-                    int identifier_value = getIdentifierValue(instance);
+                    var identifier_value = getIdentifierValue(instance);
                     restoreManyToOneAssociations(instance, identifier_value);
                     restoreManyToMany(instance, identifier_value);
 
@@ -995,7 +994,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                 }
 
                 // handle after callback
-                Callbacks<BeanType> callbacks = getCallbacks(instance);
+                var callbacks = getCallbacks(instance);
                 return !(callbacks != null && !callbacks.afterRestore(instance));
             }
         };
@@ -1021,13 +1020,13 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
     protected void restoreManyToMany(final BeanType bean, final int objectId) {
         // handle many-to-many associations
-        final Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
-        final Map<String, ManyToManyDeclaration> declarations = obtainManyToManyDeclarations(this, constrained, true);
+        final var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+        final var declarations = obtainManyToManyDeclarations(this, constrained, true);
         if (declarations != null) {
-            // iterate over all the many to many relationships
-            final String column1_name = generateManyToManyJoinColumnName(AbstractGenericQueryManager.this);
-            for (Map.Entry<String, ManyToManyDeclaration> entry : declarations.entrySet()) {
-                ManyToManyDeclaration declaration = entry.getValue();
+            // iterate over all the many-to-many relationships
+            final var column1_name = generateManyToManyJoinColumnName(AbstractGenericQueryManager.this);
+            for (var entry : declarations.entrySet()) {
+                var declaration = entry.getValue();
 
                 // create the associations collection
                 Object association_collection;
@@ -1048,64 +1047,57 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     }
 
     protected void restoreManyToOne(final BeanType bean) {
-        // TODO : investigate if lazy loading can be supported without a custom classloader
-//        Field gqm_field = null;
-//        Field lazyloaded_field = null;
-//        try {
-//            gqm_field = bean.getClass().getDeclaredField(LazyLoadAccessorsBytecodeTransformer.GQM_VAR_NAME);
-//            lazyloaded_field = bean.getClass().getDeclaredField(LazyLoadAccessorsBytecodeTransformer.LAZYLOADED_VAR_NAME);
-//        } catch (Exception e) {
-//            // if the synthetic fields don't exist in the class, just set them to null
-//            // since this means that bytecode enhancement hasn't been performed to provide
-//            // lazy-load functionalities
-//            gqm_field = null;
-//            lazyloaded_field = null;
-//        }
-//
-//        // if the class has been enhanced for lazy loading capabilities, add a reference
-//        // to this GQM and create a new map for storing the already loaded property values
-//        if (gqm_field != null &&
-//            lazyloaded_field != null) {
-//            gqm_field.setAccessible(true);
-//            lazyloaded_field.setAccessible(true);
-//            try {
-//                gqm_field.set(bean, this);
-//                if (TerracottaUtils.isTcPresent()) {
-//                    lazyloaded_field.set(bean, new HashMap());
-//                } else {
-//                    lazyloaded_field.set(bean, new WeakHashMap());
-//                }
-//            } catch (Exception e) {
-//                throw new DatabaseException(e);
-//            }
-//        }
-//        // otherwise eagerly load all many-to-one properties
-//        else {
-            processManyToOneJoinColumns(this, new ManyToOneJoinColumnProcessor() {
-                public boolean processJoinColumn(String columnName, String propertyName, ManyToOneDeclaration declaration) {
-                    Object property_value = restoreManyToOneProperty(AbstractGenericQueryManager.this, bean, declaration.getAssociationManager(), columnName, declaration.getAssociationType());
+        Field gqm_field = null;
+        Field lazyloaded_field = null;
+        try {
+            gqm_field = bean.getClass().getDeclaredField(LazyLoadAccessorsBytecodeTransformer.GQM_VAR_NAME);
+            lazyloaded_field = bean.getClass().getDeclaredField(LazyLoadAccessorsBytecodeTransformer.LAZY_LOADED_VAR_NAME);
+        } catch (Exception e) {
+            // if the synthetic fields don't exist in the class, just set them to null
+            // since this means that bytecode enhancement hasn't been performed to provide
+            // lazy-load functionalities
+            gqm_field = null;
+            lazyloaded_field = null;
+        }
 
-                    // set the many-to-one mapping as the property value
-                    try {
-                        BeanUtils.setPropertyValue(bean, propertyName, property_value);
-                    } catch (BeanUtilsException e) {
-                        throw new DatabaseException(e);
-                    }
+        // if the class has been enhanced for lazy loading capabilities, add a reference
+        // to this GQM and create a new map for storing the already loaded property values
+        if (gqm_field != null &&
+            lazyloaded_field != null) {
+            gqm_field.setAccessible(true);
+            lazyloaded_field.setAccessible(true);
+            try {
+                gqm_field.set(bean, this);
+                lazyloaded_field.set(bean, new WeakHashMap<>());
+            } catch (Exception e) {
+                throw new DatabaseException(e);
+            }
+        }
+        // otherwise eagerly load all many-to-one properties
+        else {
+            processManyToOneJoinColumns(this, (columnName, propertyName, declaration) -> {
+                var property_value = restoreManyToOneProperty(AbstractGenericQueryManager.this, bean, declaration.getAssociationManager(), columnName, declaration.getAssociationType());
 
-                    return true;
+                // set the many-to-one mapping as the property value
+                try {
+                    BeanUtils.setPropertyValue(bean, propertyName, property_value);
+                } catch (BeanUtilsException e) {
+                    throw new DatabaseException(e);
                 }
+
+                return true;
             });
-//        }
+        }
     }
 
     protected void restoreManyToOneAssociations(final BeanType bean, final int objectId) {
         // handle many-to-one associations
-        final Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
-        final Map<String, ManyToOneAssociationDeclaration> declarations = obtainManyToOneAssociationDeclarations(this, constrained);
+        final var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+        final var declarations = obtainManyToOneAssociationDeclarations(this, constrained);
         if (declarations != null) {
             // iterate over all the many to one association relationships
-            for (Map.Entry<String, ManyToOneAssociationDeclaration> entry : declarations.entrySet()) {
-                ManyToOneAssociationDeclaration declaration = entry.getValue();
+            for (var entry : declarations.entrySet()) {
+                var declaration = entry.getValue();
 
                 // create the associations collection
                 Object association_collection;
@@ -1151,20 +1143,20 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
     protected void installManyToMany() {
         // create many-to-many join tables
-        Constrained constrained = ConstrainedUtils.getConstrainedInstance(baseClass_);
-        Map<String, ManyToManyDeclaration> manytomany_declarations = obtainManyToManyDeclarations(this, constrained, false);
+        var constrained = ConstrainedUtils.getConstrainedInstance(baseClass_);
+        var manytomany_declarations = obtainManyToManyDeclarations(this, constrained, false);
         if (manytomany_declarations != null) {
-            String column1 = generateManyToManyJoinColumnName(AbstractGenericQueryManager.this);
-            for (Map.Entry<String, ManyToManyDeclaration> entry : manytomany_declarations.entrySet()) {
-                ManyToManyDeclaration declaration = entry.getValue();
-                GenericQueryManager association_manager = createNewManager(declaration.getAssociationType());
-                String table = generateManyToManyJoinTableName(declaration, AbstractGenericQueryManager.this, association_manager);
-                String column2 = generateManyToManyJoinColumnName(association_manager);
+            var column1 = generateManyToManyJoinColumnName(AbstractGenericQueryManager.this);
+            for (var entry : manytomany_declarations.entrySet()) {
+                var declaration = entry.getValue();
+                var association_manager = createNewManager(declaration.getAssociationType());
+                var table = generateManyToManyJoinTableName(declaration, AbstractGenericQueryManager.this, association_manager);
+                var column2 = generateManyToManyJoinColumnName(association_manager);
 
                 // obtain the violation actions
                 CreateTable.ViolationAction onupdate = null;
                 CreateTable.ViolationAction ondelete = null;
-                ConstrainedProperty property = constrained.getConstrainedProperty(entry.getKey());
+                var property = constrained.getConstrainedProperty(entry.getKey());
                 if (property != null &&
                     property.hasManyToMany()) {
                     onupdate = property.getManyToMany().getOnUpdate();
@@ -1172,7 +1164,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                 }
 
                 // build the table creation query
-                CreateTable create_join_table = new CreateTable(getDatasource())
+                var create_join_table = new CreateTable(getDatasource())
                     .table(table)
                     .column(column1, int.class, CreateTable.NOTNULL)
                     .column(column2, int.class, CreateTable.NOTNULL)
@@ -1205,16 +1197,16 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
     protected void removeManyToMany() {
         // drop many-to-many join tables
-        Constrained constrained = ConstrainedUtils.getConstrainedInstance(baseClass_);
-        Map<String, ManyToManyDeclaration> manytomany_declarations = obtainManyToManyDeclarations(this, constrained, false);
+        var constrained = ConstrainedUtils.getConstrainedInstance(baseClass_);
+        var manytomany_declarations = obtainManyToManyDeclarations(this, constrained, false);
         if (manytomany_declarations != null) {
-            for (Map.Entry<String, ManyToManyDeclaration> entry : manytomany_declarations.entrySet()) {
-                ManyToManyDeclaration declaration = entry.getValue();
-                GenericQueryManager association_manager = createNewManager(declaration.getAssociationType());
-                String table = generateManyToManyJoinTableName(declaration, AbstractGenericQueryManager.this, association_manager);
+            for (var entry : manytomany_declarations.entrySet()) {
+                var declaration = entry.getValue();
+                var association_manager = createNewManager(declaration.getAssociationType());
+                var table = generateManyToManyJoinTableName(declaration, AbstractGenericQueryManager.this, association_manager);
 
                 // build the table removal query
-                DropTable drop_join_table = new DropTable(getDatasource())
+                var drop_join_table = new DropTable(getDatasource())
                     .table(table);
                 executeUpdate(drop_join_table);
             }
@@ -1250,7 +1242,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             return;
         }
 
-        for (GenericQueryManagerListener<BeanType> listener : listeners_) {
+        for (var listener : listeners_) {
             listener.installed();
         }
     }
@@ -1260,7 +1252,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             return;
         }
 
-        for (GenericQueryManagerListener<BeanType> listener : listeners_) {
+        for (var listener : listeners_) {
             listener.removed();
         }
     }
@@ -1270,7 +1262,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             return;
         }
 
-        for (GenericQueryManagerListener<BeanType> listener : listeners_) {
+        for (var listener : listeners_) {
             listener.inserted(bean);
         }
     }
@@ -1280,7 +1272,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             return;
         }
 
-        for (GenericQueryManagerListener<BeanType> listener : listeners_) {
+        for (var listener : listeners_) {
             listener.updated(bean);
         }
     }
@@ -1290,7 +1282,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             return;
         }
 
-        for (GenericQueryManagerListener<BeanType> listener : listeners_) {
+        for (var listener : listeners_) {
             listener.restored(bean);
         }
     }
@@ -1300,7 +1292,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             return;
         }
 
-        for (GenericQueryManagerListener<BeanType> listener : listeners_) {
+        for (var listener : listeners_) {
             listener.deleted(objectId);
         }
     }
