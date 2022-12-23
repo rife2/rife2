@@ -29,7 +29,6 @@ repositories {
 
 dependencies {
     antlr("org.antlr:antlr4:4.11.1")
-    implementation("org.antlr:antlr4-runtime:4.11.1")
     compileOnly("org.jsoup:jsoup:1.15.3")
     compileOnly("org.eclipse.jetty:jetty-server:11.0.12")
     compileOnly("org.eclipse.jetty:jetty-servlet:11.0.12")
