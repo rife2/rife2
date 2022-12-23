@@ -5,6 +5,7 @@
 package rife.engine;
 
 import rife.authentication.elements.AuthConfig;
+import rife.authentication.elements.Identified;
 import rife.engine.exceptions.EngineException;
 import rife.template.Template;
 import rife.template.TemplateEncoder;
@@ -127,7 +128,12 @@ class EngineTemplateProcessor {
     }
 
     private void processAuthentication(final List<String> setValues) {
-        final var identity = AuthConfig.identityAttribute(context_);
+        var identified = Identified.getIdentifiedElementInRequest(context_);
+        if (identified == null) {
+            return;
+        }
+
+        final var identity = identified.getAuthConfig().identityAttribute(context_);
         if (identity != null) {
             final var auth_value_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_AUTH);
             final var auth_block_tags = template_.getFilteredBlocks(TemplateFactoryFilters.TAG_AUTH);
@@ -140,26 +146,26 @@ class EngineTemplateProcessor {
 
                     // handle authenticated login blocks assignment
                     if (!template_.isValueSet(auth_value_id)) {
-                         for (var block_groups : auth_login_block_tags) {
+                        for (var block_groups : auth_login_block_tags) {
                             var auth_block_id = block_groups[0];
                             if (block_groups[1].equals(auth_differentiator) &&
                                 identity.getLogin().equals(block_groups[2])) {
                                 template_.setBlock(auth_value_id, auth_block_id);
                                 setValues.add(auth_value_id);
                             }
-                         }
+                        }
                     }
 
                     // handle authenticated role blocks assignment
                     if (!template_.isValueSet(auth_value_id)) {
-                         for (var block_groups : auth_role_block_tags) {
+                        for (var block_groups : auth_role_block_tags) {
                             var auth_block_id = block_groups[0];
                             if (block_groups[1].equals(auth_differentiator) &&
                                 identity.getAttributes().isInRole(block_groups[2])) {
                                 template_.setBlock(auth_value_id, auth_block_id);
                                 setValues.add(auth_value_id);
                             }
-                         }
+                        }
                     }
 
                     // handle authenticated blocks assignment

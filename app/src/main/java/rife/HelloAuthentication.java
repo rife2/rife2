@@ -24,7 +24,7 @@ public class HelloAuthentication extends Site {
                 before(new Authenticated(config));
                 landing = get("/hello", c -> {
                     var t = c.template("HelloAuthenticated");
-                    t.setValue("user", AuthConfig.identityAttribute(c).getLogin());
+                    t.setValue("user", config.identityAttribute(c).getLogin());
                     c.print(t);
                 });
                 logout = get("/logout", new Logout(config, TemplateFactory.HTML.get("HelloLogout")));

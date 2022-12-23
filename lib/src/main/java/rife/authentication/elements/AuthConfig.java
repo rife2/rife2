@@ -62,11 +62,11 @@ public class AuthConfig {
         return this;
     }
 
-    public static String identityAttributeName() {
+    public String identityAttributeName() {
         return DEFAULT_IDENTITY_ATTRIBUTE_NAME;
     }
 
-    public static RoleUserIdentity identityAttribute(Context c) {
+    public RoleUserIdentity identityAttribute(Context c) {
         return (RoleUserIdentity) c.attribute(identityAttributeName());
     }
 

@@ -15,6 +15,19 @@ public class Identified implements Element {
         authConfig_ = config;
     }
 
+    public static Identified getIdentifiedElementInRequest(Context c) {
+        var identified = c.attribute(Identified.class.getName());
+        if (identified instanceof Identified result) {
+            return result;
+        }
+
+        return null;
+    }
+
+    public AuthConfig getAuthConfig() {
+        return authConfig_;
+    }
+
     public void process(Context c)
     throws Exception {
         if (!c.hasAttribute(authConfig_.identityAttributeName())) {
@@ -22,16 +35,15 @@ public class Identified implements Element {
         }
     }
 
-    public void setIdentityAttribute(Context c)
-    throws Exception {
+    public void setIdentityAttribute(Context c) {
         var identity = getIdentity(c);
         if (identity != null) {
+            c.setAttribute(Identified.class.getName(), this);
             c.setAttribute(authConfig_.identityAttributeName(), identity);
         }
     }
 
-    public RoleUserIdentity getIdentity(Context c)
-    throws Exception {
+    public RoleUserIdentity getIdentity(Context c) {
         if (!c.hasCookie(authConfig_.authCookieName())) {
             return null;
         }
