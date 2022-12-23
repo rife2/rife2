@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public abstract class MetaData implements ValidatedConstrained, Constrained, Cloneable {
+public abstract class MetaData implements ValidatedConstrained, Constrained, MetaDataMerged, MetaDataBeanAware, Cloneable {
     private Validated metaDataBean_ = this;
     private Validation validation_;
 

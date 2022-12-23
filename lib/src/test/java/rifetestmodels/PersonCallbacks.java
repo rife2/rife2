@@ -4,30 +4,8 @@
  */
 package rifetestmodels;
 
-import rife.database.querymanagers.generic.AbstractCallbacks;
-import rife.database.querymanagers.generic.Callbacks;
-import rife.database.querymanagers.generic.CallbacksProvider;
-import rife.validation.ConstrainedProperty;
-
-public class PersonCallbacks extends Person implements CallbacksProvider, Cloneable {
+public class PersonCallbacks extends Person implements Cloneable {
     private Integer id_;
-
-    public Callbacks getCallbacks() {
-        return new AbstractCallbacks<PersonCallbacks>() {
-            public boolean beforeSave(PersonCallbacks object) {
-                object.setFirstname("beforeSave");
-                return true;
-            }
-        };
-    }
-
-    public void activateMetaData() {
-        addConstraint(new ConstrainedProperty("firstname")
-            .maxLength(10)
-            .notNull(true));
-        addConstraint(new ConstrainedProperty("lastname")
-            .inList("Smith", "Jones", "Ronda"));
-    }
 
     public void setId(Integer id) {
         id_ = id;

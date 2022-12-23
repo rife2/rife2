@@ -4,7 +4,10 @@
  */
 package rifetestmodels;
 
-public class Person {
+import rife.validation.annotations.MetaDataClass;
+
+@MetaDataClass(PersonMetaData.class)
+public class PersonAnnotation {
     private String firstname_;
     private String lastname_;
 
