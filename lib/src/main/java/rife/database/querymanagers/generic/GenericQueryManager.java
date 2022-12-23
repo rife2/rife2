@@ -6,10 +6,10 @@
 package rife.database.querymanagers.generic;
 
 import rife.database.DbRowProcessor;
+import rife.database.RowProcessor;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.CreateTable;
 import rife.validation.ValidationContext;
-//import rife.site.ValidationContext;
 import java.util.List;
 
 /**
@@ -202,6 +202,20 @@ public interface GenericQueryManager<BeanType> extends ValidationContext {
     throws DatabaseException;
 
     /**
+     * Restore all beans using the row processor provided.
+     * <p>This method will return all beans using a {@link RowProcessor} for
+     * reduced memory requirements as opposed to the full {@link List} version
+     * of {@link #restore()}.
+     *
+     * @param rowProcessor the RowProcessor each row should be passed to
+     * @return true if beans were restored, false if not
+     * @see #restore()
+     * @since 1.0
+     */
+    boolean restore(RowProcessor rowProcessor)
+    throws DatabaseException;
+
+    /**
      * Restore the first bean that matches the {@link RestoreQuery}.
      * <p>This method will return the first bean that matches the {@link
      * RestoreQuery}. Especially useful for selecting the first returned bean
@@ -245,6 +259,24 @@ public interface GenericQueryManager<BeanType> extends ValidationContext {
      * @since 1.0
      */
     boolean restore(RestoreQuery query, DbRowProcessor rowProcessor)
+    throws DatabaseException;
+
+    /**
+     * Restore a list of beans that match the provided {@link RestoreQuery}
+     * and process with the {@link RowProcessor}.
+     * <p>This method will return a list of beans that match the provided
+     * RestoreQuery and process these matches with the provided {@link
+     * RowProcessor}. This can be used for more memory-intensive (or larger
+     * result sets) complex queries or for the exclusion of certain beans from
+     * the results.
+     *
+     * @param query        the query the beans should be restored from
+     * @param rowProcessor the row processor that should be used to process
+     *                     each matched bean row
+     * @return true if beans were processed, false if not
+     * @since 1.0
+     */
+    boolean restore(RestoreQuery query, RowProcessor rowProcessor)
     throws DatabaseException;
 
     /**

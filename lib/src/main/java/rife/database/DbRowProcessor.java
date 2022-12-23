@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 /**
  * This abstract base class should be used to implement classes that process one
- * row in a database query resulset. The <code>fetch</code> method of a
+ * row in a database query result set. The <code>fetch</code> method of a
  * <code>DbQueryManager</code> requires an instance of a
  * <code>DbRowProcessor</code> and calls its <code>processRow</code>
  * method each time it is called.
@@ -25,16 +25,17 @@ import java.util.logging.Logger;
  * <p>
  * A class that extends <code>DbRowProcessor</code> can for example take a
  * <code>Template</code> instance as the argument of its constructor and
- * progressively fill in each resulting row in a HTML table. This, without
+ * progressively fill in each resulting row in an HTML table. This, without
  * having to maintain the query results in memory to be able to provide it to a
- * seperate method which is responsible for the handling of the output. Using a
- * <code>DbRowProcessor</code> thus allows for perfect seperation and
+ * separate method which is responsible for the handling of the output. Using a
+ * <code>DbRowProcessor</code> thus allows for perfect separation and
  * abstraction of result processing without having to be burdened with possible
  * large memory usage or large object allocation.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see #processRow(ResultSet resultSet)
- * @see rife.database.DbQueryManager
+ * @see DbQueryManager
+ * @see DbRowProcessor
  * @since 1.0
  */
 public abstract class DbRowProcessor implements Cloneable {
@@ -43,7 +44,7 @@ public abstract class DbRowProcessor implements Cloneable {
     /**
      * This method has to be implemented by each class that extends the
      * <code>DbRowProcessor</code> class. It has to contain all the logic that
-     * should be executed for each row of a resultset.
+     * should be executed for each row of a result set.
      *
      * @param resultSet the <code>ResultSet</code> instance that was provided to
      *                  the <code>DbQueryManager</code>'s <code>fetch</code> method.

@@ -479,10 +479,32 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
+    public void testExecuteUpdateSimpleHandler(Datasource datasource) {
+        var manager = new DbQueryManager(datasource);
+        try {
+            var create_query = new CreateTable(datasource);
+            create_query.table("tbltest").column("name", String.class, 50);
+            manager.executeUpdate(create_query);
+
+            var insert_query = new Insert(datasource);
+            insert_query.into("tbltest")
+                .fieldParameter("name");
+            assertEquals(1, manager.executeUpdate(insert_query, statement -> statement.setString("name", "me")));
+
+            assertEquals("me", manager.executeGetFirstString(new Select(datasource).from("tbltest")));
+        } catch (DatabaseException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        } finally {
+            tearDown(datasource);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
     public void testIllegalExecuteHasResultRows(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
-            manager.executeHasResultRows((Select) null);
+            manager.executeHasResultRows(null);
             fail();
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -504,6 +526,7 @@ public class TestDbQueryManager {
 
             assertTrue(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = 'me'")));
 
+            assertTrue(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = ?"), s -> s.setString(1, "me")));
             assertTrue(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = ?"), new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -515,6 +538,7 @@ public class TestDbQueryManager {
 
             assertFalse(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = 'me'")));
 
+            assertFalse(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = ?"), s -> s.setString(1, "me")));
             assertFalse(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = ?"), new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -547,6 +571,7 @@ public class TestDbQueryManager {
             template2.setValue("name", template2.getEncoder().encode("me"));
             assertTrue(manager.executeHasResultRows(new ReadQueryTemplate(template2)));
 
+            assertTrue(manager.executeHasResultRows(new ReadQueryTemplate(template1, "query2"), s -> s.setString(1, "me")));
             assertTrue(manager.executeHasResultRows(new ReadQueryTemplate(template1, "query2"), new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -558,6 +583,7 @@ public class TestDbQueryManager {
 
             assertFalse(manager.executeHasResultRows(new ReadQueryTemplate(template1, "query1")));
 
+            assertFalse(manager.executeHasResultRows(new ReadQueryTemplate(template1, "query2"), s -> s.setString(1, "me")));
             assertFalse(manager.executeHasResultRows(new ReadQueryTemplate(template1, "query2"), new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -593,6 +619,7 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("name")
                 .whereParameter("name", "=");
+            assertTrue(manager.executeHasResultRows(select_query, s -> s.setString("name", "me")));
             assertTrue(manager.executeHasResultRows(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -612,6 +639,7 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("name")
                 .whereParameter("name", "=");
+            assertFalse(manager.executeHasResultRows(select_query, s -> s.setString("name", "me")));
             assertFalse(manager.executeHasResultRows(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -697,6 +725,7 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("firstcol")
                 .whereParameter("lastcol", "=");
+            assertEquals("Piet", manager.executeGetFirstString(select_query, s -> s.setString("lastcol", "Smith")));
             assertEquals("Piet", manager.executeGetFirstString(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -782,6 +811,7 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("datacol")
                 .whereParameter("lastcol", "=");
+            assertFalse(manager.executeGetFirstBoolean(select_query, s -> s.setString("lastcol", "Smith")));
             assertFalse(manager.executeGetFirstBoolean(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -868,6 +898,7 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("datacol")
                 .whereParameter("lastcol", "=");
+            assertEquals(23, manager.executeGetFirstByte(select_query, s ->s.setString("lastcol", "Smith")));
             assertEquals(23, manager.executeGetFirstByte(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -954,6 +985,7 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("datacol")
                 .whereParameter("lastcol", "=");
+            assertEquals(243, manager.executeGetFirstShort(select_query, s -> s.setString("lastcol", "Smith")));
             assertEquals(243, manager.executeGetFirstShort(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -1040,6 +1072,7 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("datacol")
                 .whereParameter("lastcol", "=");
+            assertEquals(154, manager.executeGetFirstInt(select_query, s -> s.setString("lastcol", "Smith")));
             assertEquals(154, manager.executeGetFirstInt(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -1126,6 +1159,7 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("datacol")
                 .whereParameter("lastcol", "=");
+            assertEquals(14873, manager.executeGetFirstLong(select_query, s -> s.setString("lastcol", "Smith")));
             assertEquals(14873, manager.executeGetFirstLong(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -1212,6 +1246,7 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("datacol")
                 .whereParameter("lastcol", "=");
+            assertEquals(23.5f, manager.executeGetFirstFloat(select_query, s -> s.setString("lastcol", "Smith")));
             assertEquals(23.5f, manager.executeGetFirstFloat(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -1298,6 +1333,7 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("datacol")
                 .whereParameter("lastcol", "=");
+            assertEquals(1984.328d, manager.executeGetFirstDouble(select_query, s -> s.setString("lastcol", "Smith")), 0.001);
             assertEquals(1984.328d, manager.executeGetFirstDouble(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -1409,6 +1445,8 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("datacol")
                 .whereParameter("lastcol", "=");
+            result = manager.executeGetFirstBytes(select_query, s -> s.setString("lastcol", "Smith"));
+            assertArrayEquals(new byte[]{100, 101, 102}, result);
             result = manager.executeGetFirstBytes(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -1510,12 +1548,14 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("datacol")
                 .whereParameter("lastcol", "=");
+            assertEquals(cal2.getTimeInMillis(), manager.executeGetFirstDate(select_query, s -> s.setString("lastcol", "Smith")).getTime());
             assertEquals(cal2.getTimeInMillis(), manager.executeGetFirstDate(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("lastcol", "Smith");
                 }
             }).getTime());
+            assertEquals(cal2.getTimeInMillis(), manager.executeGetFirstDate(select_query, Calendar.getInstance(), s -> s.setString("lastcol", "Smith")).getTime());
             assertEquals(cal2.getTimeInMillis(), manager.executeGetFirstDate(select_query, Calendar.getInstance(), new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -1626,12 +1666,14 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("datacol")
                 .whereParameter("lastcol", "=");
+            assertEquals(cal2.getTimeInMillis(), manager.executeGetFirstTime(select_query, s -> s.setString("lastcol", "Smith")).getTime());
             assertEquals(cal2.getTimeInMillis(), manager.executeGetFirstTime(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("lastcol", "Smith");
                 }
             }).getTime());
+            assertEquals(cal2.getTimeInMillis(), manager.executeGetFirstTime(select_query, Calendar.getInstance(), s -> s.setString("lastcol", "Smith")).getTime());
             assertEquals(cal2.getTimeInMillis(), manager.executeGetFirstTime(select_query, Calendar.getInstance(), new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -1742,12 +1784,14 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("datacol")
                 .whereParameter("lastcol", "=");
+            assertEquals(cal2.getTimeInMillis(), manager.executeGetFirstTimestamp(select_query, s -> s.setString("lastcol", "Smith")).getTime());
             assertEquals(cal2.getTimeInMillis(), manager.executeGetFirstTimestamp(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("lastcol", "Smith");
                 }
             }).getTime());
+            assertEquals(cal2.getTimeInMillis(), manager.executeGetFirstTimestamp(select_query, Calendar.getInstance(), s -> s.setString("lastcol", "Smith")).getTime());
             assertEquals(cal2.getTimeInMillis(), manager.executeGetFirstTimestamp(select_query, Calendar.getInstance(), new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -1869,6 +1913,19 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("firstcol")
                 .whereParameter("lastcol", "=");
+            manager.executeUseFirstAsciiStream(select_query, new InputStreamUser<>() {
+                public Object useInputStream(InputStream stream)
+                throws InnerClassException {
+                    assertNotNull(stream);
+                    try {
+                        assertEquals("Piet", FileUtils.readString(stream));
+                    } catch (FileUtilsErrorException e) {
+                        fail(ExceptionUtils.getExceptionStackTrace(e));
+                    }
+
+                    return null;
+                }
+            }, s -> s.setString("lastcol", "Smith"));
             manager.executeUseFirstAsciiStream(select_query, new InputStreamUser<>() {
                 public Object useInputStream(InputStream stream)
                 throws InnerClassException {
@@ -2012,6 +2069,20 @@ public class TestDbQueryManager {
 
                     return null;
                 }
+            }, s -> s.setString("lastcol", "Smith"));
+            manager.executeUseFirstCharacterStream(select_query, new ReaderUser<>() {
+                public Object useReader(Reader reader)
+                throws InnerClassException {
+                    assertNotNull(reader);
+
+                    try {
+                        assertEquals("Piet", FileUtils.readString(reader));
+                    } catch (FileUtilsErrorException e) {
+                        fail(ExceptionUtils.getExceptionStackTrace(e));
+                    }
+
+                    return null;
+                }
             }, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -2130,8 +2201,7 @@ public class TestDbQueryManager {
             manager.executeUpdate(new Insert(datasource)
                 .into("tbltest")
                 .fieldParameter("firstcol")
-                .field("lastcol", "Smith"), new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
+                .field("lastcol", "Smith"), statement -> {
                     if (datasource.getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver") ||
                         datasource.getAliasedDriver().equals("org.h2.Driver") ||
                         datasource.getAliasedDriver().equals("org.hsqldb.jdbcDriver")) {
@@ -2139,8 +2209,7 @@ public class TestDbQueryManager {
                     } else {
                         statement.setString("firstcol", "Piet");
                     }
-                }
-            });
+                });
 
             manager.executeUseFirstBinaryStream(select_query, new InputStreamUser<>() {
                 public Object useInputStream(InputStream stream)
@@ -2160,6 +2229,19 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("firstcol")
                 .whereParameter("lastcol", "=");
+            manager.executeUseFirstBinaryStream(select_query, new InputStreamUser<>() {
+                public Object useInputStream(InputStream stream)
+                throws InnerClassException {
+                    assertNotNull(stream);
+                    try {
+                        assertEquals("Piet", FileUtils.readString(stream));
+                    } catch (FileUtilsErrorException e) {
+                        fail(ExceptionUtils.getExceptionStackTrace(e));
+                    }
+
+                    return null;
+                }
+            }, s -> s.setString("lastcol", "Smith"));
             manager.executeUseFirstBinaryStream(select_query, new InputStreamUser<>() {
                 public Object useInputStream(InputStream stream)
                 throws InnerClassException {
@@ -2229,7 +2311,7 @@ public class TestDbQueryManager {
     public void testIllegalExecuteFetchFirst(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
-            manager.executeFetchFirst(null, null);
+            manager.executeFetchFirst(null, (DbRowProcessor) null);
             fail();
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -2261,6 +2343,10 @@ public class TestDbQueryManager {
 
             DbRowProcessorSuccess processor = null;
 
+            int[] count1 = {0};
+            assertTrue(manager.executeFetchFirst(select_query, p -> count1[0]++));
+            assertEquals(count1[0], 1);
+
             processor = new DbRowProcessorSuccess();
             assertTrue(manager.executeFetchFirst(select_query, processor));
             assertEquals(processor.getCounter(), 1);
@@ -2270,6 +2356,12 @@ public class TestDbQueryManager {
             select_query
                 .whereParameter("valuecol", "=");
 
+            int[] count2 = {0};
+            assertTrue(manager.executeFetchFirst(select_query,
+                p -> count2[0]++,
+                s -> s.setString("valuecol", "thevalue")));
+            assertEquals(count2[0], 1);
+
             processor = new DbRowProcessorSuccess();
             assertTrue(manager.executeFetchFirst(select_query, processor, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
@@ -2278,6 +2370,10 @@ public class TestDbQueryManager {
                 }
             }));
             assertEquals(processor.getCounter(), 1);
+
+            processor = new DbRowProcessorSuccess();
+            assertFalse(manager.executeFetchFirst(select_query, processor, s -> s.setString("valuecol", "not present")));
+            assertEquals(processor.getCounter(), 0);
 
             processor = new DbRowProcessorSuccess();
             assertFalse(manager.executeFetchFirst(select_query, processor, new DbPreparedStatementHandler<>() {
@@ -2310,7 +2406,7 @@ public class TestDbQueryManager {
                 .field("datacol");
 
             try {
-                manager.executeFetchFirst(select_query, null, new DbPreparedStatementHandler<>() {
+                manager.executeFetchFirst(select_query, (DbRowProcessor) null, new DbPreparedStatementHandler<>() {
                     public Object concludeResults(DbResultSet resultSet)
                     throws SQLException {
                         return resultSet.getString("unknown");
@@ -2386,6 +2482,27 @@ public class TestDbQueryManager {
             select_query
                 .whereParameter("propertyString", "=");
 
+            bean = manager.executeFetchFirstBean(select_query, BeanImplConstrained.class, s -> s.setString("propertyString", "someotherstring"));
+            assertNotNull(bean);
+            assertEquals(bean.getPropertyString(), bean_populated.getPropertyString());
+            assertEquals(bean.getPropertyStringbuffer().toString(), bean_populated.getPropertyStringbuffer().toString());
+            assertEquals((bean.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
+            assertEquals((bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
+            assertEquals((bean.getPropertyTimestamp().getTime() / 1000) * 1000, (bean_populated.getPropertyTimestamp().getTime() / 1000) * 1000);
+            assertEquals(bean.getPropertySqlDate().toString(), bean_populated.getPropertySqlDate().toString());
+            assertEquals(bean.getPropertyTime().toString(), bean_populated.getPropertyTime().toString());
+            assertEquals(bean.isPropertyBoolean(), bean_populated.isPropertyBoolean());
+            assertEquals(bean.getPropertyChar(), bean_populated.getPropertyChar());
+            assertNotEquals(bean.getPropertyByte(), bean_populated.getPropertyByte()); // byte is not saved
+            assertEquals(bean.getPropertyDouble(), bean_populated.getPropertyDouble(), 0.001);
+            assertEquals(bean.getPropertyFloat(), bean_populated.getPropertyFloat(), 0.001);
+            assertEquals(bean.getPropertyDoubleObject(), bean_populated.getPropertyDoubleObject(), 0.01);
+            assertEquals(bean.getPropertyFloatObject(), bean_populated.getPropertyFloatObject(), 0.01);
+            assertEquals(bean.getPropertyInt(), bean_populated.getPropertyInt());
+            assertNotEquals(bean.getPropertyLong(), bean_populated.getPropertyLong()); // long is not persistent
+            assertEquals(bean.getPropertyShort(), bean_populated.getPropertyShort());
+            assertEquals(bean.getPropertyBigDecimal(), bean_populated.getPropertyBigDecimal());
+
             bean = manager.executeFetchFirstBean(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -2411,6 +2528,9 @@ public class TestDbQueryManager {
             assertNotEquals(bean.getPropertyLong(), bean_populated.getPropertyLong()); // long is not persistent
             assertEquals(bean.getPropertyShort(), bean_populated.getPropertyShort());
             assertEquals(bean.getPropertyBigDecimal(), bean_populated.getPropertyBigDecimal());
+
+            bean = manager.executeFetchFirstBean(select_query, BeanImplConstrained.class, s -> s.setString("propertyString", "not present"));
+            assertNull(bean);
 
             bean = manager.executeFetchFirstBean(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
@@ -2461,7 +2581,7 @@ public class TestDbQueryManager {
     public void testIllegalExecuteFetchAll(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
-            manager.executeFetchAll(null, null);
+            manager.executeFetchAll(null, (DbRowProcessor) null);
             fail();
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -2511,6 +2631,10 @@ public class TestDbQueryManager {
                 .whereParameter("valuecol", "=");
 
             processor = new DbRowProcessorSuccess();
+            assertTrue(manager.executeFetchAll(select_query, processor, s -> s.setString("valuecol", "thevalue2")));
+            assertEquals(processor.getCounter(), 2);
+
+            processor = new DbRowProcessorSuccess();
             assertTrue(manager.executeFetchAll(select_query, processor, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -2518,6 +2642,10 @@ public class TestDbQueryManager {
                 }
             }));
             assertEquals(processor.getCounter(), 2);
+
+            processor = new DbRowProcessorSuccess();
+            assertFalse(manager.executeFetchAll(select_query, processor, s -> s.setString("valuecol", "not present")));
+            assertEquals(processor.getCounter(), 0);
 
             processor = new DbRowProcessorSuccess();
             assertFalse(manager.executeFetchAll(select_query, processor, new DbPreparedStatementHandler<>() {
@@ -2645,12 +2773,7 @@ public class TestDbQueryManager {
             select_query
                 .whereParameter("propertyString", "=");
 
-            beans = manager.executeFetchAllBeans(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString("propertyString", "one");
-                }
-            });
+            beans = manager.executeFetchAllBeans(select_query, BeanImplConstrained.class, s -> s.setString("propertyString", "one"));
             assertNotNull(beans);
             assertEquals(beans.size(), 1);
             var bean2 = beans.get(0);
@@ -2673,6 +2796,39 @@ public class TestDbQueryManager {
             assertNotEquals(bean2.getPropertyLong(), bean_populated.getPropertyLong()); // long is not persistent
             assertEquals(bean2.getPropertyShort(), bean_populated.getPropertyShort());
             assertEquals(bean2.getPropertyBigDecimal(), bean_populated.getPropertyBigDecimal());
+
+            beans = manager.executeFetchAllBeans(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler<>() {
+                public void setParameters(DbPreparedStatement statement) {
+                    statement
+                        .setString("propertyString", "one");
+                }
+            });
+            assertNotNull(beans);
+            assertEquals(beans.size(), 1);
+            bean2 = beans.get(0);
+            assertEquals(bean2.getPropertyString(), "one");
+            assertEquals(bean2.getPropertyStringbuffer().toString(), "someotherstringbuf2");
+            // don't compare milliseconds since each db stores it differently
+            assertEquals((bean2.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
+            assertEquals((bean2.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
+            assertEquals((bean2.getPropertyTimestamp().getTime() / 1000) * 1000, (bean_populated.getPropertyTimestamp().getTime() / 1000) * 1000);
+            assertEquals(bean2.getPropertySqlDate().toString(), bean_populated.getPropertySqlDate().toString());
+            assertEquals(bean2.getPropertyTime().toString(), bean_populated.getPropertyTime().toString());
+            assertEquals(bean2.isPropertyBoolean(), bean_populated.isPropertyBoolean());
+            assertEquals(bean2.getPropertyChar(), bean_populated.getPropertyChar());
+            assertNotEquals(bean2.getPropertyByte(), bean_populated.getPropertyByte()); // byte is not saved
+            assertEquals(bean2.getPropertyDouble(), bean_populated.getPropertyDouble(), 0.001);
+            assertEquals(bean2.getPropertyFloat(), bean_populated.getPropertyFloat(), 0.001);
+            assertEquals(bean2.getPropertyDoubleObject(), bean_populated.getPropertyDoubleObject(), 0.01);
+            assertEquals(bean2.getPropertyFloatObject(), bean_populated.getPropertyFloatObject(), 0.01);
+            assertEquals(bean2.getPropertyInt(), bean_populated.getPropertyInt());
+            assertNotEquals(bean2.getPropertyLong(), bean_populated.getPropertyLong()); // long is not persistent
+            assertEquals(bean2.getPropertyShort(), bean_populated.getPropertyShort());
+            assertEquals(bean2.getPropertyBigDecimal(), bean_populated.getPropertyBigDecimal());
+
+            beans = manager.executeFetchAllBeans(select_query, BeanImplConstrained.class, s -> s.setString("propertyString", "not present"));
+            assertNotNull(beans);
+            assertEquals(beans.size(), 0);
 
             beans = manager.executeFetchAllBeans(select_query, BeanImplConstrained.class, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
@@ -2812,7 +2968,7 @@ public class TestDbQueryManager {
     public void testIllegalExecuteQueryDbResultSetHandler(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
-            manager.executeQuery((Select) null, (DbResultSetHandler) null);
+            manager.executeResultQuery(null, null);
             fail();
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -2835,7 +2991,7 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .where("lastcol", "=", "Doe");
 
-            assertNull(manager.executeQuery(select_query, (DbResultSetHandler) null));
+            assertNull(manager.executeResultQuery(select_query, null));
 
             manager.executeUpdate(new Insert(datasource).into("tbltest").fields(new String[]{"firstcol", "John", "lastcol", "Doe"}));
             manager.executeUpdate(new Insert(datasource).into("tbltest").fields(new String[]{"firstcol", "Piet", "lastcol", "Smith"}));
@@ -2843,7 +2999,7 @@ public class TestDbQueryManager {
             select_query = new Select(datasource);
             select_query.from("tbltest")
                 .where("lastcol", "=", "Doe");
-            assertEquals("John Doe", manager.executeQuery(select_query, new DbResultSetHandler() {
+            assertEquals("John Doe", manager.executeResultQuery(select_query, new DbResultSetHandler() {
                 public Object concludeResults(DbResultSet resultSet)
                 throws SQLException {
                     if (resultSet.next()) {
@@ -2873,7 +3029,7 @@ public class TestDbQueryManager {
             select_query = new Select(datasource);
             select_query.from("tbltest");
             try {
-                manager.executeQuery(select_query, new DbResultSetHandler() {
+                manager.executeResultQuery(select_query, new DbResultSetHandler() {
                     public Object concludeResults(DbResultSet resultSet)
                     throws SQLException {
                         return resultSet.getString("unknown");
@@ -2914,7 +3070,7 @@ public class TestDbQueryManager {
     public void testIllegalExecuteQuerySql(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
-            manager.executeQuery((ReadQuery) null);
+            manager.executeQuery(null);
             fail();
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -2987,7 +3143,7 @@ public class TestDbQueryManager {
     public void testIllegalFetch(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
-            manager.fetch((ResultSet) null, null);
+            manager.fetch(null, (DbRowProcessor) null);
             fail();
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -3062,6 +3218,13 @@ public class TestDbQueryManager {
             } catch (DatabaseException e) {
                 assertTrue(true);
             }
+
+            try (var statement1 = manager.executeQuery(select_query)) {
+                manager.fetch(statement1.getResultSet(), resultSet -> resultSet.getString("inexistant_column"));
+                fail();
+            } catch (DatabaseException e) {
+                assertTrue(true);
+            }
         } catch (DatabaseException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
@@ -3074,7 +3237,7 @@ public class TestDbQueryManager {
     public void testIllegalFetchAll(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
-            manager.fetchAll((ResultSet) null, null);
+            manager.fetchAll(null, (DbRowProcessor) null);
             fail();
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -3152,6 +3315,15 @@ public class TestDbQueryManager {
             var select_query = new Select(datasource);
             select_query.from("tbltest")
                 .field("column1");
+
+            try {
+                try (var statement = manager.executeQuery(select_query)) {
+                    manager.fetchAll(statement.getResultSet(), resultSet -> resultSet.getString("inexistant_column"));
+                }
+                fail();
+            } catch (DatabaseException e) {
+                assertTrue(true);
+            }
 
             try {
                 try (var statement = manager.executeQuery(select_query)) {

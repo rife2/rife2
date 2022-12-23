@@ -49,7 +49,7 @@ public abstract class GenericQueryManagerRelationalUtils {
     public static Object restoreLazyManyToOneProperty(GenericQueryManager manager, Constrained constrained, String propertyName, String propertyTypeClassName) {
         Object result = null;
 
-        ConstrainedProperty property = constrained.getConstrainedProperty(propertyName);
+        var property = constrained.getConstrainedProperty(propertyName);
 
         // only lazily load the property value if a constrained property has been found
         if (property != null) {
@@ -64,7 +64,7 @@ public abstract class GenericQueryManagerRelationalUtils {
                 }
 
                 // obtain the associated class from the many-to-one constraint
-                Class associated_class = property.getManyToOne().getAssociatedClass();
+                var associated_class = property.getManyToOne().getAssociatedClass();
 
                 // if the associated class wasn't specified, use the property's type
                 if (null == associated_class) {
@@ -77,9 +77,9 @@ public abstract class GenericQueryManagerRelationalUtils {
                 }
 
                 // retrieve the entity from the database for this property
-                ManyToOneDeclaration declaration = createManyToOneDeclaration(manager, property, return_type);
+                var declaration = createManyToOneDeclaration(manager, property, return_type);
                 if (!declaration.isBasic()) {
-                    String column_name = generateManyToOneJoinColumnName(property.getPropertyName(), declaration);
+                    var column_name = generateManyToOneJoinColumnName(property.getPropertyName(), declaration);
                     result = restoreManyToOneProperty(manager, constrained, declaration.getAssociationManager(), column_name, associated_class);
                 }
             }
@@ -89,7 +89,7 @@ public abstract class GenericQueryManagerRelationalUtils {
     }
 
     public static Object restoreManyToOneProperty(GenericQueryManager manager, Object constrained, GenericQueryManager associationManager, String columnName, Class propertyType) {
-        RestoreQuery query = associationManager.getRestoreQuery()
+        var query = associationManager.getRestoreQuery()
             .fields(associationManager.getTable(), propertyType)
             .join(manager.getTable())
             .where(associationManager.getTable() + "." + associationManager.getIdentifierName() + " = " + manager.getTable() + "." + columnName)
@@ -103,7 +103,7 @@ public abstract class GenericQueryManagerRelationalUtils {
 
         if (property != null &&
             property.hasManyToOne()) {
-            ConstrainedProperty.ManyToOne many_to_one = property.getManyToOne();
+            var many_to_one = property.getManyToOne();
 
             declaration = new ManyToOneDeclaration()
                 .associationType(many_to_one.getAssociatedClass())
@@ -128,7 +128,7 @@ public abstract class GenericQueryManagerRelationalUtils {
                     .associationTable(many_to_one.getTable());
 
                 // retrieve the class that has been associated to the property through constraints
-                Class associated_class = declaration.getAssociationType();
+                var associated_class = declaration.getAssociationType();
 
                 // if an associated class has already been specified through constraints,
                 // ensure that it's compatible with the type of the property
@@ -143,7 +143,7 @@ public abstract class GenericQueryManagerRelationalUtils {
                 }
 
                 // create the association query manager
-                GenericQueryManager association_manager = manager.createNewManager(declaration.getAssociationType());
+                var association_manager = manager.createNewManager(declaration.getAssociationType());
                 declaration.setAssociationManager(association_manager);
 
                 // determine the association table
@@ -165,17 +165,17 @@ public abstract class GenericQueryManagerRelationalUtils {
         final Map<String, ManyToOneDeclaration> declarations;
         if (constrained != null &&
             constrained.hasPropertyConstraint(ConstrainedProperty.MANY_TO_ONE)) {
-            declarations = new LinkedHashMap<String, ManyToOneDeclaration>();
+            declarations = new LinkedHashMap<>();
 
             // collect all properties that have a many-to-one relationship
-            final List<String> property_names = new ArrayList<String>();
+            final List<String> property_names = new ArrayList<>();
             if (fixedMainProperty != null) {
-                ConstrainedProperty property = constrained.getConstrainedProperty(fixedMainProperty);
+                var property = constrained.getConstrainedProperty(fixedMainProperty);
                 if (property.hasManyToOne()) {
                     property_names.add(property.getPropertyName());
                 }
             } else {
-                for (ConstrainedProperty property : (Collection<ConstrainedProperty>) constrained.getConstrainedProperties()) {
+                for (var property : (Collection<ConstrainedProperty>) constrained.getConstrainedProperties()) {
                     if (property.hasManyToOne()) {
                         property_names.add(property.getPropertyName());
                     }
@@ -184,27 +184,24 @@ public abstract class GenericQueryManagerRelationalUtils {
 
             // obtain the actual bean properties for the many-to-one relationships
             if (property_names.size() > 0) {
-                String[] unresolvednamearray = new String[property_names.size()];
-                property_names.toArray(unresolvednamearray);
+                var unresolved_name_array = new String[property_names.size()];
+                property_names.toArray(unresolved_name_array);
                 try {
-                    BeanUtils.processProperties(manager.getBaseClass(), unresolvednamearray, null, null, new BeanPropertyProcessor() {
-                        public boolean gotProperty(String name, PropertyDescriptor descriptor)
-                        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                            ConstrainedProperty property = constrained.getConstrainedProperty(name);
-                            ManyToOneDeclaration declaration = createManyToOneDeclaration(manager, property, descriptor.getReadMethod().getReturnType());
-                            if (declaration != null) {
-                                if (null == fixedAssocationType ||
-                                    fixedAssocationType == declaration.getAssociationType()) {
-                                    declarations.put(property.getPropertyName(), declaration);
+                    BeanUtils.processProperties(manager.getBaseClass(), unresolved_name_array, null, null, (name, descriptor) -> {
+                        var property = constrained.getConstrainedProperty(name);
+                        var declaration = createManyToOneDeclaration(manager, property, descriptor.getReadMethod().getReturnType());
+                        if (declaration != null) {
+                            if (null == fixedAssocationType ||
+                                fixedAssocationType == declaration.getAssociationType()) {
+                                declarations.put(property.getPropertyName(), declaration);
 
-                                    if (fixedAssocationType != null) {
-                                        return false;
-                                    }
+                                if (fixedAssocationType != null) {
+                                    return false;
                                 }
                             }
-
-                            return true;
                         }
+
+                        return true;
                     });
                 } catch (BeanUtilsException e) {
                     throw new DatabaseException(e);
@@ -221,64 +218,59 @@ public abstract class GenericQueryManagerRelationalUtils {
         final Map<String, ManyToManyDeclaration> declarations;
         if (constrained != null &&
             (constrained.hasPropertyConstraint(ConstrainedProperty.MANY_TO_MANY) ||
-                includeAssociations && constrained.hasPropertyConstraint(ConstrainedProperty.MANY_TO_MANY_ASSOCIATION))) {
-            declarations = new HashMap<String, ManyToManyDeclaration>();
+             includeAssociations && constrained.hasPropertyConstraint(ConstrainedProperty.MANY_TO_MANY_ASSOCIATION))) {
+            declarations = new HashMap<>();
 
             // collect all properties that have a many-to-many relationship
-            final List<String> unresolvednamelist = new ArrayList<String>();
-            for (ConstrainedProperty property : (Collection<ConstrainedProperty>) constrained.getConstrainedProperties()) {
+            final List<String> unresolved_name_list = new ArrayList<String>();
+            for (var property : constrained.getConstrainedProperties()) {
                 if (property.hasManyToMany()) {
                     declarations.put(property.getPropertyName(), new ManyToManyDeclaration()
                         .associationType(property.getManyToMany().getAssociatedClass()));
-                    unresolvednamelist.add(property.getPropertyName());
+                    unresolved_name_list.add(property.getPropertyName());
                 } else if (includeAssociations && property.hasManyToManyAssociation()) {
                     declarations.put(property.getPropertyName(), new ManyToManyDeclaration()
                         .reversed(true)
                         .associationType(property.getManyToManyAssociation().getAssociatedClass()));
-                    unresolvednamelist.add(property.getPropertyName());
+                    unresolved_name_list.add(property.getPropertyName());
                 }
             }
 
             // obtain the actual bean properties for the many-to-many relationships
-            if (unresolvednamelist.size() > 0) {
-                String[] unresolvednamearray = new String[unresolvednamelist.size()];
-                unresolvednamelist.toArray(unresolvednamearray);
+            if (unresolved_name_list.size() > 0) {
+                var unresolved_name_array = new String[unresolved_name_list.size()];
+                unresolved_name_list.toArray(unresolved_name_array);
                 try {
-                    BeanUtils.processProperties(manager.getBaseClass(), unresolvednamearray, null, null, new BeanPropertyProcessor() {
-                        public boolean gotProperty(String name, PropertyDescriptor descriptor)
-                        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                            Method read_method = descriptor.getReadMethod();
+                    BeanUtils.processProperties(manager.getBaseClass(), unresolved_name_array, null, null, (name, descriptor) -> {
+                        var read_method = descriptor.getReadMethod();
 
-                            ManyToManyDeclaration declaration = declarations.get(name);
+                        var declaration = declarations.get(name);
 
-                            // make sure that the many-to-many property has a supported collection type
-                            Class return_type = read_method.getReturnType();
-                            ensureSupportedManyToManyPropertyCollectionType(manager.getBaseClass(), name, return_type);
-                            declaration.setCollectionType(return_type);
+                        // make sure that the many-to-many property has a supported collection type
+                        Class return_type = read_method.getReturnType();
+                        ensureSupportedManyToManyPropertyCollectionType(manager.getBaseClass(), name, return_type);
+                        declaration.setCollectionType(return_type);
 
-                            // check if the class of the relationship has already been set, otherwise detect it from
-                            // the generic information that's available in the collection
-                            if (null == declaration.getAssociationType()) {
-                                Class associated_class = null;
-                                if (JavaSpecificationUtils.isAtLeastJdk15()) {
-                                    try {
-                                        Class klass = Class.forName("rife.database.querymanagers.generic.GenericTypeDetector");
-                                        Method method = klass.getDeclaredMethod("detectAssociatedClass", Method.class);
-                                        associated_class = (Class) method.invoke(null, read_method);
-                                    } catch (Exception e) {
-                                        throw new DatabaseException(e);
-                                    }
-                                }
-
-                                if (null == associated_class) {
-                                    throw new MissingManyToManyTypeInformationException(manager.getBaseClass(), name);
-                                }
-
-                                declaration.setAssociationType(associated_class);
+                        // check if the class of the relationship has already been set, otherwise detect it from
+                        // the generic information that's available in the collection
+                        if (null == declaration.getAssociationType()) {
+                            Class associated_class = null;
+                            try {
+                                Class klass = Class.forName("rife.database.querymanagers.generic.GenericTypeDetector");
+                                var method = klass.getDeclaredMethod("detectAssociatedClass", Method.class);
+                                associated_class = (Class) method.invoke(null, read_method);
+                            } catch (Exception e) {
+                                throw new DatabaseException(e);
                             }
 
-                            return false;
+                            if (null == associated_class) {
+                                throw new MissingManyToManyTypeInformationException(manager.getBaseClass(), name);
+                            }
+
+                            declaration.setAssociationType(associated_class);
                         }
+
+                        return false;
                     });
                 } catch (BeanUtilsException e) {
                     throw new DatabaseException(e);
@@ -295,74 +287,69 @@ public abstract class GenericQueryManagerRelationalUtils {
         final Map<String, ManyToOneAssociationDeclaration> declarations;
         if (constrained != null &&
             constrained.hasPropertyConstraint(ConstrainedProperty.MANY_TO_ONE_ASSOCIATION)) {
-            declarations = new HashMap<String, ManyToOneAssociationDeclaration>();
+            declarations = new HashMap<>();
 
             // collect all properties that have a many-to-one association relationship
-            final List<String> unresolvednamelist = new ArrayList<String>();
-            for (ConstrainedProperty property : (Collection<ConstrainedProperty>) constrained.getConstrainedProperties()) {
+            final List<String> unresolved_name_list = new ArrayList<>();
+            for (var property : constrained.getConstrainedProperties()) {
                 if (property.hasManyToOneAssociation()) {
-                    ConstrainedProperty.ManyToOneAssociation association = property.getManyToOneAssociation();
+                    var association = property.getManyToOneAssociation();
                     declarations.put(property.getPropertyName(), new ManyToOneAssociationDeclaration()
                         .mainType(association.getMainClass())
                         .mainProperty(association.getMainProperty()));
-                    unresolvednamelist.add(property.getPropertyName());
+                    unresolved_name_list.add(property.getPropertyName());
                 }
             }
 
             // obtain the actual bean properties for the many-to-one association relationships
-            if (unresolvednamelist.size() > 0) {
-                String[] unresolvednamearray = new String[unresolvednamelist.size()];
-                unresolvednamelist.toArray(unresolvednamearray);
+            if (unresolved_name_list.size() > 0) {
+                var unresolved_name_array = new String[unresolved_name_list.size()];
+                unresolved_name_list.toArray(unresolved_name_array);
                 try {
-                    BeanUtils.processProperties(manager.getBaseClass(), unresolvednamearray, null, null, new BeanPropertyProcessor() {
-                        public boolean gotProperty(String name, PropertyDescriptor descriptor)
-                        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                            Method read_method = descriptor.getReadMethod();
+                    BeanUtils.processProperties(manager.getBaseClass(), unresolved_name_array, null, null, (name, descriptor) -> {
+                        var read_method = descriptor.getReadMethod();
 
-                            ManyToOneAssociationDeclaration declaration = declarations.get(name);
+                        var declaration = declarations.get(name);
 
-                            // make sure that the many-to-one association property has a supported collection type
-                            Class return_type = read_method.getReturnType();
-                            ensureSupportedManyToOneAssociationPropertyCollectionType(manager.getBaseClass(), name, return_type);
-                            declaration.setCollectionType(return_type);
+                        // make sure that the many-to-one association property has a supported collection type
+                        Class return_type = read_method.getReturnType();
+                        ensureSupportedManyToOneAssociationPropertyCollectionType(manager.getBaseClass(), name, return_type);
+                        declaration.setCollectionType(return_type);
 
-                            // check if the class of the relationship has already been set, otherwise detect it from
-                            // the generic information that's available in the collection
-                            if (null == declaration.getMainType()) {
-                                Class associated_class = null;
-                                if (JavaSpecificationUtils.isAtLeastJdk15()) {
-                                    try {
-                                        Class klass = Class.forName("rife.database.querymanagers.generic.GenericTypeDetector");
-                                        Method method = klass.getDeclaredMethod("detectAssociatedClass", Method.class);
-                                        associated_class = (Class) method.invoke(null, read_method);
-                                    } catch (Exception e) {
-                                        throw new DatabaseException(e);
-                                    }
-                                }
-
-                                if (null == associated_class) {
-                                    throw new MissingManyToOneAssociationTypeInformationException(manager.getBaseClass(), name);
-                                }
-
-                                declaration.setMainType(associated_class);
+                        // check if the class of the relationship has already been set, otherwise detect it from
+                        // the generic information that's available in the collection
+                        if (null == declaration.getMainType()) {
+                            Class associated_class = null;
+                            try {
+                                Class klass = Class.forName("rife.database.querymanagers.generic.GenericTypeDetector");
+                                var method = klass.getDeclaredMethod("detectAssociatedClass", Method.class);
+                                associated_class = (Class) method.invoke(null, read_method);
+                            } catch (Exception e) {
+                                throw new DatabaseException(e);
                             }
 
-                            // obtain the main declaration
-                            Constrained main_constrained = ConstrainedUtils.getConstrainedInstance(declaration.getMainType());
-                            GenericQueryManager main_manager = manager.createNewManager(declaration.getMainType());
-                            Map<String, ManyToOneDeclaration> main_declarations = obtainManyToOneDeclarations(main_manager, main_constrained, declaration.getMainProperty(), manager.getBaseClass());
-                            if (null == main_declarations ||
-                                0 == main_declarations.size()) {
-                                throw new MissingManyToOneMainPropertyException(manager.getBaseClass(), name, declaration.getMainType());
-                            } else {
-                                Map.Entry<String, ManyToOneDeclaration> main_entry = main_declarations.entrySet().iterator().next();
-                                declaration
-                                    .mainProperty(main_entry.getKey())
-                                    .mainDeclaration(main_entry.getValue());
+                            if (null == associated_class) {
+                                throw new MissingManyToOneAssociationTypeInformationException(manager.getBaseClass(), name);
                             }
 
-                            return false;
+                            declaration.setMainType(associated_class);
                         }
+
+                        // obtain the main declaration
+                        var main_constrained = ConstrainedUtils.getConstrainedInstance(declaration.getMainType());
+                        var main_manager = manager.createNewManager(declaration.getMainType());
+                        var main_declarations = obtainManyToOneDeclarations(main_manager, main_constrained, declaration.getMainProperty(), manager.getBaseClass());
+                        if (null == main_declarations ||
+                            0 == main_declarations.size()) {
+                            throw new MissingManyToOneMainPropertyException(manager.getBaseClass(), name, declaration.getMainType());
+                        } else {
+                            var main_entry = main_declarations.entrySet().iterator().next();
+                            declaration
+                                .mainProperty(main_entry.getKey())
+                                .mainDeclaration(main_entry.getValue());
+                        }
+
+                        return false;
                     });
                 } catch (BeanUtilsException e) {
                     throw new DatabaseException(e);
@@ -397,16 +384,16 @@ public abstract class GenericQueryManagerRelationalUtils {
         }
 
         // generate many-to-one join columns
-        Constrained constrained = ConstrainedUtils.getConstrainedInstance(manager.getBaseClass());
+        var constrained = ConstrainedUtils.getConstrainedInstance(manager.getBaseClass());
         if (constrained != null &&
             constrained.hasPropertyConstraint(ConstrainedProperty.MANY_TO_ONE)) {
-            Map<String, ManyToOneDeclaration> manytoone_declarations = obtainManyToOneDeclarations(manager, constrained, null, null);
+            var manytoone_declarations = obtainManyToOneDeclarations(manager, constrained, null, null);
             if (manytoone_declarations != null) {
                 // iterate over all the many-to-one relationships that have associated classes
-                for (Map.Entry<String, ManyToOneDeclaration> entry : manytoone_declarations.entrySet()) {
-                    ManyToOneDeclaration declaration = entry.getValue();
+                for (var entry : manytoone_declarations.entrySet()) {
+                    var declaration = entry.getValue();
                     if (!declaration.isBasic()) {
-                        String column_name = generateManyToOneJoinColumnName(entry.getKey(), declaration);
+                        var column_name = generateManyToOneJoinColumnName(entry.getKey(), declaration);
                         if (!processor.processJoinColumn(column_name, entry.getKey(), declaration)) {
                             break;
                         }
@@ -419,8 +406,8 @@ public abstract class GenericQueryManagerRelationalUtils {
     public static void ensureSupportedManyToManyPropertyCollectionType(Class beanClass, String propertyName, Class propertyType)
     throws UnsupportedManyToManyPropertyTypeException {
         if (!(propertyType == Collection.class ||
-            propertyType == Set.class ||
-            propertyType == List.class)) {
+              propertyType == Set.class ||
+              propertyType == List.class)) {
             throw new UnsupportedManyToManyPropertyTypeException(beanClass, propertyName, propertyType);
         }
     }
@@ -435,8 +422,8 @@ public abstract class GenericQueryManagerRelationalUtils {
     public static void ensureSupportedManyToOneAssociationPropertyCollectionType(Class beanClass, String propertyName, Class propertyType)
     throws UnsupportedManyToManyPropertyTypeException {
         if (!(propertyType == Collection.class ||
-            propertyType == Set.class ||
-            propertyType == List.class)) {
+              propertyType == Set.class ||
+              propertyType == List.class)) {
             throw new UnsupportedManyToOneAssociationPropertyTypeException(beanClass, propertyName, propertyType);
         }
     }

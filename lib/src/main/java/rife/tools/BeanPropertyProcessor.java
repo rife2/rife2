@@ -7,6 +7,7 @@ package rife.tools;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 
+@FunctionalInterface
 public interface BeanPropertyProcessor {
     boolean gotProperty(String name, PropertyDescriptor descriptor)
     throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;

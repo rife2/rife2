@@ -62,7 +62,7 @@ public class UrlBuilder {
 
         // detect which parameters are annotation for output and input and retrieve those that correspond
         if (context_.route() instanceof RouteClass) {
-            var out_params = RouteClass.getAnnotatedOutParameters(context_.response().getLastElement());
+            var out_params = RouteClass.getAnnotatedOutParameters(context_);
             Set<String> in_params = new HashSet<>();
             // input parameters
             if (route_ instanceof RouteClass route) {
@@ -70,8 +70,9 @@ public class UrlBuilder {
             }
             // path info parameters
             if (route_.pathInfoHandling().type() == PathInfoType.MAP) {
-                var mapping = route_.pathInfoHandling().mapping();
-                in_params.addAll(mapping.parameters());
+                for (var mapping : route_.pathInfoHandling().mappings()) {
+                    in_params.addAll(mapping.parameters());
+                }
             }
             // retain the appropriate output parameters
             out_params.keySet().retainAll(in_params);
@@ -91,50 +92,53 @@ public class UrlBuilder {
         }
         // handle path info mapping
         else if (route_.pathInfoHandling().type() == PathInfoType.MAP) {
-            var mapping = route_.pathInfoHandling().mapping();
-            if (parameters.keySet().containsAll(mapping.parameters())) {
-                var parameters_it = mapping.parameters().iterator();
+            for (var mapping : route_.pathInfoHandling().mappings()) {
+                if (parameters.keySet().containsAll(mapping.parameters())) {
+                    var parameters_it = mapping.parameters().iterator();
 
-                var builder = new StringBuilder();
-                String parameter_name;
-                String[] parameter_value;
-                for (var segment : mapping.segments()) {
-                    if (segment.isRegexp()) {
-                        if (!parameters_it.hasNext()) {
-                            continue;
+                    var builder = new StringBuilder();
+                    String parameter_name;
+                    String[] parameter_value;
+                    for (var segment : mapping.segments()) {
+                        if (segment.isRegexp()) {
+                            if (!parameters_it.hasNext()) {
+                                continue;
+                            }
+
+                            parameter_name = parameters_it.next();
+
+                            // ensure that the parameter has at least one value
+                            parameter_value = parameters.get(parameter_name);
+                            if (null == parameter_value ||
+                                parameter_value.length < 1) {
+                                continue;
+                            }
+
+                            // ensure that the parameter value corresponds to the
+                            // regexp pattern for it
+                            var matcher = segment.pattern().matcher(parameter_value[0]);
+                            if (!matcher.matches()) {
+                                continue;
+                            }
+
+                            // add the url-encoded parameter value to the path info
+                            builder.append(StringUtils.encodeUrl(parameter_value[0]));
+                            parameters.remove(parameter_name);
+                        } else {
+                            builder.append(segment.text());
                         }
-
-                        parameter_name = parameters_it.next();
-
-                        // ensure that the parameter has at least one value
-                        parameter_value = parameters.get(parameter_name);
-                        if (null == parameter_value ||
-                            parameter_value.length < 1) {
-                            continue;
-                        }
-
-                        // ensure that the parameter value corresponds to the
-                        // regexp pattern for it
-                        var matcher = segment.pattern().matcher(parameter_value[0]);
-                        if (!matcher.matches()) {
-                            continue;
-                        }
-
-                        // add the url-encoded parameter value to the path info
-                        builder.append(StringUtils.encodeUrl(parameter_value[0]));
-                        parameters.remove(parameter_name);
-                    } else {
-                        builder.append(segment.text());
                     }
-                }
 
-                // append the new path info
-                var path_info = builder.toString();
-                if (!path_info.isEmpty()) {
-                    if (path_info.charAt(0) != '/' && url.charAt(url.length() - 1) != '/') {
-                        url.append("/");
+                    // append the new path info
+                    var path_info = builder.toString();
+                    if (!path_info.isEmpty()) {
+                        if (path_info.charAt(0) != '/' && url.charAt(url.length() - 1) != '/') {
+                            url.append("/");
+                        }
+                        url.append(path_info);
                     }
-                    url.append(path_info);
+
+                    break;
                 }
             }
         }

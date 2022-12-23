@@ -4,13 +4,14 @@
  */
 package rife.engine;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.TextPage;
-import com.gargoylesoftware.htmlunit.UnexpectedPage;
-import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
+import rife.config.RifeConfig;
+import rife.engine.annotations.Parameter;
+import rife.engine.exceptions.AnnotatedElementInstanceFieldException;
+import rife.engine.exceptions.EngineException;
 import rife.template.TemplateFactory;
 import rife.tools.IntegerUtils;
 
@@ -127,6 +128,44 @@ public class TestEngine {
     }
 
     @Test
+    public void testPathInfoMappingMultiple()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                get("/pathinfo/map",
+                    PathInfoHandling.MAP(
+                        m -> m.t("text").s().p("param1"),
+                        m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")
+                    ), c -> {
+                        c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo());
+                        c.print(":" + c.parameter("param1"));
+                        c.print(":" + c.parameter("param2"));
+                    });
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page;
+
+                page = webClient.getPage("http://localhost:8181/pathinfo/map/text/val1/x4321");
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("Just some text 127.0.0.1:8181:text/val1/x4321:val1:4321", page.asNormalizedText());
+
+                page = webClient.getPage("http://localhost:8181/pathinfo/map/text/val1");
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("Just some text 127.0.0.1:8181:text/val1:val1:null", page.asNormalizedText());
+
+                try {
+                    webClient.getOptions().setPrintContentOnFailingStatusCode(false);
+                    webClient.getPage("http://localhost:8181/pathinfo/map/ddd");
+                    fail("Expecting 404");
+                } catch (FailingHttpStatusCodeException e) {
+                    // success
+                }
+            }
+        }
+    }
+
+    @Test
     public void testPathInfoMappingUrlGeneration()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
@@ -189,11 +228,17 @@ public class TestEngine {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
                 get("/cookies1", c -> {
-                    if (c.hasCookie("cookie1") &&
+                    var names = c.cookieNames();
+
+                    if (names.size() == 3 &&
+                        names.contains("cookie1") &&
+                        names.contains("cookie2") &&
+                        names.contains("cookie3") &&
+                        c.hasCookie("cookie1") &&
                         c.hasCookie("cookie2") &&
                         c.hasCookie("cookie3")) {
-                        c.addCookie(new Cookie("cookie3", c.cookieValue("cookie1")));
-                        c.addCookie(new Cookie("cookie4", c.cookieValue("cookie2")));
+                        c.addCookie(new CookieBuilder("cookie3", c.cookieValue("cookie1")));
+                        c.addCookie(new CookieBuilder("cookie4", c.cookieValue("cookie2")));
                     }
 
                     c.print("source");
@@ -506,4 +551,29 @@ public class TestEngine {
             }
         }
     }
+
+    @Test
+    public void testPreventElementInstanceAnnotations() {
+        RifeConfig.engine().setPrettyEngineExceptions(false);
+        try {
+            try (final var server = new TestServerRunner(new Site() {
+                public void setup() {
+                    get("/route", new Element() {
+                        @Parameter String parameter;
+                        public void process(Context c) {
+                        }
+                    });
+                }
+            })) {
+                fail("Expected setup exception");
+            }
+        } catch (EngineException e) {
+            assertTrue(e.getCause() instanceof AnnotatedElementInstanceFieldException);
+            assertEquals(((AnnotatedElementInstanceFieldException)e.getCause()).getRoute().path(), "/route");
+            assertEquals(((AnnotatedElementInstanceFieldException)e.getCause()).getField(), "parameter");
+        } finally {
+            RifeConfig.engine().setPrettyEngineExceptions(true);
+        }
+    }
+
 }

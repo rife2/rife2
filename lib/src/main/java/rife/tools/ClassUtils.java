@@ -50,8 +50,7 @@ public abstract class ClassUtils {
     }
 
     public static String[] getEnumClassValues(Class klass) {
-        if (JavaSpecificationUtils.isAtLeastJdk15() &&
-            klass.isEnum()) {
+        if (klass.isEnum()) {
             var values = klass.getEnumConstants();
             return ArrayUtils.createStringArray(values);
         }

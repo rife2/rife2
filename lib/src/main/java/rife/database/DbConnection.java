@@ -725,7 +725,7 @@ public class DbConnection implements AutoCloseable {
     /**
      * <p><strong>Warning:</strong> only use the raw transaction methods if
      * you really know what you're doing. It's almost always better to use the
-     * {@link DbQueryManager#inTransaction(DbTransactionUser) inTransaction}
+     * {@link DbQueryManager#inTransaction(TransactionUser) inTransaction}
      * method of the <code>DbQueryManager</code> class instead.
      * <p>Starts a new transaction if the <code>Datasource</code> supports it.
      * <p>If an exception is thrown, this <code>DbConnection</code> is
@@ -740,7 +740,7 @@ public class DbConnection implements AutoCloseable {
      * <code>DbConnection</code>.
      * @throws DatabaseException when an error occurred during the creation
      *                           of the new transaction, or when the active transaction has timed-out.
-     * @see DbQueryManager#inTransaction(DbTransactionUser)
+     * @see DbQueryManager#inTransaction(TransactionUser)
      * @see #supportsTransactions()
      * @see #commit()
      * @see #rollback()
@@ -789,7 +789,7 @@ public class DbConnection implements AutoCloseable {
     /**
      * <p><strong>Warning:</strong> only use the raw transaction methods if
      * you really know what you're doing. It's almost always better to use the
-     * {@link DbQueryManager#inTransaction(DbTransactionUser) inTransaction}
+     * {@link DbQueryManager#inTransaction(TransactionUser) inTransaction}
      * method of the <code>DbQueryManager</code> class instead.
      * <p>Commits an active transaction.
      * <p>All transaction-related resources are cleared and all the threads
@@ -808,7 +808,7 @@ public class DbConnection implements AutoCloseable {
      * @throws DatabaseException when an error occurred during the commit
      *                           of the active transaction, or when the active transaction has
      *                           timed-out.
-     * @see DbQueryManager#inTransaction(DbTransactionUser)
+     * @see DbQueryManager#inTransaction(TransactionUser)
      * @see #supportsTransactions()
      * @see #beginTransaction()
      * @see #rollback()
@@ -858,7 +858,7 @@ public class DbConnection implements AutoCloseable {
     /**
      * <p><strong>Warning:</strong> only use the raw transaction methods if
      * you really know what you're doing. It's almost always better to use the
-     * {@link DbQueryManager#inTransaction(DbTransactionUser) inTransaction}
+     * {@link DbQueryManager#inTransaction(TransactionUser) inTransaction}
      * method of the <code>DbQueryManager</code> class instead.
      * <p>Rolls-back an active transaction.
      * <p>All transaction-related resources are cleared and all the threads
@@ -877,7 +877,7 @@ public class DbConnection implements AutoCloseable {
      * @throws DatabaseException when an error occurred during the rollback
      *                           of the active transaction, or when the active transaction has
      *                           timed-out.
-     * @see DbQueryManager#inTransaction(DbTransactionUser)
+     * @see DbQueryManager#inTransaction(TransactionUser)
      * @see #supportsTransactions()
      * @see #beginTransaction()
      * @see #commit()

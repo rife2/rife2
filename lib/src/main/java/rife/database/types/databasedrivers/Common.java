@@ -144,7 +144,7 @@ public abstract class Common implements SqlConversion {
                         } else if (targetType.isEnum()) {
                             return Enum.valueOf(targetType, result.toString());
                         } else if (targetType == UUID.class) {
-                            return result.toString();
+                            return UUID.fromString(result.toString());
                         } else {
                             return null;
                         }

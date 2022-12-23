@@ -109,6 +109,9 @@ public class Gate {
         if (null == initException_) {
             if (RifeConfig.engine().getPrettyEngineExceptions()) {
                 initException_ = exception;
+                if (RifeConfig.engine().getLogEngineExceptions()) {
+                    Logger.getLogger("rife.engine").severe("Error while initializing site\n" + ExceptionUtils.getExceptionStackTrace(exception));
+                }
             } else {
                 if (exception instanceof RuntimeException) {
                     throw (RuntimeException) exception;
@@ -127,15 +130,15 @@ public class Gate {
 
         c.engineException(exception);
 
-        var router = c.route().router();
-        if (router == null) {
-            router = site_;
+        Router router = site_;
+        if (c.route() != null && c.route().router() != null) {
+            router = c.route().router();
         }
 
         var exception_route = router.getExceptionRoute();
         if (exception_route != null) {
             try {
-                exception_route.obtainElementInstance(c).process(c);
+                c.processElement(exception_route);
                 return;
             } catch (Exception ignored) {
             }

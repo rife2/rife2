@@ -21,26 +21,4 @@ public abstract class JavaSpecificationUtils {
     public static double getVersion() {
         return Double.parseDouble(System.getProperty("java.specification.version"));
     }
-
-    /**
-     * Checks if the currently running JVM is at least compliant with JDK 1.5.
-     *
-     * @return <code>true</code> if the JVM is complient with JDK 1.5; or
-     * <p><code>false</code> otherwise
-     * @since 1.0
-     */
-    public static boolean isAtLeastJdk15() {
-        return getVersion() >= 1.5;
-    }
-
-    /**
-     * Checks if the currently running JVM is at least compliant with JDK 1.6.
-     *
-     * @return <code>true</code> if the JVM is compliant with JDK 1.6; or
-     * <p><code>false</code> otherwise
-     * @since 1.0
-     */
-    public static boolean isAtLeastJdk16() {
-        return getVersion() >= 1.6;
-    }
 }

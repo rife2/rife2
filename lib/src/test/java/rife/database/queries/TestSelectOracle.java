@@ -565,7 +565,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testDistincOracle() {
+    public void testDistinctOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .distinct()

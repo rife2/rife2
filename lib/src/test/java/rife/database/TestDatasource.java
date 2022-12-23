@@ -22,32 +22,32 @@ public class TestDatasource {
         assertNull(datasource1.getUrl());
         assertNull(datasource1.getUser());
         assertNull(datasource1.getPassword());
-        assertEquals(datasource1.getPoolsize(), 0);
+        assertEquals(datasource1.getPoolSize(), 0);
         assertFalse(datasource1.isPooled());
 
         String driver = "driver";
         String url = "url";
         String user = "user";
         String password = "password";
-        int poolsize = 5;
+        int poolSize = 5;
 
-        Datasource datasource2 = new Datasource(driver, url, user, password, poolsize);
+        Datasource datasource2 = new Datasource(driver, url, user, password, poolSize);
         assertNotNull(datasource2);
         assertEquals(datasource2.getDriver(), driver);
         assertEquals(datasource2.getUrl(), url);
         assertEquals(datasource2.getUser(), user);
         assertEquals(datasource2.getPassword(), password);
-        assertEquals(datasource2.getPoolsize(), poolsize);
+        assertEquals(datasource2.getPoolSize(), poolSize);
         assertTrue(datasource2.isPooled());
 
         PGSimpleDataSource pgdatasource = new PGSimpleDataSource();
-        Datasource datasource3 = new Datasource(pgdatasource, driver, user, password, poolsize);
+        Datasource datasource3 = new Datasource(pgdatasource, driver, user, password, poolSize);
         assertNotNull(datasource3);
         assertEquals(datasource3.getDriver(), driver);
         assertSame(datasource3.getDataSource(), pgdatasource);
         assertEquals(datasource3.getUser(), user);
         assertEquals(datasource3.getPassword(), password);
-        assertEquals(datasource3.getPoolsize(), poolsize);
+        assertEquals(datasource3.getPoolSize(), poolSize);
         assertTrue(datasource3.isPooled());
     }
 
@@ -57,7 +57,7 @@ public class TestDatasource {
         String url = "url";
         String user = "user";
         String password = "password";
-        int poolsize = 5;
+        int poolSize = 5;
         PGSimpleDataSource pgdatasource = new PGSimpleDataSource();
 
         Datasource datasource = new Datasource();
@@ -66,13 +66,13 @@ public class TestDatasource {
         datasource.setUrl(url);
         datasource.setUser(user);
         datasource.setPassword(password);
-        datasource.setPoolsize(poolsize);
+        datasource.setPoolSize(poolSize);
         assertEquals(datasource.getDriver(), driver);
         assertSame(datasource.getDataSource(), pgdatasource);
         assertEquals(datasource.getUrl(), url);
         assertEquals(datasource.getUser(), user);
         assertEquals(datasource.getPassword(), password);
-        assertEquals(datasource.getPoolsize(), poolsize);
+        assertEquals(datasource.getPoolSize(), poolSize);
         assertTrue(datasource.isPooled());
     }
 
@@ -98,16 +98,16 @@ public class TestDatasource {
         String url = "url";
         String user = "user";
         String password = "password";
-        int poolsize = 5;
+        int poolSize = 5;
 
         Datasource datasource1 = new Datasource();
         datasource1.setDriver(driver);
         datasource1.setUrl(url);
         datasource1.setUser(user);
         datasource1.setPassword(password);
-        datasource1.setPoolsize(poolsize);
+        datasource1.setPoolSize(poolSize);
 
-        Datasource datasource2 = new Datasource(driver, url, user, password, poolsize);
+        Datasource datasource2 = new Datasource(driver, url, user, password, poolSize);
 
         assertNotSame(datasource1, datasource2);
 
@@ -115,7 +115,7 @@ public class TestDatasource {
         assertEquals(datasource1.getUrl(), datasource2.getUrl());
         assertEquals(datasource1.getUser(), datasource2.getUser());
         assertEquals(datasource1.getPassword(), datasource2.getPassword());
-        assertEquals(datasource1.getPoolsize(), datasource2.getPoolsize());
+        assertEquals(datasource1.getPoolSize(), datasource2.getPoolSize());
         assertEquals(datasource1.isPooled(), datasource2.isPooled());
         assertEquals(datasource1, datasource2);
 
@@ -139,7 +139,7 @@ public class TestDatasource {
         datasource2.setPassword(password);
         assertTrue(datasource1.equals(datasource2));
 
-        datasource2.setPoolsize(poolsize + 1);
+        datasource2.setPoolSize(poolSize + 1);
         assertTrue(datasource1.equals(datasource2));
 
         PGSimpleDataSource pgdatasource = new PGSimpleDataSource();
@@ -149,9 +149,9 @@ public class TestDatasource {
         datasource3.setDataSource(pgdatasource);
         datasource3.setUser(user);
         datasource3.setPassword(password);
-        datasource3.setPoolsize(poolsize);
+        datasource3.setPoolSize(poolSize);
 
-        Datasource datasource4 = new Datasource(pgdatasource, driver, user, password, poolsize);
+        Datasource datasource4 = new Datasource(pgdatasource, driver, user, password, poolSize);
 
         assertNotSame(datasource3, datasource4);
 
@@ -159,7 +159,7 @@ public class TestDatasource {
         assertEquals(datasource3.getUrl(), datasource4.getUrl());
         assertEquals(datasource3.getUser(), datasource4.getUser());
         assertEquals(datasource3.getPassword(), datasource4.getPassword());
-        assertEquals(datasource3.getPoolsize(), datasource4.getPoolsize());
+        assertEquals(datasource3.getPoolSize(), datasource4.getPoolSize());
         assertEquals(datasource3.isPooled(), datasource4.isPooled());
         assertEquals(datasource3, datasource4);
 
@@ -183,7 +183,7 @@ public class TestDatasource {
         datasource4.setPassword(password);
         assertTrue(datasource3.equals(datasource4));
 
-        datasource4.setPoolsize(poolsize + 1);
+        datasource4.setPoolSize(poolSize + 1);
         assertTrue(datasource3.equals(datasource4));
     }
 

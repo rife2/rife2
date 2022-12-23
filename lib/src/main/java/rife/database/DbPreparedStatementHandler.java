@@ -27,7 +27,7 @@ package rife.database;
  * @see DbQueryManager
  * @since 1.0
  */
-public abstract class DbPreparedStatementHandler<DataType> extends DbResultSetHandler {
+public abstract class DbPreparedStatementHandler<DataType> extends DbResultSetHandler implements PreparedStatementHandler {
     protected DataType data_ = null;
 
     public DbPreparedStatementHandler() {

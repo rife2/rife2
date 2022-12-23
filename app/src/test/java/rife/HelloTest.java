@@ -30,9 +30,9 @@ class HelloTest {
 
     @Test void verifyHelloTemplate() {
         var m = new MockConversation(new HelloTemplate());
-        assertEquals("Hello World", m.doRequest("/link")
-            .getParsedHtml().getLinkWithText("Hello")
-            .follow().getText());
+        var t = m.doRequest("/link").getTemplate();
+        var link = t.getValue("route:hello");
+        assertEquals("Hello World", m.doRequest(link).getText());
     }
 
     @Test void verifyHelloForm() {

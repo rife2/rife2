@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.uwyn.rife2"
-version = "0.5.11"
+version = "0.8.7"
 
 base {
     archivesName.set("rife2")
@@ -23,11 +23,11 @@ java {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    implementation("org.ow2.asm:asm:9.4")
     antlr("org.antlr:antlr4:4.11.1")
     implementation("org.antlr:antlr4-runtime:4.11.1")
     compileOnly("org.jsoup:jsoup:1.15.3")
@@ -54,7 +54,7 @@ configurations[JavaPlugin.API_CONFIGURATION_NAME].let { apiConfiguration ->
 }
 
 sourceSets.main {
-    java.srcDirs("${projectDir}/src/generated/java/")
+    java.srcDirs("${projectDir}/src/processed/java/")
     resources.exclude("templates/**")
 }
 
@@ -100,6 +100,7 @@ tasks.register("precompileTemplates") {
 tasks.jar {
     dependsOn("precompileTemplates")
 }
+
 tasks.generateGrammarSource {
     arguments = arguments + listOf(
         "-visitor",
@@ -108,19 +109,62 @@ tasks.generateGrammarSource {
     outputDirectory = File("${projectDir}/src/generated/java/rife/template/antlr")
 }
 
-tasks.clean {
-    delete("${projectDir}/src/generated")
+tasks.register<Copy>("processGeneratedParserCode") {
+    dependsOn("generateGrammarSource")
+    from("${projectDir}/src/generated/java/rife/template/antlr")
+    into("${projectDir}/src/processed/java/rife/template/antlr")
+    filter { line -> line.replace("org.antlr.v4.runtime", "rife.antlr.v4.runtime") }
 }
 
-tasks.named<Test>("test") {
+tasks.register<Jar>("agentJar") {
+    dependsOn("jar")
+
+    base.archivesName.set("rife2-agent")
+    from(sourceSets.main.get().output)
+    include(
+        "rife/asm/**",
+        "rife/instrument/**",
+        "rife/database/querymanagers/generic/instrument/**",
+        "rife/tools/ClassBytesLoader*",
+        "rife/tools/FileUtils*",
+        "rife/tools/InstrumentationUtils*",
+        "rife/tools/RawFormatter*",
+        "rife/tools/exceptions/FileUtils*"
+    )
+    manifest {
+        attributes["Premain-Class"] = "rife.instrument.RifeAgent"
+    }
+}
+
+tasks.compileJava {
+    dependsOn("processGeneratedParserCode")
+}
+
+tasks.test {
+    dependsOn("precompileTemplates")
+    dependsOn("agentJar")
     useJUnitPlatform()
     environment("project.dir", project.projectDir.toString())
 }
 
+tasks.clean {
+    delete("${projectDir}/src/generated")
+    delete("${projectDir}/src/processed")
+}
+
+tasks.javadoc {
+    title = "RIFE2"
+    if (JavaVersion.current().isJava9Compatible) {
+        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+    }
+    exclude("rife/antlr/**")
+    exclude("rife/asm/**")
+}
+
 idea {
     module {
-        sourceDirs.add(File("${projectDir}/src/generated/java"))
-        generatedSourceDirs.add(File("${projectDir}/src/generated/java"))
+        sourceDirs.add(File("${projectDir}/src/processed/java"))
+        generatedSourceDirs.add(File("${projectDir}/src/processed/java"))
     }
 }
 
@@ -172,9 +216,3 @@ signing {
     sign(publishing.publications["mavenJava"])
 }
 
-tasks.javadoc {
-    title = "RIFE 2"
-    if (JavaVersion.current().isJava9Compatible) {
-        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
-    }
-}

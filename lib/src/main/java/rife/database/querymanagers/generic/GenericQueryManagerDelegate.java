@@ -5,8 +5,7 @@
  */
 package rife.database.querymanagers.generic;
 
-import rife.database.Datasource;
-import rife.database.DbRowProcessor;
+import rife.database.*;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.CreateTable;
 import rife.validation.Validated;
@@ -108,12 +107,22 @@ public class GenericQueryManagerDelegate<T> implements GenericQueryManager<T> {
         return delegate_.restore(rowProcessor);
     }
 
+    public boolean restore(RowProcessor rowProcessor)
+    throws DatabaseException {
+        return delegate_.restore(rowProcessor);
+    }
+
     public T restoreFirst(RestoreQuery query)
     throws DatabaseException {
         return delegate_.restoreFirst(query);
     }
 
     public boolean restore(RestoreQuery query, DbRowProcessor rowProcessor)
+    throws DatabaseException {
+        return delegate_.restore(query, rowProcessor);
+    }
+
+    public boolean restore(RestoreQuery query, RowProcessor rowProcessor)
     throws DatabaseException {
         return delegate_.restore(query, rowProcessor);
     }

@@ -7,8 +7,6 @@ package rife.database;
 import rife.database.exceptions.*;
 import rife.selector.NameSelector;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -112,7 +110,7 @@ public class Datasources {
     /**
      * Cleans up all connections that have been reserved by this datasource.
      *
-     * @throws DatabaseException when an error occured during the cleanup
+     * @throws DatabaseException when an error occurred during the cleanup
      * @since 1.0
      */
     public void cleanup()

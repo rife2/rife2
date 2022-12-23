@@ -4,9 +4,9 @@
  */
 package rife.template;
 
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
+import rife.asm.ClassVisitor;
+import rife.asm.MethodVisitor;
+import rife.asm.Opcodes;
 
 abstract class ParsedBlockPart implements Opcodes {
     public enum Type {

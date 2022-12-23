@@ -53,7 +53,11 @@ class EngineTemplateProcessor {
 
         if (template_.hasValueId(Context.ID_CONTEXT_PATH_INFO) &&
             !template_.isValueSet(Context.ID_CONTEXT_PATH_INFO)) {
-            template_.setValue(Context.ID_CONTEXT_PATH_INFO, context_.pathInfo());
+            var path_info = context_.pathInfo();
+            if (!path_info.isEmpty()) {
+                path_info = "/" + path_info;
+            }
+            template_.setValue(Context.ID_CONTEXT_PATH_INFO, path_info);
             setValues.add(Context.ID_CONTEXT_PATH_INFO);
         }
 
@@ -89,9 +93,8 @@ class EngineTemplateProcessor {
                 var cookie_value_id = captured_groups[0];
                 if (!template_.isValueSet(cookie_value_id)) {
                     var cookie_name = captured_groups[1];
-                    var cookie = context_.cookie(cookie_name);
-                    if (cookie != null) {
-                        template_.setValue(cookie_value_id, encoder_.encode(cookie.getValue()));
+                    if (context_.hasCookie(cookie_name)) {
+                        template_.setValue(cookie_value_id, encoder_.encode(context_.cookieValue(cookie_name)));
                         setValues.add(cookie_value_id);
                     }
                 }

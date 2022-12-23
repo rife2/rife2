@@ -5,6 +5,7 @@
 package rife;
 
 import rife.engine.*;
+import rife.engine.annotations.Parameter;
 
 public class HelloWorld extends Site {
     public void setup() {

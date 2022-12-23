@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 /**
  * By extending this class it's possible to provide the logic that should be
- * executed by the {@link DbQueryManager#inTransaction(DbTransactionUser) inTransaction}
+ * executed by the {@link DbQueryManager#inTransaction(TransactionUser) inTransaction}
  * method in the {@link DbQueryManager} class.
  * <p>This class has both a default constructor and one that can take a data
  * object. This can be handy when using it as an extending anonymous inner
@@ -20,10 +20,10 @@ import java.util.logging.Logger;
  * cumbersome to change to <code>final</code> in the enclosing class.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @see DbQueryManager#inTransaction(DbTransactionUser)
+ * @see DbQueryManager#inTransaction(TransactionUser)
  * @since 1.0
  */
-public abstract class DbTransactionUser<ResultType, DataType> implements Cloneable {
+public abstract class DbTransactionUser<ResultType, DataType> implements Cloneable, TransactionUser<ResultType> {
     protected DataType data_ = null;
 
     public DbTransactionUser() {
@@ -69,7 +69,7 @@ public abstract class DbTransactionUser<ResultType, DataType> implements Cloneab
      * Calling this method makes it possible to throw a checked exception from
      * within this class.
      * <p>To catch it you should surround the {@link
-     * DbQueryManager#inTransaction(DbTransactionUser) inTransaction} with a
+     * DbQueryManager#inTransaction(TransactionUser) inTransaction} with a
      * <code>try-catch</code> block that catching
      * <code>InnerClassException</code>. The original exception is then
      * available through <code>getCause()</code> and can for example be

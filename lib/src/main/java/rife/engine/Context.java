@@ -4,9 +4,6 @@
  */
 package rife.engine;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpSession;
 import rife.config.RifeConfig;
 import rife.engine.exceptions.*;
 import rife.template.Template;
@@ -42,6 +39,9 @@ public class Context {
     private final Map<String, String[]> parameters_;
     private Throwable engineException_;
 
+    private Route processingRoute_ = null;
+    private Element processingElement_ = null;
+
     public Context(String gateUrl, Site site, Request request, Response response, RouteMatch routeMatch) {
         gateUrl_ = gateUrl;
         site_ = site;
@@ -50,13 +50,17 @@ public class Context {
         routeMatch_ = routeMatch;
 
         var params = new LinkedHashMap<>(request_.getParameters());
-        if (routeMatch_.route().pathInfoHandling().type() == PathInfoType.MAP) {
-            var mapping = routeMatch_.route().pathInfoHandling().mapping();
-            var matcher = mapping.regexp().matcher(pathInfo());
-            if (matcher.matches()) {
-                var i = 1;
-                for (var param : mapping.parameters()) {
-                    params.put(param, new String[]{matcher.group(i++)});
+        if (routeMatch_ != null) {
+            if (routeMatch_.route().pathInfoHandling().type() == PathInfoType.MAP) {
+                for (var mapping : routeMatch_.route().pathInfoHandling().mappings()) {
+                    var matcher = mapping.regexp().matcher(pathInfo());
+                    if (matcher.matches()) {
+                        var i = 1;
+                        for (var param : mapping.parameters()) {
+                            params.put(param, new String[]{matcher.group(i++)});
+                        }
+                        break;
+                    }
                 }
             }
         }
@@ -87,9 +91,13 @@ public class Context {
         }
     }
 
-    private void processElement(Route route)
+    void processElement(Route route)
     throws Exception {
         var element = route.obtainElementInstance(this);
+
+        processingRoute_ = route;
+        processingElement_ = element;
+
         response_.setLastElement(element);
         try {
             element.process(this);
@@ -97,7 +105,18 @@ public class Context {
         } catch (NextException ignored) {
             // this element is done processing
             // move on to the next one
+        } finally {
+            processingRoute_ = null;
+            processingElement_ = null;
         }
+    }
+
+    Route processingRoute() {
+        return processingRoute_;
+    }
+
+    Element processingElement() {
+        return processingElement_;
     }
 
     public Site site() {
@@ -113,7 +132,7 @@ public class Context {
     }
 
     public String pathInfo() {
-        if (routeMatch_.pathInfo() != null) {
+        if (routeMatch_ != null && routeMatch_.pathInfo() != null) {
             return routeMatch_.pathInfo();
         }
 
@@ -121,6 +140,9 @@ public class Context {
     }
 
     public Route route() {
+        if (routeMatch_ == null) {
+            return null;
+        }
         return routeMatch_.route();
     }
 
@@ -130,7 +152,7 @@ public class Context {
 
     public void print(Template template)
     throws TemplateException, EngineException {
-        var set_values = new EngineTemplateProcessor(this, template).processTemplate();
+        new EngineTemplateProcessor(this, template).processTemplate();
 
         // set the content type
         if (!response_.isContentTypeSet()) {
@@ -144,9 +166,6 @@ public class Context {
 
         // print the element contents with the auto-generated values
         response_.print(template);
-
-        // clean up the values that were set
-        template.removeValues(set_values);
     }
 
     public Template template()
@@ -1246,21 +1265,21 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getCookie}.
+     * Retrieves the names of the cookies.
      *
+     * @return a list of strings with the cookie names
+     * @see #cookieValue(String)
+     * @see #hasCookie(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
      * @since 1.0
      */
-    public Cookie cookie(String name) {
-        return request_.getCookie(name);
-    }
-
-    /**
-     * See {@link Request#getCookies()}.
-     *
-     * @since 1.0
-     */
-    public Cookie[] cookies() {
-        return request_.getCookies();
+    public List <String> cookieNames() {
+        var names = new ArrayList<String>();
+        for (var cookie : request_.getCookies()) {
+            names.add(cookie.getName());
+        }
+        return names;
     }
 
     /**
@@ -1269,32 +1288,27 @@ public class Context {
      * @param name the name of the cookie
      * @return the value of the cookie; or
      * <p>{@code null} if no such cookie is present
+     * @see #cookieNames()
      * @see #hasCookie(String)
-     * @see #cookie(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #addCookie(Cookie)
      * @since 1.0
      */
     public String cookieValue(String name) {
-        var cookie = cookie(name);
-        String value = null;
-        if (cookie != null) {
-            value = cookie.getValue();
+        if (!request_.hasCookie(name)) {
+            return null;
         }
-
-        return value;
+        return request_.getCookie(name).getValue();
     }
 
     /**
      * Retrieves all current cookies names with their values.
      *
      * @return a new map of all the current cookies names with their values
+     * @see #cookieNames()
      * @see #hasCookie(String)
-     * @see #cookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
-     * @see #addCookie(Cookie)
      * @since 1.0
      */
     public Map<String, String> cookieValues() {
@@ -1316,12 +1330,11 @@ public class Context {
      *                     value is present
      * @return the cookie value; or
      * <p>the default value if no cookie value is present
+     * @see #cookieNames()
      * @see #hasCookie(String)
-     * @see #cookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #addCookie(Cookie)
      * @since 1.0
      */
     public String cookieValue(String name, String defaultValue) {
@@ -1339,12 +1352,11 @@ public class Context {
      * @return the converted cookie value; or
      * <p>{@code false} if no cookie value is present or if the cookie
      * value is not a valid boolean
+     * @see #cookieNames()
      * @see #hasCookie(String)
-     * @see #cookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #addCookie(Cookie)
      * @since 1.0
      */
     public boolean cookieBoolean(String name) {
@@ -1360,12 +1372,11 @@ public class Context {
      *                     value is present
      * @return the converted cookie value; or
      * <p>the default value if no cookie value is present
+     * @see #cookieNames()
      * @see #hasCookie(String)
-     * @see #cookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #addCookie(Cookie)
      * @since 1.0
      */
     public boolean cookieBoolean(String name, boolean defaultValue) {
@@ -1384,12 +1395,11 @@ public class Context {
      * @return the converted cookie value; or
      * <p>{@code 0} if no cookie value is present or if the cookie value
      * is not a valid integer
+     * @see #cookieNames()
      * @see #hasCookie(String)
-     * @see #cookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #addCookie(Cookie)
      * @since 1.0
      */
     public int cookieInt(String name) {
@@ -1405,12 +1415,11 @@ public class Context {
      *                     value is present
      * @return the converted cookie value; or
      * <p>the default value if no cookie value is present
+     * @see #cookieNames()
      * @see #hasCookie(String)
-     * @see #cookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #addCookie(Cookie)
      * @since 1.0
      */
     public int cookieInt(String name, int defaultValue) {
@@ -1432,12 +1441,11 @@ public class Context {
      * @return the converted cookie value; or
      * <p>{@code 0L} if no cookie value is present or if the cookie value
      * is not a valid long
+     * @see #cookieNames()
      * @see #hasCookie(String)
-     * @see #cookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #addCookie(Cookie)
      * @since 1.0
      */
     public long cookieLong(String name) {
@@ -1453,12 +1461,11 @@ public class Context {
      *                     value is present
      * @return the converted cookie value; or
      * <p>the default value if no cookie value is present
+     * @see #cookieNames()
      * @see #hasCookie(String)
-     * @see #cookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #addCookie(Cookie)
      * @since 1.0
      */
     public long cookieLong(String name, long defaultValue) {
@@ -1480,12 +1487,11 @@ public class Context {
      * @return the converted cookie value; or
      * <p>{@code 0.0d} if no cookie value is present or if the cookie
      * value is not a valid double
+     * @see #cookieNames()
      * @see #hasCookie(String)
-     * @see #cookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #addCookie(Cookie)
      * @since 1.0
      */
     public double cookieDouble(String name) {
@@ -1501,12 +1507,11 @@ public class Context {
      *                     value is present
      * @return the converted cookie value; or
      * <p>the default value if no cookie value is present
+     * @see #cookieNames()
      * @see #hasCookie(String)
-     * @see #cookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #addCookie(Cookie)
      * @since 1.0
      */
     public double cookieDouble(String name, double defaultValue) {
@@ -1528,12 +1533,11 @@ public class Context {
      * @return the converted cookie value; or
      * <p>{@code 0.0}f if no cookie value is present or if the cookie
      * value is not a valid float
+     * @see #cookieNames()
      * @see #hasCookie(String)
-     * @see #cookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #addCookie(Cookie)
      * @since 1.0
      */
     public float cookieFloat(String name) {
@@ -1549,12 +1553,11 @@ public class Context {
      *                     value is present
      * @return the converted cookie value; or
      * <p>the default value if no cookie value is present
+     * @see #cookieNames()
      * @see #hasCookie(String)
-     * @see #cookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
-     * @see #addCookie(Cookie)
      * @since 1.0
      */
     public float cookieFloat(String name, float defaultValue) {
@@ -1732,30 +1735,39 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getRequestDispatcher}.
+     * Returns the current session associated with this request, or if the request does not have a session, creates one.
      *
+     * @return the <code>Session</code> associated with this request
+     *
+     * @see #session(boolean)
      * @since 1.0
      */
-    public RequestDispatcher requestDispatcher(String url) {
-        return request_.getRequestDispatcher(url);
+    public Session session() {
+        return session(true);
     }
 
     /**
-     * See {@link Request#getSession}.
+     * Returns the current <code>Session</code> associated with this request or, if there is no current session and
+     * <code>create</code> is true, returns a new session.
+     *
+     * <p>
+     * If <code>create</code> is <code>false</code> and the request has no valid <code>Session</code>, this method
+     * returns <code>null</code>.
+     *
+     * @param create <code>true</code> to create a new session for this request if necessary; <code>false</code> to return
+     * <code>null</code> if there's no current session
+     *
+     * @return the <code>Session</code> associated with this request or <code>null</code> if <code>create</code> is
+     * <code>false</code> and the request has no valid session
      *
      * @since 1.0
      */
-    public HttpSession session() {
-        return request_.getSession();
-    }
-
-    /**
-     * See {@link Request#getSession(boolean)}.
-     *
-     * @since 1.0
-     */
-    public HttpSession session(boolean create) {
-        return request_.getSession(create);
+    public Session session(boolean create) {
+        var session = request_.getSession(create);
+        if (session == null) {
+            return null;
+        }
+        return new Session(session);
     }
 
     /**
@@ -1894,15 +1906,6 @@ public class Context {
     }
 
     /**
-     * See {@link Response#addCookie(Cookie)}.
-     *
-     * @since 1.0
-     */
-    public void addCookie(Cookie cookie) {
-        response_.addCookie(cookie);
-    }
-
-    /**
      * Adds the <code>Cookie</code> created by a <code>CookieBuilder</code> to the response.
      * This method can be called multiple times to set more than one cookie.
      *
@@ -1931,10 +1934,7 @@ public class Context {
      * @since 1.0
      */
     public void removeCookie(String path, String name) {
-        var cookie = new Cookie(name, "");
-        cookie.setPath(path);
-        cookie.setMaxAge(0);
-        addCookie(cookie);
+        addCookie(new CookieBuilder(name, "").path(path).maxAge(0));
     }
 
     /**
