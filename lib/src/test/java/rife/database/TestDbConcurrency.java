@@ -53,7 +53,7 @@ public class TestDbConcurrency {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testConcurrency(Datasource datasource) {
-        Structure structure = new Structure(datasource);
+        var structure = new Structure(datasource);
         try {
             structure.install();
         } catch (DatabaseException e) {
@@ -64,20 +64,20 @@ public class TestDbConcurrency {
             System.out.println();
         }
 
-        ArrayList<Concurrency> threads = new ArrayList<Concurrency>();
-        final Object main_lock = new Object();
+        var threads = new ArrayList<Concurrency>();
+        final var main_lock = new Object();
         Concurrency concurrency = null;
-        for (int i = 1; i <= datasource.getPoolSize() * sConnectionOverload; i++) {
+        for (var i = 1; i <= datasource.getPoolSize() * sConnectionOverload; i++) {
             concurrency = new Concurrency(datasource, main_lock);
 
-            Thread thread = new Thread(concurrency, "example " + i);
+            var thread = new Thread(concurrency, "example " + i);
             thread.setDaemon(true);
             threads.add(concurrency);
             thread.start();
         }
 
-        boolean thread_alive = true;
-        boolean thread_advanced = false;
+        var thread_alive = true;
+        var thread_advanced = false;
         synchronized (main_lock) {
             while (thread_alive) {
                 try {
@@ -89,7 +89,7 @@ public class TestDbConcurrency {
                 thread_alive = false;
                 thread_advanced = false;
 
-                for (Concurrency thread : threads) {
+                for (var thread : threads) {
                     if (thread.isAlive()) {
                         thread_alive = true;
 
@@ -103,7 +103,7 @@ public class TestDbConcurrency {
                 // if none of the threads has advanced
                 // throw an error and terminate all threads
                 if (thread_alive && !thread_advanced) {
-                    for (Concurrency thread : threads) {
+                    for (var thread : threads) {
                         thread.terminate();
                     }
 
@@ -127,61 +127,57 @@ public class TestDbConcurrency {
 }
 
 class Concurrency extends DbQueryManager implements Runnable {
-    private Object mMainlock = null;
-    private int mErrors = 0;
-    private int mCommits = 0;
-    private long mLastExecution = -1;
-    private boolean mAlive = false;
+    private final Object mainLock_;
+    private int errors_ = 0;
+    private int commits_ = 0;
+    private long lastExecution_ = -1;
+    private boolean alive_ = false;
 
-    public Concurrency(Datasource datasource, Object mainlock) {
+    public Concurrency(Datasource datasource, Object mainLock) {
         super(datasource);
 
-        mMainlock = mainlock;
+        mainLock_ = mainLock;
     }
 
     public void terminate() {
-        mAlive = false;
+        alive_ = false;
     }
 
     public long getLastExecution() {
-        return mLastExecution;
+        return lastExecution_;
     }
 
     public boolean hasAdvanced() {
-        if (-1 == mLastExecution) {
+        if (-1 == lastExecution_) {
             return true;
         }
 
-        if (System.currentTimeMillis() < mLastExecution + (100 * 1000)) {
-            return true;
-        }
-
-        return false;
+        return System.currentTimeMillis() < lastExecution_ + (100 * 1000);
     }
 
     public boolean isAlive() {
-        if (mErrors >= 10 && mCommits >= 10) {
+        if (errors_ >= 10 && commits_ >= 10) {
             return false;
         }
 
-        return mAlive;
+        return alive_;
     }
 
     public void run() {
-        mAlive = true;
+        alive_ = true;
 
         while (isAlive()) {
-            mLastExecution = System.currentTimeMillis();
+            lastExecution_ = System.currentTimeMillis();
 
             try {
                 doIt();
                 Thread.yield();
-                Thread.sleep((int) Math.random() * 200);
+                Thread.sleep((int) (Math.random() * 200));
                 TestDbConcurrency.displayCommit();
-                mCommits++;
+                commits_++;
             } catch (DatabaseException e) {
                 TestDbConcurrency.displayError();
-                mErrors++;
+                errors_++;
                 if (TestDbConcurrency.DEBUG) {
                     e.printStackTrace();
                 }
@@ -190,10 +186,10 @@ class Concurrency extends DbQueryManager implements Runnable {
             }
         }
 
-        mAlive = false;
+        alive_ = false;
 
-        synchronized (mMainlock) {
-            mMainlock.notifyAll();
+        synchronized (mainLock_) {
+            mainLock_.notifyAll();
         }
     }
 
@@ -203,7 +199,7 @@ class Concurrency extends DbQueryManager implements Runnable {
             System.out.println(Thread.currentThread().getName() + " : begin");
         }
 
-        inTransaction(new DbTransactionUserWithoutResult() {
+        inTransaction(new DbTransactionUserWithoutResult<>() {
 
             public int getTransactionIsolation() {
                 if (getDatasource().getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver")) {
@@ -215,13 +211,12 @@ class Concurrency extends DbQueryManager implements Runnable {
 
             public void useTransactionWithoutResult()
             throws InnerClassException {
-                Insert insert = new Insert(getDatasource());
+                var insert = new Insert(getDatasource());
                 insert
                     .into("example")
                     .fieldParameter("firstname")
                     .fieldParameter("lastname");
-                DbPreparedStatement insert_stmt = getConnection().getPreparedStatement(insert);
-                try {
+                try (var insert_stmt = getConnection().getPreparedStatement(insert)) {
                     insert_stmt.setString("firstname", "John");
                     if ((Math.random() * 100) <= 30) {
                         insert_stmt.setNull("lastname", Types.VARCHAR);
@@ -233,30 +228,25 @@ class Concurrency extends DbQueryManager implements Runnable {
                     insert_stmt.setString("firstname", "Jane");
                     insert_stmt.setString("lastname", "TheLane");
                     insert_stmt.executeUpdate();
-                } finally {
-                    insert_stmt.close();
                 }
 
-                Select select = new Select(getDatasource());
+                var select = new Select(getDatasource());
                 select
                     .from("example")
                     .orderBy("firstname");
-                DbStatement select_stmt = executeQuery(select);
-                try {
-                    Processor processor = new Processor();
+                try (var select_stmt = executeQuery(select)) {
+                    var processor = new Processor();
                     while (fetch(select_stmt.getResultSet(), processor) &&
-                        processor.wasSuccessful()) {
+                           processor.wasSuccessful()) {
                         processor.getFirstname();
                         processor.getLastname();
                     }
-                } finally {
-                    select_stmt.close();
                 }
             }
         });
 
         if ((Math.random() * 100) <= 10) {
-            inTransaction(new DbTransactionUserWithoutResult() {
+            inTransaction(new DbTransactionUserWithoutResult<>() {
 
                 public int getTransactionIsolation() {
                     if (getDatasource().getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver")) {
@@ -268,14 +258,11 @@ class Concurrency extends DbQueryManager implements Runnable {
 
                 public void useTransactionWithoutResult()
                 throws InnerClassException {
-                    Delete delete = new Delete(getDatasource());
+                    var delete = new Delete(getDatasource());
                     delete
                         .from("example");
-                    DbPreparedStatement delete_stmt = getConnection().getPreparedStatement(delete);
-                    try {
+                    try (var delete_stmt = getConnection().getPreparedStatement(delete)) {
                         delete_stmt.executeUpdate();
-                    } finally {
-                        delete_stmt.close();
                     }
                     if (TestDbConcurrency.DEBUG) {
                         System.out.println(Thread.currentThread().getName() + " : deleted");
@@ -291,21 +278,21 @@ class Concurrency extends DbQueryManager implements Runnable {
 }
 
 class Processor extends DbRowProcessor {
-    private String mFirstname = null;
-    private String mLastname = null;
+    private String firstname_ = null;
+    private String lastname_ = null;
 
     public String getFirstname() {
-        return mFirstname;
+        return firstname_;
     }
 
     public String getLastname() {
-        return mLastname;
+        return lastname_;
     }
 
     public boolean processRow(ResultSet resultSet)
     throws SQLException {
-        mFirstname = resultSet.getString("firstname");
-        mLastname = resultSet.getString("lastname");
+        firstname_ = resultSet.getString("firstname");
+        lastname_ = resultSet.getString("lastname");
 
         return true;
     }
@@ -318,7 +305,7 @@ class Structure extends DbQueryManager {
 
     public void install()
     throws DatabaseException {
-        CreateTable create = new CreateTable(getDatasource());
+        var create = new CreateTable(getDatasource());
         create
             .table("example")
             .column("firstname", String.class, 50, CreateTable.NOTNULL)
@@ -328,7 +315,7 @@ class Structure extends DbQueryManager {
 
     public void remove()
     throws DatabaseException {
-        DropTable drop = new DropTable(getDatasource());
+        var drop = new DropTable(getDatasource());
         drop.table("example");
         executeUpdate(drop);
     }
