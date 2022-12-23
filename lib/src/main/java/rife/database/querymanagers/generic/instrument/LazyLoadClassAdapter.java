@@ -16,7 +16,7 @@ class LazyLoadClassAdapter extends ClassVisitor implements Opcodes {
     private final Map<String, String> lazyLoadingMethods_;
 
     LazyLoadClassAdapter(Map<String, String> lazyLoadingMethods, ClassVisitor writer) {
-        super(V1_4, writer);
+        super(ASM9, writer);
 
         lazyLoadingMethods_ = lazyLoadingMethods;
     }

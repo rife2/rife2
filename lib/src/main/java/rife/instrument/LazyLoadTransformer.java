@@ -6,6 +6,7 @@ package rife.instrument;
 
 import rife.database.querymanagers.generic.instrument.LazyLoadAccessorsBytecodeTransformer;
 import rife.tools.ClassBytesLoader;
+import rife.validation.instrument.ConstrainedDetector;
 
 import java.security.ProtectionDomain;
 

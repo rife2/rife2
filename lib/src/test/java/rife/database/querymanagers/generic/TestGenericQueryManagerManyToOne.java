@@ -154,8 +154,6 @@ public class TestGenericQueryManagerManyToOne {
             assertSame(second_bean_b, new_bean_b.getSecondBean());
             assertSame(second_bean_b, new_bean_b.getSecondBean());
 
-/* TODO : requires the lazy loading bytecode infrastructure
-
             // set the property to null to cause a new instance to be fetched
             new_bean_a.setSecondBean(null);
             var second_bean_c = new_bean_a.getSecondBean();
@@ -170,7 +168,6 @@ public class TestGenericQueryManagerManyToOne {
             assertEquals(second_bean_d.getIdentifier(), second_bean_b.getIdentifier());
             assertEquals(second_bean_d.getSecondString(), second_bean_b.getSecondString());
             assertNotSame(second_bean_d, second_bean_b);
-*/
 
             // assert that the other many-to-one relationships have correctly been restored
             var second_bean_2a = new_bean_a.getSecondBean2();

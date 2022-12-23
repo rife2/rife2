@@ -12,15 +12,15 @@ import java.io.Serial;
 public class RedirectException extends LightweightError implements ControlFlowRuntimeException {
     @Serial private static final long serialVersionUID = -4659026261646459653L;
 
-    private final Object url_;
+    private final String url_;
 
     public RedirectException(Object url) {
         super();
 
-        url_ = url;
+        url_ = String.valueOf(url);
     }
 
     public String getUrl() {
-        return String.valueOf(url_);
+        return url_;
     }
 }

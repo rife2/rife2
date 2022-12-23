@@ -52,7 +52,7 @@ public abstract class LazyLoadAccessorsBytecodeTransformer {
         var method_collector = new LazyLoadMethodCollector();
         cr.accept(method_collector, ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
 
-        var cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+        var cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
         ClassVisitor meta_data_adapter = new LazyLoadClassAdapter(method_collector.getMethods(), cw);
         cr.accept(meta_data_adapter, ClassReader.SKIP_FRAMES);
 

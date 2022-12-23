@@ -36,6 +36,7 @@ public class TestDatabaseUsers {
 
         try {
             assertEquals(true, users.install());
+            users.remove();
         } catch (CredentialsManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -47,6 +48,7 @@ public class TestDatabaseUsers {
         DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
 
         try {
+            users.install();
             assertEquals(true, users.remove());
         } catch (CredentialsManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));

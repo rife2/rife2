@@ -19,20 +19,33 @@ import java.security.ProtectionDomain;
 public abstract class RifeTransformer implements ClassFileTransformer {
     public final byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer)
     throws IllegalClassFormatException {
-        if (className.startsWith("java/") ||
-            className.startsWith("javax/") ||
+        if (className.startsWith("apple/security/") ||
             className.startsWith("jakarta/") ||
+            className.startsWith("java/") ||
+            className.startsWith("javax/") ||
+            className.startsWith("jdk/") ||
+            className.startsWith("com/esotericsoftware/") ||
             className.startsWith("com/google/") ||
+            className.startsWith("com/mysql/") ||
             className.startsWith("com/sun/") ||
-            className.startsWith("sun/") ||
+            className.startsWith("net/rubygrapefruit/") ||
             className.startsWith("net/sourceforge/htmlunit/") ||
+            className.startsWith("oracle/") ||
             className.startsWith("org/antlr/") ||
             className.startsWith("org/apache/") ||
+            className.startsWith("org/apiguardian/") ||
             className.startsWith("org/eclipse/jetty/") ||
+            className.startsWith("org/h2/") ||
+            className.startsWith("org/hsqldb/") ||
+            className.startsWith("org/gradle/") ||
             className.startsWith("org/junit/") ||
-            className.startsWith("org/sl4j/") ||
+            className.startsWith("org/opentest4j/") ||
+            className.startsWith("org/postgresql/") ||
+            className.startsWith("org/slf4j/") ||
             className.startsWith("org/xml/") ||
             className.startsWith("org/w3c/") ||
+            className.startsWith("sun/") ||
+            className.startsWith("worker/org/gradle/") ||
             (className.startsWith("rife/") && !className.startsWith("rife/continuations/Test"))) {
             return classfileBuffer;
         }

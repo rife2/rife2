@@ -13,7 +13,6 @@ import rife.asm.*;
 
 class LazyLoadMethodAdapter extends MethodVisitor implements Opcodes {
     private final String className_;
-    private final String methodName_;
     private final String methodDescriptor_;
     private final String propertyName_;
     private final boolean isGetter_;
@@ -22,15 +21,14 @@ class LazyLoadMethodAdapter extends MethodVisitor implements Opcodes {
     private static final int GET_SET_ACCESSOR_PREFIX_LENGTH = 3;
 
     LazyLoadMethodAdapter(String className, String methodName, String methodDescriptor, MethodVisitor visitor) {
-        super(V1_4, visitor);
+        super(ASM9, visitor);
 
         className_ = className;
-        methodName_ = methodName;
         methodDescriptor_ = methodDescriptor;
         propertyName_ = uncapitalize(methodName.substring(GET_SET_ACCESSOR_PREFIX_LENGTH));
 
-        isGetter_ = methodName_.startsWith("get");
-        isSetter_ = methodName_.startsWith("set");
+        isGetter_ = methodName.startsWith("get");
+        isSetter_ = methodName.startsWith("set");
     }
 
     private static String uncapitalize(String source) {

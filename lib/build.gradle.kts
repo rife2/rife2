@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.uwyn.rife2"
-version = "0.8.7"
+version = "0.8.8"
 
 base {
     archivesName.set("rife2")
@@ -29,7 +29,6 @@ repositories {
 
 dependencies {
     antlr("org.antlr:antlr4:4.11.1")
-    implementation("org.antlr:antlr4-runtime:4.11.1")
     compileOnly("org.jsoup:jsoup:1.15.3")
     compileOnly("org.eclipse.jetty:jetty-server:11.0.12")
     compileOnly("org.eclipse.jetty:jetty-servlet:11.0.12")
@@ -145,6 +144,7 @@ tasks.test {
     dependsOn("agentJar")
     useJUnitPlatform()
     environment("project.dir", project.projectDir.toString())
+    jvmArgs = listOf("-javaagent:${buildDir}/libs/rife2-agent-${version}.jar")
 }
 
 tasks.clean {

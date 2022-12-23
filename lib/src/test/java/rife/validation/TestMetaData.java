@@ -9,9 +9,7 @@ import rife.database.TestDatasources;
 import rife.database.querymanagers.generic.GenericQueryManager;
 import rife.database.querymanagers.generic.GenericQueryManagerFactory;
 import rife.tools.ObjectUtils;
-import rifetestmodels.Person;
-import rifetestmodels.PersonCallbacks;
-import rifetestmodels.PersonCloneable;
+import rifetestmodels.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +22,49 @@ public class TestMetaData {
     @Test
     public void testConstraintsValidation() {
         Person person = new Person();
+
+        Constrained constrained = (Constrained) person;
+        assertNotNull(constrained);
+
+        Set<ValidationError> errors;
+
+        Validated validated = (Validated) person;
+        assertFalse(validated.validate());
+        assertFalse(validated.isSubjectValid("firstname"));
+        assertTrue(validated.isSubjectValid("lastname"));
+        errors = validated.getValidationErrors();
+        assertEquals(1, errors.size());
+        assertEquals(ValidationError.IDENTIFIER_MANDATORY, errors.iterator().next().getIdentifier());
+
+        validated.resetValidation();
+        person.setFirstname("John");
+        person.setLastname("Smith");
+        assertTrue(validated.validate());
+
+        validated.resetValidation();
+        person.setFirstname("John");
+        person.setLastname("Wayne");
+        assertFalse(validated.validate());
+        assertTrue(validated.isSubjectValid("firstname"));
+        assertFalse(validated.isSubjectValid("lastname"));
+        errors = validated.getValidationErrors();
+        assertEquals(1, errors.size());
+        assertEquals(ValidationError.IDENTIFIER_INVALID, errors.iterator().next().getIdentifier());
+
+        validated.resetValidation();
+        person.setFirstname("Dean Marie Alson");
+        person.setLastname("Jones");
+        assertFalse(validated.validate());
+        assertFalse(validated.isSubjectValid("firstname"));
+        assertTrue(validated.isSubjectValid("lastname"));
+        errors = validated.getValidationErrors();
+        assertEquals(1, errors.size());
+        assertEquals(ValidationError.IDENTIFIER_WRONG_LENGTH, errors.iterator().next().getIdentifier());
+    }
+
+    @Test
+    public void testConstraintsValidationAnnotation() {
+        PersonAnnotation person = new PersonAnnotation();
 
         Constrained constrained = (Constrained) person;
         assertNotNull(constrained);
@@ -95,7 +136,7 @@ public class TestMetaData {
 
         PersonCloneable person_clone;
 
-        // check if the original clone methods it still working
+        // check if the original clone methods is still working
         person_clone = ObjectUtils.genericClone(person);
         assertNotNull(person_clone);
         assertEquals("autofirst", person_clone.getFirstname());

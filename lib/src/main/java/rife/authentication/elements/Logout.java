@@ -70,7 +70,7 @@ public class Logout implements Element {
             }
         }
 
-        c.removeAttribute(AuthConfig.identityAttributeName());
+        c.removeAttribute(authConfig_.identityAttributeName());
 
         loggedOut(template);
 

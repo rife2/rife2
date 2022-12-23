@@ -43,7 +43,7 @@ public class MemoryAuthenticatedSite extends Site {
             landing = get("/landing", c -> c.print("Landing"));
             logout = get("/logout", new Logout(config, TemplateFactory.HTML.get("authentication.logout")));
             template = get("/template", c -> c.print(c.template("filtered_tags_auth")));
-            get("/username", c -> c.print(AuthConfig.identityAttribute(c) != null ? AuthConfig.identityAttribute(c).getLogin() : "not logged in"));
+            get("/username", c -> c.print(config.identityAttribute(c) != null ? config.identityAttribute(c).getLogin() : "not logged in"));
             group(new Router() {
                 public void setup() {
                     before(new Logout(config));

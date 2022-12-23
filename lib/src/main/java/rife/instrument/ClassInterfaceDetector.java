@@ -7,7 +7,7 @@ package rife.instrument;
 import rife.asm.*;
 import rife.instrument.exceptions.VisitInterruptionException;
 
-import static rife.asm.Opcodes.V1_4;
+import static rife.asm.Opcodes.ASM9;
 
 /**
  * Detects whether a class implements a particular interface by analyzing the
@@ -80,7 +80,7 @@ public class ClassInterfaceDetector {
         private String superName_ = null;
 
         private DetectionClassVisitor() {
-            super(V1_4);
+            super(ASM9);
         }
 
         private boolean isClassOrInterface() {
@@ -112,33 +112,6 @@ public class ClassInterfaceDetector {
             }
 
             throw new VisitInterruptionException();
-        }
-
-        public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-            return null;
-        }
-
-        public void visitInnerClass(String name, String outerName, String innerName, int access) {
-        }
-
-        public void visitOuterClass(String owner, String name, String desc) {
-        }
-
-        public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-            return null;
-        }
-
-        public void visitSource(String source, String debug) {
-        }
-
-        public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-            return null;
-        }
-
-        public void visitAttribute(Attribute attr) {
-        }
-
-        public void visitEnd() {
         }
     }
 }
