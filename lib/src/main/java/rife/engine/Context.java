@@ -5,8 +5,10 @@
 package rife.engine;
 
 import rife.config.RifeConfig;
+import rife.continuations.ContinuationConfigRuntime;
 import rife.continuations.ContinuationContext;
 import rife.continuations.exceptions.ContinuationsNotActiveException;
+import rife.continuations.exceptions.PauseException;
 import rife.engine.exceptions.*;
 import rife.template.Template;
 import rife.template.TemplateFactory;
@@ -83,6 +85,8 @@ public class Context {
             }
         } catch (RespondException ignored) {
             // processing is over, just send the current response
+        } catch (PauseException e) {
+            handlePause(e);
         } catch (Exception e) {
             throw new EngineException(e);
         }
@@ -90,7 +94,12 @@ public class Context {
 
     void processElement(Route route)
     throws Exception {
-        var element = route.obtainElementInstance(this);
+        var element = setupContinuationContext(route);
+        if (element == null) {
+            element = route.obtainElementInstance(this);
+        }
+
+        route.prepareElementInstance(element, this);
 
         processedRoute_ = route;
         processedElement_ = element;
@@ -98,11 +107,53 @@ public class Context {
         response_.setLastElement(element);
         try {
             element.process(this);
-            route.finalizeElementInstance(element, this);
         } catch (NextException ignored) {
             // this element is done processing
             // move on to the next one
+        } finally {
+            route.finalizeElementInstance(element, this);
         }
+    }
+
+    private Element setupContinuationContext(Route route)
+    throws CloneNotSupportedException {
+        // continuations are only supported on element class routes, not element instance routes
+        if (route instanceof RouteInstance) {
+            return null;
+        }
+
+        Element element = null;
+        ContinuationContext continuation_context = null;
+
+        // resume a continuation context if it can be found
+        if (hasParameterValue(SpecialParameters.CONT_ID)) {
+            continuation_context = site_.continuationManager_.resumeContext(parameter(SpecialParameters.CONT_ID));
+        }
+
+        // if a continuation context can be resumed, activate it
+        // when its continuable is the same type as the element that should be processed,
+        // process that continuable instead
+        if (continuation_context != null) {
+            ContinuationContext.setActiveContext(continuation_context);
+
+            if (continuation_context.getContinuable() != null &&
+                route.getElementClass() == continuation_context.getContinuable().getClass()) {
+                element = (Element) continuation_context.getContinuable();
+            }
+        }
+
+        ContinuationConfigRuntime.setActiveConfigRuntime(site_.continuationManager_.getConfigRuntime());
+
+        return element;
+    }
+
+    private void handlePause(PauseException e) {
+        // register context
+        var continuation_context = e.getContext();
+        site_.continuationManager_.addContext(continuation_context);
+
+        // register continuation cookie
+        parameter(SpecialParameters.CONT_ID, continuation_context.getId());
     }
 
     Route processedRoute() {

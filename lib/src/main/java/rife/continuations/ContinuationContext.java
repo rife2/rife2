@@ -57,7 +57,10 @@ public class ContinuationContext implements Cloneable {
      */
     public static ContinuationContext createOrResetContext(Object executingInstance) {
         var context = getActiveContext();
-        if (null == context) {
+        if (null == context ||
+            context.getContinuable() == null ||
+            executingInstance.getClass() != context.getContinuable().getClass()) {
+
             var config = ContinuationConfigRuntime.getActiveConfigRuntime();
             context = new ContinuationContext(config.getContinuationManager(executingInstance), executingInstance);
 

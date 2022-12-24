@@ -62,7 +62,7 @@ class ResumableClassAdapter extends ClassVisitor {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest("Class:visitMethod             (" + access + ", \"" + name + "\", \"" + desc + "\", \"" + signature + "\", " + (null == exceptions ? null : join(exceptions, ",")) + ")");
 
-        // only adapt the processElement method
+        // only adapt the entry method
         if (entryMethodName_.equals(name) &&
             entryMethodDesc_.equals(desc)) {
             if (adapt_) {

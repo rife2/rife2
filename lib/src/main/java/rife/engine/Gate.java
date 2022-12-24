@@ -28,8 +28,6 @@ public class Gate {
     private Site site_ = null;
     private Throwable initException_ = null;
 
-    final ContinuationManager continuationManager_ = new ContinuationManager(new EngineContinuationConfigRuntime(this));
-
     /**
      * Set up the gate with the provided <code>Site</code>.
      *
@@ -94,12 +92,7 @@ public class Gate {
 
         var context = new Context(gateUrl, site_, request, response, match);
         try {
-            setupContinuationContext(context);
-
             context.process();
-            response.close();
-        } catch (PauseException e) {
-            handlePause(e, context);
             response.close();
         } catch (RedirectException e) {
             response.sendRedirect(e.getUrl());
@@ -111,27 +104,6 @@ public class Gate {
         }
 
         return true;
-    }
-
-    private void setupContinuationContext(Context context)
-    throws CloneNotSupportedException {
-        ContinuationContext continuation_context = null;
-        if (context.hasParameterValue(SpecialParameters.CONT_ID)) {
-            continuation_context = continuationManager_.resumeContext(context.parameter(SpecialParameters.CONT_ID));
-        }
-        if (continuation_context != null) {
-            ContinuationContext.setActiveContext(continuation_context);
-        }
-        ContinuationConfigRuntime.setActiveConfigRuntime(continuationManager_.getConfigRuntime());
-    }
-
-    private void handlePause(PauseException e, Context context) {
-        // register context
-        var continuation_context = e.getContext();
-        continuationManager_.addContext(continuation_context);
-
-        // register continuation cookie
-        context.parameter(SpecialParameters.CONT_ID, continuation_context.getId());
     }
 
     private void handleSiteInitException(Throwable exception) {

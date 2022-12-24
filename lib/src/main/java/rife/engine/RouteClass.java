@@ -192,8 +192,15 @@ public class RouteClass implements Route {
     @Override
     public Element obtainElementInstance(Context context) {
         try {
-            var element = elementClass_.getDeclaredConstructor().newInstance();
+            return elementClass_.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            throw new EngineException(e);
+        }
+    }
 
+    @Override
+    public void prepareElementInstance(Element element, Context context) {
+        try {
             for (var field : getAnnotatedFields()) {
                 var name = field.getName();
                 var type = field.getType();
@@ -326,9 +333,6 @@ public class RouteClass implements Route {
                     }
                 }
             }
-
-
-            return element;
         } catch (Exception e) {
             throw new EngineException(e);
         }
@@ -392,6 +396,11 @@ public class RouteClass implements Route {
     @Override
     public String defaultElementId() {
         return StringUtils.uncapitalize(ClassUtils.shortenClassName(elementClass_));
+    }
+
+    @Override
+    public Class getElementClass() {
+        return elementClass_;
     }
 
     private String defaultElementPath() {

@@ -8,8 +8,7 @@ import rife.engine.Context;
 import rife.engine.Element;
 
 public class TestNullConditional implements Element {
-    public void process(Context c)
-    throws Exception {
+    public void process(Context c) {
         String value = null;
         if (c.hasParameterValue("value")) {
             value = c.parameter("value");

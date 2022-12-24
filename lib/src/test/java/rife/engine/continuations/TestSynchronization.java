@@ -9,33 +9,33 @@ import rife.engine.Element;
 
 public class TestSynchronization implements Element {
     private final Object monitorMember_ = new Object();
-//    private static Object sMonitorStatic = new Object();
+    private static final Object sMonitorStatic = new Object();
 
     public void process(Context c) {
-//        synchronized (this) {
-//        }
-//
+        synchronized (this) {
+        }
+
         synchronized (this) {
             c.print("monitor this");
         }
-//        c.print("\n" + c.continuationId());
-//
-//        c.pause();
+        c.print("\n" + c.continuationId());
+
+        c.pause();
 
         synchronized (monitorMember_) {
             c.print("monitor member");
         }
-//        c.print("\n" + c.continuationId());
+        c.print("\n" + c.continuationId());
 
         c.pause();
-//
-//        synchronized (sMonitorStatic) {
-//            c.print("monitor static");
-//        }
-//        c.print("\n" + c.continuationId());
-//
-//        c.pause();
-//
-//        c.print("done");
+
+        synchronized (sMonitorStatic) {
+            c.print("monitor static");
+        }
+        c.print("\n" + c.continuationId());
+
+        c.pause();
+
+        c.print("done");
     }
 }

@@ -60,6 +60,11 @@ public class RouteInstance implements Route {
         return StringUtils.stripFromFront(path_, "/");
     }
 
+    @Override
+    public Class getElementClass() {
+        return element_.getClass();
+    }
+
     private void preventAnnotatedFields() {
         try {
             Class klass = element_.getClass();
@@ -95,6 +100,11 @@ public class RouteInstance implements Route {
     @Override
     public Element obtainElementInstance(Context context) {
         return element_;
+    }
+
+    @Override
+    public void prepareElementInstance(Element element, Context context) {
+        // no-op
     }
 
     @Override

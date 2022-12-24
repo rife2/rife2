@@ -7,14 +7,14 @@ package rife.engine;
 import rife.continuations.*;
 
 public class EngineContinuationConfigRuntime extends ContinuationConfigRuntime {
-    private final Gate gate_;
+    private final Site site_;
 
-    EngineContinuationConfigRuntime(Gate gate) {
-        gate_ = gate;
+    EngineContinuationConfigRuntime(Site site) {
+        site_ = site;
     }
 
     public ContinuationManager getContinuationManager(Object executingContinuable) {
-        return gate_.continuationManager_;
+        return site_.continuationManager_;
     }
 
     public boolean cloneContinuations(Object executingContinuable) {

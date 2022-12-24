@@ -4,6 +4,7 @@
  */
 package rife.engine;
 
+import rife.continuations.ContinuationManager;
 import rife.engine.exceptions.EngineException;
 import rife.tools.StringUtils;
 
@@ -11,6 +12,8 @@ import java.util.*;
 
 public class Site extends Router {
     public final int RND = new Random().nextInt();
+
+    final ContinuationManager continuationManager_ = new ContinuationManager(new EngineContinuationConfigRuntime(this));
 
     /**
      * Looks up the information of the element that is responsible for handling
