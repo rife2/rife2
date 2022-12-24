@@ -1,6 +1,7 @@
 package rife.engine;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.jupiter.api.Test;
 import rife.engine.continuations.*;
@@ -20,7 +21,7 @@ public class TestContinuations {
             try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/nopause");
 
-                String text = page.getWebResponse().getContentAsString();
+                var text = page.getWebResponse().getContentAsString();
                 assertEquals("", text);
             }
         }
@@ -37,8 +38,8 @@ public class TestContinuations {
             try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/simple");
 
-                String text = page.getWebResponse().getContentAsString();
-                String[] lines = StringUtils.splitToArray(text, "\n");
+                var text = page.getWebResponse().getContentAsString();
+                var lines = StringUtils.splitToArray(text, "\n");
                 assertEquals(2, lines.length);
                 assertEquals("before simple pause", lines[0]);
 
@@ -59,8 +60,8 @@ public class TestContinuations {
             try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/null");
 
-                String text = page.getWebResponse().getContentAsString();
-                String[] lines = StringUtils.splitToArray(text, "\n");
+                var text = page.getWebResponse().getContentAsString();
+                var lines = StringUtils.splitToArray(text, "\n");
                 assertEquals(2, lines.length);
                 assertEquals("before null pause", lines[0]);
 
@@ -81,7 +82,7 @@ public class TestContinuations {
             try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/null_reference");
 
-                String text = page.getWebResponse().getContentAsString();
+                var text = page.getWebResponse().getContentAsString();
 
                 page = webClient.getPage("http://localhost:8181/null_reference?" + SpecialParameters.CONT_ID + "=" + text);
                 assertTrue(page.getWebResponse().getContentAsString().contains("java.lang.NullPointerException"));
@@ -100,7 +101,7 @@ public class TestContinuations {
             try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/null_conditional?value=thevalue");
 
-                String text = page.getWebResponse().getContentAsString();
+                var text = page.getWebResponse().getContentAsString();
                 assertTrue(text.startsWith("thevalue"));
 
                 page = webClient.getPage("http://localhost:8181/null_conditional?" + SpecialParameters.CONT_ID + "=" + text.substring(8));
@@ -166,8 +167,8 @@ public class TestContinuations {
             try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/member_method");
 
-                String text = page.getWebResponse().getContentAsString();
-                String[] lines = StringUtils.splitToArray(text, "\n");
+                var text = page.getWebResponse().getContentAsString();
+                var lines = StringUtils.splitToArray(text, "\n");
                 assertEquals(2, lines.length);
                 assertEquals("before pause", lines[0]);
 
@@ -204,8 +205,8 @@ public class TestContinuations {
             try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/synchronization");
 
-                String text = page.getWebResponse().getContentAsString();
-                String[] lines = StringUtils.splitToArray(text, "\n");
+                var text = page.getWebResponse().getContentAsString();
+                var lines = StringUtils.splitToArray(text, "\n");
                 assertEquals(2, lines.length);
                 assertEquals("monitor this", lines[0]);
 
@@ -350,8 +351,8 @@ public class TestContinuations {
             try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/finally");
 
-                String text = page.getWebResponse().getContentAsString();
-                String[] lines = StringUtils.splitToArray(text, "\n");
+                var text = page.getWebResponse().getContentAsString();
+                var lines = StringUtils.splitToArray(text, "\n");
                 assertEquals(2, lines.length);
                 assertEquals("start", lines[0]);
 
@@ -390,8 +391,8 @@ public class TestContinuations {
             try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/instanceof");
 
-                String text = page.getWebResponse().getContentAsString();
-                String[] lines = StringUtils.splitToArray(text, "\n");
+                var text = page.getWebResponse().getContentAsString();
+                var lines = StringUtils.splitToArray(text, "\n");
                 assertEquals(2, lines.length);
                 assertEquals("before instanceof pause", lines[0]);
 
@@ -412,8 +413,8 @@ public class TestContinuations {
             try (final var webClient = new WebClient()) {
                 HtmlPage page = webClient.getPage("http://localhost:8181/innerclass");
 
-                String text = page.getWebResponse().getContentAsString();
-                String[] lines = StringUtils.splitToArray(text, "\n");
+                var text = page.getWebResponse().getContentAsString();
+                var lines = StringUtils.splitToArray(text, "\n");
                 assertEquals(2, lines.length);
                 assertEquals("before pause", lines[0]);
 
@@ -437,7 +438,7 @@ public class TestContinuations {
 
                 HtmlPage page = webClient.getPage("http://localhost:8181/alltypes");
 
-                for (int i = 8; i < 40; i++) {
+                for (var i = 8; i < 40; i++) {
                     text = page.getWebResponse().getContentAsString();
                     lines = StringUtils.splitToArray(text, "\n");
                     assertEquals(2, lines.length);
@@ -499,4 +500,153 @@ public class TestContinuations {
         }
     }
 
+    @Test
+    public void testFormSubmission()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                route("/form_submission", TestFormSubmission.class);
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page = webClient.getPage("http://localhost:8181/form_submission");
+
+                assertEquals("0", page.getTitleText());
+                var form = page.getFormByName("getanswer");
+                assertNotNull(form);
+                form.getInputsByName("answer").get(0).setValueAttribute("12");
+                page = form.getInputsByName("submit").get(0).click();
+
+                assertEquals("12", page.getTitleText());
+                form = page.getFormByName("getanswer");
+                assertNotNull(form);
+                form.getInputsByName("answer").get(0).setValueAttribute("32");
+                page = form.getInputsByName("submit").get(0).click();
+
+                assertEquals("44", page.getTitleText());
+                form = page.getFormByName("getanswer");
+                assertNotNull(form);
+                form.getInputsByName("answer").get(0).setValueAttribute("41");
+                page = form.getInputsByName("submit").get(0).click();
+
+                assertEquals("got a total of 85", page.getWebResponse().getContentAsString());
+            }
+        }
+    }
+
+    @Test
+    public void testUniqueIDPerRequest()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                route("/unique", TestFormSubmission.class);
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page1 = webClient.getPage("http://localhost:8181/unique");
+                assertEquals("0", page1.getTitleText());
+                var form1 = page1.getFormByName("getanswer");
+                assertNotNull(form1);
+                var cont1 = form1.getActionAttribute().split(SpecialParameters.CONT_ID + "=")[1];
+                assertNotNull(cont1);
+                form1.getInputsByName("answer").get(0).setValueAttribute("12");
+
+                HtmlPage page2 = form1.getInputsByName("submit").get(0).click();
+                assertEquals("12", page2.getTitleText());
+                var form2 = page2.getFormByName("getanswer");
+                assertNotNull(form2);
+                var cont2 = form2.getActionAttribute().split(SpecialParameters.CONT_ID + "=")[1];
+                assertNotNull(cont2);
+                form2.getInputsByName("answer").get(0).setValueAttribute("32");
+
+                HtmlPage page3 = form2.getInputsByName("submit").get(0).click();
+                assertEquals("44", page3.getTitleText());
+                var form3 = page3.getFormByName("getanswer");
+                assertNotNull(form3);
+                var cont3 = form3.getActionAttribute().split(SpecialParameters.CONT_ID + "=")[1];
+                assertNotNull(cont3);
+                form3.getInputsByName("answer").get(0).setValueAttribute("41");
+
+                // check if previous continuation contexts makes the logic
+                // start from scratch again
+                HtmlPage page4 = form1.getInputsByName("submit").get(0).click();
+                assertEquals("0", page4.getTitleText());
+                var form4 = page4.getFormByName("getanswer");
+                assertNotNull(form4);
+                var cont4 = form4.getActionAttribute().split(SpecialParameters.CONT_ID + "=")[1];
+                assertNotNull(cont4);
+
+                HtmlPage page5 = form2.getInputsByName("submit").get(0).click();
+                assertEquals("0", page5.getTitleText());
+                var form5 = page5.getFormByName("getanswer");
+                assertNotNull(form5);
+                var cont5 = form5.getActionAttribute().split(SpecialParameters.CONT_ID + "=")[1];
+                assertNotNull(cont5);
+
+                // each should have a unique id
+                assertNotEquals(cont4, cont1);
+                assertNotEquals(cont4, cont2);
+                assertNotEquals(cont4, cont3);
+                assertNotEquals(cont4, cont5);
+                assertNotEquals(cont5, cont1);
+                assertNotEquals(cont5, cont2);
+                assertNotEquals(cont5, cont3);
+                assertNotEquals(cont5, cont4);
+
+                // perform the last step in the calculation
+                HtmlPage page6 = form3.getInputsByName("submit").get(0).click();
+                assertEquals("got a total of 85", page6.getWebResponse().getContentAsString());
+            }
+        }
+    }
+
+    @Test
+    public void testNumberGuess()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                route("/numberguess", TestNumberGuess.class);
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page = null;
+                HtmlForm form = null;
+
+                var low_bound = 0;
+                var high_bound = 100;
+                var last_guess = 50;
+
+                var tries = 0;
+
+                page = webClient.getPage("http://localhost:8181/numberguess");
+
+                do {
+                    form = page.getFormByName("perform_guess");
+                    assertNotNull(form);
+                    form.getInputsByName("guess").get(0).setValueAttribute(String.valueOf(last_guess));
+                    page = form.getInputsByName("submit").get(0).click();
+                    tries++;
+
+                    var text = page.getWebResponse().getContentAsString();
+                    if (text.contains("lower")) {
+                        high_bound = last_guess;
+                        last_guess = low_bound + (last_guess - low_bound) / 2;
+                    } else if (text.contains("higher")) {
+                        if (last_guess == low_bound &&
+                            low_bound == high_bound - 1) {
+                            last_guess = high_bound;
+                        } else {
+                            low_bound = last_guess;
+                            last_guess = last_guess + (high_bound - last_guess) / 2;
+                        }
+                    }
+                }
+                while (page.getTitleText().equals("Perform a guess"));
+
+                var text = page.getWebResponse().getContentAsString();
+                assertTrue(text.contains("the answer was " + last_guess));
+                assertTrue(text.contains("guessed it in " + tries + " tries"));
+            }
+        }
+    }
 }

@@ -285,7 +285,8 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
                     labelIndex_++;
 
                     return;
-                } else if (config_.getStepBackMethodName().equals(name) && "()V".equals(desc)) {
+                } else if (config_.getStepBackMethodName() != null && !config_.getStepBackMethodName().isEmpty() &&
+                           config_.getStepBackMethodName().equals(name) && "()V".equals(desc)) {
                     debugMessage("CONT: stepBack : undoing method call");
 
                     // pop the ALOAD opcode off the stack
@@ -297,7 +298,7 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
                     saveOperandStack(stack);
 
                     // generate the stepBack exception
-                    debugMessage("CONT: stepBack : throwing pause exception");
+                    debugMessage("CONT: stepBack : throwing step-back exception");
                     methodVisitor_.visitTypeInsn(NEW, "rife/continuations/exceptions/StepBackException");
                     methodVisitor_.visitInsn(DUP);
                     methodVisitor_.visitVarInsn(ALOAD, contextIndex_);
@@ -319,7 +320,8 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
                     labelIndex_++;
 
                     return;
-                } else if (config_.getCallMethodName().equals(name) && config_.getCallMethodDescriptor().equals(desc)) {
+                } else if (config_.getCallMethodName() != null && !config_.getCallMethodName().isEmpty() &&
+                           config_.getCallMethodName().equals(name) && config_.getCallMethodDescriptor().equals(desc)) {
                     // store the call target
                     debugMessage("CONT: call : storing call target");
                     methodVisitor_.visitVarInsn(ASTORE, callTargetIndex_);
@@ -377,7 +379,8 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
                     labelIndex_++;
 
                     return;
-                } else if (config_.getAnswerMethodName().equals(name) && ("()V".equals(desc) || "(Ljava/lang/Object;)V".equals(desc))) {
+                } else if (config_.getAnswerMethodName() != null && !config_.getAnswerMethodName().isEmpty() &&
+                           config_.getAnswerMethodName().equals(name) && ("()V".equals(desc) || "(Ljava/lang/Object;)V".equals(desc))) {
                     if ("()V".equals(desc)) {
                         methodVisitor_.visitInsn(ACONST_NULL);
                     }

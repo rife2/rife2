@@ -123,8 +123,8 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
             if ((owner_classname.equals(config_.getContinuableSupportClassName()) || className_.equals(owner_classname)) &&
                 ((config_.getPauseMethodName().equals(name) && "()V".equals(desc)) ||
-                 (config_.getStepBackMethodName().equals(name) && "()V".equals(desc)) ||
-                 (config_.getCallMethodName().equals(name) && config_.getCallMethodDescriptor().equals(desc)))) {
+                 (config_.getStepBackMethodName() != null && !config_.getStepBackMethodName().isEmpty() && config_.getStepBackMethodName().equals(name) && "()V".equals(desc)) ||
+                 (config_.getCallMethodName() != null && !config_.getCallMethodName().isEmpty() && config_.getCallMethodName().equals(name) && config_.getCallMethodDescriptor().equals(desc)))) {
                 // pop the element instance reference from the stack
                 currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
 

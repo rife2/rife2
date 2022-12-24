@@ -8,8 +8,7 @@ import rife.engine.Context;
 import rife.engine.Element;
 
 public class TestSimplePause implements Element {
-    public void process(Context c)
-    throws Exception {
+    public void process(Context c) {
         var before = "before simple pause";
         var after = "after simple pause";
 

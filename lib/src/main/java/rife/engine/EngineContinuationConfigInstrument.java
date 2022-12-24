@@ -30,24 +30,4 @@ public class EngineContinuationConfigInstrument implements ContinuationConfigIns
     public String getPauseMethodName() {
         return "pause";
     }
-
-    public String getStepBackMethodName() {
-        return "stepBack";
-    }
-
-    public String getCallMethodName() {
-        return "call";
-    }
-
-    public Class getCallMethodReturnType() {
-        return Object.class;
-    }
-
-    public Class[] getCallMethodArgumentTypes() {
-        return new Class[]{String.class};
-    }
-
-    public String getAnswerMethodName() {
-        return "answer";
-    }
 }

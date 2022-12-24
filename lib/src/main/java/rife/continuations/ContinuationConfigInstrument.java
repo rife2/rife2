@@ -112,31 +112,40 @@ public interface ContinuationConfigInstrument {
      * <p>This method should have a {@code void} return type and take no
      * arguments.
      *
-     * @return the name of the step-back method
+     * @return the name of the step-back method; or
+     * {@code null} if you don't use step-back continuations
      * @since 1.0
      */
-    String getStepBackMethodName();
+    default String getStepBackMethodName() {
+        return null;
+    }
 
     /**
      * The name of the method that will trigger a call continuation, for
      * instance {@code "call"}.
      *
-     * @return the name of the call method
+     * @return the name of the call method; or
+     * {@code null} if you don't use call/answer continuations
      * @since 1.0
      */
-    String getCallMethodName();
+    default String getCallMethodName() {
+        return null;
+    }
 
     /**
      * The return type of the call method, for instance {@code Object.class}.
-     * <p>This needs to be an object, not a primitive and you have to be
+     * <p>This needs to be an object, not a primitive, and you have to be
      * certain that it's compatible with the values that are sent through the
      * answer to the call continuation. It's just recommended to keep this as
      * generic as possible (hence {@code Object.class}).
      *
-     * @return the type of the call method's return value
+     * @return the type of the call method's return value; or
+     * {@code null} if you don't use call/answer continuations
      * @since 1.0
      */
-    Class getCallMethodReturnType();
+    default Class getCallMethodReturnType() {
+        return null;
+    }
 
     /**
      * The array argument types that the call method takes, for instance
@@ -149,10 +158,13 @@ public interface ContinuationConfigInstrument {
      * be used to resolve the target of the call continuation by using the
      * what's provided as the argument of the method call.
      *
-     * @return the array of argument types of the call method
+     * @return the array of argument types of the call method; or
+     * {@code null} if you don't use call/answer continuations
      * @since 1.0
      */
-    Class[] getCallMethodArgumentTypes();
+    default Class[] getCallMethodArgumentTypes() {
+        return null;
+    }
 
     default String getCallMethodDescriptor() {
         return getMethodDescriptor(getCallMethodReturnType(), getCallMethodArgumentTypes());
@@ -164,9 +176,11 @@ public interface ContinuationConfigInstrument {
      * <p>This method should have a {@code void} return type and take one
      * argument with the type {@code java.lang.Object}.
      *
-     * @return the name of the answer method
+     * @return the name of the answer method; or
+     * {@code null} if you don't use call/answer continuations
      * @since 1.0
      */
-    String getAnswerMethodName();
+    default String getAnswerMethodName() {
+        return null;
+    }
 }
-

@@ -7,8 +7,7 @@ package rife.engine;
 import rife.config.RifeConfig;
 import rife.continuations.ContinuationConfigRuntime;
 import rife.continuations.ContinuationContext;
-import rife.continuations.exceptions.ContinuationsNotActiveException;
-import rife.continuations.exceptions.PauseException;
+import rife.continuations.exceptions.*;
 import rife.engine.exceptions.*;
 import rife.template.Template;
 import rife.template.TemplateFactory;
@@ -89,12 +88,19 @@ public class Context {
             handlePause(e);
         } catch (Exception e) {
             throw new EngineException(e);
+        } finally {
+            ContinuationContext.clearActiveContext();
         }
     }
 
     void processElement(Route route)
     throws Exception {
-        var element = setupContinuationContext(route);
+        String resume_id = null;
+        if (hasParameterValue(SpecialParameters.CONT_ID)) {
+            resume_id = parameter(SpecialParameters.CONT_ID);
+        }
+
+        Element element = setupContinuationContext(route, resume_id);
         if (element == null) {
             element = route.obtainElementInstance(this);
         }
@@ -115,7 +121,7 @@ public class Context {
         }
     }
 
-    private Element setupContinuationContext(Route route)
+    private Element setupContinuationContext(Route route, String resumeId)
     throws CloneNotSupportedException {
         // continuations are only supported on element class routes, not element instance routes
         if (route instanceof RouteInstance) {
@@ -126,9 +132,7 @@ public class Context {
         ContinuationContext continuation_context = null;
 
         // resume a continuation context if it can be found
-        if (hasParameterValue(SpecialParameters.CONT_ID)) {
-            continuation_context = site_.continuationManager_.resumeContext(parameter(SpecialParameters.CONT_ID));
-        }
+        continuation_context = site_.continuationManager_.resumeContext(resumeId);
 
         // if a continuation context can be resumed, activate it
         // when its continuable is the same type as the element that should be processed,
@@ -201,98 +205,6 @@ public class Context {
     public final void pause() {
         // this is deliberately empty since the continuation support
         // rewrites method calls to pause
-        throw new ContinuationsNotActiveException();
-    }
-
-    /**
-     * Steps back to the start of the previous continuation.
-     * <p>If there is no previous continuation, the element will be executed
-     * from the beginning again.
-     *
-     * @see #duringStepBack
-     * @since 1.0
-     */
-    public final void stepBack() {
-        // this is deliberately empty since the continuation support
-        // rewrites method calls to pause
-        throw new ContinuationsNotActiveException();
-    }
-
-    /**
-     * Indicates whether the current element execution is a step back.
-     *
-     * @return {@code true} if a step back occurred in this request; or
-     * <p>{@code false} otherwise
-     * @see #stepBack
-     * @since 1.0
-     */
-    public boolean duringStepBack() {
-        return false;
-        // TODO
-//        return mElementContext.duringStepBack();
-    }
-
-    /**
-     * Pauses the execution of the element and creates a new continuation. The
-     * execution will immediately continue in the element that is the target
-     * of the called exit.
-     * <p>As soon as the called element returns or executes {@link #answer()},
-     * the execution will resume in the calling element with a completely
-     * restored call stack and variable stack.
-     *
-     * @param exit the name of the exit whose target element will be called
-     * @return the object that was provided through the {@link #answer(Object)}
-     * method in the called element; or
-     * <p>{@code null} if no answer was provided
-     * @see #answer()
-     * @see #answer(Object)
-     * @since 1.0
-     */
-    public final Object call(String exit) {
-        // this is deliberately empty since the continuation support
-        // rewrites method calls to call
-        throw new ContinuationsNotActiveException();
-    }
-
-    /**
-     * Resumes the execution in the calling element by providing no answer
-     * object.
-     * <p>The execution in the active element will be interrupted immediately
-     * and the call continuation will be resumed exactly where it was paused
-     * before.
-     *
-     * @throws rife.engine.exceptions.EngineException a runtime
-     *                                                exception that is used to immediately interrupt the execution, don't
-     *                                                catch this exception
-     * @see #call(String)
-     * @see #answer(Object)
-     * @since 1.0
-     */
-    public final void answer()
-    throws EngineException {
-        // this is deliberately empty since the continuation support
-        // rewrites method calls to answer
-        throw new ContinuationsNotActiveException();
-    }
-
-    /**
-     * Resumes the execution in the calling element by providing an answer.
-     * <p>The execution in the active element will be interrupted immediately
-     * and the call continuation will be resumed exactly where it was paused
-     * before.
-     *
-     * @param answer the object that will be answered to the calling element
-     * @throws rife.engine.exceptions.EngineException a runtime
-     *                                                exception that is used to immediately interrupt the execution, don't
-     *                                                catch this exception
-     * @see #call(String)
-     * @see #answer()
-     * @since 1.0
-     */
-    public final void answer(Object answer)
-    throws EngineException {
-        // this is deliberately empty since the continuation support
-        // rewrites method calls to answer
         throw new ContinuationsNotActiveException();
     }
 
