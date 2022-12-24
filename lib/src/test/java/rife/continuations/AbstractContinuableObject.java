@@ -4,7 +4,7 @@
  */
 package rife.continuations;
 
-public abstract class AbstractContinuableObject extends ContinuableSupport implements ContinuableObject {
+public abstract class AbstractContinuableObject extends ContinuableSupport implements CloneableContinuable {
     public Object clone()
     throws CloneNotSupportedException {
         return super.clone();

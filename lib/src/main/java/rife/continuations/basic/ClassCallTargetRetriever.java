@@ -5,7 +5,6 @@
 package rife.continuations.basic;
 
 import rife.continuations.CallState;
-import rife.continuations.ContinuableObject;
 import rife.continuations.exceptions.CallTargetNotFoundException;
 
 /**
@@ -27,11 +26,11 @@ public class ClassCallTargetRetriever implements CallTargetRetriever {
      * response to this call
      * @since 1.0
      */
-    public ContinuableObject getCallTarget(Object target, CallState state) {
+    public Object getCallTarget(Object target, CallState state) {
         try {
             var target_class = (Class) target;
             var target_instance = target_class.getDeclaredConstructor().newInstance();
-            return (ContinuableObject) target_instance;
+            return target_instance;
         } catch (Throwable e) {
             throw new CallTargetNotFoundException(target, e);
         }

@@ -311,7 +311,7 @@ public class ContinuationStack {
         return result.toString();
     }
 
-    public synchronized ContinuationStack clone(Object elementInstance)
+    public synchronized ContinuationStack clone(Object continuableInstance)
     throws CloneNotSupportedException {
         var new_stack = new ContinuationStack();
 
@@ -326,8 +326,8 @@ public class ContinuationStack {
         new_stack.referenceStack_ = new Object[referenceStack_.length];
         for (var i = 0; i < referenceStack_.length; i++) {
             if (referenceStack_[i] != null &&
-                referenceStack_[i].getClass() == elementInstance.getClass()) {
-                new_stack.referenceStack_[i] = elementInstance;
+                referenceStack_[i].getClass() == continuableInstance.getClass()) {
+                new_stack.referenceStack_[i] = continuableInstance;
             } else {
                 new_stack.referenceStack_[i] = ObjectUtils.deepClone(referenceStack_[i]);
             }

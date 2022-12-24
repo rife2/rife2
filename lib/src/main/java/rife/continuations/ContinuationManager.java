@@ -33,8 +33,7 @@ public class ContinuationManager {
      */
     public ContinuationManager(ContinuationConfigRuntime config) {
         config_ = config;
-
-        contexts_ = new WeakHashMap<String, ContinuationContext>();
+        contexts_ = new WeakHashMap<>();
     }
 
     /**
@@ -121,7 +120,9 @@ public class ContinuationManager {
             var context = getContext(id);
             if (context != null &&
                 context.isPaused()) {
-                if (config_.cloneContinuations(context.getContinuable())) {
+                Object continuable = context.getContinuable();
+                if (continuable instanceof CloneableContinuable &&
+                    config_.cloneContinuations(continuable)) {
                     result = cloneContext(context);
                 } else {
                     result = reuseContext(context);

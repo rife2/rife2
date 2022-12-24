@@ -5,7 +5,6 @@
 package rife.continuations;
 
 import org.junit.jupiter.api.Test;
-import rife.continuations.instrument.ContinuationDebug;
 import rife.tools.ExceptionUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,7 +32,7 @@ public class TestCall {
         final var test_classes = new String[]{"TestCallAnswerInOtherThreadCallSource", "TestCallAnswerInOtherThreadCallInterfaceSource"};
         for (final var test_class : test_classes) {
             final var runner = new ContinuableRunnerTest();
-            final var continuables = new ContinuableObject[2];
+            final var continuables = new Object[2];
             final var ids = new String[2];
 
             var thread1 = new Thread() {

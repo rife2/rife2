@@ -26,6 +26,7 @@ public class RifeAgent {
         System.getProperties().setProperty(AGENT_ACTIVE_PROPERTY, String.valueOf(true));
 
         instrumentation.addTransformer(new InitialTransformer());
+        instrumentation.addTransformer(new EngineContinuationsTransformer());
         instrumentation.addTransformer(new MetaDataTransformer());
         instrumentation.addTransformer(new LazyLoadTransformer());
         instrumentation.addTransformer(new FinalTransformer());

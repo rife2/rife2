@@ -4,7 +4,7 @@
  */
 package rife.continuations;
 
-public class TestCallSimpleCallInterfaceTarget1 implements ContinuableObject, ContinuableSupportAware {
+public class TestCallSimpleCallInterfaceTarget1 implements CloneableContinuable, ContinuableSupportAware {
     private ContinuableSupport support_;
 
     public void setContinuableSupport(ContinuableSupport support) {

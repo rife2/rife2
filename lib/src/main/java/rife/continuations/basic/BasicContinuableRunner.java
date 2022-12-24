@@ -5,7 +5,6 @@
 package rife.continuations.basic;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import rife.continuations.*;
 import rife.continuations.exceptions.AnswerException;
@@ -28,7 +27,7 @@ public class BasicContinuableRunner {
     private final ClassLoader classLoader_;
     private final ContinuationConfigInstrument configInstrument_;
     private final ContinuationManager manager_;
-    private final ThreadLocal<ContinuableObject> currentContinuable_ = new ThreadLocal<>();
+    private final ThreadLocal<Object> currentContinuable_ = new ThreadLocal<>();
 
     private volatile CallTargetRetriever callTargetRetriever_ = new ClassCallTargetRetriever();
     private volatile boolean cloneContinuations_ = true;
@@ -135,7 +134,7 @@ public class BasicContinuableRunner {
             // set the continuations classloader as the context classloader
             Thread.currentThread().setContextClassLoader(classLoader_);
 
-            ContinuableObject object = null;
+            Object object = null;
             var step_back = false;
             var call = false;
             var answer = false;
@@ -150,7 +149,7 @@ public class BasicContinuableRunner {
                                     null == runId) {
                                     // load the continuable class through the provided classloader
                                     var continuableClass = classLoader_.loadClass(className);
-                                    object = (ContinuableObject) continuableClass.getDeclaredConstructor().newInstance();
+                                    object = continuableClass.getDeclaredConstructor().newInstance();
                                     ContinuationContext.clearActiveContext();
                                 } else {
                                     ContinuationContext context = null;
@@ -263,13 +262,13 @@ public class BasicContinuableRunner {
      * Executes the continuable object by looking up the entrance method and
      * invoking it.
      * <p>This method can be overridden in case the default behavior isn't
-     * approrpiate.
+     * appropriate.
      *
      * @param object the continuable that will be executed
      * @throws Throwable when an unexpected error occurs
      * @since 1.0
      */
-    public void executeContinuable(ContinuableObject object)
+    public void executeContinuable(Object object)
     throws Throwable {
         // lookup the method that will be used to execute the entrance of the continuable object
         beforeExecuteEntryMethodHook(object);
@@ -289,7 +288,7 @@ public class BasicContinuableRunner {
      * @see #executeContinuable
      * @since 1.0
      */
-    public void beforeExecuteEntryMethodHook(ContinuableObject object) {
+    public void beforeExecuteEntryMethodHook(Object object) {
     }
 
     /**
@@ -404,7 +403,7 @@ public class BasicContinuableRunner {
      * <p>{@code null} if there's no current continuable
      * @since 1.0
      */
-    public ContinuableObject getCurrentContinuable() {
+    public Object getCurrentContinuable() {
         return currentContinuable_.get();
     }
 
@@ -419,15 +418,11 @@ public class BasicContinuableRunner {
     }
 
     private class BasicConfigRuntime extends ContinuationConfigRuntime {
-        public ContinuableObject getAssociatedContinuableObject(Object executingInstance) {
-            return currentContinuable_.get();
-        }
-
-        public ContinuationManager getContinuationManager(ContinuableObject executingContinuable) {
+        public ContinuationManager getContinuationManager(Object executingInstance) {
             return manager_;
         }
 
-        public boolean cloneContinuations(ContinuableObject executingContinuable) {
+        public boolean cloneContinuations(Object executingContinuable) {
             return cloneContinuations_;
         }
     }

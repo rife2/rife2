@@ -30,7 +30,7 @@ public class ContinuationContext implements Cloneable {
 
     private final transient ContinuationManager manager_;
 
-    private ContinuableObject continuable_ = null;
+    private Object continuable_ = null;
     private CallState createdCallState_ = null;
     private CallState activeCallState_ = null;
     private Object callAnswer_ = null;
@@ -59,8 +59,7 @@ public class ContinuationContext implements Cloneable {
         var context = getActiveContext();
         if (null == context) {
             var config = ContinuationConfigRuntime.getActiveConfigRuntime();
-            var continuable = config.getAssociatedContinuableObject(executingInstance);
-            context = new ContinuationContext(config.getContinuationManager(continuable), continuable);
+            context = new ContinuationContext(config.getContinuationManager(executingInstance), executingInstance);
 
             // check if the last continuation created a call continuation, in that case
             // pass the call state on to this new continuation
@@ -85,7 +84,7 @@ public class ContinuationContext implements Cloneable {
 
         // preserve a reference to the last executed continuation, so that it's
         // possible to detect call continuations
-        LAST_CONTEXT.set(new WeakReference<ContinuationContext>(context));
+        LAST_CONTEXT.set(new WeakReference<>(context));
 
         return context;
     }
@@ -156,7 +155,7 @@ public class ContinuationContext implements Cloneable {
         return null;
     }
 
-    private ContinuationContext(ContinuationManager manager, ContinuableObject continuable) {
+    private ContinuationContext(ContinuationManager manager, Object continuable) {
         manager_ = manager;
         continuable_ = continuable;
 
@@ -442,7 +441,7 @@ public class ContinuationContext implements Cloneable {
      * @return this continuation's active object
      * @since 1.0
      */
-    public ContinuableObject getContinuable() {
+    public Object getContinuable() {
         return continuable_;
     }
 
@@ -505,7 +504,7 @@ public class ContinuationContext implements Cloneable {
      * Set the answer to a call continuation.
      *
      * @param answer the object that will be the call continuation's answer; or
-     *               {@code null} if there was no answer
+     *               {@code null} if there was no answer
      * @since 1.0
      */
     public synchronized void setCallAnswer(Object answer) {
@@ -515,7 +514,7 @@ public class ContinuationContext implements Cloneable {
     /**
      * [PRIVATE AND UNSUPPORTED] Creates a cloned instance of this
      * continuation context, this clone is not a perfect copy but is intended
-     * to be a child continuation and all context data is setup for that.
+     * to be a child continuation and all context data is set up for that.
      * <p>This method is used by the instrumented bytecode that provides
      * continuations support, it's not intended for general use.
      *
@@ -527,13 +526,16 @@ public class ContinuationContext implements Cloneable {
         ContinuationContext new_continuationcontext = null;
         try {
             new_continuationcontext = (ContinuationContext) super.clone();
-        }
-        catch (CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException e) {
             // this should never happen
             Logger.getLogger("rife.continuations").severe(ExceptionUtils.getExceptionStackTrace(e));
         }
 
-        new_continuationcontext.continuable_ = (ContinuableObject) continuable_.clone();
+        if (continuable_ instanceof CloneableContinuable continuable) {
+            new_continuationcontext.continuable_ = continuable.clone();
+        } else {
+            throw new CloneNotSupportedException(continuable_.getClass().getName() + " can't be cloned.");
+        }
         new_continuationcontext.callAnswer_ = null;
 
         new_continuationcontext.id_ = UniqueIDGenerator.generate().toString();

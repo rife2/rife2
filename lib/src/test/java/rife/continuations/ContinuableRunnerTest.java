@@ -17,7 +17,7 @@ public class ContinuableRunnerTest extends BasicContinuableRunner {
         Class.forName(ContinuableSupport.class.getName());
     }
 
-    public void beforeExecuteEntryMethodHook(ContinuableObject object) {
+    public void beforeExecuteEntryMethodHook(Object object) {
         if (object instanceof ContinuableSupportAware) {
             ((ContinuableSupportAware) object).setContinuableSupport(CONTINUABLE_SUPPORT_DUMMY);
         }

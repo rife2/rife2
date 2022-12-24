@@ -5,6 +5,8 @@
 package rife.engine;
 
 import rife.config.RifeConfig;
+import rife.continuations.ContinuationContext;
+import rife.continuations.exceptions.ContinuationsNotActiveException;
 import rife.engine.exceptions.*;
 import rife.template.Template;
 import rife.template.TemplateFactory;
@@ -141,6 +143,122 @@ public class Context {
             return null;
         }
         return routeMatch_.route();
+    }
+
+    /**
+     * Pauses the execution of the element and creates a new continuation.
+     * <p>The next request will resume exactly at the same location with a
+     * completely restored call stack and variable stack.
+     *
+     * @since 1.0
+     */
+    public final void pause() {
+        // this is deliberately empty since the continuation support
+        // rewrites method calls to pause
+        throw new ContinuationsNotActiveException();
+    }
+
+    /**
+     * Steps back to the start of the previous continuation.
+     * <p>If there is no previous continuation, the element will be executed
+     * from the beginning again.
+     *
+     * @see #duringStepBack
+     * @since 1.0
+     */
+    public final void stepBack() {
+        // this is deliberately empty since the continuation support
+        // rewrites method calls to pause
+        throw new ContinuationsNotActiveException();
+    }
+
+    /**
+     * Indicates whether the current element execution is a step back.
+     *
+     * @return {@code true} if a step back occurred in this request; or
+     * <p>{@code false} otherwise
+     * @see #stepBack
+     * @since 1.0
+     */
+    public boolean duringStepBack() {
+        return false;
+        // TODO
+//        return mElementContext.duringStepBack();
+    }
+
+    /**
+     * Pauses the execution of the element and creates a new continuation. The
+     * execution will immediately continue in the element that is the target
+     * of the called exit.
+     * <p>As soon as the called element returns or executes {@link #answer()},
+     * the execution will resume in the calling element with a completely
+     * restored call stack and variable stack.
+     *
+     * @param exit the name of the exit whose target element will be called
+     * @return the object that was provided through the {@link #answer(Object)}
+     * method in the called element; or
+     * <p>{@code null} if no answer was provided
+     * @see #answer()
+     * @see #answer(Object)
+     * @since 1.0
+     */
+    public final Object call(String exit) {
+        // this is deliberately empty since the continuation support
+        // rewrites method calls to call
+        throw new ContinuationsNotActiveException();
+    }
+
+    /**
+     * Resumes the execution in the calling element by providing no answer
+     * object.
+     * <p>The execution in the active element will be interrupted immediately
+     * and the call continuation will be resumed exactly where it was paused
+     * before.
+     *
+     * @throws rife.engine.exceptions.EngineException a runtime
+     *                                                exception that is used to immediately interrupt the execution, don't
+     *                                                catch this exception
+     * @see #call(String)
+     * @see #answer(Object)
+     * @since 1.0
+     */
+    public final void answer()
+    throws EngineException {
+        // this is deliberately empty since the continuation support
+        // rewrites method calls to answer
+        throw new ContinuationsNotActiveException();
+    }
+
+    /**
+     * Resumes the execution in the calling element by providing an answer.
+     * <p>The execution in the active element will be interrupted immediately
+     * and the call continuation will be resumed exactly where it was paused
+     * before.
+     *
+     * @param answer the object that will be answered to the calling element
+     * @throws rife.engine.exceptions.EngineException a runtime
+     *                                                exception that is used to immediately interrupt the execution, don't
+     *                                                catch this exception
+     * @see #call(String)
+     * @see #answer()
+     * @since 1.0
+     */
+    public final void answer(Object answer)
+    throws EngineException {
+        // this is deliberately empty since the continuation support
+        // rewrites method calls to answer
+        throw new ContinuationsNotActiveException();
+    }
+
+    /**
+     * Returns the unique identifier of the current continuation.
+     *
+     * @return the unique identifier of the current continuation; or
+     * <p>{@code null} if no continuation is active
+     * @since 1.0
+     */
+    public String continuationId() {
+        return ContinuationContext.getActiveContextId();
     }
 
     public void print(Object o) {
@@ -1271,7 +1389,7 @@ public class Context {
      * @see #cookieValues()
      * @since 1.0
      */
-    public List <String> cookieNames() {
+    public List<String> cookieNames() {
         var names = new ArrayList<String>();
         for (var cookie : request_.getCookies()) {
             names.add(cookie.getName());
@@ -1735,7 +1853,6 @@ public class Context {
      * Returns the current session associated with this request, or if the request does not have a session, creates one.
      *
      * @return the <code>Session</code> associated with this request
-     *
      * @see #session(boolean)
      * @since 1.0
      */
@@ -1752,11 +1869,9 @@ public class Context {
      * returns <code>null</code>.
      *
      * @param create <code>true</code> to create a new session for this request if necessary; <code>false</code> to return
-     * <code>null</code> if there's no current session
-     *
+     *               <code>null</code> if there's no current session
      * @return the <code>Session</code> associated with this request or <code>null</code> if <code>create</code> is
      * <code>false</code> and the request has no valid session
-     *
      * @since 1.0
      */
     public Session session(boolean create) {

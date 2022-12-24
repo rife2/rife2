@@ -4,7 +4,7 @@
  */
 package rife.continuations;
 
-public class TestStepBackCounterInterface implements ContinuableObject, ContinuableSupportAware {
+public class TestStepBackCounterInterface implements CloneableContinuable, ContinuableSupportAware {
     private ContinuableSupport support_;
 
     public void setContinuableSupport(ContinuableSupport support) {

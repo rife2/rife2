@@ -6,6 +6,8 @@ package rife.engine;
 
 import rife.Version;
 import rife.config.RifeConfig;
+import rife.continuations.*;
+import rife.continuations.exceptions.PauseException;
 import rife.engine.exceptions.DeferException;
 import rife.engine.exceptions.RedirectException;
 import rife.template.TemplateFactory;
@@ -23,8 +25,13 @@ import java.util.logging.Logger;
  * @since 1.0
  */
 public class Gate {
+    final String CONTINUATION_COOKIE_ID = "continuationId";
+
+
     private Site site_ = null;
     private Throwable initException_ = null;
+
+    final ContinuationManager continuationManager_ = new ContinuationManager(new EngineContinuationConfigRuntime(this));
 
     /**
      * Set up the gate with the provided <code>Site</code>.
@@ -46,10 +53,10 @@ public class Gate {
     /**
      * Handle the web request with the provided arguments.
      *
-     * @param gateUrl the part of the URL that corresponds to the root of the gate, typically the webapp context URL
+     * @param gateUrl    the part of the URL that corresponds to the root of the gate, typically the webapp context URL
      * @param elementUrl the part of the URL after the gateUrl that will be resolved to find the execution element
-     * @param request the request instance of this web request
-     * @param response the response instance of this web request
+     * @param request    the request instance of this web request
+     * @param response   the response instance of this web request
      * @return <code>true</code> if the request was successfully handled; or
      * <code>false</code> otherwise
      * @since 1.0
@@ -90,7 +97,12 @@ public class Gate {
 
         var context = new Context(gateUrl, site_, request, response, match);
         try {
+            setupContinuationContext(context);
+
             context.process();
+            response.close();
+        } catch (PauseException e) {
+            handlePause(e, context);
             response.close();
         } catch (RedirectException e) {
             response.sendRedirect(e.getUrl());
@@ -102,6 +114,30 @@ public class Gate {
         }
 
         return true;
+    }
+
+    private void setupContinuationContext(Context context)
+    throws CloneNotSupportedException {
+        ContinuationContext continuation_context = null;
+        if (context.hasCookie(CONTINUATION_COOKIE_ID)) {
+            continuation_context = continuationManager_.resumeContext(context.cookieValue(CONTINUATION_COOKIE_ID));
+        }
+        if (continuation_context != null) {
+            ContinuationContext.setActiveContext(continuation_context);
+        }
+        ContinuationConfigRuntime.setActiveConfigRuntime(continuationManager_.getConfigRuntime());
+    }
+
+    private void handlePause(PauseException e, Context context) {
+        // register context
+        var continuation_context = e.getContext();
+        continuationManager_.addContext(continuation_context);
+
+        // obtain continuation ID
+        var continuation_id = continuation_context.getId();
+        context.addCookie(new CookieBuilder(CONTINUATION_COOKIE_ID, continuation_id)
+            .path("/")
+            .maxAge((int) continuationManager_.getConfigRuntime().getContinuationDuration() / 1000));
     }
 
     private void handleSiteInitException(Throwable exception) {

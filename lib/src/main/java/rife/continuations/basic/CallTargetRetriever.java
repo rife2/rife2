@@ -5,7 +5,7 @@
 package rife.continuations.basic;
 
 import rife.continuations.CallState;
-import rife.continuations.ContinuableObject;
+import rife.continuations.CloneableContinuable;
 
 /**
  * Retrieves the target continuable for a call continuation.
@@ -29,5 +29,5 @@ public interface CallTargetRetriever {
      * and state
      * @since 1.0
      */
-    ContinuableObject getCallTarget(Object target, CallState state);
+    Object getCallTarget(Object target, CallState state);
 }

@@ -9,13 +9,13 @@ import rife.continuations.exceptions.MissingActiveContinuationConfigRuntimeExcep
 /**
  * Configures the runtime behavior of the continuations engine.
  * <p>The active runtime configuration always has to be available through
- * {@link #getActiveConfigRuntime()} when a {@link ContinuableObject} is
+ * {@link #getActiveConfigRuntime()} when a continuable object is
  * executed. Therefore, it's best to always call
- * {@link #setActiveConfigRuntime} before the executing. The
+ * {@link #setActiveConfigRuntime} before the execution. The
  * {@link rife.continuations.basic.BasicContinuableRunner} does
  * this by default. If you create your own runner, you have to ensure that
  * this is respected.
- * <p>By default the lifetime duration and purging of {@link ContinuableObject}
+ * <p>By default the lifetime duration and purging of continuable object
  * instances is set to a sensible default, so this only needs tuning in
  * specific case.
  * <p>This class has to be extended though to provide information that suits
@@ -58,7 +58,7 @@ public abstract class ContinuationConfigRuntime implements ContinuationConfigRun
     /**
      * The duration, in milliseconds, by which a continuation stays valid.
      * <p>When this period is exceeded, a continuation can not be retrieved
-     * anymore and it will be removed from the manager during the next purge.
+     * anymore, and it will be removed from the manager during the next purge.
      *
      * @return the validity duration of a continuation in milliseconds
      * @since 1.0
@@ -86,7 +86,7 @@ public abstract class ContinuationConfigRuntime implements ContinuationConfigRun
     /**
      * The scale that will be used to determine how often continuations purging
      * will run in the {@link ContinuationManager}.
-     * <p>See {@link #getContinuationPurgeScale} for more info.
+     * <p>See {@link #getContinuationPurgeFrequency} for more info.
      *
      * @return the continuation purge scale
      * @see #getContinuationPurgeFrequency
@@ -97,32 +97,14 @@ public abstract class ContinuationConfigRuntime implements ContinuationConfigRun
     }
 
     /**
-     * Retrieves the {@code ContinuableObject} that corresponds to the currently
-     * executing object instance.
-     * <p> If you don't work with a seperate continuable support class
-     * ({@link ContinuationConfigInstrument#getContinuableSupportClassName see here})
-     * and don't allow people to just implement a marker interface without having
-     * to extend a base class, the associated continuable object is the same as
-     * the executing instance.
-     * <p>However, if there is a separate continuable support class, you'll need
-     * to return the appropriate continuable object here.
+     * Retrieves the manager that is responsible for the
+     * continuable object that is currently executing.
      *
      * @param executingInstance the currently executing object instance
-     * @return the executing {@code ContinuableObject}
-     * @see ContinuationConfigInstrument#getContinuableSupportClassName
-     * @since 1.0
-     */
-    public abstract ContinuableObject getAssociatedContinuableObject(Object executingInstance);
-
-    /**
-     * Retrieves the manager that is responsible for the
-     * {@code ContinuableObject} that is currently executing.
-     *
-     * @param executingContinuable the currently executing continuable
      * @return the corresponding manager
      * @since 1.0
      */
-    public abstract ContinuationManager getContinuationManager(ContinuableObject executingContinuable);
+    public abstract ContinuationManager getContinuationManager(Object executingInstance);
 
     /**
      * Indicates whether a continuable should be cloned before resuming the
@@ -133,6 +115,6 @@ public abstract class ContinuationConfigRuntime implements ContinuationConfigRun
      * <p>{@code false} otherwise
      * @since 1.0
      */
-    public abstract boolean cloneContinuations(ContinuableObject executingContinuable);
+    public abstract boolean cloneContinuations(Object executingContinuable);
 }
 

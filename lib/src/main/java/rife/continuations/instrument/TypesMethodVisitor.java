@@ -135,36 +135,59 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
             }
             // not the pause invocation
             else {
-                // pop off the argument types of the method
-                var arguments = Type.getArgumentTypes(desc);
-                for (var i = 0; i < arguments.length; i++) {
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                }
-
-                // pop the object reference from the stack if it'd not a static
-                // method invocation
-                if (INVOKESTATIC != opcode) {
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                }
-
-                // store the return type of the method
-                if (!("<init>".equals(name) && INVOKESPECIAL == opcode)) {
-                    var type = Type.getReturnType(desc);
-                    switch (type.getSort()) {
-                        case Type.OBJECT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, type.getInternalName()));
-                        case Type.ARRAY -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, type.getDescriptor()));
-                        case Type.BOOLEAN -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BOOLEAN));
-                        case Type.BYTE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BYTE));
-                        case Type.CHAR -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_CHAR));
-                        case Type.FLOAT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_FLOAT));
-                        case Type.INT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
-                        case Type.SHORT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_SHORT));
-                        case Type.DOUBLE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_DOUBLE));
-                        case Type.LONG -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_LONG));
-                    }
-                }
+                handleMethodTypes(opcode, name, desc);
             }
         }
+    }
+
+    private void handleMethodTypes(int opcode, String name, String desc) {
+        // pop off the argument types of the method
+        var arguments = Type.getArgumentTypes(desc);
+        for (var i = 0; i < arguments.length; i++) {
+            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
+        }
+
+        // pop the object reference from the stack if it'd not a static
+        // method invocation
+        if (INVOKESTATIC != opcode &&
+            INVOKEDYNAMIC != opcode) {
+            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
+        }
+
+        // store the return type of the method
+        if (!("<init>".equals(name) && INVOKESPECIAL == opcode)) {
+            var type = Type.getReturnType(desc);
+            switch (type.getSort()) {
+                case Type.OBJECT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, type.getInternalName()));
+                case Type.ARRAY -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, type.getDescriptor()));
+                case Type.BOOLEAN -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BOOLEAN));
+                case Type.BYTE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BYTE));
+                case Type.CHAR -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_CHAR));
+                case Type.FLOAT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_FLOAT));
+                case Type.INT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
+                case Type.SHORT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_SHORT));
+                case Type.DOUBLE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_DOUBLE));
+                case Type.LONG -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_LONG));
+            }
+        }
+    }
+
+    /**
+     * Visits an invokedynamic instruction.
+     *
+     * @param name                     the method's name.
+     * @param descriptor               the method's descriptor (see {@link Type}).
+     * @param bootstrapMethodHandle    the bootstrap method.
+     * @param bootstrapMethodArguments the bootstrap method constant arguments. Each argument must be
+     *                                 an {@link Integer}, {@link Float}, {@link Long}, {@link Double}, {@link String}, {@link
+     *                                 Type}, {@link Handle} or {@link ConstantDynamic} value. This method is allowed to modify
+     *                                 the content of the array so a caller should expect that this array may change.
+     */
+    public void visitInvokeDynamicInsn(final String name, final String descriptor, final Handle bootstrapMethodHandle, final Object... bootstrapMethodArguments) {
+        if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
+            ContinuationDebug.LOGGER.finest(" Code:visitInvokeDynamicInsn  (\"" + name + "\", \"" + descriptor + "\", " + bootstrapMethodHandle + ", " + Arrays.toString(bootstrapMethodArguments) + ")");
+
+        handleMethodTypes(INVOKEDYNAMIC, name, descriptor);
     }
 
     /**

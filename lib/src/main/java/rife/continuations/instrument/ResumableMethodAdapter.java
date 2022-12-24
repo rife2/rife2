@@ -421,6 +421,8 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      *                                 the content of the array so a caller should expect that this array may change.
      */
     public void visitInvokeDynamicInsn(final String name, final String descriptor, final Handle bootstrapMethodHandle, final Object... bootstrapMethodArguments) {
+        if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
+            ContinuationDebug.LOGGER.finest(" Code:visitInvokeDynamicInsn  (\"" + name + "\", \"" + descriptor + "\", " + bootstrapMethodHandle + ", " + Arrays.toString(bootstrapMethodArguments) + ")");
 
         if (visit_) {
             methodVisitor_.visitInvokeDynamicInsn(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
@@ -501,15 +503,15 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      * Save the operand stack
      */
     private void saveOperandStack(Stack<String> stack) {
-        String tupe = null;
+        String type = null;
 
         // save all stack entries besides the last one pushed, it's the
         // element's object reference that is used for the stub continuation
         // methods
-        for (var i = stack.size() - 1; i >= 0; i--) {
-            tupe = stack.get(i);
+        for (int i = stack.size() - 1; i >= 0; i--) {
+            type = stack.get(i);
 
-            switch (tupe) {
+            switch (type) {
                 case TypesContext.CAT1_BOOLEAN, TypesContext.CAT1_CHAR, TypesContext.CAT1_BYTE, TypesContext.CAT1_SHORT, TypesContext.CAT1_INT -> {
                     methodVisitor_.visitVarInsn(ISTORE, tempIndex_);
                     methodVisitor_.visitVarInsn(ALOAD, contextIndex_);
