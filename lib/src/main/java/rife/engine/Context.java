@@ -28,11 +28,6 @@ public class Context {
     public static final double DEFAULT_DOUBLE = 0.0d;
     public static final float DEFAULT_FLOAT = 0.0f;
 
-    public static final String ID_WEBAPP_ROOT_URL = "webapp:rootUrl";
-    public static final String ID_SERVER_ROOT_URL = "server:rootUrl";
-    public static final String ID_CONTEXT_PATH_INFO = "context:pathInfo";
-    public static final String ID_CONTEXT_PARAM_RANDOM = "context:paramRandom";
-
     private final String gateUrl_;
     private final Site site_;
     private final Request request_;

@@ -16,6 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 class EngineTemplateProcessor {
+    public static final String ID_WEBAPP_ROOT_URL = "webapp:rootUrl";
+    public static final String ID_SERVER_ROOT_URL = "server:rootUrl";
+    public static final String ID_CONTEXT_PATH_INFO = "context:pathInfo";
+    public static final String ID_CONTEXT_PARAM_RANDOM = "context:paramRandom";
+    public static final String ID_CONTEXT_CONT_ID = "context:contId";
+
     private final Context context_;
     private final Template template_;
     private final TemplateEncoder encoder_;
@@ -40,32 +46,40 @@ class EngineTemplateProcessor {
     }
 
     private void processApplicationTags(final List<String> setValues) {
-        if (template_.hasValueId(Context.ID_WEBAPP_ROOT_URL) &&
-            !template_.isValueSet(Context.ID_WEBAPP_ROOT_URL)) {
-            template_.setValue(Context.ID_WEBAPP_ROOT_URL, context_.webappRootUrl(-1));
-            setValues.add(Context.ID_WEBAPP_ROOT_URL);
+        if (template_.hasValueId(ID_WEBAPP_ROOT_URL) &&
+            !template_.isValueSet(ID_WEBAPP_ROOT_URL)) {
+            template_.setValue(ID_WEBAPP_ROOT_URL, context_.webappRootUrl(-1));
+            setValues.add(ID_WEBAPP_ROOT_URL);
         }
 
-        if (template_.hasValueId(Context.ID_SERVER_ROOT_URL) &&
-            !template_.isValueSet(Context.ID_SERVER_ROOT_URL)) {
-            template_.setValue(Context.ID_SERVER_ROOT_URL, context_.serverRootUrl(-1));
-            setValues.add(Context.ID_SERVER_ROOT_URL);
+        if (template_.hasValueId(ID_SERVER_ROOT_URL) &&
+            !template_.isValueSet(ID_SERVER_ROOT_URL)) {
+            template_.setValue(ID_SERVER_ROOT_URL, context_.serverRootUrl(-1));
+            setValues.add(ID_SERVER_ROOT_URL);
         }
 
-        if (template_.hasValueId(Context.ID_CONTEXT_PATH_INFO) &&
-            !template_.isValueSet(Context.ID_CONTEXT_PATH_INFO)) {
+        if (template_.hasValueId(ID_CONTEXT_PATH_INFO) &&
+            !template_.isValueSet(ID_CONTEXT_PATH_INFO)) {
             var path_info = context_.pathInfo();
             if (!path_info.isEmpty()) {
                 path_info = "/" + path_info;
             }
-            template_.setValue(Context.ID_CONTEXT_PATH_INFO, path_info);
-            setValues.add(Context.ID_CONTEXT_PATH_INFO);
+            template_.setValue(ID_CONTEXT_PATH_INFO, path_info);
+            setValues.add(ID_CONTEXT_PATH_INFO);
         }
 
-        if (template_.hasValueId(Context.ID_CONTEXT_PARAM_RANDOM) &&
-            !template_.isValueSet(Context.ID_CONTEXT_PARAM_RANDOM)) {
-            template_.setValue(Context.ID_CONTEXT_PARAM_RANDOM, "rnd=" + context_.site().RND);
-            setValues.add(Context.ID_CONTEXT_PARAM_RANDOM);
+        if (template_.hasValueId(ID_CONTEXT_PARAM_RANDOM) &&
+            !template_.isValueSet(ID_CONTEXT_PARAM_RANDOM)) {
+            template_.setValue(ID_CONTEXT_PARAM_RANDOM, SpecialParameters.RND + "=" + context_.site().RND);
+            setValues.add(ID_CONTEXT_PARAM_RANDOM);
+        }
+
+        if (template_.hasValueId(ID_CONTEXT_CONT_ID) &&
+            !template_.isValueSet(ID_CONTEXT_CONT_ID)) {
+            if (context_.continuationId() != null) {
+                template_.setValue(ID_CONTEXT_CONT_ID, SpecialParameters.CONT_ID + "=" + context_.continuationId());
+            }
+            setValues.add(ID_CONTEXT_CONT_ID);
         }
     }
 

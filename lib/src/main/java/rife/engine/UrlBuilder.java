@@ -64,6 +64,8 @@ public class UrlBuilder {
         if (context_.route() instanceof RouteClass) {
             var out_params = RouteClass.getAnnotatedOutParameters(context_);
             Set<String> in_params = new HashSet<>();
+            in_params.add(SpecialParameters.CONT_ID);
+
             // input parameters
             if (route_ instanceof RouteClass route) {
                 in_params = route.getAnnotatedInParameters();

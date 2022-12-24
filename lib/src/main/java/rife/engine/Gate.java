@@ -25,9 +25,6 @@ import java.util.logging.Logger;
  * @since 1.0
  */
 public class Gate {
-    final String CONTINUATION_COOKIE_ID = "continuationId";
-
-
     private Site site_ = null;
     private Throwable initException_ = null;
 
@@ -119,8 +116,8 @@ public class Gate {
     private void setupContinuationContext(Context context)
     throws CloneNotSupportedException {
         ContinuationContext continuation_context = null;
-        if (context.hasCookie(CONTINUATION_COOKIE_ID)) {
-            continuation_context = continuationManager_.resumeContext(context.cookieValue(CONTINUATION_COOKIE_ID));
+        if (context.hasParameterValue(SpecialParameters.CONT_ID)) {
+            continuation_context = continuationManager_.resumeContext(context.parameter(SpecialParameters.CONT_ID));
         }
         if (continuation_context != null) {
             ContinuationContext.setActiveContext(continuation_context);
@@ -133,11 +130,8 @@ public class Gate {
         var continuation_context = e.getContext();
         continuationManager_.addContext(continuation_context);
 
-        // obtain continuation ID
-        var continuation_id = continuation_context.getId();
-        context.addCookie(new CookieBuilder(CONTINUATION_COOKIE_ID, continuation_id)
-            .path("/")
-            .maxAge((int) continuationManager_.getConfigRuntime().getContinuationDuration() / 1000));
+        // register continuation cookie
+        context.parameter(SpecialParameters.CONT_ID, continuation_context.getId());
     }
 
     private void handleSiteInitException(Throwable exception) {
