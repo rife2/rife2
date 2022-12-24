@@ -123,12 +123,18 @@ tasks.register<Jar>("agentJar") {
     include(
         "rife/asm/**",
         "rife/instrument/**",
+        "rife/continuations/ContinuationConfigInstrument**",
+        "rife/continuations/instrument/**",
         "rife/database/querymanagers/generic/instrument/**",
+        "rife/engine/EngineContinuationConfigInstrument**",
         "rife/tools/ClassBytesLoader*",
         "rife/tools/FileUtils*",
         "rife/tools/InstrumentationUtils*",
         "rife/tools/RawFormatter*",
-        "rife/tools/exceptions/FileUtils*"
+        "rife/tools/exceptions/FileUtils*",
+        "rife/validation/instrument/**",
+        "rife/validation/MetaDataMerged**",
+        "rife/validation/MetaDataBeanAware**"
     )
     manifest {
         attributes["Premain-Class"] = "rife.instrument.RifeAgent"
