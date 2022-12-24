@@ -246,6 +246,17 @@ public class Context {
     }
 
     /**
+     * Indicates whether a continuation identifier is available
+     *
+     * @return {@code true} when a continuation identifier is available; or
+     * <p>{@code false} otherwise
+     * @since 1.0
+     */
+    public boolean hasContinuationId() {
+        return ContinuationContext.getActiveContextId() != null;
+    }
+
+    /**
      * Returns the unique identifier of the current continuation.
      *
      * @return the unique identifier of the current continuation; or

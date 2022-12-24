@@ -7,13 +7,16 @@ package rife.engine.continuations;
 import rife.engine.Context;
 import rife.engine.Element;
 
-public class TestNoPause implements Element {
+public class TestPrivateMethod implements Element {
+    public int getInt() {
+        return 1234;
+    }
+
     public void process(Context c) {
-        var before = "before simple pause";
-        assert before != null;
-        var after = "after simple pause";
-        assert after != null;
+        int result = getInt();
 
         c.print(c.continuationId());
+        c.pause();
+        c.print(result);
     }
 }

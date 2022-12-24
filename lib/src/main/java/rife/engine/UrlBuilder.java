@@ -63,13 +63,18 @@ public class UrlBuilder {
         // detect which parameters are annotation for output and input and retrieve those that correspond
         if (context_.route() instanceof RouteClass) {
             var out_params = RouteClass.getAnnotatedOutParameters(context_);
+            if (context_.hasContinuationId()) {
+                out_params.put(SpecialParameters.CONT_ID, new String[]{context_.continuationId()});
+            }
+
             Set<String> in_params = new HashSet<>();
             in_params.add(SpecialParameters.CONT_ID);
 
             // input parameters
             if (route_ instanceof RouteClass route) {
-                in_params = route.getAnnotatedInParameters();
+                in_params.addAll(route.getAnnotatedInParameters());
             }
+
             // path info parameters
             if (route_.pathInfoHandling().type() == PathInfoType.MAP) {
                 for (var mapping : route_.pathInfoHandling().mappings()) {
