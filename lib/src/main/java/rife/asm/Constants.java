@@ -191,15 +191,15 @@ final class Constants {
   }
 
   static boolean isWhitelisted(final String internalName) {
-    if (!internalName.startsWith("org/objectweb/asm/")) {
+    if (!internalName.startsWith("rife/asm/")) {
       return false;
     }
     String member = "(Annotation|Class|Field|Method|Module|RecordComponent|Signature)";
     return internalName.contains("Test$")
         || Pattern.matches(
-            "org/objectweb/asm/util/Trace" + member + "Visitor(\\$.*)?", internalName)
+            "rife/asm/util/Trace" + member + "Visitor(\\$.*)?", internalName)
         || Pattern.matches(
-            "org/objectweb/asm/util/Check" + member + "Adapter(\\$.*)?", internalName);
+            "rife/asm/util/Check" + member + "Adapter(\\$.*)?", internalName);
   }
 
   static void checkIsPreview(final InputStream classInputStream) {

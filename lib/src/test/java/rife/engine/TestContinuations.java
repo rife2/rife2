@@ -219,4 +219,50 @@ public class TestContinuations {
 //            }
 //        }
 //    }
+
+    @Test
+    public void testThrow()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                route("/throw", TestThrow.class);
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page = webClient.getPage("http://localhost:8181/throw");
+
+                var form = page.getFormByName("action");
+                assertNotNull(form);
+                form.getInputsByName("throw").get(0).setValueAttribute("1");
+                page = form.getInputsByName("submit").get(0).click();
+
+                assertEquals("do throw = true : throw message : finally message", page.getTitleText());
+                form = page.getFormByName("action");
+                assertNotNull(form);
+                form.getInputsByName("throw").get(0).setValueAttribute("1"); // will not be checked
+                page = form.getInputsByName("submit").get(0).click();
+
+                assertEquals("do throw = true : throw message : finally message : all done", page.getTitleText());
+                form = page.getFormByName("action");
+                assertNotNull(form);
+
+                page = webClient.getPage("http://localhost:8181/throw");
+
+                form = page.getFormByName("action");
+                assertNotNull(form);
+                form.getInputsByName("throw").get(0).setValueAttribute("0");
+                page = form.getInputsByName("submit").get(0).click();
+
+                assertEquals("do throw = false : finally message", page.getTitleText());
+                form = page.getFormByName("action");
+                assertNotNull(form);
+                form.getInputsByName("throw").get(0).setValueAttribute("1"); // will not be checked
+                page = form.getInputsByName("submit").get(0).click();
+
+                assertEquals("do throw = false : finally message : all done", page.getTitleText());
+                form = page.getFormByName("action");
+                assertNotNull(form);
+            }
+        }
+    }
 }
