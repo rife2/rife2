@@ -238,7 +238,8 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
             var owner_classname = owner.replace('/', '.');
 
             if (owner_classname.equals(config_.getContinuableSupportClassName()) || className_.equals(owner_classname)) {
-                if (config_.getPauseMethodName().equals(name) && "()V".equals(desc)) {
+                if (config_.getPauseMethodName() != null && !config_.getPauseMethodName().isEmpty() &&
+                    config_.getPauseMethodName().equals(name) && "()V".equals(desc)) {
                     debugMessage("CONT: pause : undoing method call");
 
                     // pop the ALOAD opcode off the stack

@@ -37,6 +37,7 @@ public abstract class RifeTransformer implements ClassFileTransformer {
               className.startsWith("org/apache/") ||
               className.startsWith("org/apiguardian/") ||
               className.startsWith("org/eclipse/jetty/") ||
+              className.startsWith("org/hamcrest/") ||
               className.startsWith("org/h2/") ||
               className.startsWith("org/hsqldb/") ||
               className.startsWith("org/gradle/") ||

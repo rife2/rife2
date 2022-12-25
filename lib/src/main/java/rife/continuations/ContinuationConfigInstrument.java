@@ -42,7 +42,9 @@ public interface ContinuationConfigInstrument {
      * <p>{@code null} if such a support class isn't used
      * @since 1.0
      */
-    String getContinuableSupportClassName();
+    default String getContinuableSupportClassName() {
+        return null;
+    }
 
     default String getMethodDescriptor(Class returnType, Class[] argumentTypes) {
         var types_array = new Type[0];
@@ -101,11 +103,13 @@ public interface ContinuationConfigInstrument {
      * <p>This method should have a {@code void} return type and take no
      * arguments.
      *
-     * @return the name of the pause method
+     * @return the name of the pause method or
+     * {@code null} if you don't use pause continuations
      * @since 1.0
      */
-    String getPauseMethodName();
-
+    default String getPauseMethodName() {
+        return null;
+    }
     /**
      * The name of the method that will trigger a step-back continuation, for
      * instance {@code "stepBack"}.

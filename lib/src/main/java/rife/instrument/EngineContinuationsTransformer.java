@@ -17,11 +17,11 @@ import rife.engine.EngineContinuationConfigInstrument;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public class EngineContinuationsTransformer extends ContinuationsTransformer
-{
-    public EngineContinuationsTransformer()
-    {
-        super(new EngineContinuationConfigInstrument());
+public class EngineContinuationsTransformer extends ContinuationsTransformer {
+    public static final String AGENT_ACTIVE_PROPERTY = "rife.agent.engine.continuations";
+
+    public EngineContinuationsTransformer() {
+        super(new EngineContinuationConfigInstrument(), AGENT_ACTIVE_PROPERTY);
     }
 }
 

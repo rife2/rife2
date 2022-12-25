@@ -48,7 +48,7 @@ class MetricsMethodVisitor extends MethodVisitor implements Opcodes {
         var owner_classname = owner.replace('/', '.');
 
         if ((owner_classname.equals(config_.getContinuableSupportClassName()) || className_.equals(owner_classname)) &&
-            ((config_.getPauseMethodName().equals(methodName) && "()V".equals(desc)) ||
+            ((config_.getPauseMethodName() != null && !config_.getPauseMethodName().isEmpty() && config_.getPauseMethodName().equals(methodName) && "()V".equals(desc)) ||
              (config_.getStepBackMethodName() != null && !config_.getStepBackMethodName().isEmpty() && config_.getStepBackMethodName().equals(methodName) && "()V".equals(desc)) ||
              (config_.getCallMethodName() != null && !config_.getCallMethodName().isEmpty() && config_.getCallMethodName().equals(methodName) && config_.getCallMethodDescriptor().equals(desc)))) {
             pauseCount_++;
