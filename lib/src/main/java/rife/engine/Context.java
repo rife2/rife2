@@ -88,19 +88,17 @@ public class Context {
             handlePause(e);
         } catch (Exception e) {
             throw new EngineException(e);
-        } finally {
-            ContinuationContext.clearActiveContext();
         }
     }
 
     void processElement(Route route)
     throws Exception {
-        String resume_id = null;
-        if (hasParameterValue(SpecialParameters.CONT_ID)) {
-            resume_id = parameter(SpecialParameters.CONT_ID);
-        }
+        // try to set up a continuation context and try to
+        // retrieve the element instance that belongs to it
+        var element = setupContinuationContext(route);
 
-        Element element = setupContinuationContext(route, resume_id);
+        // if not element can be obtained from a continuation,
+        // get a new instance from the route
         if (element == null) {
             element = route.obtainElementInstance(this);
         }
@@ -109,8 +107,9 @@ public class Context {
 
         processedRoute_ = route;
         processedElement_ = element;
-
         response_.setLastElement(element);
+
+        // process the element with this context
         try {
             element.process(this);
         } catch (NextException ignored) {
@@ -118,10 +117,11 @@ public class Context {
             // move on to the next one
         } finally {
             route.finalizeElementInstance(element, this);
+            ContinuationContext.clearActiveContext();
         }
     }
 
-    private Element setupContinuationContext(Route route, String resumeId)
+    private Element setupContinuationContext(Route route)
     throws CloneNotSupportedException {
         // continuations are only supported on element class routes, not element instance routes
         if (route instanceof RouteInstance) {
@@ -132,7 +132,8 @@ public class Context {
         ContinuationContext continuation_context = null;
 
         // resume a continuation context if it can be found
-        continuation_context = site_.continuationManager_.resumeContext(resumeId);
+        var resume_id = parameter(SpecialParameters.CONT_ID);
+        continuation_context = site_.continuationManager_.resumeContext(resume_id);
 
         // if a continuation context can be resumed, activate it
         // when its continuable is the same type as the element that should be processed,
@@ -1220,7 +1221,7 @@ public class Context {
 
             Object empty_bean = null;
 
-            for (String parameter_name : parameterNames()) {
+            for (var parameter_name : parameterNames()) {
                 parameter_values = parameterValues(parameter_name);
                 if (null == empty_bean &&
                     (null == parameter_values ||
@@ -1231,8 +1232,8 @@ public class Context {
                 BeanUtils.setUppercasedBeanProperty(parameter_name, parameter_values, prefix, bean_properties, bean, empty_bean);
             }
 
-            for (String uploaded_file_name : fileNames()) {
-                UploadedFile file = file(uploaded_file_name);
+            for (var uploaded_file_name : fileNames()) {
+                var file = file(uploaded_file_name);
                 BeanUtils.setUppercasedBeanProperty(uploaded_file_name, file, prefix, bean_properties, bean);
             }
         } catch (BeanUtilsException e) {
