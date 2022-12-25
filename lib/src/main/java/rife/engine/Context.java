@@ -156,7 +156,7 @@ public class Context {
         var continuation_context = e.getContext();
         site_.continuationManager_.addContext(continuation_context);
 
-        // register continuation cookie
+        // set the continuation ID parameter
         parameter(SpecialParameters.CONT_ID, continuation_context.getId());
     }
 
