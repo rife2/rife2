@@ -77,13 +77,11 @@ public class TaskRunner {
      * @since 1.0
      */
     public void start(final String className) {
-        new Thread(taskThreads_, new Runnable() {
-            public void run() {
-                try {
-                    runner_.start(className);
-                } catch (Throwable e) {
-                    throw new RuntimeException(e);
-                }
+        new Thread(taskThreads_, () -> {
+            try {
+                runner_.start(className);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
             }
         }).start();
     }
