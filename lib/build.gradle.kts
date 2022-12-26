@@ -7,9 +7,9 @@ plugins {
     signing
 }
 
-var rifeAgentName: String = "rife2-agent"
 val rifeVersion by rootProject.extra { "0.8.8" }
-val rifeAgentJar by rootProject.extra { "$rifeAgentName-$rifeVersion.jar"}
+var rifeAgentName: String = "rife2-$rifeVersion-agent"
+val rifeAgentJar by rootProject.extra { "$rifeAgentName.jar"}
 group = "com.uwyn.rife2"
 version = rifeVersion
 
@@ -118,7 +118,7 @@ tasks.register<Copy>("processGeneratedParserCode") {
 tasks.register<Jar>("agentJar") {
     dependsOn("jar")
 
-    archiveBaseName.set("$rifeAgentName")
+    archiveFileName.set("$rifeAgentJar")
     from(sourceSets.main.get().output)
     include(
         "rife/asm/**",
@@ -174,10 +174,18 @@ idea {
     }
 }
 
+val agentFile = layout.buildDirectory.file("libs/$rifeAgentJar")
+val agentArtifact = artifacts.add("archives", agentFile.get().asFile) {
+    type = "jar"
+    classifier = "agent"
+    builtBy("agentJar")
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             artifactId = "rife2"
+            artifact(agentArtifact)
             from(components["java"])
             pom {
                 name.set("RIFE2")
@@ -213,7 +221,6 @@ publishing {
                     url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
                 }
             }
-
         }
     }
 }
