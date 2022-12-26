@@ -3,8 +3,7 @@ plugins {
 }
 
 base {
-    archivesName.set("hello")
-    version = 1.0
+    archivesName.set("rife2-examples")
 }
 
 java {

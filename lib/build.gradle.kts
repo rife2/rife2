@@ -7,12 +7,11 @@ plugins {
     signing
 }
 
+var rifeAgentName: String = "rife2-agent"
+val rifeVersion by rootProject.extra { "0.8.8" }
+val rifeAgentJar by rootProject.extra { "$rifeAgentName-$rifeVersion.jar"}
 group = "com.uwyn.rife2"
-version = "0.8.8"
-
-base {
-    archivesName.set("rife2")
-}
+version = rifeVersion
 
 java {
     withJavadocJar()
@@ -63,7 +62,6 @@ tasks.register<JavaExec>("precompileHtmlTemplates") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("rife.template.TemplateDeployer")
     args = listOf(
-        "-verbose",
         "-t", "html",
         "-d", "${projectDir}/build/classes/java/main",
         "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates"
@@ -74,7 +72,6 @@ tasks.register<JavaExec>("precompileXmlTemplates") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("rife.template.TemplateDeployer")
     args = listOf(
-        "-verbose",
         "-t", "xml",
         "-d", "${projectDir}/build/classes/java/main",
         "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates"
@@ -85,7 +82,6 @@ tasks.register<JavaExec>("precompileSqlTemplates") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("rife.template.TemplateDeployer")
     args = listOf(
-        "-verbose",
         "-t", "sql",
         "-d", "${projectDir}/build/classes/java/main",
         "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates"
@@ -100,6 +96,8 @@ tasks.register("precompileTemplates") {
 
 tasks.jar {
     dependsOn("precompileTemplates")
+
+    archiveBaseName.set("rife2")
 }
 
 tasks.generateGrammarSource {
@@ -120,7 +118,7 @@ tasks.register<Copy>("processGeneratedParserCode") {
 tasks.register<Jar>("agentJar") {
     dependsOn("jar")
 
-    base.archivesName.set("rife2-agent")
+    archiveBaseName.set("$rifeAgentName")
     from(sourceSets.main.get().output)
     include(
         "rife/asm/**",
@@ -152,7 +150,7 @@ tasks.test {
     dependsOn("agentJar")
     useJUnitPlatform()
     environment("project.dir", project.projectDir.toString())
-    jvmArgs = listOf("-javaagent:${buildDir}/libs/rife2-agent-${version}.jar")
+    jvmArgs = listOf("-javaagent:${buildDir}/libs/$rifeAgentJar")
 }
 
 tasks.clean {
