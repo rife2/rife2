@@ -18,18 +18,68 @@ dependencies {
     runtimeOnly("com.h2database:h2:2.1.214")
 }
 
+val rifeAgentJar: String by rootProject.extra
+tasks.register<JavaExec>("runHelloAll") {
+    dependsOn(":lib:agentJar")
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("rife.HelloAll")
+    jvmArgs = listOf("-javaagent:${project(":lib").buildDir}/libs/$rifeAgentJar")
+    project.logger.lifecycle("")
+    project.logger.lifecycle("================================================================================")
+    project.logger.lifecycle(" All the examples are included in this site. These are their URLs:")
+    project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloAuthentication:")
+    project.logger.lifecycle("   Open your browser at http://localhost:8080/authentication")
+    project.logger.lifecycle("   The authentication credentials are: testUser / testPassword")
+    project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloContinuations:")
+    project.logger.lifecycle("   Open your browser at http://localhost:8080/guess")
+    project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloDatabase:")
+    project.logger.lifecycle("   Install the database at at http://localhost:8080/install")
+    project.logger.lifecycle("   Then add names by going to http://localhost:8080/add")
+    project.logger.lifecycle("   When you're done, delete the database through http://localhost:8080/remove")
+    project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloErrors:")
+    project.logger.lifecycle("   Trigger and exception at http://localhost:8080/error")
+    project.logger.lifecycle("   Try any other URL that doesn't exit, ie. http://localhost:8080/treasure")
+    project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloForm:")
+    project.logger.lifecycle("   Open your browser at http://localhost:8080/form")
+    project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloGroup:")
+    project.logger.lifecycle("   Open your browser at http://localhost:8080/welcome")
+    project.logger.lifecycle("   Also at http://localhost:8080/group/hello")
+    project.logger.lifecycle("   And at http://localhost:8080/group/bonjour")
+    project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloLink:")
+    project.logger.lifecycle("   Open your browser at http://localhost:8080/link")
+    project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloPathInfoMapping:")
+    project.logger.lifecycle("   Open your browser at http://localhost:8080/mapping/John")
+    project.logger.lifecycle("   Or http://localhost:8080/mapping/John/Smith")
+    project.logger.lifecycle("   Or another other matching path info")
+    project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloTemplate:")
+    project.logger.lifecycle("   Open your browser at http://localhost:8080/template")
+    project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloWorld:")
+    project.logger.lifecycle("   Open your browser at http://localhost:8080/hello")
+    project.logger.lifecycle("================================================================================")
+    project.logger.lifecycle("")
+}
+
 tasks.register<JavaExec>("runHelloAuthentication") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("rife.HelloAuthentication")
     project.logger.lifecycle("")
     project.logger.lifecycle("================================================================================")
-    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/hello")
+    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/authentication")
     project.logger.lifecycle(" The authentication credentials are: testUser / testPassword")
     project.logger.lifecycle("================================================================================")
     project.logger.lifecycle("")
 }
 
-val rifeAgentJar: String by rootProject.extra
 tasks.register<JavaExec>("runHelloContinuations") {
     dependsOn(":lib:agentJar")
     classpath = sourceSets["main"].runtimeClasspath
@@ -70,7 +120,7 @@ tasks.register<JavaExec>("runHelloForm") {
     mainClass.set("rife.HelloForm")
     project.logger.lifecycle("")
     project.logger.lifecycle("================================================================================")
-    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/hello")
+    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/form")
     project.logger.lifecycle("================================================================================")
     project.logger.lifecycle("")
 }
@@ -80,7 +130,7 @@ tasks.register<JavaExec>("runHelloGroup") {
     mainClass.set("rife.HelloGroup")
     project.logger.lifecycle("")
     project.logger.lifecycle("================================================================================")
-    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/hello")
+    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/welcome")
     project.logger.lifecycle(" or http://localhost:8080/group/hello, or http://localhost:8080/group/bonjour")
     project.logger.lifecycle("================================================================================")
     project.logger.lifecycle("")
@@ -101,8 +151,8 @@ tasks.register<JavaExec>("runHelloPathInfoMapping") {
     mainClass.set("rife.HelloPathInfoMapping")
     project.logger.lifecycle("")
     project.logger.lifecycle("================================================================================")
-    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/hello/John")
-    project.logger.lifecycle(" or http://localhost:8080/hello/John/Smith, or another other matching path info")
+    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/mapping/John")
+    project.logger.lifecycle(" or http://localhost:8080/mapping/John/Smith, or another other matching path info")
     project.logger.lifecycle("================================================================================")
     project.logger.lifecycle("")
 }
@@ -112,7 +162,7 @@ tasks.register<JavaExec>("runHelloTemplate") {
     mainClass.set("rife.HelloTemplate")
     project.logger.lifecycle("")
     project.logger.lifecycle("================================================================================")
-    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/link")
+    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/template")
     project.logger.lifecycle("================================================================================")
     project.logger.lifecycle("")
 }

@@ -7,8 +7,8 @@ package rife;
 import rife.engine.*;
 
 public class HelloTemplate extends Site {
-    Route hello = get("/hello", c -> c.print("Hello World"));
-    Route link = get("/link", c-> c.print(c.template("HelloTemplate")));
+    Route templateHello = get("/templateHello", c -> c.print("Hello World Template"));
+    Route template = get("/template", c-> c.print(c.template("HelloTemplate")));
 
     public static void main(String[] args) {
         new Server().start(new HelloTemplate());

@@ -7,7 +7,7 @@ package rife;
 import rife.engine.*;
 
 public class HelloGroup extends Site {
-    Route hello = get("/hello", c -> c.print("Hello World"));
+    Route welcome = get("/welcome", c -> c.print("Hello World"));
     Router group = group("/group", new Router() {
         public void setup() {
             before(c -> c.print("before "));

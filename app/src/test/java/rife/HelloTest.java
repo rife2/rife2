@@ -17,7 +17,7 @@ class HelloTest {
 
     @Test void verifyHelloLink() {
         var m = new MockConversation(new HelloLink());
-        assertEquals("Hello World", m.doRequest("/link")
+        assertEquals("Hello World Link", m.doRequest("/link")
             .getParsedHtml().getLinkWithText("Hello")
             .follow().getText());
     }
@@ -30,14 +30,14 @@ class HelloTest {
 
     @Test void verifyHelloTemplate() {
         var m = new MockConversation(new HelloTemplate());
-        var t = m.doRequest("/link").getTemplate();
-        var link = t.getValue("route:hello");
-        assertEquals("Hello World", m.doRequest(link).getText());
+        var t = m.doRequest("/template").getTemplate();
+        var link = t.getValue("route:templateHello");
+        assertEquals("Hello World Template", m.doRequest(link).getText());
     }
 
     @Test void verifyHelloForm() {
         var m = new MockConversation(new HelloForm());
-        var r = m.doRequest("/hello").getParsedHtml()
+        var r = m.doRequest("/form").getParsedHtml()
             .getFormWithName("hello").submit();
         assertEquals("Hello World", r.getParsedHtml()
             .getDocument().body()
@@ -52,7 +52,7 @@ class HelloTest {
 
     @Test void verifyHelloPathInfoMapping() {
         var m = new MockConversation(new HelloPathInfoMapping());
-        assertEquals("Jimmy", m.doRequest("/hello/Jimmy").getText());
-        assertEquals("Jimmy Joe", m.doRequest("/hello/Jimmy/Joe").getText());
+        assertEquals("Jimmy", m.doRequest("/mapping/Jimmy").getText());
+        assertEquals("Jimmy Joe", m.doRequest("/mapping/Jimmy/Joe").getText());
     }
 }

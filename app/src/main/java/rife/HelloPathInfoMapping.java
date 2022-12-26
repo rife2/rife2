@@ -9,7 +9,7 @@ import rife.engine.annotations.Parameter;
 
 public class HelloPathInfoMapping extends Site {
     public void setup() {
-        get("/hello", PathInfoHandling.MAP(
+        get("/mapping", PathInfoHandling.MAP(
             m -> m.p("first"),
             m -> m.p("first").s().p("last")), HelloPerson.class);
     }

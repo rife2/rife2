@@ -22,7 +22,7 @@ public class HelloAuthentication extends Site {
         group(new Router() {
             public void setup() {
                 before(new Authenticated(config));
-                landing = get("/hello", c -> {
+                landing = get("/authentication", c -> {
                     var t = c.template("HelloAuthenticated");
                     t.setValue("user", config.identityAttribute(c).getLogin());
                     c.print(t);

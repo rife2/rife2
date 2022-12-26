@@ -7,7 +7,7 @@ package rife;
 import rife.engine.*;
 
 public class HelloForm extends Site {
-    Route hello = route("/hello", c -> {
+    Route form = route("/form", c -> {
         var t = c.template("HelloForm");
         switch (c.method()) {
             case GET -> t.setBlock("content", "form");
