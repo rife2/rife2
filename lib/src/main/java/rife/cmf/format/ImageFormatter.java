@@ -31,20 +31,21 @@ import javax.imageio.ImageWriter;
  *
  * <p>The following content attributes are supported:
  * <table>
+ * <caption>Content Attributes</caption>
  * <tr>
- * <td valign="top"><code>width</code></td>
+ * <td><code>width</code></td>
  * <td>Changes the width of the image. If no height is provided, the image
  * will be proportionally scaled.</td>
  * </tr>
  * <tr>
- * <td valign="top"><code>height</code></td>
+ * <td><code>height</code></td>
  * <td>Changes the height of the image. If no width is provided, the image
  * will be proportionally scaled.</td>
  * </tr>
  * <tr>
- * <td valign="top"><code>longest-edge-length</code></td>
+ * <td><code>longest-edge-length</code></td>
  * <td>Changes the longest edge of the image.  Aspect ratio is preserved.  The &quot;width&quot; or
- * &quot;height&quot; attributes take precendence if set, and this attribute will be ignored.
+ * &quot;height&quot; attributes take precedence if set, and this attribute will be ignored.
  * </td>
  * </tr>
  * </table>

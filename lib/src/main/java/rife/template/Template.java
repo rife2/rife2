@@ -1193,7 +1193,7 @@ public interface Template extends Cloneable {
      * Returns whether the specified value has been set. If this method
      * returns <code>false</code>, the value has its original default value.
      * <p>If no such value exists in this template, this method will not throw
-     * an exception, it will return <code>false</
+     * an exception, it will return <code>false</code>.
      * <p>If the value was automatically set by RIFE2, this method will not
      * return {@code true}, but {@link #isValueGenerated} will.
      *
