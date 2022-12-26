@@ -171,7 +171,7 @@ public abstract class AbstractResponse implements Response {
             return;
         }
 
-        String text = String.valueOf(value);
+        var text = String.valueOf(value);
 
         if (textBufferEnabled_) {
             if (outputStream_ != null) {

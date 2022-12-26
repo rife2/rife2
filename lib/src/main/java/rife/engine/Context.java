@@ -167,9 +167,6 @@ public class Context {
         // register context
         var continuation_context = e.getContext();
         site_.continuationManager_.addContext(continuation_context);
-
-        // set the continuation ID parameter
-        parameter(SpecialParameters.CONT_ID, continuation_context.getId());
     }
 
     Route processedRoute() {

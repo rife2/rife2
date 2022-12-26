@@ -160,6 +160,8 @@ public class Gate {
     }
 
     private void printExceptionDetails(Throwable exception, Response response) {
+        response.clearBuffer();
+
         TemplateFactory template_factory = null;
         if (response.isContentTypeSet()) {
             var content_type = response.getContentType();
@@ -180,11 +182,7 @@ public class Gate {
         template.setValue("exceptions", ExceptionFormattingUtils.formatExceptionStackTrace(exception, template));
         template.setValue("RIFE_VERSION", template.getEncoder().encode(Version.getVersion()));
 
-        try {
-            response.getWriter().print(template.getContent());
-        } catch (IOException e2) {
-            throw new RuntimeException(e2);
-        }
+        response.print(template.getContent());
     }
 }
 
