@@ -42,21 +42,26 @@ class EngineTemplateProcessor {
         processRoutes(set_values);
         processAuthentication(set_values);
 
+        template_.addGeneratedValues(set_values);
+
         return set_values;
     }
 
     private void processApplicationTags(final List<String> setValues) {
-        if (template_.hasValueId(ID_WEBAPP_ROOT_URL)) {
+        if (template_.hasValueId(ID_WEBAPP_ROOT_URL) &&
+            !template_.isValueSet(ID_WEBAPP_ROOT_URL)) {
             template_.setValue(ID_WEBAPP_ROOT_URL, context_.webappRootUrl(-1));
             setValues.add(ID_WEBAPP_ROOT_URL);
         }
 
-        if (template_.hasValueId(ID_SERVER_ROOT_URL)) {
+        if (template_.hasValueId(ID_SERVER_ROOT_URL) &&
+            !template_.isValueSet(ID_SERVER_ROOT_URL)) {
             template_.setValue(ID_SERVER_ROOT_URL, context_.serverRootUrl(-1));
             setValues.add(ID_SERVER_ROOT_URL);
         }
 
-        if (template_.hasValueId(ID_CONTEXT_PATH_INFO)) {
+        if (template_.hasValueId(ID_CONTEXT_PATH_INFO) &&
+            !template_.isValueSet(ID_CONTEXT_PATH_INFO)) {
             var path_info = context_.pathInfo();
             if (!path_info.isEmpty()) {
                 path_info = "/" + path_info;
@@ -65,12 +70,14 @@ class EngineTemplateProcessor {
             setValues.add(ID_CONTEXT_PATH_INFO);
         }
 
-        if (template_.hasValueId(ID_CONTEXT_PARAM_RANDOM)) {
+        if (template_.hasValueId(ID_CONTEXT_PARAM_RANDOM) &&
+            !template_.isValueSet(ID_CONTEXT_PARAM_RANDOM)) {
             template_.setValue(ID_CONTEXT_PARAM_RANDOM, SpecialParameters.RND + "=" + context_.site().RND);
             setValues.add(ID_CONTEXT_PARAM_RANDOM);
         }
 
-        if (template_.hasValueId(ID_CONTEXT_CONT_ID)) {
+        if (template_.hasValueId(ID_CONTEXT_CONT_ID) &&
+            !template_.isValueSet(ID_CONTEXT_CONT_ID)) {
             if (context_.continuationId() != null) {
                 template_.setValue(ID_CONTEXT_CONT_ID, SpecialParameters.CONT_ID + "=" + context_.continuationId());
             }
@@ -84,11 +91,13 @@ class EngineTemplateProcessor {
         if (param_tags != null) {
             for (var captured_groups : param_tags) {
                 var param_value_id = captured_groups[0];
-                var param_name = captured_groups[1];
-                if (parameters.containsKey(param_name)) {
-                    String[] param_values = parameters.get(param_name);
-                    template_.setValue(param_value_id, encoder_.encode(param_values[0]));
-                    setValues.add(param_value_id);
+                if (!template_.isValueSet(param_value_id)) {
+                    var param_name = captured_groups[1];
+                    if (parameters.containsKey(param_name)) {
+                        String[] param_values = parameters.get(param_name);
+                        template_.setValue(param_value_id, encoder_.encode(param_values[0]));
+                        setValues.add(param_value_id);
+                    }
                 }
             }
         }
@@ -99,10 +108,12 @@ class EngineTemplateProcessor {
         if (cookie_tags != null) {
             for (var captured_groups : cookie_tags) {
                 var cookie_value_id = captured_groups[0];
-                var cookie_name = captured_groups[1];
-                if (context_.hasCookie(cookie_name)) {
-                    template_.setValue(cookie_value_id, encoder_.encode(context_.cookieValue(cookie_name)));
-                    setValues.add(cookie_value_id);
+                if (!template_.isValueSet(cookie_value_id)) {
+                    var cookie_name = captured_groups[1];
+                    if (context_.hasCookie(cookie_name)) {
+                        template_.setValue(cookie_value_id, encoder_.encode(context_.cookieValue(cookie_name)));
+                        setValues.add(cookie_value_id);
+                    }
                 }
             }
         }
@@ -113,18 +124,20 @@ class EngineTemplateProcessor {
         if (route_tags != null) {
             for (var captured_groups : route_tags) {
                 var route_value_id = captured_groups[0];
-                var path = captured_groups[1];
-                Route route;
-                if (path.isEmpty()) {
-                    route = context_.route();
-                } else {
-                    route = context_.route().router().resolveRoute(path);
-                }
+                if (!template_.isValueSet(route_value_id)) {
+                    var path = captured_groups[1];
+                    Route route;
+                    if (path.isEmpty()) {
+                        route = context_.route();
+                    } else {
+                        route = context_.route().router().resolveRoute(path);
+                    }
 
-                if (route != null) {
-                    var route_value = context_.urlFor(route);
-                    template_.setValue(route_value_id, route_value);
-                    setValues.add(route_value_id);
+                    if (route != null) {
+                        var route_value = context_.urlFor(route);
+                        template_.setValue(route_value_id, route_value);
+                        setValues.add(route_value_id);
+                    }
                 }
             }
         }
@@ -148,31 +161,37 @@ class EngineTemplateProcessor {
                     var auth_differentiator = captured_groups[1];
 
                     // handle authenticated login blocks assignment
-                    for (var block_groups : auth_login_block_tags) {
-                        var auth_block_id = block_groups[0];
-                        if (block_groups[1].equals(auth_differentiator) &&
-                            identity.getLogin().equals(block_groups[2])) {
-                            template_.setBlock(auth_value_id, auth_block_id);
-                            setValues.add(auth_value_id);
+                    if (!template_.isValueSet(auth_value_id)) {
+                        for (var block_groups : auth_login_block_tags) {
+                            var auth_block_id = block_groups[0];
+                            if (block_groups[1].equals(auth_differentiator) &&
+                                identity.getLogin().equals(block_groups[2])) {
+                                template_.setBlock(auth_value_id, auth_block_id);
+                                setValues.add(auth_value_id);
+                            }
                         }
                     }
 
                     // handle authenticated role blocks assignment
-                    for (var block_groups : auth_role_block_tags) {
-                        var auth_block_id = block_groups[0];
-                        if (block_groups[1].equals(auth_differentiator) &&
-                            identity.getAttributes().isInRole(block_groups[2])) {
-                            template_.setBlock(auth_value_id, auth_block_id);
-                            setValues.add(auth_value_id);
+                    if (!template_.isValueSet(auth_value_id)) {
+                        for (var block_groups : auth_role_block_tags) {
+                            var auth_block_id = block_groups[0];
+                            if (block_groups[1].equals(auth_differentiator) &&
+                                identity.getAttributes().isInRole(block_groups[2])) {
+                                template_.setBlock(auth_value_id, auth_block_id);
+                                setValues.add(auth_value_id);
+                            }
                         }
                     }
 
                     // handle authenticated blocks assignment
-                    for (var block_groups : auth_block_tags) {
-                        var auth_block_id = block_groups[0];
-                        if (block_groups[1].equals(auth_differentiator)) {
-                            template_.setBlock(auth_value_id, auth_block_id);
-                            setValues.add(auth_value_id);
+                    if (!template_.isValueSet(auth_value_id)) {
+                        for (var block_groups : auth_block_tags) {
+                            var auth_block_id = block_groups[0];
+                            if (block_groups[1].equals(auth_differentiator)) {
+                                template_.setBlock(auth_value_id, auth_block_id);
+                                setValues.add(auth_value_id);
+                            }
                         }
                     }
                 }
