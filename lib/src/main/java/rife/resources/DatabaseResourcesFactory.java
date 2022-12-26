@@ -13,8 +13,8 @@ public abstract class DatabaseResourcesFactory extends DbQueryManagerFactory {
 
     private static final DbQueryManagerCache cache_ = new DbQueryManagerCache();
 
-    public static DatabaseResources getInstance(Datasource datasource) {
-        return (DatabaseResources) getInstance(MANAGER_PACKAGE_NAME, cache_, datasource);
+    public static DatabaseResources instance(Datasource datasource) {
+        return (DatabaseResources) instance(MANAGER_PACKAGE_NAME, cache_, datasource);
     }
 }
 

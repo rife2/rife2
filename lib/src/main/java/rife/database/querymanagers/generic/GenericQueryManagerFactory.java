@@ -26,14 +26,14 @@ public class GenericQueryManagerFactory {
     private static DbQueryManagerCache cache_ = new DbQueryManagerCache();
     private static String packageName_ = GenericQueryManagerFactory.class.getPackage().getName() + ".databasedrivers.";
 
-    public static <BeanType> GenericQueryManager<BeanType> getInstance(Datasource datasource, Class<BeanType> beanClass)
+    public static <BeanType> GenericQueryManager<BeanType> instance(Datasource datasource, Class<BeanType> beanClass)
     throws DatabaseException {
         String short_name = ClassUtils.shortenClassName(beanClass);
 
-        return getInstance(datasource, beanClass, short_name);
+        return instance(datasource, beanClass, short_name);
     }
 
-    public static <BeanType> GenericQueryManager<BeanType> getInstance(Datasource datasource, Class<BeanType> beanClass, String tableName)
+    public static <BeanType> GenericQueryManager<BeanType> instance(Datasource datasource, Class<BeanType> beanClass, String tableName)
     throws DatabaseException {
         AbstractGenericQueryManager<BeanType> query_manager = null;
 

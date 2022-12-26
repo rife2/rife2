@@ -6,7 +6,6 @@ package rife.test;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.xml.sax.SAXException;
 import rife.engine.*;
 
 import java.io.*;

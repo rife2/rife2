@@ -1234,7 +1234,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     }
 
     public <OtherBeanType> GenericQueryManager<OtherBeanType> createNewManager(Class<OtherBeanType> beanClass) {
-        return GenericQueryManagerFactory.getInstance(getDatasource(), beanClass);
+        return GenericQueryManagerFactory.instance(getDatasource(), beanClass);
     }
 
     protected void fireInstalled() {

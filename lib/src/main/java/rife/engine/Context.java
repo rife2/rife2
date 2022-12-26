@@ -29,6 +29,17 @@ public class Context {
     public static final double DEFAULT_DOUBLE = 0.0d;
     public static final float DEFAULT_FLOAT = 0.0f;
 
+    /**
+     * Status code (304) indicating that a conditional GET operation found that the resource was available and not modified.
+     */
+    public static final int SC_NOT_MODIFIED = 304;
+
+
+    /**
+     * Status code (500) indicating an error inside the HTTP server which prevented it from fulfilling the request.
+     */
+    public static final int SC_INTERNAL_SERVER_ERROR = 500;
+
     private final String gateUrl_;
     private final Site site_;
     private final Request request_;

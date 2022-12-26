@@ -24,9 +24,9 @@ public class TestGenericQueryManagerManyToOne {
     private GenericQueryManager<MOThirdBean> thirdManager_ = null;
 
     protected void setUp(Datasource datasource) {
-        firstManager_ = GenericQueryManagerFactory.getInstance(datasource, MOFirstBean.class);
-        secondManager_ = GenericQueryManagerFactory.getInstance(datasource, MOSecondBean.class);
-        thirdManager_ = GenericQueryManagerFactory.getInstance(datasource, MOThirdBean.class);
+        firstManager_ = GenericQueryManagerFactory.instance(datasource, MOFirstBean.class);
+        secondManager_ = GenericQueryManagerFactory.instance(datasource, MOSecondBean.class);
+        thirdManager_ = GenericQueryManagerFactory.instance(datasource, MOThirdBean.class);
         thirdManager_.install();
         secondManager_.install();
         firstManager_.install();

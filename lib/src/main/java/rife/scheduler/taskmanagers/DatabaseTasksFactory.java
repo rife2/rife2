@@ -13,7 +13,7 @@ public abstract class DatabaseTasksFactory extends DbQueryManagerFactory {
 
     private static final DbQueryManagerCache cache_ = new DbQueryManagerCache();
 
-    public static DatabaseTasks getInstance(Datasource datasource) {
-        return (DatabaseTasks) getInstance(MANAGER_PACKAGE_NAME, cache_, datasource);
+    public static DatabaseTasks instance(Datasource datasource) {
+        return (DatabaseTasks) instance(MANAGER_PACKAGE_NAME, cache_, datasource);
     }
 }

@@ -23,7 +23,7 @@ public abstract class DatabaseScheduler extends DbQueryManager implements Schedu
     }
 
     public Scheduler getScheduler() {
-        return new Scheduler(DatabaseTasksFactory.getInstance(getDatasource()), DatabaseTaskOptionsFactory.getInstance(getDatasource()));
+        return new Scheduler(DatabaseTasksFactory.instance(getDatasource()), DatabaseTaskOptionsFactory.instance(getDatasource()));
     }
 
     public abstract boolean install()
@@ -35,11 +35,11 @@ public abstract class DatabaseScheduler extends DbQueryManager implements Schedu
     protected boolean install_()
     throws SchedulerManagerException {
         try {
-            DatabaseTasks tasks_manager = DatabaseTasksFactory.getInstance(getDatasource());
-            DatabaseTaskOptions taskoptions_manager = DatabaseTaskOptionsFactory.getInstance(getDatasource());
+            DatabaseTasks tasks_manager = DatabaseTasksFactory.instance(getDatasource());
+            DatabaseTaskOptions task_options_manager = DatabaseTaskOptionsFactory.instance(getDatasource());
 
             tasks_manager.install();
-            taskoptions_manager.install();
+            task_options_manager.install();
         } catch (SchedulerException e) {
             throw new InstallSchedulerErrorException(e);
         }
@@ -50,10 +50,10 @@ public abstract class DatabaseScheduler extends DbQueryManager implements Schedu
     protected boolean remove_()
     throws SchedulerManagerException {
         try {
-            DatabaseTasks tasks_manager = DatabaseTasksFactory.getInstance(getDatasource());
-            DatabaseTaskOptions taskoptions_manager = DatabaseTaskOptionsFactory.getInstance(getDatasource());
+            DatabaseTasks tasks_manager = DatabaseTasksFactory.instance(getDatasource());
+            DatabaseTaskOptions task_options_manager = DatabaseTaskOptionsFactory.instance(getDatasource());
 
-            taskoptions_manager.remove();
+            task_options_manager.remove();
             tasks_manager.remove();
         } catch (SchedulerException e) {
             throw new RemoveSchedulerErrorException(e);

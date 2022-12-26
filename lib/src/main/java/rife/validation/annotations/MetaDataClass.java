@@ -6,14 +6,13 @@ package rife.validation.annotations;
 import java.lang.annotation.*;
 
 /**
- * Declares which class should be used for meta data merging.
+ * Declares which class should be used for meta-data merging.
  * <p>
  * This allows classes to not have to rely on the {@code MetaData} suffix when
  * they want to have another class merged.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @version $Revision$
- * @since 1.6.2
+ * @since 1.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
@@ -21,9 +20,9 @@ import java.lang.annotation.*;
 public @interface MetaDataClass
 {
 	/**
-	 * The class that will be merged during meta data merging.
+	 * The class that will be merged during meta-data merging.
 	 * @return the class
-	 * @since 1.6.2
+	 * @since 1.0
 	 */
 	Class value();
 }

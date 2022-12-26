@@ -4,6 +4,7 @@
  */
 package rife.template;
 
+import rife.cmf.MimeType;
 import rife.forms.FormBuilder;
 import rife.forms.FormBuilderXml;
 import rife.tools.BeanUtils;
@@ -21,10 +22,9 @@ public class BeanHandlerXml extends AbstractBeanHandler {
         return BeanHandlerXmlSingleton.INSTANCE;
     }
 
-    // TODO : cmf
-//    public MimeType getMimeType() {
-//        return MimeType.TEXT_XML;
-//    }
+    public MimeType getMimeType() {
+        return MimeType.TEXT_XML;
+    }
 
     public FormBuilder getFormBuilder() {
         return formBuilder_;

@@ -48,7 +48,7 @@ public class TestDatabaseResources {
         """;
 
     protected void setup(Datasource datasource) {
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             resource_finder.install();
             resource_finder.addResource("resources/test.txt", RESOURCE);
@@ -59,7 +59,7 @@ public class TestDatabaseResources {
     }
 
     protected void tearDown(Datasource datasource) {
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             resource_finder.remove();
         } catch (ResourceWriterErrorException e) {
@@ -72,8 +72,8 @@ public class TestDatabaseResources {
     public void testInstantiation(Datasource datasource) {
         setup(datasource);
         try {
-            ResourceFinder resource_finder1 = DatabaseResourcesFactory.getInstance(datasource);
-            ResourceFinder resource_finder2 = DatabaseResourcesFactory.getInstance(datasource);
+            ResourceFinder resource_finder1 = DatabaseResourcesFactory.instance(datasource);
+            ResourceFinder resource_finder2 = DatabaseResourcesFactory.instance(datasource);
             assertNotNull(resource_finder1);
             assertNotNull(resource_finder2);
             assertSame(resource_finder1, resource_finder2);
@@ -87,7 +87,7 @@ public class TestDatabaseResources {
     public void testInstall(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             resource_finder.remove();
 
@@ -110,7 +110,7 @@ public class TestDatabaseResources {
     public void testRemove(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             resource_finder.remove();
 
@@ -134,7 +134,7 @@ public class TestDatabaseResources {
     public void testAddResource(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             resource_finder.addResource("just/some/resource", "the content of this resource\nyes it's there");
         } catch (ResourceWriterErrorException e) {
@@ -149,7 +149,7 @@ public class TestDatabaseResources {
     public void testGetUnknownResource(Datasource datasource) {
         setup(datasource);
         try {
-            var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+            var resource_finder = DatabaseResourcesFactory.instance(datasource);
             assertNull(resource_finder.getResource("this/resource/doesnt/exist.txt"));
         } finally {
             tearDown(datasource);
@@ -161,7 +161,7 @@ public class TestDatabaseResources {
     public void testGetResourceByName(Datasource datasource) {
         setup(datasource);
         try {
-            var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+            var resource_finder = DatabaseResourcesFactory.instance(datasource);
             assertNotNull(resource_finder.getResource("resources/test.txt"));
         } finally {
             tearDown(datasource);
@@ -173,7 +173,7 @@ public class TestDatabaseResources {
     public void testUpdateResource(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             var content1 = "the content of this resource\nyes it's there";
             var content2 = "the content of this resource has been modified";
@@ -203,7 +203,7 @@ public class TestDatabaseResources {
     public void testUpdateMissingResource(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             assertNull(resource_finder.getContent("resources/test_blah.txt"));
             assertFalse(resource_finder.updateResource("resources/test_blah.txt", "blah"));
@@ -220,7 +220,7 @@ public class TestDatabaseResources {
     public void testRemoveResource(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             assertNotNull(resource_finder.getContent("resources/test.txt"));
             assertTrue(resource_finder.removeResource("resources/test.txt"));
@@ -238,7 +238,7 @@ public class TestDatabaseResources {
     public void testGetUnknownStreamByName(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             resource_finder.useStream("this/resource/doesnt/exist.txt", new InputStreamUser<>() {
                 public Object useInputStream(InputStream stream)
@@ -260,7 +260,7 @@ public class TestDatabaseResources {
     public void testGetUnknownStreamByResource(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             resource_finder.useStream(new URL("file://this/resource/doesnt/exist.txt"), new InputStreamUser<>() {
                 public Object useInputStream(InputStream stream)
@@ -282,7 +282,7 @@ public class TestDatabaseResources {
     public void testGetStreamByName(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             resource_finder.useStream("resources/test.txt", new InputStreamUser<>() {
                 public Object useInputStream(InputStream stream)
@@ -308,7 +308,7 @@ public class TestDatabaseResources {
     public void testGetStreamByResource(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         var resource = resource_finder.getResource("resources/test.txt");
         try {
             resource_finder.useStream(resource, new InputStreamUser<>() {
@@ -336,7 +336,7 @@ public class TestDatabaseResources {
         setup(datasource);
 
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             var content = resource_finder.getContent("this/resource/doesnt/exist.txt");
             assertNull(content);
@@ -352,7 +352,7 @@ public class TestDatabaseResources {
     public void testGetUnknownContentByResource(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             var content = resource_finder.getContent(new URL("file://this/resource/doesnt/exist.txt"));
             assertNull(content);
@@ -368,7 +368,7 @@ public class TestDatabaseResources {
     public void testGetContentByName(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             var content = resource_finder.getContent("resources/test.txt");
             assertNotNull(content);
@@ -385,7 +385,7 @@ public class TestDatabaseResources {
     public void testGetContentByResource(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         var resource = resource_finder.getResource("resources/test.txt");
         try {
             var content = resource_finder.getContent(resource);
@@ -403,7 +403,7 @@ public class TestDatabaseResources {
     public void testGetContentByNameAndEncoding(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             var content = resource_finder.getContent("resources/test-utf8.txt", "UTF-8");
             assertNotNull(content);
@@ -420,7 +420,7 @@ public class TestDatabaseResources {
     public void testGetContentByResourceAndEncoding(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         var resource = resource_finder.getResource("resources/test-utf8.txt");
         try {
             var content = resource_finder.getContent(resource, "UTF-8");
@@ -438,7 +438,7 @@ public class TestDatabaseResources {
     public void testGetUnknownModificationTimeByName(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             var time = resource_finder.getModificationTime("this/resource/doesnt/exist.txt");
             assertEquals(-1, time);
@@ -454,7 +454,7 @@ public class TestDatabaseResources {
     public void testGetUnknownModificationTimeByResource(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             var time = resource_finder.getModificationTime(new URL("file://this/resource/doesnt/exist.txt"));
             assertEquals(-1, time);
@@ -470,7 +470,7 @@ public class TestDatabaseResources {
     public void testGetModificationTimeByName(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         try {
             var time = resource_finder.getModificationTime("resources/test.txt");
             assertTrue(time != -1);
@@ -486,7 +486,7 @@ public class TestDatabaseResources {
     public void testGetModificationTimeByResource(Datasource datasource) {
         setup(datasource);
 
-        var resource_finder = DatabaseResourcesFactory.getInstance(datasource);
+        var resource_finder = DatabaseResourcesFactory.instance(datasource);
         var resource = resource_finder.getResource("resources/test.txt");
         try {
             var time = resource_finder.getModificationTime(resource);

@@ -10,10 +10,10 @@ public abstract class TestDbQueryManagerFactoryImpl extends DbQueryManagerFactor
     private static DbQueryManagerCache mCache = new DbQueryManagerCache();
 
     public static TestDbQueryManagerImpl getInstance(Datasource datasource) {
-        return (TestDbQueryManagerImpl) getInstance(MANAGER_PACKAGE_NAME, mCache, datasource);
+        return (TestDbQueryManagerImpl) instance(MANAGER_PACKAGE_NAME, mCache, datasource);
     }
 
     public static TestDbQueryManagerImpl getInstance(Datasource datasource, String identifier) {
-        return (TestDbQueryManagerImpl) getInstance(MANAGER_PACKAGE_NAME, mCache, datasource, identifier);
+        return (TestDbQueryManagerImpl) instance(MANAGER_PACKAGE_NAME, mCache, datasource, identifier);
     }
 }

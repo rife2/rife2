@@ -54,7 +54,7 @@ public class HelloDatabase extends Site {
                     c.print("Maximum number of names reached<br><br>");
                     rollback();
                 }
-                c.print("Added " + name + " (#" + count+ ")<br><br>");
+                c.print("Added " + name + " (#" + count + ")<br><br>");
             }
         });
         c.print("<a href='" + c.urlFor(addForm) + "'>Add more</a><br>");

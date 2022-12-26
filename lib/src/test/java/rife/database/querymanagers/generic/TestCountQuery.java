@@ -27,9 +27,9 @@ public class TestCountQuery {
     private GenericQueryManager<BeanImpl> bigBeanManager_ = null;
 
     protected void setUp(Datasource datasource) {
-        manager_ = GenericQueryManagerFactory.getInstance(datasource, SimpleBean.class);
-        linkManager_ = GenericQueryManagerFactory.getInstance(datasource, LinkBean.class);
-        bigBeanManager_ = GenericQueryManagerFactory.getInstance(datasource, BeanImpl.class);
+        manager_ = GenericQueryManagerFactory.instance(datasource, SimpleBean.class);
+        linkManager_ = GenericQueryManagerFactory.instance(datasource, LinkBean.class);
+        bigBeanManager_ = GenericQueryManagerFactory.instance(datasource, BeanImpl.class);
         manager_.install();
         linkManager_.install();
         bigBeanManager_.install();

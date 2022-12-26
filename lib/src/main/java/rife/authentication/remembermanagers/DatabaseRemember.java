@@ -13,9 +13,7 @@ import rife.database.Datasource;
 import rife.database.DbPreparedStatement;
 import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
-import rife.database.DbTransactionUserWithoutResult;
 import rife.database.exceptions.DatabaseException;
-import rife.database.exceptions.ExecutionErrorException;
 import rife.database.queries.CreateTable;
 import rife.database.queries.Delete;
 import rife.database.queries.DropTable;
@@ -23,7 +21,6 @@ import rife.database.queries.Insert;
 import rife.database.queries.Select;
 import rife.tools.StringEncryptor;
 import rife.tools.UniqueIDGenerator;
-import rife.tools.InnerClassException;
 import rife.tools.ExceptionUtils;
 
 import java.security.NoSuchAlgorithmException;

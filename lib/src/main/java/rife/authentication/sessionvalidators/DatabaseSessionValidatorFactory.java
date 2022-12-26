@@ -33,8 +33,8 @@ public class DatabaseSessionValidatorFactory extends DbQueryManagerFactory {
      * @return the requested {@code DatabaseSessionValidator} instance
      * @since 1.0
      */
-    public static DatabaseSessionValidator getInstance(Datasource datasource) {
-        return (DatabaseSessionValidator) getInstance(MANAGER_PACKAGE_NAME, cache_, datasource);
+    public static DatabaseSessionValidator instance(Datasource datasource) {
+        return (DatabaseSessionValidator) instance(MANAGER_PACKAGE_NAME, cache_, datasource);
     }
 
     /**
@@ -47,7 +47,7 @@ public class DatabaseSessionValidatorFactory extends DbQueryManagerFactory {
      * @return the requested {@code DatabaseSessionValidator} instance
      * @since 1.0
      */
-    public static DatabaseSessionValidator getInstance(Datasource datasource, String identifier) {
-        return (DatabaseSessionValidator) getInstance(MANAGER_PACKAGE_NAME, cache_, datasource, identifier);
+    public static DatabaseSessionValidator instance(Datasource datasource, String identifier) {
+        return (DatabaseSessionValidator) instance(MANAGER_PACKAGE_NAME, cache_, datasource, identifier);
     }
 }

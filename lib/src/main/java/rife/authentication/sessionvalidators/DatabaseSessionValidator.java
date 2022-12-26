@@ -4,10 +4,7 @@
  */
 package rife.authentication.sessionvalidators;
 
-import rife.authentication.CredentialsManager;
-import rife.authentication.RememberManager;
 import rife.authentication.SessionAttributes;
-import rife.authentication.SessionManager;
 import rife.authentication.SessionValidator;
 import rife.authentication.credentialsmanagers.DatabaseUsers;
 import rife.authentication.credentialsmanagers.DatabaseUsersFactory;
@@ -35,9 +32,9 @@ public abstract class DatabaseSessionValidator extends DbQueryManager implements
     protected DatabaseSessionValidator(Datasource datasource) {
         super(datasource);
 
-        credentialsManager_ = DatabaseUsersFactory.getInstance(datasource);
-        sessionManager_ = DatabaseSessionsFactory.getInstance(datasource);
-        rememberManager_ = DatabaseRememberFactory.getInstance(datasource);
+        credentialsManager_ = DatabaseUsersFactory.instance(datasource);
+        sessionManager_ = DatabaseSessionsFactory.instance(datasource);
+        rememberManager_ = DatabaseRememberFactory.instance(datasource);
     }
 
     public void setCredentialsManager(DatabaseUsers credentialsManager) {

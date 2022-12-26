@@ -43,6 +43,10 @@ public class RifeConfig {
         return instance().database;
     }
 
+    public static CmfConfig cmf() {
+        return instance().cmf;
+    }
+
     public static EngineConfig engine() {
         return instance().engine;
     }
@@ -67,15 +71,21 @@ public class RifeConfig {
         return instance().tools;
     }
 
+    public static XmlConfig xml() {
+        return instance().xml;
+    }
+
     public final GlobalConfig global = new GlobalConfig();
     public final AuthenticationConfig authentication = new AuthenticationConfig();
     public final DatabaseConfig database = new DatabaseConfig();
+    public final CmfConfig cmf = new CmfConfig();
     public final EngineConfig engine = new EngineConfig();
     public final ResourcesConfig resources = new ResourcesConfig();
     public final SchedulerConfig scheduler = new SchedulerConfig();
     public final ServerConfig server = new ServerConfig();
     public final TemplateConfig template = new TemplateConfig();
     public final ToolsConfig tools = new ToolsConfig();
+    public final XmlConfig xml = new XmlConfig();
 
     public class GlobalConfig {
         private String tempPath_ = StringUtils.stripFromEnd(System.getProperty("java.io.tmpdir"), File.separator);
@@ -306,6 +316,120 @@ public class RifeConfig {
         }
     }
 
+    public class CmfConfig {
+        private String sequenceContentRepository_ = DEFAULT_SEQUENCE_CONTENT_REPOSITORY;
+        private String sequenceContentInfo_ = DEFAULT_SEQUENCE_CONTENT_INFO;
+        private String tableContentRepository_ = DEFAULT_TABLE_CONTENT_REPOSITORY;
+        private String tableContentInfo_ = DEFAULT_TABLE_CONTENT_INFO;
+        private String tableContentAttribute_ = DEFAULT_TABLE_CONTENT_ATTRIBUTE;
+        private String tableContentProperty_ = DEFAULT_TABLE_CONTENT_PROPERTY;
+        private String tableContentStoreImage_ = DEFAULT_TABLE_CONTENT_STORE_IMAGE;
+        private String tableContentStoreText_ = DEFAULT_TABLE_CONTENT_STORE_TEXT;
+        private String tableContentStoreRawInfo_ = DEFAULT_TABLE_CONTENT_STORE_RAW_INFO;
+        private String tableContentStoreRawChunk_ = DEFAULT_TABLE_CONTENT_STORE_RAW_CHUNK;
+
+        private static final String DEFAULT_SEQUENCE_CONTENT_REPOSITORY = "SEQ_CONTENT_REPOSITORY";
+        private static final String DEFAULT_SEQUENCE_CONTENT_INFO = "SEQ_CONTENT_INFO";
+        private static final String DEFAULT_TABLE_CONTENT_REPOSITORY = "ContentRepository";
+        private static final String DEFAULT_TABLE_CONTENT_INFO = "ContentInfo";
+        private static final String DEFAULT_TABLE_CONTENT_ATTRIBUTE = "ContentAttribute";
+        private static final String DEFAULT_TABLE_CONTENT_PROPERTY = "ContentProperty";
+        private static final String DEFAULT_TABLE_CONTENT_STORE_IMAGE = "ContentStoreImage";
+        private static final String DEFAULT_TABLE_CONTENT_STORE_TEXT = "ContentStoreText";
+        private static final String DEFAULT_TABLE_CONTENT_STORE_RAW_INFO = "ContentStoreRawInfo";
+        private static final String DEFAULT_TABLE_CONTENT_STORE_RAW_CHUNK = "ContentStoreRawChunk";
+
+        public String getSequenceContentRepository() {
+            return sequenceContentRepository_;
+        }
+
+        public CmfConfig setSequenceContentRepository(String sequence) {
+            sequenceContentRepository_ = sequence;
+            return this;
+        }
+
+        public String getSequenceContentInfo() {
+            return sequenceContentInfo_;
+        }
+
+        public CmfConfig setSequenceContentInfo(String sequence) {
+            sequenceContentInfo_ = sequence;
+            return this;
+        }
+
+        public String getTableContentRepository() {
+            return tableContentRepository_;
+        }
+
+        public CmfConfig setTableContentRepository(String table) {
+            tableContentRepository_ = table;
+            return this;
+        }
+
+        public String getTableContentInfo() {
+            return tableContentInfo_;
+        }
+
+        public CmfConfig setTableContentInfo(String table) {
+            tableContentInfo_ = table;
+            return this;
+        }
+
+        public String getTableContentAttribute() {
+            return tableContentAttribute_;
+        }
+
+        public CmfConfig setTableContentAttribute(String table) {
+            tableContentAttribute_ = table;
+            return this;
+        }
+
+        public String getTableContentProperty() {
+            return tableContentProperty_;
+        }
+
+        public CmfConfig setTableContentProperty(String table) {
+            tableContentProperty_ = table;
+            return this;
+        }
+
+        public String getTableContentStoreImage() {
+            return tableContentStoreImage_;
+        }
+
+        public CmfConfig setTableContentStoreImage(String table) {
+            tableContentStoreImage_ = table;
+            return this;
+        }
+
+        public String getTableContentStoreText() {
+            return tableContentStoreText_;
+        }
+
+        public CmfConfig setTableContentStoreText(String table) {
+            tableContentStoreText_ = table;
+            return this;
+        }
+
+        public String getTableContentStoreRawInfo() {
+            return tableContentStoreRawInfo_;
+        }
+
+        public CmfConfig setTableContentStoreRawInfo(String table) {
+            tableContentStoreRawInfo_ = table;
+            return this;
+        }
+
+        public String getTableContentStoreRawChunk() {
+            return tableContentStoreRawChunk_;
+        }
+
+        public CmfConfig setTableContentStoreRawChunk(String table) {
+            tableContentStoreRawChunk_ = table;
+            return this;
+        }
+    }
+
     public class DatabaseConfig {
         private int transactionTimeout_ = DEFAULT_TRANSACTION_TIMEOUT;
         private boolean sqlDebugTrace_ = DEFAULT_SQL_DEBUG_TRACE;
@@ -323,7 +447,7 @@ public class RifeConfig {
         }
 
         public boolean getSqlDebugTrace() {
-            return DEFAULT_SQL_DEBUG_TRACE;
+            return sqlDebugTrace_;
         }
 
         public DatabaseConfig setSqlDebugTrace(boolean flag) {
@@ -1060,4 +1184,18 @@ public class RifeConfig {
         }
     }
 
+    public class XmlConfig {
+        private boolean xmlValidation_ = DEFAULT_XML_VALIDATION;
+
+        private static final boolean DEFAULT_XML_VALIDATION = true;
+
+        public boolean getXmlValidation() {
+            return xmlValidation_;
+        }
+
+        public XmlConfig setXmlValidation(boolean flag) {
+            xmlValidation_ = flag;
+            return this;
+        }
+    }
 }

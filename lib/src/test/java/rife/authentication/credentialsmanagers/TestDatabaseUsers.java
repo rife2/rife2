@@ -25,14 +25,14 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstantiation(Datasource datasource) {
-        DatabaseUsers manager = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers manager = DatabaseUsersFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstall(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             assertEquals(true, users.install());
@@ -45,7 +45,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemove(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -58,7 +58,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testAddRoles(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -94,7 +94,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRolesList(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -138,7 +138,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testAddUsers(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -209,7 +209,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUpdateUsers(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -286,7 +286,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetUserAttributes(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -338,7 +338,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUsersList(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -376,7 +376,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUsersListRanged(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -448,7 +448,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUserIdSpecification(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -493,7 +493,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testValidUsers(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
         users.setPasswordEncryptor(StringEncryptor.SHA);
 
         try {
@@ -552,7 +552,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUsersInRole(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
         users.setPasswordEncryptor(StringEncryptor.MD5);
 
         try {
@@ -605,7 +605,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testListUsersInRole(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -675,7 +675,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemoveUsersByLogin(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -714,7 +714,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemoveUsersByUserId(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -753,7 +753,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemoveRole(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -798,7 +798,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testClearUsers(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -829,7 +829,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testVerifyCredentials(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
         users.setPasswordEncryptor(StringEncryptor.OBF);
 
         try {
@@ -876,7 +876,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testListUserRoles(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();

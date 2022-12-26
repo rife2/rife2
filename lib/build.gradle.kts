@@ -33,6 +33,7 @@ dependencies {
     compileOnly("org.eclipse.jetty:jetty-server:11.0.12")
     compileOnly("org.eclipse.jetty:jetty-servlet:11.0.12")
     compileOnly("jakarta.servlet:jakarta.servlet-api:5.0.0")
+    compileOnly("net.imagej:ij:1.53v")
     testImplementation("org.jsoup:jsoup:1.15.3")
     testImplementation("org.eclipse.jetty:jetty-server:11.0.12")
     testImplementation("org.eclipse.jetty:jetty-servlet:11.0.12")
@@ -46,6 +47,7 @@ dependencies {
     testImplementation("org.apache.derby:derby:10.16.1.1")
     testImplementation("org.apache.derby:derbytools:10.16.1.1")
     testImplementation("com.oracle.database.jdbc:ojdbc11:21.7.0.0")
+    testImplementation("net.imagej:ij:1.53v")
 }
 
 configurations[JavaPlugin.API_CONFIGURATION_NAME].let { apiConfiguration ->

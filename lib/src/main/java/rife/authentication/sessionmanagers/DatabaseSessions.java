@@ -16,12 +16,9 @@ import rife.database.DbPreparedStatement;
 import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
 import rife.database.DbRowProcessor;
-import rife.database.DbTransactionUserWithoutResult;
 import rife.database.exceptions.DatabaseException;
-import rife.database.exceptions.ExecutionErrorException;
 import rife.tools.UniqueIDGenerator;
 import rife.tools.ExceptionUtils;
-import rife.tools.InnerClassException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

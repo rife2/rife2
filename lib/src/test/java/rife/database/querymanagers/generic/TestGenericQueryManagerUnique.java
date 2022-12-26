@@ -23,7 +23,7 @@ public class TestGenericQueryManagerUnique {
     }
 
     protected void setUp(Datasource datasource) {
-        uniqueManager_ = GenericQueryManagerFactory.getInstance(datasource, UniqueBean.class);
+        uniqueManager_ = GenericQueryManagerFactory.instance(datasource, UniqueBean.class);
         uniqueManager_.install();
     }
 

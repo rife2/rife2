@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGenericQueryManagerCallbacks {
     protected GenericQueryManager<CallbacksBean> setUpCallbacksBeanManager(Datasource datasource) {
-        var manager = GenericQueryManagerFactory.getInstance(datasource, CallbacksBean.class);
+        var manager = GenericQueryManagerFactory.instance(datasource, CallbacksBean.class);
         try {
             var listener = new AggregatingCallbacksBeanListener();
             manager.addListener(listener);
@@ -44,7 +44,7 @@ public class TestGenericQueryManagerCallbacks {
     }
 
     protected GenericQueryManager<CallbacksSparseBean> setUpCallbacksSparseBeanManager(Datasource datasource) {
-        var manager = GenericQueryManagerFactory.getInstance(datasource, CallbacksSparseBean.class);
+        var manager = GenericQueryManagerFactory.instance(datasource, CallbacksSparseBean.class);
         manager.install();
         return manager;
     }
@@ -54,7 +54,7 @@ public class TestGenericQueryManagerCallbacks {
     }
 
     protected GenericQueryManager<CallbacksProviderBean> setUpCallbacksProviderBeanManager(Datasource datasource) {
-        var manager = GenericQueryManagerFactory.getInstance(datasource, CallbacksProviderBean.class);
+        var manager = GenericQueryManagerFactory.instance(datasource, CallbacksProviderBean.class);
         manager.install();
         return manager;
     }

@@ -202,7 +202,7 @@ public class TestMetaData {
         person.setFirstname("John");
         person.setLastname("Smith");
 
-        GenericQueryManager<PersonCallbacks> manager = GenericQueryManagerFactory.getInstance(TestDatasources.DERBY, PersonCallbacks.class);
+        GenericQueryManager<PersonCallbacks> manager = GenericQueryManagerFactory.instance(TestDatasources.DERBY, PersonCallbacks.class);
         manager.install();
         try {
             int id = manager.save(person);

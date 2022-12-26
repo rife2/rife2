@@ -8,7 +8,7 @@ import rife.tools.InnerClassException;
 
 /**
  * Convenience class that offers the same facilities as the
- * <code>DbTransactionUser</code> class, but makes it easier to work with
+ * {@code DbTransactionUser} class, but makes it easier to work with
  * transactions that don't return any results.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -30,7 +30,7 @@ public abstract class DbTransactionUserWithoutResult<DataType> extends DbTransac
      *
      * @since 1.0
      */
-    public Object useTransaction()
+    public final Object useTransaction()
     throws InnerClassException {
         useTransactionWithoutResult();
         return null;

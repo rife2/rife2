@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDatabaseTaskOptions {
     public void setup(Datasource datasource) {
-        DatabaseScheduler manager = DatabaseSchedulerFactory.getInstance(datasource);
+        DatabaseScheduler manager = DatabaseSchedulerFactory.instance(datasource);
 
         try {
             assertTrue(manager.install());
@@ -38,7 +38,7 @@ public class TestDatabaseTaskOptions {
     }
 
     public void tearDown(Datasource datasource) {
-        DatabaseScheduler manager = DatabaseSchedulerFactory.getInstance(datasource);
+        DatabaseScheduler manager = DatabaseSchedulerFactory.instance(datasource);
 
         try {
             assertTrue(manager.remove());
@@ -52,7 +52,7 @@ public class TestDatabaseTaskOptions {
     public void testInstantiateTaskOptionManager(Datasource datasource) {
         setup(datasource);
         try {
-            TaskOptionManager manager = DatabaseTaskOptionsFactory.getInstance(datasource);
+            TaskOptionManager manager = DatabaseTaskOptionsFactory.instance(datasource);
             assertNotNull(manager);
         } finally {
             tearDown(datasource);
@@ -69,7 +69,7 @@ public class TestDatabaseTaskOptions {
             taskoption.setName("name");
             taskoption.setValue("value");
 
-            TaskOptionManager manager = DatabaseTaskOptionsFactory.getInstance(datasource);
+            TaskOptionManager manager = DatabaseTaskOptionsFactory.instance(datasource);
             try {
                 manager.addTaskOption(taskoption);
                 fail();
@@ -90,8 +90,8 @@ public class TestDatabaseTaskOptions {
 
         int task_id = 0;
         Task task = new Task();
-        TaskManager task_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskManager();
-        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
+        TaskManager task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
+        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
             Calendar cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -126,8 +126,8 @@ public class TestDatabaseTaskOptions {
 
         int task_id = 0;
         Task task = new Task();
-        TaskManager task_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskManager();
-        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
+        TaskManager task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
+        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
             Calendar cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -165,8 +165,8 @@ public class TestDatabaseTaskOptions {
 
         int task_id = 0;
         Task task = new Task();
-        TaskManager task_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskManager();
-        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
+        TaskManager task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
+        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
             Calendar cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -210,8 +210,8 @@ public class TestDatabaseTaskOptions {
 
         int task_id = 0;
         Task task = new Task();
-        TaskManager task_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskManager();
-        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
+        TaskManager task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
+        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
             Calendar cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -262,8 +262,8 @@ public class TestDatabaseTaskOptions {
 
         int task_id = 0;
         Task task = new Task();
-        TaskManager task_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskManager();
-        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
+        TaskManager task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
+        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
             Calendar cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -306,8 +306,8 @@ public class TestDatabaseTaskOptions {
 
         int task_id = 0;
         Task task = new Task();
-        TaskManager task_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskManager();
-        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
+        TaskManager task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
+        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
             Calendar cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -346,7 +346,7 @@ public class TestDatabaseTaskOptions {
     public void testGetNonExistingTaskOption(Datasource datasource) {
         setup(datasource);
 
-        TaskOptionManager manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
+        TaskOptionManager manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
         int task_nonexisting_id = 340;
         try {
             assertNull(manager.getTaskOption(task_nonexisting_id, "unknownname"));
@@ -363,7 +363,7 @@ public class TestDatabaseTaskOptions {
         setup(datasource);
 
         try {
-            TaskOptionManager manager = DatabaseSchedulerFactory.getInstance(datasource).getScheduler().getTaskOptionManager();
+            TaskOptionManager manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
             int task_nonexisting_id = 120;
             try {
                 assertFalse(manager.removeTaskOption(task_nonexisting_id, "unknownname"));

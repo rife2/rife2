@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDatabaseTasks {
     public void setup(Datasource datasource) {
-        DatabaseScheduler scheduler_manager = DatabaseSchedulerFactory.getInstance(datasource);
+        DatabaseScheduler scheduler_manager = DatabaseSchedulerFactory.instance(datasource);
         try {
             scheduler_manager.install();
         } catch (SchedulerManagerException e) {
@@ -34,7 +34,7 @@ public class TestDatabaseTasks {
     }
 
     public void tearDown(Datasource datasource) {
-        DatabaseScheduler scheduler_manager = DatabaseSchedulerFactory.getInstance(datasource);
+        DatabaseScheduler scheduler_manager = DatabaseSchedulerFactory.instance(datasource);
         try {
             scheduler_manager.remove();
         } catch (SchedulerManagerException e) {
@@ -45,7 +45,7 @@ public class TestDatabaseTasks {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstantiateTaskManager(Datasource datasource) {
-        TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
+        TaskManager manager = DatabaseTasksFactory.instance(datasource);
         assertNotNull(manager);
     }
 
@@ -62,7 +62,7 @@ public class TestDatabaseTasks {
         boolean busy = false;
 
         Task task = new Task();
-        TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
+        TaskManager manager = DatabaseTasksFactory.instance(datasource);
         try {
             task.setType(type);
             task.setPlanned(planned);
@@ -93,7 +93,7 @@ public class TestDatabaseTasks {
         boolean busy = false;
 
         Task task = new Task();
-        TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
+        TaskManager manager = DatabaseTasksFactory.instance(datasource);
         try {
             task.setType(type);
             task.setPlanned(planned);
@@ -132,7 +132,7 @@ public class TestDatabaseTasks {
         boolean busy = false;
 
         Task task = new Task();
-        TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
+        TaskManager manager = DatabaseTasksFactory.instance(datasource);
         try {
             task.setType(type);
             task.setPlanned(planned);
@@ -187,7 +187,7 @@ public class TestDatabaseTasks {
         boolean busy = false;
 
         Task task = new Task();
-        TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
+        TaskManager manager = DatabaseTasksFactory.instance(datasource);
         try {
             task.setType(type);
             task.setPlanned(planned);
@@ -208,7 +208,7 @@ public class TestDatabaseTasks {
     public void testGetNonExistingTask(Datasource datasource) {
         setup(datasource);
 
-        TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
+        TaskManager manager = DatabaseTasksFactory.instance(datasource);
         int task_nonexisting_id = 0;
         try {
             assertNull(manager.getTask(task_nonexisting_id));
@@ -224,7 +224,7 @@ public class TestDatabaseTasks {
     public void testRemoveNonExistingTask(Datasource datasource) {
         setup(datasource);
 
-        TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
+        TaskManager manager = DatabaseTasksFactory.instance(datasource);
         int task_nonexisting_id = 0;
         try {
             assertFalse(manager.removeTask(task_nonexisting_id));
@@ -242,7 +242,7 @@ public class TestDatabaseTasks {
 
         int one_hour = 1000 * 60 * 60;
 
-        TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
+        TaskManager manager = DatabaseTasksFactory.instance(datasource);
         try {
             Task task1 = new Task();
             task1.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -295,7 +295,7 @@ public class TestDatabaseTasks {
 
         int one_hour = 1000 * 60 * 60;
 
-        TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
+        TaskManager manager = DatabaseTasksFactory.instance(datasource);
         try {
             Task task1 = new Task();
             task1.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -348,7 +348,7 @@ public class TestDatabaseTasks {
 
         int one_hour = 1000 * 60 * 60;
 
-        TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
+        TaskManager manager = DatabaseTasksFactory.instance(datasource);
         try {
             Task task1 = new Task();
             task1.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -416,7 +416,7 @@ public class TestDatabaseTasks {
     public void testTaskActivation(Datasource datasource) {
         setup(datasource);
 
-        TaskManager manager = DatabaseTasksFactory.getInstance(datasource);
+        TaskManager manager = DatabaseTasksFactory.instance(datasource);
         try {
             Task task = new Task();
             task.setType(TestTasktypes.UPLOAD_GROUPS);

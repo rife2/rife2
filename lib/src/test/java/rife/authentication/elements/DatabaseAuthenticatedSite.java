@@ -18,7 +18,7 @@ public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
     AuthConfig configNotEnforced;
 
     public DatabaseAuthenticatedSite(Datasource datasource) {
-        validator = DatabaseSessionValidatorFactory.getInstance(datasource);
+        validator = DatabaseSessionValidatorFactory.instance(datasource);
         config = new AuthConfig(validator);
         configAdmin = new AuthConfig(validator);
         configMaint = new AuthConfig(validator);

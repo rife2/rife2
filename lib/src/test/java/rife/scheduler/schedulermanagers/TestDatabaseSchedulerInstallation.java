@@ -17,14 +17,14 @@ public class TestDatabaseSchedulerInstallation {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstantiateSchedulerManager(Datasource datasource) {
-        DatabaseScheduler manager = DatabaseSchedulerFactory.getInstance(datasource);
+        DatabaseScheduler manager = DatabaseSchedulerFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstall(Datasource datasource) {
-        DatabaseScheduler manager = DatabaseSchedulerFactory.getInstance(datasource);
+        DatabaseScheduler manager = DatabaseSchedulerFactory.instance(datasource);
 
         try {
             assertTrue(manager.install());
@@ -36,7 +36,7 @@ public class TestDatabaseSchedulerInstallation {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemove(Datasource datasource) {
-        DatabaseScheduler manager = DatabaseSchedulerFactory.getInstance(datasource);
+        DatabaseScheduler manager = DatabaseSchedulerFactory.instance(datasource);
 
         try {
             assertTrue(manager.remove());

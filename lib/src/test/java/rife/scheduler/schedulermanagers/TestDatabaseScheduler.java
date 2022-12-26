@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDatabaseScheduler {
     public void setup(Datasource datasource) {
-        DatabaseScheduler scheduler_manager = DatabaseSchedulerFactory.getInstance(datasource);
+        DatabaseScheduler scheduler_manager = DatabaseSchedulerFactory.instance(datasource);
         try {
             scheduler_manager.install();
         } catch (SchedulerManagerException e) {
@@ -37,7 +37,7 @@ public class TestDatabaseScheduler {
     }
 
     public void tearDown(Datasource datasource) {
-        DatabaseScheduler scheduler_manager = DatabaseSchedulerFactory.getInstance(datasource);
+        DatabaseScheduler scheduler_manager = DatabaseSchedulerFactory.instance(datasource);
         try {
             scheduler_manager.remove();
         } catch (SchedulerManagerException e) {
@@ -51,7 +51,7 @@ public class TestDatabaseScheduler {
         setup(datasource);
 
         try {
-            Scheduler scheduler = DatabaseSchedulerFactory.getInstance(datasource).getScheduler();
+            Scheduler scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
             assertNotNull(scheduler);
         } finally {
             tearDown(datasource);
@@ -63,7 +63,7 @@ public class TestDatabaseScheduler {
     public void testStartStopScheduler(Datasource datasource) {
         setup(datasource);
 
-        Scheduler scheduler = DatabaseSchedulerFactory.getInstance(datasource).getScheduler();
+        Scheduler scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
         try {
             scheduler.start();
             synchronized (scheduler) {
@@ -87,7 +87,7 @@ public class TestDatabaseScheduler {
     public void testAddExecutor(Datasource datasource) {
         setup(datasource);
         try {
-            Scheduler scheduler = DatabaseSchedulerFactory.getInstance(datasource).getScheduler();
+            Scheduler scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
             Executor executor = new TestExecutor();
 
             assertNull(scheduler.getExecutor(executor.getHandledTasktype()));
@@ -109,7 +109,7 @@ public class TestDatabaseScheduler {
         setup(datasource);
 
         int sleep_time = 60 * 1000;
-        Scheduler scheduler = DatabaseSchedulerFactory.getInstance(datasource).getScheduler();
+        Scheduler scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
         TestExecutor executor = new TestExecutor();
         TaskManager taskmanager = scheduler.getTaskManager();
         Task task = new Task();
@@ -173,7 +173,7 @@ public class TestDatabaseScheduler {
         int scheduler_sleeptime = 30 * 1000;                // 30 seconds
         int task_frequency = 60 * 1000;                    // 1 minute
         int thread_sleeptime = scheduler_sleeptime * 6;    // 3 minutes
-        Scheduler scheduler = DatabaseSchedulerFactory.getInstance(datasource).getScheduler();
+        Scheduler scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
         TestExecutor executor = new TestExecutor();
         TaskManager taskmanager = scheduler.getTaskManager();
         Task task = new Task();

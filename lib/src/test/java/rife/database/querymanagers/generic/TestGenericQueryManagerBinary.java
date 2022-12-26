@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGenericQueryManagerBinary {
     protected GenericQueryManager<BinaryBean> setUp(Datasource datasource) {
-        var manager = GenericQueryManagerFactory.getInstance(datasource, BinaryBean.class);
+        var manager = GenericQueryManagerFactory.instance(datasource, BinaryBean.class);
         manager.install();
         return manager;
     }
@@ -87,7 +87,7 @@ public class TestGenericQueryManagerBinary {
             assertNotEquals(999999, manager.save(bean));
             assertEquals(bean.getId(), id + 1);
 
-            var manager_othertable = GenericQueryManagerFactory.getInstance(datasource, BinaryBean.class, "othertable");
+            var manager_othertable = GenericQueryManagerFactory.instance(datasource, BinaryBean.class, "othertable");
             manager_othertable.install();
 
             var bytes4 = new byte[]{79, 15, 88, 42};

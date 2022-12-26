@@ -97,60 +97,51 @@ public class TestDbQueryManager {
             final var select = new Select(datasource).from("tbltest").field("count(*)");
 
             if (manager.getConnection().supportsTransactions() &&
-                // TODO : lock on in derby
+                // TODO : locks up in derby
                 !datasource.getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver") &&
                 // TODO : locks up on hsqldb
                 !datasource.getAliasedDriver().equals("org.hsqldb.jdbcDriver")) {
-                manager.inTransaction(new DbTransactionUserWithoutResult<>() {
-                    public void useTransactionWithoutResult()
-                    throws InnerClassException {
-                        manager.executeUpdate(insert);
-                        assertEquals(1, manager.executeGetFirstInt(select));
+                manager.inTransaction(() -> {
+                    manager.executeUpdate(insert);
+                    assertEquals(1, manager.executeGetFirstInt(select));
 
-                        manager.inTransaction(new DbTransactionUserWithoutResult<>() {
-                            public void useTransactionWithoutResult()
-                            throws InnerClassException {
-                                manager.inTransaction(new DbTransactionUserWithoutResult<>() {
-                                    public void useTransactionWithoutResult()
-                                    throws InnerClassException {
-                                        manager.executeUpdate(insert);
-                                        assertEquals(2, manager.executeGetFirstInt(select));
-                                    }
-                                });
-
-                                manager.executeUpdate(insert);
-                                assertEquals(3, manager.executeGetFirstInt(select));
-                            }
+                    manager.inTransaction(() -> {
+                        manager.inTransaction(() -> {
+                            manager.executeUpdate(insert);
+                            assertEquals(2, manager.executeGetFirstInt(select));
                         });
 
+                        manager.executeUpdate(insert);
                         assertEquals(3, manager.executeGetFirstInt(select));
+                    });
 
-                        // ensure that the transaction isn't committed yet
-                        // since this should only happen after the last transaction user
-                        var other_thread = new Thread() {
-                            public void run() {
-                                // HsqlDB only has read-uncommitted transaction isolation
-                                if ("org.hsqldb.jdbcDriver".equals(datasource.getAliasedDriver())) {
-                                    assertEquals(3, manager.executeGetFirstInt(select));
-                                }
-                                // all the rest should be fully isolated
-                                else {
-                                    assertEquals(0, manager.executeGetFirstInt(select));
-                                }
+                    assertEquals(3, manager.executeGetFirstInt(select));
 
-                                synchronized (this) {
-                                    this.notifyAll();
-                                }
+                    // ensure that the transaction isn't committed yet
+                    // since this should only happen after the last transaction user
+                    var other_thread = new Thread() {
+                        public void run() {
+                            // HsqlDB only has read-uncommitted transaction isolation
+                            if ("org.hsqldb.jdbcDriver".equals(datasource.getAliasedDriver())) {
+                                assertEquals(3, manager.executeGetFirstInt(select));
                             }
-                        };
+                            // all the rest should be fully isolated
+                            else {
+                                assertEquals(0, manager.executeGetFirstInt(select));
+                            }
 
-                        other_thread.start();
-                        while (other_thread.isAlive()) {
-                            synchronized (other_thread) {
-                                try {
-                                    other_thread.wait();
-                                } catch (InterruptedException ignored) {
-                                }
+                            synchronized (this) {
+                                this.notifyAll();
+                            }
+                        }
+                    };
+
+                    other_thread.start();
+                    while (other_thread.isAlive()) {
+                        synchronized (other_thread) {
+                            try {
+                                other_thread.wait();
+                            } catch (InterruptedException ignored) {
                             }
                         }
                     }
@@ -175,30 +166,24 @@ public class TestDbQueryManager {
             final var select = new Select(datasource).from("tbltest").field("count(*)");
 
             if (manager.getConnection().supportsTransactions()) {
-                manager.inTransaction(new DbTransactionUserWithoutResult<>() {
-                    public void useTransactionWithoutResult()
-                    throws InnerClassException {
-                        manager.executeUpdate(insert);
-                        assertEquals(1, manager.executeGetFirstInt(select));
+                manager.inTransaction(() -> {
+                    manager.executeUpdate(insert);
+                    assertEquals(1, manager.executeGetFirstInt(select));
 
+                    manager.inTransaction(() -> {
                         manager.inTransaction(new DbTransactionUserWithoutResult<>() {
                             public void useTransactionWithoutResult()
                             throws InnerClassException {
-                                manager.inTransaction(new DbTransactionUserWithoutResult<>() {
-                                    public void useTransactionWithoutResult()
-                                    throws InnerClassException {
-                                        manager.executeUpdate(insert);
-                                        rollback();
-                                    }
-                                });
-
                                 manager.executeUpdate(insert);
-                                fail();
+                                rollback();
                             }
                         });
 
+                        manager.executeUpdate(insert);
                         fail();
-                    }
+                    });
+
+                    fail();
                 });
                 assertEquals(0, manager.executeGetFirstInt(select));
             }
@@ -221,30 +206,21 @@ public class TestDbQueryManager {
 
             if (manager.getConnection().supportsTransactions()) {
                 try {
-                    manager.inTransaction(new DbTransactionUserWithoutResult<>() {
-                        public void useTransactionWithoutResult()
-                        throws InnerClassException {
-                            manager.executeUpdate(insert);
-                            assertEquals(1, manager.executeGetFirstInt(select));
+                    manager.inTransaction(() -> {
+                        manager.executeUpdate(insert);
+                        assertEquals(1, manager.executeGetFirstInt(select));
 
-                            manager.inTransaction(new DbTransactionUserWithoutResult<>() {
-                                public void useTransactionWithoutResult()
-                                throws InnerClassException {
-                                    manager.inTransaction(new DbTransactionUserWithoutResult<>() {
-                                        public void useTransactionWithoutResult()
-                                        throws InnerClassException {
-                                            manager.executeUpdate(insert);
-                                            throw new RuntimeException("something happened");
-                                        }
-                                    });
-
-                                    manager.executeUpdate(insert);
-                                    fail();
-                                }
+                        manager.inTransaction(() -> {
+                            manager.inTransaction(() -> {
+                                manager.executeUpdate(insert);
+                                throw new RuntimeException("something happened");
                             });
 
+                            manager.executeUpdate(insert);
                             fail();
-                        }
+                        });
+
+                        fail();
                     });
 
                     fail();
@@ -272,14 +248,11 @@ public class TestDbQueryManager {
             final var select = new Select(datasource).from("tbltest").field("count(*)");
 
             if (manager.getConnection().supportsTransactions()) {
-                manager.inTransaction(new DbTransactionUserWithoutResult<>() {
-                    public void useTransactionWithoutResult()
-                    throws InnerClassException {
-                        manager.executeUpdate(insert);
-                        assertEquals(1, manager.executeGetFirstInt(select));
+                manager.inTransaction(() -> {
+                    manager.executeUpdate(insert);
+                    assertEquals(1, manager.executeGetFirstInt(select));
 
-                        manager.getConnection().rollback();
-                    }
+                    manager.getConnection().rollback();
                 });
                 assertEquals(0, manager.executeGetFirstInt(select));
             }
@@ -302,30 +275,21 @@ public class TestDbQueryManager {
 
             if (manager.getConnection().supportsTransactions()) {
                 try {
-                    manager.inTransaction(new DbTransactionUserWithoutResult<>() {
-                        public void useTransactionWithoutResult()
-                        throws InnerClassException {
-                            manager.executeUpdate(insert);
-                            assertEquals(1, manager.executeGetFirstInt(select));
+                    manager.inTransaction(() -> {
+                        manager.executeUpdate(insert);
+                        assertEquals(1, manager.executeGetFirstInt(select));
 
-                            manager.inTransaction(new DbTransactionUserWithoutResult<>() {
-                                public void useTransactionWithoutResult()
-                                throws InnerClassException {
-                                    manager.inTransaction(new DbTransactionUserWithoutResult<>() {
-                                        public void useTransactionWithoutResult()
-                                        throws InnerClassException {
-                                            manager.executeUpdate(insert);
-                                            throw new TestCommittingRuntimeException("something happened");
-                                        }
-                                    });
-
-                                    manager.executeUpdate(insert);
-                                    fail();
-                                }
+                        manager.inTransaction(() -> {
+                            manager.inTransaction(() -> {
+                                manager.executeUpdate(insert);
+                                throw new TestCommittingRuntimeException("something happened");
                             });
 
+                            manager.executeUpdate(insert);
                             fail();
-                        }
+                        });
+
+                        fail();
                     });
 
                     fail();
@@ -453,12 +417,7 @@ public class TestDbQueryManager {
             var insert_query = new Insert(datasource);
             insert_query.into("tbltest")
                 .fieldParameter("name");
-            assertEquals(1, manager.executeUpdate(insert_query, new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString("name", "me");
-                }
-            }));
+            assertEquals(1, manager.executeUpdate(insert_query, s -> s.setString("name", "me")));
 
             assertEquals("me", manager.executeGetFirstString(new Select(datasource).from("tbltest")));
 
@@ -527,24 +486,14 @@ public class TestDbQueryManager {
             assertTrue(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = 'me'")));
 
             assertTrue(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = ?"), s -> s.setString(1, "me")));
-            assertTrue(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = ?"), new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString(1, "me");
-                }
-            }));
+            assertTrue(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = ?"), s -> s.setString(1, "me")));
 
             manager.executeUpdate(new Delete(datasource).from("tbltest"));
 
             assertFalse(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = 'me'")));
 
             assertFalse(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = ?"), s -> s.setString(1, "me")));
-            assertFalse(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = ?"), new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString(1, "me");
-                }
-            }));
+            assertFalse(manager.executeHasResultRows(new ReadQueryString("SELECT name FROM tbltest WHERE name = ?"), s -> s.setString(1, "me")));
         } catch (DatabaseException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
@@ -898,7 +847,7 @@ public class TestDbQueryManager {
             select_query.from("tbltest")
                 .field("datacol")
                 .whereParameter("lastcol", "=");
-            assertEquals(23, manager.executeGetFirstByte(select_query, s ->s.setString("lastcol", "Smith")));
+            assertEquals(23, manager.executeGetFirstByte(select_query, s -> s.setString("lastcol", "Smith")));
             assertEquals(23, manager.executeGetFirstByte(select_query, new DbPreparedStatementHandler<>() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
@@ -2202,14 +2151,14 @@ public class TestDbQueryManager {
                 .into("tbltest")
                 .fieldParameter("firstcol")
                 .field("lastcol", "Smith"), statement -> {
-                    if (datasource.getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver") ||
-                        datasource.getAliasedDriver().equals("org.h2.Driver") ||
-                        datasource.getAliasedDriver().equals("org.hsqldb.jdbcDriver")) {
-                        statement.setBytes("firstcol", "Piet".getBytes(StandardCharsets.UTF_8));
-                    } else {
-                        statement.setString("firstcol", "Piet");
-                    }
-                });
+                if (datasource.getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver") ||
+                    datasource.getAliasedDriver().equals("org.h2.Driver") ||
+                    datasource.getAliasedDriver().equals("org.hsqldb.jdbcDriver")) {
+                    statement.setBytes("firstcol", "Piet".getBytes(StandardCharsets.UTF_8));
+                } else {
+                    statement.setString("firstcol", "Piet");
+                }
+            });
 
             manager.executeUseFirstBinaryStream(select_query, new InputStreamUser<>() {
                 public Object useInputStream(InputStream stream)

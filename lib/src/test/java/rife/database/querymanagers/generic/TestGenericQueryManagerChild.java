@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class TestGenericQueryManagerChild {
     protected GenericQueryManager<ChildBean> setUp(Datasource datasource) {
-        var manager = GenericQueryManagerFactory.getInstance(datasource, ChildBean.class);
+        var manager = GenericQueryManagerFactory.instance(datasource, ChildBean.class);
         manager.install();
         return manager;
     }

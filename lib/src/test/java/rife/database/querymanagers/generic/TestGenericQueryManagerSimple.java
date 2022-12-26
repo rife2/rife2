@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGenericQueryManagerSimple {
     protected GenericQueryManager<SimpleBean> setUp(Datasource datasource) {
-        var manager = GenericQueryManagerFactory.getInstance(datasource, SimpleBean.class);
+        var manager = GenericQueryManagerFactory.instance(datasource, SimpleBean.class);
         manager.install();
         return manager;
     }
@@ -33,7 +33,7 @@ public class TestGenericQueryManagerSimple {
     public void testNoDefaultConstructor(Datasource datasource) {
         var manager = setUp(datasource);
         try {
-            GenericQueryManagerFactory.getInstance(datasource, NoDefaultConstructorBean.class);
+            GenericQueryManagerFactory.instance(datasource, NoDefaultConstructorBean.class);
             fail("MissingDefaultConstructorException exception wasn't thrown");
         } catch (MissingDefaultConstructorException e) {
             assertSame(e.getBeanClass(), NoDefaultConstructorBean.class);
@@ -113,7 +113,7 @@ public class TestGenericQueryManagerSimple {
             assertNotEquals(999999, manager.save(bean));
             assertEquals(bean.getId(), id + 1);
 
-            var manager_othertable = GenericQueryManagerFactory.getInstance(datasource, SimpleBean.class, "othertable");
+            var manager_othertable = GenericQueryManagerFactory.instance(datasource, SimpleBean.class, "othertable");
             manager_othertable.install();
 
             var bean2 = new SimpleBean();
@@ -136,7 +136,7 @@ public class TestGenericQueryManagerSimple {
     public void testSparseIdentifier(Datasource datasource) {
         var manager = setUp(datasource);
         try {
-            var manager_sparsebean = GenericQueryManagerFactory.getInstance(datasource, SparseBean.class);
+            var manager_sparsebean = GenericQueryManagerFactory.instance(datasource, SparseBean.class);
             var sparse_bean = new SparseBean();
 
             manager_sparsebean.install();

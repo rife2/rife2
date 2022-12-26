@@ -13,7 +13,7 @@ public abstract class DatabaseSchedulerFactory extends DbQueryManagerFactory {
 
     private static final DbQueryManagerCache cache_ = new DbQueryManagerCache();
 
-    public static DatabaseScheduler getInstance(Datasource datasource) {
-        return (DatabaseScheduler) getInstance(MANAGER_PACKAGE_NAME, cache_, datasource);
+    public static DatabaseScheduler instance(Datasource datasource) {
+        return (DatabaseScheduler) instance(MANAGER_PACKAGE_NAME, cache_, datasource);
     }
 }

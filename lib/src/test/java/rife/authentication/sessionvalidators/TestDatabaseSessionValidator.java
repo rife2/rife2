@@ -26,7 +26,7 @@ public class TestDatabaseSessionValidator {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstantiation(Datasource datasource) {
-        SessionValidator validator = DatabaseSessionValidatorFactory.getInstance(datasource);
+        SessionValidator validator = DatabaseSessionValidatorFactory.instance(datasource);
         assertNotNull(validator);
         assertTrue(validator instanceof DatabaseSessionValidator);
     }
@@ -34,7 +34,7 @@ public class TestDatabaseSessionValidator {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testValidSessionId(Datasource datasource) {
-        SessionValidator validator = DatabaseSessionValidatorFactory.getInstance(datasource);
+        SessionValidator validator = DatabaseSessionValidatorFactory.instance(datasource);
 
         assertTrue(validator.isAccessAuthorized(1));
     }
@@ -42,8 +42,8 @@ public class TestDatabaseSessionValidator {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSessionValidity(Datasource datasource) {
-        SessionValidator validator = DatabaseSessionValidatorFactory.getInstance(datasource);
-        DatabaseSessions sessions = DatabaseSessionsFactory.getInstance(datasource);
+        SessionValidator validator = DatabaseSessionValidatorFactory.instance(datasource);
+        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(120000);
         validator.setSessionManager(sessions);
 
@@ -80,9 +80,9 @@ public class TestDatabaseSessionValidator {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSessionValidityRole(Datasource datasource) {
-        SessionValidator validator = DatabaseSessionValidatorFactory.getInstance(datasource);
-        DatabaseUsers users = DatabaseUsersFactory.getInstance(datasource);
-        DatabaseSessions sessions = DatabaseSessionsFactory.getInstance(datasource);
+        SessionValidator validator = DatabaseSessionValidatorFactory.instance(datasource);
+        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(120000);
         validator.setSessionManager(sessions);
 

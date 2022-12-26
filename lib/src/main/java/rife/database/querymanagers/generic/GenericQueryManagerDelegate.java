@@ -18,12 +18,12 @@ public class GenericQueryManagerDelegate<T> implements GenericQueryManager<T> {
 
     public GenericQueryManagerDelegate(Datasource datasource, Class<T> klass, String table) {
         datasource_ = datasource;
-        delegate_ = GenericQueryManagerFactory.getInstance(datasource, klass, table);
+        delegate_ = GenericQueryManagerFactory.instance(datasource, klass, table);
     }
 
     public GenericQueryManagerDelegate(Datasource datasource, Class<T> klass) {
         datasource_ = datasource;
-        delegate_ = GenericQueryManagerFactory.getInstance(datasource, klass);
+        delegate_ = GenericQueryManagerFactory.instance(datasource, klass);
     }
 
     public Datasource getDatasource() {

@@ -50,7 +50,7 @@ public class TestDbConcurrency {
         display('x');
     }
 
-    @ParameterizedTest
+    @ParameterizedTest()
     @ArgumentsSource(TestDatasources.class)
     public void testConcurrency(Datasource datasource) {
         var structure = new Structure(datasource);
@@ -272,7 +272,7 @@ class Concurrency extends DbQueryManager implements Runnable {
         }
 
         if (TestDbConcurrency.DEBUG) {
-            System.out.println(Thread.currentThread().getName() + " : comitted");
+            System.out.println(Thread.currentThread().getName() + " : committed");
         }
     }
 }

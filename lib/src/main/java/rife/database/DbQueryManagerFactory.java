@@ -43,8 +43,8 @@ public abstract class DbQueryManagerFactory {
      * @return the created <code>DbQueryManager</code> instance
      * @since 1.0
      */
-    protected static DbQueryManager getInstance(String managerPackageName, DbQueryManagerCache cache, Datasource datasource) {
-        return getInstance(managerPackageName, cache, datasource, "");
+    protected static DbQueryManager instance(String managerPackageName, DbQueryManagerCache cache, Datasource datasource) {
+        return instance(managerPackageName, cache, datasource, "");
     }
 
     /**
@@ -61,7 +61,7 @@ public abstract class DbQueryManagerFactory {
      * @return the created <code>DbQueryManager</code> instance
      * @since 1.0
      */
-    protected static DbQueryManager getInstance(String managerPackageName, DbQueryManagerCache cache, Datasource datasource, String identifier) {
+    protected static DbQueryManager instance(String managerPackageName, DbQueryManagerCache cache, Datasource datasource, String identifier) {
         if (null == managerPackageName) throw new IllegalArgumentException("managerPackageName can't be null.");
         if (0 == managerPackageName.length()) throw new IllegalArgumentException("managerPackageName can't be empty.");
         if (null == cache) throw new IllegalArgumentException("cache can't be null.");

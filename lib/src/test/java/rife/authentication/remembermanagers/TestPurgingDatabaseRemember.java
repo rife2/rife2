@@ -17,14 +17,14 @@ public class TestPurgingDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstantiation(Datasource datasource) {
-        DatabaseRemember manager = DatabaseRememberFactory.getInstance(datasource);
+        DatabaseRemember manager = DatabaseRememberFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStartSession(Datasource datasource) {
-        PurgingRememberManager remember = new PurgingRememberManager(DatabaseRememberFactory.getInstance(datasource));
+        PurgingRememberManager remember = new PurgingRememberManager(DatabaseRememberFactory.instance(datasource));
         remember.setRememberPurgeFrequency(0);
 
         int user_id = 143;
@@ -53,7 +53,7 @@ public class TestPurgingDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testPurgeRemember(Datasource datasource) {
-        PurgingRememberManager remember = new PurgingRememberManager(DatabaseRememberFactory.getInstance(datasource));
+        PurgingRememberManager remember = new PurgingRememberManager(DatabaseRememberFactory.instance(datasource));
         remember.setRememberDuration(2000);
         remember.setRememberPurgeFrequency(1);
         remember.setRememberPurgeScale(1);

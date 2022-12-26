@@ -35,8 +35,8 @@ public class DatabaseUsersFactory extends DbQueryManagerFactory {
      * @return the requested {@code DatabaseUsers} instance
      * @since 1.0
      */
-    public static DatabaseUsers getInstance(Datasource datasource) {
-        return getInstance(datasource, null);
+    public static DatabaseUsers instance(Datasource datasource) {
+        return instance(datasource, null);
     }
 
     /**
@@ -49,9 +49,9 @@ public class DatabaseUsersFactory extends DbQueryManagerFactory {
      * @return the requested {@code DatabaseUsers} instance
      * @since 1.0
      */
-    public static DatabaseUsers getInstance(Datasource datasource, String identifier) {
+    public static DatabaseUsers instance(Datasource datasource, String identifier) {
         if (null == identifier) identifier = "";
 
-        return (DatabaseUsers) getInstance(MANAGER_PACKAGE_NAME, cache_, datasource, identifier);
+        return (DatabaseUsers) instance(MANAGER_PACKAGE_NAME, cache_, datasource, identifier);
     }
 }

@@ -31,9 +31,9 @@ public class DatabaseSessionsFactory extends DbQueryManagerFactory
 	 * @return the requested {@code DatabaseSessions} instance
 	 * @since 1.0
 	 */
-	public static DatabaseSessions getInstance(Datasource datasource)
+	public static DatabaseSessions instance(Datasource datasource)
 	{
-		return (DatabaseSessions)getInstance(MANAGER_PACKAGE_NAME, cache_, datasource);
+		return (DatabaseSessions) instance(MANAGER_PACKAGE_NAME, cache_, datasource);
 	}
 
 }

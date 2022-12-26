@@ -22,8 +22,8 @@ public class TestGenericQueryManagerManyToMany {
     private GenericQueryManager<MMSecondBean> secondManager_ = null;
 
     protected void setUp(Datasource datasource) {
-        firstManager_ = GenericQueryManagerFactory.getInstance(datasource, MMFirstBean.class);
-        secondManager_ = GenericQueryManagerFactory.getInstance(datasource, MMSecondBean.class);
+        firstManager_ = GenericQueryManagerFactory.instance(datasource, MMFirstBean.class);
+        secondManager_ = GenericQueryManagerFactory.instance(datasource, MMSecondBean.class);
         secondManager_.install();
         firstManager_.install();
     }

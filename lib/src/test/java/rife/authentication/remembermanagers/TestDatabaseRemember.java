@@ -19,14 +19,14 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstantiation(Datasource datasource) {
-        DatabaseRemember manager = DatabaseRememberFactory.getInstance(datasource);
+        DatabaseRemember manager = DatabaseRememberFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstall(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.getInstance(datasource);
+        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
 
         try {
             assertTrue(remember.install());
@@ -38,7 +38,7 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemove(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.getInstance(datasource);
+        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
 
         try {
             assertTrue(remember.remove());
@@ -50,7 +50,7 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testCreateRememberId(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.getInstance(datasource);
+        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
 
         int user_id = 143;
 
@@ -78,7 +78,7 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetRememberedUserId(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.getInstance(datasource);
+        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
 
         try {
             remember.install();
@@ -119,7 +119,7 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testEraseRememberId(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.getInstance(datasource);
+        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
 
         int user_id = 93;
 
@@ -145,7 +145,7 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testEraseUnknownSession(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.getInstance(datasource);
+        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
 
         String remember_id = "unknown";
         try {
@@ -166,7 +166,7 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testEraseAllRememberIds(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.getInstance(datasource);
+        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
 
         try {
             remember.install();
@@ -203,7 +203,7 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testEraseUserRememberIds(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.getInstance(datasource);
+        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
 
         try {
             remember.install();
@@ -238,7 +238,7 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testEraseUnkownUserRememberIds(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.getInstance(datasource);
+        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
 
         try {
             remember.install();
@@ -270,7 +270,7 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testPurgeRememberIds(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.getInstance(datasource);
+        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
         remember.setRememberDuration(2000);
 
         int user_id = 9478;
