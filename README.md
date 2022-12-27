@@ -51,7 +51,7 @@ application {
 }
 
 dependencies {
-    implementation("com.uwyn.rife2:rife2:0.8.7")
+    implementation("com.uwyn.rife2:rife2:0.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
     testImplementation("org.jsoup:jsoup:1.15.3")
     runtimeOnly("org.eclipse.jetty:jetty-server:11.0.12")
