@@ -421,7 +421,7 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Set whether the property value has to be unique.
      * <p>Note that this is only applicable to contexts where a collection
-     * of the data is stored an that uniqueness can apply against the
+     * of the data is stored and that uniqueness can apply against the
      * other entries. In a singular context, uniqueness is always
      * guaranteed.
      *
@@ -462,7 +462,7 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Set whether the property value is an identifier.
      * <p>Note that this is only applicable to contexts where a collection
-     * of the data is stored an that identification can apply against the
+     * of the data is stored and that identification can apply against the
      * other entries. In a singular context, identification is
      * meaningless.
      *
