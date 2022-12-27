@@ -63,7 +63,7 @@ import java.util.logging.Logger;
  * <p>Apart from the handling of content, this query manager also integrates
  * the functionalities of the {@link OrdinalManager} class.
  * <p>The new '{@link rife.validation.ConstrainedProperty#ordinal(boolean) ordinal}'
- * constraint indicates which bean property will be used to order that table
+ * constraint indicates which bean property will be used to order that table's
  * rows. When saving and deleting beans, the ordinal values will be
  * automatically updated in the entire table. The
  * <code>ContentQueryManager</code> also provides the {@link
@@ -71,7 +71,7 @@ import java.util.logging.Logger;
  * #up(Constrained, String) up} and {@link #down(Constrained, String) down}
  * methods to easily manipulate the order of existing rows.
  *
- * @author Geert Bevin (gbevin[remove] at uwyn dot com)i
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
 public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> implements Cloneable {

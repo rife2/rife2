@@ -10,16 +10,6 @@ import rife.database.querymanagers.generic.GenericQueryManagerFactory;
 import rife.engine.*;
 
 public class HelloGenericQueryManager extends Site {
-    public static class Person {
-        private Integer id_;
-        private String name_;
-
-        public void    setId(Integer id)    { id_ = id; }
-        public Integer getId()              { return id_; }
-        public void    setName(String name) { name_ = name; }
-        public String  getName()            { return name_; }
-    }
-
     Datasource datasource = new Datasource(
         "org.h2.Driver", "jdbc:h2:./embedded_dbs/h2/hello", "sa", "", 5);
     GenericQueryManager<Person> manager =

@@ -304,7 +304,7 @@ public interface GenericQueryManager<BeanType> extends ValidationContext {
     RestoreQuery getRestoreQuery();
 
     /**
-     * Get the base query used to restore a single identifed bean.
+     * Get the base query used to restore a single identified bean.
      * <p>This method will return the base query that would be used to restore
      * a single bean with {@link #restore(int)}. This can be used to restrict
      * the query so that a bean not matching the query will not be returned.
