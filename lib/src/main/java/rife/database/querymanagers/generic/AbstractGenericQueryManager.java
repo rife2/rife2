@@ -1011,12 +1011,6 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         return executeFetchAll(restore, rowProcessor);
     }
 
-    protected boolean _restore(Select restore, RowProcessor rowProcessor)
-    throws DatabaseException {
-        assert restore != null;
-
-        return executeFetchAll(restore, rowProcessor);
-    }
 
     protected void restoreManyToMany(final BeanType bean, final int objectId) {
         // handle many-to-many associations

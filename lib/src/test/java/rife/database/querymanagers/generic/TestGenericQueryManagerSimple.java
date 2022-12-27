@@ -344,6 +344,91 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
+    public void testRestoreBeanFetcher(Datasource datasource) {
+        var manager = setUp(datasource);
+        try {
+            var bean1 = new SimpleBean();
+            var bean2 = new SimpleBean();
+            var bean3 = new SimpleBean();
+
+            final var uuid1 = UUID.randomUUID();
+            final var uuid2 = UUID.randomUUID();
+            final var uuid3 = UUID.randomUUID();
+
+            bean1.setTestString("This is bean1");
+            bean1.setUuid(uuid1);
+            bean1.setEnum(SomeEnum.VALUE_ONE);
+            bean2.setTestString("This is bean2");
+            bean2.setUuid(uuid2);
+            bean2.setEnum(SomeEnum.VALUE_TWO);
+            bean3.setTestString("This is bean3");
+            bean3.setUuid(uuid3);
+            bean3.setEnum(SomeEnum.VALUE_THREE);
+
+            manager.save(bean1);
+            manager.save(bean2);
+            manager.save(bean3);
+
+            final var count = new int[]{0};
+            manager.restore(bean -> {
+                count[0]++;
+
+                assertTrue(
+                    bean.getTestString().equals("This is bean1") ||
+                    bean.getTestString().equals("This is bean2") ||
+                    bean.getTestString().equals("This is bean3"));
+
+                assertTrue(
+                    bean.getUuid().equals(uuid1) ||
+                    bean.getUuid().equals(uuid2) ||
+                    bean.getUuid().equals(uuid3));
+            });
+
+            assertEquals(count[0], 3);
+        } finally {
+            tearDown(manager);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    public void testRestoreQueryBeanFetcher(Datasource datasource) {
+        var manager = setUp(datasource);
+        try {
+            var bean1 = new SimpleBean();
+            var bean2 = new SimpleBean();
+            var bean3 = new SimpleBean();
+
+            final var uuid1 = UUID.randomUUID();
+            final var uuid2 = UUID.randomUUID();
+            final var uuid3 = UUID.randomUUID();
+
+            bean1.setTestString("This is bean1");
+            bean1.setUuid(uuid1);
+            bean2.setTestString("This is bean2");
+            bean2.setUuid(uuid2);
+            bean3.setTestString("This is bean3");
+            bean3.setUuid(uuid3);
+
+            manager.save(bean1);
+            manager.save(bean2);
+            manager.save(bean3);
+
+            final var count = new int[]{0};
+            manager.restore(manager.getRestoreQuery().where("testString", "LIKE", "%bean2"), bean -> {
+                count[0]++;
+                assertEquals("This is bean2", bean.getTestString());
+                assertEquals(uuid2, bean.getUuid());
+            });
+
+            assertEquals(count[0], 1);
+        } finally {
+            tearDown(manager);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
     public void testCount(Datasource datasource) {
         var manager = setUp(datasource);
         try {

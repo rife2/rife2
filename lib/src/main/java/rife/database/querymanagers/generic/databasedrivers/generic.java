@@ -291,9 +291,14 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
         return _restore(getInternalRestoreListQuery(), rowProcessor);
     }
 
-    public boolean restore(RowProcessor rowProcessor)
+    public boolean restore(BeanFetcher<BeanType> beanFetcher)
     throws DatabaseException {
-        return _restore(getInternalRestoreListQuery(), rowProcessor);
+        return _restore(getInternalRestoreListQuery(), new DbBeanFetcher<>(getDatasource(), baseClass_) {
+            public boolean gotBeanInstance(BeanType instance) {
+                beanFetcher.gotBeanInstance(instance);
+                return true;
+            }
+        });
     }
 
     public List<BeanType> restore(RestoreQuery query)
@@ -305,10 +310,14 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     throws DatabaseException {
         return _restore(query.getDelegate(), rowProcessor);
     }
-
-    public boolean restore(RestoreQuery query, RowProcessor rowProcessor)
+    public boolean restore(RestoreQuery query, BeanFetcher<BeanType> beanFetcher)
     throws DatabaseException {
-        return _restore(query.getDelegate(), rowProcessor);
+        return _restore(query.getDelegate(), new DbBeanFetcher<>(getDatasource(), baseClass_) {
+            public boolean gotBeanInstance(BeanType instance) {
+                beanFetcher.gotBeanInstance(instance);
+                return true;
+            }
+        });
     }
 
     public BeanType restoreFirst(RestoreQuery query)

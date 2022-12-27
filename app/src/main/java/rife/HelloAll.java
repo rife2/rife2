@@ -15,6 +15,7 @@ public class HelloAll extends Site {
         group(new HelloDatabase());
         group(new HelloErrors());
         group(new HelloForm());
+        group("/generic", new HelloGenericQueryManager());
         group(new HelloGroup());
         group(new HelloLink());
         group(new HelloPathInfoMapping());

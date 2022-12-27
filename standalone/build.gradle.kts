@@ -36,7 +36,7 @@ tasks.register<JavaExec>("runHelloAll") {
     project.logger.lifecycle("   Open your browser at http://localhost:8080/guess")
     project.logger.lifecycle("")
     project.logger.lifecycle(" HelloDatabase:")
-    project.logger.lifecycle("   Install the database at at http://localhost:8080/install")
+    project.logger.lifecycle("   Install the database at http://localhost:8080/install")
     project.logger.lifecycle("   Then add names by going to http://localhost:8080/add")
     project.logger.lifecycle("   When you're done, delete the database through http://localhost:8080/remove")
     project.logger.lifecycle("")
@@ -46,6 +46,11 @@ tasks.register<JavaExec>("runHelloAll") {
     project.logger.lifecycle("")
     project.logger.lifecycle(" HelloForm:")
     project.logger.lifecycle("   Open your browser at http://localhost:8080/form")
+    project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloGenericQueryManager:")
+    project.logger.lifecycle("   Install the database at http://localhost:8080/generic/install")
+    project.logger.lifecycle("   Then add names by going to http://localhost:8080/generic/add")
+    project.logger.lifecycle("   Delete the database through http://localhost:8080/generic/remove")
     project.logger.lifecycle("")
     project.logger.lifecycle(" HelloGroup:")
     project.logger.lifecycle("   Open your browser at http://localhost:8080/welcome")
@@ -121,6 +126,18 @@ tasks.register<JavaExec>("runHelloForm") {
     project.logger.lifecycle("")
     project.logger.lifecycle("================================================================================")
     project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/form")
+    project.logger.lifecycle("================================================================================")
+    project.logger.lifecycle("")
+}
+
+tasks.register<JavaExec>("HelloGenericQueryManager") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("rife.HelloGenericQueryManager")
+    project.logger.lifecycle("")
+    project.logger.lifecycle("================================================================================")
+    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/install")
+    project.logger.lifecycle(" Then add names by going to http://localhost:8080/add")
+    project.logger.lifecycle(" When you're done, delete the database through http://localhost:8080/remove")
     project.logger.lifecycle("================================================================================")
     project.logger.lifecycle("")
 }

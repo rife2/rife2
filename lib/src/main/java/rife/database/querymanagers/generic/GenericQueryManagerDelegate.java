@@ -107,9 +107,9 @@ public class GenericQueryManagerDelegate<T> implements GenericQueryManager<T> {
         return delegate_.restore(rowProcessor);
     }
 
-    public boolean restore(RowProcessor rowProcessor)
+    public boolean restore(BeanFetcher<T> beanFetcher)
     throws DatabaseException {
-        return delegate_.restore(rowProcessor);
+        return delegate_.restore(beanFetcher);
     }
 
     public T restoreFirst(RestoreQuery query)
@@ -122,9 +122,9 @@ public class GenericQueryManagerDelegate<T> implements GenericQueryManager<T> {
         return delegate_.restore(query, rowProcessor);
     }
 
-    public boolean restore(RestoreQuery query, RowProcessor rowProcessor)
+    public boolean restore(RestoreQuery query, BeanFetcher<T> beanFetcher)
     throws DatabaseException {
-        return delegate_.restore(query, rowProcessor);
+        return delegate_.restore(query, beanFetcher);
     }
 
     public CreateTable getInstallTableQuery()

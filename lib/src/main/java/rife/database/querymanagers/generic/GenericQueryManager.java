@@ -5,11 +5,11 @@
  */
 package rife.database.querymanagers.generic;
 
-import rife.database.DbRowProcessor;
-import rife.database.RowProcessor;
+import rife.database.*;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.CreateTable;
 import rife.validation.ValidationContext;
+
 import java.util.List;
 
 /**
@@ -202,17 +202,17 @@ public interface GenericQueryManager<BeanType> extends ValidationContext {
     throws DatabaseException;
 
     /**
-     * Restore all beans using the row processor provided.
-     * <p>This method will return all beans using a {@link RowProcessor} for
+     * Restore all beans using the bean fetcher provided.
+     * <p>This method will return all beans using a {@link BeanFetcher} for
      * reduced memory requirements as opposed to the full {@link List} version
      * of {@link #restore()}.
      *
-     * @param rowProcessor the RowProcessor each row should be passed to
+     * @param beanFetcher the RowProcessor each row should be passed to
      * @return true if beans were restored, false if not
      * @see #restore()
      * @since 1.0
      */
-    boolean restore(RowProcessor rowProcessor)
+    boolean restore(BeanFetcher<BeanType> beanFetcher)
     throws DatabaseException;
 
     /**
@@ -263,20 +263,20 @@ public interface GenericQueryManager<BeanType> extends ValidationContext {
 
     /**
      * Restore a list of beans that match the provided {@link RestoreQuery}
-     * and process with the {@link RowProcessor}.
+     * and process with the {@link BeanFetcher}.
      * <p>This method will return a list of beans that match the provided
      * RestoreQuery and process these matches with the provided {@link
-     * RowProcessor}. This can be used for more memory-intensive (or larger
+     * BeanFetcher}. This can be used for more memory-intensive (or larger
      * result sets) complex queries or for the exclusion of certain beans from
      * the results.
      *
-     * @param query        the query the beans should be restored from
-     * @param rowProcessor the row processor that should be used to process
-     *                     each matched bean row
+     * @param query       the query the beans should be restored from
+     * @param beanFetcher the bean fetch that should be used to process
+     *                    each matched bean row
      * @return true if beans were processed, false if not
      * @since 1.0
      */
-    boolean restore(RestoreQuery query, RowProcessor rowProcessor)
+    boolean restore(RestoreQuery query, BeanFetcher<BeanType> beanFetcher)
     throws DatabaseException;
 
     /**
