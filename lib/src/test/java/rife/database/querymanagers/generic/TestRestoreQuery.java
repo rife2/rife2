@@ -26,7 +26,7 @@ public class TestRestoreQuery {
     private GenericQueryManager<LinkBean> linkManager_ = null;
     private GenericQueryManager<BeanImpl> bigBeanManager_ = null;
 
-    protected void setUp(Datasource datasource) {
+    protected void setup(Datasource datasource) {
         manager_ = GenericQueryManagerFactory.instance(datasource, SimpleBean.class);
         linkManager_ = GenericQueryManagerFactory.instance(datasource, LinkBean.class);
         bigBeanManager_ = GenericQueryManagerFactory.instance(datasource, BeanImpl.class);
@@ -44,7 +44,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testLimit(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -69,7 +69,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testOffset(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -96,7 +96,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testCloneToStringAndClear(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var query = manager_.getRestoreQuery().where("testString", "=", "bean set 1");
 
@@ -125,7 +125,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDistinctOn(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -200,7 +200,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetDatasource(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             assertEquals(datasource, manager_.getRestoreQuery().getDatasource());
         } finally {
@@ -211,7 +211,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetFrom(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             assertEquals(manager_
                 .getRestoreQuery()
@@ -228,7 +228,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetParameters(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var select = new Select(datasource);
             select
@@ -250,7 +250,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRestoreFirst(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -299,7 +299,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testJoin(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -353,7 +353,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testJoinCross(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -418,7 +418,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testJoinInner(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -472,7 +472,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testJoinOuter(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -526,7 +526,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testJoinCustom(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -580,7 +580,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testOrderBy(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -609,7 +609,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testWhere(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new BeanImpl();
 
@@ -705,7 +705,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testWhereAnd(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new BeanImpl();
 
@@ -765,7 +765,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testWhereOr(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new BeanImpl();
 
@@ -825,7 +825,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUnion(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var query = manager_.getRestoreQuery();
 
@@ -842,7 +842,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testWhereSubSelect(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -898,7 +898,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testFields(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -990,7 +990,7 @@ public class TestRestoreQuery {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testWhereGroupChaining(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             bean1.setTestString("test");

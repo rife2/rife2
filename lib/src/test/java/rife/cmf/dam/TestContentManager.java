@@ -31,7 +31,7 @@ import java.io.InputStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestContentManager {
-    public void setUp(Datasource datasource) {
+    public void setup(Datasource datasource) {
         DatabaseContentFactory.instance(datasource).install();
     }
 
@@ -46,7 +46,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstallError(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -64,7 +64,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemoveError(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             DatabaseContentFactory.instance(datasource).remove();
 
@@ -84,7 +84,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentXhtml(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -108,7 +108,7 @@ public class TestContentManager {
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentGif(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -132,7 +132,7 @@ public class TestContentManager {
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentTif(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -156,7 +156,7 @@ public class TestContentManager {
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentGifResized(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -181,7 +181,7 @@ public class TestContentManager {
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentTifResized(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -205,7 +205,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentRaw(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -236,7 +236,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentRepository(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -262,7 +262,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreUnknownContentRepository(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -286,7 +286,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testCreateRepositoryIllegalArguments(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -311,7 +311,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testContainsContentRepository(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -329,7 +329,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testContainsRepositoryIllegalArguments(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -347,7 +347,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentIllegalArguments(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -407,7 +407,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentUnsupportedMimeType(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -427,7 +427,7 @@ public class TestContentManager {
     @ArgumentsSource(TestDatasources.class)
     public void testUseContent(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -462,7 +462,7 @@ public class TestContentManager {
     @ArgumentsSource(TestDatasources.class)
     public void testUseContentName(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -494,7 +494,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUseContentDataIllegalArguments(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -564,7 +564,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUseContentDataUnknown(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -581,7 +581,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testHasContentData(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -600,7 +600,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testHasContentDataName(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -621,7 +621,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testHasContentDataIllegalArguments(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -654,7 +654,7 @@ public class TestContentManager {
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteContentImage(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
             var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -687,7 +687,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteContentText(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -717,7 +717,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteContentRaw(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -753,7 +753,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteContentIllegalArguments(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -785,7 +785,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetContentInfo(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -837,7 +837,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetContentInfoName(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -911,7 +911,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetContentInfoIllegalArguments(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -943,7 +943,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testServeContentIllegalArgument(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -961,7 +961,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetContentForHtmlInvalidPath(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -976,7 +976,7 @@ public class TestContentManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetContentForHtmlUnknownPath(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 

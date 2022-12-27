@@ -23,7 +23,7 @@ public class TestGenericQueryManagerManyToOne {
     private GenericQueryManager<MOSecondBean> secondManager_ = null;
     private GenericQueryManager<MOThirdBean> thirdManager_ = null;
 
-    protected void setUp(Datasource datasource) {
+    protected void setup(Datasource datasource) {
         firstManager_ = GenericQueryManagerFactory.instance(datasource, MOFirstBean.class);
         secondManager_ = GenericQueryManagerFactory.instance(datasource, MOSecondBean.class);
         thirdManager_ = GenericQueryManagerFactory.instance(datasource, MOThirdBean.class);
@@ -41,7 +41,7 @@ public class TestGenericQueryManagerManyToOne {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetBaseClass(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             assertSame(MOFirstBean.class, firstManager_.getBaseClass());
             assertSame(MOSecondBean.class, secondManager_.getBaseClass());
@@ -53,7 +53,7 @@ public class TestGenericQueryManagerManyToOne {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstallCustomQuery(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             firstManager_.remove();
             secondManager_.remove();
@@ -68,7 +68,7 @@ public class TestGenericQueryManagerManyToOne {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSaveRestoreConstrained(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean_a = new MOFirstBean();
             var bean_b = new MOFirstBean();
@@ -238,7 +238,7 @@ public class TestGenericQueryManagerManyToOne {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSaveRestoreConstrainedAssociation(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean1a = new MOFirstBean();
             bean1a.setFirstString("This is my test string");
@@ -319,7 +319,7 @@ public class TestGenericQueryManagerManyToOne {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDelete(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             assertEquals(0, secondManager_.count());
             assertEquals(0, thirdManager_.count());
@@ -383,7 +383,7 @@ public class TestGenericQueryManagerManyToOne {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteAssociation(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             final var bean_1a = new MOFirstBean();
             bean_1a.setFirstString("This is my test string");
@@ -415,7 +415,7 @@ public class TestGenericQueryManagerManyToOne {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testValidationContextManyToOne(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean = new MOFirstBean();
 
@@ -475,7 +475,7 @@ public class TestGenericQueryManagerManyToOne {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testValidationContextManyToOneAssociation(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             final var bean_1a = new MOFirstBean();
             bean_1a.setIdentifier(23);

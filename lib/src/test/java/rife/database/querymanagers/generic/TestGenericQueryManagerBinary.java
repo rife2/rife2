@@ -13,7 +13,7 @@ import rife.database.querymanagers.generic.beans.BinaryBean;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGenericQueryManagerBinary {
-    protected GenericQueryManager<BinaryBean> setUp(Datasource datasource) {
+    protected GenericQueryManager<BinaryBean> setup(Datasource datasource) {
         var manager = GenericQueryManagerFactory.instance(datasource, BinaryBean.class);
         manager.install();
         return manager;
@@ -26,7 +26,7 @@ public class TestGenericQueryManagerBinary {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetBaseClass(Datasource datasource) {
-        var manager = setUp(datasource);
+        var manager = setup(datasource);
         try {
             assertSame(BinaryBean.class, manager.getBaseClass());
         } finally {
@@ -37,7 +37,7 @@ public class TestGenericQueryManagerBinary {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstallCustomQuery(Datasource datasource) {
-        var manager = setUp(datasource);
+        var manager = setup(datasource);
         try {
             manager.remove();
             manager.install(manager.getInstallTableQuery());
@@ -49,7 +49,7 @@ public class TestGenericQueryManagerBinary {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSaveRestoreBinary(Datasource datasource) {
-        var manager = setUp(datasource);
+        var manager = setup(datasource);
         try {
             var bean = new BinaryBean();
             BinaryBean newbean = null;

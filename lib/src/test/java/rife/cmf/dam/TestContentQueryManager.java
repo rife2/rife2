@@ -28,7 +28,7 @@ import rife.tools.exceptions.FileUtilsErrorException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestContentQueryManager {
-    public void setUp(Datasource datasource) {
+    public void setup(Datasource datasource) {
         DatabaseContentFactory.instance(datasource).install();
     }
 
@@ -39,7 +39,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstantiation(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             assertNotNull(manager);
@@ -53,7 +53,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testBuildCmfPathBean(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var content = new ContentImage()
                 .name("the content name");
@@ -70,7 +70,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testBuildCmfPathId(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             assertEquals("/contentimage/4/image", manager.buildCmfPath(4, "image"));
@@ -82,7 +82,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testBuildCmfPathBeanRepository(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var content = new ContentImageRepository()
                 .name("the content name");
@@ -99,7 +99,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testBuildCmfPathIdRepository(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageRepository.class);
             assertEquals("testrep:/contentimagerepository/4/image", manager.buildCmfPath(4, "image"));
@@ -111,7 +111,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testBuildServeContentPathBean(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var content = new ContentImage()
                 .name("the content name");
@@ -128,7 +128,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testBuildServeContentPathId(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             assertEquals("/contentimage/4/image", manager.buildServeContentPath(4, "image"));
@@ -140,7 +140,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testBuildServeContentPathBeanRepository(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var content = new ContentImageRepository()
                 .name("the content name");
@@ -157,7 +157,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testBuildServeContentPathIdRepository(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageRepository.class);
             assertEquals("/contentimagerepository/4/image", manager.buildServeContentPath(4, "image"));
@@ -170,7 +170,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testSaveContent(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             manager.install();
@@ -215,7 +215,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testSaveContentOtherTable(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class, "othercontentimage");
             manager.install();
@@ -274,7 +274,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testSaveContentRepository(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageRepository.class);
             manager.install();
@@ -322,7 +322,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSaveContentRaw(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentRaw.class);
             manager.install();
@@ -375,7 +375,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testSaveContentUpdate(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             manager.install();
@@ -428,7 +428,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testSaveContentUpdateRepository(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageRepository.class);
             manager.install();
@@ -486,7 +486,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSavePojo(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, RegularPojo.class);
             manager.install();
@@ -513,7 +513,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testStoreEmptyContent(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             manager.install();
@@ -559,7 +559,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testStoreEmptyContentRepository(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageRepository.class);
             manager.install();
@@ -608,7 +608,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreEmptyContentIllegalArguments(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             manager.install();
@@ -644,7 +644,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreEmptyContentPojo(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, RegularPojo.class);
             manager.install();
@@ -664,7 +664,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreEmptyContentMissingIdentifier(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             manager.install();
@@ -688,7 +688,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testStoreEmptyContentUnknownProperty(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             manager.install();
@@ -720,7 +720,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testStoreEmptyContentMimeTypeExpected(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             manager.install();
@@ -752,7 +752,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteContent(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             manager.install();
@@ -788,7 +788,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteContentRepository(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageRepository.class);
             manager.install();
@@ -828,7 +828,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteContentNonCmfProperty(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageNonCmfProps.class);
             manager.install();
@@ -863,7 +863,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDeletePojo(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, RegularPojo.class);
             manager.install();
@@ -889,7 +889,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteOrdinal(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, Ordered.class);
             manager.install();
@@ -931,7 +931,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteOrdinalRestricted(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrderedRestricted.class);
             manager.install();
@@ -994,7 +994,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteNotPresent(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, RegularPojo.class);
             manager.install();
@@ -1011,7 +1011,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteContentUnknownId(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             manager.install();
@@ -1028,7 +1028,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSaveOrdinal(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, Ordered.class);
             manager.install();
@@ -1069,7 +1069,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSaveOrdinalRestricted(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrderedRestricted.class);
             manager.install();
@@ -1132,7 +1132,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testMoveOrdinal(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, Ordered.class);
             manager.install();
@@ -1202,7 +1202,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testMoveIllegalArguments(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, Ordered.class);
             manager.install();
@@ -1238,7 +1238,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testMoveUnknownProperty(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, Ordered.class);
             manager.install();
@@ -1261,7 +1261,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testMoveNotOrdinalConstraint(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             manager.install();
@@ -1284,7 +1284,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testMoveNotOrdinalInvalidOrdinalType(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrderedInvalidType.class);
             manager.install();
@@ -1307,7 +1307,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testMoveOrdinalRestricted(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrderedRestricted.class);
             manager.install();
@@ -1438,7 +1438,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSaveOrdinalRestrictedInvalidType(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrdrdRestrInvalidType.class);
             manager.install();
@@ -1466,7 +1466,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testMoveUnknownOrdinal(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrdrdUnknown.class);
             manager.install();
@@ -1489,7 +1489,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testMoveUnknownRestriction(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrdrdRestrUnknown.class);
             manager.install();
@@ -1513,7 +1513,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testMoveRestrictionInvalidType(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrdrdRestrInvalidType.class);
             manager.install();
@@ -1537,7 +1537,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testMoveRestrictionNull(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrdrdRestrInvalidType.class);
             manager.install();
@@ -1561,7 +1561,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSaveOrdinalRestrictedUnknownRestriction(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrdrdRestrUnknown.class);
             manager.install();
@@ -1590,7 +1590,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testHasContent(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             manager.install();
@@ -1623,7 +1623,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testHasContentRepository(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageRepository.class);
             manager.install();
@@ -1659,7 +1659,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testRestoreById(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
             manager.install();
@@ -1688,7 +1688,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testRestoreByIdAutoRetrieved(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageAutoRetrieved.class);
             manager.install();
@@ -1718,7 +1718,7 @@ public class TestContentQueryManager {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRestoreByIdPojo(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, RegularPojo.class);
             manager.install();
@@ -1744,7 +1744,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testRestoreByIdNonCmfProperties(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageNonCmfProps.class);
             manager.install();
@@ -1773,7 +1773,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testRestoreFirst(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageAutoRetrieved.class);
             manager.install();
@@ -1812,7 +1812,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testRestore(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageAutoRetrieved.class);
             manager.install();
@@ -1863,7 +1863,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testRestoreRepository(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageAutoRetrRep.class);
             manager.install();
@@ -1919,7 +1919,7 @@ public class TestContentQueryManager {
     @ArgumentsSource(TestDatasources.class)
     public void testRestoreQuery(Datasource datasource)
     throws Exception {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageAutoRetrieved.class);
             manager.install();

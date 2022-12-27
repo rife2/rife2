@@ -53,7 +53,7 @@ public class TestDatabaseRawStore {
         return binary;
     }
 
-    public void setUp(Datasource datasource) {
+    public void setup(Datasource datasource) {
         DatabaseContentFactory.instance(datasource).install();
     }
 
@@ -68,7 +68,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstallError(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var store = DatabaseRawStoreFactory.instance(datasource);
             try {
@@ -85,7 +85,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRemoveError(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             DatabaseContentFactory.instance(datasource).remove();
             var store = DatabaseRawStoreFactory.instance(datasource);
@@ -103,7 +103,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetSupportedMimeTypes(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var store = DatabaseRawStoreFactory.instance(datasource);
             assertTrue(store.getSupportedMimeTypes().size() > 0);
@@ -115,7 +115,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetContentType(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var store = DatabaseRawStoreFactory.instance(datasource);
             var info = new ContentInfo();
@@ -141,7 +141,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetFormatter(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var store = DatabaseRawStoreFactory.instance(datasource);
             assertNotNull(store.getFormatter(MimeType.RAW, false));
@@ -154,7 +154,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentDataStream(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             final var id = new int[]{1};
             final var manager = DatabaseContentFactory.instance(datasource);
@@ -213,7 +213,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentDataBytes(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             final var id = new int[]{1};
             final var manager = DatabaseContentFactory.instance(datasource);
@@ -272,7 +272,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentDataLargeStream(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             final var id = new int[]{1};
             final var manager = DatabaseContentFactory.instance(datasource);
@@ -330,7 +330,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentDataLargeBytes(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             final var id = new int[]{1};
             final var manager = DatabaseContentFactory.instance(datasource);
@@ -388,7 +388,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentDataContentEmpty(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             final var id = new int[]{1};
             final var manager = DatabaseContentFactory.instance(datasource);
@@ -435,7 +435,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentDataContentNull(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             final var id = new int[]{1};
             final var manager = DatabaseContentFactory.instance(datasource);
@@ -481,7 +481,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentDataMimeTypeWithoutFormatter(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             final var id = new int[]{1};
             final var manager = DatabaseContentFactory.instance(datasource);
@@ -539,7 +539,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentDataIllegalArgument(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var store = DatabaseRawStoreFactory.instance(datasource);
 
@@ -564,7 +564,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testStoreContentDataError(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var raw = getSmallRaw();
 
@@ -584,7 +584,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUseContentData(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -614,7 +614,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUseContentDataUnknown(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var store = DatabaseRawStoreFactory.instance(datasource);
 
@@ -627,7 +627,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUseContentDataIllegalArgument(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var store = DatabaseRawStoreFactory.instance(datasource);
 
@@ -651,7 +651,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testUseContentDataError(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             DatabaseContentFactory.instance(datasource).remove();
             var store = DatabaseRawStoreFactory.instance(datasource);
@@ -668,7 +668,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testHasContentData(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -688,7 +688,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testHasContentDataContentEmpty(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -706,7 +706,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testHasContentDataUnknown(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var store = DatabaseRawStoreFactory.instance(datasource);
             assertFalse(store.hasContentData(3));
@@ -718,7 +718,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testHasContentDataIllegalArgument(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var store = DatabaseRawStoreFactory.instance(datasource);
             try {
@@ -735,7 +735,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testHasContentDataError(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             DatabaseContentFactory.instance(datasource).remove();
             var store = DatabaseRawStoreFactory.instance(datasource);
@@ -753,7 +753,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteContentData(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -776,7 +776,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteContentDataUnknown(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var store = DatabaseRawStoreFactory.instance(datasource);
             assertFalse(store.deleteContentData(3));
@@ -788,7 +788,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteContentDataIllegalArgument(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var store = DatabaseRawStoreFactory.instance(datasource);
             try {
@@ -805,7 +805,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDeleteContentDataError(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             DatabaseContentFactory.instance(datasource).remove();
             var store = DatabaseRawStoreFactory.instance(datasource);
@@ -823,7 +823,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRetrieveSize(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
 
@@ -844,7 +844,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRetrieveSizeIllegalArgument(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var store = DatabaseRawStoreFactory.instance(datasource);
 
@@ -862,7 +862,7 @@ public class TestDatabaseRawStore {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testRetrieveSizeError(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             DatabaseContentFactory.instance(datasource).remove();
             var store = DatabaseRawStoreFactory.instance(datasource);

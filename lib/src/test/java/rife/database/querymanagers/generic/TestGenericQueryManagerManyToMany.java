@@ -21,7 +21,7 @@ public class TestGenericQueryManagerManyToMany {
     private GenericQueryManager<MMFirstBean> firstManager_ = null;
     private GenericQueryManager<MMSecondBean> secondManager_ = null;
 
-    protected void setUp(Datasource datasource) {
+    protected void setup(Datasource datasource) {
         firstManager_ = GenericQueryManagerFactory.instance(datasource, MMFirstBean.class);
         secondManager_ = GenericQueryManagerFactory.instance(datasource, MMSecondBean.class);
         secondManager_.install();
@@ -36,7 +36,7 @@ public class TestGenericQueryManagerManyToMany {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetBaseClass(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             assertSame(MMFirstBean.class, firstManager_.getBaseClass());
             assertSame(MMSecondBean.class, secondManager_.getBaseClass());
@@ -48,7 +48,7 @@ public class TestGenericQueryManagerManyToMany {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstallCustomQuery(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             firstManager_.remove();
             secondManager_.remove();
@@ -63,7 +63,7 @@ public class TestGenericQueryManagerManyToMany {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSaveRestoreConstrained(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean = new MMFirstBean();
             MMFirstBean new_bean = null;
@@ -216,7 +216,7 @@ public class TestGenericQueryManagerManyToMany {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testDelete(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean = new MMFirstBean();
 
@@ -294,7 +294,7 @@ public class TestGenericQueryManagerManyToMany {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testValidationContextManyToMany(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean = new MMFirstBean();
 
@@ -347,7 +347,7 @@ public class TestGenericQueryManagerManyToMany {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testValidationContextManyToManyAssociation(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean2 = new MMSecondBean();
             bean2.setSecondString("This is my test string");

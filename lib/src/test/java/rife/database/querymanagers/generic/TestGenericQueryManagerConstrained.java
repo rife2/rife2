@@ -21,7 +21,7 @@ public class TestGenericQueryManagerConstrained {
     private GenericQueryManager<LinkBean> linkManager_ = null;
     private GenericQueryManager<ConstrainedBean> constrainedManager_ = null;
 
-    protected void setUp(Datasource datasource) {
+    protected void setup(Datasource datasource) {
         linkManager_ = new TestGenericQueryManagerDelegate.GQMLinkBean(datasource);
         constrainedManager_ = new TestGenericQueryManagerDelegate.GQMConstrainedBean(datasource);
         linkManager_.install();
@@ -36,7 +36,7 @@ public class TestGenericQueryManagerConstrained {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testGetBaseClass(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             assertSame(LinkBean.class, linkManager_.getBaseClass());
             assertSame(ConstrainedBean.class, constrainedManager_.getBaseClass());
@@ -48,7 +48,7 @@ public class TestGenericQueryManagerConstrained {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testInstallCustomQuery(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             constrainedManager_.remove();
             linkManager_.remove();
@@ -63,7 +63,7 @@ public class TestGenericQueryManagerConstrained {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testSaveRestoreConstrained(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var bean = new ConstrainedBean();
             ConstrainedBean new_bean = null;
@@ -105,7 +105,7 @@ public class TestGenericQueryManagerConstrained {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     public void testValidationContextManyToOne(Datasource datasource) {
-        setUp(datasource);
+        setup(datasource);
         try {
             var link_bean1 = new LinkBean();
             var link_bean2 = new LinkBean();
