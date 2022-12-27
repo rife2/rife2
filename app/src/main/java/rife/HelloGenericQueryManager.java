@@ -29,7 +29,8 @@ public class HelloGenericQueryManager extends Site {
         </form>""")
     );
     Route list = get("/list", c -> {
-        manager.restore(person -> c.print(person.getName() + "<br>"));
+        manager.restore(manager.getRestoreQuery().orderBy("name"),
+            person -> c.print(person.getName() + "<br>"));
         c.print("<br><a href='" + c.urlFor(addForm) + "'>Add more</a><br>");
     });
     Route add = post("/add", c -> {
