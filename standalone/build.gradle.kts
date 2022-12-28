@@ -35,6 +35,9 @@ tasks.register<JavaExec>("runHelloAll") {
     project.logger.lifecycle(" HelloContinuations:")
     project.logger.lifecycle("   Open your browser at http://localhost:8080/guess")
     project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloCounterContinuations:")
+    project.logger.lifecycle("   Open your browser at http://localhost:8080/count")
+    project.logger.lifecycle("")
     project.logger.lifecycle(" HelloDatabase:")
     project.logger.lifecycle("   Install the database at http://localhost:8080/install")
     project.logger.lifecycle("   Then add names by going to http://localhost:8080/add")
@@ -47,7 +50,7 @@ tasks.register<JavaExec>("runHelloAll") {
     project.logger.lifecycle(" HelloForm:")
     project.logger.lifecycle("   Open your browser at http://localhost:8080/form")
     project.logger.lifecycle("")
-    project.logger.lifecycle(" runHelloFormContinuation:")
+    project.logger.lifecycle(" runHelloFormContinuations:")
     project.logger.lifecycle("   Open your browser at http://localhost:8080/continuation/form")
     project.logger.lifecycle("")
     project.logger.lifecycle(" HelloGenericQueryManager:")
@@ -100,6 +103,18 @@ tasks.register<JavaExec>("runHelloContinuations") {
     project.logger.lifecycle("")
 }
 
+tasks.register<JavaExec>("runHelloCounterContinuations") {
+    dependsOn(":lib:agentJar")
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("rife.HelloCounterContinuations")
+    jvmArgs = listOf("-javaagent:${project(":lib").buildDir}/libs/$rifeAgentJar")
+    project.logger.lifecycle("")
+    project.logger.lifecycle("================================================================================")
+    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/count")
+    project.logger.lifecycle("================================================================================")
+    project.logger.lifecycle("")
+}
+
 tasks.register<JavaExec>("runHelloDatabase") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("rife.HelloDatabase")
@@ -133,9 +148,9 @@ tasks.register<JavaExec>("runHelloForm") {
     project.logger.lifecycle("")
 }
 
-tasks.register<JavaExec>("runHelloFormContinuation") {
+tasks.register<JavaExec>("runHelloFormContinuations") {
     classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("rife.HelloFormContinuation")
+    mainClass.set("rife.HelloFormContinuations")
     jvmArgs = listOf("-javaagent:${project(":lib").buildDir}/libs/$rifeAgentJar")
     project.logger.lifecycle("")
     project.logger.lifecycle("================================================================================")

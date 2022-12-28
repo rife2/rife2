@@ -11,10 +11,11 @@ public class HelloAll extends Site {
     public void setup() {
         group(new HelloAuthentication());
         group(new HelloContinuations());
+        group(new HelloCounterContinuations());
         group(new HelloDatabase());
         group(new HelloErrors());
         group(new HelloForm());
-        group("/continuation", new HelloFormContinuation());
+        group("/continuation", new HelloFormContinuations());
         group("/generic", new HelloGenericQueryManager());
         group(new HelloGroup());
         group(new HelloLink());

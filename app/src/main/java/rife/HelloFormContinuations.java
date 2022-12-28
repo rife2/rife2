@@ -7,8 +7,8 @@ package rife;
 import rife.engine.*;
 import rife.engine.annotations.Parameter;
 
-public class HelloFormContinuation extends Site {
-    public static class MyForm implements Element {
+public class HelloFormContinuations extends Site {
+    public static class Form implements Element {
         @Parameter String name;
         public void process(Context c) {
             var t = c.template("HelloForm");
@@ -22,9 +22,9 @@ public class HelloFormContinuation extends Site {
             c.print(t);
         }
     }
-    Route form = route("/form", MyForm.class);
+    Route form = route("/form", Form.class);
 
     public static void main(String[] args) {
-        new Server().start(new HelloFormContinuation());
+        new Server().start(new HelloFormContinuations());
     }
 }
