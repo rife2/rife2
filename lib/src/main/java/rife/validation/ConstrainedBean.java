@@ -16,10 +16,10 @@ import rife.datastructures.EnumClass;
  * constraints for a bean instance that are not related to a single property.
  * The constraints here are global for the entire bean and either involve
  * several properties or are even totally unrelated to properties.
- * <p>It's possible to add constraints to a ConstrainedProperty instance
+ * <p>It's possible to add constraints to a ConstrainedBean instance
  * through regular setters, but chainable setters are also available to make
  * it possible to easily define a series of constraints, for example:
- * <pre>ConstrainedBean constrained = new ConstrainedBean()
+ * <pre>var constrained = new ConstrainedBean()
  *    .unique("firstName", "lastName")
  *    .defaultOrder("city")
  *    .defaultOrder("lastName")

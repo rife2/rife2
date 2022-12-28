@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  */
 public abstract class MetaData implements Validated, Constrained, MetaDataMerged, MetaDataBeanAware, Cloneable {
     private Validated metaDataBean_ = this;
-    private Validation validation_;
+    private Validation validation_ = null;
 
     /**
      * This method is called at least once and maximum once when any meta-data
