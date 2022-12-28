@@ -11,7 +11,7 @@ import rife.tools.ObjectUtils;
 
 import java.util.logging.Logger;
 
-public class Validation implements ValidatedConstrained, Cloneable, Constrained, ConstrainedPropertyListener {
+public class Validation implements Validated, Cloneable, Constrained, ConstrainedPropertyListener {
     private boolean activated_ = false;
 
     private Validated validatedBean_ = null;

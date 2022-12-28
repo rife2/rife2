@@ -16,7 +16,7 @@ import rife.tools.exceptions.BeanUtilsException;
 public class ValidationGroup implements Cloneable {
     private final String name_;
 
-    private ValidatedConstrained validation_;
+    private Validated validation_;
     private ArrayList<String> subjects_;
     private ValidationGroup parent_ = null;
     private ArrayList<String> propertyNames_ = null;
@@ -31,7 +31,7 @@ public class ValidationGroup implements Cloneable {
         parent_ = parent;
     }
 
-    void setValidation(ValidatedConstrained validation) {
+    void setValidation(Validated validation) {
         validation_ = validation;
     }
 
@@ -73,7 +73,7 @@ public class ValidationGroup implements Cloneable {
         return subjects_;
     }
 
-    public ValidatedConstrained getValidation() {
+    public Validated getValidation() {
         return validation_;
     }
 
