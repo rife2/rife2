@@ -63,7 +63,7 @@ public class ConstrainedBean {
     public ConstrainedBean associations(Class... associations) {
         setAssociations(associations);
 
-        return (ConstrainedBean) this;
+        return this;
     }
 
     public void setAssociations(Class... associations) {
@@ -93,13 +93,13 @@ public class ConstrainedBean {
             unique_list.add(unique);
         }
 
-        return (ConstrainedBean) this;
+        return this;
     }
 
     public ConstrainedBean uniques(List<String[]> unique) {
         setUniques(unique);
 
-        return (ConstrainedBean) this;
+        return this;
     }
 
     public void setUniques(List<String[]> unique) {
@@ -121,7 +121,7 @@ public class ConstrainedBean {
     public ConstrainedBean textualIdentifier(TextualIdentifierGenerator identifier) {
         setTextualIdentifier(identifier);
 
-        return (ConstrainedBean) this;
+        return this;
     }
 
     public void setTextualIdentifier(TextualIdentifierGenerator identifier) {
@@ -159,13 +159,13 @@ public class ConstrainedBean {
             ordering_list.add(order);
         }
 
-        return (ConstrainedBean) this;
+        return this;
     }
 
     public ConstrainedBean defaultOrdering(List<Order> ordering) {
         setDefaultOrdering(ordering);
 
-        return (ConstrainedBean) this;
+        return this;
     }
 
     public void setDefaultOrdering(List<Order> ordering) {

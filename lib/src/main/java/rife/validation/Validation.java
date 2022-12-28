@@ -202,12 +202,12 @@ public class Validation implements Validated, Cloneable, Constrained, Constraine
         if (constrainedProperty.isFormatted()) {
             rules.add(new ValidationRuleFormat(constrainedProperty.getPropertyName(), constrainedProperty.getFormat()));
         }
-//        if (constrainedProperty.hasMimeType()) {
-//            PropertyValidationRule rule = constrainedProperty.getMimeType().getValidationRule(constrainedProperty);
-//            if (rule != null) {
-//                rules.add(rule);
-//            }
-//        }
+        if (constrainedProperty.hasMimeType()) {
+            PropertyValidationRule rule = constrainedProperty.getMimeType().getValidationRule(constrainedProperty);
+            if (rule != null) {
+                rules.add(rule);
+            }
+        }
 
         return rules;
     }

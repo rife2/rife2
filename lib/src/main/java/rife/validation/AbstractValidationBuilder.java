@@ -101,7 +101,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         var filtered_error_values = template.getFilteredValues(TAG_ERRORS);
         ArrayList<List<String[]>> sorted_error_values = null;
         if (filtered_error_values.size() > 0) {
-            sorted_error_values = new ArrayList<List<String[]>>();
+            sorted_error_values = new ArrayList<>();
 
             List<String[]> error_values;
             for (var filtered_value : filtered_error_values) {
@@ -127,7 +127,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                     }
                 }
                 if (null == error_values) {
-                    error_values = new ArrayList<String[]>();
+                    error_values = new ArrayList<>();
                     sorted_error_values.set(filtered_value.length - 1, error_values);
                 }
                 error_values.add(filtered_value);
@@ -141,7 +141,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         var filtered_error_blocks = template.getFilteredBlocks(TAG_ERRORS);
         ArrayList<List<String[]>> sorted_error_blocks = null;
         if (filtered_error_blocks.size() > 0) {
-            sorted_error_blocks = new ArrayList<List<String[]>>();
+            sorted_error_blocks = new ArrayList<>();
 
             List<String[]> error_blocks;
             for (var filtered_block : filtered_error_blocks) {
@@ -154,7 +154,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                     }
                 }
                 if (null == error_blocks) {
-                    error_blocks = new ArrayList<String[]>();
+                    error_blocks = new ArrayList<>();
                     sorted_error_blocks.set(filtered_block.length - 1, error_blocks);
                 }
                 error_blocks.add(filtered_block);
@@ -173,7 +173,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         // has an error individually.
         LinkedHashMap<String, ArrayList<String>> block_properties_mapping = null;
         if (sorted_error_blocks != null) {
-            block_properties_mapping = new LinkedHashMap<String, ArrayList<String>>();
+            block_properties_mapping = new LinkedHashMap<>();
 
             ArrayList<String> block_properties;
 
@@ -275,11 +275,11 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         }
 
         // Process the sorted error message blocks so that for each
-        // property the first occuring block will be used.
+        // property the first occurring block will be used.
         var filtered_error_messages = template.getFilteredBlocks(TAG_ERRORMESSAGE);
         HashMap<String, String> property_error_messages_mapping = null;
         if (filtered_error_messages.size() > 0) {
-            property_error_messages_mapping = new HashMap<String, String>();
+            property_error_messages_mapping = new HashMap<>();
 
             for (var filtered_errormessage : filtered_error_messages) {
                 for (var i = 1; i < filtered_errormessage.length; i++) {
@@ -364,7 +364,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
     }
 
     private Collection<String> collectSubjects(Collection<ValidationError> errors, String prefix) {
-        // Collect the invalid subjects in a seperate collection which
+        // Collect the invalid subjects in a separate collection which
         // only contains their name.
         var invalid_subjects = new ArrayList<String>();
         String subject;
@@ -526,7 +526,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         var filtered_marks = template.getFilteredValues(TAG_MARK);
         HashMap<String, ArrayList<List<String[]>>> sorted_marks_map = null;
         if (filtered_marks.size() > 0) {
-            sorted_marks_map = new HashMap<String, ArrayList<List<String[]>>>();
+            sorted_marks_map = new HashMap<>();
 
             ArrayList<List<String[]>> sorted_marks;
             List<String[]> marks;
@@ -545,14 +545,11 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                 }
 
                 // get the sorted marks for the specific mark extension
-                sorted_marks = sorted_marks_map.get(filtered_mark[1]);
-                // or create a new collection if it doesn't exist yet
-                if (null == sorted_marks) {
-                    sorted_marks = new ArrayList<List<String[]>>();
-                    sorted_marks_map.put(filtered_mark[1], sorted_marks);
-                }
+                sorted_marks = sorted_marks_map.computeIfAbsent(filtered_mark[1], k -> new ArrayList<>());
 
-                // setup the collection of marks with the same number of
+                // or create a new collection if it doesn't exist yet
+
+                // set up the collection of marks with the same number of
                 // properties and create a new one if that's needed
                 var number_of_properties = (filtered_mark.length - 2) / 2;
                 if (number_of_properties < sorted_marks.size()) {
@@ -564,7 +561,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                     }
                 }
                 if (null == marks) {
-                    marks = new ArrayList<String[]>();
+                    marks = new ArrayList<>();
                     sorted_marks.set(number_of_properties, marks);
                 }
 

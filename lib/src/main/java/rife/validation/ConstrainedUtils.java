@@ -47,12 +47,12 @@ public class ConstrainedUtils {
         }
 
         Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
-        ConstrainedProperty contrained_property = null;
+        ConstrainedProperty constrained_property = null;
         if (constrained != null) {
-            contrained_property = constrained.getConstrainedProperty(name);
+            constrained_property = constrained.getConstrainedProperty(name);
         }
 
-        return contrained_property;
+        return constrained_property;
     }
 
     public static String getIdentityProperty(Class beanClass) {
