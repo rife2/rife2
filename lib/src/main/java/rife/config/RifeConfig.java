@@ -5,6 +5,7 @@
 package rife.config;
 
 import rife.config.exceptions.DateFormatInitializationException;
+import rife.continuations.ContinuationConfigRuntimeDefaults;
 import rife.template.TemplateFactory;
 import rife.tools.Localization;
 import rife.tools.StringUtils;
@@ -457,6 +458,10 @@ public class RifeConfig {
     }
 
     public class EngineConfig {
+        private long continuationDuration_ = ContinuationConfigRuntimeDefaults.DEFAULT_CONTINUATION_DURATION;
+        private int continuationPurgeFrequency_ = ContinuationConfigRuntimeDefaults.DEFAULT_CONTINUATION_PURGE_FREQUENCY;
+        private int continuationPurgeScale_ = ContinuationConfigRuntimeDefaults.DEFAULT_CONTINUATION_PURGE_SCALE;
+
         private String defaultContentType_ = DEFAULT_DEFAULT_CONTENT_TYPE;
         private boolean prettyEngineExceptions_ = DEFAULT_PRETTY_ENGINE_EXCEPTIONS;
         private boolean logEngineExceptions_ = DEFAULT_LOG_ENGINE_EXCEPTIONS;
@@ -591,6 +596,33 @@ public class RifeConfig {
 
         public EngineConfig setFileUploadSizeException(boolean flag) {
             fileUploadSizeException_ = flag;
+            return this;
+        }
+
+        public long getContinuationDuration() {
+            return continuationDuration_;
+        }
+
+        public EngineConfig setContinuationDuration(long duration) {
+            continuationDuration_ = duration;
+            return this;
+        }
+
+        public int getContinuationPurgeFrequency() {
+            return continuationPurgeFrequency_;
+        }
+
+        public EngineConfig setContinuationPurgeFrequency(int frequency) {
+            continuationPurgeFrequency_ = frequency;
+            return this;
+        }
+
+        public int getContinuationPurgeScale() {
+            return continuationPurgeScale_;
+        }
+
+        public EngineConfig setContinuationPurgeScale(int frequency) {
+            continuationPurgeScale_ = frequency;
             return this;
         }
 

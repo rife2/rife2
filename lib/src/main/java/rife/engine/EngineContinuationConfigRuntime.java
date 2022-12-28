@@ -4,6 +4,7 @@
  */
 package rife.engine;
 
+import rife.config.RifeConfig;
 import rife.continuations.*;
 
 public class EngineContinuationConfigRuntime extends ContinuationConfigRuntime {
@@ -21,19 +22,15 @@ public class EngineContinuationConfigRuntime extends ContinuationConfigRuntime {
         return false;
     }
 
-    // TODO : hook up continuation runtime settings
-//    public long getContinuationDuration()
-//    {
-//        return RifeConfig.Engine.getContinuationDuration();
-//    }
-//
-//    public int getContinuationPurgeFrequency()
-//    {
-//        return RifeConfig.Engine.getContinuationPurgeFrequency();
-//    }
-//
-//    public int getContinuationPurgeScale()
-//    {
-//        return RifeConfig.Engine.getContinuationPurgeScale();
-//    }
+    public long getContinuationDuration() {
+        return RifeConfig.engine().getContinuationDuration();
+    }
+
+    public int getContinuationPurgeFrequency() {
+        return RifeConfig.engine().getContinuationPurgeFrequency();
+    }
+
+    public int getContinuationPurgeScale() {
+        return RifeConfig.engine().getContinuationPurgeScale();
+    }
 }
