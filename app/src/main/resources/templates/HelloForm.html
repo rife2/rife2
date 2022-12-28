@@ -7,9 +7,10 @@
 <!--v content/-->
 <!--b form-->
 <form action="{{v route:/}}" method="post" name="hello">
+  <input type="text" name="name">
   <input type="submit" name="Submit">
 </form>
 <!--/b-->
-<!--b text--><p id="greeting">Hello World</p><!--/b-->
+<!--b greeting--><p id="greeting">Hello <!--v name/--></p><!--/b-->
 </body>
 </html>

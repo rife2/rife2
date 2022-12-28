@@ -7,29 +7,24 @@ package rife;
 import rife.engine.*;
 import rife.engine.annotations.Parameter;
 
-public class HelloForm extends Site {
+public class HelloFormContinuation extends Site {
     public static class MyForm implements Element {
         @Parameter String name;
         public void process(Context c) {
             var t = c.template("HelloForm");
             t.setBlock("content", "form");
+            c.print(t);
 
-            switch (c.method()) {
-                case GET -> {
-                    t.setBlock("content", "form");
-                }
-                case POST -> {
-                    t.setValueEncoded("name", name);
-                    t.setBlock("content", "greeting");
-                }
-            }
+            c.pause();
 
+            t.setValueEncoded("name", name);
+            t.setBlock("content", "greeting");
             c.print(t);
         }
     }
     Route form = route("/form", MyForm.class);
 
     public static void main(String[] args) {
-        new Server().start(new HelloForm());
+        new Server().start(new HelloFormContinuation());
     }
 }

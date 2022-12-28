@@ -47,6 +47,9 @@ tasks.register<JavaExec>("runHelloAll") {
     project.logger.lifecycle(" HelloForm:")
     project.logger.lifecycle("   Open your browser at http://localhost:8080/form")
     project.logger.lifecycle("")
+    project.logger.lifecycle(" runHelloFormContinuation:")
+    project.logger.lifecycle("   Open your browser at http://localhost:8080/continuation/form")
+    project.logger.lifecycle("")
     project.logger.lifecycle(" HelloGenericQueryManager:")
     project.logger.lifecycle("   Install the database at http://localhost:8080/generic/install")
     project.logger.lifecycle("   Then add names by going to http://localhost:8080/generic/add")
@@ -123,6 +126,17 @@ tasks.register<JavaExec>("runHelloErrors") {
 tasks.register<JavaExec>("runHelloForm") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("rife.HelloForm")
+    project.logger.lifecycle("")
+    project.logger.lifecycle("================================================================================")
+    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/form")
+    project.logger.lifecycle("================================================================================")
+    project.logger.lifecycle("")
+}
+
+tasks.register<JavaExec>("runHelloFormContinuation") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("rife.HelloFormContinuation")
+    jvmArgs = listOf("-javaagent:${project(":lib").buildDir}/libs/$rifeAgentJar")
     project.logger.lifecycle("")
     project.logger.lifecycle("================================================================================")
     project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/form")
