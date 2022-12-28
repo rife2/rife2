@@ -7,7 +7,10 @@ RIFE2 is a full-stack, no-declaration, framework to quickly and effortlessly cre
 RIFE2 is built on the foundations of the original RIFE framework that was popular from 2002-2010.
 Since then, the world and Java have changed and many of the original RIFE APIs can finally be replaced with pure Java, no-XML, no-YAML, leaving only type-safe expressive code.  
 
-**NOTE: The documentation and this readme are work-in-progress**
+**This is a quick tutorial, the [full documentation](https://github.com/gbevin/rife2/wiki)
+contains a lot more information.**
+
+_NOTE: The documentation and this readme are work-in-progress_
 
 ## Hello World Example
 
@@ -215,3 +218,6 @@ class HelloTest {
     }
 }
 ```
+
+
+**Read more in the [full documentation](https://github.com/gbevin/rife2/wiki).**
