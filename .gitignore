@@ -10,3 +10,4 @@ lib/src/main/gen
 lib/embedded_dbs
 derby.log
 embedded_dbs
+lib/src/processed
