@@ -29,12 +29,31 @@ public interface ValidationBuilder extends Cloneable {
 
     void setFallbackErrorArea(Template template, String message);
 
+    Collection<String> generateValidationErrors(Template template, Collection<ValidationError> errors);
+
+    Collection<String> generateValidationErrors(Template template, Collection<ValidationError> errors, Collection<String> onlySubjectsToClear);
+
+    Collection<String> generateValidationErrors(Template template, Collection<ValidationError> errors, String prefix);
+
     Collection<String> generateValidationErrors(Template template, Collection<ValidationError> errors, Collection<String> onlySubjectsToClear, String prefix);
+
+    Collection<String> generateErrorMarkings(Template template, Collection<ValidationError> errors)
+    throws ValidationBuilderException;
+
+    Collection<String> generateErrorMarkings(Template template, Collection<ValidationError> errors, Collection<String> onlySubjectsToClear)
+    throws ValidationBuilderException;
+
+    Collection<String> generateErrorMarkings(Template template, Collection<ValidationError> errors, String prefix)
+    throws ValidationBuilderException;
 
     Collection<String> generateErrorMarkings(Template template, Collection<ValidationError> errors, Collection<String> onlySubjectsToClear, String prefix)
     throws ValidationBuilderException;
 
+    void removeValidationErrors(Template template, Collection<String> subjects);
+
     void removeValidationErrors(Template template, Collection<String> subjects, String prefix);
+
+    void removeErrorMarkings(Template template, Collection<String> subjects);
 
     void removeErrorMarkings(Template template, Collection<String> subjects, String prefix);
 

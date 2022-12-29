@@ -41,7 +41,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                 template.removeValue(ID_ERRORS);
             }
         } else if (template.hasValueId(ID_ERRORS) &&
-            template.hasBlock(ID_ERRORS_WILDCARD)) {
+                   template.hasBlock(ID_ERRORS_WILDCARD)) {
             if (template.hasValueId(ID_ERRORMESSAGE) &&
                 template.hasBlock(ID_ERRORMESSAGE_WILDCARD)) {
                 template.setValue(ID_ERRORMESSAGE, message);
@@ -59,6 +59,18 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         } else {
             template.setValue(ID_ERRORS_WILDCARD, message);
         }
+    }
+
+    public Collection<String> generateValidationErrors(Template template, Collection<ValidationError> errors) {
+        return generateValidationErrors(template, errors, null, null);
+    }
+
+    public Collection<String> generateValidationErrors(Template template, Collection<ValidationError> errors, Collection<String> onlySubjectsToClear) {
+        return generateValidationErrors(template, errors, onlySubjectsToClear, null);
+    }
+
+    public Collection<String> generateValidationErrors(Template template, Collection<ValidationError> errors, String prefix) {
+        return generateValidationErrors(template, errors, null, prefix);
     }
 
     public Collection<String> generateValidationErrors(Template template, Collection<ValidationError> errors, Collection<String> onlySubjectsToClear, String prefix) {
@@ -195,7 +207,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
 
         // Go over the error values according to their order of importance.
         // Values with a broader scope (more properties) get precedence of
-        // those with a narrower scope (less properties) and inside the
+        // those with a narrower scope (fewer properties) and inside the
         // same scope level they are handled according to their order
         // of declaration.
         // For each value that is used to report errors in, an internal
@@ -497,6 +509,21 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
 
     protected abstract String formatLine(String content);
 
+    public Collection<String> generateErrorMarkings(Template template, Collection<ValidationError> errors)
+    throws ValidationBuilderException {
+        return generateErrorMarkings(template, errors, null, null);
+    }
+
+    public Collection<String> generateErrorMarkings(Template template, Collection<ValidationError> errors, Collection<String> onlySubjectsToClear)
+    throws ValidationBuilderException {
+        return generateErrorMarkings(template, errors, onlySubjectsToClear, null);
+    }
+
+    public Collection<String> generateErrorMarkings(Template template, Collection<ValidationError> errors, String prefix)
+    throws ValidationBuilderException {
+        return generateErrorMarkings(template, errors, null, prefix);
+    }
+
     public Collection<String> generateErrorMarkings(Template template, Collection<ValidationError> errors, Collection<String> onlySubjectsToClear, String prefix)
     throws ValidationBuilderException {
         if (null == template ||
@@ -638,6 +665,10 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         return set_values;
     }
 
+    public void removeValidationErrors(Template template, Collection<String> subjects) {
+        removeValidationErrors(template, subjects, null);
+    }
+
     public void removeValidationErrors(Template template, Collection<String> subjects, String prefix) {
         if (null == template) {
             return;
@@ -671,6 +702,10 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                 }
             }
         }
+    }
+
+    public void removeErrorMarkings(Template template, Collection<String> subjects) {
+        removeErrorMarkings(template, subjects, null);
     }
 
     public void removeErrorMarkings(Template template, Collection<String> subjects, String prefix) {
