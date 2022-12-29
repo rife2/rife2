@@ -17,7 +17,7 @@ public class WhereGroup<ParentType extends WhereQuery> extends AbstractWhereGrou
     }
 
     public ParentType end() {
-        StringBuilder where = new StringBuilder();
+        var where = new StringBuilder();
 
         where.append("(");
         where.append(getSql());

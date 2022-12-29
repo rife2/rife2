@@ -24,7 +24,7 @@ public class ValidationGroup implements Cloneable {
     ValidationGroup(String name, Validation validation) {
         name_ = name;
         validation_ = validation;
-        subjects_ = new ArrayList<String>();
+        subjects_ = new ArrayList<>();
     }
 
     void setParent(ValidationGroup parent) {
@@ -45,15 +45,15 @@ public class ValidationGroup implements Cloneable {
 
         Object new_bean;
         try {
-            new_bean = bean.getClass().newInstance();
+            new_bean = bean.getClass().getDeclaredConstructor().newInstance();
         } catch (Throwable e) {
             throw new ValidationException(e);
         }
 
-        String[] property_names = new String[propertyNames_.size()];
+        var property_names = new String[propertyNames_.size()];
         propertyNames_.toArray(property_names);
         try {
-            for (String name : BeanUtils.getPropertyNames(bean.getClass(), property_names, null, null)) {
+            for (var name : BeanUtils.getPropertyNames(bean.getClass(), property_names, null, null)) {
                 BeanUtils.setPropertyValue(bean, name, BeanUtils.getPropertyValue(new_bean, name));
             }
         } catch (BeanUtilsException e) {
@@ -95,7 +95,7 @@ public class ValidationGroup implements Cloneable {
 
     private void addPropertyName(String name) {
         if (null == propertyNames_) {
-            propertyNames_ = new ArrayList<String>();
+            propertyNames_ = new ArrayList<>();
         }
 
         if (!propertyNames_.contains(name)) {
@@ -113,7 +113,7 @@ public class ValidationGroup implements Cloneable {
     public ValidationGroup addConstraint(ConstrainedProperty constrainedProperty) {
         addPropertyName(constrainedProperty.getPropertyName());
 
-        List<PropertyValidationRule> rules = validation_.addConstrainedPropertyRules(constrainedProperty);
+        var rules = validation_.addConstrainedPropertyRules(constrainedProperty);
         for (ValidationRule rule : rules) {
             addSubject(rule.getSubject());
         }
@@ -122,7 +122,7 @@ public class ValidationGroup implements Cloneable {
     }
 
     public ValidationGroup addGroup(String name) {
-        ValidationGroup group = validation_.addGroup(name);
+        var group = validation_.addGroup(name);
         group.setParent(this);
         return group;
     }
@@ -133,10 +133,10 @@ public class ValidationGroup implements Cloneable {
             new_validationgroup = (ValidationGroup) super.clone();
 
             if (subjects_ != null) {
-                new_validationgroup.subjects_ = new ArrayList<String>(subjects_);
+                new_validationgroup.subjects_ = new ArrayList<>(subjects_);
             }
             if (propertyNames_ != null) {
-                new_validationgroup.propertyNames_ = new ArrayList<String>(propertyNames_);
+                new_validationgroup.propertyNames_ = new ArrayList<>(propertyNames_);
             }
         } catch (CloneNotSupportedException e) {
             // this should never happen

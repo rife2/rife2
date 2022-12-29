@@ -56,7 +56,7 @@ public class DropSequence extends AbstractQuery implements Cloneable {
             if (null == name_) {
                 throw new SequenceNameRequiredException("DropSequence");
             } else {
-                Template template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".drop_sequence");
+                var template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".drop_sequence");
 
                 if (template.hasValueId("NAME")) {
                     template.setValue("NAME", name_);

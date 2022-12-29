@@ -113,13 +113,13 @@ public class CreateTable extends AbstractQuery implements Cloneable {
             } else if (0 == columnMapping_.size()) {
                 throw new ColumnsRequiredException("CreateTable");
             } else {
-                Template template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".create_table");
+                var template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".create_table");
                 String block = null;
                 String sql = null;
 
                 String columns = null;
-                ArrayList<String> column_list = new ArrayList<String>();
-                for (Column column : columnMapping_.values()) {
+                var column_list = new ArrayList<String>();
+                for (var column : columnMapping_.values()) {
                     column_list.add(column.getSql(template));
                 }
                 columns = StringUtils.join(column_list, template.getBlock("SEPARATOR"));
@@ -132,10 +132,10 @@ public class CreateTable extends AbstractQuery implements Cloneable {
                     template.setValue("TEMPORARY", block);
                 }
 
-                String primary = "";
+                var primary = "";
                 if (primaryKeys_.size() > 0) {
-                    ArrayList<String> constraints = new ArrayList<String>();
-                    for (PrimaryKey primary_key : primaryKeys_) {
+                    var constraints = new ArrayList<String>();
+                    for (var primary_key : primaryKeys_) {
                         sql = primary_key.getSql(template);
                         if (sql.length() > 0) {
                             constraints.add(sql);
@@ -146,10 +146,10 @@ public class CreateTable extends AbstractQuery implements Cloneable {
                     }
                 }
 
-                String foreign = "";
+                var foreign = "";
                 if (foreignKeys_.size() > 0) {
-                    ArrayList<String> constraints = new ArrayList<String>();
-                    for (ForeignKey foreign_key : foreignKeys_) {
+                    var constraints = new ArrayList<String>();
+                    for (var foreign_key : foreignKeys_) {
                         sql = foreign_key.getSql(template);
                         if (sql.length() > 0) {
                             constraints.add(sql);
@@ -160,10 +160,10 @@ public class CreateTable extends AbstractQuery implements Cloneable {
                     }
                 }
 
-                String unique = "";
+                var unique = "";
                 if (uniqueConstraints_.size() > 0) {
-                    ArrayList<String> constraints = new ArrayList<String>();
-                    for (UniqueConstraint unique_constraint : uniqueConstraints_) {
+                    var constraints = new ArrayList<String>();
+                    for (var unique_constraint : uniqueConstraints_) {
                         sql = unique_constraint.getSql(template);
                         if (sql.length() > 0) {
                             constraints.add(sql);
@@ -174,10 +174,10 @@ public class CreateTable extends AbstractQuery implements Cloneable {
                     }
                 }
 
-                String check = "";
+                var check = "";
                 if (checkConstraints_.size() > 0) {
-                    ArrayList<String> constraints = new ArrayList<String>();
-                    for (CheckConstraint check_constraint : checkConstraints_) {
+                    var constraints = new ArrayList<String>();
+                    for (var check_constraint : checkConstraints_) {
                         sql = check_constraint.getSql(template);
                         if (sql.length() > 0) {
                             constraints.add(sql);
@@ -293,7 +293,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
     public CreateTable columns(Object[] keyValues) {
         if (null == keyValues) throw new IllegalArgumentException("keyValues can't be null.");
 
-        for (int i = 0; i < keyValues.length; i += 2) {
+        for (var i = 0; i < keyValues.length; i += 2) {
             if (null != keyValues[i]) {
                 column(keyValues[i].toString(), (Class) keyValues[i + 1]);
             }
@@ -312,7 +312,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
         if (!columnMapping_.containsKey(name))
             throw new IllegalArgumentException("the '" + name + "' column hasn't been defined.");
 
-        Column column = columnMapping_.get(name);
+        var column = columnMapping_.get(name);
         column.setPrecision(precision);
         column.setScale(scale);
 
@@ -325,7 +325,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
         if (!columnMapping_.containsKey(name))
             throw new IllegalArgumentException("the '" + name + "' column hasn't been defined.");
 
-        Column column = columnMapping_.get(name);
+        var column = columnMapping_.get(name);
         column.setNullable(nullable);
 
         return this;
@@ -341,7 +341,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
         if (!columnMapping_.containsKey(name))
             throw new IllegalArgumentException("the '" + name + "' column hasn't been defined.");
 
-        Column column = columnMapping_.get(name);
+        var column = columnMapping_.get(name);
         column.setDefault(datasource_.getSqlConversion().getSqlValue(value));
 
         return this;
@@ -355,7 +355,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
         if (null == defaultFunction) throw new IllegalArgumentException("defaultFunction can't be null.");
         if (0 == defaultFunction.length()) throw new IllegalArgumentException("defaultFunction can't be empty.");
 
-        Column column = columnMapping_.get(name);
+        var column = columnMapping_.get(name);
         column.setDefault(defaultFunction);
 
         return this;
@@ -367,7 +367,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
         if (!columnMapping_.containsKey(name))
             throw new IllegalArgumentException("the '" + name + "' column hasn't been defined.");
 
-        Column column = columnMapping_.get(name);
+        var column = columnMapping_.get(name);
         column.addCustomAttribute(attribute);
 
         return this;
@@ -392,15 +392,15 @@ public class CreateTable extends AbstractQuery implements Cloneable {
     throws DbQueryException {
         if (null == beanClass) throw new IllegalArgumentException("beanClass can't be null.");
 
-        Constrained constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
+        var constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
 
         // handle constrained bean
         if (constrained != null) {
-            ConstrainedBean constrained_bean = constrained.getConstrainedBean();
+            var constrained_bean = constrained.getConstrainedBean();
             if (constrained_bean != null) {
                 // handle multi-column uniques
                 if (constrained_bean.hasUniques()) {
-                    for (String[] o : (List<String[]>) constrained_bean.getUniques()) {
+                    for (var o : (List<String[]>) constrained_bean.getUniques()) {
                         unique(o);
                     }
                 }
@@ -409,10 +409,10 @@ public class CreateTable extends AbstractQuery implements Cloneable {
 
         // handle properties
         ConstrainedProperty constrained_property = null;
-        Map<String, Class> column_types = QueryHelper.getBeanPropertyTypes(beanClass, includedFields, excludedFields);
+        var column_types = QueryHelper.getBeanPropertyTypes(beanClass, includedFields, excludedFields);
         Class column_type = null;
         Column column = null;
-        for (String column_name : column_types.keySet()) {
+        for (var column_name : column_types.keySet()) {
             if (!ConstrainedUtils.persistConstrainedProperty(constrained, column_name, null)) {
                 continue;
             }
@@ -474,7 +474,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
 
                     if (constrained_property.hasManyToOne() &&
                         ClassUtils.isBasic(column_type)) {
-                        ConstrainedProperty.ManyToOne many_to_one = constrained_property.getManyToOne();
+                        var many_to_one = constrained_property.getManyToOne();
 
                         if (null == many_to_one.getDerivedTable()) {
                             throw new MissingManyToOneTableException(beanClass, constrained_property.getPropertyName());
@@ -491,12 +491,12 @@ public class CreateTable extends AbstractQuery implements Cloneable {
 
             // handle in list constraints
             if (in_list_values != null) {
-                for (int i = 0; i < in_list_values.length; i++) {
+                for (var i = 0; i < in_list_values.length; i++) {
                     in_list_values[i] = StringUtils.encodeSql(in_list_values[i]);
                 }
 
-                StringBuilder check_constraint = new StringBuilder();
-                String seperator = "";
+                var check_constraint = new StringBuilder();
+                var seperator = "";
                 if (ClassUtils.isText(column_type) || column_type.isEnum()) {
                     seperator = "'";
                 }
@@ -533,7 +533,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
         if (null == columns) throw new IllegalArgumentException("columns array can't be null.");
         if (0 == columns.length) throw new IllegalArgumentException("columns array can't be empty.");
 
-        for (String column : columns) {
+        for (var column : columns) {
             nullable(column, CreateTable.NOTNULL);
         }
         primaryKeys_.add(new PrimaryKey(name, columns));
@@ -624,13 +624,13 @@ public class CreateTable extends AbstractQuery implements Cloneable {
     }
 
     public CreateTable clone() {
-        CreateTable new_instance = (CreateTable) super.clone();
+        var new_instance = (CreateTable) super.clone();
         if (new_instance != null) {
             if (columnMapping_ != null) {
                 new_instance.columnMapping_ = new LinkedHashMap<String, Column>();
 
                 Column column = null;
-                for (String name : columnMapping_.keySet()) {
+                for (var name : columnMapping_.keySet()) {
                     column = columnMapping_.get(name);
                     new_instance.columnMapping_.put(name, column.clone());
                 }
@@ -639,7 +639,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
             if (primaryKeys_ != null) {
                 new_instance.primaryKeys_ = new ArrayList<PrimaryKey>();
 
-                for (PrimaryKey primary_key : primaryKeys_) {
+                for (var primary_key : primaryKeys_) {
                     new_instance.primaryKeys_.add(primary_key.clone());
                 }
             }
@@ -647,7 +647,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
             if (foreignKeys_ != null) {
                 new_instance.foreignKeys_ = new ArrayList<ForeignKey>();
 
-                for (ForeignKey foreign_key : foreignKeys_) {
+                for (var foreign_key : foreignKeys_) {
                     new_instance.foreignKeys_.add(foreign_key.clone());
                 }
             }
@@ -655,7 +655,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
             if (uniqueConstraints_ != null) {
                 new_instance.uniqueConstraints_ = new ArrayList<UniqueConstraint>();
 
-                for (UniqueConstraint unique_constraint : uniqueConstraints_) {
+                for (var unique_constraint : uniqueConstraints_) {
                     new_instance.uniqueConstraints_.add(unique_constraint.clone());
                 }
             }
@@ -663,7 +663,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
             if (checkConstraints_ != null) {
                 new_instance.checkConstraints_ = new ArrayList<CheckConstraint>();
 
-                for (CheckConstraint check_constraint : checkConstraints_) {
+                for (var check_constraint : checkConstraints_) {
                     new_instance.checkConstraints_.add(check_constraint.clone());
                 }
             }
@@ -732,7 +732,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
 
             template.setValue("FOREIGN_TABLE", getForeignTable());
 
-            String violations_actions = "";
+            var violations_actions = "";
             if (getOnUpdate() != null) {
                 block = template.getBlock("ON_UPDATE_" + getOnUpdate().toString());
                 if (0 == block.length()) {
@@ -760,9 +760,9 @@ public class CreateTable extends AbstractQuery implements Cloneable {
             }
             template.setValue("VIOLATION_ACTIONS", violations_actions);
 
-            String[] local_columns = new String[getColumns().length / 2];
-            String[] foreign_columns = new String[getColumns().length / 2];
-            for (int i = 0; i < getColumns().length; i += 2) {
+            var local_columns = new String[getColumns().length / 2];
+            var foreign_columns = new String[getColumns().length / 2];
+            for (var i = 0; i < getColumns().length; i += 2) {
                 local_columns[i / 2] = getColumns()[i];
                 foreign_columns[i / 2] = getColumns()[i + 1];
             }
@@ -983,7 +983,7 @@ public class CreateTable extends AbstractQuery implements Cloneable {
             String result = null;
 
             template.setValue("NAME", getName());
-            String type = customType_;
+            var type = customType_;
             if (type == null) {
                 type = datasource_.getSqlConversion().getSqlType(getType(), getPrecision(), getScale());
             }

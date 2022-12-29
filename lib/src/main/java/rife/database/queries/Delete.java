@@ -60,7 +60,7 @@ public class Delete extends AbstractWhereQuery<Delete> implements Cloneable {
             if (null == from_) {
                 throw new TableNameRequiredException("Delete");
             } else {
-                Template template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".delete");
+                var template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".delete");
 
                 if (hint_ != null) {
                     if (!template.hasValueId("HINT")) {

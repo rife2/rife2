@@ -27,7 +27,7 @@ public abstract class QueryHelper {
 
     public static Map<String, String> getBeanPropertyValues(Object bean, String[] includedFields, String[] excludedFields, Datasource datasource)
     throws DbQueryException {
-        Map<String, String> property_values_sql = new LinkedHashMap<String, String>();
+        Map<String, String> property_values_sql = new LinkedHashMap<>();
 
         if (bean != null) {
             Map<String, Object> property_values = null;

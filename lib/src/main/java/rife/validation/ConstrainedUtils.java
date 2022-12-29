@@ -46,7 +46,7 @@ public class ConstrainedUtils {
             return null;
         }
 
-        Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+        var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
         ConstrainedProperty constrained_property = null;
         if (constrained != null) {
             constrained_property = constrained.getConstrainedProperty(name);
@@ -58,9 +58,9 @@ public class ConstrainedUtils {
     public static String getIdentityProperty(Class beanClass) {
         String identity_property = null;
 
-        Constrained constrained_bean = getConstrainedInstance(beanClass);
+        var constrained_bean = getConstrainedInstance(beanClass);
         if (constrained_bean != null) {
-            Iterator<ConstrainedProperty> properties_it = constrained_bean.getConstrainedProperties().iterator();
+            var properties_it = constrained_bean.getConstrainedProperties().iterator();
             ConstrainedProperty property;
             while (properties_it.hasNext()) {
                 property = properties_it.next();
@@ -88,7 +88,7 @@ public class ConstrainedUtils {
             propertyName = propertyName.substring(prefix.length());
         }
 
-        ConstrainedProperty constrained_property = bean.getConstrainedProperty(propertyName);
+        var constrained_property = bean.getConstrainedProperty(propertyName);
 
         return !(constrained_property != null &&
             !constrained_property.isEditable());
@@ -104,7 +104,7 @@ public class ConstrainedUtils {
             propertyName = propertyName.substring(prefix.length());
         }
 
-        ConstrainedProperty constrained_property = bean.getConstrainedProperty(propertyName);
+        var constrained_property = bean.getConstrainedProperty(propertyName);
         if (constrained_property != null) {
             if (!constrained_property.isPersistent() ||
                 constrained_property.isSameAs() ||
@@ -125,7 +125,7 @@ public class ConstrainedUtils {
 
     private static boolean isManyToOneJoinProperty(Class beanClass, String propertyName) {
         try {
-            Class property_type = BeanUtils.getPropertyType(beanClass, propertyName);
+            var property_type = BeanUtils.getPropertyType(beanClass, propertyName);
             if (ClassUtils.isBasic(property_type)) {
                 return true;
             }
@@ -146,7 +146,7 @@ public class ConstrainedUtils {
             propertyName = propertyName.substring(prefix.length());
         }
 
-        ConstrainedProperty constrained_property = bean.getConstrainedProperty(propertyName);
+        var constrained_property = bean.getConstrainedProperty(propertyName);
         if (constrained_property != null) {
             if (!constrained_property.isPersistent() ||
                 !constrained_property.isSaved() ||
@@ -176,7 +176,7 @@ public class ConstrainedUtils {
             propertyName = propertyName.substring(prefix.length());
         }
 
-        ConstrainedProperty constrained_property = bean.getConstrainedProperty(propertyName);
+        var constrained_property = bean.getConstrainedProperty(propertyName);
 
         return constrained_property != null && constrained_property.isFile();
     }

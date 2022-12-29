@@ -195,18 +195,18 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
 
     public String getSql()
     throws DbQueryException {
-        Constrained constrained = ConstrainedUtils.getConstrainedInstance(constrainedClass_);
+        var constrained = ConstrainedUtils.getConstrainedInstance(constrainedClass_);
 
         // handle constrained beans meta-data that needs to be handled after all the
         // rest
         if (constrained != null) {
-            ConstrainedBean constrained_bean = constrained.getConstrainedBean();
+            var constrained_bean = constrained.getConstrainedBean();
             if (constrained_bean != null) {
                 // handle default ordering if no order statements have been
                 // defined yet
                 if (constrained_bean.hasDefaultOrdering() &&
                     0 == orderBy_.size()) {
-                    Iterator<ConstrainedBean.Order> ordering_it = constrained_bean.getDefaultOrdering().iterator();
+                    var ordering_it = constrained_bean.getDefaultOrdering().iterator();
                     ConstrainedBean.Order order = null;
                     while (ordering_it.hasNext()) {
                         order = ordering_it.next();
@@ -221,7 +221,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
             throw new TableNameOrFieldsRequiredException("Select");
         } else {
             if (null == sql_) {
-                Template template = getTemplate();
+                var template = getTemplate();
                 String block = null;
 
                 if (hint_ != null) {
@@ -267,8 +267,8 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
                 }
 
                 if (joins_.size() > 0) {
-                    ArrayList<String> join_list = new ArrayList<String>();
-                    for (Join join : joins_) {
+                    var join_list = new ArrayList<String>();
+                    for (var join : joins_) {
                         join_list.add(join.getSql(template));
                     }
                     template.setValue("JOINS", StringUtils.join(join_list, ""));
@@ -302,7 +302,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
                 }
 
                 if (unions_ != null) {
-                    for (Union union : unions_) {
+                    for (var union : unions_) {
                         template.setValue("EXPRESSION", union.getExpression());
                         if (union.isAll()) {
                             block = template.getBlock("UNION_ALL");
@@ -321,8 +321,8 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
                 }
 
                 if (orderBy_.size() > 0) {
-                    ArrayList<String> orderby_list = new ArrayList<String>();
-                    for (OrderBy order_by : orderBy_) {
+                    var orderby_list = new ArrayList<String>();
+                    for (var order_by : orderBy_) {
                         orderby_list.add(order_by.getSql(template));
                     }
                     template.setValue("ORDERBY_PARTS", StringUtils.join(orderby_list, template.getBlock("SEPARATOR")));
@@ -339,7 +339,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
                     // by the template
                     if (-1 == offset_ &&
                         template.hasValueId("OFFSET_VALUE")) {
-                        String offset_value = template.getValue("OFFSET_VALUE");
+                        var offset_value = template.getValue("OFFSET_VALUE");
                         if (offset_value != null &&
                             offset_value.trim().length() > 0) {
                             offset_ = Integer.parseInt(offset_value);
@@ -416,7 +416,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
         if (0 == alias.length()) throw new IllegalArgumentException("alias can't be empty.");
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        StringBuilder buffer = new StringBuilder();
+        var buffer = new StringBuilder();
 
         buffer.append("(");
         buffer.append(query.toString());
@@ -449,12 +449,12 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
     throws DbQueryException {
         if (null == beanClass) throw new IllegalArgumentException("beanClass can't be null.");
 
-        Set<String> property_names = QueryHelper.getBeanPropertyNames(beanClass, excludedFields);
+        var property_names = QueryHelper.getBeanPropertyNames(beanClass, excludedFields);
 
-        Constrained constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
+        var constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
 
         // handle the properties
-        for (String property_name : property_names) {
+        for (var property_name : property_names) {
             if (!ConstrainedUtils.persistConstrainedProperty(constrained, property_name, null)) {
                 continue;
             }
@@ -523,7 +523,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
     public Select from(Select query) {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        StringBuilder buffer = new StringBuilder();
+        var buffer = new StringBuilder();
 
         buffer.append("(");
         buffer.append(query.toString());
@@ -541,7 +541,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
         if (0 == alias.length()) throw new IllegalArgumentException("alias can't be empty.");
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        StringBuilder buffer = new StringBuilder();
+        var buffer = new StringBuilder();
 
         buffer.append("(");
         buffer.append(query.toString());
@@ -570,7 +570,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
         if (0 == alias.length()) throw new IllegalArgumentException("alias can't be empty.");
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        StringBuilder buffer = new StringBuilder();
+        var buffer = new StringBuilder();
         buffer.append("(");
         buffer.append(query.toString());
         buffer.append(") ");
@@ -673,11 +673,11 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
     throws DbQueryException {
         if (null == beanClass) throw new IllegalArgumentException("beanClass can't be null.");
 
-        Set<String> property_names = QueryHelper.getBeanPropertyNames(beanClass, excludedFields);
+        var property_names = QueryHelper.getBeanPropertyNames(beanClass, excludedFields);
 
         clearGenerated();
 
-        for (String property_name : property_names) {
+        for (var property_name : property_names) {
             groupBy_.add(property_name);
         }
 
@@ -744,7 +744,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
         if (0 == column.length()) throw new IllegalArgumentException("column can't be empty.");
         if (null == direction) throw new IllegalArgumentException("direction can't be null.");
 
-        OrderBy orderby = new OrderBy(column, direction);
+        var orderby = new OrderBy(column, direction);
         clearGenerated();
         orderBy_.add(orderby);
 
@@ -783,18 +783,18 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
     }
 
     protected boolean isLimitBeforeOffset() {
-        Template template = getTemplate();
+        var template = getTemplate();
         if (!template.hasValueId("OFFSET") ||
             !template.hasValueId("LIMIT_VALUE")
         ) {
             return super.isLimitBeforeOffset();
         }
 
-        String offset = template.getValue("OFFSET");
-        String limit_value = template.getValue("LIMIT_VALUE");
+        var offset = template.getValue("OFFSET");
+        var limit_value = template.getValue("LIMIT_VALUE");
         template.setValue("OFFSET", "offset");
         template.setValue("LIMIT_VALUE", "limit");
-        String limit = template.getBlock("LIMIT");
+        var limit = template.getBlock("LIMIT");
 
         template.setValue("OFFSET", offset);
         template.setValue("LIMIT_VALUE", limit_value);
@@ -814,7 +814,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
     }
 
     public Select clone() {
-        Select new_instance = super.clone();
+        var new_instance = super.clone();
         if (new_instance != null) {
             if (fields_ != null) {
                 new_instance.fields_ = new ArrayList<String>();
@@ -824,14 +824,14 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
             if (joins_ != null) {
                 new_instance.joins_ = new ArrayList<Join>();
 
-                for (Join join : joins_) {
+                for (var join : joins_) {
                     new_instance.joins_.add(join.clone());
                 }
             }
 
             if (unions_ != null) {
                 new_instance.unions_ = new ArrayList<Union>();
-                for (Union union : unions_) {
+                for (var union : unions_) {
                     new_instance.unions_.add(union.clone());
                 }
             }
@@ -853,7 +853,7 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
 
             if (orderBy_ != null) {
                 new_instance.orderBy_ = new ArrayList<OrderBy>();
-                for (OrderBy order_by : orderBy_) {
+                for (var order_by : orderBy_) {
                     new_instance.orderBy_.add(order_by.clone());
                 }
             }

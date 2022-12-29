@@ -93,7 +93,7 @@ public abstract class ValidationError implements Cloneable {
     }
 
     /**
-     * Returns wether this error is overridable for the same subject.
+     * Returns whether this error is overridable for the same subject.
      *
      * @since 1.0
      */
