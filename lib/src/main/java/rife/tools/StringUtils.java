@@ -4,15 +4,12 @@
  */
 package rife.tools;
 
+import org.eclipse.jetty.util.UrlEncoded;
 import rife.config.RifeConfig;
 import rife.datastructures.DocumentPosition;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.BreakIterator;
@@ -538,11 +535,10 @@ public abstract class StringUtils {
         if (ch > '~') return false;
         return UNRESERVED_URI_CHARS.get(ch);
     }
+    private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
 
     private static void appendUrlEncodedDigit(StringBuilder out, int digit) {
-        char ch = Character.forDigit(digit & 0xF, 16);
-        if (Character.isLetter(ch)) ch -= LOWERCASE_CHAR_TO_UPPERCASE;
-        out.append(ch);
+        out.append(HEX_DIGITS[digit & 0x0F]);
     }
 
     private static void appendUrlEncodedByte(StringBuilder out, int ch) {
