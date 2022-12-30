@@ -472,18 +472,25 @@ public abstract class StringUtils {
      * @since 1.0
      */
     public static String encodeUrl(String source) {
-        if (!needsUrlEncoding(source)) {
-            return source;
+        if (source == null) {
+            return null;
         }
 
-        var out = new StringBuilder(source.length());
+        StringBuilder out = null;
         char ch;
         for (var i = 0; i < source.length(); ) {
             ch = source.charAt(i);
             if (isUnreservedUriChar(ch)) {
-                out.append(ch);
+                if (out != null) {
+                    out.append(ch);
+                }
                 i += 1;
             } else {
+                if (out == null) {
+                    out = new StringBuilder(source.length());
+                    out.append(source, 0, i);
+                }
+
                 int cp = source.codePointAt(i);
                 if (cp < 0x80) {
                     appendUrlEncodedByte(out, cp);
@@ -502,6 +509,10 @@ public abstract class StringUtils {
                     i += 2;
                 }
             }
+        }
+
+        if (out == null) {
+            return source;
         }
 
         return out.toString();
@@ -528,24 +539,6 @@ public abstract class StringUtils {
         return UNRESERVED_URI_CHARS.get(ch);
     }
 
-    private static boolean needsUrlEncoding(String source) {
-        if (null == source) {
-            return false;
-        }
-
-        // check if the string needs encoding without doing any memory allocation
-        var encode = false;
-        for (var i = 0; i < source.length(); ++i) {
-            if (isUnreservedUriChar(source.charAt(i))) {
-                continue;
-            }
-            encode = true;
-            break;
-        }
-
-        return encode;
-    }
-
     private static void appendUrlEncodedDigit(StringBuilder out, int digit) {
         char ch = Character.forDigit(digit & 0xF, 16);
         if (Character.isLetter(ch)) ch -= LOWERCASE_CHAR_TO_UPPERCASE;
@@ -568,12 +561,12 @@ public abstract class StringUtils {
      * @since 1.0
      */
     public static String decodeUrl(String source) {
-        if (!needsUrlDecoding(source)) {
+        if (source == null) {
             return source;
         }
 
         var length = source.length();
-        var out = new StringBuilder(length);
+        StringBuilder out = null;
         char ch;
         byte[] bytes_buffer = null;
         int bytes_pos = 0;
@@ -581,6 +574,11 @@ public abstract class StringUtils {
             ch = source.charAt(i);
 
             if (ch == '%') {
+                if (out == null) {
+                    out = new StringBuilder(source.length());
+                    out.append(source, 0, i);
+                }
+
                 if (bytes_buffer == null) {
                     // the remaining characters divided by the length
                     // of the encoding format %xx, is the maximum number of
@@ -613,9 +611,16 @@ public abstract class StringUtils {
                     bytes_pos = 0;
                 }
 
-                out.append(ch);
+                if (out != null) {
+                    out.append(ch);
+                }
+
                 i += 1;
             }
+        }
+
+        if (out == null) {
+            return source;
         }
 
         if (bytes_buffer != null) {
@@ -623,23 +628,6 @@ public abstract class StringUtils {
         }
 
         return out.toString();
-    }
-
-    private static boolean needsUrlDecoding(String source) {
-        if (null == source) {
-            return false;
-        }
-
-        // check if the string needs decoding without doing any memory allocation
-        var decode = false;
-        for (var i = 0; i < source.length(); ++i) {
-            if (source.charAt(i) == '%') {
-                decode = true;
-                break;
-            }
-        }
-
-        return decode;
     }
 
     private static boolean needsHtmlEncoding(String source, boolean defensive) {
