@@ -71,6 +71,9 @@ tasks.register<JavaExec>("runHelloAll") {
     project.logger.lifecycle("   Or http://localhost:8080/mapping/John/Smith")
     project.logger.lifecycle("   Or another other matching path info")
     project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloSvg:")
+    project.logger.lifecycle("   Open your browser at http://localhost:8080/clock")
+    project.logger.lifecycle("")
     project.logger.lifecycle(" HelloTemplate:")
     project.logger.lifecycle("   Open your browser at http://localhost:8080/template")
     project.logger.lifecycle("")
@@ -199,6 +202,16 @@ tasks.register<JavaExec>("runHelloPathInfoMapping") {
     project.logger.lifecycle("================================================================================")
     project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/mapping/John")
     project.logger.lifecycle(" or http://localhost:8080/mapping/John/Smith, or another other matching path info")
+    project.logger.lifecycle("================================================================================")
+    project.logger.lifecycle("")
+}
+
+tasks.register<JavaExec>("runHelloSvg") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("rife.HelloSvg")
+    project.logger.lifecycle("")
+    project.logger.lifecycle("================================================================================")
+    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/clock")
     project.logger.lifecycle("================================================================================")
     project.logger.lifecycle("")
 }

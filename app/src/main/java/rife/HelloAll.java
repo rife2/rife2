@@ -20,6 +20,7 @@ public class HelloAll extends Site {
         group(new HelloGroup());
         group(new HelloLink());
         group(new HelloPathInfoMapping());
+        group(new HelloSvg());
         group(new HelloTemplate());
         group(new HelloWorld());
     }
