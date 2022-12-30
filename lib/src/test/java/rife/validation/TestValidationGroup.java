@@ -113,7 +113,7 @@ public class TestValidationGroup {
             group.reinitializeProperties(bean);
             fail();
         } catch (ValidationException e) {
-            assertTrue(e.getCause() instanceof InstantiationException);
+            assertTrue(e.getCause() instanceof NoSuchMethodException);
         }
     }
 
