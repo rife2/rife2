@@ -159,7 +159,7 @@ tasks.register<JavaExec>("runHelloFormContinuations") {
     project.logger.lifecycle("")
 }
 
-tasks.register<JavaExec>("HelloGenericQueryManager") {
+tasks.register<JavaExec>("runHelloGenericQueryManager") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("rife.HelloGenericQueryManager")
     project.logger.lifecycle("")
