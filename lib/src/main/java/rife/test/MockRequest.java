@@ -66,16 +66,7 @@ public class MockRequest implements Request {
         String[] parameter_values = null;
         for (var entry : parameters_.entrySet()) {
             parameter_name = entry.getKey();
-            if (StringUtils.doesUrlValueNeedDecoding(parameter_name)) {
-                parameter_name = StringUtils.decodeUrlValue(parameter_name);
-            }
-
             parameter_values = entry.getValue();
-            for (var i = 0; i < parameter_values.length; i++) {
-                if (StringUtils.doesUrlValueNeedDecoding(parameter_values[i])) {
-                    parameter_values[i] = StringUtils.decodeUrlValue(parameter_values[i]);
-                }
-            }
 
             parameters_.put(parameter_name, parameter_values);
         }

@@ -51,14 +51,14 @@ public abstract class StringUtils {
     public static final Pattern BBCODE_QUOTE_LONG = Pattern.compile("\\[quote=([^\\]]+\\]*)\\]", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
     public static final Pattern BBCODE_BAREURL = Pattern.compile("(?:[^\"'=>\\]]|^)((?:http|ftp)s?://(?:%[\\p{Digit}A-Fa-f][\\p{Digit}A-Fa-f]|[\\-_\\.!~*';\\|/?:@#&=\\+$,\\p{Alnum}])+)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 
-    private static final Map<Character, String> AGGRESSIVE_HTML_ENCODE_MAP = new HashMap<Character, String>();
-    private static final Map<Character, String> DEFENSIVE_HTML_ENCODE_MAP = new HashMap<Character, String>();
-    private static final Map<Character, String> XML_ENCODE_MAP = new HashMap<Character, String>();
-    private static final Map<Character, String> STRING_ENCODE_MAP = new HashMap<Character, String>();
-    private static final Map<Character, String> SQL_ENCODE_MAP = new HashMap<Character, String>();
-    private static final Map<Character, String> LATEX_ENCODE_MAP = new HashMap<Character, String>();
+    private static final Map<Character, String> AGGRESSIVE_HTML_ENCODE_MAP = new HashMap<>();
+    private static final Map<Character, String> DEFENSIVE_HTML_ENCODE_MAP = new HashMap<>();
+    private static final Map<Character, String> XML_ENCODE_MAP = new HashMap<>();
+    private static final Map<Character, String> STRING_ENCODE_MAP = new HashMap<>();
+    private static final Map<Character, String> SQL_ENCODE_MAP = new HashMap<>();
+    private static final Map<Character, String> LATEX_ENCODE_MAP = new HashMap<>();
 
-    private static final Map<String, Character> HTML_DECODE_MAP = new HashMap<String, Character>();
+    private static final Map<String, Character> HTML_DECODE_MAP = new HashMap<>();
 
     private static final HtmlEncoderFallbackHandler HTML_ENCODER_FALLBACK = new HtmlEncoderFallbackHandler();
 
@@ -454,33 +454,6 @@ public abstract class StringUtils {
         return matcher.replaceAll("_");
     }
 
-    private static boolean needsUrlEncoding(String source) {
-        if (null == source) {
-            return false;
-        }
-
-        // check if the string needs encoding first since
-        // the URLEncoder always allocates a StringBuffer, even when the
-        // string is returned as-is
-        var encode = false;
-        char ch;
-        for (var i = 0; i < source.length(); i++) {
-            ch = source.charAt(i);
-
-            if (ch >= 'a' && ch <= 'z' ||
-                ch >= 'A' && ch <= 'Z' ||
-                ch >= '0' && ch <= '9' ||
-                ch == '-' || ch == '_' || ch == '.' || ch == '*') {
-                continue;
-            }
-
-            encode = true;
-            break;
-        }
-
-        return encode;
-    }
-
     /**
      * Transforms a provided <code>String</code> object into a new string,
      * containing only valid URL characters in the UTF-8 encoding.
@@ -490,7 +463,6 @@ public abstract class StringUtils {
      * @return The encoded <code>String</code> object.
      * @see #decodeUrl(String)
      * @see #encodeClassname(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
@@ -504,7 +476,86 @@ public abstract class StringUtils {
             return source;
         }
 
-        return URLEncoder.encode(source, StandardCharsets.UTF_8);
+        var out = new StringBuilder(source.length());
+        char ch;
+        for (var i = 0; i < source.length(); ) {
+            ch = source.charAt(i);
+            if (isUnreservedUriChar(ch)) {
+                out.append(ch);
+                i += 1;
+            } else {
+                int cp = source.codePointAt(i);
+                if (cp < 0x80) {
+                    appendUrlEncodedByte(out, cp);
+                    i += 1;
+                } else if (Character.isBmpCodePoint(cp)) {
+                    for (var b : Character.toString(ch).getBytes(StandardCharsets.UTF_8)) {
+                        appendUrlEncodedByte(out, b);
+                    }
+                    i += 1;
+                } else if (Character.isSupplementaryCodePoint(cp)) {
+                    char high = Character.highSurrogate(cp);
+                    char low = Character.lowSurrogate(cp);
+                    for (var b : new String(new char[]{high, low}).getBytes(StandardCharsets.UTF_8)) {
+                        appendUrlEncodedByte(out, b);
+                    }
+                    i += 2;
+                }
+            }
+        }
+
+        return out.toString();
+    }
+
+    static final BitSet UNRESERVED_URI_CHARS;
+    static final int LOWERCASE_CHAR_TO_UPPERCASE = ('a' - 'A');
+    static {
+        // see https://www.rfc-editor.org/rfc/rfc3986#page-13
+        var unreserved = new BitSet('~' + 1);
+        unreserved.set('-');
+        unreserved.set('.');
+        for (int c = '0'; c <= '9'; ++c) unreserved.set(c);
+        for (int c = 'A'; c <= 'Z'; ++c) unreserved.set(c);
+        unreserved.set('_');
+        for (int c = 'a'; c <= 'z'; ++c) unreserved.set(c);
+        unreserved.set('~');
+        UNRESERVED_URI_CHARS = unreserved;
+    }
+
+    // see https://www.rfc-editor.org/rfc/rfc3986#page-13
+    private static boolean isUnreservedUriChar(char ch) {
+        if (ch > '~') return false;
+        return UNRESERVED_URI_CHARS.get(ch);
+    }
+
+    private static boolean needsUrlEncoding(String source) {
+        if (null == source) {
+            return false;
+        }
+
+        // check if the string needs encoding without doing any memory allocation
+        var encode = false;
+        for (var i = 0; i < source.length(); ++i) {
+            if (isUnreservedUriChar(source.charAt(i))) {
+                continue;
+            }
+            encode = true;
+            break;
+        }
+
+        return encode;
+    }
+
+    private static void appendUrlEncodedDigit(StringBuilder out, int digit) {
+        char ch = Character.forDigit(digit & 0xF, 16);
+        if (Character.isLetter(ch)) ch -= LOWERCASE_CHAR_TO_UPPERCASE;
+        out.append(ch);
+    }
+
+    private static void appendUrlEncodedByte(StringBuilder out, int ch) {
+        out.append("%");
+        appendUrlEncodedDigit(out, ch >> 4);
+        appendUrlEncodedDigit(out, ch);
     }
 
     /**
@@ -517,109 +568,78 @@ public abstract class StringUtils {
      * @since 1.0
      */
     public static String decodeUrl(String source) {
-        return URLDecoder.decode(source, StandardCharsets.UTF_8);
-    }
-
-    /**
-     * Transforms a provided <code>String</code> object into a new string,
-     * only pure US Ascii strings are preserved and URL encoded in a regular
-     * way. Strings with characters from other encodings will be encoded in a
-     * RIFE-specific manner to allow international data to be passed along the
-     * query string.
-     *
-     * @param source The string that has to be transformed into a valid URL
-     *               parameter string.
-     * @return The encoded <code>String</code> object.
-     * @see #decodeUrlValue(String)
-     * @see #encodeClassname(String)
-     * @see #encodeUrl(String)
-     * @see #encodeHtml(String)
-     * @see #encodeXml(String)
-     * @see #encodeSql(String)
-     * @see #encodeLatex(String)
-     * @see #encodeRegexp(String)
-     * @see #encodeJson(String)
-     * @since 1.0
-     */
-    public static String encodeUrlValue(String source) {
-        if (!needsUrlEncoding(source)) {
+        if (!needsUrlDecoding(source)) {
             return source;
         }
 
-        // check if the string is valid US-ASCII encoding
-        var valid = true;
-        var encoder = CHARSET_US_ASCII.newEncoder();
-        try {
-            encoder.encode(CharBuffer.wrap(source));
-        } catch (CharacterCodingException e) {
-            valid = false;
-        }
+        var length = source.length();
+        var out = new StringBuilder(length);
+        char ch;
+        byte[] bytes_buffer = null;
+        int bytes_pos = 0;
+        for (var i = 0; i < length; ) {
+            ch = source.charAt(i);
 
-        try {
-            // if it is valid US-ASCII, use the regular URL encoding method
-            if (valid) {
-                return URLEncoder.encode(source, ENCODING_US_ASCII);
-            }
-            // otherwise, base-64 encode the UTF-8 bytes and mark the string
-            // as being encoded in a special way
-            else {
-                var encoded = new StringBuilder("%02%02");
-                var base64 = Base64.getEncoder().encodeToString(source.getBytes(StandardCharsets.UTF_8));
-                var base64_urlsafe = replace(base64, "=", "%3D");
-                encoded.append(base64_urlsafe);
+            if (ch == '%') {
+                if (bytes_buffer == null) {
+                    // the remaining characters divided by the length
+                    // of the encoding format %xx, is the maximum number of
+                    // bytes that can be extracted
+                    bytes_buffer = new byte[(length - i) / 3];
+                    bytes_pos = 0;
+                }
 
-                return encoded.toString();
-            }
-        } catch (UnsupportedEncodingException e) {
-            // this should never happen, ISO-8859-1 is a standard encoding
-            throw new RuntimeException(e);
-        }
-    }
+                i += 1;
+                if (length < i + 2) {
+                    throw new IllegalArgumentException("StringUtils.decodeUrl: Illegal escape sequence");
+                }
+                try {
+                    int v = Integer.parseInt(source, i, i + 2, 16);
+                    if (v < 0 || v > 0xFF) {
+                        throw new IllegalArgumentException("StringUtils.decodeUrl: Illegal escape value");
+                    }
 
-    /**
-     * Decodes a <code>String</code> that has been encoded in a RIFE-specific
-     * manner for URL usage. Before calling this method, you should first
-     * verify if the value needs decoding by using the
-     * <code>doesUrlValueNeedDecoding(String)</code> method.
-     *
-     * @param source the value that has been encoded for URL usage in a
-     *               RIFE-specific way
-     * @return The decoded <code>String</code> object.
-     * @see #encodeUrlValue(String)
-     * @see #doesUrlValueNeedDecoding(String)
-     * @since 1.0
-     */
-    public static String decodeUrlValue(String source) {
-        try {
-            var decoded = Base64.getDecoder().decode(source.substring(2));
-            if (null == decoded) {
-                return null;
+                    bytes_buffer[bytes_pos++] = (byte)v;
+
+                    i += 2;
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("StringUtils.decodeUrl: Illegal characters in escape sequence" + e.getMessage());
+                }
             } else {
-                return new String(decoded, StringUtils.ENCODING_UTF_8);
+                if (bytes_buffer != null) {
+                    out.append(new String(bytes_buffer, 0, bytes_pos, StandardCharsets.UTF_8));
+
+                    bytes_buffer = null;
+                    bytes_pos = 0;
+                }
+
+                out.append(ch);
+                i += 1;
             }
-        } catch (UnsupportedEncodingException e) {
-            // this should never happen, UTF-8 is a standard encoding
-            throw new RuntimeException(e);
         }
+
+        if (bytes_buffer != null) {
+            out.append(new String(bytes_buffer, 0, bytes_pos, StandardCharsets.UTF_8));
+        }
+
+        return out.toString();
     }
 
-    /**
-     * Checks if a <code>String</code> is encoded in a RIFE-specific manner
-     * for URL usage.
-     *
-     * @param source the value that might have been encoded for URL usage in a
-     *               RIFE-specific way
-     * @return <code>true</code> if the value is encoded in the RIFE-specific
-     * format; and
-     * <p><code>false</code> otherwise
-     * @see #encodeUrlValue(String)
-     * @see #decodeUrlValue(String)
-     * @since 1.0
-     */
-    public static boolean doesUrlValueNeedDecoding(String source) {
-        return source != null &&
-            source.length() > 2 &&
-            source.startsWith("\u0002\u0002");
+    private static boolean needsUrlDecoding(String source) {
+        if (null == source) {
+            return false;
+        }
+
+        // check if the string needs decoding without doing any memory allocation
+        var decode = false;
+        for (var i = 0; i < source.length(); ++i) {
+            if (source.charAt(i) == '%') {
+                decode = true;
+                break;
+            }
+        }
+
+        return decode;
     }
 
     private static boolean needsHtmlEncoding(String source, boolean defensive) {
@@ -733,7 +753,6 @@ public abstract class StringUtils {
      * @return The encoded <code>String</code> object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
      * @see #encodeString(String)
@@ -760,7 +779,6 @@ public abstract class StringUtils {
      * @return The encoded <code>String</code> object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
      * @see #encodeString(String)
@@ -784,7 +802,6 @@ public abstract class StringUtils {
      * @return The encoded <code>String</code> object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeSql(String)
      * @see #encodeString(String)
@@ -806,7 +823,6 @@ public abstract class StringUtils {
      * @return The encoded <code>String</code> object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
@@ -828,7 +844,6 @@ public abstract class StringUtils {
      * @return The encoded <code>String</code> object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
@@ -865,7 +880,6 @@ public abstract class StringUtils {
      * @return The encoded <code>String</code> object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeString(String)
@@ -887,7 +901,6 @@ public abstract class StringUtils {
      * @return The encoded <code>String</code> object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
@@ -1011,7 +1024,6 @@ public abstract class StringUtils {
      * @return The encoded <code>String</code> object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
@@ -1036,33 +1048,22 @@ public abstract class StringUtils {
             b = c;
             c = source.charAt(i);
             switch (c) {
-                case '\\':
-                case '"':
+                case '\\', '"' -> {
                     encoded_string.append('\\');
                     encoded_string.append(c);
-                    break;
-                case '/':
+                }
+                case '/' -> {
                     if (b == '<') {
                         encoded_string.append('\\');
                     }
                     encoded_string.append(c);
-                    break;
-                case '\b':
-                    encoded_string.append("\\b");
-                    break;
-                case '\t':
-                    encoded_string.append("\\t");
-                    break;
-                case '\n':
-                    encoded_string.append("\\n");
-                    break;
-                case '\f':
-                    encoded_string.append("\\f");
-                    break;
-                case '\r':
-                    encoded_string.append("\\r");
-                    break;
-                default:
+                }
+                case '\b' -> encoded_string.append("\\b");
+                case '\t' -> encoded_string.append("\\t");
+                case '\n' -> encoded_string.append("\\n");
+                case '\f' -> encoded_string.append("\\f");
+                case '\r' -> encoded_string.append("\\r");
+                default -> {
                     if (c < ' ' || (c >= '\u0080' && c < '\u00a0')
                         || (c >= '\u2000' && c < '\u2100')) {
                         encoded_string.append("\\u");
@@ -1072,6 +1073,7 @@ public abstract class StringUtils {
                     } else {
                         encoded_string.append(c);
                     }
+                }
             }
         }
 
@@ -1087,7 +1089,6 @@ public abstract class StringUtils {
      * @return The encoded <code>String</code> object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
@@ -1123,8 +1124,8 @@ public abstract class StringUtils {
 
     public static String encodeHex(byte[] bytes) {
         var sb = new StringBuilder();
-        for (var i = 0; i < bytes.length; ++i) {
-            sb.append(Integer.toHexString((bytes[i] & 0xFF) | 0x100), 1, 3);
+        for (byte b : bytes) {
+            sb.append(Integer.toHexString((b & 0xFF) | 0x100), 1, 3);
         }
         return sb.toString();
     }
@@ -1454,7 +1455,7 @@ public abstract class StringUtils {
                 new_index = source_lookup_reference.indexOf(stringToStrip, new_index + strip_length);
             }
             while (new_index != -1 &&
-                new_index == last_index + strip_length);
+                   new_index == last_index + strip_length);
 
             return source.substring(last_index + strip_length);
         } else {
@@ -1514,7 +1515,7 @@ public abstract class StringUtils {
                 new_index = source_lookup_reference.lastIndexOf(stringToStrip, last_index - 1);
             }
             while (new_index != -1 &&
-                new_index == last_index - strip_length);
+                   new_index == last_index - strip_length);
 
             return source.substring(0, last_index);
         } else {
@@ -1685,7 +1686,7 @@ public abstract class StringUtils {
      * @return A new <code>String</code> with the join result.
      * @since 1.0
      */
-    public static String join(Collection collection, String separator) {
+    public static String join(Collection<?> collection, String separator) {
         if (null == collection) {
             return null;
         }
@@ -2470,10 +2471,9 @@ public abstract class StringUtils {
                 /* must end before the next [code]
                  * this will leave a dangling [/code] but the HTML is valid
                  */
-                var sourcecopycopy = source_copy.substring(0, nextCodeIndex) +
-                    "[/code]" +
-                    source_copy.substring(nextCodeIndex);
-                source_copy = sourcecopycopy;
+                source_copy = source_copy.substring(0, nextCodeIndex) +
+                              "[/code]" +
+                              source_copy.substring(nextCodeIndex);
 
                 endIndex = source_copy.indexOf("[/code]") + 7;
             }
@@ -2614,11 +2614,11 @@ public abstract class StringUtils {
         }
 
         return value.equals("1") ||
-            value.equalsIgnoreCase("t") ||
-            value.equalsIgnoreCase("true") ||
-            value.equalsIgnoreCase("y") ||
-            value.equalsIgnoreCase("yes") ||
-            value.equalsIgnoreCase("on");
+               value.equalsIgnoreCase("t") ||
+               value.equalsIgnoreCase("true") ||
+               value.equalsIgnoreCase("y") ||
+               value.equalsIgnoreCase("yes") ||
+               value.equalsIgnoreCase("on");
     }
 
     /**

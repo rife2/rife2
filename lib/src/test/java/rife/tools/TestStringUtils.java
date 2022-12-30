@@ -24,25 +24,42 @@ public class TestStringUtils {
     @Test
     public void testEncodeURL() {
         assertNull(StringUtils.encodeUrl(null));
-        assertEquals("a+test+%26", StringUtils.encodeUrl("a test &"));
-        String valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.*";
+        assertEquals("a%20test%20%26", StringUtils.encodeUrl("a test &"));
+        String valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~";
         assertSame(valid, StringUtils.encodeUrl(valid));
-        assertEquals("%21abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.*%3D", StringUtils.encodeUrl("!abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.*="));
+        assertEquals("%21abcdefghijklmnopqrstuvwxyz%25%25ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~%3D", StringUtils.encodeUrl("!abcdefghijklmnopqrstuvwxyz%%ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~="));
+        assertEquals("%25%23ok%C3%A9k%C3%89%C8%A2%20smile%21%F0%9F%98%81", StringUtils.encodeUrl("%#okékÉȢ smile!😁"));
     }
 
     @Test
-    public void testEncodeURLValue() {
-        assertNull(StringUtils.encodeUrlValue(null));
-        assertEquals("a+test+%26", StringUtils.encodeUrlValue("a test &"));
-        String valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.*";
-        assertSame(valid, StringUtils.encodeUrlValue(valid));
-        assertEquals("%21abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.*%3D", StringUtils.encodeUrlValue("!abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.*="));
-        assertEquals("%02%02YWJjZGVmw4zDjcOOw4/DkcOSw5PDlMOVw5bDmMOZw5rDm8Ocw5/DoMOhw6I%3D", StringUtils.encodeUrlValue("abcdefÌÍÎÏÑÒÓÔÕÖØÙÚÛÜßàáâ"));
+    public void testDecodeURL() {
+        assertNull(StringUtils.decodeUrl(null));
+        assertEquals("a test &", StringUtils.decodeUrl("a%20test%20%26"));
+        String valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~";
+        assertSame(valid, StringUtils.decodeUrl(valid));
+        assertEquals("!abcdefghijklmnopqrstuvwxyz%%ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~=", StringUtils.decodeUrl("%21abcdefghijklmnopqrstuvwxyz%25%25ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~%3D"));
+        assertEquals("%#okékÉȢ smile!😁", StringUtils.decodeUrl("%25%23ok%C3%A9k%C3%89%C8%A2%20smile%21%F0%9F%98%81"));
 
-        assertFalse(StringUtils.doesUrlValueNeedDecoding("a+test+%26"));
-        assertFalse(StringUtils.doesUrlValueNeedDecoding("%02%02YWJjZGVmw4zDjcOOw4/DkcOSw5PDlMOVw5bDmMOZw5rDm8Ocw5/DoMOhw6I%3D"));
-        assertTrue(StringUtils.doesUrlValueNeedDecoding(StringUtils.decodeUrl("%02%02YWJjZGVmw4zDjcOOw4/DkcOSw5PDlMOVw5bDmMOZw5rDm8Ocw5/DoMOhw6I%3D")));
-        assertEquals("abcdefÌÍÎÏÑÒÓÔÕÖØÙÚÛÜßàáâ", StringUtils.decodeUrlValue(StringUtils.decodeUrl("%02%02YWJjZGVmw4zDjcOOw4/DkcOSw5PDlMOVw5bDmMOZw5rDm8Ocw5/DoMOhw6I%3D")));
+        try {
+            StringUtils.decodeUrl("sdkjfh%");
+            fail();
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalArgumentException);
+        }
+
+        try {
+            StringUtils.decodeUrl("sdkjfh%6");
+            fail();
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalArgumentException);
+        }
+
+        try {
+            StringUtils.decodeUrl("sdkjfh%xx");
+            fail();
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalArgumentException);
+        }
     }
 
     @Test
