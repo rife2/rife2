@@ -8,11 +8,10 @@ jobs:
 
     env:
       GRADLE_OPTS: "-Dorg.gradle.jvmargs=-XX:MaxMetaspaceSize=512m"
-      SONAR_JDK: "11"
 
     strategy:
       matrix:
-        java-version: [ 17 ]
+        java-version: [ 19 ]
 
     steps:
       - uses: actions/checkout@v2
