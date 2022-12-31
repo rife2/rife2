@@ -173,20 +173,20 @@ public abstract class ValidationError implements Cloneable {
         }
     }
 
-    public static class WRONGLENGTH extends ValidationError {
-        public WRONGLENGTH(String subject) {
+    public static class WRONG_LENGTH extends ValidationError {
+        public WRONG_LENGTH(String subject) {
             super(IDENTIFIER_WRONG_LENGTH, subject);
         }
     }
 
-    public static class WRONGFORMAT extends ValidationError {
-        public WRONGFORMAT(String subject) {
+    public static class WRONG_FORMAT extends ValidationError {
+        public WRONG_FORMAT(String subject) {
             super(IDENTIFIER_WRONG_FORMAT, subject);
         }
     }
 
-    public static class NOTNUMERIC extends ValidationError {
-        public NOTNUMERIC(String subject) {
+    public static class NOT_NUMERIC extends ValidationError {
+        public NOT_NUMERIC(String subject) {
             super(IDENTIFIER_NOT_NUMERIC, subject);
         }
     }
@@ -209,8 +209,8 @@ public abstract class ValidationError implements Cloneable {
         }
     }
 
-    public static class NOTSAMEAS extends ValidationError {
-        public NOTSAMEAS(String subject) {
+    public static class DIFFERENT extends ValidationError {
+        public DIFFERENT(String subject) {
             super(IDENTIFIER_DIFFERENT, subject);
         }
     }

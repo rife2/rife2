@@ -52,6 +52,6 @@ public class ValidationRuleLimitedLength extends PropertyValidationRule {
     }
 
     public ValidationError getError() {
-        return new ValidationError.WRONGLENGTH(getSubject());
+        return new ValidationError.WRONG_LENGTH(getSubject());
     }
 }

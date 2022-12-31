@@ -4,7 +4,7 @@
  */
 package rife.validation;
 
-public class ValidationBuilderXhtml extends AbstractValidationBuilder {
+public class ValidationBuilderHtml extends AbstractValidationBuilder {
     protected String formatLine(String content) {
         return content + "<br />\n";
     }

@@ -602,7 +602,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
 
         // Go over the mark extensions according to their order of importance.
         // Marks with a broader scope (more properties) get precedence of
-        // those with a narrower scope (less properties) and inside the
+        // those with a narrower scope (fewer properties) and inside the
         // same scope level they are handled according to their order
         // of declaration.
         if (sorted_marks_map != null) {

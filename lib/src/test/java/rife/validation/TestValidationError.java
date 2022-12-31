@@ -25,21 +25,21 @@ public class TestValidationError {
 
     @Test
     public void testWrongLength() {
-        ValidationError error = new ValidationError.WRONGLENGTH("subject4");
+        ValidationError error = new ValidationError.WRONG_LENGTH("subject4");
         assertEquals(ValidationError.IDENTIFIER_WRONG_LENGTH, error.getIdentifier());
         assertEquals("subject4", error.getSubject());
     }
 
     @Test
     public void testWrongFormat() {
-        ValidationError error = new ValidationError.WRONGFORMAT("subject5");
+        ValidationError error = new ValidationError.WRONG_FORMAT("subject5");
         assertEquals(ValidationError.IDENTIFIER_WRONG_FORMAT, error.getIdentifier());
         assertEquals("subject5", error.getSubject());
     }
 
     @Test
     public void testNotNumeric() {
-        ValidationError error = new ValidationError.NOTNUMERIC("subject6");
+        ValidationError error = new ValidationError.NOT_NUMERIC("subject6");
         assertEquals(ValidationError.IDENTIFIER_NOT_NUMERIC, error.getIdentifier());
         assertEquals("subject6", error.getSubject());
     }

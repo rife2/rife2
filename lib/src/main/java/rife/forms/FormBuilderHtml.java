@@ -8,7 +8,7 @@ import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.validation.ConstrainedProperty;
 import rife.validation.ValidationBuilder;
-import rife.validation.ValidationBuilderXhtml;
+import rife.validation.ValidationBuilderHtml;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class FormBuilderHtml extends AbstractFormBuilder {
     private static final String ID_DISABLED = "DISABLED";
     private static final String ID_FORM_OPTION = "FORM:OPTION:";
 
-    private ValidationBuilder mValidationBuilder = new ValidationBuilderXhtml();
+    private ValidationBuilder mValidationBuilder = new ValidationBuilderHtml();
 
     public ValidationBuilder getValidationBuilder() {
         return mValidationBuilder;

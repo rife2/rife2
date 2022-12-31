@@ -34,6 +34,6 @@ public class ValidationRuleSameAs extends PropertyValidationRule {
     }
 
     public ValidationError getError() {
-        return new ValidationError.NOTSAMEAS(getPropertyName());
+        return new ValidationError.DIFFERENT(getPropertyName());
     }
 }

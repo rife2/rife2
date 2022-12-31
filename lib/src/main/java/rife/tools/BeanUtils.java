@@ -985,13 +985,13 @@ public abstract class BeanUtils {
                 }
             } catch (ParseException e) {
                 if (validated != null) {
-                    validated.addValidationError(new ValidationError.NOTNUMERIC(propertyName).erroneousValue(propertyValues[0]));
+                    validated.addValidationError(new ValidationError.NOT_NUMERIC(propertyName).erroneousValue(propertyValues[0]));
                 } else {
                     throw new BeanUtilsException("The '" + propertyName + "' property of the bean with class '" + bean_class.getName() + "' couldn't be populated due to a parsing error.", bean_class, e);
                 }
             } catch (ConversionException e) {
                 if (validated != null) {
-                    validated.addValidationError(new ValidationError.NOTNUMERIC(propertyName).erroneousValue(propertyValues[0]));
+                    validated.addValidationError(new ValidationError.NOT_NUMERIC(propertyName).erroneousValue(propertyValues[0]));
                 } else {
                     throw new BeanUtilsException("The '" + propertyName + "' property of the bean with class '" + bean_class.getName() + "' couldn't be populated due to conversion error.", bean_class, e);
                 }
@@ -1070,7 +1070,7 @@ public abstract class BeanUtils {
             try {
                 if (propertyFile.wasSizeExceeded()) {
                     if (validated != null) {
-                        validated.addValidationError(new ValidationError.WRONGLENGTH(propertyName));
+                        validated.addValidationError(new ValidationError.WRONG_LENGTH(propertyName));
                     }
                 } else {
                     Object parameter_value_typed = null;
