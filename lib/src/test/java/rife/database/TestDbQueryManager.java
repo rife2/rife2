@@ -4,6 +4,7 @@
  */
 package rife.database;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.database.exceptions.DatabaseException;
@@ -88,6 +89,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
+    @Disabled
     void testTransactionUserCommit(Datasource datasource) {
         final var manager = new DbQueryManager(datasource);
         var create = "CREATE TABLE tbltest (id INTEGER, stringcol VARCHAR(255))";
