@@ -1120,7 +1120,12 @@ public class RifeConfig {
         public ToolsConfig setDefaultCountry(String countryCode) {
             if (null != countryCode &&
                 countryCode.isEmpty()) throw new IllegalArgumentException("countryCode can't be empty.");
-            defaultCountry_ = countryCode;
+
+            if (null == countryCode) {
+                defaultCountry_ = DEFAULT_DEFAULT_COUNTRY;
+            } else {
+                defaultCountry_ = countryCode;
+            }
             return this;
         }
 
