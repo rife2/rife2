@@ -28,4 +28,4 @@ jobs:
         run: chmod +x gradlew
 
       - name: Test with Gradle
-        run: ./gradlew clean jar app:test
+        run: ./gradlew build check --stacktrace

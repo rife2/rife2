@@ -4,6 +4,7 @@
  */
 package rife.database;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.database.exceptions.DatabaseException;
@@ -45,6 +46,7 @@ public class TestDbConcurrency {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
+    @Disabled
     void testConcurrency(Datasource datasource) {
         var structure = new Structure(datasource);
         try {
