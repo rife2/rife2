@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+
 plugins {
     `java-library`
 }
@@ -37,7 +39,8 @@ tasks.test {
 
     useJUnitPlatform()
     testLogging {
-        events("started", "passed", "skipped", "failed", "standardOut", "standardError")
+        events("started", "passed", "skipped", "failed")
+        exceptionFormat = TestExceptionFormat.FULL
     }
     environment("project.dir", project.projectDir.toString())
     jvmArgs = listOf("-javaagent:${project(":lib").buildDir}/libs/$rifeAgentJar")

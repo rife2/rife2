@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+
 plugins {
     idea
     java
@@ -148,7 +150,8 @@ tasks.compileJava {
 tasks.test {
     useJUnitPlatform()
     testLogging {
-        events("started", "passed", "skipped", "failed", "standardOut", "standardError")
+        events("started", "passed", "skipped", "failed")
+        exceptionFormat = TestExceptionFormat.FULL
     }
     addTestListener(object : TestListener {
         override fun beforeTest(p0: TestDescriptor?) = Unit
