@@ -148,7 +148,7 @@ tasks.compileJava {
 tasks.test {
     useJUnitPlatform()
     testLogging {
-        events("passed", "skipped", "failed")
+        events("started", "passed", "skipped", "failed")
     }
     addTestListener(object : TestListener {
         override fun beforeTest(p0: TestDescriptor?) = Unit
