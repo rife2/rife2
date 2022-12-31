@@ -7,7 +7,7 @@ plugins {
     signing
 }
 
-val rifeVersion by rootProject.extra { "0.9.2" }
+val rifeVersion by rootProject.extra { "0.9.3" }
 var rifeAgentName: String = "rife2-$rifeVersion-agent"
 val rifeAgentJar by rootProject.extra { "$rifeAgentName.jar"}
 group = "com.uwyn.rife2"
