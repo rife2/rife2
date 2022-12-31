@@ -10,8 +10,12 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.image.ImageObserver;
 
-public class ImageWaiter {
+public final class ImageWaiter {
     private static Canvas waitComponent_ = null;
+
+    private ImageWaiter() {
+        // no-op
+    }
 
     public static void wait(Image image) {
         if (waitComponent_ == null) {
@@ -21,7 +25,7 @@ public class ImageWaiter {
     }
 
     public static void wait(Image image, Component component) {
-        MediaTracker tracker = new MediaTracker(component);
+        var tracker = new MediaTracker(component);
         tracker.addImage(image, 0);
         try {
             tracker.waitForAll();
@@ -31,7 +35,7 @@ public class ImageWaiter {
     }
 
     public static void wait(final Image image, final Component component, final ImageObserver imageobserver) {
-        final MediaTracker tracker = new MediaTracker(component);
+        final var tracker = new MediaTracker(component);
 
         new Thread(() -> {
             tracker.addImage(image, 0);

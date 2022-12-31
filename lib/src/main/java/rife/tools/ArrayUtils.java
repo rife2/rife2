@@ -4,18 +4,17 @@
  */
 package rife.tools;
 
+import rife.validation.ConstrainedProperty;
+
+import java.util.logging.Logger;
+
 /**
  * General purpose class containing common array manipulation methods.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-
-import rife.validation.ConstrainedProperty;
-
-import java.util.logging.Logger;
-
-public class ArrayUtils {
+public final class ArrayUtils {
     public enum ArrayType {
         NO_ARRAY,
         OBJECT_ARRAY,
@@ -29,6 +28,10 @@ public class ArrayUtils {
         DOUBLE_ARRAY
     }
 
+    private ArrayUtils() {
+        // no-op
+    }
+
     public static ArrayType getArrayType(Object object) {
         var classname = object.getClass().getName();
 
@@ -40,27 +43,37 @@ public class ArrayUtils {
                 }
 
                 switch (classname.charAt(position)) {
-                    case 'L':
+                    case 'L' -> {
                         return ArrayType.OBJECT_ARRAY;
-                    case 'Z':
+                    }
+                    case 'Z' -> {
                         return ArrayType.BOOLEAN_ARRAY;
-                    case 'B':
+                    }
+                    case 'B' -> {
                         return ArrayType.BYTE_ARRAY;
-                    case 'C':
+                    }
+                    case 'C' -> {
                         return ArrayType.CHAR_ARRAY;
-                    case 'S':
+                    }
+                    case 'S' -> {
                         return ArrayType.SHORT_ARRAY;
-                    case 'I':
+                    }
+                    case 'I' -> {
                         return ArrayType.INT_ARRAY;
-                    case 'J':
+                    }
+                    case 'J' -> {
                         return ArrayType.LONG_ARRAY;
-                    case 'F':
+                    }
+                    case 'F' -> {
                         return ArrayType.FLOAT_ARRAY;
-                    case 'D':
+                    }
+                    case 'D' -> {
                         return ArrayType.DOUBLE_ARRAY;
-                    default:
+                    }
+                    default -> {
                         Logger.getLogger("rife.tools").severe("Unknown primitive array class: " + classname);
                         return null;
+                    }
                 }
             }
             return null;

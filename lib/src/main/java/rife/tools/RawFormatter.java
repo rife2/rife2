@@ -17,14 +17,14 @@ public class RawFormatter extends Formatter {
      * @return a formatted log record
      */
     public synchronized String format(LogRecord record) {
-        StringBuilder sb = new StringBuilder();
-        String message = formatMessage(record);
+        var sb = new StringBuilder();
+        var message = formatMessage(record);
         sb.append(message);
         sb.append(System.lineSeparator());
         if (record.getThrown() != null) {
             try {
-                StringWriter sw = new StringWriter();
-                PrintWriter pw = new PrintWriter(sw);
+                var sw = new StringWriter();
+                var pw = new PrintWriter(sw);
                 record.getThrown().printStackTrace(pw);
                 pw.close();
                 sb.append(sw);

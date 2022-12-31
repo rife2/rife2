@@ -6,7 +6,7 @@ package rife.tools;
 
 import java.util.Random;
 
-public abstract class PasswordGenerator {
+public final class PasswordGenerator {
     public static final int DIGITS_ONLY = 0;
     public static final int LETTERS_ONLY = 1;
     public static final int MIXED = 2;
@@ -15,6 +15,10 @@ public abstract class PasswordGenerator {
     private static final int LETTERS_LENGTH = LETTERS.length();
     private static final String NUMBERS = "1357924680";
     private static final int NUMBERS_LENGTH = NUMBERS.length();
+
+    private PasswordGenerator() {
+        // no-op
+    }
 
     public static String get(int length) {
         return get(new Random(System.currentTimeMillis()), length, MIXED);
@@ -30,16 +34,16 @@ public abstract class PasswordGenerator {
             type != LETTERS_ONLY &&
             type != MIXED) throw new IllegalArgumentException("invalid type");
 
-        StringBuilder generated_password = new StringBuilder("");
-        boolean type_selector = false;
+        var generated_password = new StringBuilder();
+        var type_selector = false;
 
-        for (int i = 0; i < length; i++) {
+        for (var i = 0; i < length; i++) {
             type_selector = random.nextBoolean();
 
             // characters
             if (LETTERS_ONLY == type ||
                 type != DIGITS_ONLY && type_selector) {
-                char c = LETTERS.charAt((int) ((double) LETTERS_LENGTH * random.nextDouble()));
+                var c = LETTERS.charAt((int) ((double) LETTERS_LENGTH * random.nextDouble()));
                 if (random.nextDouble() > 0.5D) {
                     c = Character.toUpperCase(c);
                 }

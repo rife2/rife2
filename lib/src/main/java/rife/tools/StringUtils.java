@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public abstract class StringUtils {
+public final class StringUtils {
     public static String ENCODING_US_ASCII = StandardCharsets.US_ASCII.name();
     public static String ENCODING_ISO_8859_1 = StandardCharsets.ISO_8859_1.name();
     public static String ENCODING_ISO_8859_2 = "ISO-8859-2";
@@ -421,6 +421,10 @@ public abstract class StringUtils {
         LATEX_ENCODE_MAP.put('\u00FD', "\\'{y}");
 // todo \u00FE
         LATEX_ENCODE_MAP.put('\u00FF', "\\\"{y}");
+    }
+
+    private StringUtils() {
+        // no-op
     }
 
     /**

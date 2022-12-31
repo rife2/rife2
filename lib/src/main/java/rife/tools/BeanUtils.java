@@ -33,11 +33,15 @@ import java.text.SimpleDateFormat;
 
 import static rife.tools.BeanUtils.Accessors.*;
 
-public abstract class BeanUtils {
+public final class BeanUtils {
     public enum Accessors {
         GETTERS,
         SETTERS,
         GETTERS_SETTERS
+    }
+
+    private BeanUtils() {
+        // no-op
     }
 
     public static DateFormat getConcisePreciseDateFormat() {

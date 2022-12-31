@@ -8,7 +8,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public abstract class ExceptionUtils {
+public final class ExceptionUtils {
+    private ExceptionUtils() {
+        // no-op
+    }
+
     public static String getExceptionStackTrace(Throwable exception) {
         if (null == exception) throw new IllegalArgumentException("exception can't be null;");
 

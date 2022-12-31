@@ -12,7 +12,11 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Convert {
+public final class Convert {
+    private Convert() {
+        // no-op
+    }
+
     public static Object toType(Object value, Class target)
     throws ConversionException {
         if (null == target) return null;

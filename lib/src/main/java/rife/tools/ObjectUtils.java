@@ -4,6 +4,13 @@
  */
 package rife.tools;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.logging.Logger;
+
 /**
  * General purpose class containing common <code>Object</code> manipulation
  * methods.
@@ -12,15 +19,11 @@ package rife.tools;
  * @author Thomas McGlynn
  * @since 1.0
  */
+public final class ObjectUtils {
+    private ObjectUtils() {
+        // no-op
+    }
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.logging.Logger;
-
-public class ObjectUtils {
     /**
      * Clone an Object if possible.
      * <p>
@@ -101,25 +104,34 @@ public class ObjectUtils {
             // handle 1 dimensional primitive arrays
             if (classname.charAt(1) != '[' && classname.charAt(1) != 'L') {
                 switch (classname.charAt(1)) {
-                    case 'B':
+                    case 'B' -> {
                         return (T) ((byte[]) object).clone();
-                    case 'Z':
+                    }
+                    case 'Z' -> {
                         return (T) ((boolean[]) object).clone();
-                    case 'C':
+                    }
+                    case 'C' -> {
                         return (T) ((char[]) object).clone();
-                    case 'S':
+                    }
+                    case 'S' -> {
                         return (T) ((short[]) object).clone();
-                    case 'I':
+                    }
+                    case 'I' -> {
                         return (T) ((int[]) object).clone();
-                    case 'J':
+                    }
+                    case 'J' -> {
                         return (T) ((long[]) object).clone();
-                    case 'F':
+                    }
+                    case 'F' -> {
                         return (T) ((float[]) object).clone();
-                    case 'D':
+                    }
+                    case 'D' -> {
                         return (T) ((double[]) object).clone();
-                    default:
+                    }
+                    default -> {
                         Logger.getLogger("rife.tools").severe("Unknown primitive array class: " + classname);
                         return null;
+                    }
                 }
             }
 
@@ -225,31 +237,41 @@ public class ObjectUtils {
 
         switch (className.charAt(dims)) {
             // handle the boxed primitives
-            case 'Z':
+            case 'Z' -> {
                 return Boolean.TYPE;
-            case 'B':
+            }
+            case 'B' -> {
                 return Byte.TYPE;
-            case 'S':
+            }
+            case 'S' -> {
                 return Short.TYPE;
-            case 'C':
+            }
+            case 'C' -> {
                 return Character.TYPE;
-            case 'I':
+            }
+            case 'I' -> {
                 return Integer.TYPE;
-            case 'J':
+            }
+            case 'J' -> {
                 return Long.TYPE;
-            case 'F':
+            }
+            case 'F' -> {
                 return Float.TYPE;
-            case 'D':
+            }
+            case 'D' -> {
                 return Double.TYPE;
+            }
             // look up the class of another reference type
-            case 'L':
+            case 'L' -> {
                 try {
                     return Class.forName(className.substring(dims + 1, className.length() - 1));
                 } catch (ClassNotFoundException e) {
                     return null;
                 }
-            default:
+            }
+            default -> {
                 return null;
+            }
         }
     }
 }

@@ -14,7 +14,11 @@ import java.util.Base64;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public abstract class SerializationUtils {
+public final class SerializationUtils {
+    private SerializationUtils() {
+        // no-op
+    }
+
     public static <TargetType extends Serializable> TargetType deserializeFromString(String value)
     throws SerializationUtilsErrorException {
         if (null == value) {

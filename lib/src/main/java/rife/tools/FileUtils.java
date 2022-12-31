@@ -17,7 +17,11 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public abstract class FileUtils {
+public final class FileUtils {
+    private FileUtils() {
+        // no-op
+    }
+
     public static ArrayList<String> getFileList(File file) {
         return getFileList(file, null, null, true);
     }

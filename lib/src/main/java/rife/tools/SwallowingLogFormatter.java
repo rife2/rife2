@@ -10,7 +10,7 @@ import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
 public class SwallowingLogFormatter extends Formatter {
-    private final ArrayList<LogRecord> records_ = new ArrayList<LogRecord>();
+    private final List<LogRecord> records_ = new ArrayList<LogRecord>();
 
     /**
      * Format the given LogRecord.

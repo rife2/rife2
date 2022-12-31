@@ -4,21 +4,12 @@
  */
 package rife.tools;
 
-import java.util.regex.Pattern;
-
-public abstract class HttpUtils {
-    private static final String METHOD_GET = "GET";
-    private static final String METHOD_POST = "POST";
-
-    private static final String HEADER_COOKIE = "Cookie";
-    private static final String HEADER_CONTENTTYPE = "Content-Type";
-    private static final String HEADER_CONTENTLENGTH = "Content-Length";
-    private static final String HEADER_SETCOOKIE = "Set-Cookie";
-
-    private static final String CONTENTTYPE_FORM_URLENCODED = "application/x-www-form-urlencoded";
-
+public final class HttpUtils {
     public static final String CHARSET = "charset=";
-    public static final Pattern CHARSET_PATTERN = Pattern.compile(";\\s*" + CHARSET + "(.*)$");
+
+    private HttpUtils() {
+        // no-op
+    }
 
     /**
      * Extracts only the mime-type from a Content-Type HTTP header. Thus a header

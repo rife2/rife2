@@ -16,8 +16,12 @@ import java.security.*;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public abstract class UniqueIDGenerator {
+public final class UniqueIDGenerator {
     private static final SecureRandom RANDOM = new SecureRandom();
+
+    private UniqueIDGenerator() {
+        // no-op
+    }
 
     public static UniqueID generate() {
         byte[] buffer = new byte[27];

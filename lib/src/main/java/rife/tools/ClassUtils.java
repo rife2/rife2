@@ -6,7 +6,11 @@ package rife.tools;
 
 import java.util.Date;
 
-public abstract class ClassUtils {
+public final class ClassUtils {
+    private ClassUtils() {
+        // no-op
+    }
+
     public static boolean isNumeric(Class klass) {
         return Number.class.isAssignableFrom(klass) ||
             byte.class == klass ||

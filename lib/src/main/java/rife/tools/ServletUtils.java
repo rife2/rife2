@@ -6,7 +6,11 @@ package rife.tools;
 
 import rife.engine.Response;
 
-public abstract class ServletUtils {
+public final class ServletUtils {
+    private ServletUtils() {
+        // no-op
+    }
+
     public static void preventCaching(Response response) {
         response.addHeader("Cache-Control", "no-cache");            // HTTP/1.1
         response.addHeader("Cache-Control", "no-store");            // HTTP/1.1

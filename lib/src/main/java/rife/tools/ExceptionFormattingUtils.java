@@ -7,9 +7,13 @@ package rife.tools;
 import rife.template.Template;
 import rife.template.exceptions.*;
 
-public abstract class ExceptionFormattingUtils {
+public final class ExceptionFormattingUtils {
     private static final int DEFAULT_STACKTRACELIMIT = 15;
     private static final int DEFAULT_BUFFERLIMIT = 300000;
+
+    private ExceptionFormattingUtils() {
+        // no-op
+    }
 
     public static String formatExceptionStackTrace(Throwable exception, Template template) {
         return formatExceptionStackTrace(exception, template, DEFAULT_STACKTRACELIMIT, DEFAULT_BUFFERLIMIT);

@@ -9,8 +9,12 @@ import java.io.File;
 
 import rife.tools.exceptions.FileUtilsErrorException;
 
-public abstract class InstrumentationUtils {
+public final class InstrumentationUtils {
     public static final String PROPERTY_RIFE_INSTRUMENTATION_DUMP = "rife.instrumentation.dump";
+
+    private InstrumentationUtils() {
+        // no-op
+    }
 
     public static void dumpClassBytes(String type, String classname, byte[] bytes) {
         var write_to_disk = (System.getProperty(PROPERTY_RIFE_INSTRUMENTATION_DUMP) != null);
