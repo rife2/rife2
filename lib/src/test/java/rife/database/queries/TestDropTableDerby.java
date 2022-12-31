@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropTableDerby extends TestDropTable {
     @Test
-    public void testInstantiationDerby() {
+    void testInstantiationDerby() {
         DropTable query = new DropTable(DERBY);
         assertNotNull(query);
         try {
@@ -24,7 +24,7 @@ public class TestDropTableDerby extends TestDropTable {
     }
 
     @Test
-    public void testIncompleteQueryDerby() {
+    void testIncompleteQueryDerby() {
         DropTable query = new DropTable(DERBY);
         try {
             query.getSql();
@@ -37,7 +37,7 @@ public class TestDropTableDerby extends TestDropTable {
     }
 
     @Test
-    public void testClearDerby() {
+    void testClearDerby() {
         DropTable query = new DropTable(DERBY);
         query.table("tablename");
         assertNotNull(query.getSql());
@@ -51,7 +51,7 @@ public class TestDropTableDerby extends TestDropTable {
     }
 
     @Test
-    public void testOneTableDerby() {
+    void testOneTableDerby() {
         DropTable query = new DropTable(DERBY);
         query.table("tabletodrop");
         assertEquals(query.getSql(), "DROP TABLE tabletodrop");
@@ -59,7 +59,7 @@ public class TestDropTableDerby extends TestDropTable {
     }
 
     @Test
-    public void testMultipleTablesDerby() {
+    void testMultipleTablesDerby() {
         DropTable query = new DropTable(DERBY);
         query.table("tabletodrop1")
             .table("tabletodrop2")
@@ -73,7 +73,7 @@ public class TestDropTableDerby extends TestDropTable {
     }
 
     @Test
-    public void testCloneDerby() {
+    void testCloneDerby() {
         DropTable query = new DropTable(DERBY);
         query.table("tabletodrop1");
 //			.table("tabletodrop2")

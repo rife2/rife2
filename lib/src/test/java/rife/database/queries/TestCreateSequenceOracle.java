@@ -11,7 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateSequenceOracle extends TestCreateSequence {
     @Test
-    public void testInstantiationOracle() {
+    void testInstantiationOracle() {
+        System.out.println("TESTING");
         CreateSequence query = new CreateSequence(ORACLE);
         assertNotNull(query);
         try {
@@ -23,7 +24,7 @@ public class TestCreateSequenceOracle extends TestCreateSequence {
     }
 
     @Test
-    public void testClearOracle() {
+    void testClearOracle() {
         CreateSequence query = new CreateSequence(ORACLE);
         query.name("sequencename");
         assertNotNull(query.getSql());
@@ -37,7 +38,7 @@ public class TestCreateSequenceOracle extends TestCreateSequence {
     }
 
     @Test
-    public void testCreateOracle() {
+    void testCreateOracle() {
         CreateSequence query = new CreateSequence(ORACLE);
         query.name("sequencename");
         assertEquals(query.getSql(), "CREATE SEQUENCE sequencename");
@@ -45,7 +46,7 @@ public class TestCreateSequenceOracle extends TestCreateSequence {
     }
 
     @Test
-    public void testCloneOracle() {
+    void testCloneOracle() {
         CreateSequence query = new CreateSequence(ORACLE);
         query.name("sequencename");
         CreateSequence query_clone = query.clone();

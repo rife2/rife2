@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class Test_org_postgresql_Driver {
     @Test
-    public void testGetSqlValue() {
+    void testGetSqlValue() {
         SqlConversion dbtypes = null;
         dbtypes = new org_postgresql_Driver();
 

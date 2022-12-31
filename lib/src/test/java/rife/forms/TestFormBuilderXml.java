@@ -55,13 +55,13 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testInstantiate() {
+    void testInstantiate() {
         FormBuilderXml builder = new FormBuilderXml();
         assertNotNull(builder);
     }
 
     @Test
-    public void testClone() {
+    void testClone() {
         FormBuilderXml builder1 = new FormBuilderXml();
         FormBuilderXml builder2 = (FormBuilderXml) builder1.clone();
         assertNotNull(builder2);
@@ -69,13 +69,13 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGetValidationBuilder() {
+    void testGetValidationBuilder() {
         FormBuilderXml builder = new FormBuilderXml();
         assertNotNull(builder.getValidationBuilder());
     }
 
     @Test
-    public void testGenerateFieldInvalidArguments() {
+    void testGenerateFieldInvalidArguments() {
         FormBuilderXml builder = new FormBuilderXml();
         assertEquals(0, builder.generateField(null, (ConstrainedProperty) null, null, null).size());
         assertEquals(0, builder.generateField(null, (String) null, null, null).size());
@@ -90,7 +90,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldInvalidArguments() {
+    void testRemoveFieldInvalidArguments() {
         FormBuilderXml builder = new FormBuilderXml();
         builder.removeField(null, null, null);
 
@@ -104,7 +104,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldHiddenWithDefault() {
+    void testGenerateFieldHiddenWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -160,7 +160,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldHiddenWithoutDefault() {
+    void testGenerateFieldHiddenWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -196,7 +196,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldHiddenPrefix() {
+    void testGenerateFieldHiddenPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -224,7 +224,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldHiddenTemplateNameWithDefault() {
+    void testGenerateFieldHiddenTemplateNameWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -282,7 +282,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldHidden() {
+    void testRemoveFieldHidden() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -296,7 +296,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldHiddenPrefix() {
+    void testRemoveFieldHiddenPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -310,7 +310,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldHiddenTemplateName() {
+    void testRemoveFieldHiddenTemplateName() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields_templatename");
@@ -324,7 +324,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldInputWithDefault() {
+    void testGenerateFieldInputWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
@@ -414,7 +414,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldInputWithoutDefault() {
+    void testGenerateFieldInputWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
@@ -473,7 +473,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldInputPrefix() {
+    void testGenerateFieldInputPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
@@ -515,7 +515,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldInputWithDefaultTemplateName() {
+    void testGenerateFieldInputWithDefaultTemplateName() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
@@ -610,7 +610,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldInput() {
+    void testRemoveFieldInput() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -624,7 +624,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldInputPrefix() {
+    void testRemoveFieldInputPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -638,7 +638,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldInputTemplateName() {
+    void testRemoveFieldInputTemplateName() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields_templatename");
@@ -652,7 +652,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldSecretWithDefault() {
+    void testGenerateFieldSecretWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -708,7 +708,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldSecretWithoutDefault() {
+    void testGenerateFieldSecretWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -744,7 +744,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldSecretPrefix() {
+    void testGenerateFieldSecretPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -772,7 +772,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldSecretTemplateNameWithDefault() {
+    void testGenerateFieldSecretTemplateNameWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -830,7 +830,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldSecret() {
+    void testRemoveFieldSecret() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -844,7 +844,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldSecretPrefix() {
+    void testRemoveFieldSecretPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -858,7 +858,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldSecretTemplateName() {
+    void testRemoveFieldSecretTemplateName() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields_templatename");
@@ -872,7 +872,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldTextareaWithDefault() {
+    void testGenerateFieldTextareaWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -928,7 +928,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldTextareaWithoutDefault() {
+    void testGenerateFieldTextareaWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -964,7 +964,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldTextareaPrefix() {
+    void testGenerateFieldTextareaPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -992,7 +992,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldTextareaTemplateNameWithDefault() {
+    void testGenerateFieldTextareaTemplateNameWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -1050,7 +1050,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldTextarea() {
+    void testRemoveFieldTextarea() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -1064,7 +1064,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldTextareaPrefix() {
+    void testRemoveFieldTextareaPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -1078,7 +1078,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldTextareaTemplateName() {
+    void testRemoveFieldTextareaTemplateName() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields_templatename");
@@ -1092,7 +1092,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldRadioWithDefault() {
+    void testGenerateFieldRadioWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
@@ -1266,7 +1266,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldRadioWithoutDefault() {
+    void testGenerateFieldRadioWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -1316,7 +1316,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldRadioPrefix() {
+    void testGenerateFieldRadioPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -1372,7 +1372,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldRadioDynamic() {
+    void testGenerateFieldRadioDynamic() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
@@ -1497,7 +1497,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldRadioTemplateNameWithDefault() {
+    void testGenerateFieldRadioTemplateNameWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
@@ -1664,7 +1664,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldRadioCustomWithDefault() {
+    void testGenerateFieldRadioCustomWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -1755,7 +1755,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldRadioCustomWithoutDefault() {
+    void testGenerateFieldRadioCustomWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -1853,7 +1853,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldRadioCustomPrefix() {
+    void testGenerateFieldRadioCustomPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -1881,7 +1881,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldRadioCustomDynamic() {
+    void testGenerateFieldRadioCustomDynamic() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -1951,7 +1951,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldRadioCustomTemplateNameWithoutDefault() {
+    void testGenerateFieldRadioCustomTemplateNameWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -2051,7 +2051,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldRadioEmptyCustomWithDefault() {
+    void testGenerateFieldRadioEmptyCustomWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -2093,7 +2093,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldRadioEmptyCustomWithoutDefault() {
+    void testGenerateFieldRadioEmptyCustomWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -2135,7 +2135,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldRadioEmptyCustomPrefix() {
+    void testGenerateFieldRadioEmptyCustomPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -2170,7 +2170,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldRadio() {
+    void testRemoveFieldRadio() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -2189,7 +2189,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldRadioTemplateName() {
+    void testRemoveFieldRadioTemplateName() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields_templatename");
@@ -2208,7 +2208,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldRadioPrefix() {
+    void testRemoveFieldRadioPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -2227,7 +2227,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxWithDefault() {
+    void testGenerateFieldCheckboxWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -2332,7 +2332,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxWithoutDefault() {
+    void testGenerateFieldCheckboxWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
@@ -2413,7 +2413,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxPrefix() {
+    void testGenerateFieldCheckboxPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
@@ -2504,7 +2504,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxTemplateNameWithDefault() {
+    void testGenerateFieldCheckboxTemplateNameWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -2643,7 +2643,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxDynamic() {
+    void testGenerateFieldCheckboxDynamic() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -2713,7 +2713,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxCustomWithDefault() {
+    void testGenerateFieldCheckboxCustomWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -2811,7 +2811,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxCustomWithoutDefault() {
+    void testGenerateFieldCheckboxCustomWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -2909,7 +2909,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxTemplatNameCustomWithoutDefault() {
+    void testGenerateFieldCheckboxTemplatNameCustomWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -3009,7 +3009,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxCustomPrefix() {
+    void testGenerateFieldCheckboxCustomPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -3037,7 +3037,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxCustomDynamic() {
+    void testGenerateFieldCheckboxCustomDynamic() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -3107,7 +3107,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxEmptyCustomWithDefault() {
+    void testGenerateFieldCheckboxEmptyCustomWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -3149,7 +3149,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxEmptyCustomWithoutDefault() {
+    void testGenerateFieldCheckboxEmptyCustomWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -3191,7 +3191,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxEmptyCustomPrefix() {
+    void testGenerateFieldCheckboxEmptyCustomPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -3226,7 +3226,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxBooleanWithDefault() {
+    void testGenerateFieldCheckboxBooleanWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -3282,7 +3282,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxBooleanWithoutDefault() {
+    void testGenerateFieldCheckboxBooleanWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -3317,7 +3317,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxTemplateNameBooleanWithDefault() {
+    void testGenerateFieldCheckboxTemplateNameBooleanWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -3375,7 +3375,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxBooleanPrefix() {
+    void testGenerateFieldCheckboxBooleanPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -3410,7 +3410,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldCheckbox() {
+    void testRemoveFieldCheckbox() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -3429,7 +3429,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldCheckboxTemplateName() {
+    void testRemoveFieldCheckboxTemplateName() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields_templatename");
@@ -3448,7 +3448,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldCheckboxPrefix() {
+    void testRemoveFieldCheckboxPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -3467,7 +3467,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldSelectWithDefault() {
+    void testGenerateFieldSelectWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
@@ -3665,7 +3665,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldSelectWithoutDefault() {
+    void testGenerateFieldSelectWithoutDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -3721,7 +3721,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldSelectTemplateNameWithDefault() {
+    void testGenerateFieldSelectTemplateNameWithDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
@@ -3912,7 +3912,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldSelectWithOutOfListDefault() {
+    void testGenerateFieldSelectWithOutOfListDefault() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
@@ -4041,7 +4041,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldSelectPrefix() {
+    void testGenerateFieldSelectPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
 
@@ -4097,7 +4097,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFieldSelectDynamic() {
+    void testGenerateFieldSelectDynamic() {
         FormBuilderXml builder = new FormBuilderXml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
@@ -4200,7 +4200,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldSelect() {
+    void testRemoveFieldSelect() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4219,7 +4219,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldSelectRTemplateName() {
+    void testRemoveFieldSelectRTemplateName() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields_templatename");
@@ -4238,7 +4238,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFieldSelectPrefix() {
+    void testRemoveFieldSelectPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4257,7 +4257,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormClassInvalidArguments() {
+    void testGenerateFormClassInvalidArguments() {
         try {
             FormBuilderXml builder = new FormBuilderXml();
             assertEquals(0, builder.generateForm(null, null, null, null).size());
@@ -4273,7 +4273,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormBeanInvalidArguments() {
+    void testGenerateFormBeanInvalidArguments() {
         try {
             FormBuilderXml builder = new FormBuilderXml();
             assertEquals(0, builder.generateForm(null, (Object) null, null, null).size());
@@ -4298,7 +4298,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormBeanNotInstantiatable() {
+    void testGenerateFormBeanNotInstantiatable() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4312,7 +4312,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFormInvalidArguments() {
+    void testRemoveFormInvalidArguments() {
         try {
             FormBuilderXml builder = new FormBuilderXml();
             builder.removeForm(null, null, null);
@@ -4328,7 +4328,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFormBeanNotInstantiatable() {
+    void testRemoveFormBeanNotInstantiatable() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4351,7 +4351,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormConstrainedEmpty() {
+    void testGenerateFormConstrainedEmpty() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4365,7 +4365,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFormConstrainedEmpty() {
+    void testRemoveFormConstrainedEmpty() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4383,7 +4383,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormConstrainedExternalValues() {
+    void testGenerateFormConstrainedExternalValues() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4419,7 +4419,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormConstrainedBeanValues() {
+    void testGenerateFormConstrainedBeanValues() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4455,7 +4455,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormConstrainedBeanValuesInvalid() {
+    void testGenerateFormConstrainedBeanValuesInvalid() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4495,7 +4495,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormConstrainedEmptyPrefix() {
+    void testGenerateFormConstrainedEmptyPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_form_prefix");
@@ -4508,7 +4508,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormConstrainedExternalValuesPrefix() {
+    void testGenerateFormConstrainedExternalValuesPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_form_prefix");
@@ -4532,7 +4532,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormConstrainedBeanValuesPrefix() {
+    void testGenerateFormConstrainedBeanValuesPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_form_prefix");
@@ -4556,7 +4556,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFormConstrainedBeanValuesPrefix() {
+    void testRemoveFormConstrainedBeanValuesPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_form_prefix");
@@ -4585,7 +4585,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFormConstrainedValues() {
+    void testRemoveFormConstrainedValues() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4624,7 +4624,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormRegularEmpty() {
+    void testGenerateFormRegularEmpty() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4638,7 +4638,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFormRegularEmpty() {
+    void testRemoveFormRegularEmpty() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4656,7 +4656,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormRegularExternalValues() {
+    void testGenerateFormRegularExternalValues() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4692,7 +4692,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormRegularBeanValues() {
+    void testGenerateFormRegularBeanValues() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4728,7 +4728,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormRegularEmptyPrefix() {
+    void testGenerateFormRegularEmptyPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_form_prefix");
@@ -4741,7 +4741,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormRegularExternalValuesPrefix() {
+    void testGenerateFormRegularExternalValuesPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_form_prefix");
@@ -4765,7 +4765,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testGenerateFormRegularBeanValuesPrefix() {
+    void testGenerateFormRegularBeanValuesPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_form_prefix");
@@ -4789,7 +4789,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFormRegularBeanValuesPrefix() {
+    void testRemoveFormRegularBeanValuesPrefix() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_form_prefix");
@@ -4818,7 +4818,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testRemoveFormRegularValues() {
+    void testRemoveFormRegularValues() {
         FormBuilderXml builder = new FormBuilderXml();
 
         Template template = TemplateFactory.XML.get("formbuilder_fields");
@@ -4857,7 +4857,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testSelectParameterInvalidArguments() {
+    void testSelectParameterInvalidArguments() {
         FormBuilderXml builder = new FormBuilderXml();
         assertEquals(0, builder.selectParameter(null, null, null).size());
 
@@ -4875,7 +4875,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testSelectParameterChecked() {
+    void testSelectParameterChecked() {
         FormBuilderXml builder = new FormBuilderXml();
         Template template = TemplateFactory.XML.get("formbuilder_parameters");
         assertEquals(0, builder.selectParameter(template, "wantsupdates", new String[]{"false", null}).size());
@@ -4891,7 +4891,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testSelectParameterCheckedValues() {
+    void testSelectParameterCheckedValues() {
         FormBuilderXml builder = new FormBuilderXml();
         Template template = TemplateFactory.XML.get("formbuilder_parameters");
         assertEquals(0, builder.selectParameter(template, "colors", new String[]{"green"}).size());
@@ -4909,7 +4909,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testSelectParameterSelectedValues() {
+    void testSelectParameterSelectedValues() {
         FormBuilderXml builder = new FormBuilderXml();
         Template template = TemplateFactory.XML.get("formbuilder_parameters");
         assertEquals(0, builder.selectParameter(template, "lastname", new String[]{"Smith"}).size());
@@ -4926,7 +4926,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testUnselectParameterInvalidArguments() {
+    void testUnselectParameterInvalidArguments() {
         FormBuilderXml builder = new FormBuilderXml();
         builder.unselectParameter(null, null, null);
 
@@ -4958,7 +4958,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testUnselectParameterChecked() {
+    void testUnselectParameterChecked() {
         FormBuilderXml builder = new FormBuilderXml();
         builder.unselectParameter(null, null, null);
 
@@ -4989,7 +4989,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testUnselectParameterCheckedValues() {
+    void testUnselectParameterCheckedValues() {
         FormBuilderXml builder = new FormBuilderXml();
         builder.unselectParameter(null, null, null);
 
@@ -5020,7 +5020,7 @@ public class TestFormBuilderXml {
     }
 
     @Test
-    public void testUnselectParameterSelectedValues() {
+    void testUnselectParameterSelectedValues() {
         FormBuilderXml builder = new FormBuilderXml();
         builder.unselectParameter(null, null, null);
 

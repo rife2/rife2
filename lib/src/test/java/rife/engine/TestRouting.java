@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class TestRouting {
     @Test
-    public void testRoutingGet()
+    void testRoutingGet()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingGetSite())) {
             try (final var webClient = new WebClient()) {
@@ -82,7 +82,7 @@ public class TestRouting {
     }
 
     @Test
-    public void testRoutingPost()
+    void testRoutingPost()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingPostSite())) {
             try (final var webClient = new WebClient()) {
@@ -149,7 +149,7 @@ public class TestRouting {
     }
 
     @Test
-    public void testRoutingPut()
+    void testRoutingPut()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingPutSite())) {
             try (final var webClient = new WebClient()) {
@@ -216,7 +216,7 @@ public class TestRouting {
     }
 
     @Test
-    public void testRoutingDelete()
+    void testRoutingDelete()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingDeleteSite())) {
             try (final var webClient = new WebClient()) {
@@ -283,7 +283,7 @@ public class TestRouting {
     }
 
     @Test
-    public void testRoutingPatch()
+    void testRoutingPatch()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingPatchSite())) {
             try (final var webClient = new WebClient()) {
@@ -350,7 +350,7 @@ public class TestRouting {
     }
 
     @Test
-    public void testRoutingRoute()
+    void testRoutingRoute()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingRouteSite())) {
             try (final var webClient = new WebClient()) {
@@ -417,7 +417,7 @@ public class TestRouting {
     }
 
     @Test
-    public void testRoutingCombo()
+    void testRoutingCombo()
     throws IOException {
         try (final var server = new TestServerRunner(new RoutingComboSite())) {
             try (final var webClient = new WebClient()) {

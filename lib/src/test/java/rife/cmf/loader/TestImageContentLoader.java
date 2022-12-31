@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestImageContentLoader {
     @Test
-    public void testLoad()
+    void testLoad()
     throws Exception {
         var loader = new ImageContentLoader();
         Set<String> errors = new HashSet<>();
@@ -29,7 +29,7 @@ public class TestImageContentLoader {
     }
 
     @Test
-    public void testLoadNull() {
+    void testLoadNull() {
         var loader = new ImageContentLoader();
         Set<String> errors = new HashSet<>();
 
@@ -40,7 +40,7 @@ public class TestImageContentLoader {
     }
 
     @Test
-    public void testGetBackends() {
+    void testGetBackends() {
         var loader = new ImageContentLoader();
         assertTrue(loader.getBackends().size() > 0);
     }

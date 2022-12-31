@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInsertHsqldb extends TestInsert {
     @Test
-    public void testInstantiationHsqldb() {
+    void testInstantiationHsqldb() {
         Insert query = new Insert(HSQLDB);
         assertNotNull(query);
         try {
@@ -35,7 +35,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testIncompleteQueryHsqldb() {
+    void testIncompleteQueryHsqldb() {
         Insert query = new Insert(HSQLDB);
         try {
             query.getSql();
@@ -55,7 +55,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testClearHsqldb() {
+    void testClearHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .field("col1", "val1");
@@ -70,7 +70,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testHintHsqldb() {
+    void testHintHsqldb() {
         Insert query = new Insert(HSQLDB)
             .hint("NO_INDEX")
             .into("tablename")
@@ -84,7 +84,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testParameterHsqldb() {
+    void testParameterHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldParameter("col1");
@@ -92,7 +92,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldHsqldb() {
+    void testFieldHsqldb() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
@@ -120,7 +120,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldCustomHsqldb() {
+    void testFieldCustomHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldCustom("propertySqlDate", "now()");
@@ -129,7 +129,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldsHsqldb() {
+    void testFieldsHsqldb() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
@@ -159,7 +159,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldParametersHsqldb() {
+    void testFieldParametersHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename");
 
@@ -250,7 +250,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldParametersMixedHsqldb() {
+    void testFieldParametersMixedHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename");
 
@@ -317,7 +317,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanHsqldb() {
+    void testFieldsBeanHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fields(BeanImpl.getPopulatedBean());
@@ -326,7 +326,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanConstrainedHsqldb() {
+    void testFieldsBeanConstrainedHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fields(BeanImplConstrained.getPopulatedBean());
@@ -335,7 +335,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanNullValuesHsqldb() {
+    void testFieldsBeanNullValuesHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fields(BeanImpl.getNullBean());
@@ -344,7 +344,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanIncludedHsqldb() {
+    void testFieldsBeanIncludedHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -353,7 +353,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanExcludedHsqldb() {
+    void testFieldsBeanExcludedHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -362,7 +362,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanFilteredHsqldb() {
+    void testFieldsBeanFilteredHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -371,7 +371,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testMultipleRowsHsqldb() {
+    void testMultipleRowsHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .field("propertyChar", 'M')
@@ -391,7 +391,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanHsqldb() {
+    void testFieldsParametersBeanHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldsParameters(BeanImpl.class);
@@ -462,7 +462,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanConstrainedHsqldb() {
+    void testFieldsParametersBeanConstrainedHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldsParameters(BeanImplConstrained.class);
@@ -524,7 +524,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanExcludedHsqldb() {
+    void testFieldsParametersBeanExcludedHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
@@ -579,7 +579,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testInsertSubselectParamsHsqldb() {
+    void testInsertSubselectParamsHsqldb() {
         Select fieldquery = new Select(HSQLDB);
         fieldquery
             .from("table2")
@@ -629,7 +629,7 @@ public class TestInsertHsqldb extends TestInsert {
     }
 
     @Test
-    public void testCloneHsqldb() {
+    void testCloneHsqldb() {
         Select fieldquery = new Select(HSQLDB);
         fieldquery
             .from("table2")

@@ -69,7 +69,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiation(Datasource datasource) {
+    void testInstantiation(Datasource datasource) {
         setup(datasource);
         try {
             ResourceFinder resource_finder1 = DatabaseResourcesFactory.instance(datasource);
@@ -84,7 +84,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstall(Datasource datasource) {
+    void testInstall(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -107,7 +107,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemove(Datasource datasource) {
+    void testRemove(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -131,7 +131,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testAddResource(Datasource datasource) {
+    void testAddResource(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -146,7 +146,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetUnknownResource(Datasource datasource) {
+    void testGetUnknownResource(Datasource datasource) {
         setup(datasource);
         try {
             var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -158,7 +158,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetResourceByName(Datasource datasource) {
+    void testGetResourceByName(Datasource datasource) {
         setup(datasource);
         try {
             var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -170,7 +170,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUpdateResource(Datasource datasource) {
+    void testUpdateResource(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -200,7 +200,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUpdateMissingResource(Datasource datasource) {
+    void testUpdateMissingResource(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -217,7 +217,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemoveResource(Datasource datasource) {
+    void testRemoveResource(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -235,7 +235,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetUnknownStreamByName(Datasource datasource) {
+    void testGetUnknownStreamByName(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -257,7 +257,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetUnknownStreamByResource(Datasource datasource) {
+    void testGetUnknownStreamByResource(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -279,7 +279,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetStreamByName(Datasource datasource) {
+    void testGetStreamByName(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -305,7 +305,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetStreamByResource(Datasource datasource) {
+    void testGetStreamByResource(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -332,7 +332,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetUnknownContentByName(Datasource datasource) {
+    void testGetUnknownContentByName(Datasource datasource) {
         setup(datasource);
 
 
@@ -349,7 +349,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetUnknownContentByResource(Datasource datasource) {
+    void testGetUnknownContentByResource(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -365,7 +365,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetContentByName(Datasource datasource) {
+    void testGetContentByName(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -382,7 +382,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetContentByResource(Datasource datasource) {
+    void testGetContentByResource(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -400,7 +400,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetContentByNameAndEncoding(Datasource datasource) {
+    void testGetContentByNameAndEncoding(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -417,7 +417,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetContentByResourceAndEncoding(Datasource datasource) {
+    void testGetContentByResourceAndEncoding(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -435,7 +435,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetUnknownModificationTimeByName(Datasource datasource) {
+    void testGetUnknownModificationTimeByName(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -451,7 +451,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetUnknownModificationTimeByResource(Datasource datasource) {
+    void testGetUnknownModificationTimeByResource(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -467,7 +467,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetModificationTimeByName(Datasource datasource) {
+    void testGetModificationTimeByName(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);
@@ -483,7 +483,7 @@ public class TestDatabaseResources {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetModificationTimeByResource(Datasource datasource) {
+    void testGetModificationTimeByResource(Datasource datasource) {
         setup(datasource);
 
         var resource_finder = DatabaseResourcesFactory.instance(datasource);

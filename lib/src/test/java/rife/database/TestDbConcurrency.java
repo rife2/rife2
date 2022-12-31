@@ -50,9 +50,9 @@ public class TestDbConcurrency {
         display('x');
     }
 
-    @ParameterizedTest()
-    @ArgumentsSource(TestDatasources.class)
-    public void testConcurrency(Datasource datasource) {
+//    @ParameterizedTest
+//    @ArgumentsSource(TestDatasources.class)
+    void testConcurrency(Datasource datasource) {
         var structure = new Structure(datasource);
         try {
             structure.install();

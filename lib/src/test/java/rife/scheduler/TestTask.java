@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTask {
     @Test
-    public void testInstantiateTask() {
+    void testInstantiateTask() {
         Task task = null;
 
         assertNull(task);
@@ -26,7 +26,7 @@ public class TestTask {
     }
 
     @Test
-    public void testPopulateTask() {
+    void testPopulateTask() {
         int id = 1;
         String type = TestTasktypes.UPLOAD_GROUPS;
         long planned = System.currentTimeMillis();
@@ -56,7 +56,7 @@ public class TestTask {
     }
 
     @Test
-    public void testCloneTask() {
+    void testCloneTask() {
         int id = 1;
         String type = TestTasktypes.UPLOAD_GROUPS;
         long planned = System.currentTimeMillis();
@@ -81,7 +81,7 @@ public class TestTask {
     }
 
     @Test
-    public void testTaskValidation() {
+    void testTaskValidation() {
         try {
             Task task = new Task();
             assertTrue(false == task.validate());

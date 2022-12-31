@@ -13,13 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSAXLoader {
     @Test
-    public void testIsBackendPresent() {
+    void testIsBackendPresent() {
         var loader = new SAXLoader();
         assertTrue(loader.isBackendPresent());
     }
 
     @Test
-    public void testLoadSuccess() {
+    void testLoadSuccess() {
         var loader = new SAXLoader();
         Set<String> errors = new HashSet<>();
 
@@ -30,7 +30,7 @@ public class TestSAXLoader {
     }
 
     @Test
-    public void testLoadUnsupportedType() {
+    void testLoadUnsupportedType() {
         var loader = new SAXLoader();
         Set<String> errors = new HashSet<>();
 
@@ -41,7 +41,7 @@ public class TestSAXLoader {
     }
 
     @Test
-    public void testLoadFromStringSuccessFragment() {
+    void testLoadFromStringSuccessFragment() {
         var loader = new SAXLoader();
         Set<String> errors = new HashSet<>();
 
@@ -52,7 +52,7 @@ public class TestSAXLoader {
     }
 
     @Test
-    public void testLoadFromStringSuccessComplete() {
+    void testLoadFromStringSuccessComplete() {
         var loader = new SAXLoader();
         Set<String> errors = new HashSet<>();
 
@@ -68,7 +68,7 @@ public class TestSAXLoader {
     }
 
     @Test
-    public void testLoadFromStringError() {
+    void testLoadFromStringError() {
         var loader = new SAXLoader();
         Set<String> errors = new HashSet<>();
 
@@ -79,7 +79,7 @@ public class TestSAXLoader {
     }
 
     @Test
-    public void testLoadFromStringErrorNoList() {
+    void testLoadFromStringErrorNoList() {
         var loader = new SAXLoader();
 
         var xhtml = loader.loadFromString("<i><b>error</i>", true, null);

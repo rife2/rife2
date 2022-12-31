@@ -17,14 +17,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiation(Datasource datasource) {
+    void testInstantiation(Datasource datasource) {
         DatabaseSessions manager = DatabaseSessionsFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstall(Datasource datasource) {
+    void testInstall(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
 
         try {
@@ -36,7 +36,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemove(Datasource datasource) {
+    void testRemove(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
 
         try {
@@ -48,7 +48,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStartSession(Datasource datasource) {
+    void testStartSession(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
 
         int user_id = 143;
@@ -78,7 +78,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStartRememberedSession(Datasource datasource) {
+    void testStartRememberedSession(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
 
         int user_id = 143;
@@ -108,7 +108,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSessionExpiration(Datasource datasource) {
+    void testSessionExpiration(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(2000);
 
@@ -147,7 +147,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testContinueSession(Datasource datasource) {
+    void testContinueSession(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(2000);
 
@@ -179,7 +179,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testContinueUnknownSession(Datasource datasource) {
+    void testContinueUnknownSession(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
 
         String auth_id = "unknown";
@@ -200,7 +200,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testEraseSession(Datasource datasource) {
+    void testEraseSession(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
 
         int user_id = 93;
@@ -228,7 +228,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testEraseUnknownSession(Datasource datasource) {
+    void testEraseUnknownSession(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
 
         String auth_id = "unknown";
@@ -249,7 +249,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testEraseAllSessions(Datasource datasource) {
+    void testEraseAllSessions(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
 
         try {
@@ -279,7 +279,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testEraseUserSessions(Datasource datasource) {
+    void testEraseUserSessions(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
 
         try {
@@ -306,7 +306,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testEraseUnkownUserSessions(Datasource datasource) {
+    void testEraseUnkownUserSessions(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
 
         try {
@@ -331,7 +331,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testPurgeSessions(Datasource datasource) {
+    void testPurgeSessions(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(2000);
 
@@ -366,7 +366,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testCountSessions(Datasource datasource) {
+    void testCountSessions(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(4000);
 
@@ -414,7 +414,7 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testListSessions(Datasource datasource) {
+    void testListSessions(Datasource datasource) {
         DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(4000);
 

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRawFormatter {
     @Test
-    public void testFormatBasic()
+    void testFormatBasic()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -37,7 +37,7 @@ public class TestRawFormatter {
     }
 
     @Test
-    public void testFormatInvalidDataType()
+    void testFormatInvalidDataType()
     throws Exception {
         var content = new Content(MimeType.RAW, new byte[1]);
         var formatter = new RawFormatter();
@@ -53,7 +53,7 @@ public class TestRawFormatter {
     }
 
     @Test
-    public void testFormatTransformer()
+    void testFormatTransformer()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);

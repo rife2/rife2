@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class Test_org_apache_derby_jdbc_EmbeddedDriver {
     @Test
-    public void testGetSqlValue() {
+    void testGetSqlValue() {
         SqlConversion dbtypes;
         dbtypes = new org_postgresql_Driver();
 

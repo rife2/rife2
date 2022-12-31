@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestArrayUtils {
     @Test
-    public void testGetArrayType() {
+    void testGetArrayType() {
         assertEquals(ArrayUtils.ArrayType.NO_ARRAY, ArrayUtils.getArrayType(new Object()));
 
         assertEquals(ArrayUtils.ArrayType.BOOLEAN_ARRAY, ArrayUtils.getArrayType(new boolean[1]));
@@ -43,7 +43,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateStringArray() {
+    void testCreateStringArray() {
         assertNull(ArrayUtils.createStringArray((Object) null, null));
         String[] converted = null;
 
@@ -131,7 +131,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateStringArrayObject() {
+    void testCreateStringArrayObject() {
         assertNull(ArrayUtils.createStringArray((Object[]) null));
 
         String[] source = new String[]{"9", "kojk", "4", "3", "ok", "6.0", "8"};
@@ -147,7 +147,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateStringArrayDate() {
+    void testCreateStringArrayDate() {
         assertNull(ArrayUtils.createStringArray((Date) null, null));
 
         Calendar cal = Calendar.getInstance();
@@ -166,7 +166,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateStringArrayDoubleFormat() {
+    void testCreateStringArrayDoubleFormat() {
         assertNull(ArrayUtils.createStringArray((Double) null, null));
 
         String[] converted = ArrayUtils.createStringArray(6782.349876675, new ConstrainedProperty("someProperty").format(NumberFormat.getCurrencyInstance(Locale.US)));
@@ -175,7 +175,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateStringArrayBoolean() {
+    void testCreateStringArrayBoolean() {
         assertNull(ArrayUtils.createStringArray((boolean[]) null));
 
         boolean[] source = new boolean[]{false, false, true, false, true};
@@ -190,7 +190,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateStringArrayByte() {
+    void testCreateStringArrayByte() {
         assertNull(ArrayUtils.createStringArray((byte[]) null));
 
         byte[] source = new byte[]{9, 4, 3, 6, 8};
@@ -204,7 +204,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateStringArrayChar() {
+    void testCreateStringArrayChar() {
         assertNull(ArrayUtils.createStringArray((char[]) null));
 
         char[] source = new char[]{'w', 'o', 'r', 'k', 's'};
@@ -218,7 +218,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateStringArrayShort() {
+    void testCreateStringArrayShort() {
         assertNull(ArrayUtils.createStringArray((short[]) null));
 
         short[] source = new short[]{84, 23, 43, 12, 5};
@@ -232,7 +232,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateStringArrayInt() {
+    void testCreateStringArrayInt() {
         assertNull(ArrayUtils.createStringArray((int[]) null));
 
         int[] source = new int[]{9834, 454, 2355, 2398, 4834};
@@ -246,7 +246,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateStringArrayLong() {
+    void testCreateStringArrayLong() {
         assertNull(ArrayUtils.createStringArray((long[]) null));
 
         long[] source = new long[]{59035, 90465, 723479, 47543, 987543};
@@ -260,7 +260,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateStringArrayFloat() {
+    void testCreateStringArrayFloat() {
         assertNull(ArrayUtils.createStringArray((float[]) null));
 
         float[] source = new float[]{228.02f, 8734.3f, 8634.2f, 34321.9f, 3478.2f};
@@ -274,7 +274,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateStringArrayDouble() {
+    void testCreateStringArrayDouble() {
         assertNull(ArrayUtils.createStringArray((double[]) null));
 
         double[] source = new double[]{987634.3434d, 653928.434d, 394374.34387d, 3847764332.3434d, 3434d};
@@ -288,7 +288,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateBooleanArray() {
+    void testCreateBooleanArray() {
         assertNull(ArrayUtils.createBooleanArray(null));
 
         String[] source = new String[]{"false", "false", null, "true", "false", "true"};
@@ -303,7 +303,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateByteArray() {
+    void testCreateByteArray() {
         assertNull(ArrayUtils.createByteArray(null));
 
         Object[] source = new Object[]{9, "ko", "4", null, 3L, "ok", "6", "8"};
@@ -318,7 +318,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateCharArray() {
+    void testCreateCharArray() {
         assertNull(ArrayUtils.createCharArray(null));
 
         Object[] source = new Object[]{'w', "loo", null, "ko", "o", "r", "k", "s", new StringBuffer("oook")};
@@ -333,7 +333,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateShortArray() {
+    void testCreateShortArray() {
         assertNull(ArrayUtils.createShortArray(null));
 
         Object[] source = new Object[]{"84", "ko", (byte) 23, "43", "ok", null, (short) 12, "5"};
@@ -348,7 +348,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateIntArray() {
+    void testCreateIntArray() {
         assertNull(ArrayUtils.createIntArray(null));
 
         Object[] source = new Object[]{"ok", 9834, null, "454", new StringBuffer("2355"), "ko", "2398", 4834L, "koko"};
@@ -363,7 +363,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateLongArray() {
+    void testCreateLongArray() {
         assertNull(ArrayUtils.createLongArray(null));
 
         Object[] source = new Object[]{59035, "90465", "ok", "723479", null, "47543", "ko", 987543};
@@ -378,7 +378,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateFloatArray() {
+    void testCreateFloatArray() {
         assertNull(ArrayUtils.createFloatArray(null));
 
         Object[] source = new Object[]{"228.02", 8734.3f, "lokoko", "8634.2", null, "kokiro", 34321.9d, "3478.2"};
@@ -393,7 +393,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testCreateDoubleArray() {
+    void testCreateDoubleArray() {
         assertNull(ArrayUtils.createDoubleArray(null));
 
         Object[] source = new Object[]{987634.3434d, null, "653928.434", "oooook", 394374.34387d, "3847764332.3434", "koooko", 3434};
@@ -408,7 +408,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinString() {
+    void testJoinString() {
         String[] first = new String[]{"lkjhkjh", "uhggh", "kgyugioh", "kjhgkhjh", "phhgg"};
         String[] second = new String[]{"ihhjf", "hhjgvgjfc", "oighiufhuf", "uiguhgi", "iuggiug"};
 
@@ -430,7 +430,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinStringSingle() {
+    void testJoinStringSingle() {
         String[] first = new String[]{"lkjhkjh", "uhggh", "kgyugioh", "kjhgkhjh", "phhgg"};
         String second = "ihhjf";
 
@@ -449,7 +449,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinByte() {
+    void testJoinByte() {
         byte[] first = new byte[]{2, 5, 5, 4, 6};
         byte[] second = new byte[]{9, 4, 3, 6, 8};
 
@@ -471,7 +471,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinByteSingle() {
+    void testJoinByteSingle() {
         byte[] first = new byte[]{2, 5, 5, 4, 6};
         byte second = 9;
 
@@ -488,7 +488,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinChar() {
+    void testJoinChar() {
         char[] first = new char[]{'t', 'h', 'i', 's', ' '};
         char[] second = new char[]{'w', 'o', 'r', 'k', 's'};
 
@@ -510,7 +510,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinCharSingle() {
+    void testJoinCharSingle() {
         char[] first = new char[]{'t', 'h', 'i', 's', ' '};
         char second = 'w';
 
@@ -527,7 +527,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinShort() {
+    void testJoinShort() {
         short[] first = new short[]{8, 3, 54, 23, 54};
         short[] second = new short[]{84, 23, 43, 12, 5};
 
@@ -549,7 +549,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinShortSingle() {
+    void testJoinShortSingle() {
         short[] first = new short[]{8, 3, 54, 23, 54};
         short second = 84;
 
@@ -566,7 +566,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinInt() {
+    void testJoinInt() {
         int[] first = new int[]{834, 3476, 343, 234, 545};
         int[] second = new int[]{9834, 454, 2355, 2398, 4834};
 
@@ -588,7 +588,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinIntSingle() {
+    void testJoinIntSingle() {
         int[] first = new int[]{834, 3476, 343, 234, 545};
         int second = 9834;
 
@@ -605,7 +605,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinLong() {
+    void testJoinLong() {
         long[] first = new long[]{987634, 98785, 54654, 9864, 4697932};
         long[] second = new long[]{59035, 90465, 723479, 47543, 987543};
 
@@ -627,7 +627,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinLongSingle() {
+    void testJoinLongSingle() {
         long[] first = new long[]{987634, 98785, 54654, 9864, 4697932};
         long second = 59035;
 
@@ -644,7 +644,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinFloat() {
+    void testJoinFloat() {
         float[] first = new float[]{43.3f, 7489.2f, 7634.98f, 343.8f, 736.9f};
         float[] second = new float[]{228.02f, 8734.3f, 8634.2f, 34321.9f, 3478.2f};
 
@@ -666,7 +666,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinFloatSingle() {
+    void testJoinFloatSingle() {
         float[] first = new float[]{43.3f, 7489.2f, 7634.98f, 343.8f, 736.9f};
         float second = 228.02f;
 
@@ -683,7 +683,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinDouble() {
+    void testJoinDouble() {
         double[] first = new double[]{973284.678943d, 8936498736.232d, 78634.9834d, 37467.334d, 986347.234243d};
         double[] second = new double[]{987634.3434d, 653928.434d, 394374.34387d, 3847764332.3434d, 3434d};
 
@@ -705,7 +705,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinDoubleSingle() {
+    void testJoinDoubleSingle() {
         double[] first = new double[]{973284.678943d, 8936498736.232d, 78634.9834d, 37467.334d, 986347.234243d};
         double second = 987634.3434d;
 
@@ -722,7 +722,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinBoolean() {
+    void testJoinBoolean() {
         boolean[] first = new boolean[]{true, false, false, true, true};
         boolean[] second = new boolean[]{false, false, true, false, true};
 
@@ -744,7 +744,7 @@ public class TestArrayUtils {
     }
 
     @Test
-    public void testJoinBooleanSingle() {
+    void testJoinBooleanSingle() {
         boolean[] first = new boolean[]{true, false, false, true, true};
         boolean second = false;
 

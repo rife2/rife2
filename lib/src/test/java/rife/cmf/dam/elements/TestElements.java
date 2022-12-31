@@ -43,7 +43,7 @@ public class TestElements {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testServeContentRaw(Datasource datasource)
+    void testServeContentRaw(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -83,7 +83,7 @@ public class TestElements {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testServeContentImage(Datasource datasource)
+    void testServeContentImage(Datasource datasource)
     throws Exception {
         RifeConfig.engine().setPassThroughSuffixes(Collections.emptySet());
         setup(datasource);
@@ -126,7 +126,7 @@ public class TestElements {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testServeContentText(Datasource datasource)
+    void testServeContentText(Datasource datasource)
     throws Exception {
         RifeConfig.engine().setPassThroughSuffixes(Collections.emptySet());
         setup(datasource);
@@ -162,7 +162,7 @@ public class TestElements {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testServeContentRepository(Datasource datasource)
+    void testServeContentRepository(Datasource datasource)
     throws Exception {
         RifeConfig.engine().setPassThroughSuffixes(Collections.emptySet());
         setup(datasource);
@@ -208,7 +208,7 @@ public class TestElements {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testServeContentUnknown(Datasource datasource)
+    void testServeContentUnknown(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -231,7 +231,7 @@ public class TestElements {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testServeContentNoPathinfo(Datasource datasource)
+    void testServeContentNoPathinfo(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -254,7 +254,7 @@ public class TestElements {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testContentQueryManagerContentForHtml(Datasource datasource)
+    void testContentQueryManagerContentForHtml(Datasource datasource)
     throws Exception {
         setup(datasource);
         var manager = new ContentQueryManager<>(datasource, ContentImage.class);
@@ -297,7 +297,7 @@ public class TestElements {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testServeContentModifiedSince(Datasource datasource)
+    void testServeContentModifiedSince(Datasource datasource)
     throws Exception {
         RifeConfig.engine().setPassThroughSuffixes(Collections.emptySet());
         setup(datasource);

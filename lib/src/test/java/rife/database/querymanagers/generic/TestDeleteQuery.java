@@ -44,7 +44,7 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testCloneToStringAndClear(Datasource datasource) {
+    void testCloneToStringAndClear(Datasource datasource) {
         setup(datasource);
         try {
             var query = bigBeanManager_.getDeleteQuery().where("propertyString", "=", "bean set 1");
@@ -73,7 +73,7 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetParameters(Datasource datasource) {
+    void testGetParameters(Datasource datasource) {
         setup(datasource);
         try {
             var delete = new Delete(datasource);
@@ -95,7 +95,7 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetDatasource(Datasource datasource) {
+    void testGetDatasource(Datasource datasource) {
         setup(datasource);
         try {
             assertEquals(datasource, bigBeanManager_.getDeleteQuery().getDatasource());
@@ -106,7 +106,7 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetFrom(Datasource datasource) {
+    void testGetFrom(Datasource datasource) {
         setup(datasource);
         try {
             assertEquals(bigBeanManager_
@@ -123,7 +123,7 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testWhere(Datasource datasource) {
+    void testWhere(Datasource datasource) {
         setup(datasource);
         try {
             var bean1 = new BeanImpl();
@@ -257,7 +257,7 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testWhereAnd(Datasource datasource) {
+    void testWhereAnd(Datasource datasource) {
         setup(datasource);
         try {
             var bean1 = new BeanImpl();
@@ -320,7 +320,7 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testWhereOr(Datasource datasource) {
+    void testWhereOr(Datasource datasource) {
         setup(datasource);
         try {
             var bean1 = new BeanImpl();
@@ -384,7 +384,7 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testWhereSubselect(Datasource datasource) {
+    void testWhereSubselect(Datasource datasource) {
         setup(datasource);
         try {
             var bean1 = new SimpleBean();

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValueH2 extends TestSequenceValue {
     @Test
-    public void testInstantiationH2() {
+    void testInstantiationH2() {
         SequenceValue query = new SequenceValue(H2);
         assertNotNull(query);
         try {
@@ -24,7 +24,7 @@ public class TestSequenceValueH2 extends TestSequenceValue {
     }
 
     @Test
-    public void testInvalidH2() {
+    void testInvalidH2() {
         SequenceValue query = new SequenceValue(H2);
         try {
             query.getSql();
@@ -51,7 +51,7 @@ public class TestSequenceValueH2 extends TestSequenceValue {
     }
 
     @Test
-    public void testClearH2() {
+    void testClearH2() {
         SequenceValue query = new SequenceValue(H2);
         query
             .name("sequencename")
@@ -68,7 +68,7 @@ public class TestSequenceValueH2 extends TestSequenceValue {
     }
 
     @Test
-    public void testNextH2() {
+    void testNextH2() {
         SequenceValue query = new SequenceValue(H2);
         query
             .name("sequencename")
@@ -78,7 +78,7 @@ public class TestSequenceValueH2 extends TestSequenceValue {
     }
 
     @Test
-    public void testCurrentH2() {
+    void testCurrentH2() {
         SequenceValue query = new SequenceValue(H2);
         query
             .name("sequencename")
@@ -88,7 +88,7 @@ public class TestSequenceValueH2 extends TestSequenceValue {
     }
 
     @Test
-    public void testCloneH2() {
+    void testCloneH2() {
         SequenceValue query = new SequenceValue(H2);
         query
             .name("sequencename")

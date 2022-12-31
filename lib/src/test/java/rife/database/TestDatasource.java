@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDatasource {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         Datasource datasource1 = new Datasource();
         assertNotNull(datasource1);
         assertNull(datasource1.getDriver());
@@ -52,7 +52,7 @@ public class TestDatasource {
     }
 
     @Test
-    public void testPopulation() {
+    void testPopulation() {
         String driver = "driver";
         String url = "url";
         String user = "user";
@@ -77,7 +77,7 @@ public class TestDatasource {
     }
 
     @Test
-    public void testDriverAlias() {
+    void testDriverAlias() {
         String driver_aliased = "org.gjt.mm.mysql.Driver";
         String driver_unaliased = "com.mysql.cj.jdbc.Driver";
 
@@ -93,7 +93,7 @@ public class TestDatasource {
     }
 
     @Test
-    public void testEquality() {
+    void testEquality() {
         String driver = "driver";
         String url = "url";
         String user = "user";
@@ -188,7 +188,7 @@ public class TestDatasource {
     }
 
     @Test
-    public void testConnection() {
+    void testConnection() {
         Datasource datasource = TestDatasources.PGSQL;
         if (null == datasource) {
             System.out.println("WARNING : Datasource testConnection test not executed (postgresql missing)");
@@ -210,7 +210,7 @@ public class TestDatasource {
     }
 
     @Test
-    public void testConnectionDataSource1() {
+    void testConnectionDataSource1() {
         Datasource declared_datasource = TestDatasources.PGSQL;
         if (null == declared_datasource) {
             System.out.println("WARNING : Datasource testConnectionDataSource test not executed (postgresql missing)");
@@ -239,7 +239,7 @@ public class TestDatasource {
     }
 
     @Test
-    public void testConnectionDataSource2() {
+    void testConnectionDataSource2() {
         Datasource declared_datasource = TestDatasources.PGSQL;
         if (null == declared_datasource) {
             System.out.println("WARNING : Datasource testConnectionDataSource test not executed (postgresql missing)");
@@ -267,30 +267,8 @@ public class TestDatasource {
         }
     }
 
-//    @Test public void testConnectionDataSourceJndi() {
-//        Datasource datasource = Datasources.getRepInstance().getDatasource("jndiderby");
-//
-//        assertNotNull(datasource.getSqlConversion());
-//
-//        Datasource datasource2 = Datasources.getRepInstance().getDatasource("jndiderby2");
-//        assertNotNull(datasource2.getCapabilitiesCompensator());
-//
-//        DbConnection connection = null;
-//        try {
-//            connection = datasource.getConnection();
-//        } catch (DatabaseException e) {
-//            fail(ExceptionUtils.getExceptionStackTrace(e));
-//        }
-//        assertNotNull(connection);
-//        try {
-//            connection.close();
-//        } catch (DatabaseException e) {
-//            fail(ExceptionUtils.getExceptionStackTrace(e));
-//        }
-//    }
-
     @Test
-    public void testConnectionPreservation() {
+    void testConnectionPreservation() {
         Datasource datasource = TestDatasources.PGSQL;
         if (null == datasource) {
             System.out.println("WARNING : Datasource testConnectionPreservation test not executed (postgresql missing)");
@@ -319,7 +297,7 @@ public class TestDatasource {
     }
 
     @Test
-    public void testConnectionPreservationDatasource1() {
+    void testConnectionPreservationDatasource1() {
         Datasource declared_datasource = TestDatasources.PGSQL;
         if (null == declared_datasource) {
             System.out.println("WARNING : Datasource testConnectionPreservationDatasource test not executed (postgresql missing)");
@@ -355,7 +333,7 @@ public class TestDatasource {
     }
 
     @Test
-    public void testConnectionPreservationDatasource2() {
+    void testConnectionPreservationDatasource2() {
         Datasource declared_datasource = TestDatasources.PGSQL;
         if (null == declared_datasource) {
             System.out.println("WARNING : Datasource testConnectionPreservationDatasource test not executed (postgresql missing)");

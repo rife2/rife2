@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestBeans {
     @Test
-    public void testParametersBean()
+    void testParametersBean()
     throws Exception {
         try (final var server = new TestServerRunner(new GetBeanSite())) {
             try (final var webClient = new WebClient()) {
@@ -135,7 +135,7 @@ public class TestBeans {
     }
 
     @Test
-    public void testParametersBeanPrefix()
+    void testParametersBeanPrefix()
     throws Exception {
         try (final var server = new TestServerRunner(new GetBeanSite("prefix_"))) {
             try (final var webClient = new WebClient()) {
@@ -247,7 +247,7 @@ public class TestBeans {
     }
 
     @Test
-    public void testParametersBeanFill()
+    void testParametersBeanFill()
     throws Exception {
         try (final var server = new TestServerRunner(new FillBeanSite())) {
             try (final var webClient = new WebClient()) {
@@ -363,7 +363,7 @@ public class TestBeans {
     }
 
     @Test
-    public void testParametersBeanFillPrefix()
+    void testParametersBeanFillPrefix()
     throws Exception {
         try (final var server = new TestServerRunner(new FillBeanSite("prefix_"))) {
             try (final var webClient = new WebClient()) {

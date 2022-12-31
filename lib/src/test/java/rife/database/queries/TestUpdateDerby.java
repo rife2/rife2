@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUpdateDerby extends TestUpdate {
     @Test
-    public void testInstantiationDerby() {
+    void testInstantiationDerby() {
         Update query = new Update(DERBY);
         assertNotNull(query);
         try {
@@ -35,7 +35,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testIncompleteQueryDerby() {
+    void testIncompleteQueryDerby() {
         Update query = new Update(DERBY);
         try {
             query.getSql();
@@ -55,7 +55,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testClearDerby() {
+    void testClearDerby() {
         Update query = new Update(DERBY);
         query.table("tablename4")
             .field("col1", "val1");
@@ -70,7 +70,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testHintDerby() {
+    void testHintDerby() {
         Update query = new Update(DERBY)
             .hint("NO_INDEX")
             .table("tablename")
@@ -84,7 +84,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldDerby() {
+    void testFieldDerby() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
@@ -113,7 +113,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldCustomDerby() {
+    void testFieldCustomDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .fieldCustom("propertySqlDate", "CURRENT_DATE");
@@ -122,7 +122,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldParametersDerby() {
+    void testFieldParametersDerby() {
         Update query = new Update(DERBY);
         query.table("tablename");
 
@@ -213,7 +213,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldParametersMixedDerby() {
+    void testFieldParametersMixedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename");
 
@@ -280,7 +280,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldsDerby() {
+    void testFieldsDerby() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
@@ -311,7 +311,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereConstructionDerby() {
+    void testWhereConstructionDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -324,7 +324,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereConstructionGroupDerby() {
+    void testWhereConstructionGroupDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -357,7 +357,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereTypedDerby() {
+    void testWhereTypedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -390,7 +390,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereTypedMixedDerby() {
+    void testWhereTypedMixedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -429,7 +429,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersDerby() {
+    void testWhereParametersDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -463,7 +463,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersMixedDerby() {
+    void testWhereParametersMixedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -492,7 +492,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldWhereParametersDerby() {
+    void testFieldWhereParametersDerby() {
         Update query = new Update(DERBY);
         query.table("tablename");
 
@@ -541,7 +541,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanDerby() {
+    void testFieldsBeanDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -551,7 +551,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanConstrainedDerby() {
+    void testFieldsBeanConstrainedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -561,7 +561,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanNullValuesDerby() {
+    void testFieldsBeanNullValuesDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -571,7 +571,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanIncludedDerby() {
+    void testFieldsBeanIncludedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -581,7 +581,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanExcludedDerby() {
+    void testFieldsBeanExcludedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -591,7 +591,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanFilteredDerby() {
+    void testFieldsBeanFilteredDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -601,7 +601,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldsParametersBeanDerby() {
+    void testFieldsParametersBeanDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .fieldsParameters(BeanImpl.class);
@@ -671,7 +671,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldsParametersBeanConstrainedDerby() {
+    void testFieldsParametersBeanConstrainedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .fieldsParameters(BeanImplConstrained.class);
@@ -733,7 +733,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testFieldsParametersBeanExcludedDerby() {
+    void testFieldsParametersBeanExcludedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
@@ -788,7 +788,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanDerby() {
+    void testWhereBeanDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -799,7 +799,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanConstrainedDerby() {
+    void testWhereBeanConstrainedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -810,7 +810,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanNullValuesDerby() {
+    void testWhereBeanNullValuesDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -821,7 +821,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanIncludedDerby() {
+    void testWhereBeanIncludedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -832,7 +832,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanExcludedDerby() {
+    void testWhereBeanExcludedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -843,7 +843,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanFilteredDerby() {
+    void testWhereBeanFilteredDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -854,7 +854,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersBeanDerby() {
+    void testWhereParametersBeanDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -926,7 +926,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersBeanConstrainedDerby() {
+    void testWhereParametersBeanConstrainedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -994,7 +994,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersBeanExcludedDerby() {
+    void testWhereParametersBeanExcludedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -1051,7 +1051,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testSubselectParamsDerby() {
+    void testSubselectParamsDerby() {
         Select fieldquery = new Select(DERBY);
         fieldquery
             .from("table2")
@@ -1129,7 +1129,7 @@ public class TestUpdateDerby extends TestUpdate {
     }
 
     @Test
-    public void testCloneDerby() {
+    void testCloneDerby() {
         Select fieldquery = new Select(DERBY);
         fieldquery
             .from("table2")

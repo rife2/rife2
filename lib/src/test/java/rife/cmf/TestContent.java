@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestContent {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         var content = new Content(MimeType.APPLICATION_XHTML, "<html></html>");
         assertNotNull(content);
 
@@ -34,7 +34,7 @@ public class TestContent {
     }
 
     @Test
-    public void testInstantiationNullData() {
+    void testInstantiationNullData() {
         var content = new Content(MimeType.APPLICATION_XHTML, null);
         assertNotNull(content);
 
@@ -56,7 +56,7 @@ public class TestContent {
     }
 
     @Test
-    public void testInvalidMimeType() {
+    void testInvalidMimeType() {
         Content content = null;
         try {
             content = new Content(null, "<html></html>");
@@ -69,7 +69,7 @@ public class TestContent {
     }
 
     @Test
-    public void testFragment() {
+    void testFragment() {
         var content = new Content(MimeType.APPLICATION_XHTML, "<html></html>");
         content.setFragment(true);
         assertTrue(content.isFragment());
@@ -78,7 +78,7 @@ public class TestContent {
     }
 
     @Test
-    public void testName() {
+    void testName() {
         var content = new Content(MimeType.APPLICATION_XHTML, "<html></html>");
         content.setName("myname.gif");
         assertTrue(content.hasName());
@@ -92,7 +92,7 @@ public class TestContent {
     }
 
     @Test
-    public void testSetAttributes() {
+    void testSetAttributes() {
         var content = new Content(MimeType.APPLICATION_XHTML, "<html></html>");
         var attrs = new HashMap<String, String>();
         attrs.put("attr1", "val1");
@@ -135,7 +135,7 @@ public class TestContent {
     }
 
     @Test
-    public void testSetAttribute() {
+    void testSetAttribute() {
         var content = new Content(MimeType.APPLICATION_XHTML, "<html></html>");
 
         assertSame(content, content
@@ -172,7 +172,7 @@ public class TestContent {
     }
 
     @Test
-    public void testLoadedDataCache() {
+    void testLoadedDataCache() {
         var content = new Content(MimeType.APPLICATION_XHTML, "<html></html>");
         var object = new Object();
         content.setCachedLoadedData(object);
@@ -184,7 +184,7 @@ public class TestContent {
     }
 
     @Test
-    public void testSetProperties() {
+    void testSetProperties() {
         var content = new Content(MimeType.APPLICATION_XHTML, "<html></html>");
         var props = new HashMap<String, String>();
         props.put("prop1", "val1");
@@ -227,7 +227,7 @@ public class TestContent {
     }
 
     @Test
-    public void testSetProperty() {
+    void testSetProperty() {
         var content = new Content(MimeType.APPLICATION_XHTML, "<html></html>");
 
         assertSame(content, content

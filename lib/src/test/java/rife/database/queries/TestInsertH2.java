@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInsertH2 extends TestInsert {
     @Test
-    public void testInstantiationH2() {
+    void testInstantiationH2() {
         Insert query = new Insert(H2);
         assertNotNull(query);
         try {
@@ -36,7 +36,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testIncompleteQueryH2() {
+    void testIncompleteQueryH2() {
         Insert query = new Insert(H2);
         try {
             query.getSql();
@@ -56,7 +56,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testClearH2() {
+    void testClearH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
             .field("col1", "val1");
@@ -71,7 +71,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testHintH2() {
+    void testHintH2() {
         Insert query = new Insert(H2)
             .hint("NO_INDEX")
             .into("tablename")
@@ -85,7 +85,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testParameterH2() {
+    void testParameterH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
             .fieldParameter("col1");
@@ -93,7 +93,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldH2() {
+    void testFieldH2() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
@@ -121,7 +121,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldCustomH2() {
+    void testFieldCustomH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
             .fieldCustom("propertySqlDate", "now()");
@@ -130,7 +130,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldsH2() {
+    void testFieldsH2() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
@@ -160,7 +160,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldParametersH2() {
+    void testFieldParametersH2() {
         Insert query = new Insert(H2);
         query.into("tablename");
 
@@ -251,7 +251,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldParametersMixedH2() {
+    void testFieldParametersMixedH2() {
         Insert query = new Insert(H2);
         query.into("tablename");
 
@@ -317,7 +317,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanH2() {
+    void testFieldsBeanH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
             .fields(BeanImpl.getPopulatedBean());
@@ -326,7 +326,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanConstrainedH2() {
+    void testFieldsBeanConstrainedH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
             .fields(BeanImplConstrained.getPopulatedBean());
@@ -335,7 +335,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanNullValuesH2() {
+    void testFieldsBeanNullValuesH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
             .fields(BeanImpl.getNullBean());
@@ -344,7 +344,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanIncludedH2() {
+    void testFieldsBeanIncludedH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
             .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -353,7 +353,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanExcludedH2() {
+    void testFieldsBeanExcludedH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
             .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -362,7 +362,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanFilteredH2() {
+    void testFieldsBeanFilteredH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
             .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -371,7 +371,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testMultipleRowsH2() {
+    void testMultipleRowsH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
             .field("propertyChar", 'M')
@@ -391,7 +391,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanH2() {
+    void testFieldsParametersBeanH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
             .fieldsParameters(BeanImpl.class);
@@ -461,7 +461,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanConstrainedH2() {
+    void testFieldsParametersBeanConstrainedH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
             .fieldsParameters(BeanImplConstrained.class);
@@ -523,7 +523,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanExcludedH2() {
+    void testFieldsParametersBeanExcludedH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
@@ -578,7 +578,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testInsertSubselectParamsH2() {
+    void testInsertSubselectParamsH2() {
         Select fieldquery = new Select(H2);
         fieldquery
             .from("table2")
@@ -628,7 +628,7 @@ public class TestInsertH2 extends TestInsert {
     }
 
     @Test
-    public void testCloneH2() {
+    void testCloneH2() {
         Select fieldquery = new Select(H2);
         fieldquery
             .from("table2")

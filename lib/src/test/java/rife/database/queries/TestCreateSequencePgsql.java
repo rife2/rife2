@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateSequencePgsql extends TestCreateSequence {
     @Test
-    public void testInstantiationPgsql() {
+    void testInstantiationPgsql() {
         CreateSequence query = new CreateSequence(PGSQL);
         assertNotNull(query);
         try {
@@ -23,7 +23,7 @@ public class TestCreateSequencePgsql extends TestCreateSequence {
     }
 
     @Test
-    public void testClearPgsql() {
+    void testClearPgsql() {
         CreateSequence query = new CreateSequence(PGSQL);
         query.name("sequencename");
         assertNotNull(query.getSql());
@@ -37,7 +37,7 @@ public class TestCreateSequencePgsql extends TestCreateSequence {
     }
 
     @Test
-    public void testCreatePgsql() {
+    void testCreatePgsql() {
         CreateSequence query = new CreateSequence(PGSQL);
         query.name("sequencename");
         assertEquals(query.getSql(), "CREATE SEQUENCE sequencename");
@@ -45,7 +45,7 @@ public class TestCreateSequencePgsql extends TestCreateSequence {
     }
 
     @Test
-    public void testClonePgsql() {
+    void testClonePgsql() {
         CreateSequence query = new CreateSequence(PGSQL);
         query.name("sequencename");
         CreateSequence query_clone = query.clone();

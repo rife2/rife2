@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPropertyValidationRule {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         Rule rule = new Rule("property");
         assertNotNull(rule);
         assertEquals("property", rule.getPropertyName());
@@ -19,7 +19,7 @@ public class TestPropertyValidationRule {
     }
 
     @Test
-    public void testPropertyName() {
+    void testPropertyName() {
         Rule rule = new Rule("property");
         assertSame(rule, rule.setPropertyName("property2"));
         assertEquals("property2", rule.getPropertyName());
@@ -27,14 +27,14 @@ public class TestPropertyValidationRule {
     }
 
     @Test
-    public void testBean() {
+    void testBean() {
         Rule rule = new Rule("property");
         assertSame(rule, rule.setBean(this));
         assertSame(this, rule.getBean());
     }
 
     @Test
-    public void testSubjectName() {
+    void testSubjectName() {
         Rule rule = new Rule("property");
         assertSame(rule, rule.setSubject("property2"));
         assertEquals("property", rule.getPropertyName());

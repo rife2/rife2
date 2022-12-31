@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInsertMysql extends TestInsert {
     @Test
-    public void testInstantiationMysql() {
+    void testInstantiationMysql() {
         Insert query = new Insert(MYSQL);
         assertNotNull(query);
         try {
@@ -34,7 +34,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testIncompleteQueryMysql() {
+    void testIncompleteQueryMysql() {
         Insert query = new Insert(MYSQL);
         try {
             query.getSql();
@@ -54,7 +54,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testClearMysql() {
+    void testClearMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
             .field("col1", "val1");
@@ -69,7 +69,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testParameterMysql() {
+    void testParameterMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldParameter("col1");
@@ -77,7 +77,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testHintMysql() {
+    void testHintMysql() {
         Insert query = new Insert(MYSQL);
         query
             .hint("DELAYED")
@@ -88,7 +88,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldMysql() {
+    void testFieldMysql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         Insert query = new Insert(MYSQL);
@@ -115,7 +115,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldCustomMysql() {
+    void testFieldCustomMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldCustom("propertySqlDate", "now()");
@@ -124,7 +124,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldsMysql() {
+    void testFieldsMysql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         Insert query = new Insert(MYSQL);
@@ -153,7 +153,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldParametersMysql() {
+    void testFieldParametersMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename");
 
@@ -244,7 +244,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldParametersMixedMysql() {
+    void testFieldParametersMixedMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename");
 
@@ -310,7 +310,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanMysql() {
+    void testFieldsBeanMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fields(BeanImpl.getPopulatedBean());
@@ -319,7 +319,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanConstrainedMysql() {
+    void testFieldsBeanConstrainedMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fields(BeanImplConstrained.getPopulatedBean());
@@ -328,7 +328,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanNullValuesMysql() {
+    void testFieldsBeanNullValuesMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fields(BeanImpl.getNullBean());
@@ -337,7 +337,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanIncludedMysql() {
+    void testFieldsBeanIncludedMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -346,7 +346,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanExcludedMysql() {
+    void testFieldsBeanExcludedMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -355,7 +355,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanFilteredMysql() {
+    void testFieldsBeanFilteredMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -364,7 +364,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testMultipleRowsMysql() {
+    void testMultipleRowsMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
             .field("propertyChar", 'M')
@@ -380,7 +380,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanMysql() {
+    void testFieldsParametersBeanMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsParameters(BeanImpl.class);
@@ -450,7 +450,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanConstrainedMysql() {
+    void testFieldsParametersBeanConstrainedMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsParameters(BeanImplConstrained.class);
@@ -512,7 +512,7 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanExcludedMysql() {
+    void testFieldsParametersBeanExcludedMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
@@ -567,12 +567,12 @@ public class TestInsertMysql extends TestInsert {
     }
 
     @Test
-    public void testInsertSubselectParamsMysql() {
+    void testInsertSubselectParamsMysql() {
         // mysql doesn't support subqueries
     }
 
     @Test
-    public void testCloneMysql() {
+    void testCloneMysql() {
         final Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);

@@ -8,9 +8,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 
+import java.util.*;
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 public class TestDatasources implements ArgumentsProvider {
     public static Datasource PGSQL = new Datasource("org.postgresql.Driver", "jdbc:postgresql://localhost:5432/unittests", "unittests", "password", 5);
@@ -20,20 +19,24 @@ public class TestDatasources implements ArgumentsProvider {
     // colima start --arch x86_64 --memory 4
     // see blog post about this: https://blog.jdriven.com/2022/07/running-oracle-xe-on-apple-silicon/
     public static Datasource ORACLE = new Datasource("oracle.jdbc.OracleDriver", "jdbc:oracle:thin:@localhost:1521/XEPDB1", "unittests", "password", 5);
+    public static Datasource MYSQL = new Datasource("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/unittests", "unittests", "password", 5);
     public static Datasource HSQLDB = new Datasource("org.hsqldb.jdbcDriver", "jdbc:hsqldb:.", "sa", "", 5);
     public static Datasource H2 = new Datasource("org.h2.Driver", "jdbc:h2:./embedded_dbs/h2/unittests", "sa", "", 5);
-    public static Datasource MYSQL = new Datasource("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/unittests", "unittests", "password", 5);
     public static Datasource DERBY = new Datasource("org.apache.derby.jdbc.EmbeddedDriver", "jdbc:derby:./embedded_dbs/derby;create=true", "", "", 5);
+
+    public static Map<TestDatasourceIdentifier, Datasource> ACTIVE_DATASOURCES;
+    static {
+        ACTIVE_DATASOURCES = new HashMap<>();
+        ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.PGSQL, TestDatasources.PGSQL);
+        ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.ORACLE, TestDatasources.ORACLE);
+        ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.MYSQL, TestDatasources.MYSQL);
+        ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.DERBY, TestDatasources.DERBY);
+        ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.HSQLDB, TestDatasources.HSQLDB);
+        ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.H2, TestDatasources.H2);
+    }
 
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
-        return Stream.of(
-            arguments(TestDatasources.PGSQL),
-            arguments(TestDatasources.ORACLE),
-            arguments(TestDatasources.DERBY),
-            arguments(TestDatasources.MYSQL),
-            arguments(TestDatasources.HSQLDB),
-            arguments(TestDatasources.H2)
-        );
+        return ACTIVE_DATASOURCES.values().stream().map(Arguments::arguments).toList().stream();
     }
 }

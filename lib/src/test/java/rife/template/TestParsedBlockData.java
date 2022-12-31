@@ -11,14 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class TestParsedBlockData {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         ParsedBlockData block_data = new ParsedBlockData();
 
         assertEquals(block_data.countParts(), 0);
     }
 
     @Test
-    public void testParts() {
+    void testParts() {
         ParsedBlockData block_data = new ParsedBlockData();
         ParsedBlockPart block_part1 = new ParsedBlockText("text");
         ParsedBlockPart block_part2 = new ParsedBlockText("text");

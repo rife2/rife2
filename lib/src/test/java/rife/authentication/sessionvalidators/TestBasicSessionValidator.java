@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestBasicSessionValidator {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         AbstractSessionValidator validator = null;
 
         validator = new BasicSessionValidator();
@@ -27,14 +27,14 @@ public class TestBasicSessionValidator {
     }
 
     @Test
-    public void testValidSessionId() {
+    void testValidSessionId() {
         BasicSessionValidator validator = new BasicSessionValidator();
 
         assertTrue(validator.isAccessAuthorized(1));
     }
 
     @Test
-    public void testSessionValidity() {
+    void testSessionValidity() {
         BasicSessionValidator validator = new BasicSessionValidator();
         MemorySessions sessions = new MemorySessions();
         sessions.setSessionDuration(120000);
@@ -63,7 +63,7 @@ public class TestBasicSessionValidator {
     }
 
     @Test
-    public void testSessionValidityRole() {
+    void testSessionValidityRole() {
         BasicSessionValidator validator = new BasicSessionValidator();
         MemoryUsers users = new MemoryUsers();
         MemorySessions sessions = new MemorySessions();

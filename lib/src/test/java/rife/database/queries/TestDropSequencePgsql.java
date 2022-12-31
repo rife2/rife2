@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropSequencePgsql extends TestDropSequence {
     @Test
-    public void testInstantiationPgsql() {
+    void testInstantiationPgsql() {
         DropSequence query = new DropSequence(PGSQL);
         assertNotNull(query);
         try {
@@ -23,7 +23,7 @@ public class TestDropSequencePgsql extends TestDropSequence {
     }
 
     @Test
-    public void testClearPgsql() {
+    void testClearPgsql() {
         DropSequence query = new DropSequence(PGSQL);
         query.name("sequencename");
         assertNotNull(query.getSql());
@@ -37,7 +37,7 @@ public class TestDropSequencePgsql extends TestDropSequence {
     }
 
     @Test
-    public void testCreatePgsql() {
+    void testCreatePgsql() {
         DropSequence query = new DropSequence(PGSQL);
         query.name("sequencename");
         assertEquals(query.getSql(), "DROP SEQUENCE sequencename");
@@ -45,7 +45,7 @@ public class TestDropSequencePgsql extends TestDropSequence {
     }
 
     @Test
-    public void testClonePgsql() {
+    void testClonePgsql() {
         DropSequence query = new DropSequence(PGSQL);
         query.name("sequencename");
         DropSequence query_clone = query.clone();

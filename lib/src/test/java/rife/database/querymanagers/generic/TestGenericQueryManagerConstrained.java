@@ -35,7 +35,7 @@ public class TestGenericQueryManagerConstrained {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetBaseClass(Datasource datasource) {
+    void testGetBaseClass(Datasource datasource) {
         setup(datasource);
         try {
             assertSame(LinkBean.class, linkManager_.getBaseClass());
@@ -47,7 +47,7 @@ public class TestGenericQueryManagerConstrained {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallCustomQuery(Datasource datasource) {
+    void testInstallCustomQuery(Datasource datasource) {
         setup(datasource);
         try {
             constrainedManager_.remove();
@@ -62,7 +62,7 @@ public class TestGenericQueryManagerConstrained {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveRestoreConstrained(Datasource datasource) {
+    void testSaveRestoreConstrained(Datasource datasource) {
         setup(datasource);
         try {
             var bean = new ConstrainedBean();
@@ -104,7 +104,7 @@ public class TestGenericQueryManagerConstrained {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testValidationContextManyToOne(Datasource datasource) {
+    void testValidationContextManyToOne(Datasource datasource) {
         setup(datasource);
         try {
             var link_bean1 = new LinkBean();

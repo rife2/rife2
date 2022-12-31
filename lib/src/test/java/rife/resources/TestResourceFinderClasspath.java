@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestResourceFinderClasspath {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         var resource_finder1 = ResourceFinderClasspath.instance();
         var resource_finder2 = ResourceFinderClasspath.instance();
         assertNotNull(resource_finder1);
@@ -29,19 +29,19 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetUnknownResource() {
+    void testGetUnknownResource() {
         var resource_finder = ResourceFinderClasspath.instance();
         assertNull(resource_finder.getResource("this/resource/doesnt/exist.txt"));
     }
 
     @Test
-    public void testGetResourceByName() {
+    void testGetResourceByName() {
         var resource_finder = ResourceFinderClasspath.instance();
         assertNotNull(resource_finder.getResource("resources/test.txt"));
     }
 
     @Test
-    public void testGetUnknownStreamByName() {
+    void testGetUnknownStreamByName() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         try {
@@ -59,7 +59,7 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetUnknownStreamByResource() {
+    void testGetUnknownStreamByResource() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         try {
@@ -77,7 +77,7 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetStreamByName() {
+    void testGetStreamByName() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         try {
@@ -109,7 +109,7 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetStreamByResource() {
+    void testGetStreamByResource() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         var resource = resource_finder.getResource("resources/test.txt");
@@ -142,7 +142,7 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetUnknownContentByName() {
+    void testGetUnknownContentByName() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         try {
@@ -154,7 +154,7 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetUnknownContentByResource() {
+    void testGetUnknownContentByResource() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         try {
@@ -166,7 +166,7 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetContentByName() {
+    void testGetContentByName() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         try {
@@ -189,7 +189,7 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetContentByResource() {
+    void testGetContentByResource() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         var resource = resource_finder.getResource("resources/test.txt");
@@ -213,7 +213,7 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetContentByNameAndEncoding() {
+    void testGetContentByNameAndEncoding() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         try {
@@ -237,7 +237,7 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetContentByResourceAndEncoding() {
+    void testGetContentByResourceAndEncoding() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         var resource = resource_finder.getResource("resources/test-utf8.txt");
@@ -262,7 +262,7 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetUnknownModificationTimeByName() {
+    void testGetUnknownModificationTimeByName() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         try {
@@ -274,7 +274,7 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetUnknownModificationTimeByResource() {
+    void testGetUnknownModificationTimeByResource() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         try {
@@ -286,7 +286,7 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetModificationTimeByName() {
+    void testGetModificationTimeByName() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         try {
@@ -298,7 +298,7 @@ public class TestResourceFinderClasspath {
     }
 
     @Test
-    public void testGetModificationTimeByResource() {
+    void testGetModificationTimeByResource() {
         var resource_finder = ResourceFinderClasspath.instance();
 
         URL resource = resource_finder.getResource("resources/test.txt");

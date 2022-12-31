@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestXhtmlFormatter {
     @Test
-    public void testFormatBasic()
+    void testFormatBasic()
     throws Exception {
         var data = """
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -37,7 +37,7 @@ public class TestXhtmlFormatter {
     }
 
     @Test
-    public void testFormatInvalidDataType()
+    void testFormatInvalidDataType()
     throws Exception {
         var content = new Content(MimeType.APPLICATION_XHTML, new Object());
         var formatter = new XhtmlFormatter();
@@ -53,7 +53,7 @@ public class TestXhtmlFormatter {
     }
 
     @Test
-    public void testFormatCachedLoadedData()
+    void testFormatCachedLoadedData()
     throws Exception {
         var data = "<p>some text <i>here</i> and <b>there</b></p>";
         var content = new Content(MimeType.IMAGE_PNG, data);
@@ -69,7 +69,7 @@ public class TestXhtmlFormatter {
     }
 
     @Test
-    public void testFormatUnreadableData()
+    void testFormatUnreadableData()
     throws Exception {
         var content = new Content(MimeType.APPLICATION_XHTML, "<p>some text <i>here</b> and <b>there</i></blurp>");
         var formatter = new XhtmlFormatter();
@@ -83,7 +83,7 @@ public class TestXhtmlFormatter {
     }
 
     @Test
-    public void testFormatTransformer()
+    void testFormatTransformer()
     throws Exception {
         var data = "<p>some text <i>here</i> and <b>there</b></p>";
         var content = new Content(MimeType.APPLICATION_XHTML, data)

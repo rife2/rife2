@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValueHsqldb extends TestSequenceValue {
     @Test
-    public void testInstantiationHsqldb() {
+    void testInstantiationHsqldb() {
         SequenceValue query = new SequenceValue(HSQLDB);
         assertNotNull(query);
         try {
@@ -25,7 +25,7 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
     }
 
     @Test
-    public void testInvalidHsqldb() {
+    void testInvalidHsqldb() {
         SequenceValue query = new SequenceValue(HSQLDB);
         try {
             query.getSql();
@@ -52,7 +52,7 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
     }
 
     @Test
-    public void testClearHsqldb() {
+    void testClearHsqldb() {
         SequenceValue query = new SequenceValue(HSQLDB);
         query
             .name("sequencename")
@@ -69,7 +69,7 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
     }
 
     @Test
-    public void testNextHsqldb() {
+    void testNextHsqldb() {
         SequenceValue query = new SequenceValue(HSQLDB);
         query
             .name("sequencename")
@@ -79,7 +79,7 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
     }
 
     @Test
-    public void testCurrentHsqldb() {
+    void testCurrentHsqldb() {
         SequenceValue query = new SequenceValue(HSQLDB);
         query
             .name("sequencename")
@@ -93,7 +93,7 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
     }
 
     @Test
-    public void testCloneHsqldb() {
+    void testCloneHsqldb() {
         SequenceValue query = new SequenceValue(HSQLDB);
         query
             .name("sequencename")

@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSelectDerby extends TestSelect {
     @Test
-    public void testInstantiationDerby() {
+    void testInstantiationDerby() {
         Select query = new Select(DERBY);
         assertNotNull(query);
         try {
@@ -33,7 +33,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testIncompleteQueryDerby() {
+    void testIncompleteQueryDerby() {
         Select query = new Select(DERBY);
         try {
             query.getSql();
@@ -56,7 +56,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testClearDerby() {
+    void testClearDerby() {
         Select query = new Select(DERBY);
         query.from("tablename");
         assertNotNull(query.getSql());
@@ -70,7 +70,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testBasicDerby() {
+    void testBasicDerby() {
         Select query = new Select(DERBY);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename");
@@ -78,7 +78,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testHintDerby() {
+    void testHintDerby() {
         Select query = new Select(DERBY);
         query
             .hint("NO_INDEX")
@@ -92,7 +92,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testOrderByAscendingDerby() {
+    void testOrderByAscendingDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .orderBy("propertyInt", Select.ASC);
@@ -101,7 +101,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testOrderByDescendingDerby() {
+    void testOrderByDescendingDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .orderBy("propertyInt", Select.DESC);
@@ -110,7 +110,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testBeanDerby() {
+    void testBeanDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .fields(BeanImpl.class);
@@ -119,7 +119,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testBeanConstrainedDerby() {
+    void testBeanConstrainedDerby() {
         Select query = new Select(DERBY, BeanImplConstrained.class);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyString ASC, propertyInt DESC");
@@ -133,7 +133,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testBeanExcludedDerby() {
+    void testBeanExcludedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
@@ -142,7 +142,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testBeanTableDerby() {
+    void testBeanTableDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .fields("tablename", BeanImpl.class);
@@ -151,7 +151,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testBeanExcludedTableDerby() {
+    void testBeanExcludedTableDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .fieldsExcluded("tablename", BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
@@ -160,7 +160,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereTypedDerby() {
+    void testWhereTypedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename");
 
@@ -191,7 +191,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereTypedMixedDerby() {
+    void testWhereTypedMixedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename");
 
@@ -228,7 +228,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersDerby() {
+    void testWhereParametersDerby() {
         Select query = new Select(DERBY);
         query.from("tablename");
 
@@ -261,7 +261,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersMixedDerby() {
+    void testWhereParametersMixedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -283,7 +283,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereConstructionDerby() {
+    void testWhereConstructionDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -294,7 +294,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereConstructionGroupDerby() {
+    void testWhereConstructionGroupDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .startWhere()
@@ -328,7 +328,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanDerby() {
+    void testWhereBeanDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
@@ -337,7 +337,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanConstrainedDerby() {
+    void testWhereBeanConstrainedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .where(BeanImplConstrained.getPopulatedBean());
@@ -346,7 +346,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanNullValuesDerby() {
+    void testWhereBeanNullValuesDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
@@ -355,7 +355,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanIncludedDerby() {
+    void testWhereBeanIncludedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -364,7 +364,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanExcludedDerby() {
+    void testWhereBeanExcludedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -373,7 +373,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanFilteredDerby() {
+    void testWhereBeanFilteredDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -382,7 +382,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanDerby() {
+    void testWhereParametersBeanDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
@@ -452,7 +452,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanConstrainedDerby() {
+    void testWhereParametersBeanConstrainedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .whereParameters(BeanImplConstrained.class);
@@ -518,7 +518,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanExcludedDerby() {
+    void testWhereParametersBeanExcludedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .whereParametersExcluded(BeanImpl.class,
@@ -572,7 +572,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testDistinctDerby() {
+    void testDistinctDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .distinct()
@@ -585,7 +585,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testDistinctOnDerby() {
+    void testDistinctOnDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .distinctOn("propertyDouble")
@@ -604,7 +604,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testComplexDerby() {
+    void testComplexDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .field("field1")
@@ -626,7 +626,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testGroupByBeanDerby() {
+    void testGroupByBeanDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .fields(BeanImpl.class)
@@ -636,7 +636,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testGroupByBeanExcludedDerby() {
+    void testGroupByBeanExcludedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort")
@@ -646,7 +646,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testJoinDerby() {
+    void testJoinDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .join("table2")
@@ -656,7 +656,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testJoinCustomDerby() {
+    void testJoinCustomDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .joinCustom("INNER JOIN table3 ON (tablename.propertyInt = table3.propertyInt)")
@@ -666,7 +666,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testJoinCrossDerby() {
+    void testJoinCrossDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .joinCross("table2")
@@ -680,7 +680,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testJoinInnerDerby() {
+    void testJoinInnerDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .joinInner("table2", Select.NATURAL, null);
@@ -707,7 +707,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testJoinOuterDerby() {
+    void testJoinOuterDerby() {
         Select query = new Select(DERBY);
 
         query.from("tablename")
@@ -789,7 +789,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testLimitDerby() {
+    void testLimitDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .limit(3);
@@ -814,7 +814,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testLimitParameterDerby() {
+    void testLimitParameterDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
             .limitParameter("limit");
@@ -841,7 +841,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testSubselectParamsDerby() {
+    void testSubselectParamsDerby() {
         Select fieldquery = new Select(DERBY);
         fieldquery
             .from("table2")
@@ -953,7 +953,7 @@ public class TestSelectDerby extends TestSelect {
     }
 
     @Test
-    public void testCloneDerby() {
+    void testCloneDerby() {
         Select fieldquery = new Select(DERBY);
         fieldquery
             .from("table2")

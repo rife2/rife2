@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestStepBack {
     @Test
-    public void testStepBackInWhile()
+    void testStepBackInWhile()
     throws Throwable {
         final var test_classes = new String[]{"TestStepBackCounter", "TestStepBackCounterInterface"};
         for (final var test_class : test_classes) {

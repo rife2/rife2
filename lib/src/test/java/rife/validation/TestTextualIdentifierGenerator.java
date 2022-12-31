@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestTextualIdentifierGenerator {
     @Test
-    public void testGenerate() {
+    void testGenerate() {
         TextualIdentifierGenerator<InitializedBeanImpl> identifier = new AbstractTextualIdentifierGenerator<>() {
             public String generateIdentifier() {
                 return bean_.getString() + ":" + bean_.getChar();

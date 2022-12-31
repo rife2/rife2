@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValueOracle extends TestSequenceValue {
     @Test
-    public void testInstantiationOracle() {
+    void testInstantiationOracle() {
         SequenceValue query = new SequenceValue(ORACLE);
         assertNotNull(query);
         try {
@@ -24,7 +24,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
     }
 
     @Test
-    public void testInvalidOracle() {
+    void testInvalidOracle() {
         SequenceValue query = new SequenceValue(ORACLE);
         try {
             query.getSql();
@@ -51,7 +51,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
     }
 
     @Test
-    public void testClearOracle() {
+    void testClearOracle() {
         SequenceValue query = new SequenceValue(ORACLE);
         query
             .name("sequencename")
@@ -68,7 +68,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
     }
 
     @Test
-    public void testNextOracle() {
+    void testNextOracle() {
         SequenceValue query = new SequenceValue(ORACLE);
         query
             .name("sequencename")
@@ -78,7 +78,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
     }
 
     @Test
-    public void testCurrentOracle() {
+    void testCurrentOracle() {
         SequenceValue query = new SequenceValue(ORACLE);
         query
             .name("sequencename")
@@ -88,7 +88,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
     }
 
     @Test
-    public void testCloneOracle() {
+    void testCloneOracle() {
         SequenceValue query = new SequenceValue(ORACLE);
         query
             .name("sequencename")

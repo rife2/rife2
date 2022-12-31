@@ -22,13 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMemoryTaskOptions {
     @Test
-    public void testInstantiateTaskOptionManager() {
+    void testInstantiateTaskOptionManager() {
         TaskOptionManager manager = new MemoryTaskOptions();
         assertNotNull(manager);
     }
 
     @Test
-    public void testAddTaskOptionWithInexistentTaskId() {
+    void testAddTaskOptionWithInexistentTaskId() {
         TaskOption taskoption = new TaskOption();
         taskoption.setTaskId(0);
         taskoption.setName("name");
@@ -47,7 +47,7 @@ public class TestMemoryTaskOptions {
     }
 
     @Test
-    public void testAddTaskOption() {
+    void testAddTaskOption() {
         Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
         TaskManager task_manager = scheduler.getTaskManager();
         TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
@@ -78,7 +78,7 @@ public class TestMemoryTaskOptions {
     }
 
     @Test
-    public void testAddDuplicateTaskOption() {
+    void testAddDuplicateTaskOption() {
         Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
         TaskManager task_manager = scheduler.getTaskManager();
         TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
@@ -123,7 +123,7 @@ public class TestMemoryTaskOptions {
     }
 
     @Test
-    public void testGetTaskOption() {
+    void testGetTaskOption() {
         Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
         TaskManager task_manager = scheduler.getTaskManager();
         TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
@@ -164,7 +164,7 @@ public class TestMemoryTaskOptions {
     }
 
     @Test
-    public void testUpdateTaskOption() {
+    void testUpdateTaskOption() {
         Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
         TaskManager task_manager = scheduler.getTaskManager();
         TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
@@ -211,7 +211,7 @@ public class TestMemoryTaskOptions {
     }
 
     @Test
-    public void testGetTaskOptions() {
+    void testGetTaskOptions() {
         Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
         TaskManager task_manager = scheduler.getTaskManager();
         TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
@@ -278,7 +278,7 @@ public class TestMemoryTaskOptions {
     }
 
     @Test
-    public void testRemoveTaskOption() {
+    void testRemoveTaskOption() {
         Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
         TaskManager task_manager = scheduler.getTaskManager();
         TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
@@ -311,7 +311,7 @@ public class TestMemoryTaskOptions {
     }
 
     @Test
-    public void testGetNonExistingTaskOption() {
+    void testGetNonExistingTaskOption() {
         Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
         TaskManager task_manager = scheduler.getTaskManager();
         TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
@@ -336,7 +336,7 @@ public class TestMemoryTaskOptions {
     }
 
     @Test
-    public void testRemoveNonExistingTaskOption() {
+    void testRemoveNonExistingTaskOption() {
         Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
         TaskManager task_manager = scheduler.getTaskManager();
         TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();

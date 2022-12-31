@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSelectHsqldb extends TestSelect {
     @Test
-    public void testInstantiationHsqldb() {
+    void testInstantiationHsqldb() {
         Select query = new Select(HSQLDB);
         assertNotNull(query);
         try {
@@ -33,7 +33,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testIncompleteQueryHsqldb() {
+    void testIncompleteQueryHsqldb() {
         Select query = new Select(HSQLDB);
         try {
             query.getSql();
@@ -56,7 +56,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testClearHsqldb() {
+    void testClearHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename");
         assertNotNull(query.getSql());
@@ -70,7 +70,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testBasicHsqldb() {
+    void testBasicHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename");
@@ -78,7 +78,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testHintHsqldb() {
+    void testHintHsqldb() {
         Select query = new Select(HSQLDB);
         query
             .hint("NO_INDEX")
@@ -92,7 +92,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testOrderByAscendingHsqldb() {
+    void testOrderByAscendingHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .orderBy("propertyInt", Select.ASC);
@@ -101,7 +101,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testOrderByDescendingHsqldb() {
+    void testOrderByDescendingHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .orderBy("propertyInt", Select.DESC);
@@ -110,7 +110,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testBeanHsqldb() {
+    void testBeanHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .fields(BeanImpl.class);
@@ -119,7 +119,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testBeanConstrainedHsqldb() {
+    void testBeanConstrainedHsqldb() {
         Select query = new Select(HSQLDB, BeanImplConstrained.class);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyString ASC, propertyInt DESC");
@@ -133,7 +133,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testBeanExcludedHsqldb() {
+    void testBeanExcludedHsqldb() {
         Select query = new Select(HSQLDB, BeanImplConstrained.class);
         query.from("tablename")
             .fields(BeanImplConstrained.class);
@@ -149,7 +149,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testBeanTableHsqldb() {
+    void testBeanTableHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .fields("tablename", BeanImpl.class);
@@ -158,7 +158,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testBeanExcludedTableHsqldb() {
+    void testBeanExcludedTableHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .fieldsExcluded("tablename", BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
@@ -167,7 +167,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereTypedHsqldb() {
+    void testWhereTypedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename");
 
@@ -198,7 +198,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereTypedMixedHsqldb() {
+    void testWhereTypedMixedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename");
 
@@ -234,7 +234,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersHsqldb() {
+    void testWhereParametersHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename");
 
@@ -267,7 +267,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersMixedHsqldb() {
+    void testWhereParametersMixedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -289,7 +289,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereConstructionHsqldb() {
+    void testWhereConstructionHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -300,7 +300,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereConstructionGroupHsqldb() {
+    void testWhereConstructionGroupHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .startWhere()
@@ -334,7 +334,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanHsqldb() {
+    void testWhereBeanHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
@@ -343,7 +343,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanConstrainedHsqldb() {
+    void testWhereBeanConstrainedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .where(BeanImplConstrained.getPopulatedBean());
@@ -352,7 +352,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanNullValuesHsqldb() {
+    void testWhereBeanNullValuesHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
@@ -361,7 +361,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanIncludedHsqldb() {
+    void testWhereBeanIncludedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -370,7 +370,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanExcludedHsqldb() {
+    void testWhereBeanExcludedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -379,7 +379,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanFilteredHsqldb() {
+    void testWhereBeanFilteredHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -388,7 +388,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanHsqldb() {
+    void testWhereParametersBeanHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
@@ -460,7 +460,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanConstrainedHsqldb() {
+    void testWhereParametersBeanConstrainedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .whereParameters(BeanImplConstrained.class);
@@ -526,7 +526,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanExcludedHsqldb() {
+    void testWhereParametersBeanExcludedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .whereParametersExcluded(BeanImpl.class,
@@ -575,7 +575,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testDistinctHsqldb() {
+    void testDistinctHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .distinct()
@@ -588,7 +588,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testDistinctOnHsqldb() {
+    void testDistinctOnHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .distinctOn("propertyDouble")
@@ -607,7 +607,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testComplexHsqldb() {
+    void testComplexHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .field("field1")
@@ -634,7 +634,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testGroupByBeanHsqldb() {
+    void testGroupByBeanHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .fields(BeanImpl.class)
@@ -644,7 +644,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testGroupByBeanExcludedHsqldb() {
+    void testGroupByBeanExcludedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort")
@@ -654,7 +654,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testJoinHsqldb() {
+    void testJoinHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .join("table2")
@@ -664,7 +664,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testJoinCustomHsqldb() {
+    void testJoinCustomHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .joinCustom("INNER JOIN table3 ON (tablename.propertyInt = table3.propertyInt)")
@@ -674,7 +674,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testJoinCrossHsqldb() {
+    void testJoinCrossHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .joinCross("table2")
@@ -688,7 +688,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testJoinInnerHsqldb() {
+    void testJoinInnerHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .joinInner("table2", Select.NATURAL, null);
@@ -715,7 +715,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testJoinOuterHsqldb() {
+    void testJoinOuterHsqldb() {
         Select query = new Select(HSQLDB);
 
         query.from("tablename")
@@ -799,7 +799,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testLimitHsqldb() {
+    void testLimitHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .limit(3);
@@ -816,7 +816,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testLimitParameterHsqldb() {
+    void testLimitParameterHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
             .limitParameter("limit");
@@ -845,7 +845,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testSubselectParamsHsqldb() {
+    void testSubselectParamsHsqldb() {
         Select fieldquery = new Select(HSQLDB);
         fieldquery
             .from("table2")
@@ -958,7 +958,7 @@ public class TestSelectHsqldb extends TestSelect {
     }
 
     @Test
-    public void testCloneHsqldb() {
+    void testCloneHsqldb() {
         Select fieldquery = new Select(HSQLDB);
         fieldquery
             .from("table2")

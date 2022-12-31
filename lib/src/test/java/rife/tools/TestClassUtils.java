@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestClassUtils {
     @Test
-    public void testIsNumeric() {
+    void testIsNumeric() {
         assertTrue(ClassUtils.isNumeric(Byte.class));
         assertTrue(ClassUtils.isNumeric(Short.class));
         assertTrue(ClassUtils.isNumeric(Integer.class));
@@ -38,7 +38,7 @@ public class TestClassUtils {
     }
 
     @Test
-    public void testIsText() {
+    void testIsText() {
         assertFalse(ClassUtils.isText(Byte.class));
         assertFalse(ClassUtils.isText(Short.class));
         assertFalse(ClassUtils.isText(Integer.class));

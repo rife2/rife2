@@ -16,14 +16,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestPurgingDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiation(Datasource datasource) {
+    void testInstantiation(Datasource datasource) {
         DatabaseRemember manager = DatabaseRememberFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStartSession(Datasource datasource) {
+    void testStartSession(Datasource datasource) {
         PurgingRememberManager remember = new PurgingRememberManager(DatabaseRememberFactory.instance(datasource));
         remember.setRememberPurgeFrequency(0);
 
@@ -52,7 +52,7 @@ public class TestPurgingDatabaseRemember {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testPurgeRemember(Datasource datasource) {
+    void testPurgeRemember(Datasource datasource) {
         PurgingRememberManager remember = new PurgingRememberManager(DatabaseRememberFactory.instance(datasource));
         remember.setRememberDuration(2000);
         remember.setRememberPurgeFrequency(1);

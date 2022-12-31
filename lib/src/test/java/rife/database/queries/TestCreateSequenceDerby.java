@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateSequenceDerby extends TestCreateSequence {
     @Test
-    public void testInstantiationDerby() {
+    void testInstantiationDerby() {
         CreateSequence query = new CreateSequence(DERBY);
         assertNotNull(query);
         try {
@@ -24,7 +24,7 @@ public class TestCreateSequenceDerby extends TestCreateSequence {
     }
 
     @Test
-    public void testClearDerby() {
+    void testClearDerby() {
         CreateSequence query = new CreateSequence(DERBY);
         query.name("sequencename");
         try {
@@ -36,7 +36,7 @@ public class TestCreateSequenceDerby extends TestCreateSequence {
     }
 
     @Test
-    public void testCreateDerby() {
+    void testCreateDerby() {
         CreateSequence query = new CreateSequence(DERBY);
         query.name("sequencename");
         try {
@@ -48,7 +48,7 @@ public class TestCreateSequenceDerby extends TestCreateSequence {
     }
 
     @Test
-    public void testCloneDerby() {
+    void testCloneDerby() {
         // sequences are not supported with mysql
     }
 }

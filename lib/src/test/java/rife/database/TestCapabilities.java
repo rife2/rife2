@@ -89,7 +89,7 @@ public class TestCapabilities {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testLimitOffset(Datasource datasource) {
+    void testLimitOffset(Datasource datasource) {
         setup(datasource);
         try {
             DbQueryManager manager = new DbQueryManager(datasource);
@@ -157,7 +157,7 @@ public class TestCapabilities {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testLimitOffsetParameters(Datasource datasource) {
+    void testLimitOffsetParameters(Datasource datasource) {
         setup(datasource);
 
         try {
@@ -237,7 +237,7 @@ public class TestCapabilities {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testLimitOffsetParametersMissing(Datasource datasource) {
+    void testLimitOffsetParametersMissing(Datasource datasource) {
         setup(datasource);
 
         try {

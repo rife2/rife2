@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDatabaseAuthenticated {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedBasic(Datasource datasource) {
+    void testDatabaseAuthenticatedBasic(Datasource datasource) {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             var conversation = new MockConversation(site);
 
@@ -86,7 +86,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedEncrypted(Datasource datasource) {
+    void testDatabaseAuthenticatedEncrypted(Datasource datasource) {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             var conversation = new MockConversation(site);
 
@@ -155,7 +155,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedRole(Datasource datasource) {
+    void testDatabaseAuthenticatedRole(Datasource datasource) {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             var conversation = new MockConversation(site);
 
@@ -238,7 +238,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedRoleEncrypted(Datasource datasource) {
+    void testDatabaseAuthenticatedRoleEncrypted(Datasource datasource) {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             var conversation = new MockConversation(site);
 
@@ -321,7 +321,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedRole2(Datasource datasource) {
+    void testDatabaseAuthenticatedRole2(Datasource datasource) {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             var conversation = new MockConversation(site);
 
@@ -409,7 +409,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedRole2Encrypted(Datasource datasource) {
+    void testDatabaseAuthenticatedRole2Encrypted(Datasource datasource) {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             var conversation = new MockConversation(site);
 
@@ -497,7 +497,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedRoleIsolation(Datasource datasource) {
+    void testDatabaseAuthenticatedRoleIsolation(Datasource datasource) {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             var conversation = new MockConversation(site);
 
@@ -533,7 +533,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedRoleIsolation2(Datasource datasource) {
+    void testDatabaseAuthenticatedRoleIsolation2(Datasource datasource) {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             var conversation = new MockConversation(site);
 
@@ -573,7 +573,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedSessionDuration(Datasource datasource)
+    void testDatabaseAuthenticatedSessionDuration(Datasource datasource)
     throws Exception {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             site.validator.getSessionManager().setSessionDuration(1000);
@@ -610,7 +610,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedNotEnforce(Datasource datasource) {
+    void testDatabaseAuthenticatedNotEnforce(Datasource datasource) {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             var conversation = new MockConversation(site);
 
@@ -657,7 +657,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedLogoutTemplate(Datasource datasource) {
+    void testDatabaseAuthenticatedLogoutTemplate(Datasource datasource) {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             var conversation = new MockConversation(site);
 
@@ -693,7 +693,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedLogoutBefore(Datasource datasource) {
+    void testDatabaseAuthenticatedLogoutBefore(Datasource datasource) {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             var conversation = new MockConversation(site);
 
@@ -729,7 +729,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedRemember(Datasource datasource)
+    void testDatabaseAuthenticatedRemember(Datasource datasource)
     throws InterruptedException {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             site.validator.getSessionManager().setSessionDuration(1000);
@@ -780,7 +780,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedRememberProhibited(Datasource datasource)
+    void testDatabaseAuthenticatedRememberProhibited(Datasource datasource)
     throws InterruptedException {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             site.config.prohibitRemember(true);
@@ -819,7 +819,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedFilteredTagsNotEnforced(Datasource datasource) {
+    void testDatabaseAuthenticatedFilteredTagsNotEnforced(Datasource datasource) {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             var conversation = new MockConversation(site);
 
@@ -836,7 +836,7 @@ public class TestDatabaseAuthenticated {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDatabaseAuthenticatedFilteredTags(Datasource datasource) {
+    void testDatabaseAuthenticatedFilteredTags(Datasource datasource) {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
             var conversation = new MockConversation(site);
 

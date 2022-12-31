@@ -16,14 +16,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDatabaseSchedulerInstallation {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiateSchedulerManager(Datasource datasource) {
+    void testInstantiateSchedulerManager(Datasource datasource) {
         DatabaseScheduler manager = DatabaseSchedulerFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstall(Datasource datasource) {
+    void testInstall(Datasource datasource) {
         DatabaseScheduler manager = DatabaseSchedulerFactory.instance(datasource);
 
         try {
@@ -35,7 +35,7 @@ public class TestDatabaseSchedulerInstallation {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemove(Datasource datasource) {
+    void testRemove(Datasource datasource) {
         DatabaseScheduler manager = DatabaseSchedulerFactory.instance(datasource);
 
         try {

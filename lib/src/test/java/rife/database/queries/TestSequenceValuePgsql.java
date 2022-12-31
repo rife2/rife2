@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValuePgsql extends TestSequenceValue {
     @Test
-    public void testInstantiationPgsql() {
+    void testInstantiationPgsql() {
         SequenceValue query = new SequenceValue(PGSQL);
         assertNotNull(query);
         try {
@@ -24,7 +24,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
     }
 
     @Test
-    public void testInvalidPgsql() {
+    void testInvalidPgsql() {
         SequenceValue query = new SequenceValue(PGSQL);
         try {
             query.getSql();
@@ -51,7 +51,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
     }
 
     @Test
-    public void testClearPgsql() {
+    void testClearPgsql() {
         SequenceValue query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
@@ -68,7 +68,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
     }
 
     @Test
-    public void testNextPgsql() {
+    void testNextPgsql() {
         SequenceValue query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
@@ -78,7 +78,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
     }
 
     @Test
-    public void testCurrentPgsql() {
+    void testCurrentPgsql() {
         SequenceValue query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
@@ -88,7 +88,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
     }
 
     @Test
-    public void testClonePgsql() {
+    void testClonePgsql() {
         SequenceValue query = new SequenceValue(PGSQL);
         query
             .name("sequencename")

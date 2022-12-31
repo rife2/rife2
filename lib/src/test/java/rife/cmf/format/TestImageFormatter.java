@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestImageFormatter {
     @Test
-    public void testFormatBasic()
+    void testFormatBasic()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -47,7 +47,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatInvalidDataType()
+    void testFormatInvalidDataType()
     throws Exception {
         var content = new Content(MimeType.IMAGE_PNG, new Object());
         var formatter = new ImageFormatter();
@@ -63,7 +63,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatCachedLoadedData()
+    void testFormatCachedLoadedData()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -84,7 +84,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatUnreadableData()
+    void testFormatUnreadableData()
     throws Exception {
         var content = new Content(MimeType.IMAGE_PNG, new byte[]{34, 9, 12, 5, 92}); // random invalid bytes
         var formatter = new ImageFormatter();
@@ -99,7 +99,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatUnsupportedMimetype()
+    void testFormatUnsupportedMimetype()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -115,7 +115,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatAttributeWidth()
+    void testFormatAttributeWidth()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -135,7 +135,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatInvalidAttributeWidth()
+    void testFormatInvalidAttributeWidth()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -153,7 +153,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatAttributeLongestEdgeLengthHorizontal()
+    void testFormatAttributeLongestEdgeLengthHorizontal()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -173,7 +173,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatAttributeLongestEdgeLengthVertical()
+    void testFormatAttributeLongestEdgeLengthVertical()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn-rotated_90_cw.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -193,7 +193,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatInvalidAttributeLongestEdgeLength()
+    void testFormatInvalidAttributeLongestEdgeLength()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -211,7 +211,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatNegativeAttributeLongestEdgeLength()
+    void testFormatNegativeAttributeLongestEdgeLength()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -231,7 +231,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatAttributeHeight()
+    void testFormatAttributeHeight()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -251,7 +251,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatInvalidAttributeHeight()
+    void testFormatInvalidAttributeHeight()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -269,7 +269,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatAttributeWidthHeight()
+    void testFormatAttributeWidthHeight()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -290,7 +290,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatAttributeWidthHeight2()
+    void testFormatAttributeWidthHeight2()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -311,7 +311,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatNegativeAttributeWidthHeight()
+    void testFormatNegativeAttributeWidthHeight()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -332,7 +332,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatUnsupportedAttributes()
+    void testFormatUnsupportedAttributes()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);
@@ -352,7 +352,7 @@ public class TestImageFormatter {
     }
 
     @Test
-    public void testFormatTransformer()
+    void testFormatTransformer()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn_small.png");
         var data_image_gif = FileUtils.readBytes(image_resource_gif);

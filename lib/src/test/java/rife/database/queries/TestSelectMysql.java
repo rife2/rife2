@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSelectMysql extends TestSelect {
     @Test
-    public void testInstantiationMysql() {
+    void testInstantiationMysql() {
         Select query = new Select(MYSQL);
         assertNotNull(query);
         try {
@@ -33,7 +33,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testIncompleteQueryMysql() {
+    void testIncompleteQueryMysql() {
         Select query = new Select(MYSQL);
         try {
             query.getSql();
@@ -56,7 +56,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testClearMysql() {
+    void testClearMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename");
         assertNotNull(query.getSql());
@@ -70,7 +70,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testBasicMysql() {
+    void testBasicMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename");
@@ -78,7 +78,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testHintMysql() {
+    void testHintMysql() {
         Select query = new Select(MYSQL);
         query
             .hint("SQL_NO_CACHE")
@@ -88,7 +88,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testOrderByAscendingMysql() {
+    void testOrderByAscendingMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .orderBy("propertyInt", Select.ASC);
@@ -97,7 +97,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testOrderByDescendingMysql() {
+    void testOrderByDescendingMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .orderBy("propertyInt", Select.DESC);
@@ -106,7 +106,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testBeanMysql() {
+    void testBeanMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .fields(BeanImpl.class);
@@ -115,7 +115,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testBeanConstrainedMysql() {
+    void testBeanConstrainedMysql() {
         Select query = new Select(MYSQL, BeanImplConstrained.class);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyString ASC, propertyInt DESC");
@@ -129,7 +129,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testBeanExcludedMysql() {
+    void testBeanExcludedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
@@ -138,7 +138,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testBeanTableMysql() {
+    void testBeanTableMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .fields("tablename", BeanImpl.class);
@@ -147,7 +147,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testBeanExcludedTableMysql() {
+    void testBeanExcludedTableMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .fieldsExcluded("tablename", BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
@@ -156,7 +156,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testWhereTypedMysql() {
+    void testWhereTypedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename");
 
@@ -187,7 +187,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testWhereTypedMixedMysql() {
+    void testWhereTypedMixedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename");
 
@@ -224,7 +224,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersMysql() {
+    void testWhereParametersMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename");
 
@@ -257,7 +257,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersMixedMysql() {
+    void testWhereParametersMixedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -279,7 +279,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testWhereConstructionMysql() {
+    void testWhereConstructionMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -290,7 +290,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testWhereConstructionGroupMysql() {
+    void testWhereConstructionGroupMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .startWhere()
@@ -324,7 +324,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanMysql() {
+    void testWhereBeanMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
@@ -333,7 +333,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanConstrainedMysql() {
+    void testWhereBeanConstrainedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .where(BeanImplConstrained.getPopulatedBean());
@@ -342,7 +342,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanNullValuesMysql() {
+    void testWhereBeanNullValuesMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
@@ -351,7 +351,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanIncludedMysql() {
+    void testWhereBeanIncludedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -360,7 +360,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanExcludedMysql() {
+    void testWhereBeanExcludedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -369,7 +369,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanFilteredMysql() {
+    void testWhereBeanFilteredMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -449,7 +449,7 @@ public class TestSelectMysql extends TestSelect {
 //    }
 
     @Test
-    public void testWhereParametersBeanConstrainedMysql() {
+    void testWhereParametersBeanConstrainedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .whereParameters(BeanImplConstrained.class);
@@ -565,7 +565,7 @@ public class TestSelectMysql extends TestSelect {
 //    }
 
     @Test
-    public void testDistinctMysql() {
+    void testDistinctMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .distinct()
@@ -578,7 +578,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testDistinctOnMysql() {
+    void testDistinctOnMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .distinctOn("propertyDouble")
@@ -597,7 +597,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testComplexMysql() {
+    void testComplexMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .field("field1")
@@ -619,7 +619,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testGroupByBeanMysql() {
+    void testGroupByBeanMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .fields(BeanImpl.class)
@@ -629,7 +629,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testGroupByBeanExcludedMysql() {
+    void testGroupByBeanExcludedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort")
@@ -639,7 +639,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testJoinMysql() {
+    void testJoinMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .join("table2")
@@ -649,7 +649,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testJoinCustomMysql() {
+    void testJoinCustomMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .joinCustom("INNER JOIN table3 USING (propertyInt)")
@@ -659,7 +659,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testJoinCrossMysql() {
+    void testJoinCrossMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .joinCross("table2")
@@ -669,7 +669,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testJoinInnerMysql() {
+    void testJoinInnerMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .joinInner("table2", Select.NATURAL, null);
@@ -693,7 +693,7 @@ public class TestSelectMysql extends TestSelect {
 
 
     @Test
-    public void testJoinOuterMysql() {
+    void testJoinOuterMysql() {
         Select query = new Select(MYSQL);
 
         query.from("tablename")
@@ -758,7 +758,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testLimitMysql() {
+    void testLimitMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .limit(3);
@@ -775,7 +775,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testLimitParameterMysql() {
+    void testLimitParameterMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
             .limitParameter("limit");
@@ -805,7 +805,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     @Test
-    public void testSubselectParamsMysql() {
+    void testSubselectParamsMysql() {
         // mysql doesn't do subqueries
     }
 

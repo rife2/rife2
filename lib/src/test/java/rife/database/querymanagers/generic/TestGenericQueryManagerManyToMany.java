@@ -35,7 +35,7 @@ public class TestGenericQueryManagerManyToMany {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetBaseClass(Datasource datasource) {
+    void testGetBaseClass(Datasource datasource) {
         setup(datasource);
         try {
             assertSame(MMFirstBean.class, firstManager_.getBaseClass());
@@ -47,7 +47,7 @@ public class TestGenericQueryManagerManyToMany {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallCustomQuery(Datasource datasource) {
+    void testInstallCustomQuery(Datasource datasource) {
         setup(datasource);
         try {
             firstManager_.remove();
@@ -62,7 +62,7 @@ public class TestGenericQueryManagerManyToMany {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveRestoreConstrained(Datasource datasource) {
+    void testSaveRestoreConstrained(Datasource datasource) {
         setup(datasource);
         try {
             var bean = new MMFirstBean();
@@ -215,7 +215,7 @@ public class TestGenericQueryManagerManyToMany {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDelete(Datasource datasource) {
+    void testDelete(Datasource datasource) {
         setup(datasource);
         try {
             var bean = new MMFirstBean();
@@ -293,7 +293,7 @@ public class TestGenericQueryManagerManyToMany {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testValidationContextManyToMany(Datasource datasource) {
+    void testValidationContextManyToMany(Datasource datasource) {
         setup(datasource);
         try {
             var bean = new MMFirstBean();
@@ -346,7 +346,7 @@ public class TestGenericQueryManagerManyToMany {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testValidationContextManyToManyAssociation(Datasource datasource) {
+    void testValidationContextManyToManyAssociation(Datasource datasource) {
         setup(datasource);
         try {
             var bean2 = new MMSecondBean();

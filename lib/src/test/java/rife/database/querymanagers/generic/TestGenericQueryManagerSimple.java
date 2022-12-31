@@ -30,7 +30,7 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testNoDefaultConstructor(Datasource datasource) {
+    void testNoDefaultConstructor(Datasource datasource) {
         var manager = setup(datasource);
         try {
             GenericQueryManagerFactory.instance(datasource, NoDefaultConstructorBean.class);
@@ -44,7 +44,7 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetBaseClass(Datasource datasource) {
+    void testGetBaseClass(Datasource datasource) {
         var manager = setup(datasource);
         try {
             assertSame(SimpleBean.class, manager.getBaseClass());
@@ -55,7 +55,7 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallCustomQuery(Datasource datasource) {
+    void testInstallCustomQuery(Datasource datasource) {
         var manager = setup(datasource);
         try {
             manager.remove();
@@ -67,7 +67,7 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveRestore(Datasource datasource) {
+    void testSaveRestore(Datasource datasource) {
         var manager = setup(datasource);
         try {
             var bean = new SimpleBean();
@@ -133,7 +133,7 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSparseIdentifier(Datasource datasource) {
+    void testSparseIdentifier(Datasource datasource) {
         var manager = setup(datasource);
         try {
             var manager_sparsebean = GenericQueryManagerFactory.instance(datasource, SparseBean.class);
@@ -168,7 +168,7 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDelete(Datasource datasource) {
+    void testDelete(Datasource datasource) {
         var manager = setup(datasource);
         try {
             var bean = new SimpleBean();
@@ -191,7 +191,7 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestore(Datasource datasource) {
+    void testRestore(Datasource datasource) {
         var manager = setup(datasource);
         try {
             var bean1 = new SimpleBean();
@@ -243,7 +243,7 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreRowProcessor(Datasource datasource) {
+    void testRestoreRowProcessor(Datasource datasource) {
         var manager = setup(datasource);
         try {
             var bean1 = new SimpleBean();
@@ -298,7 +298,7 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreQueryRowProcessor(Datasource datasource) {
+    void testRestoreQueryRowProcessor(Datasource datasource) {
         var manager = setup(datasource);
         try {
             var bean1 = new SimpleBean();
@@ -344,7 +344,7 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreBeanFetcher(Datasource datasource) {
+    void testRestoreBeanFetcher(Datasource datasource) {
         var manager = setup(datasource);
         try {
             var bean1 = new SimpleBean();
@@ -392,7 +392,7 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreQueryBeanFetcher(Datasource datasource) {
+    void testRestoreQueryBeanFetcher(Datasource datasource) {
         var manager = setup(datasource);
         try {
             var bean1 = new SimpleBean();
@@ -429,7 +429,7 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testCount(Datasource datasource) {
+    void testCount(Datasource datasource) {
         var manager = setup(datasource);
         try {
             var bean1 = new SimpleBean();

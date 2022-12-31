@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestConvert {
     @Test
-    public void testToType() throws ConversionException {
+    void testToType() throws ConversionException {
         assertEquals(true, Convert.toType(1, boolean.class));
         assertEquals(false, Convert.toType(0, boolean.class));
         assertEquals(true, Convert.toType("1", boolean.class));
@@ -104,13 +104,13 @@ public class TestConvert {
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertNull(Convert.toString(null));
         assertEquals("1234", Convert.toString(1234));
     }
 
     @Test
-    public void testToBooleanErrors() {
+    void testToBooleanErrors() {
         try {
             Convert.toBoolean(null);
             fail("exception not thrown");
@@ -139,7 +139,7 @@ public class TestConvert {
     }
 
     @Test
-    public void testToBoolean()
+    void testToBoolean()
         throws ConversionException {
         assertTrue(Convert.toBoolean(1));
         assertFalse(Convert.toBoolean(0));
@@ -149,14 +149,14 @@ public class TestConvert {
     }
 
     @Test
-    public void testToBooleanDefaults() {
+    void testToBooleanDefaults() {
         assertTrue(Convert.toBoolean(null, true));
         assertFalse(Convert.toBoolean(4, false));
         assertTrue(Convert.toBoolean(new Object(), true));
     }
 
     @Test
-    public void testToCharErrors() {
+    void testToCharErrors() {
         try {
             Convert.toChar(null);
             fail("exception not thrown");
@@ -185,7 +185,7 @@ public class TestConvert {
     }
 
     @Test
-    public void testToChar()
+    void testToChar()
         throws ConversionException {
         assertEquals((char) 23, Convert.toChar(23L));
         assertEquals((char) 89, Convert.toChar(89.7d));
@@ -195,14 +195,14 @@ public class TestConvert {
     }
 
     @Test
-    public void testToCharDefaults() {
+    void testToCharDefaults() {
         assertEquals('c', Convert.toChar(null, 'c'));
         assertEquals('f', Convert.toChar(new Object(), 'f'));
         assertEquals('W', Convert.toChar("kjoiji", 'W'));
     }
 
     @Test
-    public void testToByteErrors() {
+    void testToByteErrors() {
         try {
             Convert.toByte(null);
             fail("exception not thrown");
@@ -232,7 +232,7 @@ public class TestConvert {
     }
 
     @Test
-    public void testToByte()
+    void testToByte()
         throws ConversionException {
         assertEquals((byte) 23, Convert.toByte(23L));
         assertEquals((byte) 89, Convert.toByte(89.7d));
@@ -240,14 +240,14 @@ public class TestConvert {
     }
 
     @Test
-    public void testToByteDefaults() {
+    void testToByteDefaults() {
         assertEquals((byte) 87, Convert.toByte(null, (byte) 87));
         assertEquals((byte) 3, Convert.toByte(new Object(), (byte) 3));
         assertEquals((byte) 79, Convert.toByte("kjoiji", (byte) 79));
     }
 
     @Test
-    public void testToShortErrors() {
+    void testToShortErrors() {
         try {
             Convert.toShort(null);
             fail("exception not thrown");
@@ -277,7 +277,7 @@ public class TestConvert {
     }
 
     @Test
-    public void testToShort()
+    void testToShort()
         throws ConversionException {
         assertEquals((short) 23, Convert.toShort(23L));
         assertEquals((short) 89, Convert.toShort(89.7d));
@@ -285,14 +285,14 @@ public class TestConvert {
     }
 
     @Test
-    public void testToShortDefaults() {
+    void testToShortDefaults() {
         assertEquals((short) 87, Convert.toShort(null, (short) 87));
         assertEquals((short) 3, Convert.toShort(new Object(), (short) 3));
         assertEquals((short) 79, Convert.toShort("kjoiji", (short) 79));
     }
 
     @Test
-    public void testToIntErrors() {
+    void testToIntErrors() {
         try {
             Convert.toInt(null);
             fail("exception not thrown");
@@ -322,7 +322,7 @@ public class TestConvert {
     }
 
     @Test
-    public void testToInt()
+    void testToInt()
         throws ConversionException {
         assertEquals(23, Convert.toInt(23L));
         assertEquals(89, Convert.toInt(89.7d));
@@ -330,14 +330,14 @@ public class TestConvert {
     }
 
     @Test
-    public void testToIntDefaults() {
+    void testToIntDefaults() {
         assertEquals(87, Convert.toInt(null, 87));
         assertEquals(3, Convert.toInt(new Object(), 3));
         assertEquals(79, Convert.toInt("kjoiji", 79));
     }
 
     @Test
-    public void testToLongErrors() {
+    void testToLongErrors() {
         try {
             Convert.toLong(null);
             fail("exception not thrown");
@@ -367,7 +367,7 @@ public class TestConvert {
     }
 
     @Test
-    public void testToLong()
+    void testToLong()
         throws ConversionException {
         assertEquals(23L, Convert.toLong(23));
         assertEquals(890L, Convert.toLong(890.7d));
@@ -375,14 +375,14 @@ public class TestConvert {
     }
 
     @Test
-    public void testToLongDefaults() {
+    void testToLongDefaults() {
         assertEquals(878069L, Convert.toLong(null, 878069L));
         assertEquals(3L, Convert.toLong(new Object(), 3L));
         assertEquals(24879L, Convert.toLong("dfjhoij", 24879L));
     }
 
     @Test
-    public void testToFloatErrors() {
+    void testToFloatErrors() {
         try {
             Convert.toFloat(null);
             fail("exception not thrown");
@@ -412,7 +412,7 @@ public class TestConvert {
     }
 
     @Test
-    public void testToFloat()
+    void testToFloat()
         throws ConversionException {
         assertEquals(23f, Convert.toFloat(23));
         assertEquals(23.9f, Convert.toFloat(23.9f));
@@ -421,14 +421,14 @@ public class TestConvert {
     }
 
     @Test
-    public void testToFloatDefaults() {
+    void testToFloatDefaults() {
         assertEquals(89.76f, Convert.toFloat(null, 89.76f));
         assertEquals(3.98f, Convert.toFloat(new Object(), 3.98f));
         assertEquals(28.43f, Convert.toFloat("dfjhoij", 28.43f));
     }
 
     @Test
-    public void testToDoubleErrors() {
+    void testToDoubleErrors() {
         try {
             Convert.toDouble(null);
             fail("exception not thrown");
@@ -458,7 +458,7 @@ public class TestConvert {
     }
 
     @Test
-    public void testToDouble()
+    void testToDouble()
         throws ConversionException {
         assertEquals(23d, Convert.toDouble(23));
         assertEquals(23.9d, Convert.toDouble(23.9f), 0.01d);
@@ -467,7 +467,7 @@ public class TestConvert {
     }
 
     @Test
-    public void testToDoubleDefaults() {
+    void testToDoubleDefaults() {
         assertEquals(89.76d, Convert.toDouble(null, 89.76d), 0.01d);
         assertEquals(869232.98792d, Convert.toDouble(new Object(), 869232.98792d), 0.000001d);
         assertEquals(2248682.24242d, Convert.toDouble("dfjhoij", 2248682.24242d), 0.000001d);

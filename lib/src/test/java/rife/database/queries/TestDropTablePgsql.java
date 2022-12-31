@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropTablePgsql extends TestDropTable {
     @Test
-    public void testInstantiationPgsql() {
+    void testInstantiationPgsql() {
         DropTable query = new DropTable(PGSQL);
         assertNotNull(query);
         try {
@@ -23,7 +23,7 @@ public class TestDropTablePgsql extends TestDropTable {
     }
 
     @Test
-    public void testIncompleteQueryPgsql() {
+    void testIncompleteQueryPgsql() {
         DropTable query = new DropTable(PGSQL);
         try {
             query.getSql();
@@ -36,7 +36,7 @@ public class TestDropTablePgsql extends TestDropTable {
     }
 
     @Test
-    public void testClearPgsql() {
+    void testClearPgsql() {
         DropTable query = new DropTable(PGSQL);
         query.table("tablename");
         assertNotNull(query.getSql());
@@ -50,7 +50,7 @@ public class TestDropTablePgsql extends TestDropTable {
     }
 
     @Test
-    public void testOneTablePgsql() {
+    void testOneTablePgsql() {
         DropTable query = new DropTable(PGSQL);
         query.table("tabletodrop");
         assertEquals(query.getSql(), "DROP TABLE tabletodrop");
@@ -58,7 +58,7 @@ public class TestDropTablePgsql extends TestDropTable {
     }
 
     @Test
-    public void testMultipleTablesPgsql() {
+    void testMultipleTablesPgsql() {
         DropTable query = new DropTable(PGSQL);
         query.table("tabletodrop1")
             .table("tabletodrop2")
@@ -68,7 +68,7 @@ public class TestDropTablePgsql extends TestDropTable {
     }
 
     @Test
-    public void testClonePgsql() {
+    void testClonePgsql() {
         DropTable query = new DropTable(PGSQL);
         query.table("tabletodrop1")
             .table("tabletodrop2")

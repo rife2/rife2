@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMemoryUsers {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         MemoryUsers users = null;
 
         users = new MemoryUsers();
@@ -28,14 +28,14 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testNoInitialUsers() {
+    void testNoInitialUsers() {
         MemoryUsers users = new MemoryUsers();
 
         assertEquals(0, users.countUsers());
     }
 
     @Test
-    public void testAddRoles() {
+    void testAddRoles() {
         MemoryUsers users = new MemoryUsers();
 
         try {
@@ -62,7 +62,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testAddUsers() {
+    void testAddUsers() {
         MemoryUsers users = new MemoryUsers();
 
         try {
@@ -121,7 +121,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testUpdateUsers() {
+    void testUpdateUsers() {
         MemoryUsers users = new MemoryUsers();
 
         try {
@@ -185,7 +185,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testListRoles() {
+    void testListRoles() {
         MemoryUsers users = new MemoryUsers();
 
         try {
@@ -235,7 +235,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testListUsers() {
+    void testListUsers() {
         MemoryUsers users = new MemoryUsers();
 
         try {
@@ -267,7 +267,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testListUsersRanged() {
+    void testListUsersRanged() {
         MemoryUsers users = new MemoryUsers();
 
         try {
@@ -343,7 +343,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testGetUserAttributes() {
+    void testGetUserAttributes() {
         MemoryUsers users = new MemoryUsers();
 
         try {
@@ -394,7 +394,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testUserIdSpecification() {
+    void testUserIdSpecification() {
         MemoryUsers users = new MemoryUsers();
 
         try {
@@ -430,7 +430,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testValidUsers() {
+    void testValidUsers() {
         MemoryUsers users = new MemoryUsers();
         users.setPasswordEncryptor(StringEncryptor.SHA);
 
@@ -479,7 +479,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testUsersInRole() {
+    void testUsersInRole() {
         MemoryUsers users = new MemoryUsers();
         users.setPasswordEncryptor(StringEncryptor.MD5);
 
@@ -518,7 +518,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testListUsersInRole() {
+    void testListUsersInRole() {
         MemoryUsers users = new MemoryUsers();
 
         try {
@@ -579,7 +579,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testRemoveUsersByLogin() {
+    void testRemoveUsersByLogin() {
         MemoryUsers users = new MemoryUsers();
 
         try {
@@ -609,7 +609,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testRemoveUsersByUserId() {
+    void testRemoveUsersByUserId() {
         MemoryUsers users = new MemoryUsers();
 
         try {
@@ -639,7 +639,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testRemoveRole() {
+    void testRemoveRole() {
         MemoryUsers users = new MemoryUsers();
 
         try {
@@ -675,7 +675,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testClearUsers() {
+    void testClearUsers() {
         MemoryUsers users = new MemoryUsers();
 
         try {
@@ -697,7 +697,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testVerifyCredentials() {
+    void testVerifyCredentials() {
         MemoryUsers users = new MemoryUsers();
         users.setPasswordEncryptor(StringEncryptor.OBF);
 
@@ -734,7 +734,7 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testListUserRoles() {
+    void testListUserRoles() {
         MemoryUsers users = new MemoryUsers();
 
         try {

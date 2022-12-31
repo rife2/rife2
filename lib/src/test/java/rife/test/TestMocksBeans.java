@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestMocksBeans {
     @Test
-    public void testParametersBean()
+    void testParametersBean()
     throws Exception {
         var conversation = new MockConversation(new GetBeanSite());
 
@@ -94,7 +94,7 @@ public class TestMocksBeans {
     }
 
     @Test
-    public void testParametersBeanPrefix()
+    void testParametersBeanPrefix()
     throws Exception {
         var conversation = new MockConversation(new GetBeanSite("prefix_"));
 
@@ -170,7 +170,7 @@ public class TestMocksBeans {
     }
 
     @Test
-    public void testParametersBeanFill()
+    void testParametersBeanFill()
     throws Exception {
         var conversation = new MockConversation(new FillBeanSite());
 
@@ -246,7 +246,7 @@ public class TestMocksBeans {
     }
 
     @Test
-    public void testParametersBeanFillPrefix()
+    void testParametersBeanFillPrefix()
     throws Exception {
         var conversation = new MockConversation(new FillBeanSite("prefix_"));
 

@@ -44,7 +44,7 @@ public class TestDatabaseTasks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiateTaskManager(Datasource datasource) {
+    void testInstantiateTaskManager(Datasource datasource) {
         TaskManager manager = DatabaseTasksFactory.instance(datasource);
         assertNotNull(manager);
     }
@@ -80,7 +80,7 @@ public class TestDatabaseTasks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetTask(Datasource datasource) {
+    void testGetTask(Datasource datasource) {
         setup(datasource);
 
         int task_id = -1;
@@ -119,7 +119,7 @@ public class TestDatabaseTasks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUpdateTask(Datasource datasource) {
+    void testUpdateTask(Datasource datasource) {
         setup(datasource);
 
         int task_id = -1;
@@ -174,7 +174,7 @@ public class TestDatabaseTasks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemoveTask(Datasource datasource) {
+    void testRemoveTask(Datasource datasource) {
         setup(datasource);
 
         int task_id = -1;
@@ -205,7 +205,7 @@ public class TestDatabaseTasks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetNonExistingTask(Datasource datasource) {
+    void testGetNonExistingTask(Datasource datasource) {
         setup(datasource);
 
         TaskManager manager = DatabaseTasksFactory.instance(datasource);
@@ -221,7 +221,7 @@ public class TestDatabaseTasks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemoveNonExistingTask(Datasource datasource) {
+    void testRemoveNonExistingTask(Datasource datasource) {
         setup(datasource);
 
         TaskManager manager = DatabaseTasksFactory.instance(datasource);
@@ -237,7 +237,7 @@ public class TestDatabaseTasks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetTasksToProcess(Datasource datasource) {
+    void testGetTasksToProcess(Datasource datasource) {
         setup(datasource);
 
         int one_hour = 1000 * 60 * 60;
@@ -290,7 +290,7 @@ public class TestDatabaseTasks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetScheduledTasks(Datasource datasource) {
+    void testGetScheduledTasks(Datasource datasource) {
         setup(datasource);
 
         int one_hour = 1000 * 60 * 60;
@@ -343,7 +343,7 @@ public class TestDatabaseTasks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testTaskConclusion(Datasource datasource) {
+    void testTaskConclusion(Datasource datasource) {
         setup(datasource);
 
         int one_hour = 1000 * 60 * 60;
@@ -413,7 +413,7 @@ public class TestDatabaseTasks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testTaskActivation(Datasource datasource) {
+    void testTaskActivation(Datasource datasource) {
         setup(datasource);
 
         TaskManager manager = DatabaseTasksFactory.instance(datasource);

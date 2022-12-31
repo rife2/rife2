@@ -19,14 +19,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMemoryTasks {
     @Test
-    public void testInstantiateTaskManager() {
+    void testInstantiateTaskManager() {
         TaskManager manager = null;
         manager = new MemoryTasks();
         assertNotNull(manager);
     }
 
     @Test
-    public void testAddTask() {
+    void testAddTask() {
         int task_id = -1;
 
         String type = TestTasktypes.UPLOAD_GROUPS;
@@ -56,7 +56,7 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testGetTask() {
+    void testGetTask() {
         int task_id = -1;
         Task task = null;
         TaskManager manager = new MemoryTasks();
@@ -86,7 +86,7 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testUpdateTask() {
+    void testUpdateTask() {
         int task_id = -1;
         Task task = null;
         TaskManager manager = new MemoryTasks();
@@ -131,7 +131,7 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testRemoveTask() {
+    void testRemoveTask() {
         int task_id = -1;
         Task task = null;
         TaskManager manager = new MemoryTasks();
@@ -154,7 +154,7 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testGetNonExistingTask() {
+    void testGetNonExistingTask() {
         TaskManager manager = new MemoryTasks();
         int task_nonexisting_id = 0;
         try {
@@ -165,7 +165,7 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testRemoveNonExistingTask() {
+    void testRemoveNonExistingTask() {
         TaskManager manager = new MemoryTasks();
         int task_nonexisting_id = 0;
         try {
@@ -176,7 +176,7 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testGetTasksToProcess() {
+    void testGetTasksToProcess() {
         int one_hour = 1000 * 60 * 60;
 
         TaskManager manager = new MemoryTasks();
@@ -224,7 +224,7 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testGetScheduledTasks() {
+    void testGetScheduledTasks() {
         int one_hour = 1000 * 60 * 60;
 
         TaskManager manager = new MemoryTasks();
@@ -272,7 +272,7 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testTaskConclusion() {
+    void testTaskConclusion() {
         int one_hour = 1000 * 60 * 60;
 
         TaskManager manager = new MemoryTasks();
@@ -337,7 +337,7 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testTaskActivation() {
+    void testTaskActivation() {
         TaskManager manager = new MemoryTasks();
         try {
             Task task = new Task();

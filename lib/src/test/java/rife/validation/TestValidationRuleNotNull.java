@@ -10,35 +10,35 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestValidationRuleNotNull {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         Bean bean = new Bean("not null");
         ValidationRuleNotNull rule = new ValidationRuleNotNull("property").setBean(bean);
         assertNotNull(rule);
     }
 
     @Test
-    public void testValid() {
+    void testValid() {
         Bean bean = new Bean("not null");
         ValidationRuleNotNull rule = new ValidationRuleNotNull("property").setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testInvalid() {
+    void testInvalid() {
         Bean bean = new Bean(null);
         ValidationRuleNotNull rule = new ValidationRuleNotNull("property").setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testUnknownProperty() {
+    void testUnknownProperty() {
         Bean bean = new Bean("not null");
         ValidationRuleNotNull rule = new ValidationRuleNotNull("unknown_property").setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testGetError() {
+    void testGetError() {
         Bean bean = new Bean("");
         ValidationRuleNotNull rule = new ValidationRuleNotNull("property").setBean(bean);
         ValidationError error = rule.getError();

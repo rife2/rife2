@@ -40,7 +40,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallError(Datasource datasource) {
+    void testInstallError(Datasource datasource) {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
@@ -57,7 +57,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemoveError(Datasource datasource) {
+    void testRemoveError(Datasource datasource) {
         setup(datasource);
         try {
             DatabaseContentFactory.instance(datasource).remove();
@@ -75,7 +75,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetSupportedMimeTypes(Datasource datasource) {
+    void testGetSupportedMimeTypes(Datasource datasource) {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
@@ -87,7 +87,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetContentType(Datasource datasource) {
+    void testGetContentType(Datasource datasource) {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
@@ -103,7 +103,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetFormatter(Datasource datasource) {
+    void testGetFormatter(Datasource datasource) {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
@@ -117,7 +117,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreContentDataXhtml(Datasource datasource) {
+    void testStoreContentDataXhtml(Datasource datasource) {
         setup(datasource);
         try {
             final var id = new int[]{1};
@@ -169,7 +169,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreContentDataXhtmlLarge(Datasource datasource) {
+    void testStoreContentDataXhtmlLarge(Datasource datasource) {
         setup(datasource);
         try {
             final var id = new int[]{1};
@@ -222,7 +222,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreContentDataTextPlain(Datasource datasource) {
+    void testStoreContentDataTextPlain(Datasource datasource) {
         setup(datasource);
         try {
             final var id = new int[]{1};
@@ -271,7 +271,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreContentDataTextPlainLarge(Datasource datasource) {
+    void testStoreContentDataTextPlainLarge(Datasource datasource) {
         setup(datasource);
         try {
             final var id = new int[]{1};
@@ -321,7 +321,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreContentDataContentEmpty(Datasource datasource) {
+    void testStoreContentDataContentEmpty(Datasource datasource) {
         setup(datasource);
         try {
             final var id = new int[]{1};
@@ -367,7 +367,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreContentDataContentNull(Datasource datasource) {
+    void testStoreContentDataContentNull(Datasource datasource) {
         setup(datasource);
         try {
             final var id = new int[]{1};
@@ -412,7 +412,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreContentDataMimeTypeWithoutFormatter(Datasource datasource) {
+    void testStoreContentDataMimeTypeWithoutFormatter(Datasource datasource) {
         setup(datasource);
         try {
             final var id = new int[]{1};
@@ -461,7 +461,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreContentDataIllegalArgument(Datasource datasource) {
+    void testStoreContentDataIllegalArgument(Datasource datasource) {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
@@ -486,7 +486,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreContentDataError(Datasource datasource) {
+    void testStoreContentDataError(Datasource datasource) {
         setup(datasource);
         try {
             var data = "<i>cool beans</i><p>hot <a href=\"http://uwyn.com\">chili</a></p>";
@@ -505,7 +505,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUseContentData(Datasource datasource) {
+    void testUseContentData(Datasource datasource) {
         setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
@@ -526,7 +526,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUseContentDataUnknown(Datasource datasource) {
+    void testUseContentDataUnknown(Datasource datasource) {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
@@ -538,7 +538,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUseContentDataIllegalArgument(Datasource datasource) {
+    void testUseContentDataIllegalArgument(Datasource datasource) {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
@@ -562,7 +562,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUseContentDataError(Datasource datasource) {
+    void testUseContentDataError(Datasource datasource) {
         setup(datasource);
         try {
             DatabaseContentFactory.instance(datasource).remove();
@@ -579,7 +579,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testHasContentData(Datasource datasource) {
+    void testHasContentData(Datasource datasource) {
         setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
@@ -598,7 +598,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testHasContentDataContentEmpty(Datasource datasource) {
+    void testHasContentDataContentEmpty(Datasource datasource) {
         setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
@@ -616,7 +616,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testHasContentDataUnknown(Datasource datasource) {
+    void testHasContentDataUnknown(Datasource datasource) {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
@@ -628,7 +628,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testHasContentDataIllegalArgument(Datasource datasource) {
+    void testHasContentDataIllegalArgument(Datasource datasource) {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
@@ -645,7 +645,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testHasContentDataError(Datasource datasource) {
+    void testHasContentDataError(Datasource datasource) {
         setup(datasource);
         try {
             DatabaseContentFactory.instance(datasource).remove();
@@ -663,7 +663,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteContentData(Datasource datasource) {
+    void testDeleteContentData(Datasource datasource) {
         setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
@@ -685,7 +685,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteContentDataUnknown(Datasource datasource) {
+    void testDeleteContentDataUnknown(Datasource datasource) {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
@@ -697,7 +697,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteContentDataIllegalArgument(Datasource datasource) {
+    void testDeleteContentDataIllegalArgument(Datasource datasource) {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
@@ -714,7 +714,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteContentDataError(Datasource datasource) {
+    void testDeleteContentDataError(Datasource datasource) {
         setup(datasource);
         try {
             DatabaseContentFactory.instance(datasource).remove();
@@ -732,7 +732,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRetrieveSize(Datasource datasource) {
+    void testRetrieveSize(Datasource datasource) {
         setup(datasource);
         try {
             var manager = DatabaseContentFactory.instance(datasource);
@@ -752,7 +752,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRetrieveSizeIllegalArgument(Datasource datasource) {
+    void testRetrieveSizeIllegalArgument(Datasource datasource) {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
@@ -770,7 +770,7 @@ public class TestDatabaseTextStore {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRetrieveSizeError(Datasource datasource) {
+    void testRetrieveSizeError(Datasource datasource) {
         setup(datasource);
         try {
             DatabaseContentFactory.instance(datasource).remove();

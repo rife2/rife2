@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestValidationGroup {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         Validation validation = new Validation();
         ValidationGroup group1 = validation.addGroup("group1");
         assertNotNull(group1);
@@ -29,7 +29,7 @@ public class TestValidationGroup {
     }
 
     @Test
-    public void testInitialstate() {
+    void testInitialstate() {
         Validation validation = new Validation();
         ValidationGroup group = validation.addGroup("mygroup");
         assertSame(validation, group.getValidation());
@@ -38,7 +38,7 @@ public class TestValidationGroup {
     }
 
     @Test
-    public void testAddSubject() {
+    void testAddSubject() {
         Validation validation = new Validation();
         ValidationGroup group = validation.addGroup("mygroup");
         assertSame(group, group.addSubject("subject1"));
@@ -56,7 +56,7 @@ public class TestValidationGroup {
     }
 
     @Test
-    public void testReinitializeProperties() {
+    void testReinitializeProperties() {
         InitializedBeanImpl bean = new InitializedBeanImpl();
         bean.setString("one");
         bean.setInt(9);
@@ -102,7 +102,7 @@ public class TestValidationGroup {
     }
 
     @Test
-    public void testReinitializePropertiesError() {
+    void testReinitializePropertiesError() {
         Validation validation = new Validation();
         ValidationGroup group = validation.addGroup("mygroup");
         group
@@ -121,7 +121,7 @@ public class TestValidationGroup {
     }
 
     @Test
-    public void testAddRule() {
+    void testAddRule() {
         Validation validation = new Validation();
         ValidationGroup group = validation.addGroup("mygroup");
         assertSame(group, group.addRule(new ValidationRuleNotNull("subject1")));
@@ -159,7 +159,7 @@ public class TestValidationGroup {
     }
 
     @Test
-    public void testAddConstraint() {
+    void testAddConstraint() {
         Validation validation = new Validation();
         ValidationGroup group = validation.addGroup("mygroup");
 
@@ -211,7 +211,7 @@ public class TestValidationGroup {
     }
 
     @Test
-    public void testAddGroup() {
+    void testAddGroup() {
         Validation validation = new Validation();
         ValidationGroup group = validation.addGroup("mygroup");
         ValidationGroup group2 = group.addGroup("group2");
@@ -240,7 +240,7 @@ public class TestValidationGroup {
     }
 
     @Test
-    public void testAddGroupAddRule() {
+    void testAddGroupAddRule() {
         Validation validation = new Validation();
         ValidationGroup group = validation.addGroup("group").addGroup("mygroup");
         assertSame(group, group.addRule(new ValidationRuleNotNull("subject1")));
@@ -260,7 +260,7 @@ public class TestValidationGroup {
     }
 
     @Test
-    public void testAddGroupAddConstraint() {
+    void testAddGroupAddConstraint() {
         Validation validation = new Validation();
         ValidationGroup group = validation.addGroup("group").addGroup("mygroup");
 
@@ -288,7 +288,7 @@ public class TestValidationGroup {
     }
 
     @Test
-    public void testClone() {
+    void testClone() {
         Validation validation = new Validation();
         ValidationGroup group1 = validation.addGroup("mygroup");
         group1.addSubject("subject1");

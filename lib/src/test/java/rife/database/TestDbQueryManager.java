@@ -49,7 +49,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalInstantiation(Datasource datasource) {
+    void testIllegalInstantiation(Datasource datasource) {
         try {
             new DbQueryManager(null);
             fail();
@@ -62,7 +62,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiation(Datasource datasource) {
+    void testInstantiation(Datasource datasource) {
         try {
             var manager = new DbQueryManager(datasource);
             assertNotNull(manager);
@@ -74,7 +74,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteUpdateSql(Datasource datasource) {
+    void testIllegalExecuteUpdateSql(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeUpdate((String) null);
@@ -88,7 +88,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testTransactionUserCommit(Datasource datasource) {
+    void testTransactionUserCommit(Datasource datasource) {
         final var manager = new DbQueryManager(datasource);
         var create = "CREATE TABLE tbltest (id INTEGER, stringcol VARCHAR(255))";
         manager.executeUpdate(create);
@@ -157,7 +157,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testTransactionUserRecommendedRollback(Datasource datasource) {
+    void testTransactionUserRecommendedRollback(Datasource datasource) {
         final var manager = new DbQueryManager(datasource);
         var create = "CREATE TABLE tbltest (id INTEGER, stringcol VARCHAR(255))";
         manager.executeUpdate(create);
@@ -196,7 +196,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testTransactionUserRuntimeException(Datasource datasource) {
+    void testTransactionUserRuntimeException(Datasource datasource) {
         final var manager = new DbQueryManager(datasource);
         var create = "CREATE TABLE tbltest (id INTEGER, stringcol VARCHAR(255))";
         manager.executeUpdate(create);
@@ -239,7 +239,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testTransactionUserRegularRollback(Datasource datasource) {
+    void testTransactionUserRegularRollback(Datasource datasource) {
         final var manager = new DbQueryManager(datasource);
         var create = "CREATE TABLE tbltest (id INTEGER, stringcol VARCHAR(255))";
         manager.executeUpdate(create);
@@ -265,7 +265,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testTransactionUserCommittingException(Datasource datasource) {
+    void testTransactionUserCommittingException(Datasource datasource) {
         final var manager = new DbQueryManager(datasource);
         var create = "CREATE TABLE tbltest (id INTEGER, stringcol VARCHAR(255))";
         manager.executeUpdate(create);
@@ -314,7 +314,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteUpdateSqlSuccess(Datasource datasource) {
+    void testExecuteUpdateSqlSuccess(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -334,7 +334,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteUpdateBuilder(Datasource datasource) {
+    void testIllegalExecuteUpdateBuilder(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeUpdate((Query) null);
@@ -348,7 +348,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteUpdateBuilderSuccess(Datasource datasource) {
+    void testExecuteUpdateBuilderSuccess(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -368,7 +368,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteUpdateBuilderError(Datasource datasource) {
+    void testExecuteUpdateBuilderError(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -393,7 +393,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteUpdateHandler(Datasource datasource) {
+    void testIllegalExecuteUpdateHandler(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeUpdate(null, null);
@@ -407,7 +407,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteUpdateHandler(Datasource datasource) {
+    void testExecuteUpdateHandler(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -438,7 +438,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteUpdateSimpleHandler(Datasource datasource) {
+    void testExecuteUpdateSimpleHandler(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -460,7 +460,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteHasResultRows(Datasource datasource) {
+    void testIllegalExecuteHasResultRows(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeHasResultRows(null);
@@ -474,7 +474,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteReadQueryString(Datasource datasource) {
+    void testExecuteReadQueryString(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -503,7 +503,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteReadQueryTemplate(Datasource datasource) {
+    void testExecuteReadQueryTemplate(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -548,7 +548,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteHasResultRows(Datasource datasource) {
+    void testExecuteHasResultRows(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -604,7 +604,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteHasResultRowsConcludeErrors(Datasource datasource) {
+    void testExecuteHasResultRowsConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -636,7 +636,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstString(Datasource datasource) {
+    void testIllegalExecuteGetFirstString(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeGetFirstString(null);
@@ -650,7 +650,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstString(Datasource datasource) {
+    void testExecuteGetFirstString(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -690,7 +690,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstStringConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstStringConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -722,7 +722,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstBoolean(Datasource datasource) {
+    void testIllegalExecuteGetFirstBoolean(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeGetFirstBoolean(null);
@@ -736,7 +736,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstBoolean(Datasource datasource) {
+    void testExecuteGetFirstBoolean(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -776,7 +776,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstBooleanConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstBooleanConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -809,7 +809,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstByte(Datasource datasource) {
+    void testIllegalExecuteGetFirstByte(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeGetFirstByte(null);
@@ -823,7 +823,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstByte(Datasource datasource) {
+    void testExecuteGetFirstByte(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -863,7 +863,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstByteConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstByteConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -896,7 +896,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstShort(Datasource datasource) {
+    void testIllegalExecuteGetFirstShort(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeGetFirstShort(null);
@@ -910,7 +910,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstShort(Datasource datasource) {
+    void testExecuteGetFirstShort(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -950,7 +950,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstShortConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstShortConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -983,7 +983,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstInt(Datasource datasource) {
+    void testIllegalExecuteGetFirstInt(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeGetFirstInt(null);
@@ -997,7 +997,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstInt(Datasource datasource) {
+    void testExecuteGetFirstInt(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1037,7 +1037,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstIntConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstIntConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1070,7 +1070,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstLong(Datasource datasource) {
+    void testIllegalExecuteGetFirstLong(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeGetFirstLong(null);
@@ -1084,7 +1084,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstLong(Datasource datasource) {
+    void testExecuteGetFirstLong(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1124,7 +1124,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstLongConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstLongConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1157,7 +1157,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstFloat(Datasource datasource) {
+    void testIllegalExecuteGetFirstFloat(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeGetFirstFloat(null);
@@ -1171,7 +1171,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstFloat(Datasource datasource) {
+    void testExecuteGetFirstFloat(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1211,7 +1211,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstFloatConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstFloatConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1244,7 +1244,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstDouble(Datasource datasource) {
+    void testIllegalExecuteGetFirstDouble(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeGetFirstDouble(null);
@@ -1258,7 +1258,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstDouble(Datasource datasource) {
+    void testExecuteGetFirstDouble(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1298,7 +1298,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstDoubleConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstDoubleConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1331,7 +1331,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstBytes(Datasource datasource) {
+    void testIllegalExecuteGetFirstBytes(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeGetFirstBytes(null);
@@ -1345,7 +1345,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstBytes(Datasource datasource) {
+    void testExecuteGetFirstBytes(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1412,7 +1412,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstBytesConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstBytesConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1445,7 +1445,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstDate(Datasource datasource) {
+    void testIllegalExecuteGetFirstDate(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeGetFirstDate(null);
@@ -1465,7 +1465,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstDate(Datasource datasource) {
+    void testExecuteGetFirstDate(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1520,7 +1520,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstDateConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstDateConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1563,7 +1563,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstTime(Datasource datasource) {
+    void testIllegalExecuteGetFirstTime(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeGetFirstTime(null);
@@ -1583,7 +1583,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstTime(Datasource datasource) {
+    void testExecuteGetFirstTime(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1638,7 +1638,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstTimeConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstTimeConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1681,7 +1681,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstTimestamp(Datasource datasource) {
+    void testIllegalExecuteGetFirstTimestamp(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeGetFirstTimestamp(null);
@@ -1701,7 +1701,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstTimestamp(Datasource datasource) {
+    void testExecuteGetFirstTimestamp(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1756,7 +1756,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstTimestampConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstTimestampConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1799,7 +1799,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstAsciiStream(Datasource datasource) {
+    void testIllegalExecuteGetFirstAsciiStream(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeUseFirstAsciiStream(null, null);
@@ -1819,7 +1819,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstAsciiStream(Datasource datasource) {
+    void testExecuteGetFirstAsciiStream(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1902,7 +1902,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstAsciiStreamConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstAsciiStreamConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -1941,7 +1941,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstCharacterStream(Datasource datasource) {
+    void testIllegalExecuteGetFirstCharacterStream(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeUseFirstCharacterStream(null, null);
@@ -1961,7 +1961,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstCharacterStream(Datasource datasource) {
+    void testExecuteGetFirstCharacterStream(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2047,7 +2047,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstCharacterStreamConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstCharacterStreamConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2086,7 +2086,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteGetFirstBinaryStream(Datasource datasource) {
+    void testIllegalExecuteGetFirstBinaryStream(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeUseFirstBinaryStream(null, null);
@@ -2106,7 +2106,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstBinaryStream(Datasource datasource) {
+    void testExecuteGetFirstBinaryStream(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2218,7 +2218,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteGetFirstBinaryStreamConcludeErrors(Datasource datasource) {
+    void testExecuteGetFirstBinaryStreamConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2257,7 +2257,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteFetchFirst(Datasource datasource) {
+    void testIllegalExecuteFetchFirst(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeFetchFirst(null, (DbRowProcessor) null);
@@ -2271,7 +2271,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteFetchFirst(Datasource datasource) {
+    void testExecuteFetchFirst(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2341,7 +2341,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteFetchFirstConcludeError(Datasource datasource) {
+    void testExecuteFetchFirstConcludeError(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2374,7 +2374,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteFetchFirstBean(Datasource datasource) {
+    void testIllegalExecuteFetchFirstBean(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeFetchFirstBean(null, null);
@@ -2388,7 +2388,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteFetchFirstBean(Datasource datasource) {
+    void testExecuteFetchFirstBean(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2497,7 +2497,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteFetchFirstBeanConcludeError(Datasource datasource) {
+    void testExecuteFetchFirstBeanConcludeError(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2527,7 +2527,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteFetchAll(Datasource datasource) {
+    void testIllegalExecuteFetchAll(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeFetchAll(null, (DbRowProcessor) null);
@@ -2541,7 +2541,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteFetchAll(Datasource datasource) {
+    void testExecuteFetchAll(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2613,7 +2613,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteFetchAllConcludeError(Datasource datasource) {
+    void testExecuteFetchAllConcludeError(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2647,7 +2647,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteFetchAllBeans(Datasource datasource) {
+    void testIllegalExecuteFetchAllBeans(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeFetchAllBeans(null, null);
@@ -2661,7 +2661,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteFetchAllBeans(Datasource datasource) {
+    void testExecuteFetchAllBeans(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2796,7 +2796,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteFetchAllBeansConcludeError(Datasource datasource) {
+    void testExecuteFetchAllBeansConcludeError(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2826,7 +2826,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteQueryDbPreparedStatementHandler(Datasource datasource) {
+    void testIllegalExecuteQueryDbPreparedStatementHandler(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeQuery(null, null);
@@ -2840,7 +2840,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteQueryDbPreparedStatementHandler(Datasource datasource) {
+    void testExecuteQueryDbPreparedStatementHandler(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2884,7 +2884,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteQueryDbPreparedStatementHandlerConcludeErrors(Datasource datasource) {
+    void testExecuteQueryDbPreparedStatementHandlerConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2914,7 +2914,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteQueryDbResultSetHandler(Datasource datasource) {
+    void testIllegalExecuteQueryDbResultSetHandler(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeResultQuery(null, null);
@@ -2928,7 +2928,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteQueryDbResultSetHandler(Datasource datasource) {
+    void testExecuteQueryDbResultSetHandler(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2967,7 +2967,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteQueryDbResultSetHandlerConcludeErrors(Datasource datasource) {
+    void testExecuteQueryDbResultSetHandlerConcludeErrors(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -2997,7 +2997,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testReserveConnection(Datasource datasource) {
+    void testReserveConnection(Datasource datasource) {
         final var manager = new DbQueryManager(datasource);
         try {
             assertEquals("test", manager.reserveConnection(new DbConnectionUser<>() {
@@ -3016,7 +3016,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalExecuteQuerySql(Datasource datasource) {
+    void testIllegalExecuteQuerySql(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.executeQuery(null);
@@ -3030,7 +3030,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteQueryBuilderSuccess(Datasource datasource) {
+    void testExecuteQueryBuilderSuccess(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -3058,7 +3058,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteQueryBuilderError(Datasource datasource) {
+    void testExecuteQueryBuilderError(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -3089,7 +3089,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalFetch(Datasource datasource) {
+    void testIllegalFetch(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.fetch(null, (DbRowProcessor) null);
@@ -3103,7 +3103,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testFetchSuccess(Datasource datasource) {
+    void testFetchSuccess(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -3144,7 +3144,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testFetchError(Datasource datasource) {
+    void testFetchError(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -3183,7 +3183,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalFetchAll(Datasource datasource) {
+    void testIllegalFetchAll(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             manager.fetchAll(null, (DbRowProcessor) null);
@@ -3197,7 +3197,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testFetchAllSuccess(Datasource datasource) {
+    void testFetchAllSuccess(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -3238,7 +3238,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testFetchAllError(Datasource datasource) {
+    void testFetchAllError(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
         try {
             var create_query = new CreateTable(datasource);
@@ -3291,7 +3291,7 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testClone(Datasource datasource) {
+    void testClone(Datasource datasource) {
         var manager = new DbQueryManager(datasource);
 
         var create_query = new CreateTable(datasource);

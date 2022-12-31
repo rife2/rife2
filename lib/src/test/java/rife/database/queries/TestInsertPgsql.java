@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInsertPgsql extends TestInsert {
     @Test
-    public void testInstantiationPgsql() {
+    void testInstantiationPgsql() {
         Insert query = new Insert(PGSQL);
         assertNotNull(query);
         try {
@@ -36,7 +36,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testIncompleteQueryPgsql() {
+    void testIncompleteQueryPgsql() {
         Insert query = new Insert(PGSQL);
         try {
             query.getSql();
@@ -56,7 +56,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testClearPgsql() {
+    void testClearPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .field("col1", "val1");
@@ -71,7 +71,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testParameterPgsql() {
+    void testParameterPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldParameter("col1");
@@ -79,7 +79,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testHintPgsql() {
+    void testHintPgsql() {
         Insert query = new Insert(PGSQL)
             .hint("NO_INDEX")
             .into("tablename")
@@ -93,7 +93,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testFieldPgsql() {
+    void testFieldPgsql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
@@ -121,7 +121,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testFieldCustomPgsql() {
+    void testFieldCustomPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldCustom("propertySqlDate", "now()");
@@ -130,7 +130,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testFieldsPgsql() {
+    void testFieldsPgsql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
@@ -160,7 +160,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testFieldParametersPgsql() {
+    void testFieldParametersPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename");
 
@@ -251,7 +251,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testFieldParametersMixedPgsql() {
+    void testFieldParametersMixedPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename");
 
@@ -317,7 +317,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanPgsql() {
+    void testFieldsBeanPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fields(BeanImpl.getPopulatedBean());
@@ -325,7 +325,7 @@ public class TestInsertPgsql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test public void testFieldsBeanConstrainedPgsql() {
+    @Test void testFieldsBeanConstrainedPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fields(BeanImplConstrained.getPopulatedBean());
@@ -334,7 +334,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanNullValuesPgsql() {
+    void testFieldsBeanNullValuesPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fields(BeanImpl.getNullBean());
@@ -343,7 +343,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanIncludedPgsql() {
+    void testFieldsBeanIncludedPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -352,7 +352,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanExcludedPgsql() {
+    void testFieldsBeanExcludedPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -361,7 +361,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanFilteredPgsql() {
+    void testFieldsBeanFilteredPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -370,7 +370,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testMultipleRowsPgsql() {
+    void testMultipleRowsPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .field("propertyChar", 'M')
@@ -390,7 +390,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanPgsql() {
+    void testFieldsParametersBeanPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldsParameters(BeanImpl.class);
@@ -459,7 +459,7 @@ public class TestInsertPgsql extends TestInsert {
         }));
     }
 
-    @Test public void testFieldsParametersBeanConstrainedPgsql() {
+    @Test void testFieldsParametersBeanConstrainedPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldsParameters(BeanImplConstrained.class);
@@ -521,7 +521,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanExcludedPgsql() {
+    void testFieldsParametersBeanExcludedPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
@@ -576,7 +576,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testInsertSubselectParamsPgsql() {
+    void testInsertSubselectParamsPgsql() {
         Select fieldquery = new Select(PGSQL);
         fieldquery
             .from("table2")
@@ -626,7 +626,7 @@ public class TestInsertPgsql extends TestInsert {
     }
 
     @Test
-    public void testClonePgsql() {
+    void testClonePgsql() {
         Select fieldquery = new Select(PGSQL);
         fieldquery
             .from("table2")

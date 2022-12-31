@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestIntegerUtils {
     @Test
-    public void testIntToBytes() {
+    void testIntToBytes() {
         assertEquals(265325803, IntegerUtils.bytesToInt(IntegerUtils.intToBytes(265325803)));
     }
 

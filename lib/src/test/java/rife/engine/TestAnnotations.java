@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestAnnotations {
     @Test
-    public void testDefaultValuesIn()
+    void testDefaultValuesIn()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationInSite())) {
             try (final var webClient = new WebClient()) {
@@ -60,7 +60,7 @@ public class TestAnnotations {
     }
 
     @Test
-    public void testAnnotationInCookiesParamsAttributesHeaders()
+    void testAnnotationInCookiesParamsAttributesHeaders()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationInSite())) {
             try (final var webClient = new WebClient()) {
@@ -116,7 +116,7 @@ public class TestAnnotations {
     }
 
     @Test
-    public void testAnnotationBodyIn()
+    void testAnnotationBodyIn()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationInSite())) {
             try (final var webClient = new WebClient()) {
@@ -195,7 +195,7 @@ public class TestAnnotations {
     }
 
     @Test
-    public void testFileUploadIn()
+    void testFileUploadIn()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationInSite())) {
             try (final var webClient = new WebClient()) {
@@ -271,7 +271,7 @@ public class TestAnnotations {
     }
 
     @Test
-    public void testDefaultValuesOut()
+    void testDefaultValuesOut()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationOutSite())) {
             try (final var webClient = new WebClient()) {
@@ -300,7 +300,7 @@ public class TestAnnotations {
     }
 
     @Test
-    public void testGeneratedValuesOut()
+    void testGeneratedValuesOut()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationOutSite())) {
             try (final var webClient = new WebClient()) {
@@ -329,7 +329,7 @@ public class TestAnnotations {
     }
 
     @Test
-    public void testDefaultValuesInOut()
+    void testDefaultValuesInOut()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationInOutSite())) {
             try (final var webClient = new WebClient()) {
@@ -376,7 +376,7 @@ public class TestAnnotations {
     }
 
     @Test
-    public void testGeneratedInValuesInOut()
+    void testGeneratedInValuesInOut()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationInOutSite())) {
             try (final var webClient = new WebClient()) {
@@ -426,7 +426,7 @@ public class TestAnnotations {
     }
 
     @Test
-    public void testGeneratedOutValuesInOut()
+    void testGeneratedOutValuesInOut()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationInOutSite())) {
             try (final var webClient = new WebClient()) {
@@ -476,7 +476,7 @@ public class TestAnnotations {
     }
 
     @Test
-    public void testParametersSite()
+    void testParametersSite()
     throws IOException {
         try (final var server = new TestServerRunner(new AnnotationParametersSite())) {
             try (final var webClient = new WebClient()) {

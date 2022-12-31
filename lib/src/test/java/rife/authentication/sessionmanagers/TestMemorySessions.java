@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMemorySessions {
     @Test
-    public void testStartSession() {
+    void testStartSession() {
         MemorySessions sessions = new MemorySessions();
         try {
             sessions.eraseAllSessions();
@@ -48,7 +48,7 @@ public class TestMemorySessions {
     }
 
     @Test
-    public void testStartRememberedSession() {
+    void testStartRememberedSession() {
         MemorySessions sessions = new MemorySessions();
         try {
             sessions.eraseAllSessions();
@@ -74,7 +74,7 @@ public class TestMemorySessions {
     }
 
     @Test
-    public void testSessionExpiration() {
+    void testSessionExpiration() {
         MemorySessions sessions = new MemorySessions();
         sessions.setSessionDuration(500);
 
@@ -102,7 +102,7 @@ public class TestMemorySessions {
     }
 
     @Test
-    public void testContinueSession() {
+    void testContinueSession() {
         MemorySessions sessions = new MemorySessions();
         sessions.setSessionDuration(2000);
 
@@ -125,7 +125,7 @@ public class TestMemorySessions {
     }
 
     @Test
-    public void testContinueUnknownSession() {
+    void testContinueUnknownSession() {
         MemorySessions sessions = new MemorySessions();
 
         String auth_id = "unknown";
@@ -137,7 +137,7 @@ public class TestMemorySessions {
     }
 
     @Test
-    public void testEraseSession() {
+    void testEraseSession() {
         MemorySessions sessions = new MemorySessions();
         sessions.setSessionDuration(1200000);
 
@@ -156,7 +156,7 @@ public class TestMemorySessions {
     }
 
     @Test
-    public void testEraseUnknownSession() {
+    void testEraseUnknownSession() {
         MemorySessions sessions = new MemorySessions();
         sessions.setSessionDuration(1200000);
 
@@ -169,7 +169,7 @@ public class TestMemorySessions {
     }
 
     @Test
-    public void testEraseAllSessions() {
+    void testEraseAllSessions() {
         MemorySessions sessions = new MemorySessions();
         sessions.setSessionDuration(1200000);
 
@@ -184,7 +184,7 @@ public class TestMemorySessions {
     }
 
     @Test
-    public void testEraseUserSessions() {
+    void testEraseUserSessions() {
         MemorySessions sessions = new MemorySessions();
         sessions.setSessionDuration(1200000);
 
@@ -204,7 +204,7 @@ public class TestMemorySessions {
     }
 
     @Test
-    public void testEraseUnkownUserSessions() {
+    void testEraseUnkownUserSessions() {
         MemorySessions sessions = new MemorySessions();
         sessions.setSessionDuration(1200000);
 
@@ -222,7 +222,7 @@ public class TestMemorySessions {
     }
 
     @Test
-    public void testPurgeSessions() {
+    void testPurgeSessions() {
         MemorySessions sessions = new MemorySessions();
         sessions.setSessionDuration(2000);
 
@@ -248,7 +248,7 @@ public class TestMemorySessions {
     }
 
     @Test
-    public void testCountSessions() {
+    void testCountSessions() {
         MemorySessions sessions = new MemorySessions();
         sessions.setSessionDuration(4000);
 
@@ -287,7 +287,7 @@ public class TestMemorySessions {
     }
 
     @Test
-    public void testListSessions() {
+    void testListSessions() {
         MemorySessions sessions = new MemorySessions();
         sessions.setSessionDuration(4000);
 

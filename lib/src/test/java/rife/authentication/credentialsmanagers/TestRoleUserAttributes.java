@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRoleUserAttributes {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         RoleUserAttributes user_attributes = null;
 
         user_attributes = new RoleUserAttributes("thepassword");
@@ -56,7 +56,7 @@ public class TestRoleUserAttributes {
     }
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         RoleUserAttributes user_attributes1 = new RoleUserAttributes("thepassword");
         RoleUserAttributes user_attributes2 = new RoleUserAttributes("thepassword");
         RoleUserAttributes user_attributes3 = new RoleUserAttributes("thepassword2");
@@ -135,14 +135,14 @@ public class TestRoleUserAttributes {
     }
 
     @Test
-    public void testEmptyInitialRoles() {
+    void testEmptyInitialRoles() {
         RoleUserAttributes user_attributes = new RoleUserAttributes("thepassword");
 
         assertEquals(0, user_attributes.getRoles().size());
     }
 
     @Test
-    public void testPopulate() {
+    void testPopulate() {
         RoleUserAttributes user_attributes = new RoleUserAttributes("thepassword");
 
         ArrayList<String> roles = new ArrayList<>();
@@ -167,7 +167,7 @@ public class TestRoleUserAttributes {
     }
 
     @Test
-    public void testIsInRole() {
+    void testIsInRole() {
         RoleUserAttributes user_attributes = new RoleUserAttributes("thepassword");
 
         ArrayList<String> roles = new ArrayList<>();
@@ -181,7 +181,7 @@ public class TestRoleUserAttributes {
     }
 
     @Test
-    public void testIsValid() {
+    void testIsValid() {
         RoleUserAttributes user_attributes = new RoleUserAttributes("thepassword");
 
         ArrayList<String> roles = new ArrayList<>();

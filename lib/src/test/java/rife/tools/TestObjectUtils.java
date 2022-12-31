@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestObjectUtils {
     @Test
-    public void testGenericClone() {
+    void testGenericClone() {
         assertNull(ObjectUtils.genericClone(null));
 
         Object object_orig = new Object();
@@ -95,7 +95,7 @@ public class TestObjectUtils {
     }
 
     @Test
-    public void testDeepClone() {
+    void testDeepClone() {
         try {
             assertNull(ObjectUtils.deepClone(null));
 
@@ -334,7 +334,7 @@ public class TestObjectUtils {
     }
 
     @Test
-    public void testGetBaseClass() {
+    void testGetBaseClass() {
         assertSame(Void.TYPE, ObjectUtils.getBaseClass(null));
         assertSame(Object.class, ObjectUtils.getBaseClass(new Object()));
         assertSame(String.class, ObjectUtils.getBaseClass(""));

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropTableH2 extends TestDropTable {
     @Test
-    public void testInstantiationH2() {
+    void testInstantiationH2() {
         DropTable query = new DropTable(H2);
         assertNotNull(query);
         try {
@@ -24,7 +24,7 @@ public class TestDropTableH2 extends TestDropTable {
     }
 
     @Test
-    public void testIncompleteQueryH2() {
+    void testIncompleteQueryH2() {
         DropTable query = new DropTable(H2);
         try {
             query.getSql();
@@ -37,7 +37,7 @@ public class TestDropTableH2 extends TestDropTable {
     }
 
     @Test
-    public void testClearH2() {
+    void testClearH2() {
         DropTable query = new DropTable(H2);
         query.table("tablename");
         assertNotNull(query.getSql());
@@ -51,7 +51,7 @@ public class TestDropTableH2 extends TestDropTable {
     }
 
     @Test
-    public void testOneTableH2() {
+    void testOneTableH2() {
         DropTable query = new DropTable(H2);
         query.table("tabletodrop");
         assertEquals(query.getSql(), "DROP TABLE tabletodrop");
@@ -59,7 +59,7 @@ public class TestDropTableH2 extends TestDropTable {
     }
 
     @Test
-    public void testMultipleTablesHsqldb() {
+    void testMultipleTablesHsqldb() {
         DropTable query = new DropTable(H2);
         query.table("tabletodrop1")
             .table("tabletodrop2")
@@ -73,7 +73,7 @@ public class TestDropTableH2 extends TestDropTable {
     }
 
     @Test
-    public void testCloneH2() {
+    void testCloneH2() {
         DropTable query = new DropTable(H2);
         query.table("tabletodrop");
         DropTable query_clone = query.clone();

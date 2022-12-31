@@ -25,7 +25,7 @@ public class TestGenericQueryManagerBinary {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetBaseClass(Datasource datasource) {
+    void testGetBaseClass(Datasource datasource) {
         var manager = setup(datasource);
         try {
             assertSame(BinaryBean.class, manager.getBaseClass());
@@ -36,7 +36,7 @@ public class TestGenericQueryManagerBinary {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallCustomQuery(Datasource datasource) {
+    void testInstallCustomQuery(Datasource datasource) {
         var manager = setup(datasource);
         try {
             manager.remove();
@@ -48,7 +48,7 @@ public class TestGenericQueryManagerBinary {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveRestoreBinary(Datasource datasource) {
+    void testSaveRestoreBinary(Datasource datasource) {
         var manager = setup(datasource);
         try {
             var bean = new BinaryBean();

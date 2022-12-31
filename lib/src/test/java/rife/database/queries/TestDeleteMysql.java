@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDeleteMysql extends TestDelete {
     @Test
-    public void testInstantiationMysql() {
+    void testInstantiationMysql() {
         Delete query = new Delete(MYSQL);
         assertNotNull(query);
         try {
@@ -33,7 +33,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testIncompleteQueryMysql() {
+    void testIncompleteQueryMysql() {
         Delete query = new Delete(MYSQL);
         try {
             query.getSql();
@@ -53,7 +53,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testClearMysql() {
+    void testClearMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where("this = that");
@@ -68,7 +68,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testFromMysql() {
+    void testFromMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename");
         assertEquals(query.getSql(), "DELETE FROM tablename");
@@ -76,7 +76,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testHintMysql() {
+    void testHintMysql() {
         Delete query = new Delete(MYSQL);
         query
             .hint("LOW_PRIORITY")
@@ -86,7 +86,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereMysql() {
+    void testWhereMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where("propertyByte = 89");
@@ -95,7 +95,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereTypedMysql() {
+    void testWhereTypedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename");
 
@@ -126,7 +126,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereTypedMixedMysql() {
+    void testWhereTypedMixedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename");
 
@@ -163,7 +163,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersMysql() {
+    void testWhereParametersMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename");
 
@@ -196,7 +196,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersMixedMysql() {
+    void testWhereParametersMixedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -223,7 +223,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereConstructionMysql() {
+    void testWhereConstructionMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -234,7 +234,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereConstructionGroupMysql() {
+    void testWhereConstructionGroupMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -265,7 +265,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanMysql() {
+    void testWhereBeanMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
@@ -274,7 +274,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanConstrainedMysql() {
+    void testWhereBeanConstrainedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where(BeanImplConstrained.getPopulatedBean());
@@ -283,7 +283,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanNullValuesMysql() {
+    void testWhereBeanNullValuesMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
@@ -292,7 +292,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanIncludedMysql() {
+    void testWhereBeanIncludedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -301,7 +301,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanExcludedMysql() {
+    void testWhereBeanExcludedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -310,7 +310,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanFilteredMysql() {
+    void testWhereBeanFilteredMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -319,7 +319,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanMysql() {
+    void testWhereParametersBeanMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
@@ -391,7 +391,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanConstrainedMysql() {
+    void testWhereParametersBeanConstrainedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
             .whereParameters(BeanImplConstrained.class);
@@ -507,12 +507,12 @@ public class TestDeleteMysql extends TestDelete {
 //    }
 
     @Test
-    public void testDeleteSubselectParamsMysql() {
+    void testDeleteSubselectParamsMysql() {
         // mysql doesn't support subqueries
     }
 
     @Test
-    public void testCloneMysql() {
+    void testCloneMysql() {
         Delete query = new Delete(MYSQL);
         query
             .hint("LOW_PRIORITY")

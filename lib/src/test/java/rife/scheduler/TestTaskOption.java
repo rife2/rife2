@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTaskOption {
     @Test
-    public void testInstantiateTaskOption() {
+    void testInstantiateTaskOption() {
         TaskOption taskoption = null;
         assertNull(taskoption);
         taskoption = new TaskOption();
@@ -22,7 +22,7 @@ public class TestTaskOption {
     }
 
     @Test
-    public void testPopulateTaskOption() {
+    void testPopulateTaskOption() {
         int taskid = 1;
         String name = "name";
         String value = "value";
@@ -38,7 +38,7 @@ public class TestTaskOption {
     }
 
     @Test
-    public void testCloneTaskOption() {
+    void testCloneTaskOption() {
         try {
             int taskid = 1;
             String name = "name";
@@ -59,7 +59,7 @@ public class TestTaskOption {
     }
 
     @Test
-    public void testTaskOptionValidation() {
+    void testTaskOptionValidation() {
         TaskOption taskoption = new TaskOption();
         assertEquals(false, taskoption.validate());
         assertEquals(3, taskoption.countValidationErrors());

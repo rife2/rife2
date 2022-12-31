@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValueMysql extends TestSequenceValue {
     @Test
-    public void testInstantiationMysql() {
+    void testInstantiationMysql() {
         SequenceValue query = new SequenceValue(MYSQL);
         assertNotNull(query);
         try {
@@ -25,7 +25,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
     }
 
     @Test
-    public void testInvalidMysql() {
+    void testInvalidMysql() {
         SequenceValue query = new SequenceValue(MYSQL);
         try {
             query.getSql();
@@ -52,7 +52,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
     }
 
     @Test
-    public void testClearMysql() {
+    void testClearMysql() {
         SequenceValue query = new SequenceValue(MYSQL);
         query
             .name("sequencename")
@@ -74,7 +74,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
     }
 
     @Test
-    public void testNextMysql() {
+    void testNextMysql() {
         SequenceValue query = new SequenceValue(MYSQL);
         query
             .name("sequencename")
@@ -88,7 +88,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
     }
 
     @Test
-    public void testCurrentMysql() {
+    void testCurrentMysql() {
         SequenceValue query = new SequenceValue(MYSQL);
         query
             .name("sequencename")
@@ -102,7 +102,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
     }
 
     @Test
-    public void testCloneMysql() {
+    void testCloneMysql() {
         SequenceValue query = new SequenceValue(MYSQL);
         query
             .name("sequencename")

@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class Test_oracle_jdbc_driver_OracleDriver {
     @Test
-    public void testGetSqlValue() {
+    void testGetSqlValue() {
         SqlConversion dbtypes;
         dbtypes = new oracle_jdbc_driver_OracleDriver();
 

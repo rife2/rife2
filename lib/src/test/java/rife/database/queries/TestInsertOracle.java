@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInsertOracle extends TestInsert {
     @Test
-    public void testInstantiationOracle() {
+    void testInstantiationOracle() {
         Insert query = new Insert(ORACLE);
         assertNotNull(query);
         try {
@@ -35,7 +35,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testIncompleteQueryOracle() {
+    void testIncompleteQueryOracle() {
         Insert query = new Insert(ORACLE);
         try {
             query.getSql();
@@ -55,7 +55,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testClearOracle() {
+    void testClearOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
             .field("col1", "val1");
@@ -70,7 +70,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testHintOracle() {
+    void testHintOracle() {
         Insert query = new Insert(ORACLE)
             .hint("APPEND")
             .into("tablename")
@@ -80,7 +80,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testParameterOracle() {
+    void testParameterOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
             .fieldParameter("col1");
@@ -88,7 +88,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldOracle() {
+    void testFieldOracle() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
         Insert query = new Insert(ORACLE);
@@ -115,7 +115,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldCustomOracle() {
+    void testFieldCustomOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
             .fieldCustom("propertySqlDate", "(SELECT sysdate FROM dual)");
@@ -124,7 +124,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldsOracle() {
+    void testFieldsOracle() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
         Insert query = new Insert(ORACLE);
@@ -153,7 +153,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldParametersOracle() {
+    void testFieldParametersOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename");
 
@@ -244,7 +244,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldParametersMixedOracle() {
+    void testFieldParametersMixedOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename");
 
@@ -311,7 +311,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanOracle() {
+    void testFieldsBeanOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
             .fields(BeanImpl.getPopulatedBean());
@@ -320,7 +320,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanConstrainedOracle() {
+    void testFieldsBeanConstrainedOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
             .fields(BeanImplConstrained.getPopulatedBean());
@@ -329,7 +329,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanNullValuesOracle() {
+    void testFieldsBeanNullValuesOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
             .fields(BeanImpl.getNullBean());
@@ -338,7 +338,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanIncludedOracle() {
+    void testFieldsBeanIncludedOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
             .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -347,7 +347,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanExcludedOracle() {
+    void testFieldsBeanExcludedOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
             .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -356,7 +356,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanFilteredOracle() {
+    void testFieldsBeanFilteredOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
             .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -365,7 +365,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testMultipleRowsOracle() {
+    void testMultipleRowsOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
             .field("propertyChar", 'M')
@@ -385,7 +385,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanOracle() {
+    void testFieldsParametersBeanOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
             .fieldsParameters(BeanImpl.class);
@@ -455,7 +455,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanConstrainedOracle() {
+    void testFieldsParametersBeanConstrainedOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
             .fieldsParameters(BeanImplConstrained.class);
@@ -517,7 +517,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanExcludedOracle() {
+    void testFieldsParametersBeanExcludedOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
@@ -572,7 +572,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testInsertSubselectParamsOracle() {
+    void testInsertSubselectParamsOracle() {
         Select fieldquery = new Select(ORACLE);
         fieldquery
             .from("table2")
@@ -622,7 +622,7 @@ public class TestInsertOracle extends TestInsert {
     }
 
     @Test
-    public void testCloneOracle() {
+    void testCloneOracle() {
         Select fieldquery = new Select(ORACLE);
         fieldquery
             .from("table2")

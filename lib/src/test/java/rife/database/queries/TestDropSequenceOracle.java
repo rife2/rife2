@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropSequenceOracle extends TestDropSequence {
     @Test
-    public void testInstantiationOracle() {
+    void testInstantiationOracle() {
         DropSequence query = new DropSequence(ORACLE);
         assertNotNull(query);
         try {
@@ -23,7 +23,7 @@ public class TestDropSequenceOracle extends TestDropSequence {
     }
 
     @Test
-    public void testClearOracle() {
+    void testClearOracle() {
         DropSequence query = new DropSequence(ORACLE);
         query.name("sequencename");
         assertNotNull(query.getSql());
@@ -37,7 +37,7 @@ public class TestDropSequenceOracle extends TestDropSequence {
     }
 
     @Test
-    public void testCreateOracle() {
+    void testCreateOracle() {
         DropSequence query = new DropSequence(ORACLE);
         query.name("sequencename");
         assertEquals(query.getSql(), "DROP SEQUENCE sequencename");
@@ -45,7 +45,7 @@ public class TestDropSequenceOracle extends TestDropSequence {
     }
 
     @Test
-    public void testCloneOracle() {
+    void testCloneOracle() {
         DropSequence query = new DropSequence(ORACLE);
         query.name("sequencename");
         DropSequence query_clone = query.clone();

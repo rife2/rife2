@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDbBeanFetcher {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testFetchBean(Datasource datasource)
+    void testFetchBean(Datasource datasource)
     throws Exception {
         final DbQueryManager manager = new DbQueryManager(datasource);
 
@@ -137,7 +137,7 @@ public class TestDbBeanFetcher {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testFetchNullBean(Datasource datasource)
+    void testFetchNullBean(Datasource datasource)
     throws Exception {
         final DbQueryManager manager = new DbQueryManager(datasource);
 

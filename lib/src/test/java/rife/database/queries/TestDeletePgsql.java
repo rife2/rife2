@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDeletePgsql extends TestDelete {
     @Test
-    public void testInstantiationPgsql() {
+    void testInstantiationPgsql() {
         Delete query = new Delete(PGSQL);
         assertNotNull(query);
         try {
@@ -34,7 +34,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testIncompleteQueryPgsql() {
+    void testIncompleteQueryPgsql() {
         Delete query = new Delete(PGSQL);
         try {
             query.getSql();
@@ -54,7 +54,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testClearPgsql() {
+    void testClearPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where("this = that");
@@ -69,7 +69,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testFromPgsql() {
+    void testFromPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename");
         assertEquals(query.getSql(), "DELETE FROM tablename");
@@ -77,7 +77,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testHintPgsql() {
+    void testHintPgsql() {
         Delete query = new Delete(PGSQL)
             .hint("NO_INDEX")
             .from("tablename");
@@ -90,7 +90,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWherePgsql() {
+    void testWherePgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where("propertyByte = 89");
@@ -99,7 +99,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereTypedPgsql() {
+    void testWhereTypedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename");
 
@@ -130,7 +130,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereTypedMixedPgsql() {
+    void testWhereTypedMixedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename");
 
@@ -167,7 +167,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersPgsql() {
+    void testWhereParametersPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename");
 
@@ -200,7 +200,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersMixedPgsql() {
+    void testWhereParametersMixedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -227,7 +227,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereConstructionPgsql() {
+    void testWhereConstructionPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -238,7 +238,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereConstructionGroupPgsql() {
+    void testWhereConstructionGroupPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -269,7 +269,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanPgsql() {
+    void testWhereBeanPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
@@ -278,7 +278,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanConstrainedPgsql() {
+    void testWhereBeanConstrainedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where(BeanImplConstrained.getPopulatedBean());
@@ -287,7 +287,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanNullValuesPgsql() {
+    void testWhereBeanNullValuesPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
@@ -296,7 +296,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanIncludedPgsql() {
+    void testWhereBeanIncludedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -305,7 +305,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanExcludedPgsql() {
+    void testWhereBeanExcludedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -314,7 +314,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanFilteredPgsql() {
+    void testWhereBeanFilteredPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -323,7 +323,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanPgsql() {
+    void testWhereParametersBeanPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
@@ -393,7 +393,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanConstrainedPgsql() {
+    void testWhereParametersBeanConstrainedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .whereParameters(BeanImplConstrained.class);
@@ -457,7 +457,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanExcludedPgsql() {
+    void testWhereParametersBeanExcludedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
             .whereParametersExcluded(BeanImpl.class,
@@ -511,7 +511,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testDeleteSubselectParamsPgsql() {
+    void testDeleteSubselectParamsPgsql() {
         Select wherequery = new Select(PGSQL);
         wherequery
             .from("table2")
@@ -571,7 +571,7 @@ public class TestDeletePgsql extends TestDelete {
     }
 
     @Test
-    public void testClonePgsql() {
+    void testClonePgsql() {
         Select wherequery = new Select(PGSQL);
         wherequery
             .from("table2")

@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSelectOracle extends TestSelect {
     @Test
-    public void testInstantiationOracle() {
+    void testInstantiationOracle() {
         Select query = new Select(ORACLE);
         assertNotNull(query);
         try {
@@ -33,7 +33,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testIncompleteQueryOracle() {
+    void testIncompleteQueryOracle() {
         Select query = new Select(ORACLE);
         try {
             query.getSql();
@@ -56,7 +56,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testClearOracle() {
+    void testClearOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename");
         assertNotNull(query.getSql());
@@ -70,7 +70,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testBasicOracle() {
+    void testBasicOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename");
@@ -78,7 +78,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testHintOracle() {
+    void testHintOracle() {
         Select query = new Select(ORACLE)
             .hint("NO_INDEX")
             .from("tablename");
@@ -87,7 +87,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testOrderByAscendingOracle() {
+    void testOrderByAscendingOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .orderBy("propertyInt", Select.ASC);
@@ -96,7 +96,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testOrderByDescendingOracle() {
+    void testOrderByDescendingOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .orderBy("propertyInt", Select.DESC);
@@ -105,7 +105,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testBeanOracle() {
+    void testBeanOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .fields(BeanImpl.class);
@@ -114,7 +114,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testBeanConstrainedOracle() {
+    void testBeanConstrainedOracle() {
         Select query = new Select(ORACLE, BeanImplConstrained.class);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyString ASC, propertyInt DESC");
@@ -128,7 +128,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testBeanExcludedOracle() {
+    void testBeanExcludedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
@@ -137,7 +137,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testBeanTableOracle() {
+    void testBeanTableOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .fields("tablename", BeanImpl.class);
@@ -146,7 +146,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testBeanExcludedTableOracle() {
+    void testBeanExcludedTableOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .fieldsExcluded("tablename", BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
@@ -155,7 +155,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereTypedOracle() {
+    void testWhereTypedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename");
 
@@ -186,7 +186,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereTypedMixedOracle() {
+    void testWhereTypedMixedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename");
 
@@ -223,7 +223,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersOracle() {
+    void testWhereParametersOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename");
 
@@ -256,7 +256,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersMixedOracle() {
+    void testWhereParametersMixedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -278,7 +278,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereConstructionOracle() {
+    void testWhereConstructionOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -289,7 +289,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereConstructionGroupOracle() {
+    void testWhereConstructionGroupOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .startWhere()
@@ -323,7 +323,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanOracle() {
+    void testWhereBeanOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
@@ -332,7 +332,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanConstrainedOracle() {
+    void testWhereBeanConstrainedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .where(BeanImplConstrained.getPopulatedBean());
@@ -341,7 +341,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanNullValuesOracle() {
+    void testWhereBeanNullValuesOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
@@ -350,7 +350,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanIncludedOracle() {
+    void testWhereBeanIncludedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -359,7 +359,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanExcludedOracle() {
+    void testWhereBeanExcludedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -368,7 +368,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanFilteredOracle() {
+    void testWhereBeanFilteredOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -377,7 +377,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanOracle() {
+    void testWhereParametersBeanOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
@@ -449,7 +449,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanConstrainedOracle() {
+    void testWhereParametersBeanConstrainedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .whereParameters(BeanImplConstrained.class);
@@ -515,7 +515,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanExcludedOracle() {
+    void testWhereParametersBeanExcludedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .whereParametersExcluded(BeanImpl.class,
@@ -565,7 +565,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testDistinctOracle() {
+    void testDistinctOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .distinct()
@@ -578,7 +578,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testDistinctOnOracle() {
+    void testDistinctOnOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .distinctOn("propertyDouble")
@@ -597,7 +597,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testComplexOracle() {
+    void testComplexOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .field("field1")
@@ -624,7 +624,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testGroupByBeanOracle() {
+    void testGroupByBeanOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .fields(BeanImpl.class)
@@ -634,7 +634,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testGroupByBeanExcludedOracle() {
+    void testGroupByBeanExcludedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort")
@@ -644,7 +644,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testJoinOracle() {
+    void testJoinOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .join("table2")
@@ -654,7 +654,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testJoinCustomOracle() {
+    void testJoinCustomOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .joinCustom("INNER JOIN table3 USING (propertyInt)")
@@ -664,7 +664,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testJoinCrossOracle() {
+    void testJoinCrossOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .joinCross("table2")
@@ -674,7 +674,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testJoinInnerOracle() {
+    void testJoinInnerOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .joinInner("table2", Select.NATURAL, null);
@@ -693,7 +693,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testJoinOuterOracle() {
+    void testJoinOuterOracle() {
         Select query = new Select(ORACLE);
 
         query.from("tablename")
@@ -746,7 +746,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testLimitOracle() {
+    void testLimitOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .limit(3);
@@ -766,7 +766,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testLimitParameterOracle() {
+    void testLimitParameterOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
             .limitParameter("limit");
@@ -787,7 +787,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testSubselectParamsOracle() {
+    void testSubselectParamsOracle() {
         Select fieldquery = new Select(ORACLE);
         fieldquery
             .from("table2")
@@ -899,7 +899,7 @@ public class TestSelectOracle extends TestSelect {
     }
 
     @Test
-    public void testCloneOracle() {
+    void testCloneOracle() {
         Select fieldquery = new Select(ORACLE);
         fieldquery
             .from("table2")

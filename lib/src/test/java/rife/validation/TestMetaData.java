@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMetaData {
     @Test
-    public void testConstraintsValidation() {
+    void testConstraintsValidation() {
         Person person = new Person();
 
         Constrained constrained = (Constrained) person;
@@ -63,7 +63,7 @@ public class TestMetaData {
     }
 
     @Test
-    public void testConstraintsValidationAnnotation() {
+    void testConstraintsValidationAnnotation() {
         PersonAnnotation person = new PersonAnnotation();
 
         Constrained constrained = (Constrained) person;
@@ -106,7 +106,7 @@ public class TestMetaData {
     }
 
     @Test
-    public void testCloningNoMethod() {
+    void testCloningNoMethod() {
         Person person = new Person();
 
         person.setFirstname("John");
@@ -129,7 +129,7 @@ public class TestMetaData {
     }
 
     @Test
-    public void testCloningExistingMethod() {
+    void testCloningExistingMethod() {
         PersonCloneable person = new PersonCloneable();
         assertNull(person.getFirstname());
         assertNull(person.getLastname());
@@ -196,7 +196,7 @@ public class TestMetaData {
     }
 
     @Test
-    public void testCallbacks() {
+    void testCallbacks() {
         PersonCallbacks person = new PersonCallbacks();
 
         person.setFirstname("John");

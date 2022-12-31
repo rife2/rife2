@@ -27,37 +27,37 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTemplateFactory {
     @Test
-    public void testUniqueFactoryHtml() {
+    void testUniqueFactoryHtml() {
         assertSame(TemplateFactory.HTML, TemplateFactory.HTML);
     }
 
     @Test
-    public void testUniqueFactoryTxt() {
+    void testUniqueFactoryTxt() {
         assertSame(TemplateFactory.TXT, TemplateFactory.TXT);
     }
 
     @Test
-    public void testUniqueParserHtml() {
+    void testUniqueParserHtml() {
         assertSame(TemplateFactory.HTML.getParser(), TemplateFactory.HTML.getParser());
     }
 
     @Test
-    public void testUniqueParserTxt() {
+    void testUniqueParserTxt() {
         assertSame(TemplateFactory.TXT.getParser(), TemplateFactory.TXT.getParser());
     }
 
     @Test
-    public void testDefaultContentTypeHtml() {
+    void testDefaultContentTypeHtml() {
         assertEquals(TemplateFactory.HTML.get("testhtml_in").getDefaultContentType(), "text/html");
     }
 
     @Test
-    public void testDefaultContentTypeTxt() {
+    void testDefaultContentTypeTxt() {
         assertEquals(TemplateFactory.TXT.get("testtext_in").getDefaultContentType(), "text/plain");
     }
 
     @Test
-    public void testTemplateHtml() {
+    void testTemplateHtml() {
         var template = TemplateFactory.HTML.get("templates.testhtml_in");
         assertEquals(template.getFactoryIdentifier(), TemplateFactory.HTML.getIdentifier());
         assertEquals(template.getFullName(), "templates.testhtml_in");
@@ -76,7 +76,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testTemplateTxt() {
+    void testTemplateTxt() {
         var template = TemplateFactory.TXT.get("templates.testtext_in");
         assertEquals(template.getFactoryIdentifier(), TemplateFactory.TXT.getIdentifier());
         assertEquals(template.getFullName(), "templates.testtext_in");
@@ -95,7 +95,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testTemplateHtmlCreateNewInstance() {
+    void testTemplateHtmlCreateNewInstance() {
         var template = TemplateFactory.HTML.get("templates.testhtml_in");
         var instance = template.createNewInstance();
 
@@ -105,7 +105,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testTemplateTxtCreateNewInstance() {
+    void testTemplateTxtCreateNewInstance() {
         var template = TemplateFactory.TXT.get("templates.testtext_in");
         var instance = template.createNewInstance();
 
@@ -115,7 +115,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testTemplatePathHtml() {
+    void testTemplatePathHtml() {
         var template = TemplateFactory.HTML.get("testhtml_in");
         template.setValue("first", "first1");
         template.setValue("second", "second1");
@@ -130,7 +130,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testTemplatePathTxt() {
+    void testTemplatePathTxt() {
         var template = TemplateFactory.TXT.get("testtext_in");
         template.setValue("first", "first1");
         template.setValue("second", "second1");
@@ -145,7 +145,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testTemplateAmbiguousHtml() {
+    void testTemplateAmbiguousHtml() {
         try {
             TemplateFactory.HTML.get("html.html");
             fail("exception not thrown");
@@ -155,7 +155,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testTemplateAmbiguousTxt() {
+    void testTemplateAmbiguousTxt() {
         try {
             TemplateFactory.TXT.get("txt.txt");
             fail("exception not thrown");
@@ -165,7 +165,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testTemplateInitializerHtml() {
+    void testTemplateInitializerHtml() {
         var factory = TemplateFactory.HTML;
         var template = factory.get("testhtml_in", null);
         assertNotEquals(template.getContent(), TemplateFactory.HTML.getParser().getTemplateContent("testhtml_out"));
@@ -194,7 +194,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testTemplateInitializerTxt() {
+    void testTemplateInitializerTxt() {
         var factory = TemplateFactory.TXT;
         var template = factory.get("testtext_in", null);
         assertNotEquals(template.getContent(), TemplateFactory.TXT.getParser().getTemplateContent("testtext_out"));
@@ -223,7 +223,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testFilteredTagsRenderHtml()
+    void testFilteredTagsRenderHtml()
     throws Exception {
         RendererImpl.sCount = 0;
         Template t = TemplateFactory.HTML.get("filtered_tags_render");
@@ -233,7 +233,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testFilteredTagsRenderTxt()
+    void testFilteredTagsRenderTxt()
     throws Exception {
         RendererImpl.sCount = 0;
         Template t = TemplateFactory.TXT.get("filtered_tags_render");
@@ -243,7 +243,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testFilteredTagsL10nHtml()
+    void testFilteredTagsL10nHtml()
     throws Exception {
         var template = TemplateFactory.HTML.get("filtered_tags_l10n");
         assertEquals("This is the localized key 'default value'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template.getContent());
@@ -261,7 +261,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testFilteredTagsL10nTxt()
+    void testFilteredTagsL10nTxt()
     throws Exception {
         var template = TemplateFactory.TXT.get("filtered_tags_l10n");
         assertEquals("This is the localized key 'default value'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template.getContent());
@@ -279,7 +279,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testFilteredTagsL10nHtmlResourceBundleNotFound()
+    void testFilteredTagsL10nHtmlResourceBundleNotFound()
     throws Exception {
         try {
             TemplateFactory.HTML.get("filtered_tags_l10n_bundlenotfound");
@@ -292,7 +292,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testFilteredTagsL10nTxtResourceBundleNotFound()
+    void testFilteredTagsL10nTxtResourceBundleNotFound()
     throws Exception {
         try {
             TemplateFactory.TXT.get("filtered_tags_l10n_bundlenotfound");
@@ -305,7 +305,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testFilteredTagsL10nHtmlDefaultResourceBundles()
+    void testFilteredTagsL10nHtmlDefaultResourceBundles()
     throws Exception {
         Template template;
 
@@ -333,7 +333,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testFilteredTagsL10nTxtDefaultResourceBundles()
+    void testFilteredTagsL10nTxtDefaultResourceBundles()
     throws Exception {
         Template template;
 
@@ -361,7 +361,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testFilteredTagsL10nHtmlSeveralResourceBundles()
+    void testFilteredTagsL10nHtmlSeveralResourceBundles()
     throws Exception {
         var template = TemplateFactory.HTML.get("filtered_tags_l10n");
         assertEquals("This is the localized key 'default value'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template.getContent());
@@ -400,7 +400,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testFilteredTagsL10nTxtSeveralResourceBundles()
+    void testFilteredTagsL10nTxtSeveralResourceBundles()
     throws Exception {
         var template = TemplateFactory.TXT.get("filtered_tags_l10n");
         assertEquals("This is the localized key 'default value'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template.getContent());
@@ -439,7 +439,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testFilteredTagsLangHtml()
+    void testFilteredTagsLangHtml()
     throws Exception {
         var template = TemplateFactory.HTML.get("filtered_tags_lang");
         assertEquals("This expression is Dutch '<!--v lang:value1/-->'.\nThis expression is French or English 'yes yes'.\n\n\n\n", template.getContent());
@@ -468,7 +468,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testFilteredTagsLangTxt()
+    void testFilteredTagsLangTxt()
     throws Exception {
         var template = TemplateFactory.TXT.get("filtered_tags_lang");
         assertEquals("This expression is Dutch '<!v lang:value1/>'.\nThis expression is French or English 'yes yes'.\n\n\n\n", template.getContent());
@@ -497,7 +497,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testEncodingHtml() {
+    void testEncodingHtml() {
         Template template_iso8859_1;
         Template template_utf_8;
         try {
@@ -512,7 +512,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testEncodingTxt() {
+    void testEncodingTxt() {
         Template template_iso8859_1;
         Template template_utf_8;
         try {
@@ -527,7 +527,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testCachingHtml() {
+    void testCachingHtml() {
         Template template1;
         Template template2;
         try {
@@ -543,7 +543,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testCachingTxt() {
+    void testCachingTxt() {
         Template template1;
         Template template2;
         try {
@@ -559,21 +559,21 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testPackageFullNameHtml() {
+    void testPackageFullNameHtml() {
         var template = TemplateFactory.HTML.get("test_package.noblocks_in");
         assertNotNull(template);
         assertEquals("test_package.noblocks_in", template.getFullName());
     }
 
     @Test
-    public void testPackageFullNameTxt() {
+    void testPackageFullNameTxt() {
         var template = TemplateFactory.TXT.get("test_package.noblocks_in");
         assertNotNull(template);
         assertEquals("test_package.noblocks_in", template.getFullName());
     }
 
     @Test
-    public void testTemplatesInPackageCachingHtml() {
+    void testTemplatesInPackageCachingHtml() {
         Template template1;
         Template template2;
         try {
@@ -589,7 +589,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testTemplatesInPackageCachingTxt() {
+    void testTemplatesInPackageCachingTxt() {
         Template template1;
         Template template2;
         try {
@@ -605,7 +605,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testTemplatesInPackagePathHtml() {
+    void testTemplatesInPackagePathHtml() {
         Template template1;
         Template template2;
         try {
@@ -621,7 +621,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testTemplatesInPackagePathTxt() {
+    void testTemplatesInPackagePathTxt() {
         Template template1;
         Template template2;
         try {
@@ -637,7 +637,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testReloadBasicHtml() {
+    void testReloadBasicHtml() {
         var resource_finder = TemplateFactory.HTML.getResourceFinder();
 
         try {
@@ -709,7 +709,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testReloadBasicTxt() {
+    void testReloadBasicTxt() {
         var resource_finder = TemplateFactory.TXT.getResourceFinder();
 
         try {
@@ -781,7 +781,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testReloadIncludesHtml() {
+    void testReloadIncludesHtml() {
         var resource_finder = TemplateFactory.HTML.getResourceFinder();
 
         try {
@@ -862,7 +862,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testReloadIncludesTxt() {
+    void testReloadIncludesTxt() {
         var resource_finder = TemplateFactory.TXT.getResourceFinder();
 
         try {
@@ -943,7 +943,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    public void testReloadMultiLevelIncludes()
+    void testReloadMultiLevelIncludes()
     throws IOException {
         var resource_finder = TemplateFactory.HTML.getResourceFinder();
 

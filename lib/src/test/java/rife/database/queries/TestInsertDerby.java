@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInsertDerby extends TestInsert {
     @Test
-    public void testInstantiationDerby() {
+    void testInstantiationDerby() {
         Insert query = new Insert(DERBY);
         assertNotNull(query);
         try {
@@ -36,7 +36,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testIncompleteQueryDerby() {
+    void testIncompleteQueryDerby() {
         Insert query = new Insert(DERBY);
         try {
             query.getSql();
@@ -56,7 +56,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testClearDerby() {
+    void testClearDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
             .field("col1", "val1");
@@ -71,7 +71,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testHintDerby() {
+    void testHintDerby() {
         Insert query = new Insert(DERBY)
             .hint("NO_INDEX")
             .into("tablename")
@@ -85,7 +85,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testParameterDerby() {
+    void testParameterDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldParameter("col1");
@@ -93,7 +93,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldDerby() {
+    void testFieldDerby() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
@@ -121,7 +121,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldCustomDerby() {
+    void testFieldCustomDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldCustom("propertySqlDate", "CURRENT_DATE");
@@ -130,7 +130,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldsDerby() {
+    void testFieldsDerby() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
@@ -160,7 +160,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldParametersDerby() {
+    void testFieldParametersDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename");
 
@@ -251,7 +251,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldParametersMixedDerby() {
+    void testFieldParametersMixedDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename");
 
@@ -317,7 +317,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanDerby() {
+    void testFieldsBeanDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
             .fields(BeanImpl.getPopulatedBean());
@@ -326,7 +326,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanConstrainedDerby() {
+    void testFieldsBeanConstrainedDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
             .fields(BeanImplConstrained.getPopulatedBean());
@@ -335,7 +335,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanNullValuesDerby() {
+    void testFieldsBeanNullValuesDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
             .fields(BeanImpl.getNullBean());
@@ -344,7 +344,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanIncludedDerby() {
+    void testFieldsBeanIncludedDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -353,7 +353,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanExcludedDerby() {
+    void testFieldsBeanExcludedDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -362,7 +362,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldsBeanFilteredDerby() {
+    void testFieldsBeanFilteredDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -371,7 +371,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testMultipleRowsDerby() {
+    void testMultipleRowsDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
             .field("propertyChar", 'M')
@@ -391,7 +391,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanDerby() {
+    void testFieldsParametersBeanDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldsParameters(BeanImpl.class);
@@ -461,7 +461,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanConstrainedDerby() {
+    void testFieldsParametersBeanConstrainedDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldsParameters(BeanImplConstrained.class);
@@ -523,7 +523,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testFieldsParametersBeanExcludedDerby() {
+    void testFieldsParametersBeanExcludedDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
@@ -578,7 +578,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testInsertSubselectParamsDerby() {
+    void testInsertSubselectParamsDerby() {
         Select fieldquery = new Select(DERBY);
         fieldquery
             .from("table2")
@@ -628,7 +628,7 @@ public class TestInsertDerby extends TestInsert {
     }
 
     @Test
-    public void testCloneDerby() {
+    void testCloneDerby() {
         Select fieldquery = new Select(DERBY);
         fieldquery
             .from("table2")

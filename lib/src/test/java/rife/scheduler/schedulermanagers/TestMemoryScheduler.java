@@ -26,13 +26,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMemoryScheduler {
     @Test
-    public void testInstantiateScheduler() {
+    void testInstantiateScheduler() {
         Scheduler scheduler = new MemoryScheduler().getScheduler();
         assertNotNull(scheduler);
     }
 
     @Test
-    public void testStartStopScheduler() {
+    void testStartStopScheduler() {
         Scheduler scheduler = new MemoryScheduler().getScheduler();
         try {
             scheduler.start();
@@ -51,7 +51,7 @@ public class TestMemoryScheduler {
     }
 
     @Test
-    public void testAddExecutor() {
+    void testAddExecutor() {
         Scheduler scheduler = new MemoryScheduler().getScheduler();
         Executor executor = new TestExecutor();
 
@@ -66,7 +66,7 @@ public class TestMemoryScheduler {
     }
 
     @Test
-    public void testOneshotTaskExecution() {
+    void testOneshotTaskExecution() {
         int sleeptime = 60 * 1000;
         Scheduler scheduler = new MemoryScheduler().getScheduler();
         TestExecutor executor = new TestExecutor();
@@ -123,7 +123,7 @@ public class TestMemoryScheduler {
     }
 
     @Test
-    public void testRepeatingTaskExecution() {
+    void testRepeatingTaskExecution() {
         int scheduler_sleeptime = 30 * 1000;                // 30 seconds
         int task_frequency = 60 * 1000;                    // 1 minute
         int thread_sleeptime = scheduler_sleeptime * 6;    // 3 minutes

@@ -46,7 +46,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testSetUppercaseBeanPropertyIllegalArguments()
+    void testSetUppercaseBeanPropertyIllegalArguments()
     throws BeanUtilsException {
         Map<String, PropertyDescriptor> bean_properties = BeanUtils.getUppercasedBeanProperties(BeanImpl2.class);
 
@@ -76,7 +76,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testSetUppercaseBeanPropertyNoOpArguments()
+    void testSetUppercaseBeanPropertyNoOpArguments()
     throws BeanUtilsException {
         BeanImpl2 bean;
         Map<String, PropertyDescriptor> bean_properties = BeanUtils.getUppercasedBeanProperties(BeanImpl2.class);
@@ -95,7 +95,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testSetUppercaseBeanPropertyNoSetter()
+    void testSetUppercaseBeanPropertyNoSetter()
     throws BeanUtilsException {
         BeanImpl2 bean;
         Map<String, PropertyDescriptor> bean_properties = BeanUtils.getUppercasedBeanProperties(BeanImpl2.class);
@@ -107,7 +107,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testSetUppercaseBeanProperty()
+    void testSetUppercaseBeanProperty()
     throws BeanUtilsException, ParseException, SerializationUtilsErrorException {
         BeanImpl2 bean;
         Map<String, PropertyDescriptor> bean_properties = BeanUtils.getUppercasedBeanProperties(BeanImpl2.class);
@@ -294,7 +294,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testSetUppercaseBeanPropertyConstrained()
+    void testSetUppercaseBeanPropertyConstrained()
     throws BeanUtilsException, ParseException, SerializationUtilsErrorException {
         BeanImpl3 bean;
         Map<String, PropertyDescriptor> bean_properties = BeanUtils.getUppercasedBeanProperties(BeanImpl3.class);
@@ -413,7 +413,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesIllegal() {
+    void testPropertyNamesIllegal() {
         try {
             assertEquals(0, BeanUtils.getPropertyNames(null, null, null, null).size());
         } catch (BeanUtilsException e) {
@@ -422,7 +422,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesEmpty() {
+    void testPropertyNamesEmpty() {
         try {
             assertEquals(0, BeanUtils.getPropertyNames(Object.class, null, null, null).size());
         } catch (BeanUtilsException e) {
@@ -431,7 +431,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNames() {
+    void testPropertyNames() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class, null, null, null);
             assertEquals(property_names.size(), 16);
@@ -457,7 +457,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesGetters() {
+    void testPropertyNamesGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class, null, null, null);
             assertEquals(property_names.size(), 17);
@@ -484,7 +484,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesSetters() {
+    void testPropertyNamesSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class, null, null, null);
             assertEquals(property_names.size(), 17);
@@ -511,7 +511,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesPrefix() {
+    void testPropertyNamesPrefix() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class, null, null, "PREFIX:");
             assertEquals(property_names.size(), 16);
@@ -537,7 +537,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesPrefixGetters() {
+    void testPropertyNamesPrefixGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class, null, null, "PREFIX:");
             assertEquals(property_names.size(), 17);
@@ -564,7 +564,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesPrefixSetters() {
+    void testPropertyNamesPrefixSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class, null, null, "PREFIX:");
             assertEquals(property_names.size(), 17);
@@ -591,7 +591,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesIncluded() {
+    void testPropertyNamesIncluded() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -613,7 +613,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesIncludedGetters() {
+    void testPropertyNamesIncludedGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -636,7 +636,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesIncludedSetters() {
+    void testPropertyNamesIncludedSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -659,7 +659,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesIncludedPrefix() {
+    void testPropertyNamesIncludedPrefix() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -681,7 +681,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesIncludedPrefixGetters() {
+    void testPropertyNamesIncludedPrefixGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -704,7 +704,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesIncludedPrefixSetters() {
+    void testPropertyNamesIncludedPrefixSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -727,7 +727,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesExcluded() {
+    void testPropertyNamesExcluded() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class,
                 null,
@@ -750,7 +750,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesExcludedGetters() {
+    void testPropertyNamesExcludedGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 null,
@@ -774,7 +774,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesExcludedSetters() {
+    void testPropertyNamesExcludedSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 null,
@@ -798,7 +798,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesExcludedPrefix() {
+    void testPropertyNamesExcludedPrefix() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class,
                 null,
@@ -821,7 +821,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesExcludedPrefixGetters() {
+    void testPropertyNamesExcludedPrefixGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 null,
@@ -845,7 +845,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesExcludedPrefixSetters() {
+    void testPropertyNamesExcludedPrefixSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 null,
@@ -869,7 +869,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesFiltered() {
+    void testPropertyNamesFiltered() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -888,7 +888,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesFilteredGetters() {
+    void testPropertyNamesFilteredGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -908,7 +908,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesFilteredSetters() {
+    void testPropertyNamesFilteredSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -928,7 +928,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesFilteredPrefix() {
+    void testPropertyNamesFilteredPrefix() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -947,7 +947,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesFilteredPrefixGetters() {
+    void testPropertyNamesFilteredPrefixGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -967,7 +967,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyNamesFilteredPrefixSetters() {
+    void testPropertyNamesFilteredPrefixSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -987,7 +987,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesIllegal() {
+    void testCountPropertiesIllegal() {
         try {
             assertEquals(0, BeanUtils.countProperties(null, null, null, null));
         } catch (BeanUtilsException e) {
@@ -996,7 +996,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountProperties() {
+    void testCountProperties() {
         try {
             int count = BeanUtils.countProperties(BeanImpl.class, null, null, null);
             assertEquals(count, 16);
@@ -1006,7 +1006,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesGetters() {
+    void testCountPropertiesGetters() {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class, null, null, null);
             assertEquals(count, 17);
@@ -1016,7 +1016,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesSetters() {
+    void testCountPropertiesSetters() {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class, null, null, null);
             assertEquals(count, 17);
@@ -1026,7 +1026,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesPrefix() {
+    void testCountPropertiesPrefix() {
         try {
             int count = BeanUtils.countProperties(BeanImpl.class, null, null, "PREFIX:");
             assertEquals(count, 16);
@@ -1036,7 +1036,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesPrefixGetters() {
+    void testCountPropertiesPrefixGetters() {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class, null, null, "PREFIX:");
             assertEquals(count, 17);
@@ -1046,7 +1046,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesPrefixSetters() {
+    void testCountPropertiesPrefixSetters() {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class, null, null, "PREFIX:");
             assertEquals(count, 17);
@@ -1056,7 +1056,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesIncluded() {
+    void testCountPropertiesIncluded() {
         try {
             assertEquals(7, BeanUtils.countProperties(BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -1070,7 +1070,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesIncludedGetters() {
+    void testCountPropertiesIncludedGetters() {
         try {
             assertEquals(8, BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -1084,7 +1084,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesIncludedSetters() {
+    void testCountPropertiesIncludedSetters() {
         try {
             assertEquals(8, BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -1098,7 +1098,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesIncludedPrefix() {
+    void testCountPropertiesIncludedPrefix() {
         try {
             assertEquals(7, BeanUtils.countProperties(BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -1112,7 +1112,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesIncludedPrefixGetters() {
+    void testCountPropertiesIncludedPrefixGetters() {
         try {
             assertEquals(8, BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -1126,7 +1126,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesIncludedPrefixSetters() {
+    void testCountPropertiesIncludedPrefixSetters() {
         try {
             assertEquals(8, BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -1140,7 +1140,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesExcluded() {
+    void testCountPropertiesExcluded() {
         try {
             int count = BeanUtils.countProperties(BeanImpl.class,
                 null,
@@ -1154,7 +1154,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesExcludedGetters() {
+    void testCountPropertiesExcludedGetters() {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 null,
@@ -1168,7 +1168,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesExcludedSetters() {
+    void testCountPropertiesExcludedSetters() {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 null,
@@ -1182,7 +1182,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesExcludedPrefix() {
+    void testCountPropertiesExcludedPrefix() {
         try {
             int count = BeanUtils.countProperties(BeanImpl.class,
                 null,
@@ -1196,7 +1196,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesExcludedPrefixGetters() {
+    void testCountPropertiesExcludedPrefixGetters() {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 null,
@@ -1210,7 +1210,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesExcludedPrefixSetters() {
+    void testCountPropertiesExcludedPrefixSetters() {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 null,
@@ -1224,7 +1224,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesFiltered() {
+    void testCountPropertiesFiltered() {
         try {
             assertEquals(3, BeanUtils.countProperties(BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -1238,7 +1238,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesFilteredGetters() {
+    void testCountPropertiesFilteredGetters() {
         try {
             assertEquals(4, BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -1252,7 +1252,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesFilteredSetters() {
+    void testCountPropertiesFilteredSetters() {
         try {
             assertEquals(4, BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -1266,7 +1266,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesFilteredPrefix() {
+    void testCountPropertiesFilteredPrefix() {
         try {
             assertEquals(3, BeanUtils.countProperties(BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -1280,7 +1280,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesFilteredPrefixGetters() {
+    void testCountPropertiesFilteredPrefixGetters() {
         try {
             assertEquals(4, BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -1294,7 +1294,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testCountPropertiesFilteredPrefixSetters() {
+    void testCountPropertiesFilteredPrefixSetters() {
         try {
             assertEquals(4, BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -1308,7 +1308,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypeIllegal() {
+    void testPropertyTypeIllegal() {
         try {
             BeanUtils.getPropertyType(null, null);
             fail();
@@ -1338,7 +1338,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyType() {
+    void testPropertyType() {
         try {
             assertSame(BeanUtils.getPropertyType(BeanImpl.class, "propertyString"), String.class);
             assertSame(BeanUtils.getPropertyType(BeanImpl.class, "propertyStringBuffer"), StringBuffer.class);
@@ -1369,7 +1369,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesIllegal() {
+    void testPropertyTypesIllegal() {
         try {
             assertEquals(0, BeanUtils.getPropertyTypes(null, null, null, null).size());
         } catch (BeanUtilsException e) {
@@ -1378,7 +1378,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypes() {
+    void testPropertyTypes() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class, null, null, null);
             assertEquals(property_types.size(), 16);
@@ -1420,7 +1420,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesGetters() {
+    void testPropertyTypesGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class, null, null, null);
             assertEquals(property_types.size(), 17);
@@ -1464,7 +1464,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesSetters() {
+    void testPropertyTypesSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class, null, null, null);
             assertEquals(property_types.size(), 17);
@@ -1508,7 +1508,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesPrefix() {
+    void testPropertyTypesPrefix() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class, null, null, "PREFIX:");
             assertEquals(property_types.size(), 16);
@@ -1550,7 +1550,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesPrefixGetters() {
+    void testPropertyTypesPrefixGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class, null, null, "PREFIX:");
             assertEquals(property_types.size(), 17);
@@ -1594,7 +1594,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesPrefixSetters() {
+    void testPropertyTypesPrefixSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class, null, null, "PREFIX:");
             assertEquals(property_types.size(), 17);
@@ -1638,7 +1638,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesIncluded() {
+    void testPropertyTypesIncluded() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -1667,7 +1667,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesIncludedGetters() {
+    void testPropertyTypesIncludedGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -1698,7 +1698,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesIncludedSetters() {
+    void testPropertyTypesIncludedSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly",
@@ -1729,7 +1729,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesIncludedPrefix() {
+    void testPropertyTypesIncludedPrefix() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -1758,7 +1758,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesIncludedPrefixGetters() {
+    void testPropertyTypesIncludedPrefixGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -1789,7 +1789,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesIncludedPrefixSetters() {
+    void testPropertyTypesIncludedPrefixSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
@@ -1820,7 +1820,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesExcluded() {
+    void testPropertyTypesExcluded() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class,
                 null,
@@ -1853,7 +1853,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesExcludedGetters() {
+    void testPropertyTypesExcludedGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 null,
@@ -1888,7 +1888,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesExcludedSetters() {
+    void testPropertyTypesExcludedSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 null,
@@ -1923,7 +1923,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesExcludedPrefix() {
+    void testPropertyTypesExcludedPrefix() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class,
                 null,
@@ -1956,7 +1956,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesExcludedPrefixGetters() {
+    void testPropertyTypesExcludedPrefixGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 null,
@@ -1991,7 +1991,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesExcludedPrefixSetters() {
+    void testPropertyTypesExcludedPrefixSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 null,
@@ -2026,7 +2026,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesFiltered() {
+    void testPropertyTypesFiltered() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
@@ -2047,7 +2047,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesFilteredGetters() {
+    void testPropertyTypesFilteredGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
@@ -2070,7 +2070,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesFilteredSetters() {
+    void testPropertyTypesFilteredSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
@@ -2093,7 +2093,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesFilteredPrefix() {
+    void testPropertyTypesFilteredPrefix() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
@@ -2114,7 +2114,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesFilteredPrefixGetters() {
+    void testPropertyTypesFilteredPrefixGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
@@ -2137,7 +2137,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testPropertyTypesFilteredPrefixSetters() {
+    void testPropertyTypesFilteredPrefixSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
@@ -2160,7 +2160,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValueIllegal() {
+    void testGetPropertyValueIllegal() {
         try {
             BeanUtils.getPropertyValue(null, null);
             fail();
@@ -2199,7 +2199,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValue() {
+    void testGetPropertyValue() {
         Object bean = getPopulatedBean();
         try {
             var cal = Calendar.getInstance();
@@ -2234,7 +2234,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testSetPropertyValue() {
+    void testSetPropertyValue() {
         BeanImpl bean = new BeanImpl();
         try {
             var cal = Calendar.getInstance();
@@ -2287,7 +2287,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesIllegal() {
+    void testGetPropertyValuesIllegal() {
         try {
             assertEquals(0, BeanUtils.getPropertyValues(null, null, null, null).size());
         } catch (BeanUtilsException e) {
@@ -2305,7 +2305,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValues() {
+    void testGetPropertyValues() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(), null, null, null);
             assertEquals(property_values.size(), 16);
@@ -2351,7 +2351,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesGetters() {
+    void testGetPropertyValuesGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(), null, null, null);
             assertEquals(property_values.size(), 17);
@@ -2399,7 +2399,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesSetters() {
+    void testGetPropertyValuesSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(), null, null, null);
             assertEquals(property_values.size(), 16);
@@ -2445,7 +2445,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesPrefix() {
+    void testGetPropertyValuesPrefix() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(), null, null, "PREFIX:");
             assertEquals(property_values.size(), 16);
@@ -2491,7 +2491,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesPrefixGetters() {
+    void testGetPropertyValuesPrefixGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(), null, null, "PREFIX:");
             assertEquals(property_values.size(), 17);
@@ -2539,7 +2539,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesPrefixSetters() {
+    void testGetPropertyValuesPrefixSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(), null, null, "PREFIX:");
             assertEquals(property_values.size(), 16);
@@ -2585,7 +2585,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesIncluded() {
+    void testGetPropertyValuesIncluded() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(),
                 new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
@@ -2616,7 +2616,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesIncludedGetters() {
+    void testGetPropertyValuesIncludedGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(),
                 new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
@@ -2649,7 +2649,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesIncludedSetters() {
+    void testGetPropertyValuesIncludedSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(),
                 new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
@@ -2680,7 +2680,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesIncludedPrefix() {
+    void testGetPropertyValuesIncludedPrefix() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(),
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
@@ -2711,7 +2711,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesIncludedPrefixGetters() {
+    void testGetPropertyValuesIncludedPrefixGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(),
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
@@ -2744,7 +2744,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesIncludedPrefixSetters() {
+    void testGetPropertyValuesIncludedPrefixSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(),
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
@@ -2775,7 +2775,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesExcluded() {
+    void testGetPropertyValuesExcluded() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(),
                 null,
@@ -2812,7 +2812,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesExcludedGetters() {
+    void testGetPropertyValuesExcludedGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(),
                 null,
@@ -2851,7 +2851,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesExcludedSetters() {
+    void testGetPropertyValuesExcludedSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(),
                 null,
@@ -2888,7 +2888,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesExcludedPrefix() {
+    void testGetPropertyValuesExcludedPrefix() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(),
                 null,
@@ -2925,7 +2925,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesExcludedPrefixGetters() {
+    void testGetPropertyValuesExcludedPrefixGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(),
                 null,
@@ -2964,7 +2964,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesExcludedPrefixSetters() {
+    void testGetPropertyValuesExcludedPrefixSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(),
                 null,
@@ -3001,7 +3001,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesFiltered() {
+    void testGetPropertyValuesFiltered() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(),
                 new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
@@ -3026,7 +3026,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesFilteredGetters() {
+    void testGetPropertyValuesFilteredGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(),
                 new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
@@ -3053,7 +3053,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesFilteredSetters() {
+    void testGetPropertyValuesFilteredSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(),
                 new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
@@ -3078,7 +3078,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesFilteredPrefix() {
+    void testGetPropertyValuesFilteredPrefix() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(),
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
@@ -3103,7 +3103,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesFilteredPrefixGetters() {
+    void testGetPropertyValuesFilteredPrefixGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(),
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
@@ -3130,7 +3130,7 @@ public class TestBeanUtils {
     }
 
     @Test
-    public void testGetPropertyValuesFilteredPrefixSetters() {
+    void testGetPropertyValuesFilteredPrefixSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(),
                 new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},

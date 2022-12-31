@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPurgingMemorySessions {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         PurgingSessionManager sessions = null;
 
         sessions = new PurgingSessionManager(new MemorySessions());
@@ -23,7 +23,7 @@ public class TestPurgingMemorySessions {
     }
 
     @Test
-    public void testStartSession() {
+    void testStartSession() {
         PurgingSessionManager sessions = new PurgingSessionManager(new MemorySessions());
         sessions.setSessionPurgeFrequency(0);
         try {
@@ -49,7 +49,7 @@ public class TestPurgingMemorySessions {
     }
 
     @Test
-    public void testPurgeSessions() {
+    void testPurgeSessions() {
         PurgingSessionManager sessions = new PurgingSessionManager(new MemorySessions());
         sessions.setSessionDuration(2000);
         sessions.setSessionPurgeFrequency(1);

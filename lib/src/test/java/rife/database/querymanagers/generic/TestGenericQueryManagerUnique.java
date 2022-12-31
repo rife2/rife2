@@ -33,7 +33,7 @@ public class TestGenericQueryManagerUnique {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetBaseClass(Datasource datasource) {
+    void testGetBaseClass(Datasource datasource) {
         setup(datasource);
         try {
             assertSame(UniqueBean.class, uniqueManager_.getBaseClass());
@@ -44,7 +44,7 @@ public class TestGenericQueryManagerUnique {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallCustomQuery(Datasource datasource) {
+    void testInstallCustomQuery(Datasource datasource) {
         setup(datasource);
         try {
             uniqueManager_.remove();
@@ -56,7 +56,7 @@ public class TestGenericQueryManagerUnique {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testValidationContextUnique(Datasource datasource) {
+    void testValidationContextUnique(Datasource datasource) {
         setup(datasource);
         try {
             // uniqueness of individual properties
@@ -172,7 +172,7 @@ public class TestGenericQueryManagerUnique {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGroupValidationContextUnique(Datasource datasource) {
+    void testGroupValidationContextUnique(Datasource datasource) {
         setup(datasource);
         try {
             // uniqueness of individual properties

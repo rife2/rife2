@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPause {
     @Test
-    public void testPauseInWhile()
+    void testPauseInWhile()
     throws Throwable {
         final var test_classes = new String[]{"TestPauseInWhile", "TestPauseInWhileInterface"};
         for (final var test_class : test_classes) {
@@ -67,7 +67,7 @@ public class TestPause {
     }
 
     @Test
-    public void testPauseInWhileClones()
+    void testPauseInWhileClones()
     throws Throwable {
         final var test_classes = new String[]{"TestPauseInWhile", "TestPauseInWhileInterface"};
         for (final String test_class : test_classes) {

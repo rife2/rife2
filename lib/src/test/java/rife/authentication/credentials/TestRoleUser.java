@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRoleUser {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         RoleUser user = null;
 
         user = new RoleUser();
@@ -22,28 +22,28 @@ public class TestRoleUser {
     }
 
     @Test
-    public void testInitialEmptyLogin() {
+    void testInitialEmptyLogin() {
         RoleUser user = new RoleUser();
 
         assertNull(user.getLogin());
     }
 
     @Test
-    public void testInitialEmptyPassword() {
+    void testInitialEmptyPassword() {
         RoleUser user = new RoleUser();
 
         assertNull(user.getPassword());
     }
 
     @Test
-    public void testInitialEmptyRole() {
+    void testInitialEmptyRole() {
         RoleUser user = new RoleUser();
 
         assertNull(user.getRole());
     }
 
     @Test
-    public void testPopulation() {
+    void testPopulation() {
         RoleUser user = new RoleUser();
 
         user.setLogin("the login");
@@ -56,7 +56,7 @@ public class TestRoleUser {
     }
 
     @Test
-    public void testValidation() {
+    void testValidation() {
         RoleUser user = new RoleUser();
 
         Iterator<ValidationError> validationerrors_it = null;

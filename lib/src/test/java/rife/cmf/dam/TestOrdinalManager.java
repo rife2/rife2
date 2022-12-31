@@ -35,7 +35,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetDirection(Datasource datasource) {
+    void testGetDirection(Datasource datasource) {
         setup(datasource);
         try {
             assertSame(OrdinalManager.UP, OrdinalManager.Direction.getDirection("up"));
@@ -47,7 +47,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInitializationIllegalArguments(Datasource datasource) {
+    void testInitializationIllegalArguments(Datasource datasource) {
         setup(datasource);
         try {
             try {
@@ -84,7 +84,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInitialization(Datasource datasource) {
+    void testInitialization(Datasource datasource) {
         setup(datasource);
         try {
             assertEquals(ordinalManager_.getTable(), orderedManager_.getTable());
@@ -97,7 +97,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInitializationRestricted(Datasource datasource) {
+    void testInitializationRestricted(Datasource datasource) {
         setup(datasource);
         try {
             assertEquals(ordinalRestrictedManager_.getTable(), orderedRestrictedManager_.getTable());
@@ -110,7 +110,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testFree(Datasource datasource) {
+    void testFree(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedManager_.save(new Ordered().name("ordered 1").priority(0));
@@ -132,7 +132,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testFreeRestricted(Datasource datasource) {
+    void testFreeRestricted(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedRestrictedManager_.save(new OrderedRestricted().name("ordered 1").priority(0).restricted(1));
@@ -161,7 +161,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testFreeOutOfBounds(Datasource datasource) {
+    void testFreeOutOfBounds(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedManager_.save(new Ordered().name("ordered 1").priority(0));
@@ -190,7 +190,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testFreeOutOfBoundsRestricted(Datasource datasource) {
+    void testFreeOutOfBoundsRestricted(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedRestrictedManager_.save(new OrderedRestricted().name("ordered 1").priority(0).restricted(1));
@@ -219,7 +219,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testFreeOutOfBoundsUnknownRestricted(Datasource datasource) {
+    void testFreeOutOfBoundsUnknownRestricted(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedRestrictedManager_.save(new OrderedRestricted().name("ordered 1").priority(0).restricted(1));
@@ -241,7 +241,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMove(Datasource datasource) {
+    void testMove(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedManager_.save(new Ordered().name("ordered 1").priority(0));
@@ -264,7 +264,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testTighten(Datasource datasource) {
+    void testTighten(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedManager_.save(new Ordered().name("ordered 1").priority(3));
@@ -286,7 +286,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testTightenRestricted(Datasource datasource) {
+    void testTightenRestricted(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedRestrictedManager_.save(new OrderedRestricted().name("ordered 1").priority(3).restricted(1));
@@ -322,7 +322,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testObtainInsertOrdinal(Datasource datasource) {
+    void testObtainInsertOrdinal(Datasource datasource) {
         setup(datasource);
         try {
             orderedManager_.save(new Ordered().name("ordered 1").priority(0));
@@ -338,7 +338,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testObtainInsertOrdinalRestricted(Datasource datasource) {
+    void testObtainInsertOrdinalRestricted(Datasource datasource) {
         setup(datasource);
         try {
             orderedRestrictedManager_.save(new OrderedRestricted().name("ordered 1").priority(0).restricted(1));
@@ -356,7 +356,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveDown(Datasource datasource) {
+    void testMoveDown(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedManager_.save(new Ordered().name("ordered 1").priority(0));
@@ -378,7 +378,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveDownRestricted(Datasource datasource) {
+    void testMoveDownRestricted(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedRestrictedManager_.save(new OrderedRestricted().name("ordered 1").priority(0).restricted(1));
@@ -407,7 +407,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveUp(Datasource datasource) {
+    void testMoveUp(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedManager_.save(new Ordered().name("ordered 1").priority(0));
@@ -429,7 +429,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveUpRestricted(Datasource datasource) {
+    void testMoveUpRestricted(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedRestrictedManager_.save(new OrderedRestricted().name("ordered 1").priority(0).restricted(1));
@@ -458,7 +458,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveOther(Datasource datasource) {
+    void testMoveOther(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedManager_.save(new Ordered().name("ordered 1").priority(0));
@@ -487,7 +487,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveOtherRestricted(Datasource datasource) {
+    void testMoveOtherRestricted(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedRestrictedManager_.save(new OrderedRestricted().name("ordered 1").priority(0).restricted(1));
@@ -530,7 +530,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveDownExtremity(Datasource datasource) {
+    void testMoveDownExtremity(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedManager_.save(new Ordered().name("ordered 1").priority(0));
@@ -552,7 +552,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveDownExtremityRestricted(Datasource datasource) {
+    void testMoveDownExtremityRestricted(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedRestrictedManager_.save(new OrderedRestricted().name("ordered 1").priority(0).restricted(1));
@@ -581,7 +581,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveUpExtremity(Datasource datasource) {
+    void testMoveUpExtremity(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedManager_.save(new Ordered().name("ordered 1").priority(0));
@@ -603,7 +603,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveUpExtremityRestricted(Datasource datasource) {
+    void testMoveUpExtremityRestricted(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedRestrictedManager_.save(new OrderedRestricted().name("ordered 1").priority(0).restricted(1));
@@ -632,7 +632,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveOtherExtremity(Datasource datasource) {
+    void testMoveOtherExtremity(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedManager_.save(new Ordered().name("ordered 1").priority(0));
@@ -661,7 +661,7 @@ public class TestOrdinalManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveOtherExtremityRestricted(Datasource datasource) {
+    void testMoveOtherExtremityRestricted(Datasource datasource) {
         setup(datasource);
         try {
             var ordered1 = orderedRestrictedManager_.save(new OrderedRestricted().name("ordered 1").priority(0).restricted(1));

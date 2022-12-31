@@ -15,118 +15,118 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestValidityChecks {
     @Test
-    public void testCheckNotNull() {
+    void testCheckNotNull() {
         assertFalse(ValidityChecks.checkNotNull(null));
         assertTrue(ValidityChecks.checkNotNull(new Object()));
     }
 
     @Test
-    public void testCheckNotEmptyCharSequence() {
+    void testCheckNotEmptyCharSequence() {
         assertTrue(ValidityChecks.checkNotEmpty((CharSequence) null));
         assertTrue(ValidityChecks.checkNotEmpty("ok"));
         assertFalse(ValidityChecks.checkNotEmpty(""));
     }
 
     @Test
-    public void testCheckNotBlankCharSequence() {
+    void testCheckNotBlankCharSequence() {
         assertFalse(ValidityChecks.checkNotBlank((CharSequence)null));
         assertTrue(ValidityChecks.checkNotBlank("ok"));
         assertFalse(ValidityChecks.checkNotBlank(""));
     }
 
     @Test
-    public void testCheckNotEmptyCharacterObject() {
+    void testCheckNotEmptyCharacterObject() {
         assertTrue(ValidityChecks.checkNotEmpty((Character) null));
         assertTrue(ValidityChecks.checkNotEmpty('I'));
         assertFalse(ValidityChecks.checkNotEmpty((char) 0));
     }
 
     @Test
-    public void testCheckNotEmptyChar() {
+    void testCheckNotEmptyChar() {
         assertTrue(ValidityChecks.checkNotEmpty('K'));
         assertFalse(ValidityChecks.checkNotEmpty((char) 0));
     }
 
     @Test
-    public void testCheckNotEmptyByteObject() {
+    void testCheckNotEmptyByteObject() {
         assertTrue(ValidityChecks.checkNotEmpty((Byte) null));
         assertTrue(ValidityChecks.checkNotEmpty((byte) 87));
         assertFalse(ValidityChecks.checkNotEmpty((byte) 0));
     }
 
     @Test
-    public void testCheckNotEmptyByte() {
+    void testCheckNotEmptyByte() {
         assertTrue(ValidityChecks.checkNotEmpty((byte) 98));
         assertFalse(ValidityChecks.checkNotEmpty((byte) 0));
     }
 
     @Test
-    public void testCheckNotEmptyShortObject() {
+    void testCheckNotEmptyShortObject() {
         assertTrue(ValidityChecks.checkNotEmpty((Short) null));
         assertTrue(ValidityChecks.checkNotEmpty((short) 223));
         assertFalse(ValidityChecks.checkNotEmpty((short) 0));
     }
 
     @Test
-    public void testCheckNotEmptyShort() {
+    void testCheckNotEmptyShort() {
         assertTrue(ValidityChecks.checkNotEmpty((short) 8982));
         assertFalse(ValidityChecks.checkNotEmpty((short) 0));
     }
 
     @Test
-    public void testCheckNotEmptyIntegerObject() {
+    void testCheckNotEmptyIntegerObject() {
         assertTrue(ValidityChecks.checkNotEmpty((Integer) null));
         assertTrue(ValidityChecks.checkNotEmpty(8796));
         assertFalse(ValidityChecks.checkNotEmpty(0));
     }
 
     @Test
-    public void testCheckNotEmptyInteger() {
+    void testCheckNotEmptyInteger() {
         assertTrue(ValidityChecks.checkNotEmpty(622));
         assertFalse(ValidityChecks.checkNotEmpty(0));
     }
 
     @Test
-    public void testCheckNotEmptyLongObject() {
+    void testCheckNotEmptyLongObject() {
         assertTrue(ValidityChecks.checkNotEmpty((Long) null));
         assertTrue(ValidityChecks.checkNotEmpty(6887232L));
         assertFalse(ValidityChecks.checkNotEmpty(0L));
     }
 
     @Test
-    public void testCheckNotEmptyLong() {
+    void testCheckNotEmptyLong() {
         assertTrue(ValidityChecks.checkNotEmpty(2324338L));
         assertFalse(ValidityChecks.checkNotEmpty(0L));
     }
 
     @Test
-    public void testCheckNotEmptyFloatObject() {
+    void testCheckNotEmptyFloatObject() {
         assertTrue(ValidityChecks.checkNotEmpty((Float) null));
         assertTrue(ValidityChecks.checkNotEmpty(923.78f));
         assertFalse(ValidityChecks.checkNotEmpty(0.0f));
     }
 
     @Test
-    public void testCheckNotEmptyFloat() {
+    void testCheckNotEmptyFloat() {
         assertTrue(ValidityChecks.checkNotEmpty(234.98f));
         assertFalse(ValidityChecks.checkNotEmpty(0.0f));
     }
 
     @Test
-    public void testCheckNotEmptyDoubleObject() {
+    void testCheckNotEmptyDoubleObject() {
         assertTrue(ValidityChecks.checkNotEmpty((Double) null));
         assertTrue(ValidityChecks.checkNotEmpty(98023.343d));
         assertFalse(ValidityChecks.checkNotEmpty(0.0d));
     }
 
     @Test
-    public void testCheckNotEmptyDouble() {
+    void testCheckNotEmptyDouble() {
         assertTrue(ValidityChecks.checkNotEmpty(8723.87901d));
         assertFalse(ValidityChecks.checkNotEmpty(0.0d));
     }
 
     @Test
-    public void testCheckNotEmptyObject() {
+    void testCheckNotEmptyObject() {
         assertTrue(ValidityChecks.checkNotEmpty((Object) null));
         assertTrue(ValidityChecks.checkNotEmpty((Object) "ok"));
         assertFalse(ValidityChecks.checkNotEmpty((Object) ""));
@@ -153,55 +153,55 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckNotEqualBoolean() {
+    void testCheckNotEqualBoolean() {
         assertTrue(ValidityChecks.checkNotEqual(true, false));
         assertFalse(ValidityChecks.checkNotEqual(true, true));
     }
 
     @Test
-    public void testCheckNotEqualChar() {
+    void testCheckNotEqualChar() {
         assertTrue(ValidityChecks.checkNotEqual('K', 'L'));
         assertFalse(ValidityChecks.checkNotEqual('a', 'a'));
     }
 
     @Test
-    public void testCheckNotEqualByte() {
+    void testCheckNotEqualByte() {
         assertTrue(ValidityChecks.checkNotEqual((byte) 98, (byte) 76));
         assertFalse(ValidityChecks.checkNotEqual((byte) 17, (byte) 17));
     }
 
     @Test
-    public void testCheckNotEqualShort() {
+    void testCheckNotEqualShort() {
         assertTrue(ValidityChecks.checkNotEqual((short) 8982, (short) 237));
         assertFalse(ValidityChecks.checkNotEqual((short) 23, (short) 23));
     }
 
     @Test
-    public void testCheckNotEqualInteger() {
+    void testCheckNotEqualInteger() {
         assertTrue(ValidityChecks.checkNotEqual(622, 766));
         assertFalse(ValidityChecks.checkNotEqual(234, 234));
     }
 
     @Test
-    public void testCheckNotEqualLong() {
+    void testCheckNotEqualLong() {
         assertTrue(ValidityChecks.checkNotEqual(2324338L, 343876L));
         assertFalse(ValidityChecks.checkNotEqual(343224L, 343224L));
     }
 
     @Test
-    public void testCheckNotEqualFloat() {
+    void testCheckNotEqualFloat() {
         assertTrue(ValidityChecks.checkNotEqual(234.98f, 3487.22f));
         assertFalse(ValidityChecks.checkNotEqual(433.2f, 433.2f));
     }
 
     @Test
-    public void testCheckNotEqualDouble() {
+    void testCheckNotEqualDouble() {
         assertTrue(ValidityChecks.checkNotEqual(8723.87901d, 34786783.232d));
         assertFalse(ValidityChecks.checkNotEqual(52982.2322d, 52982.2322d));
     }
 
     @Test
-    public void testCheckNotEqualObject() {
+    void testCheckNotEqualObject() {
         assertTrue(ValidityChecks.checkNotEqual(null, null));
         assertTrue(ValidityChecks.checkNotEqual(new Object(), null));
         assertTrue(ValidityChecks.checkNotEqual(null, new Object()));
@@ -210,7 +210,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckNotEqualArray() {
+    void testCheckNotEqualArray() {
         assertTrue(ValidityChecks.checkNotEqual((String[]) null, (String[]) null));
         assertTrue(ValidityChecks.checkNotEqual(new String[]{"one"}, null));
         assertTrue(ValidityChecks.checkNotEqual(new String[]{"test", "test2", "test3"}, "test4"));
@@ -220,55 +220,55 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckEqualBoolean() {
+    void testCheckEqualBoolean() {
         assertFalse(ValidityChecks.checkEqual(true, false));
         assertTrue(ValidityChecks.checkEqual(true, true));
     }
 
     @Test
-    public void testCheckEqualChar() {
+    void testCheckEqualChar() {
         assertFalse(ValidityChecks.checkEqual('K', 'L'));
         assertTrue(ValidityChecks.checkEqual('a', 'a'));
     }
 
     @Test
-    public void testCheckEqualByte() {
+    void testCheckEqualByte() {
         assertFalse(ValidityChecks.checkEqual((byte) 98, (byte) 76));
         assertTrue(ValidityChecks.checkEqual((byte) 17, (byte) 17));
     }
 
     @Test
-    public void testCheckEqualShort() {
+    void testCheckEqualShort() {
         assertFalse(ValidityChecks.checkEqual((short) 8982, (short) 237));
         assertTrue(ValidityChecks.checkEqual((short) 23, (short) 23));
     }
 
     @Test
-    public void testCheckEqualInteger() {
+    void testCheckEqualInteger() {
         assertFalse(ValidityChecks.checkEqual(622, 766));
         assertTrue(ValidityChecks.checkEqual(234, 234));
     }
 
     @Test
-    public void testCheckEqualLong() {
+    void testCheckEqualLong() {
         assertFalse(ValidityChecks.checkEqual(2324338L, 343876L));
         assertTrue(ValidityChecks.checkEqual(343224L, 343224L));
     }
 
     @Test
-    public void testCheckEqualFloat() {
+    void testCheckEqualFloat() {
         assertFalse(ValidityChecks.checkEqual(234.98f, 3487.22f));
         assertTrue(ValidityChecks.checkEqual(433.2f, 433.2f));
     }
 
     @Test
-    public void testCheckEqualDouble() {
+    void testCheckEqualDouble() {
         assertFalse(ValidityChecks.checkEqual(8723.87901d, 34786783.232d));
         assertTrue(ValidityChecks.checkEqual(52982.2322d, 52982.2322d));
     }
 
     @Test
-    public void testCheckEqualObject() {
+    void testCheckEqualObject() {
         assertTrue(ValidityChecks.checkEqual(null, null));
         assertTrue(ValidityChecks.checkEqual(new Object(), null));
         assertTrue(ValidityChecks.checkEqual(null, new Object()));
@@ -277,7 +277,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckEqualArray() {
+    void testCheckEqualArray() {
         assertTrue(ValidityChecks.checkEqual((String[]) null, (String[]) null));
         assertTrue(ValidityChecks.checkEqual(new String[]{"one"}, null));
         assertTrue(ValidityChecks.checkEqual(new String[]{"test3", "test3", "test3"}, "test3"));
@@ -287,56 +287,56 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckLengthByte() {
+    void testCheckLengthByte() {
         assertTrue(ValidityChecks.checkLength((byte) 23, 0, 2));
         assertFalse(ValidityChecks.checkLength((byte) 120, 0, 2));
         assertFalse(ValidityChecks.checkLength((byte) 2, 2, 3));
     }
 
     @Test
-    public void testCheckLengthChar() {
+    void testCheckLengthChar() {
         assertTrue(ValidityChecks.checkLength('O', 0, 2));
         assertTrue(ValidityChecks.checkLength('K', 1, 2));
         assertFalse(ValidityChecks.checkLength('f', 2, 3));
     }
 
     @Test
-    public void testCheckLengthShort() {
+    void testCheckLengthShort() {
         assertTrue(ValidityChecks.checkLength((short) 2341, 0, 4));
         assertFalse(ValidityChecks.checkLength((short) 23419, 0, 4));
         assertFalse(ValidityChecks.checkLength((short) 143, 4, 7));
     }
 
     @Test
-    public void testCheckLengthInt() {
+    void testCheckLengthInt() {
         assertTrue(ValidityChecks.checkLength(2341, 0, 4));
         assertFalse(ValidityChecks.checkLength(23419, 0, 4));
         assertFalse(ValidityChecks.checkLength(143, 4, 7));
     }
 
     @Test
-    public void testCheckLengthLong() {
+    void testCheckLengthLong() {
         assertTrue(ValidityChecks.checkLength(2341L, 0, 4));
         assertFalse(ValidityChecks.checkLength(23419L, 0, 4));
         assertFalse(ValidityChecks.checkLength(143L, 4, 7));
     }
 
     @Test
-    public void testCheckLengthFloat() {
+    void testCheckLengthFloat() {
         assertTrue(ValidityChecks.checkLength(21.78f, 0, 5));
         assertFalse(ValidityChecks.checkLength(231.78f, 0, 5));
         assertFalse(ValidityChecks.checkLength(12.8f, 5, 7));
     }
 
     @Test
-    public void testCheckLengthDouble() {
+    void testCheckLengthDouble() {
         assertTrue(ValidityChecks.checkLength(21.78d, 0, 5));
         assertFalse(ValidityChecks.checkLength(231.78d, 0, 5));
         assertFalse(ValidityChecks.checkLength(12.8d, 5, 7));
     }
 
     @Test
-    public void testCheckLength() {
+    void testCheckLength() {
         assertTrue(ValidityChecks.checkLength(null, 0, 0));
 
         StringBuffer string = new StringBuffer("testing");
@@ -348,7 +348,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckRegexp() {
+    void testCheckRegexp() {
         assertTrue(ValidityChecks.checkRegexp(null, null));
         assertTrue(ValidityChecks.checkRegexp(null, ""));
         assertTrue(ValidityChecks.checkRegexp(null, "\\d+"));
@@ -359,14 +359,14 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckEmail() {
+    void testCheckEmail() {
         assertTrue(ValidityChecks.checkEmail("john.doe@something.com"));
         assertTrue(ValidityChecks.checkEmail("john+doe@something.com"));
         assertFalse(ValidityChecks.checkEmail("john.doe@something."));
     }
 
     @Test
-    public void testCheckUrl() {
+    void testCheckUrl() {
         assertTrue(ValidityChecks.checkUrl(null));
         assertTrue(ValidityChecks.checkUrl(""));
         assertTrue(ValidityChecks.checkUrl("http://uwyn.com"));
@@ -375,13 +375,13 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testLaterThanNow() {
+    void testLaterThanNow() {
         assertTrue(ValidityChecks.checkLaterThanNow(null));
         assertTrue(ValidityChecks.checkLaterThanNow(new Date(2003, Calendar.APRIL, 1)));
     }
 
     @Test
-    public void testLimitedDate() {
+    void testLimitedDate() {
         assertTrue(ValidityChecks.checkLimitedDate(null, null, null));
         assertTrue(ValidityChecks.checkLimitedDate("test", null, null));
         assertTrue(ValidityChecks.checkLimitedDate(new Date(2003, 12, 11), null, null));
@@ -393,7 +393,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testInList() {
+    void testInList() {
         assertTrue(ValidityChecks.checkInList(null, null));
         assertTrue(ValidityChecks.checkInList(null, new String[0]));
         assertTrue(ValidityChecks.checkInList("test", new String[0]));
@@ -408,7 +408,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckRangeByte() {
+    void testCheckRangeByte() {
         assertTrue(ValidityChecks.checkRange((byte) 0, (byte) 0, (byte) 23));
         assertTrue(ValidityChecks.checkRange((byte) 12, (byte) 0, (byte) 23));
         assertTrue(ValidityChecks.checkRange((byte) 23, (byte) 7, (byte) 23));
@@ -417,7 +417,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckRangeChar() {
+    void testCheckRangeChar() {
         assertTrue(ValidityChecks.checkRange('b', 'b', 'y'));
         assertTrue(ValidityChecks.checkRange('g', 'b', 'y'));
         assertTrue(ValidityChecks.checkRange('y', 'b', 'y'));
@@ -426,7 +426,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckRangeShort() {
+    void testCheckRangeShort() {
         assertTrue(ValidityChecks.checkRange((short) 0, (short) 0, (short) 23));
         assertTrue(ValidityChecks.checkRange((short) 8, (short) 0, (short) 23));
         assertTrue(ValidityChecks.checkRange((short) 23, (short) 7, (short) 23));
@@ -435,7 +435,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckRangeInt() {
+    void testCheckRangeInt() {
         assertTrue(ValidityChecks.checkRange(0, 0, 23));
         assertTrue(ValidityChecks.checkRange(9, 0, 23));
         assertTrue(ValidityChecks.checkRange(23, 7, 23));
@@ -444,7 +444,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckRangeLong() {
+    void testCheckRangeLong() {
         assertTrue(ValidityChecks.checkRange(0L, 0, 23));
         assertTrue(ValidityChecks.checkRange(12L, 0, 23));
         assertTrue(ValidityChecks.checkRange(23L, 7, 23));
@@ -453,7 +453,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckRangeFloat() {
+    void testCheckRangeFloat() {
         assertTrue(ValidityChecks.checkRange(0.7f, 0.7f, 23.9f));
         assertTrue(ValidityChecks.checkRange(15.9f, 0.7f, 23.9f));
         assertTrue(ValidityChecks.checkRange(23.9f, 0.7f, 23.9f));
@@ -462,7 +462,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckRangeDouble() {
+    void testCheckRangeDouble() {
         assertTrue(ValidityChecks.checkRange(0.7d, 0.7d, 23.9d));
         assertTrue(ValidityChecks.checkRange(19.23d, 0.7d, 23.9d));
         assertTrue(ValidityChecks.checkRange(23.9d, 0.7d, 23.9d));
@@ -471,7 +471,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckRangeObject() {
+    void testCheckRangeObject() {
         assertTrue(ValidityChecks.checkRange(null, "abc", "zrr"));
         assertTrue(ValidityChecks.checkRange(new Object(), "aaa", "aaa"));
         assertTrue(ValidityChecks.checkRange("bgt", null, null));
@@ -483,7 +483,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckRangeArray() {
+    void testCheckRangeArray() {
         assertTrue(ValidityChecks.checkRange(new String[]{"abc", "ccc", "zrr"}, "abc", "zrr"));
         assertFalse(ValidityChecks.checkRange(new String[]{"abb", "ccc", "zrr"}, "abc", "zrr"));
         assertTrue(ValidityChecks.checkRange(new int[]{89, 7, 3}, 3, 89));
@@ -491,7 +491,7 @@ public class TestValidityChecks {
     }
 
     @Test
-    public void testCheckFormat() {
+    void testCheckFormat() {
         assertTrue(ValidityChecks.checkFormat(null, null));
         assertTrue(ValidityChecks.checkFormat(new Object(), null));
         assertTrue(ValidityChecks.checkFormat(new Object(), new SimpleDateFormat("dd/MM/yyyy")));

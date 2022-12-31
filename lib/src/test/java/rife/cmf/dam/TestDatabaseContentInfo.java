@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDatabaseContentInfo {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         var content_info = new DatabaseContentInfo();
         assertNotNull(content_info);
 
@@ -38,7 +38,7 @@ public class TestDatabaseContentInfo {
     }
 
     @Test
-    public void testContentId() {
+    void testContentId() {
         var content_info = new DatabaseContentInfo();
         content_info.setContentId(12);
         assertEquals(12, content_info.getContentId());
@@ -46,7 +46,7 @@ public class TestDatabaseContentInfo {
 
 
     @Test
-    public void testValidation() {
+    void testValidation() {
         var content_info = new DatabaseContentInfo();
 
         content_info.resetValidation();

@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestXhtmlContentLoader {
     @Test
-    public void testLoad() {
+    void testLoad() {
         var loader = new XhtmlContentLoader();
         Set<String> errors = new HashSet<>();
 
@@ -24,7 +24,7 @@ public class TestXhtmlContentLoader {
     }
 
     @Test
-    public void testLoadNull() {
+    void testLoadNull() {
         var loader = new XhtmlContentLoader();
         Set<String> errors = new HashSet<>();
 

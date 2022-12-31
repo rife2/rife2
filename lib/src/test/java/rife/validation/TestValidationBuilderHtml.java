@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestValidationBuilderHtml {
     @Test
-    public void testInstantiate() {
+    void testInstantiate() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
         assertNotNull(builder);
     }
 
     @Test
-    public void testClone() {
+    void testClone() {
         ValidationBuilderHtml builder1 = new ValidationBuilderHtml();
         ValidationBuilderHtml builder2 = (ValidationBuilderHtml) builder1.clone();
         assertNotNull(builder2);
@@ -30,7 +30,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testSetFallbackErrorAreaInvalidArguments() {
+    void testSetFallbackErrorAreaInvalidArguments() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
         builder.setFallbackErrorArea(null, null);
 
@@ -40,7 +40,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testSetFallbackErrorAreaBasic() {
+    void testSetFallbackErrorAreaBasic() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_fallbackarea_basic");
@@ -49,7 +49,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testSetFallbackErrorAreaWildcardFormatted() {
+    void testSetFallbackErrorAreaWildcardFormatted() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_fallbackarea_wildcardformatted");
@@ -58,7 +58,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testSetFallbackErrorAreaFormatted() {
+    void testSetFallbackErrorAreaFormatted() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_fallbackarea_formatted");
@@ -67,7 +67,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testSetFallbackErrorAreaWildcardDecorated() {
+    void testSetFallbackErrorAreaWildcardDecorated() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_fallbackarea_wildcarddecorated");
@@ -76,7 +76,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testSetFallbackErrorAreaDecorated() {
+    void testSetFallbackErrorAreaDecorated() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_fallbackarea_decorated");
@@ -85,7 +85,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateValidationErrorsInvalidArguments() {
+    void testGenerateValidationErrorsInvalidArguments() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
         assertEquals(0, builder.generateValidationErrors(null, null, null, null).size());
 
@@ -101,7 +101,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateValidationErrorsNovalues() {
+    void testGenerateValidationErrorsNovalues() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_novalues");
@@ -113,7 +113,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateValidationErrorsRaw() {
+    void testGenerateValidationErrorsRaw() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_raw");
@@ -126,7 +126,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateValidationErrorsRawFallbackblock() {
+    void testGenerateValidationErrorsRawFallbackblock() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_raw_fallbackblock");
@@ -139,7 +139,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateValidationErrorsMessages() {
+    void testGenerateValidationErrorsMessages() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_messages");
@@ -154,7 +154,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateValidationErrorsMessagesPrefix() {
+    void testGenerateValidationErrorsMessagesPrefix() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_messages_prefix");
@@ -168,7 +168,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateValidationErrorsFormattedmessages() {
+    void testGenerateValidationErrorsFormattedmessages() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_formattedmessages");
@@ -183,7 +183,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateValidationErrorsFormattedmessagesNocontent() {
+    void testGenerateValidationErrorsFormattedmessagesNocontent() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_formattedmessages_nocontent");
@@ -198,7 +198,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateValidationErrorsFormattedmessagesPrefix() {
+    void testGenerateValidationErrorsFormattedmessagesPrefix() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_formattedmessages_prefix");
@@ -213,7 +213,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateValidationErrorsPositionedmessages() {
+    void testGenerateValidationErrorsPositionedmessages() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_positionedmessages");
@@ -239,7 +239,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateValidationErrorsPositionedmessagesPrefix() {
+    void testGenerateValidationErrorsPositionedmessagesPrefix() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_positionedmessages_prefix");
@@ -265,7 +265,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateValidationErrorsDecoratedmessages() {
+    void testGenerateValidationErrorsDecoratedmessages() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_decoratedmessages");
@@ -291,7 +291,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateValidationErrorsDecoratedmessagesPrefix() {
+    void testGenerateValidationErrorsDecoratedmessagesPrefix() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_decoratedmessages_prefix");
@@ -317,7 +317,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testRemoveValidationErrorsInvalidArguments() {
+    void testRemoveValidationErrorsInvalidArguments() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
         builder.removeValidationErrors(null, null, null);
 
@@ -334,7 +334,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testRemoveValidationErrorsNovalues() {
+    void testRemoveValidationErrorsNovalues() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_novalues");
@@ -348,7 +348,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testRemoveValidationErrorsRaw() {
+    void testRemoveValidationErrorsRaw() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_raw");
@@ -364,7 +364,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testRemoveValidationErrorsDecoratedmessages() {
+    void testRemoveValidationErrorsDecoratedmessages() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_decoratedmessages");
@@ -379,7 +379,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testRemoveValidationErrorsDecoratedmessagesMissingSubjects() {
+    void testRemoveValidationErrorsDecoratedmessagesMissingSubjects() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_decoratedmessages");
@@ -400,7 +400,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testRemoveValidationErrorsDecoratedmessagesPrefix() {
+    void testRemoveValidationErrorsDecoratedmessagesPrefix() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_decoratedmessages_prefix");
@@ -415,7 +415,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateErrorMarkingsInvalidArguments() {
+    void testGenerateErrorMarkingsInvalidArguments() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
         assertEquals(0, builder.generateErrorMarkings(null, null, null, null).size());
 
@@ -429,7 +429,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateErrorMarkingsNoValues() {
+    void testGenerateErrorMarkingsNoValues() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_novalues");
@@ -441,7 +441,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateErrorMarkingsMising() {
+    void testGenerateErrorMarkingsMising() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_mark_missing");
@@ -457,7 +457,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateErrorMarkingsSimple() {
+    void testGenerateErrorMarkingsSimple() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_mark_simple");
@@ -469,7 +469,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateErrorMarkingsPositioned() {
+    void testGenerateErrorMarkingsPositioned() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_mark_positioned");
@@ -499,7 +499,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateErrorMarkingsSelective() {
+    void testGenerateErrorMarkingsSelective() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_mark_selective");
@@ -529,7 +529,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateErrorMarkingsSimplePrefix() {
+    void testGenerateErrorMarkingsSimplePrefix() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_mark_simple_prefix");
@@ -541,7 +541,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateErrorMarkingsPositionedPrefix() {
+    void testGenerateErrorMarkingsPositionedPrefix() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_mark_positioned_prefix");
@@ -571,7 +571,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testGenerateErrorMarkingsSelectivePrefix() {
+    void testGenerateErrorMarkingsSelectivePrefix() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_mark_selective_prefix");
@@ -601,7 +601,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testRemoveErrorMarkingsInvalidArguments() {
+    void testRemoveErrorMarkingsInvalidArguments() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
         builder.removeErrorMarkings(null, null, null);
 
@@ -618,7 +618,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testRemoveErrorMarkingsNoValues() {
+    void testRemoveErrorMarkingsNoValues() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_errors_novalues");
@@ -632,7 +632,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testRemoveErrorMarkingsPositioned() {
+    void testRemoveErrorMarkingsPositioned() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_mark_positioned");
@@ -646,7 +646,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testRemoveErrorMarkingsPositionedPrefix() {
+    void testRemoveErrorMarkingsPositionedPrefix() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_mark_positioned_prefix");
@@ -660,7 +660,7 @@ public class TestValidationBuilderHtml {
     }
 
     @Test
-    public void testRemoveErrorMarkingsPositionedMissingSubjects() {
+    void testRemoveErrorMarkingsPositionedMissingSubjects() {
         ValidationBuilderHtml builder = new ValidationBuilderHtml();
 
         Template template = TemplateFactory.HTML.get("validationbuilder_mark_positioned");

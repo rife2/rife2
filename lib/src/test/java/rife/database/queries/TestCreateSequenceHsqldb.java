@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateSequenceHsqldb extends TestCreateSequence {
     @Test
-    public void testInstantiationHsqldb() {
+    void testInstantiationHsqldb() {
         CreateSequence query = new CreateSequence(HSQLDB);
         assertNotNull(query);
         try {
@@ -23,7 +23,7 @@ public class TestCreateSequenceHsqldb extends TestCreateSequence {
     }
 
     @Test
-    public void testClearHsqldb() {
+    void testClearHsqldb() {
         CreateSequence query = new CreateSequence(HSQLDB);
         query.name("sequencename");
         assertNotNull(query.getSql());
@@ -37,7 +37,7 @@ public class TestCreateSequenceHsqldb extends TestCreateSequence {
     }
 
     @Test
-    public void testCreateHsqldb() {
+    void testCreateHsqldb() {
         CreateSequence query = new CreateSequence(HSQLDB);
         query.name("sequencename");
         assertEquals(query.getSql(), "CREATE SEQUENCE sequencename");
@@ -45,7 +45,7 @@ public class TestCreateSequenceHsqldb extends TestCreateSequence {
     }
 
     @Test
-    public void testCloneHsqldb() {
+    void testCloneHsqldb() {
         CreateSequence query = new CreateSequence(HSQLDB);
         query.name("sequencename");
         CreateSequence query_clone = query.clone();

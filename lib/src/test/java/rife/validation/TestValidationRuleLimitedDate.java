@@ -12,49 +12,49 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestValidationRuleLimitedDate {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         Bean bean = new Bean(new Date(2003, 12, 11));
         ValidationRuleLimitedDate rule = new ValidationRuleLimitedDate("property", new Date(2003, 3, 1), new Date(2004, 3, 1)).setBean(bean);
         assertNotNull(rule);
     }
 
     @Test
-    public void testValid() {
+    void testValid() {
         Bean bean = new Bean(new Date(2003, 12, 11));
         ValidationRuleLimitedDate rule = new ValidationRuleLimitedDate("property", new Date(2003, 3, 1), new Date(2004, 3, 1)).setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testValidArray() {
+    void testValidArray() {
         Bean bean = new Bean(new Date[]{new Date(2003, 12, 11), new Date(2005, 3, 7)});
         ValidationRuleLimitedDate rule = new ValidationRuleLimitedDate("arrayProperty", new Date(2003, 3, 1), new Date(2006, 3, 1)).setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testInvalid() {
+    void testInvalid() {
         Bean bean = new Bean(new Date(2003, 12, 11));
         ValidationRuleLimitedDate rule = new ValidationRuleLimitedDate("property", new Date(2004, 3, 1), new Date(2004, 4, 1)).setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testInvalidArray() {
+    void testInvalidArray() {
         Bean bean = new Bean(new Date[]{new Date(2003, 12, 11), new Date(2006, 3, 7)});
         ValidationRuleLimitedDate rule = new ValidationRuleLimitedDate("arrayProperty", new Date(2003, 3, 1), new Date(2006, 3, 1)).setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testUnknownProperty() {
+    void testUnknownProperty() {
         Bean bean = new Bean(new Date(2003, 12, 11));
         ValidationRuleLimitedDate rule = new ValidationRuleLimitedDate("unknown_property", new Date(2003, 3, 1), new Date(2004, 3, 1)).setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testGetError() {
+    void testGetError() {
         Bean bean = new Bean(new Date(2003, 12, 11));
         ValidationRuleLimitedDate rule = new ValidationRuleLimitedDate("property", new Date(2004, 3, 1), new Date(2004, 4, 1)).setBean(bean);
         ValidationError error = rule.getError();

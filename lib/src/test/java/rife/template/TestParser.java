@@ -24,7 +24,7 @@ public class TestParser {
     }
 
     @Test
-    public void testClone() {
+    void testClone() {
         var parser_clone = parser_.clone();
         assertNotNull(parser_clone);
         assertNotSame(parser_, parser_clone);
@@ -32,7 +32,7 @@ public class TestParser {
     }
 
     @Test
-    public void testTemplatePackage() {
+    void testTemplatePackage() {
         try {
             var template_parsed = parser_.parse("test_package.noblocks_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
@@ -45,7 +45,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseDefaultValues() {
+    void testParseDefaultValues() {
         try {
             var template_parsed = parser_.parse("defaultvalues_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
@@ -70,7 +70,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseComments() {
+    void testParseComments() {
         try {
             var template_parsed = parser_.parse("comments_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
@@ -90,7 +90,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseCommentsSuccessiveEscaped() {
+    void testParseCommentsSuccessiveEscaped() {
         try {
             var template_parsed = parser_.parse("comments_successive_escaped_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
@@ -103,7 +103,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseNoBlocks() {
+    void testParseNoBlocks() {
         try {
             var template_parsed = parser_.parse("noblocks_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
@@ -116,7 +116,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlocksSuccessive() {
+    void testParseBlocksSuccessive() {
         try {
             var template_parsed = parser_.parse("blocks_successive_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
@@ -138,7 +138,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlocksSuccessiveEscaped() {
+    void testParseBlocksSuccessiveEscaped() {
         try {
             var template_parsed = parser_.parse("blocks_successive_escaped_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
@@ -154,7 +154,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlocksSpaced() {
+    void testParseBlocksSpaced() {
         try {
             var template_parsed = parser_.parse("blocks_spaced_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
@@ -176,7 +176,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlocksSpacedEscaped() {
+    void testParseBlocksSpacedEscaped() {
         try {
             var template_parsed = parser_.parse("blocks_spaced_escaped_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
@@ -192,7 +192,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlocksExtremities() {
+    void testParseBlocksExtremities() {
         try {
             var template_parsed = parser_.parse("blocks_extremities_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
@@ -214,7 +214,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlocksExtremitiesEscaped() {
+    void testParseBlocksExtremitiesEscaped() {
         try {
             var template_parsed = parser_.parse("blocks_extremities_escaped_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
@@ -230,7 +230,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlockvalues() {
+    void testParseBlockvalues() {
         try {
             var template_parsed = parser_.parse("blockvalues_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
@@ -255,7 +255,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlockvaluesEscaped() {
+    void testParseBlockvaluesEscaped() {
         try {
             var template_parsed = parser_.parse("blockvalues_escaped_in", null);
             assertEquals(template_parsed.getBlocks().size(), 3);
@@ -276,7 +276,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlockappends() {
+    void testParseBlockappends() {
         try {
             var template_parsed = parser_.parse("blockappends_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
@@ -303,7 +303,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlockappendsEscaped() {
+    void testParseBlockappendsEscaped() {
         try {
             var template_parsed = parser_.parse("blockappends_escaped_in", null);
             assertEquals(template_parsed.getBlocks().size(), 3);
@@ -324,7 +324,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlockoverrides() {
+    void testParseBlockoverrides() {
         try {
             var template_parsed = parser_.parse("blockoverrides_in", null);
             assertEquals(template_parsed.getBlocks().size(), 3);
@@ -351,7 +351,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlocksNested() {
+    void testParseBlocksNested() {
         try {
             var template_parsed = parser_.parse("blocks_nested_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
@@ -373,7 +373,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlocksNestedEscaped() {
+    void testParseBlocksNestedEscaped() {
         try {
             var template_parsed = parser_.parse("blocks_nested_escaped_in", null);
             assertEquals(template_parsed.getBlocks().size(), 3);
@@ -392,7 +392,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseBlocksNameHashcodeConflicts() {
+    void testParseBlocksNameHashcodeConflicts() {
         try {
             assertEquals("DMn0".hashCode(), "Cln0".hashCode());
             assertEquals("DMn0".hashCode(), "DNNO".hashCode());
@@ -429,7 +429,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseValuesLong() {
+    void testParseValuesLong() {
         try {
             var template_parsed = parser_.parse("values_long_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
@@ -466,7 +466,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseValuesLongEscaped() {
+    void testParseValuesLongEscaped() {
         try {
             var template_parsed = parser_.parse("values_long_escaped_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
@@ -492,7 +492,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseValuesShort() {
+    void testParseValuesShort() {
         try {
             var template_parsed = parser_.parse("values_short_in", null);
             assertEquals(template_parsed.getBlocks().size(), 4);
@@ -524,7 +524,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseValuesShortEscaped() {
+    void testParseValuesShortEscaped() {
         try {
             var template_parsed = parser_.parse("values_short_escaped_in", null);
             assertEquals(template_parsed.getBlocks().size(), 2);
@@ -546,7 +546,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseIncludes() {
+    void testParseIncludes() {
         try {
             var template_parsed = parser_.parse("includes_master_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
@@ -559,7 +559,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseIncludesMultiple() {
+    void testParseIncludesMultiple() {
         try {
             var template_parsed = parser_.parse("includes_multiple_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
@@ -572,7 +572,7 @@ public class TestParser {
     }
 
     /*
-           @Test public void testParseIncludesOtherType()
+           @Test void testParseIncludesOtherType()
             {
                 try
                 {
@@ -594,7 +594,7 @@ public class TestParser {
 */
 
     @Test
-    public void testParseIncludesEscaped() {
+    void testParseIncludesEscaped() {
         try {
             var template_parsed = parser_.parse("includes_escaped_master_in", null);
             assertEquals(template_parsed.getBlocks().size(), 1);
@@ -607,7 +607,7 @@ public class TestParser {
     }
 
     @Test
-    public void testEncodingLatinHtml() {
+    void testEncodingLatinHtml() {
         try {
             var template_ascii = TemplateFactory.HTML.getParser().parse("encoding_latin_ascii", "US-ASCII");
             var template_utf_16le = TemplateFactory.HTML.getParser().parse("encoding_latin_utf16le", "UTF-16LE");
@@ -623,7 +623,7 @@ public class TestParser {
     }
 
     @Test
-    public void testEncodingLatinTxt() {
+    void testEncodingLatinTxt() {
         try {
             var template_ascii = TemplateFactory.TXT.getParser().parse("encoding_latin_ascii", "US-ASCII");
             var template_utf_16le = TemplateFactory.TXT.getParser().parse("encoding_latin_utf16le", "UTF-16LE");
@@ -639,7 +639,7 @@ public class TestParser {
     }
 
     @Test
-    public void testEncodingLatin1Html() {
+    void testEncodingLatin1Html() {
         try {
             var template_iso8859_1 = TemplateFactory.HTML.getParser().parse("encoding_latin1_iso88591", "ISO8859-1");
             var template_utf_8 = TemplateFactory.HTML.getParser().parse("encoding_latin1_utf8", "UTF-8");
@@ -655,7 +655,7 @@ public class TestParser {
     }
 
     @Test
-    public void testEncodingLatin1Txt() {
+    void testEncodingLatin1Txt() {
         try {
             var template_iso8859_1 = TemplateFactory.TXT.getParser().parse("encoding_latin1_iso88591", "ISO8859-1");
             var template_utf_8 = TemplateFactory.TXT.getParser().parse("encoding_latin1_utf8", "UTF-8");
@@ -671,7 +671,7 @@ public class TestParser {
     }
 
     @Test
-    public void testEncodingNonLatinHtml() {
+    void testEncodingNonLatinHtml() {
         try {
             var template_utf_8 = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf8", "UTF-8");
             var template_utf_8_wrong = TemplateFactory.HTML.getParser().parse("encoding_nonlatin_utf8", "ISO8859-1");
@@ -687,7 +687,7 @@ public class TestParser {
     }
 
     @Test
-    public void testEncodingNonLatinTxt() {
+    void testEncodingNonLatinTxt() {
         try {
             var template_utf_8 = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "UTF-8");
             var template_utf_8_wrong = TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "ISO8859-1");
@@ -703,7 +703,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseFilteredBlocks() {
+    void testParseFilteredBlocks() {
         try {
             Parser parser;
             Parsed template_parsed;
@@ -876,7 +876,7 @@ public class TestParser {
     }
 
     @Test
-    public void testParseFilteredValues() {
+    void testParseFilteredValues() {
         try {
             Parser parser;
             Parsed template_parsed;
@@ -1049,7 +1049,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorTerminatingUnopenedValue() {
+    void testErrorTerminatingUnopenedValue() {
         try {
             parser_.parse("error_terminating_unopened_value", null);
             fail();
@@ -1065,7 +1065,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorTerminatingUnopenedBlock() {
+    void testErrorTerminatingUnopenedBlock() {
         try {
             parser_.parse("error_terminating_unopened_block", null);
             fail();
@@ -1081,7 +1081,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorTerminatingUnopenedBlockvalue() {
+    void testErrorTerminatingUnopenedBlockvalue() {
         try {
             parser_.parse("error_terminating_unopened_blockvalue", null);
             fail();
@@ -1097,7 +1097,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorIncludeNotFound() {
+    void testErrorIncludeNotFound() {
         try {
             parser_.parse("error_include_not_found", null);
             fail();
@@ -1114,7 +1114,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorCircularIncludes() {
+    void testErrorCircularIncludes() {
         try {
             parser_.parse("error_circular_includes_master", null);
             fail();
@@ -1132,7 +1132,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorIncludeBadlyTerminated() {
+    void testErrorIncludeBadlyTerminated() {
         try {
             parser_.parse("error_include_badly_terminated", null);
             fail();
@@ -1148,7 +1148,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorValueTagNotTerminated() {
+    void testErrorValueTagNotTerminated() {
         try {
             parser_.parse("error_value_tag_not_terminated", null);
             fail();
@@ -1164,7 +1164,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorValueShortBeginTagBadlyTerminated() {
+    void testErrorValueShortBeginTagBadlyTerminated() {
         try {
             parser_.parse("error_valueshort_begin_badly_terminated", null);
             fail();
@@ -1180,7 +1180,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorValueLongBeginTagBadlyTerminated() {
+    void testErrorValueLongBeginTagBadlyTerminated() {
         try {
             parser_.parse("error_valuelong_begin_badly_terminated", null);
             fail();
@@ -1196,7 +1196,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorUnsupportedNestedValueTag() {
+    void testErrorUnsupportedNestedValueTag() {
         try {
             parser_.parse("error_unsupported_nested_value_tag", null);
             fail();
@@ -1212,7 +1212,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorValueBeginTagNotEnded() {
+    void testErrorValueBeginTagNotEnded() {
         try {
             parser_.parse("error_value_begin_tag_not_ended", null);
             fail();
@@ -1229,7 +1229,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorCommentMissingTerminationTag() {
+    void testErrorCommentMissingTerminationTag() {
         try {
             parser_.parse("error_comment_missing_termination_tag", null);
             fail();
@@ -1245,7 +1245,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorBlockBeginTagNotEnded() {
+    void testErrorBlockBeginTagNotEnded() {
         try {
             parser_.parse("error_block_begin_tag_not_ended", null);
             fail();
@@ -1261,7 +1261,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorBlockMissingTerminationTag() {
+    void testErrorBlockMissingTerminationTag() {
         try {
             parser_.parse("error_block_missing_termination_tag", null);
             fail();
@@ -1277,7 +1277,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorBlockMismatchedTerminationTag1() {
+    void testErrorBlockMismatchedTerminationTag1() {
         try {
             parser_.parse("error_block_mismatched_termination_tag1", null);
             fail();
@@ -1293,7 +1293,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorBlockMismatchedTerminationTag2() {
+    void testErrorBlockMismatchedTerminationTag2() {
         try {
             parser_.parse("error_block_mismatched_termination_tag2", null);
             fail();
@@ -1309,7 +1309,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorBlockMismatchedTerminationTag3() {
+    void testErrorBlockMismatchedTerminationTag3() {
         try {
             parser_.parse("error_block_mismatched_termination_tag3", null);
             fail();
@@ -1325,7 +1325,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorBlockBeginTagBadlyTerminated() {
+    void testErrorBlockBeginTagBadlyTerminated() {
         try {
             parser_.parse("error_block_begin_tag_badly_terminated", null);
             fail();
@@ -1341,7 +1341,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorBlockValueBeginTagBadlyTerminated() {
+    void testErrorBlockValueBeginTagBadlyTerminated() {
         try {
             parser_.parse("error_blockvalue_begin_tag_badly_terminated", null);
             fail();
@@ -1357,7 +1357,7 @@ public class TestParser {
     }
 
     @Test
-    public void testErrorUnsupportedEncoding() {
+    void testErrorUnsupportedEncoding() {
         try {
             TemplateFactory.TXT.getParser().parse("encoding_nonlatin_utf8", "THIS_ENCODING_DOESNT_EXIST");
             fail();

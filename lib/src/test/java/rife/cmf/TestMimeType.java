@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMimeType {
     @Test
-    public void testMimeTypeIdentifiers() {
+    void testMimeTypeIdentifiers() {
         assertEquals("application/xhtml+xml", MimeType.APPLICATION_XHTML.toString());
         assertEquals("text/plain", MimeType.TEXT_PLAIN.toString());
         assertEquals("image/gif", MimeType.IMAGE_GIF.toString());
@@ -21,7 +21,7 @@ public class TestMimeType {
     }
 
     @Test
-    public void testGetMimeType() {
+    void testGetMimeType() {
         assertSame(MimeType.getMimeType("application/xhtml+xml"), MimeType.APPLICATION_XHTML);
         assertSame(MimeType.getMimeType("text/plain"), MimeType.TEXT_PLAIN);
         assertSame(MimeType.getMimeType("image/gif"), MimeType.IMAGE_GIF);
@@ -30,12 +30,12 @@ public class TestMimeType {
     }
 
     @Test
-    public void testGetUnsupportedMimeType() {
+    void testGetUnsupportedMimeType() {
         assertNull(MimeType.getMimeType("uwynsspecial/type"));
     }
 
     @Test
-    public void testFormatters() {
+    void testFormatters() {
         assertNotNull(MimeType.APPLICATION_XHTML.getFormatter());
         assertNotNull(MimeType.TEXT_PLAIN.getFormatter());
         assertNotNull(MimeType.IMAGE_GIF.getFormatter());
@@ -44,7 +44,7 @@ public class TestMimeType {
     }
 
     @Test
-    public void testValidationRuleApplicationXhtml() {
+    void testValidationRuleApplicationXhtml() {
         var rule = MimeType.APPLICATION_XHTML.getValidationRule(new ConstrainedProperty("xhtml"));
         assertNotNull(rule);
         rule.setBean(new TestBean(false));
@@ -54,13 +54,13 @@ public class TestMimeType {
     }
 
     @Test
-    public void testValidationRuleTextPlain() {
+    void testValidationRuleTextPlain() {
         var rule = MimeType.TEXT_PLAIN.getValidationRule(new ConstrainedProperty("textplain"));
         assertNull(rule);
     }
 
     @Test
-    public void testValidationRuleImageGif() {
+    void testValidationRuleImageGif() {
         var rule = MimeType.IMAGE_GIF.getValidationRule(new ConstrainedProperty("gif"));
         assertNotNull(rule);
         rule.setBean(new TestBean(false));
@@ -70,7 +70,7 @@ public class TestMimeType {
     }
 
     @Test
-    public void testValidationRuleImageJpeg() {
+    void testValidationRuleImageJpeg() {
         var rule = MimeType.IMAGE_JPEG.getValidationRule(new ConstrainedProperty("jpeg"));
         assertNotNull(rule);
         rule.setBean(new TestBean(false));
@@ -80,7 +80,7 @@ public class TestMimeType {
     }
 
     @Test
-    public void testValidationRuleImagePng() {
+    void testValidationRuleImagePng() {
         var rule = MimeType.IMAGE_PNG.getValidationRule(new ConstrainedProperty("png"));
         assertNotNull(rule);
         rule.setBean(new TestBean(false));

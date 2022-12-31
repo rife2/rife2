@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateTableOracle extends TestCreateTable {
     @Test
-    public void testInstantiationOracle() {
+    void testInstantiationOracle() {
         CreateTable query = new CreateTable(ORACLE);
         assertNotNull(query);
         try {
@@ -30,7 +30,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testIncompleteQueryOracle() {
+    void testIncompleteQueryOracle() {
         CreateTable query = new CreateTable(ORACLE);
         try {
             query.getSql();
@@ -51,7 +51,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testClearOracle() {
+    void testClearOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("string", String.class);
@@ -66,7 +66,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testColumnOracle() {
+    void testColumnOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename1")
             .column("string", String.class)
@@ -95,7 +95,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testColumnPrecisionOracle() {
+    void testColumnPrecisionOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename1")
             .column("string", String.class, 255)
@@ -123,7 +123,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanOracle() {
+    void testColumnsBeanOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .columns(BeanImpl.class);
@@ -133,7 +133,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanIncludedOracle() {
+    void testColumnsBeanIncludedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
@@ -143,7 +143,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanExcludedOracle() {
+    void testColumnsBeanExcludedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
@@ -153,7 +153,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanFilteredOracle() {
+    void testColumnsBeanFilteredOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringbuffer"});
@@ -162,7 +162,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanPrecisionOracle() {
+    void testColumnsBeanPrecisionOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .columns(BeanImpl.class)
@@ -196,7 +196,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanConstrainedOracle() {
+    void testColumnsBeanConstrainedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .columns(BeanImplConstrained.class);
@@ -205,7 +205,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testNullableOracle() {
+    void testNullableOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn1", int.class, CreateTable.NULL)
@@ -221,7 +221,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testDefaultOracle() {
+    void testDefaultOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename1")
             .column("string", String.class, 255)
@@ -267,7 +267,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testDefaultFunctionOracle() {
+    void testDefaultFunctionOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename1")
             .column("intcolumn", int.class)
@@ -277,7 +277,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testCustomAttributeOracle() {
+    void testCustomAttributeOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename1")
             .column("intColumn", Integer.class)
@@ -287,7 +287,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testTemporaryOracle() {
+    void testTemporaryOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .temporary(true)
@@ -297,7 +297,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testPrimaryKeySimpleOracle() {
+    void testPrimaryKeySimpleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -307,7 +307,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testPrimaryKeyMultipleOracle() {
+    void testPrimaryKeyMultipleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -318,7 +318,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testPrimaryKeyNamedOracle() {
+    void testPrimaryKeyNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -328,7 +328,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testPrimaryKeyMultipleNamedOracle() {
+    void testPrimaryKeyMultipleNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -339,7 +339,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testUniqueSimpleOracle() {
+    void testUniqueSimpleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -349,7 +349,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testUniqueMultipleOracle() {
+    void testUniqueMultipleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -360,7 +360,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testUniqueNamedOracle() {
+    void testUniqueNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -370,7 +370,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testUniqueMultipleNamedOracle() {
+    void testUniqueMultipleNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -381,7 +381,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeySimpleOracle() {
+    void testForeignKeySimpleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -391,7 +391,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyMultipleOracle() {
+    void testForeignKeyMultipleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -402,7 +402,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeySimpleNamedOracle() {
+    void testForeignKeySimpleNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -412,7 +412,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyMultipleNamedOracle() {
+    void testForeignKeyMultipleNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -423,7 +423,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyViolationsSingleOracle() {
+    void testForeignKeyViolationsSingleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -529,7 +529,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyViolationsOracle() {
+    void testForeignKeyViolationsOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -543,7 +543,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyMultipleViolationsOracle() {
+    void testForeignKeyMultipleViolationsOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -558,7 +558,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testCheckSimpleOracle() {
+    void testCheckSimpleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -568,7 +568,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testCheckNamedOracle() {
+    void testCheckNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -578,7 +578,7 @@ public class TestCreateTableOracle extends TestCreateTable {
     }
 
     @Test
-    public void testCloneOracle() {
+    void testCloneOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
             .columns(BeanImpl.class)

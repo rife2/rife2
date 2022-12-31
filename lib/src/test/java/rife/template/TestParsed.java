@@ -23,7 +23,7 @@ public class TestParsed {
     }
 
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         Parsed tp = new Parsed(paser_);
 
         assertNotNull(tp);
@@ -39,7 +39,7 @@ public class TestParsed {
     }
 
     @Test
-    public void testResource() {
+    void testResource() {
         Parsed tp = new Parsed(paser_);
 
         assertNull(tp.getResource());
@@ -54,7 +54,7 @@ public class TestParsed {
     }
 
     @Test
-    public void testClassname() {
+    void testClassname() {
         Parsed tp = new Parsed(paser_);
 
         assertNull(tp.getClassName());
@@ -66,7 +66,7 @@ public class TestParsed {
     }
 
     @Test
-    public void testBlocks() {
+    void testBlocks() {
         Parsed tp = new Parsed(paser_);
 
         assertEquals(tp.getBlocks().size(), 0);
@@ -89,7 +89,7 @@ public class TestParsed {
     }
 
     @Test
-    public void testDefaultValues() {
+    void testDefaultValues() {
         Parsed tp = new Parsed(paser_);
 
         assertEquals(tp.getDefaultValues().size(), 0);
@@ -106,7 +106,7 @@ public class TestParsed {
     }
 
     @Test
-    public void testIncludes() {
+    void testIncludes() {
         Parsed tp = new Parsed(paser_);
 
         String include1_name = "noblocks_in";

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestContentDataUser {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         var user = new ContentDataUser<>() {
             public Object useContentData(Object contentData)
             throws InnerClassException {
@@ -23,7 +23,7 @@ public class TestContentDataUser {
     }
 
     @Test
-    public void testData() {
+    void testData() {
         var user = new ContentDataUser<String>() {
             public String useContentData(Object contentData)
             throws InnerClassException {
@@ -35,7 +35,7 @@ public class TestContentDataUser {
     }
 
     @Test
-    public void testException() {
+    void testException() {
         var user = new ContentDataUser<>() {
             public Object useContentData(Object contentData)
             throws InnerClassException {

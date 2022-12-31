@@ -10,49 +10,49 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestValidationRuleUrl {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         Bean bean = new Bean("http://www.test.com");
         ValidationRuleUrl rule = new ValidationRuleUrl("property").setBean(bean);
         assertNotNull(rule);
     }
 
     @Test
-    public void testValid() {
+    void testValid() {
         Bean bean = new Bean("http://www.test.com");
         ValidationRuleUrl rule = new ValidationRuleUrl("property").setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testValidArray() {
+    void testValidArray() {
         Bean bean = new Bean(new String[]{"http://www.test.com", "http://www.uwyn.com", "http://www.rifers.org"});
         ValidationRuleUrl rule = new ValidationRuleUrl("arrayProperty").setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testInvalid() {
+    void testInvalid() {
         Bean bean = new Bean("htt:www/.test.com");
         ValidationRuleUrl rule = new ValidationRuleUrl("property").setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testInvalidArray() {
+    void testInvalidArray() {
         Bean bean = new Bean(new String[]{"http://www.test.com", "http://www.uwyn.com", "htt:www/.rifersorg"});
         ValidationRuleUrl rule = new ValidationRuleUrl("arrayProperty").setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testUnknownProperty() {
+    void testUnknownProperty() {
         Bean bean = new Bean("http://www.test.com");
         ValidationRuleUrl rule = new ValidationRuleUrl("unknown_property").setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testGetError() {
+    void testGetError() {
         Bean bean = new Bean("http://www.test.com");
         ValidationRuleUrl rule = new ValidationRuleUrl("property").setBean(bean);
         ValidationError error = rule.getError();

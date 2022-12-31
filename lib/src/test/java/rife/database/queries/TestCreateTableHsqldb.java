@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateTableHsqldb extends TestCreateTable {
     @Test
-    public void testInstantiationHsqldb() {
+    void testInstantiationHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         assertNotNull(query);
         try {
@@ -29,7 +29,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testIncompleteQueryHsqldb() {
+    void testIncompleteQueryHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         try {
             query.getSql();
@@ -50,7 +50,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testClearHsqldb() {
+    void testClearHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("string", String.class);
@@ -65,7 +65,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testColumnHsqldb() {
+    void testColumnHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
             .column("string", String.class)
@@ -93,7 +93,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testColumnPrecisionHsqldb() {
+    void testColumnPrecisionHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
             .column("string", String.class, 255)
@@ -121,7 +121,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanHsqldb() {
+    void testColumnsBeanHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .columns(BeanImpl.class);
@@ -130,7 +130,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanIncludedHsqldb() {
+    void testColumnsBeanIncludedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
@@ -139,7 +139,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanExcludedHsqldb() {
+    void testColumnsBeanExcludedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
@@ -148,7 +148,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanFilteredHsqldb() {
+    void testColumnsBeanFilteredHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringbuffer"});
@@ -157,7 +157,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanPrecisionHsqldb() {
+    void testColumnsBeanPrecisionHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .columns(BeanImpl.class)
@@ -190,7 +190,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanConstrainedHsqldb() {
+    void testColumnsBeanConstrainedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .columns(BeanImplConstrained.class);
@@ -199,7 +199,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testNullableHsqldb() {
+    void testNullableHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn1", int.class, CreateTable.NULL)
@@ -215,7 +215,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testDefaultHsqldb() {
+    void testDefaultHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
             .column("string", String.class, 255)
@@ -261,7 +261,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testDefaultFunctionHsqldb() {
+    void testDefaultFunctionHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
             .column("dateobject", java.sql.Date.class)
@@ -271,7 +271,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testCustomAttributeHsqldb() {
+    void testCustomAttributeHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
             .column("intColumn", Integer.class)
@@ -281,7 +281,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testTemporaryHsqldb() {
+    void testTemporaryHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .temporary(true)
@@ -291,7 +291,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testPrimaryKeySimpleHsqldb() {
+    void testPrimaryKeySimpleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -301,7 +301,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testPrimaryKeyMultipleHsqldb() {
+    void testPrimaryKeyMultipleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -312,7 +312,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testPrimaryKeyNamedHsqldb() {
+    void testPrimaryKeyNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -322,7 +322,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testPrimaryKeyMultipleNamedHsqldb() {
+    void testPrimaryKeyMultipleNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -333,7 +333,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testUniqueSimpleHsqldb() {
+    void testUniqueSimpleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -343,7 +343,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testUniqueMultipleHsqldb() {
+    void testUniqueMultipleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -354,7 +354,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testUniqueNamedHsqldb() {
+    void testUniqueNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -364,7 +364,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testUniqueMultipleNamedHsqldb() {
+    void testUniqueMultipleNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -375,7 +375,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeySimpleHsqldb() {
+    void testForeignKeySimpleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -385,7 +385,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyMultipleHsqldb() {
+    void testForeignKeyMultipleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -396,7 +396,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeySimpleNamedHsqldb() {
+    void testForeignKeySimpleNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -406,7 +406,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyMultipleNamedHsqldb() {
+    void testForeignKeyMultipleNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -417,7 +417,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyViolationsSingleHsqldb() {
+    void testForeignKeyViolationsSingleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -493,7 +493,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyViolationsHsqldb() {
+    void testForeignKeyViolationsHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -503,7 +503,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyMultipleViolationsHsqldb() {
+    void testForeignKeyMultipleViolationsHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -516,7 +516,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testCheckSimpleHsqldb() {
+    void testCheckSimpleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -526,7 +526,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testCheckNamedHsqldb() {
+    void testCheckNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -536,7 +536,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
     }
 
     @Test
-    public void testCloneHsqldb() {
+    void testCloneHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
             .columns(BeanImpl.class)

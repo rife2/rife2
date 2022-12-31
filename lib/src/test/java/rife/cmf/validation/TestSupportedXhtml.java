@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSupportedXhtml {
     @Test
-    public void testValidateNull()
+    void testValidateNull()
     throws Exception {
         var rule = new SupportedXhtml("xhtml", true);
         var bean = new XhtmlBean();
@@ -26,7 +26,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    public void testValidateSupportedDocument()
+    void testValidateSupportedDocument()
     throws Exception {
         var rule = new SupportedXhtml("xhtml", false);
         var bean = new XhtmlBean();
@@ -45,7 +45,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    public void testValidateUnsupportedDocument()
+    void testValidateUnsupportedDocument()
     throws Exception {
         var rule = new SupportedXhtml("xhtml", false);
         var bean = new XhtmlBean();
@@ -59,7 +59,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    public void testValidateSupportedFragment()
+    void testValidateSupportedFragment()
     throws Exception {
         var rule = new SupportedXhtml("xhtml", true);
         var bean = new XhtmlBean();
@@ -73,7 +73,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    public void testValidateUnsupportedFragment()
+    void testValidateUnsupportedFragment()
     throws Exception {
         var rule = new SupportedXhtml("xhtml", true);
         var bean = new XhtmlBean();
@@ -87,7 +87,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    public void testValidateNotConstrained()
+    void testValidateNotConstrained()
     throws Exception {
         var rule = new SupportedXhtml("xhtml", true);
         var bean = new XhtmlBeanNotConstrained();
@@ -98,7 +98,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    public void testValidateNotCmfProperty()
+    void testValidateNotCmfProperty()
     throws Exception {
         var rule = new SupportedXhtml("xhtml", true);
         var bean = new XhtmlBeanValidation();
@@ -111,7 +111,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    public void testValidateUnknownProperty()
+    void testValidateUnknownProperty()
     throws Exception {
         var rule = new SupportedXhtml("xhtml_unknown", true);
         var bean = new XhtmlBean();
@@ -121,7 +121,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    public void testGetError()
+    void testGetError()
     throws Exception {
         var rule = new SupportedXhtml("xhtml", true);
         assertEquals("xhtml", rule.getError().getSubject());

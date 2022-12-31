@@ -11,14 +11,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMockCookie {
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         var mock = new MockCookie("name", "value");
         assertEquals(mock.getName(), "name");
         assertEquals(mock.getValue(), "value");
     }
 
     @Test
-    public void testConstructorCookie() {
+    void testConstructorCookie() {
         var cookie1 = new Cookie("name1", "value1");
 
         var mock1 = new MockCookie(cookie1);
@@ -54,7 +54,7 @@ public class TestMockCookie {
     }
 
     @Test
-    public void testExpiration()
+    void testExpiration()
     throws InterruptedException {
         var cookie1 = new Cookie("name1", "value1");
         assertFalse(new MockCookie(cookie1).isExpired());

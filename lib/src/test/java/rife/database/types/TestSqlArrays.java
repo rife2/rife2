@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestSqlArrays {
     @Test
-    public void testConvertArray() {
+    void testConvertArray() {
         assertEquals(SqlArrays.convertArray(new Object[]{
             "string'value", new StringBuffer("stringbuffer'value"), null, 12, new Object[]{"value1", "value2"}
         }), "{'string''value','stringbuffer''value',NULL,12,{'value1','value2'}}");

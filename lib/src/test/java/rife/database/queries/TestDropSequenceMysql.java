@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropSequenceMysql extends TestDropSequence {
     @Test
-    public void testInstantiationMysql() {
+    void testInstantiationMysql() {
         DropSequence query = new DropSequence(MYSQL);
         assertNotNull(query);
         try {
@@ -24,7 +24,7 @@ public class TestDropSequenceMysql extends TestDropSequence {
     }
 
     @Test
-    public void testClearMysql() {
+    void testClearMysql() {
         DropSequence query = new DropSequence(MYSQL);
         query.name("sequencename");
         try {
@@ -36,7 +36,7 @@ public class TestDropSequenceMysql extends TestDropSequence {
     }
 
     @Test
-    public void testCreateMysql() {
+    void testCreateMysql() {
         DropSequence query = new DropSequence(MYSQL);
         query.name("sequencename");
         try {
@@ -48,7 +48,7 @@ public class TestDropSequenceMysql extends TestDropSequence {
     }
 
     @Test
-    public void testCloneMysql() {
+    void testCloneMysql() {
         // sequences are not supported on mysql
     }
 }

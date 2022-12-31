@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTemplate {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         var template = TemplateFactory.HTML.get("empty");
         assertNotNull(template);
         assertTrue(template.getModificationTime() <= System.currentTimeMillis());
@@ -47,7 +47,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testClone() {
+    void testClone() {
         var template1 = TemplateFactory.HTML.get("values");
         assertEquals("values", template1.getName());
         assertEquals("values", template1.getFullName());
@@ -69,7 +69,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testSetValues() {
+    void testSetValues() {
         var template = TemplateFactory.HTML.get("values");
         assertNull(template.getValue("VALUE1"));
         assertNull(template.getValue("VALUE2"));
@@ -102,7 +102,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testSetValuesEncoded() {
+    void testSetValuesEncoded() {
         var template = TemplateFactory.HTML.get("values");
         assertNull(template.getValue("VALUE1"));
         assertNull(template.getValue("VALUE2"));
@@ -121,7 +121,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testSetValuesTyped() {
+    void testSetValuesTyped() {
         var template = TemplateFactory.HTML.get("values_typed");
 
         String value_string = "abcde";
@@ -175,7 +175,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testAppendValuesEncoded() {
+    void testAppendValuesEncoded() {
         var template = TemplateFactory.HTML.get("values");
         assertNull(template.getValue("VALUE1"));
         assertNull(template.getValue("VALUE2"));
@@ -201,7 +201,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testAppendValuesTyped() {
+    void testAppendValuesTyped() {
         var template = TemplateFactory.HTML.get("values_typed");
 
         String value_string = "abcde";
@@ -240,7 +240,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testRemoveValues() {
+    void testRemoveValues() {
         var template = TemplateFactory.HTML.get("values");
         var value1 = "aaab";
         var value2 = "bbbc";
@@ -269,7 +269,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testBlankValues() {
+    void testBlankValues() {
         var template = TemplateFactory.HTML.get("values");
         var value1 = "aaab";
         var value2 = "bbbc";
@@ -305,7 +305,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testClearValues() {
+    void testClearValues() {
         var template = TemplateFactory.HTML.get("values");
         var value1 = "aaab";
         var value2 = "bbbc";
@@ -323,7 +323,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testDefaultValues() {
+    void testDefaultValues() {
         var template = TemplateFactory.HTML.get("values_default");
         var defaultvalue1 = "azerty";
         assertTrue(template.hasDefaultValue("DEFAULTVALUE"));
@@ -345,7 +345,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testUnsetValues() {
+    void testUnsetValues() {
         Template template;
         Collection<String> unset_value_ids;
         try {
@@ -444,7 +444,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testUnsetValuesDefaults() {
+    void testUnsetValuesDefaults() {
         Template template;
         Collection<String> unset_value_ids;
         try {
@@ -487,7 +487,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConditionalBlockRetrieval() {
+    void testConditionalBlockRetrieval() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("construction_simple_in");
@@ -505,7 +505,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionSimpleHtml() {
+    void testConstructionSimpleHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("construction_simple_in");
@@ -529,7 +529,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionSimpleTxt() {
+    void testConstructionSimpleTxt() {
         Template template;
         try {
             template = TemplateFactory.TXT.get("construction_simple_in");
@@ -553,7 +553,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionRepeatedHtml() {
+    void testConstructionRepeatedHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("construction_repeated_in");
@@ -572,7 +572,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionRepeatedTxt() {
+    void testConstructionRepeatedTxt() {
         Template template;
         try {
             template = TemplateFactory.TXT.get("construction_repeated_in");
@@ -591,7 +591,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionOverridingHtml() {
+    void testConstructionOverridingHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("construction_overriding_in");
@@ -637,7 +637,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionOverridingTxt() {
+    void testConstructionOverridingTxt() {
         Template template;
         try {
             template = TemplateFactory.TXT.get("construction_overriding_in");
@@ -683,7 +683,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionDefaultValueHtml() {
+    void testConstructionDefaultValueHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("construction_defaultvalue_in");
@@ -696,7 +696,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionDefaultValueText() {
+    void testConstructionDefaultValueText() {
         Template template;
         try {
             template = TemplateFactory.TXT.get("construction_defaultvalue_in");
@@ -709,7 +709,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionEmbeddedHtml() {
+    void testConstructionEmbeddedHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("construction_embedded_in");
@@ -731,7 +731,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionEmbeddedTxt() {
+    void testConstructionEmbeddedTxt() {
         Template template;
         try {
             template = TemplateFactory.TXT.get("construction_embedded_in");
@@ -830,7 +830,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionInternalValuesHtml() {
+    void testConstructionInternalValuesHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("construction_internalvalues_in");
@@ -857,7 +857,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionInternalValuesTxt() {
+    void testConstructionInternalValuesTxt() {
         Template template;
         try {
             template = TemplateFactory.TXT.get("construction_internalvalues_in");
@@ -884,7 +884,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testConstructionInternalBlocksNameHashcodeConflicts() {
+    void testConstructionInternalBlocksNameHashcodeConflicts() {
         try {
             assertEquals("DMn0".hashCode(), "Cln0".hashCode());
             assertEquals("DMn0".hashCode(), "DNNO".hashCode());
@@ -914,7 +914,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testHasValuesHtml() {
+    void testHasValuesHtml() {
         Template template;
         try {
             template = TemplateFactory.HTML.get("defaultvalues_in");
@@ -928,7 +928,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testHasValuesTxt() {
+    void testHasValuesTxt() {
         Template template;
         try {
             template = TemplateFactory.TXT.get("defaultvalues_in");
@@ -942,7 +942,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testUnsetValuesOutput() {
+    void testUnsetValuesOutput() {
         var template = TemplateFactory.HTML.get("unsetvalues_output_in");
         assertTrue(template.hasValueId("VALUE1"));
         assertTrue(template.hasValueId("VALUE2"));
@@ -955,7 +955,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testSetBeanValues() {
+    void testSetBeanValues() {
         try {
             var template = TemplateFactory.HTML.get("values_bean_in");
             var bean = new BeanImpl();
@@ -967,7 +967,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testRemoveBeanValues() {
+    void testRemoveBeanValues() {
         try {
             var template = TemplateFactory.HTML.get("values_bean_in");
             var bean = new BeanImpl();
@@ -981,7 +981,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testSetBeanValuesPrefix() {
+    void testSetBeanValuesPrefix() {
         try {
             var template = TemplateFactory.HTML.get("values_bean_prefix_in");
             var bean = new BeanImpl();
@@ -993,7 +993,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testRemoveBeanValuesPrefix() {
+    void testRemoveBeanValuesPrefix() {
         try {
             var template = TemplateFactory.HTML.get("values_bean_prefix_in");
             var bean = new BeanImpl();
@@ -1009,7 +1009,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testSetBeanValuesHtml() {
+    void testSetBeanValuesHtml() {
         try {
             Template template;
             var bean = new HtmlBeanImpl();
@@ -1046,7 +1046,7 @@ public class TestTemplate {
     }
 
     @Test
-    public void testRemoveBeanValuesHtml() {
+    void testRemoveBeanValuesHtml() {
         try {
             Template template;
             HtmlBeanImpl bean;

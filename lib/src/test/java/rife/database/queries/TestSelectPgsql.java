@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSelectPgsql extends TestSelect {
     @Test
-    public void testInstantiationPgsql() {
+    void testInstantiationPgsql() {
         Select query = new Select(PGSQL);
         assertNotNull(query);
         try {
@@ -34,7 +34,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testIncompleteQueryPgsql() {
+    void testIncompleteQueryPgsql() {
         Select query = new Select(PGSQL);
         try {
             query.getSql();
@@ -57,7 +57,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testClearPgsql() {
+    void testClearPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename");
         assertNotNull(query.getSql());
@@ -71,7 +71,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testBasicPgsql() {
+    void testBasicPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename");
@@ -79,7 +79,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testHintPgsql() {
+    void testHintPgsql() {
         Select query = new Select(PGSQL);
         query
             .hint("NO_INDEX")
@@ -93,7 +93,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testOrderByAscendingPgsql() {
+    void testOrderByAscendingPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .orderBy("propertyInt", Select.ASC);
@@ -102,7 +102,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testOrderByDescendingPgsql() {
+    void testOrderByDescendingPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .orderBy("propertyInt", Select.DESC);
@@ -111,7 +111,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testBeanPgsql() {
+    void testBeanPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .fields(BeanImpl.class);
@@ -119,7 +119,7 @@ public class TestSelectPgsql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test public void testBeanConstrainedPgsql() {
+    @Test void testBeanConstrainedPgsql() {
         Select query = new Select(PGSQL, BeanImplConstrained.class);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyString ASC, propertyInt DESC");
@@ -133,7 +133,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testBeanExcludedPgsql() {
+    void testBeanExcludedPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, new String[]{"propertyCalendar", "propertyFloat", "propertyShort"});
@@ -142,7 +142,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testBeanTablePgsql() {
+    void testBeanTablePgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .fields("tablename", BeanImpl.class);
@@ -151,7 +151,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testBeanExcludedTablePgsql() {
+    void testBeanExcludedTablePgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .fieldsExcluded("tablename", BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
@@ -160,7 +160,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testWhereTypedPgsql() {
+    void testWhereTypedPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename");
 
@@ -191,7 +191,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testWhereTypedMixedPgsql() {
+    void testWhereTypedMixedPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename");
 
@@ -228,7 +228,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersPgsql() {
+    void testWhereParametersPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename");
 
@@ -261,7 +261,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersMixedPgsql() {
+    void testWhereParametersMixedPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -283,7 +283,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testWhereConstructionPgsql() {
+    void testWhereConstructionPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -294,7 +294,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testWhereConstructionGroupPgsql() {
+    void testWhereConstructionGroupPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .startWhere()
@@ -328,7 +328,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanPgsql() {
+    void testWhereBeanPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
@@ -336,7 +336,7 @@ public class TestSelectPgsql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test public void testWhereBeanConstrainedPgsql() {
+    @Test void testWhereBeanConstrainedPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .where(BeanImplConstrained.getPopulatedBean());
@@ -345,7 +345,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanNullValuesPgsql() {
+    void testWhereBeanNullValuesPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
@@ -354,7 +354,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanIncludedPgsql() {
+    void testWhereBeanIncludedPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -363,7 +363,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanExcludedPgsql() {
+    void testWhereBeanExcludedPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -372,7 +372,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanFilteredPgsql() {
+    void testWhereBeanFilteredPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -381,7 +381,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanPgsql() {
+    void testWhereParametersBeanPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
@@ -450,7 +450,7 @@ public class TestSelectPgsql extends TestSelect {
         }));
     }
 
-    @Test public void testWhereParametersBeanConstrainedPgsql() {
+    @Test void testWhereParametersBeanConstrainedPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .whereParameters(BeanImplConstrained.class);
@@ -514,7 +514,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanExcludedPgsql() {
+    void testWhereParametersBeanExcludedPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .whereParametersExcluded(BeanImpl.class,
@@ -568,7 +568,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testDistinctPgsql() {
+    void testDistinctPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .distinct()
@@ -581,7 +581,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testDistinctOnPgsql() {
+    void testDistinctOnPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .distinctOn("propertyDouble")
@@ -596,7 +596,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testComplexPgsql() {
+    void testComplexPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .field("field1")
@@ -618,7 +618,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testGroupByBeanPgsql() {
+    void testGroupByBeanPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .fields(BeanImpl.class)
@@ -628,7 +628,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testGroupByBeanExcludedPgsql() {
+    void testGroupByBeanExcludedPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, new String[]{"propertyCalendar", "propertyFloat", "propertyShort"})
@@ -638,7 +638,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testJoinPgsql() {
+    void testJoinPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .join("table2")
@@ -648,7 +648,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testJoinCustomPgsql() {
+    void testJoinCustomPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .joinCustom("INNER JOIN table3 USING (propertyInt)")
@@ -658,7 +658,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testJoinCrossPgsql() {
+    void testJoinCrossPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .joinCross("table2")
@@ -668,7 +668,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testJoinInnerPgsql() {
+    void testJoinInnerPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .joinInner("table2", Select.NATURAL, null);
@@ -687,7 +687,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testJoinOuterPgsql() {
+    void testJoinOuterPgsql() {
         Select query = new Select(PGSQL);
 
         query.from("tablename")
@@ -740,7 +740,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testLimitPgsql() {
+    void testLimitPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .limit(3);
@@ -757,7 +757,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testLimitParameterPgsql() {
+    void testLimitParameterPgsql() {
         Select query = new Select(PGSQL);
         query.from("tablename")
             .limitParameter("limit");
@@ -787,7 +787,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testSubselectParamsPgsql() {
+    void testSubselectParamsPgsql() {
         Select fieldquery = new Select(PGSQL);
         fieldquery
             .from("table2")
@@ -900,7 +900,7 @@ public class TestSelectPgsql extends TestSelect {
     }
 
     @Test
-    public void testClonePgsql() {
+    void testClonePgsql() {
         Select fieldquery = new Select(PGSQL);
         fieldquery
             .from("table2")

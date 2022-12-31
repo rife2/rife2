@@ -10,49 +10,49 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestValidationRuleRegexp {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         Bean bean = new Bean("12241");
         ValidationRuleRegexp rule = new ValidationRuleRegexp("property", "\\d+").setBean(bean);
         assertNotNull(rule);
     }
 
     @Test
-    public void testValid() {
+    void testValid() {
         Bean bean = new Bean("12241");
         ValidationRuleRegexp rule = new ValidationRuleRegexp("property", "\\d+").setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testValidArray() {
+    void testValidArray() {
         Bean bean = new Bean(new String[]{"12241", "8788", "142"});
         ValidationRuleRegexp rule = new ValidationRuleRegexp("arrayProperty", "\\d+").setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testInvalid() {
+    void testInvalid() {
         Bean bean = new Bean("entry");
         ValidationRuleRegexp rule = new ValidationRuleRegexp("property", "\\d+").setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testInvalidArray() {
+    void testInvalidArray() {
         Bean bean = new Bean(new String[]{"12241", "8788", "89uu8i"});
         ValidationRuleRegexp rule = new ValidationRuleRegexp("arrayProperty", "\\d+").setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testUnknownProperty() {
+    void testUnknownProperty() {
         Bean bean = new Bean("12241");
         ValidationRuleRegexp rule = new ValidationRuleRegexp("unknown_property", "\\d+").setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testGetError() {
+    void testGetError() {
         Bean bean = new Bean("12241");
         ValidationRuleRegexp rule = new ValidationRuleRegexp("property", "\\d+").setBean(bean);
         ValidationError error = rule.getError();

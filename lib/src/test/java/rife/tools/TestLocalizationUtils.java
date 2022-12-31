@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class TestLocalizationUtils {
     @Test
-    public void testExtractLocalizedUrl() {
+    void testExtractLocalizedUrl() {
         assertEquals("/root", Localization.extractLocalizedUrl("en:/root,nl:/wortel"));
         assertEquals("/logout", Localization.extractLocalizedUrl("nl:/afmelden,/logout,fr:/deconnection"));
         assertNull(Localization.extractLocalizedUrl(null));

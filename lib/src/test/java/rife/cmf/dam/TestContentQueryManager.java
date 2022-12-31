@@ -38,7 +38,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiation(Datasource datasource) {
+    void testInstantiation(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
@@ -52,7 +52,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testBuildCmfPathBean(Datasource datasource) {
+    void testBuildCmfPathBean(Datasource datasource) {
         setup(datasource);
         try {
             var content = new ContentImage()
@@ -69,7 +69,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testBuildCmfPathId(Datasource datasource) {
+    void testBuildCmfPathId(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
@@ -81,7 +81,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testBuildCmfPathBeanRepository(Datasource datasource) {
+    void testBuildCmfPathBeanRepository(Datasource datasource) {
         setup(datasource);
         try {
             var content = new ContentImageRepository()
@@ -98,7 +98,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testBuildCmfPathIdRepository(Datasource datasource) {
+    void testBuildCmfPathIdRepository(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageRepository.class);
@@ -110,7 +110,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testBuildServeContentPathBean(Datasource datasource) {
+    void testBuildServeContentPathBean(Datasource datasource) {
         setup(datasource);
         try {
             var content = new ContentImage()
@@ -127,7 +127,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testBuildServeContentPathId(Datasource datasource) {
+    void testBuildServeContentPathId(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
@@ -139,7 +139,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testBuildServeContentPathBeanRepository(Datasource datasource) {
+    void testBuildServeContentPathBeanRepository(Datasource datasource) {
         setup(datasource);
         try {
             var content = new ContentImageRepository()
@@ -156,7 +156,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testBuildServeContentPathIdRepository(Datasource datasource) {
+    void testBuildServeContentPathIdRepository(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImageRepository.class);
@@ -168,7 +168,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveContent(Datasource datasource)
+    void testSaveContent(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -213,7 +213,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveContentOtherTable(Datasource datasource)
+    void testSaveContentOtherTable(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -272,7 +272,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveContentRepository(Datasource datasource)
+    void testSaveContentRepository(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -321,7 +321,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveContentRaw(Datasource datasource) {
+    void testSaveContentRaw(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentRaw.class);
@@ -373,7 +373,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveContentUpdate(Datasource datasource)
+    void testSaveContentUpdate(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -426,7 +426,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveContentUpdateRepository(Datasource datasource)
+    void testSaveContentUpdateRepository(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -485,7 +485,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSavePojo(Datasource datasource) {
+    void testSavePojo(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, RegularPojo.class);
@@ -511,7 +511,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreEmptyContent(Datasource datasource)
+    void testStoreEmptyContent(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -557,7 +557,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreEmptyContentRepository(Datasource datasource)
+    void testStoreEmptyContentRepository(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -607,7 +607,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreEmptyContentIllegalArguments(Datasource datasource) {
+    void testStoreEmptyContentIllegalArguments(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
@@ -643,7 +643,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreEmptyContentPojo(Datasource datasource) {
+    void testStoreEmptyContentPojo(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, RegularPojo.class);
@@ -663,7 +663,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreEmptyContentMissingIdentifier(Datasource datasource) {
+    void testStoreEmptyContentMissingIdentifier(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
@@ -686,7 +686,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreEmptyContentUnknownProperty(Datasource datasource)
+    void testStoreEmptyContentUnknownProperty(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -718,7 +718,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStoreEmptyContentMimeTypeExpected(Datasource datasource)
+    void testStoreEmptyContentMimeTypeExpected(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -750,7 +750,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteContent(Datasource datasource)
+    void testDeleteContent(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -786,7 +786,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteContentRepository(Datasource datasource)
+    void testDeleteContentRepository(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -826,7 +826,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteContentNonCmfProperty(Datasource datasource)
+    void testDeleteContentNonCmfProperty(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -862,7 +862,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeletePojo(Datasource datasource) {
+    void testDeletePojo(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, RegularPojo.class);
@@ -888,7 +888,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteOrdinal(Datasource datasource) {
+    void testDeleteOrdinal(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, Ordered.class);
@@ -930,7 +930,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteOrdinalRestricted(Datasource datasource) {
+    void testDeleteOrdinalRestricted(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrderedRestricted.class);
@@ -993,7 +993,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteNotPresent(Datasource datasource) {
+    void testDeleteNotPresent(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, RegularPojo.class);
@@ -1010,7 +1010,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteContentUnknownId(Datasource datasource) {
+    void testDeleteContentUnknownId(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
@@ -1027,7 +1027,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveOrdinal(Datasource datasource) {
+    void testSaveOrdinal(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, Ordered.class);
@@ -1068,7 +1068,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveOrdinalRestricted(Datasource datasource) {
+    void testSaveOrdinalRestricted(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrderedRestricted.class);
@@ -1131,7 +1131,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveOrdinal(Datasource datasource) {
+    void testMoveOrdinal(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, Ordered.class);
@@ -1201,7 +1201,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveIllegalArguments(Datasource datasource) {
+    void testMoveIllegalArguments(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, Ordered.class);
@@ -1237,7 +1237,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveUnknownProperty(Datasource datasource) {
+    void testMoveUnknownProperty(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, Ordered.class);
@@ -1260,7 +1260,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveNotOrdinalConstraint(Datasource datasource) {
+    void testMoveNotOrdinalConstraint(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, ContentImage.class);
@@ -1283,7 +1283,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveNotOrdinalInvalidOrdinalType(Datasource datasource) {
+    void testMoveNotOrdinalInvalidOrdinalType(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrderedInvalidType.class);
@@ -1306,7 +1306,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveOrdinalRestricted(Datasource datasource) {
+    void testMoveOrdinalRestricted(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrderedRestricted.class);
@@ -1437,7 +1437,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveOrdinalRestrictedInvalidType(Datasource datasource) {
+    void testSaveOrdinalRestrictedInvalidType(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrdrdRestrInvalidType.class);
@@ -1465,7 +1465,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveUnknownOrdinal(Datasource datasource) {
+    void testMoveUnknownOrdinal(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrdrdUnknown.class);
@@ -1488,7 +1488,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveUnknownRestriction(Datasource datasource) {
+    void testMoveUnknownRestriction(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrdrdRestrUnknown.class);
@@ -1512,7 +1512,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveRestrictionInvalidType(Datasource datasource) {
+    void testMoveRestrictionInvalidType(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrdrdRestrInvalidType.class);
@@ -1536,7 +1536,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testMoveRestrictionNull(Datasource datasource) {
+    void testMoveRestrictionNull(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrdrdRestrInvalidType.class);
@@ -1560,7 +1560,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveOrdinalRestrictedUnknownRestriction(Datasource datasource) {
+    void testSaveOrdinalRestrictedUnknownRestriction(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, OrdrdRestrUnknown.class);
@@ -1588,7 +1588,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testHasContent(Datasource datasource)
+    void testHasContent(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -1621,7 +1621,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testHasContentRepository(Datasource datasource)
+    void testHasContentRepository(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -1657,7 +1657,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreById(Datasource datasource)
+    void testRestoreById(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -1686,7 +1686,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreByIdAutoRetrieved(Datasource datasource)
+    void testRestoreByIdAutoRetrieved(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -1717,7 +1717,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreByIdPojo(Datasource datasource) {
+    void testRestoreByIdPojo(Datasource datasource) {
         setup(datasource);
         try {
             var manager = new ContentQueryManager<>(datasource, RegularPojo.class);
@@ -1742,7 +1742,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreByIdNonCmfProperties(Datasource datasource)
+    void testRestoreByIdNonCmfProperties(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -1771,7 +1771,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreFirst(Datasource datasource)
+    void testRestoreFirst(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -1810,7 +1810,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestore(Datasource datasource)
+    void testRestore(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -1861,7 +1861,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreRepository(Datasource datasource)
+    void testRestoreRepository(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {
@@ -1917,7 +1917,7 @@ public class TestContentQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreQuery(Datasource datasource)
+    void testRestoreQuery(Datasource datasource)
     throws Exception {
         setup(datasource);
         try {

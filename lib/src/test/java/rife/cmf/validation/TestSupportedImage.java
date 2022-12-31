@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSupportedImage {
     @Test
-    public void testValidateNull()
+    void testValidateNull()
     throws Exception {
         var rule = new SupportedImage("image");
         var bean = new ImageBean();
@@ -28,7 +28,7 @@ public class TestSupportedImage {
     }
 
     @Test
-    public void testValidateSupported()
+    void testValidateSupported()
     throws Exception {
         var rule = new SupportedImage("image");
         var bean = new ImageBean();
@@ -44,7 +44,7 @@ public class TestSupportedImage {
     }
 
     @Test
-    public void testValidateUnsupported()
+    void testValidateUnsupported()
     throws Exception {
         var rule = new SupportedImage("image");
         var bean = new ImageBean();
@@ -60,7 +60,7 @@ public class TestSupportedImage {
     }
 
     @Test
-    public void testValidateNotConstrained()
+    void testValidateNotConstrained()
     throws Exception {
         var rule = new SupportedImage("image");
         var bean = new ImageBeanNotConstrained();
@@ -73,7 +73,7 @@ public class TestSupportedImage {
     }
 
     @Test
-    public void testValidateNotCmfProperty()
+    void testValidateNotCmfProperty()
     throws Exception {
         var rule = new SupportedImage("image");
         var bean = new ImageBeanValidation();
@@ -88,7 +88,7 @@ public class TestSupportedImage {
     }
 
     @Test
-    public void testValidateUnknownProperty()
+    void testValidateUnknownProperty()
     throws Exception {
         var rule = new SupportedImage("image_unknown");
         var bean = new ImageBean();
@@ -98,7 +98,7 @@ public class TestSupportedImage {
     }
 
     @Test
-    public void testGetError()
+    void testGetError()
     throws Exception {
         var rule = new SupportedImage("image");
         assertEquals("image", rule.getError().getSubject());

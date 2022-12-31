@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSelectH2 extends TestSelect {
     @Test
-    public void testInstantiationH2() {
+    void testInstantiationH2() {
         Select query = new Select(H2);
         assertNotNull(query);
         try {
@@ -33,7 +33,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testIncompleteQueryH2() {
+    void testIncompleteQueryH2() {
         Select query = new Select(H2);
         try {
             query.getSql();
@@ -56,7 +56,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testClearH2() {
+    void testClearH2() {
         Select query = new Select(H2);
         query.from("tablename");
         assertNotNull(query.getSql());
@@ -71,7 +71,7 @@ public class TestSelectH2 extends TestSelect {
 
 
     @Test
-    public void testBasicH2() {
+    void testBasicH2() {
         Select query = new Select(H2);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename");
@@ -79,7 +79,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testHintH2() {
+    void testHintH2() {
         Select query = new Select(H2);
         query
             .hint("NO_INDEX")
@@ -93,7 +93,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testOrderByAscendingH2() {
+    void testOrderByAscendingH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .orderBy("propertyInt", Select.ASC);
@@ -102,7 +102,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testOrderByDescendingH2() {
+    void testOrderByDescendingH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .orderBy("propertyInt", Select.DESC);
@@ -111,7 +111,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testBeanH2() {
+    void testBeanH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .fields(BeanImpl.class);
@@ -120,7 +120,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testBeanConstrainedH2() {
+    void testBeanConstrainedH2() {
         Select query = new Select(H2, BeanImplConstrained.class);
         query.from("tablename");
         assertEquals(query.getSql(), "SELECT * FROM tablename ORDER BY propertyString ASC, propertyInt DESC");
@@ -134,7 +134,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testBeanExcludedH2() {
+    void testBeanExcludedH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
@@ -143,7 +143,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testBeanTableH2() {
+    void testBeanTableH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .fields("tablename", BeanImpl.class);
@@ -152,7 +152,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testBeanExcludedTableH2() {
+    void testBeanExcludedTableH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .fieldsExcluded("tablename", BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort");
@@ -161,7 +161,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereTypedH2() {
+    void testWhereTypedH2() {
         Select query = new Select(H2);
         query.from("tablename");
 
@@ -192,7 +192,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereTypedMixedH2() {
+    void testWhereTypedMixedH2() {
         Select query = new Select(H2);
         query.from("tablename");
 
@@ -229,7 +229,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersH2() {
+    void testWhereParametersH2() {
         Select query = new Select(H2);
         query.from("tablename");
 
@@ -262,7 +262,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersMixedH2() {
+    void testWhereParametersMixedH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -284,7 +284,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereConstructionH2() {
+    void testWhereConstructionH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -295,7 +295,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereConstructionGroupH2() {
+    void testWhereConstructionGroupH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .startWhere()
@@ -329,7 +329,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanH2() {
+    void testWhereBeanH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
@@ -338,7 +338,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanConstrainedH2() {
+    void testWhereBeanConstrainedH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .where(BeanImplConstrained.getPopulatedBean());
@@ -347,7 +347,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanNullValuesH2() {
+    void testWhereBeanNullValuesH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
@@ -356,7 +356,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanIncludedH2() {
+    void testWhereBeanIncludedH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -365,7 +365,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanExcludedH2() {
+    void testWhereBeanExcludedH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -374,7 +374,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereBeanFilteredH2() {
+    void testWhereBeanFilteredH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -383,7 +383,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanH2() {
+    void testWhereParametersBeanH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
@@ -453,7 +453,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanConstrainedH2() {
+    void testWhereParametersBeanConstrainedH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .whereParameters(BeanImplConstrained.class);
@@ -517,7 +517,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testWhereParametersBeanExcludedH2() {
+    void testWhereParametersBeanExcludedH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .whereParametersExcluded(BeanImpl.class,
@@ -571,7 +571,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testDistinctH2() {
+    void testDistinctH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .distinct()
@@ -584,7 +584,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testDistinctOnH2() {
+    void testDistinctOnH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .distinctOn("propertyDouble")
@@ -603,7 +603,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testComplexH2() {
+    void testComplexH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .field("field1")
@@ -625,7 +625,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testGroupByBeanH2() {
+    void testGroupByBeanH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .fields(BeanImpl.class)
@@ -635,7 +635,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testGroupByBeanExcludedH2() {
+    void testGroupByBeanExcludedH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .fieldsExcluded(BeanImpl.class, "propertyCalendar", "propertyFloat", "propertyShort")
@@ -645,7 +645,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testJoinH2() {
+    void testJoinH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .join("table2")
@@ -655,7 +655,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testJoinCustomH2() {
+    void testJoinCustomH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .joinCustom("INNER JOIN table3 ON (tablename.propertyInt = table3.propertyInt)")
@@ -665,7 +665,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testJoinCrossH2() {
+    void testJoinCrossH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .joinCross("table2")
@@ -675,7 +675,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testJoinInnerH2() {
+    void testJoinInnerH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .joinInner("table2", Select.NATURAL, null);
@@ -703,7 +703,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testJoinOuterH2() {
+    void testJoinOuterH2() {
         Select query = new Select(H2);
 
         query.from("tablename")
@@ -789,7 +789,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testLimitH2() {
+    void testLimitH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .limit(3);
@@ -806,7 +806,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testLimitParameterH2() {
+    void testLimitParameterH2() {
         Select query = new Select(H2);
         query.from("tablename")
             .limitParameter("limit");
@@ -836,7 +836,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testSubselectParamsH2() {
+    void testSubselectParamsH2() {
         Select fieldquery = new Select(H2);
         fieldquery
             .from("table2")
@@ -949,7 +949,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
     @Test
-    public void testCloneH2() {
+    void testCloneH2() {
         Select fieldquery = new Select(H2);
         fieldquery
             .from("table2")

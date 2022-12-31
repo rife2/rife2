@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDeleteDerby extends TestDelete {
     @Test
-    public void testInstantiationDerby() {
+    void testInstantiationDerby() {
         Delete query = new Delete(DERBY);
         assertNotNull(query);
         try {
@@ -34,7 +34,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testIncompleteQueryDerby() {
+    void testIncompleteQueryDerby() {
         Delete query = new Delete(DERBY);
         try {
             query.getSql();
@@ -54,7 +54,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testClearDerby() {
+    void testClearDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .where("this = that");
@@ -69,7 +69,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testHintDerby() {
+    void testHintDerby() {
         Delete query = new Delete(DERBY)
             .hint("NO_INDEX")
             .from("tablename");
@@ -82,7 +82,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testFromDerby() {
+    void testFromDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename");
         assertEquals(query.getSql(), "DELETE FROM tablename");
@@ -90,7 +90,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereDerby() {
+    void testWhereDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .where("propertyByte = 89");
@@ -99,7 +99,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereTypedDerby() {
+    void testWhereTypedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename");
 
@@ -130,7 +130,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereTypedMixedDerby() {
+    void testWhereTypedMixedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename");
 
@@ -167,7 +167,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersDerby() {
+    void testWhereParametersDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename");
 
@@ -200,7 +200,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersMixedDerby() {
+    void testWhereParametersMixedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -227,7 +227,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereConstructionDerby() {
+    void testWhereConstructionDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -238,7 +238,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereConstructionGroupDerby() {
+    void testWhereConstructionGroupDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -269,7 +269,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanDerby() {
+    void testWhereBeanDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
@@ -278,7 +278,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanConstrainedDerby() {
+    void testWhereBeanConstrainedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .where(BeanImplConstrained.getPopulatedBean());
@@ -287,7 +287,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanNullValuesDerby() {
+    void testWhereBeanNullValuesDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
@@ -296,7 +296,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanIncludedDerby() {
+    void testWhereBeanIncludedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -305,7 +305,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanExcludedDerby() {
+    void testWhereBeanExcludedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -314,7 +314,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanFilteredDerby() {
+    void testWhereBeanFilteredDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -323,7 +323,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanDerby() {
+    void testWhereParametersBeanDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
@@ -393,7 +393,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanConstrainedDerby() {
+    void testWhereParametersBeanConstrainedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .whereParameters(BeanImplConstrained.class);
@@ -459,7 +459,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanExcludedDerby() {
+    void testWhereParametersBeanExcludedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
             .whereParametersExcluded(BeanImpl.class,
@@ -513,7 +513,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testDeleteSubselectParamsDerby() {
+    void testDeleteSubselectParamsDerby() {
         Select wherequery = new Select(DERBY);
         wherequery
             .from("table2")
@@ -573,7 +573,7 @@ public class TestDeleteDerby extends TestDelete {
     }
 
     @Test
-    public void testCloneDerby() {
+    void testCloneDerby() {
         Select wherequery = new Select(DERBY);
         wherequery
             .from("table2")

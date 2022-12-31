@@ -47,7 +47,7 @@ public class TestDatabaseScheduler {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiateScheduler(Datasource datasource) {
+    void testInstantiateScheduler(Datasource datasource) {
         setup(datasource);
 
         try {
@@ -60,7 +60,7 @@ public class TestDatabaseScheduler {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStartStopScheduler(Datasource datasource) {
+    void testStartStopScheduler(Datasource datasource) {
         setup(datasource);
 
         Scheduler scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
@@ -84,7 +84,7 @@ public class TestDatabaseScheduler {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testAddExecutor(Datasource datasource) {
+    void testAddExecutor(Datasource datasource) {
         setup(datasource);
         try {
             Scheduler scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
@@ -105,7 +105,7 @@ public class TestDatabaseScheduler {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testOneshotTaskExecution(Datasource datasource) {
+    void testOneshotTaskExecution(Datasource datasource) {
         setup(datasource);
 
         int sleep_time = 60 * 1000;
@@ -167,7 +167,7 @@ public class TestDatabaseScheduler {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRepeatingTaskExecution(Datasource datasource) {
+    void testRepeatingTaskExecution(Datasource datasource) {
         setup(datasource);
 
         int scheduler_sleeptime = 30 * 1000;                // 30 seconds

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUpdateOracle extends TestUpdate {
     @Test
-    public void testInstantiationOracle() {
+    void testInstantiationOracle() {
         Update query = new Update(ORACLE);
         assertNotNull(query);
         try {
@@ -34,7 +34,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testIncompleteQueryOracle() {
+    void testIncompleteQueryOracle() {
         Update query = new Update(ORACLE);
         try {
             query.getSql();
@@ -54,7 +54,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testClearOracle() {
+    void testClearOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename4")
             .field("col1", "val1");
@@ -69,7 +69,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testHintOracle() {
+    void testHintOracle() {
         Update query = new Update(ORACLE)
             .hint("NO_INDEX")
             .table("tablename")
@@ -79,7 +79,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldOracle() {
+    void testFieldOracle() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
         Update query = new Update(ORACLE);
@@ -107,7 +107,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldCustomOracle() {
+    void testFieldCustomOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .fieldCustom("propertySqlDate", "(SELECT sysdate FROM dual)");
@@ -116,7 +116,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldParametersOracle() {
+    void testFieldParametersOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename");
 
@@ -207,7 +207,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldParametersMixedOracle() {
+    void testFieldParametersMixedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename");
 
@@ -274,7 +274,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldsOracle() {
+    void testFieldsOracle() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
         Update query = new Update(ORACLE);
@@ -304,7 +304,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereConstructionOracle() {
+    void testWhereConstructionOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -317,7 +317,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereConstructionGroupOracle() {
+    void testWhereConstructionGroupOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -350,7 +350,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereTypedOracle() {
+    void testWhereTypedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -383,7 +383,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereTypedMixedOracle() {
+    void testWhereTypedMixedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -422,7 +422,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersOracle() {
+    void testWhereParametersOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -457,7 +457,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersMixedOracle() {
+    void testWhereParametersMixedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -486,7 +486,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldWhereParametersOracle() {
+    void testFieldWhereParametersOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename");
 
@@ -535,7 +535,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanOracle() {
+    void testFieldsBeanOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -545,7 +545,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanConstrainedOracle() {
+    void testFieldsBeanConstrainedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -555,7 +555,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanNullValuesOracle() {
+    void testFieldsBeanNullValuesOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -565,7 +565,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanIncludedOracle() {
+    void testFieldsBeanIncludedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -575,7 +575,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanExcludedOracle() {
+    void testFieldsBeanExcludedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -585,7 +585,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanFilteredOracle() {
+    void testFieldsBeanFilteredOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -595,7 +595,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldsParametersBeanOracle() {
+    void testFieldsParametersBeanOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .fieldsParameters(BeanImpl.class);
@@ -665,7 +665,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldsParametersBeanConstrainedOracle() {
+    void testFieldsParametersBeanConstrainedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .fieldsParameters(BeanImplConstrained.class);
@@ -727,7 +727,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testFieldsParametersBeanExcludedOracle() {
+    void testFieldsParametersBeanExcludedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
@@ -782,7 +782,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanOracle() {
+    void testWhereBeanOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -793,7 +793,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanConstrainedOracle() {
+    void testWhereBeanConstrainedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -804,7 +804,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanNullValuesOracle() {
+    void testWhereBeanNullValuesOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -815,7 +815,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanIncludedOracle() {
+    void testWhereBeanIncludedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -826,7 +826,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanExcludedOracle() {
+    void testWhereBeanExcludedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -837,7 +837,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanFilteredOracle() {
+    void testWhereBeanFilteredOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -848,7 +848,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersBeanOracle() {
+    void testWhereParametersBeanOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -922,7 +922,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersBeanConstrainedOracle() {
+    void testWhereParametersBeanConstrainedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -990,7 +990,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersBeanExcludedOracle() {
+    void testWhereParametersBeanExcludedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -1042,7 +1042,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testSubselectParamsOracle() {
+    void testSubselectParamsOracle() {
         Select fieldquery = new Select(ORACLE);
         fieldquery
             .from("table2")
@@ -1120,7 +1120,7 @@ public class TestUpdateOracle extends TestUpdate {
     }
 
     @Test
-    public void testCloneOracle() {
+    void testCloneOracle() {
         Select fieldquery = new Select(ORACLE);
         fieldquery
             .from("table2")

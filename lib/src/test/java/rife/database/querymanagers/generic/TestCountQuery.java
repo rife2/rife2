@@ -43,7 +43,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testCloneToStringAndClear(Datasource datasource) {
+    void testCloneToStringAndClear(Datasource datasource) {
         setup(datasource);
         try {
             var query = manager_.getCountQuery().where("testString", "=", "bean set 1");
@@ -72,7 +72,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetDatasource(Datasource datasource) {
+    void testGetDatasource(Datasource datasource) {
         setup(datasource);
         try {
             assertEquals(datasource, manager_.getCountQuery().getDatasource());
@@ -83,7 +83,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetFrom(Datasource datasource) {
+    void testGetFrom(Datasource datasource) {
         setup(datasource);
         try {
             assertEquals(manager_
@@ -100,7 +100,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetParameters(Datasource datasource) {
+    void testGetParameters(Datasource datasource) {
         setup(datasource);
         try {
             var select = new Select(datasource);
@@ -122,7 +122,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testJoin(Datasource datasource) {
+    void testJoin(Datasource datasource) {
         setup(datasource);
         try {
             var bean1 = new SimpleBean();
@@ -174,7 +174,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testJoinCross(Datasource datasource) {
+    void testJoinCross(Datasource datasource) {
         setup(datasource);
         try {
             var bean1 = new SimpleBean();
@@ -237,7 +237,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testJoinInner(Datasource datasource) {
+    void testJoinInner(Datasource datasource) {
         setup(datasource);
         try {
             var bean1 = new SimpleBean();
@@ -289,7 +289,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testJoinOuter(Datasource datasource) {
+    void testJoinOuter(Datasource datasource) {
         setup(datasource);
         try {
             var bean1 = new SimpleBean();
@@ -340,7 +340,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testJoinCustom(Datasource datasource) {
+    void testJoinCustom(Datasource datasource) {
         setup(datasource);
         try {
             var bean1 = new SimpleBean();
@@ -391,7 +391,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testWhere(Datasource datasource) {
+    void testWhere(Datasource datasource) {
         setup(datasource);
         try {
             var bean1 = new BeanImpl();
@@ -468,7 +468,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testWhereAnd(Datasource datasource) {
+    void testWhereAnd(Datasource datasource) {
         setup(datasource);
         try {
             var bean1 = new BeanImpl();
@@ -524,7 +524,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testWhereOr(Datasource datasource) {
+    void testWhereOr(Datasource datasource) {
         setup(datasource);
         try {
             var bean1 = new BeanImpl();
@@ -580,7 +580,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUnion(Datasource datasource) {
+    void testUnion(Datasource datasource) {
         setup(datasource);
         try {
             var query = manager_.getCountQuery();
@@ -598,7 +598,7 @@ public class TestCountQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testWhereSubSelect(Datasource datasource) {
+    void testWhereSubSelect(Datasource datasource) {
         setup(datasource);
         try {
             var bean1 = new SimpleBean();

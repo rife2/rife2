@@ -35,7 +35,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testAllWildcards() {
+    void testAllWildcards() {
         try {
             Frequency frequency = new Frequency("* * * * *");
             assertNotNull(frequency);
@@ -53,7 +53,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidSpacing() {
+    void testInvalidSpacing() {
         try {
             Frequency frequency = new Frequency("*  *  * * *");
             fail();
@@ -64,7 +64,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testTooManyParts() {
+    void testTooManyParts() {
         try {
             Frequency frequency = new Frequency("* * * * * *");
             fail();
@@ -75,7 +75,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testTooLittleParts() {
+    void testTooLittleParts() {
         try {
             Frequency frequency = new Frequency("* * * *");
             fail();
@@ -86,7 +86,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidNumberMinute() {
+    void testInvalidNumberMinute() {
         try {
             Frequency frequency = new Frequency("d * * * *");
             fail();
@@ -97,7 +97,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidDividerMinute() {
+    void testInvalidDividerMinute() {
         try {
             Frequency frequency = new Frequency("2/4 * * * *");
             fail();
@@ -108,7 +108,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidEmptyPartMinute() {
+    void testInvalidEmptyPartMinute() {
         try {
             Frequency frequency = new Frequency("2, * * * *");
             assertNotNull(frequency);
@@ -119,7 +119,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testSingleMinute() {
+    void testSingleMinute() {
         try {
             Frequency frequency = new Frequency("2 * * * *");
             assertNotNull(frequency);
@@ -139,7 +139,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedMinutes() {
+    void testRangedMinutes() {
         try {
             Frequency frequency = null;
 
@@ -187,7 +187,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedMinutes() {
+    void testReverseRangedMinutes() {
         try {
             Frequency frequency = null;
 
@@ -222,7 +222,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testDividerMinutes() {
+    void testDividerMinutes() {
         try {
             Frequency frequency = new Frequency("*/17 * * * *");
             assertNotNull(frequency);
@@ -242,7 +242,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedDividerMinutes() {
+    void testRangedDividerMinutes() {
         try {
             Frequency frequency = new Frequency("5-40/17 * * * *");
             assertNotNull(frequency);
@@ -262,7 +262,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedDividerMinutes() {
+    void testReverseRangedDividerMinutes() {
         try {
             Frequency frequency = new Frequency("31-20/13 * * * *");
             assertNotNull(frequency);
@@ -282,7 +282,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testMixedMinutes() {
+    void testMixedMinutes() {
         try {
             Frequency frequency = new Frequency("10,12-18/2,30-40,45,48-5/3 * * * *");
             assertNotNull(frequency);
@@ -302,7 +302,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidNumberHour() {
+    void testInvalidNumberHour() {
         try {
             Frequency frequency = new Frequency("* d * * *");
             fail();
@@ -313,7 +313,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidDividerHour() {
+    void testInvalidDividerHour() {
         try {
             Frequency frequency = new Frequency("* 2/4 * * *");
             fail();
@@ -324,7 +324,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidEmptyPartHour() {
+    void testInvalidEmptyPartHour() {
         try {
             Frequency frequency = new Frequency("* 2, * * *");
             fail();
@@ -335,7 +335,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testSingleHour() {
+    void testSingleHour() {
         try {
             Frequency frequency = new Frequency("* 12 * * *");
             assertNotNull(frequency);
@@ -355,7 +355,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedHours() {
+    void testRangedHours() {
         try {
             Frequency frequency = null;
 
@@ -403,7 +403,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedHours() {
+    void testReverseRangedHours() {
         try {
             Frequency frequency = null;
 
@@ -438,7 +438,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testDividerHours() {
+    void testDividerHours() {
         try {
             Frequency frequency = new Frequency("* */6 * * *");
             assertNotNull(frequency);
@@ -458,7 +458,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedDividerHours() {
+    void testRangedDividerHours() {
         try {
             Frequency frequency = new Frequency("* 4-17/5 * * *");
             assertNotNull(frequency);
@@ -478,7 +478,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedDividerHours() {
+    void testReverseRangedDividerHours() {
         try {
             Frequency frequency = new Frequency("* 18-5/4 * * *");
             assertNotNull(frequency);
@@ -498,7 +498,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testMixedHours() {
+    void testMixedHours() {
         try {
             Frequency frequency = new Frequency("* 4,8-10/3,12,15-18,20-3/3 * * *");
             assertNotNull(frequency);
@@ -518,7 +518,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidNumberDate() {
+    void testInvalidNumberDate() {
         try {
             Frequency frequency = new Frequency("* * d * *");
             fail();
@@ -529,7 +529,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidDividerDate() {
+    void testInvalidDividerDate() {
         try {
             Frequency frequency = new Frequency("* * 2/4 * *");
             fail();
@@ -540,7 +540,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidEmptyPartDate() {
+    void testInvalidEmptyPartDate() {
         try {
             Frequency frequency = new Frequency("* * 2, * *");
             fail();
@@ -551,7 +551,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testSingleDate() {
+    void testSingleDate() {
         try {
             Frequency frequency = new Frequency("* * 14 * *");
             assertNotNull(frequency);
@@ -571,7 +571,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedDates() {
+    void testRangedDates() {
         try {
             Frequency frequency = null;
 
@@ -619,7 +619,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedDates() {
+    void testReverseRangedDates() {
         try {
             Frequency frequency = null;
 
@@ -693,7 +693,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testDividerDates() {
+    void testDividerDates() {
         try {
             Frequency frequency = new Frequency("* * */8 * *");
             assertNotNull(frequency);
@@ -713,7 +713,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedDividerDates() {
+    void testRangedDividerDates() {
         try {
             Frequency frequency = new Frequency("* * 7-23/9 * *");
             assertNotNull(frequency);
@@ -733,7 +733,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedDividerDates() {
+    void testReverseRangedDividerDates() {
         try {
             Frequency frequency = new Frequency("* * 11-7/13 * *");
             assertNotNull(frequency);
@@ -779,7 +779,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testMixedDates() {
+    void testMixedDates() {
         try {
             Frequency frequency = new Frequency("* * 3,5,8-18/4,19-23,27-2/2 * *");
             assertNotNull(frequency);
@@ -799,7 +799,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidNumberMonth() {
+    void testInvalidNumberMonth() {
         try {
             Frequency frequency = new Frequency("* * * d *");
             fail();
@@ -810,7 +810,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidDividerMonth() {
+    void testInvalidDividerMonth() {
         try {
             Frequency frequency = new Frequency("* * * 2/4 *");
             fail();
@@ -821,7 +821,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidEmptyPartMonth() {
+    void testInvalidEmptyPartMonth() {
         try {
             Frequency frequency = new Frequency("* * * 2, *");
             fail();
@@ -832,7 +832,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testSingleMonth() {
+    void testSingleMonth() {
         try {
             Frequency frequency = new Frequency("* * * 3 *");
             assertNotNull(frequency);
@@ -852,7 +852,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedMonths() {
+    void testRangedMonths() {
         try {
             Frequency frequency = null;
 
@@ -900,7 +900,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedMonths() {
+    void testReverseRangedMonths() {
         try {
             Frequency frequency = null;
 
@@ -935,7 +935,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testDividerMonths() {
+    void testDividerMonths() {
         try {
             Frequency frequency = new Frequency("* * * */4 *");
             assertNotNull(frequency);
@@ -955,7 +955,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedDividerMonths() {
+    void testRangedDividerMonths() {
         try {
             Frequency frequency = new Frequency("* * * 3-11/3 *");
             assertNotNull(frequency);
@@ -975,7 +975,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedDividerMonths() {
+    void testReverseRangedDividerMonths() {
         try {
             Frequency frequency = new Frequency("* * * 5-3/2 *");
             assertNotNull(frequency);
@@ -995,7 +995,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testMixedMonths() {
+    void testMixedMonths() {
         try {
             Frequency frequency = new Frequency("* * * 4,5-6,8-11/2,12-3/3 *");
             assertNotNull(frequency);
@@ -1015,7 +1015,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidNumberWeekday() {
+    void testInvalidNumberWeekday() {
         try {
             Frequency frequency = new Frequency("* * * * d");
             fail();
@@ -1026,7 +1026,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidDividerWeekday() {
+    void testInvalidDividerWeekday() {
         try {
             Frequency frequency = new Frequency("* * * * 2/4");
             fail();
@@ -1037,7 +1037,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidEmptyPartWeekday() {
+    void testInvalidEmptyPartWeekday() {
         try {
             Frequency frequency = new Frequency("* * * * 2,");
             fail();
@@ -1048,7 +1048,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testSingleWeekday() {
+    void testSingleWeekday() {
         try {
             Frequency frequency = new Frequency("* * * * 7");
             assertNotNull(frequency);
@@ -1068,7 +1068,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedWeekdays() {
+    void testRangedWeekdays() {
         try {
             Frequency frequency = null;
 
@@ -1116,7 +1116,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedWeekdays() {
+    void testReverseRangedWeekdays() {
         try {
             Frequency frequency = null;
 
@@ -1151,7 +1151,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testDividerWeekdays() {
+    void testDividerWeekdays() {
         try {
             Frequency frequency = new Frequency("* * * * */3");
             assertNotNull(frequency);
@@ -1171,7 +1171,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedDividerWeekdays() {
+    void testRangedDividerWeekdays() {
         try {
             Frequency frequency = new Frequency("* * * * 2-6/3");
             assertNotNull(frequency);
@@ -1191,7 +1191,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedDividerWeekdays() {
+    void testReverseRangedDividerWeekdays() {
         try {
             Frequency frequency = new Frequency("* * * * 4-2/2");
             assertNotNull(frequency);
@@ -1211,7 +1211,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testMixedWeekdays() {
+    void testMixedWeekdays() {
         try {
             Frequency frequency = new Frequency("* * * * 2,3-4,4-1/2");
             assertNotNull(frequency);
@@ -1231,7 +1231,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testNextDateMinutes() {
+    void testNextDateMinutes() {
         try {
             Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
@@ -1365,7 +1365,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testNextDateHours() {
+    void testNextDateHours() {
         try {
             Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
@@ -1494,7 +1494,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testNextDateDates() {
+    void testNextDateDates() {
         try {
             Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
@@ -1800,7 +1800,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testNextDateMonths() {
+    void testNextDateMonths() {
         try {
             Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
@@ -1930,7 +1930,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testNextDateWeekdays() {
+    void testNextDateWeekdays() {
         try {
             Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
@@ -1974,7 +1974,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidNextDate() {
+    void testInvalidNextDate() {
         try {
             Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 0);

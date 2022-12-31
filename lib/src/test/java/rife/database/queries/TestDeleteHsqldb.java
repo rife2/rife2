@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDeleteHsqldb extends TestDelete {
     @Test
-    public void testInstantiationHsqldb() {
+    void testInstantiationHsqldb() {
         Delete query = new Delete(HSQLDB);
         assertNotNull(query);
         try {
@@ -33,7 +33,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testIncompleteQueryHsqldb() {
+    void testIncompleteQueryHsqldb() {
         Delete query = new Delete(HSQLDB);
         try {
             query.getSql();
@@ -53,7 +53,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testClearHsqldb() {
+    void testClearHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .where("this = that");
@@ -68,7 +68,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testHintHsqldb() {
+    void testHintHsqldb() {
         Delete query = new Delete(HSQLDB)
             .hint("NO_INDEX")
             .from("tablename");
@@ -81,7 +81,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testFromHsqldb() {
+    void testFromHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename");
         assertEquals(query.getSql(), "DELETE FROM tablename");
@@ -89,7 +89,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereHsqldb() {
+    void testWhereHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .where("propertyByte = 89");
@@ -98,7 +98,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereTypedHsqldb() {
+    void testWhereTypedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename");
 
@@ -129,7 +129,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereTypedMixedHsqldb() {
+    void testWhereTypedMixedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename");
 
@@ -166,7 +166,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersHsqldb() {
+    void testWhereParametersHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename");
 
@@ -198,7 +198,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersMixedHsqldb() {
+    void testWhereParametersMixedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -225,7 +225,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereConstructionHsqldb() {
+    void testWhereConstructionHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -236,7 +236,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereConstructionGroupHsqldb() {
+    void testWhereConstructionGroupHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -267,7 +267,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanHsqldb() {
+    void testWhereBeanHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
@@ -276,7 +276,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanConstrainedHsqldb() {
+    void testWhereBeanConstrainedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .where(BeanImplConstrained.getPopulatedBean());
@@ -285,7 +285,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanNullValuesHsqldb() {
+    void testWhereBeanNullValuesHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
@@ -294,7 +294,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanIncludedHsqldb() {
+    void testWhereBeanIncludedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -303,7 +303,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanExcludedHsqldb() {
+    void testWhereBeanExcludedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -312,7 +312,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanFilteredHsqldb() {
+    void testWhereBeanFilteredHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -321,7 +321,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanHsqldb() {
+    void testWhereParametersBeanHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
@@ -393,7 +393,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanConstrainedHsqldb() {
+    void testWhereParametersBeanConstrainedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .whereParameters(BeanImplConstrained.class);
@@ -459,7 +459,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanExcludedHsqldb() {
+    void testWhereParametersBeanExcludedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
             .whereParametersExcluded(BeanImpl.class,
@@ -508,7 +508,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testDeleteSubselectParamsHsqldb() {
+    void testDeleteSubselectParamsHsqldb() {
         Select wherequery = new Select(HSQLDB);
         wherequery
             .from("table2")
@@ -567,7 +567,7 @@ public class TestDeleteHsqldb extends TestDelete {
     }
 
     @Test
-    public void testCloneHsqldb() {
+    void testCloneHsqldb() {
         Select wherequery = new Select(HSQLDB);
         wherequery
             .from("table2")

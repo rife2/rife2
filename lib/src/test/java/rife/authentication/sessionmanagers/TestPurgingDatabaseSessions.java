@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestPurgingDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStartSession(Datasource datasource) {
+    void testStartSession(Datasource datasource) {
         PurgingSessionManager sessions = new PurgingSessionManager(DatabaseSessionsFactory.instance(datasource));
         sessions.setSessionPurgeFrequency(0);
 
@@ -48,7 +48,7 @@ public class TestPurgingDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testPurgeSessions(Datasource datasource) {
+    void testPurgeSessions(Datasource datasource) {
         PurgingSessionManager sessions = new PurgingSessionManager(DatabaseSessionsFactory.instance(datasource));
         sessions.setSessionDuration(2000);
         sessions.setSessionPurgeFrequency(1);

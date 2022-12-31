@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMemoryAuthenticated {
     @Test
-    public void testMemoryAuthenticatedBasic() {
+    void testMemoryAuthenticatedBasic() {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         var conversation = new MockConversation(site);
 
@@ -78,7 +78,7 @@ public class TestMemoryAuthenticated {
     }
 
     @Test
-    public void testMemoryAuthenticatedEncrypted() {
+    void testMemoryAuthenticatedEncrypted() {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         var conversation = new MockConversation(site);
 
@@ -145,7 +145,7 @@ public class TestMemoryAuthenticated {
     }
 
     @Test
-    public void testMemoryAuthenticatedRole() {
+    void testMemoryAuthenticatedRole() {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         var conversation = new MockConversation(site);
 
@@ -226,7 +226,7 @@ public class TestMemoryAuthenticated {
     }
 
     @Test
-    public void testMemoryAuthenticatedRoleEncrypted() {
+    void testMemoryAuthenticatedRoleEncrypted() {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         var conversation = new MockConversation(site);
 
@@ -307,7 +307,7 @@ public class TestMemoryAuthenticated {
     }
 
     @Test
-    public void testMemoryAuthenticatedRole2() {
+    void testMemoryAuthenticatedRole2() {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         var conversation = new MockConversation(site);
 
@@ -393,7 +393,7 @@ public class TestMemoryAuthenticated {
     }
 
     @Test
-    public void testMemoryAuthenticatedRole2Encrypted() {
+    void testMemoryAuthenticatedRole2Encrypted() {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         var conversation = new MockConversation(site);
 
@@ -479,7 +479,7 @@ public class TestMemoryAuthenticated {
     }
 
     @Test
-    public void testMemoryAuthenticatedRoleIsolation() {
+    void testMemoryAuthenticatedRoleIsolation() {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         var conversation = new MockConversation(site);
 
@@ -513,7 +513,7 @@ public class TestMemoryAuthenticated {
     }
 
     @Test
-    public void testMemoryAuthenticatedRoleIsolation2() {
+    void testMemoryAuthenticatedRoleIsolation2() {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         var conversation = new MockConversation(site);
 
@@ -551,7 +551,7 @@ public class TestMemoryAuthenticated {
     }
 
     @Test
-    public void testMemoryAuthenticatedSessionDuration()
+    void testMemoryAuthenticatedSessionDuration()
     throws Exception {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         site.validator.getSessionManager().setSessionDuration(1000);
@@ -585,7 +585,7 @@ public class TestMemoryAuthenticated {
     }
 
     @Test
-    public void testMemoryAuthenticatedNotEnforce() {
+    void testMemoryAuthenticatedNotEnforce() {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         var conversation = new MockConversation(site);
 
@@ -630,7 +630,7 @@ public class TestMemoryAuthenticated {
     }
 
     @Test
-    public void testMemoryAuthenticatedLogoutTemplate() {
+    void testMemoryAuthenticatedLogoutTemplate() {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         var conversation = new MockConversation(site);
 
@@ -664,7 +664,7 @@ public class TestMemoryAuthenticated {
     }
 
     @Test
-    public void testMemoryAuthenticatedLogoutBefore() {
+    void testMemoryAuthenticatedLogoutBefore() {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         var conversation = new MockConversation(site);
 
@@ -698,7 +698,7 @@ public class TestMemoryAuthenticated {
     }
 
     @Test
-    public void testMemoryAuthenticatedFilteredTagsNotEnforced() {
+    void testMemoryAuthenticatedFilteredTagsNotEnforced() {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         var conversation = new MockConversation(site);
 
@@ -713,7 +713,7 @@ public class TestMemoryAuthenticated {
     }
 
     @Test
-    public void testMemoryAuthenticatedFilteredTags() {
+    void testMemoryAuthenticatedFilteredTags() {
         MemoryAuthenticatedSite site = new MemoryAuthenticatedSite();
         var conversation = new MockConversation(site);
 

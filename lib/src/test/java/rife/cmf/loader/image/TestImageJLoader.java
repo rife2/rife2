@@ -15,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestImageJLoader {
     @Test
-    public void testIsBackendPresent() {
+    void testIsBackendPresent() {
         var loader = new ImageJLoader();
         assertTrue(loader.isBackendPresent());
     }
 
     @Test
-    public void testLoadSuccess()
+    void testLoadSuccess()
     throws Exception {
         var loader = new ImageJLoader();
         Set<String> errors = new HashSet<>();
@@ -35,7 +35,7 @@ public class TestImageJLoader {
     }
 
     @Test
-    public void testLoadUnsupportedType() {
+    void testLoadUnsupportedType() {
         var loader = new ImageJLoader();
         Set<String> errors = new HashSet<>();
 
@@ -46,7 +46,7 @@ public class TestImageJLoader {
     }
 
     @Test
-    public void testLoadFromBytesSuccess()
+    void testLoadFromBytesSuccess()
     throws Exception {
         var loader = new ImageJLoader();
         Set<String> errors = new HashSet<>();
@@ -60,7 +60,7 @@ public class TestImageJLoader {
     }
 
     @Test
-    public void testLoadFromBytesError() {
+    void testLoadFromBytesError() {
         var loader = new ImageJLoader();
         Set<String> errors = new HashSet<>();
 
@@ -71,7 +71,7 @@ public class TestImageJLoader {
     }
 
     @Test
-    public void testLoadFromBytesErrorNoList() {
+    void testLoadFromBytesErrorNoList() {
         var loader = new ImageJLoader();
 
         var image_bytes = new byte[]{2, 9, 7, 12, 45}; // just random values

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUpdateMysql extends TestUpdate {
     @Test
-    public void testInstantiationMysql() {
+    void testInstantiationMysql() {
         Update query = new Update(MYSQL);
         assertNotNull(query);
         try {
@@ -34,7 +34,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testIncompleteQueryMysql() {
+    void testIncompleteQueryMysql() {
         Update query = new Update(MYSQL);
         try {
             query.getSql();
@@ -54,7 +54,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testClearMysql() {
+    void testClearMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename4")
             .field("col1", "val1");
@@ -69,7 +69,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testHintMysql() {
+    void testHintMysql() {
         Update query = new Update(MYSQL);
         query
             .hint("LOW_PRIORITY")
@@ -80,7 +80,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldMysql() {
+    void testFieldMysql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         Update query = new Update(MYSQL);
@@ -108,7 +108,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldCustomMysql() {
+    void testFieldCustomMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .fieldCustom("propertySqlDate", "now()");
@@ -117,7 +117,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldParametersMysql() {
+    void testFieldParametersMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename");
 
@@ -207,7 +207,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldParametersMixedMysql() {
+    void testFieldParametersMixedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename");
 
@@ -273,7 +273,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldsMysql() {
+    void testFieldsMysql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         Update query = new Update(MYSQL);
@@ -303,7 +303,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereConstructionMysql() {
+    void testWhereConstructionMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -316,7 +316,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereConstructionGroupMysql() {
+    void testWhereConstructionGroupMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -349,7 +349,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereTypedMysql() {
+    void testWhereTypedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -382,7 +382,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereTypedMixedMysql() {
+    void testWhereTypedMixedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -421,7 +421,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersMysql() {
+    void testWhereParametersMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -456,7 +456,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersMixedMysql() {
+    void testWhereParametersMixedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -485,7 +485,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldWhereParametersMysql() {
+    void testFieldWhereParametersMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename");
 
@@ -534,7 +534,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanMysql() {
+    void testFieldsBeanMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -544,7 +544,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanConstrainedMysql() {
+    void testFieldsBeanConstrainedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -554,7 +554,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanNullValuesMysql() {
+    void testFieldsBeanNullValuesMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -564,7 +564,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanIncludedMysql() {
+    void testFieldsBeanIncludedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -574,7 +574,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanExcludedMysql() {
+    void testFieldsBeanExcludedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -584,7 +584,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldsBeanFilteredMysql() {
+    void testFieldsBeanFilteredMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -594,7 +594,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldsParametersBeanMysql() {
+    void testFieldsParametersBeanMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .fieldsParameters(BeanImpl.class);
@@ -664,7 +664,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldsParametersBeanConstrainedMysql() {
+    void testFieldsParametersBeanConstrainedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .fieldsParameters(BeanImplConstrained.class);
@@ -726,7 +726,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testFieldsParametersBeanExcludedMysql() {
+    void testFieldsParametersBeanExcludedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
@@ -781,7 +781,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanMysql() {
+    void testWhereBeanMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -792,7 +792,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanConstrainedMysql() {
+    void testWhereBeanConstrainedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -803,7 +803,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanNullValuesMysql() {
+    void testWhereBeanNullValuesMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -814,7 +814,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanIncludedMysql() {
+    void testWhereBeanIncludedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -825,7 +825,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanExcludedMysql() {
+    void testWhereBeanExcludedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -836,7 +836,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereBeanFilteredMysql() {
+    void testWhereBeanFilteredMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -847,7 +847,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersBeanMysql() {
+    void testWhereParametersBeanMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -921,7 +921,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     @Test
-    public void testWhereParametersBeanConstrainedMysql() {
+    void testWhereParametersBeanConstrainedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -1042,12 +1042,12 @@ public class TestUpdateMysql extends TestUpdate {
 //    }
 
     @Test
-    public void testSubselectParamsMysql() {
+    void testSubselectParamsMysql() {
         // mysql doesn't support subqueries
     }
 
     @Test
-    public void testCloneMysql() {
+    void testCloneMysql() {
         final Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);

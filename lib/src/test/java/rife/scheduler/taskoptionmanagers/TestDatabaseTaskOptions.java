@@ -49,7 +49,7 @@ public class TestDatabaseTaskOptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiateTaskOptionManager(Datasource datasource) {
+    void testInstantiateTaskOptionManager(Datasource datasource) {
         setup(datasource);
         try {
             TaskOptionManager manager = DatabaseTaskOptionsFactory.instance(datasource);
@@ -61,7 +61,7 @@ public class TestDatabaseTaskOptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testAddTaskOptionWithInexistentTaskId(Datasource datasource) {
+    void testAddTaskOptionWithInexistentTaskId(Datasource datasource) {
         setup(datasource);
         try {
             TaskOption taskoption = new TaskOption();
@@ -85,7 +85,7 @@ public class TestDatabaseTaskOptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testAddTaskOption(Datasource datasource) {
+    void testAddTaskOption(Datasource datasource) {
         setup(datasource);
 
         int task_id = 0;
@@ -121,7 +121,7 @@ public class TestDatabaseTaskOptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testAddDuplicateTaskOption(Datasource datasource) {
+    void testAddDuplicateTaskOption(Datasource datasource) {
         setup(datasource);
 
         int task_id = 0;
@@ -160,7 +160,7 @@ public class TestDatabaseTaskOptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetTaskOption(Datasource datasource) {
+    void testGetTaskOption(Datasource datasource) {
         setup(datasource);
 
         int task_id = 0;
@@ -205,7 +205,7 @@ public class TestDatabaseTaskOptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUpdateTaskOption(Datasource datasource) {
+    void testUpdateTaskOption(Datasource datasource) {
         setup(datasource);
 
         int task_id = 0;
@@ -257,7 +257,7 @@ public class TestDatabaseTaskOptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetTaskOptions(Datasource datasource) {
+    void testGetTaskOptions(Datasource datasource) {
         setup(datasource);
 
         int task_id = 0;
@@ -301,7 +301,7 @@ public class TestDatabaseTaskOptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemoveTaskOption(Datasource datasource) {
+    void testRemoveTaskOption(Datasource datasource) {
         setup(datasource);
 
         int task_id = 0;
@@ -343,7 +343,7 @@ public class TestDatabaseTaskOptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetNonExistingTaskOption(Datasource datasource) {
+    void testGetNonExistingTaskOption(Datasource datasource) {
         setup(datasource);
 
         TaskOptionManager manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
@@ -359,7 +359,7 @@ public class TestDatabaseTaskOptions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemoveNonExistingTaskOption(Datasource datasource) {
+    void testRemoveNonExistingTaskOption(Datasource datasource) {
         setup(datasource);
 
         try {

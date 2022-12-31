@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateTableH2 extends TestCreateTable {
     @Test
-    public void testInstantiationH2() {
+    void testInstantiationH2() {
         CreateTable query = new CreateTable(H2);
         assertNotNull(query);
         try {
@@ -29,7 +29,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testIncompleteQueryH2() {
+    void testIncompleteQueryH2() {
         CreateTable query = new CreateTable(H2);
         try {
             query.getSql();
@@ -50,7 +50,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testClearH2() {
+    void testClearH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("string", String.class);
@@ -65,7 +65,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testColumnH2() {
+    void testColumnH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename1")
             .column("string", String.class)
@@ -93,7 +93,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testColumnPrecisionH2() {
+    void testColumnPrecisionH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename1")
             .column("string", String.class, 255)
@@ -121,7 +121,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanH2() {
+    void testColumnsBeanH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .columns(BeanImpl.class);
@@ -130,7 +130,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanIncludedH2() {
+    void testColumnsBeanIncludedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
@@ -139,7 +139,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanExcludedH2() {
+    void testColumnsBeanExcludedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
@@ -148,7 +148,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanFilteredH2() {
+    void testColumnsBeanFilteredH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringbuffer"});
@@ -157,7 +157,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanPrecisionH2() {
+    void testColumnsBeanPrecisionH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .columns(BeanImpl.class)
@@ -191,7 +191,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testColumnsBeanConstrainedH2() {
+    void testColumnsBeanConstrainedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .columns(BeanImplConstrained.class);
@@ -200,7 +200,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testNullableH2() {
+    void testNullableH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn1", int.class, CreateTable.NULL)
@@ -216,7 +216,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testDefaultH2() {
+    void testDefaultH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename1")
             .column("string", String.class, 255)
@@ -262,7 +262,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testDefaultFunctionH2() {
+    void testDefaultFunctionH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename1")
             .column("dateobject", java.sql.Date.class)
@@ -272,7 +272,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testCustomAttributeH2() {
+    void testCustomAttributeH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename1")
             .column("intColumn", Integer.class)
@@ -282,7 +282,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testTemporaryH2() {
+    void testTemporaryH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .temporary(true)
@@ -292,7 +292,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testPrimaryKeySimpleH2() {
+    void testPrimaryKeySimpleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -302,7 +302,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testPrimaryKeyMultipleH2() {
+    void testPrimaryKeyMultipleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -313,7 +313,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testPrimaryKeyNamedH2() {
+    void testPrimaryKeyNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -323,7 +323,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testPrimaryKeyMultipleNamedH2() {
+    void testPrimaryKeyMultipleNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -334,7 +334,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testUniqueSimpleH2() {
+    void testUniqueSimpleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -344,7 +344,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testUniqueMultipleH2() {
+    void testUniqueMultipleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -355,7 +355,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testUniqueNamedH2() {
+    void testUniqueNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -365,7 +365,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testUniqueMultipleNamedH2() {
+    void testUniqueMultipleNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -376,7 +376,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeySimpleH2() {
+    void testForeignKeySimpleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -386,7 +386,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyMultipleH2() {
+    void testForeignKeyMultipleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -397,7 +397,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeySimpleNamedH2() {
+    void testForeignKeySimpleNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -407,7 +407,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyMultipleNamedH2() {
+    void testForeignKeyMultipleNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -418,7 +418,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyViolationsSingleH2() {
+    void testForeignKeyViolationsSingleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -492,7 +492,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyViolationsH2() {
+    void testForeignKeyViolationsH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -502,7 +502,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testForeignKeyMultipleViolationsH2() {
+    void testForeignKeyMultipleViolationsH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -513,7 +513,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testCheckSimpleH2() {
+    void testCheckSimpleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -523,7 +523,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testCheckNamedH2() {
+    void testCheckNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
@@ -533,7 +533,7 @@ public class TestCreateTableH2 extends TestCreateTable {
     }
 
     @Test
-    public void testCloneH2() {
+    void testCloneH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
             .columns(BeanImpl.class)

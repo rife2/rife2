@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestStringEncryptor {
     @Test
-    public void testAdaptiveEncrypt() {
+    void testAdaptiveEncrypt() {
         String encrypted_value_sha = "SHA:Hw/gszrpwzs0GnKTaKbwetEqBb0=";
         String encrypted_value_shahex = "SHAHEX:1f0fe0b33ae9c33b341a729368a6f07ad12a05bd";
         String encrypted_value_md5 = "MD5:JZ3Y+j2LYEvTmtYRY1Khsw==";
@@ -38,7 +38,7 @@ public class TestStringEncryptor {
     }
 
     @Test
-    public void testEncryptorInstance() {
+    void testEncryptorInstance() {
         String encrypted_value_sha = "SHA:Hw/gszrpwzs0GnKTaKbwetEqBb0=";
         String encrypted_value_shahex = "SHAHEX:1f0fe0b33ae9c33b341a729368a6f07ad12a05bd";
         String encrypted_value_md5 = "MD5:JZ3Y+j2LYEvTmtYRY1Khsw==";
@@ -63,7 +63,7 @@ public class TestStringEncryptor {
     }
 
     @Test
-    public void testGetEncryptor() {
+    void testGetEncryptor() {
         String encrypted_value_sha = "SHA:Hw/gszrpwzs0GnKTaKbwetEqBb0=";
         String encrypted_value_shahex = "SHAHEX:1f0fe0b33ae9c33b341a729368a6f07ad12a05bd";
         String encrypted_value_md5 = "MD5:JZ3Y+j2LYEvTmtYRY1Khsw==";
@@ -88,7 +88,7 @@ public class TestStringEncryptor {
     }
 
     @Test
-    public void testEncryptPlain() {
+    void testEncryptPlain() {
         String value = "somevalue";
 
         try {
@@ -101,7 +101,7 @@ public class TestStringEncryptor {
     }
 
     @Test
-    public void testEncryptOBF() {
+    void testEncryptOBF() {
         String value = "somevalue";
         String value2 = "somevalue";
         String value3 = "somevalue2";
@@ -120,7 +120,7 @@ public class TestStringEncryptor {
     }
 
     @Test
-    public void testEncryptMD5() {
+    void testEncryptMD5() {
         String value = "MD5:somevalue";
         String value2 = "somevalue";
         String value3 = "somevalue2";
@@ -137,7 +137,7 @@ public class TestStringEncryptor {
     }
 
     @Test
-    public void testEncryptMD5HEX() {
+    void testEncryptMD5HEX() {
         String value = "MD5HEX:somevalue";
         String value2 = "somevalue";
         String value3 = "somevalue2";
@@ -154,7 +154,7 @@ public class TestStringEncryptor {
     }
 
     @Test
-    public void testEncryptSHA() {
+    void testEncryptSHA() {
         String value = "SHA:somevalue";
         String value2 = "somevalue";
         String value3 = "somevalue2";
@@ -171,7 +171,7 @@ public class TestStringEncryptor {
     }
 
     @Test
-    public void testEncryptSHAHEX() {
+    void testEncryptSHAHEX() {
         String value = "SHAHEX:somevalue";
         String value2 = "somevalue";
         String value3 = "somevalue2";
@@ -188,7 +188,7 @@ public class TestStringEncryptor {
     }
 
     @Test
-    public void testEncryptWRP() {
+    void testEncryptWRP() {
         String value = "WRP:somevalue";
         String value2 = "somevalue";
         String value3 = "somevalue2";
@@ -205,7 +205,7 @@ public class TestStringEncryptor {
     }
 
     @Test
-    public void testEncryptWRPHEX() {
+    void testEncryptWRPHEX() {
         String value = "WRPHEX:somevalue";
         String value2 = "somevalue";
         String value3 = "somevalue2";

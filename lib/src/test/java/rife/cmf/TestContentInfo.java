@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestContentInfo {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         var contentinfo = new ContentInfo();
         assertNotNull(contentinfo);
 
@@ -36,28 +36,28 @@ public class TestContentInfo {
     }
 
     @Test
-    public void testPath() {
+    void testPath() {
         var contentinfo = new ContentInfo();
         contentinfo.setPath("/my/path");
         assertEquals("/my/path", contentinfo.getPath());
     }
 
     @Test
-    public void testVersion() {
+    void testVersion() {
         var contentinfo = new ContentInfo();
         contentinfo.setVersion(5);
         assertEquals(5, contentinfo.getVersion());
     }
 
     @Test
-    public void testMimeType() {
+    void testMimeType() {
         var contentinfo = new ContentInfo();
         contentinfo.setMimeType(MimeType.IMAGE_GIF.toString());
         assertEquals(MimeType.IMAGE_GIF.toString(), contentinfo.getMimeType());
     }
 
     @Test
-    public void testFragment() {
+    void testFragment() {
         var contentinfo = new ContentInfo();
         contentinfo.setFragment(true);
         assertTrue(contentinfo.isFragment());
@@ -66,7 +66,7 @@ public class TestContentInfo {
     }
 
     @Test
-    public void testCreated() {
+    void testCreated() {
         var contentinfo = new ContentInfo();
         var ts = new Timestamp(System.currentTimeMillis());
         contentinfo.setCreated(ts);
@@ -74,7 +74,7 @@ public class TestContentInfo {
     }
 
     @Test
-    public void testName() {
+    void testName() {
         var contentinfo = new ContentInfo();
         contentinfo.setName("myname.gif");
         assertTrue(contentinfo.hasName());
@@ -85,7 +85,7 @@ public class TestContentInfo {
     }
 
     @Test
-    public void testOptimalPath() {
+    void testOptimalPath() {
         var contentinfo = new ContentInfo();
         contentinfo.setPath("/some/path");
         assertEquals("/some/path", contentinfo.getOptimalPath());
@@ -96,7 +96,7 @@ public class TestContentInfo {
     }
 
     @Test
-    public void testSetAttributes() {
+    void testSetAttributes() {
         var contentinfo = new ContentInfo();
         var attrs = new HashMap<String, String>();
         attrs.put("attr1", "val1");
@@ -139,14 +139,14 @@ public class TestContentInfo {
     }
 
     @Test
-    public void testSize() {
+    void testSize() {
         var contentinfo = new ContentInfo();
         contentinfo.setSize(2434);
         assertEquals(2434, contentinfo.getSize());
     }
 
     @Test
-    public void testFormattedSize() {
+    void testFormattedSize() {
         var contentinfo = new ContentInfo();
         contentinfo.setSize(90);
         assertEquals("0.09KB", contentinfo.getFormattedSize());
@@ -161,7 +161,7 @@ public class TestContentInfo {
     }
 
     @Test
-    public void testProperties() {
+    void testProperties() {
         var contentinfo = new ContentInfo();
         var props = new HashMap<String, String>();
         props.put("prop1", "val1");
@@ -204,7 +204,7 @@ public class TestContentInfo {
     }
 
     @Test
-    public void testValidation() {
+    void testValidation() {
         var contentinfo = new ContentInfo();
 
         contentinfo.resetValidation();

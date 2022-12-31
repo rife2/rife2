@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TaskTest {
     @Test
-    public void simple()
+    void simple()
     throws Throwable {
         final var endings = new int[]{0};
         final var sum = new int[]{0};

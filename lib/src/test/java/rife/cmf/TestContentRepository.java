@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestContentRepository {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         var repository = new ContentRepository();
         assertNotNull(repository);
 
@@ -18,7 +18,7 @@ public class TestContentRepository {
     }
 
     @Test
-    public void testName() {
+    void testName() {
         var repository = new ContentRepository();
         repository.setName("anotherone");
         assertEquals("anotherone", repository.getName());
@@ -29,7 +29,7 @@ public class TestContentRepository {
     }
 
     @Test
-    public void testValidation() {
+    void testValidation() {
         var repository = new ContentRepository();
 
         repository.resetValidation();

@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDeleteOracle extends TestDelete {
     @Test
-    public void testInstantiationOracle() {
+    void testInstantiationOracle() {
         Delete query = new Delete(ORACLE);
         assertNotNull(query);
         try {
@@ -32,7 +32,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testIncompleteQueryOracle() {
+    void testIncompleteQueryOracle() {
         Delete query = new Delete(ORACLE);
         try {
             query.getSql();
@@ -52,7 +52,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testClearOracle() {
+    void testClearOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .where("this = that");
@@ -67,7 +67,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testFromOracle() {
+    void testFromOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename");
         assertEquals(query.getSql(), "DELETE FROM tablename");
@@ -75,7 +75,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testHintOracle() {
+    void testHintOracle() {
         Delete query = new Delete(ORACLE)
             .hint("NO_INDEX")
             .from("tablename")
@@ -85,7 +85,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereOracle() {
+    void testWhereOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .where("propertyByte = 89");
@@ -94,7 +94,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereTypedOracle() {
+    void testWhereTypedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename");
 
@@ -125,7 +125,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereTypedMixedOracle() {
+    void testWhereTypedMixedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename");
 
@@ -162,7 +162,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersOracle() {
+    void testWhereParametersOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename");
 
@@ -195,7 +195,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersMixedOracle() {
+    void testWhereParametersMixedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -222,7 +222,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereConstructionOracle() {
+    void testWhereConstructionOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -233,7 +233,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereConstructionGroupOracle() {
+    void testWhereConstructionGroupOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .where("propertyInt = 545")
@@ -264,7 +264,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanOracle() {
+    void testWhereBeanOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .where(BeanImpl.getPopulatedBean());
@@ -273,7 +273,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanConstrainedOracle() {
+    void testWhereBeanConstrainedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .where(BeanImplConstrained.getPopulatedBean());
@@ -282,7 +282,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanNullValuesOracle() {
+    void testWhereBeanNullValuesOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .where(BeanImpl.getNullBean());
@@ -291,7 +291,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanIncludedOracle() {
+    void testWhereBeanIncludedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -300,7 +300,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanExcludedOracle() {
+    void testWhereBeanExcludedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
@@ -309,7 +309,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereBeanFilteredOracle() {
+    void testWhereBeanFilteredOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
@@ -318,7 +318,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanOracle() {
+    void testWhereParametersBeanOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .whereParameters(BeanImpl.class);
@@ -390,7 +390,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanConstrainedOracle() {
+    void testWhereParametersBeanConstrainedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .whereParameters(BeanImplConstrained.class);
@@ -456,7 +456,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testWhereParametersBeanExcludedOracle() {
+    void testWhereParametersBeanExcludedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
             .whereParametersExcluded(BeanImpl.class,
@@ -506,7 +506,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testDeleteSubselectParamsOracle() {
+    void testDeleteSubselectParamsOracle() {
         Select wherequery = new Select(ORACLE);
         wherequery
             .from("table2")
@@ -564,7 +564,7 @@ public class TestDeleteOracle extends TestDelete {
     }
 
     @Test
-    public void testCloneOracle() {
+    void testCloneOracle() {
         Select wherequery = new Select(ORACLE);
         wherequery
             .from("table2")

@@ -10,42 +10,42 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestValidationRuleSameAs {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         Bean bean = new Bean("value", "value");
         ValidationRuleSameAs rule = new ValidationRuleSameAs("other", "property").setBean(bean);
         assertNotNull(rule);
     }
 
     @Test
-    public void testValid() {
+    void testValid() {
         Bean bean = new Bean("value", "value");
         ValidationRuleSameAs rule = new ValidationRuleSameAs("other", "property").setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testValidArray() {
+    void testValidArray() {
         Bean bean = new Bean(new String[]{"value", "value"}, "value");
         ValidationRuleSameAs rule = new ValidationRuleSameAs("propertyArray", "other").setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testInvalid() {
+    void testInvalid() {
         Bean bean = new Bean("value", "value2");
         ValidationRuleSameAs rule = new ValidationRuleSameAs("other", "property").setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testInalidArray() {
+    void testInalidArray() {
         Bean bean = new Bean(new String[]{"value", "value2"}, "value");
         ValidationRuleSameAs rule = new ValidationRuleSameAs("propertyArray", "other").setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testUnknownProperty() {
+    void testUnknownProperty() {
         Bean bean = new Bean("value", "value2");
         ValidationRuleSameAs rule = new ValidationRuleSameAs("other", "unknown_property").setBean(bean);
         assertTrue(rule.validate());
@@ -54,7 +54,7 @@ public class TestValidationRuleSameAs {
     }
 
     @Test
-    public void testGetError() {
+    void testGetError() {
         Bean bean = new Bean("value", "value2");
         ValidationRuleSameAs rule = new ValidationRuleSameAs("other", "property").setBean(bean);
         ValidationError error = rule.getError();

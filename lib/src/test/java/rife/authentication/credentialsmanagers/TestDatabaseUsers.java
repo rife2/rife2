@@ -24,14 +24,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiation(Datasource datasource) {
+    void testInstantiation(Datasource datasource) {
         DatabaseUsers manager = DatabaseUsersFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstall(Datasource datasource) {
+    void testInstall(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -44,7 +44,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemove(Datasource datasource) {
+    void testRemove(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -57,7 +57,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testAddRoles(Datasource datasource) {
+    void testAddRoles(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -93,7 +93,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRolesList(Datasource datasource) {
+    void testRolesList(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -137,7 +137,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testAddUsers(Datasource datasource) {
+    void testAddUsers(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -208,7 +208,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUpdateUsers(Datasource datasource) {
+    void testUpdateUsers(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -285,7 +285,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetUserAttributes(Datasource datasource) {
+    void testGetUserAttributes(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -337,7 +337,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUsersList(Datasource datasource) {
+    void testUsersList(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -375,7 +375,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUsersListRanged(Datasource datasource) {
+    void testUsersListRanged(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -447,7 +447,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUserIdSpecification(Datasource datasource) {
+    void testUserIdSpecification(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -492,7 +492,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testValidUsers(Datasource datasource) {
+    void testValidUsers(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
         users.setPasswordEncryptor(StringEncryptor.SHA);
 
@@ -551,7 +551,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUsersInRole(Datasource datasource) {
+    void testUsersInRole(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
         users.setPasswordEncryptor(StringEncryptor.MD5);
 
@@ -604,7 +604,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testListUsersInRole(Datasource datasource) {
+    void testListUsersInRole(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -674,7 +674,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemoveUsersByLogin(Datasource datasource) {
+    void testRemoveUsersByLogin(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -713,7 +713,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemoveUsersByUserId(Datasource datasource) {
+    void testRemoveUsersByUserId(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -752,7 +752,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemoveRole(Datasource datasource) {
+    void testRemoveRole(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -797,7 +797,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testClearUsers(Datasource datasource) {
+    void testClearUsers(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {
@@ -828,7 +828,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testVerifyCredentials(Datasource datasource) {
+    void testVerifyCredentials(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
         users.setPasswordEncryptor(StringEncryptor.OBF);
 
@@ -875,7 +875,7 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testListUserRoles(Datasource datasource) {
+    void testListUserRoles(Datasource datasource) {
         DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
 
         try {

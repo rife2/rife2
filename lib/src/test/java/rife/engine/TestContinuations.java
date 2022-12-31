@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestContinuations {
     @Test
-    public void testNoPause()
+    void testNoPause()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -28,7 +28,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testSimplePause()
+    void testSimplePause()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -50,7 +50,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testNull()
+    void testNull()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -72,7 +72,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testNullReference()
+    void testNullReference()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -91,7 +91,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testNullConditional()
+    void testNullConditional()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -111,7 +111,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testConditional()
+    void testConditional()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -157,7 +157,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testMemberMethod()
+    void testMemberMethod()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -179,7 +179,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testPrivateMethod()
+    void testPrivateMethod()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -195,7 +195,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testSynchronization()
+    void testSynchronization()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -232,7 +232,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testThrow()
+    void testThrow()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -278,7 +278,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testTryCatch()
+    void testTryCatch()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -341,7 +341,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testFinally()
+    void testFinally()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -381,7 +381,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testInstanceOf()
+    void testInstanceOf()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -403,7 +403,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testInnerClass()
+    void testInnerClass()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -425,7 +425,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testAllTypes()
+    void testAllTypes()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -501,7 +501,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testFormSubmission()
+    void testFormSubmission()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -535,7 +535,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testUniqueIDPerRequest()
+    void testUniqueIDPerRequest()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -601,7 +601,7 @@ public class TestContinuations {
     }
 
     @Test
-    public void testNumberGuess()
+    void testNumberGuess()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {

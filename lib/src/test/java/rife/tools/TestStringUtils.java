@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestStringUtils {
     @Test
-    public void testEncodeClassname() {
+    void testEncodeClassname() {
         assertNull(StringUtils.encodeClassname(null));
         assertEquals("just_a_string_", StringUtils.encodeClassname("just.a:string="));
     }
 
     @Test
-    public void testEncodeURL() {
+    void testEncodeURL() {
         assertNull(StringUtils.encodeUrl(null));
         assertEquals("a%20test%20%26", StringUtils.encodeUrl("a test &"));
         String valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~";
@@ -32,7 +32,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testDecodeURL() {
+    void testDecodeURL() {
         assertNull(StringUtils.decodeUrl(null));
         assertEquals("a test &", StringUtils.decodeUrl("a%20test%20%26"));
         String valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~";
@@ -63,14 +63,14 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testEncodeHtml() {
+    void testEncodeHtml() {
         assertNull(StringUtils.encodeHtml(null));
         assertEquals(StringUtils.encodeHtml("&<>\"¡¢£¥§¨©ª«¬®¯°±´µ¶·¸º»¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜßàáâãäåæçèéêëìíîïñòóôõö÷øùúûüÿƒΩπ•…⁄™∂∏∑√∞∫≈≠≤≥◊ascii∛plainΘ❤"),
             "&amp;&lt;&gt;&quot;&iexcl;&cent;&pound;&yen;&sect;&uml;&copy;&ordf;&laquo;&not;&reg;&macr;&deg;&plusmn;&acute;&micro;&para;&middot;&cedil;&ordm;&raquo;&iquest;&Agrave;&Aacute;&Acirc;&Atilde;&Auml;&Aring;&AElig;&Ccedil;&Egrave;&Eacute;&Ecirc;&Euml;&Igrave;&Iacute;&Icirc;&Iuml;&Ntilde;&Ograve;&Oacute;&Ocirc;&Otilde;&Ouml;&Oslash;&Ugrave;&Uacute;&Ucirc;&Uuml;&szlig;&agrave;&aacute;&acirc;&atilde;&auml;&aring;&aelig;&ccedil;&egrave;&eacute;&ecirc;&euml;&igrave;&iacute;&icirc;&iuml;&ntilde;&ograve;&oacute;&ocirc;&otilde;&ouml;&divide;&oslash;&ugrave;&uacute;&ucirc;&uuml;&yuml;&fnof;&Omega;&pi;&bull;&hellip;&frasl;&trade;&part;&prod;&sum;&radic;&infin;&int;&asymp;&ne;&le;&ge;&loz;ascii&#8731;plain&Theta;&#10084;");
     }
 
     @Test
-    public void testDecodeHtml() {
+    void testDecodeHtml() {
         assertNull(StringUtils.decodeHtml(null));
 
         assertEquals("plain", StringUtils.decodeHtml("plain"));
@@ -92,44 +92,44 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testEncodeHtmlDefensive() {
+    void testEncodeHtmlDefensive() {
         assertNull(StringUtils.encodeHtmlDefensive(null));
         assertEquals(StringUtils.encodeHtmlDefensive("&<>\"¡¢£¥§¨©ª«¬®¯°±´µ¶·¸º»¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜßàáâãäåæçèéêëìíîïñòóôõö÷øùúûüÿƒΩπ•…⁄™∂∏∑√∞∫≈≠≤≥◊"),
             "&<>\"&iexcl;&cent;&pound;&yen;&sect;&uml;&copy;&ordf;&laquo;&not;&reg;&macr;&deg;&plusmn;&acute;&micro;&para;&middot;&cedil;&ordm;&raquo;&iquest;&Agrave;&Aacute;&Acirc;&Atilde;&Auml;&Aring;&AElig;&Ccedil;&Egrave;&Eacute;&Ecirc;&Euml;&Igrave;&Iacute;&Icirc;&Iuml;&Ntilde;&Ograve;&Oacute;&Ocirc;&Otilde;&Ouml;&Oslash;&Ugrave;&Uacute;&Ucirc;&Uuml;&szlig;&agrave;&aacute;&acirc;&atilde;&auml;&aring;&aelig;&ccedil;&egrave;&eacute;&ecirc;&euml;&igrave;&iacute;&icirc;&iuml;&ntilde;&ograve;&oacute;&ocirc;&otilde;&ouml;&divide;&oslash;&ugrave;&uacute;&ucirc;&uuml;&yuml;&fnof;&Omega;&pi;&bull;&hellip;&frasl;&trade;&part;&prod;&sum;&radic;&infin;&int;&asymp;&ne;&le;&ge;&loz;");
     }
 
     @Test
-    public void testEncodeUnicode() {
+    void testEncodeUnicode() {
         assertNull(StringUtils.encodeUnicode(null));
         assertEquals("\\u0061\\u0062\\u0063\\u0064\\u0065\\u006B", StringUtils.encodeUnicode("abcdek"));
     }
 
     @Test
-    public void testEncodeXml() {
+    void testEncodeXml() {
         assertNull(StringUtils.encodeXml(null));
         assertEquals(StringUtils.encodeXml("abcd'\"<>&wxyz"), "abcd&apos;&quot;&lt;&gt;&amp;wxyz");
     }
 
     @Test
-    public void testEncodeSql() {
+    void testEncodeSql() {
         assertNull(StringUtils.encodeSql(null));
         assertEquals(StringUtils.encodeSql("abcd'wxyz"), "abcd''wxyz");
     }
 
     @Test
-    public void testEncodeString() {
+    void testEncodeString() {
         assertNull(StringUtils.encodeString(null));
         assertEquals(StringUtils.encodeString("abcd\"\na\t\r\\wxyz"), "abcd\\\"\\na\\t\\r\\\\wxyz");
     }
 
     @Test
-    public void testEncodeLatex() {
+    void testEncodeLatex() {
         assertNull(StringUtils.encodeLatex(null));
         assertEquals("\\\\\\#\\$\\%\\&\\~\\_\\^\\{\\}\\`{A}\\'{A}\\^{A}\\H{A}\\\"{A}\\AA\\AE\\c{C}\\`{E}\\'{E}\\^{E}\\\"{E}\\`{I}\\'{I}\\^{I}\\\"{I}\\H{N}\\`{O}\\'{O}\\^{O}\\H{O}\\\"{O}\\O\\`{U}\\'{U}\\^{U}\\\"{U}\\ss\\`{a}\\'{a}\\^{a}\\H{a}\\\"{a}\\aa\\ae\\c{c}\\`{e}\\'{e}\\^{e}\\\"{e}\\`{i}\\'{i}\\^{i}\\\"{i}\\H{n}\\`{o}\\'{o}\\^{o}\\H{o}\\\"{o}\\o\\`{u}\\'{u}\\^{u}\\\"{u}\\\"{y}\\LaTeX\\LaTeX", StringUtils.encodeLatex("\\#$%&~_^{}ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜßàáâãäåæçèéêëìíîïñòóôõöøùúûüÿlatexLaTeX"));
     }
 
     @Test
-    public void testCount() {
+    void testCount() {
         assertEquals(StringUtils.count(null, null), 0);
         assertEquals(StringUtils.count("", null), 0);
         assertEquals(StringUtils.count("onetwoonethreefouroneONE", "one"), 3);
@@ -138,7 +138,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testEncodeJson() {
+    void testEncodeJson() {
         assertNull(StringUtils.encodeJson(null));
         assertEquals(StringUtils.encodeJson("""
             abcd"
@@ -148,12 +148,12 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testCountCase() {
+    void testCountCase() {
         assertEquals(StringUtils.count("ONEtwooNethreefourone", "onE", false), 3);
     }
 
     @Test
-    public void testSplit() {
+    void testSplit() {
         assertEquals(StringUtils.split(null, null).size(), 0);
         assertEquals(StringUtils.split("one", null).size(), 1);
         assertEquals(StringUtils.split("one", null).get(0), "one");
@@ -172,7 +172,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testSplitCase() {
+    void testSplitCase() {
         String string_to_split = "oneaAatwoAAAthree";
         List<String> string_parts = StringUtils.split(string_to_split, "aaa", false);
 
@@ -183,7 +183,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testSplitToArray() {
+    void testSplitToArray() {
         String string_to_split = "onextwoxthreeXfour";
         String[] string_parts = StringUtils.splitToArray(string_to_split, "x");
 
@@ -194,7 +194,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testSplitToArrayCase() {
+    void testSplitToArrayCase() {
         String string_to_split = "oneaAatwoAAAthree";
         String[] string_parts = StringUtils.splitToArray(string_to_split, "aaa", false);
 
@@ -205,7 +205,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testSplitToIntArray() {
+    void testSplitToIntArray() {
         String string_to_split = "1x5x10xezfzefx50x100X200";
         int[] string_parts = StringUtils.splitToIntArray(string_to_split, "x");
         assertNotNull(string_parts);
@@ -216,7 +216,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testSplitToIntArrayCase() {
+    void testSplitToIntArrayCase() {
         String string_to_split = "1xXx5XXX10xxxezfzefXxX50";
         int[] string_parts = StringUtils.splitToIntArray(string_to_split, "XXX", false);
         assertNotNull(string_parts);
@@ -227,7 +227,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testSplitToByteArray() {
+    void testSplitToByteArray() {
         String string_to_split = "sdfsdx5x1078456x50x100X200";
         byte[] string_parts = StringUtils.splitToByteArray(string_to_split, "x");
         assertNotNull(string_parts);
@@ -236,7 +236,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testSplitToByteArrayCase() {
+    void testSplitToByteArrayCase() {
         String string_to_split = "sdfsd_A_5_a_1078456_A_50";
         byte[] string_parts = StringUtils.splitToByteArray(string_to_split, "_a_", false);
         assertNotNull(string_parts);
@@ -245,7 +245,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testStripFromFront() {
+    void testStripFromFront() {
         assertNull(StringUtils.stripFromFront(null, null));
         assertEquals(StringUtils.stripFromFront("2frontmiddleback", null), "2frontmiddleback");
 
@@ -258,7 +258,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testStripFromFrontCase() {
+    void testStripFromFrontCase() {
         assertEquals(StringUtils.stripFromFront("2fRoNtmiddleback", "front", false), "2fRoNtmiddleback");
         assertEquals(StringUtils.stripFromFront("FRONTmiddleback", "front", false), "middleback");
         assertEquals(StringUtils.stripFromFront("fROntFRONt2frontmiddleback", "front", false), "2frontmiddleback");
@@ -267,7 +267,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testStripFromEnd() {
+    void testStripFromEnd() {
         assertNull(StringUtils.stripFromEnd(null, null));
         assertEquals(StringUtils.stripFromEnd("frontmiddleback", null), "frontmiddleback");
 
@@ -280,7 +280,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testStripFromEndCase() {
+    void testStripFromEndCase() {
         assertEquals(StringUtils.stripFromEnd("fRONtmiddleback", "front", false), "fRONtmiddleback");
         assertEquals(StringUtils.stripFromEnd("frontMIDDLEback", "middle", false), "frontMIDDLEback");
         assertEquals(StringUtils.stripFromEnd("frontmiddleBAcK", "back", false), "frontmiddle");
@@ -289,7 +289,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testReplace() {
+    void testReplace() {
         assertNull(StringUtils.replace(null, "one", "five"));
         assertEquals(StringUtils.replace("onetwooneTWOthreeONEfourone", null, "five"), "onetwooneTWOthreeONEfourone");
         assertEquals(StringUtils.replace("onetwooneTWOthreeONEfourone", "one", null), "onetwooneTWOthreeONEfourone");
@@ -300,14 +300,14 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testReplaceCase() {
+    void testReplaceCase() {
         assertEquals(StringUtils.replace("ONEtwoOnEthreefouroNE", "one", "five", false), "fivetwofivethreefourfive");
         assertEquals(StringUtils.replace("onetWOonethreefourone", "two", "five", false), "onefiveonethreefourone");
         assertEquals(StringUtils.replace("onetwoonethreefourone", "six", "five", false), "onetwoonethreefourone");
     }
 
     @Test
-    public void testRepeat() {
+    void testRepeat() {
         assertNull(StringUtils.repeat(null, 0), (String) null);
 
         assertEquals(StringUtils.repeat("one", 0), "");
@@ -316,7 +316,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testToStringArray() {
+    void testToStringArray() {
         assertEquals(StringUtils.toStringArray(null).length, 0);
 
         Vector<String> strings = new Vector<String>();
@@ -334,7 +334,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testToArrayList() {
+    void testToArrayList() {
         assertEquals(StringUtils.toArrayList(null).size(), 0);
 
         String[] string_array = {"one", "two", "three"};
@@ -346,7 +346,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testJoinCollection() {
+    void testJoinCollection() {
         assertNull(StringUtils.join((ArrayList<String>) null, null));
         assertEquals("", StringUtils.join(new ArrayList<String>(), ""));
         assertEquals("", StringUtils.join(new ArrayList<String>(), null));
@@ -361,7 +361,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testJoinStringArray() {
+    void testJoinStringArray() {
         assertNull(StringUtils.join((String[]) null, null));
         assertEquals("", StringUtils.join(new String[0], ""));
         assertEquals("", StringUtils.join(new String[0], null));
@@ -377,7 +377,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testJoinStringArrayEncode() {
+    void testJoinStringArrayEncode() {
         String[] string_array = {"one\"", "two", "thr\"ee"};
         String joined_string = StringUtils.join(string_array, ",", "'", true);
         assertNotNull(joined_string);
@@ -385,7 +385,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testJoinBooleanArray() {
+    void testJoinBooleanArray() {
         assertNull(StringUtils.join((boolean[]) null, null));
         assertEquals("", StringUtils.join(new boolean[0], ""));
         assertEquals("", StringUtils.join(new boolean[0], null));
@@ -397,7 +397,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testJoinByteArray() {
+    void testJoinByteArray() {
         assertNull(StringUtils.join((byte[]) null, null));
         assertEquals("", StringUtils.join(new byte[0], ""));
         assertEquals("", StringUtils.join(new byte[0], null));
@@ -409,7 +409,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testJoinShortArray() {
+    void testJoinShortArray() {
         assertNull(StringUtils.join((short[]) null, null));
         assertEquals("", StringUtils.join(new short[0], ""));
         assertEquals("", StringUtils.join(new short[0], null));
@@ -421,7 +421,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testJoinCharArray() {
+    void testJoinCharArray() {
         assertNull(StringUtils.join((char[]) null, null));
         assertEquals("", StringUtils.join(new char[0], ""));
         assertEquals("", StringUtils.join(new char[0], null));
@@ -436,7 +436,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testJoinIntArray() {
+    void testJoinIntArray() {
         assertNull(StringUtils.join((int[]) null, null));
         assertEquals("", StringUtils.join(new int[0], ""));
         assertEquals("", StringUtils.join(new int[0], null));
@@ -448,7 +448,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testJoinLongArray() {
+    void testJoinLongArray() {
         assertNull(StringUtils.join((long[]) null, null));
         assertEquals("", StringUtils.join(new long[0], ""));
         assertEquals("", StringUtils.join(new long[0], null));
@@ -460,7 +460,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testJoinFloatArray() {
+    void testJoinFloatArray() {
         assertNull(StringUtils.join((float[]) null, null));
         assertEquals("", StringUtils.join(new float[0], ""));
         assertEquals("", StringUtils.join(new float[0], null));
@@ -472,7 +472,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testJoinDoubleArray() {
+    void testJoinDoubleArray() {
         assertNull(StringUtils.join((double[]) null, null));
         assertEquals("", StringUtils.join(new double[0], ""));
         assertEquals("", StringUtils.join(new double[0], null));
@@ -484,7 +484,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testIndicesOf() {
+    void testIndicesOf() {
         assertEquals(0, StringUtils.indicesOf(null, "one").length);
         assertEquals(0, StringUtils.indicesOf("onetwoonethreefouroneONE", null).length);
 
@@ -510,7 +510,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testIndicesOfCase() {
+    void testIndicesOfCase() {
         int[] indices = StringUtils.indicesOf("oNEtwoONEthreefourOne", "one", false);
         assertEquals(indices.length, 3);
         assertEquals(indices[0], 0);
@@ -519,7 +519,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testGetMatchingRegexp() {
+    void testGetMatchingRegexp() {
         Pattern pattern1 = Pattern.compile("reg(.*)lar");
         Pattern pattern2 = Pattern.compile("exp(.*)ion");
 
@@ -533,7 +533,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testGetRegexpMatch() {
+    void testGetRegexpMatch() {
         String value1 = "regular";
         String value2 = "expression";
 
@@ -547,7 +547,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testFilterSingular() {
+    void testFilterSingular() {
         assertFalse(StringUtils.filter(null, null, (Pattern) null));
 
         assertTrue(StringUtils.filter("test", null, Pattern.compile(".*a.*")));
@@ -562,7 +562,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testFilterMultiple() {
+    void testFilterMultiple() {
         assertFalse(StringUtils.filter(null, null, (Pattern[]) null));
 
         assertTrue(StringUtils.filter("test", null, new Pattern[]{Pattern.compile(".*a.*"), Pattern.compile(".*b.*")}));
@@ -580,7 +580,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testCapitalize() {
+    void testCapitalize() {
         assertNull(StringUtils.capitalize(null));
         assertEquals("", StringUtils.capitalize(""));
         assertEquals("Hohoho", StringUtils.capitalize("Hohoho"));
@@ -588,7 +588,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testUncapitalize() {
+    void testUncapitalize() {
         assertNull(StringUtils.uncapitalize(null));
         assertEquals("", StringUtils.uncapitalize(""));
         assertEquals("hohoho", StringUtils.uncapitalize("Hohoho"));
@@ -596,7 +596,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testConvertBbcode() {
+    void testConvertBbcode() {
         assertNull(StringUtils.convertBbcode(null));
 
         String source =
@@ -686,16 +686,16 @@ public class TestStringUtils {
             <u>VERY COOL</u>""", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.SHORTEN_URL));
 
         source = "[url]javascript:self.close();[/url]\n" +
-            "[url=javascript:self.close();]Click here[/url]";
+                 "[url=javascript:self.close();]Click here[/url]";
 
         assertEquals("<a href=\"javascript:self.close();\">javascript:self.close();</a><br />\n" +
-            "<a href=\"javascript:self.close();\">Click here</a>", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.SHORTEN_URL));
+                     "<a href=\"javascript:self.close();\">Click here</a>", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.SHORTEN_URL));
 
         assertEquals("<a href=\"https://self.close();\" target=\"_blank\">javascript:self.close();</a><br />\n" +
-            "<a href=\"https://self.close();\" target=\"_blank\">Click here</a>", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.SHORTEN_URL, StringUtils.BbcodeOption.SANITIZE_URL));
+                     "<a href=\"https://self.close();\" target=\"_blank\">Click here</a>", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.SHORTEN_URL, StringUtils.BbcodeOption.SANITIZE_URL));
 
         source = "[quote]This is a quote[/quote]\n" +
-            "[quote=Bob]This is a quote from Bob[/quote]";
+                 "[quote=Bob]This is a quote from Bob[/quote]";
 
         assertEquals("""
             <div class="quotebody">This is a quote</div><br />
@@ -754,18 +754,18 @@ public class TestStringUtils {
             <a href="https://www.uwyn.com" target="_blank" rel="nofollow">Uwyn</a>""", StringUtils.convertBbcode(source, StringUtils.BbcodeOption.CONVERT_BARE_URLS, StringUtils.BbcodeOption.NO_FOLLOW_LINKS));
 
         source = "[code]" +
-            "codepart" +
-            "[code]" +
-            "text" +
-            "[/code]codepart3[/code]" +
-            "[code]codepart4[/code]";
+                 "codepart" +
+                 "[code]" +
+                 "text" +
+                 "[/code]codepart3[/code]" +
+                 "[code]codepart4[/code]";
 
         assertEquals("<div class=\"codebody\"><pre>codepart</pre></div><div class=\"codebody\"><pre>text</pre></div>codepart3[/code]<div class=\"codebody\"><pre>codepart4</pre></div>",
             StringUtils.convertBbcode(source));
     }
 
     @Test
-    public void testConvertToBoolean() {
+    void testConvertToBoolean() {
         assertFalse(StringUtils.convertToBoolean(null));
         assertFalse(StringUtils.convertToBoolean("blabla"));
         assertFalse(StringUtils.convertToBoolean("0"));
@@ -783,7 +783,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testGetDocumentPosition() {
+    void testGetDocumentPosition() {
         DocumentPosition position;
 
         String document1 = """
@@ -873,13 +873,13 @@ public class TestStringUtils {
         assertNull(StringUtils.getDocumentPosition(document1, 59));
 
         String document2 = "0123456789\r" +
-            "9012345678\r" +
-            "\r" +
-            "\r" +
-            "8901234567\r" +
-            "7890123456\r" +
-            "\r" +
-            "6789012345\r";
+                           "9012345678\r" +
+                           "\r" +
+                           "\r" +
+                           "8901234567\r" +
+                           "7890123456\r" +
+                           "\r" +
+                           "6789012345\r";
 
         assertNull(StringUtils.getDocumentPosition(null, 1));
         assertNull(StringUtils.getDocumentPosition(document2, -2));
@@ -1056,7 +1056,7 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testWordWrap() {
+    void testWordWrap() {
         String buffer = """
             Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Suspendisse nisi enim, rutrum eget, condimentum quis, malesuada cursus, magna. Fusce suscipit, lorem accumsan hendrerit convallis, purus sem feugiat nulla, a consequat turpis nisi sed ipsum. Duis iaculis suscipit quam. Praesent placerat nibh lobortis nulla. Morbi scelerisque. Etiam et libero. Aliquam viverra tortor eget lectus. Cras quis sem id massa tempor imperdiet. Morbi posuere purus sit amet tortor. Curabitur venenatis ultrices elit. Integer vitae neque. Suspendisse at ipsum sed orci interdum dictum. Praesent condimentum augue et diam. Nunc a neque. Quisque arcu.
             Praesent diam dolor, gravida eget, faucibus in, aliquet sed, elit. Sed lacinia lorem eu leo condimentum lacinia. Proin egestas. Sed porta magna. Nunc ut est. Sed vitae sem. Nunc tempor mattis felis. Nunc urna magna, aliquet quis, consequat ut, ullamcorper eget, libero. Mauris eu dui. Integer ante nibh, lobortis ut, sagittis eu, pretium sed, quam. Praesent fringilla nisi non metus mollis cursus. Ut convallis. Pellentesque imperdiet rhoncus nulla. Fusce tempor. Sed mollis. Fusce feugiat. Proin porttitor nulla sit amet velit.

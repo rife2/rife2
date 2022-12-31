@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUniqueIDGenerator {
     @Test
-    public void testGeneration() {
+    void testGeneration() {
         var uid = UniqueIDGenerator.generate();
         assertNotNull(uid);
         assertNotNull(uid.toString());
@@ -20,7 +20,7 @@ public class TestUniqueIDGenerator {
     }
 
     @Test
-    public void testUniqueness() {
+    void testUniqueness() {
         var uid1 = UniqueIDGenerator.generate();
         var uid2 = UniqueIDGenerator.generate();
         var uid3 = UniqueIDGenerator.generate();

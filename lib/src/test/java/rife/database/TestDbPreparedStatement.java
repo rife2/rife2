@@ -66,7 +66,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiationSql(Datasource datasource) {
+    void testInstantiationSql(Datasource datasource) {
         setup(datasource);
         try {
             String sql = "DELETE FROM parametersbean";
@@ -84,7 +84,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiationQuery(Datasource datasource) {
+    void testInstantiationQuery(Datasource datasource) {
         setup(datasource);
         try {
             Delete query_delete = new Delete(datasource);
@@ -104,7 +104,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteQuery(Datasource datasource) {
+    void testExecuteQuery(Datasource datasource) {
         setup(datasource);
         try {
             Select query_select = new Select(datasource);
@@ -123,7 +123,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteQueryException(Datasource datasource) {
+    void testExecuteQueryException(Datasource datasource) {
         setup(datasource);
         try {
             Select query_select = new Select(datasource);
@@ -154,7 +154,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteUpdate(Datasource datasource) {
+    void testExecuteUpdate(Datasource datasource) {
         setup(datasource);
         try {
             Delete query_delete = new Delete(datasource);
@@ -172,7 +172,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteUpdateException(Datasource datasource) {
+    void testExecuteUpdateException(Datasource datasource) {
         setup(datasource);
         try {
             Delete query_delete = new Delete(datasource);
@@ -201,7 +201,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testNotParametrized(Datasource datasource) {
+    void testNotParametrized(Datasource datasource) {
         setup(datasource);
         try {
             String sql = "SELECT * FROM parametersbean WHERE propertyString = ?";
@@ -223,7 +223,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testNoParameters(Datasource datasource) {
+    void testNoParameters(Datasource datasource) {
         setup(datasource);
         try {
             Select query_select = new Select(datasource);
@@ -246,7 +246,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testAddBatch(Datasource datasource) {
+    void testAddBatch(Datasource datasource) {
         setup(datasource);
 
         CreateTable query_create = new CreateTable(datasource);
@@ -341,7 +341,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetMetaData(Datasource datasource) {
+    void testGetMetaData(Datasource datasource) {
         setup(datasource);
 
         try {
@@ -376,7 +376,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetParameterMetaData(Datasource datasource) {
+    void testGetParameterMetaData(Datasource datasource) {
         setup(datasource);
 
         try {
@@ -414,7 +414,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSetBeanNull(Datasource datasource) {
+    void testSetBeanNull(Datasource datasource) {
         setup(datasource);
 
         try {
@@ -440,7 +440,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSetBeanError(Datasource datasource) {
+    void testSetBeanError(Datasource datasource) {
         setup(datasource);
 
         try {
@@ -464,7 +464,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSetBean(Datasource datasource) {
+    void testSetBean(Datasource datasource) {
         setup(datasource);
 
         try {
@@ -542,7 +542,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSetBeanNulls(Datasource datasource) {
+    void testSetBeanNulls(Datasource datasource) {
         setup(datasource);
 
         try {
@@ -626,7 +626,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSetNamedParameters(Datasource datasource) {
+    void testSetNamedParameters(Datasource datasource) {
         setup(datasource);
 
         try {
@@ -724,7 +724,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalParameterName(Datasource datasource) {
+    void testIllegalParameterName(Datasource datasource) {
         setup(datasource);
 
         try {
@@ -761,7 +761,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInexistantParameterName(Datasource datasource) {
+    void testInexistantParameterName(Datasource datasource) {
         setup(datasource);
 
         try {
@@ -793,7 +793,7 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalArgumentTypedParameters(Datasource datasource) {
+    void testIllegalArgumentTypedParameters(Datasource datasource) {
         setup(datasource);
 
         try {
