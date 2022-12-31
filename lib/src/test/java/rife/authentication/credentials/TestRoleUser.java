@@ -23,28 +23,28 @@ public class TestRoleUser {
 
     @Test
     void testInitialEmptyLogin() {
-        RoleUser user = new RoleUser();
+        var user = new RoleUser();
 
         assertNull(user.getLogin());
     }
 
     @Test
     void testInitialEmptyPassword() {
-        RoleUser user = new RoleUser();
+        var user = new RoleUser();
 
         assertNull(user.getPassword());
     }
 
     @Test
     void testInitialEmptyRole() {
-        RoleUser user = new RoleUser();
+        var user = new RoleUser();
 
         assertNull(user.getRole());
     }
 
     @Test
     void testPopulation() {
-        RoleUser user = new RoleUser();
+        var user = new RoleUser();
 
         user.setLogin("the login");
         user.setPassword("the password");
@@ -57,7 +57,7 @@ public class TestRoleUser {
 
     @Test
     void testValidation() {
-        RoleUser user = new RoleUser();
+        var user = new RoleUser();
 
         Iterator<ValidationError> validationerrors_it = null;
         ValidationError validationerror = null;

@@ -23,19 +23,19 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestMemoryTaskOptions {
     @Test
     void testInstantiateTaskOptionManager() {
-        TaskOptionManager manager = new MemoryTaskOptions();
+        var manager = new MemoryTaskOptions();
         assertNotNull(manager);
     }
 
     @Test
     void testAddTaskOptionWithInexistentTaskId() {
-        TaskOption taskoption = new TaskOption();
+        var taskoption = new TaskOption();
         taskoption.setTaskId(0);
         taskoption.setName("name");
         taskoption.setValue("value");
 
-        Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
-        TaskOptionManager manager = scheduler.getTaskOptionManager();
+        var scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
+        var manager = scheduler.getTaskOptionManager();
         try {
             manager.addTaskOption(taskoption);
             fail();
@@ -48,16 +48,16 @@ public class TestMemoryTaskOptions {
 
     @Test
     void testAddTaskOption() {
-        Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
-        TaskManager task_manager = scheduler.getTaskManager();
-        TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
-        int task_id = 0;
-        Task task = new Task();
-        String taskoption_name = "name";
-        String taskoption_value = "value";
+        var scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
+        var task_manager = scheduler.getTaskManager();
+        var taskoption_manager = scheduler.getTaskOptionManager();
+        var task_id = 0;
+        var task = new Task();
+        var taskoption_name = "name";
+        var taskoption_value = "value";
 
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -66,7 +66,7 @@ public class TestMemoryTaskOptions {
 
             task_id = task_manager.addTask(task);
 
-            TaskOption taskoption = new TaskOption();
+            var taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(taskoption_value);
@@ -79,16 +79,16 @@ public class TestMemoryTaskOptions {
 
     @Test
     void testAddDuplicateTaskOption() {
-        Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
-        TaskManager task_manager = scheduler.getTaskManager();
-        TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
-        int task_id = 0;
-        Task task = new Task();
-        String taskoption_name = "name";
-        String taskoption_value = "value";
+        var scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
+        var task_manager = scheduler.getTaskManager();
+        var taskoption_manager = scheduler.getTaskOptionManager();
+        var task_id = 0;
+        var task = new Task();
+        var taskoption_name = "name";
+        var taskoption_value = "value";
 
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -97,7 +97,7 @@ public class TestMemoryTaskOptions {
 
             task_id = task_manager.addTask(task);
 
-            TaskOption taskoption1 = new TaskOption();
+            var taskoption1 = new TaskOption();
             taskoption1.setTaskId(task_id);
             taskoption1.setName(taskoption_name);
             taskoption1.setValue(taskoption_value);
@@ -108,7 +108,7 @@ public class TestMemoryTaskOptions {
         }
 
         try {
-            TaskOption taskoption2 = new TaskOption();
+            var taskoption2 = new TaskOption();
             taskoption2.setTaskId(task_id);
             taskoption2.setName(taskoption_name);
             taskoption2.setValue(taskoption_value);
@@ -124,16 +124,16 @@ public class TestMemoryTaskOptions {
 
     @Test
     void testGetTaskOption() {
-        Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
-        TaskManager task_manager = scheduler.getTaskManager();
-        TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
-        int task_id = 0;
-        Task task = new Task();
-        String taskoption_name = "name";
-        String taskoption_value = "value";
+        var scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
+        var task_manager = scheduler.getTaskManager();
+        var taskoption_manager = scheduler.getTaskOptionManager();
+        var task_id = 0;
+        var task = new Task();
+        var taskoption_name = "name";
+        var taskoption_value = "value";
 
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -142,7 +142,7 @@ public class TestMemoryTaskOptions {
 
             task_id = task_manager.addTask(task);
 
-            TaskOption taskoption1 = new TaskOption();
+            var taskoption1 = new TaskOption();
             taskoption1.setTaskId(task_id);
             taskoption1.setName(taskoption_name);
             taskoption1.setValue(taskoption_value);
@@ -152,7 +152,7 @@ public class TestMemoryTaskOptions {
             task = task_manager.getTask(task_id);
             assertEquals(task.getTaskOptionValue(taskoption_name), taskoption_value);
 
-            TaskOption taskoption = taskoption_manager.getTaskOption(task_id, taskoption_name);
+            var taskoption = taskoption_manager.getTaskOption(task_id, taskoption_name);
             assertNotNull(taskoption);
 
             assertEquals(taskoption.getTaskId(), task_id);
@@ -165,16 +165,16 @@ public class TestMemoryTaskOptions {
 
     @Test
     void testUpdateTaskOption() {
-        Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
-        TaskManager task_manager = scheduler.getTaskManager();
-        TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
-        int task_id = 0;
-        Task task = new Task();
-        String taskoption_name = "name";
-        String taskoption_value = "value";
+        var scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
+        var task_manager = scheduler.getTaskManager();
+        var taskoption_manager = scheduler.getTaskOptionManager();
+        var task_id = 0;
+        var task = new Task();
+        var taskoption_name = "name";
+        var taskoption_value = "value";
 
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -183,7 +183,7 @@ public class TestMemoryTaskOptions {
 
             task_id = task_manager.addTask(task);
 
-            TaskOption taskoption1 = new TaskOption();
+            var taskoption1 = new TaskOption();
             taskoption1.setTaskId(task_id);
             taskoption1.setName(taskoption_name);
             taskoption1.setValue(taskoption_value);
@@ -192,7 +192,7 @@ public class TestMemoryTaskOptions {
 
             taskoption_value = "new_taskoption_value";
 
-            TaskOption taskoption2 = new TaskOption();
+            var taskoption2 = new TaskOption();
             taskoption2.setTaskId(task_id);
             taskoption2.setName(taskoption_name);
             taskoption2.setValue(taskoption_value);
@@ -212,18 +212,18 @@ public class TestMemoryTaskOptions {
 
     @Test
     void testGetTaskOptions() {
-        Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
-        TaskManager task_manager = scheduler.getTaskManager();
-        TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
-        int task_id1 = -1;
-        int task_id2 = -1;
-        Task task = new Task();
-        String taskoption_name = "name";
-        String taskoption_name2 = "name2";
-        String taskoption_value = "value";
+        var scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
+        var task_manager = scheduler.getTaskManager();
+        var taskoption_manager = scheduler.getTaskOptionManager();
+        var task_id1 = -1;
+        var task_id2 = -1;
+        var task = new Task();
+        var taskoption_name = "name";
+        var taskoption_name2 = "name2";
+        var taskoption_value = "value";
 
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -232,14 +232,14 @@ public class TestMemoryTaskOptions {
 
             task_id1 = task_manager.addTask(task);
 
-            TaskOption taskoption1 = new TaskOption();
+            var taskoption1 = new TaskOption();
             taskoption1.setTaskId(task_id1);
             taskoption1.setName(taskoption_name);
             taskoption1.setValue(taskoption_value);
 
             assertTrue(taskoption_manager.addTaskOption(taskoption1));
 
-            TaskOption taskoption2 = new TaskOption();
+            var taskoption2 = new TaskOption();
             taskoption2.setTaskId(task_id1);
             taskoption2.setName(taskoption_name2);
             taskoption2.setValue(taskoption_value);
@@ -252,14 +252,14 @@ public class TestMemoryTaskOptions {
 
             assertTrue(taskoption_manager.addTaskOption(taskoption1));
 
-            Collection<TaskOption> taskoptions = taskoption_manager.getTaskOptions(task_id1);
+            var taskoptions = taskoption_manager.getTaskOptions(task_id1);
             assertEquals(2, taskoptions.size());
 
-            Iterator<TaskOption> taskoptions_it = taskoptions.iterator();
+            var taskoptions_it = taskoptions.iterator();
 
             assertTrue(taskoptions_it.hasNext());
 
-            TaskOption taskoption = taskoptions_it.next();
+            var taskoption = taskoptions_it.next();
             assertEquals(taskoption.getTaskId(), task_id1);
             assertEquals(taskoption.getName(), taskoption_name);
             assertEquals(taskoption.getValue(), "value");
@@ -279,16 +279,16 @@ public class TestMemoryTaskOptions {
 
     @Test
     void testRemoveTaskOption() {
-        Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
-        TaskManager task_manager = scheduler.getTaskManager();
-        TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
-        int task_id = 0;
-        Task task = new Task();
-        String taskoption_name = "name";
-        String taskoption_value = "value";
+        var scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
+        var task_manager = scheduler.getTaskManager();
+        var taskoption_manager = scheduler.getTaskOptionManager();
+        var task_id = 0;
+        var task = new Task();
+        var taskoption_name = "name";
+        var taskoption_value = "value";
 
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -297,7 +297,7 @@ public class TestMemoryTaskOptions {
 
             task_id = task_manager.addTask(task);
 
-            TaskOption taskoption1 = new TaskOption();
+            var taskoption1 = new TaskOption();
             taskoption1.setTaskId(task_id);
             taskoption1.setName(taskoption_name);
             taskoption1.setValue(taskoption_value);
@@ -312,14 +312,14 @@ public class TestMemoryTaskOptions {
 
     @Test
     void testGetNonExistingTaskOption() {
-        Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
-        TaskManager task_manager = scheduler.getTaskManager();
-        TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
-        int task_id = 0;
-        Task task = new Task();
+        var scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
+        var task_manager = scheduler.getTaskManager();
+        var taskoption_manager = scheduler.getTaskOptionManager();
+        var task_id = 0;
+        var task = new Task();
 
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -337,14 +337,14 @@ public class TestMemoryTaskOptions {
 
     @Test
     void testRemoveNonExistingTaskOption() {
-        Scheduler scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
-        TaskManager task_manager = scheduler.getTaskManager();
-        TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
-        int task_id = 0;
-        Task task = new Task();
+        var scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
+        var task_manager = scheduler.getTaskManager();
+        var taskoption_manager = scheduler.getTaskOptionManager();
+        var task_id = 0;
+        var task = new Task();
 
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);

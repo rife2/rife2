@@ -25,14 +25,14 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testInstantiation(Datasource datasource) {
-        DatabaseUsers manager = DatabaseUsersFactory.instance(datasource);
+        var manager = DatabaseUsersFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testInstall(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             assertEquals(true, users.install());
@@ -45,7 +45,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testRemove(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -58,7 +58,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testAddRoles(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -94,7 +94,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testRolesList(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -104,7 +104,7 @@ public class TestDatabaseUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            ListDatabaseRoles listroles = new ListDatabaseRoles();
+            var listroles = new ListDatabaseRoles();
             assertTrue(users.listRoles(listroles));
             assertEquals(3, listroles.getRoles().size());
             assertTrue(listroles.getRoles().contains("role1"));
@@ -122,7 +122,7 @@ public class TestDatabaseUsers {
     }
 
     class ListDatabaseRoles implements ListRoles {
-        private ArrayList<String> mRoles = new ArrayList<String>();
+        private ArrayList<String> mRoles = new ArrayList<>();
 
         public ArrayList<String> getRoles() {
             return mRoles;
@@ -138,7 +138,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testAddUsers(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -148,27 +148,27 @@ public class TestDatabaseUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
+            var user1_attributes = new RoleUserAttributes("thepassword");
             users.addUser("login1", user1_attributes);
             assertEquals(0, user1_attributes.getUserId());
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
             users.addUser("login2", user2_attributes);
             assertEquals(1, user2_attributes.getUserId());
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
             users.addUser("login3", user3_attributes);
             assertEquals(174, user3_attributes.getUserId());
-            RoleUserAttributes user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
+            var user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
             users.addUser("login4", user4_attributes);
             assertEquals(175, user4_attributes.getUserId());
             try {
-                RoleUserAttributes user5_attributes = new RoleUserAttributes("thepassword5", new String[]{"role1"});
+                var user5_attributes = new RoleUserAttributes("thepassword5", new String[]{"role1"});
                 users.addUser("login1", user5_attributes);
                 fail();
             } catch (DuplicateLoginException e) {
                 assertEquals(e.getLogin(), "login1");
             }
 
-            RoleUserAttributes user6_attributes = new RoleUserAttributes("thepassword6", new String[]{"role_unknown"});
+            var user6_attributes = new RoleUserAttributes("thepassword6", new String[]{"role_unknown"});
             try {
                 users.addUser("login6", user6_attributes);
                 fail();
@@ -209,7 +209,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testUpdateUsers(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -219,21 +219,21 @@ public class TestDatabaseUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
-            RoleUserAttributes user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
+            var user1_attributes = new RoleUserAttributes("thepassword");
+            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
             users
                 .addUser("login1", user1_attributes)
                 .addUser("login2", user2_attributes)
                 .addUser("login3", user3_attributes)
                 .addUser("login4", user4_attributes);
 
-            RoleUserAttributes user1_attributes_new = new RoleUserAttributes(4, "thepassword_new", new String[]{"role1", "role2"});
-            RoleUserAttributes user2_attributes_new = new RoleUserAttributes(3, new String[]{"role2"});
-            RoleUserAttributes user3_attributes_new = new RoleUserAttributes(2, new String[]{"role1"});
-            RoleUserAttributes user4_attributes_new = new RoleUserAttributes(1, "thepassword_new4");
-            RoleUserAttributes user5_attributes_new = new RoleUserAttributes(5, new String[]{"role_unknown"});
+            var user1_attributes_new = new RoleUserAttributes(4, "thepassword_new", new String[]{"role1", "role2"});
+            var user2_attributes_new = new RoleUserAttributes(3, new String[]{"role2"});
+            var user3_attributes_new = new RoleUserAttributes(2, new String[]{"role1"});
+            var user4_attributes_new = new RoleUserAttributes(1, "thepassword_new4");
+            var user5_attributes_new = new RoleUserAttributes(5, new String[]{"role_unknown"});
             assertTrue(users.updateUser("login1", user1_attributes_new));
             assertTrue(users.updateUser("login2", user2_attributes_new));
             assertTrue(users.updateUser("login3", user3_attributes_new));
@@ -286,7 +286,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testGetUserAttributes(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -296,17 +296,17 @@ public class TestDatabaseUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes(0, "thepassword");
-            RoleUserAttributes user2_attributes = new RoleUserAttributes(1, "thepassword2", new String[]{"role1", "role2"});
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user1_attributes = new RoleUserAttributes(0, "thepassword");
+            var user2_attributes = new RoleUserAttributes(1, "thepassword2", new String[]{"role1", "role2"});
+            var user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
             users
                 .addUser("login1", user1_attributes)
                 .addUser("login2", user2_attributes)
                 .addUser("login3", user3_attributes);
 
-            RoleUserAttributes attributes1 = users.getAttributes("login1");
-            RoleUserAttributes attributes2 = users.getAttributes("login2");
-            RoleUserAttributes attributes3 = users.getAttributes("login3");
+            var attributes1 = users.getAttributes("login1");
+            var attributes2 = users.getAttributes("login2");
+            var attributes3 = users.getAttributes("login3");
 
             assertEquals(attributes1.getUserId(), user1_attributes.getUserId());
             assertEquals(attributes1.getRoles(), user1_attributes.getRoles());
@@ -338,7 +338,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testUsersList(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -348,15 +348,15 @@ public class TestDatabaseUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes(0, "thepassword");
-            RoleUserAttributes user2_attributes = new RoleUserAttributes(1, "thepassword2", new String[]{"role1", "role2"});
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user1_attributes = new RoleUserAttributes(0, "thepassword");
+            var user2_attributes = new RoleUserAttributes(1, "thepassword2", new String[]{"role1", "role2"});
+            var user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
             users
                 .addUser("login1", user1_attributes)
                 .addUser("login2", user2_attributes)
                 .addUser("login3", user3_attributes);
 
-            ListDatabaseUsers listusers = new ListDatabaseUsers();
+            var listusers = new ListDatabaseUsers();
             assertTrue(users.listUsers(listusers));
             assertEquals(3, listusers.getUsers().size());
             assertTrue(listusers.getUsers().contains("0,login1,thepassword"));
@@ -376,7 +376,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testUsersListRanged(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -386,10 +386,10 @@ public class TestDatabaseUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes(0, "thepassword");
-            RoleUserAttributes user2_attributes = new RoleUserAttributes(1, "thepassword2", new String[]{"role1", "role2"});
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
-            RoleUserAttributes user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role1", "role2"});
+            var user1_attributes = new RoleUserAttributes(0, "thepassword");
+            var user2_attributes = new RoleUserAttributes(1, "thepassword2", new String[]{"role1", "role2"});
+            var user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role1", "role2"});
             users
                 .addUser("login1", user1_attributes)
                 .addUser("login2", user2_attributes)
@@ -431,14 +431,14 @@ public class TestDatabaseUsers {
     }
 
     class ListDatabaseUsers implements ListUsers {
-        private ArrayList<String> mUsers = new ArrayList<String>();
+        private ArrayList<String> users_ = new ArrayList<>();
 
         public ArrayList<String> getUsers() {
-            return mUsers;
+            return users_;
         }
 
         public boolean foundUser(long userId, String login, String password) {
-            mUsers.add(userId + "," + login + "," + password);
+            users_.add(userId + "," + login + "," + password);
 
             return true;
         }
@@ -448,7 +448,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testUserIdSpecification(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -493,7 +493,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testValidUsers(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
         users.setPasswordEncryptor(StringEncryptor.SHA);
 
         try {
@@ -504,13 +504,13 @@ public class TestDatabaseUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes(0, "thepassword");
+            var user1_attributes = new RoleUserAttributes(0, "thepassword");
             users.addUser("login1", user1_attributes);
-            RoleUserAttributes user2_attributes = new RoleUserAttributes(1, "SHA:iTeooS7tJ7m1mdRrbUacq/pr1uM=", new String[]{"role1", "role2"});
+            var user2_attributes = new RoleUserAttributes(1, "SHA:iTeooS7tJ7m1mdRrbUacq/pr1uM=", new String[]{"role1", "role2"});
             users.addUser("login2", user2_attributes);
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
             users.addUser("login3", user3_attributes);
-            RoleUserAttributes user4_attributes = new RoleUserAttributes(174, "thepassword4", new String[]{"role2", "role3"});
+            var user4_attributes = new RoleUserAttributes(174, "thepassword4", new String[]{"role2", "role3"});
             users.addUser("login4", user4_attributes);
 
             assertEquals(-1, users.verifyCredentials(new RoleUser("login", "thepassword")));
@@ -552,7 +552,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testUsersInRole(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
         users.setPasswordEncryptor(StringEncryptor.MD5);
 
         try {
@@ -563,16 +563,16 @@ public class TestDatabaseUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
+            var user1_attributes = new RoleUserAttributes("thepassword");
             user1_attributes.setUserId(0);
             users.addUser("login1", user1_attributes);
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
             user2_attributes.setUserId(43);
             users.addUser("login2", user2_attributes);
-            RoleUserAttributes user3_attributes = new RoleUserAttributes("thepassword3", new String[]{"role1", "role2", "role3"});
+            var user3_attributes = new RoleUserAttributes("thepassword3", new String[]{"role1", "role2", "role3"});
             user3_attributes.setUserId(23);
             users.addUser("login3", user3_attributes);
-            RoleUserAttributes user4_attributes = new RoleUserAttributes(174, "thepassword4", new String[]{"role2", "role3"});
+            var user4_attributes = new RoleUserAttributes(174, "thepassword4", new String[]{"role2", "role3"});
             user4_attributes.setUserId(98);
             users.addUser("login4", user4_attributes);
 
@@ -605,7 +605,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testListUsersInRole(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -615,12 +615,12 @@ public class TestDatabaseUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            ListDatabaseUsers listusers = new ListDatabaseUsers();
+            var listusers = new ListDatabaseUsers();
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
-            RoleUserAttributes user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
+            var user1_attributes = new RoleUserAttributes("thepassword");
+            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
             users
                 .addUser("login1", user1_attributes)
                 .addUser("login2", user2_attributes)
@@ -675,7 +675,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testRemoveUsersByLogin(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -714,7 +714,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testRemoveUsersByUserId(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -753,7 +753,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testRemoveRole(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -773,7 +773,7 @@ public class TestDatabaseUsers {
             assertTrue(users.removeRole("role3"));
             assertEquals(2, users.countRoles());
 
-            RoleUserAttributes attributes = users.getAttributes("login3");
+            var attributes = users.getAttributes("login3");
             assertTrue(attributes.getRoles().contains("role1"));
             assertTrue(attributes.getRoles().contains("role2"));
             assertFalse(attributes.getRoles().contains("role3"));
@@ -798,7 +798,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testClearUsers(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -829,7 +829,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testVerifyCredentials(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
         users.setPasswordEncryptor(StringEncryptor.OBF);
 
         try {
@@ -840,14 +840,14 @@ public class TestDatabaseUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes(49, "thepassword");
+            var user1_attributes = new RoleUserAttributes(49, "thepassword");
             users.addUser("login1", user1_attributes);
-            RoleUserAttributes user2_attributes = new RoleUserAttributes(322, "thepassword2", new String[]{"role1", "role2"});
+            var user2_attributes = new RoleUserAttributes(322, "thepassword2", new String[]{"role1", "role2"});
             users.addUser("login2", user2_attributes);
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
             users.addUser("login3", user3_attributes);
 
-            RoleUser user = new RoleUser();
+            var user = new RoleUser();
             user.setLogin("login2");
             user.setPassword("thepassword2");
             user.setRole("role2");
@@ -876,7 +876,7 @@ public class TestDatabaseUsers {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testListUserRoles(Datasource datasource) {
-        DatabaseUsers users = DatabaseUsersFactory.instance(datasource);
+        var users = DatabaseUsersFactory.instance(datasource);
 
         try {
             users.install();
@@ -886,14 +886,14 @@ public class TestDatabaseUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes(49, "thepassword");
+            var user1_attributes = new RoleUserAttributes(49, "thepassword");
             users.addUser("login1", user1_attributes);
-            RoleUserAttributes user2_attributes = new RoleUserAttributes(322, "thepassword2", new String[]{"role1", "role2"});
+            var user2_attributes = new RoleUserAttributes(322, "thepassword2", new String[]{"role1", "role2"});
             users.addUser("login2", user2_attributes);
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
             users.addUser("login3", user3_attributes);
 
-            ListDatabaseRoles listroles = new ListDatabaseRoles();
+            var listroles = new ListDatabaseRoles();
 
             assertFalse(users.listUserRoles("login1", listroles));
 

@@ -24,7 +24,7 @@ public class TestPurgingMemorySessions {
 
     @Test
     void testStartSession() {
-        PurgingSessionManager sessions = new PurgingSessionManager(new MemorySessions());
+        var sessions = new PurgingSessionManager(new MemorySessions());
         sessions.setSessionPurgeFrequency(0);
         try {
             sessions.eraseAllSessions();
@@ -32,8 +32,8 @@ public class TestPurgingMemorySessions {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
 
-        int user_id = 143;
-        String host_ip = "189.38.987.43";
+        var user_id = 143;
+        var host_ip = "189.38.987.43";
 
         String auth_id = null;
         try {
@@ -50,13 +50,13 @@ public class TestPurgingMemorySessions {
 
     @Test
     void testPurgeSessions() {
-        PurgingSessionManager sessions = new PurgingSessionManager(new MemorySessions());
+        var sessions = new PurgingSessionManager(new MemorySessions());
         sessions.setSessionDuration(2000);
         sessions.setSessionPurgeFrequency(1);
         sessions.setSessionPurgeScale(1);
 
-        int user_id = 9478;
-        String host_ip = "98.232.12.456";
+        var user_id = 9478;
+        var host_ip = "98.232.12.456";
 
         try {
             sessions.eraseAllSessions();

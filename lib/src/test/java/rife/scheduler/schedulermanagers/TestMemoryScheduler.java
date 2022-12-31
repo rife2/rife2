@@ -27,13 +27,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestMemoryScheduler {
     @Test
     void testInstantiateScheduler() {
-        Scheduler scheduler = new MemoryScheduler().getScheduler();
+        var scheduler = new MemoryScheduler().getScheduler();
         assertNotNull(scheduler);
     }
 
     @Test
     void testStartStopScheduler() {
-        Scheduler scheduler = new MemoryScheduler().getScheduler();
+        var scheduler = new MemoryScheduler().getScheduler();
         try {
             scheduler.start();
             synchronized (scheduler) {
@@ -52,7 +52,7 @@ public class TestMemoryScheduler {
 
     @Test
     void testAddExecutor() {
-        Scheduler scheduler = new MemoryScheduler().getScheduler();
+        var scheduler = new MemoryScheduler().getScheduler();
         Executor executor = new TestExecutor();
 
         assertNull(scheduler.getExecutor(executor.getHandledTasktype()));
@@ -67,11 +67,11 @@ public class TestMemoryScheduler {
 
     @Test
     void testOneshotTaskExecution() {
-        int sleeptime = 60 * 1000;
-        Scheduler scheduler = new MemoryScheduler().getScheduler();
-        TestExecutor executor = new TestExecutor();
-        TaskManager taskmanager = scheduler.getTaskManager();
-        Task task = new Task();
+        var sleep_time = 2 * 1000;
+        var scheduler = new MemoryScheduler().getScheduler();
+        var executor = new TestExecutor();
+        var taskmanager = scheduler.getTaskManager();
+        var task = new Task();
 
         try {
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -87,7 +87,7 @@ public class TestMemoryScheduler {
         } catch (SchedulerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
-        scheduler.setSleepTime(sleeptime);
+        scheduler.setSleepTime(sleep_time);
         try {
             task.setId(taskmanager.addTask(task));
             task = taskmanager.getTask(task.getId());
@@ -98,7 +98,7 @@ public class TestMemoryScheduler {
         try {
             scheduler.start();
             try {
-                Thread.sleep(sleeptime * 2);
+                Thread.sleep(sleep_time * 2);
             } catch (InterruptedException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
@@ -112,9 +112,9 @@ public class TestMemoryScheduler {
                 }
             }
 
-            Collection<Task> executed_tasks = executor.getExecutedTasks();
+            var executed_tasks = executor.getExecutedTasks();
             assertEquals(1, executed_tasks.size());
-            Task executed_task = executed_tasks.iterator().next();
+            var executed_task = executed_tasks.iterator().next();
             assertEquals(task, executed_task);
             assertSame(executed_task.getTaskManager(), taskmanager);
         } catch (NoExecutorForTasktypeException | UnableToRetrieveTasksToProcessException e) {
@@ -124,25 +124,25 @@ public class TestMemoryScheduler {
 
     @Test
     void testRepeatingTaskExecution() {
-        int scheduler_sleeptime = 30 * 1000;                // 30 seconds
-        int task_frequency = 60 * 1000;                    // 1 minute
-        int thread_sleeptime = scheduler_sleeptime * 6;    // 3 minutes
-        Scheduler scheduler = new MemoryScheduler().getScheduler();
-        TestExecutor executor = new TestExecutor();
-        TaskManager taskmanager = scheduler.getTaskManager();
-        Task task = new Task();
+        var scheduler_sleep_time = 10 * 1000;                // 10 seconds
+        var task_frequency = 20 * 1000;                      // 20 seconds
+        var thread_sleep_time = scheduler_sleep_time * 3;    // 30 seconds
+        var scheduler = new MemoryScheduler().getScheduler();
+        var executor = new TestExecutor();
+        var taskmanager = scheduler.getTaskManager();
+        var task = new Task();
 
         try {
             task.setType(TestTasktypes.UPLOAD_GROUPS);
-            // set back a while in the past to test the catch up rescheduling
-            task.setPlanned(System.currentTimeMillis() - (scheduler_sleeptime * 10));
+            // set back a while in the past to test the catch-up rescheduling
+            task.setPlanned(System.currentTimeMillis() - (scheduler_sleep_time * 10));
             task.setFrequency("* * * * *");
             task.setBusy(false);
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
 
-        scheduler.setSleepTime(scheduler_sleeptime);
+        scheduler.setSleepTime(scheduler_sleep_time);
 
         try {
             scheduler.addExecutor(executor);
@@ -158,11 +158,11 @@ public class TestMemoryScheduler {
         }
 
         Collection<Task> executed_tasks = null;
-        int executed_tasks_size = -1;
+        var executed_tasks_size = -1;
         try {
             scheduler.start();
             try {
-                Thread.sleep(thread_sleeptime);
+                Thread.sleep(thread_sleep_time);
                 executed_tasks = executor.getExecutedTasks();
                 executed_tasks_size = executed_tasks.size();
             } catch (InterruptedException e) {
@@ -179,12 +179,12 @@ public class TestMemoryScheduler {
             }
 
             // task frequency fits in the thread sleep time
-            long number_of_executions = (thread_sleeptime / task_frequency) + 1;
+            long number_of_executions = (thread_sleep_time / task_frequency) + 1;
 
 //			System.out.println("\nMemory\n"+executor.getFirstExecution().getTime().getTime()+" : "+executor.getFirstExecution().getTime().toGMTString()+"\n"+now.getTime()+" : "+now.toGMTString()+"\ntask_frequency = "+task_frequency+"\nnumber_of_executions = "+number_of_executions+"\nexecuted_tasks_size = "+executed_tasks_size);
-            Date now = new Date();
+            var now = new Date();
             assertTrue(number_of_executions == executed_tasks_size || number_of_executions == executed_tasks_size + 1, "\nFAILED Memory\n" + executor.getFirstExecution().getTime().getTime() + " : " + executor.getFirstExecution().getTime().toGMTString() + "\n" + now.getTime() + " : " + now.toGMTString() + "\ntask_frequency = " + task_frequency + "\nnumber_of_executions = " + number_of_executions + "\nexecuted_tasks_size = " + executed_tasks_size);
-            for (Task executed_task : executed_tasks) {
+            for (var executed_task : executed_tasks) {
                 assertEquals(task.getId(), executed_task.getId());
                 assertEquals(task.getType(), executed_task.getType());
                 assertEquals(task.getFrequency(), executed_task.getFrequency());

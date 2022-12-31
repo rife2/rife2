@@ -19,7 +19,7 @@ public class TestRoleUserAttributes {
         assertNotNull(user_attributes);
         assertEquals("thepassword", user_attributes.getPassword());
 
-        ArrayList<String> roles = new ArrayList<>();
+        var roles = new ArrayList<String>();
         roles.add("firstrole");
         roles.add("secondrole");
         user_attributes = new RoleUserAttributes("thepassword", roles);
@@ -27,9 +27,9 @@ public class TestRoleUserAttributes {
         assertEquals("thepassword", user_attributes.getPassword());
 
         assertEquals(2, user_attributes.getRoles().size());
-        boolean firstrole = false;
-        boolean secondrole = false;
-        for (String role : user_attributes.getRoles()) {
+        var firstrole = false;
+        var secondrole = false;
+        for (var role : user_attributes.getRoles()) {
             if (role.equals("firstrole")) {
                 firstrole = true;
             } else if (role.equals("secondrole")) {
@@ -45,7 +45,7 @@ public class TestRoleUserAttributes {
         assertEquals(2, user_attributes.getRoles().size());
         firstrole = false;
         secondrole = false;
-        for (String role : user_attributes.getRoles()) {
+        for (var role : user_attributes.getRoles()) {
             if (role.equals("firstrole")) {
                 firstrole = true;
             } else if (role.equals("secondrole")) {
@@ -57,16 +57,16 @@ public class TestRoleUserAttributes {
 
     @Test
     void testEquals() {
-        RoleUserAttributes user_attributes1 = new RoleUserAttributes("thepassword");
-        RoleUserAttributes user_attributes2 = new RoleUserAttributes("thepassword");
-        RoleUserAttributes user_attributes3 = new RoleUserAttributes("thepassword2");
-        RoleUserAttributes user_attributes4 = new RoleUserAttributes(12, "thepassword2");
-        RoleUserAttributes user_attributes5 = new RoleUserAttributes("thepassword", new String[]{"firstrole", "secondrole"});
-        RoleUserAttributes user_attributes6 = new RoleUserAttributes("thepassword", new String[]{"firstrole", "secondrole"});
-        RoleUserAttributes user_attributes7 = new RoleUserAttributes("thepassword", new String[]{"firstrole"});
-        RoleUserAttributes user_attributes8 = new RoleUserAttributes("thepassword", new String[]{"firstrole", "thirdrole"});
-        RoleUserAttributes user_attributes9 = new RoleUserAttributes(13, "thepassword", new String[]{"firstrole", "secondrole"});
-        RoleUserAttributes user_attributes10 = new RoleUserAttributes(13, "thepassword", new String[]{"firstrole", "secondrole"});
+        var user_attributes1 = new RoleUserAttributes("thepassword");
+        var user_attributes2 = new RoleUserAttributes("thepassword");
+        var user_attributes3 = new RoleUserAttributes("thepassword2");
+        var user_attributes4 = new RoleUserAttributes(12, "thepassword2");
+        var user_attributes5 = new RoleUserAttributes("thepassword", new String[]{"firstrole", "secondrole"});
+        var user_attributes6 = new RoleUserAttributes("thepassword", new String[]{"firstrole", "secondrole"});
+        var user_attributes7 = new RoleUserAttributes("thepassword", new String[]{"firstrole"});
+        var user_attributes8 = new RoleUserAttributes("thepassword", new String[]{"firstrole", "thirdrole"});
+        var user_attributes9 = new RoleUserAttributes(13, "thepassword", new String[]{"firstrole", "secondrole"});
+        var user_attributes10 = new RoleUserAttributes(13, "thepassword", new String[]{"firstrole", "secondrole"});
 
         assertEquals(user_attributes1, user_attributes1);
         assertEquals(user_attributes1, user_attributes2);
@@ -136,16 +136,16 @@ public class TestRoleUserAttributes {
 
     @Test
     void testEmptyInitialRoles() {
-        RoleUserAttributes user_attributes = new RoleUserAttributes("thepassword");
+        var user_attributes = new RoleUserAttributes("thepassword");
 
         assertEquals(0, user_attributes.getRoles().size());
     }
 
     @Test
     void testPopulate() {
-        RoleUserAttributes user_attributes = new RoleUserAttributes("thepassword");
+        var user_attributes = new RoleUserAttributes("thepassword");
 
-        ArrayList<String> roles = new ArrayList<>();
+        var roles = new ArrayList<String>();
         roles.add("firstrole");
         roles.add("secondrole");
         user_attributes.setRoles(roles);
@@ -153,9 +153,9 @@ public class TestRoleUserAttributes {
         assertEquals("thepassword", user_attributes.getPassword());
 
         assertEquals(2, user_attributes.getRoles().size());
-        boolean firstrole = false;
-        boolean secondrole = false;
-        for (String role : user_attributes.getRoles()) {
+        var firstrole = false;
+        var secondrole = false;
+        for (var role : user_attributes.getRoles()) {
             if (role.equals("firstrole")) {
                 firstrole = true;
             } else if (role.equals("secondrole")) {
@@ -168,9 +168,9 @@ public class TestRoleUserAttributes {
 
     @Test
     void testIsInRole() {
-        RoleUserAttributes user_attributes = new RoleUserAttributes("thepassword");
+        var user_attributes = new RoleUserAttributes("thepassword");
 
-        ArrayList<String> roles = new ArrayList<>();
+        var roles = new ArrayList<String>();
         roles.add("firstrole");
         roles.add("secondrole");
         user_attributes.setRoles(roles);
@@ -182,9 +182,9 @@ public class TestRoleUserAttributes {
 
     @Test
     void testIsValid() {
-        RoleUserAttributes user_attributes = new RoleUserAttributes("thepassword");
+        var user_attributes = new RoleUserAttributes("thepassword");
 
-        ArrayList<String> roles = new ArrayList<>();
+        var roles = new ArrayList<String>();
         roles.add("firstrole");
         roles.add("secondrole");
         user_attributes.setRoles(roles);

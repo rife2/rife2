@@ -23,11 +23,11 @@ public class TestTaskOption {
 
     @Test
     void testPopulateTaskOption() {
-        int taskid = 1;
-        String name = "name";
-        String value = "value";
+        var taskid = 1;
+        var name = "name";
+        var value = "value";
 
-        TaskOption taskoption = new TaskOption();
+        var taskoption = new TaskOption();
         taskoption.setTaskId(taskid);
         taskoption.setName(name);
         taskoption.setValue(value);
@@ -40,16 +40,16 @@ public class TestTaskOption {
     @Test
     void testCloneTaskOption() {
         try {
-            int taskid = 1;
-            String name = "name";
-            String value = "value";
+            var taskid = 1;
+            var name = "name";
+            var value = "value";
 
-            TaskOption taskoption = new TaskOption();
+            var taskoption = new TaskOption();
             taskoption.setTaskId(taskid);
             taskoption.setName(name);
             taskoption.setValue(value);
 
-            TaskOption taskoption_clone = taskoption.clone();
+            var taskoption_clone = taskoption.clone();
             assertNotSame(taskoption, taskoption_clone);
             assertNotNull(taskoption_clone);
             assertEquals(taskoption, taskoption_clone);
@@ -60,11 +60,11 @@ public class TestTaskOption {
 
     @Test
     void testTaskOptionValidation() {
-        TaskOption taskoption = new TaskOption();
-        assertEquals(false, taskoption.validate());
+        var taskoption = new TaskOption();
+        assertFalse(taskoption.validate());
         assertEquals(3, taskoption.countValidationErrors());
         ValidationError error = null;
-        Iterator<ValidationError> it = taskoption.getValidationErrors().iterator();
+        var it = taskoption.getValidationErrors().iterator();
         error = it.next();
         assertEquals(error.getIdentifier(), "invalid");
         assertEquals(error.getSubject(), "taskId");

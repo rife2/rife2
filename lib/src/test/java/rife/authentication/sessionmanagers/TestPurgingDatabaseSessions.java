@@ -19,11 +19,11 @@ public class TestPurgingDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testStartSession(Datasource datasource) {
-        PurgingSessionManager sessions = new PurgingSessionManager(DatabaseSessionsFactory.instance(datasource));
+        var sessions = new PurgingSessionManager(DatabaseSessionsFactory.instance(datasource));
         sessions.setSessionPurgeFrequency(0);
 
-        int user_id = 143;
-        String host_ip = "189.38.987.43";
+        var user_id = 143;
+        var host_ip = "189.38.987.43";
 
         String auth_id = null;
         try {
@@ -49,13 +49,13 @@ public class TestPurgingDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testPurgeSessions(Datasource datasource) {
-        PurgingSessionManager sessions = new PurgingSessionManager(DatabaseSessionsFactory.instance(datasource));
+        var sessions = new PurgingSessionManager(DatabaseSessionsFactory.instance(datasource));
         sessions.setSessionDuration(2000);
         sessions.setSessionPurgeFrequency(1);
         sessions.setSessionPurgeScale(1);
 
-        int user_id = 9478;
-        String host_ip = "98.232.12.456";
+        var user_id = 9478;
+        var host_ip = "98.232.12.456";
 
         try {
             ((DatabaseSessions) sessions.getSessionManager()).install();

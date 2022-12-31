@@ -19,14 +19,14 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testInstantiation(Datasource datasource) {
-        DatabaseRemember manager = DatabaseRememberFactory.instance(datasource);
+        var manager = DatabaseRememberFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testInstall(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
+        var remember = DatabaseRememberFactory.instance(datasource);
 
         try {
             assertTrue(remember.install());
@@ -38,7 +38,7 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testRemove(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
+        var remember = DatabaseRememberFactory.instance(datasource);
 
         try {
             assertTrue(remember.remove());
@@ -50,9 +50,9 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testCreateRememberId(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
+        var remember = DatabaseRememberFactory.instance(datasource);
 
-        int user_id = 143;
+        var user_id = 143;
 
         String remember_id = null;
         try {
@@ -78,14 +78,14 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testGetRememberedUserId(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
+        var remember = DatabaseRememberFactory.instance(datasource);
 
         try {
             remember.install();
 
-            ArrayList<String> remember_ids1 = new ArrayList<String>();
-            ArrayList<String> remember_ids2 = new ArrayList<String>();
-            ArrayList<String> remember_ids3 = new ArrayList<String>();
+            var remember_ids1 = new ArrayList<String>();
+            var remember_ids2 = new ArrayList<String>();
+            var remember_ids3 = new ArrayList<String>();
             remember_ids1.add(remember.createRememberId(232, "123.98.23.3"));
             remember_ids1.add(remember.createRememberId(232, "123.98.23.32"));
             remember_ids2.add(remember.createRememberId(23, "123.98.23.3"));
@@ -94,15 +94,15 @@ public class TestDatabaseRemember {
             remember_ids1.add(remember.createRememberId(232, "123.98.23.34"));
             remember_ids2.add(remember.createRememberId(23, "123.98.23.3"));
 
-            for (String remember_id : remember_ids1) {
+            for (var remember_id : remember_ids1) {
                 assertEquals(232, remember.getRememberedUserId(remember_id));
             }
 
-            for (String remember_id : remember_ids2) {
+            for (var remember_id : remember_ids2) {
                 assertEquals(23, remember.getRememberedUserId(remember_id));
             }
 
-            for (String remember_id : remember_ids3) {
+            for (var remember_id : remember_ids3) {
                 assertEquals(53, remember.getRememberedUserId(remember_id));
             }
         } catch (RememberManagerException e) {
@@ -119,9 +119,9 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testEraseRememberId(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
+        var remember = DatabaseRememberFactory.instance(datasource);
 
-        int user_id = 93;
+        var user_id = 93;
 
         try {
             remember.install();
@@ -145,9 +145,9 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testEraseUnknownSession(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
+        var remember = DatabaseRememberFactory.instance(datasource);
 
-        String remember_id = "unknown";
+        var remember_id = "unknown";
         try {
             remember.install();
 
@@ -166,12 +166,12 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testEraseAllRememberIds(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
+        var remember = DatabaseRememberFactory.instance(datasource);
 
         try {
             remember.install();
 
-            ArrayList<String> remember_ids = new ArrayList<String>();
+            var remember_ids = new ArrayList<String>();
             remember_ids.add(remember.createRememberId(232, "123.98.23.3"));
             remember_ids.add(remember.createRememberId(232, "123.98.23.34"));
             remember_ids.add(remember.createRememberId(23, "123.98.23.3"));
@@ -180,13 +180,13 @@ public class TestDatabaseRemember {
             remember_ids.add(remember.createRememberId(232, "123.98.23.31"));
             remember_ids.add(remember.createRememberId(23, "123.98.23.3"));
 
-            for (String remember_id : remember_ids) {
+            for (var remember_id : remember_ids) {
                 assertTrue(remember.getRememberedUserId(remember_id) != -1);
             }
 
             remember.eraseAllRememberIds();
 
-            for (String remember_id : remember_ids) {
+            for (var remember_id : remember_ids) {
                 assertEquals(-1, remember.getRememberedUserId(remember_id));
             }
         } catch (RememberManagerException e) {
@@ -203,18 +203,18 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testEraseUserRememberIds(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
+        var remember = DatabaseRememberFactory.instance(datasource);
 
         try {
             remember.install();
 
-            ArrayList<String> remember_ids = new ArrayList<String>();
+            var remember_ids = new ArrayList<String>();
             remember_ids.add(remember.createRememberId(8433, "123.98.23.3"));
             remember_ids.add(remember.createRememberId(8433, "123.98.23.33"));
             remember_ids.add(remember.createRememberId(8432, "123.98.23.31"));
             remember_ids.add(remember.createRememberId(8431, "123.98.23.3"));
 
-            for (String remember_id : remember_ids) {
+            for (var remember_id : remember_ids) {
                 assertTrue(remember.getRememberedUserId(remember_id) != -1);
             }
 
@@ -238,22 +238,22 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testEraseUnkownUserRememberIds(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
+        var remember = DatabaseRememberFactory.instance(datasource);
 
         try {
             remember.install();
 
-            ArrayList<String> remember_ids = new ArrayList<String>();
+            var remember_ids = new ArrayList<String>();
             remember_ids.add(remember.createRememberId(8432, "123.98.23.3"));
             remember_ids.add(remember.createRememberId(8431, "123.98.23.3"));
 
-            for (String remember_id : remember_ids) {
+            for (var remember_id : remember_ids) {
                 assertTrue(remember.getRememberedUserId(remember_id) != -1);
             }
 
             assertFalse(remember.eraseUserRememberIds(8433));
 
-            for (String remember_id : remember_ids) {
+            for (var remember_id : remember_ids) {
                 assertTrue(remember.getRememberedUserId(remember_id) != -1);
             }
         } catch (RememberManagerException e) {
@@ -270,17 +270,17 @@ public class TestDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testPurgeRememberIds(Datasource datasource) {
-        DatabaseRemember remember = DatabaseRememberFactory.instance(datasource);
+        var remember = DatabaseRememberFactory.instance(datasource);
         remember.setRememberDuration(2000);
 
-        int user_id = 9478;
+        var user_id = 9478;
 
         try {
             remember.install();
 
             remember.eraseAllRememberIds();
 
-            String remember_id = remember.createRememberId(user_id, "123.98.23.3");
+            var remember_id = remember.createRememberId(user_id, "123.98.23.3");
 
             remember.purgeRememberIds();
 

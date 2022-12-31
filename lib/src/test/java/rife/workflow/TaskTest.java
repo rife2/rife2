@@ -4,6 +4,7 @@
  */
 package rife.workflow;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import rife.workflow.run.EventListener;
 import rife.workflow.run.TaskRunner;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TaskTest {
     @Test
+    @Disabled
     void simple()
     throws Throwable {
         final var endings = new int[]{0};

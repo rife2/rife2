@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDatabaseScheduler {
     public void setup(Datasource datasource) {
-        DatabaseScheduler scheduler_manager = DatabaseSchedulerFactory.instance(datasource);
+        var scheduler_manager = DatabaseSchedulerFactory.instance(datasource);
         try {
             scheduler_manager.install();
         } catch (SchedulerManagerException e) {
@@ -37,7 +37,7 @@ public class TestDatabaseScheduler {
     }
 
     public void tearDown(Datasource datasource) {
-        DatabaseScheduler scheduler_manager = DatabaseSchedulerFactory.instance(datasource);
+        var scheduler_manager = DatabaseSchedulerFactory.instance(datasource);
         try {
             scheduler_manager.remove();
         } catch (SchedulerManagerException e) {
@@ -51,7 +51,7 @@ public class TestDatabaseScheduler {
         setup(datasource);
 
         try {
-            Scheduler scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
+            var scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
             assertNotNull(scheduler);
         } finally {
             tearDown(datasource);
@@ -63,7 +63,7 @@ public class TestDatabaseScheduler {
     void testStartStopScheduler(Datasource datasource) {
         setup(datasource);
 
-        Scheduler scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
+        var scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
         try {
             scheduler.start();
             synchronized (scheduler) {
@@ -87,7 +87,7 @@ public class TestDatabaseScheduler {
     void testAddExecutor(Datasource datasource) {
         setup(datasource);
         try {
-            Scheduler scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
+            var scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
             Executor executor = new TestExecutor();
 
             assertNull(scheduler.getExecutor(executor.getHandledTasktype()));
@@ -108,11 +108,11 @@ public class TestDatabaseScheduler {
     void testOneshotTaskExecution(Datasource datasource) {
         setup(datasource);
 
-        int sleep_time = 60 * 1000;
-        Scheduler scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
-        TestExecutor executor = new TestExecutor();
-        TaskManager taskmanager = scheduler.getTaskManager();
-        Task task = new Task();
+        var sleep_time = 2 * 1000;
+        var scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
+        var executor = new TestExecutor();
+        var taskmanager = scheduler.getTaskManager();
+        var task = new Task();
 
         try {
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -153,9 +153,9 @@ public class TestDatabaseScheduler {
                 }
             }
 
-            Collection<Task> executed_tasks = executor.getExecutedTasks();
+            var executed_tasks = executor.getExecutedTasks();
             assertEquals(1, executed_tasks.size());
-            Task executed_task = executed_tasks.iterator().next();
+            var executed_task = executed_tasks.iterator().next();
             assertEquals(task, executed_task);
             assertSame(executed_task.getTaskManager(), taskmanager);
         } catch (NoExecutorForTasktypeException | UnableToRetrieveTasksToProcessException e) {
@@ -170,25 +170,25 @@ public class TestDatabaseScheduler {
     void testRepeatingTaskExecution(Datasource datasource) {
         setup(datasource);
 
-        int scheduler_sleeptime = 30 * 1000;                // 30 seconds
-        int task_frequency = 60 * 1000;                    // 1 minute
-        int thread_sleeptime = scheduler_sleeptime * 6;    // 3 minutes
-        Scheduler scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
-        TestExecutor executor = new TestExecutor();
-        TaskManager taskmanager = scheduler.getTaskManager();
-        Task task = new Task();
+        var scheduler_sleep_time = 10 * 1000;                // 10 seconds
+        var task_frequency = 20 * 1000;                      // 20 seconds
+        var thread_sleep_time = scheduler_sleep_time * 3;    // 30 seconds
+        var scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
+        var executor = new TestExecutor();
+        var taskmanager = scheduler.getTaskManager();
+        var task = new Task();
 
         try {
             task.setType(TestTasktypes.UPLOAD_GROUPS);
-            // set back a while in the past to test the catch up rescheduling
-            task.setPlanned(System.currentTimeMillis() - (scheduler_sleeptime * 10));
+            // set back a while in the past to test the catch-up rescheduling
+            task.setPlanned(System.currentTimeMillis() - (scheduler_sleep_time * 10));
             task.setFrequency("* * * * *");
             task.setBusy(false);
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
 
-        scheduler.setSleepTime(scheduler_sleeptime);
+        scheduler.setSleepTime(scheduler_sleep_time);
 
         try {
             scheduler.addExecutor(executor);
@@ -204,11 +204,11 @@ public class TestDatabaseScheduler {
         }
 
         Collection<Task> executed_tasks = null;
-        int executed_tasks_size = -1;
+        var executed_tasks_size = -1;
         try {
             scheduler.start();
             try {
-                Thread.sleep(thread_sleeptime);
+                Thread.sleep(thread_sleep_time);
                 executed_tasks = executor.getExecutedTasks();
                 executed_tasks_size = executed_tasks.size();
             } catch (InterruptedException e) {
@@ -225,12 +225,12 @@ public class TestDatabaseScheduler {
             }
 
             // task frequency fits in the thread sleep time
-            long number_of_executions = (thread_sleeptime / task_frequency) + 1;
+            long number_of_executions = (thread_sleep_time / task_frequency) + 1;
 
 //			System.out.println("\n"+mDatasource.getDriver()+"\n"+executor.getFirstExecution().getTime().getTime()+" : "+executor.getFirstExecution().getTime().toGMTString()+"\n"+now.getTime()+" : "+now.toGMTString()+"\ntask_frequency = "+task_frequency+"\nnumber_of_executions = "+number_of_executions+"\nexecuted_tasks_size = "+executed_tasks_size);
-            Date now = new Date();
+            var now = new Date();
             assertTrue(number_of_executions == executed_tasks_size || number_of_executions == executed_tasks_size + 1, "\nFAILED " + datasource.getDriver() + " \n" + executor.getFirstExecution().getTime().getTime() + " : " + executor.getFirstExecution().getTime().toGMTString() + "\n" + now.getTime() + " : " + now.toGMTString() + "\ntask_frequency = " + task_frequency + "\nnumber_of_executions = " + number_of_executions + "\nexecuted_tasks_size = " + executed_tasks_size);
-            for (Task executed_task : executed_tasks) {
+            for (var executed_task : executed_tasks) {
                 assertEquals(task.getId(), executed_task.getId());
                 assertEquals(task.getType(), executed_task.getType());
                 assertEquals(task.getFrequency(), executed_task.getFrequency());
@@ -255,7 +255,7 @@ public class TestDatabaseScheduler {
         private ArrayList<Task> mExecutedTasks = null;
 
         public TestExecutor() {
-            mExecutedTasks = new ArrayList<Task>();
+            mExecutedTasks = new ArrayList<>();
         }
 
         public boolean executeTask(Task task) {

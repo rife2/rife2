@@ -11,6 +11,7 @@ package rife.authentication;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
+@FunctionalInterface
 public interface ListSessions {
     /**
      * <p>This method is called when active authentication session was found.

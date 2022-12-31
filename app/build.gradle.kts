@@ -31,6 +31,9 @@ dependencies {
     runtimeOnly("com.h2database:h2:2.1.214")
 }
 
-tasks.named<Test>("test") {
+tasks.test {
     useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }

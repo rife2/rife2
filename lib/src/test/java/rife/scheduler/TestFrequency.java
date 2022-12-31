@@ -37,7 +37,7 @@ public class TestFrequency {
     @Test
     void testAllWildcards() {
         try {
-            Frequency frequency = new Frequency("* * * * *");
+            var frequency = new Frequency("* * * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -55,7 +55,7 @@ public class TestFrequency {
     @Test
     void testInvalidSpacing() {
         try {
-            Frequency frequency = new Frequency("*  *  * * *");
+            var frequency = new Frequency("*  *  * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -66,7 +66,7 @@ public class TestFrequency {
     @Test
     void testTooManyParts() {
         try {
-            Frequency frequency = new Frequency("* * * * * *");
+            var frequency = new Frequency("* * * * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -77,7 +77,7 @@ public class TestFrequency {
     @Test
     void testTooLittleParts() {
         try {
-            Frequency frequency = new Frequency("* * * *");
+            var frequency = new Frequency("* * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -88,7 +88,7 @@ public class TestFrequency {
     @Test
     void testInvalidNumberMinute() {
         try {
-            Frequency frequency = new Frequency("d * * * *");
+            var frequency = new Frequency("d * * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -99,7 +99,7 @@ public class TestFrequency {
     @Test
     void testInvalidDividerMinute() {
         try {
-            Frequency frequency = new Frequency("2/4 * * * *");
+            var frequency = new Frequency("2/4 * * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -110,7 +110,7 @@ public class TestFrequency {
     @Test
     void testInvalidEmptyPartMinute() {
         try {
-            Frequency frequency = new Frequency("2, * * * *");
+            var frequency = new Frequency("2, * * * *");
             assertNotNull(frequency);
             fail();
         } catch (FrequencyException e) {
@@ -121,7 +121,7 @@ public class TestFrequency {
     @Test
     void testSingleMinute() {
         try {
-            Frequency frequency = new Frequency("2 * * * *");
+            var frequency = new Frequency("2 * * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -224,7 +224,7 @@ public class TestFrequency {
     @Test
     void testDividerMinutes() {
         try {
-            Frequency frequency = new Frequency("*/17 * * * *");
+            var frequency = new Frequency("*/17 * * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -244,7 +244,7 @@ public class TestFrequency {
     @Test
     void testRangedDividerMinutes() {
         try {
-            Frequency frequency = new Frequency("5-40/17 * * * *");
+            var frequency = new Frequency("5-40/17 * * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -264,7 +264,7 @@ public class TestFrequency {
     @Test
     void testReverseRangedDividerMinutes() {
         try {
-            Frequency frequency = new Frequency("31-20/13 * * * *");
+            var frequency = new Frequency("31-20/13 * * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -284,7 +284,7 @@ public class TestFrequency {
     @Test
     void testMixedMinutes() {
         try {
-            Frequency frequency = new Frequency("10,12-18/2,30-40,45,48-5/3 * * * *");
+            var frequency = new Frequency("10,12-18/2,30-40,45,48-5/3 * * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -304,7 +304,7 @@ public class TestFrequency {
     @Test
     void testInvalidNumberHour() {
         try {
-            Frequency frequency = new Frequency("* d * * *");
+            var frequency = new Frequency("* d * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -315,7 +315,7 @@ public class TestFrequency {
     @Test
     void testInvalidDividerHour() {
         try {
-            Frequency frequency = new Frequency("* 2/4 * * *");
+            var frequency = new Frequency("* 2/4 * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -326,7 +326,7 @@ public class TestFrequency {
     @Test
     void testInvalidEmptyPartHour() {
         try {
-            Frequency frequency = new Frequency("* 2, * * *");
+            var frequency = new Frequency("* 2, * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -337,7 +337,7 @@ public class TestFrequency {
     @Test
     void testSingleHour() {
         try {
-            Frequency frequency = new Frequency("* 12 * * *");
+            var frequency = new Frequency("* 12 * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -440,7 +440,7 @@ public class TestFrequency {
     @Test
     void testDividerHours() {
         try {
-            Frequency frequency = new Frequency("* */6 * * *");
+            var frequency = new Frequency("* */6 * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -460,7 +460,7 @@ public class TestFrequency {
     @Test
     void testRangedDividerHours() {
         try {
-            Frequency frequency = new Frequency("* 4-17/5 * * *");
+            var frequency = new Frequency("* 4-17/5 * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -480,7 +480,7 @@ public class TestFrequency {
     @Test
     void testReverseRangedDividerHours() {
         try {
-            Frequency frequency = new Frequency("* 18-5/4 * * *");
+            var frequency = new Frequency("* 18-5/4 * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -500,7 +500,7 @@ public class TestFrequency {
     @Test
     void testMixedHours() {
         try {
-            Frequency frequency = new Frequency("* 4,8-10/3,12,15-18,20-3/3 * * *");
+            var frequency = new Frequency("* 4,8-10/3,12,15-18,20-3/3 * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -520,7 +520,7 @@ public class TestFrequency {
     @Test
     void testInvalidNumberDate() {
         try {
-            Frequency frequency = new Frequency("* * d * *");
+            var frequency = new Frequency("* * d * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -531,7 +531,7 @@ public class TestFrequency {
     @Test
     void testInvalidDividerDate() {
         try {
-            Frequency frequency = new Frequency("* * 2/4 * *");
+            var frequency = new Frequency("* * 2/4 * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -542,7 +542,7 @@ public class TestFrequency {
     @Test
     void testInvalidEmptyPartDate() {
         try {
-            Frequency frequency = new Frequency("* * 2, * *");
+            var frequency = new Frequency("* * 2, * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -553,7 +553,7 @@ public class TestFrequency {
     @Test
     void testSingleDate() {
         try {
-            Frequency frequency = new Frequency("* * 14 * *");
+            var frequency = new Frequency("* * 14 * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -695,7 +695,7 @@ public class TestFrequency {
     @Test
     void testDividerDates() {
         try {
-            Frequency frequency = new Frequency("* * */8 * *");
+            var frequency = new Frequency("* * */8 * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -715,7 +715,7 @@ public class TestFrequency {
     @Test
     void testRangedDividerDates() {
         try {
-            Frequency frequency = new Frequency("* * 7-23/9 * *");
+            var frequency = new Frequency("* * 7-23/9 * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -735,7 +735,7 @@ public class TestFrequency {
     @Test
     void testReverseRangedDividerDates() {
         try {
-            Frequency frequency = new Frequency("* * 11-7/13 * *");
+            var frequency = new Frequency("* * 11-7/13 * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -781,7 +781,7 @@ public class TestFrequency {
     @Test
     void testMixedDates() {
         try {
-            Frequency frequency = new Frequency("* * 3,5,8-18/4,19-23,27-2/2 * *");
+            var frequency = new Frequency("* * 3,5,8-18/4,19-23,27-2/2 * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -801,7 +801,7 @@ public class TestFrequency {
     @Test
     void testInvalidNumberMonth() {
         try {
-            Frequency frequency = new Frequency("* * * d *");
+            var frequency = new Frequency("* * * d *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -812,7 +812,7 @@ public class TestFrequency {
     @Test
     void testInvalidDividerMonth() {
         try {
-            Frequency frequency = new Frequency("* * * 2/4 *");
+            var frequency = new Frequency("* * * 2/4 *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -823,7 +823,7 @@ public class TestFrequency {
     @Test
     void testInvalidEmptyPartMonth() {
         try {
-            Frequency frequency = new Frequency("* * * 2, *");
+            var frequency = new Frequency("* * * 2, *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -834,7 +834,7 @@ public class TestFrequency {
     @Test
     void testSingleMonth() {
         try {
-            Frequency frequency = new Frequency("* * * 3 *");
+            var frequency = new Frequency("* * * 3 *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -937,7 +937,7 @@ public class TestFrequency {
     @Test
     void testDividerMonths() {
         try {
-            Frequency frequency = new Frequency("* * * */4 *");
+            var frequency = new Frequency("* * * */4 *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -957,7 +957,7 @@ public class TestFrequency {
     @Test
     void testRangedDividerMonths() {
         try {
-            Frequency frequency = new Frequency("* * * 3-11/3 *");
+            var frequency = new Frequency("* * * 3-11/3 *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -977,7 +977,7 @@ public class TestFrequency {
     @Test
     void testReverseRangedDividerMonths() {
         try {
-            Frequency frequency = new Frequency("* * * 5-3/2 *");
+            var frequency = new Frequency("* * * 5-3/2 *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -997,7 +997,7 @@ public class TestFrequency {
     @Test
     void testMixedMonths() {
         try {
-            Frequency frequency = new Frequency("* * * 4,5-6,8-11/2,12-3/3 *");
+            var frequency = new Frequency("* * * 4,5-6,8-11/2,12-3/3 *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -1017,7 +1017,7 @@ public class TestFrequency {
     @Test
     void testInvalidNumberWeekday() {
         try {
-            Frequency frequency = new Frequency("* * * * d");
+            var frequency = new Frequency("* * * * d");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -1028,7 +1028,7 @@ public class TestFrequency {
     @Test
     void testInvalidDividerWeekday() {
         try {
-            Frequency frequency = new Frequency("* * * * 2/4");
+            var frequency = new Frequency("* * * * 2/4");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -1039,7 +1039,7 @@ public class TestFrequency {
     @Test
     void testInvalidEmptyPartWeekday() {
         try {
-            Frequency frequency = new Frequency("* * * * 2,");
+            var frequency = new Frequency("* * * * 2,");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -1050,7 +1050,7 @@ public class TestFrequency {
     @Test
     void testSingleWeekday() {
         try {
-            Frequency frequency = new Frequency("* * * * 7");
+            var frequency = new Frequency("* * * * 7");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -1153,7 +1153,7 @@ public class TestFrequency {
     @Test
     void testDividerWeekdays() {
         try {
-            Frequency frequency = new Frequency("* * * * */3");
+            var frequency = new Frequency("* * * * */3");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -1173,7 +1173,7 @@ public class TestFrequency {
     @Test
     void testRangedDividerWeekdays() {
         try {
-            Frequency frequency = new Frequency("* * * * 2-6/3");
+            var frequency = new Frequency("* * * * 2-6/3");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -1193,7 +1193,7 @@ public class TestFrequency {
     @Test
     void testReverseRangedDividerWeekdays() {
         try {
-            Frequency frequency = new Frequency("* * * * 4-2/2");
+            var frequency = new Frequency("* * * * 4-2/2");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -1213,7 +1213,7 @@ public class TestFrequency {
     @Test
     void testMixedWeekdays() {
         try {
-            Frequency frequency = new Frequency("* * * * 2,3-4,4-1/2");
+            var frequency = new Frequency("* * * * 2,3-4,4-1/2");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
@@ -1233,15 +1233,15 @@ public class TestFrequency {
     @Test
     void testNextDateMinutes() {
         try {
-            Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
-            long calendar_time = calendar.getTimeInMillis();
+            var calendar_time = calendar.getTimeInMillis();
             long previous = 0;
             long next = 0;
             Frequency frequency = null;
 
-            int minute = 60 * 1000;
-            int hour = 60 * minute;
+            var minute = 60 * 1000;
+            var hour = 60 * minute;
 
             frequency = new Frequency("* * * * *");
             previous = calendar_time;
@@ -1367,16 +1367,16 @@ public class TestFrequency {
     @Test
     void testNextDateHours() {
         try {
-            Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
-            long calendar_time = calendar.getTimeInMillis();
+            var calendar_time = calendar.getTimeInMillis();
             long previous = 0;
             long next = 0;
             Frequency frequency = null;
 
-            int minute = 60 * 1000;
-            int hour = 60 * minute;
-            int day = 24 * hour;
+            var minute = 60 * 1000;
+            var hour = 60 * minute;
+            var day = 24 * hour;
 
             frequency = new Frequency("*/30 13 * * *");        // 2002/09/01 10:29
             previous = calendar_time;
@@ -1496,16 +1496,16 @@ public class TestFrequency {
     @Test
     void testNextDateDates() {
         try {
-            Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
-            long calendar_time = calendar.getTimeInMillis();
+            var calendar_time = calendar.getTimeInMillis();
             long previous = 0;
             long next = 0;
             Frequency frequency = null;
 
             long minute = 60 * 1000;
-            long hour = 60 * minute;
-            long day = 24 * hour;
+            var hour = 60 * minute;
+            var day = 24 * hour;
 
             frequency = new Frequency("*/30 */12 6 * *");            // 2002/09/01 10:29
             previous = calendar_time;
@@ -1802,16 +1802,16 @@ public class TestFrequency {
     @Test
     void testNextDateMonths() {
         try {
-            Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
-            long calendar_time = calendar.getTimeInMillis();
+            var calendar_time = calendar.getTimeInMillis();
             long previous = 0;
             long next = 0;
             Frequency frequency = null;
 
             long minute = 60 * 1000;
-            long hour = 60 * minute;
-            long day = 24 * hour;
+            var hour = 60 * minute;
+            var day = 24 * hour;
 
             frequency = new Frequency("*/30 */12 */20 10 *");            // 2002/09/01 10:29
             previous = calendar_time;
@@ -1932,16 +1932,16 @@ public class TestFrequency {
     @Test
     void testNextDateWeekdays() {
         try {
-            Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
-            long calendar_time = calendar.getTimeInMillis();
+            var calendar_time = calendar.getTimeInMillis();
             long previous = 0;
             long next = 0;
             Frequency frequency = null;
 
             long minute = 60 * 1000;
-            long hour = 60 * minute;
-            long day = 24 * hour;
+            var hour = 60 * minute;
+            var day = 24 * hour;
 
             frequency = new Frequency("30 12 * 10 1");                        // 2002/09/01 10:29
             previous = calendar_time;
@@ -1976,9 +1976,9 @@ public class TestFrequency {
     @Test
     void testInvalidNextDate() {
         try {
-            Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 0);
-            long calendar_time = calendar.getTimeInMillis();
+            var calendar_time = calendar.getTimeInMillis();
             Frequency frequency = null;
 
             frequency = new Frequency("* * 31 2 *");

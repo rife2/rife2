@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDatabaseTaskOptions {
     public void setup(Datasource datasource) {
-        DatabaseScheduler manager = DatabaseSchedulerFactory.instance(datasource);
+        var manager = DatabaseSchedulerFactory.instance(datasource);
 
         try {
             assertTrue(manager.install());
@@ -38,7 +38,7 @@ public class TestDatabaseTaskOptions {
     }
 
     public void tearDown(Datasource datasource) {
-        DatabaseScheduler manager = DatabaseSchedulerFactory.instance(datasource);
+        var manager = DatabaseSchedulerFactory.instance(datasource);
 
         try {
             assertTrue(manager.remove());
@@ -64,7 +64,7 @@ public class TestDatabaseTaskOptions {
     void testAddTaskOptionWithInexistentTaskId(Datasource datasource) {
         setup(datasource);
         try {
-            TaskOption taskoption = new TaskOption();
+            var taskoption = new TaskOption();
             taskoption.setTaskId(0);
             taskoption.setName("name");
             taskoption.setValue("value");
@@ -88,12 +88,12 @@ public class TestDatabaseTaskOptions {
     void testAddTaskOption(Datasource datasource) {
         setup(datasource);
 
-        int task_id = 0;
-        Task task = new Task();
-        TaskManager task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
-        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var task_id = 0;
+        var task = new Task();
+        var task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
+        var taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -103,10 +103,10 @@ public class TestDatabaseTaskOptions {
             task_id = task_manager.addTask(task);
             assertTrue(task_id >= 0);
 
-            String taskoption_name = "name";
-            String value = "value";
+            var taskoption_name = "name";
+            var value = "value";
 
-            TaskOption taskoption = new TaskOption();
+            var taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(value);
@@ -124,12 +124,12 @@ public class TestDatabaseTaskOptions {
     void testAddDuplicateTaskOption(Datasource datasource) {
         setup(datasource);
 
-        int task_id = 0;
-        Task task = new Task();
-        TaskManager task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
-        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var task_id = 0;
+        var task = new Task();
+        var task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
+        var taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -139,10 +139,10 @@ public class TestDatabaseTaskOptions {
             task_id = task_manager.addTask(task);
             assertTrue(task_id >= 0);
 
-            String taskoption_name = "name";
-            String value = "value";
+            var taskoption_name = "name";
+            var value = "value";
 
-            TaskOption taskoption = new TaskOption();
+            var taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(value);
@@ -163,12 +163,12 @@ public class TestDatabaseTaskOptions {
     void testGetTaskOption(Datasource datasource) {
         setup(datasource);
 
-        int task_id = 0;
-        Task task = new Task();
-        TaskManager task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
-        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var task_id = 0;
+        var task = new Task();
+        var task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
+        var taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -177,10 +177,10 @@ public class TestDatabaseTaskOptions {
             task_id = task_manager.addTask(task);
             assertTrue(task_id >= 0);
 
-            String taskoption_name = "name";
-            String value = "value";
+            var taskoption_name = "name";
+            var value = "value";
 
-            TaskOption taskoption = new TaskOption();
+            var taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(value);
@@ -208,12 +208,12 @@ public class TestDatabaseTaskOptions {
     void testUpdateTaskOption(Datasource datasource) {
         setup(datasource);
 
-        int task_id = 0;
-        Task task = new Task();
-        TaskManager task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
-        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var task_id = 0;
+        var task = new Task();
+        var task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
+        var taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -223,10 +223,10 @@ public class TestDatabaseTaskOptions {
             task_id = task_manager.addTask(task);
             assertTrue(task_id >= 0);
 
-            String taskoption_name = "name";
-            String value = "value";
+            var taskoption_name = "name";
+            var value = "value";
 
-            TaskOption taskoption = new TaskOption();
+            var taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(value);
@@ -260,12 +260,12 @@ public class TestDatabaseTaskOptions {
     void testGetTaskOptions(Datasource datasource) {
         setup(datasource);
 
-        int task_id = 0;
-        Task task = new Task();
-        TaskManager task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
-        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var task_id = 0;
+        var task = new Task();
+        var task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
+        var taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -275,17 +275,17 @@ public class TestDatabaseTaskOptions {
             task_id = task_manager.addTask(task);
             assertTrue(task_id >= 0);
 
-            String taskoption_name = "name";
-            String value = "some_value";
+            var taskoption_name = "name";
+            var value = "some_value";
 
-            TaskOption taskoption = new TaskOption();
+            var taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(value);
 
             assertTrue(taskoption_manager.addTaskOption(taskoption));
 
-            Collection<TaskOption> taskoptions = taskoption_manager.getTaskOptions(task_id);
+            var taskoptions = taskoption_manager.getTaskOptions(task_id);
             assertEquals(1, taskoptions.size());
 
             taskoption = taskoptions.iterator().next();
@@ -304,12 +304,12 @@ public class TestDatabaseTaskOptions {
     void testRemoveTaskOption(Datasource datasource) {
         setup(datasource);
 
-        int task_id = 0;
-        Task task = new Task();
-        TaskManager task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
-        TaskOptionManager taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var task_id = 0;
+        var task = new Task();
+        var task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
+        var taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
@@ -319,10 +319,10 @@ public class TestDatabaseTaskOptions {
             task_id = task_manager.addTask(task);
             assertTrue(task_id >= 0);
 
-            String taskoption_name = "name";
-            String value = "value";
+            var taskoption_name = "name";
+            var value = "value";
 
-            TaskOption taskoption = new TaskOption();
+            var taskoption = new TaskOption();
             taskoption.setTaskId(task_id);
             taskoption.setName(taskoption_name);
             taskoption.setValue(value);
@@ -346,8 +346,8 @@ public class TestDatabaseTaskOptions {
     void testGetNonExistingTaskOption(Datasource datasource) {
         setup(datasource);
 
-        TaskOptionManager manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
-        int task_nonexisting_id = 340;
+        var manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var task_nonexisting_id = 340;
         try {
             assertNull(manager.getTaskOption(task_nonexisting_id, "unknownname"));
         } catch (TaskOptionManagerException e) {
@@ -363,8 +363,8 @@ public class TestDatabaseTaskOptions {
         setup(datasource);
 
         try {
-            TaskOptionManager manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
-            int task_nonexisting_id = 120;
+            var manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+            var task_nonexisting_id = 120;
             try {
                 assertFalse(manager.removeTaskOption(task_nonexisting_id, "unknownname"));
             } catch (TaskOptionManagerException e) {

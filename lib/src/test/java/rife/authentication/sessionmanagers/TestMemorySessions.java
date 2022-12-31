@@ -305,26 +305,22 @@ public class TestMemorySessions {
         try {
             sessions.eraseAllSessions();
 
-            assertFalse(sessions.listSessions(new ListSessions() {
-                public boolean foundSession(long userId, String hostIp, String authId) {
-                    fail();
-                    return true;
-                }
+            assertFalse(sessions.listSessions((userId, hostIp, authId) -> {
+                fail();
+                return true;
             }));
 
             sessions.startSession(user_id1, host_ip1, false);
 
             count[0] = 0;
-            assertTrue(sessions.listSessions(new ListSessions() {
-                public boolean foundSession(long userId, String hostIp, String authId) {
-                    count[0]++;
-                    assertTrue(count[0] <= 1);
+            assertTrue(sessions.listSessions((userId, hostIp, authId) -> {
+                count[0]++;
+                assertTrue(count[0] <= 1);
 
-                    assertEquals(9478, userId);
-                    assertEquals(host_ip1, hostIp);
+                assertEquals(9478, userId);
+                assertEquals(host_ip1, hostIp);
 
-                    return true;
-                }
+                return true;
             }));
 
             Thread.sleep(2000);
@@ -332,16 +328,14 @@ public class TestMemorySessions {
             sessions.startSession(user_id2, host_ip2, false);
 
             count[0] = 0;
-            assertTrue(sessions.listSessions(new ListSessions() {
-                public boolean foundSession(long userId, String hostIp, String authId) {
-                    count[0]++;
-                    assertTrue(count[0] <= 2);
+            assertTrue(sessions.listSessions((userId, hostIp, authId) -> {
+                count[0]++;
+                assertTrue(count[0] <= 2);
 
-                    assertTrue(9478 == userId || 9479 == userId);
-                    assertTrue(host_ip1.equals(hostIp) || host_ip2.equals(hostIp));
+                assertTrue(9478 == userId || 9479 == userId);
+                assertTrue(host_ip1.equals(hostIp) || host_ip2.equals(hostIp));
 
-                    return true;
-                }
+                return true;
             }));
 
             Thread.sleep(1000);
@@ -349,32 +343,28 @@ public class TestMemorySessions {
             sessions.startSession(user_id3, host_ip3, false);
 
             count[0] = 0;
-            assertTrue(sessions.listSessions(new ListSessions() {
-                public boolean foundSession(long userId, String hostIp, String authId) {
-                    count[0]++;
-                    assertTrue(count[0] <= 3);
+            assertTrue(sessions.listSessions((userId, hostIp, authId) -> {
+                count[0]++;
+                assertTrue(count[0] <= 3);
 
-                    assertTrue(9478 == userId || 9479 == userId || 9480 == userId);
-                    assertTrue(host_ip1.equals(hostIp) || host_ip2.equals(hostIp) || host_ip3.equals(hostIp));
+                assertTrue(9478 == userId || 9479 == userId || 9480 == userId);
+                assertTrue(host_ip1.equals(hostIp) || host_ip2.equals(hostIp) || host_ip3.equals(hostIp));
 
-                    return true;
-                }
+                return true;
             }));
 
             Thread.sleep(1100);
 
 
             count[0] = 0;
-            assertTrue(sessions.listSessions(new ListSessions() {
-                public boolean foundSession(long userId, String hostIp, String authId) {
-                    count[0]++;
-                    assertTrue(count[0] <= 2);
+            assertTrue(sessions.listSessions((userId, hostIp, authId) -> {
+                count[0]++;
+                assertTrue(count[0] <= 2);
 
-                    assertTrue(9479 == userId || 9480 == userId);
-                    assertTrue(host_ip2.equals(hostIp) || host_ip3.equals(hostIp));
+                assertTrue(9479 == userId || 9480 == userId);
+                assertTrue(host_ip2.equals(hostIp) || host_ip3.equals(hostIp));
 
-                    return true;
-                }
+                return true;
             }));
         } catch (InterruptedException | SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));

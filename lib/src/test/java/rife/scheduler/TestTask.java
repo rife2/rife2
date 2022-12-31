@@ -27,14 +27,14 @@ public class TestTask {
 
     @Test
     void testPopulateTask() {
-        int id = 1;
-        String type = TestTasktypes.UPLOAD_GROUPS;
-        long planned = System.currentTimeMillis();
-        String frequency = "* * * * *";
-        boolean busy = true;
+        var id = 1;
+        var type = TestTasktypes.UPLOAD_GROUPS;
+        var planned = System.currentTimeMillis();
+        var frequency = "* * * * *";
+        var busy = true;
 
         try {
-            Task task = new Task();
+            var task = new Task();
             task.setId(id);
             task.setType(type);
             task.setPlanned(planned);
@@ -43,7 +43,7 @@ public class TestTask {
 
             assertEquals(id, task.getId());
             assertEquals(type, task.getType());
-            Calendar calendar = Calendar.getInstance();
+            var calendar = Calendar.getInstance();
             calendar.setTimeInMillis(planned);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
@@ -57,21 +57,21 @@ public class TestTask {
 
     @Test
     void testCloneTask() {
-        int id = 1;
-        String type = TestTasktypes.UPLOAD_GROUPS;
-        long planned = System.currentTimeMillis();
-        String frequency = "* * * * *";
-        boolean busy = true;
+        var id = 1;
+        var type = TestTasktypes.UPLOAD_GROUPS;
+        var planned = System.currentTimeMillis();
+        var frequency = "* * * * *";
+        var busy = true;
 
         try {
-            Task task = new Task();
+            var task = new Task();
             task.setId(id);
             task.setType(type);
             task.setPlanned(planned);
             task.setFrequency(frequency);
             task.setBusy(busy);
 
-            Task task_clone = task.clone();
+            var task_clone = task.clone();
             assertNotSame(task, task_clone);
             assertNotNull(task_clone);
             assertEquals(task, task_clone);
@@ -83,11 +83,11 @@ public class TestTask {
     @Test
     void testTaskValidation() {
         try {
-            Task task = new Task();
-            assertTrue(false == task.validate());
-            assertTrue(2 == task.countValidationErrors());
+            var task = new Task();
+            assertFalse(task.validate());
+            assertEquals(2, task.countValidationErrors());
             ValidationError error = null;
-            Iterator<ValidationError> it = task.getValidationErrors().iterator();
+            var it = task.getValidationErrors().iterator();
             error = it.next();
             assertEquals(error.getIdentifier(), "mandatory");
             assertEquals(error.getSubject(), "type");
@@ -100,15 +100,15 @@ public class TestTask {
             task.setFrequency("* * * * *");
             task.setBusy(false);
             task.resetValidation();
-            assertTrue(true == task.validate());
+            assertTrue(task.validate());
 
-            Calendar cal = Calendar.getInstance();
-            cal.set(1970, 10, 25);
+            var cal = Calendar.getInstance();
+            cal.set(1970, Calendar.NOVEMBER, 25);
             task.setPlanned(cal.getTime());
             task.resetValidation();
-            assertTrue(false == task.validate());
-            assertTrue(1 == task.countValidationErrors());
-            Set<ValidationError> set = task.getValidationErrors();
+            assertFalse(task.validate());
+            assertEquals(1, task.countValidationErrors());
+            var set = task.getValidationErrors();
             error = set.iterator().next();
             assertEquals(error.getIdentifier(), "invalid");
             assertEquals(error.getSubject(), "planned");
@@ -116,7 +116,7 @@ public class TestTask {
 
             task.setFrequency(null);
             task.resetValidation();
-            assertTrue(true == task.validate());
+            assertTrue(task.validate());
             task.setFrequency("* * * * *");
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));

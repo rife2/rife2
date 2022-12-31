@@ -18,14 +18,14 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testInstantiation(Datasource datasource) {
-        DatabaseSessions manager = DatabaseSessionsFactory.instance(datasource);
+        var manager = DatabaseSessionsFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testInstall(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
 
         try {
             assertTrue(sessions.install());
@@ -37,7 +37,7 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testRemove(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
 
         try {
             assertTrue(sessions.remove());
@@ -49,10 +49,10 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testStartSession(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
 
-        int user_id = 143;
-        String host_ip = "189.38.987.43";
+        var user_id = 143;
+        var host_ip = "189.38.987.43";
 
         String auth_id = null;
         try {
@@ -79,10 +79,10 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testStartRememberedSession(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
 
-        int user_id = 143;
-        String host_ip = "189.38.987.43";
+        var user_id = 143;
+        var host_ip = "189.38.987.43";
 
         String auth_id = null;
         try {
@@ -109,11 +109,11 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testSessionExpiration(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(2000);
 
-        int user_id = 1243;
-        String host_ip = "837.234.23.434";
+        var user_id = 1243;
+        var host_ip = "837.234.23.434";
 
         String auth_id = null;
         try {
@@ -123,7 +123,7 @@ public class TestDatabaseSessions {
             assertTrue(sessions.isSessionValid(auth_id, host_ip));
             assertEquals(1, sessions.countSessions());
 
-            long start = System.currentTimeMillis();
+            var start = System.currentTimeMillis();
 
             Thread.sleep(1500);
             if (System.currentTimeMillis() - start <= 2000) {
@@ -148,11 +148,11 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testContinueSession(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(2000);
 
-        int user_id = 41;
-        String host_ip = "113.98.46.140";
+        var user_id = 41;
+        var host_ip = "113.98.46.140";
 
         String auth_id = null;
         try {
@@ -180,9 +180,9 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testContinueUnknownSession(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
 
-        String auth_id = "unknown";
+        var auth_id = "unknown";
         try {
             sessions.install();
 
@@ -201,15 +201,15 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testEraseSession(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
 
-        int user_id = 93;
-        String host_ip = "24.534.23.444";
+        var user_id = 93;
+        var host_ip = "24.534.23.444";
 
         try {
             sessions.install();
 
-            long number_of_sessions = sessions.countSessions();
+            var number_of_sessions = sessions.countSessions();
             String auth_id = null;
             auth_id = sessions.startSession(user_id, host_ip, false);
             assertEquals(number_of_sessions + 1, sessions.countSessions());
@@ -229,9 +229,9 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testEraseUnknownSession(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
 
-        String auth_id = "unknown";
+        var auth_id = "unknown";
         try {
             sessions.install();
 
@@ -250,7 +250,7 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testEraseAllSessions(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
 
         try {
             sessions.install();
@@ -280,7 +280,7 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testEraseUserSessions(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
 
         try {
             sessions.install();
@@ -307,7 +307,7 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testEraseUnkownUserSessions(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
 
         try {
             sessions.install();
@@ -332,11 +332,11 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testPurgeSessions(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(2000);
 
-        int user_id = 9478;
-        String host_ip = "98.232.12.456";
+        var user_id = 9478;
+        var host_ip = "98.232.12.456";
 
         try {
             sessions.install();
@@ -367,17 +367,17 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testCountSessions(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(4000);
 
-        int user_id1 = 9478;
-        String host_ip1 = "98.232.12.456";
+        var user_id1 = 9478;
+        var host_ip1 = "98.232.12.456";
 
-        int user_id2 = 9479;
-        String host_ip2 = "98.232.12.457";
+        var user_id2 = 9479;
+        var host_ip2 = "98.232.12.457";
 
-        int user_id3 = 9480;
-        String host_ip3 = "98.232.12.458";
+        var user_id3 = 9480;
+        var host_ip3 = "98.232.12.458";
 
         try {
             sessions.install();
@@ -415,45 +415,41 @@ public class TestDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testListSessions(Datasource datasource) {
-        DatabaseSessions sessions = DatabaseSessionsFactory.instance(datasource);
+        var sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(4000);
 
-        final int user_id1 = 9478;
-        final String host_ip1 = "98.232.12.456";
+        final var user_id1 = 9478;
+        final var host_ip1 = "98.232.12.456";
 
-        final int user_id2 = 9479;
-        final String host_ip2 = "98.232.12.457";
+        final var user_id2 = 9479;
+        final var host_ip2 = "98.232.12.457";
 
-        final int user_id3 = 9480;
-        final String host_ip3 = "98.232.12.458";
+        final var user_id3 = 9480;
+        final var host_ip3 = "98.232.12.458";
 
-        final int[] count = new int[1];
+        final var count = new int[1];
         count[0] = 0;
         try {
             sessions.install();
 
             sessions.eraseAllSessions();
 
-            assertFalse(sessions.listSessions(new ListSessions() {
-                public boolean foundSession(long userId, String hostIp, String authId) {
-                    fail();
-                    return true;
-                }
+            assertFalse(sessions.listSessions((userId, hostIp, authId) -> {
+                fail();
+                return true;
             }));
 
             sessions.startSession(user_id1, host_ip1, false);
 
             count[0] = 0;
-            assertTrue(sessions.listSessions(new ListSessions() {
-                public boolean foundSession(long userId, String hostIp, String authId) {
-                    count[0]++;
-                    assertTrue(count[0] <= 1);
+            assertTrue(sessions.listSessions((userId, hostIp, authId) -> {
+                count[0]++;
+                assertTrue(count[0] <= 1);
 
-                    assertEquals(9478, userId);
-                    assertEquals(host_ip1, hostIp);
+                assertEquals(9478, userId);
+                assertEquals(host_ip1, hostIp);
 
-                    return true;
-                }
+                return true;
             }));
 
             Thread.sleep(2000);
@@ -461,16 +457,14 @@ public class TestDatabaseSessions {
             sessions.startSession(user_id2, host_ip2, false);
 
             count[0] = 0;
-            assertTrue(sessions.listSessions(new ListSessions() {
-                public boolean foundSession(long userId, String hostIp, String authId) {
-                    count[0]++;
-                    assertTrue(count[0] <= 2);
+            assertTrue(sessions.listSessions((userId, hostIp, authId) -> {
+                count[0]++;
+                assertTrue(count[0] <= 2);
 
-                    assertTrue(9478 == userId || 9479 == userId);
-                    assertTrue(host_ip1.equals(hostIp) || host_ip2.equals(hostIp));
+                assertTrue(9478 == userId || 9479 == userId);
+                assertTrue(host_ip1.equals(hostIp) || host_ip2.equals(hostIp));
 
-                    return true;
-                }
+                return true;
             }));
 
             Thread.sleep(1000);
@@ -478,32 +472,28 @@ public class TestDatabaseSessions {
             sessions.startSession(user_id3, host_ip3, false);
 
             count[0] = 0;
-            assertTrue(sessions.listSessions(new ListSessions() {
-                public boolean foundSession(long userId, String hostIp, String authId) {
-                    count[0]++;
-                    assertTrue(count[0] <= 3);
+            assertTrue(sessions.listSessions((userId, hostIp, authId) -> {
+                count[0]++;
+                assertTrue(count[0] <= 3);
 
-                    assertTrue(9478 == userId || 9479 == userId || 9480 == userId);
-                    assertTrue(host_ip1.equals(hostIp) || host_ip2.equals(hostIp) || host_ip3.equals(hostIp));
+                assertTrue(9478 == userId || 9479 == userId || 9480 == userId);
+                assertTrue(host_ip1.equals(hostIp) || host_ip2.equals(hostIp) || host_ip3.equals(hostIp));
 
-                    return true;
-                }
+                return true;
             }));
 
             Thread.sleep(1100);
 
 
             count[0] = 0;
-            assertTrue(sessions.listSessions(new ListSessions() {
-                public boolean foundSession(long userId, String hostIp, String authId) {
-                    count[0]++;
-                    assertTrue(count[0] <= 2);
+            assertTrue(sessions.listSessions((userId, hostIp, authId) -> {
+                count[0]++;
+                assertTrue(count[0] <= 2);
 
-                    assertTrue(9479 == userId || 9480 == userId);
-                    assertTrue(host_ip2.equals(hostIp) || host_ip3.equals(hostIp));
+                assertTrue(9479 == userId || 9480 == userId);
+                assertTrue(host_ip2.equals(hostIp) || host_ip3.equals(hostIp));
 
-                    return true;
-                }
+                return true;
             }));
         } catch (InterruptedException | SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));

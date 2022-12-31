@@ -17,17 +17,17 @@ public class TestPurgingDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testInstantiation(Datasource datasource) {
-        DatabaseRemember manager = DatabaseRememberFactory.instance(datasource);
+        var manager = DatabaseRememberFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testStartSession(Datasource datasource) {
-        PurgingRememberManager remember = new PurgingRememberManager(DatabaseRememberFactory.instance(datasource));
+        var remember = new PurgingRememberManager(DatabaseRememberFactory.instance(datasource));
         remember.setRememberPurgeFrequency(0);
 
-        int user_id = 143;
+        var user_id = 143;
 
         String remember_id = null;
         try {
@@ -53,7 +53,7 @@ public class TestPurgingDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testPurgeRemember(Datasource datasource) {
-        PurgingRememberManager remember = new PurgingRememberManager(DatabaseRememberFactory.instance(datasource));
+        var remember = new PurgingRememberManager(DatabaseRememberFactory.instance(datasource));
         remember.setRememberDuration(2000);
         remember.setRememberPurgeFrequency(1);
         remember.setRememberPurgeScale(1);
@@ -63,15 +63,15 @@ public class TestPurgingDatabaseRemember {
 
             remember.eraseAllRememberIds();
 
-            int user_id1 = 143;
-            String remember_id1 = remember.createRememberId(user_id1, "123.98.23.3");
+            var user_id1 = 143;
+            var remember_id1 = remember.createRememberId(user_id1, "123.98.23.3");
 
             assertEquals(user_id1, remember.getRememberedUserId(remember_id1));
 
             Thread.sleep(2000);
 
-            int user_id2 = 143;
-            String remember_id2 = remember.createRememberId(user_id2, "123.98.23.39");
+            var user_id2 = 143;
+            var remember_id2 = remember.createRememberId(user_id2, "123.98.23.39");
 
             assertEquals(user_id2, remember.getRememberedUserId(remember_id2));
             assertEquals(-1, remember.getRememberedUserId(remember_id1));
