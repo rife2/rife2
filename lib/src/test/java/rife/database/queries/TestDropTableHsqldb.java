@@ -4,14 +4,15 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.TableNameRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropTableHsqldb extends TestDropTable {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testInstantiationHsqldb() {
         DropTable query = new DropTable(HSQLDB);
         assertNotNull(query);
@@ -23,7 +24,7 @@ public class TestDropTableHsqldb extends TestDropTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testIncompleteQueryHsqldb() {
         DropTable query = new DropTable(HSQLDB);
         try {
@@ -36,7 +37,7 @@ public class TestDropTableHsqldb extends TestDropTable {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testClearHsqldb() {
         DropTable query = new DropTable(HSQLDB);
         query.table("tablename");
@@ -50,7 +51,7 @@ public class TestDropTableHsqldb extends TestDropTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testOneTableHsqldb() {
         DropTable query = new DropTable(HSQLDB);
         query.table("tabletodrop");
@@ -58,7 +59,7 @@ public class TestDropTableHsqldb extends TestDropTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testMultipleTablesHsqldb() {
         DropTable query = new DropTable(HSQLDB);
         query.table("tabletodrop1")
@@ -72,7 +73,7 @@ public class TestDropTableHsqldb extends TestDropTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCloneHsqldb() {
         DropTable query = new DropTable(HSQLDB);
         query.table("tabletodrop");

@@ -4,11 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
+import rife.database.*;
 import rife.database.exceptions.TableNameRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
@@ -20,7 +16,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDeleteHsqldb extends TestDelete {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testInstantiationHsqldb() {
         Delete query = new Delete(HSQLDB);
         assertNotNull(query);
@@ -32,7 +28,7 @@ public class TestDeleteHsqldb extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testIncompleteQueryHsqldb() {
         Delete query = new Delete(HSQLDB);
         try {
@@ -52,7 +48,7 @@ public class TestDeleteHsqldb extends TestDelete {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testClearHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -67,7 +63,7 @@ public class TestDeleteHsqldb extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testHintHsqldb() {
         Delete query = new Delete(HSQLDB)
             .hint("NO_INDEX")
@@ -80,7 +76,7 @@ public class TestDeleteHsqldb extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFromHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename");
@@ -88,7 +84,7 @@ public class TestDeleteHsqldb extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -97,7 +93,7 @@ public class TestDeleteHsqldb extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereTypedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename");
@@ -128,7 +124,7 @@ public class TestDeleteHsqldb extends TestDelete {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereTypedMixedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename");
@@ -165,7 +161,7 @@ public class TestDeleteHsqldb extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename");
@@ -197,7 +193,7 @@ public class TestDeleteHsqldb extends TestDelete {
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersMixedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -224,7 +220,7 @@ public class TestDeleteHsqldb extends TestDelete {
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereConstructionHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -235,7 +231,7 @@ public class TestDeleteHsqldb extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereConstructionGroupHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -266,7 +262,7 @@ public class TestDeleteHsqldb extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -275,7 +271,7 @@ public class TestDeleteHsqldb extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanConstrainedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -284,7 +280,7 @@ public class TestDeleteHsqldb extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanNullValuesHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -293,7 +289,7 @@ public class TestDeleteHsqldb extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanIncludedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -302,7 +298,7 @@ public class TestDeleteHsqldb extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanExcludedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -311,7 +307,7 @@ public class TestDeleteHsqldb extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanFilteredHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -320,7 +316,7 @@ public class TestDeleteHsqldb extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersBeanHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -392,7 +388,7 @@ public class TestDeleteHsqldb extends TestDelete {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersBeanConstrainedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -458,7 +454,7 @@ public class TestDeleteHsqldb extends TestDelete {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersBeanExcludedHsqldb() {
         Delete query = new Delete(HSQLDB);
         query.from("tablename")
@@ -507,7 +503,7 @@ public class TestDeleteHsqldb extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testDeleteSubselectParamsHsqldb() {
         Select wherequery = new Select(HSQLDB);
         wherequery
@@ -566,7 +562,7 @@ public class TestDeleteHsqldb extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCloneHsqldb() {
         Select wherequery = new Select(HSQLDB);
         wherequery

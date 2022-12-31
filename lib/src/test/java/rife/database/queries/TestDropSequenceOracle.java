@@ -4,13 +4,14 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropSequenceOracle extends TestDropSequence {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInstantiationOracle() {
         DropSequence query = new DropSequence(ORACLE);
         assertNotNull(query);
@@ -22,7 +23,7 @@ public class TestDropSequenceOracle extends TestDropSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testClearOracle() {
         DropSequence query = new DropSequence(ORACLE);
         query.name("sequencename");
@@ -36,7 +37,7 @@ public class TestDropSequenceOracle extends TestDropSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCreateOracle() {
         DropSequence query = new DropSequence(ORACLE);
         query.name("sequencename");
@@ -44,7 +45,7 @@ public class TestDropSequenceOracle extends TestDropSequence {
         execute(ORACLE, query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCloneOracle() {
         DropSequence query = new DropSequence(ORACLE);
         query.name("sequencename");

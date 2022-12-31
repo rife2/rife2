@@ -4,11 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
+import rife.database.*;
 import rife.database.exceptions.TableNameRequiredException;
 
 import java.math.BigDecimal;
@@ -19,7 +15,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDeleteOracle extends TestDelete {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInstantiationOracle() {
         Delete query = new Delete(ORACLE);
         assertNotNull(query);
@@ -31,7 +27,7 @@ public class TestDeleteOracle extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testIncompleteQueryOracle() {
         Delete query = new Delete(ORACLE);
         try {
@@ -51,7 +47,7 @@ public class TestDeleteOracle extends TestDelete {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testClearOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -66,7 +62,7 @@ public class TestDeleteOracle extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFromOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename");
@@ -74,7 +70,7 @@ public class TestDeleteOracle extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testHintOracle() {
         Delete query = new Delete(ORACLE)
             .hint("NO_INDEX")
@@ -84,7 +80,7 @@ public class TestDeleteOracle extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -93,7 +89,7 @@ public class TestDeleteOracle extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereTypedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename");
@@ -124,7 +120,7 @@ public class TestDeleteOracle extends TestDelete {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereTypedMixedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename");
@@ -161,7 +157,7 @@ public class TestDeleteOracle extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename");
@@ -194,7 +190,7 @@ public class TestDeleteOracle extends TestDelete {
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersMixedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -221,7 +217,7 @@ public class TestDeleteOracle extends TestDelete {
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereConstructionOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -232,7 +228,7 @@ public class TestDeleteOracle extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereConstructionGroupOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -263,7 +259,7 @@ public class TestDeleteOracle extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -272,7 +268,7 @@ public class TestDeleteOracle extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanConstrainedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -281,7 +277,7 @@ public class TestDeleteOracle extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanNullValuesOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -290,7 +286,7 @@ public class TestDeleteOracle extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanIncludedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -299,7 +295,7 @@ public class TestDeleteOracle extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanExcludedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -308,7 +304,7 @@ public class TestDeleteOracle extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanFilteredOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -317,7 +313,7 @@ public class TestDeleteOracle extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersBeanOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -389,7 +385,7 @@ public class TestDeleteOracle extends TestDelete {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersBeanConstrainedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -455,7 +451,7 @@ public class TestDeleteOracle extends TestDelete {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersBeanExcludedOracle() {
         Delete query = new Delete(ORACLE);
         query.from("tablename")
@@ -505,7 +501,7 @@ public class TestDeleteOracle extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testDeleteSubselectParamsOracle() {
         Select wherequery = new Select(ORACLE);
         wherequery
@@ -563,7 +559,7 @@ public class TestDeleteOracle extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCloneOracle() {
         Select wherequery = new Select(ORACLE);
         wherequery

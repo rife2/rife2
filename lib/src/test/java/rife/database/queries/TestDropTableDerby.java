@@ -4,14 +4,15 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.TableNameRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropTableDerby extends TestDropTable {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testInstantiationDerby() {
         DropTable query = new DropTable(DERBY);
         assertNotNull(query);
@@ -23,7 +24,7 @@ public class TestDropTableDerby extends TestDropTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testIncompleteQueryDerby() {
         DropTable query = new DropTable(DERBY);
         try {
@@ -36,7 +37,7 @@ public class TestDropTableDerby extends TestDropTable {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testClearDerby() {
         DropTable query = new DropTable(DERBY);
         query.table("tablename");
@@ -50,7 +51,7 @@ public class TestDropTableDerby extends TestDropTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testOneTableDerby() {
         DropTable query = new DropTable(DERBY);
         query.table("tabletodrop");
@@ -58,7 +59,7 @@ public class TestDropTableDerby extends TestDropTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testMultipleTablesDerby() {
         DropTable query = new DropTable(DERBY);
         query.table("tabletodrop1")
@@ -72,7 +73,7 @@ public class TestDropTableDerby extends TestDropTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCloneDerby() {
         DropTable query = new DropTable(DERBY);
         query.table("tabletodrop1");

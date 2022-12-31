@@ -4,15 +4,14 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.exceptions.SequenceNameRequiredException;
-import rife.database.exceptions.SequenceOperationRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
+import rife.database.exceptions.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValueDerby extends TestSequenceValue {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testInstantiationDerby() {
         SequenceValue query = new SequenceValue(DERBY);
         assertNotNull(query);
@@ -24,7 +23,7 @@ public class TestSequenceValueDerby extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testInvalidDerby() {
         SequenceValue query = new SequenceValue(DERBY);
         try {
@@ -51,7 +50,7 @@ public class TestSequenceValueDerby extends TestSequenceValue {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testClearDerby() {
         SequenceValue query = new SequenceValue(DERBY);
         query
@@ -73,7 +72,7 @@ public class TestSequenceValueDerby extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testNextDerby() {
         SequenceValue query = new SequenceValue(DERBY);
         query
@@ -87,7 +86,7 @@ public class TestSequenceValueDerby extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCurrentDerby() {
         SequenceValue query = new SequenceValue(DERBY);
         query
@@ -101,7 +100,7 @@ public class TestSequenceValueDerby extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCloneDerby() {
         SequenceValue query = new SequenceValue(DERBY);
         query

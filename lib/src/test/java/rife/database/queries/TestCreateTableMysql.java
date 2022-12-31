@@ -4,9 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
+import rife.database.*;
 import rife.database.exceptions.ColumnsRequiredException;
 import rife.database.exceptions.TableNameRequiredException;
 
@@ -16,7 +14,7 @@ import java.sql.Blob;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateTableMysql extends TestCreateTable {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInstantiationMysql() {
         CreateTable query = new CreateTable(MYSQL);
         try {
@@ -27,7 +25,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testIncompleteQueryMysql() {
         CreateTable query = new CreateTable(MYSQL);
         try {
@@ -48,7 +46,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testClearMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -63,7 +61,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename1")
@@ -92,7 +90,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         // VARCHAR and CHAR need size specification
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnPrecisionMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename1")
@@ -120,7 +118,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnsBeanMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -130,7 +128,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         // CHAR needs size specification
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnsBeanIncludedMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -139,7 +137,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnsBeanExcludedMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -149,7 +147,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         // VARCHAR and CHAR need size specification
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnsBeanFilteredMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -158,7 +156,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnsBeanPrecisionMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -192,7 +190,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnsBeanConstrainedMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -201,7 +199,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testNullableMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -217,7 +215,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testDefaultMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename1")
@@ -263,7 +261,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testDefaultFunctionMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename1")
@@ -274,7 +272,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         // it doesn't support columns with default functions
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCustomAttributeMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename1")
@@ -285,7 +283,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testTemporaryMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -295,7 +293,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testPrimaryKeySimpleMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -305,7 +303,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testPrimaryKeyMultipleMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -316,7 +314,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testPrimaryKeyNamedMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -326,7 +324,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testPrimaryKeyMultipleNamedMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -337,7 +335,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testUniqueSimpleMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -347,7 +345,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testUniqueMultipleMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -358,7 +356,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testUniqueNamedMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -368,7 +366,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testUniqueMultipleNamedMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -379,7 +377,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeySimpleMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -389,7 +387,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeyMultipleMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -400,7 +398,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeySimpleNamedMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -410,7 +408,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeyMultipleNamedMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -421,7 +419,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeyViolationsSingleMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -495,7 +493,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeyViolationsMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -505,7 +503,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeyMultipleViolationsMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -516,7 +514,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCheckSimpleMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -526,7 +524,7 @@ public class TestCreateTableMysql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCheckNamedMysql() {
         CreateTable query = new CreateTable(MYSQL);
         query.table("tablename")
@@ -537,7 +535,7 @@ public class TestCreateTableMysql extends TestCreateTable {
     }
 
     // TODO : test fails
-//    @Test
+//    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
 //    public void testCloneMysql() {
 //        CreateTable query = new CreateTable(MYSQL);
 //        query.table("tablename")

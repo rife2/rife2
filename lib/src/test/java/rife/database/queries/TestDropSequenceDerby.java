@@ -4,14 +4,15 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropSequenceDerby extends TestDropSequence {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testInstantiationDerby() {
         DropSequence query = new DropSequence(DERBY);
         assertNotNull(query);
@@ -23,7 +24,7 @@ public class TestDropSequenceDerby extends TestDropSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testClearDerby() {
         DropSequence query = new DropSequence(DERBY);
         query.name("sequencename");
@@ -35,7 +36,7 @@ public class TestDropSequenceDerby extends TestDropSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCreateDerby() {
         DropSequence query = new DropSequence(DERBY);
         query.name("sequencename");
@@ -47,7 +48,7 @@ public class TestDropSequenceDerby extends TestDropSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCloneDerby() {
         // sequences are not supported on mysql
     }

@@ -4,14 +4,8 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
-import rife.database.exceptions.FieldsRequiredException;
-import rife.database.exceptions.TableNameRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.*;
+import rife.database.exceptions.*;
 import rife.database.types.SqlNull;
 
 import java.math.BigDecimal;
@@ -23,7 +17,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInsertPgsql extends TestInsert {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testInstantiationPgsql() {
         Insert query = new Insert(PGSQL);
         assertNotNull(query);
@@ -35,7 +29,7 @@ public class TestInsertPgsql extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testIncompleteQueryPgsql() {
         Insert query = new Insert(PGSQL);
         try {
@@ -55,7 +49,7 @@ public class TestInsertPgsql extends TestInsert {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClearPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
@@ -70,7 +64,7 @@ public class TestInsertPgsql extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testParameterPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
@@ -78,7 +72,7 @@ public class TestInsertPgsql extends TestInsert {
         assertEquals(query.getSql(), "INSERT INTO tablename (col1) VALUES (?)");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testHintPgsql() {
         Insert query = new Insert(PGSQL)
             .hint("NO_INDEX")
@@ -92,7 +86,7 @@ public class TestInsertPgsql extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldPgsql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -120,7 +114,7 @@ public class TestInsertPgsql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldCustomPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
@@ -129,7 +123,7 @@ public class TestInsertPgsql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsPgsql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -159,7 +153,7 @@ public class TestInsertPgsql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldParametersPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename");
@@ -250,7 +244,7 @@ public class TestInsertPgsql extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldParametersMixedPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename");
@@ -316,7 +310,7 @@ public class TestInsertPgsql extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
@@ -325,7 +319,7 @@ public class TestInsertPgsql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test void testFieldsBeanConstrainedPgsql() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL) void testFieldsBeanConstrainedPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fields(BeanImplConstrained.getPopulatedBean());
@@ -333,7 +327,7 @@ public class TestInsertPgsql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanNullValuesPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
@@ -342,7 +336,7 @@ public class TestInsertPgsql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanIncludedPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
@@ -351,7 +345,7 @@ public class TestInsertPgsql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanExcludedPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
@@ -360,7 +354,7 @@ public class TestInsertPgsql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanFilteredPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
@@ -369,7 +363,7 @@ public class TestInsertPgsql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testMultipleRowsPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
@@ -389,7 +383,7 @@ public class TestInsertPgsql extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsParametersBeanPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
@@ -459,7 +453,7 @@ public class TestInsertPgsql extends TestInsert {
         }));
     }
 
-    @Test void testFieldsParametersBeanConstrainedPgsql() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL) void testFieldsParametersBeanConstrainedPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
             .fieldsParameters(BeanImplConstrained.class);
@@ -520,7 +514,7 @@ public class TestInsertPgsql extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsParametersBeanExcludedPgsql() {
         Insert query = new Insert(PGSQL);
         query.into("tablename")
@@ -575,7 +569,7 @@ public class TestInsertPgsql extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testInsertSubselectParamsPgsql() {
         Select fieldquery = new Select(PGSQL);
         fieldquery
@@ -625,7 +619,7 @@ public class TestInsertPgsql extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClonePgsql() {
         Select fieldquery = new Select(PGSQL);
         fieldquery

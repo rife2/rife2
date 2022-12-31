@@ -4,26 +4,20 @@
  */
 package rife.database.queries;
 
+import rife.database.*;
+import rife.database.exceptions.*;
+import rife.database.types.SqlNull;
+
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
-import rife.database.exceptions.FieldsRequiredException;
-import rife.database.exceptions.TableNameRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
-import rife.database.types.SqlNull;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInsertH2 extends TestInsert {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testInstantiationH2() {
         Insert query = new Insert(H2);
         assertNotNull(query);
@@ -35,7 +29,7 @@ public class TestInsertH2 extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testIncompleteQueryH2() {
         Insert query = new Insert(H2);
         try {
@@ -55,7 +49,7 @@ public class TestInsertH2 extends TestInsert {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testClearH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
@@ -70,7 +64,7 @@ public class TestInsertH2 extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testHintH2() {
         Insert query = new Insert(H2)
             .hint("NO_INDEX")
@@ -84,7 +78,7 @@ public class TestInsertH2 extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testParameterH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
@@ -92,7 +86,7 @@ public class TestInsertH2 extends TestInsert {
         assertEquals(query.getSql(), "INSERT INTO tablename (col1) VALUES (?)");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldH2() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -120,7 +114,7 @@ public class TestInsertH2 extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldCustomH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
@@ -129,7 +123,7 @@ public class TestInsertH2 extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldsH2() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -159,7 +153,7 @@ public class TestInsertH2 extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldParametersH2() {
         Insert query = new Insert(H2);
         query.into("tablename");
@@ -250,7 +244,7 @@ public class TestInsertH2 extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldParametersMixedH2() {
         Insert query = new Insert(H2);
         query.into("tablename");
@@ -316,7 +310,7 @@ public class TestInsertH2 extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldsBeanH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
@@ -325,7 +319,7 @@ public class TestInsertH2 extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldsBeanConstrainedH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
@@ -334,7 +328,7 @@ public class TestInsertH2 extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldsBeanNullValuesH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
@@ -343,7 +337,7 @@ public class TestInsertH2 extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldsBeanIncludedH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
@@ -352,7 +346,7 @@ public class TestInsertH2 extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldsBeanExcludedH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
@@ -361,7 +355,7 @@ public class TestInsertH2 extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldsBeanFilteredH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
@@ -370,7 +364,7 @@ public class TestInsertH2 extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testMultipleRowsH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
@@ -390,7 +384,7 @@ public class TestInsertH2 extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldsParametersBeanH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
@@ -460,7 +454,7 @@ public class TestInsertH2 extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldsParametersBeanConstrainedH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
@@ -522,7 +516,7 @@ public class TestInsertH2 extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFieldsParametersBeanExcludedH2() {
         Insert query = new Insert(H2);
         query.into("tablename")
@@ -577,7 +571,7 @@ public class TestInsertH2 extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testInsertSubselectParamsH2() {
         Select fieldquery = new Select(H2);
         fieldquery
@@ -627,7 +621,7 @@ public class TestInsertH2 extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCloneH2() {
         Select fieldquery = new Select(H2);
         fieldquery

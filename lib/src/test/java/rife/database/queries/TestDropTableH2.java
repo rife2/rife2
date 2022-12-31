@@ -4,14 +4,15 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.TableNameRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropTableH2 extends TestDropTable {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testInstantiationH2() {
         DropTable query = new DropTable(H2);
         assertNotNull(query);
@@ -23,7 +24,7 @@ public class TestDropTableH2 extends TestDropTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testIncompleteQueryH2() {
         DropTable query = new DropTable(H2);
         try {
@@ -36,7 +37,7 @@ public class TestDropTableH2 extends TestDropTable {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testClearH2() {
         DropTable query = new DropTable(H2);
         query.table("tablename");
@@ -50,7 +51,7 @@ public class TestDropTableH2 extends TestDropTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testOneTableH2() {
         DropTable query = new DropTable(H2);
         query.table("tabletodrop");
@@ -58,7 +59,7 @@ public class TestDropTableH2 extends TestDropTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testMultipleTablesHsqldb() {
         DropTable query = new DropTable(H2);
         query.table("tabletodrop1")
@@ -72,7 +73,7 @@ public class TestDropTableH2 extends TestDropTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCloneH2() {
         DropTable query = new DropTable(H2);
         query.table("tabletodrop");

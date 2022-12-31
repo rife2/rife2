@@ -4,15 +4,15 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateSequenceOracle extends TestCreateSequence {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInstantiationOracle() {
-        System.out.println("TESTING");
         CreateSequence query = new CreateSequence(ORACLE);
         assertNotNull(query);
         try {
@@ -23,7 +23,7 @@ public class TestCreateSequenceOracle extends TestCreateSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testClearOracle() {
         CreateSequence query = new CreateSequence(ORACLE);
         query.name("sequencename");
@@ -37,7 +37,7 @@ public class TestCreateSequenceOracle extends TestCreateSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCreateOracle() {
         CreateSequence query = new CreateSequence(ORACLE);
         query.name("sequencename");
@@ -45,7 +45,7 @@ public class TestCreateSequenceOracle extends TestCreateSequence {
         execute(ORACLE, query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCloneOracle() {
         CreateSequence query = new CreateSequence(ORACLE);
         query.name("sequencename");

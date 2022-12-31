@@ -4,14 +4,15 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 import rife.database.exceptions.SequenceOperationRequiredException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValuePgsql extends TestSequenceValue {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testInstantiationPgsql() {
         SequenceValue query = new SequenceValue(PGSQL);
         assertNotNull(query);
@@ -23,7 +24,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testInvalidPgsql() {
         SequenceValue query = new SequenceValue(PGSQL);
         try {
@@ -50,7 +51,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClearPgsql() {
         SequenceValue query = new SequenceValue(PGSQL);
         query
@@ -67,7 +68,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testNextPgsql() {
         SequenceValue query = new SequenceValue(PGSQL);
         query
@@ -77,7 +78,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
         assertTrue(execute(PGSQL, query) >= 0);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testCurrentPgsql() {
         SequenceValue query = new SequenceValue(PGSQL);
         query
@@ -87,7 +88,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
         assertTrue(execute(PGSQL, query) >= 0);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClonePgsql() {
         SequenceValue query = new SequenceValue(PGSQL);
         query

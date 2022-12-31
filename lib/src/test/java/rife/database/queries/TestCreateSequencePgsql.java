@@ -4,13 +4,14 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateSequencePgsql extends TestCreateSequence {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testInstantiationPgsql() {
         CreateSequence query = new CreateSequence(PGSQL);
         assertNotNull(query);
@@ -22,7 +23,7 @@ public class TestCreateSequencePgsql extends TestCreateSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClearPgsql() {
         CreateSequence query = new CreateSequence(PGSQL);
         query.name("sequencename");
@@ -36,7 +37,7 @@ public class TestCreateSequencePgsql extends TestCreateSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testCreatePgsql() {
         CreateSequence query = new CreateSequence(PGSQL);
         query.name("sequencename");
@@ -44,7 +45,7 @@ public class TestCreateSequencePgsql extends TestCreateSequence {
         execute(PGSQL, query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClonePgsql() {
         CreateSequence query = new CreateSequence(PGSQL);
         query.name("sequencename");

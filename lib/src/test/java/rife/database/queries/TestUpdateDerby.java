@@ -4,14 +4,8 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
-import rife.database.exceptions.FieldsRequiredException;
-import rife.database.exceptions.TableNameRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.*;
+import rife.database.exceptions.*;
 import rife.database.types.SqlNull;
 
 import java.math.BigDecimal;
@@ -22,7 +16,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUpdateDerby extends TestUpdate {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testInstantiationDerby() {
         Update query = new Update(DERBY);
         assertNotNull(query);
@@ -34,7 +28,7 @@ public class TestUpdateDerby extends TestUpdate {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testIncompleteQueryDerby() {
         Update query = new Update(DERBY);
         try {
@@ -54,7 +48,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testClearDerby() {
         Update query = new Update(DERBY);
         query.table("tablename4")
@@ -69,7 +63,7 @@ public class TestUpdateDerby extends TestUpdate {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testHintDerby() {
         Update query = new Update(DERBY)
             .hint("NO_INDEX")
@@ -83,7 +77,7 @@ public class TestUpdateDerby extends TestUpdate {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldDerby() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -112,7 +106,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldCustomDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -121,7 +115,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldParametersDerby() {
         Update query = new Update(DERBY);
         query.table("tablename");
@@ -212,7 +206,7 @@ public class TestUpdateDerby extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldParametersMixedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename");
@@ -279,7 +273,7 @@ public class TestUpdateDerby extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsDerby() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -310,7 +304,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereConstructionDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -323,7 +317,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereConstructionGroupDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -356,7 +350,7 @@ public class TestUpdateDerby extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereTypedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -389,7 +383,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereTypedMixedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -428,7 +422,7 @@ public class TestUpdateDerby extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -462,7 +456,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = 1, propertyByte = 16 WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersMixedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -491,7 +485,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = 1, propertyByte = 16 WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldWhereParametersDerby() {
         Update query = new Update(DERBY);
         query.table("tablename");
@@ -540,7 +534,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = ?, propertyByte = ? WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsBeanDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -550,7 +544,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsBeanConstrainedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -560,7 +554,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsBeanNullValuesDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -570,7 +564,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsBeanIncludedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -580,7 +574,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsBeanExcludedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -590,7 +584,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsBeanFilteredDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -600,7 +594,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsParametersBeanDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -670,7 +664,7 @@ public class TestUpdateDerby extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsParametersBeanConstrainedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -732,7 +726,7 @@ public class TestUpdateDerby extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsParametersBeanExcludedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -787,7 +781,7 @@ public class TestUpdateDerby extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -798,7 +792,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanConstrainedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -809,7 +803,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanNullValuesDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -820,7 +814,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanIncludedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -831,7 +825,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanExcludedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -842,7 +836,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanFilteredDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -853,7 +847,7 @@ public class TestUpdateDerby extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersBeanDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -925,7 +919,7 @@ public class TestUpdateDerby extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersBeanConstrainedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -993,7 +987,7 @@ public class TestUpdateDerby extends TestUpdate {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersBeanExcludedDerby() {
         Update query = new Update(DERBY);
         query.table("tablename")
@@ -1050,7 +1044,7 @@ public class TestUpdateDerby extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testSubselectParamsDerby() {
         Select fieldquery = new Select(DERBY);
         fieldquery
@@ -1128,7 +1122,7 @@ public class TestUpdateDerby extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCloneDerby() {
         Select fieldquery = new Select(DERBY);
         fieldquery

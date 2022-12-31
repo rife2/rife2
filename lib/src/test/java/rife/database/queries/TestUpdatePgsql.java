@@ -4,14 +4,8 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
-import rife.database.exceptions.FieldsRequiredException;
-import rife.database.exceptions.TableNameRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.*;
+import rife.database.exceptions.*;
 import rife.database.types.SqlNull;
 
 import java.math.BigDecimal;
@@ -23,7 +17,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUpdatePgsql extends TestUpdate {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testInstantiationPgsql() {
         Update query = new Update(PGSQL);
         assertNotNull(query);
@@ -35,7 +29,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testIncompleteQueryPgsql() {
         Update query = new Update(PGSQL);
         try {
@@ -55,7 +49,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClearPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename4")
@@ -70,7 +64,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testHintPgsql() {
         Update query = new Update(PGSQL)
             .hint("NO_INDEX")
@@ -84,7 +78,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldPgsql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -113,7 +107,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldCustomPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -122,7 +116,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldParametersPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename");
@@ -213,7 +207,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldParametersMixedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename");
@@ -280,7 +274,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsPgsql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -311,7 +305,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereConstructionPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -324,7 +318,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereConstructionGroupPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -357,7 +351,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereTypedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -390,7 +384,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereTypedMixedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -429,7 +423,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereParametersPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -463,7 +457,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereParametersMixedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -492,7 +486,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldWhereParametersPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename");
@@ -541,7 +535,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = ?, propertyByte = ? WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -551,7 +545,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test void testFieldsBeanConstrainedPgsql() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL) void testFieldsBeanConstrainedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyInt = 545")
@@ -560,7 +554,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanNullValuesPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -570,7 +564,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanIncludedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -580,7 +574,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanExcludedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -590,7 +584,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanFilteredPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -600,7 +594,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsParametersBeanPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -670,7 +664,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }));
     }
 
-    @Test void testFieldsParametersBeanConstrainedPgsql() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL) void testFieldsParametersBeanConstrainedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
             .fieldsParameters(BeanImplConstrained.class);
@@ -731,7 +725,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsParametersBeanExcludedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -786,7 +780,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -797,7 +791,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test void testWhereBeanConstrainedPgsql() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL) void testWhereBeanConstrainedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -807,7 +801,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanNullValuesPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -818,7 +812,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanIncludedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -829,7 +823,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanExcludedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -840,7 +834,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanFilteredPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -851,7 +845,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereParametersBeanPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -923,7 +917,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }));
     }
 
-    @Test void testWhereParametersBeanConstrainedPgsql() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL) void testWhereParametersBeanConstrainedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
@@ -988,7 +982,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereParametersBeanExcludedPgsql() {
         Update query = new Update(PGSQL);
         query.table("tablename")
@@ -1045,7 +1039,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testSubselectParamsPgsql() {
         Select fieldquery = new Select(PGSQL);
         fieldquery
@@ -1123,7 +1117,7 @@ public class TestUpdatePgsql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClonePgsql() {
         Select fieldquery = new Select(PGSQL);
         fieldquery

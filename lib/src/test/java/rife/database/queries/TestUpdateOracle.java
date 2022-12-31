@@ -4,11 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
+import rife.database.*;
 import rife.database.exceptions.FieldsRequiredException;
 import rife.database.exceptions.TableNameRequiredException;
 import rife.database.types.SqlNull;
@@ -21,7 +17,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUpdateOracle extends TestUpdate {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInstantiationOracle() {
         Update query = new Update(ORACLE);
         assertNotNull(query);
@@ -33,7 +29,7 @@ public class TestUpdateOracle extends TestUpdate {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testIncompleteQueryOracle() {
         Update query = new Update(ORACLE);
         try {
@@ -53,7 +49,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testClearOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename4")
@@ -68,7 +64,7 @@ public class TestUpdateOracle extends TestUpdate {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testHintOracle() {
         Update query = new Update(ORACLE)
             .hint("NO_INDEX")
@@ -78,7 +74,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldOracle() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
@@ -106,7 +102,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldCustomOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -115,7 +111,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldParametersOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename");
@@ -206,7 +202,7 @@ public class TestUpdateOracle extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldParametersMixedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename");
@@ -273,7 +269,7 @@ public class TestUpdateOracle extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsOracle() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
@@ -303,7 +299,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereConstructionOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -316,7 +312,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereConstructionGroupOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -349,7 +345,7 @@ public class TestUpdateOracle extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereTypedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -382,7 +378,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereTypedMixedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -421,7 +417,7 @@ public class TestUpdateOracle extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -456,7 +452,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = 1, propertyByte = 16 WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersMixedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -485,7 +481,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = 1, propertyByte = 16 WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldWhereParametersOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename");
@@ -534,7 +530,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = ?, propertyByte = ? WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsBeanOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -544,7 +540,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsBeanConstrainedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -554,7 +550,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsBeanNullValuesOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -564,7 +560,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsBeanIncludedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -574,7 +570,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsBeanExcludedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -584,7 +580,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsBeanFilteredOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -594,7 +590,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsParametersBeanOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -664,7 +660,7 @@ public class TestUpdateOracle extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsParametersBeanConstrainedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -726,7 +722,7 @@ public class TestUpdateOracle extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsParametersBeanExcludedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -781,7 +777,7 @@ public class TestUpdateOracle extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -792,7 +788,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanConstrainedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -803,7 +799,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanNullValuesOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -814,7 +810,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanIncludedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -825,7 +821,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanExcludedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -836,7 +832,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanFilteredOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -847,7 +843,7 @@ public class TestUpdateOracle extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersBeanOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -921,7 +917,7 @@ public class TestUpdateOracle extends TestUpdate {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersBeanConstrainedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -989,7 +985,7 @@ public class TestUpdateOracle extends TestUpdate {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersBeanExcludedOracle() {
         Update query = new Update(ORACLE);
         query.table("tablename")
@@ -1041,7 +1037,7 @@ public class TestUpdateOracle extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testSubselectParamsOracle() {
         Select fieldquery = new Select(ORACLE);
         fieldquery
@@ -1119,7 +1115,7 @@ public class TestUpdateOracle extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCloneOracle() {
         Select fieldquery = new Select(ORACLE);
         fieldquery

@@ -4,13 +4,14 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.TableNameRequiredException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropTableMysql extends TestDropTable {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInstantiationMysql() {
         DropTable query = new DropTable(MYSQL);
         assertNotNull(query);
@@ -22,7 +23,7 @@ public class TestDropTableMysql extends TestDropTable {
         }
     }
 
-    @Test void testIncompleteQueryMysql() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL) void testIncompleteQueryMysql() {
         DropTable query = new DropTable(MYSQL);
         try {
             query.getSql();
@@ -34,7 +35,7 @@ public class TestDropTableMysql extends TestDropTable {
         assertNotNull(query.getSql());
     }
 
-    @Test void testClearMysql() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL) void testClearMysql() {
         DropTable query = new DropTable(MYSQL);
         query.table("tablename");
         assertNotNull(query.getSql());
@@ -47,14 +48,14 @@ public class TestDropTableMysql extends TestDropTable {
         }
     }
 
-    @Test void testOneTableMysql() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL) void testOneTableMysql() {
         DropTable query = new DropTable(MYSQL);
         query.table("tabletodrop");
         assertEquals(query.getSql(), "DROP TABLE tabletodrop");
         execute(query);
     }
 
-    @Test void testMultipleTablesMysql() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL) void testMultipleTablesMysql() {
         DropTable query = new DropTable(MYSQL);
         query.table("tabletodrop1")
             .table("tabletodrop2")
@@ -63,7 +64,7 @@ public class TestDropTableMysql extends TestDropTable {
         execute(query);
     }
 
-    @Test void testCloneMysql() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL) void testCloneMysql() {
         DropTable query = new DropTable(MYSQL);
         query.table("tabletodrop1")
             .table("tabletodrop2")

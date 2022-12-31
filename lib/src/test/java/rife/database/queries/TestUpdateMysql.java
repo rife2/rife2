@@ -4,11 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
+import rife.database.*;
 import rife.database.exceptions.FieldsRequiredException;
 import rife.database.exceptions.TableNameRequiredException;
 import rife.database.types.SqlNull;
@@ -21,7 +17,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUpdateMysql extends TestUpdate {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInstantiationMysql() {
         Update query = new Update(MYSQL);
         assertNotNull(query);
@@ -33,7 +29,7 @@ public class TestUpdateMysql extends TestUpdate {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testIncompleteQueryMysql() {
         Update query = new Update(MYSQL);
         try {
@@ -53,7 +49,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testClearMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename4")
@@ -68,7 +64,7 @@ public class TestUpdateMysql extends TestUpdate {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testHintMysql() {
         Update query = new Update(MYSQL);
         query
@@ -79,7 +75,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldMysql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -107,7 +103,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldCustomMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -116,7 +112,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldParametersMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename");
@@ -206,7 +202,7 @@ public class TestUpdateMysql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldParametersMixedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename");
@@ -272,7 +268,7 @@ public class TestUpdateMysql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsMysql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -302,7 +298,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereConstructionMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -315,7 +311,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereConstructionGroupMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -348,7 +344,7 @@ public class TestUpdateMysql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereTypedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -381,7 +377,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereTypedMixedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -420,7 +416,7 @@ public class TestUpdateMysql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereParametersMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -455,7 +451,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = 1, propertyByte = 16 WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereParametersMixedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -484,7 +480,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = 1, propertyByte = 16 WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldWhereParametersMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename");
@@ -533,7 +529,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = ?, propertyByte = ? WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -543,7 +539,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanConstrainedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -553,7 +549,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanNullValuesMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -563,7 +559,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanIncludedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -573,7 +569,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanExcludedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -583,7 +579,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanFilteredMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -593,7 +589,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsParametersBeanMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -663,7 +659,7 @@ public class TestUpdateMysql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsParametersBeanConstrainedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -725,7 +721,7 @@ public class TestUpdateMysql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsParametersBeanExcludedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -780,7 +776,7 @@ public class TestUpdateMysql extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -791,7 +787,7 @@ public class TestUpdateMysql extends TestUpdate {
         // mysql doesn't compare correctly on floats, thus don't execute
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanConstrainedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -802,7 +798,7 @@ public class TestUpdateMysql extends TestUpdate {
         // mysql doesn't compare correctly on floats, thus don't execute
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanNullValuesMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -813,7 +809,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanIncludedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -824,7 +820,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanExcludedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -835,7 +831,7 @@ public class TestUpdateMysql extends TestUpdate {
         // mysql doesn't compare correctly on floats, thus don't execute
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanFilteredMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -846,7 +842,7 @@ public class TestUpdateMysql extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereParametersBeanMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -920,7 +916,7 @@ public class TestUpdateMysql extends TestUpdate {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereParametersBeanConstrainedMysql() {
         Update query = new Update(MYSQL);
         query.table("tablename")
@@ -989,7 +985,7 @@ public class TestUpdateMysql extends TestUpdate {
     }
 
     // TODO : test fails
-//    @Test
+//    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
 //    public void testWhereParametersBeanExcludedMysql() {
 //        Update query = new Update(MYSQL);
 //        query.table("tablename")
@@ -1041,12 +1037,12 @@ public class TestUpdateMysql extends TestUpdate {
 //        }));
 //    }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testSubselectParamsMysql() {
         // mysql doesn't support subqueries
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCloneMysql() {
         final Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);

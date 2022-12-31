@@ -4,11 +4,9 @@
  */
 package rife.database.queries;
 
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
+import rife.database.*;
 import rife.database.exceptions.ColumnsRequiredException;
 import rife.database.exceptions.TableNameRequiredException;
-import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.sql.Blob;
@@ -16,7 +14,7 @@ import java.sql.Blob;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateTableHsqldb extends TestCreateTable {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testInstantiationHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         assertNotNull(query);
@@ -28,7 +26,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testIncompleteQueryHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         try {
@@ -49,7 +47,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testClearHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -64,7 +62,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testColumnHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
@@ -92,7 +90,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testColumnPrecisionHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
@@ -120,7 +118,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testColumnsBeanHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -129,7 +127,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testColumnsBeanIncludedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -138,7 +136,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testColumnsBeanExcludedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -147,7 +145,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testColumnsBeanFilteredHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -156,7 +154,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testColumnsBeanPrecisionHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -189,7 +187,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testColumnsBeanConstrainedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -198,7 +196,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testNullableHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -214,7 +212,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testDefaultHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
@@ -260,7 +258,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testDefaultFunctionHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
@@ -270,7 +268,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCustomAttributeHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename1")
@@ -280,7 +278,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testTemporaryHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -290,7 +288,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testPrimaryKeySimpleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -300,7 +298,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testPrimaryKeyMultipleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -311,7 +309,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testPrimaryKeyNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -321,7 +319,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testPrimaryKeyMultipleNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -332,7 +330,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testUniqueSimpleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -342,7 +340,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testUniqueMultipleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -353,7 +351,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testUniqueNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -363,7 +361,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testUniqueMultipleNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -374,7 +372,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testForeignKeySimpleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -384,7 +382,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testForeignKeyMultipleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -395,7 +393,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testForeignKeySimpleNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -405,7 +403,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testForeignKeyMultipleNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -416,7 +414,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testForeignKeyViolationsSingleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -492,7 +490,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testForeignKeyViolationsHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -502,7 +500,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testForeignKeyMultipleViolationsHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -515,7 +513,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCheckSimpleHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -525,7 +523,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCheckNamedHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")
@@ -535,7 +533,7 @@ public class TestCreateTableHsqldb extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCloneHsqldb() {
         CreateTable query = new CreateTable(HSQLDB);
         query.table("tablename")

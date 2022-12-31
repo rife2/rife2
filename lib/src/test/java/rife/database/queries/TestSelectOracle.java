@@ -4,11 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
+import rife.database.*;
 import rife.database.exceptions.TableNameOrFieldsRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
@@ -20,7 +16,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSelectOracle extends TestSelect {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInstantiationOracle() {
         Select query = new Select(ORACLE);
         assertNotNull(query);
@@ -32,7 +28,7 @@ public class TestSelectOracle extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testIncompleteQueryOracle() {
         Select query = new Select(ORACLE);
         try {
@@ -55,7 +51,7 @@ public class TestSelectOracle extends TestSelect {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testClearOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename");
@@ -69,7 +65,7 @@ public class TestSelectOracle extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testBasicOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename");
@@ -77,7 +73,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testHintOracle() {
         Select query = new Select(ORACLE)
             .hint("NO_INDEX")
@@ -86,7 +82,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testOrderByAscendingOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -95,7 +91,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testOrderByDescendingOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -104,7 +100,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testBeanOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -113,7 +109,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testBeanConstrainedOracle() {
         Select query = new Select(ORACLE, BeanImplConstrained.class);
         query.from("tablename");
@@ -127,7 +123,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testBeanExcludedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -136,7 +132,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testBeanTableOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -145,7 +141,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testBeanExcludedTableOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -154,7 +150,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereTypedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename");
@@ -185,7 +181,7 @@ public class TestSelectOracle extends TestSelect {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereTypedMixedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename");
@@ -222,7 +218,7 @@ public class TestSelectOracle extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename");
@@ -255,7 +251,7 @@ public class TestSelectOracle extends TestSelect {
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersMixedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -277,7 +273,7 @@ public class TestSelectOracle extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereConstructionOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -288,7 +284,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereConstructionGroupOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -322,7 +318,7 @@ public class TestSelectOracle extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -331,7 +327,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanConstrainedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -340,7 +336,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanNullValuesOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -349,7 +345,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanIncludedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -358,7 +354,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanExcludedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -367,7 +363,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereBeanFilteredOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -376,7 +372,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersBeanOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -448,7 +444,7 @@ public class TestSelectOracle extends TestSelect {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersBeanConstrainedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -514,7 +510,7 @@ public class TestSelectOracle extends TestSelect {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testWhereParametersBeanExcludedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -564,7 +560,7 @@ public class TestSelectOracle extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testDistinctOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -577,7 +573,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testDistinctOnOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -596,7 +592,7 @@ public class TestSelectOracle extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testComplexOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -623,7 +619,7 @@ public class TestSelectOracle extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testGroupByBeanOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -633,7 +629,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testGroupByBeanExcludedOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -643,7 +639,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testJoinOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -653,7 +649,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testJoinCustomOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -663,7 +659,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testJoinCrossOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -673,7 +669,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testJoinInnerOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -692,7 +688,7 @@ public class TestSelectOracle extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testJoinOuterOracle() {
         Select query = new Select(ORACLE);
 
@@ -745,7 +741,7 @@ public class TestSelectOracle extends TestSelect {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testLimitOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -765,7 +761,7 @@ public class TestSelectOracle extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testLimitParameterOracle() {
         Select query = new Select(ORACLE);
         query.from("tablename")
@@ -786,7 +782,7 @@ public class TestSelectOracle extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testSubselectParamsOracle() {
         Select fieldquery = new Select(ORACLE);
         fieldquery
@@ -898,7 +894,7 @@ public class TestSelectOracle extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCloneOracle() {
         Select fieldquery = new Select(ORACLE);
         fieldquery

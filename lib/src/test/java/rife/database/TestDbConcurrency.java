@@ -7,17 +7,10 @@ package rife.database;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.database.exceptions.DatabaseException;
-import rife.database.queries.CreateTable;
-import rife.database.queries.Delete;
-import rife.database.queries.DropTable;
-import rife.database.queries.Insert;
-import rife.database.queries.Select;
+import rife.database.queries.*;
 import rife.tools.InnerClassException;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class TestDbConcurrency {
@@ -50,8 +43,8 @@ public class TestDbConcurrency {
         display('x');
     }
 
-//    @ParameterizedTest
-//    @ArgumentsSource(TestDatasources.class)
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
     void testConcurrency(Datasource datasource) {
         var structure = new Structure(datasource);
         try {

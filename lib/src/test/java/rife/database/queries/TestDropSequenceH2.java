@@ -4,13 +4,14 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropSequenceH2 extends TestDropSequence {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testInstantiationH2() {
         DropSequence query = new DropSequence(H2);
         assertNotNull(query);
@@ -22,7 +23,7 @@ public class TestDropSequenceH2 extends TestDropSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testClearH2() {
         DropSequence query = new DropSequence(H2);
         query.name("sequencename");
@@ -36,7 +37,7 @@ public class TestDropSequenceH2 extends TestDropSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCreateH2() {
         DropSequence query = new DropSequence(H2);
         query.name("sequencename");
@@ -44,7 +45,7 @@ public class TestDropSequenceH2 extends TestDropSequence {
         execute(H2, query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCloneH2() {
         DropSequence query = new DropSequence(H2);
         query.name("sequencename");

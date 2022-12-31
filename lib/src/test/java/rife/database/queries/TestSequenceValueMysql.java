@@ -4,15 +4,14 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.exceptions.SequenceNameRequiredException;
-import rife.database.exceptions.SequenceOperationRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
+import rife.database.exceptions.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValueMysql extends TestSequenceValue {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInstantiationMysql() {
         SequenceValue query = new SequenceValue(MYSQL);
         assertNotNull(query);
@@ -24,7 +23,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInvalidMysql() {
         SequenceValue query = new SequenceValue(MYSQL);
         try {
@@ -51,7 +50,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testClearMysql() {
         SequenceValue query = new SequenceValue(MYSQL);
         query
@@ -73,7 +72,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testNextMysql() {
         SequenceValue query = new SequenceValue(MYSQL);
         query
@@ -87,7 +86,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCurrentMysql() {
         SequenceValue query = new SequenceValue(MYSQL);
         query
@@ -101,7 +100,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCloneMysql() {
         SequenceValue query = new SequenceValue(MYSQL);
         query

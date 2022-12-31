@@ -4,11 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
+import rife.database.*;
 import rife.database.exceptions.TableNameRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
@@ -21,7 +17,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDeletePgsql extends TestDelete {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testInstantiationPgsql() {
         Delete query = new Delete(PGSQL);
         assertNotNull(query);
@@ -33,7 +29,7 @@ public class TestDeletePgsql extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testIncompleteQueryPgsql() {
         Delete query = new Delete(PGSQL);
         try {
@@ -53,7 +49,7 @@ public class TestDeletePgsql extends TestDelete {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClearPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -68,7 +64,7 @@ public class TestDeletePgsql extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFromPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename");
@@ -76,7 +72,7 @@ public class TestDeletePgsql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testHintPgsql() {
         Delete query = new Delete(PGSQL)
             .hint("NO_INDEX")
@@ -89,7 +85,7 @@ public class TestDeletePgsql extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWherePgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -98,7 +94,7 @@ public class TestDeletePgsql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereTypedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename");
@@ -129,7 +125,7 @@ public class TestDeletePgsql extends TestDelete {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereTypedMixedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename");
@@ -166,7 +162,7 @@ public class TestDeletePgsql extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereParametersPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename");
@@ -199,7 +195,7 @@ public class TestDeletePgsql extends TestDelete {
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereParametersMixedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -226,7 +222,7 @@ public class TestDeletePgsql extends TestDelete {
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereConstructionPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -237,7 +233,7 @@ public class TestDeletePgsql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereConstructionGroupPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -268,7 +264,7 @@ public class TestDeletePgsql extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -277,7 +273,7 @@ public class TestDeletePgsql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanConstrainedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -286,7 +282,7 @@ public class TestDeletePgsql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanNullValuesPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -295,7 +291,7 @@ public class TestDeletePgsql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanIncludedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -304,7 +300,7 @@ public class TestDeletePgsql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanExcludedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -313,7 +309,7 @@ public class TestDeletePgsql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanFilteredPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -322,7 +318,7 @@ public class TestDeletePgsql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereParametersBeanPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -392,7 +388,7 @@ public class TestDeletePgsql extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereParametersBeanConstrainedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -456,7 +452,7 @@ public class TestDeletePgsql extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereParametersBeanExcludedPgsql() {
         Delete query = new Delete(PGSQL);
         query.from("tablename")
@@ -510,7 +506,7 @@ public class TestDeletePgsql extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testDeleteSubselectParamsPgsql() {
         Select wherequery = new Select(PGSQL);
         wherequery
@@ -570,7 +566,7 @@ public class TestDeletePgsql extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClonePgsql() {
         Select wherequery = new Select(PGSQL);
         wherequery

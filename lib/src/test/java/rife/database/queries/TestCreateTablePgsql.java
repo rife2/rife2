@@ -4,10 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.SomeEnum;
+import rife.database.*;
 import rife.database.exceptions.ColumnsRequiredException;
 import rife.database.exceptions.TableNameRequiredException;
 
@@ -17,7 +14,7 @@ import java.sql.Blob;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateTablePgsql extends TestCreateTable {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testInstantiationPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         assertNotNull(query);
@@ -29,7 +26,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testIncompleteQueryPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         try {
@@ -50,7 +47,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClearPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -65,7 +62,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testColumnPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename1")
@@ -94,7 +91,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testColumnPrecisionPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename1")
@@ -123,7 +120,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testColumnsBeanPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -132,7 +129,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testColumnsBeanIncludedPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -141,7 +138,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testColumnsBeanExcludedPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -150,7 +147,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testColumnsBeanFilteredPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -159,7 +156,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testColumnsBeanPrecisionPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -200,7 +197,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testNullablePgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -216,7 +213,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testDefaultPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename1")
@@ -262,7 +259,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testDefaultFunctionPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename1")
@@ -272,7 +269,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testCustomAttributePgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename1")
@@ -282,7 +279,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testTemporaryPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -292,7 +289,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testPrimaryKeySimplePgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -302,7 +299,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testPrimaryKeyMultiplePgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -313,7 +310,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testPrimaryKeyNamedPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -323,7 +320,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testPrimaryKeyMultipleNamedPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -334,7 +331,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testUniqueSimplePgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -344,7 +341,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testUniqueMultiplePgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -355,7 +352,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testUniqueNamedPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -365,7 +362,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testUniqueMultipleNamedPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -376,7 +373,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testForeignKeySimplePgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -386,7 +383,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testForeignKeyMultiplePgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -397,7 +394,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testForeignKeySimpleNamedPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -407,7 +404,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testForeignKeyMultipleNamedPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -418,7 +415,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testForeignKeyViolationsSinglePgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -492,7 +489,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testForeignKeyViolationsPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -502,7 +499,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testForeignKeyMultipleViolationsPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -513,7 +510,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testCheckSimplePgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -523,7 +520,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testCheckNamedPgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")
@@ -533,7 +530,7 @@ public class TestCreateTablePgsql extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClonePgsql() {
         CreateTable query = new CreateTable(PGSQL);
         query.table("tablename")

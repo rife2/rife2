@@ -4,14 +4,15 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 import rife.database.exceptions.SequenceOperationRequiredException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValueH2 extends TestSequenceValue {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testInstantiationH2() {
         SequenceValue query = new SequenceValue(H2);
         assertNotNull(query);
@@ -23,7 +24,7 @@ public class TestSequenceValueH2 extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testInvalidH2() {
         SequenceValue query = new SequenceValue(H2);
         try {
@@ -50,7 +51,7 @@ public class TestSequenceValueH2 extends TestSequenceValue {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testClearH2() {
         SequenceValue query = new SequenceValue(H2);
         query
@@ -67,7 +68,7 @@ public class TestSequenceValueH2 extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testNextH2() {
         SequenceValue query = new SequenceValue(H2);
         query
@@ -77,7 +78,7 @@ public class TestSequenceValueH2 extends TestSequenceValue {
         assertTrue(execute(H2, query) >= 0);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCurrentH2() {
         SequenceValue query = new SequenceValue(H2);
         query
@@ -87,7 +88,7 @@ public class TestSequenceValueH2 extends TestSequenceValue {
         assertTrue(execute(H2, query) >= 0);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCloneH2() {
         SequenceValue query = new SequenceValue(H2);
         query

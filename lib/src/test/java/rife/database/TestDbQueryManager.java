@@ -97,10 +97,31 @@ public class TestDbQueryManager {
             final var select = new Select(datasource).from("tbltest").field("count(*)");
 
             if (manager.getConnection().supportsTransactions() &&
-                // TODO : locks up in derby
+                // locks up in derby and hsqldb
                 !datasource.getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver") &&
-                // TODO : locks up on hsqldb
                 !datasource.getAliasedDriver().equals("org.hsqldb.jdbcDriver")) {
+                // ensure that the transaction isn't committed yet
+                // since this should only happen after the last transaction user
+                final var updated_monitor = new Object();
+                final var isolation_monitor = new Object();
+                var other_thread = new Thread(() -> {
+                    synchronized (updated_monitor) {
+                        try {
+                            updated_monitor.wait();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    assertEquals(0, manager.executeGetFirstInt(select));
+
+                    synchronized (isolation_monitor) {
+                        isolation_monitor.notifyAll();
+                    }
+                });
+
+                other_thread.start();
+
                 manager.inTransaction(() -> {
                     manager.executeUpdate(insert);
                     assertEquals(1, manager.executeGetFirstInt(select));
@@ -117,30 +138,14 @@ public class TestDbQueryManager {
 
                     assertEquals(3, manager.executeGetFirstInt(select));
 
-                    // ensure that the transaction isn't committed yet
-                    // since this should only happen after the last transaction user
-                    var other_thread = new Thread() {
-                        public void run() {
-                            // HsqlDB only has read-uncommitted transaction isolation
-                            if ("org.hsqldb.jdbcDriver".equals(datasource.getAliasedDriver())) {
-                                assertEquals(3, manager.executeGetFirstInt(select));
-                            }
-                            // all the rest should be fully isolated
-                            else {
-                                assertEquals(0, manager.executeGetFirstInt(select));
-                            }
+                    synchronized (updated_monitor) {
+                        updated_monitor.notifyAll();
+                    }
 
-                            synchronized (this) {
-                                this.notifyAll();
-                            }
-                        }
-                    };
-
-                    other_thread.start();
-                    while (other_thread.isAlive()) {
-                        synchronized (other_thread) {
+                    synchronized (isolation_monitor) {
+                        if (other_thread.isAlive()) {
                             try {
-                                other_thread.wait();
+                                isolation_monitor.wait();
                             } catch (InterruptedException ignored) {
                             }
                         }

@@ -4,11 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
+import rife.database.*;
 import rife.database.exceptions.FieldsRequiredException;
 import rife.database.exceptions.TableNameRequiredException;
 import rife.database.types.SqlNull;
@@ -21,7 +17,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInsertMysql extends TestInsert {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInstantiationMysql() {
         Insert query = new Insert(MYSQL);
         assertNotNull(query);
@@ -33,7 +29,7 @@ public class TestInsertMysql extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testIncompleteQueryMysql() {
         Insert query = new Insert(MYSQL);
         try {
@@ -53,7 +49,7 @@ public class TestInsertMysql extends TestInsert {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testClearMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
@@ -68,7 +64,7 @@ public class TestInsertMysql extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testParameterMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
@@ -76,7 +72,7 @@ public class TestInsertMysql extends TestInsert {
         assertEquals(query.getSql(), "INSERT INTO tablename (col1) VALUES (?)");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testHintMysql() {
         Insert query = new Insert(MYSQL);
         query
@@ -87,7 +83,7 @@ public class TestInsertMysql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldMysql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -114,7 +110,7 @@ public class TestInsertMysql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldCustomMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
@@ -123,7 +119,7 @@ public class TestInsertMysql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsMysql() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -152,7 +148,7 @@ public class TestInsertMysql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldParametersMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename");
@@ -243,7 +239,7 @@ public class TestInsertMysql extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldParametersMixedMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename");
@@ -309,7 +305,7 @@ public class TestInsertMysql extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
@@ -318,7 +314,7 @@ public class TestInsertMysql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanConstrainedMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
@@ -327,7 +323,7 @@ public class TestInsertMysql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanNullValuesMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
@@ -336,7 +332,7 @@ public class TestInsertMysql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanIncludedMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
@@ -345,7 +341,7 @@ public class TestInsertMysql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanExcludedMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
@@ -354,7 +350,7 @@ public class TestInsertMysql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanFilteredMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
@@ -363,7 +359,7 @@ public class TestInsertMysql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testMultipleRowsMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
@@ -379,7 +375,7 @@ public class TestInsertMysql extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsParametersBeanMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
@@ -449,7 +445,7 @@ public class TestInsertMysql extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsParametersBeanConstrainedMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
@@ -511,7 +507,7 @@ public class TestInsertMysql extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsParametersBeanExcludedMysql() {
         Insert query = new Insert(MYSQL);
         query.into("tablename")
@@ -566,12 +562,12 @@ public class TestInsertMysql extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInsertSubselectParamsMysql() {
         // mysql doesn't support subqueries
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCloneMysql() {
         final Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);

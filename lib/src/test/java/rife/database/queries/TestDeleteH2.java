@@ -4,11 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
+import rife.database.*;
 import rife.database.exceptions.TableNameRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
@@ -20,7 +16,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDeleteH2 extends TestDelete {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testInstantiationH2() {
         Delete query = new Delete(H2);
         assertNotNull(query);
@@ -32,7 +28,7 @@ public class TestDeleteH2 extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testIncompleteQueryH2() {
         Delete query = new Delete(H2);
         try {
@@ -52,7 +48,7 @@ public class TestDeleteH2 extends TestDelete {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testClearH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -67,7 +63,7 @@ public class TestDeleteH2 extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testHintH2() {
         Delete query = new Delete(H2)
             .hint("NO_INDEX")
@@ -80,7 +76,7 @@ public class TestDeleteH2 extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testFromH2() {
         Delete query = new Delete(H2);
         query.from("tablename");
@@ -88,7 +84,7 @@ public class TestDeleteH2 extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -97,7 +93,7 @@ public class TestDeleteH2 extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereTypedH2() {
         Delete query = new Delete(H2);
         query.from("tablename");
@@ -128,7 +124,7 @@ public class TestDeleteH2 extends TestDelete {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereTypedMixedH2() {
         Delete query = new Delete(H2);
         query.from("tablename");
@@ -165,7 +161,7 @@ public class TestDeleteH2 extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereParametersH2() {
         Delete query = new Delete(H2);
         query.from("tablename");
@@ -198,7 +194,7 @@ public class TestDeleteH2 extends TestDelete {
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereParametersMixedH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -225,7 +221,7 @@ public class TestDeleteH2 extends TestDelete {
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereConstructionH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -236,7 +232,7 @@ public class TestDeleteH2 extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereConstructionGroupH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -267,7 +263,7 @@ public class TestDeleteH2 extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereBeanH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -276,7 +272,7 @@ public class TestDeleteH2 extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereBeanConstrainedH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -285,7 +281,7 @@ public class TestDeleteH2 extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereBeanNullValuesH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -294,7 +290,7 @@ public class TestDeleteH2 extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereBeanIncludedH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -303,7 +299,7 @@ public class TestDeleteH2 extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereBeanExcludedH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -312,7 +308,7 @@ public class TestDeleteH2 extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereBeanFilteredH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -321,7 +317,7 @@ public class TestDeleteH2 extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereParametersBeanH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -391,7 +387,7 @@ public class TestDeleteH2 extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereParametersBeanConstrainedH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -455,7 +451,7 @@ public class TestDeleteH2 extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereParametersBeanExcludedH2() {
         Delete query = new Delete(H2);
         query.from("tablename")
@@ -509,7 +505,7 @@ public class TestDeleteH2 extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testDeleteSubselectParamsH2() {
         Select wherequery = new Select(H2);
         wherequery
@@ -569,7 +565,7 @@ public class TestDeleteH2 extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCloneH2() {
         Select wherequery = new Select(H2);
         wherequery

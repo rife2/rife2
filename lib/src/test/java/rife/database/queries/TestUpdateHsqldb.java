@@ -4,14 +4,8 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
-import rife.database.exceptions.FieldsRequiredException;
-import rife.database.exceptions.TableNameRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.*;
+import rife.database.exceptions.*;
 import rife.database.types.SqlNull;
 
 import java.math.BigDecimal;
@@ -22,7 +16,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUpdateHsqldb extends TestUpdate {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testInstantiationHsqldb() {
         Update query = new Update(HSQLDB);
         assertNotNull(query);
@@ -34,7 +28,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testIncompleteQueryHsqldb() {
         Update query = new Update(HSQLDB);
         try {
@@ -54,7 +48,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testClearHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename4")
@@ -69,7 +63,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testHintHsqldb() {
         Update query = new Update(HSQLDB)
             .hint("NO_INDEX")
@@ -83,7 +77,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldHsqldb() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -112,7 +106,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldCustomHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -121,7 +115,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldParametersHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename");
@@ -212,7 +206,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldParametersMixedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename");
@@ -278,7 +272,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsHsqldb() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -309,7 +303,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereConstructionHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -322,7 +316,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereConstructionGroupHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -355,7 +349,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereTypedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -388,7 +382,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereTypedMixedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -427,7 +421,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -462,7 +456,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersMixedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -491,7 +485,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldWhereParametersHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename");
@@ -540,7 +534,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = ?, propertyByte = ? WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsBeanHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -550,7 +544,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsBeanConstrainedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -560,7 +554,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsBeanNullValuesHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -570,7 +564,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsBeanIncludedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -580,7 +574,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsBeanExcludedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -590,7 +584,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsBeanFilteredHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -600,7 +594,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsParametersBeanHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -670,7 +664,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsParametersBeanConstrainedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -732,7 +726,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsParametersBeanExcludedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -787,7 +781,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -798,7 +792,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanConstrainedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -809,7 +803,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanNullValuesHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -820,7 +814,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanIncludedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -831,7 +825,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanExcludedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -842,7 +836,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanFilteredHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -853,7 +847,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersBeanHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -925,7 +919,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersBeanConstrainedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -993,7 +987,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersBeanExcludedHsqldb() {
         Update query = new Update(HSQLDB);
         query.table("tablename")
@@ -1045,7 +1039,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testSubselectParamsHsqldb() {
         Select fieldquery = new Select(HSQLDB);
         fieldquery
@@ -1121,7 +1115,7 @@ public class TestUpdateHsqldb extends TestUpdate {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCloneHsqldb() {
         Select fieldquery = new Select(HSQLDB);
         fieldquery

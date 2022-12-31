@@ -4,15 +4,14 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.exceptions.SequenceNameRequiredException;
-import rife.database.exceptions.SequenceOperationRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
+import rife.database.exceptions.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValueHsqldb extends TestSequenceValue {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testInstantiationHsqldb() {
         SequenceValue query = new SequenceValue(HSQLDB);
         assertNotNull(query);
@@ -24,7 +23,7 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testInvalidHsqldb() {
         SequenceValue query = new SequenceValue(HSQLDB);
         try {
@@ -51,7 +50,7 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testClearHsqldb() {
         SequenceValue query = new SequenceValue(HSQLDB);
         query
@@ -68,7 +67,7 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testNextHsqldb() {
         SequenceValue query = new SequenceValue(HSQLDB);
         query
@@ -78,7 +77,7 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
         assertTrue(execute(HSQLDB, query) >= 0);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCurrentHsqldb() {
         SequenceValue query = new SequenceValue(HSQLDB);
         query
@@ -92,7 +91,7 @@ public class TestSequenceValueHsqldb extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCloneHsqldb() {
         SequenceValue query = new SequenceValue(HSQLDB);
         query

@@ -4,14 +4,8 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
-import rife.database.exceptions.FieldsRequiredException;
-import rife.database.exceptions.TableNameRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.*;
+import rife.database.exceptions.*;
 import rife.database.types.SqlNull;
 
 import java.math.BigDecimal;
@@ -22,7 +16,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInsertOracle extends TestInsert {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInstantiationOracle() {
         Insert query = new Insert(ORACLE);
         assertNotNull(query);
@@ -34,7 +28,7 @@ public class TestInsertOracle extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testIncompleteQueryOracle() {
         Insert query = new Insert(ORACLE);
         try {
@@ -54,7 +48,7 @@ public class TestInsertOracle extends TestInsert {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testClearOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
@@ -69,7 +63,7 @@ public class TestInsertOracle extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testHintOracle() {
         Insert query = new Insert(ORACLE)
             .hint("APPEND")
@@ -79,7 +73,7 @@ public class TestInsertOracle extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testParameterOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
@@ -87,7 +81,7 @@ public class TestInsertOracle extends TestInsert {
         assertEquals(query.getSql(), "INSERT INTO tablename (col1) VALUES (?)");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldOracle() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
@@ -114,7 +108,7 @@ public class TestInsertOracle extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldCustomOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
@@ -123,7 +117,7 @@ public class TestInsertOracle extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsOracle() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
@@ -152,7 +146,7 @@ public class TestInsertOracle extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldParametersOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename");
@@ -243,7 +237,7 @@ public class TestInsertOracle extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldParametersMixedOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename");
@@ -310,7 +304,7 @@ public class TestInsertOracle extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsBeanOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
@@ -319,7 +313,7 @@ public class TestInsertOracle extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsBeanConstrainedOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
@@ -328,7 +322,7 @@ public class TestInsertOracle extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsBeanNullValuesOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
@@ -337,7 +331,7 @@ public class TestInsertOracle extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsBeanIncludedOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
@@ -346,7 +340,7 @@ public class TestInsertOracle extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsBeanExcludedOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
@@ -355,7 +349,7 @@ public class TestInsertOracle extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsBeanFilteredOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
@@ -364,7 +358,7 @@ public class TestInsertOracle extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testMultipleRowsOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
@@ -384,7 +378,7 @@ public class TestInsertOracle extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsParametersBeanOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
@@ -454,7 +448,7 @@ public class TestInsertOracle extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsParametersBeanConstrainedOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
@@ -516,7 +510,7 @@ public class TestInsertOracle extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testFieldsParametersBeanExcludedOracle() {
         Insert query = new Insert(ORACLE);
         query.into("tablename")
@@ -571,7 +565,7 @@ public class TestInsertOracle extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInsertSubselectParamsOracle() {
         Select fieldquery = new Select(ORACLE);
         fieldquery
@@ -621,7 +615,7 @@ public class TestInsertOracle extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCloneOracle() {
         Select fieldquery = new Select(ORACLE);
         fieldquery

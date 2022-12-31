@@ -4,12 +4,8 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.exceptions.ColumnsRequiredException;
-import rife.database.exceptions.TableNameRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.*;
+import rife.database.exceptions.*;
 
 import java.math.BigDecimal;
 import java.sql.Blob;
@@ -17,7 +13,7 @@ import java.sql.Blob;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateTableOracle extends TestCreateTable {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInstantiationOracle() {
         CreateTable query = new CreateTable(ORACLE);
         assertNotNull(query);
@@ -29,7 +25,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testIncompleteQueryOracle() {
         CreateTable query = new CreateTable(ORACLE);
         try {
@@ -50,7 +46,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testClearOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -65,7 +61,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename1")
@@ -94,7 +90,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         // VARCHAR2 and CHAR need size specification
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnPrecisionOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename1")
@@ -122,7 +118,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnsBeanOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -132,7 +128,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         // VARCHAR2 and CHAR need size specification
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnsBeanIncludedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -142,7 +138,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         // VARCHAR2 and CHAR need size specification
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnsBeanExcludedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -152,7 +148,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         // VARCHAR2 and CHAR need size specification
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnsBeanFilteredOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -161,7 +157,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnsBeanPrecisionOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -195,7 +191,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnsBeanConstrainedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -204,7 +200,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testNullableOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -220,7 +216,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testDefaultOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename1")
@@ -266,7 +262,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testDefaultFunctionOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename1")
@@ -276,7 +272,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCustomAttributeOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename1")
@@ -286,7 +282,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testTemporaryOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -296,7 +292,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testPrimaryKeySimpleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -306,7 +302,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testPrimaryKeyMultipleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -317,7 +313,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testPrimaryKeyNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -327,7 +323,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testPrimaryKeyMultipleNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -338,7 +334,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testUniqueSimpleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -348,7 +344,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testUniqueMultipleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -359,7 +355,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testUniqueNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -369,7 +365,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testUniqueMultipleNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -380,7 +376,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeySimpleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -390,7 +386,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeyMultipleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -401,7 +397,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeySimpleNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -411,7 +407,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeyMultipleNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -422,7 +418,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeyViolationsSingleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -528,7 +524,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeyViolationsOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -542,7 +538,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeyMultipleViolationsOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -557,7 +553,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCheckSimpleOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -567,7 +563,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCheckNamedOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")
@@ -577,7 +573,7 @@ public class TestCreateTableOracle extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCloneOracle() {
         CreateTable query = new CreateTable(ORACLE);
         query.table("tablename")

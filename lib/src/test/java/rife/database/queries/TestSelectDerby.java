@@ -4,23 +4,19 @@
  */
 package rife.database.queries;
 
+import rife.database.*;
+import rife.database.exceptions.TableNameOrFieldsRequiredException;
+import rife.database.exceptions.UnsupportedSqlFeatureException;
+
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
-import rife.database.exceptions.TableNameOrFieldsRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSelectDerby extends TestSelect {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testInstantiationDerby() {
         Select query = new Select(DERBY);
         assertNotNull(query);
@@ -32,7 +28,7 @@ public class TestSelectDerby extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testIncompleteQueryDerby() {
         Select query = new Select(DERBY);
         try {
@@ -55,7 +51,7 @@ public class TestSelectDerby extends TestSelect {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testClearDerby() {
         Select query = new Select(DERBY);
         query.from("tablename");
@@ -69,7 +65,7 @@ public class TestSelectDerby extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testBasicDerby() {
         Select query = new Select(DERBY);
         query.from("tablename");
@@ -77,7 +73,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testHintDerby() {
         Select query = new Select(DERBY);
         query
@@ -91,7 +87,7 @@ public class TestSelectDerby extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testOrderByAscendingDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -100,7 +96,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testOrderByDescendingDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -109,7 +105,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testBeanDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -118,7 +114,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testBeanConstrainedDerby() {
         Select query = new Select(DERBY, BeanImplConstrained.class);
         query.from("tablename");
@@ -132,7 +128,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testBeanExcludedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -141,7 +137,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testBeanTableDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -150,7 +146,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testBeanExcludedTableDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -159,7 +155,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereTypedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename");
@@ -190,7 +186,7 @@ public class TestSelectDerby extends TestSelect {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereTypedMixedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename");
@@ -227,7 +223,7 @@ public class TestSelectDerby extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersDerby() {
         Select query = new Select(DERBY);
         query.from("tablename");
@@ -260,7 +256,7 @@ public class TestSelectDerby extends TestSelect {
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersMixedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -282,7 +278,7 @@ public class TestSelectDerby extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereConstructionDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -293,7 +289,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereConstructionGroupDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -327,7 +323,7 @@ public class TestSelectDerby extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -336,7 +332,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanConstrainedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -345,7 +341,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanNullValuesDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -354,7 +350,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanIncludedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -363,7 +359,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanExcludedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -372,7 +368,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanFilteredDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -381,7 +377,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersBeanDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -451,7 +447,7 @@ public class TestSelectDerby extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersBeanConstrainedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -517,7 +513,7 @@ public class TestSelectDerby extends TestSelect {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersBeanExcludedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -571,7 +567,7 @@ public class TestSelectDerby extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testDistinctDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -584,7 +580,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testDistinctOnDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -603,7 +599,7 @@ public class TestSelectDerby extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testComplexDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -625,7 +621,7 @@ public class TestSelectDerby extends TestSelect {
         assertEquals(query.getSql(), "SELECT DISTINCT field1, field2, field3 FROM tablename, table2, table3 WHERE this = that GROUP BY gexpr1, gexpr2 HAVING hexpr1, hexpr2 UNION ALL uexpr1 UNION uexpr2");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testGroupByBeanDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -635,7 +631,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testGroupByBeanExcludedDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -645,7 +641,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testJoinDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -655,7 +651,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testJoinCustomDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -665,7 +661,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testJoinCrossDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -679,7 +675,7 @@ public class TestSelectDerby extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testJoinInnerDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -706,7 +702,7 @@ public class TestSelectDerby extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testJoinOuterDerby() {
         Select query = new Select(DERBY);
 
@@ -788,7 +784,7 @@ public class TestSelectDerby extends TestSelect {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testLimitDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -813,7 +809,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testLimitParameterDerby() {
         Select query = new Select(DERBY);
         query.from("tablename")
@@ -840,7 +836,7 @@ public class TestSelectDerby extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testSubselectParamsDerby() {
         Select fieldquery = new Select(DERBY);
         fieldquery
@@ -952,7 +948,7 @@ public class TestSelectDerby extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCloneDerby() {
         Select fieldquery = new Select(DERBY);
         fieldquery

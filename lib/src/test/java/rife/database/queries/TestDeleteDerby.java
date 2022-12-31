@@ -4,11 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
+import rife.database.*;
 import rife.database.exceptions.TableNameRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
@@ -21,7 +17,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDeleteDerby extends TestDelete {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testInstantiationDerby() {
         Delete query = new Delete(DERBY);
         assertNotNull(query);
@@ -33,7 +29,7 @@ public class TestDeleteDerby extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testIncompleteQueryDerby() {
         Delete query = new Delete(DERBY);
         try {
@@ -53,7 +49,7 @@ public class TestDeleteDerby extends TestDelete {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testClearDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -68,7 +64,7 @@ public class TestDeleteDerby extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testHintDerby() {
         Delete query = new Delete(DERBY)
             .hint("NO_INDEX")
@@ -81,7 +77,7 @@ public class TestDeleteDerby extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFromDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename");
@@ -89,7 +85,7 @@ public class TestDeleteDerby extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -98,7 +94,7 @@ public class TestDeleteDerby extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereTypedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename");
@@ -129,7 +125,7 @@ public class TestDeleteDerby extends TestDelete {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereTypedMixedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename");
@@ -166,7 +162,7 @@ public class TestDeleteDerby extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename");
@@ -199,7 +195,7 @@ public class TestDeleteDerby extends TestDelete {
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersMixedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -226,7 +222,7 @@ public class TestDeleteDerby extends TestDelete {
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereConstructionDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -237,7 +233,7 @@ public class TestDeleteDerby extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereConstructionGroupDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -268,7 +264,7 @@ public class TestDeleteDerby extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -277,7 +273,7 @@ public class TestDeleteDerby extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanConstrainedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -286,7 +282,7 @@ public class TestDeleteDerby extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanNullValuesDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -295,7 +291,7 @@ public class TestDeleteDerby extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanIncludedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -304,7 +300,7 @@ public class TestDeleteDerby extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanExcludedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -313,7 +309,7 @@ public class TestDeleteDerby extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereBeanFilteredDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -322,7 +318,7 @@ public class TestDeleteDerby extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersBeanDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -392,7 +388,7 @@ public class TestDeleteDerby extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersBeanConstrainedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -458,7 +454,7 @@ public class TestDeleteDerby extends TestDelete {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testWhereParametersBeanExcludedDerby() {
         Delete query = new Delete(DERBY);
         query.from("tablename")
@@ -512,7 +508,7 @@ public class TestDeleteDerby extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testDeleteSubselectParamsDerby() {
         Select wherequery = new Select(DERBY);
         wherequery
@@ -572,7 +568,7 @@ public class TestDeleteDerby extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCloneDerby() {
         Select wherequery = new Select(DERBY);
         wherequery

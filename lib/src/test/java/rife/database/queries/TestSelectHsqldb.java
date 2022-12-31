@@ -4,11 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
+import rife.database.*;
 import rife.database.exceptions.TableNameOrFieldsRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
@@ -20,7 +16,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSelectHsqldb extends TestSelect {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testInstantiationHsqldb() {
         Select query = new Select(HSQLDB);
         assertNotNull(query);
@@ -32,7 +28,7 @@ public class TestSelectHsqldb extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testIncompleteQueryHsqldb() {
         Select query = new Select(HSQLDB);
         try {
@@ -55,7 +51,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testClearHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename");
@@ -69,7 +65,7 @@ public class TestSelectHsqldb extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testBasicHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename");
@@ -77,7 +73,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testHintHsqldb() {
         Select query = new Select(HSQLDB);
         query
@@ -91,7 +87,7 @@ public class TestSelectHsqldb extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testOrderByAscendingHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -100,7 +96,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testOrderByDescendingHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -109,7 +105,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testBeanHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -118,7 +114,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testBeanConstrainedHsqldb() {
         Select query = new Select(HSQLDB, BeanImplConstrained.class);
         query.from("tablename");
@@ -132,7 +128,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testBeanExcludedHsqldb() {
         Select query = new Select(HSQLDB, BeanImplConstrained.class);
         query.from("tablename")
@@ -148,7 +144,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testBeanTableHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -157,7 +153,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testBeanExcludedTableHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -166,7 +162,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereTypedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename");
@@ -197,7 +193,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereTypedMixedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename");
@@ -233,7 +229,7 @@ public class TestSelectHsqldb extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename");
@@ -266,7 +262,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersMixedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -288,7 +284,7 @@ public class TestSelectHsqldb extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereConstructionHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -299,7 +295,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereConstructionGroupHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -333,7 +329,7 @@ public class TestSelectHsqldb extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -342,7 +338,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanConstrainedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -351,7 +347,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanNullValuesHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -360,7 +356,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanIncludedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -369,7 +365,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanExcludedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -378,7 +374,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereBeanFilteredHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -387,7 +383,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersBeanHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -459,7 +455,7 @@ public class TestSelectHsqldb extends TestSelect {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersBeanConstrainedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -525,7 +521,7 @@ public class TestSelectHsqldb extends TestSelect {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testWhereParametersBeanExcludedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -574,7 +570,7 @@ public class TestSelectHsqldb extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testDistinctHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -587,7 +583,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testDistinctOnHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -606,7 +602,7 @@ public class TestSelectHsqldb extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testComplexHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -633,7 +629,7 @@ public class TestSelectHsqldb extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testGroupByBeanHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -643,7 +639,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testGroupByBeanExcludedHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -653,7 +649,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testJoinHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -663,7 +659,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testJoinCustomHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -673,7 +669,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testJoinCrossHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -687,7 +683,7 @@ public class TestSelectHsqldb extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testJoinInnerHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -714,7 +710,7 @@ public class TestSelectHsqldb extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testJoinOuterHsqldb() {
         Select query = new Select(HSQLDB);
 
@@ -798,7 +794,7 @@ public class TestSelectHsqldb extends TestSelect {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testLimitHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -815,7 +811,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testLimitParameterHsqldb() {
         Select query = new Select(HSQLDB);
         query.from("tablename")
@@ -844,7 +840,7 @@ public class TestSelectHsqldb extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testSubselectParamsHsqldb() {
         Select fieldquery = new Select(HSQLDB);
         fieldquery
@@ -957,7 +953,7 @@ public class TestSelectHsqldb extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCloneHsqldb() {
         Select fieldquery = new Select(HSQLDB);
         fieldquery

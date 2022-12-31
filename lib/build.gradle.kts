@@ -151,6 +151,12 @@ tasks.test {
     useJUnitPlatform()
     environment("project.dir", project.projectDir.toString())
     jvmArgs = listOf("-javaagent:${buildDir}/libs/$rifeAgentJar")
+    if (System.getProperty("test.postgres") != null) systemProperty("test.postgres", System.getProperty("test.postgres"))
+    if (System.getProperty("test.mysql") != null) systemProperty("test.mysql", System.getProperty("test.mysql"))
+    if (System.getProperty("test.oracle") != null) systemProperty("test.oracle", System.getProperty("test.oracle"))
+    if (System.getProperty("test.derby") != null) systemProperty("test.derby", System.getProperty("test.derby"))
+    if (System.getProperty("test.hsqldb") != null) systemProperty("test.hsqldb", System.getProperty("test.hsqldb"))
+    if (System.getProperty("test.h2") != null) systemProperty("test.h2", System.getProperty("test.h2"))
 }
 
 tasks.clean {

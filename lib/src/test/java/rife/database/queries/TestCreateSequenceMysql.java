@@ -4,14 +4,15 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateSequenceMysql extends TestCreateSequence {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInstantiationMysql() {
         CreateSequence query = new CreateSequence(MYSQL);
         assertNotNull(query);
@@ -23,7 +24,7 @@ public class TestCreateSequenceMysql extends TestCreateSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testClearMysql() {
         CreateSequence query = new CreateSequence(MYSQL);
         query.name("sequencename");
@@ -35,7 +36,7 @@ public class TestCreateSequenceMysql extends TestCreateSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCreateMysql() {
         CreateSequence query = new CreateSequence(MYSQL);
         query.name("sequencename");
@@ -47,7 +48,7 @@ public class TestCreateSequenceMysql extends TestCreateSequence {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCloneMysql() {
         // sequences are not supported with mysql
     }

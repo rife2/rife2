@@ -5,7 +5,7 @@
 package rife.validation;
 
 import org.junit.jupiter.api.Test;
-import rife.database.TestDatasources;
+import rife.database.*;
 import rife.database.querymanagers.generic.GenericQueryManager;
 import rife.database.querymanagers.generic.GenericQueryManagerFactory;
 import rife.tools.ObjectUtils;
@@ -195,7 +195,7 @@ public class TestMetaData {
         assertEquals(1, ((Validated) person).countValidationErrors());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCallbacks() {
         PersonCallbacks person = new PersonCallbacks();
 

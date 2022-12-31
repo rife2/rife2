@@ -4,14 +4,15 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 import rife.database.exceptions.SequenceOperationRequiredException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValueOracle extends TestSequenceValue {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInstantiationOracle() {
         SequenceValue query = new SequenceValue(ORACLE);
         assertNotNull(query);
@@ -23,7 +24,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInvalidOracle() {
         SequenceValue query = new SequenceValue(ORACLE);
         try {
@@ -50,7 +51,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testClearOracle() {
         SequenceValue query = new SequenceValue(ORACLE);
         query
@@ -67,7 +68,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testNextOracle() {
         SequenceValue query = new SequenceValue(ORACLE);
         query
@@ -77,7 +78,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
         assertTrue(execute(ORACLE, query) >= 0);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCurrentOracle() {
         SequenceValue query = new SequenceValue(ORACLE);
         query
@@ -87,7 +88,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
         assertTrue(execute(ORACLE, query) >= 0);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCloneOracle() {
         SequenceValue query = new SequenceValue(ORACLE);
         query

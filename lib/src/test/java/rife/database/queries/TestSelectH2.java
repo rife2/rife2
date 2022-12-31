@@ -4,11 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
+import rife.database.*;
 import rife.database.exceptions.TableNameOrFieldsRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
@@ -20,7 +16,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSelectH2 extends TestSelect {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testInstantiationH2() {
         Select query = new Select(H2);
         assertNotNull(query);
@@ -32,7 +28,7 @@ public class TestSelectH2 extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testIncompleteQueryH2() {
         Select query = new Select(H2);
         try {
@@ -55,7 +51,7 @@ public class TestSelectH2 extends TestSelect {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testClearH2() {
         Select query = new Select(H2);
         query.from("tablename");
@@ -70,7 +66,7 @@ public class TestSelectH2 extends TestSelect {
     }
 
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testBasicH2() {
         Select query = new Select(H2);
         query.from("tablename");
@@ -78,7 +74,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testHintH2() {
         Select query = new Select(H2);
         query
@@ -92,7 +88,7 @@ public class TestSelectH2 extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testOrderByAscendingH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -101,7 +97,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testOrderByDescendingH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -110,7 +106,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testBeanH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -119,7 +115,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testBeanConstrainedH2() {
         Select query = new Select(H2, BeanImplConstrained.class);
         query.from("tablename");
@@ -133,7 +129,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testBeanExcludedH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -142,7 +138,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testBeanTableH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -151,7 +147,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testBeanExcludedTableH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -160,7 +156,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereTypedH2() {
         Select query = new Select(H2);
         query.from("tablename");
@@ -191,7 +187,7 @@ public class TestSelectH2 extends TestSelect {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereTypedMixedH2() {
         Select query = new Select(H2);
         query.from("tablename");
@@ -228,7 +224,7 @@ public class TestSelectH2 extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereParametersH2() {
         Select query = new Select(H2);
         query.from("tablename");
@@ -261,7 +257,7 @@ public class TestSelectH2 extends TestSelect {
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereParametersMixedH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -283,7 +279,7 @@ public class TestSelectH2 extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereConstructionH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -294,7 +290,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereConstructionGroupH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -328,7 +324,7 @@ public class TestSelectH2 extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereBeanH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -337,7 +333,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereBeanConstrainedH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -346,7 +342,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereBeanNullValuesH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -355,7 +351,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereBeanIncludedH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -364,7 +360,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereBeanExcludedH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -373,7 +369,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereBeanFilteredH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -382,7 +378,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereParametersBeanH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -452,7 +448,7 @@ public class TestSelectH2 extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereParametersBeanConstrainedH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -516,7 +512,7 @@ public class TestSelectH2 extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testWhereParametersBeanExcludedH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -570,7 +566,7 @@ public class TestSelectH2 extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testDistinctH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -583,7 +579,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testDistinctOnH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -602,7 +598,7 @@ public class TestSelectH2 extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testComplexH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -624,7 +620,7 @@ public class TestSelectH2 extends TestSelect {
         assertEquals(query.getSql(), "SELECT DISTINCT field1, field2, field3 FROM tablename, table2 CROSS JOIN table3 WHERE this = that GROUP BY gexpr1, gexpr2 HAVING hexpr1, hexpr2 UNION ALL uexpr1 UNION uexpr2 LIMIT 3 OFFSET 1");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testGroupByBeanH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -634,7 +630,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testGroupByBeanExcludedH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -644,7 +640,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testJoinH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -654,7 +650,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testJoinCustomH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -664,7 +660,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testJoinCrossH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -674,7 +670,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testJoinInnerH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -702,7 +698,7 @@ public class TestSelectH2 extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testJoinOuterH2() {
         Select query = new Select(H2);
 
@@ -788,7 +784,7 @@ public class TestSelectH2 extends TestSelect {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testLimitH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -805,7 +801,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testLimitParameterH2() {
         Select query = new Select(H2);
         query.from("tablename")
@@ -835,7 +831,7 @@ public class TestSelectH2 extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testSubselectParamsH2() {
         Select fieldquery = new Select(H2);
         fieldquery
@@ -948,7 +944,7 @@ public class TestSelectH2 extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCloneH2() {
         Select fieldquery = new Select(H2);
         fieldquery

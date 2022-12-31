@@ -4,14 +4,8 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
-import rife.database.exceptions.FieldsRequiredException;
-import rife.database.exceptions.TableNameRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.*;
+import rife.database.exceptions.*;
 import rife.database.types.SqlNull;
 
 import java.math.BigDecimal;
@@ -22,7 +16,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInsertHsqldb extends TestInsert {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testInstantiationHsqldb() {
         Insert query = new Insert(HSQLDB);
         assertNotNull(query);
@@ -34,7 +28,7 @@ public class TestInsertHsqldb extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testIncompleteQueryHsqldb() {
         Insert query = new Insert(HSQLDB);
         try {
@@ -54,7 +48,7 @@ public class TestInsertHsqldb extends TestInsert {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testClearHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
@@ -69,7 +63,7 @@ public class TestInsertHsqldb extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testHintHsqldb() {
         Insert query = new Insert(HSQLDB)
             .hint("NO_INDEX")
@@ -83,7 +77,7 @@ public class TestInsertHsqldb extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testParameterHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
@@ -91,7 +85,7 @@ public class TestInsertHsqldb extends TestInsert {
         assertEquals(query.getSql(), "INSERT INTO tablename (col1) VALUES (?)");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldHsqldb() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -119,7 +113,7 @@ public class TestInsertHsqldb extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldCustomHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
@@ -128,7 +122,7 @@ public class TestInsertHsqldb extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsHsqldb() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -158,7 +152,7 @@ public class TestInsertHsqldb extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldParametersHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename");
@@ -249,7 +243,7 @@ public class TestInsertHsqldb extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldParametersMixedHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename");
@@ -316,7 +310,7 @@ public class TestInsertHsqldb extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsBeanHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
@@ -325,7 +319,7 @@ public class TestInsertHsqldb extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsBeanConstrainedHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
@@ -334,7 +328,7 @@ public class TestInsertHsqldb extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsBeanNullValuesHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
@@ -343,7 +337,7 @@ public class TestInsertHsqldb extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsBeanIncludedHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
@@ -352,7 +346,7 @@ public class TestInsertHsqldb extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsBeanExcludedHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
@@ -361,7 +355,7 @@ public class TestInsertHsqldb extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsBeanFilteredHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
@@ -370,7 +364,7 @@ public class TestInsertHsqldb extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testMultipleRowsHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
@@ -390,7 +384,7 @@ public class TestInsertHsqldb extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsParametersBeanHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
@@ -461,7 +455,7 @@ public class TestInsertHsqldb extends TestInsert {
 
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsParametersBeanConstrainedHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
@@ -523,7 +517,7 @@ public class TestInsertHsqldb extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testFieldsParametersBeanExcludedHsqldb() {
         Insert query = new Insert(HSQLDB);
         query.into("tablename")
@@ -578,7 +572,7 @@ public class TestInsertHsqldb extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testInsertSubselectParamsHsqldb() {
         Select fieldquery = new Select(HSQLDB);
         fieldquery
@@ -628,7 +622,7 @@ public class TestInsertHsqldb extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCloneHsqldb() {
         Select fieldquery = new Select(HSQLDB);
         fieldquery

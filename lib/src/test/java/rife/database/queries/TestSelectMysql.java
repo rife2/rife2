@@ -4,23 +4,19 @@
  */
 package rife.database.queries;
 
+import rife.database.*;
+import rife.database.exceptions.TableNameOrFieldsRequiredException;
+import rife.database.exceptions.UnsupportedSqlFeatureException;
+
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
-import rife.database.exceptions.TableNameOrFieldsRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSelectMysql extends TestSelect {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInstantiationMysql() {
         Select query = new Select(MYSQL);
         assertNotNull(query);
@@ -32,7 +28,7 @@ public class TestSelectMysql extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testIncompleteQueryMysql() {
         Select query = new Select(MYSQL);
         try {
@@ -55,7 +51,7 @@ public class TestSelectMysql extends TestSelect {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testClearMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename");
@@ -69,7 +65,7 @@ public class TestSelectMysql extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testBasicMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename");
@@ -77,7 +73,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testHintMysql() {
         Select query = new Select(MYSQL);
         query
@@ -87,7 +83,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testOrderByAscendingMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -96,7 +92,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testOrderByDescendingMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -105,7 +101,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testBeanMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -114,7 +110,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testBeanConstrainedMysql() {
         Select query = new Select(MYSQL, BeanImplConstrained.class);
         query.from("tablename");
@@ -128,7 +124,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testBeanExcludedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -137,7 +133,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testBeanTableMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -146,7 +142,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testBeanExcludedTableMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -155,7 +151,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereTypedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename");
@@ -186,7 +182,7 @@ public class TestSelectMysql extends TestSelect {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereTypedMixedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename");
@@ -223,7 +219,7 @@ public class TestSelectMysql extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereParametersMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename");
@@ -256,7 +252,7 @@ public class TestSelectMysql extends TestSelect {
         assertEquals(query.getSql(), "SELECT * FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereParametersMixedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -278,7 +274,7 @@ public class TestSelectMysql extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereConstructionMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -289,7 +285,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereConstructionGroupMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -323,7 +319,7 @@ public class TestSelectMysql extends TestSelect {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -332,7 +328,7 @@ public class TestSelectMysql extends TestSelect {
         // mysql doesn't compare correctly on floats, thus don't execute
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanConstrainedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -341,7 +337,7 @@ public class TestSelectMysql extends TestSelect {
         // mysql doesn't compare correctly on floats, thus don't execute
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanNullValuesMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -350,7 +346,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanIncludedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -359,7 +355,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanExcludedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -368,7 +364,7 @@ public class TestSelectMysql extends TestSelect {
         // mysql doesn't compare correctly on floats, thus don't execute
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanFilteredMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -378,7 +374,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     // TODO : test fails
-//    @Test
+//    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
 //    public void testWhereParametersBeanMysql() {
 //        Select query = new Select(MYSQL);
 //        query.from("tablename")
@@ -448,7 +444,7 @@ public class TestSelectMysql extends TestSelect {
 //        }));
 //    }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereParametersBeanConstrainedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -515,7 +511,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
     // TODO : test fails
-//    @Test
+//    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
 //    public void testWhereParametersBeanExcludedMysql() {
 //        Select query = new Select(MYSQL);
 //        query.from("tablename")
@@ -564,7 +560,7 @@ public class TestSelectMysql extends TestSelect {
 //        }));
 //    }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testDistinctMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -577,7 +573,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testDistinctOnMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -596,7 +592,7 @@ public class TestSelectMysql extends TestSelect {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testComplexMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -618,7 +614,7 @@ public class TestSelectMysql extends TestSelect {
         assertEquals(query.getSql(), "SELECT DISTINCT field1, field2, field3 FROM tablename, table2 CROSS JOIN table3 WHERE this = that GROUP BY gexpr1, gexpr2 HAVING hexpr1, hexpr2 UNION ALL uexpr1 UNION uexpr2 LIMIT 3 OFFSET 1");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testGroupByBeanMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -628,7 +624,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testGroupByBeanExcludedMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -638,7 +634,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testJoinMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -648,7 +644,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testJoinCustomMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -658,7 +654,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testJoinCrossMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -668,7 +664,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testJoinInnerMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -692,7 +688,7 @@ public class TestSelectMysql extends TestSelect {
     }
 
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testJoinOuterMysql() {
         Select query = new Select(MYSQL);
 
@@ -757,7 +753,7 @@ public class TestSelectMysql extends TestSelect {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testLimitMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -774,7 +770,7 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testLimitParameterMysql() {
         Select query = new Select(MYSQL);
         query.from("tablename")
@@ -804,13 +800,13 @@ public class TestSelectMysql extends TestSelect {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testSubselectParamsMysql() {
         // mysql doesn't do subqueries
     }
 
     // TODO : test fails
-//    @Test
+//    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
 //    public void testCloneMysql() {
 //        Select unionquery1 = new Select(MYSQL);
 //        unionquery1

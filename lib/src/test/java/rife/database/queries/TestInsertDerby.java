@@ -4,14 +4,8 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
-import rife.database.exceptions.FieldsRequiredException;
-import rife.database.exceptions.TableNameRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.*;
+import rife.database.exceptions.*;
 import rife.database.types.SqlNull;
 
 import java.math.BigDecimal;
@@ -23,7 +17,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInsertDerby extends TestInsert {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testInstantiationDerby() {
         Insert query = new Insert(DERBY);
         assertNotNull(query);
@@ -35,7 +29,7 @@ public class TestInsertDerby extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testIncompleteQueryDerby() {
         Insert query = new Insert(DERBY);
         try {
@@ -55,7 +49,7 @@ public class TestInsertDerby extends TestInsert {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testClearDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
@@ -70,7 +64,7 @@ public class TestInsertDerby extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testHintDerby() {
         Insert query = new Insert(DERBY)
             .hint("NO_INDEX")
@@ -84,7 +78,7 @@ public class TestInsertDerby extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testParameterDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
@@ -92,7 +86,7 @@ public class TestInsertDerby extends TestInsert {
         assertEquals(query.getSql(), "INSERT INTO tablename (col1) VALUES (?)");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldDerby() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -120,7 +114,7 @@ public class TestInsertDerby extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldCustomDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
@@ -129,7 +123,7 @@ public class TestInsertDerby extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsDerby() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -159,7 +153,7 @@ public class TestInsertDerby extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldParametersDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename");
@@ -250,7 +244,7 @@ public class TestInsertDerby extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldParametersMixedDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename");
@@ -316,7 +310,7 @@ public class TestInsertDerby extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsBeanDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
@@ -325,7 +319,7 @@ public class TestInsertDerby extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsBeanConstrainedDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
@@ -334,7 +328,7 @@ public class TestInsertDerby extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsBeanNullValuesDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
@@ -343,7 +337,7 @@ public class TestInsertDerby extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsBeanIncludedDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
@@ -352,7 +346,7 @@ public class TestInsertDerby extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsBeanExcludedDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
@@ -361,7 +355,7 @@ public class TestInsertDerby extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsBeanFilteredDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
@@ -370,7 +364,7 @@ public class TestInsertDerby extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testMultipleRowsDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
@@ -390,7 +384,7 @@ public class TestInsertDerby extends TestInsert {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsParametersBeanDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
@@ -460,7 +454,7 @@ public class TestInsertDerby extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsParametersBeanConstrainedDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
@@ -522,7 +516,7 @@ public class TestInsertDerby extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testFieldsParametersBeanExcludedDerby() {
         Insert query = new Insert(DERBY);
         query.into("tablename")
@@ -577,7 +571,7 @@ public class TestInsertDerby extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testInsertSubselectParamsDerby() {
         Select fieldquery = new Select(DERBY);
         fieldquery
@@ -627,7 +621,7 @@ public class TestInsertDerby extends TestInsert {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCloneDerby() {
         Select fieldquery = new Select(DERBY);
         fieldquery

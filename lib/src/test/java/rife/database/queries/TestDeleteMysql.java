@@ -4,11 +4,7 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
+import rife.database.*;
 import rife.database.exceptions.TableNameRequiredException;
 
 import java.math.BigDecimal;
@@ -20,7 +16,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDeleteMysql extends TestDelete {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInstantiationMysql() {
         Delete query = new Delete(MYSQL);
         assertNotNull(query);
@@ -32,7 +28,7 @@ public class TestDeleteMysql extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testIncompleteQueryMysql() {
         Delete query = new Delete(MYSQL);
         try {
@@ -52,7 +48,7 @@ public class TestDeleteMysql extends TestDelete {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testClearMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
@@ -67,7 +63,7 @@ public class TestDeleteMysql extends TestDelete {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFromMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename");
@@ -75,7 +71,7 @@ public class TestDeleteMysql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testHintMysql() {
         Delete query = new Delete(MYSQL);
         query
@@ -85,7 +81,7 @@ public class TestDeleteMysql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
@@ -94,7 +90,7 @@ public class TestDeleteMysql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereTypedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename");
@@ -125,7 +121,7 @@ public class TestDeleteMysql extends TestDelete {
         assertFalse(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereTypedMixedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename");
@@ -162,7 +158,7 @@ public class TestDeleteMysql extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereParametersMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename");
@@ -195,7 +191,7 @@ public class TestDeleteMysql extends TestDelete {
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereParametersMixedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
@@ -222,7 +218,7 @@ public class TestDeleteMysql extends TestDelete {
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyInt = 545");
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereConstructionMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
@@ -233,7 +229,7 @@ public class TestDeleteMysql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereConstructionGroupMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
@@ -264,7 +260,7 @@ public class TestDeleteMysql extends TestDelete {
         }));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
@@ -273,7 +269,7 @@ public class TestDeleteMysql extends TestDelete {
         // mysql doesn't compare correctly on floats, thus don't execute
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanConstrainedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
@@ -282,7 +278,7 @@ public class TestDeleteMysql extends TestDelete {
         // mysql doesn't compare correctly on floats, thus don't execute
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanNullValuesMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
@@ -291,7 +287,7 @@ public class TestDeleteMysql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanIncludedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
@@ -300,7 +296,7 @@ public class TestDeleteMysql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanExcludedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
@@ -309,7 +305,7 @@ public class TestDeleteMysql extends TestDelete {
         // mysql doesn't compare correctly on floats, thus don't execute
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereBeanFilteredMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
@@ -318,7 +314,7 @@ public class TestDeleteMysql extends TestDelete {
         assertTrue(execute(query));
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereParametersBeanMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
@@ -390,7 +386,7 @@ public class TestDeleteMysql extends TestDelete {
         });
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testWhereParametersBeanConstrainedMysql() {
         Delete query = new Delete(MYSQL);
         query.from("tablename")
@@ -457,7 +453,7 @@ public class TestDeleteMysql extends TestDelete {
     }
 
     // TODO : test fails
-//    @Test
+//    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
 //    public void testWhereParametersBeanExcludedMysql() {
 //        Delete query = new Delete(MYSQL);
 //        query.from("tablename")
@@ -506,12 +502,12 @@ public class TestDeleteMysql extends TestDelete {
 //        }));
 //    }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testDeleteSubselectParamsMysql() {
         // mysql doesn't support subqueries
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCloneMysql() {
         Delete query = new Delete(MYSQL);
         query

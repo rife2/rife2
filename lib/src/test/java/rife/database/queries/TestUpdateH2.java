@@ -4,10 +4,7 @@
  */
 package rife.database.queries;
 
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
+import rife.database.*;
 import rife.database.exceptions.FieldsRequiredException;
 import rife.database.exceptions.TableNameRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
@@ -21,6 +18,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUpdateH2 extends TestUpdate {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testInstantiationH2() {
         Update query = new Update(H2);
         assertNotNull(query);
@@ -32,6 +30,7 @@ public class TestUpdateH2 extends TestUpdate {
         }
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testIncompleteQueryH2() {
         Update query = new Update(H2);
         try {
@@ -51,6 +50,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertNotNull(query.getSql());
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testClearH2() {
         Update query = new Update(H2);
         query.table("tablename4")
@@ -65,6 +65,7 @@ public class TestUpdateH2 extends TestUpdate {
         }
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testHintH2() {
         Update query = new Update(H2)
             .hint("NO_INDEX")
@@ -78,6 +79,7 @@ public class TestUpdateH2 extends TestUpdate {
         }
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldH2() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -106,6 +108,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldCustomH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -114,6 +117,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldParametersH2() {
         Update query = new Update(H2);
         query.table("tablename");
@@ -204,6 +208,7 @@ public class TestUpdateH2 extends TestUpdate {
         }));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldParametersMixedH2() {
         Update query = new Update(H2);
         query.table("tablename");
@@ -270,6 +275,7 @@ public class TestUpdateH2 extends TestUpdate {
         }));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldsH2() {
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 7, 19, 12, 17, 52);
@@ -300,6 +306,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereConstructionH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -312,6 +319,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereConstructionGroupH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -344,6 +352,7 @@ public class TestUpdateH2 extends TestUpdate {
         }));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereTypedH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -376,6 +385,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertFalse(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereTypedMixedH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -414,6 +424,7 @@ public class TestUpdateH2 extends TestUpdate {
         }));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereParametersH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -447,6 +458,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyInt = 545");
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereParametersMixedH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -475,6 +487,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyInt = 545");
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldWhereParametersH2() {
         Update query = new Update(H2);
         query.table("tablename");
@@ -523,6 +536,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = ?, propertyByte = ? WHERE propertyInt = 545");
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldsBeanH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -532,6 +546,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldsBeanConstrainedH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -541,6 +556,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldsBeanNullValuesH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -550,6 +566,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldsBeanIncludedH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -559,6 +576,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldsBeanExcludedH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -568,6 +586,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldsBeanFilteredH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -577,6 +596,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldsParametersBeanH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -646,6 +666,7 @@ public class TestUpdateH2 extends TestUpdate {
         }));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldsParametersBeanConstrainedH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -707,6 +728,7 @@ public class TestUpdateH2 extends TestUpdate {
         }));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testFieldsParametersBeanExcludedH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -761,6 +783,7 @@ public class TestUpdateH2 extends TestUpdate {
         }));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereBeanH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -771,6 +794,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereBeanConstrainedH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -781,6 +805,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereBeanNullValuesH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -791,6 +816,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereBeanIncludedH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -801,6 +827,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereBeanExcludedH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -811,6 +838,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereBeanFilteredH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -821,6 +849,7 @@ public class TestUpdateH2 extends TestUpdate {
         assertTrue(execute(query));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereParametersBeanH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -892,6 +921,7 @@ public class TestUpdateH2 extends TestUpdate {
         }));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereParametersBeanConstrainedH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -957,6 +987,7 @@ public class TestUpdateH2 extends TestUpdate {
         }));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testWhereParametersBeanExcludedH2() {
         Update query = new Update(H2);
         query.table("tablename")
@@ -1013,6 +1044,7 @@ public class TestUpdateH2 extends TestUpdate {
         }));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testSubselectParamsH2() {
         Select fieldquery = new Select(H2);
         fieldquery
@@ -1090,6 +1122,7 @@ public class TestUpdateH2 extends TestUpdate {
         }));
     }
 
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     public void testCloneH2() {
         Select fieldquery = new Select(H2);
         fieldquery

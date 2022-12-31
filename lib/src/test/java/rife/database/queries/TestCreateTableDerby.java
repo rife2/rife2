@@ -4,12 +4,8 @@
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.exceptions.ColumnsRequiredException;
-import rife.database.exceptions.TableNameRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.*;
+import rife.database.exceptions.*;
 
 import java.math.BigDecimal;
 import java.sql.Blob;
@@ -17,7 +13,7 @@ import java.sql.Blob;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateTableDerby extends TestCreateTable {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testInstantiationDerby() {
         CreateTable query = new CreateTable(DERBY);
         assertNotNull(query);
@@ -29,7 +25,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testIncompleteQueryDerby() {
         CreateTable query = new CreateTable(DERBY);
         try {
@@ -50,7 +46,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testClearDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -65,7 +61,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testColumnDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename1")
@@ -93,7 +89,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testColumnPrecisionDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename1")
@@ -121,7 +117,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testColumnsBeanDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -130,7 +126,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testColumnsBeanIncludedDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -139,7 +135,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testColumnsBeanExcludedDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -148,7 +144,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testColumnsBeanFilteredDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -157,7 +153,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testColumnsBeanPrecisionDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -191,7 +187,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testColumnsBeanConstrainedDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -200,7 +196,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testNullableDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -216,7 +212,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testDefaultDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename1")
@@ -262,7 +258,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testDefaultFunctionDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename1")
@@ -272,7 +268,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCustomAttributeDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename1")
@@ -282,7 +278,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testTemporaryDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -296,7 +292,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testPrimaryKeySimpleDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -306,7 +302,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testPrimaryKeyMultipleDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -317,7 +313,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testPrimaryKeyNamedDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -327,7 +323,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testPrimaryKeyMultipleNamedDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -338,7 +334,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testUniqueSimpleDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -348,7 +344,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testUniqueMultipleDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -359,7 +355,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testUniqueNamedDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -369,7 +365,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testUniqueMultipleNamedDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -380,7 +376,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testForeignKeySimpleDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -390,7 +386,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testForeignKeyMultipleDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -401,7 +397,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testForeignKeySimpleNamedDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -411,7 +407,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testForeignKeyMultipleNamedDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -422,7 +418,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testForeignKeyViolationsSingleDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -512,7 +508,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testForeignKeyViolationsDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -522,7 +518,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testForeignKeyMultipleViolationsDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -533,7 +529,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCheckSimpleDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -543,7 +539,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCheckNamedDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")
@@ -553,7 +549,7 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCloneDerby() {
         CreateTable query = new CreateTable(DERBY);
         query.table("tablename")

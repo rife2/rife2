@@ -4,19 +4,17 @@
  */
 package rife.database.queries;
 
-import java.math.BigDecimal;
-import java.sql.Blob;
-
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
+import rife.database.*;
 import rife.database.exceptions.ColumnsRequiredException;
 import rife.database.exceptions.TableNameRequiredException;
+
+import java.math.BigDecimal;
+import java.sql.Blob;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateTableH2 extends TestCreateTable {
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testInstantiationH2() {
         CreateTable query = new CreateTable(H2);
         assertNotNull(query);
@@ -28,7 +26,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testIncompleteQueryH2() {
         CreateTable query = new CreateTable(H2);
         try {
@@ -49,7 +47,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         assertNotNull(query.getSql());
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testClearH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -64,7 +62,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename1")
@@ -92,7 +90,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnPrecisionH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename1")
@@ -120,7 +118,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnsBeanH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -129,7 +127,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnsBeanIncludedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -138,7 +136,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnsBeanExcludedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -147,7 +145,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnsBeanFilteredH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -156,7 +154,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnsBeanPrecisionH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -190,7 +188,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnsBeanConstrainedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -199,7 +197,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testNullableH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -215,7 +213,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testDefaultH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename1")
@@ -261,7 +259,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testDefaultFunctionH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename1")
@@ -271,7 +269,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCustomAttributeH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename1")
@@ -281,7 +279,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testTemporaryH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -291,7 +289,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testPrimaryKeySimpleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -301,7 +299,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testPrimaryKeyMultipleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -312,7 +310,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testPrimaryKeyNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -322,7 +320,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testPrimaryKeyMultipleNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -333,7 +331,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testUniqueSimpleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -343,7 +341,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testUniqueMultipleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -354,7 +352,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testUniqueNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -364,7 +362,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testUniqueMultipleNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -375,7 +373,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeySimpleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -385,7 +383,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeyMultipleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -396,7 +394,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeySimpleNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -406,7 +404,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeyMultipleNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -417,7 +415,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeyViolationsSingleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -491,7 +489,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         query.clear();
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeyViolationsH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -501,7 +499,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeyMultipleViolationsH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -512,7 +510,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCheckSimpleH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -522,7 +520,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCheckNamedH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")
@@ -532,7 +530,7 @@ public class TestCreateTableH2 extends TestCreateTable {
         execute(query);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCloneH2() {
         CreateTable query = new CreateTable(H2);
         query.table("tablename")

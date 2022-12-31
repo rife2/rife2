@@ -38,8 +38,8 @@ class HelloTest {
     @Test void verifyHelloForm() {
         var m = new MockConversation(new HelloForm());
         var r = m.doRequest("/form").getParsedHtml()
-            .getFormWithName("hello").submit();
-        assertEquals("Hello World", r.getParsedHtml()
+            .getFormWithName("hello").parameter("name", "John").submit();
+        assertEquals("Hello John", r.getParsedHtml()
             .getDocument().body()
             .getElementById("greeting").text());
     }
