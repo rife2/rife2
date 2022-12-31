@@ -29,23 +29,23 @@ repositories {
 dependencies {
     antlr("org.antlr:antlr4:4.11.1")
     compileOnly("org.jsoup:jsoup:1.15.3")
-    compileOnly("org.eclipse.jetty:jetty-server:11.0.12")
-    compileOnly("org.eclipse.jetty:jetty-servlet:11.0.12")
+    compileOnly("org.eclipse.jetty:jetty-server:11.0.13")
+    compileOnly("org.eclipse.jetty:jetty-servlet:11.0.13")
     compileOnly("jakarta.servlet:jakarta.servlet-api:5.0.0")
     compileOnly("net.imagej:ij:1.53v")
     testImplementation("org.jsoup:jsoup:1.15.3")
-    testImplementation("org.eclipse.jetty:jetty-server:11.0.12")
-    testImplementation("org.eclipse.jetty:jetty-servlet:11.0.12")
-    testImplementation("net.sourceforge.htmlunit:htmlunit:2.66.0")
+    testImplementation("org.eclipse.jetty:jetty-server:11.0.13")
+    testImplementation("org.eclipse.jetty:jetty-servlet:11.0.13")
+    testImplementation("net.sourceforge.htmlunit:htmlunit:2.67.0")
     testImplementation("jakarta.servlet:jakarta.servlet-api:5.0.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
-    testImplementation("org.postgresql:postgresql:42.5.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
+    testImplementation("org.postgresql:postgresql:42.5.1")
     testImplementation("mysql:mysql-connector-java:8.0.31")
     testImplementation("org.hsqldb:hsqldb:2.7.1")
     testImplementation("com.h2database:h2:2.1.214")
     testImplementation("org.apache.derby:derby:10.16.1.1")
     testImplementation("org.apache.derby:derbytools:10.16.1.1")
-    testImplementation("com.oracle.database.jdbc:ojdbc11:21.7.0.0")
+    testImplementation("com.oracle.database.jdbc:ojdbc11:21.8.0.0")
     testImplementation("net.imagej:ij:1.53v")
 }
 
@@ -146,6 +146,7 @@ tasks.compileJava {
 }
 
 tasks.test {
+    useJUnitPlatform()
     testLogging {
         events("passed", "skipped", "failed")
     }
@@ -157,10 +158,9 @@ tasks.test {
             printResults(desc, result)
         }
     })
+    environment("project.dir", project.projectDir.toString())
     dependsOn("precompileTemplates")
     dependsOn("agentJar")
-    useJUnitPlatform()
-    environment("project.dir", project.projectDir.toString())
     jvmArgs = listOf("-javaagent:${buildDir}/libs/$rifeAgentJar")
     if (System.getProperty("test.postgres") != null) systemProperty("test.postgres", System.getProperty("test.postgres"))
     if (System.getProperty("test.mysql") != null) systemProperty("test.mysql", System.getProperty("test.mysql"))
