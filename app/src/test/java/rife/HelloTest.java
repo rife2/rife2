@@ -37,11 +37,8 @@ class HelloTest {
 
     @Test void verifyHelloForm() {
         var m = new MockConversation(new HelloForm());
-        var r = m.doRequest("/form");
-        System.out.println(r.getText());
-        var p = r.getParsedHtml();
-        var f = p.getFormWithName("hello");
-        r = f.parameter("name", "John").submit();
+        var r = m.doRequest("/form").getParsedHtml()
+            .getFormWithName("hello").parameter("name", "John").submit();
         assertEquals("Hello John", r.getParsedHtml()
             .getDocument().body()
             .getElementById("greeting").text());
