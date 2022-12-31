@@ -515,7 +515,6 @@ public abstract class StringUtils {
     }
 
     static final BitSet UNRESERVED_URI_CHARS;
-    static final int LOWERCASE_CHAR_TO_UPPERCASE = ('a' - 'A');
     static {
         // see https://www.rfc-editor.org/rfc/rfc3986#page-13
         var unreserved = new BitSet('~' + 1);
