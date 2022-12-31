@@ -77,6 +77,11 @@ tasks.register<JavaExec>("runHelloAll") {
     project.logger.lifecycle(" HelloTemplate:")
     project.logger.lifecycle("   Open your browser at http://localhost:8080/template")
     project.logger.lifecycle("")
+    project.logger.lifecycle(" HelloValidation:")
+    project.logger.lifecycle("   Install the database at http://localhost:8080/validation/install")
+    project.logger.lifecycle("   Then add names by going to http://localhost:8080/validation/add")
+    project.logger.lifecycle("   Delete the database through http://localhost:8080/validation/remove")
+    project.logger.lifecycle("")
     project.logger.lifecycle(" HelloWorld:")
     project.logger.lifecycle("   Open your browser at http://localhost:8080/hello")
     project.logger.lifecycle("================================================================================")
@@ -222,6 +227,18 @@ tasks.register<JavaExec>("runHelloTemplate") {
     project.logger.lifecycle("")
     project.logger.lifecycle("================================================================================")
     project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/template")
+    project.logger.lifecycle("================================================================================")
+    project.logger.lifecycle("")
+}
+
+tasks.register<JavaExec>("runHelloValidation") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("rife.HelloValidation")
+    project.logger.lifecycle("")
+    project.logger.lifecycle("================================================================================")
+    project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/install")
+    project.logger.lifecycle(" Then add names by going to http://localhost:8080/add")
+    project.logger.lifecycle(" When you're done, delete the database through http://localhost:8080/remove")
     project.logger.lifecycle("================================================================================")
     project.logger.lifecycle("")
 }

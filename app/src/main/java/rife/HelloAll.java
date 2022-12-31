@@ -22,6 +22,7 @@ public class HelloAll extends Site {
         group(new HelloPathInfoMapping());
         group(new HelloSvg());
         group(new HelloTemplate());
+        group("/validation", new HelloValidation());
         group(new HelloWorld());
     }
 
