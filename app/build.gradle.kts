@@ -37,7 +37,7 @@ tasks.test {
 
     useJUnitPlatform()
     testLogging {
-        events("started", "passed", "skipped", "failed")
+        events("started", "passed", "skipped", "failed", "standardOut", "standardError")
     }
     environment("project.dir", project.projectDir.toString())
     jvmArgs = listOf("-javaagent:${project(":lib").buildDir}/libs/$rifeAgentJar")

@@ -120,27 +120,27 @@ public class TestDatasource {
         assertEquals(datasource1, datasource2);
 
         datasource2.setDriver("otherdriver");
-        assertTrue(!datasource1.equals(datasource2));
+        assertNotEquals(datasource1, datasource2);
         datasource2.setDriver(driver);
-        assertTrue(datasource1.equals(datasource2));
+        assertEquals(datasource1, datasource2);
 
         datasource2.setUrl("otherurl");
-        assertTrue(!datasource1.equals(datasource2));
+        assertNotEquals(datasource1, datasource2);
         datasource2.setUrl(url);
-        assertTrue(datasource1.equals(datasource2));
+        assertEquals(datasource1, datasource2);
 
         datasource2.setUser("otheruser");
-        assertTrue(!datasource1.equals(datasource2));
+        assertNotEquals(datasource1, datasource2);
         datasource2.setUser(user);
-        assertTrue(datasource1.equals(datasource2));
+        assertEquals(datasource1, datasource2);
 
         datasource2.setPassword("otherpassword");
-        assertTrue(!datasource1.equals(datasource2));
+        assertNotEquals(datasource1, datasource2);
         datasource2.setPassword(password);
-        assertTrue(datasource1.equals(datasource2));
+        assertEquals(datasource1, datasource2);
 
         datasource2.setPoolSize(poolSize + 1);
-        assertTrue(datasource1.equals(datasource2));
+        assertEquals(datasource1, datasource2);
 
         PGSimpleDataSource pgdatasource = new PGSimpleDataSource();
 
@@ -164,30 +164,30 @@ public class TestDatasource {
         assertEquals(datasource3, datasource4);
 
         datasource4.setDriver("otherdriver");
-        assertTrue(!datasource3.equals(datasource4));
+        assertNotEquals(datasource3, datasource4);
         datasource4.setDriver(driver);
-        assertTrue(datasource3.equals(datasource4));
+        assertEquals(datasource3, datasource4);
 
         datasource4.setDataSource(new PGSimpleDataSource());
-        assertTrue(!datasource3.equals(datasource4));
+        assertNotEquals(datasource3, datasource4);
         datasource4.setDataSource(pgdatasource);
-        assertTrue(datasource3.equals(datasource4));
+        assertEquals(datasource3, datasource4);
 
         datasource4.setUser("otheruser");
-        assertTrue(!datasource3.equals(datasource4));
+        assertNotEquals(datasource3, datasource4);
         datasource4.setUser(user);
-        assertTrue(datasource3.equals(datasource4));
+        assertEquals(datasource3, datasource4);
 
         datasource4.setPassword("otherpassword");
-        assertTrue(!datasource3.equals(datasource4));
+        assertNotEquals(datasource3, datasource4);
         datasource4.setPassword(password);
-        assertTrue(datasource3.equals(datasource4));
+        assertEquals(datasource3, datasource4);
 
         datasource4.setPoolSize(poolSize + 1);
-        assertTrue(datasource3.equals(datasource4));
+        assertEquals(datasource3, datasource4);
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testConnection() {
         Datasource datasource = TestDatasources.PGSQL;
         if (null == datasource) {
@@ -209,7 +209,7 @@ public class TestDatasource {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testConnectionDataSource1() {
         Datasource declared_datasource = TestDatasources.PGSQL;
         if (null == declared_datasource) {
@@ -238,7 +238,7 @@ public class TestDatasource {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testConnectionDataSource2() {
         Datasource declared_datasource = TestDatasources.PGSQL;
         if (null == declared_datasource) {
@@ -267,7 +267,7 @@ public class TestDatasource {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testConnectionPreservation() {
         Datasource datasource = TestDatasources.PGSQL;
         if (null == datasource) {
@@ -281,14 +281,14 @@ public class TestDatasource {
 
             connection1 = datasource.getConnection();
             connection2 = datasource.getConnection();
-            assertTrue(connection1 != connection2);
+            assertNotSame(connection1, connection2);
             connection1.close();
             connection2.close();
 
             connection1 = datasource.getConnection();
             connection1.beginTransaction();
             connection2 = datasource.getConnection();
-            assertTrue(connection1 == connection2);
+            assertSame(connection1, connection2);
             connection1.rollback();
             connection1.close();
         } catch (DatabaseException e) {
@@ -296,7 +296,7 @@ public class TestDatasource {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testConnectionPreservationDatasource1() {
         Datasource declared_datasource = TestDatasources.PGSQL;
         if (null == declared_datasource) {
@@ -317,14 +317,14 @@ public class TestDatasource {
 
             connection1 = datasource.getConnection();
             connection2 = datasource.getConnection();
-            assertTrue(connection1 != connection2);
+            assertNotSame(connection1, connection2);
             connection1.close();
             connection2.close();
 
             connection1 = datasource.getConnection();
             connection1.beginTransaction();
             connection2 = datasource.getConnection();
-            assertTrue(connection1 == connection2);
+            assertSame(connection1, connection2);
             connection1.rollback();
             connection1.close();
         } catch (DatabaseException e) {
@@ -332,7 +332,7 @@ public class TestDatasource {
         }
     }
 
-    @Test
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testConnectionPreservationDatasource2() {
         Datasource declared_datasource = TestDatasources.PGSQL;
         if (null == declared_datasource) {
@@ -353,14 +353,14 @@ public class TestDatasource {
 
             connection1 = datasource.getConnection();
             connection2 = datasource.getConnection();
-            assertTrue(connection1 != connection2);
+            assertNotSame(connection1, connection2);
             connection1.close();
             connection2.close();
 
             connection1 = datasource.getConnection();
             connection1.beginTransaction();
             connection2 = datasource.getConnection();
-            assertTrue(connection1 == connection2);
+            assertSame(connection1, connection2);
             connection1.rollback();
             connection1.close();
         } catch (DatabaseException e) {

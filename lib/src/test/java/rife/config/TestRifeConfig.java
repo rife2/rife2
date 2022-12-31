@@ -15,8 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRifeConfig {
     @Test
-    void testShortDateFormat()
-    throws Exception {
+    void testShortDateFormat() {
         switchLocale("US", "EN");
 
         DateFormat sf = RifeConfig.tools().getDefaultShortDateFormat();
@@ -60,8 +59,7 @@ public class TestRifeConfig {
     }
 
     @Test
-    void testLongDateFormat()
-    throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    void testLongDateFormat() {
         switchLocale("US", "EN");
 
         DateFormat sf = RifeConfig.tools().getDefaultLongDateFormat();

@@ -223,8 +223,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    void testFilteredTagsRenderHtml()
-    throws Exception {
+    void testFilteredTagsRenderHtml() {
         RendererImpl.sCount = 0;
         Template t = TemplateFactory.HTML.get("filtered_tags_render");
         assertEquals("This is the render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
@@ -233,8 +232,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    void testFilteredTagsRenderTxt()
-    throws Exception {
+    void testFilteredTagsRenderTxt() {
         RendererImpl.sCount = 0;
         Template t = TemplateFactory.TXT.get("filtered_tags_render");
         assertEquals("This is the render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
@@ -243,8 +241,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    void testFilteredTagsL10nHtml()
-    throws Exception {
+    void testFilteredTagsL10nHtml() {
         var template = TemplateFactory.HTML.get("filtered_tags_l10n");
         assertEquals("This is the localized key 'default value'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template.getContent());
 
@@ -261,8 +258,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    void testFilteredTagsL10nTxt()
-    throws Exception {
+    void testFilteredTagsL10nTxt() {
         var template = TemplateFactory.TXT.get("filtered_tags_l10n");
         assertEquals("This is the localized key 'default value'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template.getContent());
 
@@ -279,8 +275,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    void testFilteredTagsL10nHtmlResourceBundleNotFound()
-    throws Exception {
+    void testFilteredTagsL10nHtmlResourceBundleNotFound() {
         try {
             TemplateFactory.HTML.get("filtered_tags_l10n_bundlenotfound");
             fail();
@@ -292,8 +287,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    void testFilteredTagsL10nTxtResourceBundleNotFound()
-    throws Exception {
+    void testFilteredTagsL10nTxtResourceBundleNotFound() {
         try {
             TemplateFactory.TXT.get("filtered_tags_l10n_bundlenotfound");
             fail();
@@ -305,8 +299,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    void testFilteredTagsL10nHtmlDefaultResourceBundles()
-    throws Exception {
+    void testFilteredTagsL10nHtmlDefaultResourceBundles() {
         Template template;
 
         var bundles = new ArrayList<String>();
@@ -333,8 +326,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    void testFilteredTagsL10nTxtDefaultResourceBundles()
-    throws Exception {
+    void testFilteredTagsL10nTxtDefaultResourceBundles() {
         Template template;
 
         var bundles = new ArrayList<String>();
@@ -361,8 +353,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    void testFilteredTagsL10nHtmlSeveralResourceBundles()
-    throws Exception {
+    void testFilteredTagsL10nHtmlSeveralResourceBundles() {
         var template = TemplateFactory.HTML.get("filtered_tags_l10n");
         assertEquals("This is the localized key 'default value'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template.getContent());
 
@@ -400,8 +391,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    void testFilteredTagsL10nTxtSeveralResourceBundles()
-    throws Exception {
+    void testFilteredTagsL10nTxtSeveralResourceBundles() {
         var template = TemplateFactory.TXT.get("filtered_tags_l10n");
         assertEquals("This is the localized key 'default value'.\nThis is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.\nThis is a class key '{{v l10n:THE_CLASS_KEY/}}'.\nThis is a key with a bundle 'The English text'.\n", template.getContent());
 
@@ -439,8 +429,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    void testFilteredTagsLangHtml()
-    throws Exception {
+    void testFilteredTagsLangHtml() {
         var template = TemplateFactory.HTML.get("filtered_tags_lang");
         assertEquals("This expression is Dutch '<!--v lang:value1/-->'.\nThis expression is French or English 'yes yes'.\n\n\n\n", template.getContent());
 
@@ -468,8 +457,7 @@ public class TestTemplateFactory {
     }
 
     @Test
-    void testFilteredTagsLangTxt()
-    throws Exception {
+    void testFilteredTagsLangTxt() {
         var template = TemplateFactory.TXT.get("filtered_tags_lang");
         assertEquals("This expression is Dutch '<!v lang:value1/>'.\nThis expression is French or English 'yes yes'.\n\n\n\n", template.getContent());
 
