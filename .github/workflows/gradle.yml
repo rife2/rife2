@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        java-version: [ 17, 19 ]
+        java-version: [ 17 ]
 
     steps:
       - uses: actions/checkout@v2
@@ -28,4 +28,4 @@ jobs:
         run: chmod +x gradlew
 
       - name: Test with Gradle
-        run: ./gradlew build check --stacktrace
+        run: ./gradlew build lib:check --stacktrace
