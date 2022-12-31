@@ -4,7 +4,6 @@
  */
 package rife.tools;
 
-import org.eclipse.jetty.util.UrlEncoded;
 import rife.config.RifeConfig;
 import rife.datastructures.DocumentPosition;
 
