@@ -474,7 +474,8 @@ public abstract class StringUtils {
 
         StringBuilder out = null;
         char ch;
-        for (var i = 0; i < source.length(); ) {
+        var i = 0;
+        while(i < source.length()) {
             ch = source.charAt(i);
             if (isUnreservedUriChar(ch)) {
                 if (out != null) {
@@ -564,7 +565,8 @@ public abstract class StringUtils {
         char ch;
         byte[] bytes_buffer = null;
         int bytes_pos = 0;
-        for (var i = 0; i < length; ) {
+        var i = 0;
+        while(i < length) {
             ch = source.charAt(i);
 
             if (ch == '%') {
