@@ -6,43 +6,49 @@ package rife.config;
 
 import org.junit.jupiter.api.Test;
 import rife.config.exceptions.DateFormatInitializationException;
+import rife.tools.Localization;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRifeConfig {
+    private static Date makeDate(int year, int month, int date, int hourOfDay, int minute) {
+        var cal = new GregorianCalendar(Localization.getLocale());
+        cal.set(year, month, date, hourOfDay, minute, 0);
+        return cal.getTime();
+    }
+    
     @Test
     void testShortDateFormat() {
         try {
             switchLocale("US", "EN");
 
             var sf = RifeConfig.tools().getDefaultShortDateFormat();
-            var formatted = sf.format(new GregorianCalendar(2004, Calendar.AUGUST, 31, 15, 53).getTime());
+            var formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
             assertEquals(formatted, "8/31/04");
 
             switchLocale("BE", "NL");
 
             sf = RifeConfig.tools().getDefaultShortDateFormat();
-            formatted = sf.format(new GregorianCalendar(2004, Calendar.AUGUST, 31, 15, 53).getTime());
+            formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
             assertEquals(formatted, "31/08/2004");
 
             switchLocale("ES", "ES");
 
             sf = RifeConfig.tools().getDefaultShortDateFormat();
-            formatted = sf.format(new GregorianCalendar(2004, Calendar.AUGUST, 31, 15, 53).getTime());
+            formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
             assertEquals(formatted, "31/8/04");
 
             switchDates("EEE, MMM d, yyyy", "EEE, d MMM yyyy HH:mm:ss");
 
             sf = RifeConfig.tools().getDefaultShortDateFormat();
-            formatted = sf.format(new GregorianCalendar(2004, Calendar.AUGUST, 31, 15, 53).getTime());
+            formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
             assertEquals(formatted, "mar, ago 31, 2004");
 
@@ -50,7 +56,7 @@ public class TestRifeConfig {
                 switchDates("vvvv 999 uuuu", "vvvv, 82.2 cccc");
 
                 sf = RifeConfig.tools().getDefaultShortDateFormat();
-                formatted = sf.format(new GregorianCalendar(2004, Calendar.AUGUST, 31, 15, 53).getTime());
+                formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
                 fail();
             } catch (DateFormatInitializationException e) {
                 assertTrue(true);
@@ -67,28 +73,29 @@ public class TestRifeConfig {
             switchLocale("US", "EN");
 
             var sf = RifeConfig.tools().getDefaultLongDateFormat();
-            var formatted = sf.format(new GregorianCalendar(2004, Calendar.AUGUST, 31, 15, 53).getTime());
+
+            var formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
             assertEquals(formatted, "Aug 31, 2004, 3:53 PM");
 
             switchLocale("BE", "NL");
 
             sf = RifeConfig.tools().getDefaultLongDateFormat();
-            formatted = sf.format(new GregorianCalendar(2004, Calendar.AUGUST, 31, 15, 53).getTime());
+            formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
             assertEquals(formatted, "31 aug. 2004 15:53");
 
             switchLocale("ES", "ES");
 
             sf = RifeConfig.tools().getDefaultLongDateFormat();
-            formatted = sf.format(new GregorianCalendar(2004, Calendar.AUGUST, 31, 15, 53).getTime());
+            formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
             assertEquals(formatted, "31 ago 2004 15:53");
 
             switchDates("EEE, MMM d, yyyy", "EEE, d MMM yyyy HH:mm:ss");
 
             sf = RifeConfig.tools().getDefaultLongDateFormat();
-            formatted = sf.format(new GregorianCalendar(2004, Calendar.AUGUST, 31, 15, 53).getTime());
+            formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
             assertEquals(formatted, "mar, 31 ago 2004 14:53:00");
 
@@ -96,7 +103,7 @@ public class TestRifeConfig {
                 switchDates("wwww 999 uuuu", "vvvv, 82.2 cccc");
 
                 sf = RifeConfig.tools().getDefaultLongDateFormat();
-                formatted = sf.format(new GregorianCalendar(2004, Calendar.AUGUST, 31, 15, 53).getTime());
+                formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
                 fail();
             } catch (DateFormatInitializationException e) {
                 assertTrue(true);
