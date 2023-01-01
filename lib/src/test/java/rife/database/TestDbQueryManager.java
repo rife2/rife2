@@ -96,6 +96,8 @@ public class TestDbQueryManager {
 
             final int[] other_first_int = {-1};
             if (manager.getConnection().supportsTransactions() &&
+                // oracle doesn't support repeatable read isolation
+                !datasource.getAliasedDriver().equals("oracle.jdbc.driver.OracleDriver") &&
                 // these databases lock on the entire table, preventing this multithreaded test to work
                 !datasource.getAliasedDriver().equals("org.hsqldb.jdbcDriver") &&
                 !datasource.getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver")) {
@@ -154,11 +156,7 @@ public class TestDbQueryManager {
                     }
 
                     public int getTransactionIsolation() {
-                        if (datasource.getAliasedDriver().equals("oracle.jdbc.driver.OracleDriver")) {
-                            return Connection.TRANSACTION_SERIALIZABLE;
-                        } else {
-                            return Connection.TRANSACTION_REPEATABLE_READ;
-                        }
+                        return Connection.TRANSACTION_REPEATABLE_READ;
                     }
                 });
 
