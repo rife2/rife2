@@ -13,6 +13,8 @@ import rife.tools.InnerClassException;
 import java.sql.*;
 import java.util.ArrayList;
 
+import static rife.database.TestDatasources.PGSQL;
+
 public class TestDbConcurrency {
     public static boolean VERBOSE = false;
     public static boolean DEBUG = false;
@@ -20,7 +22,7 @@ public class TestDbConcurrency {
     private static final Object sOutputLock = new Object();
     private static final int sOutputLimit = 60;
     private static int sOutputChars = 0;
-    private static int sConnectionOverload = 25;
+    private static final int sConnectionOverload = 25;
 
     private static void display(char display) {
         if (VERBOSE) {
@@ -43,15 +45,9 @@ public class TestDbConcurrency {
         display('x');
     }
 
-    @ParameterizedTest
-    @ArgumentsSource(TestDatasources.class)
-    void testConcurrency(Datasource datasource) {
-        // don't do this for embedded databases
-        if (datasource.getAliasedDriver().equals("org.hsqldb.jdbcDriver") ||
-            datasource.getAliasedDriver().equals("org.h2.Driver") ||
-            datasource.getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver")) {
-            return;
-        }
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testConcurrency() {
+        final var datasource = PGSQL;
 
         var structure = new Structure(datasource);
         try {

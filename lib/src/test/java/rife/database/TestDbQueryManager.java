@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static rife.database.TestDatasources.PGSQL;
 
 public class TestDbQueryManager {
     public void tearDown(Datasource datasource) {
@@ -85,10 +86,9 @@ public class TestDbQueryManager {
         }
     }
 
-    @ParameterizedTest
-    @ArgumentsSource(TestDatasources.class)
-    @Disabled
-    void testTransactionUserCommit(Datasource datasource) {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testTransactionUserCommit() {
+        final var datasource = PGSQL;
         final var manager = new DbQueryManager(datasource);
         var create = "CREATE TABLE tbltest (id INTEGER, stringcol VARCHAR(255))";
         manager.executeUpdate(create);
