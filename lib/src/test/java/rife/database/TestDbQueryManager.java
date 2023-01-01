@@ -97,27 +97,11 @@ public class TestDbQueryManager {
             final var select = new Select(datasource).from("tbltest").field("count(*)");
 
             final int[] other_first_int = {-1};
-            if (manager.getConnection().supportsTransactions() &&
-                // oracle doesn't support repeatable read isolation
-                !datasource.getAliasedDriver().equals("oracle.jdbc.driver.OracleDriver") &&
-                // mysql doesn't actually support repeatable read isolation
-                !datasource.getAliasedDriver().equals("com.mysql.cj.jdbc.Driver") &&
-                // these databases lock on the entire table, preventing this multithreaded test to work
-                !datasource.getAliasedDriver().equals("org.hsqldb.jdbcDriver") &&
-                !datasource.getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver")) {
+            if (manager.getConnection().supportsTransactions()) {
                 // ensure that the transaction isn't committed yet
                 // since this should only happen after the last transaction user
-                final var updated_monitor = new Object();
                 final var isolation_monitor = new Object();
                 var other_thread = new Thread(() -> {
-                    synchronized (updated_monitor) {
-                        try {
-                            updated_monitor.wait(5000);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
                     other_first_int[0] = manager.executeGetFirstInt(select);
 
                     synchronized (isolation_monitor) {
@@ -144,10 +128,6 @@ public class TestDbQueryManager {
                         });
 
                         assertEquals(3, manager.executeGetFirstInt(select));
-
-                        synchronized (updated_monitor) {
-                            updated_monitor.notifyAll();
-                        }
 
                         synchronized (isolation_monitor) {
                             if (other_thread.isAlive()) {
