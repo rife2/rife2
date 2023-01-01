@@ -4,7 +4,6 @@
  */
 package rife.database;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.database.exceptions.DatabaseException;
@@ -46,8 +45,14 @@ public class TestDbConcurrency {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    @Disabled
     void testConcurrency(Datasource datasource) {
+        // don't do this for embedded databases
+        if (datasource.getAliasedDriver().equals("org.hsqldb.jdbcDriver") ||
+            datasource.getAliasedDriver().equals("org.h2.Driver") ||
+            datasource.getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver")) {
+            return;
+        }
+
         var structure = new Structure(datasource);
         try {
             structure.install();
