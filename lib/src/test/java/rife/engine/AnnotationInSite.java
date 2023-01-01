@@ -14,6 +14,9 @@ import static rife.engine.annotations.FlowDirection.IN_OUT;
 
 public class AnnotationInSite extends Site {
     public static class ParentElement implements Element {
+        @ActiveSite AnnotationInSite site;
+        @ActiveSite Site baseSite;
+        @ActiveSite Object notSite;
         @Body int intBody = -1;
         @Cookie("cookie2") String stringCookie2 = "defaultCookie2";
         @FileUpload String fileString;
@@ -25,10 +28,14 @@ public class AnnotationInSite extends Site {
 
         public void process(Context c)
         throws Exception {
+            if (site == null) throw new RuntimeException("site should be filled");
+            if (baseSite == null) throw new RuntimeException("baseSite should be filled");
+            if (notSite != null) throw new RuntimeException("notSite should not be filled");
         }
     }
 
     public static class AnnotatedElement extends ParentElement {
+        @ActiveSite AnnotationInSite childSite;
         @Body String stringBody = "defaultBody";
 
         @Cookie String stringCookie = "defaultCookie";
@@ -62,6 +69,8 @@ public class AnnotationInSite extends Site {
         public void process(Context c)
         throws Exception {
             super.process(c);
+
+            if (childSite == null) throw new RuntimeException("childSite should be filled");
 
             c.print(stringBody + "\n");
             c.print(intBody + "\n");

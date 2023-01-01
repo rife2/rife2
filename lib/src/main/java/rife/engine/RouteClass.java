@@ -100,7 +100,8 @@ public class RouteClass implements Route {
                         continue;
                     }
 
-                    if (field.isAnnotationPresent(Parameter.class) ||
+                    if (field.isAnnotationPresent(ActiveSite.class) ||
+                        field.isAnnotationPresent(Parameter.class) ||
                         field.isAnnotationPresent(Header.class) ||
                         field.isAnnotationPresent(Body.class) ||
                         field.isAnnotationPresent(PathInfo.class) ||
@@ -205,8 +206,12 @@ public class RouteClass implements Route {
                 var name = field.getName();
                 var type = field.getType();
 
-                if (field.isAnnotationPresent(Parameter.class) &&
-                    shouldProcessInFlow(field.getAnnotation(Parameter.class).flow())) {
+                if (field.isAnnotationPresent(ActiveSite.class)) {
+                    if (Site.class.isAssignableFrom(field.getType())) {
+                        field.set(element, context.site());
+                    }
+                } else if (field.isAnnotationPresent(Parameter.class) &&
+                           shouldProcessInFlow(field.getAnnotation(Parameter.class).flow())) {
                     var params = context.parameters();
                     var annotation_name = field.getAnnotation(Parameter.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {

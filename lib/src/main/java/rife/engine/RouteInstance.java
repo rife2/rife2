@@ -78,7 +78,8 @@ public class RouteInstance implements Route {
                         continue;
                     }
 
-                    if (field.isAnnotationPresent(Parameter.class) ||
+                    if (field.isAnnotationPresent(ActiveSite.class) ||
+                        field.isAnnotationPresent(Parameter.class) ||
                         field.isAnnotationPresent(Header.class) ||
                         field.isAnnotationPresent(Body.class) ||
                         field.isAnnotationPresent(PathInfo.class) ||
