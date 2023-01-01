@@ -6,19 +6,15 @@ package rife.config;
 
 import org.junit.jupiter.api.Test;
 import rife.config.exceptions.DateFormatInitializationException;
-import rife.tools.Localization;
 
-import java.lang.reflect.InvocationTargetException;
-import java.text.DateFormat;
+import java.time.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRifeConfig {
     private static Date makeDate(int year, int month, int date, int hourOfDay, int minute) {
-        var cal = new GregorianCalendar(Localization.getLocale());
-        cal.set(year, month, date, hourOfDay, minute, 0);
-        return cal.getTime();
+        return Date.from(LocalDateTime.of(year, month + 1, date, hourOfDay, minute, 0, 0).toInstant(ZoneOffset.of("-04:00")));
     }
     
     @Test
