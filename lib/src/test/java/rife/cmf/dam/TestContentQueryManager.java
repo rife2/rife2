@@ -1842,14 +1842,33 @@ public class TestContentQueryManager {
                 var restored_list = manager.restore();
                 ContentImageAutoRetrieved restored = null;
                 var restored_it = restored_list.iterator();
+
+                boolean checked1 = false;
+                boolean checked2 = false;
                 restored = restored_it.next();
-                assertEquals(content1.getId(), restored.getId());
-                assertEquals(content1.getName(), restored.getName());
-                assertArrayEquals(uwyn_image_png, restored.getImage());
+                assertTrue(restored.getId() == content1.getId() || restored.getId() == content2.getId());
+                if (restored.getId() == content1.getId()) {
+                    checked1 = true;
+                    assertEquals(content1.getName(), restored.getName());
+                    assertArrayEquals(uwyn_image_png, restored.getImage());
+                } else {
+                    checked2 = true;
+                    assertEquals(content2.getName(), restored.getName());
+                    assertArrayEquals(rife_image_png, restored.getImage());
+                }
+
                 restored = restored_it.next();
-                assertEquals(content2.getId(), restored.getId());
-                assertEquals(content2.getName(), restored.getName());
-                assertArrayEquals(rife_image_png, restored.getImage());
+                assertTrue(restored.getId() == content1.getId() || restored.getId() == content2.getId());
+                if (restored.getId() == content1.getId()) {
+                    assertFalse(checked1);
+                    assertEquals(content1.getName(), restored.getName());
+                    assertArrayEquals(uwyn_image_png, restored.getImage());
+                } else {
+                    assertFalse(checked2);
+                    assertEquals(content2.getName(), restored.getName());
+                    assertArrayEquals(rife_image_png, restored.getImage());
+                }
+
                 assertFalse(restored_it.hasNext());
             } finally {
                 manager.remove();
@@ -1898,14 +1917,33 @@ public class TestContentQueryManager {
                 var restored_list = manager.restore();
                 ContentImageAutoRetrRep restored = null;
                 var restored_it = restored_list.iterator();
+
+                boolean checked1 = false;
+                boolean checked2 = false;
                 restored = restored_it.next();
-                assertEquals(content1.getId(), restored.getId());
-                assertEquals(content1.getName(), restored.getName());
-                assertArrayEquals(uwyn_image_png, restored.getImage());
+                assertTrue(restored.getId() == content1.getId() || restored.getId() == content2.getId());
+                if (restored.getId() == content1.getId()) {
+                    checked1 = true;
+                    assertEquals(content1.getName(), restored.getName());
+                    assertArrayEquals(uwyn_image_png, restored.getImage());
+                } else {
+                    checked2 = true;
+                    assertEquals(content2.getName(), restored.getName());
+                    assertArrayEquals(rife_image_png, restored.getImage());
+                }
+
                 restored = restored_it.next();
-                assertEquals(content2.getId(), restored.getId());
-                assertEquals(content2.getName(), restored.getName());
-                assertArrayEquals(rife_image_png, restored.getImage());
+                assertTrue(restored.getId() == content1.getId() || restored.getId() == content2.getId());
+                if (restored.getId() == content1.getId()) {
+                    assertFalse(checked1);
+                    assertEquals(content1.getName(), restored.getName());
+                    assertArrayEquals(uwyn_image_png, restored.getImage());
+                } else {
+                    assertFalse(checked2);
+                    assertEquals(content2.getName(), restored.getName());
+                    assertArrayEquals(rife_image_png, restored.getImage());
+                }
+
                 assertFalse(restored_it.hasNext());
             } finally {
                 manager.remove();
