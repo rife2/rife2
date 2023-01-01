@@ -61,137 +61,139 @@ sourceSets.main {
     resources.exclude("templates/**")
 }
 
-tasks.register<JavaExec>("precompileHtmlTemplates") {
-    classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("rife.template.TemplateDeployer")
-    args = listOf(
-        "-t", "html",
-        "-d", "${projectDir}/build/classes/java/main",
-        "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates"
-    )
-}
-
-tasks.register<JavaExec>("precompileXmlTemplates") {
-    classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("rife.template.TemplateDeployer")
-    args = listOf(
-        "-t", "xml",
-        "-d", "${projectDir}/build/classes/java/main",
-        "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates"
-    )
-}
-
-tasks.register<JavaExec>("precompileSqlTemplates") {
-    classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("rife.template.TemplateDeployer")
-    args = listOf(
-        "-t", "sql",
-        "-d", "${projectDir}/build/classes/java/main",
-        "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates"
-    )
-}
-
-tasks.register("precompileTemplates") {
-    dependsOn("precompileHtmlTemplates")
-    dependsOn("precompileXmlTemplates")
-    dependsOn("precompileSqlTemplates")
-}
-
-tasks.jar {
-    dependsOn("precompileTemplates")
-
-    archiveBaseName.set("rife2")
-}
-
-tasks.generateGrammarSource {
-    arguments = arguments + listOf(
-        "-visitor",
-        "-long-messages"
-    )
-    outputDirectory = File("${projectDir}/src/generated/java/rife/template/antlr")
-}
-
-tasks.register<Copy>("processGeneratedParserCode") {
-    dependsOn("generateGrammarSource")
-    from("${projectDir}/src/generated/java/rife/template/antlr")
-    into("${projectDir}/src/processed/java/rife/template/antlr")
-    filter { line -> line.replace("org.antlr.v4.runtime", "rife.antlr.v4.runtime") }
-}
-
-tasks.register<Jar>("agentJar") {
-    dependsOn("jar")
-
-    archiveFileName.set("$rifeAgentJar")
-    from(sourceSets.main.get().output)
-    include(
-        "rife/asm/**",
-        "rife/instrument/**",
-        "rife/continuations/ContinuationConfigInstrument**",
-        "rife/continuations/instrument/**",
-        "rife/database/querymanagers/generic/instrument/**",
-        "rife/engine/EngineContinuationConfigInstrument**",
-        "rife/tools/ClassBytesLoader*",
-        "rife/tools/FileUtils*",
-        "rife/tools/InstrumentationUtils*",
-        "rife/tools/RawFormatter*",
-        "rife/tools/exceptions/FileUtils*",
-        "rife/validation/instrument/**",
-        "rife/validation/MetaDataMerged**",
-        "rife/validation/MetaDataBeanAware**"
-    )
-    manifest {
-        attributes["Premain-Class"] = "rife.instrument.RifeAgent"
-    }
-}
-
-tasks.compileJava {
-    dependsOn("processGeneratedParserCode")
-}
-
-tasks.test {
-    useJUnitPlatform()
-    testLogging {
-        exceptionFormat = TestExceptionFormat.FULL
-        events = setOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
-    }
-    addTestListener(object : TestListener {
-        override fun beforeTest(p0: TestDescriptor?) = Unit
-        override fun beforeSuite(p0: TestDescriptor?) = Unit
-        override fun afterTest(desc: TestDescriptor, result: TestResult) = Unit
-        override fun afterSuite(desc: TestDescriptor, result: TestResult) {
-            printResults(desc, result)
-        }
-    })
-    environment("project.dir", project.projectDir.toString())
-    dependsOn("precompileTemplates")
-    dependsOn("agentJar")
-    jvmArgs = listOf("-javaagent:${buildDir}/libs/$rifeAgentJar")
-    if (System.getProperty("test.postgres") != null) systemProperty("test.postgres", System.getProperty("test.postgres"))
-    if (System.getProperty("test.mysql") != null) systemProperty("test.mysql", System.getProperty("test.mysql"))
-    if (System.getProperty("test.oracle") != null) systemProperty("test.oracle", System.getProperty("test.oracle"))
-    if (System.getProperty("test.derby") != null) systemProperty("test.derby", System.getProperty("test.derby"))
-    if (System.getProperty("test.hsqldb") != null) systemProperty("test.hsqldb", System.getProperty("test.hsqldb"))
-    if (System.getProperty("test.h2") != null) systemProperty("test.h2", System.getProperty("test.h2"))
-}
-
-tasks.clean {
-    delete("${projectDir}/src/generated")
-    delete("${projectDir}/src/processed")
-}
-
-tasks.javadoc {
-    title = "RIFE2"
-    if (JavaVersion.current().isJava9Compatible) {
-        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
-    }
-    exclude("rife/antlr/**")
-    exclude("rife/asm/**")
-}
-
 idea {
     module {
         sourceDirs.add(File("${projectDir}/src/processed/java"))
         generatedSourceDirs.add(File("${projectDir}/src/processed/java"))
+    }
+}
+
+tasks {
+    register<JavaExec>("precompileHtmlTemplates") {
+        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set("rife.template.TemplateDeployer")
+        args = listOf(
+            "-t", "html",
+            "-d", "${projectDir}/build/classes/java/main",
+            "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates"
+        )
+    }
+
+    register<JavaExec>("precompileXmlTemplates") {
+        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set("rife.template.TemplateDeployer")
+        args = listOf(
+            "-t", "xml",
+            "-d", "${projectDir}/build/classes/java/main",
+            "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates"
+        )
+    }
+
+    register<JavaExec>("precompileSqlTemplates") {
+        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set("rife.template.TemplateDeployer")
+        args = listOf(
+            "-t", "sql",
+            "-d", "${projectDir}/build/classes/java/main",
+            "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates"
+        )
+    }
+
+    register("precompileTemplates") {
+        dependsOn("precompileHtmlTemplates")
+        dependsOn("precompileXmlTemplates")
+        dependsOn("precompileSqlTemplates")
+    }
+
+    jar {
+        dependsOn("precompileTemplates")
+
+        archiveBaseName.set("rife2")
+    }
+
+    generateGrammarSource {
+        arguments = arguments + listOf(
+            "-visitor",
+            "-long-messages"
+        )
+        outputDirectory = File("${projectDir}/src/generated/java/rife/template/antlr")
+    }
+
+    register<Copy>("processGeneratedParserCode") {
+        dependsOn("generateGrammarSource")
+        from("${projectDir}/src/generated/java/rife/template/antlr")
+        into("${projectDir}/src/processed/java/rife/template/antlr")
+        filter { line -> line.replace("org.antlr.v4.runtime", "rife.antlr.v4.runtime") }
+    }
+
+    compileJava {
+        dependsOn("processGeneratedParserCode")
+    }
+
+    register<Jar>("agentJar") {
+        dependsOn("jar")
+
+        archiveFileName.set("$rifeAgentJar")
+        from(sourceSets.main.get().output)
+        include(
+            "rife/asm/**",
+            "rife/instrument/**",
+            "rife/continuations/ContinuationConfigInstrument**",
+            "rife/continuations/instrument/**",
+            "rife/database/querymanagers/generic/instrument/**",
+            "rife/engine/EngineContinuationConfigInstrument**",
+            "rife/tools/ClassBytesLoader*",
+            "rife/tools/FileUtils*",
+            "rife/tools/InstrumentationUtils*",
+            "rife/tools/RawFormatter*",
+            "rife/tools/exceptions/FileUtils*",
+            "rife/validation/instrument/**",
+            "rife/validation/MetaDataMerged**",
+            "rife/validation/MetaDataBeanAware**"
+        )
+        manifest {
+            attributes["Premain-Class"] = "rife.instrument.RifeAgent"
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            exceptionFormat = TestExceptionFormat.FULL
+            events = setOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
+        }
+        addTestListener(object : TestListener {
+            override fun beforeTest(p0: TestDescriptor?) = Unit
+            override fun beforeSuite(p0: TestDescriptor?) = Unit
+            override fun afterTest(desc: TestDescriptor, result: TestResult) = Unit
+            override fun afterSuite(desc: TestDescriptor, result: TestResult) {
+                printResults(desc, result)
+            }
+        })
+        environment("project.dir", project.projectDir.toString())
+        dependsOn("precompileTemplates")
+        dependsOn("agentJar")
+        jvmArgs = listOf("-javaagent:${buildDir}/libs/$rifeAgentJar")
+        if (System.getProperty("test.postgres") != null) systemProperty("test.postgres", System.getProperty("test.postgres"))
+        if (System.getProperty("test.mysql") != null) systemProperty("test.mysql", System.getProperty("test.mysql"))
+        if (System.getProperty("test.oracle") != null) systemProperty("test.oracle", System.getProperty("test.oracle"))
+        if (System.getProperty("test.derby") != null) systemProperty("test.derby", System.getProperty("test.derby"))
+        if (System.getProperty("test.hsqldb") != null) systemProperty("test.hsqldb", System.getProperty("test.hsqldb"))
+        if (System.getProperty("test.h2") != null) systemProperty("test.h2", System.getProperty("test.h2"))
+    }
+
+    clean {
+        delete("${projectDir}/src/generated")
+        delete("${projectDir}/src/processed")
+    }
+
+    javadoc {
+        title = "RIFE2"
+        if (JavaVersion.current().isJava9Compatible) {
+            (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+        }
+        exclude("rife/antlr/**")
+        exclude("rife/asm/**")
     }
 }
 

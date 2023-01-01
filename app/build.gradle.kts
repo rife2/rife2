@@ -34,14 +34,16 @@ dependencies {
 }
 
 val rifeAgentJar: String by rootProject.extra
-tasks.test {
-    dependsOn(":lib:agentJar")
+tasks {
+    test {
+        dependsOn(":lib:agentJar")
 
-    useJUnitPlatform()
-    testLogging {
-        events("started", "passed", "skipped", "failed")
-        exceptionFormat = TestExceptionFormat.FULL
+        useJUnitPlatform()
+        testLogging {
+            events("started", "passed", "skipped", "failed")
+            exceptionFormat = TestExceptionFormat.FULL
+        }
+        environment("project.dir", project.projectDir.toString())
+        jvmArgs = listOf("-javaagent:${project(":lib").buildDir}/libs/$rifeAgentJar")
     }
-    environment("project.dir", project.projectDir.toString())
-    jvmArgs = listOf("-javaagent:${project(":lib").buildDir}/libs/$rifeAgentJar")
 }
