@@ -10,8 +10,8 @@ jobs:
       mysql:
         image: mysql:8
         env:
-          MYSQL_DATABASE: unittest
-          MYSQL_USER: unittest
+          MYSQL_DATABASE: unittests
+          MYSQL_USER: unittests
           MYSQL_PASSWORD: password
           MYSQL_ROOT_PASSWORD: root
         ports:
