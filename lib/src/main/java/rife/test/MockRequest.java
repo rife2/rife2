@@ -122,8 +122,10 @@ public class MockRequest implements Request {
      * <p><code>false</code> otherwise
      * @see #getParameters
      * @see #setParameters
-     * @see #setParameter(String, String[])
-     * @see #setParameter(String, String)
+     * @see #setParameter(String, String...)
+     * @see #setParameter(String, Object...)
+     * @see #parameter(String, String...)
+     * @see #parameter(String, Object...)
      * @since 1.0
      */
     public boolean hasParameter(String name) {
@@ -137,8 +139,10 @@ public class MockRequest implements Request {
      * and their value arrays as the values
      * @see #hasParameter
      * @see #setParameters
-     * @see #setParameter(String, String[])
-     * @see #setParameter(String, String)
+     * @see #setParameter(String, String...)
+     * @see #setParameter(String, Object...)
+     * @see #parameter(String, String...)
+     * @see #parameter(String, Object...)
      * @since 1.0
      */
     public Map<String, String[]> getParameters() {
@@ -152,8 +156,10 @@ public class MockRequest implements Request {
      *                   with the names as the keys and their value arrays as the values
      * @see #hasParameter
      * @see #getParameters
-     * @see #setParameter(String, String[])
-     * @see #setParameter(String, String)
+     * @see #setParameter(String, String...)
+     * @see #setParameter(String, Object...)
+     * @see #parameter(String, String...)
+     * @see #parameter(String, Object...)
      * @since 1.0
      */
     public void setParameters(Map<String, String[]> parameters) {
@@ -175,8 +181,10 @@ public class MockRequest implements Request {
      * @see #hasParameter
      * @see #getParameters
      * @see #setParameters
-     * @see #setParameter(String, String[])
-     * @see #setParameter(String, String)
+     * @see #setParameter(String, String...)
+     * @see #setParameter(String, Object...)
+     * @see #parameter(String, String...)
+     * @see #parameter(String, Object...)
      * @since 1.0
      */
     public MockRequest parameters(Map<String, String[]> parameters) {
@@ -193,10 +201,11 @@ public class MockRequest implements Request {
      * @see #hasParameter
      * @see #getParameters
      * @see #setParameters
-     * @see #setParameter(String, String)
+     * @see #parameter(String, String...)
+     * @see #parameter(String, Object...)
      * @since 1.0
      */
-    public void setParameter(String name, String[] values) {
+    public void setParameter(String name, String... values) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
         if (null == values) throw new IllegalArgumentException("values can't be null");
@@ -212,15 +221,43 @@ public class MockRequest implements Request {
      *
      * @param name   the name of the parameter
      * @param values the value array of the parameter
+     * @see #hasParameter
+     * @see #getParameters
+     * @see #setParameters
+     * @see #parameter(String, String...)
+     * @see #parameter(String, Object...)
+     * @since 1.0
+     */
+    public void setParameter(String name, Object... values) {
+        if (null == name) throw new IllegalArgumentException("name can't be null");
+        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (null == values) throw new IllegalArgumentException("values can't be null");
+
+        final var strings = new String[values.length];
+        for (int i = 0; i < values.length; ++i) {
+            strings[i] = String.valueOf(values[i]);
+        }
+
+        parameters_.put(name, strings);
+        if (files_ != null) {
+            files_.remove(name);
+        }
+    }
+
+    /**
+     * Sets a parameter in this request.
+     *
+     * @param name   the name of the parameter
+     * @param values the value array of the parameter
      * @return this <code>MockRequest</code> instance
      * @see #hasParameter
      * @see #getParameters
      * @see #setParameters
-     * @see #setParameter(String, String[])
-     * @see #setParameter(String, String)
+     * @see #setParameter(String, String...)
+     * @see #setParameter(String, Object...)
      * @since 1.0
      */
-    public MockRequest parameter(String name, String[] values) {
+    public MockRequest parameter(String name, String... values) {
         setParameter(name, values);
 
         return this;
@@ -229,37 +266,18 @@ public class MockRequest implements Request {
     /**
      * Sets a parameter in this request.
      *
-     * @param name  the name of the parameter
-     * @param value the value of the parameter
-     * @see #hasParameter
-     * @see #getParameters
-     * @see #setParameters
-     * @see #setParameter(String, String[])
-     * @since 1.0
-     */
-    public void setParameter(String name, String value) {
-        if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
-        if (null == value) throw new IllegalArgumentException("value can't be null");
-
-        setParameter(name, new String[]{value});
-    }
-
-    /**
-     * Sets a parameter in this request.
-     *
-     * @param name  the name of the parameter
-     * @param value the value of the parameter
+     * @param name   the name of the parameter
+     * @param values the value array of the parameter
      * @return this <code>MockRequest</code> instance
      * @see #hasParameter
      * @see #getParameters
      * @see #setParameters
-     * @see #setParameter(String, String[])
-     * @see #setParameter(String, String)
+     * @see #setParameter(String, String...)
+     * @see #setParameter(String, Object...)
      * @since 1.0
      */
-    public MockRequest parameter(String name, String value) {
-        setParameter(name, value);
+    public MockRequest parameter(String name, Object... values) {
+        setParameter(name, values);
 
         return this;
     }
