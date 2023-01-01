@@ -7,8 +7,23 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_DATABASE: unittest
+          MYSQL_USER: unittest
+          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
       postgres:
-        image: postgres
+        image: postgres:15
         env:
           POSTGRES_DB: unittests
           POSTGRES_PASSWORD: password
@@ -33,14 +48,6 @@ jobs:
         java-version: [ 19 ]
 
     steps:
-      - name: Set up MySQL
-        run: |
-          sudo /etc/init.d/mysql start
-          mysql -e "CREATE DATABASE ${{ env.MYSQL_DATABASE }};" -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
-          mysql -e "CREATE USER 'unittests'@'localhost' IDENTIFIED BY 'password';" -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
-          mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'unittests'@'localhost' WITH GRANT OPTION;" -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
-          mysql -e "FLUSH PRIVILEGES;" -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
-
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
