@@ -102,26 +102,16 @@ public class TaskRunner {
         // the type of the event
 
         // first obtain the collection for this event's type
-        final Collection<String> ids;
+        Set<String> ids_to_resume = new HashSet<>();
         synchronized (eventsMapping_) {
-            ids = eventsMapping_.getOrDefault(event.getType(), Collections.emptySet());
+            final Collection<String> ids = eventsMapping_.getOrDefault(event.getType(), Collections.emptySet());
+            ids_to_resume.addAll(ids);
+            ids.clear();;
         }
 
-        // then go over the continuation IDs for this event's type
-        // and collect them into a seperate collection, while erasing them
-        // from the events mapping
-        Set<String> ids_to_resume = new HashSet<>();
-        synchronized (ids) {
-            if (ids.size() > 0) {
-                var it = ids.iterator();
-                while (it.hasNext()) {
-                    ids_to_resume.add(it.next());
-                    it.remove();
-                }
-            } else {
-                synchronized (pendingEvents_) {
-                    pendingEvents_.add(event);
-                }
+        if (ids_to_resume.isEmpty()) {
+            synchronized (pendingEvents_) {
+                pendingEvents_.add(event);
             }
         }
 
@@ -131,8 +121,15 @@ public class TaskRunner {
         }
 
         // notify all the event listeners that a new event has been triggered
+        Collection<EventListener> listeners = null;
         synchronized (listeners_) {
-            for (var listener : listeners_) {
+            if (!listeners_.isEmpty()) {
+                listeners = new LinkedHashSet<>(listeners_);
+            }
+        }
+
+        if (listeners != null) {
+            for (var listener : listeners) {
                 listener.eventTriggered(event);
             }
         }
@@ -196,9 +193,6 @@ public class TaskRunner {
                     ids = new HashSet<>();
                     eventsMapping_.put(type, ids);
                 }
-            }
-
-            synchronized (ids) {
                 ids.add(state.getContinuationId());
             }
 
