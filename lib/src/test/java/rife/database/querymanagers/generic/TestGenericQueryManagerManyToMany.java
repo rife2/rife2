@@ -242,8 +242,8 @@ public class TestGenericQueryManagerManyToMany {
             assertEquals(2, new DbQueryManager(datasource)
                 .executeGetFirstInt(new Select(datasource)
                     .field("count(*)")
-                    .from("mmfirstbean_mmsecondbean")
-                    .where("mmfirstbean_identifier", "=", id1)));
+                    .from("MMFirstBean_MMSecondBean")
+                    .where("MMFirstBean_identifier", "=", id1)));
             assertEquals(2, secondManager_.count());
 
             // delete the first bean
@@ -254,8 +254,8 @@ public class TestGenericQueryManagerManyToMany {
             assertEquals(0, new DbQueryManager(datasource)
                 .executeGetFirstInt(new Select(datasource)
                     .field("count(*)")
-                    .from("mmfirstbean_mmsecondbean")
-                    .where("mmfirstbean_identifier", "=", id1)));
+                    .from("MMFirstBean_MMSecondBean")
+                    .where("MMFirstBean_identifier", "=", id1)));
             assertEquals(2, secondManager_.count());
 
             // add another many-to-many relationship
@@ -271,8 +271,8 @@ public class TestGenericQueryManagerManyToMany {
             assertEquals(3, new DbQueryManager(datasource)
                 .executeGetFirstInt(new Select(datasource)
                     .field("count(*)")
-                    .from("mmfirstbean_mmsecondbean")
-                    .where("mmfirstbean_identifier", "=", id2)));
+                    .from("MMFirstBean_MMSecondBean")
+                    .where("MMFirstBean_identifier", "=", id2)));
             assertEquals(3, secondManager_.count());
 
             // delete the second bean
@@ -283,8 +283,8 @@ public class TestGenericQueryManagerManyToMany {
             assertEquals(0, new DbQueryManager(datasource)
                 .executeGetFirstInt(new Select(datasource)
                     .field("count(*)")
-                    .from("mmfirstbean_mmsecondbean")
-                    .where("mmfirstbean_identifier", "=", id2)));
+                    .from("MMFirstBean_MMSecondBean")
+                    .where("MMFirstBean_identifier", "=", id2)));
             assertEquals(3, secondManager_.count());
         } finally {
             tearDown();

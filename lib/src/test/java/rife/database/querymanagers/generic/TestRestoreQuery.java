@@ -937,7 +937,7 @@ public class TestRestoreQuery {
 
             query = manager_.getRestoreQuery();
             query
-                .fields("simplebean", SimpleBean.class);
+                .fields("SimpleBean", SimpleBean.class);
 
             bean_list = manager_.restore(query);
 
@@ -954,7 +954,7 @@ public class TestRestoreQuery {
 
             query = manager_.getRestoreQuery();
             query
-                .fieldsExcluded("simplebean", SimpleBean.class, "testString");
+                .fieldsExcluded("SimpleBean", SimpleBean.class, "testString");
 
             bean_list = manager_.restore(query);
 
@@ -965,7 +965,7 @@ public class TestRestoreQuery {
 
             query = manager_.getRestoreQuery();
             query
-                .fields("linkBean");
+                .fields("LinkBean");
 
             bean_list = manager_.restore(query);
 

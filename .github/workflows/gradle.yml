@@ -48,7 +48,8 @@ jobs:
         java-version: [ 19 ]
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout source repository
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -63,4 +64,4 @@ jobs:
         run: chmod +x gradlew
 
       - name: Test with Gradle
-        run: ./gradlew -Dtest.postgres=true -Dtest.mysql=true  clean :lib:test --stacktrace --tests TestGenericQueryManagerManyToMany
+        run: ./gradlew -Dtest.postgres=true -Dtest.mysql=true  clean :lib:test --stacktrace --tests "rife.database.querymanagers.generic*"
