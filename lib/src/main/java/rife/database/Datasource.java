@@ -43,8 +43,8 @@ import javax.sql.DataSource;
  * @since 1.0
  */
 public class Datasource implements Cloneable {
-    static HashMap<String, String> sDriverAliases = new HashMap<String, String>();
-    static HashMap<String, String> sDriverNames = new HashMap<String, String>();
+    static HashMap<String, String> sDriverAliases = new HashMap<>();
+    static HashMap<String, String> sDriverNames = new HashMap<>();
 
     static {
         sDriverAliases.put("org.gjt.mm.mysql.Driver", "com.mysql.cj.jdbc.Driver");

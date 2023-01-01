@@ -98,6 +98,8 @@ public class TestDbQueryManager {
             if (manager.getConnection().supportsTransactions() &&
                 // oracle doesn't support repeatable read isolation
                 !datasource.getAliasedDriver().equals("oracle.jdbc.driver.OracleDriver") &&
+                // mysql doesn't actually support repeatable read isolation
+                !datasource.getAliasedDriver().equals("com.mysql.cj.jdbc.Driver") &&
                 // these databases lock on the entire table, preventing this multithreaded test to work
                 !datasource.getAliasedDriver().equals("org.hsqldb.jdbcDriver") &&
                 !datasource.getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver")) {
