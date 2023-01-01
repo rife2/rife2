@@ -64,4 +64,4 @@ jobs:
         run: chmod +x gradlew
 
       - name: Test with Gradle
-        run: ./gradlew -Dtest.postgres=true -Dtest.mysql=true  clean :lib:test --stacktrace --tests "rife.database.querymanagers.generic*"
+        run: ./gradlew -Dtest.postgres=true -Dtest.mysql=true build check --stacktrace
