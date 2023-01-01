@@ -416,7 +416,7 @@ public final class BeanUtils {
      * @see #setUppercasedBeanProperty(String, UploadedFile, String, Map, Object)
      * @since 1.0
      */
-    public static HashMap<String, PropertyDescriptor> getUppercasedBeanProperties(Class beanClass)
+    public static Map<String, PropertyDescriptor> getUppercasedBeanProperties(Class beanClass)
     throws BeanUtilsException {
         if (null == beanClass) throw new IllegalArgumentException("beanClass can't be null.");
 
