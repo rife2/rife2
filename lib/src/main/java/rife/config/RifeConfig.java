@@ -15,6 +15,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 public class RifeConfig {
@@ -1144,23 +1146,18 @@ public class RifeConfig {
             return this;
         }
 
-        public DateFormat getDefaultShortDateFormat() {
+        public DateTimeFormatter getDefaultShortDateFormat() {
             if (defaultShortDateFormat_ != null) {
-                SimpleDateFormat sf;
+                DateTimeFormatter df;
                 try {
-                    sf = new SimpleDateFormat(defaultShortDateFormat_, Localization.getLocale());
-                    sf.setTimeZone(getDefaultTimeZone());
+                    df = DateTimeFormatter.ofPattern(defaultShortDateFormat_, Localization.getLocale());
                 } catch (IllegalArgumentException e) {
                     throw new DateFormatInitializationException(e.getMessage());
                 }
 
-                return sf;
+                return df;
             } else {
-                if (0 != getDefaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
-                    return DateFormat.getDateInstance(DateFormat.SHORT, Localization.getLocale());
-                }
-
-                return DateFormat.getDateInstance(DateFormat.SHORT, Locale.ENGLISH);
+                return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).localizedBy(Localization.getLocale());
             }
         }
 
@@ -1171,23 +1168,18 @@ public class RifeConfig {
             return this;
         }
 
-        public DateFormat getDefaultLongDateFormat() {
+        public DateTimeFormatter getDefaultLongDateFormat() {
             if (defaultLongDateFormat_ != null) {
-                SimpleDateFormat sf;
+                DateTimeFormatter df;
                 try {
-                    sf = new SimpleDateFormat(defaultLongDateFormat_, Localization.getLocale());
-                    sf.setTimeZone(getDefaultTimeZone());
+                    df = DateTimeFormatter.ofPattern(defaultLongDateFormat_, Localization.getLocale());
                 } catch (IllegalArgumentException e) {
                     throw new DateFormatInitializationException(e.getMessage());
                 }
 
-                return sf;
+                return df;
             } else {
-                if (0 != getDefaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
-                    return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Localization.getLocale());
-                }
-
-                return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.ENGLISH);
+                return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).localizedBy(Localization.getLocale());
             }
         }
 

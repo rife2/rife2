@@ -13,8 +13,8 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRifeConfig {
-    private static Date makeDate(int year, int month, int date, int hourOfDay, int minute) {
-        return Date.from(LocalDateTime.of(year, month + 1, date, hourOfDay, minute, 0, 0).toInstant(ZoneOffset.of("-04:00")));
+    private static ZonedDateTime makeDate(int year, int month, int dayOfMonth, int hourOfDay, int minute) {
+        return ZonedDateTime.of(year, month + 1, dayOfMonth, hourOfDay, minute, 0, 0, RifeConfig.tools().getDefaultTimeZone().toZoneId());
     }
     
     @Test
@@ -49,7 +49,7 @@ public class TestRifeConfig {
             assertEquals(formatted, "mar, ago 31, 2004");
 
             try {
-                switchDates("vvvv 999 uuuu", "vvvv, 82.2 cccc");
+                switchDates("VvVv 999 uuuu", "WwWw, 82.2 cccc");
 
                 sf = RifeConfig.tools().getDefaultShortDateFormat();
                 formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
@@ -72,31 +72,31 @@ public class TestRifeConfig {
 
             var formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
-            assertEquals(formatted, "Aug 31, 2004, 3:53 PM");
+            assertEquals(formatted, "Aug 31, 2004, 3:53:00 PM");
 
             switchLocale("BE", "NL");
 
             sf = RifeConfig.tools().getDefaultLongDateFormat();
             formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
-            assertEquals(formatted, "31 aug. 2004 15:53");
+            assertEquals(formatted, "31 aug. 2004 15:53:00");
 
             switchLocale("ES", "ES");
 
             sf = RifeConfig.tools().getDefaultLongDateFormat();
             formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
-            assertEquals(formatted, "31 ago 2004 15:53");
+            assertEquals(formatted, "31 ago 2004 15:53:00");
 
             switchDates("EEE, MMM d, yyyy", "EEE, d MMM yyyy HH:mm:ss");
 
             sf = RifeConfig.tools().getDefaultLongDateFormat();
             formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
-            assertEquals(formatted, "mar, 31 ago 2004 14:53:00");
+            assertEquals(formatted, "mar, 31 ago 2004 15:53:00");
 
             try {
-                switchDates("wwww 999 uuuu", "vvvv, 82.2 cccc");
+                switchDates("WwWw 999 uuuu", "VvVv, 82.2 cccc");
 
                 sf = RifeConfig.tools().getDefaultLongDateFormat();
                 formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
