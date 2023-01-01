@@ -25,8 +25,8 @@ jobs:
     env:
       GRADLE_OPTS: "-Dorg.gradle.jvmargs=-XX:MaxMetaspaceSize=512m"
       MYSQL_DATABASE: unittests
-      MYSQL_USER: unittests
-      MYSQL_PASSWORD: password
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
 
     strategy:
       matrix:
@@ -37,6 +37,9 @@ jobs:
         run: |
           sudo /etc/init.d/mysql start
           mysql -e 'CREATE DATABASE ${{ env.MYSQL_DATABASE }};' -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
+          mysql -e 'CREATE USER 'unittests'@'localhost' IDENTIFIED BY 'password';' -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
+          mysql -e 'GRANT ALL PRIVILEGES ON *.* TO 'unittests'@'localhost' WITH GRANT OPTION;' -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
+          mysql -e 'FLUSH PRIVILEGES;' -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
 
       - uses: actions/checkout@v2
         with:
