@@ -53,7 +53,7 @@ public class DbConnection implements AutoCloseable {
     private final Datasource datasource_;
     private Connection connection_;
     private ArrayList<DbStatement> statements_;
-    private int mSupportsTransactions = TRANSACTIONS_SUPPORT_UNKNOWN;
+    private int supportsTransactions_ = TRANSACTIONS_SUPPORT_UNKNOWN;
     private Thread transactionThread_ = null;
 
     /**
@@ -135,7 +135,7 @@ public class DbConnection implements AutoCloseable {
                         }
                     } finally {
                         connection_ = null;
-                        mSupportsTransactions = TRANSACTIONS_SUPPORT_UNKNOWN;
+                        supportsTransactions_ = TRANSACTIONS_SUPPORT_UNKNOWN;
                     }
                 }
             } finally {
@@ -220,7 +220,7 @@ public class DbConnection implements AutoCloseable {
                 }
             }
             connection_ = null;
-            mSupportsTransactions = TRANSACTIONS_SUPPORT_UNKNOWN;
+            supportsTransactions_ = TRANSACTIONS_SUPPORT_UNKNOWN;
         } finally {
             if (transaction_thread != null) {
                 datasource_.getPool().unregisterThreadConnection(transaction_thread);
@@ -705,15 +705,15 @@ public class DbConnection implements AutoCloseable {
             synchronized (this) {
                 detectCleanup();
 
-                if (TRANSACTIONS_SUPPORT_UNKNOWN == mSupportsTransactions) {
+                if (TRANSACTIONS_SUPPORT_UNKNOWN == supportsTransactions_) {
                     if (connection_.getMetaData().supportsTransactions()) {
-                        mSupportsTransactions = TRANSACTIONS_SUPPORTED;
+                        supportsTransactions_ = TRANSACTIONS_SUPPORTED;
                     } else {
-                        mSupportsTransactions = TRANSACTIONS_UNSUPPORTED;
+                        supportsTransactions_ = TRANSACTIONS_UNSUPPORTED;
                     }
                 }
 
-                return TRANSACTIONS_SUPPORTED == mSupportsTransactions;
+                return TRANSACTIONS_SUPPORTED == supportsTransactions_;
 
             }
         } catch (SQLException e) {

@@ -4,7 +4,6 @@
  */
 package rife.database;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.database.exceptions.DatabaseException;
@@ -17,9 +16,7 @@ import rife.tools.exceptions.FileUtilsErrorException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.sql.Blob;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Calendar;
 import java.util.List;
 
@@ -89,7 +86,6 @@ public class TestDbQueryManager {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    @Disabled
     void testTransactionUserCommit(Datasource datasource) {
         final var manager = new DbQueryManager(datasource);
         var create = "CREATE TABLE tbltest (id INTEGER, stringcol VARCHAR(255))";
@@ -98,10 +94,10 @@ public class TestDbQueryManager {
             final var insert = "INSERT INTO tbltest VALUES (232, 'somestring')";
             final var select = new Select(datasource).from("tbltest").field("count(*)");
 
+            final int[] other_first_int = {-1};
             if (manager.getConnection().supportsTransactions() &&
-                // don't do this for embedded databases
+                // these databases lock on the entire table, preventing this multithreaded test to work
                 !datasource.getAliasedDriver().equals("org.hsqldb.jdbcDriver") &&
-                !datasource.getAliasedDriver().equals("org.h2.Driver") &&
                 !datasource.getAliasedDriver().equals("org.apache.derby.jdbc.EmbeddedDriver")) {
                 // ensure that the transaction isn't committed yet
                 // since this should only happen after the last transaction user
@@ -110,13 +106,13 @@ public class TestDbQueryManager {
                 var other_thread = new Thread(() -> {
                     synchronized (updated_monitor) {
                         try {
-                            updated_monitor.wait();
+                            updated_monitor.wait(5000);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
                     }
 
-                    assertEquals(0, manager.executeGetFirstInt(select));
+                    other_first_int[0] = manager.executeGetFirstInt(select);
 
                     synchronized (isolation_monitor) {
                         isolation_monitor.notifyAll();
@@ -125,35 +121,51 @@ public class TestDbQueryManager {
 
                 other_thread.start();
 
-                manager.inTransaction(() -> {
-                    manager.executeUpdate(insert);
-                    assertEquals(1, manager.executeGetFirstInt(select));
+                manager.inTransaction(new DbTransactionUserWithoutResult<>() {
+                    public void useTransactionWithoutResult()
+                    throws InnerClassException {
+                        manager.executeUpdate(insert);
+                        assertEquals(1, manager.executeGetFirstInt(select));
 
-                    manager.inTransaction(() -> {
                         manager.inTransaction(() -> {
+                            manager.inTransaction(() -> {
+                                manager.executeUpdate(insert);
+                                assertEquals(2, manager.executeGetFirstInt(select));
+                            });
+
                             manager.executeUpdate(insert);
-                            assertEquals(2, manager.executeGetFirstInt(select));
+                            assertEquals(3, manager.executeGetFirstInt(select));
                         });
 
-                        manager.executeUpdate(insert);
                         assertEquals(3, manager.executeGetFirstInt(select));
-                    });
 
-                    assertEquals(3, manager.executeGetFirstInt(select));
+                        synchronized (updated_monitor) {
+                            updated_monitor.notifyAll();
+                        }
 
-                    synchronized (updated_monitor) {
-                        updated_monitor.notifyAll();
-                    }
-
-                    synchronized (isolation_monitor) {
-                        if (other_thread.isAlive()) {
-                            try {
-                                isolation_monitor.wait();
-                            } catch (InterruptedException ignored) {
+                        synchronized (isolation_monitor) {
+                            if (other_thread.isAlive()) {
+                                try {
+                                    isolation_monitor.wait(5000);
+                                } catch (InterruptedException ignored) {
+                                }
                             }
                         }
                     }
+
+                    public int getTransactionIsolation() {
+                        return Connection.TRANSACTION_READ_COMMITTED;
+                    }
                 });
+
+                try {
+                    other_thread.join(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                assertEquals(0, other_first_int[0]);
+
                 assertEquals(3, manager.executeGetFirstInt(select));
             }
         } catch (DatabaseException e) {
