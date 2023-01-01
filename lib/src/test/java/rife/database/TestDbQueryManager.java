@@ -154,7 +154,7 @@ public class TestDbQueryManager {
                     }
 
                     public int getTransactionIsolation() {
-                        return Connection.TRANSACTION_READ_COMMITTED;
+                        return Connection.TRANSACTION_REPEATABLE_READ;
                     }
                 });
 
