@@ -24,12 +24,20 @@ jobs:
 
     env:
       GRADLE_OPTS: "-Dorg.gradle.jvmargs=-XX:MaxMetaspaceSize=512m"
+      MYSQL_DATABASE: unittests
+      MYSQL_USER: unittests
+      MYSQL_PASSWORD: password
 
     strategy:
       matrix:
         java-version: [ 19 ]
 
     steps:
+      - name: Set up MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE ${{ env.MYSQL_DATABASE }};' -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
+
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -43,4 +51,4 @@ jobs:
         run: chmod +x gradlew
 
       - name: Test with Gradle
-        run: ./gradlew -Dtest.postgres=true build check --stacktrace
+        run: ./gradlew -Dtest.postgres=true -Dtest.mysql=true build check --stacktrace
