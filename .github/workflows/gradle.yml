@@ -7,6 +7,20 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
+      oracle:
+        image: gvenzl/oracle-xe:18-slim
+        env:
+          ORACLE_RANDOM_PASSWORD: true
+          APP_USER: unittests
+          APP_USER_PASSWORD: password
+        ports:
+          - 1521:1521
+        options: >-
+          --health-cmd healthcheck.sh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
       mysql:
         image: mysql:8
         env:
@@ -58,10 +72,19 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
-          cache: 'gradle'
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ matrix.java-version }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-${{ matrix.java-version }}-
+
       - name: Test with Gradle
-        run: ./gradlew -Dtest.postgres=true -Dtest.mysql=true build check --stacktrace
+        run: ./gradlew -Dtest.postgres=true -Dtest.mysql=true -Dtest.oracle=true build check --stacktrace
