@@ -154,7 +154,11 @@ public class TestDbQueryManager {
                     }
 
                     public int getTransactionIsolation() {
-                        return Connection.TRANSACTION_REPEATABLE_READ;
+                        if (datasource.getAliasedDriver().equals("oracle.jdbc.driver.OracleDriver")) {
+                            return Connection.TRANSACTION_SERIALIZABLE;
+                        } else {
+                            return Connection.TRANSACTION_REPEATABLE_READ;
+                        }
                     }
                 });
 
