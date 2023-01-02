@@ -4,11 +4,14 @@
  */
 package rife.engine;
 
+import rife.ioc.HierarchicalProperties;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class Router {
+    final HierarchicalProperties properties_ = new HierarchicalProperties();
     final List<Route> before_ = new ArrayList<>();
     final List<Route> after_ = new ArrayList<>();
     final Map<String, List<Route>> routes_ = new HashMap<>();
@@ -64,6 +67,7 @@ public class Router {
     }
 
     public final <T extends Router> T group(String path, T router) {
+        router.properties_.setParent(this.properties_);
         router.parent_ = this;
         groups_.add(router);
 
@@ -315,6 +319,10 @@ public class Router {
     final Route registerFallback(Route route) {
         fallbackRoutes_.put("", route);
         return route;
+    }
+
+    public HierarchicalProperties properties() {
+        return properties_;
     }
 
     public Site site() {

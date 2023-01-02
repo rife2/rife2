@@ -101,12 +101,13 @@ public class RouteClass implements Route {
                     }
 
                     if (field.isAnnotationPresent(ActiveSite.class) ||
-                        field.isAnnotationPresent(Parameter.class) ||
-                        field.isAnnotationPresent(Header.class) ||
                         field.isAnnotationPresent(Body.class) ||
-                        field.isAnnotationPresent(PathInfo.class) ||
-                        field.isAnnotationPresent(FileUpload.class) ||
                         field.isAnnotationPresent(Cookie.class) ||
+                        field.isAnnotationPresent(FileUpload.class) ||
+                        field.isAnnotationPresent(Header.class) ||
+                        field.isAnnotationPresent(Parameter.class) ||
+                        field.isAnnotationPresent(PathInfo.class) ||
+                        field.isAnnotationPresent(Property.class) ||
                         field.isAnnotationPresent(RequestAttribute.class) ||
                         field.isAnnotationPresent(SessionAttribute.class)) {
                         fields.add(field);
@@ -222,6 +223,22 @@ public class RouteClass implements Route {
                         Object value;
                         try {
                             value = Convert.toType(values[0], type);
+                        } catch (ConversionException e) {
+                            value = Convert.getDefaultValue(type);
+                        }
+                        field.set(element, value);
+                    }
+                } else if (field.isAnnotationPresent(Property.class)) {
+                    var properties = context.properties();
+                    var annotation_name = field.getAnnotation(Property.class).value();
+                    if (annotation_name != null && !annotation_name.isEmpty()) {
+                        name = annotation_name;
+                    }
+                    var values = properties.get(name);
+                    if (values != null) {
+                        Object value;
+                        try {
+                            value = Convert.toType(values, type);
                         } catch (ConversionException e) {
                             value = Convert.getDefaultValue(type);
                         }

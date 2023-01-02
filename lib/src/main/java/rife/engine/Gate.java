@@ -6,15 +6,13 @@ package rife.engine;
 
 import rife.Version;
 import rife.config.RifeConfig;
-import rife.continuations.*;
-import rife.continuations.exceptions.PauseException;
 import rife.engine.exceptions.DeferException;
 import rife.engine.exceptions.RedirectException;
+import rife.ioc.HierarchicalProperties;
 import rife.template.TemplateFactory;
 import rife.tools.ExceptionFormattingUtils;
 import rife.tools.ExceptionUtils;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
@@ -25,6 +23,7 @@ import java.util.logging.Logger;
  * @since 1.0
  */
 public class Gate {
+    private HierarchicalProperties properties_ = null;
     private Site site_ = null;
     private Throwable initException_ = null;
 
@@ -34,7 +33,10 @@ public class Gate {
      * @param site the site that will handle the requests
      * @since 1.0
      */
-    public void setup(Site site) {
+    public void setup(HierarchicalProperties properties, Site site) {
+        var system_properties = new HierarchicalProperties().putAll(System.getProperties());
+        properties_ = properties.parent(system_properties);
+        site.properties_.setParent(properties_);
         site_ = site;
 
         try {

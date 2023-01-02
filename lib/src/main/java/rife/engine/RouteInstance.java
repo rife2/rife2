@@ -79,12 +79,13 @@ public class RouteInstance implements Route {
                     }
 
                     if (field.isAnnotationPresent(ActiveSite.class) ||
-                        field.isAnnotationPresent(Parameter.class) ||
-                        field.isAnnotationPresent(Header.class) ||
                         field.isAnnotationPresent(Body.class) ||
-                        field.isAnnotationPresent(PathInfo.class) ||
-                        field.isAnnotationPresent(FileUpload.class) ||
                         field.isAnnotationPresent(Cookie.class) ||
+                        field.isAnnotationPresent(FileUpload.class) ||
+                        field.isAnnotationPresent(Header.class) ||
+                        field.isAnnotationPresent(Parameter.class) ||
+                        field.isAnnotationPresent(PathInfo.class) ||
+                        field.isAnnotationPresent(Property.class) ||
                         field.isAnnotationPresent(RequestAttribute.class) ||
                         field.isAnnotationPresent(SessionAttribute.class)) {
                         throw new AnnotatedElementInstanceFieldException(this, element_, field.getName());

@@ -9,6 +9,7 @@ import rife.continuations.ContinuationConfigRuntime;
 import rife.continuations.ContinuationContext;
 import rife.continuations.exceptions.*;
 import rife.engine.exceptions.*;
+import rife.ioc.HierarchicalProperties;
 import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.template.exceptions.TemplateException;
@@ -202,6 +203,64 @@ public class Context {
             return null;
         }
         return routeMatch_.route();
+    }
+
+    public Router router() {
+        var route = route();
+        if (route == null) {
+            return null;
+        }
+        return route.router();
+    }
+
+    public HierarchicalProperties properties() {
+        var router = router();
+        if (router == null) {
+            return null;
+        }
+        return router.properties();
+    }
+
+    /**
+     * Retrieve a property from this context's {@code HierarchicalProperties}.
+     *
+     * @return the requested property; or {@code null} if it doesn't exist
+     * @since 1.0
+     */
+    public Object property(String name) {
+        var properties = properties();
+        if (null == properties) {
+            return null;
+        }
+        return properties.getValue(name);
+    }
+
+    /**
+     * Checks for the existence of a property in this context's {@code HierarchicalProperties}.
+     *
+     * @return {@code true} if the property exists; or {@code false} otherwise
+     * @since 1.0
+     */
+    public boolean hasProperty(String name) {
+        var properties = properties();
+        if (null == properties) {
+            return false;
+        }
+        return properties.contains(name);
+    }
+
+    /**
+     * Returns a collection of the names in this context's {@code HierarchicalProperties}.
+     *
+     * @return the requested collection of names
+     * @since 1.0
+     */
+    public Collection<String> propertyNames() {
+        var properties = properties();
+        if (null == properties) {
+            return Collections.emptyList();
+        }
+        return properties.getNames();
     }
 
     /**

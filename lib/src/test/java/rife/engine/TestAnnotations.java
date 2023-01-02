@@ -54,6 +54,9 @@ public class TestAnnotations {
                     -11
                     defaultHeader2
                     -12
+                    propval1
+                    defaultProp2
+                    propval1
                     """, webClient.getPage(new WebRequest(new URL("http://localhost:8181/get"), HttpMethod.GET)).getWebResponse().getContentAsString());
             }
         }
@@ -110,6 +113,9 @@ public class TestAnnotations {
                     18
                     value19
                     20
+                    propval1
+                    defaultProp2
+                    propval1
                     """, webClient.getPage(request).getWebResponse().getContentAsString());
             }
         }
@@ -155,6 +161,9 @@ public class TestAnnotations {
                     -11
                     defaultHeader2
                     -12
+                    propval1
+                    defaultProp2
+                    propval1
                     """, webClient.getPage(request).getWebResponse().getContentAsString());
 
                 request.setRequestBody("836");
@@ -189,6 +198,9 @@ public class TestAnnotations {
                     -11
                     defaultHeader2
                     -12
+                    propval1
+                    defaultProp2
+                    propval1
                     """, webClient.getPage(request).getWebResponse().getContentAsString());
             }
         }
@@ -265,6 +277,9 @@ public class TestAnnotations {
                     -11
                     defaultHeader2
                     -12
+                    propval1
+                    defaultProp2
+                    propval1
                     """, page.getWebResponse().getContentAsString());
             }
         }

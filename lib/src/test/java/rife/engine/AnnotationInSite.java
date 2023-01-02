@@ -25,6 +25,9 @@ public class AnnotationInSite extends Site {
         @RequestAttribute int intRequestAttribute = -7;
         @SessionAttribute int intSessionAttribute = -9;
         @Header("header2") String stringHeader2 = "defaultHeader2";
+        @Property String prop1 = "defaultProp1";
+        @Property String prop2 = "defaultProp2";
+        @Property("prop1") String prop3 = "defaultProp3";
 
         public void process(Context c)
         throws Exception {
@@ -65,6 +68,10 @@ public class AnnotationInSite extends Site {
         @Header String stringHeader = "defaultHeader";
         @Header int intHeader = -11;
         @Header("header3") int intHeader2 = -12;
+
+        @Property String prop1 = "defaultProp1";
+        @Property String prop2 = "defaultProp2";
+        @Property("prop1") String prop3 = "defaultProp3";
 
         public void process(Context c)
         throws Exception {
@@ -133,10 +140,15 @@ public class AnnotationInSite extends Site {
             c.print(intHeader + "\n");
             c.print(stringHeader2 + "\n");
             c.print(intHeader2 + "\n");
+
+            c.print(prop1 + "\n");
+            c.print(prop2 + "\n");
+            c.print(prop3 + "\n");
         }
     }
 
     public void setup() {
+        properties().put("prop1", "propval1");
         before(c -> {
            if (c.parameterBoolean("generate")) {
                c.setAttribute("stringRequestAttribute", "value9");

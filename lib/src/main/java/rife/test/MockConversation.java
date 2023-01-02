@@ -8,6 +8,7 @@ import jakarta.servlet.http.Cookie;
 import rife.engine.Gate;
 import rife.engine.Site;
 import rife.engine.exceptions.EngineException;
+import rife.ioc.HierarchicalProperties;
 import rife.tools.ArrayUtils;
 import rife.tools.StringUtils;
 
@@ -31,6 +32,7 @@ public class MockConversation {
 
     private Gate gate_ = null;
 
+    private final HierarchicalProperties properties_ = new HierarchicalProperties();
     private final HashMap<String, MockCookie> cookies_ = new HashMap<>();
     private final HashMap<String, MockSession> sessions_ = new HashMap<>();
     private String scheme_ = "http";
@@ -48,7 +50,8 @@ public class MockConversation {
     public MockConversation(Site site)
     throws EngineException {
         gate_ = new Gate();
-        gate_.setup(site);
+
+        gate_.setup(properties_, site);
     }
 
     /**
@@ -290,6 +293,17 @@ public class MockConversation {
         setContextPath(contextPath);
 
         return this;
+    }
+
+    /**
+     * Returns the properties uses by this conversation.
+     *
+     * @return the instance of <code>HierarchicalProperties</code> that is used
+     * by this conversation
+     * @since 1.0
+     */
+    public HierarchicalProperties properties() {
+        return properties_;
     }
 
     /**

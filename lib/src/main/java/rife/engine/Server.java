@@ -8,11 +8,13 @@ import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.session.*;
 import org.eclipse.jetty.servlet.*;
 import rife.config.RifeConfig;
+import rife.ioc.HierarchicalProperties;
 import rife.servlet.RifeFilter;
 
 import java.util.EnumSet;
 
 public class Server {
+    private final HierarchicalProperties properties_ = new HierarchicalProperties();
     private final org.eclipse.jetty.server.Server server_ = new org.eclipse.jetty.server.Server();
     private final SessionIdManager sessions_ = new DefaultSessionIdManager(server_);
     private final ServletContextHandler handler_ = new ServletContextHandler();
@@ -25,6 +27,10 @@ public class Server {
     public Server staticResourceBase(String base) {
         RifeConfig.server().setStaticResourceBase(base);
         return this;
+    }
+
+    public HierarchicalProperties properties() {
+        return properties_;
     }
 
     public Server start(Site site) {
@@ -41,7 +47,7 @@ public class Server {
         handler_.setSessionHandler(session_handler);
 
         var rife_filter = new RifeFilter();
-        rife_filter.site(site);
+        rife_filter.site(properties_, site);
         var filter_holder = new FilterHolder(rife_filter);
 
         var ctx = new ServletContextHandler();

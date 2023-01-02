@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import rife.config.RifeConfig;
 import rife.engine.Gate;
 import rife.engine.Site;
+import rife.ioc.HierarchicalProperties;
 import rife.tools.FileUtils;
 
 import java.io.IOException;
@@ -20,8 +21,8 @@ public class RifeFilter implements Filter {
     private final Gate gate_ = new Gate();
     private String gateUrl_ = null;
 
-    public void site(Site site) {
-        gate_.setup(site);
+    public void site(HierarchicalProperties properties, Site site) {
+        gate_.setup(properties, site);
     }
 
     @Override
@@ -29,11 +30,29 @@ public class RifeFilter implements Filter {
     throws ServletException {
         var classloader = getClass().getClassLoader();
 
+        // set up the properties
+        var properties = new HierarchicalProperties();
+
+        var context = config.getServletContext();
+        var names = context.getInitParameterNames();
+        String name;
+        while (names.hasMoreElements()) {
+            name = names.nextElement();
+            properties.put(name, context.getInitParameter(name));
+        }
+
+        names = config.getInitParameterNames();
+        while (names.hasMoreElements()) {
+            name = names.nextElement();
+            properties.put(name, config.getInitParameter(name));
+        }
+
+        // create the site instance
         var site_classname = config.getInitParameter(RIFE_SITE_CLASS_NAME);
         if (site_classname != null) {
             try {
                 var site_class = classloader.loadClass(site_classname);
-                gate_.setup((Site) site_class.getDeclaredConstructor().newInstance());
+                gate_.setup(properties, (Site) site_class.getDeclaredConstructor().newInstance());
             } catch (Throwable e) {
                 throw new ServletException(e);
             }
@@ -51,7 +70,7 @@ public class RifeFilter implements Filter {
 
                 // check if the url matches one of the pass-through suffixes
                 var pass_through = extension != null &&
-                    RifeConfig.engine().getPassThroughSuffixes().contains(extension);
+                                   RifeConfig.engine().getPassThroughSuffixes().contains(extension);
 
                 // if not passed through, handle the request
                 if (!pass_through) {
