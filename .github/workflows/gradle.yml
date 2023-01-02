@@ -87,7 +87,7 @@ jobs:
             ${{ runner.os }}-gradle-${{ matrix.java-version }}-
 
       - name: Test with Gradle
-        run: ./gradlew -Dtest.postgres=true -Dtest.mysql=true -Dtest.oracle=true build check --stacktrace
+        run: ./gradlew -Dtest.postgres=true -Dtest.mysql=true -Dtest.oracle=true build check --stacktrace -PtestsBadgeApiKey=${{ secrets.TESTS_BADGE_API_KEY }}
 
       - name: Cleanup Gradle Cache
         run: |

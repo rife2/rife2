@@ -1,5 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import java.net.*
+import java.net.http.*
 
 plugins {
     idea
@@ -270,5 +272,32 @@ fun printResults(desc: TestDescriptor, result: TestResult) {
         println(separationLine)
         println(testResultLine)
         println(separationLine)
+    }
+
+    if (desc.parent == null) {
+        val passed = result.successfulTestCount
+        val failed = result.failedTestCount
+        val skipped = result.skippedTestCount
+
+        if (project.properties["testsBadgeApiKey"] != null) {
+            val apiKey = project.properties["testsBadgeApiKey"]
+            val response: HttpResponse<String> = HttpClient.newHttpClient()
+                .send(
+                    HttpRequest.newBuilder()
+                        .uri(
+                            URI(
+                                "https://rife2.com/tests-badge/update/com.uwyn.rife2/rife2?" +
+                                        "apiKey=$apiKey&" +
+                                        "passed=$passed&" +
+                                        "failed=$failed&" +
+                                        "skipped=$skipped"
+                            )
+                        )
+                        .POST(HttpRequest.BodyPublishers.noBody())
+                        .build(), HttpResponse.BodyHandlers.ofString()
+                )
+            println("RESPONSE: " + response.statusCode())
+            println(response.body())
+        }
     }
 }
