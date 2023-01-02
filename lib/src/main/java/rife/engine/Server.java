@@ -14,10 +14,15 @@ import rife.servlet.RifeFilter;
 import java.util.EnumSet;
 
 public class Server {
-    private final HierarchicalProperties properties_ = new HierarchicalProperties();
+    private final HierarchicalProperties properties_;
     private final org.eclipse.jetty.server.Server server_ = new org.eclipse.jetty.server.Server();
     private final SessionIdManager sessions_ = new DefaultSessionIdManager(server_);
     private final ServletContextHandler handler_ = new ServletContextHandler();
+
+    public Server() {
+        var system_properties = new HierarchicalProperties().putAll(System.getProperties());
+        properties_ = new HierarchicalProperties().parent(system_properties);
+    }
 
     public Server port(int port) {
         RifeConfig.server().setPort(port);

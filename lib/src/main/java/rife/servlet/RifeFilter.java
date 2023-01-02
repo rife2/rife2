@@ -31,7 +31,8 @@ public class RifeFilter implements Filter {
         var classloader = getClass().getClassLoader();
 
         // set up the properties
-        var properties = new HierarchicalProperties();
+        var system_properties = new HierarchicalProperties().putAll(System.getProperties());
+        var properties = new HierarchicalProperties().parent(system_properties);
 
         var context = config.getServletContext();
         var names = context.getInitParameterNames();

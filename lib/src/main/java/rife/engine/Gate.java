@@ -23,7 +23,6 @@ import java.util.logging.Logger;
  * @since 1.0
  */
 public class Gate {
-    private HierarchicalProperties properties_ = null;
     private Site site_ = null;
     private Throwable initException_ = null;
 
@@ -34,9 +33,7 @@ public class Gate {
      * @since 1.0
      */
     public void setup(HierarchicalProperties properties, Site site) {
-        var system_properties = new HierarchicalProperties().putAll(System.getProperties());
-        properties_ = properties.parent(system_properties);
-        site.properties_.setParent(properties_);
+        site.properties_.setParent(properties);
         site_ = site;
 
         try {

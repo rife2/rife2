@@ -32,7 +32,7 @@ public class MockConversation {
 
     private Gate gate_ = null;
 
-    private final HierarchicalProperties properties_ = new HierarchicalProperties();
+    private final HierarchicalProperties properties_;
     private final HashMap<String, MockCookie> cookies_ = new HashMap<>();
     private final HashMap<String, MockSession> sessions_ = new HashMap<>();
     private String scheme_ = "http";
@@ -49,8 +49,10 @@ public class MockConversation {
      */
     public MockConversation(Site site)
     throws EngineException {
-        gate_ = new Gate();
+        var system_properties = new HierarchicalProperties().putAll(System.getProperties());
+        properties_ = new HierarchicalProperties().parent(system_properties);
 
+        gate_ = new Gate();
         gate_.setup(properties_, site);
     }
 
