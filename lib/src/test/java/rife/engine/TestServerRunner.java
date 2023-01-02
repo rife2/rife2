@@ -4,11 +4,17 @@
  */
 package rife.engine;
 
+import rife.ioc.HierarchicalProperties;
+
 public class TestServerRunner implements AutoCloseable {
     final Server server_ = new Server().port(8181);
 
     public TestServerRunner(Site site) {
         server_.start(site);
+    }
+
+    public HierarchicalProperties properties() {
+        return server_.properties();
     }
 
     public void close() {
