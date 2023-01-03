@@ -6,9 +6,7 @@ package rife.scheduler.schedulermanagers;
 
 import org.junit.jupiter.api.Test;
 import rife.scheduler.Executor;
-import rife.scheduler.Scheduler;
 import rife.scheduler.Task;
-import rife.scheduler.TaskManager;
 import rife.scheduler.TestTasktypes;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.scheduler.exceptions.NoExecutorForTasktypeException;
@@ -55,13 +53,13 @@ public class TestMemoryScheduler {
         var scheduler = new MemoryScheduler().getScheduler();
         Executor executor = new TestExecutor();
 
-        assertNull(scheduler.getExecutor(executor.getHandledTasktype()));
+        assertNull(scheduler.getExecutor(executor.getHandledTaskType()));
         try {
             scheduler.addExecutor(executor);
         } catch (SchedulerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
-        assertEquals(executor, scheduler.getExecutor(executor.getHandledTasktype()));
+        assertEquals(executor, scheduler.getExecutor(executor.getHandledTaskType()));
         assertTrue(scheduler.removeExecutor(executor));
     }
 
@@ -234,7 +232,7 @@ public class TestMemoryScheduler {
             }
         }
 
-        public String getHandledTasktype() {
+        public String getHandledTaskType() {
             return TestTasktypes.UPLOAD_GROUPS;
         }
 

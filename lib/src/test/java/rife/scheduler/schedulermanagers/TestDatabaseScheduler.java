@@ -12,9 +12,7 @@ import rife.scheduler.exceptions.*;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.scheduler.Executor;
-import rife.scheduler.Scheduler;
 import rife.scheduler.Task;
-import rife.scheduler.TaskManager;
 import rife.scheduler.TestTasktypes;
 import rife.tools.ExceptionUtils;
 import rife.tools.Localization;
@@ -90,13 +88,13 @@ public class TestDatabaseScheduler {
             var scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
             Executor executor = new TestExecutor();
 
-            assertNull(scheduler.getExecutor(executor.getHandledTasktype()));
+            assertNull(scheduler.getExecutor(executor.getHandledTaskType()));
             try {
                 scheduler.addExecutor(executor);
             } catch (SchedulerException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
-            assertEquals(executor, scheduler.getExecutor(executor.getHandledTasktype()));
+            assertEquals(executor, scheduler.getExecutor(executor.getHandledTaskType()));
             assertTrue(scheduler.removeExecutor(executor));
         } finally {
             tearDown(datasource);
@@ -282,7 +280,7 @@ public class TestDatabaseScheduler {
             }
         }
 
-        public String getHandledTasktype() {
+        public String getHandledTaskType() {
             return TestTasktypes.UPLOAD_GROUPS;
         }
 

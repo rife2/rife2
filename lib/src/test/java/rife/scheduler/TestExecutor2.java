@@ -9,7 +9,7 @@ public class TestExecutor2 extends Executor {
         return true;
     }
 
-    public String getHandledTasktype() {
+    public String getHandledTaskType() {
         return "test_executor2";
     }
 }

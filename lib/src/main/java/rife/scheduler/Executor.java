@@ -18,7 +18,7 @@ public abstract class Executor {
         assert task != null;
 
         var executor_thread = new ExecutorThread(this, task);
-        var thread = new Thread(executor_thread, getHandledTasktype());
+        var thread = new Thread(executor_thread, getHandledTaskType());
         thread.start();
     }
 
@@ -32,5 +32,5 @@ public abstract class Executor {
 
     public abstract boolean executeTask(Task task);
 
-    public abstract String getHandledTasktype();
+    public abstract String getHandledTaskType();
 }

@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class Scheduler extends Thread {
     private TaskManager taskManager_ = null;
-    private TaskOptionManager taskoptionManager_ = null;
+    private TaskOptionManager taskOptionManager_ = null;
     private int sleepTime_ = 500;
     private final HashMap<Object, Executor> executors_;
 
@@ -38,12 +38,12 @@ public class Scheduler extends Thread {
     public void setTaskOptionManager(TaskOptionManager taskoptionManager) {
         if (null == taskoptionManager) throw new IllegalArgumentException("taskoptionManager can't be null.");
 
-        taskoptionManager_ = taskoptionManager;
+        taskOptionManager_ = taskoptionManager;
         taskoptionManager.setScheduler(this);
     }
 
     public TaskOptionManager getTaskOptionManager() {
-        return taskoptionManager_;
+        return taskOptionManager_;
     }
 
     public boolean addExecutor(Executor executor)
@@ -51,7 +51,7 @@ public class Scheduler extends Thread {
         if (null == executor) throw new IllegalArgumentException("executor can't be null.");
 
         if (null == executor.getScheduler()) {
-            executors_.put(executor.getHandledTasktype(), executor);
+            executors_.put(executor.getHandledTaskType(), executor);
             executor.setScheduler(this);
         } else if (this == executor.getScheduler()) {
             return false;
@@ -59,8 +59,8 @@ public class Scheduler extends Thread {
             throw new ExecutorAlreadyRegisteredException(executor);
         }
 
-        assert executors_.containsKey(executor.getHandledTasktype());
-        assert executor == executors_.get(executor.getHandledTasktype());
+        assert executors_.containsKey(executor.getHandledTaskType());
+        assert executor == executors_.get(executor.getHandledTaskType());
         assert this == executor.getScheduler();
 
         return true;
@@ -69,13 +69,13 @@ public class Scheduler extends Thread {
     public boolean removeExecutor(Executor executor) {
         if (null == executor) throw new IllegalArgumentException("executor can't be null.");
 
-        if (null == executors_.remove(executor.getHandledTasktype())) {
+        if (null == executors_.remove(executor.getHandledTaskType())) {
             return false;
         }
 
         executor.setScheduler(null);
 
-        assert !executors_.containsKey(executor.getHandledTasktype());
+        assert !executors_.containsKey(executor.getHandledTaskType());
         assert null == executor.getScheduler();
 
         return true;
