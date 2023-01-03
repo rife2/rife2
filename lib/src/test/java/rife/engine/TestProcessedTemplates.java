@@ -49,4 +49,48 @@ public class TestProcessedTemplates {
             }
         }
     }
+
+    @Test
+    void testTemplateAttributesHtml()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                before(c -> {
+                    c.setAttribute("attribute1", "value1");
+                    c.setAttribute("another_attribute", "value2");
+                });
+                get("/template/html", c -> c.print(c.template("filtered_tags_attribute")));
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                final HtmlPage page = webClient.getPage("http://localhost:8181/template/html");
+                var response = page.getWebResponse();
+                assertEquals("text/html", response.getContentType());
+                assertEquals("This is an attribute value 'value1'.\n" +
+                             "This is another attribute value 'value2'.\n", response.getContentAsString());
+            }
+        }
+    }
+
+    @Test
+    void testTemplateAttributesTxt()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                before(c -> {
+                    c.setAttribute("attribute1", "value1");
+                    c.setAttribute("another_attribute", "value2");
+                });
+                get("/template/txt", c -> c.print(c.templateTxt("filtered_tags_attribute")));
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                final TextPage page = webClient.getPage("http://localhost:8181/template/txt");
+                var response = page.getWebResponse();
+                assertEquals("text/plain", response.getContentType());
+                assertEquals("This is an attribute value 'value1'.\n" +
+                             "This is another attribute value 'value2'.\n", response.getContentAsString());
+            }
+        }
+    }
 }

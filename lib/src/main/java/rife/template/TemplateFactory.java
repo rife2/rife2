@@ -42,6 +42,7 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
                 TemplateFactoryFilters.TAG_PROPERTY,
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },
@@ -66,6 +67,7 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
                 TemplateFactoryFilters.TAG_PROPERTY,
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },
@@ -90,6 +92,7 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
                 TemplateFactoryFilters.TAG_PROPERTY,
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },
@@ -114,6 +117,7 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
                 TemplateFactoryFilters.TAG_PROPERTY,
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },
@@ -154,6 +158,7 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
                 TemplateFactoryFilters.TAG_PROPERTY,
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },

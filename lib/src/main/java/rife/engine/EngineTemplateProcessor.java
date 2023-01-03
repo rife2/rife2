@@ -39,6 +39,7 @@ class EngineTemplateProcessor {
         processApplicationTags(set_values);
         processParameters(set_values);
         processProperties(set_values);
+        processAttributes(set_values);
         processCookies(set_values);
         processRoutes(set_values);
         processAuthentication(set_values);
@@ -95,7 +96,7 @@ class EngineTemplateProcessor {
                 if (!template_.isValueSet(param_value_id)) {
                     var param_name = captured_groups[1];
                     if (parameters.containsKey(param_name)) {
-                        String[] param_values = parameters.get(param_name);
+                        var param_values = parameters.get(param_name);
                         template_.setValue(param_value_id, encoder_.encode(param_values[0]));
                         setValues.add(param_value_id);
                     }
@@ -113,9 +114,27 @@ class EngineTemplateProcessor {
                 if (!template_.isValueSet(prop_value_id)) {
                     var prop_name = captured_groups[1];
                     if (properties.contains(prop_name)) {
-                        String prop_value = properties.getValueString(prop_name);
+                        var prop_value = properties.getValueString(prop_name);
                         template_.setValue(prop_value_id, encoder_.encode(prop_value));
                         setValues.add(prop_value_id);
+                    }
+                }
+            }
+        }
+    }
+
+    private void processAttributes(final List<String> setValues) {
+        var attribute_names = context_.attributeNames();
+        final var attr_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_ATTRIBUTE);
+        if (attr_tags != null) {
+            for (var captured_groups : attr_tags) {
+                var attr_value_id = captured_groups[0];
+                if (!template_.isValueSet(attr_value_id)) {
+                    var attr_name = captured_groups[1];
+                    if (attribute_names.contains(attr_name)) {
+                        var attr_value = String.valueOf(context_.attribute(attr_name));
+                        template_.setValue(attr_value_id, encoder_.encode(attr_value));
+                        setValues.add(attr_value_id);
                     }
                 }
             }
