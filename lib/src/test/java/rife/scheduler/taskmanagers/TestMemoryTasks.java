@@ -38,10 +38,7 @@ public class TestMemoryTasks {
 
         var task = new Task();
         try {
-            task.setType(type);
-            task.setPlanned(planned);
-            task.setFrequency(frequency);
-            task.setBusy(busy);
+            task.type(type).planned(planned).frequency(frequency).busy(busy);
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }

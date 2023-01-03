@@ -77,8 +77,8 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
 
         if (null == task) throw new IllegalArgumentException("task can't be null.");
 
-        int result = -1;
-        int task_id = -1;
+        var result = -1;
+        var task_id = -1;
         try {
             task_id = executeGetFirstInt(getTaskId);
             if (-1 == task_id) {
@@ -113,7 +113,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
 
         if (null == task) throw new IllegalArgumentException("task can't be null.");
 
-        boolean result = false;
+        var result = false;
 
         try {
             if (0 == executeUpdate(updateTask, handler)) {
@@ -137,12 +137,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
         Task task = null;
 
         try {
-            executeFetchFirst(getTask, processTask, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setInt("id", id);
-                }
-            });
+            executeFetchFirst(getTask, processTask, s -> s.setInt("id", id));
             task = processTask.getTask();
         } catch (DatabaseException e) {
             throw new GetTaskErrorException(id, e);
@@ -155,16 +150,11 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
     throws TaskManagerException {
         assert getTasksToProcess != null;
 
-        ArrayList<Task> tasks_to_process = new ArrayList<Task>();
+        var tasks_to_process = new ArrayList<Task>();
         processTask.setCollection(tasks_to_process);
 
         try {
-            executeFetchAll(getTasksToProcess, processTask, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setLong("planned", System.currentTimeMillis());
-                }
-            });
+            executeFetchAll(getTasksToProcess, processTask, s -> s.setLong("planned", System.currentTimeMillis()));
         } catch (DatabaseException e) {
             throw new GetTasksToProcessErrorException(e);
         }
@@ -176,16 +166,11 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
 
     protected Collection<Task> getScheduledTasks_(Select getScheduledTasks, ProcessTask processTask)
     throws TaskManagerException {
-        ArrayList<Task> scheduled_tasks = new ArrayList<Task>();
+        var scheduled_tasks = new ArrayList<Task>();
         processTask.setCollection(scheduled_tasks);
 
         try {
-            executeFetchAll(getScheduledTasks, processTask, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setLong("planned", System.currentTimeMillis());
-                }
-            });
+            executeFetchAll(getScheduledTasks, processTask, s -> s.setLong("planned", System.currentTimeMillis()));
         } catch (DatabaseException e) {
             throw new GetScheduledTasksErrorException(e);
         }
@@ -201,15 +186,10 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
 
         if (id < 0) throw new IllegalArgumentException("the task id can't be negative.");
 
-        boolean result = false;
+        var result = false;
 
         try {
-            if (0 != executeUpdate(removeTask, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setInt("id", id);
-                }
-            })) {
+            if (0 != executeUpdate(removeTask, s -> s.setInt("id", id))) {
                 result = true;
             }
         } catch (DatabaseException e) {
@@ -224,7 +204,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
         if (null == task) throw new IllegalArgumentException("task can't be null.");
         if (newPlanned <= 0) throw new IllegalArgumentException("newPlanned has to be bigger than 0.");
 
-        boolean result = false;
+        var result = false;
 
         Task task_tmp = null;
         try {
@@ -255,7 +235,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
             }
 
             try {
-                long next_date = task.getNextDate();
+                var next_date = task.getNextDate();
                 if (next_date >= 0 &&
                     rescheduleTask(task, next_date, task.getFrequency()) &&
                     deactivateTask(task.getId())) {
@@ -275,15 +255,10 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
 
         if (id < 0) throw new IllegalArgumentException("the task id can't be negative.");
 
-        boolean result = false;
+        var result = false;
 
         try {
-            if (0 != executeUpdate(activateTask, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setInt("id", id);
-                }
-            })) {
+            if (0 != executeUpdate(activateTask, s -> s.setInt("id", id))) {
                 result = true;
             }
         } catch (DatabaseException e) {
@@ -299,15 +274,10 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
 
         if (id < 0) throw new IllegalArgumentException("the task id can't be negative.");
 
-        boolean result = false;
+        var result = false;
 
         try {
-            if (0 != executeUpdate(deactivateTask, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setInt("id", id);
-                }
-            })) {
+            if (0 != executeUpdate(deactivateTask, s -> s.setInt("id", id))) {
                 result = true;
             }
         } catch (DatabaseException e) {

@@ -35,8 +35,8 @@ public abstract class DatabaseScheduler extends DbQueryManager implements Schedu
     protected boolean install_()
     throws SchedulerManagerException {
         try {
-            DatabaseTasks tasks_manager = DatabaseTasksFactory.instance(getDatasource());
-            DatabaseTaskOptions task_options_manager = DatabaseTaskOptionsFactory.instance(getDatasource());
+            var tasks_manager = DatabaseTasksFactory.instance(getDatasource());
+            var task_options_manager = DatabaseTaskOptionsFactory.instance(getDatasource());
 
             tasks_manager.install();
             task_options_manager.install();
@@ -50,8 +50,8 @@ public abstract class DatabaseScheduler extends DbQueryManager implements Schedu
     protected boolean remove_()
     throws SchedulerManagerException {
         try {
-            DatabaseTasks tasks_manager = DatabaseTasksFactory.instance(getDatasource());
-            DatabaseTaskOptions task_options_manager = DatabaseTaskOptionsFactory.instance(getDatasource());
+            var tasks_manager = DatabaseTasksFactory.instance(getDatasource());
+            var task_options_manager = DatabaseTaskOptionsFactory.instance(getDatasource());
 
             task_options_manager.remove();
             tasks_manager.remove();

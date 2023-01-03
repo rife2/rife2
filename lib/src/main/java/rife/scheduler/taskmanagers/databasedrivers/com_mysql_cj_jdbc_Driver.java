@@ -74,13 +74,9 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             result = reserveConnection(new DbConnectionUser() {
                 public Integer useConnection(DbConnection connection) {
                     try {
-                        if (0 == executeUpdate(addTask_, new DbPreparedStatementHandler() {
-                            public void setParameters(DbPreparedStatement statement) {
-                                statement
-                                    .setBean(task)
-                                    .setNull("id", java.sql.Types.INTEGER);
-                            }
-                        })) {
+                        if (0 == executeUpdate(addTask_, s -> s
+                            .setBean(task)
+                            .setNull("id", java.sql.Types.INTEGER))) {
                             throw new RuntimeException(new AddTaskErrorException(task));
                         }
                     } catch (DatabaseException e) {

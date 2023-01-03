@@ -6,7 +6,7 @@ package rife.scheduler.exceptions;
 
 import java.io.Serial;
 
-public class FrequencyException extends SchedulerException {
+public class FrequencyException extends RuntimeException {
     @Serial private static final long serialVersionUID = -3013172833353569656L;
 
     public FrequencyException(String message) {

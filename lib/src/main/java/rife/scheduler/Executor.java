@@ -17,8 +17,8 @@ public abstract class Executor {
     throws SchedulerExecutionException {
         assert task != null;
 
-        ExecutorThread executor_thread = new ExecutorThread(this, task);
-        Thread thread = new Thread(executor_thread, getHandledTasktype());
+        var executor_thread = new ExecutorThread(this, task);
+        var thread = new Thread(executor_thread, getHandledTasktype());
         thread.start();
     }
 

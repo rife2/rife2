@@ -18,8 +18,8 @@ public class ExecutorThread implements Runnable {
     public void run() {
         assert task_ != null;
 
-        boolean successful_execution = false;
-        TaskManager manager = executor_.getScheduler().getTaskManager();
+        var successful_execution = false;
+        var manager = executor_.getScheduler().getTaskManager();
 
         try {
             manager.activateTask(task_.getId());

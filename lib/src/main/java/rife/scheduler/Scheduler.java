@@ -104,9 +104,9 @@ public class Scheduler extends Thread {
                     scheduleStep();
                     // Ensure that the wakeup is always on an even multiplier of the
                     // sleep time, this to ensure that no drift occurs.
-                    long now = System.currentTimeMillis();
-                    long projected = ((System.currentTimeMillis() + sleepTime_) / sleepTime_) * sleepTime_;
-                    long difference = projected - now;
+                    var now = System.currentTimeMillis();
+                    var projected = ((System.currentTimeMillis() + sleepTime_) / sleepTime_) * sleepTime_;
+                    var difference = projected - now;
 
                     Thread.sleep(difference);
                 } else {
@@ -128,7 +128,7 @@ public class Scheduler extends Thread {
 
         try {
             Executor executor = null;
-            for (Task task : taskManager_.getTasksToProcess()) {
+            for (var task : taskManager_.getTasksToProcess()) {
                 executor = executors_.get(task.getType());
                 if (null != executor) {
                     executor.startTaskExecution(task);

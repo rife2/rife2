@@ -31,15 +31,15 @@ public class com_mysql_cj_jdbc_Driver<BeanType> extends generic<BeanType> implem
     protected CreateTable getInternalCreateTableQuery() {
         if (null == createTableMysql_) {
             CreateTable query = new CreateTable(getDatasource())
-                .table(mTableName)
+                .table(tableName_)
                 .columns(baseClass_);
             if (!isIdentifierSparse()) {
                 query
-                    .customAttribute(mPrimaryKey, "AUTO_INCREMENT");
+                    .customAttribute(primaryKey_, "AUTO_INCREMENT");
             }
-            if (!mHasIdentifier) {
+            if (!hasIdentifier_) {
                 query
-                    .primaryKey(mPrimaryKey);
+                    .primaryKey(primaryKey_);
             }
 
             addCreateTableManyToOneColumns(query);
@@ -53,10 +53,10 @@ public class com_mysql_cj_jdbc_Driver<BeanType> extends generic<BeanType> implem
     protected Insert getInternalSaveQuery() {
         if (null == saveMysql_) {
             Insert query = new Insert(getDatasource())
-                .into(mTableName);
+                .into(tableName_);
             if (!isIdentifierSparse()) {
                 query
-                    .fieldsParametersExcluded(baseClass_, new String[]{mPrimaryKey});
+                    .fieldsParametersExcluded(baseClass_, new String[]{primaryKey_});
             } else {
                 query
                     .fieldsParameters(baseClass_);
@@ -73,7 +73,7 @@ public class com_mysql_cj_jdbc_Driver<BeanType> extends generic<BeanType> implem
     protected Select getInternalLastIdQuery() {
         if (null == lastIdMysql_) {
             Select query = new Select(getDatasource())
-                .from(mTableName)
+                .from(tableName_)
                 .field("LAST_INSERT_ID()");
             lastIdMysql_ = query;
         }

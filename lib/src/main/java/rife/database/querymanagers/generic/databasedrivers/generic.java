@@ -30,27 +30,25 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     private Insert save_ = null;
     private Select count_ = null;
 
-    protected String mTableName = null;
-    protected String mPrimaryKey = null;
-    protected boolean mHasIdentifier;
+    protected String tableName_;
+    protected boolean hasIdentifier_;
 
     public generic(Datasource datasource, String tableName, String primaryKey, Class<BeanType> beanClass, boolean hasIdentifier)
     throws DatabaseException {
         super(datasource, beanClass, primaryKey);
 
         baseClass_ = beanClass;
-        mTableName = tableName;
-        mPrimaryKey = primaryKey;
-        mHasIdentifier = hasIdentifier;
+        tableName_ = tableName;
+        hasIdentifier_ = hasIdentifier;
     }
 
     protected CreateTable getInternalCreateTableQuery() {
         if (null == createTable_) {
             final CreateTable query = new CreateTable(getDatasource())
-                .table(mTableName)
+                .table(tableName_)
                 .columns(baseClass_);
-            if (!mHasIdentifier) {
-                query.primaryKey(mPrimaryKey);
+            if (!hasIdentifier_) {
+                query.primaryKey(primaryKey_);
             }
 
             addCreateTableManyToOneColumns(query);
@@ -86,13 +84,13 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     }
 
     protected String getSequenceName() {
-        return "SEQ_" + mTableName;
+        return "SEQ_" + tableName_;
     }
 
     protected DropTable getInternalDropTableQuery() {
         if (null == dropTable_) {
             DropTable query = new DropTable(getDatasource())
-                .table(mTableName);
+                .table(tableName_);
             dropTable_ = query;
         }
 
@@ -112,8 +110,8 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     protected Select getInternalRestoreByIdQuery() {
         if (null == restore_) {
             Select query = new Select(getDatasource())
-                .from(mTableName)
-                .whereParameter(mPrimaryKey, "=");
+                .from(tableName_)
+                .whereParameter(primaryKey_, "=");
             restore_ = query;
         }
 
@@ -134,8 +132,8 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     protected Delete getInternalDeleteQuery() {
         if (null == delete_) {
             Delete query = new Delete(getDatasource())
-                .from(mTableName)
-                .whereParameter(mPrimaryKey, "=");
+                .from(tableName_)
+                .whereParameter(primaryKey_, "=");
             delete_ = query;
         }
 
@@ -145,7 +143,7 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     protected Delete getInternalDeleteNoIdQuery() {
         if (null == deleteNoId_) {
             Delete query = new Delete(getDatasource())
-                .from(mTableName);
+                .from(tableName_);
             deleteNoId_ = query;
         }
 
@@ -155,9 +153,9 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     protected Update getInternalSaveUpdateQuery() {
         if (null == saveUpdate_) {
             final Update query = new Update(getDatasource())
-                .table(mTableName)
-                .fieldsParametersExcluded(baseClass_, new String[]{mPrimaryKey})
-                .whereParameter(mPrimaryKey, "=");
+                .table(tableName_)
+                .fieldsParametersExcluded(baseClass_, new String[]{primaryKey_})
+                .whereParameter(primaryKey_, "=");
 
             addSaveUpdateManyToOneFields(query);
 
@@ -183,7 +181,7 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     protected Select getInternalRestoreListQuery() {
         if (null == restoreQuery_) {
             Select query = new Select(getDatasource(), getBaseClass())
-                .from(mTableName);
+                .from(tableName_);
             restoreQuery_ = query;
         }
 
@@ -193,10 +191,10 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     protected Insert getInternalSaveQuery() {
         if (null == save_) {
             final Insert query = new Insert(getDatasource())
-                .into(mTableName)
+                .into(tableName_)
                 .fieldsParameters(getBaseClass());
-            if (!query.getFields().containsKey(mPrimaryKey)) {
-                query.fieldParameter(mPrimaryKey);
+            if (!query.getFields().containsKey(primaryKey_)) {
+                query.fieldParameter(primaryKey_);
             }
 
             addSaveManyToOneFields(query);
@@ -223,7 +221,7 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     protected Select getInternalCountQuery() {
         if (null == count_) {
             Select query = new Select(getDatasource())
-                .from(mTableName)
+                .from(tableName_)
                 .field("count(*)");
             count_ = query;
         }
@@ -310,6 +308,7 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     throws DatabaseException {
         return _restore(query.getDelegate(), rowProcessor);
     }
+
     public boolean restore(RestoreQuery query, BeanFetcher<BeanType> beanFetcher)
     throws DatabaseException {
         return _restore(query.getDelegate(), new DbBeanFetcher<>(getDatasource(), baseClass_) {
@@ -339,7 +338,7 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     }
 
     public RestoreQuery getRestoreQuery(int objectId) {
-        return new RestoreQuery(getInternalRestoreListQuery()).where(mPrimaryKey, "=", objectId);
+        return new RestoreQuery(getInternalRestoreListQuery()).where(primaryKey_, "=", objectId);
     }
 
     public CountQuery getCountQuery() {
@@ -351,10 +350,10 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     }
 
     public DeleteQuery getDeleteQuery(int objectId) {
-        return new DeleteQuery(getInternalDeleteNoIdQuery()).where(mPrimaryKey, "=", objectId);
+        return new DeleteQuery(getInternalDeleteNoIdQuery()).where(primaryKey_, "=", objectId);
     }
 
     public String getTable() {
-        return mTableName;
+        return tableName_;
     }
 }

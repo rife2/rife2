@@ -48,17 +48,17 @@ public class Task extends Validation implements Cloneable {
             return null;
         }
 
-        Scheduler scheduler = taskManager_.getScheduler();
+        var scheduler = taskManager_.getScheduler();
         if (null == scheduler) {
             return null;
         }
 
-        TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
-        if (null == taskoption_manager) {
+        var task_option_manager = scheduler.getTaskOptionManager();
+        if (null == task_option_manager) {
             return null;
         }
 
-        TaskOption taskoption = taskoption_manager.getTaskOption(getId(), name);
+        var taskoption = task_option_manager.getTaskOption(getId(), name);
         if (null == taskoption) {
             return null;
         }
@@ -69,10 +69,10 @@ public class Task extends Validation implements Cloneable {
     public long getNextDate()
     throws FrequencyException {
         // lower towards the minute, remove seconds and milliseconds
-        Calendar current_calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+        var current_calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
         current_calendar.set(Calendar.SECOND, 0);
         current_calendar.set(Calendar.MILLISECOND, 0);
-        long current_time = current_calendar.getTimeInMillis();
+        var current_time = current_calendar.getTimeInMillis();
         if (planned_ <= current_time) {
             return getNextDate(current_time);
         }
@@ -101,6 +101,11 @@ public class Task extends Validation implements Cloneable {
         type_ = type;
     }
 
+    public Task type(String type) {
+        setType(type);
+        return this;
+    }
+
     public String getType() {
         return type_;
     }
@@ -111,12 +116,22 @@ public class Task extends Validation implements Cloneable {
 
     public void setPlanned(long planned) {
         // lower towards the minute, remove seconds and milliseconds
-        Calendar planned_calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+        var planned_calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
         planned_calendar.setTimeInMillis(planned);
         planned_calendar.set(Calendar.SECOND, 0);
         planned_calendar.set(Calendar.MILLISECOND, 0);
 
         planned_ = planned_calendar.getTimeInMillis();
+    }
+
+    public Task planned(Date planned) {
+        setPlanned(planned);
+        return this;
+    }
+
+    public Task planned(long planned) {
+        setPlanned(planned);
+        return this;
     }
 
     public long getPlanned() {
@@ -132,6 +147,12 @@ public class Task extends Validation implements Cloneable {
         }
     }
 
+    public Task frequency(String frequency)
+    throws FrequencyException {
+        setFrequency(frequency);
+        return this;
+    }
+
     public String getFrequency() {
         if (null == frequency_) {
             return null;
@@ -141,6 +162,11 @@ public class Task extends Validation implements Cloneable {
 
     public void setBusy(boolean busy) {
         busy_ = busy;
+    }
+
+    public Task busy(boolean busy) {
+        setBusy(busy);
+        return this;
     }
 
     public boolean isBusy() {
@@ -163,7 +189,7 @@ public class Task extends Validation implements Cloneable {
             return false;
         }
 
-        Task other_task = (Task) object;
+        var other_task = (Task) object;
 
         if (other_task.getId() == getId() &&
             other_task.getType().equals(getType()) &&
@@ -183,7 +209,7 @@ public class Task extends Validation implements Cloneable {
                 return true;
             }
 
-            Calendar current_calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var current_calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             current_calendar.set(Calendar.SECOND, 0);
             current_calendar.set(Calendar.MILLISECOND, 0);
             return planned_ >= current_calendar.getTimeInMillis();

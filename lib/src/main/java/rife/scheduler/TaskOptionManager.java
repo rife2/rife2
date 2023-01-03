@@ -19,10 +19,10 @@ public interface TaskOptionManager {
     boolean updateTaskOption(TaskOption taskoption)
     throws TaskOptionManagerException;
 
-    TaskOption getTaskOption(int taskid, String name)
+    TaskOption getTaskOption(int taskId, String name)
     throws TaskOptionManagerException;
 
-    Collection<TaskOption> getTaskOptions(int taskid)
+    Collection<TaskOption> getTaskOptions(int taskId)
     throws TaskOptionManagerException;
 
     boolean removeTaskOption(TaskOption taskoption)

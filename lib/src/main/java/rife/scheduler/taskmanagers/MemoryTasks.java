@@ -40,7 +40,7 @@ public class MemoryTasks implements TaskManager {
 
         synchronized (this) {
             // FIXME: check for integer overflow
-            int task_id = taskIdSequence_++;
+            var task_id = taskIdSequence_++;
 
             task.setId(task_id);
             taskMapping_.put(task_id, task);
@@ -56,7 +56,7 @@ public class MemoryTasks implements TaskManager {
         if (task.getId() < 0) throw new IllegalArgumentException("the task id is required.");
 
         synchronized (this) {
-            int task_id = task.getId();
+            var task_id = task.getId();
 
             if (!taskMapping_.containsKey(task_id)) {
                 return false;
@@ -78,10 +78,10 @@ public class MemoryTasks implements TaskManager {
 
     public Collection<Task> getTasksToProcess()
     throws TaskManagerException {
-        ArrayList<Task> tasks_to_process = new ArrayList<Task>();
+        var tasks_to_process = new ArrayList<Task>();
 
         synchronized (this) {
-            for (Task task : taskMapping_.values()) {
+            for (var task : taskMapping_.values()) {
                 if (!task.isBusy() &&
                     task.getPlanned() < System.currentTimeMillis()) {
                     tasks_to_process.add(task);
@@ -94,10 +94,10 @@ public class MemoryTasks implements TaskManager {
 
     public Collection<Task> getScheduledTasks()
     throws TaskManagerException {
-        ArrayList<Task> scheduled_tasks = new ArrayList<Task>();
+        var scheduled_tasks = new ArrayList<Task>();
 
         synchronized (this) {
-            for (Task task : taskMapping_.values()) {
+            for (var task : taskMapping_.values()) {
                 if (!task.isBusy() &&
                     task.getPlanned() >= System.currentTimeMillis()) {
                     scheduled_tasks.add(task);
@@ -126,7 +126,7 @@ public class MemoryTasks implements TaskManager {
         if (null == task) throw new IllegalArgumentException("task can't be null.");
         if (newPlanned <= 0) throw new IllegalArgumentException("newPlanned has to be bigger than 0.");
 
-        boolean result = false;
+        var result = false;
 
         Task task_tmp = null;
         try {
@@ -157,7 +157,7 @@ public class MemoryTasks implements TaskManager {
             }
 
             try {
-                long next_date = task.getNextDate();
+                var next_date = task.getNextDate();
                 if (next_date >= 0 &&
                     rescheduleTask(task, next_date, task.getFrequency()) &&
                     deactivateTask(task.getId())) {
@@ -176,7 +176,7 @@ public class MemoryTasks implements TaskManager {
         if (id < 0) throw new IllegalArgumentException("the task id can't be negative.");
 
         synchronized (this) {
-            Task task = taskMapping_.get(id);
+            var task = taskMapping_.get(id);
             if (null == task) {
                 return false;
             }
@@ -190,7 +190,7 @@ public class MemoryTasks implements TaskManager {
         if (id < 0) throw new IllegalArgumentException("the task id can't be negative.");
 
         synchronized (this) {
-            Task task = taskMapping_.get(id);
+            var task = taskMapping_.get(id);
             if (null == task) {
                 return false;
             }

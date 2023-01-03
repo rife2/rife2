@@ -8,7 +8,6 @@ import rife.database.queries.*;
 import rife.scheduler.taskoptionmanagers.exceptions.*;
 
 import rife.database.Datasource;
-import rife.database.DbPreparedStatement;
 import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
 import rife.database.DbRowProcessor;
@@ -76,7 +75,7 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
 
         if (null == taskoption) throw new IllegalArgumentException("taskoption can't be null.");
 
-        boolean result = false;
+        var result = false;
 
         try {
             if (0 == executeUpdate(addTaskOption, handler)) {
@@ -96,7 +95,7 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
 
         if (null == taskoption) throw new IllegalArgumentException("taskoption can't be null.");
 
-        boolean result = false;
+        var result = false;
         try {
             if (0 == executeUpdate(updateTaskOption, handler)) {
                 throw new UpdateTaskOptionErrorException(taskoption);
@@ -120,13 +119,9 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
         TaskOption taskoption = null;
 
         try {
-            executeFetchFirst(getTaskOption, processTaskOption, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setInt("task_id", taskId)
-                        .setString("name", name);
-                }
-            });
+            executeFetchFirst(getTaskOption, processTaskOption, s ->
+                s.setInt("task_id", taskId)
+                    .setString("name", name));
             taskoption = processTaskOption.getTaskOption();
         } catch (DatabaseException e) {
             throw new GetTaskOptionErrorException(taskId, name, e);
@@ -141,23 +136,18 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
 
         if (taskId < 0) throw new IllegalArgumentException("taskid can't be negative.");
 
-        ArrayList<TaskOption> taskoptions = new ArrayList<TaskOption>();
-        processTaskOption.setCollection(taskoptions);
+        var task_options = new ArrayList<TaskOption>();
+        processTaskOption.setCollection(task_options);
 
         try {
-            executeFetchAll(getTaskOptions, processTaskOption, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setInt("task_id", taskId);
-                }
-            });
+            executeFetchAll(getTaskOptions, processTaskOption, s -> s.setInt("task_id", taskId));
         } catch (DatabaseException e) {
             throw new GetTaskOptionsErrorException(taskId, e);
         }
 
-        assert taskoptions != null;
+        assert task_options != null;
 
-        return taskoptions;
+        return task_options;
     }
 
     protected boolean _removeTaskOption(Delete removeTaskOption, TaskOption taskoption)
@@ -175,16 +165,12 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
-        boolean result = false;
+        var result = false;
 
         try {
-            if (0 != executeUpdate(removeTaskOption, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setInt("task_id", taskId)
-                        .setString("name", name);
-                }
-            })) {
+            if (0 != executeUpdate(removeTaskOption, s ->
+                s.setInt("task_id", taskId)
+                    .setString("name", name))) {
                 result = true;
             }
         } catch (DatabaseException e) {
@@ -195,35 +181,35 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
     }
 
     protected class ProcessTaskOption extends DbRowProcessor {
-        protected Collection<TaskOption> mCollection = null;
-        protected TaskOption mTaskOption = null;
+        protected Collection<TaskOption> collection_ = null;
+        protected TaskOption taskOption_ = null;
 
         public ProcessTaskOption() {
         }
 
         public void setCollection(Collection<TaskOption> collection) {
-            mCollection = collection;
+            collection_ = collection;
         }
 
         public boolean processRow(ResultSet resultSet)
         throws SQLException {
             assert resultSet != null;
 
-            mTaskOption = new TaskOption();
+            taskOption_ = new TaskOption();
 
-            mTaskOption.setTaskId(resultSet.getInt("task_id"));
-            mTaskOption.setName(resultSet.getString("name"));
-            mTaskOption.setValue(resultSet.getString("val"));
+            taskOption_.setTaskId(resultSet.getInt("task_id"));
+            taskOption_.setName(resultSet.getString("name"));
+            taskOption_.setValue(resultSet.getString("val"));
 
-            if (mCollection != null) {
-                mCollection.add(mTaskOption);
+            if (collection_ != null) {
+                collection_.add(taskOption_);
             }
 
             return true;
         }
 
         public TaskOption getTaskOption() {
-            return mTaskOption;
+            return taskOption_;
         }
     }
 }
