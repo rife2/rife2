@@ -521,11 +521,15 @@ public class RifeConfig {
             add("z");
             add("wav");
             add("mp3");
+            add("mp4");
+            add("m4a");
             add("wma");
             add("mpg");
             add("avi");
             add("ogg");
             add("txt");
+            add("ttf");
+            add("otf");
         }};
 
         public static final Charset DEFAULT_REQUEST_ENCODING = StandardCharsets.UTF_8;
