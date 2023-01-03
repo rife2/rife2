@@ -24,6 +24,8 @@ public class HelloAll extends Site {
         group(new HelloTemplate());
         group("/validation", new HelloValidation());
         group(new HelloWorld());
+
+        get("/", c -> c.print(c.template("HelloAll")));
     }
 
     public static void main(String[] args) {

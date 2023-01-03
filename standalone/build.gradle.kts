@@ -21,6 +21,10 @@ dependencies {
 val rifeAgentJar: String by rootProject.extra
 
 tasks {
+    register<JavaExec>("run") {
+        dependsOn("runHelloAll")
+    }
+
     register<JavaExec>("runHelloAll") {
         dependsOn(":lib:agentJar")
         classpath = sourceSets["main"].runtimeClasspath
@@ -52,7 +56,7 @@ tasks {
         project.logger.lifecycle(" HelloForm:")
         project.logger.lifecycle("   Open your browser at http://localhost:8080/form")
         project.logger.lifecycle("")
-        project.logger.lifecycle(" runHelloFormContinuations:")
+        project.logger.lifecycle(" HelloFormContinuations:")
         project.logger.lifecycle("   Open your browser at http://localhost:8080/continuation/form")
         project.logger.lifecycle("")
         project.logger.lifecycle(" HelloGenericQueryManager:")
