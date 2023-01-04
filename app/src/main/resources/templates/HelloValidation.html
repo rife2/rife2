@@ -35,22 +35,24 @@
     </div>
   <!--/b-->
   <!--b mandatory:name-->The name is required.<!--/b-->
-  <!--b mandatory:email-->The email is required.<!--/b-->
   <!--b invalid:email-->The email has the wrong format.<!--/b-->
   <!--b mark:error-->error-mark<!--/b-->
   <form method="post">
     <label class="{{v mark:name}}{{/v}}" for="name">Name</label>
     <input class="{{v mark:name/}}" id="name" name="name" value="{{v param:name}}{{/v}}"/><br>
 
-    <label class="{{v mark:email}}{{/v}}" for="email">Email</label>
-    <input class="{{v mark:email/}}" id="email" name="email" value="{{v param:email}}{{/v}}"/><br>
+    <label class="{{v mark:1-email}}{{/v}}" for="1-email">Email 1</label>
+    <input class="{{v mark:1-email/}}" id="1-email" name="1-email" value="{{v param:1-email}}{{/v}}"/><br>
+
+    <label class="{{v mark:2-email}}{{/v}}" for="2-email">Email 2</label>
+    <input class="{{v mark:2-email/}}" id="2-email" name="2-email" value="{{v param:2-email}}{{/v}}"/><br>
 
     <input type="submit"/>
   </form>
 <!--/bv-->
 
 <!--b added-->
-  Added <!--v name/--> &lt;<!--v email/-->&gt;<br><br>
+  Added <!--v name/-->:<!--v email/--><br><br>
   <a href="{{v route:addForm/}}">Add more</a><br>
   <a href="{{v route:list/}}">List names</a><br>
 <!--/b-->
@@ -59,7 +61,7 @@
   <ol>
     <!--v entries/-->
     <!--b entry-->
-      <li><!--v name/--> &lt;<!--v email/-->&gt;</li>
+      <li><!--v name/-->:<!--v email/--></li>
     <!--/b-->
   </ol>
   <a href="{{v route:addForm/}}">Add more</a><br>

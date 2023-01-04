@@ -8,6 +8,7 @@ import rife.database.*;
 import rife.database.querymanagers.generic.GenericQueryManager;
 import rife.database.querymanagers.generic.GenericQueryManagerFactory;
 import rife.engine.*;
+import rife.models.Person;
 
 public class HelloGenericQueryManager extends Site {
     Datasource datasource = new Datasource(

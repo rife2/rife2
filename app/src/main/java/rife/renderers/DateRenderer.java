@@ -2,7 +2,7 @@
  * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
-package rife;
+package rife.renderers;
 
 import rife.config.RifeConfig;
 import rife.template.*;
