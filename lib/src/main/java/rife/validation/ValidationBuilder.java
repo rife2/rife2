@@ -23,9 +23,9 @@ public interface ValidationBuilder extends Cloneable {
     String ID_ERRORS_FALLBACK = "errors:";
     String ID_ERRORS_WILDCARD = "errors:*";
 
-    String TAG_ERRORS = "(?=(?<=^" + PREFIX_ERRORS + ")|\\G(?<!^))\\s*(\\w+)\\s*,?(?=[\\w,]+$|$)";
-    String TAG_ERRORMESSAGE = "(?=(?<=^" + PREFIX_ERRORMESSAGE + ")|\\G(?<!^))\\s*(\\w+)\\s*,?(?=[\\w,]+$|$)";
-    String TAG_MARK = "(?:^" + PREFIX_MARK + "(?:(\\w+):)?|\\G(?<!^))\\s*(\\w+)\\s*,?(?=[\\w,]+$|$)";
+    String TAG_ERRORS = "(?=(?<=^" + PREFIX_ERRORS + ")|\\G(?<!^))\\s*([^,]+)\\s*,?(?=[[^,],]+$|$)";
+    String TAG_ERRORMESSAGE = "(?=(?<=^" + PREFIX_ERRORMESSAGE + ")|\\G(?<!^))\\s*([^,]+)\\s*,?(?=[[^,],]+$|$)";
+    String TAG_MARK = "(?:^" + PREFIX_MARK + "(?:([^:]+):)?|\\G(?<!^))\\s*([^,]+)\\s*,?(?=[[^,],]+$|$)";
 
     void setFallbackErrorArea(Template template, String message);
 
