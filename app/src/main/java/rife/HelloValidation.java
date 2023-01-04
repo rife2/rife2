@@ -60,12 +60,7 @@ public class HelloValidation extends Site {
         Set<ValidationError> errors = new HashSet<>();
         validateEmail(email1, emails, t, errors, "1-");
         validateEmail(email2, emails, t, errors, "2-");
-
-        var builder = new ValidationBuilderHtml();
-        if (!friend.validate()) {
-            errors.addAll(friend.getValidationErrors());
-            builder.generateErrorMarkings(t, errors, Collections.emptyList());
-        }
+        validateFriend(friend, t, errors);
 
         if (!errors.isEmpty()) {
             new ValidationBuilderHtml().generateValidationErrors(t, errors);
@@ -90,6 +85,13 @@ public class HelloValidation extends Site {
             } else {
                 emails.add(email);
             }
+        }
+    }
+
+    private static void validateFriend(Friend friend, Template t, Set<ValidationError> errors) {
+        if (!friend.validate()) {
+            errors.addAll(friend.getValidationErrors());
+            new ValidationBuilderHtml().generateErrorMarkings(t, errors, Collections.emptyList());
         }
     }
 
