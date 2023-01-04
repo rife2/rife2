@@ -27,6 +27,8 @@ import java.security.NoSuchAlgorithmException;
 
 public abstract class DatabaseRemember extends DbQueryManager implements RememberManager {
     private long rememberDuration_ = RifeConfig.authentication().getRememberDuration();
+    private int rememberPurgeFrequency_ = RifeConfig.authentication().getRememberPurgeFrequency();
+    private int rememberPurgeScale_ = RifeConfig.authentication().getRememberPurgeScale();
 
     protected DatabaseRemember(Datasource datasource) {
         super(datasource);
@@ -38,6 +40,22 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
 
     public void setRememberDuration(long milliseconds) {
         rememberDuration_ = milliseconds;
+    }
+
+    public int getRememberPurgeFrequency() {
+        return rememberPurgeFrequency_;
+    }
+
+    public void setRememberPurgeFrequency(int frequency) {
+        rememberPurgeFrequency_ = frequency;
+    }
+
+    public int getRememberPurgeScale() {
+        return rememberPurgeScale_;
+    }
+
+    public void setRememberPurgeScale(int scale) {
+        rememberPurgeScale_ = scale;
     }
 
     public abstract boolean install()

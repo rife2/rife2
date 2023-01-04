@@ -12,6 +12,9 @@ import rife.authentication.sessionmanagers.DatabaseSessions;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class generic extends DatabaseSessions {
     protected CreateTable createAuthentication_;
     protected String createAuthenticationSessStartIndex_;
@@ -127,6 +130,11 @@ public class generic extends DatabaseSessions {
 
     public String startSession(long userId, String authData, boolean remembered)
     throws SessionManagerException {
+        int purge_decision = ThreadLocalRandom.current().nextInt(getSessionPurgeScale());
+        if (purge_decision <= getSessionPurgeFrequency()) {
+            purgeSessions();
+        }
+
         return _startSession(startSession_, userId, authData, remembered);
     }
 

@@ -24,14 +24,14 @@ public class TestPurgingDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testStartSession(Datasource datasource) {
-        var remember = new PurgingRememberManager(DatabaseRememberFactory.instance(datasource));
+        var remember = DatabaseRememberFactory.instance(datasource);
         remember.setRememberPurgeFrequency(0);
 
         var user_id = 143;
 
         String remember_id = null;
         try {
-            ((DatabaseRemember) remember.getRememberManager()).install();
+            remember.install();
 
             remember_id = remember.createRememberId(user_id, "123.98.23.3");
 
@@ -43,7 +43,7 @@ public class TestPurgingDatabaseRemember {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
             try {
-                ((DatabaseRemember) remember.getRememberManager()).remove();
+                remember.remove();
             } catch (RememberManagerException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
@@ -53,13 +53,13 @@ public class TestPurgingDatabaseRemember {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testPurgeRemember(Datasource datasource) {
-        var remember = new PurgingRememberManager(DatabaseRememberFactory.instance(datasource));
+        var remember = DatabaseRememberFactory.instance(datasource);
         remember.setRememberDuration(2000);
         remember.setRememberPurgeFrequency(1);
         remember.setRememberPurgeScale(1);
 
         try {
-            ((DatabaseRemember) remember.getRememberManager()).install();
+            remember.install();
 
             remember.eraseAllRememberIds();
 
@@ -79,7 +79,7 @@ public class TestPurgingDatabaseRemember {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
             try {
-                ((DatabaseRemember) remember.getRememberManager()).remove();
+                remember.remove();
             } catch (RememberManagerException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }

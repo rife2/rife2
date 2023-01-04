@@ -5,6 +5,7 @@
 package rife.authentication;
 
 import rife.authentication.exceptions.RememberManagerException;
+import rife.config.RifeConfig;
 
 /**
  * This interface defines the methods that classes with
@@ -38,6 +39,66 @@ public interface RememberManager {
      * @since 1.0
      */
     void setRememberDuration(long milliseconds);
+
+    /**
+     * Obtains the frequency at which the purging will happen in relationship
+     * to the scale.
+     * <p>
+     * This defaults to {@link RifeConfig.AuthenticationConfig#getRememberPurgeFrequency()}.
+     *
+     * @return the purge frequency
+     * @see #setRememberPurgeFrequency
+     * @see #getRememberPurgeScale
+     * @see #setRememberPurgeScale
+     * @since 1.0
+     */
+    int getRememberPurgeFrequency();
+
+    /**
+     * Set the frequency at which the purging will happen in relationship
+     * to the scale.
+     * <p>
+     * By default, the frequency and scale respectively are 20 and 1000,
+     * which means that the purging will have once every fifty times the
+     * remember sessions are accessed.
+     *
+     * @param frequency the purge frequency
+     * @see #getRememberPurgeFrequency
+     * @see #getRememberPurgeScale
+     * @see #setRememberPurgeScale
+     * @since 1.0
+     */
+    void setRememberPurgeFrequency(int frequency);
+
+    /**
+     * Obtains the scale at which the purging will happen in relationship
+     * to the frequency.
+     * <p>
+     * This defaults to {@link RifeConfig.AuthenticationConfig#getRememberPurgeScale()}.
+     *
+     * @return the purge scale
+     * @see #getRememberPurgeFrequency
+     * @see #setRememberPurgeFrequency
+     * @see #setRememberPurgeScale
+     * @since 1.0
+     */
+    int getRememberPurgeScale();
+
+    /**
+     * Set the scale at which the purging will happen in relationship
+     * to the frequency.
+     * <p>
+     * By default, the frequency and scale respectively are 20 and 1000,
+     * which means that the purging will have once every fifty times the
+     * remember sessions are accessed.
+     *
+     * @param scale the purge scale
+     * @see #getRememberPurgeFrequency
+     * @see #setRememberPurgeFrequency
+     * @see #getRememberPurgeScale
+     * @since 1.0
+     */
+    void setRememberPurgeScale(int scale);
 
     /**
      * Starts a new session.

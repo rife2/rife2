@@ -19,7 +19,7 @@ public class TestPurgingDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testStartSession(Datasource datasource) {
-        var sessions = new PurgingSessionManager(DatabaseSessionsFactory.instance(datasource));
+        var sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionPurgeFrequency(0);
 
         var user_id = 143;
@@ -27,7 +27,7 @@ public class TestPurgingDatabaseSessions {
 
         String auth_id = null;
         try {
-            ((DatabaseSessions) sessions.getSessionManager()).install();
+            sessions.install();
 
             auth_id = sessions.startSession(user_id, auth_data, false);
 
@@ -39,7 +39,7 @@ public class TestPurgingDatabaseSessions {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
             try {
-                ((DatabaseSessions) sessions.getSessionManager()).remove();
+                sessions.remove();
             } catch (SessionManagerException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
@@ -49,7 +49,7 @@ public class TestPurgingDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testPurgeSessions(Datasource datasource) {
-        var sessions = new PurgingSessionManager(DatabaseSessionsFactory.instance(datasource));
+        var sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(2000);
         sessions.setSessionPurgeFrequency(1);
         sessions.setSessionPurgeScale(1);
@@ -58,7 +58,7 @@ public class TestPurgingDatabaseSessions {
         var auth_data = "98.232.12.456";
 
         try {
-            ((DatabaseSessions) sessions.getSessionManager()).install();
+            sessions.install();
 
             sessions.eraseAllSessions();
             assertEquals(0, sessions.countSessions());
@@ -74,7 +74,7 @@ public class TestPurgingDatabaseSessions {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
             try {
-                ((DatabaseSessions) sessions.getSessionManager()).remove();
+                sessions.remove();
             } catch (SessionManagerException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }

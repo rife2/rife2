@@ -26,6 +26,8 @@ import java.sql.SQLException;
 public abstract class DatabaseSessions extends DbQueryManager implements SessionManager {
     private long sessionDuration_ = RifeConfig.authentication().getSessionDuration();
     private boolean restrictAuthData_ = RifeConfig.authentication().getSessionRestrictAuthData();
+    private int sessionPurgeFrequency_ = RifeConfig.authentication().getSessionPurgeFrequency();
+    private int sessionPurgeScale_ = RifeConfig.authentication().getSessionPurgeScale();
 
     protected DatabaseSessions(Datasource datasource) {
         super(datasource);
@@ -45,6 +47,22 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
 
     public void setRestrictAuthData(boolean flag) {
         restrictAuthData_ = flag;
+    }
+
+    public int getSessionPurgeFrequency() {
+        return sessionPurgeFrequency_;
+    }
+
+    public void setSessionPurgeFrequency(int frequency) {
+        sessionPurgeFrequency_ = frequency;
+    }
+
+    public int getSessionPurgeScale() {
+        return sessionPurgeScale_;
+    }
+
+    public void setSessionPurgeScale(int scale) {
+        sessionPurgeScale_ = scale;
     }
 
     public abstract boolean install()

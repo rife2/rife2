@@ -5,6 +5,7 @@
 package rife.authentication;
 
 import rife.authentication.exceptions.SessionManagerException;
+import rife.config.RifeConfig;
 
 /**
  * This interface defines the methods that classes with
@@ -65,6 +66,66 @@ public interface SessionManager {
      * @since 1.0
      */
     void setRestrictAuthData(boolean flag);
+
+    /**
+     * Obtains the frequency at which the purging will happen in relationship
+     * to the scale.
+     * <p>
+     * This defaults to {@link RifeConfig.AuthenticationConfig#getSessionPurgeFrequency()}.
+     *
+     * @return the purge frequency
+     * @see #setSessionPurgeFrequency
+     * @see #getSessionPurgeScale
+     * @see #setSessionPurgeScale
+     * @since 1.0
+     */
+    int getSessionPurgeFrequency();
+
+    /**
+     * Set the frequency at which the purging will happen in relationship
+     * to the scale.
+     * <p>
+     * By default, the frequency and scale respectively are 20 and 1000,
+     * which means that the purging will have once every fifty times the
+     * authentication sessions are accessed.
+     *
+     * @param frequency the purge frequency
+     * @see #getSessionPurgeFrequency
+     * @see #getSessionPurgeScale
+     * @see #setSessionPurgeScale
+     * @since 1.0
+     */
+    void setSessionPurgeFrequency(int frequency);
+
+    /**
+     * Obtains the scale at which the purging will happen in relationship
+     * to the frequency.
+     * <p>
+     * This defaults to {@link RifeConfig.AuthenticationConfig#getSessionPurgeScale()}.
+     *
+     * @return the purge scale
+     * @see #getSessionPurgeFrequency
+     * @see #setSessionPurgeFrequency
+     * @see #setSessionPurgeScale
+     * @since 1.0
+     */
+    int getSessionPurgeScale();
+
+    /**
+     * Set the scale at which the purging will happen in relationship
+     * to the frequency.
+     * <p>
+     * By default, the frequency and scale respectively are 20 and 1000,
+     * which means that the purging will have once every fifty times the
+     * authentication sessions are accessed.
+     *
+     * @param scale the purge scale
+     * @see #getSessionPurgeFrequency
+     * @see #setSessionPurgeFrequency
+     * @see #getSessionPurgeScale
+     * @since 1.0
+     */
+    void setSessionPurgeScale(int scale);
 
     /**
      * Starts a new session.

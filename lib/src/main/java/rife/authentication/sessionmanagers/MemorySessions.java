@@ -14,10 +14,13 @@ import rife.tools.UniqueIDGenerator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MemorySessions implements SessionManager {
     private long sessionDuration_ = RifeConfig.authentication().getSessionDuration();
     private boolean restrictAuthData_ = RifeConfig.authentication().getSessionRestrictAuthData();
+    private int sessionPurgeFrequency_ = RifeConfig.authentication().getSessionPurgeFrequency();
+    private int sessionPurgeScale_ = RifeConfig.authentication().getSessionPurgeScale();
 
     private final Map<String, MemorySession> sessions_ = new HashMap<>();
 
@@ -38,6 +41,22 @@ public class MemorySessions implements SessionManager {
 
     public void setRestrictAuthData(boolean flags) {
         restrictAuthData_ = flags;
+    }
+
+    public int getSessionPurgeFrequency() {
+        return sessionPurgeFrequency_;
+    }
+
+    public void setSessionPurgeFrequency(int frequency) {
+        sessionPurgeFrequency_ = frequency;
+    }
+
+    public int getSessionPurgeScale() {
+        return sessionPurgeScale_;
+    }
+
+    public void setSessionPurgeScale(int scale) {
+        sessionPurgeScale_ = scale;
     }
 
     public void purgeSessions() {
@@ -70,6 +89,11 @@ public class MemorySessions implements SessionManager {
             null == authData ||
             0 == authData.length()) {
             throw new StartSessionErrorException(userId, authData);
+        }
+
+        int purge_decision = ThreadLocalRandom.current().nextInt(getSessionPurgeScale());
+        if (purge_decision <= getSessionPurgeFrequency()) {
+            purgeSessions();
         }
 
         var auth_id_string = UniqueIDGenerator.generate().toString();

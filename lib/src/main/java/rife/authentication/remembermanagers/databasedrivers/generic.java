@@ -14,6 +14,8 @@ import rife.database.queries.DropTable;
 import rife.database.queries.Insert;
 import rife.database.queries.Select;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class generic extends DatabaseRemember {
     protected CreateTable createRemember_;
     protected String createRememberMomentIndex_;
@@ -82,6 +84,11 @@ public class generic extends DatabaseRemember {
 
     public String createRememberId(long userId, String authData)
     throws RememberManagerException {
+        int purge_decision = ThreadLocalRandom.current().nextInt(getRememberPurgeScale());
+        if (purge_decision <= getRememberPurgeFrequency()) {
+            purgeRememberIds();
+        }
+
         return _createRememberId(createRememberId_, userId, authData);
     }
 
