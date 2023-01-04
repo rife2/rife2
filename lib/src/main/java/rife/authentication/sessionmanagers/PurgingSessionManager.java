@@ -45,7 +45,7 @@ public class PurgingSessionManager implements SessionManager {
         sessionPurgeScale_ = scale;
     }
 
-    public String startSession(long userId, String hostIp, boolean remembered)
+    public String startSession(long userId, String authData, boolean remembered)
     throws SessionManagerException {
         int purge_decision = -1;
         synchronized (random_) {
@@ -55,7 +55,7 @@ public class PurgingSessionManager implements SessionManager {
             purgeSessions();
         }
 
-        return mSessionManager.startSession(userId, hostIp, remembered);
+        return mSessionManager.startSession(userId, authData, remembered);
     }
 
     public void setSessionDuration(final long milliseconds) {
@@ -66,12 +66,12 @@ public class PurgingSessionManager implements SessionManager {
         return mSessionManager.getSessionDuration();
     }
 
-    public boolean getRestrictHostIp() {
-        return mSessionManager.getRestrictHostIp();
+    public boolean getRestrictAuthData() {
+        return mSessionManager.getRestrictAuthData();
     }
 
-    public void setRestrictHostIp(boolean flag) {
-        mSessionManager.setRestrictHostIp(flag);
+    public void setRestrictAuthData(boolean flag) {
+        mSessionManager.setRestrictAuthData(flag);
     }
 
     public void eraseAllSessions()
@@ -79,9 +79,9 @@ public class PurgingSessionManager implements SessionManager {
         mSessionManager.eraseAllSessions();
     }
 
-    public boolean isSessionValid(final String authId, final String hostIp)
+    public boolean isSessionValid(final String authId, final String authData)
     throws SessionManagerException {
-        return mSessionManager.isSessionValid(authId, hostIp);
+        return mSessionManager.isSessionValid(authId, authData);
     }
 
     public boolean continueSession(final String authId)

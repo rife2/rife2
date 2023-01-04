@@ -23,13 +23,13 @@ public class TestPurgingDatabaseSessions {
         sessions.setSessionPurgeFrequency(0);
 
         var user_id = 143;
-        var host_ip = "189.38.987.43";
+        var auth_data = "189.38.987.43";
 
         String auth_id = null;
         try {
             ((DatabaseSessions) sessions.getSessionManager()).install();
 
-            auth_id = sessions.startSession(user_id, host_ip, false);
+            auth_id = sessions.startSession(user_id, auth_data, false);
 
             assertEquals(1, sessions.countSessions());
 
@@ -55,7 +55,7 @@ public class TestPurgingDatabaseSessions {
         sessions.setSessionPurgeScale(1);
 
         var user_id = 9478;
-        var host_ip = "98.232.12.456";
+        var auth_data = "98.232.12.456";
 
         try {
             ((DatabaseSessions) sessions.getSessionManager()).install();
@@ -63,12 +63,12 @@ public class TestPurgingDatabaseSessions {
             sessions.eraseAllSessions();
             assertEquals(0, sessions.countSessions());
 
-            sessions.startSession(user_id, host_ip, false);
+            sessions.startSession(user_id, auth_data, false);
             assertEquals(1, sessions.countSessions());
 
             Thread.sleep(2010);
 
-            sessions.startSession(user_id, host_ip, false);
+            sessions.startSession(user_id, auth_data, false);
             assertEquals(1, sessions.countSessions());
         } catch (InterruptedException | SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));

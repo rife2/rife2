@@ -137,6 +137,8 @@ public class Login extends Identified implements SessionAttributes {
 
         initializeLogin();
 
+        var auth_data = authConfig_.generateAuthData(c);
+
         final Template template = template_.createNewInstance();
         template.addResourceBundles(template_.getResourceBundles());
         entrance(template);
@@ -156,7 +158,7 @@ public class Login extends Identified implements SessionAttributes {
             if (userid != -1) {
                 // try to start a new session, if it hasn't succeeded,
                 // regular authentication will kick in
-                startNewSession(c, userid, true, true);
+                startNewSession(c, userid, auth_data, true, true);
             }
         }
 
@@ -189,7 +191,7 @@ public class Login extends Identified implements SessionAttributes {
                     }
 
                     // start a new session
-                    if (!startNewSession(c, userid, remember, false)) {
+                    if (!startNewSession(c, userid, auth_data, remember, false)) {
                         // errors occurred, notify user
                         sessionCreationError(template, credentials);
                     }
@@ -200,7 +202,7 @@ public class Login extends Identified implements SessionAttributes {
         c.print(template);
     }
 
-    private boolean startNewSession(Context c, long userid, boolean remember, boolean remembered)
+    private boolean startNewSession(Context c, long userid, String authData, boolean remember, boolean remembered)
     throws Exception {
         if (remember) {
             var remember_manager = authConfig_.sessionValidator().getRememberManager();
@@ -208,7 +210,7 @@ public class Login extends Identified implements SessionAttributes {
                 throw new UndefinedAuthenticationRememberManagerException();
             }
 
-            var remember_id = remember_manager.createRememberId(userid, c.remoteAddr());
+            var remember_id = remember_manager.createRememberId(userid, authData);
 
             if (remember_id != null) {
                 c.addCookie(new CookieBuilder(authConfig_.rememberCookieName(), remember_id)
@@ -217,7 +219,7 @@ public class Login extends Identified implements SessionAttributes {
             }
         }
 
-        var authid = authConfig_.sessionValidator().getSessionManager().startSession(userid, c.remoteAddr(), remembered);
+        var authid = authConfig_.sessionValidator().getSessionManager().startSession(userid, authData, remembered);
 
         if (null != authid) {
             authenticated(userid);
@@ -230,7 +232,7 @@ public class Login extends Identified implements SessionAttributes {
             assert session_validator != null;
 
             // validate the session
-            var session_validity_id = session_validator.validateSession(authid, c.remoteAddr(), this);
+            var session_validity_id = session_validator.validateSession(authid, authData, this);
 
             // check if the validation allows access
             if (session_validator.isAccessAuthorized(session_validity_id)) {

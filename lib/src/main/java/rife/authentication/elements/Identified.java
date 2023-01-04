@@ -49,6 +49,7 @@ public class Identified implements Element {
         }
 
         var value = c.cookieValue(authConfig_.authCookieName());
+        var auth_data = authConfig_.generateAuthData(c);
         String login = null;
         RoleUserAttributes attributes = null;
 
@@ -57,7 +58,7 @@ public class Identified implements Element {
             var auth_attribute = Authenticated.createAuthAttributeName(authConfig_.loginRoute(), authConfig_.authCookieName(), value);
 
             if (c.hasAttribute(auth_attribute) ||
-                validator.getSessionManager().isSessionValid(value, c.remoteAddr())) {
+                validator.getSessionManager().isSessionValid(value, auth_data)) {
                 var sessions = validator.getSessionManager();
                 var userid = sessions.getSessionUserId(value);
 

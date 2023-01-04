@@ -18,7 +18,7 @@ public class generic extends DatabaseSessions {
     protected Delete purgeSessions_;
     protected Insert startSession_;
     protected Select isSessionValid_;
-    protected Select isSessionValidRestrictHostIp_;
+    protected Select isSessionValidRestrictAuthData_;
     protected Update continueSession_;
     protected Delete eraseSession_;
     protected Select wasRemembered_;
@@ -33,17 +33,18 @@ public class generic extends DatabaseSessions {
     public generic(Datasource datasource) {
         super(datasource);
 
+        var table_authentication = RifeConfig.authentication().getTableAuthentication();
         createAuthentication_ = new CreateTable(getDatasource())
-            .table(RifeConfig.authentication().getTableAuthentication())
+            .table(table_authentication)
             .column("authId", String.class, 40, CreateTable.NOTNULL)
             .column("userId", long.class, CreateTable.NOTNULL)
-            .column("hostIp", String.class, 40, CreateTable.NOTNULL)
+            .column("authData", String.class, 40, CreateTable.NULL)
             .column("sessStart", long.class, CreateTable.NOTNULL)
             .column("remembered", boolean.class, CreateTable.NOTNULL)
             .defaultValue("remembered", false)
-            .primaryKey(RifeConfig.authentication().getTableAuthentication().toUpperCase() + "_PK", "authId");
+            .primaryKey(table_authentication.toUpperCase() + "_PK", "authId");
 
-        createAuthenticationSessStartIndex_ = "CREATE INDEX " + RifeConfig.authentication().getTableAuthentication() + "_IDX ON " + RifeConfig.authentication().getTableAuthentication() + " (sessStart)";
+        createAuthenticationSessStartIndex_ = "CREATE INDEX " + table_authentication + "_IDX ON " + table_authentication + " (sessStart)";
 
         purgeSessions_ = new Delete(getDatasource())
             .from(createAuthentication_.getTable())
@@ -53,7 +54,7 @@ public class generic extends DatabaseSessions {
             .into(createAuthentication_.getTable())
             .fieldParameter("authId")
             .fieldParameter("userId")
-            .fieldParameter("hostIp")
+            .fieldParameter("authData")
             .fieldParameter("sessStart")
             .fieldParameter("remembered");
 
@@ -62,10 +63,10 @@ public class generic extends DatabaseSessions {
             .whereParameter("authId", "=")
             .whereParameterAnd("sessStart", ">");
 
-        isSessionValidRestrictHostIp_ = new Select(getDatasource())
+        isSessionValidRestrictAuthData_ = new Select(getDatasource())
             .from(createAuthentication_.getTable())
             .whereParameter("authId", "=")
-            .whereParameterAnd("hostIp", "=")
+            .whereParameterAnd("authData", "=")
             .whereParameterAnd("sessStart", ">");
 
         continueSession_ = new Update(getDatasource())
@@ -92,7 +93,7 @@ public class generic extends DatabaseSessions {
         removeAuthentication_ = new DropTable(getDatasource())
             .table(createAuthentication_.getTable());
 
-        removeAuthenticationSessStartIndex_ = "DROP INDEX " + RifeConfig.authentication().getTableAuthentication() + "_IDX";
+        removeAuthenticationSessStartIndex_ = "DROP INDEX " + table_authentication + "_IDX";
 
         countSessions_ = new Select(getDatasource())
             .field("count(*)")
@@ -124,14 +125,14 @@ public class generic extends DatabaseSessions {
         _purgeSessions(purgeSessions_);
     }
 
-    public String startSession(long userId, String hostIp, boolean remembered)
+    public String startSession(long userId, String authData, boolean remembered)
     throws SessionManagerException {
-        return _startSession(startSession_, userId, hostIp, remembered);
+        return _startSession(startSession_, userId, authData, remembered);
     }
 
-    public boolean isSessionValid(String authId, String hostIp)
+    public boolean isSessionValid(String authId, String authData)
     throws SessionManagerException {
-        return _isSessionValid(isSessionValid_, isSessionValidRestrictHostIp_, authId, hostIp);
+        return _isSessionValid(isSessionValid_, isSessionValidRestrictAuthData_, authId, authData);
     }
 
     public boolean continueSession(String authId)

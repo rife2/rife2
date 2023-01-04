@@ -36,22 +36,6 @@ public class DatabaseUsersFactory extends DbQueryManagerFactory {
      * @since 1.0
      */
     public static DatabaseUsers instance(Datasource datasource) {
-        return instance(datasource, null);
-    }
-
-    /**
-     * Return an instance of {@code DatabaseUsers} for the provided
-     * {@code Datasource} and identifier.
-     *
-     * @param datasource the datasource that will be used to create the manager
-     * @param identifier the identifier that will be used to differentiate the
-     *                   manager when different ones are needed for the same datasource
-     * @return the requested {@code DatabaseUsers} instance
-     * @since 1.0
-     */
-    public static DatabaseUsers instance(Datasource datasource, String identifier) {
-        if (null == identifier) identifier = "";
-
-        return (DatabaseUsers) instance(MANAGER_PACKAGE_NAME, cache_, datasource, identifier);
+        return (DatabaseUsers) instance(MANAGER_PACKAGE_NAME, cache_, datasource);
     }
 }

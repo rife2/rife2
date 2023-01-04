@@ -29,12 +29,12 @@ public class BasicSessionValidator<C extends CredentialsManager, S extends Sessi
         return SESSION_VALID == id;
     }
 
-    public int validateSession(String authId, String hostIp, SessionAttributes attributes)
+    public int validateSession(String authId, String authData, SessionAttributes attributes)
     throws SessionValidatorException {
         if (null == authId ||
             0 == authId.length() ||
-            null == hostIp ||
-            0 == hostIp.length() ||
+            null == authData ||
+            0 == authData.length() ||
             null == attributes) {
             return SESSION_INVALID;
         }
@@ -42,11 +42,11 @@ public class BasicSessionValidator<C extends CredentialsManager, S extends Sessi
         S sessions = getSessionManager();
 
         try {
-            if (!sessions.isSessionValid(authId, hostIp)) {
+            if (!sessions.isSessionValid(authId, authData)) {
                 return SESSION_INVALID;
             }
         } catch (SessionManagerException e) {
-            throw new SessionValidityCheckErrorException(authId, hostIp, e);
+            throw new SessionValidityCheckErrorException(authId, authData, e);
         }
 
         if (attributes.hasAttribute("role")) {
@@ -69,7 +69,7 @@ public class BasicSessionValidator<C extends CredentialsManager, S extends Sessi
                     return SESSION_INVALID;
                 }
             } catch (CredentialsManagerException e) {
-                throw new RoleCheckErrorException(authId, hostIp, role, e);
+                throw new RoleCheckErrorException(authId, authData, role, e);
             }
 
             return SESSION_VALID;

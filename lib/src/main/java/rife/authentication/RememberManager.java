@@ -42,10 +42,9 @@ public interface RememberManager {
     /**
      * Starts a new session.
      *
-     * @param userId The ID that uniquely identifies the user that has to be
-     *               remembered.
-     * @param hostIp The ip address of the host from which the user accesses
-     *               the application.
+     * @param userId   The ID that uniquely identifies the user that has to be
+     *                 remembered.
+     * @param authData The authentication data that is associated with the session.
      * @return A {@code String} that uniquely identifies the remembered
      * user ID.
      * @throws RememberManagerException An undefined number of exceptional
@@ -55,7 +54,7 @@ public interface RememberManager {
      *                                  of this interface to give more specific meanings to these exceptions.
      * @since 1.0
      */
-    String createRememberId(long userId, String hostIp)
+    String createRememberId(long userId, String authData)
     throws RememberManagerException;
 
     /**

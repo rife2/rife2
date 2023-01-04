@@ -35,7 +35,7 @@ public class TestDatabaseUsers {
         var users = DatabaseUsersFactory.instance(datasource);
 
         try {
-            assertEquals(true, users.install());
+            assertTrue(users.install());
             users.remove();
         } catch (CredentialsManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -49,7 +49,7 @@ public class TestDatabaseUsers {
 
         try {
             users.install();
-            assertEquals(true, users.remove());
+            assertTrue(users.remove());
         } catch (CredentialsManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -122,14 +122,14 @@ public class TestDatabaseUsers {
     }
 
     class ListDatabaseRoles implements ListRoles {
-        private ArrayList<String> mRoles = new ArrayList<>();
+        private ArrayList<String> roles_ = new ArrayList<>();
 
         public ArrayList<String> getRoles() {
-            return mRoles;
+            return roles_;
         }
 
         public boolean foundRole(String name) {
-            mRoles.add(name);
+            roles_.add(name);
 
             return true;
         }
@@ -431,7 +431,7 @@ public class TestDatabaseUsers {
     }
 
     class ListDatabaseUsers implements ListUsers {
-        private ArrayList<String> users_ = new ArrayList<>();
+        private final ArrayList<String> users_ = new ArrayList<>();
 
         public ArrayList<String> getUsers() {
             return users_;
@@ -615,7 +615,7 @@ public class TestDatabaseUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            var listusers = new ListDatabaseUsers();
+            var list_users = new ListDatabaseUsers();
 
             var user1_attributes = new RoleUserAttributes("thepassword");
             var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
@@ -628,39 +628,39 @@ public class TestDatabaseUsers {
                 .addUser("login4", user4_attributes);
 
             assertFalse(users.listUsersInRole(null, "role1"));
-            assertFalse(users.listUsersInRole(listusers, null));
-            assertFalse(users.listUsersInRole(listusers, ""));
+            assertFalse(users.listUsersInRole(list_users, null));
+            assertFalse(users.listUsersInRole(list_users, ""));
 
-            assertTrue(users.listUsersInRole(listusers, "role1"));
-            assertEquals(2, listusers.getUsers().size());
-            assertFalse(listusers.getUsers().contains("0,login1,thepassword"));
-            assertTrue(listusers.getUsers().contains("1,login2,thepassword2"));
-            assertTrue(listusers.getUsers().contains("174,login3,thepassword3"));
-            assertFalse(listusers.getUsers().contains("175,login4,thepassword4"));
+            assertTrue(users.listUsersInRole(list_users, "role1"));
+            assertEquals(2, list_users.getUsers().size());
+            assertFalse(list_users.getUsers().contains("0,login1,thepassword"));
+            assertTrue(list_users.getUsers().contains("1,login2,thepassword2"));
+            assertTrue(list_users.getUsers().contains("174,login3,thepassword3"));
+            assertFalse(list_users.getUsers().contains("175,login4,thepassword4"));
 
-            listusers = new ListDatabaseUsers();
-            assertTrue(users.listUsersInRole(listusers, "role2"));
-            assertEquals(3, listusers.getUsers().size());
-            assertFalse(listusers.getUsers().contains("0,login1,thepassword"));
-            assertTrue(listusers.getUsers().contains("1,login2,thepassword2"));
-            assertTrue(listusers.getUsers().contains("174,login3,thepassword3"));
-            assertTrue(listusers.getUsers().contains("175,login4,thepassword4"));
+            list_users = new ListDatabaseUsers();
+            assertTrue(users.listUsersInRole(list_users, "role2"));
+            assertEquals(3, list_users.getUsers().size());
+            assertFalse(list_users.getUsers().contains("0,login1,thepassword"));
+            assertTrue(list_users.getUsers().contains("1,login2,thepassword2"));
+            assertTrue(list_users.getUsers().contains("174,login3,thepassword3"));
+            assertTrue(list_users.getUsers().contains("175,login4,thepassword4"));
 
-            listusers = new ListDatabaseUsers();
-            assertTrue(users.listUsersInRole(listusers, "role3"));
-            assertEquals(2, listusers.getUsers().size());
-            assertFalse(listusers.getUsers().contains("0,login1,thepassword"));
-            assertFalse(listusers.getUsers().contains("1,login2,thepassword2"));
-            assertTrue(listusers.getUsers().contains("174,login3,thepassword3"));
-            assertTrue(listusers.getUsers().contains("175,login4,thepassword4"));
+            list_users = new ListDatabaseUsers();
+            assertTrue(users.listUsersInRole(list_users, "role3"));
+            assertEquals(2, list_users.getUsers().size());
+            assertFalse(list_users.getUsers().contains("0,login1,thepassword"));
+            assertFalse(list_users.getUsers().contains("1,login2,thepassword2"));
+            assertTrue(list_users.getUsers().contains("174,login3,thepassword3"));
+            assertTrue(list_users.getUsers().contains("175,login4,thepassword4"));
 
-            listusers = new ListDatabaseUsers();
-            assertFalse(users.listUsersInRole(listusers, "role4"));
-            assertEquals(0, listusers.getUsers().size());
-            assertFalse(listusers.getUsers().contains("0,login1,thepassword"));
-            assertFalse(listusers.getUsers().contains("1,login2,thepassword2"));
-            assertFalse(listusers.getUsers().contains("174,login3,thepassword3"));
-            assertFalse(listusers.getUsers().contains("2,login4,thepassword4"));
+            list_users = new ListDatabaseUsers();
+            assertFalse(users.listUsersInRole(list_users, "role4"));
+            assertEquals(0, list_users.getUsers().size());
+            assertFalse(list_users.getUsers().contains("0,login1,thepassword"));
+            assertFalse(list_users.getUsers().contains("1,login2,thepassword2"));
+            assertFalse(list_users.getUsers().contains("174,login3,thepassword3"));
+            assertFalse(list_users.getUsers().contains("2,login4,thepassword4"));
         } catch (CredentialsManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {

@@ -20,9 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestMemoryUsers {
     @Test
     void testInstantiation() {
-        MemoryUsers users = null;
-
-        users = new MemoryUsers();
+        var users = new MemoryUsers();
 
         assertNotNull(users);
     }

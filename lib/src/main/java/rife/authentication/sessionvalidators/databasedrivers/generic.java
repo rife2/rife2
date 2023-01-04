@@ -14,9 +14,9 @@ import rife.database.queries.Select;
 
 public class generic extends DatabaseSessionValidator {
     protected Select checkValidityNoRole_;
-    protected Select checkValidityNoRoleRestrictHostIp_;
+    protected Select checkValidityNoRoleRestrictAuthData_;
     protected Select checkValidityRole_;
-    protected Select checkValidityRoleRestrictHostIp_;
+    protected Select checkValidityRoleRestrictAuthData_;
 
     public generic(Datasource datasource) {
         super(datasource);
@@ -27,8 +27,8 @@ public class generic extends DatabaseSessionValidator {
             .whereParameter(RifeConfig.authentication().getTableAuthentication() + ".authId", "=")
             .whereParameterAnd(RifeConfig.authentication().getTableAuthentication() + ".sessStart", ">");
 
-        checkValidityNoRoleRestrictHostIp_ = checkValidityNoRole_.clone()
-            .whereParameterAnd(RifeConfig.authentication().getTableAuthentication() + ".hostIp", "=");
+        checkValidityNoRoleRestrictAuthData_ = checkValidityNoRole_.clone()
+            .whereParameterAnd(RifeConfig.authentication().getTableAuthentication() + ".authData", "=");
 
         checkValidityRole_ = new Select(getDatasource())
             .from(RifeConfig.authentication().getTableAuthentication())
@@ -41,13 +41,13 @@ public class generic extends DatabaseSessionValidator {
             .whereParameterAnd(RifeConfig.authentication().getTableRole() + ".name", "role", "=")
             .whereAnd(RifeConfig.authentication().getTableRole() + ".roleId = " + RifeConfig.authentication().getTableRoleLink() + ".roleId");
 
-        checkValidityRoleRestrictHostIp_ = checkValidityRole_.clone()
-            .whereParameterAnd(RifeConfig.authentication().getTableAuthentication() + ".hostIp", "=");
+        checkValidityRoleRestrictAuthData_ = checkValidityRole_.clone()
+            .whereParameterAnd(RifeConfig.authentication().getTableAuthentication() + ".authData", "=");
     }
 
-    public int validateSession(String authId, String hostIp, SessionAttributes attributes)
+    public int validateSession(String authId, String authData, SessionAttributes attributes)
     throws SessionValidatorException {
-        return _validateSession(checkValidityNoRole_, checkValidityNoRoleRestrictHostIp_, checkValidityRole_, checkValidityRoleRestrictHostIp_, new ProcessSessionValidityBasic(), authId, hostIp, attributes);
+        return _validateSession(checkValidityNoRole_, checkValidityNoRoleRestrictAuthData_, checkValidityRole_, checkValidityRoleRestrictAuthData_, new ProcessSessionValidityBasic(), authId, authData, attributes);
     }
 }
 

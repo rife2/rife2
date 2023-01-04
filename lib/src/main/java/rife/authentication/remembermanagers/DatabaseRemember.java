@@ -69,7 +69,7 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
         return true;
     }
 
-    protected String _createRememberId(Insert createRememberId, final long userId, String hostIp)
+    protected String _createRememberId(Insert createRememberId, final long userId, String authData)
     throws RememberManagerException {
         assert createRememberId != null;
 
@@ -80,14 +80,10 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
         final String remember_id_string = UniqueIDGenerator.generate().toString();
 
         try {
-            if (0 == executeUpdate(createRememberId, new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString("rememberId", remember_id_string)
-                        .setLong("userId", userId)
-                        .setLong("moment", System.currentTimeMillis());
-                }
-            })) {
+            if (0 == executeUpdate(createRememberId, s ->
+                s.setString("rememberId", remember_id_string)
+                    .setLong("userId", userId)
+                    .setLong("moment", System.currentTimeMillis()))) {
                 throw new CreateRememberIdErrorException(userId);
             }
         } catch (DatabaseException e) {

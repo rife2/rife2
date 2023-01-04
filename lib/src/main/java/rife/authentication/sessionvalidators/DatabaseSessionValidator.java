@@ -71,12 +71,12 @@ public abstract class DatabaseSessionValidator extends DbQueryManager implements
         return SESSION_VALID == id;
     }
 
-    protected int _validateSession(Select sessionValidityNoRole, Select sessionValidityNoRoleRestrictHostIp, Select sessionValidityRole, Select sessionValidityRoleRestrictHostIp, ProcessSessionValidity processSessionValidity, final String authId, final String hostIp, final SessionAttributes attributes)
+    protected int _validateSession(Select sessionValidityNoRole, Select sessionValidityNoRoleRestrictAuthData, Select sessionValidityRole, Select sessionValidityRoleRestrictAuthData, ProcessSessionValidity processSessionValidity, final String authId, final String authData, final SessionAttributes attributes)
     throws SessionValidatorException {
         if (null == authId ||
             0 == authId.length() ||
-            null == hostIp ||
-            0 == hostIp.length() ||
+            null == authData ||
+            0 == authData.length() ||
             null == attributes) {
             return SESSION_INVALID;
         }
@@ -87,14 +87,14 @@ public abstract class DatabaseSessionValidator extends DbQueryManager implements
 
         // select which query to use according to the role attribute
         if (attributes.hasAttribute("role")) {
-            if (sessionManager_.getRestrictHostIp()) {
-                query = sessionValidityRoleRestrictHostIp;
+            if (sessionManager_.getRestrictAuthData()) {
+                query = sessionValidityRoleRestrictAuthData;
             } else {
                 query = sessionValidityRole;
             }
         } else {
-            if (sessionManager_.getRestrictHostIp()) {
-                query = sessionValidityNoRoleRestrictHostIp;
+            if (sessionManager_.getRestrictAuthData()) {
+                query = sessionValidityNoRoleRestrictAuthData;
             } else {
                 query = sessionValidityNoRole;
             }
@@ -102,25 +102,23 @@ public abstract class DatabaseSessionValidator extends DbQueryManager implements
 
         // role has been specified, use optimized validity check to limit the amount of db queries
         try {
-            executeFetchFirst(query, processSessionValidity, new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString("authId", authId)
-                        .setLong("sessStart", System.currentTimeMillis() - sessionManager_.getSessionDuration());
+            executeFetchFirst(query, processSessionValidity, statement -> {
+                statement
+                    .setString("authId", authId)
+                    .setLong("sessStart", System.currentTimeMillis() - sessionManager_.getSessionDuration());
 
-                    if (attributes.hasAttribute("role")) {
-                        statement
-                            .setString("role", attributes.getAttribute("role"));
-                    }
-                    if (sessionManager_.getRestrictHostIp()) {
-                        statement
-                            .setString("hostIp", hostIp);
-                    }
+                if (attributes.hasAttribute("role")) {
+                    statement
+                        .setString("role", attributes.getAttribute("role"));
+                }
+                if (sessionManager_.getRestrictAuthData()) {
+                    statement
+                        .setString("authData", authData);
                 }
             });
             result = processSessionValidity.getValidity();
         } catch (DatabaseException e) {
-            throw new SessionValidityCheckErrorException(authId, hostIp, e);
+            throw new SessionValidityCheckErrorException(authId, authData, e);
         }
 
         return result;

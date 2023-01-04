@@ -80,9 +80,9 @@ public class generic extends DatabaseRemember {
         return _remove(removeRemember_, removeRememberMomentIndex_);
     }
 
-    public String createRememberId(long userId, String hostIp)
+    public String createRememberId(long userId, String authData)
     throws RememberManagerException {
-        return _createRememberId(createRememberId_, userId, hostIp);
+        return _createRememberId(createRememberId_, userId, authData);
     }
 
     public boolean eraseRememberId(String rememberId)

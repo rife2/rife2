@@ -31,6 +31,7 @@ public class AuthConfig {
     private boolean enforceAuthentication_ = DEFAULT_ENFORCE_AUTHENTICATION;
     private Class<? extends Credentials> credentialsClass_ = DEFAULT_CREDENTIALS_CLASS;
     private String role_ = null;
+    private String staticAuthData_ = null;
 
     public AuthConfig(SessionValidator sessionValidator) {
         sessionValidator_ = sessionValidator;
@@ -136,6 +137,23 @@ public class AuthConfig {
 
     public AuthConfig role(String role) {
         role_ = role;
+        return this;
+    }
+
+    public String generateAuthData(Context c) {
+        if (staticAuthData_ != null) {
+            return staticAuthData_;
+        }
+
+        return c.remoteAddr();
+    }
+
+    public String staticAuthData() {
+        return staticAuthData_;
+    }
+
+    public AuthConfig staticAuthData(String authData) {
+        staticAuthData_ = authData;
         return this;
     }
 }

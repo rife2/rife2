@@ -13,23 +13,23 @@ public class StartSessionErrorException extends SessionManagerException {
     @Serial private static final long serialVersionUID = 1599170266402021852L;
 
     private final long userId_;
-    private final String hostIp_;
+    private final String authData_;
 
-    public StartSessionErrorException(long userId, String hostIp) {
-        this(userId, hostIp, null);
+    public StartSessionErrorException(long userId, String authData) {
+        this(userId, authData, null);
     }
 
-    public StartSessionErrorException(long userId, String hostIp, DatabaseException cause) {
-        super("Unable to start session for userid '" + userId + "' and hostip '" + hostIp + "'.", cause);
+    public StartSessionErrorException(long userId, String authData, DatabaseException cause) {
+        super("Unable to start session for userid '" + userId + "' and auth data '" + authData + "'.", cause);
         userId_ = userId;
-        hostIp_ = hostIp;
+        authData_ = authData;
     }
 
     public long getUserId() {
         return userId_;
     }
 
-    public String getHostIp() {
-        return hostIp_;
+    public String getAuthData() {
+        return authData_;
     }
 }

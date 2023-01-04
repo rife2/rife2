@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class MemorySessions implements SessionManager {
     private long sessionDuration_ = RifeConfig.authentication().getSessionDuration();
-    private boolean restrictHostIp_ = RifeConfig.authentication().getSessionRestrictHostIp();
+    private boolean restrictAuthData_ = RifeConfig.authentication().getSessionRestrictAuthData();
 
     private final Map<String, MemorySession> sessions_ = new HashMap<>();
 
@@ -32,12 +32,12 @@ public class MemorySessions implements SessionManager {
         sessionDuration_ = milliseconds;
     }
 
-    public boolean getRestrictHostIp() {
-        return restrictHostIp_;
+    public boolean getRestrictAuthData() {
+        return restrictAuthData_;
     }
 
-    public void setRestrictHostIp(boolean flags) {
-        restrictHostIp_ = flags;
+    public void setRestrictAuthData(boolean flags) {
+        restrictAuthData_ = flags;
     }
 
     public void purgeSessions() {
@@ -47,16 +47,16 @@ public class MemorySessions implements SessionManager {
     private class PurgeSessions extends Thread {
         public void run() {
             synchronized (sessions_) {
-                ArrayList<String> stale_sessions = new ArrayList<>();
-                long expiration = System.currentTimeMillis() - getSessionDuration();
-                for (MemorySession session : sessions_.values()) {
+                var stale_sessions = new ArrayList<String>();
+                var expiration = System.currentTimeMillis() - getSessionDuration();
+                for (var session : sessions_.values()) {
                     if (session.getStart() <= expiration) {
                         stale_sessions.add(session.getAuthId());
                     }
                 }
 
                 if (stale_sessions != null) {
-                    for (String authid : stale_sessions) {
+                    for (var authid : stale_sessions) {
                         sessions_.remove(authid);
                     }
                 }
@@ -64,17 +64,17 @@ public class MemorySessions implements SessionManager {
         }
     }
 
-    public String startSession(long userId, String hostIp, boolean remembered)
+    public String startSession(long userId, String authData, boolean remembered)
     throws SessionManagerException {
         if (userId < 0 ||
-            null == hostIp ||
-            0 == hostIp.length()) {
-            throw new StartSessionErrorException(userId, hostIp);
+            null == authData ||
+            0 == authData.length()) {
+            throw new StartSessionErrorException(userId, authData);
         }
 
-        String auth_id_string = UniqueIDGenerator.generate().toString();
+        var auth_id_string = UniqueIDGenerator.generate().toString();
 
-        MemorySession session = new MemorySession(auth_id_string, userId, hostIp, remembered);
+        var session = new MemorySession(auth_id_string, userId, authData, remembered);
 
         synchronized (sessions_) {
             sessions_.put(auth_id_string, session);
@@ -83,22 +83,20 @@ public class MemorySessions implements SessionManager {
         return auth_id_string;
     }
 
-    public boolean isSessionValid(String authId, String hostIp)
+    public boolean isSessionValid(String authId, String authData)
     throws SessionManagerException {
         if (null == authId ||
             0 == authId.length() ||
-            null == hostIp ||
-            0 == hostIp.length()) {
+            null == authData ||
+            0 == authData.length()) {
             return false;
         }
 
-        MemorySession session = getSession(authId);
+        var session = getSession(authId);
 
         if (session != null) {
-            if (session.getStart() > System.currentTimeMillis() - getSessionDuration() &&
-                (!restrictHostIp_ || session.getHostIp().equals(hostIp))) {
-                return true;
-            }
+            return session.getStart() > System.currentTimeMillis() - getSessionDuration() &&
+                   (!restrictAuthData_ || session.getAuthData().equals(authData));
         }
 
         return false;
@@ -106,7 +104,7 @@ public class MemorySessions implements SessionManager {
 
     public long getSessionUserId(String authId)
     throws SessionManagerException {
-        MemorySession session = sessions_.get(authId);
+        var session = sessions_.get(authId);
 
         if (null == session) {
             return -1;
@@ -124,7 +122,7 @@ public class MemorySessions implements SessionManager {
 
         synchronized (sessions_) {
             if (sessions_.containsKey(authId)) {
-                MemorySession session = sessions_.get(authId);
+                var session = sessions_.get(authId);
                 session.setStart(System.currentTimeMillis());
                 sessions_.put(authId, session);
 
@@ -161,7 +159,7 @@ public class MemorySessions implements SessionManager {
         }
 
         synchronized (sessions_) {
-            MemorySession session = sessions_.get(authId);
+            var session = sessions_.get(authId);
             if (null == session) {
                 return false;
             }
@@ -176,20 +174,20 @@ public class MemorySessions implements SessionManager {
             return false;
         }
 
-        boolean result = false;
+        var result = false;
 
         synchronized (sessions_) {
-            ArrayList<String> sessions_to_erase = new ArrayList<>();
+            var sessions_to_erase = new ArrayList<String>();
 
             // collect the sessions that have to be erased
-            for (Map.Entry<String, MemorySession> sessions_entry : sessions_.entrySet()) {
+            for (var sessions_entry : sessions_.entrySet()) {
                 if (userId == sessions_entry.getValue().getUserId()) {
                     sessions_to_erase.add(sessions_entry.getKey());
                 }
             }
 
             // erased the collected sessions
-            for (String authid : sessions_to_erase) {
+            for (var authid : sessions_to_erase) {
                 sessions_.remove(authid);
             }
 
@@ -213,8 +211,8 @@ public class MemorySessions implements SessionManager {
     public long countSessions() {
         long valid_session_count = 0;
         synchronized (sessions_) {
-            long expiration = System.currentTimeMillis() - getSessionDuration();
-            for (MemorySession session : sessions_.values()) {
+            var expiration = System.currentTimeMillis() - getSessionDuration();
+            for (var session : sessions_.values()) {
                 if (session.getStart() > expiration) {
                     valid_session_count++;
                 }
@@ -226,14 +224,14 @@ public class MemorySessions implements SessionManager {
     public boolean listSessions(ListSessions processor) {
         if (null == processor) throw new IllegalArgumentException("processor can't be null");
 
-        boolean result = false;
+        var result = false;
 
         synchronized (sessions_) {
-            long expiration = System.currentTimeMillis() - getSessionDuration();
-            for (MemorySession session : sessions_.values()) {
+            var expiration = System.currentTimeMillis() - getSessionDuration();
+            for (var session : sessions_.values()) {
                 if (session.getStart() > expiration) {
                     result = true;
-                    if (!processor.foundSession(session.getUserId(), session.getHostIp(), session.getAuthId())) {
+                    if (!processor.foundSession(session.getUserId(), session.getAuthData(), session.getAuthId())) {
                         break;
                     }
                 }

@@ -16,14 +16,14 @@ public interface ListSessions {
     /**
      * <p>This method is called when active authentication session was found.
      *
-     * @param userId the unique ID of the user
-     * @param hostIp the IP address of the host that initiated the session
-     * @param authId the unique identifier of this authentication session
+     * @param userId   the unique ID of the user
+     * @param authData data that was associated with the session when it was initiated
+     * @param authId   the unique identifier of this authentication session
      * @return {@code true} when the next active session should be
      * returned; or
      * <p>{@code false} if the process should be interrupted
      * @since 1.0
      */
-    boolean foundSession(long userId, String hostIp, String authId);
+    boolean foundSession(long userId, String authData, String authId);
 }
 

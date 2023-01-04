@@ -126,7 +126,7 @@ public class RifeConfig {
         private long sessionDuration_ = DEFAULT_SESSION_DURATION;
         private int sessionPurgeFrequency_ = DEFAULT_SESSION_PURGE_FREQUENCY;
         private int sessionPurgeScale_ = DEFAULT_SESSION_PURGE_SCALE;
-        private boolean sessionRestrictHostIp_ = DEFAULT_SESSION_RESTRICT_HOST_IP;
+        private boolean sessionRestrictAuthData_ = DEFAULT_SESSION_RESTRICT_AUTH_DATA;
         private long rememberDuration_ = DEFAULT_REMEMBER_DURATION;
         private int rememberPurgeFrequency_ = DEFAULT_REMEMBER_PURGE_FREQUENCY;
         private int rememberPurgeScale_ = DEFAULT_REMEMBER_PURGE_SCALE;
@@ -145,7 +145,7 @@ public class RifeConfig {
         public static final long DEFAULT_SESSION_DURATION = 1000 * 60 * 20;        // 20 minutes
         public static final int DEFAULT_SESSION_PURGE_FREQUENCY = 20;              // 20 out of 1000 times, means 1/50th of the time
         public static final int DEFAULT_SESSION_PURGE_SCALE = 1000;
-        public static final boolean DEFAULT_SESSION_RESTRICT_HOST_IP = false;
+        public static final boolean DEFAULT_SESSION_RESTRICT_AUTH_DATA = true;
         public static final long DEFAULT_REMEMBER_DURATION = 1000L * 60L * 60L * 24L * 30L * 3L;    // 3 months
         public static final int DEFAULT_REMEMBER_PURGE_FREQUENCY = 20;             // 20 out of 1000 times, means 1/50th of the time
         public static final int DEFAULT_REMEMBER_PURGE_SCALE = 1000;
@@ -228,12 +228,12 @@ public class RifeConfig {
             return this;
         }
 
-        public boolean getSessionRestrictHostIp() {
-            return sessionRestrictHostIp_;
+        public boolean getSessionRestrictAuthData() {
+            return sessionRestrictAuthData_;
         }
 
-        public AuthenticationConfig setSessionRestrictHostIp(boolean restrict) {
-            sessionRestrictHostIp_ = restrict;
+        public AuthenticationConfig setSessionRestrictAuthData(boolean restrict) {
+            sessionRestrictAuthData_ = restrict;
             return this;
         }
 

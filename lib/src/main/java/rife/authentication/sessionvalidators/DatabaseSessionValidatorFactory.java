@@ -36,18 +36,4 @@ public class DatabaseSessionValidatorFactory extends DbQueryManagerFactory {
     public static DatabaseSessionValidator instance(Datasource datasource) {
         return (DatabaseSessionValidator) instance(MANAGER_PACKAGE_NAME, cache_, datasource);
     }
-
-    /**
-     * Return an instance of {@code DatabaseSessionValidator} for the provided
-     * {@code Datasource} and identifier.
-     *
-     * @param datasource the datasource that will be used to create the manager
-     * @param identifier the identifier that will be used to differentiate the
-     *                   manager when different ones are needed for the same datasource
-     * @return the requested {@code DatabaseSessionValidator} instance
-     * @since 1.0
-     */
-    public static DatabaseSessionValidator instance(Datasource datasource, String identifier) {
-        return (DatabaseSessionValidator) instance(MANAGER_PACKAGE_NAME, cache_, datasource, identifier);
-    }
 }

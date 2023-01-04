@@ -57,6 +57,7 @@ public class Authenticated extends Identified implements SessionAttributes {
         if (c.hasCookie(authConfig_.authCookieName())) {
             var auth_id = c.cookieValue(authConfig_.authCookieName());
             var auth_attribute = createAuthAttributeName(authConfig_.loginRoute(), authConfig_.authCookieName(), auth_id);
+            var auth_data = authConfig_.generateAuthData(c);
 
             if (c.hasAttribute(auth_attribute)) {
                 c.next();
@@ -65,7 +66,7 @@ public class Authenticated extends Identified implements SessionAttributes {
                 assert session_validator != null;
 
                 // validate the session
-                var session_validity_id = session_validator.validateSession(auth_id, c.remoteAddr(), this);
+                var session_validity_id = session_validator.validateSession(auth_id, auth_data, this);
 
                 // check if the validation allows access
                 if (session_validator.isAccessAuthorized(session_validity_id)) {

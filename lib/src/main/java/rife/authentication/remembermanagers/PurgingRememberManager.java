@@ -52,7 +52,7 @@ public class PurgingRememberManager implements RememberManager {
         mRememberManager.setRememberDuration(milliseconds);
     }
 
-    public String createRememberId(long userId, String hostIp)
+    public String createRememberId(long userId, String authData)
     throws RememberManagerException {
         int purge_decision = -1;
         synchronized (mRandom) {
@@ -62,7 +62,7 @@ public class PurgingRememberManager implements RememberManager {
             purgeRememberIds();
         }
 
-        return mRememberManager.createRememberId(userId, hostIp);
+        return mRememberManager.createRememberId(userId, authData);
     }
 
     public boolean eraseRememberId(String rememberId)

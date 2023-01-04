@@ -14,9 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestRoleUser {
     @Test
     void testInstantiation() {
-        RoleUser user = null;
-
-        user = new RoleUser();
+        var user = new RoleUser();
 
         assertNotNull(user);
     }
