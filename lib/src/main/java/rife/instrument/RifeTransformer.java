@@ -49,7 +49,10 @@ public abstract class RifeTransformer implements ClassFileTransformer {
               className.startsWith("org/w3c/"))) ||
             className.startsWith("sun/") ||
             className.startsWith("worker/org/gradle/") ||
-            (className.startsWith("rife/") && !className.startsWith("rife/Hello") && !className.startsWith("rife/engine/continuations/Test"))) {
+            (className.startsWith("rife/") &&
+             !className.startsWith("rife/Hello") &&
+             !className.startsWith("rife/models/") &&
+             !className.startsWith("rife/engine/continuations/Test"))) {
             return classfileBuffer;
         }
 
