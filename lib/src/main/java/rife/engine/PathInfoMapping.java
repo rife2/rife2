@@ -34,7 +34,7 @@ public class PathInfoMapping {
     }
 
     public PathInfoMapping p(String name) {
-        return p(name, "\\w+");
+        return p(name, "[\\w\\-\\._]+");
     }
 
     public PathInfoMapping p(String name, String regexp) {
