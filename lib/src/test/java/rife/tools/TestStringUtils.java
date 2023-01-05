@@ -25,9 +25,9 @@ public class TestStringUtils {
     void testEncodeURL() {
         assertNull(StringUtils.encodeUrl(null));
         assertEquals("a%20test%20%26", StringUtils.encodeUrl("a test &"));
-        String valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~";
+        String valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.";
         assertSame(valid, StringUtils.encodeUrl(valid));
-        assertEquals("%21abcdefghijklmnopqrstuvwxyz%25%25ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~%3D", StringUtils.encodeUrl("!abcdefghijklmnopqrstuvwxyz%%ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~="));
+        assertEquals("%21abcdefghijklmnopqrstuvwxyz%25%25ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.%7E%3D", StringUtils.encodeUrl("!abcdefghijklmnopqrstuvwxyz%%ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~="));
         assertEquals("%25%23ok%C3%A9k%C3%89%C8%A2%20smile%21%F0%9F%98%81", StringUtils.encodeUrl("%#okékÉȢ smile!😁"));
     }
 
@@ -35,9 +35,9 @@ public class TestStringUtils {
     void testDecodeURL() {
         assertNull(StringUtils.decodeUrl(null));
         assertEquals("a test &", StringUtils.decodeUrl("a%20test%20%26"));
-        String valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~";
+        String valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.";
         assertSame(valid, StringUtils.decodeUrl(valid));
-        assertEquals("!abcdefghijklmnopqrstuvwxyz%%ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~=", StringUtils.decodeUrl("%21abcdefghijklmnopqrstuvwxyz%25%25ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~%3D"));
+        assertEquals("!abcdefghijklmnopqrstuvwxyz%%ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~=", StringUtils.decodeUrl("%21abcdefghijklmnopqrstuvwxyz%25%25ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.%7E%3D"));
         assertEquals("%#okékÉȢ smile!😁", StringUtils.decodeUrl("%25%23ok%C3%A9k%C3%89%C8%A2%20smile%21%F0%9F%98%81"));
 
         try {

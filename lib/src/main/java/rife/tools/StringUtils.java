@@ -522,20 +522,21 @@ public final class StringUtils {
     static final BitSet UNRESERVED_URI_CHARS;
     static {
         // see https://www.rfc-editor.org/rfc/rfc3986#page-13
-        var unreserved = new BitSet('~' + 1);
+        // and https://url.spec.whatwg.org/#application-x-www-form-urlencoded-percent-encode-set
+        var unreserved = new BitSet('z' + 1);
         unreserved.set('-');
         unreserved.set('.');
         for (int c = '0'; c <= '9'; ++c) unreserved.set(c);
         for (int c = 'A'; c <= 'Z'; ++c) unreserved.set(c);
         unreserved.set('_');
         for (int c = 'a'; c <= 'z'; ++c) unreserved.set(c);
-        unreserved.set('~');
         UNRESERVED_URI_CHARS = unreserved;
     }
 
     // see https://www.rfc-editor.org/rfc/rfc3986#page-13
+    // and https://url.spec.whatwg.org/#application-x-www-form-urlencoded-percent-encode-set
     private static boolean isUnreservedUriChar(char ch) {
-        if (ch > '~') return false;
+        if (ch > 'z') return false;
         return UNRESERVED_URI_CHARS.get(ch);
     }
     private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
