@@ -323,7 +323,7 @@ public abstract class ValidityChecks {
     }
 
     public static boolean checkEmail(CharSequence value) {
-        return checkRegexp(value, "^[a-zA-Z0-9][_\\+\\-\\.\\w]*@[\\w\\.\\-]+[\\w]\\.[a-zA-Z]{2,8}$");
+        return checkRegexp(value, "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)$");
     }
 
     public static boolean checkUrl(CharSequence value) {
