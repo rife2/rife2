@@ -12,7 +12,7 @@ plugins {
     signing
 }
 
-val rifeVersion by rootProject.extra { "0.9.4-SNAPSHOT" }
+val rifeVersion by rootProject.extra { "0.9.4" }
 var rifeAgentName: String = "rife2-$rifeVersion-agent"
 val rifeAgentJar by rootProject.extra { "$rifeAgentName.jar" }
 group = "com.uwyn.rife2"
@@ -41,7 +41,7 @@ dependencies {
     testImplementation("org.jsoup:jsoup:1.15.3")
     testImplementation("org.eclipse.jetty:jetty-server:11.0.13")
     testImplementation("org.eclipse.jetty:jetty-servlet:11.0.13")
-    testImplementation("net.sourceforge.htmlunit:htmlunit:2.67.0")
+    testImplementation("net.sourceforge.htmlunit:htmlunit:2.68.0")
     testImplementation("jakarta.servlet:jakarta.servlet-api:5.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
     testImplementation("org.postgresql:postgresql:42.5.1")
