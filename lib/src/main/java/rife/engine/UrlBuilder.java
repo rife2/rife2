@@ -95,7 +95,7 @@ public class UrlBuilder {
             if (url.charAt(url.length() - 1) != '/') {
                 url.append("/");
             }
-            url.append(pathInfo_);
+            url.append(StringUtils.encodeUrl(pathInfo_));
         }
         // handle path info mapping
         else if (route_.pathInfoHandling().type() == PathInfoType.MAP) {
