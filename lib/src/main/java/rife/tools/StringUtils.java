@@ -472,16 +472,60 @@ public final class StringUtils {
      * @since 1.0
      */
     public static String encodeUrl(String source) {
-        if (source == null) {
-            return null;
+        return encodeUrl(source, (String) null);
+    }
+
+    /**
+     * Transforms a provided <code>String</code> object into a new string,
+     * containing only valid URL characters in the UTF-8 encoding.
+     *
+     * @param source The string that has to be transformed into a valid URL
+     *               string.
+     * @param allow  Additional characters to allow.
+     * @return The encoded <code>String</code> object.
+     * @see #decodeUrl(String)
+     * @see #encodeClassname(String)
+     * @see #encodeHtml(String)
+     * @see #encodeXml(String)
+     * @see #encodeSql(String)
+     * @see #encodeLatex(String)
+     * @see #encodeRegexp(String)
+     * @see #encodeJson(String)
+     * @since 1.0
+     */
+    public static String encodeUrl(String source, char... allow) {
+        return encodeUrl(source, new String(allow));
+    }
+
+
+    /**
+     * Transforms a provided <code>String</code> object into a new string,
+     * containing only valid URL characters in the UTF-8 encoding.
+     *
+     * @param source The string that has to be transformed into a valid URL
+     *               string.
+     * @return The encoded <code>String</code> object.
+     * @see #decodeUrl(String)
+     * @see #encodeClassname(String)
+     * @see #encodeHtml(String)
+     * @see #encodeXml(String)
+     * @see #encodeSql(String)
+     * @see #encodeLatex(String)
+     * @see #encodeRegexp(String)
+     * @see #encodeJson(String)
+     * @since 1.0
+     */
+    public static String encodeUrl(String source, String allow) {
+        if (source == null || source.isEmpty()) {
+            return source;
         }
 
         StringBuilder out = null;
         char ch;
         var i = 0;
-        while(i < source.length()) {
+        while (i < source.length()) {
             ch = source.charAt(i);
-            if (isUnreservedUriChar(ch)) {
+            if (isUnreservedUriChar(ch) || (allow != null && allow.indexOf(ch) != -1)) {
                 if (out != null) {
                     out.append(ch);
                 }
@@ -492,7 +536,7 @@ public final class StringUtils {
                     out.append(source, 0, i);
                 }
 
-                int cp = source.codePointAt(i);
+                var cp = source.codePointAt(i);
                 if (cp < 0x80) {
                     appendUrlEncodedByte(out, cp);
                     i += 1;
@@ -502,8 +546,8 @@ public final class StringUtils {
                     }
                     i += 1;
                 } else if (Character.isSupplementaryCodePoint(cp)) {
-                    char high = Character.highSurrogate(cp);
-                    char low = Character.lowSurrogate(cp);
+                    var high = Character.highSurrogate(cp);
+                    var low = Character.lowSurrogate(cp);
                     for (var b : new String(new char[]{high, low}).getBytes(StandardCharsets.UTF_8)) {
                         appendUrlEncodedByte(out, b);
                     }
