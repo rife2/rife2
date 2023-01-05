@@ -151,6 +151,8 @@ public class Context {
         // when its continuable is the same type as the element that should be processed,
         // process that continuable instead
         if (continuation_context != null) {
+            removeGenerateTemplateValues(continuation_context);
+
             ContinuationContext.setActiveContext(continuation_context);
 
             if (continuation_context.getContinuable() != null &&
@@ -162,6 +164,23 @@ public class Context {
         ContinuationConfigRuntime.setActiveConfigRuntime(site_.continuationManager_.getConfigRuntime());
 
         return element;
+    }
+
+    private void removeGenerateTemplateValues(ContinuationContext continuationContext) {
+        var local_stack = continuationContext.getLocalStack();
+        for (int i = 0; i < local_stack.getReferenceStackSize(); ++i) {
+            var reference = local_stack.getReference(i);
+            if (reference instanceof Template t) {
+                t.removeGeneratedValues();
+            }
+        }
+        var local_vars = continuationContext.getLocalVars();
+        for (int i = 0; i < local_vars.getReferenceStackSize(); ++i) {
+            var reference = local_vars.getReference(i);
+            if (reference instanceof Template t) {
+                t.removeGeneratedValues();
+            }
+        }
     }
 
     private void handlePause(PauseException e) {

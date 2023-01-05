@@ -129,6 +129,10 @@ public class ContinuationStack {
         return referenceStack_[position];
     }
 
+    public synchronized int getReferenceStackSize() {
+        return referenceStack_.length;
+    }
+
     private synchronized void storeIndex(int index, int position, int type) {
         if (index > positionMapping_.length - 1) {
             var size = (((index + 1) / 10) + 1) * 10;

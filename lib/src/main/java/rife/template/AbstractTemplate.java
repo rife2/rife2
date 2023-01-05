@@ -667,7 +667,7 @@ public abstract class AbstractTemplate implements Template {
         constructedValues_.remove(id);
     }
 
-    public final void removeValues(List<String> ids) {
+    public final void removeValues(Collection<String> ids) {
         if (null == ids ||
             0 == ids.size()) {
             return;
@@ -676,6 +676,12 @@ public abstract class AbstractTemplate implements Template {
         for (var id : ids) {
             removeValue(id);
         }
+    }
+
+    public final void removeGeneratedValues() {
+        var generated_values = generatedValues_;
+        generatedValues_ = new HashSet<>();
+        removeValues(generated_values);
     }
 
     public final void blankValue(String id) {
@@ -811,7 +817,7 @@ public abstract class AbstractTemplate implements Template {
         }
     }
 
-    public final void addResourceBundles(List<ResourceBundle> resourceBundles) {
+    public final void addResourceBundles(Collection<ResourceBundle> resourceBundles) {
         if (null == resourceBundles) {
             return;
         }

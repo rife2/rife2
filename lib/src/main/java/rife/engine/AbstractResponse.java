@@ -153,7 +153,7 @@ public abstract class AbstractResponse implements Response {
             }
 
             if (null == textBuffer_) {
-                textBuffer_ = new ArrayList<CharSequence>();
+                textBuffer_ = new ArrayList<>();
             }
             textBuffer_.addAll(deferredContent);
         } else {
@@ -183,7 +183,7 @@ public abstract class AbstractResponse implements Response {
             }
 
             if (null == textBuffer_) {
-                textBuffer_ = new ArrayList<CharSequence>();
+                textBuffer_ = new ArrayList<>();
             }
             textBuffer_.add(text);
         } else {

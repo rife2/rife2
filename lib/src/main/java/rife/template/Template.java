@@ -1278,7 +1278,15 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    void removeValues(List<String> ids);
+    void removeValues(Collection<String> ids);
+
+    /**
+     * Reverts the generated values back to their default value.
+     *
+     * @see #addGeneratedValues
+     * @since 1.0
+     */
+    void removeGeneratedValues();
 
     /**
      * Set the content of the specified value to an empty string.
@@ -1314,10 +1322,10 @@ public interface Template extends Cloneable {
     String[] getAvailableValueIds();
 
     /**
-     * Returns a list of the ID's of all values in this template which
+     * Returns a collection of the ID's of all values in this template which
      * {@linkplain #isValueSet(String) have not been set}.
      *
-     * @return a list of ID's of values in this template which have not been
+     * @return a collection of ID's of values in this template which have not been
      * set
      * @since 1.0
      */
@@ -1410,7 +1418,7 @@ public interface Template extends Cloneable {
      * @see #hasResourceBundles
      * @since 1.0
      */
-    void addResourceBundles(List<ResourceBundle> resourceBundles);
+    void addResourceBundles(Collection<ResourceBundle> resourceBundles);
 
     /**
      * Adds a resource bundle to this template. Resource bundles are used in
