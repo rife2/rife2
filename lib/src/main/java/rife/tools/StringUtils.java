@@ -605,7 +605,7 @@ public final class StringUtils {
      * @since 1.0
      */
     public static String decodeUrl(String source) {
-        if (source == null) {
+        if (source == null || source.isEmpty()) {
             return source;
         }
 

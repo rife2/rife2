@@ -16,16 +16,18 @@ public class FormBuilderXml extends AbstractFormBuilder {
     public static final String VALUE_SELECTED = "<selected>1</selected>";
     public static final String VALUE_CHECKED = "<checked>1</checked>";
 
-    private static final String ID_NAME = "NAME";
-    private static final String ID_ATTRIBUTES = "ATTRIBUTES";
-    private static final String ID_VALUE = "VALUE";
-    private static final String ID_MAXLENGTH = "MAXLENGTH";
-    private static final String ID_CHECKED = "CHECKED";
-    private static final String ID_OPTIONS = "OPTIONS";
-    private static final String ID_SELECTED = "SELECTED";
-    private static final String ID_LABEL = "LABEL";
-    private static final String ID_DISABLED = "DISABLED";
-    private static final String ID_FORM_OPTION = "FORM:OPTION:";
+    private static final String ID_NAME = "name";
+    private static final String ID_ATTRIBUTES = "attributes";
+    private static final String ID_VALUE = "value";
+    private static final String ID_MINLENGTH = "minlength";
+    private static final String ID_MAXLENGTH = "maxlength";
+    private static final String ID_REQUIRED = "required";
+    private static final String ID_CHECKED = "checked";
+    private static final String ID_OPTIONS = "options";
+    private static final String ID_SELECTED = "selected";
+    private static final String ID_LABEL = "label";
+    private static final String ID_DISABLED = "disabled";
+    private static final String ID_FORM_OPTION = "form:option:";
 
     private ValidationBuilder mValidationBuilder = new ValidationBuilderXml();
 
@@ -45,19 +47,19 @@ public class FormBuilderXml extends AbstractFormBuilder {
     }
 
     protected void generateFieldHidden(Template template, String templateFieldName, String name, ConstrainedProperty property, String[] values, Template builderTemplate, List<String> setValues, boolean replaceExistingValues) {
-        generateFieldText(PREFIX_FORM_HIDDEN, true, true, false, false, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
+        generateFieldText(PREFIX_FORM_HIDDEN, true, true, false, false, false, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
     }
 
     protected void generateFieldInput(Template template, String templateFieldName, String name, ConstrainedProperty property, String[] values, Template builderTemplate, List<String> setValues, boolean replaceExistingValues) {
-        generateFieldText(PREFIX_FORM_INPUT, true, true, true, true, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
+        generateFieldText(PREFIX_FORM_INPUT, true, true, true, true, true, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
     }
 
     protected void generateFieldSecret(Template template, String templateFieldName, String name, ConstrainedProperty property, String[] values, Template builderTemplate, List<String> setValues, boolean replaceExistingValues) {
-        generateFieldText(PREFIX_FORM_SECRET, false, true, true, true, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
+        generateFieldText(PREFIX_FORM_SECRET, false, true, true, true, true, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
     }
 
     protected void generateFieldTextarea(Template template, String templateFieldName, String name, ConstrainedProperty property, String[] values, Template builderTemplate, List<String> setValues, boolean replaceExistingValues) {
-        generateFieldText(PREFIX_FORM_TEXTAREA, true, true, false, true, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
+        generateFieldText(PREFIX_FORM_TEXTAREA, true, true, false, true, true, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
     }
 
     protected void generateFieldRadio(Template template, String templateFieldName, Class propertyType, String name, ConstrainedProperty property, String[] values, Template builderTemplate, List<String> setValues, boolean replaceExistingValues) {
@@ -80,8 +82,16 @@ public class FormBuilderXml extends AbstractFormBuilder {
         return ID_VALUE;
     }
 
+    protected String getIdMinlength() {
+        return ID_MINLENGTH;
+    }
+
     protected String getIdMaxlength() {
         return ID_MAXLENGTH;
+    }
+
+    protected String getIdRequired() {
+        return ID_REQUIRED;
     }
 
     protected String getIdChecked() {

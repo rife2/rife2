@@ -17,6 +17,8 @@ public class GenerateFormSite extends Site {
             bean.setAnotherlogin("jullie");
             bean.setPassword("secret");
             bean.setAnotherpassword("real secret");
+            bean.setEmail("my@email.com");
+            bean.setUrl("https://rife2.com");
             bean.setComment("één comment");
             bean.setAnothercomment("this comment");
             bean.setQuestion(ConstrainedBeanImpl.Question.a2);

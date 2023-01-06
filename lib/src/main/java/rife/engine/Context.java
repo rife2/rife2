@@ -506,9 +506,9 @@ public class Context {
      * &lt;/select&gt;</pre>
      * <p>the result will then be:
      * <pre>&lt;select name="colors"&gt;
-     * &lt;option value="blue" selected="selected"&gt;Blue&lt;/option&gt;
+     * &lt;option value="blue" selected&gt;Blue&lt;/option&gt;
      * &lt;option value="orange"&gt;Orange&lt;/option&gt;
-     * &lt;option value="red" selected="selected"&gt;Red&lt;/option&gt;
+     * &lt;option value="red" selected&gt;Red&lt;/option&gt;
      * &lt;option value="green"&gt;Green&lt;/option&gt;
      * &lt;/select&gt;</pre>
      * <p>For example for radio buttons, consider the name '{@code size}',
@@ -516,14 +516,14 @@ public class Context {
      * <pre>&lt;input type="radio" name="size" value="large"{{v size:large:checked}}{{/v}} /&gt;
      * &lt;input type="radio" name="size" value="small"{{v size:small:checked}}{{/v}} /&gt;</pre>
      * <p>the result will then be:
-     * <pre>&lt;input type="radio" name="size" value="large" checked="checked" /&gt;
+     * <pre>&lt;input type="radio" name="size" value="large" checked /&gt;
      * &lt;input type="radio" name="size" value="small" /&gt;</pre>
      * <p>For example for checkboxes, consider the name '{@code active}',
      * the value '{@code true}' and the following HTML template excerpt:
      * <pre>&lt;input type="checkbox" name="active"{{v active:checked}}{{/v}} /&gt;
      * &lt;input type="checkbox" name="senditnow"{{v senditnow:checked}}{{/v}} /&gt;</pre>
      * <p>the result will then be:
-     * <pre>&lt;input type="checkbox" name="active" checked="checked" /&gt;
+     * <pre>&lt;input type="checkbox" name="active" checked /&gt;
      * &lt;input type="checkbox" name="senditnow" /&gt;</pre>
      *
      * @param template the template instance where the selection should happen

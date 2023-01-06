@@ -89,6 +89,26 @@ public interface FormBuilder extends Cloneable {
     String PREFIX_FORM_INPUT = "form:input:";
 
     /**
+     * Template values that start with <code>form:email:</code> will generate
+     * an email input form field for the property name that follows the prefix.
+     * The maximum length of the allowed text will be obtained from the
+     * <code>maxLength</code> constraint.
+     *
+     * @since 1.0
+     */
+    String PREFIX_FORM_EMAIL = "form:email:";
+
+    /**
+     * Template values that start with <code>form:input:</code> will generate
+     * an url input form field for the property name that follows the prefix.
+     * The maximum length of the allowed text will be obtained from the
+     * <code>maxLength</code> constraint.
+     *
+     * @since 1.0
+     */
+    String PREFIX_FORM_URL = "form:url:";
+
+    /**
      * Template values that start with <code>form:secret:</code> will generate
      * a password input form field for the property name that follows the
      * prefix. The maximum length of the allowed text will be obtained from the
@@ -224,7 +244,8 @@ public interface FormBuilder extends Cloneable {
     String[] VALUE_PREFIXES = new String[]
         {
             PREFIX_FORM_HIDDEN,
-            PREFIX_FORM_INPUT, PREFIX_FORM_SECRET, PREFIX_FORM_TEXTAREA,
+            PREFIX_FORM_INPUT, PREFIX_FORM_EMAIL, PREFIX_FORM_URL,
+            PREFIX_FORM_SECRET, PREFIX_FORM_TEXTAREA,
             PREFIX_FORM_RADIO, PREFIX_FORM_CHECKBOX, PREFIX_FORM_SELECT,
             PREFIX_FORM_DISPLAY
         };

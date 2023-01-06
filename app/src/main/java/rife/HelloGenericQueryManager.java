@@ -26,7 +26,7 @@ public class HelloGenericQueryManager extends Site {
     });
     Route addForm = get("/add", c -> c.print("""
         <form method='post'>
-        <input name='name'/><input type='submit'/>
+        <input name='name' /><input type='submit' />
         </form>""")
     );
     Route list = get("/list", c -> {

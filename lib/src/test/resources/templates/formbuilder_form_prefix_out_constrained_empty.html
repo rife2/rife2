@@ -1,18 +1,20 @@
-<input type="text" name="prefix_login" size="10" maxlength="6" />
-<input type="password" name="prefix_password" size="10" maxlength="8" />
+<input type="text" name="prefix_login" size="10" minlength="2" maxlength="6" required="required" />
+<input type="password" name="prefix_password" size="10" maxlength="8" required="required" />
 <textarea name="prefix_comment" cols="10" rows="5" disabled="disabled"></textarea>
-<input type="radio" name="prefix_question" alt="sometext" value="a1" />answer1<input type="radio" name="prefix_question" alt="sometext" value="a2" />answer2<input type="radio" name="prefix_question" alt="sometext" value="a3" />a3
+<input type="radio" name="prefix_question" alt="sometext" value="a1" required="required" />answer1<input type="radio" name="prefix_question" alt="sometext" value="a2" required="required" />answer2<input type="radio" name="prefix_question" alt="sometext" value="a3" required="required" />a3
 
 
 
-<input type="checkbox" name="prefix_options" alt="someblurp" value="0" />option0<input type="checkbox" name="prefix_options" alt="someblurp" value="2" />option2<input type="checkbox" name="prefix_options" alt="someblurp" value="3" />3
+<input type="checkbox" name="prefix_options" alt="someblurp" value="0" required="required" />option0<input type="checkbox" name="prefix_options" alt="someblurp" value="2" required="required" />option2<input type="checkbox" name="prefix_options" alt="someblurp" value="3" required="required" />3
 
 
 
 <input type="checkbox" name="prefix_invoice" alt="atext" disabled="disabled" />I want an invoice
-<select name="prefix_colors" size="3" multiple="multiple"><option value="red">red spots</option><option value="blue">blue spots</option><option value="green">green spots</option></select>
+<select name="prefix_colors" size="3" multiple="multiple" required="required"><option value="red">red spots</option><option value="blue">blue spots</option><option value="green">green spots</option></select>
 
 
 
 <input type="hidden" name="prefix_hidden" id="thehiddenone" />
-<select name="prefix_yourcolors" size="2" multiple="multiple"><option value="orange" selected="selected">orange</option><option value="purple">purple</option><option value="yellow">yellow</option><option value="brown">brown</option></select>
+<select name="prefix_yourcolors" size="2" multiple="multiple" required="required"><option value="orange" selected="selected">orange</option><option value="purple">purple</option><option value="yellow">yellow</option><option value="brown">brown</option></select>
+<input type="email" name="prefix_email" size="20" />
+<input type="url" name="prefix_url" size="40" />

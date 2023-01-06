@@ -58,3 +58,5 @@
 <!--v form:display:otheroptions/--><!--b form:display:attributes:otheroptions-->  <id>{{v form:name/}}{{v form:value/}}</id> <!--/b-->
 <!--v form:display:colors/-->
 <!--v form:select:yourcolors--><size>2</size> <multiple>1</multiple><!--/v-->
+<!--v form:input:email-->  <size>20</size> <!--/v-->
+<!--v form:input:url-->  <size>40</size> <!--/v-->
