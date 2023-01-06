@@ -9,7 +9,6 @@ import rife.continuations.ContinuationConfigRuntime;
 import rife.continuations.ContinuationContext;
 import rife.continuations.exceptions.*;
 import rife.engine.exceptions.*;
-import rife.forms.FormBuilder;
 import rife.ioc.HierarchicalProperties;
 import rife.template.Template;
 import rife.template.TemplateFactory;
@@ -157,7 +156,7 @@ public class Context {
 
             if (continuation_context.getContinuable() != null &&
                 route.getElementClass() == continuation_context.getContinuable().getClass()) {
-                removeGenerateTemplateValues(continuation_context);
+                removeGeneratedTemplateValues(continuation_context);
 
                 element = (Element) continuation_context.getContinuable();
             }
@@ -168,7 +167,7 @@ public class Context {
         return element;
     }
 
-    private void removeGenerateTemplateValues(ContinuationContext continuationContext)
+    private void removeGeneratedTemplateValues(ContinuationContext continuationContext)
     throws Exception {
         var local_stack = continuationContext.getLocalStack();
         for (int i = 0; i < local_stack.getReferenceStackSize(); ++i) {
