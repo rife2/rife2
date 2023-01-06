@@ -21,6 +21,7 @@ import rife.tools.exceptions.BeanUtilsException;
 
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class Context {
@@ -134,7 +135,7 @@ public class Context {
     }
 
     private Element setupContinuationContext(Route route)
-    throws CloneNotSupportedException {
+    throws Exception {
         // continuations are only supported on element class routes, not element instance routes
         if (route instanceof RouteInstance) {
             return null;
@@ -151,12 +152,12 @@ public class Context {
         // when its continuable is the same type as the element that should be processed,
         // process that continuable instead
         if (continuation_context != null) {
-            removeGenerateTemplateValues(continuation_context);
-
             ContinuationContext.setActiveContext(continuation_context);
 
             if (continuation_context.getContinuable() != null &&
                 route.getElementClass() == continuation_context.getContinuable().getClass()) {
+                removeGenerateTemplateValues(continuation_context);
+
                 element = (Element) continuation_context.getContinuable();
             }
         }
@@ -166,7 +167,8 @@ public class Context {
         return element;
     }
 
-    private void removeGenerateTemplateValues(ContinuationContext continuationContext) {
+    private void removeGenerateTemplateValues(ContinuationContext continuationContext)
+    throws Exception {
         var local_stack = continuationContext.getLocalStack();
         for (int i = 0; i < local_stack.getReferenceStackSize(); ++i) {
             var reference = local_stack.getReference(i);
@@ -180,6 +182,27 @@ public class Context {
             if (reference instanceof Template t) {
                 t.removeGeneratedValues();
             }
+        }
+
+        var continuable = continuationContext.getContinuable();
+        Class klass = continuable.getClass();
+        while (klass != null && klass != Element.class) {
+            for (var field : klass.getDeclaredFields()) {
+                field.setAccessible(true);
+
+                if (Modifier.isStatic(field.getModifiers()) ||
+                    Modifier.isFinal(field.getModifiers()) ||
+                    Modifier.isTransient(field.getModifiers())) {
+                    continue;
+                }
+
+                if (Template.class.isAssignableFrom(field.getType())) {
+                    var t = (Template)field.get(continuable);
+                    t.removeGeneratedValues();
+                }
+            }
+
+            klass = klass.getSuperclass();
         }
     }
 
