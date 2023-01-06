@@ -25,15 +25,15 @@ import java.util.Map;
  * validation errors and markings.
  * <p>The form building works with a {@link Template} instance that it will
  * analyze for the presence of certain values. The names of these will be in
- * the following format: <code>FORM:PREFIX:name</code> where
- * <code>FORM:PREFIX:</code> identifies which type of field has to be generated
+ * the following format: <code>form:prefix:name</code> where
+ * <code>form:prefix:</code> identifies which type of field has to be generated
  * and <code>name</code> indicates the name of the property for which the form
  * field will be generated.
  * <p>The form builder will generally use the constraints on the bean property
  * to generate the form field with the appropriate metadata information.
  * Many times it's appropriate to add custom information to the form
  * fields. This can be done by providing text in between the form field value
- * begin and end tags. For example, for the XHTML form builder you can provide
+ * begin and end tags. For example, for the HTML form builder you can provide
  * custom CSS style information:
  * <pre>
  * &lt;!--v form:input:firstname--&gt;style="border: 1px solid black;"&lt;!--/v--&gt;
@@ -63,6 +63,9 @@ import java.util.Map;
  * <pre>
  * firstname-John : &lt;input type="text" name="firstname" /&gt;
  * </pre>
+ * <p>
+ * Additional template values are available for collection field, please
+ * look at {@link #selectParameter} for more information.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see Validated
@@ -87,26 +90,6 @@ public interface FormBuilder extends Cloneable {
      * @since 1.0
      */
     String PREFIX_FORM_INPUT = "form:input:";
-
-    /**
-     * Template values that start with <code>form:email:</code> will generate
-     * an email input form field for the property name that follows the prefix.
-     * The maximum length of the allowed text will be obtained from the
-     * <code>maxLength</code> constraint.
-     *
-     * @since 1.0
-     */
-    String PREFIX_FORM_EMAIL = "form:email:";
-
-    /**
-     * Template values that start with <code>form:input:</code> will generate
-     * an url input form field for the property name that follows the prefix.
-     * The maximum length of the allowed text will be obtained from the
-     * <code>maxLength</code> constraint.
-     *
-     * @since 1.0
-     */
-    String PREFIX_FORM_URL = "form:url:";
 
     /**
      * Template values that start with <code>form:secret:</code> will generate
@@ -235,20 +218,6 @@ public interface FormBuilder extends Cloneable {
 
     String SUFFIX_SELECTED = ":selected";
     String SUFFIX_CHECKED = ":checked";
-
-    /**
-     * The array of standard form field prefixes.
-     *
-     * @since 1.0
-     */
-    String[] VALUE_PREFIXES = new String[]
-        {
-            PREFIX_FORM_HIDDEN,
-            PREFIX_FORM_INPUT, PREFIX_FORM_EMAIL, PREFIX_FORM_URL,
-            PREFIX_FORM_SECRET, PREFIX_FORM_TEXTAREA,
-            PREFIX_FORM_RADIO, PREFIX_FORM_CHECKBOX, PREFIX_FORM_SELECT,
-            PREFIX_FORM_DISPLAY
-        };
 
     /**
      * Generates all the form fields for a bean class.
@@ -574,6 +543,50 @@ public interface FormBuilder extends Cloneable {
     /**
      * Generates the required attributes so that an existing form field
      * indicates its checked or selected status.
+     * <p>This method will check the template for certain value tags and set
+     * them to the correct attributes according to the name and the provided
+     * values in this method. This is dependent on the template type and
+     * currently only makes sense for {@code html} templates.
+     * <p>For example for select boxes, consider the name '{@code colors}',
+     * the values '{@code blue}' and '{@code red}', and the
+     * following HTML template excerpt:
+     * <pre>
+     * &lt;select name="colors"&gt;
+     *   &lt;option value="blue"{{v colors:blue:selected}}{{/v}}&gt;Blue&lt;/option&gt;
+     *   &lt;option value="orange"{{v colors:orange:selected}}{{/v}}&gt;Orange&lt;/option&gt;
+     *   &lt;option value="red"{{v colors:red:selected}}{{/v}}&gt;Red&lt;/option&gt;
+     *   &lt;option value="green"{{v colors:green:selected'}}{{/v}}&gt;Green&lt;/option&gt;
+     * &lt;/select&gt;</pre>
+     * <p>the result will then be:
+     * <pre>
+     * &lt;select name="colors"&gt;
+     *   &lt;option value="blue" selected="selected"&gt;Blue&lt;/option&gt;
+     *   &lt;option value="orange"&gt;Orange&lt;/option&gt;
+     *   &lt;option value="red" selected="selected"&gt;Red&lt;/option&gt;
+     *   &lt;option value="green"&gt;Green&lt;/option&gt;
+     * &lt;/select&gt;</pre>
+     * <p>For example for radio buttons, consider the name '{@code size}',
+     * the value '{@code large}' and the following HTML template excerpt:
+     * <pre>
+     * &lt;input type="radio" name="size" value="large"{{v size:large:checked}}{{/v}} /&gt;
+     * &lt;input type="radio" name="size" value="small"{{v size:small:checked}}{{/v}} /&gt;
+     * </pre>
+     * <p>the result will then be:
+     * <pre>
+     * &lt;input type="radio" name="size" value="large" checked="checked" /&gt;
+     * &lt;input type="radio" name="size" value="small" /&gt;
+     * </pre>
+     * <p>For example for checkboxes, consider the name '{@code active}',
+     * the value '{@code true}' and the following HTML template excerpt:
+     * <pre>
+     * &lt;input type="checkbox" name="active"{{v active:checked}}{{/v}} /&gt;
+     * &lt;input type="checkbox" name="senditnow"{{v senditnow:checked}}{{/v}} /&gt;
+     * </pre>
+     * <p>the result will then be:
+     * <pre>
+     * &lt;input type="checkbox" name="active" checked="checked" /&gt;
+     * &lt;input type="checkbox" name="senditnow" /&gt;
+     * </pre>
      *
      * @param template the template instance that will be used for the
      *                 generation

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import rife.forms.FormBuilder;
 import rife.template.exceptions.TemplateException;
 
 /**
@@ -1393,6 +1394,15 @@ public interface Template extends Cloneable {
      * @since 1.0
      */
     BeanHandler getBeanHandler();
+
+    /**
+     * Returns this template's {@linkplain FormBuilder form builder}. The form
+     * builder can be used for generating forms and fields.
+     *
+     * @return this template's form builder
+     * @since 1.0
+     */
+    FormBuilder getFormBuilder();
 
     /**
      * Returns the encoder that this template uses to convert strings to

@@ -5,6 +5,7 @@
 package rife.template;
 
 import rife.config.RifeConfig;
+import rife.forms.FormBuilder;
 import rife.resources.ResourceFinder;
 import rife.template.exceptions.*;
 import rife.tools.Localization;
@@ -796,6 +797,14 @@ public abstract class AbstractTemplate implements Template {
 
     final void setBeanHandler(BeanHandler beanHandler) {
         beanHandler_ = beanHandler;
+    }
+
+    public final FormBuilder getFormBuilder() {
+        var bean_handler = getBeanHandler();
+        if (null == bean_handler) {
+            return null;
+        }
+        return bean_handler.getFormBuilder();
     }
 
     public final TemplateEncoder getEncoder() {

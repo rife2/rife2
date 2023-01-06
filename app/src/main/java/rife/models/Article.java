@@ -5,13 +5,10 @@
 package rife.models;
 
 public class Article {
-    private Integer id_;
     private String title_;
     private String email_;
     private String body_;
 
-    public void    setId(Integer id)      { id_ = id; }
-    public Integer getId()                { return id_; }
     public void    setTitle(String title) { title_ = title; }
     public String  getTitle()             { return title_; }
     public void    setEmail(String email) { email_ = email; }

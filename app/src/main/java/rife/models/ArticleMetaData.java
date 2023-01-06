@@ -9,9 +9,6 @@ import rife.validation.MetaData;
 
 public class ArticleMetaData extends MetaData {
     public void activateMetaData() {
-        addConstraint(new ConstrainedProperty("id")
-            .identifier(true)
-            .editable(false));
         addConstraint(new ConstrainedProperty("title")
             .notNull(true)
             .notEmpty(true)

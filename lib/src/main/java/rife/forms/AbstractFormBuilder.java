@@ -15,7 +15,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.logging.Logger;
 
-abstract public class AbstractFormBuilder implements FormBuilder {
+public abstract class AbstractFormBuilder implements FormBuilder {
+    static final String PREFIX_FORM_EMAIL = "form:email:";
+    static final String PREFIX_FORM_URL = "form:url:";
+    static final String[] VALUE_PREFIXES = new String[]
+        {
+            PREFIX_FORM_HIDDEN,
+            PREFIX_FORM_INPUT, PREFIX_FORM_EMAIL, PREFIX_FORM_URL,
+            PREFIX_FORM_SECRET, PREFIX_FORM_TEXTAREA,
+            PREFIX_FORM_RADIO, PREFIX_FORM_CHECKBOX, PREFIX_FORM_SELECT,
+            PREFIX_FORM_DISPLAY
+        };
+
     protected abstract String getIdName();
 
     protected abstract String getIdAttributes();
@@ -357,7 +368,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                 values[0] != null) {
                 value = template.getEncoder().encode(values[0]);
             } else if (property != null &&
-                property.hasDefaultValue()) {
+                       property.hasDefaultValue()) {
                 value = template.getEncoder().encode(property.getDefaultValue().toString());
             }
 
@@ -524,7 +535,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                 if (propertyType.isEnum()) {
                     list_values = ClassUtils.getEnumClassValues(propertyType);
                 } else if (propertyType.isArray() &&
-                    propertyType.getComponentType().isEnum()) {
+                           propertyType.getComponentType().isEnum()) {
                     list_values = ClassUtils.getEnumClassValues(propertyType.getComponentType());
                 }
             }
@@ -546,7 +557,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                             values[0] != null) {
                             template.setValue(ID_FORM_VALUE, template.getEncoder().encode(values[0]));
                         } else if (property != null &&
-                            property.hasDefaultValue()) {
+                                   property.hasDefaultValue()) {
                             template.setValue(ID_FORM_VALUE, template.getEncoder().encode(property.getDefaultValue().toString()));
                         }
                     }
@@ -735,7 +746,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                 if (propertyType.isEnum()) {
                     list_values = ClassUtils.getEnumClassValues(propertyType);
                 } else if (propertyType.isArray() &&
-                    propertyType.getComponentType().isEnum()) {
+                           propertyType.getComponentType().isEnum()) {
                     list_values = ClassUtils.getEnumClassValues(propertyType.getComponentType());
                 }
             }
@@ -863,7 +874,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                     values[counter] != null) {
                     value = template.getEncoder().encode(values[counter]);
                 } else if (property != null &&
-                    property.hasDefaultValue()) {
+                           property.hasDefaultValue()) {
                     value = template.getEncoder().encode(property.getDefaultValue().toString());
                 }
 
@@ -901,7 +912,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                     // if the field is a constrained property that is constrained
                     // to a list, display the label instead of the value
                     if ((property != null && property.isInList() ||
-                        propertyType != null && (propertyType.isEnum() || propertyType.isArray() && propertyType.getComponentType().isEnum()))) {
+                         propertyType != null && (propertyType.isEnum() || propertyType.isArray() && propertyType.getComponentType().isEnum()))) {
                         builderTemplate.setValue(getIdValue(), generateLabel(template, templateFieldName, value));
                     } else {
                         builderTemplate.setValue(getIdValue(), value);

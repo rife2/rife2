@@ -9,22 +9,16 @@
 <!--b form-->
   <!--v errors:*--><!--/v-->
   <!--b errormessage:*--><!--v errormessage/--><br><!--/b-->
-  <form action="{{v route:/}}" method="post" name="hello">
-    <div>
-      <label>Title<br>
-        <!--v form:input:title-->size="50"<!--/v-->
-      </label>
-    </div>
-    <div>
-      <label>Email<br>
-        <!--v form:input:email-->size="50"<!--/v-->
-      </label>
-    </div>
-    <div>
-      <label>Body<br>
-        <!--v form:textarea:body-->cols="50"<!--/v-->
-      </label>
-    </div>
+  <form action="{{v route:/}}" method="post">
+    <label>Title<br>
+      <!--v form:input:title-->size="50"<!--/v-->
+    </label><br>
+    <label>Email<br>
+      <!--v form:input:email-->size="50"<!--/v-->
+    </label><br>
+    <label>Body<br>
+      <!--v form:textarea:body-->cols="50"<!--/v-->
+    </label><br>
     <input type="submit" name="Submit" />
   </form>
 <!--/b-->

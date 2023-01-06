@@ -9,6 +9,7 @@ import rife.continuations.ContinuationConfigRuntime;
 import rife.continuations.ContinuationContext;
 import rife.continuations.exceptions.*;
 import rife.engine.exceptions.*;
+import rife.forms.FormBuilder;
 import rife.ioc.HierarchicalProperties;
 import rife.template.Template;
 import rife.template.TemplateFactory;
@@ -197,7 +198,7 @@ public class Context {
                 }
 
                 if (Template.class.isAssignableFrom(field.getType())) {
-                    var t = (Template)field.get(continuable);
+                    var t = (Template) field.get(continuable);
                     t.removeGeneratedValues();
                 }
             }
@@ -491,40 +492,6 @@ public class Context {
     /**
      * Sets a select box option, a radio button or a checkbox to selected or
      * checked.
-     * <p>This method will check the template for certain value tags and set
-     * them to the correct attributes according to the name and the provided
-     * values in this method. This is dependent on the template type and
-     * currently only makes sense for {@code html} templates.
-     * <p>For example for select boxes, consider the name '{@code colors}',
-     * the values '{@code blue}' and '{@code red}', and the
-     * following HTML template excerpt:
-     * <pre>&lt;select name="colors"&gt;
-     * &lt;option value="blue"{{v colors:blue:selected}}{{/v}}&gt;Blue&lt;/option&gt;
-     * &lt;option value="orange"{{v colors:orange:selected}}{{/v}}&gt;Orange&lt;/option&gt;
-     * &lt;option value="red"{{v colors:red:selected}}{{/v}}&gt;Red&lt;/option&gt;
-     * &lt;option value="green"{{v colors:green:selected'}}{{/v}}&gt;Green&lt;/option&gt;
-     * &lt;/select&gt;</pre>
-     * <p>the result will then be:
-     * <pre>&lt;select name="colors"&gt;
-     * &lt;option value="blue" selected&gt;Blue&lt;/option&gt;
-     * &lt;option value="orange"&gt;Orange&lt;/option&gt;
-     * &lt;option value="red" selected&gt;Red&lt;/option&gt;
-     * &lt;option value="green"&gt;Green&lt;/option&gt;
-     * &lt;/select&gt;</pre>
-     * <p>For example for radio buttons, consider the name '{@code size}',
-     * the value '{@code large}' and the following HTML template excerpt:
-     * <pre>&lt;input type="radio" name="size" value="large"{{v size:large:checked}}{{/v}} /&gt;
-     * &lt;input type="radio" name="size" value="small"{{v size:small:checked}}{{/v}} /&gt;</pre>
-     * <p>the result will then be:
-     * <pre>&lt;input type="radio" name="size" value="large" checked /&gt;
-     * &lt;input type="radio" name="size" value="small" /&gt;</pre>
-     * <p>For example for checkboxes, consider the name '{@code active}',
-     * the value '{@code true}' and the following HTML template excerpt:
-     * <pre>&lt;input type="checkbox" name="active"{{v active:checked}}{{/v}} /&gt;
-     * &lt;input type="checkbox" name="senditnow"{{v senditnow:checked}}{{/v}} /&gt;</pre>
-     * <p>the result will then be:
-     * <pre>&lt;input type="checkbox" name="active" checked /&gt;
-     * &lt;input type="checkbox" name="senditnow" /&gt;</pre>
      *
      * @param template the template instance where the selection should happen
      * @param name     the name of the parameter
@@ -539,7 +506,12 @@ public class Context {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
-        return EngineTemplateHelper.selectParameter(template, name, values);
+        var form_builder = template.getFormBuilder();
+        if (null == form_builder) {
+            return Collections.emptyList();
+        }
+
+        return form_builder.selectParameter(template, name, values);
     }
 
     /**
@@ -580,7 +552,16 @@ public class Context {
         if (null == template) throw new IllegalArgumentException("template can't be null.");
         if (null == beanInstance) throw new IllegalArgumentException("beanInstance can't be null.");
 
-        EngineTemplateHelper.generateForm(template, beanInstance, prefix);
+        var form_builder = template.getFormBuilder();
+        if (null == form_builder) {
+            return;
+        }
+        try {
+            form_builder.removeForm(template, beanInstance.getClass(), prefix);
+            form_builder.generateForm(template, beanInstance, null, prefix);
+        } catch (BeanUtilsException e) {
+            throw new EngineException(e);
+        }
     }
 
     /**
@@ -624,7 +605,16 @@ public class Context {
         if (null == template) throw new IllegalArgumentException("template can't be null.");
         if (null == beanClass) throw new IllegalArgumentException("beanClass can't be null.");
 
-        EngineTemplateHelper.generateEmptyForm(template, beanClass, prefix);
+        var form_builder = template.getFormBuilder();
+        if (null == form_builder) {
+            return;
+        }
+        try {
+            form_builder.removeForm(template, beanClass, prefix);
+            form_builder.generateForm(template, beanClass, null, prefix);
+        } catch (BeanUtilsException e) {
+            throw new EngineException(e);
+        }
     }
 
     /**
@@ -667,7 +657,15 @@ public class Context {
         if (null == template) throw new IllegalArgumentException("template can't be null.");
         if (null == beanClass) throw new IllegalArgumentException("beanClass can't be null.");
 
-        EngineTemplateHelper.removeForm(template, beanClass, prefix);
+        var form_builder = template.getFormBuilder();
+        if (null == form_builder) {
+            return;
+        }
+        try {
+            form_builder.removeForm(template, beanClass, prefix);
+        } catch (BeanUtilsException e) {
+            throw new EngineException(e);
+        }
     }
 
     /**
