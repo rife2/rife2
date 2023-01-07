@@ -34,11 +34,6 @@ public class NewsItem extends MetaData {
             .mimeType(MimeType.IMAGE_JPEG)
             .contentAttribute("width", 480)
             .editable(false));
-
-        addConstraint(new ConstrainedProperty("id")
-            .editable(false)
-            .saved(false)
-            .identifier(true));
     }
 
     public void    setId(Integer id)                 { id_ = id; }
@@ -59,5 +54,4 @@ public class NewsItem extends MetaData {
     public byte[] getImageSmall()                    { return newsImage_; }
     public void   setImageMedium(byte[] imageMedium) { }  // dummy setter
     public byte[] getImageMedium()                   { return newsImage_; }
-
 }
