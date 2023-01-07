@@ -64,7 +64,11 @@ public class UrlBuilder {
         if (context_.route() instanceof RouteClass) {
             var out_params = RouteClass.getAnnotatedOutParameters(context_);
             if (context_.hasContinuationId()) {
-                out_params.put(SpecialParameters.CONT_ID, new String[]{context_.continuationId()});
+                // only add the continuation ID if the route is going to the same element class
+                if (context_.processedElement() != null &&
+                    context_.processedElement().getClass() == route_.getElementClass()) {
+                    out_params.put(SpecialParameters.CONT_ID, new String[]{context_.continuationId()});
+                }
             }
 
             Set<String> in_params = new HashSet<>();

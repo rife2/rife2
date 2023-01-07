@@ -13,18 +13,15 @@ import rife.cmf.format.exceptions.UnreadableDataFormatException;
 import rife.cmf.format.exceptions.UnsupportedTargetMimeTypeException;
 import rife.cmf.loader.ImageContentLoader;
 import rife.cmf.transform.ContentTransformer;
-import rife.tools.ImageWaiter;
 
-import java.awt.AlphaComposite;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriter;
+import javax.imageio.*;
 
 /**
  * Formats raw <code>Content</code> data as an image.
@@ -82,6 +79,12 @@ public class ImageFormatter implements Formatter<byte[], Image> {
             if (null == data) {
                 throw new UnreadableDataFormatException(content.getMimeType(), errors);
             }
+        }
+
+        // determine image type
+        var image_type = BufferedImage.TYPE_INT_ARGB;
+        if (content.getMimeType() == MimeType.IMAGE_JPEG) {
+            image_type = BufferedImage.TYPE_INT_RGB;
         }
 
         // perform additional conversions according to the provided attributes
@@ -150,15 +153,17 @@ public class ImageFormatter implements Formatter<byte[], Image> {
                         width = -1;
                     }
                 }
+                if (height == -1) {
+                    height = (int) (((double)(orig_height * width) / orig_width) + 0.5);
+                }
+                if (width == -1) {
+                    width = (int) ((((double)orig_width * height) / orig_height) + 0.5);
+                }
 
-                // only do a rescale when the dimensions are actually different
+                // only rescale when the dimensions are actually different
                 if ((width >= 0 && width != orig_width) ||
                     (height >= 0 && height != orig_height)) {
-                    data = data.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                    if (data.getWidth(null) < 0 ||
-                        data.getHeight(null) < 0) {
-                        ImageWaiter.wait(data);
-                    }
+                    data = progressiveScaling(data, Math.max(width, height), image_type);
                 }
             }
         }
@@ -169,14 +174,12 @@ public class ImageFormatter implements Formatter<byte[], Image> {
         }
 
         // draw it on a new buffer
-        BufferedImage buffer = null;
-        if (content.getMimeType() == MimeType.IMAGE_JPEG) {
-            buffer = new BufferedImage(data.getWidth(null), data.getHeight(null), BufferedImage.TYPE_INT_RGB);
-        } else {
-            buffer = new BufferedImage(data.getWidth(null), data.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        }
+        var buffer = new BufferedImage(data.getWidth(null), data.getHeight(null), image_type);
         var g2 = buffer.createGraphics();
-        g2.setComposite(AlphaComposite.SrcOver);
+        g2.setComposite(AlphaComposite.Src);
+        g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
         g2.drawImage(data, 0, 0, null);
         g2.dispose();
 
@@ -194,6 +197,7 @@ public class ImageFormatter implements Formatter<byte[], Image> {
             // retrieve a supported writer
             var writers = ImageIO.getImageWritersByMIMEType(content.getMimeType().toString());
             ImageWriter writer = null;
+            ImageWriteParam write_param = null;
             if (writers.hasNext()) {
                 writer = writers.next();
             }
@@ -202,7 +206,12 @@ public class ImageFormatter implements Formatter<byte[], Image> {
             }
             var image_out = ImageIO.createImageOutputStream(buffered_out);
             writer.setOutput(image_out);
-            writer.write(buffer);
+            if (content.getMimeType() == MimeType.IMAGE_JPEG) {
+                write_param = writer.getDefaultWriteParam();
+                write_param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                write_param.setCompressionQuality(0.85f);
+            }
+            writer.write(null, new IIOImage(buffer, null, null), write_param);
             writer.dispose();
             bytes_out.flush();
             bytes_out.close();
@@ -211,6 +220,38 @@ public class ImageFormatter implements Formatter<byte[], Image> {
         }
 
         return bytes_out.toByteArray();
+    }
+
+    private static BufferedImage progressiveScaling(Image before, double longestSideLength, int imageType) {
+        if (before == null) {
+            return null;
+        }
+
+        var w = before.getWidth(null);
+        var h = before.getHeight(null);
+        var ratio = h > w ? longestSideLength / h : longestSideLength / w;
+
+        while (ratio < 0.5) {
+            before = scaleImage(before, 0.5, imageType);
+            w = before.getWidth(null);
+            h = before.getHeight(null);
+            ratio = h > w ? longestSideLength / h : longestSideLength / w;
+        }
+        return scaleImage(before, ratio, imageType);
+    }
+
+    private static BufferedImage scaleImage(Image image, double ratio, int imageType) {
+        var scaled_width = (int) (image.getWidth(null) * ratio + 0.5);
+        var scaled_height = (int) (image.getHeight(null) * ratio + 0.5);
+        var scaled_image = new BufferedImage(scaled_width, scaled_height, imageType);
+        var g2 = scaled_image.createGraphics();
+        g2.setComposite(AlphaComposite.Src);
+        g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+        g2.drawImage(image, 0, 0, scaled_width, scaled_height, null);
+        g2.dispose();
+        return scaled_image;
     }
 }
 

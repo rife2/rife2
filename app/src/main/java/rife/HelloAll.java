@@ -10,6 +10,7 @@ import rife.engine.Site;
 public class HelloAll extends Site {
     public void setup() {
         group(new HelloAuthentication());
+        group("/cmf", new HelloContentManagement());
         group(new HelloContinuations());
         group(new HelloCounterContinuations());
         group(new HelloDatabase());
