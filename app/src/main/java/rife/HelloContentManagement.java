@@ -59,7 +59,7 @@ public class HelloContentManagement extends Site {
     });
     Route list = route("/list", c -> {
         var t = c.template("HelloContentManagement");
-        for (NewsItem news : manager.restore(manager.getRestoreQuery().limit(10))) {
+        for (var news : manager.restore(manager.getRestoreQuery().limit(10))) {
             t.setBean(news);
             t.setValue("imageSmall", manager.getContentForHtml(news, "imageSmall", c, serve));
 
