@@ -32,7 +32,7 @@ public class HelloContentManagement extends Site {
                 news = c.parametersBean(NewsItem.class);
             }
 
-            var router = (HelloContentManagement)c.router();
+            var router = (HelloContentManagement) c.router();
             router.manager.save(news);
 
             t.setBean(news);
@@ -46,7 +46,7 @@ public class HelloContentManagement extends Site {
         }
     }
 
-    Route serve = get("/serve",PathInfoHandling.CAPTURE, new ServeContent(datasource));
+    Route serve = get("/serve", PathInfoHandling.CAPTURE, new ServeContent(datasource));
     Route install = get("/install", c -> {
         manager.getContentManager().install();
         manager.install();
