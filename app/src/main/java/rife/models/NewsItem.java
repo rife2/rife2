@@ -23,8 +23,7 @@ public class NewsItem extends MetaData {
             .notNull(true)
             .notEmpty(true));
         addConstraint(new ConstrainedProperty("newsImage")
-            .persistent(false)
-            .file(true));
+            .persistent(false));
 
         // specify types for content delivery and sizes for automatic rescaling
         addConstraint(new ConstrainedProperty("imageSmall")

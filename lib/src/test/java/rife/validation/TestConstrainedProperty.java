@@ -775,14 +775,4 @@ public class TestConstrainedProperty {
         assertEquals("tablename", property.getManyToOne().getTable());
         assertEquals("tablename", property.getManyToOne().getDerivedTable());
     }
-
-    @Test
-    void testFile() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
-        assertSame(property, property.file(true));
-        assertTrue(property.isFile());
-
-        assertSame(property, property.file(false));
-        assertFalse(property.isFile());
-    }
 }
