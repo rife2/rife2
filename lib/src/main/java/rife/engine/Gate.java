@@ -36,11 +36,13 @@ public class Gate {
         site.properties_.setParent(properties);
         site_ = site;
 
-        try {
-            site_.setup();
-            site_.deploy();
-        } catch (Throwable e) {
-            handleSiteInitException(e);
+        if (!site.deployed_) {
+            try {
+                site_.setup();
+                site_.deploy();
+            } catch (Throwable e) {
+                handleSiteInitException(e);
+            }
         }
     }
 
