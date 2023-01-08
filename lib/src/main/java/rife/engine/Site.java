@@ -63,7 +63,15 @@ public class Site extends Router {
     }
 
     private static boolean routeHandlesMethod(Route route, RequestMethod method) {
-        return route.method() == null || route.method() == method;
+        if (route.methods() == null) {
+            return true;
+        }
+        for (var m : route.methods()) {
+            if (m == method) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Route resolvePathInfoUrl(Request request, String url, String pathInfo)

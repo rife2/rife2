@@ -57,7 +57,7 @@ public class HelloContentManagement extends Site {
         manager.getContentManager().remove();
         c.print("Removed");
     });
-    Route list = route("/list", c -> {
+    Route list = getPost("/list", c -> {
         var t = c.template("HelloContentManagement");
         for (var news : manager.restore(manager.getRestoreQuery().limit(10))) {
             t.setBean(news);
@@ -69,7 +69,7 @@ public class HelloContentManagement extends Site {
         t.appendBlock("content", "add");
         c.print(t);
     });
-    Route add = route("/add", AddNews.class);
+    Route add = getPost("/add", AddNews.class);
 
     public static void main(String[] args) {
         new Server().start(new HelloContentManagement());

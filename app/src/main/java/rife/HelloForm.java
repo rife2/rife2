@@ -27,7 +27,7 @@ public class HelloForm extends Site {
         }
     }
 
-    Route form = route("/form", MyForm.class);
+    Route form = getPost("/form", MyForm.class);
 
     public static void main(String[] args) {
         new Server().start(new HelloForm());

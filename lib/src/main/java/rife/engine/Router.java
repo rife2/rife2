@@ -146,123 +146,147 @@ public class Router {
     }
 
     public final Route get(Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.GET, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET}, elementClass));
     }
 
     public final Route get(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.GET, pathInfo, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET}, pathInfo, elementClass));
     }
 
     public final Route get(String path, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.GET, path, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET}, path, elementClass));
     }
 
     public final Route get(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.GET, path, pathInfo, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET}, path, pathInfo, elementClass));
     }
 
     public final Route get(String path, Element element) {
-        return registerRoute(new RouteInstance(this, RequestMethod.GET, path, element));
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.GET}, path, element));
     }
 
     public final Route get(String path, PathInfoHandling pathInfo, Element element) {
-        return registerRoute(new RouteInstance(this, RequestMethod.GET, path, pathInfo, element));
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.GET}, path, pathInfo, element));
     }
 
     public final Route post(Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.POST, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.POST}, elementClass));
     }
 
     public final Route post(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.POST, pathInfo, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.POST}, pathInfo, elementClass));
     }
 
     public final Route post(String path, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.POST, path, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.POST}, path, elementClass));
     }
 
     public final Route post(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.POST, path, pathInfo, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.POST}, path, pathInfo, elementClass));
     }
 
     public final Route post(String path, Element element) {
-        return registerRoute(new RouteInstance(this, RequestMethod.POST, path, element));
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.POST}, path, element));
     }
 
     public final Route post(String path, PathInfoHandling pathInfo, Element element) {
-        return registerRoute(new RouteInstance(this, RequestMethod.POST, path, pathInfo, element));
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.POST}, path, pathInfo, element));
+    }
+
+    public final Route getPost(Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST}, elementClass));
+    }
+
+    public final Route getPost(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST}, pathInfo, elementClass));
+    }
+
+    public final Route getPost(String path, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST}, path, elementClass));
+    }
+
+    public final Route getPost(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST}, path, pathInfo, elementClass));
+    }
+
+    public final Route getPost(String path, Element element) {
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST}, path, element));
+    }
+
+    public final Route getPost(String path, PathInfoHandling pathInfo, Element element) {
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST}, path, pathInfo, element));
     }
 
     public final Route put(Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.PUT, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.PUT}, elementClass));
     }
 
     public final Route put(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.PUT, pathInfo, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.PUT}, pathInfo, elementClass));
     }
 
     public final Route put(String path, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.PUT, path, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.PUT}, path, elementClass));
     }
 
     public final Route put(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.PUT, path, pathInfo, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.PUT}, path, pathInfo, elementClass));
     }
 
     public final Route put(String path, Element element) {
-        return registerRoute(new RouteInstance(this, RequestMethod.PUT, path, element));
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.PUT}, path, element));
     }
 
     public final Route put(String path, PathInfoHandling pathInfo, Element element) {
-        return registerRoute(new RouteInstance(this, RequestMethod.PUT, path, pathInfo, element));
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.PUT}, path, pathInfo, element));
     }
 
     public final Route delete(Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.DELETE, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.DELETE}, elementClass));
     }
 
     public final Route delete(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.DELETE, pathInfo, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.DELETE}, pathInfo, elementClass));
     }
 
     public final Route delete(String path, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.DELETE, path, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.DELETE}, path, elementClass));
     }
 
     public final Route delete(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.DELETE, path, pathInfo, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.DELETE}, path, pathInfo, elementClass));
     }
 
     public final Route delete(String path, Element element) {
-        return registerRoute(new RouteInstance(this, RequestMethod.DELETE, path, element));
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.DELETE}, path, element));
     }
 
     public final Route delete(String path, PathInfoHandling pathInfo, Element element) {
-        return registerRoute(new RouteInstance(this, RequestMethod.DELETE, path, pathInfo, element));
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.DELETE}, path, pathInfo, element));
     }
 
     public final Route patch(Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.PATCH, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.PATCH}, elementClass));
     }
 
     public final Route patch(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.PATCH, pathInfo, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.PATCH}, pathInfo, elementClass));
     }
 
     public final Route patch(String path, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.PATCH, path, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.PATCH}, path, elementClass));
     }
 
     public final Route patch(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
-        return registerRoute(new RouteClass(this, RequestMethod.PATCH, path, pathInfo, elementClass));
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.PATCH}, path, pathInfo, elementClass));
     }
 
     public final Route patch(String path, Element element) {
-        return registerRoute(new RouteInstance(this, RequestMethod.PATCH, path, element));
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.PATCH}, path, element));
     }
 
     public final Route patch(String path, PathInfoHandling pathInfo, Element element) {
-        return registerRoute(new RouteInstance(this, RequestMethod.PATCH, path, pathInfo, element));
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.PATCH}, path, pathInfo, element));
     }
 
     public final Route route(Class<? extends Element> elementClass) {
@@ -306,7 +330,7 @@ public class Router {
 
     public final Route exception(Class<? extends Element> elementClass) {
         ensurePreDeployment();
-        exceptionRoute_ = new RouteClass(this, RequestMethod.GET, elementClass);
+        exceptionRoute_ = new RouteClass(this, new RequestMethod[]{RequestMethod.GET}, elementClass);
         return exceptionRoute_;
     }
 

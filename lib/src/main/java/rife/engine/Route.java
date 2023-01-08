@@ -20,13 +20,13 @@ public interface Route {
     Router router();
 
     /**
-     * The request method that this route responds to.
+     * The request methods that this route responds to.
      *
-     * @return this route's request method; or
+     * @return this route's request methods; or
      * <code>null</code> if the route should respond to all methods
      * @since 1.0
      */
-    RequestMethod method();
+    RequestMethod[] methods();
 
     /**
      * The URL path that this route responds to.

@@ -18,7 +18,7 @@ import java.util.*;
 
 public class RouteClass implements Route {
     private final Router router_;
-    private final RequestMethod method_;
+    private final RequestMethod[] methods_;
     private String path_;
     private final PathInfoHandling pathInfoHandling_;
     private final Class<? extends Element> elementClass_;
@@ -28,21 +28,21 @@ public class RouteClass implements Route {
         this(router, null, null, null, elementClass);
     }
 
-    public RouteClass(Router router, RequestMethod method, Class<? extends Element> elementClass) {
-        this(router, method, null, null, elementClass);
+    public RouteClass(Router router, RequestMethod[] methods, Class<? extends Element> elementClass) {
+        this(router, methods, null, null, elementClass);
     }
 
-    public RouteClass(Router router, RequestMethod method, String path, Class<? extends Element> elementClass) {
-        this(router, method, path, null, elementClass);
+    public RouteClass(Router router, RequestMethod[] methods, String path, Class<? extends Element> elementClass) {
+        this(router, methods, path, null, elementClass);
     }
 
-    public RouteClass(Router router, RequestMethod method, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
-        this(router, method, null, pathInfoHandling, elementClass);
+    public RouteClass(Router router, RequestMethod[] methods, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
+        this(router, methods, null, pathInfoHandling, elementClass);
     }
 
-    public RouteClass(Router router, RequestMethod method, String path, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
+    public RouteClass(Router router, RequestMethod[] methods, String path, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
         router_ = router;
-        method_ = method;
+        methods_ = methods;
         elementClass_ = elementClass;
         if (path == null) {
             path = defaultElementPath();
@@ -60,8 +60,8 @@ public class RouteClass implements Route {
     }
 
     @Override
-    public RequestMethod method() {
-        return method_;
+    public RequestMethod[] methods() {
+        return methods_;
     }
 
     @Override

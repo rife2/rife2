@@ -13,7 +13,7 @@ import java.lang.reflect.Modifier;
 
 public class RouteInstance implements Route {
     private final Router router_;
-    private final RequestMethod method_;
+    private final RequestMethod[] methods_;
     private String path_;
     private final PathInfoHandling pathInfoHandling_;
     private final Element element_;
@@ -22,13 +22,13 @@ public class RouteInstance implements Route {
         this(router, null, null, element);
     }
 
-    public RouteInstance(Router router, RequestMethod method, String path, Element element) {
-        this(router, method, path, PathInfoHandling.NONE, element);
+    public RouteInstance(Router router, RequestMethod[] methods, String path, Element element) {
+        this(router, methods, path, PathInfoHandling.NONE, element);
     }
 
-    public RouteInstance(Router router, RequestMethod method, String path, PathInfoHandling pathInfoHandling, Element element) {
+    public RouteInstance(Router router, RequestMethod[] methods, String path, PathInfoHandling pathInfoHandling, Element element) {
         router_ = router;
-        method_ = method;
+        methods_ = methods;
         path_ = path;
         pathInfoHandling_ = pathInfoHandling;
         element_ = element;
@@ -41,8 +41,8 @@ public class RouteInstance implements Route {
     }
 
     @Override
-    public RequestMethod method() {
-        return method_;
+    public RequestMethod[] methods() {
+        return methods_;
     }
 
     @Override

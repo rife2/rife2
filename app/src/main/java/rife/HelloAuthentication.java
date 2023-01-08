@@ -18,7 +18,7 @@ public class HelloAuthentication extends Site {
     Route logout;
 
     public void setup() {
-        var login = route("/login", new Login(config, TemplateFactory.HTML.get("HelloLogin")));
+        var login = getPost("/login", new Login(config, TemplateFactory.HTML.get("HelloLogin")));
         group(new Router() {
             public void setup() {
                 before(new Authenticated(config));
