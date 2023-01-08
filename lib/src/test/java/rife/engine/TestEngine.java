@@ -6,7 +6,6 @@ package rife.engine;
 
 import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import rife.config.RifeConfig;
 import rife.engine.annotations.Parameter;
@@ -205,7 +204,7 @@ public class TestEngine {
                     c.addHeader("Content-Disposition", "attachment; filename=thefile.zip");
                     Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
                     cal.set(2002, Calendar.OCTOBER, 25, 19, 20, 58);
-                    c.addHeader("DateHeader", cal.getTimeInMillis());
+                    c.addDateHeader("DateHeader", cal.getTimeInMillis());
                     c.addHeader("IntHeader", 1212);
 
                     c.print("headers");

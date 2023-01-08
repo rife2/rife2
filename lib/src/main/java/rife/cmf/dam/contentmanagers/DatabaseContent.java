@@ -475,8 +475,8 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
             context.addHeader("Content-Disposition", "inline; filename=" + content_info.getName());
         }
         context.addHeader("Cache-Control", "must-revalidate");
-        context.addHeader("Expires", System.currentTimeMillis() + 60 * 60 * 1000);
-        context.addHeader("Last-Modified", last_modified_timestamp);
+        context.addDateHeader("Expires", System.currentTimeMillis() + 60 * 60 * 1000);
+        context.addDateHeader("Last-Modified", last_modified_timestamp);
 
         store.serveContentData(context, content_info.getContentId());
     }

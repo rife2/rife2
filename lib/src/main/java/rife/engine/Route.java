@@ -52,6 +52,12 @@ public interface Route {
      */
     String defaultElementId();
 
+    /**
+     * The class of the element of this route.
+     *
+     * @return this route's element class
+     * @since 1.0
+     */
     Class getElementClass();
 
     /**

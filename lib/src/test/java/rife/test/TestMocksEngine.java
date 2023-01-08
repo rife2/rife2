@@ -4,10 +4,6 @@
  */
 package rife.test;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import rife.engine.*;
 import rife.template.TemplateFactory;
@@ -162,7 +158,7 @@ public class TestMocksEngine {
         assertEquals("text/html; charset=UTF-8", response.getContentType());
         assertEquals("http://localhost/pathinfo/map/text/v1/x412", response.getText());
 
-        response = conversation.doRequest( response.getText());
+        response = conversation.doRequest(response.getText());
         assertEquals(200, response.getStatus());
         assertEquals("text/html; charset=UTF-8", response.getContentType());
         assertEquals("Just some text 127.0.0.1:text/v1/x412:v1:412", response.getText());
@@ -176,7 +172,7 @@ public class TestMocksEngine {
                     c.addHeader("Content-Disposition", "attachment; filename=thefile.zip");
                     var cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
                     cal.set(2002, Calendar.OCTOBER, 25, 19, 20, 58);
-                    c.addHeader("DateHeader", cal.getTimeInMillis());
+                    c.addDateHeader("DateHeader", cal.getTimeInMillis());
                     c.addHeader("IntHeader", 1212);
 
                     c.print("headers");

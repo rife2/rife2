@@ -69,7 +69,7 @@ public interface Request {
     /**
      * Checks if a particular file has been uploaded in this request.
      *
-     * @param name the name of the file, as declared in the submission
+     * @param name the name of the file
      * @return <code>true</code> if the file was uploaded; or
      * <p><code>false</code> otherwise
      * @see #getFiles()
@@ -82,7 +82,7 @@ public interface Request {
     /**
      * Retrieves an uploaded file.
      *
-     * @param name the name of the file, as declared in the submission
+     * @param name the name of the file
      * @return the uploaded file; or
      * <p><code>null</code> if no file was uploaded
      * @see #getFiles()
@@ -95,7 +95,7 @@ public interface Request {
     /**
      * Retrieves all files that have been uploaded for a particular name.
      *
-     * @param name the name of the file, as declared in the submission
+     * @param name the name of the file
      * @return the uploaded files; or
      * <p><code>null</code> if no files were uploaded for that name
      * @see #getFiles()
