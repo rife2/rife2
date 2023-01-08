@@ -10,7 +10,19 @@ import rife.tools.StringUtils;
 
 import java.util.*;
 
+/**
+ * The main site of your web application, which is also the
+ * top-level router.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.0
+ */
 public class Site extends Router {
+    /**
+     * A unique random number that's generated only once per web application deployment.
+     *
+     * @since 1.0
+     */
     public final int RND = new Random().nextInt();
 
     final ContinuationManager continuationManager_ = new ContinuationManager(new EngineContinuationConfigRuntime(this));
@@ -22,7 +34,7 @@ public class Site extends Router {
      * @param url      the URL that should be looked up
      * @param pathInfo the path info that should be taken into account
      * @return the corresponding element information; or
-     * <p><code>null</code> if the URL and path info aren't registered in this site
+     * <p>{@code null} if the URL and path info aren't registered in this site
      * @since 1.0
      */
     private Route resolveUrl(Request request, String url, String pathInfo)
@@ -136,9 +148,9 @@ public class Site extends Router {
      * <p>
      *
      * @param elementUrl the URL that will be used to search for the element
-     * @return an instance of <code>Route</code> when an element match
+     * @return an instance of {@code Route} when an element match
      * was found; or
-     * <p><code>null</code> if no suitable element could be found.
+     * <p>{@code null} if no suitable element could be found.
      * @since 1.0
      */
     RouteMatch findRouteForRequest(Request request, String elementUrl) {

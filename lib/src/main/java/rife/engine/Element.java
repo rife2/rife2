@@ -19,7 +19,7 @@ package rife.engine;
 @FunctionalInterface
 public interface Element {
     /**
-     * Process the provided <code>Context</code> with this element.
+     * Process the provided {@code Context} with this element.
      *
      * @param c the provided request/response context
      * @throws Exception when an error occurs

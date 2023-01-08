@@ -7,7 +7,7 @@ package rife.engine;
 import rife.config.RifeConfig;
 import rife.continuations.*;
 
-public class EngineContinuationConfigRuntime extends ContinuationConfigRuntime {
+class EngineContinuationConfigRuntime extends ContinuationConfigRuntime {
     private final Site site_;
 
     EngineContinuationConfigRuntime(Site site) {

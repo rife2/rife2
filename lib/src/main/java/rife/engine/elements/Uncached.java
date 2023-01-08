@@ -7,6 +7,14 @@ package rife.engine.elements;
 import rife.engine.Context;
 import rife.engine.Element;
 
+/**
+ * Standard element that can be placed {@link rife.engine.Router#before before}
+ * any other route to indicate to the clients that the content should not be cached.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @see Context#preventCaching()
+ * @since 1.0
+ */
 public class Uncached implements Element {
     public void process(Context c)
     throws Exception {

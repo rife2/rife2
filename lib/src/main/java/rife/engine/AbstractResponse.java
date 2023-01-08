@@ -20,9 +20,9 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * This abstract class implements parts of the {@link Response} interface to
- * provide behaviour that is specific to RIFE.
+ * provide behaviour that is specific to RIFE2.
  * <p>Additional abstract methods have been provided to integrate with the
- * concrete back-end classes that extend <code>AbstractResponse</code>.
+ * concrete back-end classes that extend {@code AbstractResponse}.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
@@ -41,8 +41,8 @@ public abstract class AbstractResponse implements Response {
 
     /**
      * This method needs to be implemented by the extending back-end class and
-     * will be called by <code>AbstractResponse</code> during the
-     * RIFE-specific additional behaviour. It behaves exactly like its {@link
+     * will be called by {@code AbstractResponse} during the
+     * RIFE2-specific additional behaviour. It behaves exactly like its {@link
      * Response#setContentType(String) counter-part in the Response interface}.
      *
      * @see Response#setContentType(String)
@@ -52,8 +52,8 @@ public abstract class AbstractResponse implements Response {
 
     /**
      * This method needs to be implemented by the extending back-end class and
-     * will be called by <code>AbstractResponse</code> during the
-     * RIFE-specific additional behaviour. It behaves exactly like its {@link
+     * will be called by {@code AbstractResponse} during the
+     * RIFE2-specific additional behaviour. It behaves exactly like its {@link
      * Response#getOutputStream() counter-part in the Request interface}.
      *
      * @see Response#getOutputStream()

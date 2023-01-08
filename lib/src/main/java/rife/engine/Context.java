@@ -408,7 +408,7 @@ public class Context {
     /**
      * Prints the string representation of an object to the request text
      * output. The string representation will be created through a
-     * <code>String.valueOf(value)</code> call.
+     * {@code String.valueOf(value)} call.
      *
      * @param object the object that will be output
      * @throws EngineException if an error occurs during the output of the content
@@ -732,7 +732,7 @@ public class Context {
      * Returns the root URL of the server that is running this web
      * applications.
      * <p>This includes the protocol, the server name and the server port, for
-     * example: <code>http://www.somehost.com:8080</code>.
+     * example: {@code http://www.somehost.com:8080}.
      *
      * @param port the server port to use, or
      *             {@code -1} to use the sane port as the active request
@@ -1007,7 +1007,7 @@ public class Context {
      * Interrupts the execution in this element and redirects the client to
      * another URL.
      *
-     * @param url the URL to which the request will be redirected, <code>String.valueOf()</code>
+     * @param url the URL to which the request will be redirected, {@code String.valueOf()}
      *            will be called with this object, so a variety of types can be used
      * @throws RedirectException an exception that is used to immediately interrupt the execution, don't
      *                           catch this exception
@@ -1079,7 +1079,7 @@ public class Context {
     /**
      * Retrieves the parameters that were sent to this context.
      *
-     * @return a <code>Map</code> with all the parameter names and values
+     * @return a {@code Map} with all the parameter names and values
      * @since 1.0
      */
     public Map<String, String[]> parameters() {
@@ -1725,7 +1725,7 @@ public class Context {
     /**
      * Retrieves the files that were uploaded in this context.
      *
-     * @return a <code>Map</code> with all the uploaded files
+     * @return a {@code Map} with all the uploaded files
      * @see #hasFile(String)
      * @see #file(String)
      * @see #files(String)
@@ -1743,8 +1743,8 @@ public class Context {
      * Checks if a particular file has been uploaded in this context.
      *
      * @param name the name of the file
-     * @return <code>true</code> if the file was uploaded; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the file was uploaded; or
+     * <p>{@code false} otherwise
      * @see #files()
      * @see #file(String)
      * @see #files(String)
@@ -1759,7 +1759,7 @@ public class Context {
      *
      * @param name the name of the file
      * @return the uploaded file; or
-     * <p><code>null</code> if no file was uploaded
+     * <p>{@code null} if no file was uploaded
      * @see #files()
      * @see #hasFile(String)
      * @see #files(String)
@@ -1774,7 +1774,7 @@ public class Context {
      *
      * @param name the name of the file
      * @return the uploaded files; or
-     * <p><code>null</code> if no files were uploaded for that name
+     * <p>{@code null} if no files were uploaded for that name
      * @see #files()
      * @see #hasFile(String)
      * @see #file(String)
@@ -1788,8 +1788,8 @@ public class Context {
      * Checks whether a cookie is present.
      *
      * @param name the name of the cookie
-     * @return <code>true</code> if the cookie was present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the cookie was present; or
+     * <p>{@code false} otherwise
      * @see #cookieValue(String)
      * @see #cookieValues()
      * @since 1.0
@@ -2126,8 +2126,8 @@ public class Context {
     /**
      * Checks if a request attribute exists.
      *
-     * @param name a <code>String</code> specifying the name of the attribute
-     *             <p><code>false</code> otherwise
+     * @param name a {@code String} specifying the name of the attribute
+     *             <p>{@code false} otherwise
      * @see #attribute
      * @see #attributeNames
      * @see #removeAttribute
@@ -2363,7 +2363,7 @@ public class Context {
     /**
      * Returns the current session associated with this request, or if the request does not have a session, creates one.
      *
-     * @return the <code>Session</code> associated with this request
+     * @return the {@code Session} associated with this request
      * @see #session(boolean)
      * @since 1.0
      */
@@ -2372,17 +2372,17 @@ public class Context {
     }
 
     /**
-     * Returns the current <code>Session</code> associated with this request or, if there is no current session and
-     * <code>create</code> is true, returns a new session.
+     * Returns the current {@code Session} associated with this request or, if there is no current session and
+     * {@code create} is true, returns a new session.
      *
      * <p>
-     * If <code>create</code> is <code>false</code> and the request has no valid <code>Session</code>, this method
-     * returns <code>null</code>.
+     * If {@code create} is {@code false} and the request has no valid {@code Session}, this method
+     * returns {@code null}.
      *
-     * @param create <code>true</code> to create a new session for this request if necessary; <code>false</code> to return
-     *               <code>null</code> if there's no current session
-     * @return the <code>Session</code> associated with this request or <code>null</code> if <code>create</code> is
-     * <code>false</code> and the request has no valid session
+     * @param create {@code true} to create a new session for this request if necessary; {@code false} to return
+     *               {@code null} if there's no current session
+     * @return the {@code Session} associated with this request or {@code null} if {@code create} is
+     * {@code false} and the request has no valid session
      * @since 1.0
      */
     public Session session(boolean create) {
@@ -2560,10 +2560,10 @@ public class Context {
     }
 
     /**
-     * Adds the <code>Cookie</code> created by a <code>CookieBuilder</code> to the response.
+     * Adds the {@code Cookie} created by a {@code CookieBuilder} to the response.
      * This method can be called multiple times to set more than one cookie.
      *
-     * @param builder the <code>CookieBuilder</code> to use for building the <code>Cookie</code>
+     * @param builder the {@code CookieBuilder} to use for building the {@code Cookie}
      * @since 1.0
      */
     public void addCookie(CookieBuilder builder) {

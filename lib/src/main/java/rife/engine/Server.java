@@ -13,31 +13,69 @@ import rife.servlet.RifeFilter;
 
 import java.util.EnumSet;
 
+/**
+ * Embedded Jetty server that can directly start from a RIFE2 site.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.0
+ */
 public class Server {
     private final HierarchicalProperties properties_;
     private final org.eclipse.jetty.server.Server server_ = new org.eclipse.jetty.server.Server();
     private final SessionIdManager sessions_ = new DefaultSessionIdManager(server_);
     private final ServletContextHandler handler_ = new ServletContextHandler();
 
+    /**
+     * Instantiates a new embedded Jetty server.
+     * @since 1.0
+     */
     public Server() {
         var system_properties = new HierarchicalProperties().putAll(System.getProperties());
         properties_ = new HierarchicalProperties().parent(system_properties);
     }
 
+    /**
+     * Configures the HTTP port the server will be listening to.
+     *
+     * @param port a port number (defaults to 8080)
+     * @return the instance of the server that's being configured
+     * @since 1.0
+     */
     public Server port(int port) {
         RifeConfig.server().setPort(port);
         return this;
     }
 
+    /**
+     * Configures the base directory where static resources will be looked up.
+     *
+     * @param base a port number (defaults to 8080)
+     * @return the instance of the server that's being configured
+     * @since 1.0
+     */
     public Server staticResourceBase(String base) {
         RifeConfig.server().setStaticResourceBase(base);
         return this;
     }
 
+    /**
+     * Retrieves the hierarchical properties for this server instance.
+     *
+     * @return this server's collection of hierarchical properties
+     * @since 1.0
+     */
     public HierarchicalProperties properties() {
         return properties_;
     }
 
+    /**
+     * Start the embedded server for a particular site.
+     *
+     * @param site the {@code Site} instance that the server will be set up for
+     * @return the instance of the server that's being started
+     * @see Site
+     * @since 1.0
+     */
     public Server start(Site site) {
         try (var connector = new ServerConnector(server_)) {
             connector.setPort(RifeConfig.server().getPort());
@@ -76,6 +114,11 @@ public class Server {
         return this;
     }
 
+    /**
+     * Stop running the embeded server.
+     *
+     * @since 1.0
+     */
     public void stop() {
         try {
             server_.stop();

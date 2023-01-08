@@ -6,6 +6,12 @@ package rife.engine;
 
 import rife.continuations.ContinuationConfigInstrument;
 
+/**
+ * Configures the continuations system for the web engine.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.0
+ */
 public class EngineContinuationConfigInstrument implements ContinuationConfigInstrument {
     public String getContinuableMarkerInterfaceName() {
         return Element.class.getName();

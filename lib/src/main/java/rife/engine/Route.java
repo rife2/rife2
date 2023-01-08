@@ -23,7 +23,7 @@ public interface Route {
      * The request methods that this route responds to.
      *
      * @return this route's request methods; or
-     * <code>null</code> if the route should respond to all methods
+     * {@code null} if the route should respond to all methods
      * @since 1.0
      */
     RequestMethod[] methods();
@@ -62,7 +62,7 @@ public interface Route {
 
     /**
      * Returns an execution {@link Element} instance to handle this route with.
-     * Note that the lifecycle of the <code>Element</code> depends on the implementer
+     * Note that the lifecycle of the {@code Element} depends on the implementer
      * of this interface. Make sure you understand the implications of this lifecycle as
      * it might have an influence on performance or cause unintended side effects.
      *
@@ -75,7 +75,7 @@ public interface Route {
     /**
      * Prepare an execution {@link Element} instance to handle this route with.
      * <p>
-     * Each implementer of this interface is free to prepare the <code>Element</code>
+     * Each implementer of this interface is free to prepare the {@code Element}
      * instance as it best sees fit.
      *
      * @param element the element to prepare
@@ -87,7 +87,7 @@ public interface Route {
     /**
      * Finalize an element instance for this route.
      * <p>
-     * Each implementer of this interface is free to finalize the <code>Element</code>
+     * Each implementer of this interface is free to finalize the {@code Element}
      * instance as it best sees fit.
      *
      * @param element the element to finalize
