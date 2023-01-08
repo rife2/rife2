@@ -4,6 +4,7 @@
  */
 package rife.engine;
 
+import rife.engine.exceptions.RouterAlreadyDeployedException;
 import rife.ioc.HierarchicalProperties;
 
 import java.lang.reflect.Field;
@@ -19,8 +20,8 @@ public class Router {
     final Map<String, Route> fallbackRoutes_ = new HashMap<>();
     final List<Router> groups_ = new ArrayList<>();
     Route exceptionRoute_ = null;
-
     Router parent_ = null;
+    boolean deployed_ = false;
 
     public void setup() {
     }
@@ -34,16 +35,26 @@ public class Router {
         for (var router : groups_) {
             router.deploy();
         }
+
+        deployed_ = true;
+    }
+
+    void ensurePreDeployment() {
+        if (deployed_) {
+            throw new RouterAlreadyDeployedException(this);
+        }
     }
 
     @SafeVarargs
     public final void before(Class<? extends Element>... elementClasses) {
+        ensurePreDeployment();
         for (var klass : elementClasses) {
             before_.add(new RouteClass(this, klass));
         }
     }
 
     public final void before(Element... elements) {
+        ensurePreDeployment();
         for (var element : elements) {
             before_.add(new RouteInstance(this, element));
         }
@@ -51,22 +62,26 @@ public class Router {
 
     @SafeVarargs
     public final void after(Class<? extends Element>... elementClasses) {
+        ensurePreDeployment();
         for (var klass : elementClasses) {
             after_.add(new RouteClass(this, klass));
         }
     }
 
     public final void after(Element... elements) {
+        ensurePreDeployment();
         for (var element : elements) {
             after_.add(new RouteInstance(this, element));
         }
     }
 
     public final <T extends Router> T group(T router) {
+        ensurePreDeployment();
         return group("", router);
     }
 
     public final <T extends Router> T group(String path, T router) {
+        ensurePreDeployment();
         router.properties_.setParent(this.properties_);
         router.parent_ = this;
         groups_.add(router);
@@ -275,6 +290,7 @@ public class Router {
     }
 
     final Route registerRoute(Route route) {
+        ensurePreDeployment();
         switch (route.pathInfoHandling().type()) {
             case NONE -> {
                 var routes = routes_.computeIfAbsent(route.path(), k -> new ArrayList<>());
@@ -289,11 +305,13 @@ public class Router {
     }
 
     public final Route exception(Class<? extends Element> elementClass) {
+        ensurePreDeployment();
         exceptionRoute_ = new RouteClass(this, RequestMethod.GET, elementClass);
         return exceptionRoute_;
     }
 
     public final Route exception(Element element) {
+        ensurePreDeployment();
         exceptionRoute_ = new RouteInstance(this, element);
         return exceptionRoute_;
     }
@@ -317,6 +335,7 @@ public class Router {
     }
 
     final Route registerFallback(Route route) {
+        ensurePreDeployment();
         fallbackRoutes_.put("", route);
         return route;
     }
@@ -333,7 +352,7 @@ public class Router {
         return (Site) router;
     }
 
-    public Route resolveRoute(String path) {
+    Route resolveRoute(String path) {
         if (null == path || path.isEmpty()) {
             return null;
         }
