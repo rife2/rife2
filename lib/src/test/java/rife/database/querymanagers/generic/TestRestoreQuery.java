@@ -464,6 +464,8 @@ public class TestRestoreQuery {
             var list = manager_.restore(query);
 
             assertEquals(list.size(), 2);
+            assertEquals(bean5.getId(), list.get(0).getId()); //Confirm original table ID not overwritten by joined ID
+            assertEquals(bean4.getId(), list.get(1).getId());
         } finally {
             tearDown();
         }
