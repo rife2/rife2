@@ -6,11 +6,8 @@ package rife.engine;
 
 import rife.engine.annotations.*;
 import rife.tools.FileUtils;
-import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
-
-import static rife.engine.annotations.FlowDirection.IN_OUT;
 
 public class AnnotationInSite extends Site {
     public static class ParentElement implements Element {
@@ -88,7 +85,7 @@ public class AnnotationInSite extends Site {
             c.print(intCookie2 + "\n");
 
             if (uploadedFile != null) {
-                c.print(uploadedFile.getName() + ", " + uploadedFile.getType() + ", " + FileUtils.readString(uploadedFile.getFile()) + "\n");
+                c.print(uploadedFile.getName() + ", " + uploadedFile.getContentType() + ", " + FileUtils.readString(uploadedFile.getFile()) + "\n");
             } else {
                 c.print(uploadedFile + "\n");
             }
@@ -103,7 +100,7 @@ public class AnnotationInSite extends Site {
                 c.print(fileString + "\n");
             }
             if (uploadedFile2 != null) {
-                c.print(uploadedFile2.getName() + ", " + uploadedFile2.getType() + ", " + FileUtils.readString(uploadedFile2.getFile()) + "\n");
+                c.print(uploadedFile2.getName() + ", " + uploadedFile2.getContentType() + ", " + FileUtils.readString(uploadedFile2.getFile()) + "\n");
             } else {
                 c.print(uploadedFile2 + "\n");
             }

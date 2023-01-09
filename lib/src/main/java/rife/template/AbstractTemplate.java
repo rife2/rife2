@@ -5,6 +5,7 @@
 package rife.template;
 
 import rife.config.RifeConfig;
+import rife.forms.FormBuilder;
 import rife.resources.ResourceFinder;
 import rife.template.exceptions.*;
 import rife.tools.Localization;
@@ -667,7 +668,7 @@ public abstract class AbstractTemplate implements Template {
         constructedValues_.remove(id);
     }
 
-    public final void removeValues(List<String> ids) {
+    public final void removeValues(Collection<String> ids) {
         if (null == ids ||
             0 == ids.size()) {
             return;
@@ -676,6 +677,12 @@ public abstract class AbstractTemplate implements Template {
         for (var id : ids) {
             removeValue(id);
         }
+    }
+
+    public final void removeGeneratedValues() {
+        var generated_values = generatedValues_;
+        generatedValues_ = new HashSet<>();
+        removeValues(generated_values);
     }
 
     public final void blankValue(String id) {
@@ -792,6 +799,14 @@ public abstract class AbstractTemplate implements Template {
         beanHandler_ = beanHandler;
     }
 
+    public final FormBuilder getFormBuilder() {
+        var bean_handler = getBeanHandler();
+        if (null == bean_handler) {
+            return null;
+        }
+        return bean_handler.getFormBuilder();
+    }
+
     public final TemplateEncoder getEncoder() {
         return encoder_;
     }
@@ -811,7 +826,7 @@ public abstract class AbstractTemplate implements Template {
         }
     }
 
-    public final void addResourceBundles(List<ResourceBundle> resourceBundles) {
+    public final void addResourceBundles(Collection<ResourceBundle> resourceBundles) {
         if (null == resourceBundles) {
             return;
         }

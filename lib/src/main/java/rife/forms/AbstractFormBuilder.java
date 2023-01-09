@@ -15,14 +15,29 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.logging.Logger;
 
-abstract public class AbstractFormBuilder implements FormBuilder {
+public abstract class AbstractFormBuilder implements FormBuilder {
+    static final String PREFIX_FORM_EMAIL = "form:email:";
+    static final String PREFIX_FORM_URL = "form:url:";
+    static final String[] VALUE_PREFIXES = new String[]
+        {
+            PREFIX_FORM_HIDDEN,
+            PREFIX_FORM_INPUT, PREFIX_FORM_EMAIL, PREFIX_FORM_URL,
+            PREFIX_FORM_SECRET, PREFIX_FORM_TEXTAREA,
+            PREFIX_FORM_RADIO, PREFIX_FORM_CHECKBOX, PREFIX_FORM_SELECT,
+            PREFIX_FORM_DISPLAY
+        };
+
     protected abstract String getIdName();
 
     protected abstract String getIdAttributes();
 
     protected abstract String getIdValue();
 
+    protected abstract String getIdMinlength();
+
     protected abstract String getIdMaxlength();
+
+    protected abstract String getIdRequired();
 
     protected abstract String getIdChecked();
 
@@ -194,6 +209,8 @@ abstract public class AbstractFormBuilder implements FormBuilder {
             }
         }
 
+        template.addGeneratedValues(set_values);
+
         return set_values;
     }
 
@@ -254,19 +271,35 @@ abstract public class AbstractFormBuilder implements FormBuilder {
     }
 
     public Collection<String> generateField(Template template, String name, String[] values, String prefix) {
-        return generateField(template, null, null, name, values, prefix, null, false);
+        var set_values = generateField(template, null, null, name, values, prefix, null, false);
+        if (template != null) {
+            template.addGeneratedValues(set_values);
+        }
+        return set_values;
     }
 
     public Collection<String> generateField(Template template, Class propertyType, String name, String[] values, String prefix) {
-        return generateField(template, null, propertyType, name, values, prefix, null, false);
+        var set_values = generateField(template, null, propertyType, name, values, prefix, null, false);
+        if (template != null) {
+            template.addGeneratedValues(set_values);
+        }
+        return set_values;
     }
 
     public Collection<String> replaceField(Template template, String templateFieldName, String name, String[] values, String prefix) {
-        return generateField(template, templateFieldName, null, name, values, prefix, null, true);
+        var set_values = generateField(template, templateFieldName, null, name, values, prefix, null, true);
+        if (template != null) {
+            template.addGeneratedValues(set_values);
+        }
+        return set_values;
     }
 
     public Collection<String> replaceField(Template template, String templateFieldName, Class propertyType, String name, String[] values, String prefix) {
-        return generateField(template, templateFieldName, propertyType, name, values, prefix, null, true);
+        var set_values = generateField(template, templateFieldName, propertyType, name, values, prefix, null, true);
+        if (template != null) {
+            template.addGeneratedValues(set_values);
+        }
+        return set_values;
     }
 
     protected Collection<String> generateField(Template template, String templateFieldName, Class propertyType, String name, String[] values, String prefix, ArrayList<String> setValues, boolean replaceExistingValues) {
@@ -306,7 +339,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
         generateFieldDisplay(template, templateFieldName, propertyType, name, property, values, builder_template, setValues, replaceExistingValues);
     }
 
-    protected void generateFieldText(String prefix, boolean setValue, boolean valueAsAttribute, boolean limitLength, boolean disableField, Template template, String templateFieldName, String name, ConstrainedProperty property, String[] values, Template builderTemplate, List<String> setValues, boolean replaceExistingValues) {
+    protected void generateFieldText(String prefix, boolean setValue, boolean valueAsAttribute, boolean limitLength, boolean disableField, boolean requireField, Template template, String templateFieldName, String name, ConstrainedProperty property, String[] values, Template builderTemplate, List<String> setValues, boolean replaceExistingValues) {
         StringBuilder field_buffer;
         String field;
         String field_attributes;
@@ -317,7 +350,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
         field = field_buffer.toString();
 
         if (template.hasValueId(field) &&
-            (replaceExistingValues || !template.isValueSet(field))) {
+            (replaceExistingValues || (!template.isValueSet(field) && !template.isValueGenerated(field)))) {
             field_buffer = new StringBuilder(prefix.length() + MIDDLE_ATTRIBUTES.length() + templateFieldName.length());
             field_buffer.append(prefix);
             field_buffer.append(MIDDLE_ATTRIBUTES);
@@ -335,7 +368,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                 values[0] != null) {
                 value = template.getEncoder().encode(values[0]);
             } else if (property != null &&
-                property.hasDefaultValue()) {
+                       property.hasDefaultValue()) {
                 value = template.getEncoder().encode(property.getDefaultValue().toString());
             }
 
@@ -380,10 +413,29 @@ abstract public class AbstractFormBuilder implements FormBuilder {
             // handle the length limit if it has been set in the
             // ConstrainedProperty
             if (limitLength &&
+                property != null) {
+                int min_length = 0;
+                if (property.isNotEmpty()) {
+                    min_length = 1;
+                }
+                if (property.getMinLength() > min_length) {
+                    min_length = property.getMinLength();
+                }
+                if (min_length > 0) {
+                    builderTemplate.setValue(getIdMinlength(), min_length);
+                    builderTemplate.appendBlock(getIdAttributes(), getIdMinlength());
+                }
+                if (property.getMaxLength() >= 0) {
+                    builderTemplate.setValue(getIdMaxlength(), property.getMaxLength());
+                    builderTemplate.appendBlock(getIdAttributes(), getIdMaxlength());
+                }
+            }
+
+            // set the field to required if the ConstrainedProperty is notNull
+            if (requireField &&
                 property != null &&
-                property.getMaxLength() >= 0) {
-                builderTemplate.setValue(getIdMaxlength(), property.getMaxLength());
-                builderTemplate.appendBlock(getIdAttributes(), getIdMaxlength());
+                property.isNotNull()) {
+                builderTemplate.appendBlock(getIdAttributes(), getIdRequired());
             }
 
             // set the field to disabled if the ConstrainedProperty is not
@@ -396,7 +448,15 @@ abstract public class AbstractFormBuilder implements FormBuilder {
 
             // replace the form field tag in the provided template by the
             // newly constructed functional form field
-            template.setValue(field, builderTemplate.getBlock(prefix));
+            var builder_template_id = prefix;
+            if (builder_template_id.equals(PREFIX_FORM_INPUT) && property != null) {
+                if (property.isEmail()) {
+                    builder_template_id = PREFIX_FORM_EMAIL;
+                } else if (property.isUrl()) {
+                    builder_template_id = PREFIX_FORM_URL;
+                }
+            }
+            template.setValue(field, builderTemplate.getBlock(builder_template_id));
 
             // register the form fields tag in the list of value ids that
             // have been set
@@ -405,6 +465,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
             // clear out template
             builderTemplate.removeValue(getIdName());
             builderTemplate.removeValue(getIdValue());
+            builderTemplate.removeValue(getIdMinlength());
             builderTemplate.removeValue(getIdMaxlength());
             builderTemplate.removeValue(getIdAttributes());
         }
@@ -422,7 +483,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
         field = field_buffer.toString();
 
         if (template.hasValueId(field) &&
-            (replaceExistingValues || !template.isValueSet(field))) {
+            (replaceExistingValues || (!template.isValueSet(field) && !template.isValueGenerated(field)))) {
             if (replaceExistingValues) {
                 template.blankValue(field);
             }
@@ -474,7 +535,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                 if (propertyType.isEnum()) {
                     list_values = ClassUtils.getEnumClassValues(propertyType);
                 } else if (propertyType.isArray() &&
-                    propertyType.getComponentType().isEnum()) {
+                           propertyType.getComponentType().isEnum()) {
                     list_values = ClassUtils.getEnumClassValues(propertyType.getComponentType());
                 }
             }
@@ -496,7 +557,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                             values[0] != null) {
                             template.setValue(ID_FORM_VALUE, template.getEncoder().encode(values[0]));
                         } else if (property != null &&
-                            property.hasDefaultValue()) {
+                                   property.hasDefaultValue()) {
                             template.setValue(ID_FORM_VALUE, template.getEncoder().encode(property.getDefaultValue().toString()));
                         }
                     }
@@ -520,6 +581,12 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                 if (active_values != null &&
                     StringUtils.convertToBoolean(active_values.get(0))) {
                     builderTemplate.appendBlock(getIdAttributes(), getIdChecked());
+                }
+
+                // set the field to required if the ConstrainedProperty is notNull
+                if (property != null &&
+                    property.isNotNull()) {
+                    builderTemplate.appendBlock(getIdAttributes(), getIdRequired());
                 }
 
                 // set the field to disabled if the ConstrainedProperty is not
@@ -563,6 +630,12 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                     if (active_values != null &&
                         active_values.contains(value)) {
                         builderTemplate.appendBlock(getIdAttributes(), getIdChecked());
+                    }
+
+                    // set the field to required if the ConstrainedProperty is notNull
+                    if (property != null &&
+                        property.isNotNull()) {
+                        builderTemplate.appendBlock(getIdAttributes(), getIdRequired());
                     }
 
                     // set the field to disabled if the ConstrainedProperty is not
@@ -637,7 +710,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
         field = field_buffer.toString();
 
         if (template.hasValueId(field) &&
-            (replaceExistingValues || !template.isValueSet(field))) {
+            (replaceExistingValues || (!template.isValueSet(field) && !template.isValueGenerated(field)))) {
             // set the field name
             builderTemplate.setValue(getIdName(), template.getEncoder().encode(name));
 
@@ -673,7 +746,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                 if (propertyType.isEnum()) {
                     list_values = ClassUtils.getEnumClassValues(propertyType);
                 } else if (propertyType.isArray() &&
-                    propertyType.getComponentType().isEnum()) {
+                           propertyType.getComponentType().isEnum()) {
                     list_values = ClassUtils.getEnumClassValues(propertyType.getComponentType());
                 }
             }
@@ -690,7 +763,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                     }
                 }
 
-                // setup the select options
+                // set up the select options
                 var i = 0;
                 while (i < list.size()) {
                     String value;
@@ -741,6 +814,12 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                     builderTemplate.setValue(getIdAttributes(), "");
                 }
 
+                // set the field to required if the ConstrainedProperty is notNull
+                if (property != null &&
+                    property.isNotNull()) {
+                    builderTemplate.appendBlock(getIdAttributes(), getIdRequired());
+                }
+
                 // set the field to disabled if the ConstrainedProperty is not
                 // editable
                 if (property != null &&
@@ -774,7 +853,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
         field = field_buffer.toString();
 
         if (template.hasValueId(field) &&
-            (replaceExistingValues || !template.isValueSet(field))) {
+            (replaceExistingValues || (!template.isValueSet(field) && !template.isValueGenerated(field)))) {
             if (replaceExistingValues) {
                 template.blankValue(field);
             }
@@ -795,7 +874,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                     values[counter] != null) {
                     value = template.getEncoder().encode(values[counter]);
                 } else if (property != null &&
-                    property.hasDefaultValue()) {
+                           property.hasDefaultValue()) {
                     value = template.getEncoder().encode(property.getDefaultValue().toString());
                 }
 
@@ -833,7 +912,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                     // if the field is a constrained property that is constrained
                     // to a list, display the label instead of the value
                     if ((property != null && property.isInList() ||
-                        propertyType != null && (propertyType.isEnum() || propertyType.isArray() && propertyType.getComponentType().isEnum()))) {
+                         propertyType != null && (propertyType.isEnum() || propertyType.isArray() && propertyType.getComponentType().isEnum()))) {
                         builderTemplate.setValue(getIdValue(), generateLabel(template, templateFieldName, value));
                     } else {
                         builderTemplate.setValue(getIdValue(), value);
@@ -883,7 +962,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
 
         String label = null;
 
-        // set a custom label if it's available from the resourcebundle
+        // set a custom label if it's available from the resource bundle
         if (template.hasResourceBundles()) {
             for (var bundle : template.getResourceBundles()) {
                 // obtain the configuration value
@@ -967,7 +1046,7 @@ abstract public class AbstractFormBuilder implements FormBuilder {
         String value_id;
         for (var value_prefix : VALUE_PREFIXES) {
             value_id = value_prefix + templateFieldName;
-            if (template.isValueSet(value_id)) {
+            if (template.isValueSet(value_id) || template.isValueGenerated(value_id)) {
                 template.removeValue(value_id);
             }
         }
@@ -1015,6 +1094,8 @@ abstract public class AbstractFormBuilder implements FormBuilder {
                 }
             }
         }
+
+        template.addGeneratedValues(set_values);
 
         return set_values;
     }

@@ -102,7 +102,6 @@ public class ConstrainedProperty implements Cloneable {
     public static final String MANY_TO_MANY = "MANY_TO_MANY";
     public static final String MANY_TO_MANY_ASSOCIATION = "MANY_TO_MANY_ASSOCIATION";
     public static final String FORMAT = "FORMAT";
-    public static final String FILE = "FILE";
     public static final String SPARSE = "SPARSE";
 
     // standard CMF constraint identifiers
@@ -1293,20 +1292,6 @@ public class ConstrainedProperty implements Cloneable {
 
     public boolean isFormatted() {
         return constraints_.containsKey(FORMAT);
-    }
-
-    public ConstrainedProperty file(boolean file) {
-        setFile(file);
-
-        return this;
-    }
-
-    public void setFile(boolean file) {
-        setConstraint(FILE, file);
-    }
-
-    public boolean isFile() {
-        return Convert.toBoolean(constraints_.get(FILE), false);
     }
 
     public ConstrainedProperty sparse(boolean sparse) {

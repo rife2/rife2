@@ -38,16 +38,19 @@
   <!--b invalid:email-->The email has the wrong format.<!--/b-->
   <!--b mark:error-->error-mark<!--/b-->
   <form method="post">
-    <label class="{{v mark:name}}{{/v}}" for="name">Name</label>
-    <input class="{{v mark:name/}}" id="name" name="name" value="{{v param:name}}{{/v}}"/><br>
+    <label class="{{v mark:name}}{{/v}}">Name
+      <input class="{{v mark:name/}}" name="name" value="{{v param:name}}{{/v}}" />
+    </label><br>
 
-    <label class="{{v mark:1-email}}{{/v}}" for="1-email">Email 1</label>
-    <input class="{{v mark:1-email/}}" id="1-email" name="1-email" value="{{v param:1-email}}{{/v}}"/><br>
+    <label class="{{v mark:1-email}}{{/v}}">Email 1
+      <input class="{{v mark:1-email/}}" name="1-email" value="{{v param:1-email}}{{/v}}" />
+    </label><br>
 
-    <label class="{{v mark:2-email}}{{/v}}" for="2-email">Email 2</label>
-    <input class="{{v mark:2-email/}}" id="2-email" name="2-email" value="{{v param:2-email}}{{/v}}"/><br>
+    <label class="{{v mark:2-email}}{{/v}}">Email 2
+      <input class="{{v mark:2-email/}}" name="2-email" value="{{v param:2-email}}{{/v}}" />
+    </label><br>
 
-    <input type="submit"/>
+    <input type="submit" />
   </form>
 <!--/bv-->
 

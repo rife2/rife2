@@ -11,10 +11,10 @@ import java.io.File;
 import java.util.logging.Logger;
 
 /**
- * An <code>UploadedFile</code> instance is created by the web engine when
- * files are uploaded through a multi-part request.
+ * An {@code UploadedFile} instance is created by the web engine when
+ * files are uploaded through a multipart request.
  * <p>The uploaded files can be retrieved through the
- * <code>ElementSupport#getUploadedFile</code> method and its siblings. The
+ * {@code ElementSupport#getUploadedFile} method and its siblings. The
  * web engine does its best to dispose of the temporary file at a convenient
  * time, but the file is not guaranteed to persist after the request. If you
  * want to make sure that the file is deleted, you should call {@link
@@ -26,14 +26,27 @@ import java.util.logging.Logger;
 public class UploadedFile implements Cloneable, AutoCloseable {
     private File tempFile_ = null;
     private String filename_ = null;
-    private String type_ = null;
+    private String contentType_ = null;
     private boolean sizeExceeded_ = false;
 
-    public UploadedFile(String filename, String type) {
+    /**
+     * Create a new instance.
+     * <p>This is an internal method, not intended to be used outside RIFE2.
+     *
+     * @param filename the file name that was uploaded
+     * @param contentType the content type of the file
+     * @since 1.0
+     */
+    public UploadedFile(String filename, String contentType) {
         filename_ = filename;
-        type_ = type;
+        contentType_ = contentType;
     }
 
+    /**
+     * Close the uploaded file and remove any temporary resources that were created.
+     *
+     * @since 1.0
+     */
     @Override
     public void close() {
         if (tempFile_ != null) {
@@ -41,6 +54,13 @@ public class UploadedFile implements Cloneable, AutoCloseable {
         }
     }
 
+    /**
+     * Register a particular file as being the temporary file used for storage.
+     * <p>This is an internal method, not intended to be used outside RIFE2.
+     *
+     * @param tempFile the temporary file that is being used
+     * @since 1.0
+     */
     public void setTempFile(File tempFile) {
         assert tempFile != null;
         assert tempFile.exists();
@@ -51,6 +71,14 @@ public class UploadedFile implements Cloneable, AutoCloseable {
         tempFile_.deleteOnExit();
     }
 
+    /**
+     * Indicates whether the maximum file size was exceeded during upload.
+     * <p>This is an internal method, not intended to be used outside RIFE2.
+     *
+     * @param exceeded {@code true} if the maximum upload size was exceeded;
+     *                             {@code false} otherwise
+     * @since 1.0
+     */
     public void setSizeExceeded(boolean exceeded) {
         sizeExceeded_ = exceeded;
     }
@@ -61,8 +89,8 @@ public class UploadedFile implements Cloneable, AutoCloseable {
      * @return the content type of the uploaded file
      * @since 1.0
      */
-    public String getType() {
-        return type_;
+    public String getContentType() {
+        return contentType_;
     }
 
     /**
@@ -92,11 +120,11 @@ public class UploadedFile implements Cloneable, AutoCloseable {
      * RifeConfig.EngineConfig#getFileUploadSizeLimit()}  upload
      * size limit}.
      * <p>If the limit was exceeded, the temporary file will be
-     * <code>null</code> and deleted from the server.
+     * {@code null} and deleted from the server.
      *
-     * @return <code>true</code> if the upload file size limit was exceeded;
+     * @return {@code true} if the upload file size limit was exceeded;
      * or
-     * <p><code>false</code> otherwise
+     * <p>{@code false} otherwise
      * @since 1.0
      */
     public boolean wasSizeExceeded() {

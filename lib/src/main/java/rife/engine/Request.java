@@ -32,7 +32,7 @@ public interface Request {
     /**
      * Retrieves the parameters that were sent in this request.
      *
-     * @return a <code>Map</code> with all the parameter names and values
+     * @return a {@code Map} with all the parameter names and values
      * @since 1.0
      */
     Map<String, String[]> getParameters();
@@ -58,7 +58,7 @@ public interface Request {
     /**
      * Retrieves the files that were uploaded in this request.
      *
-     * @return a <code>Map</code> with all the uploaded files
+     * @return a {@code Map} with all the uploaded files
      * @see #hasFile(String)
      * @see #getFile(String)
      * @see #getFiles(String)
@@ -69,9 +69,9 @@ public interface Request {
     /**
      * Checks if a particular file has been uploaded in this request.
      *
-     * @param name the name of the file, as declared in the submission
-     * @return <code>true</code> if the file was uploaded; or
-     * <p><code>false</code> otherwise
+     * @param name the name of the file
+     * @return {@code true} if the file was uploaded; or
+     * <p>{@code false} otherwise
      * @see #getFiles()
      * @see #getFile(String)
      * @see #getFiles(String)
@@ -82,9 +82,9 @@ public interface Request {
     /**
      * Retrieves an uploaded file.
      *
-     * @param name the name of the file, as declared in the submission
+     * @param name the name of the file
      * @return the uploaded file; or
-     * <p><code>null</code> if no file was uploaded
+     * <p>{@code null} if no file was uploaded
      * @see #getFiles()
      * @see #hasFile(String)
      * @see #getFiles(String)
@@ -95,9 +95,9 @@ public interface Request {
     /**
      * Retrieves all files that have been uploaded for a particular name.
      *
-     * @param name the name of the file, as declared in the submission
+     * @param name the name of the file
      * @return the uploaded files; or
-     * <p><code>null</code> if no files were uploaded for that name
+     * <p>{@code null} if no files were uploaded for that name
      * @see #getFiles()
      * @see #hasFile(String)
      * @see #getFile(String)
@@ -109,7 +109,7 @@ public interface Request {
      * Returns the root URL of the server that is running this web
      * applications.
      * <p>This includes the protocol, the server name and the server port, for
-     * example: <code>http://www.somehost.com:8080</code>.
+     * example: {@code http://www.somehost.com:8080}.
      *
      * @return the server's root url
      * @since 1.0
@@ -120,8 +120,8 @@ public interface Request {
      * Checks whether a cookie is present.
      *
      * @param name the name of the cookie
-     * @return <code>true</code> if the cookie was present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the cookie was present; or
+     * <p>{@code false} otherwise
      * @see #getCookie(String)
      * @see #getCookies()
      * @since 1.0
@@ -133,7 +133,7 @@ public interface Request {
      *
      * @param name the name of the cookie.
      * @return the instance of the cookie; or
-     * <p><code>null</code> if no such cookie is present
+     * <p>{@code null} if no such cookie is present
      * @see #hasCookie(String)
      * @see #getCookies()
      * @since 1.0
@@ -157,8 +157,8 @@ public interface Request {
     /**
      * Checks if a request attribute exists.
      *
-     * @param name a <code>String</code> specifying the name of the attribute
-     *             <p><code>false</code> otherwise
+     * @param name a {@code String} specifying the name of the attribute
+     *             <p>{@code false} otherwise
      * @since 1.0
      */
     boolean hasAttribute(String name);
@@ -334,9 +334,9 @@ public interface Request {
     /**
      * Retrieves the underlying {@link HttpServletRequest}.
      *
-     * @return the underlying <code>HttpServletRequest</code> instance; or
-     * <p><code>null</code> if this request isn't backed by
-     * <code>HttpServletRequest</code>
+     * @return the underlying {@code HttpServletRequest} instance; or
+     * <p>{@code null} if this request isn't backed by
+     * {@code HttpServletRequest}
      * @since 1.0
      */
     HttpServletRequest getHttpServletRequest();

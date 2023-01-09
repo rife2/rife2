@@ -114,10 +114,8 @@ public class ConstrainedUtils {
                 return false;
             }
 
-            if (constrained_property.hasManyToOne() &&
-                !isManyToOneJoinProperty(bean.getClass(), propertyName)) {
-                return false;
-            }
+            return !constrained_property.hasManyToOne() ||
+                   isManyToOneJoinProperty(bean.getClass(), propertyName);
         }
 
         return true;
@@ -157,27 +155,10 @@ public class ConstrainedUtils {
                 return false;
             }
 
-            if (constrained_property.hasManyToOne() &&
-                !isManyToOneJoinProperty(bean.getClass(), propertyName)) {
-                return false;
-            }
+            return !constrained_property.hasManyToOne() ||
+                   isManyToOneJoinProperty(bean.getClass(), propertyName);
         }
 
         return true;
-    }
-
-    public static boolean fileConstrainedProperty(Constrained bean, String propertyName, String prefix) {
-        if (null == bean) {
-            return false;
-        }
-
-        if (prefix != null &&
-            propertyName.startsWith(prefix)) {
-            propertyName = propertyName.substring(prefix.length());
-        }
-
-        var constrained_property = bean.getConstrainedProperty(propertyName);
-
-        return constrained_property != null && constrained_property.isFile();
     }
 }

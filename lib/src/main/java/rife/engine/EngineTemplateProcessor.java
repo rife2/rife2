@@ -4,7 +4,6 @@
  */
 package rife.engine;
 
-import rife.authentication.elements.AuthConfig;
 import rife.authentication.elements.Identified;
 import rife.engine.exceptions.EngineException;
 import rife.template.Template;
@@ -20,6 +19,7 @@ class EngineTemplateProcessor {
     public static final String ID_SERVER_ROOT_URL = "server:rootUrl";
     public static final String ID_CONTEXT_PATH_INFO = "context:pathInfo";
     public static final String ID_CONTEXT_PARAM_RANDOM = "context:paramRandom";
+    public static final String ID_CONTEXT_PARAM_CONT_ID = "context:paramContId";
     public static final String ID_CONTEXT_CONT_ID = "context:contId";
 
     private final Context context_;
@@ -78,10 +78,18 @@ class EngineTemplateProcessor {
             setValues.add(ID_CONTEXT_PARAM_RANDOM);
         }
 
+        if (template_.hasValueId(ID_CONTEXT_PARAM_CONT_ID) &&
+            !template_.isValueSet(ID_CONTEXT_PARAM_CONT_ID)) {
+            if (context_.continuationId() != null) {
+                template_.setValue(ID_CONTEXT_PARAM_CONT_ID, SpecialParameters.CONT_ID + "=" + context_.continuationId());
+            }
+            setValues.add(ID_CONTEXT_PARAM_CONT_ID);
+        }
+
         if (template_.hasValueId(ID_CONTEXT_CONT_ID) &&
             !template_.isValueSet(ID_CONTEXT_CONT_ID)) {
             if (context_.continuationId() != null) {
-                template_.setValue(ID_CONTEXT_CONT_ID, SpecialParameters.CONT_ID + "=" + context_.continuationId());
+                template_.setValue(ID_CONTEXT_CONT_ID, context_.continuationId());
             }
             setValues.add(ID_CONTEXT_CONT_ID);
         }

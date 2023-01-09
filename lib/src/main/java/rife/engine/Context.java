@@ -21,8 +21,15 @@ import rife.tools.exceptions.BeanUtilsException;
 
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
+/**
+ * This class provides the context for the current HTTP request.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.0
+ */
 public class Context {
     public static final boolean DEFAULT_BOOLEAN = false;
     public static final int DEFAULT_INTEGER = 0;
@@ -52,7 +59,7 @@ public class Context {
     private Route processedRoute_ = null;
     private Element processedElement_ = null;
 
-    public Context(String gateUrl, Site site, Request request, Response response, RouteMatch routeMatch) {
+    Context(String gateUrl, Site site, Request request, Response response, RouteMatch routeMatch) {
         gateUrl_ = gateUrl;
         site_ = site;
         request_ = request;
@@ -134,7 +141,7 @@ public class Context {
     }
 
     private Element setupContinuationContext(Route route)
-    throws CloneNotSupportedException {
+    throws Exception {
         // continuations are only supported on element class routes, not element instance routes
         if (route instanceof RouteInstance) {
             return null;
@@ -155,6 +162,8 @@ public class Context {
 
             if (continuation_context.getContinuable() != null &&
                 route.getElementClass() == continuation_context.getContinuable().getClass()) {
+                removeGeneratedTemplateValues(continuation_context);
+
                 element = (Element) continuation_context.getContinuable();
             }
         }
@@ -162,6 +171,45 @@ public class Context {
         ContinuationConfigRuntime.setActiveConfigRuntime(site_.continuationManager_.getConfigRuntime());
 
         return element;
+    }
+
+    private void removeGeneratedTemplateValues(ContinuationContext continuationContext)
+    throws Exception {
+        var local_stack = continuationContext.getLocalStack();
+        for (int i = 0; i < local_stack.getReferenceStackSize(); ++i) {
+            var reference = local_stack.getReference(i);
+            if (reference instanceof Template t) {
+                t.removeGeneratedValues();
+            }
+        }
+        var local_vars = continuationContext.getLocalVars();
+        for (int i = 0; i < local_vars.getReferenceStackSize(); ++i) {
+            var reference = local_vars.getReference(i);
+            if (reference instanceof Template t) {
+                t.removeGeneratedValues();
+            }
+        }
+
+        var continuable = continuationContext.getContinuable();
+        Class klass = continuable.getClass();
+        while (klass != null && klass != Element.class) {
+            for (var field : klass.getDeclaredFields()) {
+                field.setAccessible(true);
+
+                if (Modifier.isStatic(field.getModifiers()) ||
+                    Modifier.isFinal(field.getModifiers()) ||
+                    Modifier.isTransient(field.getModifiers())) {
+                    continue;
+                }
+
+                if (Template.class.isAssignableFrom(field.getType())) {
+                    var t = (Template) field.get(continuable);
+                    t.removeGeneratedValues();
+                }
+            }
+
+            klass = klass.getSuperclass();
+        }
     }
 
     private void handlePause(PauseException e) {
@@ -178,18 +226,56 @@ public class Context {
         return processedElement_;
     }
 
+    void engineException(Throwable exception) {
+        engineException_ = exception;
+    }
+
+    /**
+     * The active site this context is executing in.
+     *
+     * @return the currently active site
+     * @since 1.0
+     */
     public Site site() {
         return site_;
     }
 
+    /**
+     * The request of this context.
+     * <p>
+     * Most request methods have direct counterparts in the context for
+     * easier and more convenient usage.
+     *
+     * @return this context's request
+     * @since 1.0
+     */
     public Request request() {
         return request_;
     }
 
+    /**
+     * The response of this context.
+     * <p>
+     * Most response methods have direct counterparts in the context for
+     * easier and more convenient usage.
+     *
+     * @return this context's response
+     * @since 1.0
+     */
     public Response response() {
         return response_;
     }
 
+    /**
+     * The pathinfo that was captured or matched.
+     * <p>
+     * The slash separated between the route path in the pathinfo will
+     * have been stripped already.
+     *
+     * @return the captured or matching pathinfo; or
+     * {@code null} if no pathinfo was captured or matched
+     * @since 1.0
+     */
     public String pathInfo() {
         if (routeMatch_ != null && routeMatch_.pathInfo() != null) {
             return routeMatch_.pathInfo();
@@ -198,6 +284,13 @@ public class Context {
         return null;
     }
 
+    /**
+     * The route of this context.
+     *
+     * @return this context's route; or
+     * {@code null} if the context doesn't belong to a specific route
+     * @since 1.0
+     */
     public Route route() {
         if (routeMatch_ == null) {
             return null;
@@ -205,6 +298,13 @@ public class Context {
         return routeMatch_.route();
     }
 
+    /**
+     * The router in which this context's route was defined.
+     *
+     * @return this context's route's router; or
+     * {@code null} if the context doesn't belong to a specific route
+     * @since 1.0
+     */
     public Router router() {
         var route = route();
         if (route == null) {
@@ -213,6 +313,13 @@ public class Context {
         return route.router();
     }
 
+    /**
+     * The hierarchical properties accessible to this context.
+     *
+     * @return this context's hierarchical properties; or
+     * {@code null} if those properties can't be found
+     * @since 1.0
+     */
     public HierarchicalProperties properties() {
         var router = router();
         if (router == null) {
@@ -298,12 +405,38 @@ public class Context {
         return ContinuationContext.getActiveContextId();
     }
 
-    public void print(Object o) {
-        response_.print(o);
+    /**
+     * Prints the string representation of an object to the request text
+     * output. The string representation will be created through a
+     * {@code String.valueOf(value)} call.
+     *
+     * @param object the object that will be output
+     * @throws EngineException if an error occurs during the output of the content
+     * @see #print(Template)
+     * @since 1.0
+     */
+    public void print(Object object)
+    throws EngineException {
+        response_.print(object);
     }
 
+    /**
+     * Prints a template to the response.
+     * <p>If no response content type was set yet, the template's content
+     * type will be used.
+     * <p>Printing a template will automatically process all the filtered
+     * tags.
+     * <p>Printing a template instead of the string representation of its
+     * content has many advantages, the biggest one being that the out-of-container
+     * testing API will have access to this template instance, allowing you
+     * to assert of value content, instead of having to parse a response.
+     *
+     * @param template the template to print
+     * @throws TemplateException if an error occurs while processing the template
+     * @throws EngineException   if an error occurs during the output of the content
+     */
     public void print(Template template)
-    throws TemplateException, EngineException {
+    throws TemplateException {
         new EngineTemplateProcessor(this, template).processTemplate();
 
         // set the content type
@@ -320,104 +453,318 @@ public class Context {
         response_.print(template);
     }
 
+    /**
+     * Instantiates an HTML template with the name corresponding to the
+     * identifier of this route's element.
+     * <p>For lambda elements, this will be the path of the route and
+     * for class elements this will be the shortened uncapitalized name
+     * of the class.
+     *
+     * @return the HTML template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #template(String)
+     * @see #template(String, String)
+     * @since 1.0
+     */
     public Template template()
-    throws TemplateException, EngineException {
+    throws TemplateException {
+        if (routeMatch_ == null) {
+            return null;
+        }
         return template(routeMatch_.route().defaultElementId(), null);
     }
 
+    /**
+     * Instantiates an HTML template with a given name.
+     *
+     * @param name the template name
+     * @return the HTML template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #template
+     * @see #template(String, String)
+     * @since 1.0
+     */
     public Template template(String name)
-    throws TemplateException, EngineException {
+    throws TemplateException {
         return template(name, null);
     }
 
+    /**
+     * Instantiates an HTML template with a given name and encoding.
+     *
+     * @param name     the template name
+     * @param encoding the template's encoding
+     * @return the HTML template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #template(String)
+     * @see #template(String, String)
+     * @since 1.0
+     */
     public Template template(String name, String encoding)
-    throws TemplateException, EngineException {
+    throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
         return TemplateFactory.HTML.get(name, encoding);
     }
 
+    /**
+     * Instantiates a TXT template with the name corresponding to the
+     * identifier of this route's element.
+     * <p>For lambda elements, this will be the path of the route and
+     * for class elements this will be the shortened uncapitalized name
+     * of the class.
+     *
+     * @return the TXT template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #templateTxt(String)
+     * @see #templateTxt(String, String)
+     * @since 1.0
+     */
     public Template templateTxt()
-    throws TemplateException, EngineException {
+    throws TemplateException {
         return templateTxt(routeMatch_.route().defaultElementId(), null);
     }
 
+    /**
+     * Instantiates a TXT template with a given name.
+     *
+     * @param name the template name
+     * @return the TXT template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #templateTxt
+     * @see #templateTxt(String, String)
+     * @since 1.0
+     */
     public Template templateTxt(String name)
-    throws TemplateException, EngineException {
+    throws TemplateException {
         return templateTxt(name, null);
     }
 
+    /**
+     * Instantiates a TXT template with a given name and encoding.
+     *
+     * @param name     the template name
+     * @param encoding the template's encoding
+     * @return the TXT template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #templateTxt(String)
+     * @see #templateTxt(String, String)
+     * @since 1.0
+     */
     public Template templateTxt(String name, String encoding)
-    throws TemplateException, EngineException {
+    throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
         return TemplateFactory.TXT.get(name, encoding);
     }
 
+    /**
+     * Instantiates an XML template with the name corresponding to the
+     * identifier of this route's element.
+     * <p>For lambda elements, this will be the path of the route and
+     * for class elements this will be the shortened uncapitalized name
+     * of the class.
+     *
+     * @return the XML template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #templateXml(String)
+     * @see #templateXml(String, String)
+     * @since 1.0
+     */
     public Template templateXml()
-    throws TemplateException, EngineException {
+    throws TemplateException {
         return templateXml(routeMatch_.route().defaultElementId(), null);
     }
 
+    /**
+     * Instantiates an XML template with a given name.
+     *
+     * @param name the template name
+     * @return the XML template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #templateXml
+     * @see #templateXml(String, String)
+     * @since 1.0
+     */
     public Template templateXml(String name)
-    throws TemplateException, EngineException {
+    throws TemplateException {
         return templateXml(name, null);
     }
 
+    /**
+     * Instantiates an XML template with a given name and encoding.
+     *
+     * @param name     the template name
+     * @param encoding the template's encoding
+     * @return the XML template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #templateXml(String)
+     * @see #templateXml(String, String)
+     * @since 1.0
+     */
     public Template templateXml(String name, String encoding)
-    throws TemplateException, EngineException {
+    throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
         return TemplateFactory.XML.get(name, encoding);
     }
 
+    /**
+     * Instantiates an JSON template with the name corresponding to the
+     * identifier of this route's element.
+     * <p>For lambda elements, this will be the path of the route and
+     * for class elements this will be the shortened uncapitalized name
+     * of the class.
+     *
+     * @return the JSON template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #templateJson(String)
+     * @see #templateJson(String, String)
+     * @since 1.0
+     */
     public Template templateJson()
-    throws TemplateException, EngineException {
+    throws TemplateException {
         return templateJson(routeMatch_.route().defaultElementId(), null);
     }
 
+    /**
+     * Instantiates an JSON template with a given name.
+     *
+     * @param name the template name
+     * @return the JSON template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #templateJson
+     * @see #templateJson(String, String)
+     * @since 1.0
+     */
     public Template templateJson(String name)
-    throws TemplateException, EngineException {
+    throws TemplateException {
         return templateJson(name, null);
     }
 
+    /**
+     * Instantiates an JSON template with a given name and encoding.
+     *
+     * @param name     the template name
+     * @param encoding the template's encoding
+     * @return the JSON template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #templateJson(String)
+     * @see #templateJson(String, String)
+     * @since 1.0
+     */
     public Template templateJson(String name, String encoding)
-    throws TemplateException, EngineException {
+    throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
         return TemplateFactory.JSON.get(name, encoding);
     }
 
+    /**
+     * Instantiates an SVG template with the name corresponding to the
+     * identifier of this route's element.
+     * <p>For lambda elements, this will be the path of the route and
+     * for class elements this will be the shortened uncapitalized name
+     * of the class.
+     *
+     * @return the SVG template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #templateSvg(String)
+     * @see #templateSvg(String, String)
+     * @since 1.0
+     */
     public Template templateSvg()
-    throws TemplateException, EngineException {
+    throws TemplateException {
         return templateSvg(routeMatch_.route().defaultElementId(), null);
     }
 
+    /**
+     * Instantiates an SVG template with a given name.
+     *
+     * @param name the template name
+     * @return the SVG template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #templateSvg
+     * @see #templateSvg(String, String)
+     * @since 1.0
+     */
     public Template templateSvg(String name)
-    throws TemplateException, EngineException {
+    throws TemplateException {
         return templateSvg(name, null);
     }
 
+    /**
+     * Instantiates an SVG template with a given name and encoding.
+     *
+     * @param name     the template name
+     * @param encoding the template's encoding
+     * @return the SVG template if it was found.
+     * @throws TemplateException when an error occurred instantiating the template
+     * @see #templateSvg(String)
+     * @see #templateSvg(String, String)
+     * @since 1.0
+     */
     public Template templateSvg(String name, String encoding)
-    throws TemplateException, EngineException {
+    throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
         return TemplateFactory.SVG.get(name, encoding);
     }
 
+    /**
+     * Retrieves the URL portion that corresponds to the entrance gate
+     * of the RIFE2 web engine, this is usually equivalent with the HTTP request
+     * context path.
+     *
+     * @return the URL of the web engine gate
+     * @since 1.0
+     */
     public String gateUrl() {
         return gateUrl_;
     }
 
+    /**
+     * Returns the root URL of the server that is running this web
+     * applications.
+     * <p>This includes the protocol, the server name and the server port, for
+     * example: {@code http://www.somehost.com:8080}.
+     *
+     * @param port the server port to use, or
+     *             {@code -1} to use the sane port as the active request
+     * @return the server's root url
+     * @since 1.0
+     */
+    public String serverRootUrl(int port) {
+        return request_.getServerRootUrl(port);
+    }
+
+    /**
+     * Returns the root URL of this web application.
+     * <p>This includes the protocol, the server name and the server port, and
+     * the gate URL.
+     *
+     * @return this web application's root URL
+     * @since 1.0
+     */
     public String webappRootUrl() {
         return webappRootUrl(-1);
     }
 
+    /**
+     * Returns the root URL of this web application.
+     * <p>This includes the protocol, the server name and the server port, and
+     * the gate URL.
+     *
+     * @param port the server port to use, or
+     *             {@code -1} to use the sane port as the active request
+     * @return this web application's root URL
+     * @since 1.0
+     */
     public String webappRootUrl(int port) {
         var webapp_root = new StringBuilder();
         webapp_root.append(serverRootUrl(port));
@@ -434,14 +781,28 @@ public class Context {
         return webapp_root.toString();
     }
 
+    /**
+     * Start building a URL towards a particular route.
+     * <p>
+     * The result is a {@see UrlBuilder} instance that can be used for
+     * further customization of the URL, if needed.
+     *
+     * @param route the target route
+     * @return an instance of {@see UrlBuilder}
+     * @since 1.0
+     */
     public UrlBuilder urlFor(Route route) {
         return new UrlBuilder(this, route);
     }
 
-    void engineException(Throwable exception) {
-        engineException_ = exception;
-    }
-
+    /**
+     * Retrieves the exception that was triggered during the RIFE2 web
+     * engine execution.
+     *
+     * @return the triggered exception; or
+     * <p>{@code null} if no exception was triggered
+     * @since 1.0
+     */
     public Throwable engineException() {
         return engineException_;
     }
@@ -449,40 +810,6 @@ public class Context {
     /**
      * Sets a select box option, a radio button or a checkbox to selected or
      * checked.
-     * <p>This method will check the template for certain value tags and set
-     * them to the correct attributes according to the name and the provided
-     * values in this method. This is dependent on the template type and
-     * currently only makes sense for {@code html} templates.
-     * <p>For example for select boxes, consider the name '{@code colors}',
-     * the values '{@code blue}' and '{@code red}', and the
-     * following HTML template excerpt:
-     * <pre>&lt;select name="colors"&gt;
-     * &lt;option value="blue"{{v colors:blue:selected}}{{/v}}&gt;Blue&lt;/option&gt;
-     * &lt;option value="orange"{{v colors:orange:selected}}{{/v}}&gt;Orange&lt;/option&gt;
-     * &lt;option value="red"{{v colors:red:selected}}{{/v}}&gt;Red&lt;/option&gt;
-     * &lt;option value="green"{{v colors:green:selected'}}{{/v}}&gt;Green&lt;/option&gt;
-     * &lt;/select&gt;</pre>
-     * <p>the result will then be:
-     * <pre>&lt;select name="colors"&gt;
-     * &lt;option value="blue" selected="selected"&gt;Blue&lt;/option&gt;
-     * &lt;option value="orange"&gt;Orange&lt;/option&gt;
-     * &lt;option value="red" selected="selected"&gt;Red&lt;/option&gt;
-     * &lt;option value="green"&gt;Green&lt;/option&gt;
-     * &lt;/select&gt;</pre>
-     * <p>For example for radio buttons, consider the name '{@code size}',
-     * the value '{@code large}' and the following HTML template excerpt:
-     * <pre>&lt;input type="radio" name="size" value="large"{{v size:large:checked}}{{/v}} /&gt;
-     * &lt;input type="radio" name="size" value="small"{{v size:small:checked}}{{/v}} /&gt;</pre>
-     * <p>the result will then be:
-     * <pre>&lt;input type="radio" name="size" value="large" checked="checked" /&gt;
-     * &lt;input type="radio" name="size" value="small" /&gt;</pre>
-     * <p>For example for checkboxes, consider the name '{@code active}',
-     * the value '{@code true}' and the following HTML template excerpt:
-     * <pre>&lt;input type="checkbox" name="active"{{v active:checked}}{{/v}} /&gt;
-     * &lt;input type="checkbox" name="senditnow"{{v senditnow:checked}}{{/v}} /&gt;</pre>
-     * <p>the result will then be:
-     * <pre>&lt;input type="checkbox" name="active" checked="checked" /&gt;
-     * &lt;input type="checkbox" name="senditnow" /&gt;</pre>
      *
      * @param template the template instance where the selection should happen
      * @param name     the name of the parameter
@@ -497,7 +824,12 @@ public class Context {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
-        return EngineTemplateHelper.selectParameter(template, name, values);
+        var form_builder = template.getFormBuilder();
+        if (null == form_builder) {
+            return Collections.emptyList();
+        }
+
+        return form_builder.selectParameter(template, name, values);
     }
 
     /**
@@ -538,7 +870,16 @@ public class Context {
         if (null == template) throw new IllegalArgumentException("template can't be null.");
         if (null == beanInstance) throw new IllegalArgumentException("beanInstance can't be null.");
 
-        EngineTemplateHelper.generateForm(template, beanInstance, prefix);
+        var form_builder = template.getFormBuilder();
+        if (null == form_builder) {
+            return;
+        }
+        try {
+            form_builder.removeForm(template, beanInstance.getClass(), prefix);
+            form_builder.generateForm(template, beanInstance, null, prefix);
+        } catch (BeanUtilsException e) {
+            throw new EngineException(e);
+        }
     }
 
     /**
@@ -582,7 +923,16 @@ public class Context {
         if (null == template) throw new IllegalArgumentException("template can't be null.");
         if (null == beanClass) throw new IllegalArgumentException("beanClass can't be null.");
 
-        EngineTemplateHelper.generateEmptyForm(template, beanClass, prefix);
+        var form_builder = template.getFormBuilder();
+        if (null == form_builder) {
+            return;
+        }
+        try {
+            form_builder.removeForm(template, beanClass, prefix);
+            form_builder.generateForm(template, beanClass, null, prefix);
+        } catch (BeanUtilsException e) {
+            throw new EngineException(e);
+        }
     }
 
     /**
@@ -625,19 +975,27 @@ public class Context {
         if (null == template) throw new IllegalArgumentException("template can't be null.");
         if (null == beanClass) throw new IllegalArgumentException("beanClass can't be null.");
 
-        EngineTemplateHelper.removeForm(template, beanClass, prefix);
+        var form_builder = template.getFormBuilder();
+        if (null == form_builder) {
+            return;
+        }
+        try {
+            form_builder.removeForm(template, beanClass, prefix);
+        } catch (BeanUtilsException e) {
+            throw new EngineException(e);
+        }
     }
 
     /**
-     * Interrupts the execution in RIFE completely and defers it to the
+     * Interrupts the execution in RIFE2 completely and defers it to the
      * servlet container.
-     * <p>If RIFE is being run as a filter, it will execute the next filter in
+     * <p>If RIFE2 is being run as a filter, it will execute the next filter in
      * the chain.
-     * <p>If RIFE is being run as a servlet, the status code {@code 404: Not
+     * <p>If RIFE2 is being run as a servlet, the status code {@code 404: Not
      * Found} will be sent to the client.
      *
-     * @throws rife.engine.exceptions.DeferException an exception that is used to immediately interrupt the execution, don't
-     *                                               catch this exception
+     * @throws DeferException an exception that is used to immediately interrupt the execution, don't
+     *                        catch this exception
      * @since 1.0
      */
     public void defer()
@@ -649,10 +1007,10 @@ public class Context {
      * Interrupts the execution in this element and redirects the client to
      * another URL.
      *
-     * @param url the URL to which the request will be redirected, <code>String.valueOf()</code>
+     * @param url the URL to which the request will be redirected, {@code String.valueOf()}
      *            will be called with this object, so a variety of types can be used
-     * @throws rife.engine.exceptions.RedirectException an exception that is used to immediately interrupt the execution, don't
-     *                                                  catch this exception
+     * @throws RedirectException an exception that is used to immediately interrupt the execution, don't
+     *                           catch this exception
      * @since 1.0
      */
     public void redirect(Object url)
@@ -665,8 +1023,8 @@ public class Context {
      * another URL.
      *
      * @param route the route to which the request will be redirected
-     * @throws rife.engine.exceptions.RedirectException an exception that is used to immediately interrupt the execution, don't
-     *                                                  catch this exception
+     * @throws RedirectException an exception that is used to immediately interrupt the execution, don't
+     *                           catch this exception
      * @since 1.0
      */
     public void redirect(Route route)
@@ -678,8 +1036,8 @@ public class Context {
      * Interrupts the execution in this element, stops processing any other
      * element, and sends the current response directly to the client.
      *
-     * @throws rife.engine.exceptions.RespondException an exception that is used to immediately interrupt the execution, don't
-     *                                                 catch this exception
+     * @throws RespondException an exception that is used to immediately interrupt the execution, don't
+     *                          catch this exception
      * @since 1.0
      */
     public void respond() {
@@ -690,8 +1048,8 @@ public class Context {
      * Interrupts the execution in this element, moving processing on to the
      * next element in the before/route/after chain
      *
-     * @throws rife.engine.exceptions.NextException an exception that is used to immediately interrupt the execution, don't
-     *                                              catch this exception
+     * @throws NextException an exception that is used to immediately interrupt the execution, don't
+     *                       catch this exception
      * @since 1.0
      */
     public void next() {
@@ -699,7 +1057,7 @@ public class Context {
     }
 
     /**
-     * Sets up the current request to prevent all caching of the response by
+     * Sets up the current response to prevent all caching of the response by
      * the client.
      *
      * @since 1.0
@@ -709,8 +1067,9 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getMethod()}.
+     * Returns the HTTP {@code RequestMethod} with which this context's request was made.
      *
+     * @return the {@code RequestMethod} of this context's request
      * @since 1.0
      */
     public RequestMethod method() {
@@ -718,8 +1077,9 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getParameters()}.
+     * Retrieves the parameters that were sent to this context.
      *
+     * @return a {@code Map} with all the parameter names and values
      * @since 1.0
      */
     public Map<String, String[]> parameters() {
@@ -1309,8 +1669,10 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getBody()}.
+     * Retrieves the body of this context's request as a string.
      *
+     * @return the string of the request body
+     * @see #bodyAsBytes()
      * @since 1.0
      */
     public String body() {
@@ -1318,8 +1680,10 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getBodyAsBytes()}.
+     * Retrieves the body of this context's request as a byte array.
      *
+     * @return the byte array of the request body
+     * @see #body()
      * @since 1.0
      */
     public byte[] bodyAsBytes() {
@@ -1329,7 +1693,7 @@ public class Context {
     /**
      * Retrieves the list of uploaded file names.
      *
-     * @return the list of uploaded file names
+     * @return the set of uploaded file names
      * @see #hasFile(String)
      * @see #isFileEmpty(String)
      * @see #file(String)
@@ -1343,7 +1707,7 @@ public class Context {
     /**
      * Checks if an uploaded file wasn't sent or if it is empty.
      *
-     * @param name the name of the file, as declared in the submission
+     * @param name the name of the file
      * @see #fileNames()
      * @see #hasFile(String)
      * @see #file(String)
@@ -1359,8 +1723,12 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getFiles()}.
+     * Retrieves the files that were uploaded in this context.
      *
+     * @return a {@code Map} with all the uploaded files
+     * @see #hasFile(String)
+     * @see #file(String)
+     * @see #files(String)
      * @since 1.0
      */
     public Map<String, UploadedFile[]> files() {
@@ -1372,8 +1740,14 @@ public class Context {
     }
 
     /**
-     * See {@link Request#hasFile}.
+     * Checks if a particular file has been uploaded in this context.
      *
+     * @param name the name of the file
+     * @return {@code true} if the file was uploaded; or
+     * <p>{@code false} otherwise
+     * @see #files()
+     * @see #file(String)
+     * @see #files(String)
      * @since 1.0
      */
     public boolean hasFile(String name) {
@@ -1381,8 +1755,14 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getFile}.
+     * Retrieves an uploaded file.
      *
+     * @param name the name of the file
+     * @return the uploaded file; or
+     * <p>{@code null} if no file was uploaded
+     * @see #files()
+     * @see #hasFile(String)
+     * @see #files(String)
      * @since 1.0
      */
     public UploadedFile file(String name) {
@@ -1390,8 +1770,14 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getFiles}.
+     * Retrieves all files that have been uploaded for a particular name.
      *
+     * @param name the name of the file
+     * @return the uploaded files; or
+     * <p>{@code null} if no files were uploaded for that name
+     * @see #files()
+     * @see #hasFile(String)
+     * @see #file(String)
      * @since 1.0
      */
     public UploadedFile[] files(String name) {
@@ -1399,17 +1785,13 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getServerRootUrl}.
+     * Checks whether a cookie is present.
      *
-     * @since 1.0
-     */
-    public String serverRootUrl(int port) {
-        return request_.getServerRootUrl(port);
-    }
-
-    /**
-     * See {@link Request#hasCookie}.
-     *
+     * @param name the name of the cookie
+     * @return {@code true} if the cookie was present; or
+     * <p>{@code false} otherwise
+     * @see #cookieValue(String)
+     * @see #cookieValues()
      * @since 1.0
      */
     public boolean hasCookie(String name) {
@@ -1724,9 +2106,17 @@ public class Context {
         }
     }
 
+
     /**
-     * See {@link Request#getAttribute}.
+     * Returns the value of the named attribute.
      *
+     * @param name the name of the attribute
+     * @return an Object containing the value of the attribute; or
+     * <p>{@code null} if the attribute does not exist
+     * @see #hasAttribute
+     * @see #attributeNames
+     * @see #removeAttribute
+     * @see #setAttribute
      * @since 1.0
      */
     public Object attribute(String name) {
@@ -1734,8 +2124,14 @@ public class Context {
     }
 
     /**
-     * See {@link Request#hasAttribute}.
+     * Checks if a request attribute exists.
      *
+     * @param name a {@code String} specifying the name of the attribute
+     *             <p>{@code false} otherwise
+     * @see #attribute
+     * @see #attributeNames
+     * @see #removeAttribute
+     * @see #setAttribute
      * @since 1.0
      */
     public boolean hasAttribute(String name) {
@@ -1743,8 +2139,14 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getAttributeNames}.
+     * Returns a list of attribute names available to this request.
      *
+     * @return a list of strings containing the names of the request's attributes; or
+     * <p>an empty list if not attributes are present
+     * @see #attribute
+     * @see #hasAttribute
+     * @see #removeAttribute
+     * @see #setAttribute
      * @since 1.0
      */
     public List<String> attributeNames() {
@@ -1752,8 +2154,14 @@ public class Context {
     }
 
     /**
-     * See {@link Request#removeAttribute}.
+     * Removes an attribute from this request. This method is not generally needed as
+     * attributes only persist as long as the request is being handled.
      *
+     * @param name the name of the attribute to remove
+     * @see #attribute
+     * @see #hasAttribute
+     * @see #attributeNames
+     * @see #setAttribute
      * @since 1.0
      */
     public void removeAttribute(String name) {
@@ -1761,8 +2169,17 @@ public class Context {
     }
 
     /**
-     * See {@link Request#setAttribute}.
+     * Stores an attribute in this request. Attributes are reset between requests.
+     * <p>Attribute names should follow the same conventions as package names.
+     * If the object passed in is {@code null}, the effect is the same as calling
+     * {@code removeAttribute}.
      *
+     * @param name   the name of the attribute to set
+     * @param object the object to store
+     * @see #attribute
+     * @see #hasAttribute
+     * @see #attributeNames
+     * @see #removeAttribute
      * @since 1.0
      */
     public void setAttribute(String name, Object object) {
@@ -1770,8 +2187,10 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getCharacterEncoding}.
+     * Returns the name of the character encoding used in the body of this request.
      *
+     * @return a {@code String} containing the name of the character encoding; or
+     * <p>{@code null} if the request does not specify a character encoding
      * @since 1.0
      */
     public String characterEncoding() {
@@ -1779,8 +2198,10 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getContentType}.
+     * Returns the MIME type of the body of the request, or null if the type is not known.
      *
+     * @return a {@code String} containing the name of the MIME type of the request; or
+     * {@code null} if the type is not known
      * @since 1.0
      */
     public String contentType() {
@@ -1788,17 +2209,15 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getDateHeader}.
+     * Returns the value of the specified request header as a String.
      *
-     * @since 1.0
-     */
-    public long headerDate(String name) {
-        return request_.getDateHeader(name);
-    }
-
-    /**
-     * See {@link Request#getHeader}.
-     *
+     * @param name the case-insensitive name of the header
+     * @return a {@code String} with the value of the requested header; or
+     * {@code null} if the request does not have a header of that name
+     * @see #headerDate
+     * @see #headerInt
+     * @see #headerNames
+     * @see #headers
      * @since 1.0
      */
     public String header(String name) {
@@ -1806,26 +2225,36 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getHeaderNames}.
+     * Returns the value of the specified request header as a long value that
+     * represents a date. Use this method with headers that contain dates,
+     * such as If-Modified-Since.
      *
+     * @param name the case-insensitive name of the header
+     * @return a long value representing the date specified in the header expressed
+     * as the number of milliseconds since January 1, 1970 GMT; or
+     * <p>{@code -1} if the named header was not included with the request
+     * @throws IllegalArgumentException if the header can't be converted to a date
+     * @see #header
+     * @see #headerInt
+     * @see #headerNames
+     * @see #headers
      * @since 1.0
      */
-    public List<String> headerNames() {
-        return Collections.list(request_.getHeaderNames());
+    public long headerDate(String name) {
+        return request_.getDateHeader(name);
     }
 
     /**
-     * See {@link Request#getHeaders}.
+     * Returns the value of the specified request header as an int.
      *
-     * @since 1.0
-     */
-    public List<String> headers(String name) {
-        return Collections.list(request_.getHeaders(name));
-    }
-
-    /**
-     * See {@link Request#getIntHeader}.
-     *
+     * @param name the case-insensitive name of the header
+     * @return an integer expressing the value of the request header; or
+     * <p>{@code -1} if the request doesn't have a header of this name
+     * @throws NumberFormatException if the header value can't be converted to an int
+     * @see #header
+     * @see #headerDate
+     * @see #headerNames
+     * @see #headers
      * @since 1.0
      */
     public int headerInt(String name) {
@@ -1833,8 +2262,47 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getLocale}.
+     * Returns a list of all the header names in the request.
      *
+     * @return a list of all the header names sent with this request;
+     * <p>if the request has no headers, an empty list will be returned
+     * @see #header
+     * @see #headerDate
+     * @see #headerInt
+     * @see #headers
+     * @since 1.0
+     */
+    public List<String> headerNames() {
+        return Collections.list(request_.getHeaderNames());
+    }
+
+    /**
+     * Returns all the values of the specified request header as a list
+     * of {@code String} objects.
+     * <p>Some headers, such as {@code Accept-Language} can be sent by clients
+     * as several headers each with a different value rather than sending the
+     * header as a comma separated list.
+     *
+     * @param name the case-insensitive name of the header
+     * @return a list containing the values of the requested header;
+     * <p>itf the request does not have any headers of that name an empty list will be returned
+     * @see #header
+     * @see #headerDate
+     * @see #headerInt
+     * @see #headerNames
+     * @since 1.0
+     */
+    public List<String> headers(String name) {
+        return Collections.list(request_.getHeaders(name));
+    }
+
+    /**
+     * Returns the preferred {@code Locale} that the client will accept content in,
+     * based on the {@code Accept-Language} header.
+     * <p>If the client request doesn't provide an Accept-Language header, this method
+     * returns the default locale for the server.
+     *
+     * @return the preferred Locale for the client
      * @since 1.0
      */
     public Locale locale() {
@@ -1842,8 +2310,13 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getLocales}.
+     * Returns a list of {@code Locale} objects indicating, in decreasing order
+     * starting with the preferred locale, the locales that are acceptable to the
+     * client based on the {@code Accept-Language}} header.
+     * <p>If the client request doesn't provide an Accept-Language header, this method
+     * returns a list containing one Locale, the default locale for the server.
      *
+     * @return a list of preferred Locale objects for the client
      * @since 1.0
      */
     public List<Locale> locales() {
@@ -1851,17 +2324,10 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getProtocol}.
+     * Returns the Internet Protocol (IP) address of the client or last proxy
+     * that sent the request.
      *
-     * @since 1.0
-     */
-    public String protocol() {
-        return request_.getProtocol();
-    }
-
-    /**
-     * See {@link Request#getRemoteAddr}.
-     *
+     * @return a String containing the IP address of the client that sent the request
      * @since 1.0
      */
     public String remoteAddr() {
@@ -1869,8 +2335,12 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getRemoteUser}.
+     * Returns the login of the user making this request.
+     * <p>Whether the username is sent with each subsequent request depends on the
+     * browser and type of authentication.
      *
+     * @return a String specifying the login of the user making this request; or
+     * {@code null} if the user login is not known
      * @since 1.0
      */
     public String remoteUser() {
@@ -1878,8 +2348,12 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getRemoteHost}.
+     * Returns the fully qualified name of the client or the last proxy that
+     * sent the request. If the engine cannot or chooses not to resolve the hostname
+     * (to improve performance), this method returns the dotted-string form of the IP
+     * address.
      *
+     * @return a String containing the fully qualified name of the client
      * @since 1.0
      */
     public String remoteHost() {
@@ -1889,7 +2363,7 @@ public class Context {
     /**
      * Returns the current session associated with this request, or if the request does not have a session, creates one.
      *
-     * @return the <code>Session</code> associated with this request
+     * @return the {@code Session} associated with this request
      * @see #session(boolean)
      * @since 1.0
      */
@@ -1898,17 +2372,17 @@ public class Context {
     }
 
     /**
-     * Returns the current <code>Session</code> associated with this request or, if there is no current session and
-     * <code>create</code> is true, returns a new session.
+     * Returns the current {@code Session} associated with this request or, if there is no current session and
+     * {@code create} is true, returns a new session.
      *
      * <p>
-     * If <code>create</code> is <code>false</code> and the request has no valid <code>Session</code>, this method
-     * returns <code>null</code>.
+     * If {@code create} is {@code false} and the request has no valid {@code Session}, this method
+     * returns {@code null}.
      *
-     * @param create <code>true</code> to create a new session for this request if necessary; <code>false</code> to return
-     *               <code>null</code> if there's no current session
-     * @return the <code>Session</code> associated with this request or <code>null</code> if <code>create</code> is
-     * <code>false</code> and the request has no valid session
+     * @param create {@code true} to create a new session for this request if necessary; {@code false} to return
+     *               {@code null} if there's no current session
+     * @return the {@code Session} associated with this request or {@code null} if {@code create} is
+     * {@code false} and the request has no valid session
      * @since 1.0
      */
     public Session session(boolean create) {
@@ -1920,8 +2394,9 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getServerPort}.
+     * Returns the port number to which the request was sent.
      *
+     * @return an integer specifying the port number
      * @since 1.0
      */
     public int serverPort() {
@@ -1929,8 +2404,20 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getScheme}.
+     * Returns the name and version of the protocol the request uses in the
+     * form protocol/majorVersion.minorVersion, for example, HTTP/1.1.
      *
+     * @return a String containing the protocol name and version number
+     * @since 1.0
+     */
+    public String protocol() {
+        return request_.getProtocol();
+    }
+
+    /**
+     * Returns the name of the scheme used to make this request.
+     *
+     * @return the name of the scheme used to make this request
      * @since 1.0
      */
     public String scheme() {
@@ -1938,8 +2425,9 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getServerName}.
+     * Returns the host name of the server to which the request was sent.
      *
+     * @return the name of the server
      * @since 1.0
      */
     public String serverName() {
@@ -1947,8 +2435,12 @@ public class Context {
     }
 
     /**
-     * See {@link Request#getContextPath}.
+     * Returns the portion of the request URI that indicates the context of the request.
+     * The context path always comes first in a request URI. The path starts with a "/"
+     * character but does not end with a "/" character. For servlets in the default (root)
+     * context, this method returns "". The container does not decode this string.
      *
+     * @return the portion of the request URI that indicates the context of the request
      * @since 1.0
      */
     public String contextPath() {
@@ -1956,8 +2448,10 @@ public class Context {
     }
 
     /**
-     * See {@link Request#isSecure}.
+     * Returns a boolean indicating whether this request was made using a secure channel,
+     * such as HTTPS.
      *
+     * @return a boolean indicating whether the request was made using a secure channel
      * @since 1.0
      */
     public boolean secure() {
@@ -2001,7 +2495,8 @@ public class Context {
     }
 
     /**
-     * See {@link Response#clearBuffer()}.
+     * Clears the text buffer is it's enabled.
+     * <p>If the text buffer is disabled, this method does nothing.
      *
      * @since 1.0
      */
@@ -2010,7 +2505,9 @@ public class Context {
     }
 
     /**
-     * See {@link Response#flush()}.
+     * Forces all the streamed content to be output to the client.
+     * <p>If the text buffer is enabled, this will flush its content to the
+     * output stream first.
      *
      * @since 1.0
      */
@@ -2019,17 +2516,22 @@ public class Context {
     }
 
     /**
-     * See {@link Response#getOutputStream()}.
+     * Returns an output stream suitable for writing binary data in the response.
+     * <p>When possible and applicable, this output stream will automatically handle
+     * gzip encoding.
      *
+     * @return an {@code OutputStream} for binary data output
      * @since 1.0
      */
-    public OutputStream outputStream() {
+    public OutputStream outputStream()
+    throws EngineException {
         return response_.getOutputStream();
     }
 
     /**
-     * See {@link Response#setContentType(String)}.
+     * Sets the content type of the response being sent to the client.
      *
+     * @param contentType the MIME type of the content
      * @since 1.0
      */
     public void setContentType(String contentType) {
@@ -2037,17 +2539,10 @@ public class Context {
     }
 
     /**
-     * See {@link Response#setLocale(Locale)}.
+     * Sets the length of the content body in the response.
      *
-     * @since 1.0
-     */
-    public void setLocale(Locale locale) {
-        response_.setLocale(locale);
-    }
-
-    /**
-     * See {@link Response#setContentLength(int)}.
-     *
+     * @param length an integer specifying the length of the content being
+     *               returned to the client
      * @since 1.0
      */
     public void setContentLength(int length) {
@@ -2055,10 +2550,20 @@ public class Context {
     }
 
     /**
-     * Adds the <code>Cookie</code> created by a <code>CookieBuilder</code> to the response.
+     * Sets the locale of the response.
+     *
+     * @param locale the locale of the response
+     * @since 1.0
+     */
+    public void setLocale(Locale locale) {
+        response_.setLocale(locale);
+    }
+
+    /**
+     * Adds the {@code Cookie} created by a {@code CookieBuilder} to the response.
      * This method can be called multiple times to set more than one cookie.
      *
-     * @param builder the <code>CookieBuilder</code> to use for building the <code>Cookie</code>
+     * @param builder the {@code CookieBuilder} to use for building the {@code Cookie}
      * @since 1.0
      */
     public void addCookie(CookieBuilder builder) {
@@ -2087,8 +2592,23 @@ public class Context {
     }
 
     /**
-     * See {@link Response#addHeader(String, String)}.
+     * Sets a response header with the given name and value.
+     * <p>If the header had already been set, the new value overwrites the previous one.
      *
+     * @param name the name of the header
+     * @param value the additional header value
+     * @since 1.0
+     */
+    public void setHeader(String name, String value) {
+        response_.setHeader(name, value);
+    }
+
+    /**
+     * Adds a response header with the given name and value.
+     * <p>This method allows response headers to have multiple values.
+     *
+     * @param name the name of the header
+     * @param value the additional header value
      * @since 1.0
      */
     public void addHeader(String name, String value) {
@@ -2096,26 +2616,59 @@ public class Context {
     }
 
     /**
-     * See {@link Response#addDateHeader(String, long)}.
+     * Adds a response header with the given name and date-value. The date is specified in terms of milliseconds since the epoch.
+     * <p>If the header had already been set, the new value overwrites the previous one.
      *
+     * @param name the name of the header to set
+     * @param date the additional date value
      * @since 1.0
      */
-    public void addHeader(String name, long date) {
+    public void setDateHeader(String name, long date) {
+        response_.setDateHeader(name, date);
+    }
+
+    /**
+     * Adds a response header with the given name and date-value. The date is specified in terms of milliseconds since the epoch.
+     * <p>This method allows response headers to have multiple values.
+     *
+     * @param name the name of the header to set
+     * @param date the additional date value
+     * @since 1.0
+     */
+    public void addDateHeader(String name, long date) {
         response_.addDateHeader(name, date);
     }
 
     /**
-     * See {@link Response#addIntHeader(String, int)}.
+     * Adds a response header with the given name and integer value.
+     * <p>If the header had already been set, the new value overwrites the previous one.
+     *
+     * @param name the name of the header
+     * @param value the assigned integer value
      *
      * @since 1.0
      */
-    public void addHeader(String name, int integer) {
-        response_.addIntHeader(name, integer);
+    public void setHeader(String name, int value) {
+        response_.setIntHeader(name, value);
     }
 
     /**
-     * See {@link Response#setStatus(int)}.
+     * Adds a response header with the given name and integer value.
+     * <p>This method allows response headers to have multiple values.
      *
+     * @param name the name of the header
+     * @param value the assigned integer value
+     *
+     * @since 1.0
+     */
+    public void addHeader(String name, int value) {
+        response_.addIntHeader(name, value);
+    }
+
+    /**
+     * Sets the status code for the response.
+     *
+     * @param statusCode the status code
      * @since 1.0
      */
     public void setStatus(int statusCode) {

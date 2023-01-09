@@ -1,4 +1,5 @@
 [![License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Java](https://img.shields.io/badge/java-17%2B-blue)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 [![Release](https://img.shields.io/github/release/gbevin/rife2.svg)](https://github.com/gbevin/rife2/releases/latest)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.uwyn.rife2/rife2/badge.svg?color=blue)](https://maven-badges.herokuapp.com/maven-central/com.uwyn.rife2/rife2)
 [![Nexus Snapshot](https://img.shields.io/nexus/s/com.uwyn.rife2/rife2?server=https%3A%2F%2Fs01.oss.sonatype.org%2F)](https://s01.oss.sonatype.org/content/repositories/snapshots/com/uwyn/rife2/rife2/)
@@ -20,6 +21,45 @@ Since then, the world and Java have changed and many of the original RIFE APIs c
 contains a lot more information.**
 
 _NOTE: The documentation and this readme are work-in-progress_
+
+## Why RIFE2?
+
+A frequently asked question is: "Why choose RIFE2 over other popular frameworks"?
+
+The short answer is that *RIFE2 is different*, it's designed to create web
+applications quickly with small teams. It has challenged and will always
+challenge the status-quo. It's not meant to replace enterprise-level frameworks
+like Spring or JEE, though I've used it for enterprise applications. RIFE2
+leverages the power of the Java platform for web applications that you'd usually
+write with scripting languages. Productivity and maintainability is key, and
+you'll find that you get 90% of the work done for 10% of the effort, and can
+still integrate with other Java libraries and frameworks where you need it.
+
+RIFE2 has features that after 20 years still can't be found elsewhere:  
+web continuations, bidirectional template engine, bean-centric metadata system,
+full-stack without dependencies, metadata-driven SQL builders, content
+management framework, full localization support, resource abstraction, cron-like
+scheduler.
+
+Most of these features have stood the test of time and after 20 years still
+prove to be great choices for web application development. RIFE2 has learned
+from decades of experience and improves on these original features in many ways.
+
+RIFE2 also has features that have been adopted by others, but that usually lack
+the convenience of the tight integration throughout a full-stack.
+
+For instance: out-of-container tests can analyze the structure of the resulting
+templates without having to parse HTML, the authentication system is built from
+all the other pieces of the full-stack and seamlessly integrates into your web
+application, URLs are generated from the configuration you created without the
+risk of becoming stale, the logic-less templates are really purely content
+driven and can generate any text-based format (JSON, XML, HTML, SVG, SQL), ...
+and much more.
+
+*RIFE2 is the red pill*, ready to show you how deep the rabbit hole can go, if
+you're up for it!
+
+# Quickstart
 
 ## Hello World Example
 
@@ -63,11 +103,11 @@ application {
 }
 
 dependencies {
-    implementation("com.uwyn.rife2:rife2:0.9.3")
+    implementation("com.uwyn.rife2:rife2:0.9.6")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
     testImplementation("org.jsoup:jsoup:1.15.3")
-    runtimeOnly("org.eclipse.jetty:jetty-server:11.0.12")
-    runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.12")
+    runtimeOnly("org.eclipse.jetty:jetty-server:11.0.13")
+    runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.13")
 }
 ```
 

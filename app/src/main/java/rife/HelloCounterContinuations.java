@@ -19,7 +19,7 @@ public class HelloCounterContinuations extends Site {
         }
     }
 
-    Route count = route("/count", Counter.class);
+    Route count = getPost("/count", Counter.class);
 
     public static void main(String[] args) {
         new Server().start(new HelloCounterContinuations());

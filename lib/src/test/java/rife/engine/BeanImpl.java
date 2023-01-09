@@ -47,9 +47,9 @@ public class BeanImpl extends Validation {
     public void activateValidation() {
         addConstraint(new ConstrainedProperty("character").editable(false));
         addConstraint(new ConstrainedProperty("byte").editable(false));
-        addConstraint(new ConstrainedProperty("stringFile").file(true));
-        addConstraint(new ConstrainedProperty("bytesFile").file(true));
-        addConstraint(new ConstrainedProperty("streamFile").file(true));
+        addConstraint(new ConstrainedProperty("stringFile"));
+        addConstraint(new ConstrainedProperty("bytesFile"));
+        addConstraint(new ConstrainedProperty("streamFile"));
 
         addGroup("somegroup")
             .addConstraint(new ConstrainedProperty("enum"))

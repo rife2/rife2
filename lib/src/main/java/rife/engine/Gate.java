@@ -27,7 +27,7 @@ public class Gate {
     private Throwable initException_ = null;
 
     /**
-     * Set up the gate with the provided <code>Site</code>.
+     * Set up the gate with the provided {@code Site}.
      *
      * @param site the site that will handle the requests
      * @since 1.0
@@ -36,11 +36,13 @@ public class Gate {
         site.properties_.setParent(properties);
         site_ = site;
 
-        try {
-            site_.setup();
-            site_.deploy();
-        } catch (Throwable e) {
-            handleSiteInitException(e);
+        if (!site.deployed_) {
+            try {
+                site_.setup();
+                site_.deploy();
+            } catch (Throwable e) {
+                handleSiteInitException(e);
+            }
         }
     }
 
@@ -51,8 +53,8 @@ public class Gate {
      * @param elementUrl the part of the URL after the gateUrl that will be resolved to find the execution element
      * @param request    the request instance of this web request
      * @param response   the response instance of this web request
-     * @return <code>true</code> if the request was successfully handled; or
-     * <code>false</code> otherwise
+     * @return {@code true} if the request was successfully handled; or
+     * {@code false} otherwise
      * @since 1.0
      */
     public boolean handleRequest(String gateUrl, String elementUrl, Request request, Response response) {

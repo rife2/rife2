@@ -58,3 +58,5 @@
 <field><value>2</value><id>otheroptions2</id></field><field><value>0</value><id>otheroptions0</id></field>
 <field><value>red spots</value></field><field><value>green spots</value></field>
 <field><name>yourcolors</name><type>select</type><options></options></field>
+<field><name>email</name><type>text</type><size>20</size><value>my@email.com</value></field>
+<field><name>url</name><type>text</type><size>40</size><value>https://rife2.com</value></field>

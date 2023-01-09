@@ -16,33 +16,33 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
-public class RouteClass implements Route {
+class RouteClass implements Route {
     private final Router router_;
-    private final RequestMethod method_;
+    private final RequestMethod[] methods_;
     private String path_;
     private final PathInfoHandling pathInfoHandling_;
     private final Class<? extends Element> elementClass_;
     private List<Field> fields_ = null;
 
-    public RouteClass(Router router, Class<? extends Element> elementClass) {
+    RouteClass(Router router, Class<? extends Element> elementClass) {
         this(router, null, null, null, elementClass);
     }
 
-    public RouteClass(Router router, RequestMethod method, Class<? extends Element> elementClass) {
-        this(router, method, null, null, elementClass);
+    RouteClass(Router router, RequestMethod[] methods, Class<? extends Element> elementClass) {
+        this(router, methods, null, null, elementClass);
     }
 
-    public RouteClass(Router router, RequestMethod method, String path, Class<? extends Element> elementClass) {
-        this(router, method, path, null, elementClass);
+    RouteClass(Router router, RequestMethod[] methods, String path, Class<? extends Element> elementClass) {
+        this(router, methods, path, null, elementClass);
     }
 
-    public RouteClass(Router router, RequestMethod method, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
-        this(router, method, null, pathInfoHandling, elementClass);
+    RouteClass(Router router, RequestMethod[] methods, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
+        this(router, methods, null, pathInfoHandling, elementClass);
     }
 
-    public RouteClass(Router router, RequestMethod method, String path, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
+    RouteClass(Router router, RequestMethod[] methods, String path, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
         router_ = router;
-        method_ = method;
+        methods_ = methods;
         elementClass_ = elementClass;
         if (path == null) {
             path = defaultElementPath();
@@ -60,8 +60,8 @@ public class RouteClass implements Route {
     }
 
     @Override
-    public RequestMethod method() {
-        return method_;
+    public RequestMethod[] methods() {
+        return methods_;
     }
 
     @Override
@@ -124,7 +124,7 @@ public class RouteClass implements Route {
         return fields;
     }
 
-    public static Map<String, String[]> getAnnotatedOutParameters(Context context) {
+    static Map<String, String[]> getAnnotatedOutParameters(Context context) {
         try {
             var parameters = new LinkedHashMap<String, String[]>();
 
@@ -159,7 +159,7 @@ public class RouteClass implements Route {
         }
     }
 
-    public Set<String> getAnnotatedInParameters() {
+    Set<String> getAnnotatedInParameters() {
         try {
             var parameters = new HashSet<String>();
 

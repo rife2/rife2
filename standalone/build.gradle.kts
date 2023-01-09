@@ -38,6 +38,11 @@ tasks {
         project.logger.lifecycle("   Open your browser at http://localhost:8080/authentication")
         project.logger.lifecycle("   The authentication credentials are: testUser / testPassword")
         project.logger.lifecycle("")
+        project.logger.lifecycle(" HelloContentManagement:")
+        project.logger.lifecycle("   Install the database at http://localhost:8080/cmf/install")
+        project.logger.lifecycle("   Then add a news item by going to http://localhost:8080/cmf/add")
+        project.logger.lifecycle("   Delete the database through http://localhost:8080/cmf/remove")
+        project.logger.lifecycle("")
         project.logger.lifecycle(" HelloContinuations:")
         project.logger.lifecycle("   Open your browser at http://localhost:8080/guess")
         project.logger.lifecycle("")
@@ -55,6 +60,10 @@ tasks {
         project.logger.lifecycle("")
         project.logger.lifecycle(" HelloForm:")
         project.logger.lifecycle("   Open your browser at http://localhost:8080/form")
+        project.logger.lifecycle("")
+        project.logger.lifecycle("")
+        project.logger.lifecycle(" runHelloFormGeneration:")
+        project.logger.lifecycle("   Open your browser at http://localhost:8080/generation/form")
         project.logger.lifecycle("")
         project.logger.lifecycle(" HelloFormContinuations:")
         project.logger.lifecycle("   Open your browser at http://localhost:8080/continuation/form")
@@ -101,6 +110,20 @@ tasks {
         project.logger.lifecycle("================================================================================")
         project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/authentication")
         project.logger.lifecycle(" The authentication credentials are: testUser / testPassword")
+        project.logger.lifecycle("================================================================================")
+        project.logger.lifecycle("")
+    }
+
+    register<JavaExec>("runHelloContentManagement") {
+        dependsOn(":lib:agentJar")
+        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set("rife.HelloContentManagement")
+        jvmArgs = listOf("-javaagent:${project(":lib").buildDir}/libs/$rifeAgentJar")
+        project.logger.lifecycle("")
+        project.logger.lifecycle("================================================================================")
+        project.logger.lifecycle("   Install the database at http://localhost:8080/install")
+        project.logger.lifecycle("   Then add a news item by going to http://localhost:8080/add")
+        project.logger.lifecycle("   Delete the database through http://localhost:8080/remove")
         project.logger.lifecycle("================================================================================")
         project.logger.lifecycle("")
     }
@@ -163,8 +186,21 @@ tasks {
     }
 
     register<JavaExec>("runHelloFormContinuations") {
+        dependsOn(":lib:agentJar")
         classpath = sourceSets["main"].runtimeClasspath
         mainClass.set("rife.HelloFormContinuations")
+        jvmArgs = listOf("-javaagent:${project(":lib").buildDir}/libs/$rifeAgentJar")
+        project.logger.lifecycle("")
+        project.logger.lifecycle("================================================================================")
+        project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/form")
+        project.logger.lifecycle("================================================================================")
+        project.logger.lifecycle("")
+    }
+
+    register<JavaExec>("runHelloFormGeneration") {
+        dependsOn(":lib:agentJar")
+        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set("rife.HelloFormGeneration")
         jvmArgs = listOf("-javaagent:${project(":lib").buildDir}/libs/$rifeAgentJar")
         project.logger.lifecycle("")
         project.logger.lifecycle("================================================================================")
