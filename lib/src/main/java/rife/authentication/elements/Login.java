@@ -4,7 +4,6 @@
  */
 package rife.authentication.elements;
 
-import jakarta.servlet.http.Cookie;
 import rife.authentication.Credentials;
 import rife.authentication.SessionAttributes;
 import rife.authentication.credentials.RememberMe;
@@ -25,8 +24,28 @@ import rife.validation.ValidationError;
  * @since 1.0
  */
 public class Login extends Identified implements SessionAttributes {
-    protected final Template template_;
+    private final Template template_;
 
+    /**
+     * This constructor is meant to be used when extending the {@code Login} element
+     * with your custom login class.
+     * <p>Don't forget to also override the `getAuthConfig()` and `getTemplate()`
+     * methods.
+     * @since 1.0
+     */
+    protected Login() {
+        template_ = null;
+    }
+
+    /**
+     * This constructor is meant to be used when the {@code Login} element is used
+     * directly as a route in your site.
+     * <p>When extending this element, use the default constructor instead
+     * and override the `getAuthConfig()` and `getTemplate()` methods.
+     * @param config the auth config to use
+     * @param template the template instance blueprint to use
+     * @since 1.0
+     */
     public Login(AuthConfig config, Template template) {
         super(config);
         template_ = template;
@@ -41,12 +60,19 @@ public class Login extends Identified implements SessionAttributes {
     }
 
     /**
-     * Hook method that is called after the template instance has been instantiated.
+     * Hook method that is called to create the template instance.
      *
-     * @param template the template instance that has been instantiated
+     * @return the template to use for login
      * @since 1.0
      */
-    protected void entrance(Template template) {
+    protected Template getTemplate() {
+        if (template_ == null) {
+            return null;
+        }
+
+        final Template template = template_.createNewInstance();
+        template.addResourceBundles(template_.getResourceBundles());
+        return template;
     }
 
     /**
@@ -129,23 +155,22 @@ public class Login extends Identified implements SessionAttributes {
 
     public void process(Context c)
     throws Exception {
-        final var credentials_class = authConfig_.credentialsClass();
-        final var session_validator = authConfig_.sessionValidator();
+        final var auth_config = getAuthConfig();
+        final var credentials_class = auth_config.credentialsClass();
+        final var session_validator = auth_config.sessionValidator();
 
         assert credentials_class != null;
         assert session_validator != null;
 
         initializeLogin();
 
-        var auth_data = authConfig_.generateAuthData(c);
+        var auth_data = auth_config.generateAuthData(c);
 
-        final Template template = template_.createNewInstance();
-        template.addResourceBundles(template_.getResourceBundles());
-        entrance(template);
+        final Template template = getTemplate();
 
         // check if a cookie for remember id is provided
-        var remember_id = c.cookieValue(authConfig_.rememberCookieName());
-        if (remember_id != null && !authConfig_.prohibitRemember()) {
+        var remember_id = c.cookieValue(auth_config.rememberCookieName());
+        if (remember_id != null && !auth_config.prohibitRemember()) {
             var remember_manager = session_validator.getRememberManager();
             if (null == remember_manager) {
                 throw new UndefinedAuthenticationRememberManagerException();
@@ -169,8 +194,8 @@ public class Login extends Identified implements SessionAttributes {
                 unvalidatedCredentials(template, credentials);
                 c.generateForm(template, credentials);
             } else {
-                if (authConfig_.role() != null && credentials instanceof RoleUserCredentials role_user) {
-                    role_user.setRole(authConfig_.role());
+                if (auth_config.role() != null && credentials instanceof RoleUserCredentials role_user) {
+                    role_user.setRole(auth_config.role());
                 }
 
                 validatedCredentials(credentials);
@@ -204,8 +229,10 @@ public class Login extends Identified implements SessionAttributes {
 
     private boolean startNewSession(Context c, long userid, String authData, boolean remember, boolean remembered)
     throws Exception {
+        final var auth_config = getAuthConfig();
+
         if (remember) {
-            var remember_manager = authConfig_.sessionValidator().getRememberManager();
+            var remember_manager = auth_config.sessionValidator().getRememberManager();
             if (null == remember_manager) {
                 throw new UndefinedAuthenticationRememberManagerException();
             }
@@ -213,22 +240,22 @@ public class Login extends Identified implements SessionAttributes {
             var remember_id = remember_manager.createRememberId(userid, authData);
 
             if (remember_id != null) {
-                c.addCookie(new CookieBuilder(authConfig_.rememberCookieName(), remember_id)
+                c.addCookie(new CookieBuilder(auth_config.rememberCookieName(), remember_id)
                     .path("/")
-                    .maxAge(authConfig_.rememberMaxAge()));
+                    .maxAge(auth_config.rememberMaxAge()));
             }
         }
 
-        var authid = authConfig_.sessionValidator().getSessionManager().startSession(userid, authData, remembered);
+        var authid = auth_config.sessionValidator().getSessionManager().startSession(userid, authData, remembered);
 
         if (null != authid) {
             authenticated(userid);
 
             // set cookie
-            c.addCookie(new CookieBuilder(authConfig_.authCookieName(), authid)
+            c.addCookie(new CookieBuilder(auth_config.authCookieName(), authid)
                 .path("/"));
 
-            var session_validator = authConfig_.sessionValidator();
+            var session_validator = auth_config.sessionValidator();
             assert session_validator != null;
 
             // validate the session
@@ -236,12 +263,12 @@ public class Login extends Identified implements SessionAttributes {
 
             // check if the validation allows access
             if (session_validator.isAccessAuthorized(session_validity_id)) {
-                var auth_attribute = Authenticated.createAuthAttributeName(c.route(), authConfig_.authCookieName(), authid);
+                var auth_attribute = Authenticated.createAuthAttributeName(c.route(), auth_config.authCookieName(), authid);
                 c.setAttribute(auth_attribute, true);
                 setIdentityAttribute(c);
 
                 // successful login
-                c.redirect(authConfig_.landingRoute());
+                c.redirect(auth_config.landingRoute());
                 return true;
             }
         }
@@ -250,12 +277,12 @@ public class Login extends Identified implements SessionAttributes {
     }
 
     public boolean hasAttribute(String key) {
-        return key.equals("role") && authConfig_.role() != null;
+        return key.equals("role") && getAuthConfig().role() != null;
     }
 
     public String getAttribute(String key) {
         if (key.equals("role")) {
-            return authConfig_.role();
+            return getAuthConfig().role();
         }
 
         return null;

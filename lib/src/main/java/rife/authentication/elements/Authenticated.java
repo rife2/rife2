@@ -17,6 +17,23 @@ import rife.engine.Route;
  * @since 1.0
  */
 public class Authenticated extends Identified implements SessionAttributes {
+    /**
+     * This constructor is meant to be used when extending the {@code Authenticated}
+     * element with your custom authenticated class.
+     * <p>Don't forget to also override the `getAuthConfig()` methodss.
+     * @since 1.0
+     */
+    protected Authenticated() {
+    }
+
+    /**
+     * This constructor is meant to be used when the {@code Authenticated} element
+     * is used directly as a route in your site.
+     * <p>When extending this element, use the default constructor instead
+     * and override the `getAuthConfig()` method.
+     * @param config the auth config to use
+     * @since 1.0
+     */
     public Authenticated(AuthConfig config) {
         super(config);
     }
@@ -54,15 +71,16 @@ public class Authenticated extends Identified implements SessionAttributes {
     throws Exception {
         initializeAuthenticated();
 
-        if (c.hasCookie(authConfig_.authCookieName())) {
-            var auth_id = c.cookieValue(authConfig_.authCookieName());
-            var auth_attribute = createAuthAttributeName(authConfig_.loginRoute(), authConfig_.authCookieName(), auth_id);
-            var auth_data = authConfig_.generateAuthData(c);
+        final var auth_config = getAuthConfig();
+        if (c.hasCookie(auth_config.authCookieName())) {
+            var auth_id = c.cookieValue(auth_config.authCookieName());
+            var auth_attribute = createAuthAttributeName(auth_config.loginRoute(), auth_config.authCookieName(), auth_id);
+            var auth_data = auth_config.generateAuthData(c);
 
             if (c.hasAttribute(auth_attribute)) {
                 c.next();
             } else {
-                var session_validator = authConfig_.sessionValidator();
+                var session_validator = auth_config.sessionValidator();
                 assert session_validator != null;
 
                 // validate the session
@@ -75,9 +93,9 @@ public class Authenticated extends Identified implements SessionAttributes {
                     // prohibit access if the authentication session was
                     // started through remembered credentials and that
                     // had been set to not allowed
-                    if (authConfig_.prohibitRemember() &&
+                    if (auth_config.prohibitRemember() &&
                         session_manager.wasRemembered(auth_id)) {
-                        sessionNotValid(authConfig_.authCookieName(), auth_id, session_validity_id);
+                        sessionNotValid(auth_config.authCookieName(), auth_id, session_validity_id);
                     }
                     // continue the session
                     else {
@@ -89,23 +107,23 @@ public class Authenticated extends Identified implements SessionAttributes {
                         }
                     }
                 } else {
-                    sessionNotValid(authConfig_.authCookieName(), auth_id, session_validity_id);
+                    sessionNotValid(auth_config.authCookieName(), auth_id, session_validity_id);
                 }
             }
         }
 
-        if (authConfig_.enforceAuthentication()) {
-            c.redirect(c.urlFor(authConfig_.loginRoute()));
+        if (auth_config.enforceAuthentication()) {
+            c.redirect(c.urlFor(auth_config.loginRoute()));
         }
     }
 
     public boolean hasAttribute(String key) {
-        return key.equals("role") && authConfig_.role() != null;
+        return key.equals("role") && getAuthConfig().role() != null;
     }
 
     public String getAttribute(String key) {
         if (key.equals("role")) {
-            return authConfig_.role();
+            return getAuthConfig().role();
         }
 
         return null;

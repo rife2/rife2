@@ -9,8 +9,26 @@ import rife.engine.Context;
 import rife.engine.Element;
 
 public class Identified implements Element {
-    protected final AuthConfig authConfig_;
+    private final AuthConfig authConfig_;
 
+    /**
+     * This constructor is meant to be used when extending the {@code Identified}
+     * element with your custom identification class.
+     * <p>Don't forget to also override the `getAuthConfig()` methods.
+     * @since 1.0
+     */
+    protected Identified() {
+        authConfig_ = null;
+    }
+
+    /**
+     * This constructor is meant to be used when the {@code Identified} element
+     * is used directly as a route in your site.
+     * <p>When extending this element, use the default constructor instead
+     * and override the `getAuthConfig()` method.
+     * @param config the auth config to use
+     * @since 1.0
+     */
     public Identified(AuthConfig config) {
         authConfig_ = config;
     }
@@ -24,13 +42,19 @@ public class Identified implements Element {
         return null;
     }
 
+    /**
+     * Hook method that is called to retrieve the {@code AuthConfig} to use.
+     *
+     * @return the config to use for authentication
+     * @since 1.0
+     */
     public AuthConfig getAuthConfig() {
         return authConfig_;
     }
 
     public void process(Context c)
     throws Exception {
-        if (!c.hasAttribute(authConfig_.identityAttributeName())) {
+        if (!c.hasAttribute(getAuthConfig().identityAttributeName())) {
             setIdentityAttribute(c);
         }
     }
@@ -39,23 +63,23 @@ public class Identified implements Element {
         var identity = getIdentity(c);
         if (identity != null) {
             c.setAttribute(Identified.class.getName(), this);
-            c.setAttribute(authConfig_.identityAttributeName(), identity);
+            c.setAttribute(getAuthConfig().identityAttributeName(), identity);
         }
     }
 
     public RoleUserIdentity getIdentity(Context c) {
-        if (!c.hasCookie(authConfig_.authCookieName())) {
+        if (!c.hasCookie(getAuthConfig().authCookieName())) {
             return null;
         }
 
-        var value = c.cookieValue(authConfig_.authCookieName());
-        var auth_data = authConfig_.generateAuthData(c);
+        var value = c.cookieValue(getAuthConfig().authCookieName());
+        var auth_data = getAuthConfig().generateAuthData(c);
         String login = null;
         RoleUserAttributes attributes = null;
 
-        var validator = authConfig_.sessionValidator();
+        var validator = getAuthConfig().sessionValidator();
         if (validator.getCredentialsManager() instanceof IdentifiableUsersManager credentials) {
-            var auth_attribute = Authenticated.createAuthAttributeName(authConfig_.loginRoute(), authConfig_.authCookieName(), value);
+            var auth_attribute = Authenticated.createAuthAttributeName(getAuthConfig().loginRoute(), getAuthConfig().authCookieName(), value);
 
             if (c.hasAttribute(auth_attribute) ||
                 validator.getSessionManager().isSessionValid(value, auth_data)) {

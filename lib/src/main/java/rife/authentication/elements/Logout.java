@@ -9,21 +9,74 @@ import rife.engine.*;
 import rife.template.Template;
 
 public class Logout implements Element {
-    protected final AuthConfig authConfig_;
-    protected final Template template_;
+    private final AuthConfig authConfig_;
+    private final Template template_;
 
+    /**
+     * This constructor is meant to be used when extending the {@code Logout} element
+     * with your custom logout class.
+     * <p>Don't forget to also override the `getAuthConfig()` and `getTemplate()`
+     * methods.
+     * @since 1.0
+     */
+    protected Logout() {
+        authConfig_ = null;
+        template_ = null;
+    }
+
+    /**
+     * This constructor is meant to be used when the {@code Logout} element is used
+     * directly as a route in your site.
+     * <p>When extending this element, use the default constructor instead
+     * and override the `getAuthConfig()` and `getTemplate()` methods.
+     * @param config the auth config to use
+     * @since 1.0
+     */
     public Logout(AuthConfig config) {
         this(config, null);
     }
+
+    /**
+     * This constructor is meant to be used when the {@code Logout} element is used
+     * directly as a route in your site.
+     * <p>When extending this element, use the default constructor instead
+     * and override the `getAuthConfig()` and `getTemplate()` methods.
+     * @param config the auth config to use
+     * @param template the template instance blueprint to use
+     * @since 1.0
+     */
     public Logout(AuthConfig config, Template template) {
         authConfig_ = config;
         template_ = template;
     }
 
-    protected void initializeLogout() {
+    /**
+     * Hook method that is called to retrieve the {@code AuthConfig} to use.
+     *
+     * @return the config to use for authentication
+     * @since 1.0
+     */
+    public AuthConfig getAuthConfig() {
+        return authConfig_;
     }
 
-    protected void entrance(Template template) {
+    /**
+     * Hook method that is called to create the template instance.
+     *
+     * @return the template to use for logout
+     * @since 1.0
+     */
+    protected Template getTemplate() {
+        if (template_ == null) {
+            return null;
+        }
+
+        final Template template = template_.createNewInstance();
+        template.addResourceBundles(template_.getResourceBundles());
+        return template;
+    }
+
+    protected void initializeLogout() {
     }
 
     protected void loggedOut(Template template) {
@@ -33,33 +86,25 @@ public class Logout implements Element {
     throws Exception {
         initializeLogout();
 
-        final Template template;
-        if (template_ == null) {
-            template = null;
-        } else {
-            template = template_.createNewInstance();
-            template.addResourceBundles(template_.getResourceBundles());
-        }
-
-        entrance(template);
+        final Template template = getTemplate();
 
         String authid = null;
-        var auth_cookie_name = authConfig_.authCookieName();
-        if (c.hasCookie(authConfig_.authCookieName())) {
+        var auth_cookie_name = getAuthConfig().authCookieName();
+        if (c.hasCookie(getAuthConfig().authCookieName())) {
             authid = c.cookieValue(auth_cookie_name);
         }
 
         if (authid != null) {
-            authConfig_.sessionValidator().getSessionManager().eraseSession(authid);
+            getAuthConfig().sessionValidator().getSessionManager().eraseSession(authid);
 
             // clear remember cookie for the user
-            if (c.hasCookie(authConfig_.rememberCookieName())) {
-                if (null == authConfig_.sessionValidator().getRememberManager()) {
+            if (c.hasCookie(getAuthConfig().rememberCookieName())) {
+                if (null == getAuthConfig().sessionValidator().getRememberManager()) {
                     throw new UndefinedLogoutRememberManagerException();
                 }
 
-                var remember_cookie_name = authConfig_.rememberCookieName();
-                authConfig_.sessionValidator().getRememberManager().eraseRememberId(c.cookieValue(remember_cookie_name));
+                var remember_cookie_name = getAuthConfig().rememberCookieName();
+                getAuthConfig().sessionValidator().getRememberManager().eraseRememberId(c.cookieValue(remember_cookie_name));
 
                 c.addCookie(new CookieBuilder(remember_cookie_name, "").path("/").maxAge(-1));
             }
@@ -70,7 +115,7 @@ public class Logout implements Element {
             }
         }
 
-        c.removeAttribute(authConfig_.identityAttributeName());
+        c.removeAttribute(getAuthConfig().identityAttributeName());
 
         loggedOut(template);
 
