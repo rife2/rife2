@@ -52,11 +52,11 @@ public class Login extends Identified implements SessionAttributes {
     }
 
     /**
-     * Hook method that is called at the start of the element's execution.
-     *
+     * Hook method that is called at the start of the element's processing.
+     * @param c the element processing context
      * @since 1.0
      */
-    protected void initializeLogin() {
+    protected void initializeLogin(Context c) {
     }
 
     /**
@@ -155,14 +155,14 @@ public class Login extends Identified implements SessionAttributes {
 
     public void process(Context c)
     throws Exception {
+        initializeLogin(c);
+
         final var auth_config = getAuthConfig();
         final var credentials_class = auth_config.credentialsClass();
         final var session_validator = auth_config.sessionValidator();
 
         assert credentials_class != null;
         assert session_validator != null;
-
-        initializeLogin();
 
         var auth_data = auth_config.generateAuthData(c);
 

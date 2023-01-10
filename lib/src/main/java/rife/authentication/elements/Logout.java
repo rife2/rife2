@@ -76,15 +76,26 @@ public class Logout implements Element {
         return template;
     }
 
-    protected void initializeLogout() {
+    /**
+     * Hook method that is called at the start of the element's processing.
+     * @param c the element processing context
+     * @since 1.0
+     */
+    protected void initializeLogout(Context c) {
     }
 
+    /**
+     * Hook method that is called after logging out and before printing the template.
+     * @param template the template that will be printed; or {@code null} if no
+     *                 template was set up
+     * @since 1.0
+     */
     protected void loggedOut(Template template) {
     }
 
     public void process(Context c)
     throws Exception {
-        initializeLogout();
+        initializeLogout(c);
 
         final Template template = getTemplate();
 

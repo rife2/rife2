@@ -39,11 +39,11 @@ public class Authenticated extends Identified implements SessionAttributes {
     }
 
     /**
-     * Hook method that is called at the start of the element's execution.
-     *
+     * Hook method that is called at the start of the element's processing.
+     * @param c the element processing context
      * @since 1.0
      */
-    protected void initializeAuthenticated() {
+    protected void initializeAuthenticated(Context c) {
     }
 
     /**
@@ -69,7 +69,7 @@ public class Authenticated extends Identified implements SessionAttributes {
 
     public void process(Context c)
     throws Exception {
-        initializeAuthenticated();
+        initializeAuthenticated(c);
 
         final var auth_config = getAuthConfig();
         if (c.hasCookie(auth_config.authCookieName())) {

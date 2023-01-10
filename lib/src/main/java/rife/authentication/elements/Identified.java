@@ -33,6 +33,14 @@ public class Identified implements Element {
         authConfig_ = config;
     }
 
+    /**
+     * Retrieve the {@code Identified} element instance that is active in
+     * this request.
+     * @param c the processing context that will be used for the lookup
+     * @return this request's identified element instance; or
+     * {@code null} if it can't be found
+     * @since 1.0
+     */
     public static Identified getIdentifiedElementInRequest(Context c) {
         var identified = c.attribute(Identified.class.getName());
         if (identified instanceof Identified result) {
@@ -40,6 +48,14 @@ public class Identified implements Element {
         }
 
         return null;
+    }
+
+    /**
+     * Hook method that is called at the start of the element's processing.
+     * @param c the element processing context
+     * @since 1.0
+     */
+    protected void initializeIdentified(Context c) {
     }
 
     /**
@@ -54,6 +70,8 @@ public class Identified implements Element {
 
     public void process(Context c)
     throws Exception {
+        initializeIdentified(c);
+
         if (!c.hasAttribute(getAuthConfig().identityAttributeName())) {
             setIdentityAttribute(c);
         }
