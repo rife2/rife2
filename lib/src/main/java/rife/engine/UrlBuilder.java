@@ -28,9 +28,15 @@ public class UrlBuilder {
     private final Map<String, String[]> parameters_ = new LinkedHashMap<>();
     private String fragment_;
 
-    UrlBuilder(Context context, Route route) {
+    public UrlBuilder(Context context, Route route) {
         context_ = context;
         rootUrl_ = context.webappRootUrl();
+        route_ = route;
+    }
+
+    public UrlBuilder(String rootUrl, Route route) {
+        context_ = null;
+        rootUrl_ = rootUrl;
         route_ = route;
     }
 
