@@ -13,7 +13,7 @@ public class HelloScheduler extends Site {
     Datasource datasource = new Datasource("org.h2.Driver", "jdbc:h2:./embedded_dbs/h2/hello", "sa", "", 5);
     DatabaseScheduler databaseScheduler = DatabaseSchedulerFactory.instance(datasource);
 
-    public static class HelloExecutor extends Executor {
+    public static class CounterExecutor extends Executor {
         private int counter_ = 0;
 
         public boolean executeTask(Task task) {
@@ -29,7 +29,7 @@ public class HelloScheduler extends Site {
     public void setup() {
         final var scheduler = databaseScheduler.getScheduler();
 
-        final var executor = new HelloExecutor();
+        final var executor = new CounterExecutor();
         scheduler.addExecutor(executor);
 
         get("/status", c -> {

@@ -38,8 +38,8 @@ still integrate with other Java libraries and frameworks where you need it.
 RIFE2 has features that after 20 years still can't be found elsewhere:  
 web continuations, bidirectional template engine, bean-centric metadata system,
 full-stack without dependencies, metadata-driven SQL builders, content
-management framework, full localization support, resource abstraction, cron-like
-scheduler.
+management framework, full localization support, resource abstraction, persisted
+cron-like scheduler.
 
 Most of these features have stood the test of time and after 20 years still
 prove to be great choices for web application development. RIFE2 has learned
