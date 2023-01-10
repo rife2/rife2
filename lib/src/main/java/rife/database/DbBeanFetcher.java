@@ -15,9 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class allows a {@link ResultSet} to be easily processed into bean
@@ -84,7 +82,7 @@ public class DbBeanFetcher<BeanType> extends DbRowProcessor {
         }
 
         if (collectInstances) {
-            collectedInstances_ = new ArrayList<BeanType>();
+            collectedInstances_ = new ArrayList<>();
         }
 
         assert datasource_ != null;
@@ -126,15 +124,23 @@ public class DbBeanFetcher<BeanType> extends DbRowProcessor {
         }
 
         var meta = resultSet.getMetaData();
+
         String column_name;
         String column_label;
 
+        // keep track of the columns that have been set as a bean property,
+        // to prevent later results from overwriting earlier ones
+        var processed_columns = new HashSet<String>();
+
+        // go over all the columns and try to set them as bean properties
         for (var i = 1; i <= meta.getColumnCount(); i++) {
             column_name = meta.getColumnName(i).toLowerCase();
             column_label = meta.getColumnLabel(i).toLowerCase();
-            if (beanProperties_.containsKey(column_name)) {
+            if (beanProperties_.containsKey(column_name) && !processed_columns.contains(column_name)) {
+                processed_columns.add(column_name);
                 populateBeanProperty(instance, column_name, meta, resultSet, i);
-            } else if (beanProperties_.containsKey(column_label)) {
+            } else if (beanProperties_.containsKey(column_label) && !processed_columns.contains(column_label)) {
+                processed_columns.add(column_label);
                 populateBeanProperty(instance, column_label, meta, resultSet, i);
             }
         }

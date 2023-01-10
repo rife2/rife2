@@ -459,11 +459,15 @@ public class TestRestoreQuery {
             var query = manager_.getRestoreQuery()
                 .joinInner(table2, Select.ON, "0 = 0") // evals to true for mysql sake
                 .where(table2 + ".id = " + table + ".linkBean")
-                .whereAnd(table + ".linkBean", "=", link_bean2.getId());
+                .whereAnd(table + ".linkBean", "=", link_bean2.getId())
+                .orderBy(table + ".id");
 
             var list = manager_.restore(query);
 
             assertEquals(list.size(), 2);
+            //Confirm original table ID not overwritten by joined ID
+            assertEquals(bean4.getId(), list.get(0).getId());
+            assertEquals(bean5.getId(), list.get(1).getId());
         } finally {
             tearDown();
         }
