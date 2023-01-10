@@ -28,8 +28,8 @@ public class TestDatasources implements ArgumentsProvider {
     static {
         ACTIVE_DATASOURCES = new HashMap<>();
         if (Boolean.parseBoolean(System.getProperty("test.postgres")))       ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.PGSQL, TestDatasources.PGSQL);
-        if (Boolean.parseBoolean(System.getProperty("test.oracle")))         ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.ORACLE, TestDatasources.ORACLE);
         if (Boolean.parseBoolean(System.getProperty("test.mysql")))          ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.MYSQL, TestDatasources.MYSQL);
+        if (Boolean.parseBoolean(System.getProperty("test.oracle")))         ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.ORACLE, TestDatasources.ORACLE);
         if (Boolean.parseBoolean(System.getProperty("test.derby", "true")))  ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.DERBY, TestDatasources.DERBY);
         if (Boolean.parseBoolean(System.getProperty("test.hsqldb", "true"))) ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.HSQLDB, TestDatasources.HSQLDB);
         if (Boolean.parseBoolean(System.getProperty("test.h2", "true")))     ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.H2, TestDatasources.H2);

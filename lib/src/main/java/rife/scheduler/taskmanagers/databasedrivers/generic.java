@@ -10,6 +10,7 @@ import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.database.DbPreparedStatement;
 import rife.database.DbPreparedStatementHandler;
+import rife.scheduler.Frequency;
 import rife.scheduler.Task;
 import rife.scheduler.exceptions.TaskManagerException;
 import rife.scheduler.taskmanagers.DatabaseTasks;
@@ -24,6 +25,7 @@ public class generic extends DatabaseTasks {
     protected SequenceValue getTaskId_ = null;
     protected Insert addTask_ = null;
     protected Select getTask_ = null;
+    protected Select getAllTasks_ = null;
     protected Select getTasksToProcess_ = null;
     protected Select getScheduledTasks_ = null;
     protected Update updateTask_ = null;
@@ -62,12 +64,15 @@ public class generic extends DatabaseTasks {
             .fieldParameter("id")
             .fieldParameter("type")
             .fieldParameter("planned")
-            .fieldParameter("frequency")
+            .fieldParameter("frequency", "frequencySpecification")
             .fieldParameter("busy");
 
         getTask_ = new Select(getDatasource())
             .from(createTableTask_.getTable())
             .whereParameter("id", "=");
+
+        getAllTasks_ = new Select(getDatasource())
+            .from(createTableTask_.getTable());
 
         getTasksToProcess_ = new Select(getDatasource())
             .from(createTableTask_.getTable())
@@ -83,7 +88,7 @@ public class generic extends DatabaseTasks {
             .table(createTableTask_.getTable())
             .fieldParameter("type")
             .fieldParameter("planned")
-            .fieldParameter("frequency")
+            .fieldParameter("frequency", "frequencySpecification")
             .fieldParameter("busy")
             .whereParameter("id", "=");
 
@@ -137,6 +142,11 @@ public class generic extends DatabaseTasks {
         return getTask_(getTask_, new ProcessTask(), id);
     }
 
+    public Collection<Task> getAllTasks()
+    throws TaskManagerException {
+        return getAllTasks_(getAllTasks_, new ProcessTask());
+    }
+
     public Collection<Task> getTasksToProcess()
     throws TaskManagerException {
         return getTasksToProcess_(getTasksToProcess_, new ProcessTask());
@@ -152,7 +162,7 @@ public class generic extends DatabaseTasks {
         return removeTask_(removeTask_, id);
     }
 
-    public boolean rescheduleTask(Task task, long interval, String frequency)
+    public boolean rescheduleTask(Task task, long interval, Frequency frequency)
     throws TaskManagerException {
         return rescheduleTask_(task, interval, frequency);
     }

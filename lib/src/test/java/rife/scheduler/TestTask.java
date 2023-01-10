@@ -10,8 +10,6 @@ import rife.tools.ExceptionUtils;
 import rife.validation.ValidationError;
 
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,7 +28,7 @@ public class TestTask {
         var id = 1;
         var type = TestTasktypes.UPLOAD_GROUPS;
         var planned = System.currentTimeMillis();
-        var frequency = "* * * * *";
+        var frequency = Frequency.MINUTELY;
         var busy = true;
 
         try {
@@ -56,11 +54,18 @@ public class TestTask {
     }
 
     @Test
+    void testCreateTaskOption() {
+        var id = 4;
+        var task = new Task();
+        task.setId(id);
+        assertEquals(task.getId(), task.createTaskOption().getTaskId());
+    }
+
+    @Test
     void testCloneTask() {
         var id = 1;
         var type = TestTasktypes.UPLOAD_GROUPS;
         var planned = System.currentTimeMillis();
-        var frequency = "* * * * *";
         var busy = true;
 
         try {
@@ -68,7 +73,7 @@ public class TestTask {
             task.setId(id);
             task.setType(type);
             task.setPlanned(planned);
-            task.setFrequency(frequency);
+            task.setFrequency(Frequency.MINUTELY);
             task.setBusy(busy);
 
             var task_clone = task.clone();
@@ -97,7 +102,7 @@ public class TestTask {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(System.currentTimeMillis() + 2000);
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
             task.setBusy(false);
             task.resetValidation();
             assertTrue(task.validate());
@@ -117,7 +122,7 @@ public class TestTask {
             task.setFrequency(null);
             task.resetValidation();
             assertTrue(task.validate());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }

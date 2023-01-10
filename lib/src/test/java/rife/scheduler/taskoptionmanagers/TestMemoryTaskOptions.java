@@ -15,8 +15,6 @@ import rife.scheduler.taskoptionmanagers.exceptions.InexistentTaskIdException;
 import rife.tools.ExceptionUtils;
 
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -62,7 +60,7 @@ public class TestMemoryTaskOptions {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id = task_manager.addTask(task);
 
@@ -93,7 +91,7 @@ public class TestMemoryTaskOptions {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id = task_manager.addTask(task);
 
@@ -138,7 +136,7 @@ public class TestMemoryTaskOptions {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id = task_manager.addTask(task);
 
@@ -179,7 +177,7 @@ public class TestMemoryTaskOptions {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id = task_manager.addTask(task);
 
@@ -228,7 +226,7 @@ public class TestMemoryTaskOptions {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id1 = task_manager.addTask(task);
 
@@ -293,7 +291,7 @@ public class TestMemoryTaskOptions {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id = task_manager.addTask(task);
 
@@ -324,7 +322,7 @@ public class TestMemoryTaskOptions {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id = task_manager.addTask(task);
 
@@ -349,7 +347,7 @@ public class TestMemoryTaskOptions {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id = task_manager.addTask(task);
 

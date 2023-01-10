@@ -30,7 +30,13 @@ public abstract class Executor {
         return 1000;
     }
 
-    public abstract boolean executeTask(Task task);
+    public Task createTask() {
+        return new Task().type(getHandledTaskType());
+    }
 
-    public abstract String getHandledTaskType();
+    public String getHandledTaskType() {
+        return getClass().getName();
+    };
+
+    public abstract boolean executeTask(Task task);
 }

@@ -8,21 +8,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.database.Datasource;
 import rife.database.TestDatasources;
-import rife.scheduler.Task;
-import rife.scheduler.TaskManager;
-import rife.scheduler.TaskOption;
-import rife.scheduler.TaskOptionManager;
-import rife.scheduler.TestTasktypes;
+import rife.scheduler.*;
 import rife.scheduler.exceptions.SchedulerException;
 import rife.scheduler.exceptions.SchedulerManagerException;
 import rife.scheduler.exceptions.TaskOptionManagerException;
-import rife.scheduler.schedulermanagers.DatabaseScheduler;
 import rife.scheduler.schedulermanagers.DatabaseSchedulerFactory;
 import rife.scheduler.taskoptionmanagers.exceptions.InexistentTaskIdException;
 import rife.tools.ExceptionUtils;
 
 import java.util.Calendar;
-import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -98,7 +92,7 @@ public class TestDatabaseTaskOptions {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id = task_manager.addTask(task);
             assertTrue(task_id >= 0);
@@ -134,7 +128,7 @@ public class TestDatabaseTaskOptions {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id = task_manager.addTask(task);
             assertTrue(task_id >= 0);
@@ -172,7 +166,7 @@ public class TestDatabaseTaskOptions {
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id = task_manager.addTask(task);
             assertTrue(task_id >= 0);
@@ -218,7 +212,7 @@ public class TestDatabaseTaskOptions {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id = task_manager.addTask(task);
             assertTrue(task_id >= 0);
@@ -270,7 +264,7 @@ public class TestDatabaseTaskOptions {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id = task_manager.addTask(task);
             assertTrue(task_id >= 0);
@@ -314,7 +308,7 @@ public class TestDatabaseTaskOptions {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
 
             task_id = task_manager.addTask(task);
             assertTrue(task_id >= 0);

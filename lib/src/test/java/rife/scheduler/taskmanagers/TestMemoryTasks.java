@@ -5,15 +5,12 @@
 package rife.scheduler.taskmanagers;
 
 import org.junit.jupiter.api.Test;
-import rife.scheduler.Task;
-import rife.scheduler.TaskManager;
-import rife.scheduler.TestTasktypes;
+import rife.scheduler.*;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.scheduler.exceptions.TaskManagerException;
 import rife.tools.ExceptionUtils;
 
 import java.util.Calendar;
-import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +30,7 @@ public class TestMemoryTasks {
         var cal = Calendar.getInstance();
         cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
         var planned = cal.getTime().getTime();
-        var frequency = "* * * * *";
+        var frequency = Frequency.MINUTELY;
         var busy = false;
 
         var task = new Task();
@@ -64,7 +61,7 @@ public class TestMemoryTasks {
             task = new Task();
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime().getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
             task.setBusy(false);
             task_id = manager.addTask(task);
 
@@ -74,7 +71,7 @@ public class TestMemoryTasks {
             assertEquals(task.getId(), task_id);
             assertEquals(task.getType(), TestTasktypes.UPLOAD_GROUPS);
             assertTrue(task.getPlanned() <= cal.getTime().getTime());
-            assertEquals(task.getFrequency(), "* * * * *");
+            assertEquals(task.getFrequency().toString(), "* * * * *");
             assertFalse(task.isBusy());
             assertSame(task.getTaskManager(), manager);
         } catch (FrequencyException | TaskManagerException e) {
@@ -94,14 +91,14 @@ public class TestMemoryTasks {
             task = new Task();
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime().getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
             task.setBusy(false);
             task_id = manager.addTask(task);
 
             cal.set(2002, Calendar.MARCH, 12, 0, 0, 0);
             var type = TestTasktypes.SEND_RANKING;
             var planned = cal.getTime().getTime();
-            var frequency = "20 */3 * * *";
+            var frequency = new Frequency().atMinute(20).everyHour(3);
             var busy = true;
 
             task = new Task();
@@ -139,7 +136,7 @@ public class TestMemoryTasks {
             task = new Task();
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime().getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
             task.setBusy(false);
             task_id = manager.addTask(task);
 
@@ -283,7 +280,7 @@ public class TestMemoryTasks {
             var task2 = new Task();
             task2.setType(TestTasktypes.UPLOAD_GROUPS);
             task2.setPlanned(System.currentTimeMillis() - one_hour);
-            task2.setFrequency("0 * * * *");
+            task2.setFrequency(Frequency.HOURLY);
             task2.setBusy(false);
 
             var task3 = new Task();

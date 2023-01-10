@@ -9,9 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import rife.scheduler.Scheduler;
-import rife.scheduler.Task;
-import rife.scheduler.TaskManager;
+import rife.scheduler.*;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.scheduler.exceptions.TaskManagerException;
 import rife.scheduler.taskmanagers.exceptions.ConcludeTaskErrorException;
@@ -76,6 +74,13 @@ public class MemoryTasks implements TaskManager {
         return taskMapping_.get(id);
     }
 
+    public Collection<Task> getAllTasks()
+    throws TaskManagerException {
+        synchronized (this) {
+            return new ArrayList<>(taskMapping_.values());
+        }
+    }
+
     public Collection<Task> getTasksToProcess()
     throws TaskManagerException {
         var tasks_to_process = new ArrayList<Task>();
@@ -121,7 +126,7 @@ public class MemoryTasks implements TaskManager {
         }
     }
 
-    public boolean rescheduleTask(Task task, long newPlanned, String frequency)
+    public boolean rescheduleTask(Task task, long newPlanned, Frequency frequency)
     throws TaskManagerException {
         if (null == task) throw new IllegalArgumentException("task can't be null.");
         if (newPlanned <= 0) throw new IllegalArgumentException("newPlanned has to be bigger than 0.");

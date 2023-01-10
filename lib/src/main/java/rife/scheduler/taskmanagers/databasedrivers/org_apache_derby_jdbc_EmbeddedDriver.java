@@ -41,7 +41,7 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
             .into(createTableTask_.getTable())
             .fieldParameter("type")
             .fieldParameter("planned")
-            .fieldParameter("frequency")
+            .fieldParameter("frequency", "frequencySpecification")
             .fieldParameter("busy");
     }
 

@@ -4,6 +4,7 @@
  */
 package rife.scheduler.taskmanagers.exceptions;
 
+import rife.scheduler.Frequency;
 import rife.scheduler.exceptions.TaskManagerException;
 
 import java.io.Serial;
@@ -14,10 +15,10 @@ public class RescheduleTaskErrorException extends TaskManagerException {
 
     private final int id_;
     private final long newPlanned_;
-    private final String frequency_;
+    private final Frequency frequency_;
 
-    public RescheduleTaskErrorException(int id, long newPlanned, String frequency, Throwable cause) {
-        super("Error while trying to reschedule the task with id '" + id + "', planned at '" + new Date(newPlanned).toString() + "' with frequency '" + frequency + "'.", cause);
+    public RescheduleTaskErrorException(int id, long newPlanned, Frequency frequency, Throwable cause) {
+        super("Error while trying to reschedule the task with id '" + id + "', planned at '" + new Date(newPlanned) + "' with frequency '" + frequency + "'.", cause);
 
         id_ = id;
         newPlanned_ = newPlanned;
@@ -25,7 +26,7 @@ public class RescheduleTaskErrorException extends TaskManagerException {
     }
 
     public RescheduleTaskErrorException(int id, long newPlanned, Throwable cause) {
-        super("Error while trying to reschedule the task with id '" + id + "', planned at '" + new Date(newPlanned).toString() + "' with no frequency.", cause);
+        super("Error while trying to reschedule the task with id '" + id + "', planned at '" + new Date(newPlanned) + "' with no frequency.", cause);
 
         id_ = id;
         newPlanned_ = newPlanned;
@@ -40,7 +41,7 @@ public class RescheduleTaskErrorException extends TaskManagerException {
         return newPlanned_;
     }
 
-    public String getFrequency() {
+    public Frequency getFrequency() {
         return frequency_;
     }
 }

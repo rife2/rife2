@@ -9,19 +9,17 @@ import rife.scheduler.exceptions.*;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class Scheduler extends Thread {
+public class Scheduler implements Runnable {
+    private Thread thread_ = null;
     private TaskManager taskManager_ = null;
     private TaskOptionManager taskOptionManager_ = null;
     private int sleepTime_ = 500;
     private final HashMap<Object, Executor> executors_;
 
     public Scheduler(TaskManager taskManager, TaskOptionManager taskoptionManager) {
-        super("SCHEDULER_DAEMON");
-
-        setDaemon(true);
         setTaskManager(taskManager);
         setTaskOptionManager(taskoptionManager);
-        executors_ = new HashMap<Object, Executor>();
+        executors_ = new HashMap<>();
     }
 
     public void setTaskManager(TaskManager taskManager) {
@@ -44,6 +42,14 @@ public class Scheduler extends Thread {
 
     public TaskOptionManager getTaskOptionManager() {
         return taskOptionManager_;
+    }
+
+    public int addTask(Task task) {
+        return taskManager_.addTask(task);
+    }
+
+    public boolean addTaskOption(TaskOption taskOption) {
+        return taskOptionManager_.addTaskOption(taskOption);
     }
 
     public boolean addExecutor(Executor executor)
@@ -97,28 +103,62 @@ public class Scheduler extends Thread {
         sleepTime_ = sleeptime;
     }
 
-    public void run() {
-        while (true) {
-            try {
-                if (!isInterrupted()) {
-                    scheduleStep();
-                    // Ensure that the wakeup is always on an even multiplier of the
-                    // sleep time, this to ensure that no drift occurs.
-                    var now = System.currentTimeMillis();
-                    var projected = ((System.currentTimeMillis() + sleepTime_) / sleepTime_) * sleepTime_;
-                    var difference = projected - now;
+    public void start() {
+        synchronized (this) {
+            if (thread_ != null) {
+                return;
+            }
 
-                    Thread.sleep(difference);
-                } else {
+            thread_ = new Thread(this, "SCHEDULER_DAEMON");
+            thread_.setDaemon(true);
+            thread_.start();
+        }
+    }
+
+    public boolean isRunning() {
+        synchronized (this) {
+            if (thread_ == null) {
+                return false;
+            }
+
+            return thread_.isAlive();
+        }
+    }
+
+    public void run() {
+        try {
+            while (true) {
+                try {
+                    if (!Thread.interrupted()) {
+                        scheduleStep();
+                        // Ensure that the wakeup is always on an even multiplier of the
+                        // sleep time, this to ensure that no drift occurs.
+                        var now = System.currentTimeMillis();
+                        var projected = ((System.currentTimeMillis() + sleepTime_) / sleepTime_) * sleepTime_;
+                        var difference = projected - now;
+
+                        Thread.sleep(difference);
+                    } else {
+                        break;
+                    }
+                } catch (InterruptedException e) {
                     break;
                 }
-            } catch (InterruptedException e) {
-                break;
+            }
+        } finally {
+            synchronized (this) {
+                thread_ = null;
+                notifyAll();
             }
         }
+    }
 
+    public void stop() {
         synchronized (this) {
-            notifyAll();
+            if (thread_ != null) {
+                thread_.interrupt();
+                thread_ = null;
+            }
         }
     }
 

@@ -13,7 +13,7 @@ import rife.validation.*;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Task extends Validation implements Cloneable {
+public class Task extends MetaData implements Cloneable {
     private int id_ = -1;
     private String type_ = null;
     private long planned_ = 0;
@@ -25,7 +25,7 @@ public class Task extends Validation implements Cloneable {
     public Task() {
     }
 
-    protected void activateValidation() {
+    public void activateMetaData() {
         addRule(new ValidationRuleNotNull("type"));
         addRule(new ValidationRuleNotEmpty("planned"));
         addRule(new InvalidPlanned());
@@ -138,26 +138,48 @@ public class Task extends Validation implements Cloneable {
         return planned_;
     }
 
-    public void setFrequency(String frequency)
+    public void setFrequency(Frequency frequency)
     throws FrequencyException {
         if (null == frequency) {
             frequency_ = null;
         } else {
-            frequency_ = new Frequency(frequency);
+            frequency_ = frequency;
         }
     }
 
-    public Task frequency(String frequency)
+    public Task frequency(Frequency frequency)
     throws FrequencyException {
         setFrequency(frequency);
         return this;
     }
 
-    public String getFrequency() {
+    public Frequency getFrequency() {
         if (null == frequency_) {
             return null;
         }
-        return frequency_.getFrequency();
+        return frequency_;
+    }
+
+    public void setFrequencySpecification(String specification)
+    throws FrequencyException {
+        if (specification == null) {
+            frequency_ = null;
+        } else {
+            setFrequency(new Frequency(specification));
+        }
+    }
+
+    public Task frequencySpecification(String specification)
+    throws FrequencyException {
+        setFrequencySpecification(specification);
+        return this;
+    }
+
+    public String getFrequencySpecification() {
+        if (frequency_ == null) {
+            return null;
+        }
+        return frequency_.toString();
     }
 
     public void setBusy(boolean busy) {
@@ -171,6 +193,10 @@ public class Task extends Validation implements Cloneable {
 
     public boolean isBusy() {
         return busy_;
+    }
+
+    public TaskOption createTaskOption() {
+        return new TaskOption().taskId(id_);
     }
 
     public Task clone()
@@ -195,7 +221,7 @@ public class Task extends Validation implements Cloneable {
             other_task.getType().equals(getType()) &&
             other_task.getPlanned() == getPlanned() &&
             ((null == other_task.getFrequency() && null == getFrequency()) ||
-                (other_task.getFrequency() != null && other_task.getFrequency().equals(getFrequency()))) &&
+             (other_task.getFrequency() != null && other_task.getFrequency().equals(getFrequency()))) &&
             other_task.getTaskManager() == getTaskManager()) {
             return true;
         }

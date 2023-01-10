@@ -7,9 +7,7 @@ package rife.scheduler.taskmanagers;
 import rife.database.*;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.*;
-import rife.scheduler.Scheduler;
-import rife.scheduler.Task;
-import rife.scheduler.TaskManager;
+import rife.scheduler.*;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.scheduler.exceptions.TaskManagerException;
 import rife.scheduler.taskmanagers.exceptions.*;
@@ -146,6 +144,24 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
         return task;
     }
 
+    protected Collection<Task> getAllTasks_(Select getAllTasks, ProcessTask processTask)
+    throws TaskManagerException {
+        assert getAllTasks != null;
+
+        var tasks = new ArrayList<Task>();
+        processTask.setCollection(tasks);
+
+        try {
+            executeFetchAll(getAllTasks, processTask);
+        } catch (DatabaseException e) {
+            throw new GetAllTasksErrorException(e);
+        }
+
+        assert tasks != null;
+
+        return tasks;
+    }
+
     protected Collection<Task> getTasksToProcess_(Select getTasksToProcess, ProcessTask processTask)
     throws TaskManagerException {
         assert getTasksToProcess != null;
@@ -199,7 +215,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
         return result;
     }
 
-    protected boolean rescheduleTask_(Task task, long newPlanned, String frequency)
+    protected boolean rescheduleTask_(Task task, long newPlanned, Frequency frequency)
     throws TaskManagerException {
         if (null == task) throw new IllegalArgumentException("task can't be null.");
         if (newPlanned <= 0) throw new IllegalArgumentException("newPlanned has to be bigger than 0.");
@@ -308,7 +324,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
             task_.setType(resultSet.getString("type"));
             task_.setPlanned(resultSet.getLong("planned"));
             try {
-                task_.setFrequency(resultSet.getString("frequency"));
+                task_.setFrequencySpecification(resultSet.getString("frequency"));
             } catch (FrequencyException e) {
                 throw new SQLException(e.getMessage());
             }

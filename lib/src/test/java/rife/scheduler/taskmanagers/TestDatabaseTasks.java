@@ -5,19 +5,15 @@
 package rife.scheduler.taskmanagers;
 
 import java.util.Calendar;
-import java.util.Collection;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.database.Datasource;
 import rife.database.TestDatasources;
-import rife.scheduler.Task;
-import rife.scheduler.TaskManager;
-import rife.scheduler.TestTasktypes;
+import rife.scheduler.*;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.scheduler.exceptions.SchedulerManagerException;
 import rife.scheduler.exceptions.TaskManagerException;
-import rife.scheduler.schedulermanagers.DatabaseScheduler;
 import rife.scheduler.schedulermanagers.DatabaseSchedulerFactory;
 import rife.tools.ExceptionUtils;
 
@@ -58,7 +54,7 @@ public class TestDatabaseTasks {
         var cal = Calendar.getInstance();
         cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
         var planned = cal.getTime().getTime();
-        var frequency = "* * * * *";
+        var frequency = Frequency.MINUTELY;
         var busy = false;
 
         var task = new Task();
@@ -89,7 +85,7 @@ public class TestDatabaseTasks {
         var cal = Calendar.getInstance();
         cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
         var planned = cal.getTime().getTime();
-        var frequency = "* * * * *";
+        var frequency = Frequency.MINUTELY;
         var busy = false;
 
         var task = new Task();
@@ -107,7 +103,7 @@ public class TestDatabaseTasks {
             assertEquals(task.getId(), task_id);
             assertEquals(task.getType(), TestTasktypes.UPLOAD_GROUPS);
             assertTrue(task.getPlanned() <= cal.getTime().getTime());
-            assertEquals(task.getFrequency(), "* * * * *");
+            assertEquals(task.getFrequency().toString(), "* * * * *");
             assertFalse(task.isBusy());
             assertSame(task.getTaskManager(), manager);
         } catch (FrequencyException | TaskManagerException e) {
@@ -128,7 +124,6 @@ public class TestDatabaseTasks {
         var cal = Calendar.getInstance();
         cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
         var planned = cal.getTime().getTime();
-        var frequency = "* * * * *";
         var busy = false;
 
         var task = new Task();
@@ -136,7 +131,7 @@ public class TestDatabaseTasks {
         try {
             task.setType(type);
             task.setPlanned(planned);
-            task.setFrequency(frequency);
+            task.setFrequency(Frequency.MINUTELY);
             task.setBusy(busy);
 
             task_id = manager.addTask(task);
@@ -144,14 +139,13 @@ public class TestDatabaseTasks {
             type = TestTasktypes.SEND_RANKING;
             cal.set(2002, Calendar.MARCH, 12, 0, 0, 0);
             planned = cal.getTime().getTime();
-            frequency = "*/10 * * * *";
             busy = true;
 
             task = new Task();
             task.setId(task_id);
             task.setType(type);
             task.setPlanned(planned);
-            task.setFrequency(frequency);
+            task.setFrequency(new Frequency().everyMinute(10));
             task.setBusy(busy);
 
             assertTrue(manager.updateTask(task));
@@ -162,7 +156,7 @@ public class TestDatabaseTasks {
             assertEquals(task.getId(), task_id);
             assertEquals(task.getType(), type);
             assertTrue(task.getPlanned() <= planned);
-            assertEquals(task.getFrequency(), frequency);
+            assertEquals(task.getFrequency().toString(), "*/10 * * * *");
             assertEquals(task.isBusy(), busy);
             assertSame(task.getTaskManager(), manager);
         } catch (FrequencyException | TaskManagerException e) {
@@ -183,7 +177,7 @@ public class TestDatabaseTasks {
         var cal = Calendar.getInstance();
         cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
         var planned = cal.getTime().getTime();
-        var frequency = "* * * * *";
+        var frequency = Frequency.MINUTELY;
         var busy = false;
 
         var task = new Task();
@@ -290,7 +284,7 @@ public class TestDatabaseTasks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    void testGetScheduledTasks(Datasource datasource) {
+    void testGetScheduledAnAllTasks(Datasource datasource) {
         setup(datasource);
 
         var one_hour = 1000 * 60 * 60;
@@ -327,6 +321,7 @@ public class TestDatabaseTasks {
             task4.setId(manager.addTask(task4));
 
             var scheduled_tasks = manager.getScheduledTasks();
+            var all_tasks = manager.getAllTasks();
 
             manager.removeTask(task1.getId());
             manager.removeTask(task2.getId());
@@ -334,6 +329,7 @@ public class TestDatabaseTasks {
             manager.removeTask(task4.getId());
 
             assertEquals(2, scheduled_tasks.size());
+            assertEquals(4, all_tasks.size());
         } catch (FrequencyException | TaskManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
@@ -359,7 +355,7 @@ public class TestDatabaseTasks {
             var task2 = new Task();
             task2.setType(TestTasktypes.UPLOAD_GROUPS);
             task2.setPlanned(System.currentTimeMillis() - one_hour);
-            task2.setFrequency("0 * * * *");
+            task2.setFrequency(Frequency.MINUTELY);
             task2.setBusy(false);
 
             var task3 = new Task();

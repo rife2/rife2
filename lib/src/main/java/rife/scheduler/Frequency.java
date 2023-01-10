@@ -9,11 +9,12 @@ import rife.scheduler.exceptions.FrequencyException;
 import rife.tools.Localization;
 import rife.tools.StringUtils;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.time.DayOfWeek;
+import java.time.Month;
+import java.util.*;
+import java.util.stream.Collectors;
 
-class Frequency {
+public class Frequency {
     private static final int MAX_YEAR = 2050;
 
     private static final byte[] ALL_MINUTES = new byte[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59};
@@ -23,7 +24,20 @@ class Frequency {
     private static final byte[] ALL_WEEKDAYS = new byte[]{1, 2, 3, 4, 5, 6, 7};
     private static final byte[] EMPTY_DATE_OVERFLOW = new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 
-    private String frequency_ = null;
+    public static final Frequency MINUTELY = new Frequency("* * * * *");
+    public static final Frequency HOURLY = new Frequency("0 * * * *");
+    public static final Frequency DAILY = new Frequency("0 0 * * *");
+    public static final Frequency MONDAYS = new Frequency("0 0 * * 1");
+    public static final Frequency TUESDAYS = new Frequency("0 0 * * 2");
+    public static final Frequency WEDNESDAYS = new Frequency("0 0 * * 3");
+    public static final Frequency THURSDAYS = new Frequency("0 0 * * 4");
+    public static final Frequency FRIDAYS = new Frequency("0 0 * * 5");
+    public static final Frequency SATURDAYS = new Frequency("0 0 * * 6");
+    public static final Frequency SUNDAYS = new Frequency("0 0 * * 7");
+    public static final Frequency MONTHLY = new Frequency("0 0 1 * *");
+    public static final Frequency YEARLY = new Frequency("0 0 1 1 *");
+
+    private final String[] parts_ = new String[]{"*", "*", "*", "*", "*"};
 
     private byte[] minutes_ = null;
     private byte[] hours_ = null;
@@ -35,9 +49,169 @@ class Frequency {
 
     private boolean parsed_ = false;
 
-    Frequency(String frequency)
+    public Frequency() {
+        reset();
+    }
+
+    public Frequency(String specification)
     throws FrequencyException {
-        parse(frequency);
+        parse(specification);
+    }
+
+    public Frequency at(int hour, int minute) {
+        processHours(String.valueOf(hour));
+        processMinutes(String.valueOf(minute));
+        return this;
+    }
+
+    public Frequency on(Month month, int date) {
+        processMonths(String.valueOf(month.getValue()));
+        processDates(String.valueOf(date));
+        return this;
+    }
+
+    public Frequency everyMinute() {
+        processMinutes("*");
+        return this;
+    }
+
+    public Frequency everyMinute(int step) {
+        processMinutes("*/" + step);
+        return this;
+    }
+
+    public Frequency atMinute(int minute) {
+        processMinutes(String.valueOf(minute));
+        return this;
+    }
+
+    public Frequency atMinutes(int... minute) {
+        processMinutes(StringUtils.join(minute, ","));
+        return this;
+    }
+
+    public Frequency duringMinutes(int first, int last) {
+        processMinutes(first + "-" + last);
+        return this;
+    }
+
+    public Frequency everyHour() {
+        processHours("*");
+        return this;
+    }
+
+    public Frequency everyHour(int step) {
+        processHours("*/" + step);
+        return this;
+    }
+
+    public Frequency atHour(int hour) {
+        processHours(String.valueOf(hour));
+        return this;
+    }
+
+    public Frequency atHours(int... hour) {
+        processHours(StringUtils.join(hour, ","));
+        return this;
+    }
+
+    public Frequency duringHours(int first, int last) {
+        processHours(first + "-" + last);
+        return this;
+    }
+
+    public Frequency everyDate() {
+        processDates("*");
+        return this;
+    }
+
+    public Frequency everyDate(int step) {
+        processDates("*/" + step);
+        return this;
+    }
+
+    public Frequency onDate(int date) {
+        processDates(String.valueOf(date));
+        return this;
+    }
+
+    public Frequency onDates(int... date) {
+        processDates(StringUtils.join(date, ","));
+        return this;
+    }
+
+    public Frequency duringDates(int first, int last) {
+        processDates(first + "-" + last);
+        return this;
+    }
+
+    public Frequency everyMonth() {
+        processMonths("*");
+        return this;
+    }
+
+    public Frequency everyMonth(int step) {
+        processMonths("*/" + step);
+        return this;
+    }
+
+    public Frequency in(Month month) {
+        processMonths(String.valueOf(month.getValue()));
+        return this;
+    }
+
+    public Frequency in(Month... months) {
+        processMonths(Arrays.stream(months).map(d -> String.valueOf(d.getValue())).collect(Collectors.joining(",")));
+        return this;
+    }
+
+    public Frequency between(Month first, Month last) {
+        processMonths(first.getValue() + "-" + last.getValue());
+        return this;
+    }
+
+    public Frequency everyWeekday() {
+        processWeekdays("*");
+        return this;
+    }
+
+    public Frequency everyWeekday(int step) {
+        processWeekdays("*/" + step);
+        return this;
+    }
+
+    public Frequency on(DayOfWeek weekday) {
+        processWeekdays(String.valueOf(weekday.getValue()));
+        return this;
+    }
+
+    public Frequency on(DayOfWeek... weekdays) {
+        processWeekdays(Arrays.stream(weekdays).map(d -> String.valueOf(d.getValue())).collect(Collectors.joining(",")));
+        return this;
+    }
+
+    public Frequency between(DayOfWeek first, DayOfWeek last) {
+        processWeekdays(first.getValue() + "-" + last.getValue());
+        return this;
+    }
+
+    public String toString() {
+        return getSpecification();
+    }
+
+    public void reset() {
+        parts_[0] = "*";
+        parts_[1] = "*";
+        parts_[2] = "*";
+        parts_[3] = "*";
+        parts_[4] = "*";
+        minutes_ = Arrays.copyOf(ALL_MINUTES, ALL_MINUTES.length);
+        hours_ = Arrays.copyOf(ALL_HOURS, ALL_HOURS.length);
+        dates_ = Arrays.copyOf(ALL_DATES, ALL_DATES.length);
+        datesUnderflow_ = null;
+        datesOverflow_ = null;
+        months_ = Arrays.copyOf(ALL_MONTHS, ALL_MONTHS.length);
+        weekdays_ = Arrays.copyOf(ALL_WEEKDAYS, ALL_WEEKDAYS.length);
     }
 
     long getNextDate(long start)
@@ -230,8 +404,8 @@ class Frequency {
         return parsed_;
     }
 
-    String getFrequency() {
-        return frequency_;
+    String getSpecification() {
+        return StringUtils.join(parts_, " ");
     }
 
     byte[] getMinutes() {
@@ -267,14 +441,12 @@ class Frequency {
         if (null == frequency) throw new IllegalArgumentException("frequency can't be null");
         if (0 == frequency.length()) throw new IllegalArgumentException("frequency can't be empty");
 
-        frequency_ = frequency;
-        parsed_ = false;
+        reset();
 
+        parsed_ = false;
         minutes_ = null;
         hours_ = null;
         dates_ = null;
-        datesUnderflow_ = new byte[ALL_DATES.length];
-        datesOverflow_ = new byte[ALL_DATES.length];
         months_ = null;
         weekdays_ = null;
 
@@ -283,14 +455,29 @@ class Frequency {
             throw new FrequencyException("invalid frequency, should be 5 fields seperated by a space");
         }
 
-        var minutes = frequency_parts.get(0);
-        var hours = frequency_parts.get(1);
-        var dates = frequency_parts.get(2);
-        var months = frequency_parts.get(3);
-        var weekdays = frequency_parts.get(4);
+        processMinutes(frequency_parts.get(0));
+        processHours(frequency_parts.get(1));
+        processDates(frequency_parts.get(2));
+        processMonths(frequency_parts.get(3));
+        processWeekdays(frequency_parts.get(4));
 
+        parsed_ = true;
+    }
+
+    private void processMinutes(String minutes) {
+        parts_[0] = minutes;
         minutes_ = processParts(StringUtils.split(minutes, ","), ALL_MINUTES, false, null, null);
+    }
+
+    private void processHours(String hours) {
+        parts_[1] = hours;
         hours_ = processParts(StringUtils.split(hours, ","), ALL_HOURS, false, null, null);
+    }
+
+    private void processDates(String dates) {
+        datesUnderflow_ = new byte[ALL_DATES.length];
+        datesOverflow_ = new byte[ALL_DATES.length];
+        parts_[2] = dates;
         dates_ = processParts(StringUtils.split(dates, ","), ALL_DATES, true, datesUnderflow_, datesOverflow_);
         if (Arrays.equals(datesUnderflow_, EMPTY_DATE_OVERFLOW)) {
             datesUnderflow_ = null;
@@ -298,10 +485,16 @@ class Frequency {
         if (Arrays.equals(datesOverflow_, EMPTY_DATE_OVERFLOW)) {
             datesOverflow_ = null;
         }
-        months_ = processParts(StringUtils.split(months, ","), ALL_MONTHS, false, null, null);
-        weekdays_ = processParts(StringUtils.split(weekdays, ","), ALL_WEEKDAYS, false, null, null);
+    }
 
-        parsed_ = true;
+    private void processMonths(String months) {
+        parts_[3] = months;
+        months_ = processParts(StringUtils.split(months, ","), ALL_MONTHS, false, null, null);
+    }
+
+    private void processWeekdays(String weekdays) {
+        parts_[4] = weekdays;
+        weekdays_ = processParts(StringUtils.split(weekdays, ","), ALL_WEEKDAYS, false, null, null);
     }
 
     private byte[] processParts(List<String> parts, byte[] allValues, boolean deferOverflowProcessing, byte[] underflowStorage, byte[] overflowStorage)
@@ -454,5 +647,16 @@ class Frequency {
         }
 
         return result_values;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Frequency frequency = (Frequency) o;
+        return Arrays.equals(parts_, frequency.parts_);
+    }
+
+    public int hashCode() {
+        return Arrays.hashCode(parts_);
     }
 }

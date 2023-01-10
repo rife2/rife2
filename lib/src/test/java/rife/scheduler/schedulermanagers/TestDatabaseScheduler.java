@@ -7,13 +7,11 @@ package rife.scheduler.schedulermanagers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.database.TestDatasources;
+import rife.scheduler.*;
 import rife.scheduler.exceptions.*;
 
 import rife.config.RifeConfig;
 import rife.database.Datasource;
-import rife.scheduler.Executor;
-import rife.scheduler.Task;
-import rife.scheduler.TestTasktypes;
 import rife.tools.ExceptionUtils;
 import rife.tools.Localization;
 
@@ -65,7 +63,7 @@ public class TestDatabaseScheduler {
         try {
             scheduler.start();
             synchronized (scheduler) {
-                scheduler.interrupt();
+                scheduler.stop();
 
                 try {
                     scheduler.wait();
@@ -110,10 +108,9 @@ public class TestDatabaseScheduler {
         var scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
         var executor = new TestExecutor();
         var taskmanager = scheduler.getTaskManager();
-        var task = new Task();
+        var task = executor.createTask();
 
         try {
-            task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(System.currentTimeMillis());
             task.setFrequency(null);
             task.setBusy(false);
@@ -142,7 +139,7 @@ public class TestDatabaseScheduler {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
             synchronized (scheduler) {
-                scheduler.interrupt();
+                scheduler.stop();
 
                 try {
                     scheduler.wait();
@@ -174,13 +171,12 @@ public class TestDatabaseScheduler {
         var scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
         var executor = new TestExecutor();
         var taskmanager = scheduler.getTaskManager();
-        var task = new Task();
+        var task = executor.createTask();
 
         try {
-            task.setType(TestTasktypes.UPLOAD_GROUPS);
             // set back a while in the past to test the catch-up rescheduling
             task.setPlanned(System.currentTimeMillis() - (scheduler_sleep_time * 10));
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
             task.setBusy(false);
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -213,7 +209,7 @@ public class TestDatabaseScheduler {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
             synchronized (scheduler) {
-                scheduler.interrupt();
+                scheduler.stop();
 
                 try {
                     scheduler.wait();
@@ -249,20 +245,20 @@ public class TestDatabaseScheduler {
     }
 
     static class TestExecutor extends Executor {
-        private Calendar mFirstExecution = null;
-        private ArrayList<Task> mExecutedTasks = null;
+        private Calendar firstExecution_ = null;
+        private ArrayList<Task> executedTasks_ = null;
 
         public TestExecutor() {
-            mExecutedTasks = new ArrayList<>();
+            executedTasks_ = new ArrayList<>();
         }
 
         public boolean executeTask(Task task) {
             synchronized (this) {
-                if (null == mFirstExecution) {
-                    mFirstExecution = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
-                    mFirstExecution.setTimeInMillis(System.currentTimeMillis());
+                if (null == firstExecution_) {
+                    firstExecution_ = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+                    firstExecution_.setTimeInMillis(System.currentTimeMillis());
                 }
-                mExecutedTasks.add(task);
+                executedTasks_.add(task);
             }
 
             return true;
@@ -270,13 +266,13 @@ public class TestDatabaseScheduler {
 
         public Collection<Task> getExecutedTasks() {
             synchronized (this) {
-                return mExecutedTasks;
+                return executedTasks_;
             }
         }
 
         public Calendar getFirstExecution() {
             synchronized (this) {
-                return mFirstExecution;
+                return firstExecution_;
             }
         }
 
