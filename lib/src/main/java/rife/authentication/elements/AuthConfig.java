@@ -20,7 +20,7 @@ public class AuthConfig {
     public static final boolean DEFAULT_ENFORCE_AUTHENTICATION = true;
     public static final Class<RoleUser> DEFAULT_CREDENTIALS_CLASS = RoleUser.class;
 
-    private SessionValidator sessionValidator_;
+    private SessionValidator<?, ?, ?> sessionValidator_;
     private Route loginRoute_;
     private Route landingRoute_;
     private String identityAttributeName_ = DEFAULT_IDENTITY_ATTRIBUTE_NAME;
@@ -33,15 +33,15 @@ public class AuthConfig {
     private String role_ = null;
     private String staticAuthData_ = null;
 
-    public AuthConfig(SessionValidator sessionValidator) {
+    public AuthConfig(SessionValidator<?, ?, ?> sessionValidator) {
         sessionValidator_ = sessionValidator;
     }
 
-    public SessionValidator sessionValidator() {
+    public SessionValidator<?, ?, ?> sessionValidator() {
         return sessionValidator_;
     }
 
-    public AuthConfig sessionValidator(SessionValidator sessionValidator) {
+    public AuthConfig sessionValidator(SessionValidator<?, ?, ?> sessionValidator) {
         sessionValidator_ = sessionValidator;
         return this;
     }

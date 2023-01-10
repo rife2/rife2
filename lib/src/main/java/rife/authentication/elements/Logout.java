@@ -8,6 +8,16 @@ import rife.authentication.elements.exceptions.UndefinedLogoutRememberManagerExc
 import rife.engine.*;
 import rife.template.Template;
 
+/**
+ * Provides logout logic with an optional template that can be printed for
+ * configuration.
+ * <p>
+ * To customize the behavior of the authentication, it's the easiest to override
+ * one of the hook methods.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.0
+ */
 public class Logout implements Element {
     private final AuthConfig authConfig_;
     private final Template template_;

@@ -8,6 +8,16 @@ import rife.authentication.credentialsmanagers.*;
 import rife.engine.Context;
 import rife.engine.Element;
 
+/**
+ * Tries to identify a user and store that as a request attribute.
+ * <p>
+ * This element can be used to customize to behavior when a user is logged
+ * in, without requiring authentication for guests.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @see AuthConfig#identityAttribute(Context)
+ * @since 1.0
+ */
 public class Identified implements Element {
     private final AuthConfig authConfig_;
 

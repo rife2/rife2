@@ -19,7 +19,6 @@ import rife.validation.ValidationError;
  * To customize the behavior of the authentication, it's the easiest to override
  * one of the hook methods.
  *
- * @author Steven Grimm (koreth[remove] at midwinter dot com)
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
