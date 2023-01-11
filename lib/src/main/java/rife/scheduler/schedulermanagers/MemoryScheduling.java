@@ -9,10 +9,10 @@ import rife.scheduler.SchedulerFactory;
 import rife.scheduler.taskmanagers.MemoryTasks;
 import rife.scheduler.taskoptionmanagers.MemoryTaskOptions;
 
-public class MemoryScheduler implements SchedulerFactory {
+public class MemoryScheduling implements SchedulerFactory {
     private Scheduler scheduler_ = null;
 
-    public MemoryScheduler() {
+    public MemoryScheduling() {
     }
 
     public Scheduler getScheduler() {

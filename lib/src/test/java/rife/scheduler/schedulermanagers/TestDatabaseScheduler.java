@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDatabaseScheduler {
     public void setup(Datasource datasource) {
-        var scheduler_manager = DatabaseSchedulerFactory.instance(datasource);
+        var scheduler_manager = DatabaseSchedulingFactory.instance(datasource);
         try {
             scheduler_manager.install();
         } catch (SchedulerManagerException e) {
@@ -33,7 +33,7 @@ public class TestDatabaseScheduler {
     }
 
     public void tearDown(Datasource datasource) {
-        var scheduler_manager = DatabaseSchedulerFactory.instance(datasource);
+        var scheduler_manager = DatabaseSchedulingFactory.instance(datasource);
         try {
             scheduler_manager.remove();
         } catch (SchedulerManagerException e) {
@@ -47,7 +47,7 @@ public class TestDatabaseScheduler {
         setup(datasource);
 
         try {
-            var scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
+            var scheduler = DatabaseSchedulingFactory.instance(datasource).getScheduler();
             assertNotNull(scheduler);
         } finally {
             tearDown(datasource);
@@ -59,7 +59,7 @@ public class TestDatabaseScheduler {
     void testStartStopScheduler(Datasource datasource) {
         setup(datasource);
 
-        var scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
+        var scheduler = DatabaseSchedulingFactory.instance(datasource).getScheduler();
         try {
             scheduler.start();
             synchronized (scheduler) {
@@ -83,7 +83,7 @@ public class TestDatabaseScheduler {
     void testAddExecutor(Datasource datasource) {
         setup(datasource);
         try {
-            var scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
+            var scheduler = DatabaseSchedulingFactory.instance(datasource).getScheduler();
             Executor executor = new TestExecutor();
 
             assertNull(scheduler.getExecutor(executor.getHandledTaskType()));
@@ -105,7 +105,7 @@ public class TestDatabaseScheduler {
         setup(datasource);
 
         var sleep_time = 2 * 1000;
-        var scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
+        var scheduler = DatabaseSchedulingFactory.instance(datasource).getScheduler();
         var executor = new TestExecutor();
         var taskmanager = scheduler.getTaskManager();
         var task = executor.createTask();
@@ -168,7 +168,7 @@ public class TestDatabaseScheduler {
         var scheduler_sleep_time = 10 * 1000;                // 10 seconds
         var task_frequency = 20 * 1000;                      // 20 seconds
         var thread_sleep_time = scheduler_sleep_time * 3;    // 30 seconds
-        var scheduler = DatabaseSchedulerFactory.instance(datasource).getScheduler();
+        var scheduler = DatabaseSchedulingFactory.instance(datasource).getScheduler();
         var executor = new TestExecutor();
         var taskmanager = scheduler.getTaskManager();
         var task = executor.createTask();

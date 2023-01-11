@@ -12,7 +12,7 @@ import rife.scheduler.*;
 import rife.scheduler.exceptions.SchedulerException;
 import rife.scheduler.exceptions.SchedulerManagerException;
 import rife.scheduler.exceptions.TaskOptionManagerException;
-import rife.scheduler.schedulermanagers.DatabaseSchedulerFactory;
+import rife.scheduler.schedulermanagers.DatabaseSchedulingFactory;
 import rife.scheduler.taskoptionmanagers.exceptions.InexistentTaskIdException;
 import rife.tools.ExceptionUtils;
 
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDatabaseTaskOptions {
     public void setup(Datasource datasource) {
-        var manager = DatabaseSchedulerFactory.instance(datasource);
+        var manager = DatabaseSchedulingFactory.instance(datasource);
 
         try {
             assertTrue(manager.install());
@@ -32,7 +32,7 @@ public class TestDatabaseTaskOptions {
     }
 
     public void tearDown(Datasource datasource) {
-        var manager = DatabaseSchedulerFactory.instance(datasource);
+        var manager = DatabaseSchedulingFactory.instance(datasource);
 
         try {
             assertTrue(manager.remove());
@@ -84,8 +84,8 @@ public class TestDatabaseTaskOptions {
 
         var task_id = 0;
         var task = new Task();
-        var task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
-        var taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var task_manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskManager();
+        var taskoption_manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
             var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -120,8 +120,8 @@ public class TestDatabaseTaskOptions {
 
         var task_id = 0;
         var task = new Task();
-        var task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
-        var taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var task_manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskManager();
+        var taskoption_manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
             var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -159,8 +159,8 @@ public class TestDatabaseTaskOptions {
 
         var task_id = 0;
         var task = new Task();
-        var task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
-        var taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var task_manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskManager();
+        var taskoption_manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
             var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -204,8 +204,8 @@ public class TestDatabaseTaskOptions {
 
         var task_id = 0;
         var task = new Task();
-        var task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
-        var taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var task_manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskManager();
+        var taskoption_manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
             var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -256,8 +256,8 @@ public class TestDatabaseTaskOptions {
 
         var task_id = 0;
         var task = new Task();
-        var task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
-        var taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var task_manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskManager();
+        var taskoption_manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
             var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -300,8 +300,8 @@ public class TestDatabaseTaskOptions {
 
         var task_id = 0;
         var task = new Task();
-        var task_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskManager();
-        var taskoption_manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var task_manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskManager();
+        var taskoption_manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskOptionManager();
         try {
             var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
@@ -340,7 +340,7 @@ public class TestDatabaseTaskOptions {
     void testGetNonExistingTaskOption(Datasource datasource) {
         setup(datasource);
 
-        var manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+        var manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskOptionManager();
         var task_nonexisting_id = 340;
         try {
             assertNull(manager.getTaskOption(task_nonexisting_id, "unknownname"));
@@ -357,7 +357,7 @@ public class TestDatabaseTaskOptions {
         setup(datasource);
 
         try {
-            var manager = DatabaseSchedulerFactory.instance(datasource).getScheduler().getTaskOptionManager();
+            var manager = DatabaseSchedulingFactory.instance(datasource).getScheduler().getTaskOptionManager();
             var task_nonexisting_id = 120;
             try {
                 assertFalse(manager.removeTaskOption(task_nonexisting_id, "unknownname"));

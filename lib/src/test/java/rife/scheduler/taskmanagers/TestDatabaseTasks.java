@@ -14,14 +14,14 @@ import rife.scheduler.*;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.scheduler.exceptions.SchedulerManagerException;
 import rife.scheduler.exceptions.TaskManagerException;
-import rife.scheduler.schedulermanagers.DatabaseSchedulerFactory;
+import rife.scheduler.schedulermanagers.DatabaseSchedulingFactory;
 import rife.tools.ExceptionUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDatabaseTasks {
     public void setup(Datasource datasource) {
-        var scheduler_manager = DatabaseSchedulerFactory.instance(datasource);
+        var scheduler_manager = DatabaseSchedulingFactory.instance(datasource);
         try {
             scheduler_manager.install();
         } catch (SchedulerManagerException e) {
@@ -30,7 +30,7 @@ public class TestDatabaseTasks {
     }
 
     public void tearDown(Datasource datasource) {
-        var scheduler_manager = DatabaseSchedulerFactory.instance(datasource);
+        var scheduler_manager = DatabaseSchedulingFactory.instance(datasource);
         try {
             scheduler_manager.remove();
         } catch (SchedulerManagerException e) {

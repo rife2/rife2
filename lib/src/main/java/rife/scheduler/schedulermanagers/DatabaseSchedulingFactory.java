@@ -8,12 +8,12 @@ import rife.database.Datasource;
 import rife.database.DbQueryManagerCache;
 import rife.database.DbQueryManagerFactory;
 
-public abstract class DatabaseSchedulerFactory extends DbQueryManagerFactory {
-    public static final String MANAGER_PACKAGE_NAME = DatabaseSchedulerFactory.class.getPackage().getName() + ".databasedrivers.";
+public abstract class DatabaseSchedulingFactory extends DbQueryManagerFactory {
+    public static final String MANAGER_PACKAGE_NAME = DatabaseSchedulingFactory.class.getPackage().getName() + ".databasedrivers.";
 
     private static final DbQueryManagerCache cache_ = new DbQueryManagerCache();
 
-    public static DatabaseScheduler instance(Datasource datasource) {
-        return (DatabaseScheduler) instance(MANAGER_PACKAGE_NAME, cache_, datasource);
+    public static DatabaseScheduling instance(Datasource datasource) {
+        return (DatabaseScheduling) instance(MANAGER_PACKAGE_NAME, cache_, datasource);
     }
 }

@@ -17,14 +17,14 @@ public class TestDatabaseSchedulerInstallation {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testInstantiateSchedulerManager(Datasource datasource) {
-        var manager = DatabaseSchedulerFactory.instance(datasource);
+        var manager = DatabaseSchedulingFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testInstall(Datasource datasource) {
-        var manager = DatabaseSchedulerFactory.instance(datasource);
+        var manager = DatabaseSchedulingFactory.instance(datasource);
 
         try {
             assertTrue(manager.install());
@@ -36,7 +36,7 @@ public class TestDatabaseSchedulerInstallation {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
     void testRemove(Datasource datasource) {
-        var manager = DatabaseSchedulerFactory.instance(datasource);
+        var manager = DatabaseSchedulingFactory.instance(datasource);
 
         try {
             assertTrue(manager.remove());

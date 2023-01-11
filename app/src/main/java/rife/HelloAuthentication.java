@@ -14,14 +14,16 @@ public class HelloAuthentication extends Site {
     final MemorySessionValidator validator = new MemorySessionValidator();
     final AuthConfig config = new AuthConfig(validator);
 
+    Route login;
     Route landing;
     Route logout;
 
     public void setup() {
-        var login = getPost("/login", new Login(config, TemplateFactory.HTML.get("HelloLogin")));
+        login = getPost("/login", new Login(config, TemplateFactory.HTML.get("HelloLogin")));
         group(new Router() {
             public void setup() {
                 before(new Authenticated(config));
+
                 landing = get("/authentication", c -> {
                     var t = c.template("HelloAuthenticated");
                     t.setValue("user", config.identityAttribute(c).getLogin());
@@ -31,8 +33,11 @@ public class HelloAuthentication extends Site {
             }
         });
 
-        config.loginRoute(login).landingRoute(landing);
-        validator.getCredentialsManager().addUser("testUser", new RoleUserAttributes().password("testPassword"));
+        config
+            .loginRoute(login)
+            .landingRoute(landing);
+        validator.getCredentialsManager()
+            .addUser("testUser", new RoleUserAttributes().password("testPassword"));
     }
 
     public static void main(String[] args) {

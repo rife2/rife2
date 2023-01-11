@@ -6,9 +6,9 @@ package rife.scheduler.schedulermanagers.databasedrivers;
 
 import rife.database.Datasource;
 import rife.scheduler.exceptions.SchedulerManagerException;
-import rife.scheduler.schedulermanagers.DatabaseScheduler;
+import rife.scheduler.schedulermanagers.DatabaseScheduling;
 
-public class generic extends DatabaseScheduler {
+public class generic extends DatabaseScheduling {
     public generic(Datasource datasource) {
         super(datasource);
     }

@@ -12,13 +12,11 @@ import rife.scheduler.exceptions.SchedulerException;
 import rife.scheduler.exceptions.SchedulerManagerException;
 import rife.scheduler.schedulermanagers.exceptions.InstallSchedulerErrorException;
 import rife.scheduler.schedulermanagers.exceptions.RemoveSchedulerErrorException;
-import rife.scheduler.taskmanagers.DatabaseTasks;
 import rife.scheduler.taskmanagers.DatabaseTasksFactory;
-import rife.scheduler.taskoptionmanagers.DatabaseTaskOptions;
 import rife.scheduler.taskoptionmanagers.DatabaseTaskOptionsFactory;
 
-public abstract class DatabaseScheduler extends DbQueryManager implements SchedulerFactory {
-    protected DatabaseScheduler(Datasource datasource) {
+public abstract class DatabaseScheduling extends DbQueryManager implements SchedulerFactory {
+    protected DatabaseScheduling(Datasource datasource) {
         super(datasource);
     }
 
