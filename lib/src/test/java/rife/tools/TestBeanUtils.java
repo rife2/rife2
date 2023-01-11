@@ -196,11 +196,6 @@ public class TestBeanUtils {
         BeanUtils.setUppercasedBeanProperty("propertyDate", new String[]{"2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl2());
         assertEquals(bean.getPropertyDate(), RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45"));
 
-        bean = new BeanImpl2();
-        BeanImpl2.SerializableType serializable = new BeanImpl2.SerializableType(5686, "Testing");
-        BeanUtils.setUppercasedBeanProperty("propertySerializableType", new String[]{SerializationUtils.serializeToString(serializable), "two"}, null, bean_properties, bean, new BeanImpl2());
-        assertEquals(bean.getPropertySerializableType(), serializable);
-
 
         bean = new BeanImpl2();
         BeanUtils.setUppercasedBeanProperty("propertyStringArray", new String[]{"one", "two"}, null, bean_properties, bean, new BeanImpl2());
@@ -285,12 +280,6 @@ public class TestBeanUtils {
         bean = new BeanImpl2();
         BeanUtils.setUppercasedBeanProperty("propertyDateArray", new String[]{"2006-08-04 10:45", "2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl2());
         assertArrayEquals(bean.getPropertyDateArray(), new Date[]{RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45"), RifeConfig.tools().getDefaultInputDateFormat().parse("2006-07-08 11:05")});
-
-        bean = new BeanImpl2();
-        BeanImpl2.SerializableType serializable1 = new BeanImpl2.SerializableType(5682, "AnotherTest");
-        BeanImpl2.SerializableType serializable2 = new BeanImpl2.SerializableType(850, "WhatTest");
-        BeanUtils.setUppercasedBeanProperty("propertySerializableTypeArray", new String[]{SerializationUtils.serializeToString(serializable1), SerializationUtils.serializeToString(serializable2)}, null, bean_properties, bean, new BeanImpl2());
-        assertArrayEquals(bean.getPropertySerializableTypeArray(), new BeanImpl2.SerializableType[]{serializable1, serializable2});
     }
 
     @Test
@@ -356,6 +345,11 @@ public class TestBeanUtils {
         assertEquals(bean.getPropertyShortObject(), (short) 3285);
 
         bean = new BeanImpl3();
+        BeanImpl3.SerializableType serializable = new BeanImpl3.SerializableType(5686, "Testing");
+        BeanUtils.setUppercasedBeanProperty("propertySerializableType", new String[]{SerializationUtils.serializeToString(serializable), "two"}, null, bean_properties, bean, new BeanImpl2());
+        assertEquals(bean.getPropertySerializableType(), serializable);
+
+        bean = new BeanImpl3();
         BeanUtils.setUppercasedBeanProperty("propertyDateArray", new String[]{"custom format 2006-08-04 10:45", "custom format 2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl3());
         assertArrayEquals(bean.getPropertyDateArray(), new Date[]{RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45"), RifeConfig.tools().getDefaultInputDateFormat().parse("2006-07-08 11:05")});
 
@@ -410,6 +404,12 @@ public class TestBeanUtils {
         bean = new BeanImpl3();
         BeanUtils.setUppercasedBeanProperty("propertyBigDecimalArray", new String[]{"97687687998978673545669789,0000000000001", "34353"}, null, bean_properties, bean, new BeanImpl3());
         assertArrayEquals(bean.getPropertyBigDecimalArray(), new BigDecimal[]{new BigDecimal("976876879989786735456697890000000000001E-13"), new BigDecimal("3.4353E4")});
+
+        bean = new BeanImpl3();
+        BeanImpl3.SerializableType serializable1 = new BeanImpl3.SerializableType(5682, "AnotherTest");
+        BeanImpl3.SerializableType serializable2 = new BeanImpl3.SerializableType(850, "WhatTest");
+        BeanUtils.setUppercasedBeanProperty("propertySerializableTypeArray", new String[]{SerializationUtils.serializeToString(serializable1), SerializationUtils.serializeToString(serializable2)}, null, bean_properties, bean, new BeanImpl2());
+        assertArrayEquals(bean.getPropertySerializableTypeArray(), new BeanImpl3.SerializableType[]{serializable1, serializable2});
     }
 
     @Test

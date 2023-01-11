@@ -133,6 +133,8 @@ public class BeanImpl extends Validation {
         sf.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
         addConstraint(new ConstrainedProperty("dateFormatted").format(sf));
         addConstraint(new ConstrainedProperty("datesFormatted").format(sf));
+        addConstraint(new ConstrainedProperty("serializableParam").format(new SerializationFormatter()));
+        addConstraint(new ConstrainedProperty("serializableParams").format(new SerializationFormatter()));
     }
 
     public void setEnum(Day day) {

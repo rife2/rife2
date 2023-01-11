@@ -5,10 +5,10 @@
 package rife.tools;
 
 import rife.config.RifeConfig;
-import rife.validation.ConstrainedBean;
 import rife.validation.ConstrainedProperty;
 import rife.validation.MetaData;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -32,6 +32,7 @@ public class BeanImpl3 extends MetaData {
     private Long propertyLongObject_ = null;
     private Short propertyShortObject_ = null;
     private BigDecimal propertyBigDecimal_ = null;
+    private SerializableType propertySerializableType_ = null;
     private Date[] propertyDateArray_ = null;
     private byte[] propertyByteArray_ = null;
     private double[] propertyDoubleArray_ = null;
@@ -46,6 +47,7 @@ public class BeanImpl3 extends MetaData {
     private Long[] propertyLongObjectArray_ = null;
     private Short[] propertyShortObjectArray_ = null;
     private BigDecimal[] propertyBigDecimalArray_ = null;
+    private SerializableType[] propertySerializableTypeArray_ = null;
 
     public void activateMetaData() {
         DateFormat date_format = new SimpleDateFormat("'custom format' yyyy-MM-dd HH:mm");
@@ -58,6 +60,7 @@ public class BeanImpl3 extends MetaData {
         NumberFormat short_format = NumberFormat.getCurrencyInstance(Locale.ENGLISH);
         DecimalFormat bigdecimal_format = (DecimalFormat) NumberFormat.getNumberInstance(Locale.FRANCE);
         bigdecimal_format.setParseBigDecimal(true);
+        SerializationFormatter serialization_formatter = new SerializationFormatter();
 
         addConstraint(new ConstrainedProperty("propertyDate").format(date_format));
         addConstraint(new ConstrainedProperty("propertyInt").format(int_format));
@@ -73,6 +76,7 @@ public class BeanImpl3 extends MetaData {
         addConstraint(new ConstrainedProperty("propertyShort").format(short_format));
         addConstraint(new ConstrainedProperty("propertyShortObject").format(short_format));
         addConstraint(new ConstrainedProperty("propertyBigDecimal").format(bigdecimal_format));
+        addConstraint(new ConstrainedProperty("propertySerializableType").format(serialization_formatter));
 
         addConstraint(new ConstrainedProperty("propertyDateArray").format(date_format));
         addConstraint(new ConstrainedProperty("propertyIntArray").format(int_format));
@@ -88,6 +92,7 @@ public class BeanImpl3 extends MetaData {
         addConstraint(new ConstrainedProperty("propertyShortArray").format(short_format));
         addConstraint(new ConstrainedProperty("propertyShortObjectArray").format(short_format));
         addConstraint(new ConstrainedProperty("propertyBigDecimalArray").format(bigdecimal_format));
+        addConstraint(new ConstrainedProperty("propertySerializableTypeArray").format(serialization_formatter));
     }
 
     public BeanImpl3() {
@@ -205,6 +210,14 @@ public class BeanImpl3 extends MetaData {
         propertyLongObject_ = propertyLongObject;
     }
 
+    public SerializableType getPropertySerializableType() {
+        return propertySerializableType_;
+    }
+
+    public void setPropertySerializableType(SerializableType propertySerializableType) {
+        propertySerializableType_ = propertySerializableType;
+    }
+
     public Date[] getPropertyDateArray() {
         return propertyDateArray_;
     }
@@ -315,5 +328,67 @@ public class BeanImpl3 extends MetaData {
 
     public void setPropertyShortObjectArray(Short[] propertyShortObjectArray) {
         propertyShortObjectArray_ = propertyShortObjectArray;
+    }
+
+    public SerializableType[] getPropertySerializableTypeArray() {
+        return propertySerializableTypeArray_;
+    }
+
+    public void setPropertySerializableTypeArray(SerializableType[] propertySerializableTypeArray) {
+        propertySerializableTypeArray_ = propertySerializableTypeArray;
+    }
+
+    public static class SerializableType implements Serializable {
+        private int number_ = -1;
+        private String string_ = null;
+
+        public SerializableType(int number, String string) {
+            number_ = number;
+            string_ = string;
+        }
+
+        public void setNumber(int number) {
+            number_ = number;
+        }
+
+        public int getNumber() {
+            return number_;
+        }
+
+        public void setString(String string) {
+            string_ = string;
+        }
+
+        public String getString() {
+            return string_;
+        }
+
+        public String toString() {
+            return number_ + ":" + string_;
+        }
+
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+
+            if (null == other) {
+                return false;
+            }
+
+            if (!(other instanceof SerializableType)) {
+                return false;
+            }
+
+            SerializableType other_datalink = (SerializableType) other;
+            if (!other_datalink.getString().equals(getString())) {
+                return false;
+            }
+            if (other_datalink.getNumber() != getNumber()) {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

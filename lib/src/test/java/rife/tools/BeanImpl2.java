@@ -31,7 +31,6 @@ public class BeanImpl2 {
     private Long propertyLongObject_ = null;
     private Short propertyShortObject_ = null;
     private BigDecimal propertyBigDecimal_ = null;
-    private SerializableType propertySerializableType_ = null;
     private String[] propertyStringArray_ = null;
     private StringBuffer[] propertyStringBufferArray_ = null;
     private StringBuilder[] propertyStringBuilderArray_ = null;
@@ -53,7 +52,6 @@ public class BeanImpl2 {
     private Long[] propertyLongObjectArray_ = null;
     private Short[] propertyShortObjectArray_ = null;
     private BigDecimal[] propertyBigDecimalArray_ = null;
-    private SerializableType[] propertySerializableTypeArray_ = null;
 
     public BeanImpl2() {
     }
@@ -233,13 +231,6 @@ public class BeanImpl2 {
         propertyLongObject_ = propertyLongObject;
     }
 
-    public SerializableType getPropertySerializableType() {
-        return propertySerializableType_;
-    }
-
-    public void setPropertySerializableType(SerializableType propertySerializableType) {
-        propertySerializableType_ = propertySerializableType;
-    }
 
     public String[] getPropertyStringArray() {
         return propertyStringArray_;
@@ -407,67 +398,5 @@ public class BeanImpl2 {
 
     public BigDecimal[] getPropertyBigDecimalArray() {
         return propertyBigDecimalArray_;
-    }
-
-    public SerializableType[] getPropertySerializableTypeArray() {
-        return propertySerializableTypeArray_;
-    }
-
-    public void setPropertySerializableTypeArray(SerializableType[] propertySerializableTypeArray) {
-        propertySerializableTypeArray_ = propertySerializableTypeArray;
-    }
-
-    public static class SerializableType implements Serializable {
-        private int mNumber = -1;
-        private String mString = null;
-
-        public SerializableType(int number, String string) {
-            mNumber = number;
-            mString = string;
-        }
-
-        public void setNumber(int number) {
-            mNumber = number;
-        }
-
-        public int getNumber() {
-            return mNumber;
-        }
-
-        public void setString(String string) {
-            mString = string;
-        }
-
-        public String getString() {
-            return mString;
-        }
-
-        public String toString() {
-            return mNumber + ":" + mString;
-        }
-
-        public boolean equals(Object other) {
-            if (this == other) {
-                return true;
-            }
-
-            if (null == other) {
-                return false;
-            }
-
-            if (!(other instanceof SerializableType)) {
-                return false;
-            }
-
-            SerializableType other_datalink = (SerializableType) other;
-            if (!other_datalink.getString().equals(getString())) {
-                return false;
-            }
-            if (other_datalink.getNumber() != getNumber()) {
-                return false;
-            }
-
-            return true;
-        }
     }
 }

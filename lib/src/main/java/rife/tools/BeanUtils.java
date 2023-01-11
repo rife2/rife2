@@ -362,15 +362,6 @@ public final class BeanUtils {
 
         if (format != null) {
             return format.format(propertyValue);
-        } else if (propertyValue != null) {
-            if (!ClassUtils.isFromJdk(propertyValue.getClass()) &&
-                propertyValue instanceof Serializable serializable) {
-                try {
-                    return SerializationUtils.serializeToString(serializable);
-                } catch (SerializationUtilsErrorException e) {
-                    // no-op, just use regular toString();
-                }
-            }
         }
 
         return String.valueOf(propertyValue);
@@ -526,7 +517,7 @@ public final class BeanUtils {
         if (beanProperties.containsKey(name_upper)) {
             if (null == emptyBean &&
                 (null == propertyValues ||
-                    0 == propertyValues.length)) {
+                 0 == propertyValues.length)) {
                 return;
             }
 
@@ -561,9 +552,9 @@ public final class BeanUtils {
                 // in case an empty template bean has been provided
                 if (emptyBean != null &&
                     (null == propertyValues ||
-                        0 == propertyValues.length ||
-                        null == propertyValues[0] ||
-                        0 == propertyValues[0].length())) {
+                     0 == propertyValues.length ||
+                     null == propertyValues[0] ||
+                     0 == propertyValues[0].length())) {
                     var read_method = property.getReadMethod();
                     var empty_value = read_method.invoke(emptyBean, (Object[]) null);
                     write_method.invoke(beanInstance, empty_value);
@@ -842,15 +833,15 @@ public final class BeanUtils {
                                 }
                             }
                             write_method.invoke(beanInstance, parameter_values_typed);
-                        } else if (Serializable.class.isAssignableFrom(component_type)) {
+                        } else if (constrained_property != null && constrained_property.isFormatted()) {
                             var parameter_values_typed = Array.newInstance(component_type, propertyValues.length);
                             for (var i = 0; i < propertyValues.length; i++) {
                                 if (propertyValues[i] != null && propertyValues[i].length() > 0) {
                                     try {
-                                        Array.set(parameter_values_typed, i, SerializationUtils.deserializeFromString(propertyValues[i]));
-                                    } catch (SerializationUtilsErrorException e) {
+                                        Array.set(parameter_values_typed, i, constrained_property.getFormat().parseObject(propertyValues[i]));
+                                    } catch (ParseException e) {
                                         if (validated != null) {
-                                            validated.addValidationError(new ValidationError.INVALID(propertyName).erroneousValue(propertyValues[i]));
+                                            validated.addValidationError(new ValidationError.INVALID(propertyName).erroneousValue(propertyValues[0]));
                                         }
                                     }
                                 }
@@ -864,48 +855,48 @@ public final class BeanUtils {
                         if (property_type == String.class) {
                             parameter_value_typed = propertyValues[0];
                         } else if (property_type == int.class ||
-                            property_type == Integer.class) {
+                                   property_type == Integer.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toInt(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toInt(propertyValues[0]);
                             }
                         } else if (property_type == char.class ||
-                            property_type == Character.class) {
+                                   property_type == Character.class) {
                             parameter_value_typed = propertyValues[0].charAt(0);
                         } else if (property_type == boolean.class ||
-                            property_type == Boolean.class) {
+                                   property_type == Boolean.class) {
                             parameter_value_typed = Convert.toBoolean(StringUtils.convertToBoolean(propertyValues[0]));
                         } else if (property_type == byte.class ||
-                            property_type == Byte.class) {
+                                   property_type == Byte.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toByte(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toByte(propertyValues[0]);
                             }
                         } else if (property_type == double.class ||
-                            property_type == Double.class) {
+                                   property_type == Double.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toDouble(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toDouble(propertyValues[0]);
                             }
                         } else if (property_type == float.class ||
-                            property_type == Float.class) {
+                                   property_type == Float.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toFloat(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toFloat(propertyValues[0]);
                             }
                         } else if (property_type == long.class ||
-                            property_type == Long.class) {
+                                   property_type == Long.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toLong(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toLong(propertyValues[0]);
                             }
                         } else if (property_type == short.class ||
-                            property_type == Short.class) {
+                                   property_type == Short.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toShort(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
@@ -971,13 +962,13 @@ public final class BeanUtils {
                                     validated.addValidationError(new ValidationError.INVALID(propertyName).erroneousValue(propertyValues[0]));
                                 }
                             }
-                        } else if (Serializable.class.isAssignableFrom(property_type)) {
+                        } else if (constrained_property != null && constrained_property.isFormatted()) {
                             try {
-                                parameter_value_typed = SerializationUtils.deserializeFromString(propertyValues[0]);
-                            } catch (SerializationUtilsErrorException e) {
+                                parameter_value_typed = constrained_property.getFormat().parseObject(propertyValues[0]);
+                            } catch (ParseException e) {
                                 // don't throw an exception for this since any invalid copy/paste of an URL
                                 // will give a general exception, just set the value to null and it will
-                                // no be set to the property
+                                // not be set to the property
                                 parameter_value_typed = null;
 
                                 if (validated != null) {
