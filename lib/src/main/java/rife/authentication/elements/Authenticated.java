@@ -93,7 +93,7 @@ public class Authenticated extends Identified implements SessionAttributes {
                     // prohibit access if the authentication session was
                     // started through remembered credentials and that
                     // had been set to not allowed
-                    if (auth_config.prohibitRemember() &&
+                    if (!auth_config.allowRemember() &&
                         session_manager.wasRemembered(auth_id)) {
                         sessionNotValid(auth_config.authCookieName(), auth_id, session_validity_id);
                     }

@@ -783,7 +783,7 @@ public class TestDatabaseAuthenticated {
     void testDatabaseAuthenticatedRememberProhibited(Datasource datasource)
     throws InterruptedException {
         try (DatabaseAuthenticatedSite site = new DatabaseAuthenticatedSite(datasource)) {
-            site.config.prohibitRemember(true);
+            site.config.allowRemember(false);
 
             site.validator.getSessionManager().setSessionDuration(1000);
 
