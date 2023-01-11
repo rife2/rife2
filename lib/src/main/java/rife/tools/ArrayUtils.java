@@ -112,27 +112,31 @@ public final class ArrayUtils {
             // would result in an OutOfMemoryError exception easily
             result = null;
         } else if (type == ArrayType.OBJECT_ARRAY) {
-            result = ArrayUtils.createStringArray((Object[]) source);
+            result = ArrayUtils.createStringArray((Object[]) source, constrainedProperty);
         } else if (type == ArrayType.BOOLEAN_ARRAY) {
-            result = ArrayUtils.createStringArray((boolean[]) source);
+            result = ArrayUtils.createStringArray((boolean[]) source, constrainedProperty);
         } else if (type == ArrayType.CHAR_ARRAY) {
-            result = ArrayUtils.createStringArray((char[]) source);
+            result = ArrayUtils.createStringArray((char[]) source, constrainedProperty);
         } else if (type == ArrayType.SHORT_ARRAY) {
-            result = ArrayUtils.createStringArray((short[]) source);
+            result = ArrayUtils.createStringArray((short[]) source, constrainedProperty);
         } else if (type == ArrayType.INT_ARRAY) {
-            result = ArrayUtils.createStringArray((int[]) source);
+            result = ArrayUtils.createStringArray((int[]) source, constrainedProperty);
         } else if (type == ArrayType.LONG_ARRAY) {
-            result = ArrayUtils.createStringArray((long[]) source);
+            result = ArrayUtils.createStringArray((long[]) source, constrainedProperty);
         } else if (type == ArrayType.FLOAT_ARRAY) {
-            result = ArrayUtils.createStringArray((float[]) source);
+            result = ArrayUtils.createStringArray((float[]) source, constrainedProperty);
         } else if (type == ArrayType.DOUBLE_ARRAY) {
-            result = ArrayUtils.createStringArray((double[]) source);
+            result = ArrayUtils.createStringArray((double[]) source, constrainedProperty);
         }
 
         return result;
     }
 
     public static String[] createStringArray(Object[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(Object[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -140,13 +144,17 @@ public final class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(boolean[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(boolean[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -154,13 +162,17 @@ public final class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(byte[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(byte[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -168,13 +180,17 @@ public final class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(char[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(char[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -182,13 +198,17 @@ public final class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(short[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(short[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -196,13 +216,17 @@ public final class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(int[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(int[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -210,13 +234,17 @@ public final class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(long[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(long[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -224,13 +252,17 @@ public final class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(float[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(float[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -238,13 +270,17 @@ public final class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(double[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(double[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -252,7 +288,7 @@ public final class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;

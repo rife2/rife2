@@ -70,6 +70,8 @@ public class AnnotationInSite extends Site {
         @Property String prop2 = "defaultProp2";
         @Property("prop1") String prop3 = "defaultProp3";
 
+        @ParametersBean BeanImpl beanParams = null;
+
         public void process(Context c)
         throws Exception {
             super.process(c);
@@ -141,6 +143,8 @@ public class AnnotationInSite extends Site {
             c.print(prop1 + "\n");
             c.print(prop2 + "\n");
             c.print(prop3 + "\n");
+
+            beanParams.printToContext(c);
         }
     }
 
@@ -170,6 +174,9 @@ public class AnnotationInSite extends Site {
     <input type="file" name="file2">
     <input type="file" name="file3">
     <input type="file" name="file4">
+    <input type="file" name="stringFile">
+    <input type="file" name="bytesFile">
+    <input type="file" name="streamFile">
     <button type="submit" id="submit">SEND</button>
 </form>
             """));

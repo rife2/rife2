@@ -40,6 +40,14 @@ public final class ClassUtils {
             isText(klass);
     }
 
+    public static boolean isFromJdk(Class klass) {
+        if (null == klass) {
+            return false;
+        }
+
+        return isBasic(klass) || klass.getClassLoader() == Object.class.getClassLoader();
+    }
+
     public static String simpleClassName(Class klass) {
         var class_name = klass.getName();
         if (klass.getPackage() != null) {

@@ -158,14 +158,8 @@ public abstract class AbstractFormBuilder implements FormBuilder {
 
             // generate the form fields using the bean's property values to set
             // the default values for the fields
-            BeanUtils.processPropertyValues(bean, null, null, null, (name, descriptor, value) -> {
+            BeanUtils.processPropertyValues(bean, null, null, null, (name, descriptor, value, constrainedProperty) -> {
                 String[] property_values = null;
-                ConstrainedProperty constrained_property = null;
-
-                // get the corresponding constrained property, if it exists
-                if (constrained != null) {
-                    constrained_property = constrained.getConstrainedProperty(name);
-                }
 
                 // check if the bean is validated and if the validation error for the
                 // property contains an erroneous value, in that case this value will
@@ -175,7 +169,7 @@ public abstract class AbstractFormBuilder implements FormBuilder {
                     for (var error : previous_errors) {
                         if (error.getErroneousValue() != null &&
                             error.getSubject().equals(name)) {
-                            property_values = ArrayUtils.createStringArray(error.getErroneousValue(), constrained_property);
+                            property_values = ArrayUtils.createStringArray(error.getErroneousValue(), constrainedProperty);
                             break;
                         }
                     }
@@ -194,7 +188,7 @@ public abstract class AbstractFormBuilder implements FormBuilder {
                         if (null == value) {
                             property_values = null;
                         } else {
-                            property_values = ArrayUtils.createStringArray(value, constrained_property);
+                            property_values = ArrayUtils.createStringArray(value, constrainedProperty);
                         }
                     }
                 }

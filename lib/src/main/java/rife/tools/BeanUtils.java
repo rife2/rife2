@@ -99,13 +99,10 @@ public final class BeanUtils {
 
         final var property_names = new LinkedHashSet<String>();
 
-        processProperties(accessors, beanClass, includedProperties, excludedProperties, prefix, new BeanPropertyProcessor() {
-            public boolean gotProperty(String name, PropertyDescriptor descriptor)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                property_names.add(name);
+        processProperties(accessors, beanClass, includedProperties, excludedProperties, prefix, (name, descriptor) -> {
+            property_names.add(name);
 
-                return true;
-            }
+            return true;
         });
 
         return property_names;
@@ -132,11 +129,11 @@ public final class BeanUtils {
             Collection<String> excluded_properties = null;
             if (null != includedProperties &&
                 includedProperties.length > 0) {
-                included_properties = new ArrayList<String>(Arrays.asList(includedProperties));
+                included_properties = new ArrayList<>(Arrays.asList(includedProperties));
             }
             if (null != excludedProperties &&
                 excludedProperties.length > 0) {
-                excluded_properties = new ArrayList<String>(Arrays.asList(excludedProperties));
+                excluded_properties = new ArrayList<>(Arrays.asList(excludedProperties));
             }
 
             // iterate over the properties of the bean
@@ -172,18 +169,25 @@ public final class BeanUtils {
         if (bean instanceof Class)
             throw new IllegalArgumentException("bean should be a bean instance, not a bean class.");
 
-        processProperties(accessors, bean.getClass(), includedProperties, excludedProperties, prefix, new BeanPropertyProcessor() {
-            public boolean gotProperty(String name, PropertyDescriptor descriptor)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                // obtain the value of the property
-                var property_read_method = descriptor.getReadMethod();
-                if (property_read_method != null) {
-                    // handle the property value
-                    processor.gotProperty(name, descriptor, property_read_method.invoke(bean, (Object[]) null));
+        // check if the bean is constrained
+        final var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+
+        processProperties(accessors, bean.getClass(), includedProperties, excludedProperties, prefix, (name, descriptor) -> {
+            // obtain the value of the property
+            var property_read_method = descriptor.getReadMethod();
+            if (property_read_method != null) {
+                ConstrainedProperty constrained_property = null;
+
+                // get the corresponding constrained property, if it exists
+                if (constrained != null) {
+                    constrained_property = constrained.getConstrainedProperty(descriptor.getName());
                 }
 
-                return true;
+                // handle the property value
+                processor.gotProperty(name, descriptor, property_read_method.invoke(bean, (Object[]) null), constrained_property);
             }
+
+            return true;
         });
     }
 
@@ -198,12 +202,9 @@ public final class BeanUtils {
 
         final var result = new int[]{0};
 
-        processProperties(accessors, beanClass, includedProperties, excludedProperties, prefix, new BeanPropertyProcessor() {
-            public boolean gotProperty(String name, PropertyDescriptor descriptor)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                result[0]++;
-                return true;
-            }
+        processProperties(accessors, beanClass, includedProperties, excludedProperties, prefix, (name, descriptor) -> {
+            result[0]++;
+            return true;
         });
 
         return result[0];
@@ -338,12 +339,9 @@ public final class BeanUtils {
     throws BeanUtilsException {
         final var property_values = new LinkedHashMap<String, Object>();
 
-        processPropertyValues(accessors, bean, includedProperties, excludedProperties, prefix, new BeanPropertyValueProcessor() {
-            public void gotProperty(String name, PropertyDescriptor descriptor, Object value)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                // store the property value
-                property_values.put(name, value);
-            }
+        processPropertyValues(accessors, bean, includedProperties, excludedProperties, prefix, (name, descriptor, value, constrainedProperty) -> {
+            // store the property value
+            property_values.put(name, value);
         });
 
         return property_values;
@@ -364,6 +362,15 @@ public final class BeanUtils {
 
         if (format != null) {
             return format.format(propertyValue);
+        } else if (propertyValue != null) {
+            if (!ClassUtils.isFromJdk(propertyValue.getClass()) &&
+                propertyValue instanceof Serializable serializable) {
+                try {
+                    return SerializationUtils.serializeToString(serializable);
+                } catch (SerializationUtilsErrorException e) {
+                    // no-op, just use regular toString();
+                }
+            }
         }
 
         return String.valueOf(propertyValue);
@@ -380,24 +387,21 @@ public final class BeanUtils {
 
         final var property_types = new LinkedHashMap<String, Class>();
 
-        processProperties(accessors, beanClass, includedProperties, excludedProperties, prefix, new BeanPropertyProcessor() {
-            public boolean gotProperty(String name, PropertyDescriptor descriptor)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                Class property_class = null;
+        processProperties(accessors, beanClass, includedProperties, excludedProperties, prefix, (name, descriptor) -> {
+            Class property_class = null;
 
-                // obtain and store the property type
-                var property_read_method = descriptor.getReadMethod();
-                if (property_read_method != null) {
-                    property_class = property_read_method.getReturnType();
-                } else {
-                    var property_write_method = descriptor.getWriteMethod();
-                    property_class = property_write_method.getParameterTypes()[0];
-                }
-
-                property_types.put(name, property_class);
-
-                return true;
+            // obtain and store the property type
+            var property_read_method = descriptor.getReadMethod();
+            if (property_read_method != null) {
+                property_class = property_read_method.getReturnType();
+            } else {
+                var property_write_method = descriptor.getWriteMethod();
+                property_class = property_write_method.getParameterTypes()[0];
             }
+
+            property_types.put(name, property_class);
+
+            return true;
         });
 
         return property_types;
@@ -736,7 +740,7 @@ public final class BeanUtils {
                             }
                             write_method.invoke(beanInstance, new Object[]{parameter_values_typed});
                         } else if (component_type == Short.class) {
-                            Short parameter_values_typed[] = new Short[propertyValues.length];
+                            var parameter_values_typed = new Short[propertyValues.length];
                             for (var i = 0; i < propertyValues.length; i++) {
                                 if (propertyValues[i] != null && propertyValues[i].length() > 0) {
                                     if (constrained_property != null && constrained_property.isFormatted()) {

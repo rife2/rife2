@@ -5,15 +5,13 @@
 package rife.engine;
 
 import rife.engine.annotations.*;
+import rife.engine.annotations.Parameter;
 import rife.engine.exceptions.EngineException;
-import rife.tools.ClassUtils;
-import rife.tools.Convert;
-import rife.tools.StringUtils;
+import rife.tools.*;
 import rife.tools.exceptions.ConversionException;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.*;
 
 class RouteClass implements Route {
@@ -106,6 +104,7 @@ class RouteClass implements Route {
                         field.isAnnotationPresent(FileUpload.class) ||
                         field.isAnnotationPresent(Header.class) ||
                         field.isAnnotationPresent(Parameter.class) ||
+                        field.isAnnotationPresent(ParametersBean.class) ||
                         field.isAnnotationPresent(PathInfo.class) ||
                         field.isAnnotationPresent(Property.class) ||
                         field.isAnnotationPresent(RequestAttribute.class) ||
@@ -141,14 +140,25 @@ class RouteClass implements Route {
                     var name = field.getName();
                     var value = field.get(context.processedElement());
 
-                    if (field.isAnnotationPresent(Parameter.class) &&
-                        shouldProcessOutFlow(field.getAnnotation(Parameter.class).flow())) {
-                        var annotation_name = field.getAnnotation(Parameter.class).value();
-                        if (annotation_name != null && !annotation_name.isEmpty()) {
-                            name = annotation_name;
-                        }
+                    if (value != null) {
+                        if (field.isAnnotationPresent(Parameter.class) &&
+                            shouldProcessOutFlow(field.getAnnotation(Parameter.class).flow())) {
+                            var annotation_name = field.getAnnotation(Parameter.class).value();
+                            if (annotation_name != null && !annotation_name.isEmpty()) {
+                                name = annotation_name;
+                            }
 
-                        parameters.put(name, new String[]{Convert.toString(value)});
+                            parameters.put(name, new String[]{Convert.toString(value)});
+                        } else if (field.isAnnotationPresent(ParametersBean.class) &&
+                                   shouldProcessOutFlow(field.getAnnotation(ParametersBean.class).flow())) {
+                            var annotation_prefix = field.getAnnotation(ParametersBean.class).prefix();
+
+                            BeanUtils.processPropertyValues(value, null, null, annotation_prefix, (propertyName, descriptor, propertyValue, constrainedProperty) -> {
+                                if (propertyValue != null) {
+                                    parameters.put(propertyName, ArrayUtils.createStringArray(propertyValue, constrainedProperty));
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -182,6 +192,12 @@ class RouteClass implements Route {
                     }
 
                     parameters.add(name);
+                } else if (field.isAnnotationPresent(ParametersBean.class) &&
+                           shouldProcessInFlow(field.getAnnotation(ParametersBean.class).flow())) {
+                    var type = field.getType();
+                    var annotation_prefix = field.getAnnotation(ParametersBean.class).prefix();
+
+                    parameters.addAll(BeanUtils.getPropertyNames(type, null, null, annotation_prefix));
                 }
             }
 
@@ -227,6 +243,15 @@ class RouteClass implements Route {
                             value = Convert.getDefaultValue(type);
                         }
                         field.set(element, value);
+                    }
+                } else if (field.isAnnotationPresent(ParametersBean.class) &&
+                           shouldProcessInFlow(field.getAnnotation(ParametersBean.class).flow())) {
+                    var annotation_prefix = field.getAnnotation(ParametersBean.class).prefix();
+                    Object bean = field.get(element);
+                    if (bean == null) {
+                        field.set(element, context.parametersBean(type, annotation_prefix));
+                    } else {
+                        context.parametersBean(bean, annotation_prefix);
                     }
                 } else if (field.isAnnotationPresent(Property.class)) {
                     var properties = context.properties();

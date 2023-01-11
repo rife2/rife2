@@ -4,11 +4,14 @@
  */
 package rife.tools;
 
+import rife.validation.ConstrainedProperty;
+
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 
+@FunctionalInterface
 public interface BeanPropertyValueProcessor {
-    void gotProperty(String name, PropertyDescriptor descriptor, Object value)
+    void gotProperty(String name, PropertyDescriptor descriptor, Object value, ConstrainedProperty constrainedProperty)
     throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 }
 
