@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -15,7 +15,7 @@ import rife.tools.Convert;
 import java.text.Format;
 
 /**
- * A <code>ConstrainedProperty</code> object makes it possible to easily
+ * A {@code ConstrainedProperty} object makes it possible to easily
  * define all constraints for a named property of a bean.
  * <p>The property name refers to the actual name of the bean property.
  * However, this sometimes doesn't correspond to its conceptual usage. It can
@@ -29,7 +29,6 @@ import java.text.Format;
  * <pre>ConstrainedProperty constrained = new ConstrainedProperty("password")
  *    .maxLength(8)
  *    .notNull(true);</pre>
- * <p>
  * <p>Constrained properties are typically added to a {@link Constrained} bean
  * in its constructor. These are the static constraints that will be set for
  * each and every instance of the bean. You'll however most of the time use
@@ -187,7 +186,7 @@ public class ConstrainedProperty implements Cloneable {
     }
 
     /**
-     * Creates a new <code>ConstrainedProperty</code> for the specified
+     * Creates a new {@code ConstrainedProperty} for the specified
      * property name.
      *
      * @param propertyName the name of the property that has to be
@@ -205,7 +204,7 @@ public class ConstrainedProperty implements Cloneable {
      * Sets the subject name.
      *
      * @param name the subject name
-     * @return this <code>ConstrainedProperty</code>
+     * @return this {@code ConstrainedProperty}
      * @since 1.0
      */
     public ConstrainedProperty subjectName(String name) {
@@ -250,19 +249,19 @@ public class ConstrainedProperty implements Cloneable {
     }
 
     /**
-     * Set whether the property value can be <code>null</code>.
+     * Set whether the property value can be {@code null}.
      * <p>Note that this has different meanings in different contexts:
      * <ul>
      * <li>for values in java this is only applicable to object references
-     * as primitive values are never <code>null</code>,
+     * as primitive values are never {@code null},
      * <li>for values that are stored in a database, it's applicable to
      * every column.
      * </ul>
      *
-     * @param notNull <code>true</code> when the value can't be
-     *                <code>null</code>; or <code>false</code> when the value can be
-     *                <code>null</code>.
-     * @return this <code>ConstrainedProperty</code>
+     * @param notNull {@code true} when the value can't be
+     *                {@code null}; or {@code false} when the value can be
+     *                {@code null}.
+     * @return this {@code ConstrainedProperty}
      * @see #isNotNull()
      * @since 1.0
      */
@@ -273,7 +272,7 @@ public class ConstrainedProperty implements Cloneable {
     }
 
     /**
-     * Set whether the property value can be <code>null</code>.
+     * Set whether the property value can be {@code null}.
      *
      * @see #notNull(boolean)
      * @since 1.0
@@ -283,11 +282,11 @@ public class ConstrainedProperty implements Cloneable {
     }
 
     /**
-     * Retrieves whether the property value can be <code>null</code>.
+     * Retrieves whether the property value can be {@code null}.
      *
-     * @return <code>true</code> when the value can't be <code>null</code>;
+     * @return {@code true} when the value can't be {@code null};
      * or
-     * <p><code>false</code> when the value can be <code>null</code>.
+     * <p>{@code false} when the value can be {@code null}.
      * @see #notNull(boolean)
      * @since 1.0
      */
@@ -303,9 +302,9 @@ public class ConstrainedProperty implements Cloneable {
      * <li>for numeric types this is 0 (zero).
      * </ul>
      *
-     * @param notEmpty <code>true</code> when the value can't be empty; or
-     *                 <code>false</code> when the value can be empty.
-     * @return this <code>ConstrainedProperty</code>
+     * @param notEmpty {@code true} when the value can't be empty; or
+     *                 {@code false} when the value can be empty.
+     * @return this {@code ConstrainedProperty}
      * @see #isNotEmpty()
      * @since 1.0
      */
@@ -328,8 +327,8 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Retrieves whether the property value can be empty.
      *
-     * @return <code>true</code> when the value can't be empty; or
-     * <p><code>false</code> when the value can be empty.
+     * @return {@code true} when the value can't be empty; or
+     * <p>{@code false} when the value can be empty.
      * @see #notEmpty(boolean)
      * @since 1.0
      */
@@ -339,10 +338,10 @@ public class ConstrainedProperty implements Cloneable {
 
     /**
      * Set that the property value can't be equal to a specified
-     * <code>boolean</code> reference value.
+     * {@code boolean} reference value.
      *
      * @param reference the reference value it will be checked against
-     * @return this <code>ConstrainedProperty</code>
+     * @return this {@code ConstrainedProperty}
      * @see #isNotEqual()
      * @since 1.0
      */
@@ -354,7 +353,7 @@ public class ConstrainedProperty implements Cloneable {
 
     /**
      * Set that the property value can't be equal to a specified
-     * <code>Object</code> reference value.
+     * {@code Object} reference value.
      *
      * @see #notEqual(boolean)
      * @since 1.0
@@ -367,7 +366,7 @@ public class ConstrainedProperty implements Cloneable {
 
     /**
      * Set that the property value can't be equal to a specified
-     * <code>boolean</code> reference value.
+     * {@code boolean} reference value.
      *
      * @see #notEqual(boolean)
      * @since 1.0
@@ -378,7 +377,7 @@ public class ConstrainedProperty implements Cloneable {
 
     /**
      * Set that the property value can't be equal to a specified
-     * <code>Object</code> reference value.
+     * {@code Object} reference value.
      *
      * @see #notEqual(boolean)
      * @since 1.0
@@ -395,8 +394,8 @@ public class ConstrainedProperty implements Cloneable {
      * Retrieves whether the property can't be equal to a specific
      * reference value.
      *
-     * @return <code>true</code> when the value can't be equal; or
-     * <p><code>false</code> when the value can be equal.
+     * @return {@code true} when the value can't be equal; or
+     * <p>{@code false} when the value can be equal.
      * @see #notEqual(boolean)
      * @since 1.0
      */
@@ -409,7 +408,7 @@ public class ConstrainedProperty implements Cloneable {
      * equal.
      *
      * @return the requested reference object instance; or
-     * <p><code>null</code> when the property has no notEqual constraint.
+     * <p>{@code null} when the property has no notEqual constraint.
      * @see #notEqual(boolean)
      * @since 1.0
      */
@@ -424,9 +423,9 @@ public class ConstrainedProperty implements Cloneable {
      * other entries. In a singular context, uniqueness is always
      * guaranteed.
      *
-     * @param unique <code>true</code> when the value has to be unique; or
-     *               <code>false</code> when it doesn't have to be.
-     * @return this <code>ConstrainedProperty</code>
+     * @param unique {@code true} when the value has to be unique; or
+     *               {@code false} when it doesn't have to be.
+     * @return this {@code ConstrainedProperty}
      * @see #isUnique()
      * @since 1.0
      */
@@ -449,8 +448,8 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Retrieves whether the property value has to be unique.
      *
-     * @return <code>true</code> when the value has to be unique; or
-     * <p><code>false</code> it doesn't have to be.
+     * @return {@code true} when the value has to be unique; or
+     * <p>{@code false} it doesn't have to be.
      * @see #unique(boolean)
      * @since 1.0
      */
@@ -465,9 +464,9 @@ public class ConstrainedProperty implements Cloneable {
      * other entries. In a singular context, identification is
      * meaningless.
      *
-     * @param identifier <code>true</code> when the value is an
-     *                   identifier; or <code>false</code> when it isn't.
-     * @return this <code>ConstrainedProperty</code>
+     * @param identifier {@code true} when the value is an
+     *                   identifier; or {@code false} when it isn't.
+     * @return this {@code ConstrainedProperty}
      * @see #isIdentifier()
      * @since 1.0
      */
@@ -490,8 +489,8 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Retrieves whether the property is an identifier.
      *
-     * @return <code>true</code> when the property is an identifier; or
-     * <p><code>false</code> it isn't.
+     * @return {@code true} when the property is an identifier; or
+     * <p>{@code false} it isn't.
      * @see #identifier(boolean)
      * @since 1.0
      */
@@ -1313,9 +1312,9 @@ public class ConstrainedProperty implements Cloneable {
      * <p>This is not actually used by the CMF itself, but is very useful when
      * integrating with automatic user interface generation libraries.
      *
-     * @param listed <code>true</code> if the property should be listed; or
-     *               <p><code>false</code> if it shouldn't
-     * @return the current <code>ConstrainedProperty</code> instance
+     * @param listed {@code true} if the property should be listed; or
+     *               <p>{@code false} if it shouldn't
+     * @return the current {@code ConstrainedProperty} instance
      * @see #setListed(boolean)
      * @see #isListed()
      * @since 1.0
@@ -1329,8 +1328,8 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Sets whether the property should be included in data lists.
      *
-     * @param listed <code>true</code> if the property should be listed; or
-     *               <p><code>false</code> if it shouldn't
+     * @param listed {@code true} if the property should be listed; or
+     *               <p>{@code false} if it shouldn't
      * @see #listed(boolean)
      * @see #isListed()
      * @since 1.0
@@ -1342,8 +1341,8 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Retrieves whether the property should be included in data lists.
      *
-     * @return <code>true</code> if the property should be listed; or
-     * <p><code>false</code> if it shouldn't
+     * @return {@code true} if the property should be listed; or
+     * <p>{@code false} if it shouldn't
      * @see #listed(boolean)
      * @see #setListed(boolean)
      * @since 1.0
@@ -1358,8 +1357,8 @@ public class ConstrainedProperty implements Cloneable {
      * integrating with automatic user interface generation libraries.
      *
      * @param position an integer value with the position; or
-     *                 <p><code>-1</code> if the property shouldn't be positioned
-     * @return the current <code>ConstrainedProperty</code> instance
+     *                 <p>{@code -1} if the property shouldn't be positioned
+     * @return the current {@code ConstrainedProperty} instance
      * @see #setPosition(int)
      * @see #hasPosition()
      * @see #getPosition()
@@ -1375,7 +1374,7 @@ public class ConstrainedProperty implements Cloneable {
      * Sets the position in which the property should be displayed.
      *
      * @param position an integer value with the position; or
-     *                 <p><code>-1</code> if the property shouldn't be positioned
+     *                 <p>{@code -1} if the property shouldn't be positioned
      * @see #position(int)
      * @see #hasPosition()
      * @see #getPosition()
@@ -1392,8 +1391,8 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Indicates whether the position of the property is set.
      *
-     * @return <code>true</code> if the property has a position; or
-     * <p><code>false</code> if it hasn't
+     * @return {@code true} if the property has a position; or
+     * <p>{@code false} if it hasn't
      * @see #position(int)
      * @see #setPosition(int)
      * @see #getPosition()
@@ -1407,7 +1406,7 @@ public class ConstrainedProperty implements Cloneable {
      * Retrieves the position in which the property should be displayed.
      *
      * @return an integer value with the position; or
-     * <p><code>-1</code> if the property shouldn't be positioned
+     * <p>{@code -1} if the property shouldn't be positioned
      * @see #position(int)
      * @see #setPosition(int)
      * @see #hasPosition()
@@ -1425,8 +1424,8 @@ public class ConstrainedProperty implements Cloneable {
      * back-end. This column will not be stored in a regular database table.
      * All this is handled transparently and automatically.
      *
-     * @param mimeType the <code>MimeType</code> of the property
-     * @return the current <code>ConstrainedProperty</code> instance
+     * @param mimeType the {@code MimeType} of the property
+     * @return the current {@code ConstrainedProperty} instance
      * @see #setMimeType(MimeType)
      * @see #hasMimeType()
      * @see #getMimeType()
@@ -1441,7 +1440,7 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Sets the mime type of the property.
      *
-     * @param mimeType the <code>MimeType</code> of the property
+     * @param mimeType the {@code MimeType} of the property
      * @see #mimeType(MimeType)
      * @see #hasMimeType()
      * @see #getMimeType()
@@ -1460,8 +1459,8 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Indicates whether the property has a mime type.
      *
-     * @return <code>true</code> if the property has a mime type; or
-     * <p><code>false</code> if it hasn't
+     * @return {@code true} if the property has a mime type; or
+     * <p>{@code false} if it hasn't
      * @see #mimeType(MimeType)
      * @see #setMimeType(MimeType)
      * @see #getMimeType()
@@ -1475,7 +1474,7 @@ public class ConstrainedProperty implements Cloneable {
      * Retrieves the mime type of the property.
      *
      * @return the mime type of the property; or
-     * <p><code>null</code> if the property has no mime type
+     * <p>{@code null} if the property has no mime type
      * @see #mimeType(MimeType)
      * @see #setMimeType(MimeType)
      * @see #hasMimeType()
@@ -1494,10 +1493,10 @@ public class ConstrainedProperty implements Cloneable {
      * everything will be stored in memory, only use this for text snippets or
      * something relatively small.
      *
-     * @param autoRetrieved <code>true</code> if the data should be
+     * @param autoRetrieved {@code true} if the data should be
      *                      automatically retrieved; or
-     *                      <p><code>false</code> otherwise
-     * @return the current <code>ConstrainedProperty</code> instance
+     *                      <p>{@code false} otherwise
+     * @return the current {@code ConstrainedProperty} instance
      * @see #mimeType(MimeType)
      * @see #setAutoRetrieved(boolean)
      * @see #isAutoRetrieved()
@@ -1513,9 +1512,9 @@ public class ConstrainedProperty implements Cloneable {
      * Sets whether the content data of this property should be retrieved
      * automatically from the back-end.
      *
-     * @param autoRetrieved <code>true</code> if the data should be
+     * @param autoRetrieved {@code true} if the data should be
      *                      automatically retrieved; or
-     *                      <p><code>false</code> otherwise
+     *                      <p>{@code false} otherwise
      * @see #autoRetrieved(boolean)
      * @see #isAutoRetrieved()
      * @since 1.0
@@ -1528,9 +1527,9 @@ public class ConstrainedProperty implements Cloneable {
      * Indicates whether the content data of this property is automatically
      * retrieved from the back-end.
      *
-     * @return <code>true</code> if the data should be automatically
+     * @return {@code true} if the data should be automatically
      * retrieved; or
-     * <p><code>false</code> otherwise
+     * <p>{@code false} otherwise
      * @see #autoRetrieved(boolean)
      * @see #setAutoRetrieved(boolean)
      * @since 1.0
@@ -1547,9 +1546,9 @@ public class ConstrainedProperty implements Cloneable {
      * larger document. For example a HTML snippet. This information is for
      * example important when validating the data.
      *
-     * @param fragment <code>true</code> if the content is a fragment; or
-     *                 <p><code>false</code> otherwise
-     * @return the current <code>ConstrainedProperty</code> instance
+     * @param fragment {@code true} if the content is a fragment; or
+     *                 <p>{@code false} otherwise
+     * @return the current {@code ConstrainedProperty} instance
      * @see #mimeType(MimeType)
      * @see #setFragment(boolean)
      * @see #isFragment()
@@ -1564,8 +1563,8 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Sets whether the content data of this property is a fragment.
      *
-     * @param fragment <code>true</code> if the content is a fragment; or
-     *                 <p><code>false</code> otherwise
+     * @param fragment {@code true} if the content is a fragment; or
+     *                 <p>{@code false} otherwise
      * @see #fragment(boolean)
      * @see #isFragment()
      * @since 1.0
@@ -1577,8 +1576,8 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Indicates whether the content data of this property is a fragment.
      *
-     * @return <code>true</code> if the content is a fragment; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the content is a fragment; or
+     * <p>{@code false} otherwise
      * @see #fragment(boolean)
      * @see #setFragment(boolean)
      * @since 1.0
@@ -1593,7 +1592,7 @@ public class ConstrainedProperty implements Cloneable {
      * constraint.
      *
      * @param name the name
-     * @return the current <code>ConstrainedProperty</code> instance
+     * @return the current {@code ConstrainedProperty} instance
      * @see #setName(String)
      * @see #getName()
      * @see #hasName()
@@ -1625,7 +1624,7 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Retrieves the name of this property.
      *
-     * @return <code>null</code> if the content data has no name; or
+     * @return {@code null} if the content data has no name; or
      * <p>the name of the content
      * @see #name(String)
      * @see #setName(String)
@@ -1639,8 +1638,8 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Indicates whether this property has a name.
      *
-     * @return <code>true</code> if the property has a name; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the property has a name; or
+     * <p>{@code false} otherwise
      * @see #name(String)
      * @see #setName(String)
      * @see #getName()
@@ -1657,7 +1656,7 @@ public class ConstrainedProperty implements Cloneable {
      * constraint.
      *
      * @param repository the repository
-     * @return the current <code>CmrProperty</code> instance
+     * @return the current {@code CmrProperty} instance
      * @see #mimeType(MimeType)
      * @see #setRepository(String)
      * @see #getRepository()
@@ -1692,7 +1691,7 @@ public class ConstrainedProperty implements Cloneable {
      * Retrieves the repository where the content data of this property will
      * be stored.
      *
-     * @return <code>null</code> if no repository has been specified; or
+     * @return {@code null} if no repository has been specified; or
      * <p>the name of the repository
      * @see #repository(String)
      * @see #setRepository(String)
@@ -1707,9 +1706,9 @@ public class ConstrainedProperty implements Cloneable {
      * Indicates whether this property will be stored in another repository
      * than the default repository.
      *
-     * @return <code>true</code> if the property will be stored in another
+     * @return {@code true} if the property will be stored in another
      * repository; or
-     * <p><code>false</code> otherwise
+     * <p>{@code false} otherwise
      * @see #repository(String)
      * @see #setRepository(String)
      * @see #getRepository()
@@ -1732,9 +1731,9 @@ public class ConstrainedProperty implements Cloneable {
      * down} methods in the {@link rife.cmf.dam.ContentQueryManager
      * ContentQueryManager} to easily reorder data rows in the back-end.
      *
-     * @param ordinal <code>true</code> if this property is an ordinal; or
-     *                <p><code>false</code> otherwise
-     * @return the current <code>ConstrainedProperty</code> instance
+     * @param ordinal {@code true} if this property is an ordinal; or
+     *                <p>{@code false} otherwise
+     * @return the current {@code ConstrainedProperty} instance
      * @see #ordinal(boolean, String)
      * @see #setOrdinal(boolean)
      * @see #setOrdinal(boolean, String)
@@ -1751,10 +1750,10 @@ public class ConstrainedProperty implements Cloneable {
      * Sets whether this property has to be used as an ordinal with a
      * restricting column.
      *
-     * @param ordinal     <code>true</code> if this property is an ordinal; or
-     *                    <p><code>false</code> otherwise
+     * @param ordinal     {@code true} if this property is an ordinal; or
+     *                    <p>{@code false} otherwise
      * @param restriction the name of the restricting column
-     * @return the current <code>ConstrainedProperty</code> instance
+     * @return the current {@code ConstrainedProperty} instance
      * @see #ordinal(boolean)
      * @see #setOrdinal(boolean)
      * @see #setOrdinal(boolean, String)
@@ -1773,8 +1772,8 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Sets whether this property has to be used as an ordinal.
      *
-     * @param ordinal <code>true</code> if this property is an ordinal; or
-     *                <p><code>false</code> otherwise
+     * @param ordinal {@code true} if this property is an ordinal; or
+     *                <p>{@code false} otherwise
      * @see #ordinal(boolean)
      * @see #ordinal(boolean, String)
      * @see #setOrdinal(boolean, String)
@@ -1790,8 +1789,8 @@ public class ConstrainedProperty implements Cloneable {
      * Sets whether this property has to be used as an ordinal with a
      * restricting column.
      *
-     * @param ordinal     <code>true</code> if this property is an ordinal; or
-     *                    <p><code>false</code> otherwise
+     * @param ordinal     {@code true} if this property is an ordinal; or
+     *                    <p>{@code false} otherwise
      * @param restriction the name of the restricting column
      * @see #ordinal(boolean)
      * @see #ordinal(boolean, String)
@@ -1818,8 +1817,8 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Indicates whether this property has to be used as an ordinal.
      *
-     * @return <code>true</code> if this property is an ordinal; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if this property is an ordinal; or
+     * <p>{@code false} otherwise
      * @see #ordinal(boolean)
      * @see #ordinal(boolean, String)
      * @see #setOrdinal(boolean)
@@ -1833,9 +1832,9 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Indicates whether this property has an ordinal restricting column.
      *
-     * @return <code>true</code> if this property has an ordinal restricting
+     * @return {@code true} if this property has an ordinal restricting
      * column; or
-     * <p><code>false</code> otherwise
+     * <p>{@code false} otherwise
      * @see #ordinal(boolean, String)
      * @see #setOrdinal(boolean, String)
      * @see #getOrdinalRestriction()
@@ -1849,7 +1848,7 @@ public class ConstrainedProperty implements Cloneable {
      * Retrieves the ordinal restriction of this property.
      *
      * @return the name of the ordinal restricting column; or
-     * <p><code>null</code> if no ordinal restricting column has been defined
+     * <p>{@code null} if no ordinal restricting column has been defined
      * @see #ordinal(boolean, String)
      * @see #setOrdinal(boolean, String)
      * @see #hasOrdinalRestriction()
@@ -1861,11 +1860,11 @@ public class ConstrainedProperty implements Cloneable {
 
     /**
      * Sets a named content attribute for this property that will be converted
-     * internally to a <code>String</code> value.
+     * internally to a {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #contentAttribute(String, String)
      * @see #getContentAttributes()
      * @since 1.0
@@ -1876,11 +1875,11 @@ public class ConstrainedProperty implements Cloneable {
 
     /**
      * Sets a named content attribute for this property that will be converted
-     * internally to a <code>String</code> value.
+     * internally to a {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #contentAttribute(String, String)
      * @see #getContentAttributes()
      * @since 1.0
@@ -1891,11 +1890,11 @@ public class ConstrainedProperty implements Cloneable {
 
     /**
      * Sets a named content attribute for this property that will be converted
-     * internally to a <code>String</code> value.
+     * internally to a {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #contentAttribute(String, String)
      * @see #getContentAttributes()
      * @since 1.0
@@ -1906,11 +1905,11 @@ public class ConstrainedProperty implements Cloneable {
 
     /**
      * Sets a named content attribute for this property that will be converted
-     * internally to a <code>String</code> value.
+     * internally to a {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #contentAttribute(String, String)
      * @see #getContentAttributes()
      * @since 1.0
@@ -1921,11 +1920,11 @@ public class ConstrainedProperty implements Cloneable {
 
     /**
      * Sets a named content attribute for this property that will be converted
-     * internally to a <code>String</code> value.
+     * internally to a {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #contentAttribute(String, String)
      * @see #getContentAttributes()
      * @since 1.0
@@ -1936,11 +1935,11 @@ public class ConstrainedProperty implements Cloneable {
 
     /**
      * Sets a named content attribute for this property that will be converted
-     * internally to a <code>String</code> value.
+     * internally to a {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #contentAttribute(String, String)
      * @see #getContentAttributes()
      * @since 1.0
@@ -1951,11 +1950,11 @@ public class ConstrainedProperty implements Cloneable {
 
     /**
      * Sets a named content attribute for this property that will be converted
-     * internally to a <code>String</code> value.
+     * internally to a {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #contentAttribute(String, String)
      * @see #getContentAttributes()
      * @since 1.0
@@ -1966,11 +1965,11 @@ public class ConstrainedProperty implements Cloneable {
 
     /**
      * Sets a named content attribute for this property that will be converted
-     * internally to a <code>String</code> value.
+     * internally to a {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #contentAttribute(String, String)
      * @see #getContentAttributes()
      * @since 1.0
@@ -1989,7 +1988,7 @@ public class ConstrainedProperty implements Cloneable {
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #mimeType(MimeType)
      * @see #getContentAttributes()
      * @since 1.0
@@ -2010,7 +2009,7 @@ public class ConstrainedProperty implements Cloneable {
      * Retrieves the map of named content attributes for this property.
      *
      * @return the map of named content attributes; or
-     * <p><code>null</code> if no attributes are present
+     * <p>{@code null} if no attributes are present
      * @see #contentAttribute(String, String)
      * @since 1.0
      */
@@ -2025,7 +2024,7 @@ public class ConstrainedProperty implements Cloneable {
      * constraint.
      *
      * @param transformer the content transformer
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #mimeType(MimeType)
      * @see #setTransformer(ContentTransformer)
      * @see #hasTransformer()
@@ -2059,9 +2058,9 @@ public class ConstrainedProperty implements Cloneable {
     /**
      * Indicates whether this property has a content transformer.
      *
-     * @return <code>true</code> if this property has a content transformer;
+     * @return {@code true} if this property has a content transformer;
      * or
-     * <p><code>false</code> otherwise
+     * <p>{@code false} otherwise
      * @see #transformer(ContentTransformer)
      * @see #setTransformer(ContentTransformer)
      * @see #getTransformer()
@@ -2075,7 +2074,7 @@ public class ConstrainedProperty implements Cloneable {
      * Retrieves the content transformer of this property.
      *
      * @return the requested content transformer; or
-     * <p><code>null</code> if no content transformer has been defined
+     * <p>{@code null} if no content transformer has been defined
      * @see #transformer(ContentTransformer)
      * @see #setTransformer(ContentTransformer)
      * @see #hasTransformer()
@@ -2110,7 +2109,7 @@ public class ConstrainedProperty implements Cloneable {
      * Retrieves the cached loaded content data.
      *
      * @return the cached loaded content data; or
-     * <p><code>null</code> if no loaded content data has been cached
+     * <p>{@code null} if no loaded content data has been cached
      * @see #setCachedLoadedData(Object)
      * @since 1.0
      */
@@ -2144,7 +2143,7 @@ public class ConstrainedProperty implements Cloneable {
      * the standard constraints since none of the additional logic
      * and checks are executed.
      *
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #setConstraint
      * @see #getConstraint
      * @see #getConstraints
@@ -2161,7 +2160,7 @@ public class ConstrainedProperty implements Cloneable {
      * generic fashion
      *
      * @return the data of a particular constraint; or
-     * <p><code>null</code> if nothing has been registered for
+     * <p>{@code null} if nothing has been registered for
      * that constraint
      * @see #setConstraint
      * @see #constraint

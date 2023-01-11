@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 
@@ -9,7 +9,7 @@ import rife.cmf.ContentInfo;
 import rife.validation.ConstrainedProperty;
 
 /**
- * This class adds additional properties to the <code>ContentInfo</code> class
+ * This class adds additional properties to the {@code ContentInfo} class
  * to be able to store the data in a database.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -19,7 +19,7 @@ public class DatabaseContentInfo extends ContentInfo {
     private int contentId_ = -1;
 
     /**
-     * Instantiates a new <code>DatabaseContentInfo</code> instance.
+     * Instantiates a new {@code DatabaseContentInfo} instance.
      */
     public DatabaseContentInfo() {
     }
@@ -34,12 +34,12 @@ public class DatabaseContentInfo extends ContentInfo {
     }
 
     /**
-     * Sets the ID of the stored <code>Content</code> instance.
+     * Sets the ID of the stored {@code Content} instance.
      * <p>This ID will not be used to refer to the Content instance from
      * outside the backend. The path and the version should be used for this
      * instead.
      *
-     * @param contentId the ID of the <code>Content</code> instance
+     * @param contentId the ID of the {@code Content} instance
      * @see #getContentId()
      */
     public void setContentId(int contentId) {
@@ -47,9 +47,9 @@ public class DatabaseContentInfo extends ContentInfo {
     }
 
     /**
-     * Retrieves the ID of the stored <code>Content</code> instance.
+     * Retrieves the ID of the stored {@code Content} instance.
      *
-     * @return the <code>Content</code>'s ID
+     * @return the {@code Content}'s ID
      * @see #setContentId(int)
      */
     public int getContentId() {

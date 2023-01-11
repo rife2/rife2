@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.loader;
@@ -25,8 +25,8 @@ public abstract class ImageContentLoaderBackend implements ContentLoaderBackend<
      *
      * @param data   the raw data that has to be loaded
      * @param errors a set to which possible error messages will be added
-     * @return an instance of the <code>Image</code>; or
-     * <p><code>null</code> if the raw data couldn't be loaded
+     * @return an instance of the {@code Image}; or
+     * <p>{@code null} if the raw data couldn't be loaded
      */
     protected abstract Image loadFromBytes(byte[] data, Set<String> errors)
     throws ContentManagerException;

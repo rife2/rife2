@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.resources;
@@ -12,8 +12,8 @@ import java.net.URL;
 
 /**
  * This abstract class offers common implementations of several
- * <code>ResourceFinder</code> methods. This makes it easier to implement
- * specific <code>ResourceFinder</code> classes.
+ * {@code ResourceFinder} methods. This makes it easier to implement
+ * specific {@code ResourceFinder} classes.
  * <p>
  * All method implementations here accept resource specification as names and
  * correctly defer the actual logic to the methods that accept resource

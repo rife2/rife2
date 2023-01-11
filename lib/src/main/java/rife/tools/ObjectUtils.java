@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * General purpose class containing common <code>Object</code> manipulation
+ * General purpose class containing common {@code Object} manipulation
  * methods.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -33,9 +33,9 @@ public final class ObjectUtils {
      * the clone method.
      *
      * @param object The object to be cloned.
-     * @return <code>null</code> if the cloning failed; or
+     * @return {@code null} if the cloning failed; or
      * <p>
-     * the cloned <code>Object</code> instance.
+     * the cloned {@code Object} instance.
      */
     public static <T> T genericClone(T object) {
         if (object == null) {
@@ -87,7 +87,7 @@ public final class ObjectUtils {
     /**
      * Try to create a deep clone of the provides object. This handles arrays,
      * collections and maps. If the class in not a supported standard JDK
-     * collection type the <code>genericClone</code> will be used instead.
+     * collection type the {@code genericClone} will be used instead.
      *
      * @param object The object to be copied.
      */

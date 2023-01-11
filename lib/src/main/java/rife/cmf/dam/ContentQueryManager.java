@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.dam;
@@ -33,11 +33,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * The <code>ContentQueryManager</code> simplifies working with content a lot.
+ * The {@code ContentQueryManager} simplifies working with content a lot.
  * It extends {@link
  * rife.database.querymanagers.generic.GenericQueryManager
  * GenericQueryManager} and is a drop-in replacement that can be used instead.
- * The <code>ContentQueryManager</code> class works hand-in-hand with
+ * The {@code ContentQueryManager} class works hand-in-hand with
  * CMF-related constraints that are provided via the classes {@link
  * rife.validation.Validation Validation} and {@link
  * rife.validation.ConstrainedProperty ConstrainedProperty}. The additional constraints
@@ -49,13 +49,13 @@ import java.util.logging.Logger;
  * the CMF instead of storing it as a regular column in a database table. The
  * property content location (i.e. its full path) is generated automatically
  * based on the bean class name, the instance's identifier value (i.e. the
- * primary key used by <code>GenericQueryManager</code>), and the property
- * name. So for example, if you have an instance of the <code>NewsItem</code>
- * class whose identifier is <code>23</code>, then the full path that is
- * generated for a property named <code>text</code> is '<code>/newsitem/23/text</code>'.
+ * primary key used by {@code GenericQueryManager}), and the property
+ * name. So for example, if you have an instance of the {@code NewsItem}
+ * class whose identifier is {@code 23}, then the full path that is
+ * generated for a property named {@code text} is '{@code /newsitem/23/text}'.
  * Note that this always specifies the most recent version of the property,
  * but that older versions are also available from the content store.
- * <p>Before being able to use the CMF and a <code>ContentQueryManager</code>,
+ * <p>Before being able to use the CMF and a {@code ContentQueryManager},
  * you must install both of them, as in this example:
  * <pre>
  * DatabaseContentFactory.instance(datasource).install();
@@ -66,7 +66,7 @@ import java.util.logging.Logger;
  * constraint indicates which bean property will be used to order that table's
  * rows. When saving and deleting beans, the ordinal values will be
  * automatically updated in the entire table. The
- * <code>ContentQueryManager</code> also provides the {@link
+ * {@code ContentQueryManager} also provides the {@link
  * #move(Constrained, String, OrdinalManager.Direction) move}, {@link
  * #up(Constrained, String) up} and {@link #down(Constrained, String) down}
  * methods to easily manipulate the order of existing rows.
@@ -85,7 +85,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     private final ThreadLocal<T> deletedBean_ = new ThreadLocal<>();
 
     /**
-     * Creates a new <code>ContentQueryManager</code> instance for a specific
+     * Creates a new {@code ContentQueryManager} instance for a specific
      * class.
      * <p>All content will be stored in a {@link
      * rife.cmf.dam.contentmanagers.DatabaseContent}.
@@ -93,9 +93,9 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * @param datasource   the datasource that indicates where the data will be
      *                     stored
      * @param klass        the class of the bean that will be handled by this
-     *                     <code>ContentQueryManager</code>
+     *                     {@code ContentQueryManager}
      * @param backendClass the class the will be used by this
-     *                     <code>ContentQueryManager</code> to reference data in the backend
+     *                     {@code ContentQueryManager} to reference data in the backend
      * @since 1.0
      */
     public ContentQueryManager(Datasource datasource, Class<T> klass, Class backendClass) {
@@ -109,7 +109,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     /**
-     * Creates a new <code>ContentQueryManager</code> instance for a specific
+     * Creates a new {@code ContentQueryManager} instance for a specific
      * class, but with a different table name for the database storage.
      * <p>All content will be stored in a {@link
      * rife.cmf.dam.contentmanagers.DatabaseContent}.
@@ -117,7 +117,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * @param datasource the datasource that indicates where the data will be
      *                   stored
      * @param klass      the class of the bean that will be handled by this
-     *                   <code>ContentQueryManager</code>
+     *                   {@code ContentQueryManager}
      * @param table      the name of the database table in which the non CMF data will
      *                   be stored
      * @since 1.6
@@ -133,7 +133,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     /**
-     * Creates a new <code>ContentQueryManager</code> instance for a specific
+     * Creates a new {@code ContentQueryManager} instance for a specific
      * class.
      * <p>All content will be stored in a {@link
      * rife.cmf.dam.contentmanagers.DatabaseContent}.
@@ -141,7 +141,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * @param datasource the datasource that indicates where the data will be
      *                   stored
      * @param klass      the class of the bean that will be handled by this
-     *                   <code>ContentQueryManager</code>
+     *                   {@code ContentQueryManager}
      * @since 1.0
      */
     public ContentQueryManager(Datasource datasource, Class<T> klass) {
@@ -155,17 +155,17 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     /**
-     * Creates a new <code>ContentQueryManager</code> instance for a specific
+     * Creates a new {@code ContentQueryManager} instance for a specific
      * class.
      * <p>All content will be stored in the provided
-     * <code>ContentManager</code> instance. This constructor is handy if you
+     * {@code ContentManager} instance. This constructor is handy if you
      * want to integrate a custom content manager implementation.
      *
      * @param datasource     the datasource that indicates where the data will be
      *                       stored
      * @param klass          the class of the bean that will be handled by this
-     *                       <code>ContentQueryManager</code>
-     * @param contentManager a <code>ContentManager</code> instance
+     *                       {@code ContentQueryManager}
+     * @param contentManager a {@code ContentManager} instance
      * @since 1.0
      */
     public ContentQueryManager(Datasource datasource, Class<T> klass, ContentManager contentManager) {
@@ -179,9 +179,9 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     /**
-     * Sets the default repository that will be used by this <code>ContentQueryManager</code>.
+     * Sets the default repository that will be used by this {@code ContentQueryManager}.
      *
-     * @return this <code>ContentQueryManager</code>
+     * @return this {@code ContentQueryManager}
      * @see #getRepository
      * @since 1.4
      */
@@ -192,9 +192,9 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     /**
-     * Retrieves the default repository that is used by this <code>ContentQueryManager</code>.
+     * Retrieves the default repository that is used by this {@code ContentQueryManager}.
      *
-     * @return this <code>ContentQueryManager</code>'s repository
+     * @return this {@code ContentQueryManager}'s repository
      * @see #repository
      * @since 1.4
      */
@@ -203,10 +203,10 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     /**
-     * Returns the <code>ContentManager</code> that is used to store and
+     * Returns the {@code ContentManager} that is used to store and
      * retrieve the content.
      *
-     * @return the <code>ContentManager</code>
+     * @return the {@code ContentManager}
      * @since 1.0
      */
     public ContentManager getContentManager() {
@@ -222,8 +222,8 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * @param propertyName the name of the property with an ordinal constraint
      * @param direction    {@link OrdinalManager#UP} or {@link
      *                     OrdinalManager#DOWN}
-     * @return <code>true</code> if the row was moved successfully; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the row was moved successfully; or
+     * <p>{@code false} otherwise
      * @since 1.0
      */
     public boolean move(Constrained bean, String propertyName, OrdinalManager.Direction direction) {
@@ -290,8 +290,8 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * @param bean         the bean instance that corresponds to the row that has to
      *                     be moved
      * @param propertyName the name of the property with an ordinal constraint
-     * @return <code>true</code> if the row was moved successfully; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the row was moved successfully; or
+     * <p>{@code false} otherwise
      * @since 1.0
      */
     public boolean up(Constrained bean, String propertyName) {
@@ -305,8 +305,8 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * @param bean         the bean instance that corresponds to the row that has to
      *                     be moved
      * @param propertyName the name of the property with an ordinal constraint
-     * @return <code>true</code> if the row was moved successfully; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the row was moved successfully; or
+     * <p>{@code false} otherwise
      * @since 1.0
      */
     public boolean down(Constrained bean, String propertyName) {
@@ -315,21 +315,21 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
 
     /**
      * Empties the content of a certain bean property.
-     * <p>When a bean is saved, <code>null</code> content properties are
-     * simply ignored when the property hasn't got an <code>autoRetrieved</code>
+     * <p>When a bean is saved, {@code null} content properties are
+     * simply ignored when the property hasn't got an {@code autoRetrieved}
      * constraint. This is needed to make it possible to only update a
      * bean's data without having to fetch the content from the back-end and
      * store it together with the other data just to make a simple update.
-     * However, this makes it impossible to rely on <code>null</code> to
+     * However, this makes it impossible to rely on {@code null} to
      * indicate empty content. This method has thus been added explicitly for
      * this purpose.
      *
      * @param bean         the bean instance that contains the property
      * @param propertyName the name of the property whose content has to be
      *                     emptied in the database
-     * @return <code>true</code> if the empty content was stored successfully;
+     * @return {@code true} if the empty content was stored successfully;
      * or
-     * <p><code>false</code> otherwise
+     * <p>{@code false} otherwise
      * @since 1.0
      */
     public boolean storeEmptyContent(final T bean, String propertyName) {
@@ -373,18 +373,18 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
 
     /**
      * Saves a bean.
-     * <p>This augments the regular <code>GenericQueryManager</code>'s
-     * <code>save</code> method with behaviour that correctly handles content
+     * <p>This augments the regular {@code GenericQueryManager}'s
+     * {@code save} method with behaviour that correctly handles content
      * or ordinal properties.
-     * When a bean is saved, <code>null</code> content properties are simply
-     * ignored when the property hasn't got an <code>autoRetrieved</code>
+     * When a bean is saved, {@code null} content properties are simply
+     * ignored when the property hasn't got an {@code autoRetrieved}
      * constraint. This is needed to make it possible to only update a bean's
      * data without having to fetch the content from the back-end and store it
      * together with the other data just to make a simple update.
      *
      * @param bean the bean instance that has to be saved
-     * @return <code>true</code> if the bean was stored successfully; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the bean was stored successfully; or
+     * <p>{@code false} otherwise
      * @since 1.0
      */
     public int save(final T bean)
@@ -461,13 +461,13 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
 
     /**
      * Restores a bean according to its ID.
-     * <p>This augments the regular <code>GenericQueryManager</code>'s
-     * <code>restore</code> method with behaviour that correctly handles
+     * <p>This augments the regular {@code GenericQueryManager}'s
+     * {@code restore} method with behaviour that correctly handles
      * content properties.
      *
      * @param objectId the ID of the bean that has to be restored
      * @return the bean instance if it was restored successfully; or
-     * <p><code>null</code> if it couldn't be found
+     * <p>{@code null} if it couldn't be found
      * @since 1.0
      */
     public T restore(int objectId)
@@ -476,14 +476,14 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     /**
-     * Restores the first bean from a <code>RestoreQuery</code>.
-     * <p>This augments the regular <code>GenericQueryManager</code>'s
-     * <code>restore</code> method with behaviour that correctly handles
+     * Restores the first bean from a {@code RestoreQuery}.
+     * <p>This augments the regular {@code GenericQueryManager}'s
+     * {@code restore} method with behaviour that correctly handles
      * content properties.
      *
      * @param query the query that will be used to restore the beans
      * @return the first bean instance that was found; or
-     * <p><code>null</code> if no beans could be found
+     * <p>{@code null} if no beans could be found
      * @since 1.0
      */
     public T restoreFirst(RestoreQuery query)
@@ -493,12 +493,12 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
 
     /**
      * Restores all beans.
-     * <p>This augments the regular <code>GenericQueryManager</code>'s
-     * <code>restore</code> method with behaviour that correctly handles
+     * <p>This augments the regular {@code GenericQueryManager}'s
+     * {@code restore} method with behaviour that correctly handles
      * content properties.
      *
      * @return the list of beans; or
-     * <p><code>null</code> if no beans could be found
+     * <p>{@code null} if no beans could be found
      * @since 1.0
      */
     public List<T> restore()
@@ -507,14 +507,14 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     /**
-     * Restores all beans from a <code>RestoreQuery</code>.
-     * <p>This augments the regular <code>GenericQueryManager</code>'s
-     * <code>restore</code> method with behaviour that correctly handles
+     * Restores all beans from a {@code RestoreQuery}.
+     * <p>This augments the regular {@code GenericQueryManager}'s
+     * {@code restore} method with behaviour that correctly handles
      * content properties.
      *
      * @param query the query that will be used to restore the beans
      * @return the list of beans; or
-     * <p><code>null</code> if no beans could be found
+     * <p>{@code null} if no beans could be found
      * @since 1.0
      */
     public List<T> restore(RestoreQuery query)
@@ -547,13 +547,13 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
 
     /**
      * Deletes a bean according to its ID.
-     * <p>This augments the regular <code>GenericQueryManager</code>'s
-     * <code>restore</code> method with behaviour that correctly handles
+     * <p>This augments the regular {@code GenericQueryManager}'s
+     * {@code restore} method with behaviour that correctly handles
      * content and ordinal properties.
      *
      * @param objectId the ID of the bean that has to be restored
-     * @return <code>true</code> if the bean was deleted successfully; or
-     * <p><code>false</code> if it couldn't be found
+     * @return {@code true} if the bean was deleted successfully; or
+     * <p>{@code false} if it couldn't be found
      * @since 1.0
      */
     public boolean delete(final int objectId)
@@ -585,8 +585,8 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * @param bean         the bean instance that will be checked
      * @param propertyName the name of the property whose content availability
      *                     will be checked
-     * @return <code>true</code> if content is available; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if content is available; or
+     * <p>{@code false} otherwise
      * @since 1.0
      */
     public boolean hasContent(T bean, String propertyName)
@@ -602,8 +602,8 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * @param objectId     the ID of the bean instance that will be checked
      * @param propertyName the name of the property whose content availability
      *                     will be checked
-     * @return <code>true</code> if content is available; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if content is available; or
+     * <p>{@code false} otherwise
      * @since 1.0
      */
     public boolean hasContent(int objectId, String propertyName)
@@ -623,7 +623,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     /**
-     * Builds the path that is used by the <code>ContentQueryManager</code>
+     * Builds the path that is used by the {@code ContentQueryManager}
      * for a certain bean and property.
      *
      * @param bean         the bean instance that will be used to construct the path
@@ -639,7 +639,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     /**
-     * Builds the path that is used by the <code>ContentQueryManager</code>
+     * Builds the path that is used by the {@code ContentQueryManager}
      * for a certain bean ID and property.
      *
      * @param objectId     the bean ID that will be used to construct the path
@@ -655,10 +655,10 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     /**
-     * Builds the path that is used by the <code>ServeContent</code> element
+     * Builds the path that is used by the {@code ServeContent} element
      * for a certain bean and property.
      * <p>Any declaration of the repository name will be ignore, since the
-     * <code>ServeContent</code> element doesn't allow you to provide this
+     * {@code ServeContent} element doesn't allow you to provide this
      * through the URL for safety reasons.
      *
      * @param bean         the bean instance that will be used to construct the path
@@ -674,10 +674,10 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     /**
-     * Builds the path that is used by the <code>ServeContent</code> element
+     * Builds the path that is used by the {@code ServeContent} element
      * for a certain bean ID and property.
      * <p>Any declaration of the repository name will be ignore, since the
-     * <code>ServeContent</code> element doesn't allow you to provide this
+     * {@code ServeContent} element doesn't allow you to provide this
      * through the URL for safety reasons.
      *
      * @param objectId     the bean ID that will be used to construct the path

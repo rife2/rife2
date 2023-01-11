@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.format;
@@ -24,23 +24,23 @@ import java.util.Set;
 import javax.imageio.*;
 
 /**
- * Formats raw <code>Content</code> data as an image.
+ * Formats raw {@code Content} data as an image.
  *
  * <p>The following content attributes are supported:
  * <table>
  * <caption>Content Attributes</caption>
  * <tr>
- * <td><code>width</code></td>
+ * <td>{@code width}</td>
  * <td>Changes the width of the image. If no height is provided, the image
  * will be proportionally scaled.</td>
  * </tr>
  * <tr>
- * <td><code>height</code></td>
+ * <td>{@code height}</td>
  * <td>Changes the height of the image. If no width is provided, the image
  * will be proportionally scaled.</td>
  * </tr>
  * <tr>
- * <td><code>longest-edge-length</code></td>
+ * <td>{@code longest-edge-length}</td>
  * <td>Changes the longest edge of the image.  Aspect ratio is preserved.  The &quot;width&quot; or
  * &quot;height&quot; attributes take precedence if set, and this attribute will be ignored.
  * </td>

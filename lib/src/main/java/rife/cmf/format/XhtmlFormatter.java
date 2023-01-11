@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.format;
@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Formats raw <code>Content</code> data as valid Xhtml.
+ * Formats raw {@code Content} data as valid Xhtml.
  * <p>No content attributes are supported:
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)

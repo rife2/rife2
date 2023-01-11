@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -55,8 +55,8 @@ public class DbBeanFetcher<BeanType> extends DbRowProcessor {
      *
      * @param datasource       the datasource to be used
      * @param beanClass        the type of bean that will be handled
-     * @param collectInstances <code>true</code> if the fetcher should
-     *                         collected the bean instances; <code>false</code> if otherwise
+     * @param collectInstances {@code true} if the fetcher should
+     *                         collected the bean instances; {@code false} if otherwise
      * @throws BeanException thrown if there is an error getting
      *                       information about the bean via the beanClass
      * @since 1.0
@@ -97,8 +97,8 @@ public class DbBeanFetcher<BeanType> extends DbRowProcessor {
      *
      * @param resultSet the {@link ResultSet} from which to process the
      *                  row
-     * @return <code>true</code> if a bean instance was retrieved; or
-     * <p><code>false</code> if otherwise
+     * @return {@code true} if a bean instance was retrieved; or
+     * <p>{@code false} if otherwise
      * @throws SQLException thrown when there is a problem processing
      *                      the row
      */
@@ -243,9 +243,9 @@ public class DbBeanFetcher<BeanType> extends DbRowProcessor {
      * a list.
      *
      * @param instance the received bean instance
-     * @return <code>true</code> if the bean fetcher should continue to
+     * @return {@code true} if the bean fetcher should continue to
      * retrieve the next bean; or
-     * <p><code>false</code> if the retrieval should stop after this bean
+     * <p>{@code false} if the retrieval should stop after this bean
      * @since 1.0
      */
     public boolean gotBeanInstance(BeanType instance) {

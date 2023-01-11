@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.dam;
@@ -16,7 +16,7 @@ import rife.engine.Route;
 import java.util.Collection;
 
 /**
- * A <code>ContentStore</code> stores the actual content data and is
+ * A {@code ContentStore} stores the actual content data and is
  * responsible for managing it.
  * <p>The store doesn't work with paths, but with content ids. Each id
  * identifies a specific content instance at a certain location and with a
@@ -32,8 +32,8 @@ public interface ContentStore {
     /**
      * Installs a content store.
      *
-     * @return <code>true</code> if the installation was successful; or
-     * <p><code>false</code> if it wasn't.
+     * @return {@code true} if the installation was successful; or
+     * <p>{@code false} if it wasn't.
      * @throws ContentManagerException if an unexpected error occurred
      * @since 1.0
      */
@@ -43,8 +43,8 @@ public interface ContentStore {
     /**
      * Removes a content store.
      *
-     * @return <code>true</code> if the removal was successful; or
-     * <p><code>false</code> if it wasn't.
+     * @return {@code true} if the removal was successful; or
+     * <p>{@code false} if it wasn't.
      * @throws ContentManagerException if an unexpected error occurred
      * @since 1.0
      */
@@ -61,7 +61,7 @@ public interface ContentStore {
 
     /**
      * Generates the HTTP content type that corresponds best to the
-     * information in the provided <code>ContentInfo</code>.
+     * information in the provided {@code ContentInfo}.
      *
      * @param contentInfo the content info instance for which the content type
      *                    has to be generated
@@ -71,13 +71,13 @@ public interface ContentStore {
     String getContentType(ContentInfo contentInfo);
 
     /**
-     * Returns a <code>Formatter</code> instance that will be used to load and
+     * Returns a {@code Formatter} instance that will be used to load and
      * to format the content data.
      *
      * @param mimeType the mime type for which the formatter will be returned
-     * @param fragment <code>true</code> if the content that has to be
+     * @param fragment {@code true} if the content that has to be
      *                 formatter is a fragment; or
-     *                 <p><code>false</code> otherwise
+     *                 <p>{@code false} otherwise
      * @return the corresponding formatter
      * @since 1.0
      */
@@ -89,9 +89,9 @@ public interface ContentStore {
      * @param id          the id of the content whose data will be stored
      * @param content     the content whose data has to be stored
      * @param transformer a transformer that will modify the content data; or
-     *                    <p><code>null</code> if the content data should stay intact
-     * @return <code>true</code> if the storing was successfully; or
-     * <p><code>false</code> if it wasn't.
+     *                    <p>{@code null} if the content data should stay intact
+     * @return {@code true} if the storing was successfully; or
+     * <p>{@code false} if it wasn't.
      * @throws ContentManagerException if an unexpected error occurred
      * @since 1.0
      */
@@ -102,8 +102,8 @@ public interface ContentStore {
      * Deletes the content data for a certain content id.
      *
      * @param id the id of the content whose data will be deleted
-     * @return <code>true</code> if the deletion was successfully; or
-     * <p><code>false</code> if it wasn't.
+     * @return {@code true} if the deletion was successfully; or
+     * <p>{@code false} if it wasn't.
      * @throws ContentManagerException if an unexpected error occurred
      * @since 1.0
      */
@@ -148,8 +148,8 @@ public interface ContentStore {
      * Checks whether content data is available for a certain content id.
      *
      * @param id the id of the content whose data availability will be checked
-     * @return <code>true</code> if content data is available; or
-     * <p><code>false</code> if it isn't.
+     * @return {@code true} if content data is available; or
+     * <p>{@code false} if it isn't.
      * @throws ContentManagerException if an expected error occurred
      * @since 1.0
      */
@@ -163,7 +163,7 @@ public interface ContentStore {
      * return the number of bytes.
      *
      * @param id the id of the content whose data size will be returned
-     * @return <code>-1</code> if no data is available for the provided
+     * @return {@code -1} if no data is available for the provided
      * content id; or
      * <p>the requested content data size.
      * @throws ContentManagerException if an unexpected error occurred

@@ -46,4 +46,8 @@ tasks {
         environment("project.dir", project.projectDir.toString())
         jvmArgs = listOf("-javaagent:${project(":lib").buildDir}/libs/$rifeAgentJar")
     }
+
+    javadoc {
+        enabled = false
+    }
 }

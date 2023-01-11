@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.querymanagers.generic;
@@ -19,9 +19,9 @@ import rife.validation.Validated;
  * clear a cache when an object has been modified (by implementing {@link
  * #afterSave(Object, boolean)} and {@link #afterDelete(int, boolean)}).
  * <p>The return value of callbacks can be used to cancel actions. When the
- * <code>before*</code> callbacks return <code>false</code>, the associated
- * actions are cancelled. When the <code>after*</code> callbacks return
- * <code>false</code>, the execution of the action is interrupted at that step
+ * {@code before*} callbacks return {@code false}, the associated
+ * actions are cancelled. When the {@code after*} callbacks return
+ * {@code false}, the execution of the action is interrupted at that step
  * and no further callbacks will be called.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -34,9 +34,9 @@ public interface Callbacks<BeanType> {
      * rife.database.querymanagers.generic.GenericQueryManager#validate(Validated)}.
      *
      * @param object the bean instance that will be validated
-     * @return <code>true</code> if the execution should continue as normal;
+     * @return {@code true} if the execution should continue as normal;
      * or
-     * <p><code>false</code> if the execution should be interrupted
+     * <p>{@code false} if the execution should be interrupted
      * @since 1.0
      */
     boolean beforeValidate(BeanType object);
@@ -49,9 +49,9 @@ public interface Callbacks<BeanType> {
      * if a new bean is being saved.
      *
      * @param object the bean instance that will be inserted
-     * @return <code>true</code> if the execution should continue as normal;
+     * @return {@code true} if the execution should continue as normal;
      * or
-     * <p><code>false</code> if the execution should be interrupted
+     * <p>{@code false} if the execution should be interrupted
      * @since 1.0
      */
     boolean beforeInsert(BeanType object);
@@ -61,9 +61,9 @@ public interface Callbacks<BeanType> {
      * rife.database.querymanagers.generic.GenericQueryManager#delete(int)}.
      *
      * @param objectId the id of the bean that will be deleted
-     * @return <code>true</code> if the execution should continue as normal;
+     * @return {@code true} if the execution should continue as normal;
      * or
-     * <p><code>false</code> if the execution should be interrupted
+     * <p>{@code false} if the execution should be interrupted
      * @since 1.0
      */
     boolean beforeDelete(int objectId);
@@ -73,9 +73,9 @@ public interface Callbacks<BeanType> {
      * rife.database.querymanagers.generic.GenericQueryManager#save(Object)}.
      *
      * @param object the bean instance that will be saved
-     * @return <code>true</code> if the execution should continue as normal;
+     * @return {@code true} if the execution should continue as normal;
      * or
-     * <p><code>false</code> if the execution should be interrupted
+     * <p>{@code false} if the execution should be interrupted
      * @since 1.0
      */
     boolean beforeSave(BeanType object);
@@ -88,9 +88,9 @@ public interface Callbacks<BeanType> {
      * if an existing bean is being saved.
      *
      * @param object the bean instance that will be updated
-     * @return <code>true</code> if the execution should continue as normal;
+     * @return {@code true} if the execution should continue as normal;
      * or
-     * <p><code>false</code> if the execution should be interrupted
+     * <p>{@code false} if the execution should be interrupted
      * @since 1.0
      */
     boolean beforeUpdate(BeanType object);
@@ -100,9 +100,9 @@ public interface Callbacks<BeanType> {
      * rife.database.querymanagers.generic.GenericQueryManager#validate(Validated)}.
      *
      * @param object the bean instance that was validated
-     * @return <code>true</code> if the execution should continue as normal;
+     * @return {@code true} if the execution should continue as normal;
      * or
-     * <p><code>false</code> if the execution should be interrupted
+     * <p>{@code false} if the execution should be interrupted
      * @since 1.0
      */
     boolean afterValidate(BeanType object);
@@ -115,11 +115,11 @@ public interface Callbacks<BeanType> {
      * if a new bean was saved.
      *
      * @param object  the bean instance that was inserted
-     * @param success <code>true</code> if the insert was successful; or
-     *                <p><code>false</code> otherwise
-     * @return <code>true</code> if the execution should continue as normal;
+     * @param success {@code true} if the insert was successful; or
+     *                <p>{@code false} otherwise
+     * @return {@code true} if the execution should continue as normal;
      * or
-     * <p><code>false</code> if the execution should be interrupted
+     * <p>{@code false} if the execution should be interrupted
      * @since 1.0
      */
     boolean afterInsert(BeanType object, boolean success);
@@ -129,11 +129,11 @@ public interface Callbacks<BeanType> {
      * rife.database.querymanagers.generic.GenericQueryManager#delete(int)}.
      *
      * @param objectId the id of the bean instance that was deleted
-     * @param success  <code>true</code> if the delete was successful; or
-     *                 <p><code>false</code> otherwise
-     * @return <code>true</code> if the execution should continue as normal;
+     * @param success  {@code true} if the delete was successful; or
+     *                 <p>{@code false} otherwise
+     * @return {@code true} if the execution should continue as normal;
      * or
-     * <p><code>false</code> if the execution should be interrupted
+     * <p>{@code false} if the execution should be interrupted
      * @since 1.0
      */
     boolean afterDelete(int objectId, boolean success);
@@ -143,11 +143,11 @@ public interface Callbacks<BeanType> {
      * rife.database.querymanagers.generic.GenericQueryManager#save(Object)}.
      *
      * @param object  the bean instance that was saved
-     * @param success <code>true</code> if the save was successful; or
-     *                <p><code>false</code> otherwise
-     * @return <code>true</code> if the execution should continue as normal;
+     * @param success {@code true} if the save was successful; or
+     *                <p>{@code false} otherwise
+     * @return {@code true} if the execution should continue as normal;
      * or
-     * <p><code>false</code> if the execution should be interrupted
+     * <p>{@code false} if the execution should be interrupted
      * @since 1.0
      */
     boolean afterSave(BeanType object, boolean success);
@@ -160,11 +160,11 @@ public interface Callbacks<BeanType> {
      * if an existing bean was saved.
      *
      * @param object  the bean instance that was updated
-     * @param success <code>true</code> if the update was successful; or
-     *                <p><code>false</code> otherwise
-     * @return <code>true</code> if the execution should continue as normal;
+     * @param success {@code true} if the update was successful; or
+     *                <p>{@code false} otherwise
+     * @return {@code true} if the execution should continue as normal;
      * or
-     * <p><code>false</code> if the execution should be interrupted
+     * <p>{@code false} if the execution should be interrupted
      * @since 1.0
      */
     boolean afterUpdate(BeanType object, boolean success);
@@ -180,9 +180,9 @@ public interface Callbacks<BeanType> {
      * rife.database.querymanagers.generic.GenericQueryManager#restore(RestoreQuery)}.
      *
      * @param object the bean instance that was restored
-     * @return <code>true</code> if the execution should continue as normal;
+     * @return {@code true} if the execution should continue as normal;
      * or
-     * <p><code>false</code> if the execution should be interrupted
+     * <p>{@code false} if the execution should be interrupted
      * @since 1.0
      */
     boolean afterRestore(BeanType object);

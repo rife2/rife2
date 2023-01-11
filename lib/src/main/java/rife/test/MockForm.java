@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.test;
@@ -148,7 +148,7 @@ public class MockForm {
      * Creates a new {@link MockRequest} that contains the method, the
      * parameters and the files of this form.
      *
-     * @return the created <code>MockRequest</code>
+     * @return the created {@code MockRequest}
      * @since 1.0
      */
     public MockRequest getRequest() {
@@ -187,7 +187,7 @@ public class MockForm {
     /**
      * Retrieves all the parameters of this form.
      *
-     * @return a <code>Map</code> of the parameters with the names as the keys
+     * @return a {@code Map} of the parameters with the names as the keys
      * and their value arrays as the values
      * @see #getParameterNames
      * @see #hasParameter
@@ -204,7 +204,7 @@ public class MockForm {
     /**
      * Retrieves all the parameter names of this form.
      *
-     * @return a <code>Collection</code> of the parameter names
+     * @return a {@code Collection} of the parameter names
      * @see #getParameters
      * @see #hasParameter
      * @see #getParameterValue
@@ -221,8 +221,8 @@ public class MockForm {
      * Checks whether a named parameter is present in this form.
      *
      * @param name the name of the parameter to check
-     * @return <code>true</code> if the parameter is present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the parameter is present; or
+     * <p>{@code false} otherwise
      * @see #getParameters
      * @see #getParameterNames
      * @see #getParameterValue
@@ -240,7 +240,7 @@ public class MockForm {
      *
      * @param name the name of the parameter
      * @return the first value of the parameter; or
-     * <p><code>null</code> if no such parameter could be found
+     * <p>{@code null} if no such parameter could be found
      * @see #getParameters
      * @see #getParameterNames
      * @see #hasParameter
@@ -264,7 +264,7 @@ public class MockForm {
      *
      * @param name the name of the parameter
      * @return the values of the parameter; or
-     * <p><code>null</code> if no such parameter could be found
+     * <p>{@code null} if no such parameter could be found
      * @see #getParameters
      * @see #getParameterNames
      * @see #hasParameter
@@ -304,7 +304,7 @@ public class MockForm {
      *
      * @param name  the name of the parameter
      * @param value the value of the parameter
-     * @return this <code>MockForm</code> instance
+     * @return this {@code MockForm} instance
      * @see #getParameters
      * @see #getParameterNames
      * @see #hasParameter
@@ -350,7 +350,7 @@ public class MockForm {
      *
      * @param name   the name of the parameter
      * @param values the value array of the parameter
-     * @return this <code>MockForm</code> instance
+     * @return this {@code MockForm} instance
      * @see #getParameters
      * @see #getParameterNames
      * @see #hasParameter
@@ -388,7 +388,7 @@ public class MockForm {
      *
      * @param name the parameter name of the file
      * @param file the file specification that will be uploaded
-     * @return this <code>MockForm</code> instance
+     * @return this {@code MockForm} instance
      * @see #setFiles(String, MockFileUpload[])
      * @since 1.0
      */
@@ -423,7 +423,7 @@ public class MockForm {
      *
      * @param name  the parameter name of the file
      * @param files the file specifications that will be uploaded
-     * @return this <code>MockForm</code> instance
+     * @return this {@code MockForm} instance
      * @see #setFile(String, MockFileUpload)
      * @since 1.0
      */
@@ -434,9 +434,9 @@ public class MockForm {
     }
 
     /**
-     * Retrieves the content of this form's <code>id</code> attribute.
+     * Retrieves the content of this form's {@code id} attribute.
      *
-     * @return the content of the <code>id</code> attribute; or
+     * @return the content of the {@code id} attribute; or
      * <p>null if no such attribute could be found
      * @since 1.0
      */
@@ -445,9 +445,9 @@ public class MockForm {
     }
 
     /**
-     * Retrieves the content of this form's <code>class</code> attribute.
+     * Retrieves the content of this form's {@code class} attribute.
      *
-     * @return the content of the <code>class</code> attribute; or
+     * @return the content of the {@code class} attribute; or
      * <p>null if no such attribute could be found
      * @since 1.0
      */
@@ -456,9 +456,9 @@ public class MockForm {
     }
 
     /**
-     * Retrieves the content of this form's <code>title</code> attribute.
+     * Retrieves the content of this form's {@code title} attribute.
      *
-     * @return the content of the <code>title</code> attribute; or
+     * @return the content of the {@code title} attribute; or
      * <p>null if no such attribute could be found
      * @since 1.0
      */
@@ -467,9 +467,9 @@ public class MockForm {
     }
 
     /**
-     * Retrieves the content of this form's <code>action</code> attribute.
+     * Retrieves the content of this form's {@code action} attribute.
      *
-     * @return the content of the <code>action</code> attribute; or
+     * @return the content of the {@code action} attribute; or
      * <p>null if no such attribute could be found
      * @since 1.0
      */
@@ -478,9 +478,9 @@ public class MockForm {
     }
 
     /**
-     * Retrieves the content of this form's <code>method</code> attribute.
+     * Retrieves the content of this form's {@code method} attribute.
      *
-     * @return the content of the <code>method</code> attribute; or
+     * @return the content of the {@code method} attribute; or
      * <p>null if no such attribute could be found
      * @since 1.0
      */
@@ -489,9 +489,9 @@ public class MockForm {
     }
 
     /**
-     * Retrieves the content of this form's <code>name</code> attribute.
+     * Retrieves the content of this form's {@code name} attribute.
      *
-     * @return the content of the <code>name</code> attribute; or
+     * @return the content of the {@code name} attribute; or
      * <p>null if no such attribute could be found
      * @since 1.0
      */

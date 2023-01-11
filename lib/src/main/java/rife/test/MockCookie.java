@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.test;
@@ -9,7 +9,7 @@ import jakarta.servlet.http.Cookie;
 import java.time.Instant;
 
 /**
- * Wraps a <code>Cookie</code> by tracking the creation time and allowing max-age
+ * Wraps a {@code Cookie} by tracking the creation time and allowing max-age
  * expiration to be evaluated.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -31,7 +31,7 @@ public class MockCookie extends Cookie {
     }
 
     /**
-     * Creates a new cookie with the same values as a standard <code>Cookie</code>.
+     * Creates a new cookie with the same values as a standard {@code Cookie}.
      * @param cookie the cookie that will provide all the values
      * @see Cookie
      * @since 1.0
@@ -50,8 +50,8 @@ public class MockCookie extends Cookie {
     /**
      * Indicates whether the cookie is expired or not.
      *
-     * @return <code>true</code> when the cookie is expired;
-     * <code>false</code> otherwise
+     * @return {@code true} when the cookie is expired;
+     * {@code false} otherwise
      * @see Cookie#setMaxAge(int)
      * @since 1.0
      */

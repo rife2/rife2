@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -13,14 +13,14 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * This class allows for {@link DbQueryManager}s to be created more
  * dynamically and with more features than by direct instantiation.
- * <p>By using the <code>DbQueryManagerFactory</code>,
- * <code>DbQueryManager</code> child classes can have custom methods that are
+ * <p>By using the {@code DbQueryManagerFactory},
+ * {@code DbQueryManager} child classes can have custom methods that are
  * implemented by different "drivers", based on the database software behind
  * the {@link Datasource}. Database "drivers" are looked up through the
  * manager's classpath according to the package name and the encoded class
  * name of the JDBC driver (dots are replaced by underscores). The default, or
  * "generic" driver, must be created under this package and will be used when
- * no specific driver can be found for a particular <code>Datasource</code>.
+ * no specific driver can be found for a particular {@code Datasource}.
  * All the created DbQueryManagers are cached in the provided cache and are
  * re-used on successive calls rather than being re-instantiated.
  *
@@ -32,15 +32,15 @@ public abstract class DbQueryManagerFactory {
     private static final String GENERIC_DRIVER = "generic";
 
     /**
-     * Get a <code>DbQueryManager</code> instance.
+     * Get a {@code DbQueryManager} instance.
      *
      * @param managerPackageName the package name that corresponds to the
      *                           location of the manager
      * @param cache              the cache to be used to cache the
-     *                           <code>DbQueryManager</code>s
+     *                           {@code DbQueryManager}s
      * @param datasource         the datasource to instantiate the
-     *                           <code>DbQueryManager</code> for
-     * @return the created <code>DbQueryManager</code> instance
+     *                           {@code DbQueryManager} for
+     * @return the created {@code DbQueryManager} instance
      * @since 1.0
      */
     protected static DbQueryManager instance(String managerPackageName, DbQueryManagerCache cache, Datasource datasource) {
@@ -48,17 +48,17 @@ public abstract class DbQueryManagerFactory {
     }
 
     /**
-     * Get a <code>DbQueryManager</code> instance.
+     * Get a {@code DbQueryManager} instance.
      *
      * @param managerPackageName the package name that corresponds to the
      *                           location of the manager
      * @param cache              the cache to be used to cache the
-     *                           <code>DbQueryManager</code>s
+     *                           {@code DbQueryManager}s
      * @param datasource         the datasource to instantiate the
-     *                           <code>DbQueryManager</code> for
+     *                           {@code DbQueryManager} for
      * @param identifier         the identifier to be used to uniquely identify
-     *                           this <code>DbQueryManager</code>
-     * @return the created <code>DbQueryManager</code> instance
+     *                           this {@code DbQueryManager}
+     * @return the created {@code DbQueryManager} instance
      * @since 1.0
      */
     protected static DbQueryManager instance(String managerPackageName, DbQueryManagerCache cache, Datasource datasource, String identifier) {

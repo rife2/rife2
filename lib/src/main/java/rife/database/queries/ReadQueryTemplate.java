@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
@@ -8,7 +8,7 @@ import rife.database.capabilities.Capabilities;
 import rife.template.Template;
 
 /**
- * An instance of <code>ReadQueryTemplate</code> will obtain a SQL from a
+ * An instance of {@code ReadQueryTemplate} will obtain a SQL from a
  * {@link Template} block. If the template is provided but no block name,
  * the entire content of the template will be used as the SQL query.
  *
@@ -24,7 +24,7 @@ public class ReadQueryTemplate implements ReadQuery {
     private String block_ = null;
 
     /**
-     * Creates a new empty instance of <code>ReadQueryTemplate</code>.
+     * Creates a new empty instance of {@code ReadQueryTemplate}.
      *
      * @since 1.0
      */
@@ -32,7 +32,7 @@ public class ReadQueryTemplate implements ReadQuery {
     }
 
     /**
-     * Creates a new instance of <code>ReadQueryTemplate</code> with the
+     * Creates a new instance of {@code ReadQueryTemplate} with the
      * template instance whose content provides the SQL query that will be
      * executed.
      *
@@ -44,7 +44,7 @@ public class ReadQueryTemplate implements ReadQuery {
     }
 
     /**
-     * Creates a new instance of <code>ReadQueryTemplate</code> with the
+     * Creates a new instance of {@code ReadQueryTemplate} with the
      * template instance and block name that provide the SQL that will
      * be executed.
      *
@@ -61,7 +61,7 @@ public class ReadQueryTemplate implements ReadQuery {
      * Sets the template instance.
      *
      * @param template the template instance
-     * @return this <code>ReadQueryTemplate</code> instance.
+     * @return this {@code ReadQueryTemplate} instance.
      * @see #setTemplate
      * @see #getTemplate
      * @since 1.0
@@ -87,7 +87,7 @@ public class ReadQueryTemplate implements ReadQuery {
      * Retrieves the template instance.
      *
      * @return the template instance; or
-     * <p><code>null</code> if no template instance was provided
+     * <p>{@code null} if no template instance was provided
      * @see #template
      * @see #setTemplate
      * @since 1.0
@@ -100,7 +100,7 @@ public class ReadQueryTemplate implements ReadQuery {
      * Sets the name of the template block.
      *
      * @param block the name of the template block
-     * @return this <code>ReadQueryTemplate</code> instance.
+     * @return this {@code ReadQueryTemplate} instance.
      * @see #setBlock
      * @see #getBlock
      * @since 1.0
@@ -126,7 +126,7 @@ public class ReadQueryTemplate implements ReadQuery {
      * Retrieves the name of the template block.
      *
      * @return the name of the template block; or
-     * <p><code>null</code> if no block name was provided
+     * <p>{@code null} if no block name was provided
      * @see #block
      * @see #setBlock
      * @since 1.0

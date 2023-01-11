@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.format;
@@ -10,7 +10,7 @@ import rife.cmf.format.exceptions.InvalidContentDataTypeException;
 import rife.cmf.transform.ContentTransformer;
 
 /**
- * Formats plain test <code>Content</code> data.
+ * Formats plain test {@code Content} data.
  * <p>This merely executes the provided transformer on the data.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.ioc;
@@ -16,10 +16,10 @@ import java.text.StringCharacterIterator;
  * This class allows the creation of a hierarchical tree of named {@link
  * PropertyValue} instances.
  * <p>When a property is looked up in a child
- * <code>HierarchicalProperties</code> instance, the lookup will be propagated
+ * {@code HierarchicalProperties} instance, the lookup will be propagated
  * to its parent when it couldn't be found in the child. A single hierarchical
  * line is thus considered to be one collection that groups all involved
- * <code>HierarchicalProperties</code> instances. Retrieving the names and the
+ * {@code HierarchicalProperties} instances. Retrieving the names and the
  * size will recursively take all the properties of the parents into account
  * and return the consolidated result. To offer these features, intelligent
  * caching has been implemented to ensure optimal performance.
@@ -43,7 +43,7 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Creates a copy of this <code>HierarchicalProperties</code> hierarchy
+     * Creates a copy of this {@code HierarchicalProperties} hierarchy
      * until a certain instance is reached.
      * <p>
      * Each copied instance will share the datastructure in which the
@@ -51,10 +51,10 @@ public class HierarchicalProperties {
      * changing the hierarchical structure but maintaining a centralized
      * management of the properties.
      *
-     * @param limit the <code>HierarchicalProperties</code> instance that will
+     * @param limit the {@code HierarchicalProperties} instance that will
      *              not be part of the shadow copy and interrupt the copying process; or
-     *              <code>null</code> if the entire hierachy should be copied.
-     * @return the shadow copy of this <code>HierarchicalProperties</code>
+     *              {@code null} if the entire hierachy should be copied.
+     * @return the shadow copy of this {@code HierarchicalProperties}
      * hierarchy
      * @since 1.0
      */
@@ -73,10 +73,10 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Retrieves the first parent of this <code>HierarchicalProperties</code>
+     * Retrieves the first parent of this {@code HierarchicalProperties}
      * hierarchy.
      *
-     * @return the root of this <code>HierarchicalProperties</code>
+     * @return the root of this {@code HierarchicalProperties}
      * hierarchy
      * @since 1.0
      */
@@ -90,11 +90,11 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Retrieves the <code>Map</code> with only the properties that are
-     * locally present in this <code>HierarchicalProperties</code> instance.
+     * Retrieves the {@code Map} with only the properties that are
+     * locally present in this {@code HierarchicalProperties} instance.
      *
-     * @return the local <code>Map</code> of this
-     * <code>HierarchicalProperties</code> instance
+     * @return the local {@code Map} of this
+     * {@code HierarchicalProperties} instance
      * @since 1.0
      */
     public Map<String, PropertyValue> getLocalMap() {
@@ -106,9 +106,9 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Sets the parent of this <code>HierarchicalProperties</code> instance.
+     * Sets the parent of this {@code HierarchicalProperties} instance.
      *
-     * @param parent the parent of this instance; or <code>null</code> if this
+     * @param parent the parent of this instance; or {@code null} if this
      *               instance should be isolated
      * @see #getParent
      * @since 1.0
@@ -128,11 +128,11 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Sets the parent of this <code>HierarchicalProperties</code> instance.
+     * Sets the parent of this {@code HierarchicalProperties} instance.
      *
-     * @param parent the parent of this instance; or <code>null</code> if this
+     * @param parent the parent of this instance; or {@code null} if this
      *               instance should be isolated
-     * @return this <code>HierarchicalProperties</code> instance
+     * @return this {@code HierarchicalProperties} instance
      * @see #getParent
      * @since 1.0
      */
@@ -143,12 +143,12 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Retrieves the parent of this <code>HierarchicalProperties</code>
+     * Retrieves the parent of this {@code HierarchicalProperties}
      * instance.
      *
-     * @return the parent of this <code>HierarchicalProperties</code>
+     * @return the parent of this {@code HierarchicalProperties}
      * instance; or
-     * <p><code>null</code> if this instance is isolated
+     * <p>{@code null} if this instance is isolated
      * @see #parent
      * @since 1.0
      */
@@ -158,14 +158,14 @@ public class HierarchicalProperties {
 
     /**
      * Associates the specified value with the specified name in this
-     * <code>HierarchicalProperties</code> instance. If it previously
+     * {@code HierarchicalProperties} instance. If it previously
      * contained a mapping for this name, the old value is replaced by the
      * specified value.
      *
      * @param name  the name that will be associated with the property
      * @param value the property value that will be associated with the
      *              specified name
-     * @return this <code>HierarchicalProperties</code> instance
+     * @return this {@code HierarchicalProperties} instance
      * @see #put(String, Object)
      * @see #putAll
      * @since 1.0
@@ -184,7 +184,7 @@ public class HierarchicalProperties {
 
     /**
      * Associates the specified fixed object value with the specified name
-     * in this <code>HierarchicalProperties</code> instance. If it previously
+     * in this {@code HierarchicalProperties} instance. If it previously
      * contained a mapping for this name, the old value is replaced by the
      * specified value.
      *
@@ -192,7 +192,7 @@ public class HierarchicalProperties {
      * @param value the property value that will be associated with the
      *              specified name, note that this method will create a {@link PropertyValueObject}
      *              instance that will contain the value in a fixed manner
-     * @return this <code>HierarchicalProperties</code> instance
+     * @return this {@code HierarchicalProperties} instance
      * @see #put(String, PropertyValue)
      * @see #putAll
      * @since 1.0
@@ -205,12 +205,12 @@ public class HierarchicalProperties {
 
     /**
      * Removes the mapping for this name from this
-     * <code>HierarchicalProperties</code> instance, if it is present.
+     * {@code HierarchicalProperties} instance, if it is present.
      *
      * @param name the name that will be removed
      * @return the previously associated value; or
-     * <p><code>null</code> if the name wasn't found in this
-     * <code>HierarchicalProperties</code> instance
+     * <p>{@code null} if the name wasn't found in this
+     * {@code HierarchicalProperties} instance
      * @since 1.0
      */
     public PropertyValue remove(String name) {
@@ -225,15 +225,15 @@ public class HierarchicalProperties {
 
     /**
      * Copies all the named properties from the specified
-     * <code>HierarchicalProperties</code> instance to this
-     * <code>HierarchicalProperties</code> instance. The effect of this call
+     * {@code HierarchicalProperties} instance to this
+     * {@code HierarchicalProperties} instance. The effect of this call
      * is equivalent to that of calling {@link #put} on this
-     * <code>HierarchicalProperties</code> once for each mapping from the
-     * specified <code>HierarchicalProperties</code> instance.
+     * {@code HierarchicalProperties} once for each mapping from the
+     * specified {@code HierarchicalProperties} instance.
      *
      * @param source the properties that will be stored in this
-     *               <code>HierarchicalProperties</code> instance
-     * @return this <code>HierarchicalProperties</code> instance
+     *               {@code HierarchicalProperties} instance
+     * @return this {@code HierarchicalProperties} instance
      * @see #put
      * @since 1.0
      */
@@ -253,17 +253,17 @@ public class HierarchicalProperties {
 
     /**
      * Copies all the named properties from the specified
-     * <code>HierarchicalProperties</code> instance to this
-     * <code>HierarchicalProperties</code> instance, without replacing existing
+     * {@code HierarchicalProperties} instance to this
+     * {@code HierarchicalProperties} instance, without replacing existing
      * properties. The effect of this call
      * is equivalent to that of calling {@link #put} on this
-     * <code>HierarchicalProperties</code> once for each mapping from the
-     * specified <code>HierarchicalProperties</code> instance that doesn't
+     * {@code HierarchicalProperties} once for each mapping from the
+     * specified {@code HierarchicalProperties} instance that doesn't
      * have a key in this instance yet.
      *
      * @param source the properties that will be stored in this
-     *               <code>HierarchicalProperties</code> instance
-     * @return this <code>HierarchicalProperties</code> instance
+     *               {@code HierarchicalProperties} instance
+     * @return this {@code HierarchicalProperties} instance
      * @see #put
      * @since 1.0
      */
@@ -286,12 +286,12 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Copies all the entries for a <code>Map</code> instance to this
-     * <code>HierarchicalProperties</code> instance.
+     * Copies all the entries for a {@code Map} instance to this
+     * {@code HierarchicalProperties} instance.
      *
      * @param source the map entries that will be stored in this
-     *               <code>HierarchicalProperties</code> instance
-     * @return this <code>HierarchicalProperties</code> instance
+     *               {@code HierarchicalProperties} instance
+     * @return this {@code HierarchicalProperties} instance
      * @since 1.0
      */
     public HierarchicalProperties putAll(Map source) {
@@ -313,12 +313,12 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Checks the <code>HierarchicalProperties</code> hierarchy for the
+     * Checks the {@code HierarchicalProperties} hierarchy for the
      * presence of the specified name.
      *
      * @param name the name whose presence will be checked
-     * @return <code>true</code> if the name was found; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the name was found; or
+     * <p>{@code false} otherwise
      * @see #get
      * @since 1.0
      */
@@ -346,12 +346,12 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Retrieves the <code>PropertyValue</code> for a specific name from the
-     * <code>HierarchicalProperties</code> hierarchy.
+     * Retrieves the {@code PropertyValue} for a specific name from the
+     * {@code HierarchicalProperties} hierarchy.
      *
      * @param name the name whose associated value will be returned
-     * @return the associated <code>PropertyValue</code>; or
-     * <p><code>null</code> if the name could not be found
+     * @return the associated {@code PropertyValue}; or
+     * <p>{@code null} if the name could not be found
      * @see #contains
      * @since 1.0
      */
@@ -381,12 +381,12 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Retrieves the value of <code>PropertyValue</code> for a specific name from
-     * the <code>HierarchicalProperties</code> hierarchy.
+     * Retrieves the value of {@code PropertyValue} for a specific name from
+     * the {@code HierarchicalProperties} hierarchy.
      *
      * @param name the name whose associated value will be returned
-     * @return the associated <code>PropertyValue</code>; or
-     * <p><code>null</code> if the name could not be found
+     * @return the associated {@code PropertyValue}; or
+     * <p>{@code null} if the name could not be found
      * @throws PropertyValueException when an error occurred while retrieving the
      *                                property value
      * @see #get
@@ -399,16 +399,16 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Retrieves the value of <code>PropertyValue</code> for a specific name from
-     * the <code>HierarchicalProperties</code> hierarchy. If the property couldn't
-     * be found or if the value was <code>null</code>, the default value will be
+     * Retrieves the value of {@code PropertyValue} for a specific name from
+     * the {@code HierarchicalProperties} hierarchy. If the property couldn't
+     * be found or if the value was {@code null}, the default value will be
      * returned.
      *
      * @param name         the name whose associated value will be returned
      * @param defaultValue the value that should be used as a fallback
-     * @return the associated <code>PropertyValue</code>; or
-     * <p>the <code>defaultValue</code> if the property couldn't be found or if
-     * the value was <code>null</code>
+     * @return the associated {@code PropertyValue}; or
+     * <p>the {@code defaultValue} if the property couldn't be found or if
+     * the value was {@code null}
      * @throws PropertyValueException when an error occurred while retrieving the
      *                                property value
      * @see #get
@@ -432,12 +432,12 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Retrieves the string value of <code>PropertyValue</code> for a specific name from
-     * the <code>HierarchicalProperties</code> hierarchy.
+     * Retrieves the string value of {@code PropertyValue} for a specific name from
+     * the {@code HierarchicalProperties} hierarchy.
      *
      * @param name the name whose associated value will be returned
-     * @return the string value of the retrieved <code>PropertyValue</code>; or
-     * <p><code>null</code> if the name could not be found
+     * @return the string value of the retrieved {@code PropertyValue}; or
+     * <p>{@code null} if the name could not be found
      * @throws PropertyValueException when an error occurred while retrieving the
      *                                property value
      * @see #get
@@ -451,16 +451,16 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Retrieves the string value of <code>PropertyValue</code> for a specific name from
-     * the <code>HierarchicalProperties</code> hierarchy. If the property couldn't
-     * be found, if the value was <code>null</code> or if the value was empty, the
+     * Retrieves the string value of {@code PropertyValue} for a specific name from
+     * the {@code HierarchicalProperties} hierarchy. If the property couldn't
+     * be found, if the value was {@code null} or if the value was empty, the
      * default value will be returned.
      *
      * @param name         the name whose associated value will be returned
      * @param defaultValue the value that should be used as a fallback
-     * @return the string value of the retrieved <code>PropertyValue</code>; or
-     * <p>the <code>defaultValue</code> if the property couldn't be found or if
-     * the value was <code>null</code> or an empty string
+     * @return the string value of the retrieved {@code PropertyValue}; or
+     * <p>the {@code defaultValue} if the property couldn't be found or if
+     * the value was {@code null} or an empty string
      * @throws PropertyValueException when an error occurred while retrieving the
      *                                property value
      * @see #get
@@ -486,17 +486,17 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Retrieves the typed value of <code>PropertyValue</code> for a specific name from
-     * the <code>HierarchicalProperties</code> hierarchy.
+     * Retrieves the typed value of {@code PropertyValue} for a specific name from
+     * the {@code HierarchicalProperties} hierarchy.
      * <p>
      * Note that no conversion will occurr, the value is simple verified to be
      * assignable to the requested type and then cast to it.
      *
      * @param name the name whose associated value will be returned
      * @param type the class that the value has to be retrieved as
-     * @return the associated <code>PropertyValue</code> as an instance of the
+     * @return the associated {@code PropertyValue} as an instance of the
      * provided type;  or
-     * <p><code>null</code> if the name could not be found
+     * <p>{@code null} if the name could not be found
      * @throws IncompatiblePropertyValueTypeException when the type of the property
      *                                                value wasn't compatible with the requested type
      * @throws PropertyValueException                 when an error occurred while retrieving the
@@ -512,8 +512,8 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Retrieves the typed value of <code>PropertyValue</code> for a specific name from
-     * the <code>HierarchicalProperties</code> hierarchy.
+     * Retrieves the typed value of {@code PropertyValue} for a specific name from
+     * the {@code HierarchicalProperties} hierarchy.
      * <p>
      * Note that no conversion will occur, the value is simple verified to be
      * assignable to the requested type and then cast to it.
@@ -521,10 +521,10 @@ public class HierarchicalProperties {
      * @param name         the name whose associated value will be returned
      * @param type         the class that the value has to be retrieved as
      * @param defaultValue the value that should be used as a fallback
-     * @return the associated <code>PropertyValue</code> as an instance of the
+     * @return the associated {@code PropertyValue} as an instance of the
      * provided type;  or
-     * <p>the <code>defaultValue</code> if the property couldn't be found or if
-     * the value was <code>null</code>
+     * <p>the {@code defaultValue} if the property couldn't be found or if
+     * the value was {@code null}
      * @throws IncompatiblePropertyValueTypeException when the type of the property
      *                                                value wasn't compatible with the requested type
      * @throws PropertyValueException                 when an error occurred while retrieving the
@@ -562,7 +562,7 @@ public class HierarchicalProperties {
 
     /**
      * Retrieves the number of unique names in the
-     * <code>HierarchicalProperties</code> hierarchy.
+     * {@code HierarchicalProperties} hierarchy.
      *
      * @return the amount of unique names
      * @since 1.0
@@ -572,8 +572,8 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Retrieves a <code>Set</code> with the unique names that are present in
-     * the <code>HierarchicalProperties</code> hierarchy.
+     * Retrieves a {@code Set} with the unique names that are present in
+     * the {@code HierarchicalProperties} hierarchy.
      *
      * @return a collection with the unique names
      * @see #getInjectableNames
@@ -608,14 +608,14 @@ public class HierarchicalProperties {
     }
 
     /**
-     * Retrieves a <code>Set</code> with the unique names that are present in
-     * the <code>HierarchicalProperties</code> hierarchy and that conform to
+     * Retrieves a {@code Set} with the unique names that are present in
+     * the {@code HierarchicalProperties} hierarchy and that conform to
      * the <a
      * href="http://java.sun.com/docs/books/jls/third_edition/html/lexical.html#3.8">Java
      * rules for valid identifiers</a>. The names in this set are thus usable
      * for injection through bean setters.
      *
-     * @return a <code>Set</code> with the unique injectable names
+     * @return a {@code Set} with the unique injectable names
      * @see #getNames
      * @since 1.0
      */

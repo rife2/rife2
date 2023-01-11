@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.test;
@@ -51,7 +51,7 @@ public class MockLink {
      * Creates a new {@link MockRequest} that contains the parameters this
      * link.
      *
-     * @return the created <code>MockRequest</code>
+     * @return the created {@code MockRequest}
      * @since 1.0
      */
     public MockRequest getRequest() {
@@ -75,7 +75,7 @@ public class MockLink {
     /**
      * Retrieves all the parameters of this link.
      *
-     * @return a <code>Map</code> of the parameters with the names as the keys
+     * @return a {@code Map} of the parameters with the names as the keys
      * and their value arrays as the values
      * @see #getParameterNames
      * @see #hasParameter
@@ -90,7 +90,7 @@ public class MockLink {
     /**
      * Retrieves all the parameter names of this link.
      *
-     * @return a <code>Collection</code> of the parameter names
+     * @return a {@code Collection} of the parameter names
      * @see #getParameters
      * @see #hasParameter
      * @see #getParameterValue
@@ -105,8 +105,8 @@ public class MockLink {
      * Checks whether a named parameter is present in this link.
      *
      * @param name the name of the parameter to check
-     * @return <code>true</code> if the parameter is present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the parameter is present; or
+     * <p>{@code false} otherwise
      * @see #getParameters
      * @see #getParameterNames
      * @see #getParameterValue
@@ -122,7 +122,7 @@ public class MockLink {
      *
      * @param name the name of the parameter
      * @return the first value of the parameter; or
-     * <p><code>null</code> if no such parameter could be found
+     * <p>{@code null} if no such parameter could be found
      * @see #getParameters
      * @see #getParameterNames
      * @see #hasParameter
@@ -144,7 +144,7 @@ public class MockLink {
      *
      * @param name the name of the parameter
      * @return the values of the parameter; or
-     * <p><code>null</code> if no such parameter could be found
+     * <p>{@code null} if no such parameter could be found
      * @see #getParameters
      * @see #getParameterNames
      * @see #hasParameter
@@ -156,9 +156,9 @@ public class MockLink {
     }
 
     /**
-     * Retrieves the content of this link's <code>id</code> attribute.
+     * Retrieves the content of this link's {@code id} attribute.
      *
-     * @return the content of the <code>id</code> attribute; or
+     * @return the content of the {@code id} attribute; or
      * <p>null if no such attribute could be found
      * @since 1.0
      */
@@ -167,9 +167,9 @@ public class MockLink {
     }
 
     /**
-     * Retrieves the content of this link's <code>class</code> attribute.
+     * Retrieves the content of this link's {@code class} attribute.
      *
-     * @return the content of the <code>class</code> attribute; or
+     * @return the content of the {@code class} attribute; or
      * <p>null if no such attribute could be found
      * @since 1.0
      */
@@ -178,9 +178,9 @@ public class MockLink {
     }
 
     /**
-     * Retrieves the content of this link's <code>title</code> attribute.
+     * Retrieves the content of this link's {@code title} attribute.
      *
-     * @return the content of the <code>title</code> attribute; or
+     * @return the content of the {@code title} attribute; or
      * <p>null if no such attribute could be found
      * @since 1.0
      */
@@ -189,9 +189,9 @@ public class MockLink {
     }
 
     /**
-     * Retrieves the content of this link's <code>href</code> attribute.
+     * Retrieves the content of this link's {@code href} attribute.
      *
-     * @return the content of the <code>href</code> attribute; or
+     * @return the content of the {@code href} attribute; or
      * <p>null if no such attribute could be found
      * @since 1.0
      */
@@ -200,9 +200,9 @@ public class MockLink {
     }
 
     /**
-     * Retrieves the content of this link's <code>target</code> attribute.
+     * Retrieves the content of this link's {@code target} attribute.
      *
-     * @return the content of the <code>target</code> attribute; or
+     * @return the content of the {@code target} attribute; or
      * <p>null if no such attribute could be found
      * @since 1.0
      */
@@ -211,9 +211,9 @@ public class MockLink {
     }
 
     /**
-     * Retrieves the content of this link's <code>name</code> attribute.
+     * Retrieves the content of this link's {@code name} attribute.
      *
-     * @return the content of the <code>name</code> attribute; or
+     * @return the content of the {@code name} attribute; or
      * <p>null if no such attribute could be found
      * @since 1.0
      */

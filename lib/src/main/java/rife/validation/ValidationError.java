@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 /**
  * Instances of this class detail subjects that were found invalid during
  * validation.
- * <p>Each <code>ValidationError</code> is tied to a specific subject and
+ * <p>Each {@code ValidationError} is tied to a specific subject and
  * provides more information through an explicative textual identifier.
  * <p>A collection of commonly used identifiers and implementations are
  * provided as static member variables and static inner classes.
@@ -37,13 +37,13 @@ public abstract class ValidationError implements Cloneable {
     private boolean overridable_ = false;
 
     /**
-     * Creates a new <code>ValidationError</code> instance for the specified
+     * Creates a new {@code ValidationError} instance for the specified
      * identifier and subject.
      * <p>The error will not be automatic overridable.
      *
-     * @param identifier a non-<code>null</code> <code>String</code> with the
+     * @param identifier a non-{@code null} {@code String} with the
      *                   textual error identifier
-     * @param subject    a non-<code>null</code> <code>String</code> with the
+     * @param subject    a non-{@code null} {@code String} with the
      *                   name of the erroneous subject
      * @since 1.0
      */
@@ -56,15 +56,15 @@ public abstract class ValidationError implements Cloneable {
     }
 
     /**
-     * Creates a new <code>ValidationError</code> instance for the specified
+     * Creates a new {@code ValidationError} instance for the specified
      * identifier and subject.
      *
-     * @param identifier  a non-<code>null</code> <code>String</code> with the
+     * @param identifier  a non-{@code null} {@code String} with the
      *                    textual error identifier
-     * @param subject     a non-<code>null</code> <code>String</code> with the
+     * @param subject     a non-{@code null} {@code String} with the
      *                    name of the erroneous subject
-     * @param overridable <code>true</code> to make any other error for the same
-     *                    subject override this error, <code>false</code> if this error should
+     * @param overridable {@code true} to make any other error for the same
+     *                    subject override this error, {@code false} if this error should
      *                    always be shown
      * @since 1.0
      */

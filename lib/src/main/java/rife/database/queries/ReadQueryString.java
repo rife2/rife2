@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
@@ -7,7 +7,7 @@ package rife.database.queries;
 import rife.database.capabilities.Capabilities;
 
 /**
- * An instance of <code>ReadQueryString</code> can contain any kind of SQL
+ * An instance of {@code ReadQueryString} can contain any kind of SQL
  * query for read purposes.
  *
  * <p>This allows you to use any SQL together with the functionalities
@@ -20,7 +20,7 @@ public class ReadQueryString implements ReadQuery {
     private String sql_ = null;
 
     /**
-     * Creates a new empty instance of <code>ReadQueryString</code>.
+     * Creates a new empty instance of {@code ReadQueryString}.
      *
      * @since 1.0
      */
@@ -28,7 +28,7 @@ public class ReadQueryString implements ReadQuery {
     }
 
     /**
-     * Creates a new instance of <code>ReadQueryString</code> with the
+     * Creates a new instance of {@code ReadQueryString} with the
      * specified SQL query.
      *
      * @param sql The SQL that should be executed by this query
@@ -42,7 +42,7 @@ public class ReadQueryString implements ReadQuery {
      * Replaces the SQL that is executed by this query.
      *
      * @param sql The SQL that should be executed by this query
-     * @return this <code>ReadQueryString</code> instance.
+     * @return this {@code ReadQueryString} instance.
      * @since 1.0
      */
     public ReadQueryString sql(String sql) {

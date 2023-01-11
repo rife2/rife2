@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
@@ -13,7 +13,7 @@ public final class HttpUtils {
 
     /**
      * Extracts only the mime-type from a Content-Type HTTP header. Thus a header
-     * like this: <code>text/html;charset=UTF-8</code> will return: <code>text/html</code>
+     * like this: {@code text/html;charset=UTF-8} will return: {@code text/html}
      *
      * @param contentType the Content-Type header
      * @return the content type header without the charset

@@ -190,12 +190,15 @@ tasks {
     }
 
     javadoc {
-        title = "RIFE2"
-        if (JavaVersion.current().isJava9Compatible) {
-            (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+        title = "RIFE2 ${rifeVersion}"
+        options {
+            this as StandardJavadocDocletOptions
+            addBooleanOption("html5", true)
+            addBooleanOption("Xdoclint:-missing", true)
         }
         exclude("rife/antlr/**")
         exclude("rife/asm/**")
+        exclude("rife/template/antlr/**")
     }
 }
 

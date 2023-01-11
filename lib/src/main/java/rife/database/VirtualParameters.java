@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -12,7 +12,7 @@ import rife.database.queries.QueryParameters;
 
 /**
  * Internal class to handle virtual parameters of a
- * <code>DbPreparedStatement</code>.
+ * {@code DbPreparedStatement}.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
@@ -24,10 +24,10 @@ public class VirtualParameters {
     private VirtualParametersHandler handler_ = null;
 
     /**
-     * Creates a new <code>VirtualParameters</code> instance.
+     * Creates a new {@code VirtualParameters} instance.
      *
      * @param parameters the actual parameters that are virtual.
-     * @param handler    the <code>VirtualParametersHandler</code> that will
+     * @param handler    the {@code VirtualParametersHandler} that will
      *                   be used by the {@link #callHandler(DbPreparedStatement)} method.
      * @since 1.0
      */
@@ -40,7 +40,7 @@ public class VirtualParameters {
     }
 
     /**
-     * Calls the registered <code>VirtualParametersHandler</code>. This is
+     * Calls the registered {@code VirtualParametersHandler}. This is
      * typically called when all virtual parameters have been defined in a
      * prepared statement and the statement is ready to be executed.
      *

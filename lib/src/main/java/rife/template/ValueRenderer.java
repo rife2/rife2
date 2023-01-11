@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.template;
@@ -7,8 +7,8 @@ package rife.template;
 /**
  * An object which can render content for a value in a template. To use a
  * renderer in a template, the template should contain a value with an ID like
- * <code>"render:org.rifers.something.MyRenderer"</code>, where
- * <code>MyRenderer</code> is your <code>ValueRenderer</code> class.
+ * {@code "render:org.rifers.something.MyRenderer"}, where
+ * {@code MyRenderer} is your {@code ValueRenderer} class.
  * <p>Value renderer implementations must provide a public zero-argumnet
  * no-arg constructor.
  *
@@ -20,7 +20,7 @@ public interface ValueRenderer {
     /**
      * Renders the specified value in the given template. The value ID will be
      * of the form "<code>render:<em>className</em></code>" or "<code>render:<em>className</em>:<em>differentiator</em></code>",
-     * where "<code>className</code>" is the fully qualified name of this
+     * where "{@code className}" is the fully qualified name of this
      * class.
      *
      * @param template       the template into which the returned string will be
@@ -28,7 +28,7 @@ public interface ValueRenderer {
      * @param valueId        the ID of the value in the given template whose value
      *                       will be set to the returned string
      * @param differentiator the differentiator string passed as part of the
-     *                       value ID, or <code>null</code> if none was provided
+     *                       value ID, or {@code null} if none was provided
      * @return the rendered text
      * @since 1.0
      */

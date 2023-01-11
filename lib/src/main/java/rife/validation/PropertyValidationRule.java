@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -7,7 +7,7 @@ package rife.validation;
 import java.util.Collection;
 
 /**
- * This abstract class extends the <code>AbstractValidationRule</code> class
+ * This abstract class extends the {@code AbstractValidationRule} class
  * to provide common functionality that is useful for all bean property
  * validation rules.
  *
@@ -21,7 +21,7 @@ public abstract class PropertyValidationRule extends AbstractValidationRule {
     private ConstrainedProperty constrainedProperty_ = null;
 
     /**
-     * Instantiates a new <code>PropertyValidationRule</code> instance.
+     * Instantiates a new {@code PropertyValidationRule} instance.
      *
      * @param propertyName the name of the property
      * @since 1.0
@@ -101,7 +101,7 @@ public abstract class PropertyValidationRule extends AbstractValidationRule {
      * of content data.
      *
      * @return the collection of errors messages; or
-     * <p><code>null</code> if the data was <code>null</code> or the property
+     * <p>{@code null} if the data was {@code null} or the property
      * didn't exist
      * @since 1.0
      */

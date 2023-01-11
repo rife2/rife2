@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.dam;
@@ -27,9 +27,9 @@ public interface ContentDataUser<ResultType> {
      * Calling this method makes it possible to throw a checked exception from
      * within this class.
      * <p>To catch it you should surround the using method with a
-     * <code>try-catch</code> block that catching
-     * <code>InnerClassException</code>. The original exception is then
-     * available through <code>getCause()</code> and can for example be
+     * {@code try-catch} block that catching
+     * {@code InnerClassException}. The original exception is then
+     * available through {@code getCause()} and can for example be
      * rethrown.
      *
      * @throws InnerClassException when a checked exception needs to be

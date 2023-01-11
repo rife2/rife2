@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.validation;
@@ -22,7 +22,7 @@ import java.util.Set;
  */
 public class SupportedImage extends CmfPropertyValidationRule {
     /**
-     * Creates a new <code>SupportedImage</code> instance.
+     * Creates a new {@code SupportedImage} instance.
      *
      * @param propertyName the name of the property that has to be validated
      * @since 1.0

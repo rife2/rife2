@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.ioc;
@@ -22,7 +22,7 @@ public class PropertyValueList extends ArrayList<PropertyValue> {
      * Interprets the list of property values and make one new property value
      * out of it.
      *
-     * @return the new <code>PropertyValue</code> instance
+     * @return the new {@code PropertyValue} instance
      * @since 1.0
      */
     public PropertyValue makePropertyValue()

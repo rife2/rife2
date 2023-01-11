@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -27,9 +27,9 @@ import java.util.Collection;
  * </ul>
  * <p>There are two types of constraints:
  * <ul>
- * <li>those that are related to the entire bean (<code>ConstrainedBean</code>
+ * <li>those that are related to the entire bean ({@code ConstrainedBean}
  * constraints)
- * <li>those that only apply to a single property (<code>ConstrainedProperty</code>
+ * <li>those that only apply to a single property ({@code ConstrainedProperty}
  * constraints)
  * </ul>
  *
@@ -47,7 +47,7 @@ public interface Constrained {
      * constraints will be replaced by those of the new constrained bean, they
      * will not be combined.
      *
-     * @param constrainedBean the <code>ConstrainedBean</code> instance
+     * @param constrainedBean the {@code ConstrainedBean} instance
      *                        that has to be added
      * @see ConstrainedBean
      * @since 1.0
@@ -62,7 +62,7 @@ public interface Constrained {
      * inList constraint will be replaced by the one of the new constrained
      * bean, they will not be combined.
      *
-     * @param constrainedProperty the <code>ConstrainedProperty</code>
+     * @param constrainedProperty the {@code ConstrainedProperty}
      *                            instance that has to be added
      * @see ConstrainedProperty
      * @since 1.0
@@ -71,10 +71,10 @@ public interface Constrained {
 
     /**
      * Retrieves the constrained bean that has been set for this
-     * <code>Constrained</code> instance.
+     * {@code Constrained} instance.
      *
-     * @return the requested <code>ConstrainedBean; or </code>
-     * <p><code>null</code> if no <code>ConstrainedBean</code> is
+     * @return the requested {@code ConstrainedBean; or }
+     * <p>{@code null} if no {@code ConstrainedBean} is
      * available.
      * @see ConstrainedProperty
      * @since 1.0
@@ -85,10 +85,10 @@ public interface Constrained {
      * Returns a collection with all the constrained properties that have
      * been registered.
      *
-     * @return A <code>Collection</code> with all the
-     * <code>ConstrainedProperty</code> objects that are registered. If no
+     * @return A {@code Collection} with all the
+     * {@code ConstrainedProperty} objects that are registered. If no
      * constrained properties are available, an empty collection will be
-     * returned, not <code>null</code>.
+     * returned, not {@code null}.
      * @see ConstrainedProperty
      * @since 1.0
      */
@@ -98,22 +98,22 @@ public interface Constrained {
      * Indicates whether this constrained bean contains a particular constraint
      * on at least one of its properties.
      *
-     * @return <code>true</code> if this constraint is present on at least one
+     * @return {@code true} if this constraint is present on at least one
      * of the properties; or
-     * <p><code>false</code> otherwise
+     * <p>{@code false} otherwise
      * @see ConstrainedProperty
      * @since 1.0
      */
     boolean hasPropertyConstraint(String name);
 
     /**
-     * Retrieve a registered <code>ConstrainedProperty</code> according to
+     * Retrieve a registered {@code ConstrainedProperty} according to
      * its name.
      *
      * @param propertyName the name of the
-     *                     <code>ConstrainedProperty</code> that has to be retrieved
-     * @return the requested <code>ConstrainedProperty; or </code>
-     * <p><code>null</code> if no such <code>ConstrainedProperty</code> is
+     *                     {@code ConstrainedProperty} that has to be retrieved
+     * @return the requested {@code ConstrainedProperty; or }
+     * <p>{@code null} if no such {@code ConstrainedProperty} is
      * available.
      * @see ConstrainedProperty
      * @since 1.0

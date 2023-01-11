@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
@@ -83,16 +83,16 @@ public final class ArrayUtils {
     }
 
     /**
-     * Convert an <code>Object</code> to a textual representation in a
-     * <code>String</code> array.
+     * Convert an {@code Object} to a textual representation in a
+     * {@code String} array.
      * <p>
      * Note that array of type byte[] are explicitly not converted since that
      * would result in many binary data to create OutOfMemoryError exceptions.
      *
-     * @param source The <code>Object</code> to convert.
-     * @return The resulting <code>String</code> array; or
+     * @param source The {@code Object} to convert.
+     * @return The resulting {@code String} array; or
      * <p>
-     * <code>null</code> if <code>source</code> is <code>null</code>.
+     * {@code null} if {@code source} is {@code null}.
      * @since 1.0
      */
     public static String[] createStringArray(Object source, ConstrainedProperty constrainedProperty) {

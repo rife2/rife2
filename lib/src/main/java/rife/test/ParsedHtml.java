@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.test;
@@ -45,10 +45,10 @@ public class ParsedHtml {
 
     /**
      * Parses the text content of a {@link MockResponse} object as HTML and
-     * returns the result as an instance of <code>ParsedHtml</code>.
+     * returns the result as an instance of {@code ParsedHtml}.
      *
      * @param response the response whose text content will be parsed
-     * @return the resulting instance of <code>ParsedHtml</code>
+     * @return the resulting instance of {@code ParsedHtml}
      * @since 1.0
      */
     public static ParsedHtml parse(MockResponse response) {
@@ -70,7 +70,7 @@ public class ParsedHtml {
     }
 
     /**
-     * Retrieves the text of the <code>title</code> tag.
+     * Retrieves the text of the {@code title} tag.
      *
      * @return the title
      * @since 1.0
@@ -98,12 +98,12 @@ public class ParsedHtml {
 
     /**
      * Retrieves the first form in the HTML document with a particular
-     * <code>name</code> attribute.
+     * {@code name} attribute.
      *
-     * @param name the content of the <code>name</code> attribute
-     * @return the first {@link MockForm} whose <code>name</code> attribute
+     * @param name the content of the {@code name} attribute
+     * @return the first {@link MockForm} whose {@code name} attribute
      * matches; or
-     * <p><code>null</code> if no such form could be found
+     * <p>{@code null} if no such form could be found
      * @see #getForms
      * @see #getFormWithId
      * @since 1.0
@@ -122,12 +122,12 @@ public class ParsedHtml {
 
     /**
      * Retrieves the first form in the HTML document with a particular
-     * <code>id</code> attribute.
+     * {@code id} attribute.
      *
-     * @param id the content of the <code>id</code> attribute
-     * @return the first {@link MockForm} whose <code>id</code> attribute
+     * @param id the content of the {@code id} attribute
+     * @return the first {@link MockForm} whose {@code id} attribute
      * matches; or
-     * <p><code>null</code> if no such form could be found
+     * <p>{@code null} if no such form could be found
      * @see #getForms
      * @see #getFormWithName
      * @since 1.0
@@ -161,12 +161,12 @@ public class ParsedHtml {
 
     /**
      * Retrieves the first link in the HTML document with a particular
-     * <code>name</code> attribute.
+     * {@code name} attribute.
      *
-     * @param name the content of the <code>name</code> attribute
-     * @return the first {@link MockLink} whose <code>name</code> attribute
+     * @param name the content of the {@code name} attribute
+     * @return the first {@link MockLink} whose {@code name} attribute
      * matches; or
-     * <p><code>null</code> if no such link could be found
+     * <p>{@code null} if no such link could be found
      * @see #getLinks
      * @see #getLinkWithId
      * @see #getLinkWithText
@@ -188,12 +188,12 @@ public class ParsedHtml {
 
     /**
      * Retrieves the first link in the HTML document with a particular
-     * <code>id</code> attribute.
+     * {@code id} attribute.
      *
-     * @param id the content of the <code>id</code> attribute
-     * @return the first {@link MockLink} whose <code>id</code> attribute
+     * @param id the content of the {@code id} attribute
+     * @return the first {@link MockLink} whose {@code id} attribute
      * matches; or
-     * <p><code>null</code> if no such link could be found
+     * <p>{@code null} if no such link could be found
      * @see #getLinks
      * @see #getLinkWithName
      * @see #getLinkWithText
@@ -219,7 +219,7 @@ public class ParsedHtml {
      *
      * @param text the surrounded text
      * @return the first {@link MockLink} whose surrounded text matches; or
-     * <p><code>null</code> if no such link could be found
+     * <p>{@code null} if no such link could be found
      * @see #getLinks
      * @see #getLinkWithName
      * @see #getLinkWithId
@@ -241,12 +241,12 @@ public class ParsedHtml {
 
     /**
      * Retrieves the first link in the HTML document that surrounds an
-     * <code>img</code> tag with a certain <code>alt</code> attribute.
+     * {@code img} tag with a certain {@code alt} attribute.
      *
-     * @param alt the content of the <code>alt</code> attribute
-     * @return the first {@link MockLink} that has an <code>img</code> tag
-     * whose <code>alt</code> attribute matches; or
-     * <p><code>null</code> if no such link could be found
+     * @param alt the content of the {@code alt} attribute
+     * @return the first {@link MockLink} that has an {@code img} tag
+     * whose {@code alt} attribute matches; or
+     * <p>{@code null} if no such link could be found
      * @see #getLinks
      * @see #getLinkWithName
      * @see #getLinkWithId
@@ -277,12 +277,12 @@ public class ParsedHtml {
 
     /**
      * Retrieves the first link in the HTML document that surrounds an
-     * <code>img</code> tag with a certain <code>name</code> attribute.
+     * {@code img} tag with a certain {@code name} attribute.
      *
-     * @param name the content of the <code>name</code> attribute
-     * @return the first {@link MockLink} that has an <code>img</code> tag
-     * whose <code>name</code> attribute matches; or
-     * <p><code>null</code> if no such link could be found
+     * @param name the content of the {@code name} attribute
+     * @return the first {@link MockLink} that has an {@code img} tag
+     * whose {@code name} attribute matches; or
+     * <p>{@code null} if no such link could be found
      * @see #getLinks
      * @see #getLinkWithName
      * @see #getLinkWithId
@@ -318,7 +318,7 @@ public class ParsedHtml {
      * @param element       the element where the attribute should be obtained from
      * @param attributeName the name of the attribute
      * @return the value of the attribute; or
-     * <p><code>null</code> if no attribute could be found
+     * <p>{@code null} if no attribute could be found
      * @since 1.0
      */
     public static String getElementAttribute(Element element, String attributeName) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.config;
@@ -25,9 +25,9 @@ public class RifeConfig {
 
     /**
      * Returns the shared singleton instance of the
-     * <code>RifeConfig</code> class.
+     * {@code RifeConfig} class.
      *
-     * @return the singleton <code>RifeConfig</code> instance
+     * @return the singleton {@code RifeConfig} instance
      * @since 1.0
      */
     public static RifeConfig instance() {

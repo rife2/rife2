@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.dam;
@@ -20,9 +20,9 @@ import java.util.logging.Logger;
  * that is typically used to determine the order of the rows in a specific
  * table.
  * <p>The basic version manages the ordinals for the entire table, but it's
- * also possible to create an <code>OrdinalManager</code> that uses several
+ * also possible to create an {@code OrdinalManager} that uses several
  * independent ranges of ordinals according to a restricting integer column.
- * <p>For example, consider the following '<code>article</code>' table:
+ * <p>For example, consider the following '{@code article}' table:
  * <pre>id          INT
  * categoryId  INT
  * ordinal     INT
@@ -37,9 +37,9 @@ import java.util.logging.Logger;
  *  5 |          2 |       1 | an article for you
  *  4 |          3 |       0 | our latest article
  *  6 |          3 |       1 | important one</pre>
- * <p>You can clearly see three independent <code>ordinal</code> ranges
- * according to the <code>categoryId</code> column.
- * <p>The <code>OrdinalManager</code> allows you to easily change the order of
+ * <p>You can clearly see three independent {@code ordinal} ranges
+ * according to the {@code categoryId} column.
+ * <p>The {@code OrdinalManager} allows you to easily change the order of
  * the articles by moving them up and down with the provided methods: {@link
  * #move(Direction, int) move}, {@link #up(int) up} and {@link #down(int) down}.
  * It's also possible to do more complex manipulations by using the lower
@@ -76,7 +76,7 @@ public class OrdinalManager implements Cloneable {
     private Select getOrdinalsRestricted_ = null;
 
     /**
-     * Creates a new <code>OrdinalManager</code> that manages ordinals
+     * Creates a new {@code OrdinalManager} that manages ordinals
      * globally for the specified table.
      *
      * @param datasource    the datasource where the table is accessible
@@ -118,7 +118,7 @@ public class OrdinalManager implements Cloneable {
     }
 
     /**
-     * Creates a new <code>OrdinalManager</code> that manages ordinals for the
+     * Creates a new {@code OrdinalManager} that manages ordinals for the
      * specified table in independent ranges according to a restricting
      * integer column.
      *
@@ -161,7 +161,7 @@ public class OrdinalManager implements Cloneable {
     }
 
     /**
-     * Retrieves the name of the table of this <code>OrdinalManager</code>.
+     * Retrieves the name of the table of this {@code OrdinalManager}.
      *
      * @return the name of the table
      * @since 1.0
@@ -184,7 +184,7 @@ public class OrdinalManager implements Cloneable {
      * Retrieves the name of the restricting column.
      *
      * @return the name of the restricting column; or
-     * <p><code>null</code> if this <code>OrdinalManager</code> manages the
+     * <p>{@code null} if this {@code OrdinalManager} manages the
      * table globally
      * @since 1.0
      */
@@ -200,8 +200,8 @@ public class OrdinalManager implements Cloneable {
      *                  OrdinalManager#UP OrdinalManager.UP} or {@link OrdinalManager#DOWN
      *                  OrdinalManager.DOWN}
      * @param ordinal   the ordinal of the row that has to be moved
-     * @return <code>true</code> if the move was executed successfully; or
-     * <p><code>false</code> if this wasn't the case
+     * @return {@code true} if the move was executed successfully; or
+     * <p>{@code false} if this wasn't the case
      * @see #move(Direction, long, int)
      * @since 1.0
      */
@@ -224,8 +224,8 @@ public class OrdinalManager implements Cloneable {
      *                   OrdinalManager.DOWN}
      * @param restrictId the restriction ID value
      * @param ordinal    the ordinal of the row that has to be moved
-     * @return <code>true</code> if the move was executed successfully; or
-     * <p><code>false</code> if this wasn't the case
+     * @return {@code true} if the move was executed successfully; or
+     * <p>{@code false} if this wasn't the case
      * @see #move(Direction, int)
      * @since 1.0
      */
@@ -243,8 +243,8 @@ public class OrdinalManager implements Cloneable {
      * Moves a row with a specific ordinal upwards within the entire table.
      *
      * @param ordinal the ordinal of the row that has to be moved
-     * @return <code>true</code> if the move was executed successfully; or
-     * <p><code>false</code> if this wasn't the case
+     * @return {@code true} if the move was executed successfully; or
+     * <p>{@code false} if this wasn't the case
      * @see #up(long, int)
      * @since 1.0
      */
@@ -275,8 +275,8 @@ public class OrdinalManager implements Cloneable {
      *
      * @param restrictId the restriction ID value
      * @param ordinal    the ordinal of the row that has to be moved
-     * @return <code>true</code> if the move was executed successfully; or
-     * <p><code>false</code> if this wasn't the case
+     * @return {@code true} if the move was executed successfully; or
+     * <p>{@code false} if this wasn't the case
      * @see #up(int)
      * @since 1.0
      */
@@ -305,8 +305,8 @@ public class OrdinalManager implements Cloneable {
      * Moves a row with a specific ordinal downwards within the entire table.
      *
      * @param ordinal the ordinal of the row that has to be moved
-     * @return <code>true</code> if the move was executed successfully; or
-     * <p><code>false</code> if this wasn't the case
+     * @return {@code true} if the move was executed successfully; or
+     * <p>{@code false} if this wasn't the case
      * @see #down(long, int)
      * @since 1.0
      */
@@ -337,8 +337,8 @@ public class OrdinalManager implements Cloneable {
      *
      * @param restrictId the restriction ID value
      * @param ordinal    the ordinal of the row that has to be moved
-     * @return <code>true</code> if the move was executed successfully; or
-     * <p><code>false</code> if this wasn't the case
+     * @return {@code true} if the move was executed successfully; or
+     * <p>{@code false} if this wasn't the case
      * @see #down(int)
      * @since 1.0
      */
@@ -370,8 +370,8 @@ public class OrdinalManager implements Cloneable {
      * @param fromOrdinal the ordinal of the row that has to be moved
      * @param toOrdinal   the ordinal of the row where the from row has will be
      *                    put above
-     * @return <code>true</code> if the move was executed successfully; or
-     * <p><code>false</code> if this wasn't the case
+     * @return {@code true} if the move was executed successfully; or
+     * <p>{@code false} if this wasn't the case
      * @see #down(int)
      * @since 1.0
      */
@@ -408,8 +408,8 @@ public class OrdinalManager implements Cloneable {
      * @param fromOrdinal the ordinal of the row that has to be moved
      * @param toOrdinal   the ordinal of the row where the from row has will be
      *                    put above
-     * @return <code>true</code> if the move was executed successfully; or
-     * <p><code>false</code> if this wasn't the case
+     * @return {@code true} if the move was executed successfully; or
+     * <p>{@code false} if this wasn't the case
      * @see #down(int)
      * @since 1.0
      */
@@ -445,7 +445,7 @@ public class OrdinalManager implements Cloneable {
     /**
      * Frees up a slot for the specified ordinal within the entire table.,
      * this is done by incrementing everything after it by 1 to make space.
-     * <p>So for example issuing the method <code>free(1)</code> on the
+     * <p>So for example issuing the method {@code free(1)} on the
      * following table:
      * <pre> id | ordinal | name
      * ----+---------+-----------------------
@@ -460,8 +460,8 @@ public class OrdinalManager implements Cloneable {
      *  1 |       3 | this is yet an article</pre>
      *
      * @param ordinal an integer representing the ordinal to free
-     * @return <code>true</code> if the slot was freed up correctly; or
-     * <p><code>false</code> if the operation wasn't possible
+     * @return {@code true} if the slot was freed up correctly; or
+     * <p>{@code false} if the operation wasn't possible
      * @see #free(long, int)
      * @since 1.0
      */
@@ -491,7 +491,7 @@ public class OrdinalManager implements Cloneable {
      * Frees up a slot for the specified ordinal within the range restricted
      * by the provided ID, this is done by incrementing everything after it by
      * 1 to make space.
-     * <p>So for example issuing the method <code>free(2, 0)</code> on the
+     * <p>So for example issuing the method {@code free(2, 0)} on the
      * following table:
      * <pre> id | categoryId | ordinal | name
      * ----+------------+---------+-----------------------
@@ -515,8 +515,8 @@ public class OrdinalManager implements Cloneable {
      *
      * @param restrictId the id by which to restrict with
      * @param ordinal    an int representation the ordinal to free
-     * @return <code>true</code> if the slot was freed up correctly; or
-     * <p><code>false</code> if the operation wasn't possible
+     * @return {@code true} if the slot was freed up correctly; or
+     * <p>{@code false} if the operation wasn't possible
      * @see #free(int)
      * @since 1.0
      */
@@ -551,8 +551,8 @@ public class OrdinalManager implements Cloneable {
      *
      * @param currentOrdinal the ordinal of the row that has to be updated
      * @param newOrdinal     the new ordinal value
-     * @return <code>true</code> if the update was executed successfully; or
-     * <p><code>false</code> if this wasn't the case
+     * @return {@code true} if the update was executed successfully; or
+     * <p>{@code false} if this wasn't the case
      * @see #update(long, int, int)
      * @since 1.0
      */
@@ -575,8 +575,8 @@ public class OrdinalManager implements Cloneable {
      * @param restrictId     the id by which to restrict with
      * @param currentOrdinal the ordinal of the row that has to be updated
      * @param newOrdinal     the new ordinal value
-     * @return <code>true</code> if the update was executed successfully; or
-     * <p><code>false</code> if this wasn't the case
+     * @return {@code true} if the update was executed successfully; or
+     * <p>{@code false} if this wasn't the case
      * @see #update(int, int)
      * @since 1.0
      */
@@ -594,7 +594,7 @@ public class OrdinalManager implements Cloneable {
     /**
      * Tightens the series of ordinal within the entire table so that no
      * spaces are present in between the ordinals.
-     * <p>So for example issuing the method <code>tighten()</code> on the
+     * <p>So for example issuing the method {@code tighten()} on the
      * following table:
      * <pre> id | ordinal | name
      * ----+---------+-----------------------
@@ -608,8 +608,8 @@ public class OrdinalManager implements Cloneable {
      *  0 |       1 | another one
      *  1 |       2 | this is yet an article</pre>
      *
-     * @return <code>true</code> if the tightening was executed correctly; or
-     * <p><code>false</code> if the operation wasn't possible
+     * @return {@code true} if the tightening was executed correctly; or
+     * <p>{@code false} if the operation wasn't possible
      * @see #tighten(long)
      * @since 1.0
      */
@@ -622,7 +622,7 @@ public class OrdinalManager implements Cloneable {
     /**
      * Tightens the series of ordinal within the range restricted by the
      * provided ID so that no spaces are present in between the ordinals.
-     * <p>So for example issuing the method <code>tighten(2)</code> on the
+     * <p>So for example issuing the method {@code tighten(2)} on the
      * following table:
      * <pre> id | categoryId | ordinal | name
      * ----+------------+---------+-----------------------
@@ -645,8 +645,8 @@ public class OrdinalManager implements Cloneable {
      *  6 |          3 |       5 | important one</pre>
      *
      * @param restrictId the id by which to restrict with
-     * @return <code>true</code> if the tightening was executed correctly; or
-     * <p><code>false</code> if the operation wasn't possible
+     * @return {@code true} if the tightening was executed correctly; or
+     * <p>{@code false} if the operation wasn't possible
      * @see #tighten()
      * @since 1.0
      */
@@ -666,17 +666,17 @@ public class OrdinalManager implements Cloneable {
     /**
      * Returns the next freely available ordinal that can be used to insert a
      * new row behind all the other rows in the entire table.
-     * <p>So for example issuing the method <code>obtainInsertOrdinal()</code>
+     * <p>So for example issuing the method {@code obtainInsertOrdinal()}
      * on the following table:
      * <pre> id | ordinal | name
      * ----+---------+-----------------------
      *  2 |       0 | some article
      *  0 |       1 | another one
      *  1 |       2 | this is yet an article</pre>
-     * <p>Will return the value <code>3</code>.
+     * <p>Will return the value {@code 3}.
      *
      * @return the requested ordinal; or
-     * <p><code>0</code> if no ordinals are present within the table yet
+     * <p>{@code 0} if no ordinals are present within the table yet
      * @see #obtainInsertOrdinal(long)
      * @since 1.0
      */
@@ -692,7 +692,7 @@ public class OrdinalManager implements Cloneable {
      * new row behind all the other rows in the range restricted by the
      * provided ID.
      * <p>So for example issuing the method
-     * <code>obtainInsertOrdinal(3)</code> on the following table:
+     * {@code obtainInsertOrdinal(3)} on the following table:
      * <pre> id | categoryId | ordinal | name
      * ----+------------+---------+-----------------------
      *  2 |          1 |       0 | some article
@@ -702,11 +702,11 @@ public class OrdinalManager implements Cloneable {
      *  5 |          2 |       1 | an article for you
      *  4 |          3 |       0 | our latest article
      *  6 |          3 |       1 | important one</pre>
-     * <p>Will return the value <code>2</code>.
+     * <p>Will return the value {@code 2}.
      *
      * @param restrictId the id by which to restrict with
      * @return the requested ordinal; or
-     * <p><code>0</code> if no ordinals are present within the range yet
+     * <p>{@code 0} if no ordinals are present within the range yet
      * @see #obtainInsertOrdinal()
      * @since 1.0
      */

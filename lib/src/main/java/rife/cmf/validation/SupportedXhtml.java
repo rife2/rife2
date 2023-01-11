@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.validation;
@@ -21,11 +21,11 @@ import java.util.Set;
  */
 public class SupportedXhtml extends CmfPropertyValidationRule {
     /**
-     * Instantiates a new <code>SupportedXhtml</code> instance.
+     * Instantiates a new {@code SupportedXhtml} instance.
      *
      * @param propertyName the name of the property
-     * @param fragment     <code>true</code> if the property is a fragment; or
-     *                     <p><code>false</code> if it's a complete document
+     * @param fragment     {@code true} if the property is a fragment; or
+     *                     <p>{@code false} if it's a complete document
      * @since 1.0
      */
     public SupportedXhtml(String propertyName, boolean fragment) {

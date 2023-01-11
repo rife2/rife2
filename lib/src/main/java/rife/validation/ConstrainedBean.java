@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -12,7 +12,7 @@ import rife.datastructures.EnumClass;
 
 
 /**
- * A <code>ConstrainedBean</code> object makes it possible to define all
+ * A {@code ConstrainedBean} object makes it possible to define all
  * constraints for a bean instance that are not related to a single property.
  * The constraints here are global for the entire bean and either involve
  * several properties or are even totally unrelated to properties.
@@ -24,7 +24,6 @@ import rife.datastructures.EnumClass;
  *    .defaultOrder("city")
  *    .defaultOrder("lastName")
  *    .defaultOrder("firstName");</pre>
- * <p>
  * <p>A constrained bean is typically added to a {@link Constrained} bean in
  * its constructor. These are the static constraints that will be set for each
  * and every instance of the bean. You'll however most of the time use the
@@ -53,7 +52,7 @@ public class ConstrainedBean {
     protected HashMap<String, Object> constraints_ = new HashMap<>();
 
     /**
-     * Creates a new <code>ConstrainedBean</code>.
+     * Creates a new {@code ConstrainedBean}.
      *
      * @since 1.0
      */

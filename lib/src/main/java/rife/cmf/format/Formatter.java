@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.format;
@@ -18,15 +18,15 @@ import rife.cmf.transform.ContentTransformer;
  */
 public interface Formatter<DataType, InternalType> {
     /**
-     * Formats raw data and returns it in a <code>DataType</code> that's
+     * Formats raw data and returns it in a {@code DataType} that's
      * supported by the back-end stores.
      *
-     * @param content     a <code>Content</code> instance that contains the raw
+     * @param content     a {@code Content} instance that contains the raw
      *                    data with additional information that describes the storage and
      *                    formatting of the processed data
      * @param transformer a transformer that will be used to modify raw data
      *                    after it has been loaded; or
-     *                    <p><code>null</code> if the data shouldn't be transformed
+     *                    <p>{@code null} if the data shouldn't be transformed
      * @return the result of the formatting of the raw data
      * @since 1.0
      */

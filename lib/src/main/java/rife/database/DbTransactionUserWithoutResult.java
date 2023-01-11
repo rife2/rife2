@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -24,8 +24,8 @@ public abstract class DbTransactionUserWithoutResult<DataType> extends DbTransac
     }
 
     /**
-     * Has been implemented to return a <code>null</code> reference and
-     * delegate the logic to the <code>useTransactionWithoutResult()</code>
+     * Has been implemented to return a {@code null} reference and
+     * delegate the logic to the {@code useTransactionWithoutResult()}
      * method.
      *
      * @since 1.0

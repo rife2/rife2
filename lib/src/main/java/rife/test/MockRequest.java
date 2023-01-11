@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.test;
@@ -103,7 +103,7 @@ public class MockRequest implements Request {
      * Sets the method of this request.
      *
      * @param method the method that will be used by this request
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @see #getMethod
      * @see #setMethod
      * @since 1.0
@@ -118,8 +118,8 @@ public class MockRequest implements Request {
      * Checks whether a named parameter is present in this request.
      *
      * @param name the name of the parameter to check
-     * @return <code>true</code> if the parameter is present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the parameter is present; or
+     * <p>{@code false} otherwise
      * @see #getParameters
      * @see #setParameters
      * @see #setParameter(String, String...)
@@ -135,7 +135,7 @@ public class MockRequest implements Request {
     /**
      * Retrieves all the parameters of this request.
      *
-     * @return a <code>Map</code> of the parameters with the names as the keys
+     * @return a {@code Map} of the parameters with the names as the keys
      * and their value arrays as the values
      * @see #hasParameter
      * @see #setParameters
@@ -152,7 +152,7 @@ public class MockRequest implements Request {
     /**
      * Sets a map of parameters in this request.
      *
-     * @param parameters a <code>Map</code> of the parameters that will be set
+     * @param parameters a {@code Map} of the parameters that will be set
      *                   with the names as the keys and their value arrays as the values
      * @see #hasParameter
      * @see #getParameters
@@ -175,9 +175,9 @@ public class MockRequest implements Request {
     /**
      * Sets a map of parameters in this request.
      *
-     * @param parameters a <code>Map</code> of the parameters that will be set
+     * @param parameters a {@code Map} of the parameters that will be set
      *                   with the names as the keys and their value arrays as the values
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @see #hasParameter
      * @see #getParameters
      * @see #setParameters
@@ -249,7 +249,7 @@ public class MockRequest implements Request {
      *
      * @param name   the name of the parameter
      * @param values the value array of the parameter
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @see #hasParameter
      * @see #getParameters
      * @see #setParameters
@@ -268,7 +268,7 @@ public class MockRequest implements Request {
      *
      * @param name   the name of the parameter
      * @param values the value array of the parameter
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @see #hasParameter
      * @see #getParameters
      * @see #setParameters
@@ -305,7 +305,7 @@ public class MockRequest implements Request {
      * Sets this request's body
      *
      * @param body the body as a string
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @see #setBody
      * @see #getBody
      * @see #bodyAsBytes
@@ -346,7 +346,7 @@ public class MockRequest implements Request {
      * Sets this request's body as bytes.
      *
      * @param bytes the body as bytes
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @see #setBody
      * @see #body
      * @see #getBody
@@ -457,7 +457,7 @@ public class MockRequest implements Request {
     /**
      * Sets a map of files in this request.
      *
-     * @param files a <code>Map</code> of the files that will be set with the
+     * @param files a {@code Map} of the files that will be set with the
      *              names as the keys and their file upload specifications as the values
      * @see #hasFile
      * @see #getFile
@@ -564,7 +564,7 @@ public class MockRequest implements Request {
      *
      * @param name the parameter name of the file
      * @param file the file specification that will be uploaded
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @see #hasFile
      * @see #getFile
      * @see #getFiles
@@ -582,9 +582,9 @@ public class MockRequest implements Request {
     /**
      * Sets a map of files in this request.
      *
-     * @param files a <code>Map</code> of the files that will be set with the
+     * @param files a {@code Map} of the files that will be set with the
      *              names as the keys and their file upload specifications as the values
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @see #hasFile
      * @see #getFile
      * @see #getFiles
@@ -604,7 +604,7 @@ public class MockRequest implements Request {
      *
      * @param name  the parameter name of the file
      * @param files the file specifications that will be uploaded
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @see #hasFile
      * @see #getFile
      * @see #getFiles
@@ -713,7 +713,7 @@ public class MockRequest implements Request {
      * Set the character encoding of this request.
      *
      * @param encoding the name of the character encoding
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @since 1.0
      */
     public MockRequest characterEncoding(String encoding) {
@@ -743,7 +743,7 @@ public class MockRequest implements Request {
      * Set the content type of this request.
      *
      * @param type the content type
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @since 1.0
      */
     public MockRequest contentType(String type) {
@@ -778,7 +778,7 @@ public class MockRequest implements Request {
      *
      * @param name  the name of the header to set
      * @param value the additional header value
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @since 1.0
      */
     public MockRequest addHeader(String name, String value) {
@@ -798,7 +798,7 @@ public class MockRequest implements Request {
      *
      * @param name  the name of the header to set
      * @param value the additional date value
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @since 1.0
      */
     public MockRequest addDateHeader(String name, long value) {
@@ -816,7 +816,7 @@ public class MockRequest implements Request {
      *
      * @param name  the name of the header to set
      * @param value the additional integer value
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @since 1.0
      */
     public MockRequest addIntHeader(String name, int value) {
@@ -832,8 +832,8 @@ public class MockRequest implements Request {
      * Checks whether a certain request header is present.
      *
      * @param name the name of the header to check
-     * @return <code>true</code> if the header was present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the header was present; or
+     * <p>{@code false} otherwise
      * @since 1.0
      */
     public boolean containsHeader(String name) {
@@ -986,7 +986,7 @@ public class MockRequest implements Request {
      * Adds a {@link Locale} to this request.
      *
      * @param locale the locale to add
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @since 1.0
      */
     public MockRequest locale(Locale locale) {
@@ -1001,7 +1001,7 @@ public class MockRequest implements Request {
 
     /**
      * Set the protocol of this request.
-     * <p>The default protocol is <code>"HTTP/1.1"</code>.
+     * <p>The default protocol is {@code "HTTP/1.1"}.
      *
      * @param protocol the protocol to set
      * @since 1.0
@@ -1017,7 +1017,7 @@ public class MockRequest implements Request {
      * Set the protocol of this request.
      *
      * @param protocol the protocol to set
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @since 1.0
      */
     public MockRequest protocol(String protocol) {
@@ -1032,7 +1032,7 @@ public class MockRequest implements Request {
 
     /**
      * Set the remote address of this request.
-     * <p>The default remote address is "<code>127.0.0.1"</code>.
+     * <p>The default remote address is "{@code 127.0.0.1"}.
      *
      * @param remoteAddr the remote address to set
      * @since 1.0
@@ -1048,7 +1048,7 @@ public class MockRequest implements Request {
      * Set the remote address of this request.
      *
      * @param remoteAddr the remote address to set
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @since 1.0
      */
     public MockRequest remoteAddr(String remoteAddr) {
@@ -1063,7 +1063,7 @@ public class MockRequest implements Request {
 
     /**
      * Set the remote user of this request.
-     * <p>The default remote user is <code>null</code>.
+     * <p>The default remote user is {@code null}.
      *
      * @param remoteUser the remote user to set
      * @since 1.0
@@ -1079,7 +1079,7 @@ public class MockRequest implements Request {
      * Set the remote user of this request.
      *
      * @param remoteUser the remote user to set
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @since 1.0
      */
     public MockRequest remoteUser(String remoteUser) {
@@ -1094,7 +1094,7 @@ public class MockRequest implements Request {
 
     /**
      * Set the remote host of this request.
-     * <p>The default remote host is "<code>localhost</code>".
+     * <p>The default remote host is "{@code localhost}".
      *
      * @param remoteHost the remote host to set
      * @since 1.0
@@ -1110,7 +1110,7 @@ public class MockRequest implements Request {
      * Set the remote host of this request.
      *
      * @param remoteHost the remote host to set
-     * @return this <code>MockRequest</code> instance
+     * @return this {@code MockRequest} instance
      * @since 1.0
      */
     public MockRequest remoteHost(String remoteHost) {
@@ -1143,8 +1143,8 @@ public class MockRequest implements Request {
      * Set whether this request is secure.
      * <p>A request is not secure by default.
      *
-     * @param secure <code>true</code> if this request is secure; or
-     *               <p><code>false</code> otherwise
+     * @param secure {@code true} if this request is secure; or
+     *               <p>{@code false} otherwise
      * @since 1.0
      */
     public void setSecure(boolean secure) {
@@ -1154,9 +1154,9 @@ public class MockRequest implements Request {
     /**
      * Set whether this request is secure.
      *
-     * @param secure <code>true</code> if this request is secure; or
-     *               <p><code>false</code> otherwise
-     * @return this <code>MockRequest</code> instance
+     * @param secure {@code true} if this request is secure; or
+     *               <p>{@code false} otherwise
+     * @return this {@code MockRequest} instance
      * @since 1.0
      */
     public MockRequest secure(boolean secure) {

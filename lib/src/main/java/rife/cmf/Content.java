@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf;
@@ -34,7 +34,7 @@ public class Content implements Cloneable {
     private Object cachedLoadedData_ = null;
 
     /**
-     * Creates a new <code>Content</code> instance with the minimal required
+     * Creates a new {@code Content} instance with the minimal required
      * arguments.
      *
      * @param mimeType the mime type as which the content will be stored in
@@ -42,7 +42,7 @@ public class Content implements Cloneable {
      *                 the mime type of the provided data. Image formats can for example be
      *                 automatically detected and converted to the target mime type by image
      *                 loading and conversion libraries.
-     * @param data     the data of the content, if this is <code>null</code>,
+     * @param data     the data of the content, if this is {@code null},
      *                 empty content should be stored
      * @since 1.0
      */
@@ -89,9 +89,9 @@ public class Content implements Cloneable {
      * snippet. This information is for example important when validating the
      * data.
      *
-     * @param fragment <code>true</code> if the content is a fragment; or
-     *                 <p><code>false</code> otherwise
-     * @return the current <code>Content</code> instance
+     * @param fragment {@code true} if the content is a fragment; or
+     *                 <p>{@code false} otherwise
+     * @return the current {@code Content} instance
      * @see #setFragment(boolean)
      * @see #isFragment()
      * @since 1.0
@@ -105,8 +105,8 @@ public class Content implements Cloneable {
     /**
      * Sets whether the content data is a fragment.
      *
-     * @param fragment <code>true</code> if the content is a fragment; or
-     *                 <p><code>false</code> otherwise
+     * @param fragment {@code true} if the content is a fragment; or
+     *                 <p>{@code false} otherwise
      * @see #fragment(boolean)
      * @see #isFragment()
      * @since 1.0
@@ -118,8 +118,8 @@ public class Content implements Cloneable {
     /**
      * Indicates whether the content data is a fragment.
      *
-     * @return <code>true</code> if the content is a fragment; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the content is a fragment; or
+     * <p>{@code false} otherwise
      * @see #fragment(boolean)
      * @see #setFragment(boolean)
      * @since 1.0
@@ -132,7 +132,7 @@ public class Content implements Cloneable {
      * Sets the name of the content.
      *
      * @param name the name
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #setName(String)
      * @see #getName()
      * @see #hasName()
@@ -160,7 +160,7 @@ public class Content implements Cloneable {
     /**
      * Retrieves the name of the content.
      *
-     * @return <code>null</code> if the content has no name; or
+     * @return {@code null} if the content has no name; or
      * <p>the name of the content
      * @see #name(String)
      * @see #setName(String)
@@ -174,8 +174,8 @@ public class Content implements Cloneable {
     /**
      * Indicates whether the content data has a name.
      *
-     * @return <code>true</code> if the content has a name; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the content has a name; or
+     * <p>{@code false} otherwise
      * @see #name(String)
      * @see #setName(String)
      * @see #getName()
@@ -193,7 +193,7 @@ public class Content implements Cloneable {
      * properties instead.
      *
      * @param attributes the map of named content attributes
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #setAttributes(Map)
      * @see #getAttributes()
      * @see #hasAttributes()
@@ -207,11 +207,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content attribute that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getAttribute(String)
      * @see #hasAttribute(String)
      * @since 1.0
@@ -222,11 +222,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content attribute that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getAttribute(String)
      * @see #hasAttribute(String)
      * @since 1.0
@@ -237,11 +237,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content attribute that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getAttribute(String)
      * @see #hasAttribute(String)
      * @since 1.0
@@ -252,11 +252,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content attribute that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getAttribute(String)
      * @see #hasAttribute(String)
      * @since 1.0
@@ -267,11 +267,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content attribute that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getAttribute(String)
      * @see #hasAttribute(String)
      * @since 1.0
@@ -282,11 +282,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content attribute that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getAttribute(String)
      * @see #hasAttribute(String)
      * @since 1.0
@@ -297,11 +297,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content attribute that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getAttribute(String)
      * @see #hasAttribute(String)
      * @since 1.0
@@ -312,11 +312,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content attribute that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getAttribute(String)
      * @see #hasAttribute(String)
      * @since 1.0
@@ -330,7 +330,7 @@ public class Content implements Cloneable {
      *
      * @param name  the name of the attribute
      * @param value the value of the attribute
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getAttribute(String)
      * @see #hasAttribute(String)
      * @since 1.0
@@ -367,7 +367,7 @@ public class Content implements Cloneable {
      * Retrieves the map of named content attributes.
      *
      * @return the map of named content attributes; or
-     * <p><code>null</code> if no attributes are present
+     * <p>{@code null} if no attributes are present
      * @see #attributes(Map)
      * @see #setAttributes(Map)
      * @see #hasAttributes()
@@ -380,8 +380,8 @@ public class Content implements Cloneable {
     /**
      * Indicates whether named content attributes are present.
      *
-     * @return <code>true</code> if named content attributes are present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if named content attributes are present; or
+     * <p>{@code false} otherwise
      * @see #attributes(Map)
      * @see #setAttributes(Map)
      * @see #getAttributes()
@@ -395,8 +395,8 @@ public class Content implements Cloneable {
      * Indicates whether a specific named content attribute is present.
      *
      * @param name the name of the attribute
-     * @return <code>true</code> if the name content attribute is present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the name content attribute is present; or
+     * <p>{@code false} otherwise
      * @see #getAttribute(String)
      * @since 1.0
      */
@@ -413,7 +413,7 @@ public class Content implements Cloneable {
      *
      * @param name the name of the attribute
      * @return the value of the named content attribute; or
-     * <p><code>null</code> if no such attribute could be found
+     * <p>{@code null} if no such attribute could be found
      * @see #hasAttribute(String)
      * @since 1.0
      */
@@ -435,7 +435,7 @@ public class Content implements Cloneable {
      * result as it's stored in the back-end.
      *
      * @param properties the content properties
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #setProperties(Map)
      * @see #hasProperties()
      * @see #getProperties()
@@ -449,11 +449,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content property that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the property
      * @param value the value of the property
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getProperty(String)
      * @see #hasProperty(String)
      * @since 1.0
@@ -464,11 +464,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content property that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the property
      * @param value the value of the property
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getProperty(String)
      * @see #hasProperty(String)
      * @since 1.0
@@ -479,11 +479,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content property that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the property
      * @param value the value of the property
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getProperty(String)
      * @see #hasProperty(String)
      * @since 1.0
@@ -494,11 +494,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content property that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the property
      * @param value the value of the property
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getProperty(String)
      * @see #hasProperty(String)
      * @since 1.0
@@ -509,11 +509,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content property that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the property
      * @param value the value of the property
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getProperty(String)
      * @see #hasProperty(String)
      * @since 1.0
@@ -524,11 +524,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content property that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the property
      * @param value the value of the property
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getProperty(String)
      * @see #hasProperty(String)
      * @since 1.0
@@ -539,11 +539,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content property that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the property
      * @param value the value of the property
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getProperty(String)
      * @see #hasProperty(String)
      * @since 1.0
@@ -554,11 +554,11 @@ public class Content implements Cloneable {
 
     /**
      * Sets a named content property that will be converted internally to a
-     * <code>String</code> value.
+     * {@code String} value.
      *
      * @param name  the name of the property
      * @param value the value of the property
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getProperty(String)
      * @see #hasProperty(String)
      * @since 1.0
@@ -572,7 +572,7 @@ public class Content implements Cloneable {
      *
      * @param name  the name of the property
      * @param value the value of the property
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #getProperty(String)
      * @see #hasProperty(String)
      * @since 1.0
@@ -608,8 +608,8 @@ public class Content implements Cloneable {
     /**
      * Indicates whether content properties are present
      *
-     * @return <code>true</code> if properties are present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if properties are present; or
+     * <p>{@code false} otherwise
      * @see #properties(Map)
      * @see #setProperties(Map)
      * @see #getProperties()
@@ -623,8 +623,8 @@ public class Content implements Cloneable {
      * Indicates whether a specific named content property is present.
      *
      * @param name the name of the property
-     * @return <code>true</code> if the name content property is present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the name content property is present; or
+     * <p>{@code false} otherwise
      * @see #getProperty(String)
      * @since 1.0
      */
@@ -641,7 +641,7 @@ public class Content implements Cloneable {
      *
      * @param name the name of the property
      * @return the value of the named content property; or
-     * <p><code>null</code> if no such property could be found
+     * <p>{@code null} if no such property could be found
      * @see #hasProperty(String)
      * @since 1.0
      */
@@ -657,7 +657,7 @@ public class Content implements Cloneable {
      * Retrieves the content properties.
      *
      * @return the content properties; or
-     * <p><code>null</code> if no content properties are present
+     * <p>{@code null} if no content properties are present
      * @see #properties(Map)
      * @see #setProperties(Map)
      * @see #hasProperties()
@@ -679,7 +679,7 @@ public class Content implements Cloneable {
      * retrieving it later enhances the speed considerably.
      *
      * @param data the loaded data
-     * @return the current <code>Content</code> instance
+     * @return the current {@code Content} instance
      * @see #setCachedLoadedData(Object)
      * @see #hasCachedLoadedData()
      * @see #getCachedLoadedData()
@@ -707,8 +707,8 @@ public class Content implements Cloneable {
     /**
      * Indicates whether cached loaded content data is present.
      *
-     * @return <code>true</code> if cached loaded content data is present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if cached loaded content data is present; or
+     * <p>{@code false} otherwise
      * @see #cachedLoadedData(Object)
      * @see #setCachedLoadedData(Object)
      * @see #getCachedLoadedData()
@@ -723,7 +723,7 @@ public class Content implements Cloneable {
      * Retrieves the cached loaded content data.
      *
      * @return the cached loaded content data; or
-     * <p><code>null</code> if no loaded content data has been cached
+     * <p>{@code null} if no loaded content data has been cached
      * @see #cachedLoadedData(Object)
      * @see #setCachedLoadedData(Object)
      * @see #hasCachedLoadedData()

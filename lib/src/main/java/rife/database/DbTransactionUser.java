@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * <p>This class has both a default constructor and one that can take a data
  * object. This can be handy when using it as an extending anonymous inner
  * class when you need to use variables inside the inner class that are
- * cumbersome to change to <code>final</code> in the enclosing class.
+ * cumbersome to change to {@code final} in the enclosing class.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see DbQueryManager#inTransaction(TransactionUser)
@@ -41,7 +41,7 @@ public abstract class DbTransactionUser<ResultType, DataType> implements Cloneab
      * Should be overridden if the transaction has to be executed in another
      * isolation level.
      *
-     * @return <code>-1</code> when the active isolation level should be
+     * @return {@code -1} when the active isolation level should be
      * preserved; or
      * <p>a level constant from {@link java.sql.Connection Connection} if the
      * isolation needs to be changed.
@@ -70,9 +70,9 @@ public abstract class DbTransactionUser<ResultType, DataType> implements Cloneab
      * within this class.
      * <p>To catch it you should surround the {@link
      * DbQueryManager#inTransaction(TransactionUser) inTransaction} with a
-     * <code>try-catch</code> block that catching
-     * <code>InnerClassException</code>. The original exception is then
-     * available through <code>getCause()</code> and can for example be
+     * {@code try-catch} block that catching
+     * {@code InnerClassException}. The original exception is then
+     * available through {@code getCause()} and can for example be
      * rethrown.
      *
      * @throws InnerClassException when a checked exception needs to be

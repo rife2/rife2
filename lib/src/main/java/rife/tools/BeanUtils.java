@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
@@ -482,15 +482,15 @@ public final class BeanUtils {
      * Set the value of a bean property from an array of strings.
      *
      * @param propertyName       the name of the property
-     * @param propertyValues     the values that will be set, can be <code>null</code>
+     * @param propertyValues     the values that will be set, can be {@code null}
      * @param propertyNamePrefix the prefix that the propertyName parameter
-     *                           should have, can be <code>null</code>
+     *                           should have, can be {@code null}
      * @param beanProperties     the map of the uppercased bean property names and
      *                           their descriptors
      * @param beanInstance       the bean instance whose property should be updated
      * @param emptyBean          this bean instance will be used to set the value of the
      *                           property in case the propertyValues parameter is empty or null, can be
-     *                           <code>null</code>
+     *                           {@code null}
      * @throws rife.tools.exceptions.BeanUtilsException when an error
      *                                                  occurred while setting the bean property
      * @see #getUppercasedBeanProperties(Class)
@@ -1013,9 +1013,9 @@ public final class BeanUtils {
      * Set the value of a bean property from an uploaded file.
      *
      * @param propertyName       the name of the property
-     * @param propertyFile       the file that will be set, can be <code>null</code>
+     * @param propertyFile       the file that will be set, can be {@code null}
      * @param propertyNamePrefix the prefix that the propertyName parameter
-     *                           should have, can be <code>null</code>
+     *                           should have, can be {@code null}
      * @param beanProperties     the map of the uppercased bean property names and
      *                           their descriptors
      * @param beanInstance       the bean instance whose property should be updated

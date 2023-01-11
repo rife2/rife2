@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.transform;
@@ -24,7 +24,7 @@ import java.util.Map;
 public interface ImageContentTransformer extends ContentTransformer<Image> {
     /**
      * Transforms the {@link java.awt.Image image} content data and returns
-     * the transformed data as an <code>Image</code>.
+     * the transformed data as an {@code Image}.
      *
      * @param data       the image that has to be transformed
      * @param attributes a map of content attributes that can be used to

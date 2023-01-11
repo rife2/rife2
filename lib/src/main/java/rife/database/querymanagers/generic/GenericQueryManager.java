@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com) and
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com) and
  * JR Boyens <gnu-jrb[remove] at gmx dot net>
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
@@ -13,7 +13,7 @@ import rife.validation.ValidationContext;
 import java.util.List;
 
 /**
- * A <code>GenericQueryManager</code> provides features that make it easy to
+ * A {@code GenericQueryManager} provides features that make it easy to
  * persist and retrieve beans in a database with single method calls. An
  * instance of the manager can be obtained by using the {@link
  * GenericQueryManagerFactory} class.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -28,7 +28,7 @@ import javax.sql.DataSource;
  * initialized when a connection is obtained for the first time. The
  * instantiation only stores the connection parameters.
  * <p>
- * A <code>Datasource</code> also defines the type of database that is used for
+ * A {@code Datasource} also defines the type of database that is used for
  * all database-independent logic such as sql to java and java to sql type
  * mappings, query builders, database-based authentication, database-based
  * scheduling, ... The key that identifies a supported type is the class name of
@@ -72,9 +72,9 @@ public class Datasource implements Cloneable {
     private DataSource dataSource_ = null;
 
     /**
-     * Instantiates a new <code>Datasource</code> object with no connection
+     * Instantiates a new {@code Datasource} object with no connection
      * information. The setters need to be used afterwards to provide each
-     * required parameter before the <code>Datasource</code> can be used.
+     * required parameter before the {@code Datasource} can be used.
      *
      * @see #setDriver(String)
      * @see #setUrl(String)
@@ -88,7 +88,7 @@ public class Datasource implements Cloneable {
     }
 
     /**
-     * Instantiates a new <code>Datasource</code> object with all the
+     * Instantiates a new {@code Datasource} object with all the
      * connection parameters that are required.
      *
      * @param driver   the fully-qualified classname of the jdbc driver that will
@@ -97,7 +97,7 @@ public class Datasource implements Cloneable {
      *                 connection will be made, this is entirely driver-dependent
      * @param user     the user that will be used to connect to the database
      * @param password the password that will be used to connect to the database
-     * @param poolSize the size of the connection pool, <code>0</code> means
+     * @param poolSize the size of the connection pool, {@code 0} means
      *                 that the connections will not be pooled
      * @since 1.0
      */
@@ -115,16 +115,16 @@ public class Datasource implements Cloneable {
     }
 
     /**
-     * Instantiates a new <code>Datasource</code> object from a standard
-     * <code>javax.sql.DataSource</code>.
+     * Instantiates a new {@code Datasource} object from a standard
+     * {@code javax.sql.DataSource}.
      * <p>
      * The driver will be detected from the connection that is provided by this
-     * <code>DataSource</code>. If the driver couldn't be detected, an exception
+     * {@code DataSource}. If the driver couldn't be detected, an exception
      * will be thrown upon connect.
      *
      * @param dataSource the standard datasource that will be used to obtain the
      *                   connection
-     * @param poolSize   the size of the connection pool, <code>0</code> means
+     * @param poolSize   the size of the connection pool, {@code 0} means
      *                   that the connections will not be pooled
      * @since 1.0
      */
@@ -136,17 +136,17 @@ public class Datasource implements Cloneable {
     }
 
     /**
-     * Instantiates a new <code>Datasource</code> object from a standard
-     * <code>javax.sql.DataSource</code>.
+     * Instantiates a new {@code Datasource} object from a standard
+     * {@code javax.sql.DataSource}.
      *
      * @param dataSource the standard datasource that will be used to obtain the
      *                   connection
      * @param driver     the fully-qualified classname of the jdbc driver that will
      *                   be used to provide an identifier for the database abstraction functionalities,
-     *                   <code>null</code> will let RIFE try to figure it out by itself
+     *                   {@code null} will let RIFE try to figure it out by itself
      * @param user       the user that will be used to connect to the database
      * @param password   the password that will be used to connect to the database
-     * @param poolSize   the size of the connection pool, <code>0</code> means
+     * @param poolSize   the size of the connection pool, {@code 0} means
      *                   that the connections will not be pooled
      * @since 1.0
      */
@@ -163,9 +163,9 @@ public class Datasource implements Cloneable {
 
     /**
      * Creates a new connection by using all the parameters that have been
-     * defined in the <code>Datasource</code>.
+     * defined in the {@code Datasource}.
      *
-     * @return the newly created <code>DbConnection</code> instance
+     * @return the newly created {@code DbConnection} instance
      * @throws DatabaseException when an error occured during the creation of
      *                           the connection
      * @since 1.0
@@ -236,10 +236,10 @@ public class Datasource implements Cloneable {
 
     /**
      * Retrieves a free database connection. If no connection pool is used, a
-     * new <code>DbConnection</code> will always be created, otherwise the first
+     * new {@code DbConnection} will always be created, otherwise the first
      * available connection in the pool will be returned.
      *
-     * @return a free <code>DbConnection</code> instance which can be used to
+     * @return a free {@code DbConnection} instance which can be used to
      * create an execute statements
      * @throws DatabaseException when errors occured during the creation of a
      *                           new connection or during the obtainance of a connection from the pool
@@ -252,11 +252,11 @@ public class Datasource implements Cloneable {
 
     /**
      * Retrieves the fully qualified class name of the jdbc driver that's used
-     * by this <code>Datasource</code>.
+     * by this {@code Datasource}.
      *
-     * @return a <code>String</code> with the name of the jdbc driver; or
+     * @return a {@code String} with the name of the jdbc driver; or
      * <p>
-     * <code>null</code> if the driver hasn't been set
+     * {@code null} if the driver hasn't been set
      * @see #setDriver(String)
      * @see #getAliasedDriver()
      * @since 1.0
@@ -273,13 +273,13 @@ public class Datasource implements Cloneable {
 
     /**
      * Retrieves the fully qualified class name of the jdbc driver that's used
-     * by this <code>Datasource</code>. Instead of straight retrieval of the
+     * by this {@code Datasource}. Instead of straight retrieval of the
      * internal value, it looks for jdbc driver aliases and changes the driver
      * classname if it's not supported by RIFE, but its alias is.
      *
-     * @return a <code>String</code> with the name of the jdbc driver; or
+     * @return a {@code String} with the name of the jdbc driver; or
      * <p>
-     * <code>null</code> if the driver hasn't been set
+     * {@code null} if the driver hasn't been set
      * @see #getDriver()
      * @see #setDriver(String)
      * @since 1.0
@@ -308,7 +308,7 @@ public class Datasource implements Cloneable {
      * If the class name can't be resolved, an exception is thrown during the
      * creation of the first connection.
      *
-     * @param driver a <code>String</code> with the fully qualified class name
+     * @param driver a {@code String} with the fully qualified class name
      *               of the jdbc driver that will be used
      * @see #getDriver()
      * @since 1.0
@@ -327,9 +327,9 @@ public class Datasource implements Cloneable {
      * Retrieves the standard datasource that is used by this RIFE datasource
      * to obtain a database connection.
      *
-     * @return a standard <code>DataSource</code>; or
+     * @return a standard {@code DataSource}; or
      * <p>
-     * <code>null</code> if the standard datasource hasn't been set
+     * {@code null} if the standard datasource hasn't been set
      * @see #setDataSource(DataSource)
      * @since 1.0
      */
@@ -340,7 +340,7 @@ public class Datasource implements Cloneable {
     /**
      * Sets the standard datasource that will be used to connect to the database.
      *
-     * @param dataSource a standard <code>DataSource</code> that will be used
+     * @param dataSource a standard {@code DataSource} that will be used
      *                   by this RIFE datasource to obtain a database connection.
      * @see #getDataSource()
      * @since 1.0
@@ -350,11 +350,11 @@ public class Datasource implements Cloneable {
     }
 
     /**
-     * Retrieves the connection url that's used by this <code>Datasource</code>.
+     * Retrieves the connection url that's used by this {@code Datasource}.
      *
-     * @return a <code>String</code> with the connection url; or
+     * @return a {@code String} with the connection url; or
      * <p>
-     * <code>null</code> if the url hasn't been set
+     * {@code null} if the url hasn't been set
      * @see #setUrl(String)
      * @since 1.0
      */
@@ -367,7 +367,7 @@ public class Datasource implements Cloneable {
      * It's not possible to change the url after a connection has been obtained
      * from a pooled datasource.
      *
-     * @param url a <code>String</code> with the connection url that will be
+     * @param url a {@code String} with the connection url that will be
      *            used
      * @see #getUrl()
      * @since 1.0
@@ -382,10 +382,10 @@ public class Datasource implements Cloneable {
     }
 
     /**
-     * Retrieves the user that's used by this <code>Datasource</code>.
+     * Retrieves the user that's used by this {@code Datasource}.
      *
-     * @return a <code>String</code> with the user; or
-     * <code>null</code> if the user hasn't been set
+     * @return a {@code String} with the user; or
+     * {@code null} if the user hasn't been set
      * @see #setUser(String)
      * @since 1.0
      */
@@ -398,7 +398,7 @@ public class Datasource implements Cloneable {
      * It's not possible to change the user after a connection has been obtained
      * from a pooled datasource.
      *
-     * @param user a <code>String</code> with the user that will be used
+     * @param user a {@code String} with the user that will be used
      * @see #getUser()
      * @since 1.0
      */
@@ -410,10 +410,10 @@ public class Datasource implements Cloneable {
     }
 
     /**
-     * Retrieves the password that's used by this <code>Datasource</code>.
+     * Retrieves the password that's used by this {@code Datasource}.
      *
-     * @return a <code>String</code> with the password; or
-     * <code>null</code> if the password hasn't been set
+     * @return a {@code String} with the password; or
+     * {@code null} if the password hasn't been set
      * @see #setPassword(String)
      * @since 1.0
      */
@@ -426,7 +426,7 @@ public class Datasource implements Cloneable {
      * It's not possible to change the password after a connection has been
      * obtained from a pooled datasource.
      *
-     * @param password a <code>String</code> with the password that will be used
+     * @param password a {@code String} with the password that will be used
      * @see #getPassword()
      * @since 1.0
      */
@@ -439,10 +439,10 @@ public class Datasource implements Cloneable {
 
     /**
      * Retrieves the size of the pool that's used by this
-     * <code>Datasource</code>.
+     * {@code Datasource}.
      *
-     * @return a positive <code>int</code> with the size of the pool; or
-     * <code>0</code> if no pool is being used
+     * @return a positive {@code int} with the size of the pool; or
+     * {@code 0} if no pool is being used
      * @see #isPooled()
      * @see #setPoolSize(int)
      * @since 1.0
@@ -452,12 +452,12 @@ public class Datasource implements Cloneable {
     }
 
     /**
-     * Indicates whether the <code>Datasource</code> uses a connection pool or
+     * Indicates whether the {@code Datasource} uses a connection pool or
      * not
      *
-     * @return <code>true</code> if a pool is being used by this
-     * <code>Datasource</code>; or
-     * <code>false</code> otherwise
+     * @return {@code true} if a pool is being used by this
+     * {@code Datasource}; or
+     * {@code false} otherwise
      * @see #getPoolSize()
      * @see #setPoolSize(int)
      * @since 1.0
@@ -470,9 +470,9 @@ public class Datasource implements Cloneable {
      * Sets the size of the connection pool that will be used to connect to the
      * database.
      *
-     * @param poolSize a positive <code>int</code> with the size of the pool,
-     *                 providing <code>0</code> will disable the use of a connection pool for
-     *                 this <code>Datasource</code>.
+     * @param poolSize a positive {@code int} with the size of the pool,
+     *                 providing {@code 0} will disable the use of a connection pool for
+     *                 this {@code Datasource}.
      * @see #getPoolSize()
      * @see #isPooled()
      * @since 1.0
@@ -487,7 +487,7 @@ public class Datasource implements Cloneable {
      * Retrieves the sql to java and java to sql type mapping logic that
      * corresponds to the provide driver class name.
      *
-     * @return a <code>SqlConversion</code> instance that is able to perform
+     * @return a {@code SqlConversion} instance that is able to perform
      * the required type conversions for the provided jdbc driver
      * @throws UnsupportedJdbcDriverException when the provided jdbc isn't
      *                                        supported
@@ -509,10 +509,10 @@ public class Datasource implements Cloneable {
     }
 
     /**
-     * Retrieves a <code>CapabilitiesCompensator</code> instance that is able to
+     * Retrieves a {@code CapabilitiesCompensator} instance that is able to
      * compensate for certain missing database features
      *
-     * @return the requested <code>CapabilitiesCompensator</code> instance
+     * @return the requested {@code CapabilitiesCompensator} instance
      * @throws UnsupportedJdbcDriverException when the provided jdbc isn't
      *                                        supported
      * @since 1.0
@@ -533,12 +533,12 @@ public class Datasource implements Cloneable {
     }
 
     /**
-     * Returns a hash code value for the <code>Datasource</code>. This method is
+     * Returns a hash code value for the {@code Datasource}. This method is
      * supported for the benefit of hashtables such as those provided by
-     * <code>java.util.Hashtable</code>.
+     * {@code java.util.Hashtable}.
      *
-     * @return an <code>int</code> with the hash code value for this
-     * <code>Datasource</code>.
+     * @return an {@code int} with the hash code value for this
+     * {@code Datasource}.
      * @see #equals(Object)
      * @since 1.0
      */
@@ -557,9 +557,9 @@ public class Datasource implements Cloneable {
      * pool is not used for the comparison.
      *
      * @param object the reference object with which to compare.
-     * @return <code>true</code> if this object is the same as the object
+     * @return {@code true} if this object is the same as the object
      * argument; or
-     * <code>false</code> otherwise
+     * {@code false} otherwise
      * @see #hashCode()
      * @since 1.0
      */
@@ -656,7 +656,7 @@ public class Datasource implements Cloneable {
      * Retrieves the instance of the connection pool that is provided by this
      * dtaasource.
      *
-     * @return the requested instance of <code>ConnectionPool</code>
+     * @return the requested instance of {@code ConnectionPool}
      */
     public ConnectionPool getPool() {
         return connectionPool_;

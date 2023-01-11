@@ -1,12 +1,12 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
 
 /**
  * This interface can optionally be implemented by a class implementing the
- * <code>MetaDataMerged</code> interface.
+ * {@code MetaDataMerged} interface.
  * <p>By implementing the methods here, each metadata instance will be made
  * aware of the bean that has been associated with.
  *

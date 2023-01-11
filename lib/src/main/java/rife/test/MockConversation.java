@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.test;
@@ -41,7 +41,7 @@ public class MockConversation {
     private String contextPath_ = "";
 
     /**
-     * Creates a new <code>MockConversation</code> instance for a particular
+     * Creates a new {@code MockConversation} instance for a particular
      * site.
      *
      * @param site the site structure that will be tested
@@ -62,7 +62,7 @@ public class MockConversation {
      * @param url the url that should be tested
      * @return the response of the request as a {@link MockResponse} instance;
      * or
-     * <p><code>null</code> if the scheme, hostname and port don't correspond
+     * <p>{@code null} if the scheme, hostname and port don't correspond
      * to the conversation setup
      * @see #doRequest(String, MockRequest)
      * @since 1.0
@@ -85,7 +85,7 @@ public class MockConversation {
      * @param request the request that will be used
      * @return the response of the request as a {@link MockResponse} instance;
      * or
-     * <p><code>null</code> if the scheme, hostname and port don't correspond
+     * <p>{@code null} if the scheme, hostname and port don't correspond
      * to the conversation setup
      * @see #doRequest(String)
      * @since 1.0
@@ -169,7 +169,7 @@ public class MockConversation {
      * Sets the scheme that will be used by this conversation.
      *
      * @param scheme the scheme
-     * @return this <code>MockConversation</code> instance
+     * @return this {@code MockConversation} instance
      * @see #getScheme
      * @see #setScheme
      * @since 1.0
@@ -208,7 +208,7 @@ public class MockConversation {
      * Sets the server name that will be used by this conversation.
      *
      * @param serverName the server name
-     * @return this <code>MockConversation</code> instance
+     * @return this {@code MockConversation} instance
      * @see #getServerName
      * @see #setServerName
      * @since 1.0
@@ -247,7 +247,7 @@ public class MockConversation {
      * Sets the server port that will be used by this conversation.
      *
      * @param serverPort the server port
-     * @return this <code>MockConversation</code> instance
+     * @return this {@code MockConversation} instance
      * @see #getServerPort
      * @see #setServerPort
      * @since 1.0
@@ -286,7 +286,7 @@ public class MockConversation {
      * Sets the context path that will be used by this conversation.
      *
      * @param contextPath the context path
-     * @return this <code>MockConversation</code> instance
+     * @return this {@code MockConversation} instance
      * @see #getContextPath
      * @see #setContextPath
      * @since 1.0
@@ -300,7 +300,7 @@ public class MockConversation {
     /**
      * Returns the properties uses by this conversation.
      *
-     * @return the instance of <code>HierarchicalProperties</code> that is used
+     * @return the instance of {@code HierarchicalProperties} that is used
      * by this conversation
      * @since 1.0
      */
@@ -312,8 +312,8 @@ public class MockConversation {
      * Checks whether a cookie is present.
      *
      * @param name the name of the cookie.
-     * @return <code>true</code> if the cookie was present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the cookie was present; or
+     * <p>{@code false} otherwise
      * @see #getCookie(String)
      * @see #getCookieValue(String)
      * @see #getCookies()
@@ -339,7 +339,7 @@ public class MockConversation {
      *
      * @param name the name of the cookie.
      * @return the instance of the cookie; or
-     * <p><code>null</code> if no such cookie is present
+     * <p>{@code null} if no such cookie is present
      * @see #hasCookie(String)
      * @see #getCookieValue(String)
      * @see #getCookies()
@@ -365,7 +365,7 @@ public class MockConversation {
      *
      * @param name the name of the cookie.
      * @return the value of the cookie; or
-     * <p><code>null</code> if no such cookie is present
+     * <p>{@code null} if no such cookie is present
      * @see #hasCookie(String)
      * @see #getCookie(String)
      * @see #getCookies()
@@ -389,7 +389,7 @@ public class MockConversation {
      * Retrieves all cookies.
      *
      * @return an array with all the cookies; or
-     * <p><code>null</code> if no cookies are present
+     * <p>{@code null} if no cookies are present
      * @see #hasCookie(String)
      * @see #getCookie(String)
      * @see #getCookieValue(String)
@@ -453,7 +453,7 @@ public class MockConversation {
      * Add a cookie.
      *
      * @param cookie the cookie instance that will be added
-     * @return this <code>MockConversation</code> instance
+     * @return this {@code MockConversation} instance
      * @see #hasCookie(String)
      * @see #getCookie(String)
      * @see #getCookieValue(String)
@@ -474,7 +474,7 @@ public class MockConversation {
      *
      * @param name  the name of the cookie
      * @param value the value of the cookie
-     * @return this <code>MockConversation</code> instance
+     * @return this {@code MockConversation} instance
      * @see #hasCookie(String)
      * @see #getCookie(String)
      * @see #getCookieValue(String)

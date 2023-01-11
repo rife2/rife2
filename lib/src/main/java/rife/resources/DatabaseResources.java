@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.resources;
@@ -21,14 +21,14 @@ import java.net.URL;
 import java.util.logging.Logger;
 
 /**
- * This class offers <code>ResourceFinder</code> and <code>ResourceWriter</code>
+ * This class offers {@code ResourceFinder} and {@code ResourceWriter}
  * capabilities for resources that are stored in a database. The relevant database
- * is specified through a <code>Datasource</code> instance at construction.
+ * is specified through a {@code Datasource} instance at construction.
  * <p>
- * While the table can be configured through the <code>TABLE_RESOURCES</code>
+ * While the table can be configured through the {@code TABLE_RESOURCES}
  * configuration setting, the structure of the table is fixed. It can be
- * installed with the <code>install()</code> method and removed with the
- * <code>remove()</code> method. The latter will implicitly erase all the
+ * installed with the {@code install()} method and removed with the
+ * {@code remove()} method. The latter will implicitly erase all the
  * resources that have been stored in the database table.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -45,7 +45,7 @@ public abstract class DatabaseResources extends DbQueryManager implements Resour
     /**
      * Creates a new instance according to the provided datasource.
      *
-     * @param datasource the <code>Datasource</code> instance that defines the
+     * @param datasource the {@code Datasource} instance that defines the
      *                   database that will be used as resources storage.
      * @since 1.0
      */

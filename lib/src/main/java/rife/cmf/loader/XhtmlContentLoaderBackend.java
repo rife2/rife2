@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.loader;
@@ -23,11 +23,11 @@ public abstract class XhtmlContentLoaderBackend implements ContentLoaderBackend<
      * Loads the data from a string
      *
      * @param data     the raw data that has to be loaded
-     * @param fragment <code>true</code> if the raw data is a fragment; or
-     *                 <p><code>false</code> if the raw data is a complete document or file
+     * @param fragment {@code true} if the raw data is a fragment; or
+     *                 <p>{@code false} if the raw data is a complete document or file
      * @param errors   a set to which possible error messages will be added
-     * @return an instance of the xhtml as a <code>String</code>; or
-     * <p><code>null</code> if the raw data couldn't be loaded
+     * @return an instance of the xhtml as a {@code String}; or
+     * <p>{@code null} if the raw data couldn't be loaded
      */
     protected abstract String loadFromString(String data, boolean fragment, Set<String> errors)
     throws ContentManagerException;

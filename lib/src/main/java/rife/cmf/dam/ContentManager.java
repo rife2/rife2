@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.dam;
@@ -12,15 +12,15 @@ import rife.engine.Context;
 import rife.engine.Route;
 
 /**
- * A <code>ContentManager</code> manages content that is stored in a back-end
+ * A {@code ContentManager} manages content that is stored in a back-end
  * data store.
  * <p>Content is isolated in repositories that should have unique names. The
  * installation of a content manager creates an initial default repository. If
  * others are needed, they have to be created explicitly.
- * <p>All content is identified by a unique <code>location</code>. The
+ * <p>All content is identified by a unique {@code location}. The
  * location is formatted like this:
  * <pre>repository:path</pre>
- * <p>If the <code>repository:</code> prefix is omitted, the content will be
+ * <p>If the {@code repository:} prefix is omitted, the content will be
  * stored in the default repository (see {@link
  * rife.cmf.ContentRepository#DEFAULT ContentRepository.DEFAULT}).
  * <p>The path should start with a slash that makes it 'absolute', this is
@@ -33,8 +33,8 @@ public interface ContentManager {
     /**
      * Installs a content manager.
      *
-     * @return <code>true</code> if the installation was successful; or
-     * <p><code>false</code> if it wasn't.
+     * @return {@code true} if the installation was successful; or
+     * <p>{@code false} if it wasn't.
      * @throws ContentManagerException if an unexpected error occurred
      * @since 1.0
      */
@@ -44,8 +44,8 @@ public interface ContentManager {
     /**
      * Removes a content manager.
      *
-     * @return <code>true</code> if the removal was successful; or
-     * <p><code>false</code> if it wasn't.
+     * @return {@code true} if the removal was successful; or
+     * <p>{@code false} if it wasn't.
      * @throws ContentManagerException if an unexpected error occurred
      * @since 1.0
      */
@@ -56,8 +56,8 @@ public interface ContentManager {
      * Creates a new repository.
      *
      * @param name the name of the repository to create
-     * @return <code>true</code> if the creation was successful; or
-     * <p><code>false</code> if it wasn't.
+     * @return {@code true} if the creation was successful; or
+     * <p>{@code false} if it wasn't.
      * @throws ContentManagerException if an unexpected error occurred
      * @since 1.0
      */
@@ -68,8 +68,8 @@ public interface ContentManager {
      * Checks if the content manager contains a certain repository.
      *
      * @param name the name of the repository to check
-     * @return <code>true</code> if the repository exists; or
-     * <p><code>false</code> if it doesn't.
+     * @return {@code true} if the repository exists; or
+     * <p>{@code false} if it doesn't.
      * @throws ContentManagerException if an unexpected error occurred
      * @since 1.4
      */
@@ -85,9 +85,9 @@ public interface ContentManager {
      * @param location    the location where the content has to be stored.
      * @param content     the content that has to be stored
      * @param transformer a transformer that will modify the content data; or
-     *                    <p><code>null</code> if the content data should stay intact
-     * @return <code>true</code> if the storing was successfully; or
-     * <p><code>false</code> if it wasn't.
+     *                    <p>{@code null} if the content data should stay intact
+     * @return {@code true} if the storing was successfully; or
+     * <p>{@code false} if it wasn't.
      * @throws ContentManagerException if an unexpected error occurred
      * @since 1.0
      */
@@ -99,8 +99,8 @@ public interface ContentManager {
      * <p>This will delete all versions of the content at that location.
      *
      * @param location the location where the content has to be deleted
-     * @return <code>true</code> if the deletion was successfully; or
-     * <p><code>false</code> if it wasn't.
+     * @return {@code true} if the deletion was successfully; or
+     * <p>{@code false} if it wasn't.
      * @throws ContentManagerException if an unexpected error occurred
      * @since 1.0
      */
@@ -145,8 +145,8 @@ public interface ContentManager {
      * Checks whether content data is available at a certain location.
      *
      * @param location the location that has to be checked
-     * @return <code>true</code> if content data is available; or
-     * <p><code>false</code> if it isn't.
+     * @return {@code true} if content data is available; or
+     * <p>{@code false} if it isn't.
      * @throws ContentManagerException if an expected error occurred
      * @since 1.0
      */
@@ -157,8 +157,8 @@ public interface ContentManager {
      * Retrieves the content info from a certain location.
      *
      * @param location the location whose content info has to be retrieved
-     * @return an instance of <code>ContentInfo</code>; or
-     * <p><code>null</code> if no content is present at the location
+     * @return an instance of {@code ContentInfo}; or
+     * <p>{@code null} if no content is present at the location
      * @throws ContentManagerException if an expected error occurred
      * @since 1.0
      */

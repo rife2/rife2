@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.loader;
@@ -15,7 +15,7 @@ import java.util.Set;
  * <p>Each content loader has a collection of back-ends that are able to
  * interpret the raw data. All that should be done by an extending class, is
  * implement the {@link #getBackends() getBackends} method and return a
- * <code>List</code> of supported loader back-ends.
+ * {@code List} of supported loader back-ends.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see ContentLoaderBackend
@@ -26,16 +26,16 @@ public abstract class ContentLoader<InternalType> {
      * Loads raw data and returns the internal type after successful loading
      * and handling.
      * <p>Should any errors occur in the back-ends, then they will be added as
-     * text messages to the <code>errors</code> collection.
+     * text messages to the {@code errors} collection.
      *
      * @param data     the raw data that has to be loaded
-     * @param fragment <code>true</code> if the raw data is a fragment; or
-     *                 <p><code>false</code> if the raw data is a complete document or file
+     * @param fragment {@code true} if the raw data is a fragment; or
+     *                 <p>{@code false} if the raw data is a complete document or file
      * @param errors   a set to which possible error messages will be added
      * @return an instance of the internal type that is common for all loaders
-     * for the handled content type, for instance <code>java.awt.Image</code>
+     * for the handled content type, for instance {@code java.awt.Image}
      * for loaders that handle images; or
-     * <p><code>null</code> if the raw data couldn't be loaded
+     * <p>{@code null} if the raw data couldn't be loaded
      * @since 1.0
      */
     public InternalType load(Object data, boolean fragment, Set<String> errors)

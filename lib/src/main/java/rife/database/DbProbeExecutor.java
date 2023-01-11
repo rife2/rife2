@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Steven Grimm (koreth[remove] at midwinter dot com)
+ * Copyright 2001-2023 Steven Grimm (koreth[remove] at midwinter dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -15,10 +15,10 @@ import rife.scheduler.Task;
  *
  * <p>There are two optional parameters.
  * <dl>
- * <dt><code>datasource</code></dt>
+ * <dt>{@code datasource}</dt>
  * <dd>The name of the Datasource to probe. If not specified, the
  * default is "datasource".</dd>
- * <dt><code>query</code></dt>
+ * <dt>{@code query}</dt>
  * <dd>The dummy query to send. If not specified, the default is
  * "select 1".</dd>
  * </dl>

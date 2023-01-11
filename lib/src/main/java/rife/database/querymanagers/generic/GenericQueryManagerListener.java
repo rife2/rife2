@@ -1,16 +1,16 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.querymanagers.generic;
 
 /**
- * The methods of a <code>GenericQueryManagerListener</code> will be executed
+ * The methods of a {@code GenericQueryManagerListener} will be executed
  * as the corresponding actions are successfully executed through the
- * <code>GenericQueryManager</code> that this listener is registered with.
- * <p>The difference with <code>Callbacks</code> is that listeners are
- * associated with a <code>GenericQueryManager</code> and
- * <code>Callbacks</code> are associated with your domain model. Listeners
+ * {@code GenericQueryManager} that this listener is registered with.
+ * <p>The difference with {@code Callbacks} is that listeners are
+ * associated with a {@code GenericQueryManager} and
+ * {@code Callbacks} are associated with your domain model. Listeners
  * are also only called as a notification mechanisms, they don't allow you to
  * intervene in the execution flow. Listeners are called before 'after'
  * callbacks.

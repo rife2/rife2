@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.resources;
@@ -20,7 +20,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 
 /**
- * This class offers <code>ResourceFinder</code> capabilities for resources that
+ * This class offers {@code ResourceFinder} capabilities for resources that
  * are available through a collection of directories.
  * <p>
  * The resources are looked up in the same order as the order in which the

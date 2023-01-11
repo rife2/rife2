@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler.taskmanagers;
@@ -16,12 +16,12 @@ import rife.scheduler.taskmanagers.exceptions.ConcludeTaskErrorException;
 import rife.scheduler.taskmanagers.exceptions.RescheduleTaskErrorException;
 
 public class MemoryTasks implements TaskManager {
+    private final Map<Integer, Task> taskMapping_;
     private Scheduler scheduler_ = null;
-    private Map<Integer, Task> taskMapping_ = null;
     private int taskIdSequence_ = 0;
 
     public MemoryTasks() {
-        taskMapping_ = new HashMap<Integer, Task>();
+        taskMapping_ = new HashMap<>();
     }
 
     public void setScheduler(Scheduler scheduler) {
@@ -37,8 +37,11 @@ public class MemoryTasks implements TaskManager {
         if (null == task) throw new IllegalArgumentException("task can't be null.");
 
         synchronized (this) {
-            // FIXME: check for integer overflow
-            var task_id = taskIdSequence_++;
+            var task_id = taskIdSequence_;
+            // check for overflow and reset to 0
+            if (++taskIdSequence_ < 0) {
+                taskIdSequence_ = 0;
+            }
 
             task.setId(task_id);
             taskMapping_.put(task_id, task);
@@ -118,11 +121,7 @@ public class MemoryTasks implements TaskManager {
         if (id < 0) throw new IllegalArgumentException("the task id can't be negative.");
 
         synchronized (this) {
-            if (null == taskMapping_.remove(id)) {
-                return false;
-            }
-
-            return true;
+            return null != taskMapping_.remove(id);
         }
     }
 
@@ -133,7 +132,7 @@ public class MemoryTasks implements TaskManager {
 
         var result = false;
 
-        Task task_tmp = null;
+        Task task_tmp;
         try {
             task_tmp = task.clone();
             task_tmp.setPlanned(newPlanned);

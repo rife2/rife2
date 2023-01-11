@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.test;
@@ -25,7 +25,7 @@ public class MockFileUpload {
     private String contentType_ = "text/plain";
 
     /**
-     * Creates a new file upload simulation based on a <code>File</code>
+     * Creates a new file upload simulation based on a {@code File}
      * object.
      * <p>The content type will be guessed from the file extension. The
      * extension to mime-type mapping is retrieved from {@link
@@ -42,7 +42,7 @@ public class MockFileUpload {
     }
 
     /**
-     * Creates a new file upload simulation based on a <code>File</code>
+     * Creates a new file upload simulation based on a {@code File}
      * object.
      *
      * @param file        the file that will be uploaded
@@ -62,7 +62,7 @@ public class MockFileUpload {
 
     /**
      * Creates a new file upload simulation based on an
-     * <code>InputStream</code>.
+     * {@code InputStream}.
      *
      * @param fileName    the name of file that will be uploaded
      * @param inputStream the input stream that will be read to provide the
@@ -101,7 +101,7 @@ public class MockFileUpload {
     /**
      * Returns the content type associated with this file upload simulation.
      * <p>If no content type has been provided, and it could not be detected
-     * automatically, then it defaults to <code>text/plain</code>.
+     * automatically, then it defaults to {@code text/plain}.
      *
      * @return the content type
      * @since 1.0

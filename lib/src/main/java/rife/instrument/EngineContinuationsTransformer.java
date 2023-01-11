@@ -1,11 +1,9 @@
 /*
- * Copyright 2001-2008 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
- * $Id$
  */
 package rife.instrument;
 
-import rife.continuations.instrument.ContinuationDebug;
 import rife.continuations.instrument.ContinuationsTransformer;
 import rife.engine.EngineContinuationConfigInstrument;
 

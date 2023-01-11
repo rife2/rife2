@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -11,7 +11,7 @@ package rife.database;
  * <p>This class has both a default constructor and one that can take a data
  * object. This can be handy when using it as an extending anonymous inner
  * class when you need to use variables inside the inner class that are
- * cumbersome to change to <code>final</code> in the enclosing class.
+ * cumbersome to change to {@code final} in the enclosing class.
  *
  * @author JR Boyens (jboyens[remove] at uwyn dot com)
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -50,7 +50,7 @@ public abstract class DbConnectionUser<ResultType, DataType> implements Cloneabl
      * Retrieve the data object that was provided to the constructor.
      *
      * @return the provided data object; or
-     * <p><code>null</code> if no data object was provided
+     * <p>{@code null} if no data object was provided
      * @since 1.0
      */
     public DataType getData() {
@@ -62,9 +62,9 @@ public abstract class DbConnectionUser<ResultType, DataType> implements Cloneabl
      * from within this class.
      * <p>To catch it you should surround the {@link
      * DbQueryManager#reserveConnection(DbConnectionUser)
-     * reserveConnection} with a <code>try-catch</code> block that catches
-     * <code>InnerClassException</code>. The original exception is then
-     * available through <code>getCause()</code> and can for example be
+     * reserveConnection} with a {@code try-catch} block that catches
+     * {@code InnerClassException}. The original exception is then
+     * available through {@code getCause()} and can for example be
      * rethrown.
      *
      * @param exception the exception to be thrown

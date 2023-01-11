@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.ioc;
@@ -21,7 +21,7 @@ public interface PropertyValue {
      * Retrieves a property value.
      *
      * @return the requested property value; or
-     * <p><code>null</code> if the property value couldn't be found
+     * <p>{@code null} if the property value couldn't be found
      * @throws PropertyValueException When something went wrong during the
      *                                retrieval of the property value.
      * @since 1.0
@@ -33,7 +33,7 @@ public interface PropertyValue {
      * Retrieves a string representation of the property value.
      *
      * @return the requested string representation of the property value; or
-     * <p><code>null</code> if the property value couldn't be found
+     * <p>{@code null} if the property value couldn't be found
      * @throws PropertyValueException When something went wrong during the
      *                                retrieval of the property value.
      * @since 1.0
@@ -49,9 +49,9 @@ public interface PropertyValue {
      * several property values together as one text result of only use one and
      * discard all other negligible ones.
      *
-     * @return <code>true</code> if the value is negligible in a textual
+     * @return {@code true} if the value is negligible in a textual
      * context; or
-     * <p><code>false</code> otherwise
+     * <p>{@code false} otherwise
      * @since 1.0
      */
     boolean isNegligible();
@@ -60,8 +60,8 @@ public interface PropertyValue {
      * Indicates whether the value is statically fixed an not dynamically
      * retrieved at runtime.
      *
-     * @return <code>true</code> if the value is static; or
-     * <p><code>false</code> if the value is dynamically retrieved at runtime
+     * @return {@code true} if the value is static; or
+     * <p>{@code false} if the value is dynamically retrieved at runtime
      * @since 1.0
      */
     boolean isStatic();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf;
@@ -19,7 +19,7 @@ public class ContentRepository extends Validation {
     private String name_ = null;
 
     /**
-     * Instantiates a new <code>ContentRepository</code> instance.
+     * Instantiates a new {@code ContentRepository} instance.
      *
      * @since 1.0
      */
@@ -38,7 +38,7 @@ public class ContentRepository extends Validation {
      * Sets the name of the content repository.
      *
      * @param name the name
-     * @return the current <code>ContentRepository</code> instance
+     * @return the current {@code ContentRepository} instance
      * @see #setName(String)
      * @see #getName()
      * @since 1.0
@@ -64,7 +64,7 @@ public class ContentRepository extends Validation {
     /**
      * Retrieves the name of the content repository.
      *
-     * @return <code>null</code> if the stored <code>Content</code> instance
+     * @return {@code null} if the stored {@code Content} instance
      * has no name; or
      * <p>the name of the content
      * @see #name(String)

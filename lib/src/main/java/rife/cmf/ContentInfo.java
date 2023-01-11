@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf;
@@ -33,7 +33,7 @@ public class ContentInfo extends Validation {
     private Map<String, String> mProperties = null;
 
     /**
-     * Instantiates a new <code>ContentInfo</code> instance.
+     * Instantiates a new {@code ContentInfo} instance.
      */
     public ContentInfo() {
     }
@@ -65,9 +65,9 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Sets the path of the stored <code>Content</code> instance.
+     * Sets the path of the stored {@code Content} instance.
      * <p>The path has to be unique and will be used to retrieve this
-     * particular <code>Content</code>.
+     * particular {@code Content}.
      *
      * @param path the absolute and unique path
      * @see #getPath()
@@ -78,9 +78,9 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Retrieves the path of the stored <code>Content</code> instance.
+     * Retrieves the path of the stored {@code Content} instance.
      *
-     * @return the <code>Content</code>'s path
+     * @return the {@code Content}'s path
      * @see #setPath(String)
      * @see #getOptimalPath()
      * @since 1.0
@@ -90,10 +90,10 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Retrieves the path of the stored <code>Content</code> instance in the
+     * Retrieves the path of the stored {@code Content} instance in the
      * most optimal form for usage in the cmf.
      *
-     * @return the <code>Content</code>'s most optimal path
+     * @return the {@code Content}'s most optimal path
      * @see #getPath()
      * @since 1.0
      */
@@ -113,11 +113,11 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Sets the version of the stored <code>Content</code> instance.
+     * Sets the version of the stored {@code Content} instance.
      * <p>Version numbers are unique and should be increased successively when
-     * the data on a certain <code>Content</code> is updated.
+     * the data on a certain {@code Content} is updated.
      * <p>The path and the version together identify exactly one particular
-     * <code>Content</code> with one particular data.
+     * {@code Content} with one particular data.
      *
      * @param version the version as a unique integer
      * @see #getVersion()
@@ -128,9 +128,9 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Retrieves the version of the stored <code>Content</code> instance.
+     * Retrieves the version of the stored {@code Content} instance.
      *
-     * @return the <code>Content</code>'s version
+     * @return the {@code Content}'s version
      * @see #setVersion(int)
      * @since 1.0
      */
@@ -139,9 +139,9 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Sets the mime type of the stored <code>Content</code> instance.
+     * Sets the mime type of the stored {@code Content} instance.
      *
-     * @param mimeType the <code>String</code> that identifies the mime type
+     * @param mimeType the {@code String} that identifies the mime type
      * @see #getMimeType()
      * @since 1.0
      */
@@ -150,9 +150,9 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Retrieves the mime type of the stored <code>Content</code> instance.
+     * Retrieves the mime type of the stored {@code Content} instance.
      *
-     * @return the <code>Content</code>'s mime type textual identifier
+     * @return the {@code Content}'s mime type textual identifier
      * @see #setMimeType(String)
      * @since 1.0
      */
@@ -161,11 +161,11 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Sets wether the stored <code>Content</code> instance is a fragment or
+     * Sets wether the stored {@code Content} instance is a fragment or
      * not.
      *
-     * @param fragment <code>true</code> if it's a fragment; or
-     *                 <p><code>false</code> otherwise
+     * @param fragment {@code true} if it's a fragment; or
+     *                 <p>{@code false} otherwise
      * @see #isFragment()
      * @since 1.0
      */
@@ -174,11 +174,11 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Retrieves wether the stored <code>Content</code> instance is a fragment
+     * Retrieves wether the stored {@code Content} instance is a fragment
      * or not.
      *
-     * @return <code>true</code> if it's a fragment; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if it's a fragment; or
+     * <p>{@code false} otherwise
      * @see #setFragment(boolean)
      * @since 1.0
      */
@@ -187,7 +187,7 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Sets the name of the stored <code>Content</code> instance.
+     * Sets the name of the stored {@code Content} instance.
      *
      * @param name the name
      * @see #getName()
@@ -199,9 +199,9 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Retrieves the name of the stored <code>Content</code> instance.
+     * Retrieves the name of the stored {@code Content} instance.
      *
-     * @return <code>null</code> if the stored <code>Content</code> instance
+     * @return {@code null} if the stored {@code Content} instance
      * has no name; or
      * <p>the name of the content
      * @see #setName(String)
@@ -213,10 +213,10 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Indicates whether the stored <code>Content</code> instance has a name.
+     * Indicates whether the stored {@code Content} instance has a name.
      *
-     * @return <code>true</code> if it has a name; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if it has a name; or
+     * <p>{@code false} otherwise
      * @see #setName(String)
      * @see #getName()
      * @since 1.0
@@ -226,7 +226,7 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Sets the moment when the <code>Content</code> instance was stored.
+     * Sets the moment when the {@code Content} instance was stored.
      *
      * @param created the moment of creation
      * @see #getCreated()
@@ -237,7 +237,7 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Retrieves the moment when the <code>Content</code> instance was stored.
+     * Retrieves the moment when the {@code Content} instance was stored.
      *
      * @return the moment of creation
      * @see #setCreated(Timestamp)
@@ -248,9 +248,9 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Sets the attributes map of the stored <code>Content</code> instance.
+     * Sets the attributes map of the stored {@code Content} instance.
      *
-     * @param attributes the attributes map with <code>String</code> keys and
+     * @param attributes the attributes map with {@code String} keys and
      *                   value.
      * @see #getAttributes()
      * @since 1.0
@@ -260,7 +260,7 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Retrieves the attributes map of the stored <code>Content</code>
+     * Retrieves the attributes map of the stored {@code Content}
      * instance.
      *
      * @return the attributes map
@@ -274,8 +274,8 @@ public class ContentInfo extends Validation {
     /**
      * Indicates whether named content attributes are present.
      *
-     * @return <code>true</code> if named content attributes are present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if named content attributes are present; or
+     * <p>{@code false} otherwise
      * @see #setAttributes(Map)
      * @see #getAttributes()
      * @since 1.0
@@ -288,8 +288,8 @@ public class ContentInfo extends Validation {
      * Indicates whether a specific named content attribute is present.
      *
      * @param name the name of the attribute
-     * @return <code>true</code> if the name content attribute is present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the name content attribute is present; or
+     * <p>{@code false} otherwise
      * @see #getAttribute(String)
      * @since 1.0
      */
@@ -306,7 +306,7 @@ public class ContentInfo extends Validation {
      *
      * @param name the name of the attribute
      * @return the value of the named content attribute; or
-     * <p><code>null</code> if no such attribute could be found
+     * <p>{@code null} if no such attribute could be found
      * @see #hasAttribute(String)
      * @since 1.0
      */
@@ -319,7 +319,7 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Sets the size of the stored <code>Content</code> instance.
+     * Sets the size of the stored {@code Content} instance.
      *
      * @param size the size of the cotent data
      * @see #getSize()
@@ -330,9 +330,9 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Retrieves the size of the stored <code>Content</code> instance.
+     * Retrieves the size of the stored {@code Content} instance.
      *
-     * @return the <code>Content</code>'s size
+     * @return the {@code Content}'s size
      * @see #setSize(int)
      * @see #getFormattedSize()
      * @since 1.0
@@ -342,10 +342,10 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Retrieves the size of the stored <code>Content</code> instance as a
+     * Retrieves the size of the stored {@code Content} instance as a
      * formatted string.
      *
-     * @return the <code>Content</code>'s formatted size
+     * @return the {@code Content}'s formatted size
      * @see #getSize()
      * @since 1.0
      */
@@ -374,7 +374,7 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Sets the content data properties of the stored <code>Content</code>
+     * Sets the content data properties of the stored {@code Content}
      * instance.
      *
      * @param properties the content data properties
@@ -388,10 +388,10 @@ public class ContentInfo extends Validation {
 
     /**
      * Indicates whether content data properties are present for the stored
-     * <code>Content</code> instance.
+     * {@code Content} instance.
      *
-     * @return <code>true</code> if properties are present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if properties are present; or
+     * <p>{@code false} otherwise
      * @see #setProperties(Map)
      * @see #getProperties()
      * @since 1.0
@@ -404,8 +404,8 @@ public class ContentInfo extends Validation {
      * Indicates whether a specific named content property is present.
      *
      * @param name the name of the property
-     * @return <code>true</code> if the name content property is present; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the name content property is present; or
+     * <p>{@code false} otherwise
      * @see #getProperty(String)
      * @since 1.0
      */
@@ -422,7 +422,7 @@ public class ContentInfo extends Validation {
      *
      * @param name the name of the property
      * @return the value of the named content property; or
-     * <p><code>null</code> if no such property could be found
+     * <p>{@code null} if no such property could be found
      * @see #hasProperty(String)
      * @since 1.0
      */
@@ -436,10 +436,10 @@ public class ContentInfo extends Validation {
 
     /**
      * Retrieves the content data properties of the stored
-     * <code>Content</code> instance.
+     * {@code Content} instance.
      *
      * @return the content data properties; or
-     * <p><code>null</code> if no content data properties are present
+     * <p>{@code null} if no content data properties are present
      * @see #setProperties(Map)
      * @see #hasProperties()
      * @since 1.0

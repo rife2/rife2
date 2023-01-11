@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.elements;
@@ -47,7 +47,7 @@ public class Authenticated extends Identified implements SessionAttributes {
     }
 
     /**
-     * Hook method that is called when the <code>SessionValidator</code> doesn't
+     * Hook method that is called when the {@code SessionValidator} doesn't
      * accept the authentication ID that a user provides after having been logged
      * in.
      * <p>
@@ -60,7 +60,7 @@ public class Authenticated extends Identified implements SessionAttributes {
      * @param authCookieValue the value of the cookie with the
      *                        authentication ID
      * @param validityId      a number that indicates the validation state of the
-     *                        session, as used by the <code>SessionValidator</code>, more information can
+     *                        session, as used by the {@code SessionValidator}, more information can
      *                        be found here: {@link SessionValidator#validateSession}
      * @since 1.0
      */

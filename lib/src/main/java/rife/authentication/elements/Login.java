@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.elements;
@@ -97,7 +97,7 @@ public class Login extends Identified implements SessionAttributes {
 
     /**
      * Hook method that is called when valid credentials have been accepted by the
-     * <code>CredentialsManager</code> that backs this authentication element.
+     * {@code CredentialsManager} that backs this authentication element.
      *
      * @param credentials the credentials object that was accepted
      * @since 1.0
@@ -117,7 +117,7 @@ public class Login extends Identified implements SessionAttributes {
 
     /**
      * Hook method that is called when valid credentials have been rejected by the
-     * <code>CredentialsManager</code> that backs this authentication element.
+     * {@code CredentialsManager} that backs this authentication element.
      * <p>
      * This can for example happen when the password is not correct.
      * <p>
@@ -135,7 +135,7 @@ public class Login extends Identified implements SessionAttributes {
     }
 
     /**
-     * Hook method that is called when the <code>SessionManager</code> couldn't
+     * Hook method that is called when the {@code SessionManager} couldn't
      * create a new authentication session of valid and accepted credentials.
      * <p>
      * Note that there is already a default implementation of this hook method that

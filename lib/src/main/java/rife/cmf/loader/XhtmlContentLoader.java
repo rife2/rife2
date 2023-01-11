@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.cmf.loader;
@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * Loads raw content as xhtml data. The internal type to which everything will
- * be converted is <code>java.lang.String</code>.
+ * be converted is {@code java.lang.String}.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.cmf.loader.ContentLoader
