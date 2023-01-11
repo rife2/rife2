@@ -5,5 +5,6 @@
 
 /**
  * Provides managers classes for content information support.
+ * @since 1.0
  */
 package rife.cmf.dam.contentmanagers;

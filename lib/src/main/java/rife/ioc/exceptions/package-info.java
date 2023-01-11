@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the inversion of control support.
+ * @since 1.0
  */
 package rife.ioc.exceptions;

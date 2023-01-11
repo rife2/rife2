@@ -5,5 +5,6 @@
 
 /**
  * Provides classes and interfaces for managing {@code RoleUser} credentials.
+ * @since 1.0
  */
 package rife.authentication.credentialsmanagers;

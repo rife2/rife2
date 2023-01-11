@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the authentication framework.
+ * @since 1.0
  */
 package rife.authentication.exceptions;

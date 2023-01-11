@@ -7,7 +7,6 @@
  * Provides classes and interfaces for the object-oriented query builders,
  * database abstraction layer, persistence manager, query handling templates,
  * fault-tolerant JDBC wrappers and connection pooling.
- *
  * @since 1.0
  */
 package rife.database;

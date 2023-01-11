@@ -5,5 +5,6 @@
 
 /**
  * Provides classes for the validation of content management framework bean properties.
+ * @since 1.0
  */
 package rife.cmf.validation;

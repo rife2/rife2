@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the template engine.
+ * @since 1.0
  */
 package rife.template.exceptions;

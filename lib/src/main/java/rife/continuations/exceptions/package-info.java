@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the continuation functionalities.
+ * @since 1.0
  */
 package rife.continuations.exceptions;

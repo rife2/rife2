@@ -5,5 +5,6 @@
 
 /**
  * Provides managers classes for authentication sessions support.
+ * @since 1.0
  */
 package rife.authentication.sessionmanagers;

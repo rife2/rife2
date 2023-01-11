@@ -5,5 +5,6 @@
 
 /**
  * Provides annotations to declare elements and site-structures for RIFE2's web engine.
+ * @since 1.0
  */
 package rife.engine.annotations;

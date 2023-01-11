@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the database access management of the content management framework.
+ * @since 1.0
  */
 package rife.cmf.dam.exceptions;

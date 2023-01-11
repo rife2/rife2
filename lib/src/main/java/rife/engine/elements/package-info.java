@@ -5,5 +5,6 @@
 
 /**
  * Provides elements with common features that are useful in many web applications.
+ * @since 1.0
  */
 package rife.engine.elements;

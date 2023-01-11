@@ -6,5 +6,6 @@
 /**
  * Contains all the classes that perform byte-code analysis and
  * transformations related to meta-data merging and constraints.
+ * @since 1.0
  */
 package rife.validation.instrument;

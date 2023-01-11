@@ -5,5 +5,6 @@
 
 /**
  * Provides classes and interfaces for the template engine.
+ * @since 1.0
  */
 package rife.template;

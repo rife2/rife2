@@ -5,5 +5,6 @@
 
 /**
  * Provides the workflow configuration of the continuations engine.
+ * @since 1.0
  */
 package rife.workflow.config;

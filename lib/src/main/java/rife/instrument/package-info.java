@@ -6,5 +6,6 @@
 /**
  * The classes that are responsible for performing byte-code
  * instrumentation through agents and transformers.
+ * @since 1.0
  */
 package rife.instrument;

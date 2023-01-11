@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the session validators.
+ * @since 1.0
  */
 package rife.authentication.sessionvalidators.exceptions;

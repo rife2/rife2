@@ -5,5 +5,6 @@
 
 /**
  * Common exceptions that are being used during the transformation of byte-code.
+ * @since 1.0
  */
 package rife.instrument.exceptions;

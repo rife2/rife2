@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the generic query manager.
+ * @since 1.0
  */
 package rife.database.querymanagers.generic.exceptions;

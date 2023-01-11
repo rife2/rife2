@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the resource abstraction framework.
+ * @since 1.0
  */
 package rife.resources.exceptions;

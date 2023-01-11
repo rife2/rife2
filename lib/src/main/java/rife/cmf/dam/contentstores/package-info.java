@@ -5,5 +5,6 @@
 
 /**
  * Provides managers classes for content data support.
+ * @since 1.0
  */
 package rife.cmf.dam.contentstores;

@@ -5,5 +5,6 @@
 
 /**
  * Provides classes and interfaces for the out-of-container testing framework.
+ * @since 1.0
  */
 package rife.test;

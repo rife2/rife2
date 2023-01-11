@@ -5,5 +5,6 @@
 
 /**
  * Provides classes and interfaces for generalized name selectors.
+ * @since 1.0
  */
 package rife.selector;

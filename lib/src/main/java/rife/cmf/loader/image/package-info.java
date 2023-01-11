@@ -5,5 +5,6 @@
 
 /**
  * Provides classes that delegate the loading of raw content data to image back-end libraries.
+ * @since 1.0
  */
 package rife.cmf.loader.image;

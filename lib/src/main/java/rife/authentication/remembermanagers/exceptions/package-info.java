@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the "remember me" managers.
+ * @since 1.0
  */
 package rife.authentication.remembermanagers.exceptions;

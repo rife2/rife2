@@ -5,5 +5,6 @@
 
 /**
  * Provides managers classes for "remember me" support.
+ * @since 1.0
  */
 package rife.authentication.remembermanagers;

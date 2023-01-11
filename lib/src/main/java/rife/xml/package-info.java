@@ -5,5 +5,6 @@
 
 /**
  * Provides classes for facilitating the SAX parsing of XML.
+ * @since 1.0
  */
 package rife.xml;

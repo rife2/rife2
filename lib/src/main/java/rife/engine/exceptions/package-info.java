@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the web engine.
+ * @since 1.0
  */
 package rife.engine.exceptions;

@@ -5,5 +5,6 @@
 
 /**
  * Provides classes for the exceptions that can occur during the management of task options.
+ * @since 1.0
  */
 package rife.scheduler.taskoptionmanagers.exceptions;

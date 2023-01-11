@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the formatting of the raw content data.
+ * @since 1.0
  */
 package rife.cmf.format.exceptions;

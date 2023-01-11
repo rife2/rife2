@@ -5,5 +5,6 @@
 
 /**
  * Basic implementation of a continuation runner with associated classes.
+ * @since 1.0
  */
 package rife.continuations.basic;

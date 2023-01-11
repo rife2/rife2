@@ -5,5 +5,6 @@
 
 /**
  * Provides classes for the exceptions that can occur during the management of schedulers.
+ * @since 1.0
  */
 package rife.scheduler.schedulermanagers.exceptions;

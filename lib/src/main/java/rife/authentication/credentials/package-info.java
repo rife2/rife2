@@ -5,5 +5,6 @@
 
 /**
  * Provides classes and interfaces for credentials and "remember me" data structures.
+ * @since 1.0
  */
 package rife.authentication.credentials;

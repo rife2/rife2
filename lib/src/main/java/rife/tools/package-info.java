@@ -5,5 +5,6 @@
 
 /**
  * Provides general purpose utility classes.
+ * @since 1.0
  */
 package rife.tools;

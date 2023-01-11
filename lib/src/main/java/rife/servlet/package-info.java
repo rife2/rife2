@@ -6,5 +6,6 @@
 /**
  * Provides classes to start and stop a RIFE2 application from a servlet container,
  * both as filters and servlets.
+ * @since 1.0
  */
 package rife.servlet;

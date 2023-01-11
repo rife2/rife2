@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the database framework.
+ * @since 1.0
  */
 package rife.database.exceptions;

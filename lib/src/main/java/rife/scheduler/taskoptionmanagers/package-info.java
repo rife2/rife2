@@ -5,5 +5,6 @@
 
 /**
  * Provides classes and interfaces for managing task options.
+ * @since 1.0
  */
 package rife.scheduler.taskoptionmanagers;

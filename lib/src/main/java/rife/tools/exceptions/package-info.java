@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the general purpose utilities.
+ * @since 1.0
  */
 package rife.tools.exceptions;

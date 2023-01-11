@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the XML parsing tools.
+ * @since 1.0
  */
 package rife.xml.exceptions;

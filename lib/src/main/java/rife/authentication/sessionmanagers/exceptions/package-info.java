@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the authentication session managers.
+ * @since 1.0
  */
 package rife.authentication.sessionmanagers.exceptions;

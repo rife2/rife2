@@ -5,5 +5,6 @@
 
 /**
  * Provides classes and interfaces for the object-oriented query builders.
+ * @since 1.0
  */
 package rife.database.queries;

@@ -8,5 +8,6 @@
  * <p>
  * Each feature is accessed through dedicated managers.
  * These have several implementations according to the back-end store (for instance, memory or database).
+ * @since 1.0
  */
 package rife.authentication;

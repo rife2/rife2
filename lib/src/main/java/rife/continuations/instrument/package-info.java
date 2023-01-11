@@ -5,5 +5,6 @@
 
 /**
  * Performs the actual bytecode analysis and instrumentation to provide continuations.
+ * @since 1.0
  */
 package rife.continuations.instrument;

@@ -5,5 +5,6 @@
 
 /**
  * Provides continuations functionalities natively in Java.
+ * @since 1.0
  */
 package rife.continuations;

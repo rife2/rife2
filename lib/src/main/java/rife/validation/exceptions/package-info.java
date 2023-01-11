@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the validation framework.
+ * @since 1.0
  */
 package rife.validation.exceptions;

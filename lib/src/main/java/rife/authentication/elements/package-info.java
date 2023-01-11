@@ -5,5 +5,6 @@
 
 /**
  * Provides elements for authentication and logout, using the variety of backend stores available.
+ * @since 1.0
  */
 package rife.authentication.elements;

@@ -5,5 +5,6 @@
 
 /**
  * Provides classes for the conversion from Java to SQL values and vice-versa.
+ * @since 1.0
  */
 package rife.database.types;

@@ -5,5 +5,6 @@
 
 /**
  * Provides classes and interfaces for the persistence framework.
+ * @since 1.0
  */
 package rife.database.querymanagers.generic;

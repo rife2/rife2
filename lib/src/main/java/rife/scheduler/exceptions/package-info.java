@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the scheduler.
+ * @since 1.0
  */
 package rife.scheduler.exceptions;

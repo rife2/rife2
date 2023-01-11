@@ -8,5 +8,6 @@
  * <p>
  * It is geared towards the process of storing, loading, validating, formatting,
  * transforming, versioning, retrieving and streaming of various content types.
+ * @since 1.0
  */
 package rife.cmf;

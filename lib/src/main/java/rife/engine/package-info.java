@@ -5,5 +5,6 @@
 
 /**
  * Provides classes and interfaces for the web engine.
+ * @since 1.0
  */
 package rife.engine;

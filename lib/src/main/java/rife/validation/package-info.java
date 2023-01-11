@@ -5,5 +5,6 @@
 
 /**
  * Provides classes and interfaces for validation and constraints.
+ * @since 1.0
  */
 package rife.validation;

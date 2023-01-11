@@ -6,5 +6,6 @@
 /**
  * Performs the bytecode analysis and instrumentation for generic query
  * manager functionalities, such as lazy-loading.
+ * @since 1.0
  */
 package rife.database.querymanagers.generic.instrument;

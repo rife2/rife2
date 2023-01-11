@@ -4,6 +4,7 @@
  */
 
 /**
- * Provides annotations for the meta data facility.
+ * Provides annotations for the metadata facility.
+ * @since 1.0
  */
 package rife.validation.annotations;

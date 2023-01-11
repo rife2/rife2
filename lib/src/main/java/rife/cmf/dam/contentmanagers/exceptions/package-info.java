@@ -5,5 +5,6 @@
 
 /**
  * Provides exception classes for the content information managers.
+ * @since 1.0
  */
 package rife.cmf.dam.contentmanagers.exceptions;

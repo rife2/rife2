@@ -4,6 +4,7 @@
  */
 
 /**
- * Provides classes for the RIFE2 web engine.
+ * Provides general data structure classes.
+ * @since 1.0
  */
 package rife.datastructures;

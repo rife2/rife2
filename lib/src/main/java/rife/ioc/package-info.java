@@ -4,6 +4,8 @@
  */
 
 /**
- * Provides interfaces and classes for IoC capable properties that resolve and obtain their values at run-time.
+ * Provides interfaces and classes for IoC capable properties that
+ * resolve and obtain their values at run-time.
+ * @since 1.0
  */
 package rife.ioc;
