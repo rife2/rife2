@@ -4,6 +4,7 @@
  */
 package rife.engine;
 
+import rife.config.RifeConfig;
 import rife.engine.annotations.*;
 import rife.tools.SerializationUtils;
 
@@ -80,11 +81,16 @@ public class AnnotationParametersSite extends Site {
             paramsBean.setLongObject(2335454L);
             paramsBean.setShort((short) 32);
             paramsBean.setShortObject((short) 12);
-            paramsBean.setDate(new GregorianCalendar(2005, Calendar.AUGUST, 20, 9, 44, 0).getTime());
-            paramsBean.setDateFormatted(new GregorianCalendar(2005, Calendar.AUGUST, 20, 9, 44, 0).getTime());
-            paramsBean.setDatesFormatted(new Date[]{
-                new GregorianCalendar(2005, Calendar.AUGUST, 21, 11, 6, 14).getTime(),
-                new GregorianCalendar(2006, Calendar.JULY, 17, 16, 5, 31).getTime()});
+
+            var cal1 = new GregorianCalendar(2005, Calendar.AUGUST, 20, 9, 44, 0);
+            cal1.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+            paramsBean.setDate(cal1.getTime());
+            paramsBean.setDateFormatted(cal1.getTime());
+            var cal2 = new GregorianCalendar(2005, Calendar.AUGUST, 21, 11, 6, 14);
+            cal2.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+            var cal3 = new GregorianCalendar(2006, Calendar.JULY, 17, 16, 5, 31);
+            cal3.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+            paramsBean.setDatesFormatted(new Date[]{cal2.getTime(), cal3.getTime()});
             paramsBean.setSerializableParam(new BeanImpl.SerializableParam(13, "Thirteen"));
             paramsBean.setSerializableParams(new BeanImpl.SerializableParam[]{
                 new BeanImpl.SerializableParam(9, "Nine"),
