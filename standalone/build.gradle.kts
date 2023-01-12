@@ -61,7 +61,7 @@ tasks {
         project.logger.lifecycle(" HelloForm:")
         project.logger.lifecycle("   Open your browser at http://localhost:8080/form")
         project.logger.lifecycle("")
-        project.logger.lifecycle(" runHelloFormGeneration:")
+        project.logger.lifecycle(" HelloFormGeneration:")
         project.logger.lifecycle("   Open your browser at http://localhost:8080/generation/form")
         project.logger.lifecycle("")
         project.logger.lifecycle(" HelloFormContinuations:")

@@ -44,7 +44,9 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_PROPERTY,
                 TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
-                TemplateFactoryFilters.TAG_ROUTE
+                TemplateFactoryFilters.TAG_ROUTE,
+                TemplateFactoryFilters.TAG_ROUTE_ACTION,
+                TemplateFactoryFilters.TAG_ROUTE_INPUTS
             },
         BeanHandlerHtml.instance(),
         EncoderHtmlSingleton.INSTANCE,

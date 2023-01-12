@@ -175,7 +175,9 @@ public class TestEngine {
                     c.print(":" + c.parameter("param2"));
                 });
                 get("/", c -> {
-                    c.print(c.urlFor(path_info).param("param1", "v1").param("param2", "412"));
+                    c.setParameter("param1", "v1a");
+                    c.setParameter("param2", "412");
+                    c.print(c.urlFor(path_info).param("param1", "v1"));
                 });
 
             }
@@ -191,6 +193,43 @@ public class TestEngine {
                 page = webClient.getPage(page.getWebResponse().getContentAsString());
                 assertEquals("text/html", page.getWebResponse().getContentType());
                 assertEquals("Just some text 127.0.0.1:8181:text/v1/x412:v1:412", page.asNormalizedText());
+            }
+        }
+    }
+
+    @Test
+    void testFormUrlGeneration()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            Route form;
+            public void setup() {
+                form = post("/form/map", PathInfoHandling.MAP(m -> m.t("text").s().t("x").p("param2", "\\d+")), c -> {
+                    c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo());
+                    c.print(":" + c.parameter("param1"));
+                    c.print(":" + c.parameter("param2"));
+                });
+                get("/", c -> {
+                    c.setParameter("param1", "v1");
+                    c.setParameter("param2", "412");
+                    c.print(c.template("form_url_generation"));
+                });
+
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page;
+
+                page = webClient.getPage("http://localhost:8181/");
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("""
+                    <form action="http://localhost:8181/form/map/text/x412" method="post">
+                      <input type="hidden" name="param1" value="v1" />
+                      <input type="submit" name="submit" />
+                    </form>""", page.getWebResponse().getContentAsString());
+
+                page = page.getForms().get(0).getInputsByName("submit").get(0).click();
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("Just some text 127.0.0.1:8181:text/x412:v1:412", page.asNormalizedText());
             }
         }
     }

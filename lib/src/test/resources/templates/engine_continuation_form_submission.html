@@ -1,7 +1,8 @@
 <html>
 <head><title><!--v subtotal--><!--/v--></title></head>
 <body>
-<form name="getanswer" action="{{v route:/}}" method="POST">
+<form name="getanswer" action="{{v route:action:/}}" method="POST">
+  <!--v route:inputs:/-->
   <input name="answer" type="text" value="{{v param:answer}}{{/v}}">
   <input name="submit" type="submit"/>
 </form>

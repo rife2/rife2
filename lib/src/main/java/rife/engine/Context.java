@@ -13,10 +13,7 @@ import rife.ioc.HierarchicalProperties;
 import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.template.exceptions.TemplateException;
-import rife.tools.ArrayUtils;
-import rife.tools.BeanUtils;
-import rife.tools.ServletUtils;
-import rife.tools.StringUtils;
+import rife.tools.*;
 import rife.tools.exceptions.BeanUtilsException;
 
 import java.io.OutputStream;
@@ -53,7 +50,8 @@ public class Context {
     private final Request request_;
     private final Response response_;
     private final RouteMatch routeMatch_;
-    private final Map<String, String[]> parameters_;
+    private final Map<String, String[]> parametersIn_;
+    private Map<String, String[]> parametersOut_;
     private Throwable engineException_;
 
     private Route processedRoute_ = null;
@@ -81,7 +79,8 @@ public class Context {
                 }
             }
         }
-        parameters_ = params;
+        parametersIn_ = params;
+        parametersOut_ = null;
     }
 
     void process() {
@@ -112,6 +111,8 @@ public class Context {
 
     void processElement(Route route)
     throws Exception {
+        parametersOut_ = null;
+
         // try to set up a continuation context and try to
         // retrieve the element instance that belongs to it
         var element = setupContinuationContext(route);
@@ -1083,7 +1084,7 @@ public class Context {
      * @since 1.0
      */
     public Map<String, String[]> parameters() {
-        return parameters_;
+        return parametersIn_;
     }
 
     /**
@@ -2557,6 +2558,99 @@ public class Context {
      */
     public void setLocale(Locale locale) {
         response_.setLocale(locale);
+    }
+
+    Map<String, String[]> parametersOut() {
+        if (parametersOut_ == null) {
+            return Collections.emptyMap();
+        }
+        return parametersOut_;
+    }
+
+    /**
+     * Sets a named parameter value for URL generation with {@link #urlFor}
+     * or the `route:` filtered template value tags.
+     * <p>
+     * The parameter value will be converted to a string array.
+     * <p>
+     * Setting parameters acts on a different collection than incoming request
+     * parameters and is used for RIFE2 state-related features like URL generation.
+     *
+     * @param name the name of the parameter to set
+     * @param value the value of the parameter
+     * @see #urlFor
+     * @see #setParametersBean(Object)
+     * @see #setParametersBean(Object, String)
+     * @see #removeParameter
+     * @since 1.0
+     */
+    public void setParameter(String name, Object value) {
+        if (parametersOut_ == null) {
+            parametersOut_ = new HashMap<>();
+        }
+        parametersOut_.put(name, ArrayUtils.createStringArray(value, null));
+    }
+
+    /**
+     * Sets named parameters values from bean properties for URL generation
+     * with {@link #urlFor} or the `route:` filtered template value tags.
+     *
+     * @param bean the bean whose properties will be set as parameters
+     * @see #urlFor
+     * @see #setParameter
+     * @see #setParametersBean(Object, String)
+     * @see #removeParameter
+     * @since 1.0
+     */
+   public void setParametersBean(Object bean) {
+        setParametersBean(bean, null);
+    }
+
+
+    /**
+     * Sets named parameters values from bean properties for URL generation
+     * with {@link #urlFor} or the `route:` filtered template value tags.
+     *
+     * @param bean the bean whose properties will be set as parameters
+     * @param prefix the prefix that will be added to the parameter names
+     * @see #urlFor
+     * @see #setParameter
+     * @see #setParametersBean(Object)
+     * @see #removeParameter
+     * @since 1.0
+     */
+    public void setParametersBean(Object bean, String prefix) {
+        if (parametersOut_ == null) {
+            parametersOut_ = new HashMap<>();
+        }
+
+        try {
+            BeanUtils.processPropertyValues(bean, null, null, prefix, (propertyName, descriptor, propertyValue, constrainedProperty) -> {
+                if (propertyValue != null) {
+                    parametersOut_.put(propertyName, ArrayUtils.createStringArray(propertyValue, constrainedProperty));
+                }
+            });
+        } catch (BeanUtilsException e) {
+            throw new EngineException(e);
+        }
+    }
+
+    /**
+     * Removes a name parameter that was previously set.
+     *
+     * @param name the name of the parameter to remove
+     * @see #urlFor
+     * @see #setParameter
+     * @see #setParametersBean(Object)
+     * @see #setParametersBean(Object, String)
+     * @since 1.0
+     */
+    public void removeParameter(String name) {
+        if (parametersOut_ == null) {
+            return;
+        }
+
+        parametersOut_.remove(name);
     }
 
     /**

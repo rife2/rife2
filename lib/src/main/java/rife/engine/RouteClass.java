@@ -148,7 +148,7 @@ class RouteClass implements Route {
                                 name = annotation_name;
                             }
 
-                            parameters.put(name, new String[]{Convert.toString(value)});
+                            parameters.put(name, ArrayUtils.createStringArray(value, null));
                         } else if (field.isAnnotationPresent(ParametersBean.class) &&
                                    shouldProcessOutFlow(field.getAnnotation(ParametersBean.class).flow())) {
                             var annotation_prefix = field.getAnnotation(ParametersBean.class).prefix();

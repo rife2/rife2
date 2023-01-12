@@ -171,14 +171,7 @@ class EngineTemplateProcessor {
             for (var captured_groups : route_tags) {
                 var route_value_id = captured_groups[0];
                 if (!template_.isValueSet(route_value_id)) {
-                    var path = captured_groups[1];
-                    Route route;
-                    if (path.isEmpty()) {
-                        route = context_.route();
-                    } else {
-                        route = context_.route().router().resolveRoute(path);
-                    }
-
+                    var route = resolveRoute(captured_groups[1]);
                     if (route != null) {
                         var route_value = context_.urlFor(route);
                         template_.setValue(route_value_id, route_value);
@@ -187,6 +180,48 @@ class EngineTemplateProcessor {
                 }
             }
         }
+
+        final var route_action_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_ROUTE_ACTION);
+        if (route_action_tags != null) {
+            for (var captured_groups : route_action_tags) {
+                var route_value_id = captured_groups[0];
+                if (!template_.isValueSet(route_value_id)) {
+                    var route = resolveRoute(captured_groups[1]);
+                    if (route != null) {
+                        var segments = context_.urlFor(route).generateSegments();
+                        template_.setValue(route_value_id, segments.path() + segments.fragment());
+                        setValues.add(route_value_id);
+                    }
+                }
+            }
+        }
+
+        final var route_inputs_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_ROUTE_INPUTS);
+        if (route_inputs_tags != null) {
+            for (var captured_groups : route_inputs_tags) {
+                var route_value_id = captured_groups[0];
+                if (!template_.isValueSet(route_value_id)) {
+                    var route = resolveRoute(captured_groups[1]);
+                    if (route != null) {
+                        var segments = context_.urlFor(route).generateSegments();
+                        var builder = new StringBuilder();
+                        segments.appendFormInputParameters(builder);
+                        template_.setValue(route_value_id, builder.toString());
+                        setValues.add(route_value_id);
+                    }
+                }
+            }
+        }
+    }
+
+    private Route resolveRoute(String path) {
+        Route route;
+        if (path.isEmpty()) {
+            route = context_.route();
+        } else {
+            route = context_.route().router().resolveRoute(path);
+        }
+        return route;
     }
 
     private void processAuthentication(final List<String> setValues) {

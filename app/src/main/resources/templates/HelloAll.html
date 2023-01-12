@@ -12,8 +12,15 @@
 
 <h2>HelloAuthentication</h2>
 <ul>
-  <li>Open your browser at <a href="{{v route:/}}authentication">{{v route:/}}authentication</a></li>
+  <li>Open your browser at <a href="{{v route:authentication.landing/}}">{{v route:authentication.landing/}}</a></li>
   <li>The authentication credentials are: <code>testUser</code> / <code>testPassword</code></li>
+</ul>
+
+<h2>HelloContentManagement</h2>
+<ul>
+  <li>Install the database at <a href="{{v route:cmf.install/}}">{{v route:cmf.install/}}</a></li>
+  <li>Then add a news item by going to <a href="{{v route:cmf.add/}}">{{v route:cmf.add/}}</a></li>
+  <li>Delete the database through h<a href="{{v route:cmf.remove/}}">{{v route:cmf.remove/}}</a></li>
 </ul>
 
 <h2>HelloContinuations</h2>
@@ -44,21 +51,26 @@
   <li>Open your browser at <a href="{{v route:/}}form">{{v route:/}}form</a></li>
 </ul>
 
+<h2>HelloFormGeneration</h2>
+<ul>
+  <li>Open your browser at <a href="{{v route:generation.form/}}">{{v route:generation.form/}}</a></li>
+</ul>
+
 <h2>HelloFormContinuations</h2>
 <ul>
-  <li>Open your browser at <a href="{{v route:/}}continuation/form">{{v route:/}}continuation/form</a></li>
+  <li>Open your browser at <a href="{{v route:continuations.form/}}">{{v route:continuations.form/}}</a></li>
 </ul>
 
 <h2>HelloGenericQueryManager</h2>
 <ul>
-  <li>Install the database at <a href="{{v route:/}}generic/install">{{v route:/}}generic/install</a></li>
-  <li>Then add names by going to <a href="{{v route:/}}generic/add">{{v route:/}}generic/add</a></li>
-  <li>Delete the database through <a href="{{v route:/}}generic/remove">{{v route:/}}generic/remove</a></li>
+  <li>Install the database at <a href="{{v route:gqm.install/}}">{{v route:gqm.install/}}</a></li>
+  <li>Then add names by going to <a href="{{v route:gqm.add/}}">{{v route:gqm.add/}}</a></li>
+  <li>Delete the database through <a href="{{v route:gqm.remove/}}">{{v route:gqm.remove/}}</a></li>
 </ul>
 
 <h2>HelloGroup</h2>
 <ul>
-  <li>Open your browser at <a href="{{v route:/}}welcome">{{v route:/}}welcome</a></li>
+  <li>Open your browser at <a href="{{v route:group.welcome/}}">{{v route:/}}welcome</a></li>
   <li>Also at <a href="{{v route:/}}group/hello">{{v route:/}}group/hello</a></li>
   <li>And at <a href="{{v route:/}}group/bonjour">{{v route:/}}group/bonjour</a></li>
 </ul>
@@ -73,6 +85,16 @@
   <li>Open your browser at <a href="{{v route:/}}mapping/John">{{v route:/}}mapping/John</a></li>
   <li>Or <a href="{{v route:/}}mapping/John/Smith">{{v route:/}}mapping/John/Smith</a></li>
   <li>Or another other matching path info</li>
+</ul>
+
+<h2>HelloScheduler</h2>
+<ul>
+  <li>Install database at <a href="{{v route:/}}scheduler/install">{{v route:/}}scheduler/install</a></li>
+  <li>Add tasks by going to <a href="{{v route:/}}scheduler/add">{{v route:/}}scheduler/add</a></li>
+  <li>Start scheduler by going to <a href="{{v route:/}}scheduler/start">{{v route:/}}scheduler/start</a></li>
+  <li>View status by going to <a href="{{v route:/}}scheduler/status">{{v route:/}}scheduler/status</a></li>
+  <li>Stop scheduler by going to <a href="{{v route:/}}scheduler/stop">{{v route:/}}scheduler/stop</a></li>
+  <li>Delete the database through <a href="{{v route:/}}scheduler/remove">{{v route:/}}scheduler/remove</a></li>
 </ul>
 
 <h2>HelloSvg</h2>

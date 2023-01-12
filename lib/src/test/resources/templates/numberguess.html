@@ -5,7 +5,8 @@
     <p><i><!--v indication--><!--/v--></i></p>
     <!--b lower-->The answer is lower.<!--/b-->
     <!--b higher-->The answer is higher.<!--/b-->
-    <form name="perform_guess" action="{{v route:/}}" method="post">
+    <form name="perform_guess" action="{{v route:action:/}}" method="post">
+        <!--v route:inputs:/-->
         <input type="text" name="guess" value="{{v param:guess}}{{/v}}" /><br />
         <input type="submit" name="submit" value="Guess" /><br />
     </form>

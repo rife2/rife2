@@ -547,7 +547,7 @@ public class TestContinuations {
                 assertEquals("0", page1.getTitleText());
                 var form1 = page1.getFormByName("getanswer");
                 assertNotNull(form1);
-                var cont1 = form1.getActionAttribute().split(SpecialParameters.CONT_ID + "=")[1];
+                var cont1 = form1.getInputsByName(SpecialParameters.CONT_ID).get(0).getValue();
                 assertNotNull(cont1);
                 form1.getInputsByName("answer").get(0).setValueAttribute("12");
 
@@ -555,7 +555,7 @@ public class TestContinuations {
                 assertEquals("12", page2.getTitleText());
                 var form2 = page2.getFormByName("getanswer");
                 assertNotNull(form2);
-                var cont2 = form2.getActionAttribute().split(SpecialParameters.CONT_ID + "=")[1];
+                var cont2 = form2.getInputsByName(SpecialParameters.CONT_ID).get(0).getValue();
                 assertNotNull(cont2);
                 form2.getInputsByName("answer").get(0).setValueAttribute("32");
 
@@ -563,7 +563,7 @@ public class TestContinuations {
                 assertEquals("44", page3.getTitleText());
                 var form3 = page3.getFormByName("getanswer");
                 assertNotNull(form3);
-                var cont3 = form3.getActionAttribute().split(SpecialParameters.CONT_ID + "=")[1];
+                var cont3 = form3.getInputsByName(SpecialParameters.CONT_ID).get(0).getValue();
                 assertNotNull(cont3);
                 form3.getInputsByName("answer").get(0).setValueAttribute("41");
 
@@ -573,14 +573,14 @@ public class TestContinuations {
                 assertEquals("0", page4.getTitleText());
                 var form4 = page4.getFormByName("getanswer");
                 assertNotNull(form4);
-                var cont4 = form4.getActionAttribute().split(SpecialParameters.CONT_ID + "=")[1];
+                var cont4 = form4.getInputsByName(SpecialParameters.CONT_ID).get(0).getValue();
                 assertNotNull(cont4);
 
                 HtmlPage page5 = form2.getInputsByName("submit").get(0).click();
                 assertEquals("0", page5.getTitleText());
                 var form5 = page5.getFormByName("getanswer");
                 assertNotNull(form5);
-                var cont5 = form5.getActionAttribute().split(SpecialParameters.CONT_ID + "=")[1];
+                var cont5 = form5.getInputsByName(SpecialParameters.CONT_ID).get(0).getValue();
                 assertNotNull(cont5);
 
                 // each should have a unique id

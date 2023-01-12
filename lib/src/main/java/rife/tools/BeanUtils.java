@@ -364,7 +364,7 @@ public final class BeanUtils {
             return format.format(propertyValue);
         }
 
-        return String.valueOf(propertyValue);
+        return Convert.toString(propertyValue);
     }
 
     public static Map<String, Class> getPropertyTypes(Class beanClass, String[] includedProperties, String[] excludedProperties, String prefix)
@@ -747,7 +747,7 @@ public final class BeanUtils {
                             for (var i = 0; i < propertyValues.length; i++) {
                                 if (propertyValues[i] != null && propertyValues[i].length() > 0) {
                                     if (constrained_property != null && constrained_property.isFormatted()) {
-                                        parameter_values_typed[i] = new BigDecimal(String.valueOf(constrained_property.getFormat().parseObject(propertyValues[i])));
+                                        parameter_values_typed[i] = new BigDecimal(Convert.toString(constrained_property.getFormat().parseObject(propertyValues[i])));
                                     } else {
                                         parameter_values_typed[i] = new BigDecimal(propertyValues[i]);
                                     }
@@ -905,7 +905,7 @@ public final class BeanUtils {
                         } else if (property_type == BigDecimal.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 var n = (Number) constrained_property.getFormat().parseObject(propertyValues[0]);
-                                parameter_value_typed = new BigDecimal(String.valueOf(n));
+                                parameter_value_typed = new BigDecimal(Convert.toString(n));
                             } else {
                                 parameter_value_typed = new BigDecimal(propertyValues[0]);
                             }
