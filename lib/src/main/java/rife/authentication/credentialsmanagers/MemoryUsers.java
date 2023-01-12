@@ -130,8 +130,10 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             // correctly handle implicit and specific user ids
             if (-1 == attributes.getUserId()) {
                 while (userIdMapping_.containsKey(userIdSequence_)) {
-                    // FIXME: check for long overflow
-                    userIdSequence_++;
+                    // check for overflow and reset to 0
+                    if (++userIdSequence_ < 0) {
+                        userIdSequence_ = 0;
+                    }
                 }
 
                 attributes.setUserId(userIdSequence_);

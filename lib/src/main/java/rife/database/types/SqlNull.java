@@ -4,10 +4,11 @@
  */
 package rife.database.types;
 
-public class SqlNull {
+public final class SqlNull {
     public static final SqlNull NULL = new SqlNull();
 
     private SqlNull() {
+        // no-op
     }
 
     public String toString() {

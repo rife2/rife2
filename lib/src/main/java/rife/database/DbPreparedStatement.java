@@ -414,7 +414,6 @@ public class DbPreparedStatement extends DbStatement {
      *                           properties.
      * @since 1.0
      */
-    // TODO : handle records
     public DbPreparedStatement setBean(Object bean)
     throws DatabaseException {
         if (null == bean) throw new IllegalArgumentException("bean can't be null.");

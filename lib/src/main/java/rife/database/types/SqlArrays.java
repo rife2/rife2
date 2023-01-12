@@ -6,7 +6,11 @@ package rife.database.types;
 
 import rife.tools.StringUtils;
 
-public abstract class SqlArrays {
+public final class SqlArrays {
+    private SqlArrays() {
+        // no-op
+    }
+
     public static String convertArray(Object[] array) {
         if (null == array) {
             return SqlNull.NULL.toString();

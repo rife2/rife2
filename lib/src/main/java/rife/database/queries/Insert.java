@@ -308,7 +308,6 @@ public class Insert extends AbstractParametrizedQuery implements Cloneable {
         return this;
     }
 
-    // TODO : handle records
     public Insert fieldsParameters(Class beanClass)
     throws DbQueryException {
         return fieldsParametersExcluded(beanClass, null);
