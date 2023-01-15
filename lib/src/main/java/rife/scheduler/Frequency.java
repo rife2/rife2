@@ -218,7 +218,7 @@ public class Frequency {
     throws FrequencyException {
         if (start < 0) throw new IllegalArgumentException("start should be positive");
 
-        var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+        var calendar = RifeConfig.tools().getCalendarInstance();
         calendar.setTimeInMillis(start);
 
         var minute = calendar.get(Calendar.MINUTE);
@@ -315,7 +315,7 @@ public class Frequency {
         assert month >= 1;
         assert year >= 0;
 
-        var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+        var calendar = RifeConfig.tools().getCalendarInstance();
         calendar.set(year, month - 1, 1);
         var maximum_date = (byte) calendar.getActualMaximum(Calendar.DATE);
         byte[] dates = null;

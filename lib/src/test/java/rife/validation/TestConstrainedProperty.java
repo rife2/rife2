@@ -5,6 +5,7 @@
 package rife.validation;
 
 import org.junit.jupiter.api.Test;
+import rife.config.RifeConfig;
 import rife.tools.BeanImpl;
 
 import java.text.SimpleDateFormat;
@@ -32,7 +33,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testInstantiation() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertEquals("the_name", property.getPropertyName());
         assertEquals("the_name", property.getSubjectName());
         assertFalse(property.isNotNull());
@@ -69,7 +70,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testSubjectName() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.subjectName("subject"));
         assertEquals("subject", property.getSubjectName());
 
@@ -79,7 +80,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testMandatory() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.notNull(true));
         assertTrue(property.isNotNull());
 
@@ -89,7 +90,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testNotEmpty() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.notEmpty(true));
         assertTrue(property.isNotEmpty());
 
@@ -99,7 +100,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testNotEqualBoolean() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.notEqual(true));
         assertTrue(property.isNotEqual());
         assertEquals(true, property.getNotEqual());
@@ -111,7 +112,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testNotEqualChar() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.notEqual('K'));
         assertTrue(property.isNotEqual());
         assertEquals('K', property.getNotEqual());
@@ -123,7 +124,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testNotEqualByte() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.notEqual((byte) 23));
         assertTrue(property.isNotEqual());
         assertEquals((byte) 23, property.getNotEqual());
@@ -135,7 +136,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testNotEqualShort() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.notEqual((short) 432));
         assertTrue(property.isNotEqual());
         assertEquals((short) 432, property.getNotEqual());
@@ -147,7 +148,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testNotEqualInt() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.notEqual(5452));
         assertTrue(property.isNotEqual());
         assertEquals(5452, property.getNotEqual());
@@ -159,7 +160,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testNotEqualLong() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.notEqual(34386434L));
         assertTrue(property.isNotEqual());
         assertEquals(34386434L, property.getNotEqual());
@@ -171,7 +172,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testNotEqualFloat() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.notEqual(435.23f));
         assertTrue(property.isNotEqual());
         assertEquals(435.23f, property.getNotEqual());
@@ -183,7 +184,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testNotEqualDouble() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.notEqual(3983498.234d));
         assertTrue(property.isNotEqual());
         assertEquals(3983498.234d, property.getNotEqual());
@@ -195,7 +196,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testNotEqual() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.notEqual("value"));
         assertTrue(property.isNotEqual());
         assertEquals("value", property.getNotEqual());
@@ -207,7 +208,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testUnique() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.unique(true));
         assertTrue(property.isUnique());
 
@@ -217,7 +218,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testIdentifier() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.identifier(true));
         assertTrue(property.isIdentifier());
 
@@ -227,7 +228,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testEditable() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.editable(false));
         assertFalse(property.isEditable());
 
@@ -237,7 +238,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testSaved() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.saved(false));
         assertFalse(property.isSaved());
 
@@ -247,7 +248,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testDisplayedRaw() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.displayedRaw(true));
         assertTrue(property.isDisplayedRaw());
 
@@ -257,7 +258,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testPersistent() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.persistent(false));
         assertFalse(property.isPersistent());
 
@@ -267,7 +268,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testLimitedLength() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
 
         assertSame(property, property.minLength(5));
         assertTrue(property.hasLimitedLength());
@@ -303,7 +304,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testPrecision() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
 
         assertSame(property, property.precision(0));
         assertTrue(property.hasPrecision());
@@ -326,7 +327,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testScale() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
 
         assertSame(property, property.scale(0));
         assertTrue(property.hasScale());
@@ -343,7 +344,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testRegexp() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.regexp("/l/k/"));
         assertTrue(property.matchesRegexp());
         assertEquals("/l/k/", property.getRegexp());
@@ -355,7 +356,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testEmail() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.email(true));
         assertTrue(property.isEmail());
 
@@ -365,7 +366,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testUrl() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.url(true));
         assertTrue(property.isUrl());
 
@@ -375,10 +376,10 @@ public class TestConstrainedProperty {
 
     @Test
     void testLimitedDate() {
-        Date date1 = new Date();
-        Date date2 = new Date();
+        var date1 = new Date();
+        var date2 = new Date();
 
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
 
         assertSame(property, property.minDate(date1));
         assertTrue(property.isLimitedDate());
@@ -405,9 +406,9 @@ public class TestConstrainedProperty {
 
     @Test
     void testFormat() {
-        SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+        var format = RifeConfig.tools().getSimpleDateFormat("dd/MM/yyyy");
 
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.format(format));
         assertTrue(property.isFormatted());
         assertSame(format, property.getFormat());
@@ -419,9 +420,9 @@ public class TestConstrainedProperty {
 
     @Test
     void testInList() {
-        String[] list = new String[]{"one", "two"};
+        var list = new String[]{"one", "two"};
 
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.inList(list));
         assertTrue(property.isInList());
         assertSame(list, property.getInList());
@@ -438,7 +439,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testRangeByte() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
 
         assertSame(property, property.rangeBegin((byte) 5));
         assertTrue(property.isRange());
@@ -465,7 +466,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testRangeChar() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
 
         assertSame(property, property.rangeBegin('b'));
         assertTrue(property.isRange());
@@ -492,7 +493,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testRangeShort() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
 
         assertSame(property, property.rangeBegin((short) 23));
         assertTrue(property.isRange());
@@ -519,7 +520,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testRangeInt() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
 
         assertSame(property, property.rangeBegin(534));
         assertTrue(property.isRange());
@@ -546,7 +547,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testRangeLong() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
 
         assertSame(property, property.rangeBegin(242L));
         assertTrue(property.isRange());
@@ -573,7 +574,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testRangeFloat() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
 
         assertSame(property, property.rangeBegin(234.32f));
         assertTrue(property.isRange());
@@ -600,7 +601,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testRangeDouble() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
 
         assertSame(property, property.rangeBegin(290.523d));
         assertTrue(property.isRange());
@@ -627,7 +628,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testRange() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
 
         assertSame(property, property.rangeBegin(5));
         assertTrue(property.isRange());
@@ -654,7 +655,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testDefaultValueChar() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.defaultValue('C'));
         assertTrue(property.hasDefaultValue());
         assertEquals('C', property.getDefaultValue());
@@ -666,7 +667,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testDefaultValueBoolean() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.defaultValue(false));
         assertTrue(property.hasDefaultValue());
         assertEquals(false, property.getDefaultValue());
@@ -678,7 +679,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testDefaultValueByte() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.defaultValue((byte) 89));
         assertTrue(property.hasDefaultValue());
         assertEquals((byte) 89, property.getDefaultValue());
@@ -690,7 +691,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testDefaultValueDouble() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.defaultValue(87923.878d));
         assertTrue(property.hasDefaultValue());
         assertEquals(87923.878d, property.getDefaultValue());
@@ -702,7 +703,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testDefaultValueFloat() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.defaultValue(61.9f));
         assertTrue(property.hasDefaultValue());
         assertEquals(61.9f, property.getDefaultValue());
@@ -714,7 +715,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testDefaultValueInt() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.defaultValue(9824));
         assertTrue(property.hasDefaultValue());
         assertEquals(9824, property.getDefaultValue());
@@ -726,7 +727,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testDefaultValueLong() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.defaultValue(2332979L));
         assertTrue(property.hasDefaultValue());
         assertEquals(2332979L, property.getDefaultValue());
@@ -738,7 +739,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testDefaultValueShort() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.defaultValue((short) 221));
         assertTrue(property.hasDefaultValue());
         assertEquals((short) 221, property.getDefaultValue());
@@ -750,7 +751,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testDefaultValueObject() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.defaultValue("the default"));
         assertTrue(property.hasDefaultValue());
         assertEquals("the default", property.getDefaultValue());
@@ -762,7 +763,7 @@ public class TestConstrainedProperty {
 
     @Test
     void testManyToOne() {
-        ConstrainedProperty property = new ConstrainedProperty("the_name");
+        var property = new ConstrainedProperty("the_name");
         assertSame(property, property.manyToOne(BeanImpl.class, "column"));
         assertTrue(property.hasManyToOne());
         assertEquals("column", property.getManyToOne().getColumn());

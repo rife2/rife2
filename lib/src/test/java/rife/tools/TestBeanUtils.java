@@ -12,10 +12,7 @@ import rife.validation.ConstrainedProperty;
 
 import java.beans.PropertyDescriptor;
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
 
@@ -24,9 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestBeanUtils {
     private BeanImpl getPopulatedBean() {
         BeanImpl bean = new BeanImpl();
-        var cal = Calendar.getInstance();
-        cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-        cal.set(Calendar.MILLISECOND, 153);
+        var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
         bean.setPropertyString("thisisastring");
         bean.setPropertyStringBuffer(new StringBuffer("butthisisastringbuffer"));
         bean.setPropertyDate(Convert.toDate(cal));
@@ -2492,9 +2487,7 @@ public class TestBeanUtils {
     void testGetPropertyValue() {
         Object bean = getPopulatedBean();
         try {
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyString"), "thisisastring");
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyDate"), Convert.toDate(cal));
@@ -2531,9 +2524,7 @@ public class TestBeanUtils {
     void testSetPropertyValue() {
         BeanImpl bean = new BeanImpl();
         try {
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             BeanUtils.setPropertyValue(bean, "propertyString", "thisisastring");
             BeanUtils.setPropertyValue(bean, "propertyStringBuffer", new StringBuffer("butthisisastringbuffer"));
             BeanUtils.setPropertyValue(bean, "propertyDate", Convert.toDate(cal));
@@ -2628,9 +2619,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertyShort"));
             assertTrue(property_values.containsKey("propertyBigDecimal"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyString"), "thisisastring");
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
@@ -2683,9 +2672,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertyShort"));
             assertTrue(property_values.containsKey("propertyBigDecimal"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyReadonly"), 23);
             assertEquals(property_values.get("propertyString"), "thisisastring");
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
@@ -2738,9 +2725,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertyShort"));
             assertTrue(property_values.containsKey("propertyBigDecimal"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyString"), "thisisastring");
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
@@ -2792,9 +2777,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
             assertTrue(property_values.containsKey("PREFIX:propertyBigDecimal"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
@@ -2847,9 +2830,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
             assertTrue(property_values.containsKey("PREFIX:propertyBigDecimal"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyReadonly"), 23);
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
@@ -2902,9 +2883,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
             assertTrue(property_values.containsKey("PREFIX:propertyBigDecimal"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
@@ -2949,9 +2928,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertyFloat"));
             assertTrue(property_values.containsKey("propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyString"), "thisisastring");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
@@ -2986,9 +2963,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertyFloat"));
             assertTrue(property_values.containsKey("propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyReadonly"), 23);
             assertEquals(property_values.get("propertyString"), "thisisastring");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
@@ -3023,9 +2998,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertyFloat"));
             assertTrue(property_values.containsKey("propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyString"), "thisisastring");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
@@ -3059,9 +3032,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertyFloat"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
@@ -3096,9 +3067,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertyFloat"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyReadonly"), 23);
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
@@ -3133,9 +3102,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertyFloat"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
@@ -3172,9 +3139,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertyLong"));
             assertTrue(property_values.containsKey("propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
@@ -3216,9 +3181,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertyLong"));
             assertTrue(property_values.containsKey("propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyReadonly"), 23);
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
@@ -3260,9 +3223,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertyLong"));
             assertTrue(property_values.containsKey("propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
@@ -3303,9 +3264,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertyLong"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
@@ -3347,9 +3306,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertyLong"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyReadonly"), 23);
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
@@ -3391,9 +3348,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertyLong"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
@@ -3427,9 +3382,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertyByte"));
             assertTrue(property_values.containsKey("propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
@@ -3456,9 +3409,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertyByte"));
             assertTrue(property_values.containsKey("propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyReadonly"), 23);
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
@@ -3485,9 +3436,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertyByte"));
             assertTrue(property_values.containsKey("propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
@@ -3513,9 +3462,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
@@ -3542,9 +3489,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyReadonly"), 23);
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
@@ -3571,9 +3516,7 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
 
-            var cal = Calendar.getInstance();
-            cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
-            cal.set(Calendar.MILLISECOND, 153);
+            var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
@@ -3587,22 +3530,24 @@ public class TestBeanUtils {
     @SuppressWarnings("deprecated")
     @Test
     void testFormatPropertyValues() {
-        assertEquals("20230123134523000-0500", BeanUtils.formatPropertyValue(new Date(123, Calendar.JANUARY, 23, 13, 45, 23), null));
-        assertEquals("134523000-0500", BeanUtils.formatPropertyValue(new Time(13, 45, 23), null));
-        assertEquals("20230123134523000-0500", BeanUtils.formatPropertyValue(Instant.parse("2023-01-23T18:45:23.00Z"), null));
-        assertEquals("20230123134523142-0500", BeanUtils.formatPropertyValue(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000), null));
-        assertEquals("20230123000000000-0500", BeanUtils.formatPropertyValue(LocalDate.of(2023, Month.JANUARY, 23), null));
-        assertEquals("134523000-0500", BeanUtils.formatPropertyValue(LocalTime.of(13, 45, 23, 142000000), null));
+        var cal = RifeConfig.tools().getCalendarInstance(2023, Calendar.JANUARY, 23, 13, 45, 23, 142);
+        assertEquals("20230123134523142-0500", BeanUtils.formatPropertyValue(Convert.toDate(cal), null));
+        assertEquals("134523000-0500", BeanUtils.formatPropertyValue(Convert.toTime(cal), null));
+        assertEquals("20230123134523142-0500", BeanUtils.formatPropertyValue(Convert.toInstant(cal), null));
+        assertEquals("20230123134523142-0500", BeanUtils.formatPropertyValue(Convert.toLocalDateTime(cal), null));
+        assertEquals("20230123000000000-0500", BeanUtils.formatPropertyValue(Convert.toLocalDate(cal), null));
+        assertEquals("134523142-0500", BeanUtils.formatPropertyValue(Convert.toLocalTime(cal), null));
     }
 
-    @SuppressWarnings("deprecated")
     @Test
     void testFormatPropertyValuesConstrained() {
-        assertEquals("23 Jan 2023 13:45:23", BeanUtils.formatPropertyValue(new Date(123, Calendar.JANUARY, 23, 13, 45, 23), new ConstrainedProperty("property").format(new SimpleDateFormat("d MMM yyyy HH:mm:ss"))));
-        assertEquals("1 Jan 1970 13:45:23", BeanUtils.formatPropertyValue(new Time(13, 45, 23), new ConstrainedProperty("property").format(new SimpleDateFormat("d MMM yyyy HH:mm:ss"))));
-        assertEquals("23 Jan 2023 13:45:23", BeanUtils.formatPropertyValue(Instant.parse("2023-01-23T18:45:23.00Z"), new ConstrainedProperty("property").format(new SimpleDateFormat("d MMM yyyy HH:mm:ss"))));
-        assertEquals("23 Jan 2023 13:45:23", BeanUtils.formatPropertyValue(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000), new ConstrainedProperty("property").format(new SimpleDateFormat("d MMM yyyy HH:mm:ss"))));
-        assertEquals("23 Jan 2023 00:00:00", BeanUtils.formatPropertyValue(LocalDate.of(2023, Month.JANUARY, 23), new ConstrainedProperty("property").format(new SimpleDateFormat("d MMM yyyy HH:mm:ss"))));
-        assertEquals("1 Jan 1970 13:45:23", BeanUtils.formatPropertyValue(LocalTime.of(13, 45, 23, 142000000), new ConstrainedProperty("property").format(new SimpleDateFormat("d MMM yyyy HH:mm:ss"))));
+        var cal = RifeConfig.tools().getCalendarInstance(2023, Calendar.JANUARY, 23, 13, 45, 23, 142);
+        var format = RifeConfig.tools().getSimpleDateFormat("d MMM yyyy HH:mm:ss");
+        assertEquals("23 Jan 2023 13:45:23", BeanUtils.formatPropertyValue(Convert.toDate(cal), new ConstrainedProperty("property").format(format)));
+        assertEquals("1 Jan 1970 13:45:23", BeanUtils.formatPropertyValue(Convert.toTime(cal), new ConstrainedProperty("property").format(format)));
+        assertEquals("23 Jan 2023 13:45:23", BeanUtils.formatPropertyValue(Instant.parse("2023-01-23T18:45:23.00Z"), new ConstrainedProperty("property").format(format)));
+        assertEquals("23 Jan 2023 13:45:23", BeanUtils.formatPropertyValue(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000), new ConstrainedProperty("property").format(format)));
+        assertEquals("23 Jan 2023 00:00:00", BeanUtils.formatPropertyValue(LocalDate.of(2023, Month.JANUARY, 23), new ConstrainedProperty("property").format(format)));
+        assertEquals("1 Jan 1970 13:45:23", BeanUtils.formatPropertyValue(LocalTime.of(13, 45, 23, 142000000), new ConstrainedProperty("property").format(format)));
     }
 }

@@ -69,7 +69,7 @@ public class Task extends MetaData implements Cloneable {
     public long getNextDate()
     throws FrequencyException {
         // lower towards the minute, remove seconds and milliseconds
-        var current_calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+        var current_calendar = RifeConfig.tools().getCalendarInstance();
         current_calendar.set(Calendar.SECOND, 0);
         current_calendar.set(Calendar.MILLISECOND, 0);
         var current_time = current_calendar.getTimeInMillis();
@@ -116,7 +116,7 @@ public class Task extends MetaData implements Cloneable {
 
     public void setPlanned(long planned) {
         // lower towards the minute, remove seconds and milliseconds
-        var planned_calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+        var planned_calendar = RifeConfig.tools().getCalendarInstance();
         planned_calendar.setTimeInMillis(planned);
         planned_calendar.set(Calendar.SECOND, 0);
         planned_calendar.set(Calendar.MILLISECOND, 0);
@@ -235,7 +235,7 @@ public class Task extends MetaData implements Cloneable {
                 return true;
             }
 
-            var current_calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var current_calendar = RifeConfig.tools().getCalendarInstance();
             current_calendar.set(Calendar.SECOND, 0);
             current_calendar.set(Calendar.MILLISECOND, 0);
             return planned_ >= current_calendar.getTimeInMillis();

@@ -13,6 +13,7 @@ import rife.tools.StringUtils;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -998,7 +999,7 @@ public class RifeConfig {
         }
 
         public String getGenerationPath() {
-            String generation_path = generationPath_;
+            var generation_path = generationPath_;
 
             if (null == generation_path) {
                 return RifeConfig.this.global.getTempPath() + File.separator + DEFAULT_TEMPLATES_RIFE_FOLDER;
@@ -1047,7 +1048,7 @@ public class RifeConfig {
         }
 
         public String getDefaultResourceBundle(TemplateFactory factory) {
-            Collection<String> result = getDefaultResourceBundles(factory);
+            var result = getDefaultResourceBundles(factory);
             if (null == result || 0 == result.size()) {
                 return null;
             }
@@ -1157,38 +1158,60 @@ public class RifeConfig {
             return this;
         }
 
+        public DateFormat getSimpleDateFormat(String pattern) {
+            try {
+                var sf = new SimpleDateFormat(pattern, Localization.getLocale());
+                sf.setTimeZone(getDefaultTimeZone());
+                return sf;
+            } catch (IllegalArgumentException e) {
+                throw new DateFormatInitializationException(e.getMessage());
+            }
+        }
+
+        public DateTimeFormatter getDateTimeFormatter(String pattern) {
+            try {
+                return DateTimeFormatter.ofPattern(pattern, Localization.getLocale()).withZone(getDefaultZoneId());
+            } catch (IllegalArgumentException e) {
+                throw new DateFormatInitializationException(e.getMessage());
+            }
+        }
+
+        public Calendar getCalendarInstance(int year, int month, int date, int hourOfDay, int minute, int seconds) {
+            return getCalendarInstance(year, month, date, hourOfDay, minute, seconds, 0);
+        }
+
+        public Calendar getCalendarInstance(int year, int month, int date, int hourOfDay, int minute, int seconds, int milliseconds) {
+            var cal = getCalendarInstance();
+            cal.set(year, month, date, hourOfDay, minute, seconds);
+            cal.set(Calendar.MILLISECOND, milliseconds);
+            return cal;
+        }
+
+        public Calendar getCalendarInstance() {
+            return GregorianCalendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+        }
+
         public DateFormat getDefaultShortDateFormat() {
             if (defaultShortDateFormat_ != null) {
-                SimpleDateFormat sf;
-                try {
-                    sf = new SimpleDateFormat(defaultShortDateFormat_, Localization.getLocale());
-                    sf.setTimeZone(getDefaultTimeZone());
-                } catch (IllegalArgumentException e) {
-                    throw new DateFormatInitializationException(e.getMessage());
-                }
-
-                return sf;
+                return getSimpleDateFormat(defaultShortDateFormat_);
             } else {
                 if (0 != getDefaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
-                    return DateFormat.getDateInstance(DateFormat.SHORT, Localization.getLocale());
+                    var sf = DateFormat.getDateInstance(DateFormat.SHORT, Localization.getLocale());
+                    sf.setTimeZone(getDefaultTimeZone());
+                    return sf;
                 }
 
-                return DateFormat.getDateInstance(DateFormat.SHORT, Locale.ENGLISH);
+                var sf = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ENGLISH);
+                sf.setTimeZone(getDefaultTimeZone());
+                return sf;
             }
         }
 
         public DateTimeFormatter getDefaultShortDateTimeFormatter() {
             if (defaultShortDateFormat_ != null) {
-                DateTimeFormatter df;
-                try {
-                    df = DateTimeFormatter.ofPattern(defaultShortDateFormat_, Localization.getLocale());
-                } catch (IllegalArgumentException e) {
-                    throw new DateFormatInitializationException(e.getMessage());
-                }
-
-                return df;
+                return getDateTimeFormatter(defaultShortDateFormat_);
             } else {
-                return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).localizedBy(Localization.getLocale());
+                return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).localizedBy(Localization.getLocale()).withZone(getDefaultZoneId());
             }
         }
 
@@ -1201,36 +1224,25 @@ public class RifeConfig {
 
         public DateFormat getDefaultLongDateFormat() {
             if (defaultLongDateFormat_ != null) {
-                SimpleDateFormat sf;
-                try {
-                    sf = new SimpleDateFormat(defaultLongDateFormat_, Localization.getLocale());
-                    sf.setTimeZone(getDefaultTimeZone());
-                } catch (IllegalArgumentException e) {
-                    throw new DateFormatInitializationException(e.getMessage());
-                }
-
-                return sf;
+                return getSimpleDateFormat(defaultLongDateFormat_);
             } else {
                 if (0 != getDefaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
-                    return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Localization.getLocale());
+                    var sf = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Localization.getLocale());
+                    sf.setTimeZone(getDefaultTimeZone());
+                    return sf;
                 }
 
-                return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.ENGLISH);
+                var sf = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.ENGLISH);
+                sf.setTimeZone(getDefaultTimeZone());
+                return sf;
             }
         }
 
         public DateTimeFormatter getDefaultLongDateTimeFormatter() {
             if (defaultLongDateFormat_ != null) {
-                DateTimeFormatter df;
-                try {
-                    df = DateTimeFormatter.ofPattern(defaultLongDateFormat_, Localization.getLocale());
-                } catch (IllegalArgumentException e) {
-                    throw new DateFormatInitializationException(e.getMessage());
-                }
-
-                return df;
+                return getDateTimeFormatter(defaultLongDateFormat_);
             } else {
-                return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).localizedBy(Localization.getLocale());
+                return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).localizedBy(Localization.getLocale()).withZone(getDefaultZoneId());
             }
         }
 
@@ -1242,18 +1254,11 @@ public class RifeConfig {
         }
 
         public DateFormat getDefaultInputDateFormat() {
-            SimpleDateFormat sf = new SimpleDateFormat(defaultInputDateFormat_);
-            sf.setTimeZone(getDefaultTimeZone());
-            return sf;
+            return getSimpleDateFormat(defaultInputDateFormat_);
         }
 
         public DateTimeFormatter getDefaultInputDateTimeFormatter() {
-            DateTimeFormatter df;
-            try {
-                return DateTimeFormatter.ofPattern(defaultInputDateFormat_, Localization.getLocale());
-            } catch (IllegalArgumentException e) {
-                throw new DateFormatInitializationException(e.getMessage());
-            }
+            return getDateTimeFormatter(defaultInputDateFormat_);
         }
 
         public ToolsConfig setDefaultInputDatePattern(String pattern) {
@@ -1264,18 +1269,11 @@ public class RifeConfig {
         }
 
         public DateFormat getDefaultInputTimeFormat() {
-            SimpleDateFormat sf = new SimpleDateFormat(defaultInputTimeFormat_);
-            sf.setTimeZone(getDefaultTimeZone());
-            return sf;
+            return getSimpleDateFormat(defaultInputTimeFormat_);
         }
 
         public DateTimeFormatter getDefaultInputTimeFormatter() {
-            DateTimeFormatter df;
-            try {
-                return DateTimeFormatter.ofPattern(defaultInputTimeFormat_, Localization.getLocale());
-            } catch (IllegalArgumentException e) {
-                throw new DateFormatInitializationException(e.getMessage());
-            }
+            return getDateTimeFormatter(defaultInputTimeFormat_);
         }
 
         public ToolsConfig setDefaultInputTimeFormat(String format) {
@@ -1283,6 +1281,22 @@ public class RifeConfig {
                 format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
             defaultInputTimeFormat_ = format;
             return this;
+        }
+
+        public DateFormat getConcisePreciseDateFormat() {
+            return getSimpleDateFormat("yyyyMMddHHmmssSSSZ");
+        }
+
+        public DateFormat getConcisePreciseTimeFormat() {
+            return getSimpleDateFormat("HHmmssSSSZ");
+        }
+
+        public DateTimeFormatter getConcisePreciseDateTimeFormatter() {
+            return getDateTimeFormatter("yyyyMMddHHmmssSSSZ");
+        }
+
+        public DateTimeFormatter getConcisePreciseTimeFormatter() {
+            return getDateTimeFormatter("HHmmssSSSZ");
         }
 
         public int getMaxVisualUrlLength() {

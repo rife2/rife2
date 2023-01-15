@@ -59,17 +59,16 @@ public class BeanImpl3 extends MetaData {
     private SerializableType[] propertySerializableTypeArray_ = null;
 
     public void activateMetaData() {
-        DateFormat date_format = new SimpleDateFormat("'custom format' yyyy-MM-dd HH:mm");
-        date_format.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
-        NumberFormat int_format = NumberFormat.getCurrencyInstance(Locale.US);
-        NumberFormat double_format = NumberFormat.getNumberInstance(Locale.US);
-        NumberFormat byte_format = NumberFormat.getPercentInstance(Locale.US);
-        NumberFormat float_format = NumberFormat.getNumberInstance(Locale.FRANCE);
-        NumberFormat long_format = NumberFormat.getCurrencyInstance(Locale.US);
-        NumberFormat short_format = NumberFormat.getCurrencyInstance(Locale.ENGLISH);
-        DecimalFormat bigdecimal_format = (DecimalFormat) NumberFormat.getNumberInstance(Locale.FRANCE);
+        var date_format = RifeConfig.tools().getSimpleDateFormat("'custom format' yyyy-MM-dd HH:mm");
+        var int_format = NumberFormat.getCurrencyInstance(Locale.US);
+        var double_format = NumberFormat.getNumberInstance(Locale.US);
+        var byte_format = NumberFormat.getPercentInstance(Locale.US);
+        var float_format = NumberFormat.getNumberInstance(Locale.FRANCE);
+        var long_format = NumberFormat.getCurrencyInstance(Locale.US);
+        var short_format = NumberFormat.getCurrencyInstance(Locale.ENGLISH);
+        var bigdecimal_format = (DecimalFormat) NumberFormat.getNumberInstance(Locale.FRANCE);
         bigdecimal_format.setParseBigDecimal(true);
-        SerializationFormatter serialization_formatter = new SerializationFormatter();
+        var serialization_formatter = new SerializationFormatter();
 
         addConstraint(new ConstrainedProperty("propertyDate").format(date_format));
         addConstraint(new ConstrainedProperty("propertyInstant").format(date_format));
@@ -461,7 +460,7 @@ public class BeanImpl3 extends MetaData {
                 return false;
             }
 
-            SerializableType other_datalink = (SerializableType) other;
+            var other_datalink = (SerializableType) other;
             if (!other_datalink.getString().equals(getString())) {
                 return false;
             }

@@ -328,22 +328,21 @@ public final class Convert {
         if (null == localDateTime) {
             return null;
         }
-        return new Date(Timestamp.valueOf(localDateTime).getTime());
+        return Date.from(toInstant(localDateTime));
     }
 
     public static Date toDate(LocalDate localDate) {
         if (null == localDate) {
             return null;
         }
-        return new Date(Timestamp.valueOf(localDate.atStartOfDay()).getTime());
+        return Date.from(toInstant(localDate));
     }
 
-    @SuppressWarnings("deprecated")
     public static Date toDate(LocalTime localTime) {
         if (null == localTime) {
             return null;
         }
-        return new Date(new Time(localTime.getHour(), localTime.getMinute(), localTime.getSecond()).getTime());
+        return Date.from(toInstant(localTime));
     }
 
     public static Date toDate(Number number) {
@@ -362,7 +361,7 @@ public final class Convert {
             return new Date(Long.parseLong(string));
         } catch (NumberFormatException e) {
             try {
-                return BeanUtils.getConcisePreciseDateFormat().parse(string);
+                return RifeConfig.tools().getConcisePreciseDateFormat().parse(string);
             } catch (ParseException e2) {
                 try {
                     return RifeConfig.tools().getDefaultInputDateFormat().parse(string);
@@ -425,29 +424,28 @@ public final class Convert {
         if (null == instant) {
             return null;
         }
-        return new java.sql.Date(instant.toEpochMilli());
+        return new java.sql.Date(toDate(instant).getTime());
     }
 
     public static java.sql.Date toSqlDate(LocalDateTime localDateTime) {
         if (null == localDateTime) {
             return null;
         }
-        return new java.sql.Date(Timestamp.valueOf(localDateTime).getTime());
+        return new java.sql.Date(toDate(localDateTime).getTime());
     }
 
     public static java.sql.Date toSqlDate(LocalDate localDate) {
         if (null == localDate) {
             return null;
         }
-        return new java.sql.Date(Timestamp.valueOf(localDate.atStartOfDay()).getTime());
+        return new java.sql.Date(toDate(localDate).getTime());
     }
 
-    @SuppressWarnings("deprecated")
     public static java.sql.Date toSqlDate(LocalTime localTime) {
         if (null == localTime) {
             return null;
         }
-        return new java.sql.Date(new Time(localTime.getHour(), localTime.getMinute(), localTime.getSecond()).getTime());
+        return new java.sql.Date(toDate(localTime).getTime());
     }
 
     public static java.sql.Date toSqlDate(Number number) {
@@ -466,7 +464,7 @@ public final class Convert {
             return new java.sql.Date(Long.parseLong(string));
         } catch (NumberFormatException e) {
             try {
-                return new java.sql.Date(BeanUtils.getConcisePreciseDateFormat().parse(string).getTime());
+                return new java.sql.Date(RifeConfig.tools().getConcisePreciseDateFormat().parse(string).getTime());
             } catch (ParseException e2) {
                 try {
                     return new java.sql.Date(RifeConfig.tools().getDefaultInputDateFormat().parse(string).getTime());
@@ -539,22 +537,21 @@ public final class Convert {
         if (null == localDateTime) {
             return null;
         }
-        return Timestamp.valueOf(localDateTime);
+        return Timestamp.from(toInstant(localDateTime));
     }
 
     public static Timestamp toTimestamp(LocalDate localDate) {
         if (null == localDate) {
             return null;
         }
-        return Timestamp.valueOf(localDate.atStartOfDay());
+        return Timestamp.from(toInstant(localDate));
     }
 
-    @SuppressWarnings("deprecated")
     public static Timestamp toTimestamp(LocalTime localTime) {
         if (null == localTime) {
             return null;
         }
-        return new Timestamp(new Time(localTime.getHour(), localTime.getMinute(), localTime.getSecond()).getTime());
+        return Timestamp.from(toInstant(localTime));
     }
 
     public static Timestamp toTimestamp(Number number) {
@@ -573,7 +570,7 @@ public final class Convert {
             return new Timestamp(Long.parseLong(string));
         } catch (NumberFormatException e) {
             try {
-                return new Timestamp(BeanUtils.getConcisePreciseDateFormat().parse(string).getTime());
+                return new Timestamp(RifeConfig.tools().getConcisePreciseDateFormat().parse(string).getTime());
             } catch (ParseException e2) {
                 try {
                     return new Timestamp(RifeConfig.tools().getDefaultInputDateFormat().parse(string).getTime());
@@ -686,7 +683,7 @@ public final class Convert {
             return new Time(Long.parseLong(string));
         } catch (NumberFormatException e) {
             try {
-                var date = BeanUtils.getConcisePreciseTimeFormat().parse(string);
+                var date = RifeConfig.tools().getConcisePreciseTimeFormat().parse(string);
                 return new Time(date.getHours(), date.getMinutes(), date.getSeconds());
             } catch (ParseException e2) {
                 try {
@@ -795,7 +792,7 @@ public final class Convert {
             return Instant.ofEpochMilli(Long.parseLong(string));
         } catch (NumberFormatException e) {
             try {
-                return BeanUtils.getConcisePreciseDateTimeFormatter().parse(string, Instant::from);
+                return RifeConfig.tools().getConcisePreciseDateTimeFormatter().parse(string, Instant::from);
             } catch (DateTimeParseException e2) {
                 try {
                     return RifeConfig.tools().getDefaultInputDateFormat().parse(string).toInstant();
@@ -898,7 +895,7 @@ public final class Convert {
             return LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(string)), RifeConfig.tools().getDefaultZoneId());
         } catch (NumberFormatException e) {
             try {
-                return LocalDateTime.from(BeanUtils.getConcisePreciseDateTimeFormatter().parse(string));
+                return LocalDateTime.from(RifeConfig.tools().getConcisePreciseDateTimeFormatter().parse(string));
             } catch (DateTimeParseException e2) {
                 try {
                     return LocalDateTime.from(RifeConfig.tools().getDefaultInputDateTimeFormatter().parse(string));
@@ -1001,7 +998,7 @@ public final class Convert {
             return LocalDate.ofInstant(Instant.ofEpochMilli(Long.parseLong(string)), RifeConfig.tools().getDefaultZoneId());
         } catch (NumberFormatException e) {
             try {
-                return LocalDate.from(BeanUtils.getConcisePreciseDateTimeFormatter().parse(string));
+                return LocalDate.from(RifeConfig.tools().getConcisePreciseDateTimeFormatter().parse(string));
             } catch (DateTimeParseException e2) {
                 try {
                     return LocalDate.from(RifeConfig.tools().getDefaultInputDateTimeFormatter().parse(string));
@@ -1104,7 +1101,7 @@ public final class Convert {
             return LocalTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(string)), RifeConfig.tools().getDefaultZoneId());
         } catch (NumberFormatException e) {
             try {
-                return LocalTime.from(BeanUtils.getConcisePreciseTimeFormatter().parse(string));
+                return LocalTime.from(RifeConfig.tools().getConcisePreciseTimeFormatter().parse(string));
             } catch (DateTimeParseException e2) {
                 try {
                     return LocalTime.from(RifeConfig.tools().getDefaultInputTimeFormatter().parse(string));

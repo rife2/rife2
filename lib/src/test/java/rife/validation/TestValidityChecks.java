@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.jupiter.api.Test;
+import rife.config.RifeConfig;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -494,11 +495,11 @@ public class TestValidityChecks {
     void testCheckFormat() {
         assertTrue(ValidityChecks.checkFormat(null, null));
         assertTrue(ValidityChecks.checkFormat(new Object(), null));
-        assertTrue(ValidityChecks.checkFormat(new Object(), new SimpleDateFormat("dd/MM/yyyy")));
+        assertTrue(ValidityChecks.checkFormat(new Object(), RifeConfig.tools().getSimpleDateFormat("dd/MM/yyyy")));
         assertTrue(ValidityChecks.checkFormat("testing", null));
-        assertTrue(ValidityChecks.checkFormat("20/02/2004", new SimpleDateFormat("dd/MM/yyyy")));
-        assertFalse(ValidityChecks.checkFormat("2/2/2004", new SimpleDateFormat("dd/MM/yyyy")));
-        assertFalse(ValidityChecks.checkFormat("31/02/2004", new SimpleDateFormat("dd/MM/yyyy")));
-        assertFalse(ValidityChecks.checkFormat("testing", new SimpleDateFormat("dd/MM/yyyy")));
+        assertTrue(ValidityChecks.checkFormat("20/02/2004", RifeConfig.tools().getSimpleDateFormat("dd/MM/yyyy")));
+        assertFalse(ValidityChecks.checkFormat("2/2/2004", RifeConfig.tools().getSimpleDateFormat("dd/MM/yyyy")));
+        assertFalse(ValidityChecks.checkFormat("31/02/2004", RifeConfig.tools().getSimpleDateFormat("dd/MM/yyyy")));
+        assertFalse(ValidityChecks.checkFormat("testing", RifeConfig.tools().getSimpleDateFormat("dd/MM/yyyy")));
     }
 }

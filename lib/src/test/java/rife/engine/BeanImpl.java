@@ -87,8 +87,7 @@ public class BeanImpl extends Validation {
                 c.print("," + Arrays.equals(image_bytes, FileUtils.readBytes(getStreamFile())));
             }
 
-            var sf = new SimpleDateFormat("EEE d MMM yyyy HH:mm:ss");
-            sf.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+            var sf = RifeConfig.tools().getSimpleDateFormat("EEE d MMM yyyy HH:mm:ss");
             
             c.print("," + (null == getDate() ? null : sf.format(getDate())));
             if (null == getDatesFormatted()) {
@@ -150,8 +149,7 @@ public class BeanImpl extends Validation {
             .addConstraint(new ConstrainedProperty("long"))
             .addConstraint(new ConstrainedProperty("shortObject"));
 
-        var sf = new SimpleDateFormat("EEE d MMM yyyy HH:mm:ss");
-        sf.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+        var sf = RifeConfig.tools().getSimpleDateFormat("EEE d MMM yyyy HH:mm:ss");
         addConstraint(new ConstrainedProperty("dateFormatted").format(sf));
         addConstraint(new ConstrainedProperty("datesFormatted").format(sf));
         addConstraint(new ConstrainedProperty("instantFormatted").format(sf));

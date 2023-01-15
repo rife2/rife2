@@ -5,6 +5,7 @@
 package rife.validation;
 
 import org.junit.jupiter.api.Test;
+import rife.config.RifeConfig;
 
 import java.text.SimpleDateFormat;
 
@@ -14,49 +15,49 @@ public class TestValidationRuleFormat {
     @Test
     void testInstantiation() {
         Bean bean = new Bean("30/01/2004");
-        ValidationRule rule = new ValidationRuleFormat("property", new SimpleDateFormat("dd/MM/yyyy")).setBean(bean);
+        ValidationRule rule = new ValidationRuleFormat("property", RifeConfig.tools().getSimpleDateFormat("dd/MM/yyyy")).setBean(bean);
         assertNotNull(rule);
     }
 
     @Test
     void testValid() {
         Bean bean = new Bean("30/01/2004");
-        ValidationRule rule = new ValidationRuleFormat("property", new SimpleDateFormat("dd/MM/yyyy")).setBean(bean);
+        ValidationRule rule = new ValidationRuleFormat("property", RifeConfig.tools().getSimpleDateFormat("dd/MM/yyyy")).setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
     void testValidArray() {
         Bean bean = new Bean(new String[]{"30/01/2004", "01/03/2006"});
-        ValidationRule rule = new ValidationRuleFormat("arrayProperty", new SimpleDateFormat("dd/MM/yyyy")).setBean(bean);
+        ValidationRule rule = new ValidationRuleFormat("arrayProperty", RifeConfig.tools().getSimpleDateFormat("dd/MM/yyyy")).setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
     void testInvalid() {
         Bean bean = new Bean("3/01/2004");
-        ValidationRule rule = new ValidationRuleFormat("property", new SimpleDateFormat("dd/MM/yyyy")).setBean(bean);
+        ValidationRule rule = new ValidationRuleFormat("property", RifeConfig.tools().getSimpleDateFormat("dd/MM/yyyy")).setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
     void testInvalidArray() {
         Bean bean = new Bean(new String[]{"30/01/2004", "1/10/2006", "17/06/2006"});
-        ValidationRule rule = new ValidationRuleFormat("arrayProperty", new SimpleDateFormat("dd/MM/yyyy")).setBean(bean);
+        ValidationRule rule = new ValidationRuleFormat("arrayProperty", RifeConfig.tools().getSimpleDateFormat("dd/MM/yyyy")).setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
     void testUnknownProperty() {
         Bean bean = new Bean("30/01/2004");
-        ValidationRule rule = new ValidationRuleFormat("unknown_property", new SimpleDateFormat("dd/MM/yyyy")).setBean(bean);
+        ValidationRule rule = new ValidationRuleFormat("unknown_property", RifeConfig.tools().getSimpleDateFormat("dd/MM/yyyy")).setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
     void testGetError() {
         Bean bean = new Bean("82/01/2004");
-        ValidationRule rule = new ValidationRuleFormat("property", new SimpleDateFormat("dd/MM/yyyy")).setBean(bean);
+        ValidationRule rule = new ValidationRuleFormat("property", RifeConfig.tools().getSimpleDateFormat("dd/MM/yyyy")).setBean(bean);
         ValidationError error = rule.getError();
         assertEquals(ValidationError.IDENTIFIER_INVALID, error.getIdentifier());
         assertEquals("property", error.getSubject());

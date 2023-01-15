@@ -48,26 +48,6 @@ public final class BeanUtils {
         // no-op
     }
 
-    public static DateFormat getConcisePreciseDateFormat() {
-        var sf = new SimpleDateFormat("yyyyMMddHHmmssSSSZ", Localization.getLocale());
-        sf.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
-        return sf;
-    }
-
-    public static DateFormat getConcisePreciseTimeFormat() {
-        var sf = new SimpleDateFormat("HHmmssSSSZ", Localization.getLocale());
-        sf.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
-        return sf;
-    }
-
-    public static DateTimeFormatter getConcisePreciseDateTimeFormatter() {
-        return DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSSZ", Localization.getLocale());
-    }
-
-    public static DateTimeFormatter getConcisePreciseTimeFormatter() {
-        return DateTimeFormatter.ofPattern("HHmmssSSSZ", Localization.getLocale());
-    }
-
     public static BeanInfo getBeanInfo(Class beanClass)
     throws BeanUtilsException {
         try {
@@ -380,7 +360,7 @@ public final class BeanUtils {
         if (propertyValue instanceof Time ||
             propertyValue instanceof LocalTime) {
             if (format == null) {
-                format = getConcisePreciseTimeFormat();
+                format = RifeConfig.tools().getConcisePreciseTimeFormat();
             }
             try {
                 return format.format(Convert.toDate(propertyValue));
@@ -392,7 +372,7 @@ public final class BeanUtils {
                    propertyValue instanceof LocalDateTime ||
                    propertyValue instanceof LocalDate) {
             if (format == null) {
-                format = getConcisePreciseDateFormat();
+                format = RifeConfig.tools().getConcisePreciseDateFormat();
             }
             try {
                 return format.format(Convert.toDate(propertyValue));
@@ -505,7 +485,7 @@ public final class BeanUtils {
         Object result = null;
         if (null == format) {
             try {
-                result = BeanUtils.getConcisePreciseDateFormat().parseObject(date);
+                result = RifeConfig.tools().getConcisePreciseDateFormat().parseObject(date);
             } catch (ParseException e) {
                 try {
                     result = RifeConfig.tools().getDefaultInputDateFormat().parseObject(date);
@@ -839,9 +819,9 @@ public final class BeanUtils {
                                         if (null == custom_format) {
                                             try {
                                                 if (Time.class.isAssignableFrom(component_type) || LocalTime.class.isAssignableFrom(component_type)) {
-                                                    used_format = BeanUtils.getConcisePreciseTimeFormat();
+                                                    used_format = RifeConfig.tools().getConcisePreciseTimeFormat();
                                                 } else {
-                                                    used_format = BeanUtils.getConcisePreciseDateFormat();
+                                                    used_format = RifeConfig.tools().getConcisePreciseDateFormat();
                                                 }
                                                 parameter_value_typed = used_format.parseObject(propertyValues[i]);
                                             } catch (ParseException e) {
@@ -1003,9 +983,9 @@ public final class BeanUtils {
                                 if (null == custom_format) {
                                     try {
                                         if (Time.class.isAssignableFrom(property_type) || LocalTime.class.isAssignableFrom(property_type)) {
-                                            used_format = BeanUtils.getConcisePreciseTimeFormat();
+                                            used_format = RifeConfig.tools().getConcisePreciseTimeFormat();
                                         } else {
-                                            used_format = BeanUtils.getConcisePreciseDateFormat();
+                                            used_format = RifeConfig.tools().getConcisePreciseDateFormat();
                                         }
                                         parameter_value_typed = used_format.parseObject(propertyValues[0]);
                                     } catch (ParseException e) {

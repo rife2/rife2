@@ -6,6 +6,8 @@
 
 package rife.antlr.v4.runtime.misc;
 
+import rife.config.RifeConfig;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,7 +30,7 @@ public class LogManager {
 		@Override
 		public String toString() {
             StringBuilder buf = new StringBuilder();
-            buf.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date(timestamp)));
+            buf.append(RifeConfig.tools().getSimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date(timestamp)));
             buf.append(" ");
             buf.append(component);
             buf.append(" ");
@@ -71,7 +73,7 @@ public class LogManager {
         String dir = ".";
         String defaultFilename =
             dir + "/antlr-" +
-            new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss").format(new Date()) + ".log";
+            RifeConfig.tools().getSimpleDateFormat("yyyy-MM-dd-HH.mm.ss").format(new Date()) + ".log";
         save(defaultFilename);
         return defaultFilename;
     }

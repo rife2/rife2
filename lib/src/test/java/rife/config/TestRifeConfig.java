@@ -110,8 +110,12 @@ public class TestRifeConfig {
         }
     }
 
-    private static Date makeDate(int year, int month, int date, int hourOfDay, int minute) {
-        return Date.from(LocalDateTime.of(year, month + 1, date, hourOfDay, minute, 0, 0).toInstant(ZoneOffset.of("-04:00")));
+    public static Date makeDate(int year, int month, int date, int hourOfDay, int minute) {
+        return RifeConfig.tools().getCalendarInstance(year, month, date, hourOfDay, minute, 0).getTime();
+    }
+
+    public static Date makeDate(int year, int month, int date, int hourOfDay, int minute, int seconds) {
+        return RifeConfig.tools().getCalendarInstance(year, month, date, hourOfDay, minute, seconds).getTime();
     }
 
     @Test
@@ -190,7 +194,7 @@ public class TestRifeConfig {
             sf = RifeConfig.tools().getDefaultLongDateFormat();
             formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
-            assertEquals(formatted, "mar, 31 ago 2004 14:53:00");
+            assertEquals(formatted, "mar, 31 ago 2004 15:53:00");
 
             try {
                 switchDates("wwww 999 uuuu", "vvvv, 82.2 cccc");

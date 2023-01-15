@@ -4,6 +4,8 @@
  */
 package rife.workflow;
 
+import rife.config.RifeConfig;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -76,6 +78,6 @@ public class Event {
     }
 
     public String toString() {
-        return new SimpleDateFormat("yyyyMMddHHmmss").format(moment_) + "; " + source_ + "; " + type_ + "; " + data_;
+        return RifeConfig.tools().getSimpleDateFormat("yyyyMMddHHmmss").format(moment_) + "; " + source_ + "; " + type_ + "; " + data_;
     }
 }

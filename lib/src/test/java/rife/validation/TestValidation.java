@@ -5,6 +5,7 @@
 package rife.validation;
 
 import org.junit.jupiter.api.Test;
+import rife.config.RifeConfig;
 import rife.tools.ExceptionUtils;
 
 import java.text.SimpleDateFormat;
@@ -607,7 +608,7 @@ public class TestValidation {
     @Test
     void testConstraintFormat() {
         Bean bean = new Bean("12032003");
-        bean.addConstraint(new ConstrainedProperty("property").format(new SimpleDateFormat("ddmmyyyy")));
+        bean.addConstraint(new ConstrainedProperty("property").format(RifeConfig.tools().getSimpleDateFormat("ddMMyyyy")));
         Iterator<ConstrainedProperty> it = bean.getConstrainedProperties().iterator();
         assertTrue(it.hasNext());
         assertTrue(it.next().isFormatted());
