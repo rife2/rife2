@@ -37,12 +37,12 @@ public class BeanErrorImpl {
     public void setPropertyDouble(double propertyDouble) {
     }
 
-    public StringBuffer getPropertyStringbuffer()
+    public StringBuffer getPropertyStringBuffer()
     throws Exception {
         throw new Exception("an error");
     }
 
-    public void setPropertyStringbuffer(StringBuffer propertyStringbuffer) {
+    public void setPropertyStringBuffer(StringBuffer propertyStringBuffer) {
     }
 
     public java.util.Date getPropertyDate()
@@ -145,9 +145,9 @@ public class BeanErrorImpl {
         BeanErrorImpl bean = new BeanErrorImpl();
         Calendar cal = Calendar.getInstance();
         cal.set(2002, 5, 18, 15, 26, 14);
-        cal.set(Calendar.MILLISECOND, 764);
+        cal.set(Calendar.MILLISECOND, 167);
         bean.setPropertyString("someotherstring");
-        bean.setPropertyStringbuffer(new StringBuffer("someotherstringbuff"));
+        bean.setPropertyStringBuffer(new StringBuffer("someotherstringbuff"));
         bean.setPropertyDate(cal.getTime());
         bean.setPropertyCalendar(cal);
         bean.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
@@ -169,7 +169,7 @@ public class BeanErrorImpl {
     public static BeanErrorImpl getNullBean() {
         BeanErrorImpl bean = new BeanErrorImpl();
         bean.setPropertyString(null);
-        bean.setPropertyStringbuffer(null);
+        bean.setPropertyStringBuffer(null);
         bean.setPropertyDate(null);
         bean.setPropertyCalendar(null);
         bean.setPropertySqlDate(null);

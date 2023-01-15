@@ -45,16 +45,26 @@ public class TestMocksBeans {
         form.setParameter("longObject", "2335454");
         form.setParameter("short", "32");
         form.setParameter("shortObject", "12");
+
         form.setParameter("date", "2005-08-20 09:44");
         form.setParameter("dateFormatted", "Sat 20 Aug 2005 09:44:00");
         form.setParameter("datesFormatted", new String[]{"Sun 21 Aug 2005 11:06:14", "Mon 17 Jul 2006 16:05:31"});
+
+        form.setParameter("instant", "2006-08-20 08:44");
+        form.setParameter("instantFormatted", "Sun 20 Aug 2006 08:44:00");
+        form.setParameter("instantsFormatted", new String[]{"Tue 21 Aug 2007 10:06:14", "Thu 17 Jul 2008 15:05:31"});
+
         form.setParameter("serializableParam", SerializationUtils.serializeToString(new BeanImpl.SerializableParam(13, "Thirteen")));
         form.setParameter("serializableParams", new String[]{SerializationUtils.serializeToString(new BeanImpl.SerializableParam(9, "Nine")), SerializationUtils.serializeToString(new BeanImpl.SerializableParam(91, "NinetyOne"))});
+
         form.file("stringFile", new MockFileUpload("somedesign.html", new ByteArrayInputStream("this is some html content".getBytes(StandardCharsets.UTF_8)), "text/html"));
         form.file("streamFile", new MockFileUpload("uwyn.png", ResourceFinderClasspath.instance().getResource("uwyn.png").openStream(), "image/png"));
         form.file("bytesFile", new MockFileUpload("someimage.png", ResourceFinderClasspath.instance().getResource("uwyn.png").openStream(), "image/png"));
 
-        assertEquals("WEDNESDAY,the string,the stringbuffer,23154,893749,u,null,true,false,0,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true,Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31,13:Thirteen,9:Nine,91:NinetyOne", form.submit().getText());
+        assertEquals("WEDNESDAY,the string,the stringbuffer,23154,893749,u,null,true,false,0,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true," +
+                     "Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31," +
+                     "Sun 20 Aug 2006 08:44:00,Tue 21 Aug 2007 10:06:14,Thu 17 Jul 2008 15:05:31," +
+                     "13:Thirteen,9:Nine,91:NinetyOne", form.submit().getText());
 
         response = conversation.doRequest("/bean/get");
         parsed = response.getParsedHtml();
@@ -79,6 +89,7 @@ public class TestMocksBeans {
         form.setParameter("short", "32");
         form.setParameter("shortObject", "");
         form.setParameter("datesFormatted", new String[]{"Sun 21 Aug 2005 11:06:14", "Mon 18 Jul 2006 16:05:31"});
+        form.setParameter("instantsFormatted", new String[]{"Tue 21 Aug 2007 10:06:14", "Thu 16 Jul 2008 15:05:31"});
         form.setParameter("serializableParam", "invalid");
         form.setParameter("serializableParams", new String[]{"invalid", SerializationUtils.serializeToString(new BeanImpl.SerializableParam(91, "NinetyOne"))});
 
@@ -88,9 +99,10 @@ public class TestMocksBeans {
             notNumeric : double
             notNumeric : longObject
             invalid : datesFormatted
+            invalid : instantsFormatted
             invalid : serializableParam
             invalid : serializableParams
-            null,the string,the stringbuffer,0,null,u,null,true,false,0,21,0.0,25435.98,3434.76,6534.8,34347897,null,32,null,null,null,null,null,null,Sun 21 Aug 2005 11:06:14,null,null,null,91:NinetyOne""", form.submit().getText());
+            null,the string,the stringbuffer,0,null,u,null,true,false,0,21,0.0,25435.98,3434.76,6534.8,34347897,null,32,null,null,null,null,null,null,Sun 21 Aug 2005 11:06:14,null,null,Tue 21 Aug 2007 10:06:14,null,null,null,91:NinetyOne""", form.submit().getText());
     }
 
     @Test
@@ -121,16 +133,26 @@ public class TestMocksBeans {
         form.setParameter("prefix_longObject", "2335454");
         form.setParameter("prefix_short", "32");
         form.setParameter("prefix_shortObject", "12");
+
         form.setParameter("prefix_date", "2005-08-20 09:44");
         form.setParameter("prefix_dateFormatted", "Sat 20 Aug 2005 09:44:00");
         form.setParameter("prefix_datesFormatted", new String[]{"Sun 21 Aug 2005 11:06:14", "Mon 17 Jul 2006 16:05:31"});
+
+        form.setParameter("prefix_instant", "2006-08-20 08:44");
+        form.setParameter("prefix_instantFormatted", "Sun 20 Aug 2006 08:44:00");
+        form.setParameter("prefix_instantsFormatted", new String[]{"Tue 21 Aug 2007 10:06:14", "Thu 17 Jul 2008 15:05:31"});
+
         form.setParameter("prefix_serializableParam", SerializationUtils.serializeToString(new BeanImpl.SerializableParam(13, "Thirteen")));
         form.setParameter("prefix_serializableParams", new String[]{SerializationUtils.serializeToString(new BeanImpl.SerializableParam(9, "Nine")), SerializationUtils.serializeToString(new BeanImpl.SerializableParam(91, "NinetyOne"))});
+
         form.file("prefix_stringFile", new MockFileUpload("somedesign.html", new ByteArrayInputStream("this is some html content".getBytes(StandardCharsets.UTF_8)), "text/html"));
         form.file("prefix_streamFile", new MockFileUpload("uwyn.png", ResourceFinderClasspath.instance().getResource("uwyn.png").openStream(), "image/png"));
         form.file("prefix_bytesFile", new MockFileUpload("someimage.png", ResourceFinderClasspath.instance().getResource("uwyn.png").openStream(), "image/png"));
 
-        assertEquals("WEDNESDAY,the string,the stringbuffer,23154,893749,u,null,true,false,0,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true,Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31,13:Thirteen,9:Nine,91:NinetyOne", form.submit().getText());
+        assertEquals("WEDNESDAY,the string,the stringbuffer,23154,893749,u,null,true,false,0,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true," +
+                     "Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31," +
+                     "Sun 20 Aug 2006 08:44:00,Tue 21 Aug 2007 10:06:14,Thu 17 Jul 2008 15:05:31," +
+                     "13:Thirteen,9:Nine,91:NinetyOne", form.submit().getText());
 
         response = conversation.doRequest("/bean/get");
         parsed = response.getParsedHtml();
@@ -155,6 +177,7 @@ public class TestMocksBeans {
         form.setParameter("prefix_short", "32");
         form.setParameter("prefix_shortObject", "");
         form.setParameter("prefix_datesFormatted", new String[]{"Sun 21 Aug 2005 11:06:14", "Mon 18 Jul 2006 16:05:31"});
+        form.setParameter("prefix_instantsFormatted", new String[]{"Tue 21 Aug 2007 10:06:14", "Thu 16 Jul 2008 15:05:31"});
         form.setParameter("prefix_serializableParam", "invalid");
         form.setParameter("prefix_serializableParams", new String[]{"invalid", SerializationUtils.serializeToString(new BeanImpl.SerializableParam(91, "NinetyOne"))});
 
@@ -164,9 +187,10 @@ public class TestMocksBeans {
             notNumeric : double
             notNumeric : longObject
             invalid : datesFormatted
+            invalid : instantsFormatted
             invalid : serializableParam
             invalid : serializableParams
-            null,the string,the stringbuffer,0,null,u,null,true,false,0,21,0.0,25435.98,3434.76,6534.8,34347897,null,32,null,null,null,null,null,null,Sun 21 Aug 2005 11:06:14,null,null,null,91:NinetyOne""", form.submit().getText());
+            null,the string,the stringbuffer,0,null,u,null,true,false,0,21,0.0,25435.98,3434.76,6534.8,34347897,null,32,null,null,null,null,null,null,Sun 21 Aug 2005 11:06:14,null,null,Tue 21 Aug 2007 10:06:14,null,null,null,91:NinetyOne""", form.submit().getText());
     }
 
     @Test
@@ -197,16 +221,26 @@ public class TestMocksBeans {
         form.setParameter("longObject", "2335454");
         form.setParameter("short", "32");
         form.setParameter("shortObject", "12");
+
         form.setParameter("date", "2005-08-20 09:44");
         form.setParameter("dateFormatted", "Sat 20 Aug 2005 09:44:00");
         form.setParameter("datesFormatted", new String[]{"Sun 21 Aug 2005 11:06:14", "Mon 17 Jul 2006 16:05:31"});
+
+        form.setParameter("instant", "2006-08-20 08:44");
+        form.setParameter("instantFormatted", "Sun 20 Aug 2006 08:44:00");
+        form.setParameter("instantsFormatted", new String[]{"Tue 21 Aug 2007 10:06:14", "Thu 17 Jul 2008 15:05:31"});
+
         form.setParameter("serializableParam", SerializationUtils.serializeToString(new BeanImpl.SerializableParam(13, "Thirteen")));
         form.setParameter("serializableParams", new String[]{SerializationUtils.serializeToString(new BeanImpl.SerializableParam(9, "Nine")), SerializationUtils.serializeToString(new BeanImpl.SerializableParam(91, "NinetyOne"))});
+
         form.file("stringFile", new MockFileUpload("somedesign.html", new ByteArrayInputStream("this is some html content".getBytes(StandardCharsets.UTF_8)), "text/html"));
         form.file("streamFile", new MockFileUpload("uwyn.png", ResourceFinderClasspath.instance().getResource("uwyn.png").openStream(), "image/png"));
         form.file("bytesFile", new MockFileUpload("someimage.png", ResourceFinderClasspath.instance().getResource("uwyn.png").openStream(), "image/png"));
 
-        assertEquals("MONDAY,the string,the stringbuffer,23154,893749,u,b,true,false,22,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true,Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31,13:Thirteen,9:Nine,91:NinetyOne", form.submit().getText());
+        assertEquals("MONDAY,the string,the stringbuffer,23154,893749,u,b,true,false,22,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true," +
+                     "Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31," +
+                     "Sun 20 Aug 2006 08:44:00,Tue 21 Aug 2007 10:06:14,Thu 17 Jul 2008 15:05:31," +
+                     "13:Thirteen,9:Nine,91:NinetyOne", form.submit().getText());
 
         response = conversation.doRequest("/bean/fill");
         parsed = response.getParsedHtml();
@@ -231,6 +265,7 @@ public class TestMocksBeans {
         form.setParameter("short", "32");
         form.setParameter("shortObject", "");
         form.setParameter("datesFormatted", new String[]{"Sun 21 Aug 2005 11:06:14", "Mon 18 Jul 2006 16:05:31"});
+        form.setParameter("instantsFormatted", new String[]{"Tue 21 Aug 2007 10:06:14", "Thu 16 Jul 2008 15:05:31"});
         form.setParameter("serializableParam", "invalid");
         form.setParameter("serializableParams", new String[]{"invalid", SerializationUtils.serializeToString(new BeanImpl.SerializableParam(91, "NinetyOne"))});
 
@@ -240,9 +275,10 @@ public class TestMocksBeans {
             notNumeric : double
             notNumeric : longObject
             invalid : datesFormatted
+            invalid : instantsFormatted
             invalid : serializableParam
             invalid : serializableParams
-            FRIDAY,the string,the stringbuffer,999,null,u,b,true,false,22,21,123.45,25435.98,3434.76,6534.8,34347897,55,32,null,stringFile,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,null,91:NinetyOne""", form.submit().getText());
+            FRIDAY,the string,the stringbuffer,999,null,u,b,true,false,22,21,123.45,25435.98,3434.76,6534.8,34347897,55,32,null,stringFile,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,Tue 21 Aug 2007 10:06:14,null,null,null,91:NinetyOne""", form.submit().getText());
     }
 
     @Test
@@ -273,16 +309,26 @@ public class TestMocksBeans {
         form.setParameter("prefix_longObject", "2335454");
         form.setParameter("prefix_short", "32");
         form.setParameter("prefix_shortObject", "12");
+
         form.setParameter("prefix_date", "2005-08-20 09:44");
         form.setParameter("prefix_dateFormatted", "Sat 20 Aug 2005 09:44:00");
         form.setParameter("prefix_datesFormatted", new String[]{"Sun 21 Aug 2005 11:06:14", "Mon 17 Jul 2006 16:05:31"});
+
+        form.setParameter("prefix_instant", "2006-08-20 08:44");
+        form.setParameter("prefix_instantFormatted", "Sun 20 Aug 2006 08:44:00");
+        form.setParameter("prefix_instantsFormatted", new String[]{"Tue 21 Aug 2007 10:06:14", "Thu 17 Jul 2008 15:05:31"});
+
         form.setParameter("prefix_serializableParam", SerializationUtils.serializeToString(new BeanImpl.SerializableParam(13, "Thirteen")));
         form.setParameter("prefix_serializableParams", new String[]{SerializationUtils.serializeToString(new BeanImpl.SerializableParam(9, "Nine")), SerializationUtils.serializeToString(new BeanImpl.SerializableParam(91, "NinetyOne"))});
+
         form.file("prefix_stringFile", new MockFileUpload("somedesign.html", new ByteArrayInputStream("this is some html content".getBytes(StandardCharsets.UTF_8)), "text/html"));
         form.file("prefix_streamFile", new MockFileUpload("uwyn.png", ResourceFinderClasspath.instance().getResource("uwyn.png").openStream(), "image/png"));
         form.file("prefix_bytesFile", new MockFileUpload("someimage.png", ResourceFinderClasspath.instance().getResource("uwyn.png").openStream(), "image/png"));
 
-        assertEquals("MONDAY,the string,the stringbuffer,23154,893749,u,b,true,false,22,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true,Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31,13:Thirteen,9:Nine,91:NinetyOne", form.submit().getText());
+        assertEquals("MONDAY,the string,the stringbuffer,23154,893749,u,b,true,false,22,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true," +
+                     "Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31," +
+                     "Sun 20 Aug 2006 08:44:00,Tue 21 Aug 2007 10:06:14,Thu 17 Jul 2008 15:05:31," +
+                     "13:Thirteen,9:Nine,91:NinetyOne", form.submit().getText());
 
         response = conversation.doRequest("/bean/fill");
         parsed = response.getParsedHtml();
@@ -307,6 +353,7 @@ public class TestMocksBeans {
         form.setParameter("prefix_short", "32");
         form.setParameter("prefix_shortObject", "");
         form.setParameter("prefix_datesFormatted", new String[]{"Sun 21 Aug 2005 11:06:14", "Mon 18 Jul 2006 16:05:31"});
+        form.setParameter("prefix_instantsFormatted", new String[]{"Tue 21 Aug 2007 10:06:14", "Thu 16 Jul 2008 15:05:31"});
         form.setParameter("prefix_serializableParam", "invalid");
         form.setParameter("prefix_serializableParams", new String[]{"invalid", SerializationUtils.serializeToString(new BeanImpl.SerializableParam(91, "NinetyOne"))});
 
@@ -316,8 +363,9 @@ public class TestMocksBeans {
             notNumeric : double
             notNumeric : longObject
             invalid : datesFormatted
+            invalid : instantsFormatted
             invalid : serializableParam
             invalid : serializableParams
-            FRIDAY,the string,the stringbuffer,999,null,u,b,true,false,22,21,123.45,25435.98,3434.76,6534.8,34347897,55,32,null,stringFile,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,null,91:NinetyOne""", form.submit().getText());
+            FRIDAY,the string,the stringbuffer,999,null,u,b,true,false,22,21,123.45,25435.98,3434.76,6534.8,34347897,55,32,null,stringFile,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,Tue 21 Aug 2007 10:06:14,null,null,null,91:NinetyOne""", form.submit().getText());
     }
 }

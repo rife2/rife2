@@ -11,9 +11,9 @@ import rife.tools.InnerClassException;
 
 public abstract class TestCreateTable extends TestQuery {
     public void execute(CreateTable query) {
-        DbQueryManager manager = new DbQueryManager(query.getDatasource());
+        var manager = new DbQueryManager(query.getDatasource());
 
-        Execution execution = new Execution(query, manager);
+        var execution = new Execution(query, manager);
         if (query.isTemporary()) {
             manager.inTransaction(execution);
         } else {
@@ -32,7 +32,7 @@ public abstract class TestCreateTable extends TestQuery {
 
         public void useTransactionWithoutResult()
         throws InnerClassException {
-            CreateTable foreign_table = new CreateTable(query_.getDatasource());
+            var foreign_table = new CreateTable(query_.getDatasource());
             try {
                 if (query_.getForeignKeys().size() > 0) {
                     foreign_table.table("foreigntable")

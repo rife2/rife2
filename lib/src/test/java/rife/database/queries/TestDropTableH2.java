@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDropTableH2 extends TestDropTable {
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testInstantiationH2() {
-        DropTable query = new DropTable(H2);
+        var query = new DropTable(H2);
         assertNotNull(query);
         try {
             query.getSql();
@@ -26,7 +26,7 @@ public class TestDropTableH2 extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testIncompleteQueryH2() {
-        DropTable query = new DropTable(H2);
+        var query = new DropTable(H2);
         try {
             query.getSql();
             fail();
@@ -39,7 +39,7 @@ public class TestDropTableH2 extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testClearH2() {
-        DropTable query = new DropTable(H2);
+        var query = new DropTable(H2);
         query.table("tablename");
         assertNotNull(query.getSql());
         query.clear();
@@ -53,7 +53,7 @@ public class TestDropTableH2 extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testOneTableH2() {
-        DropTable query = new DropTable(H2);
+        var query = new DropTable(H2);
         query.table("tabletodrop");
         assertEquals(query.getSql(), "DROP TABLE tabletodrop");
         execute(query);
@@ -61,7 +61,7 @@ public class TestDropTableH2 extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testMultipleTablesHsqldb() {
-        DropTable query = new DropTable(H2);
+        var query = new DropTable(H2);
         query.table("tabletodrop1")
             .table("tabletodrop2")
             .table("tabletodrop3");
@@ -75,9 +75,9 @@ public class TestDropTableH2 extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCloneH2() {
-        DropTable query = new DropTable(H2);
+        var query = new DropTable(H2);
         query.table("tabletodrop");
-        DropTable query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
         execute(query_clone);

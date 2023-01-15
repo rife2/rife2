@@ -36,7 +36,7 @@ public class TestCapabilities {
             .precision("propertyFloat", 13, 2)
             .precision("propertyFloatObject", 13, 2)
             .precision("propertyString", 255)
-            .precision("propertyStringbuffer", 100);
+            .precision("propertyStringBuffer", 100);
 
         try {
             // prepare table and data

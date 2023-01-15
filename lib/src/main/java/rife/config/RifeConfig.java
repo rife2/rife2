@@ -15,6 +15,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
@@ -1072,6 +1073,7 @@ public class RifeConfig {
         private TimeZone defaultTimeZone_ = DEFAULT_DEFAULT_TIMEZONE;
         private String defaultShortDateFormat_;
         private String defaultInputDateFormat_ = DEFAULT_INPUT_DATE_FORMAT;
+        private String defaultInputTimeFormat_ = DEFAULT_INPUT_TIME_FORMAT;
         private String defaultLongDateFormat_;
         private int maxVisualUrlLength_ = DEFAULT_MAX_VISUAL_URL_LENGTH;
 
@@ -1081,6 +1083,7 @@ public class RifeConfig {
         public static final String DEFAULT_DEFAULT_COUNTRY = null;
         public static final TimeZone DEFAULT_DEFAULT_TIMEZONE = TimeZone.getTimeZone("EST");
         public static final String DEFAULT_INPUT_DATE_FORMAT = "yyyy-MM-dd HH:mm";
+        public static final String DEFAULT_INPUT_TIME_FORMAT = "HH:mm";
         public static final int DEFAULT_MAX_VISUAL_URL_LENGTH = 70;
 
         public boolean getResourceBundleAutoReload() {
@@ -1145,12 +1148,36 @@ public class RifeConfig {
             return result;
         }
 
+        public ZoneId getDefaultZoneId() {
+            return getDefaultTimeZone().toZoneId();
+        }
+
         public ToolsConfig setDefaultTimeZone(TimeZone timeZone) {
             defaultTimeZone_ = timeZone;
             return this;
         }
 
-        public DateTimeFormatter getDefaultShortDateFormat() {
+        public DateFormat getDefaultShortDateFormat() {
+            if (defaultShortDateFormat_ != null) {
+                SimpleDateFormat sf;
+                try {
+                    sf = new SimpleDateFormat(defaultShortDateFormat_, Localization.getLocale());
+                    sf.setTimeZone(getDefaultTimeZone());
+                } catch (IllegalArgumentException e) {
+                    throw new DateFormatInitializationException(e.getMessage());
+                }
+
+                return sf;
+            } else {
+                if (0 != getDefaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
+                    return DateFormat.getDateInstance(DateFormat.SHORT, Localization.getLocale());
+                }
+
+                return DateFormat.getDateInstance(DateFormat.SHORT, Locale.ENGLISH);
+            }
+        }
+
+        public DateTimeFormatter getDefaultShortDateTimeFormatter() {
             if (defaultShortDateFormat_ != null) {
                 DateTimeFormatter df;
                 try {
@@ -1165,14 +1192,34 @@ public class RifeConfig {
             }
         }
 
-        public ToolsConfig setDefaultShortDateFormat(String format) {
-            if (null != format &&
-                format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
-            defaultShortDateFormat_ = format;
+        public ToolsConfig setDefaultShortDatePattern(String pattern) {
+            if (null != pattern &&
+                pattern.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
+            defaultShortDateFormat_ = pattern;
             return this;
         }
 
-        public DateTimeFormatter getDefaultLongDateFormat() {
+        public DateFormat getDefaultLongDateFormat() {
+            if (defaultLongDateFormat_ != null) {
+                SimpleDateFormat sf;
+                try {
+                    sf = new SimpleDateFormat(defaultLongDateFormat_, Localization.getLocale());
+                    sf.setTimeZone(getDefaultTimeZone());
+                } catch (IllegalArgumentException e) {
+                    throw new DateFormatInitializationException(e.getMessage());
+                }
+
+                return sf;
+            } else {
+                if (0 != getDefaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
+                    return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Localization.getLocale());
+                }
+
+                return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.ENGLISH);
+            }
+        }
+
+        public DateTimeFormatter getDefaultLongDateTimeFormatter() {
             if (defaultLongDateFormat_ != null) {
                 DateTimeFormatter df;
                 try {
@@ -1187,10 +1234,10 @@ public class RifeConfig {
             }
         }
 
-        public ToolsConfig setDefaultLongDateFormat(String format) {
-            if (null != format &&
-                format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
-            defaultLongDateFormat_ = format;
+        public ToolsConfig setDefaultLongDatePattern(String pattern) {
+            if (null != pattern &&
+                pattern.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
+            defaultLongDateFormat_ = pattern;
             return this;
         }
 
@@ -1200,10 +1247,41 @@ public class RifeConfig {
             return sf;
         }
 
-        public ToolsConfig setDefaultInputDateFormat(String format) {
+        public DateTimeFormatter getDefaultInputDateTimeFormatter() {
+            DateTimeFormatter df;
+            try {
+                return DateTimeFormatter.ofPattern(defaultInputDateFormat_, Localization.getLocale());
+            } catch (IllegalArgumentException e) {
+                throw new DateFormatInitializationException(e.getMessage());
+            }
+        }
+
+        public ToolsConfig setDefaultInputDatePattern(String pattern) {
+            if (null != pattern &&
+                pattern.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
+            defaultInputDateFormat_ = pattern;
+            return this;
+        }
+
+        public DateFormat getDefaultInputTimeFormat() {
+            SimpleDateFormat sf = new SimpleDateFormat(defaultInputTimeFormat_);
+            sf.setTimeZone(getDefaultTimeZone());
+            return sf;
+        }
+
+        public DateTimeFormatter getDefaultInputTimeFormatter() {
+            DateTimeFormatter df;
+            try {
+                return DateTimeFormatter.ofPattern(defaultInputTimeFormat_, Localization.getLocale());
+            } catch (IllegalArgumentException e) {
+                throw new DateFormatInitializationException(e.getMessage());
+            }
+        }
+
+        public ToolsConfig setDefaultInputTimeFormat(String format) {
             if (null != format &&
                 format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
-            defaultInputDateFormat_ = format;
+            defaultInputTimeFormat_ = format;
             return this;
         }
 

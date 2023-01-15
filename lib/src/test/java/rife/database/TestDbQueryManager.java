@@ -2415,7 +2415,7 @@ public class TestDbQueryManager {
 
             var bean_populated = BeanImplConstrained.getPopulatedBean();
             assertEquals(bean.getPropertyString(), bean_populated.getPropertyString());
-            assertEquals(bean.getPropertyStringbuffer().toString(), bean_populated.getPropertyStringbuffer().toString());
+            assertEquals(bean.getPropertyStringBuffer().toString(), bean_populated.getPropertyStringBuffer().toString());
             // don't compare milliseconds since each db stores it differently
             assertEquals((bean.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
             assertEquals((bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
@@ -2440,7 +2440,7 @@ public class TestDbQueryManager {
             bean = manager.executeFetchFirstBean(select_query, BeanImplConstrained.class, s -> s.setString("propertyString", "someotherstring"));
             assertNotNull(bean);
             assertEquals(bean.getPropertyString(), bean_populated.getPropertyString());
-            assertEquals(bean.getPropertyStringbuffer().toString(), bean_populated.getPropertyStringbuffer().toString());
+            assertEquals(bean.getPropertyStringBuffer().toString(), bean_populated.getPropertyStringBuffer().toString());
             assertEquals((bean.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
             assertEquals((bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
             assertEquals((bean.getPropertyTimestamp().getTime() / 1000) * 1000, (bean_populated.getPropertyTimestamp().getTime() / 1000) * 1000);
@@ -2466,7 +2466,7 @@ public class TestDbQueryManager {
             });
             assertNotNull(bean);
             assertEquals(bean.getPropertyString(), bean_populated.getPropertyString());
-            assertEquals(bean.getPropertyStringbuffer().toString(), bean_populated.getPropertyStringbuffer().toString());
+            assertEquals(bean.getPropertyStringBuffer().toString(), bean_populated.getPropertyStringBuffer().toString());
             assertEquals((bean.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
             assertEquals((bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
             assertEquals((bean.getPropertyTimestamp().getTime() / 1000) * 1000, (bean_populated.getPropertyTimestamp().getTime() / 1000) * 1000);
@@ -2678,19 +2678,19 @@ public class TestDbQueryManager {
             var insert_query = new Insert(datasource);
             bean = BeanImplConstrained.getPopulatedBean();
             bean.setPropertyString("someotherstring");
-            bean.setPropertyStringbuffer(new StringBuffer("someotherstringbuf1"));
+            bean.setPropertyStringBuffer(new StringBuffer("someotherstringbuf1"));
             insert_query.into("tbltest").fields(bean);
             assertEquals(1, manager.executeUpdate(insert_query));
             insert_query.clear();
             bean = BeanImplConstrained.getPopulatedBean();
             bean.setPropertyString("one");
-            bean.setPropertyStringbuffer(new StringBuffer("someotherstringbuf2"));
+            bean.setPropertyStringBuffer(new StringBuffer("someotherstringbuf2"));
             insert_query.into("tbltest").fields(bean);
             assertEquals(1, manager.executeUpdate(insert_query));
             insert_query.clear();
             bean = BeanImplConstrained.getPopulatedBean();
             bean.setPropertyString("tw''o");
-            bean.setPropertyStringbuffer(new StringBuffer("someotherstringbuf3"));
+            bean.setPropertyStringBuffer(new StringBuffer("someotherstringbuf3"));
             insert_query.into("tbltest").fields(bean);
             assertEquals(1, manager.executeUpdate(insert_query));
 
@@ -2705,7 +2705,7 @@ public class TestDbQueryManager {
             assertEquals(beans.size(), 3);
             for (var bean2 : beans) {
                 assertTrue(bean2.getPropertyString().equals("someotherstring") || bean2.getPropertyString().equals("one") || bean2.getPropertyString().equals("tw''o"));
-                assertTrue(bean2.getPropertyStringbuffer().toString().equals("someotherstringbuf1") || bean2.getPropertyStringbuffer().toString().equals("someotherstringbuf2") || bean2.getPropertyStringbuffer().toString().equals("someotherstringbuf3"));
+                assertTrue(bean2.getPropertyStringBuffer().toString().equals("someotherstringbuf1") || bean2.getPropertyStringBuffer().toString().equals("someotherstringbuf2") || bean2.getPropertyStringBuffer().toString().equals("someotherstringbuf3"));
                 // don't compare milliseconds since each db stores it differently
                 assertEquals((bean2.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
                 assertEquals((bean2.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
@@ -2733,7 +2733,7 @@ public class TestDbQueryManager {
             assertEquals(beans.size(), 1);
             var bean2 = beans.get(0);
             assertEquals(bean2.getPropertyString(), "one");
-            assertEquals(bean2.getPropertyStringbuffer().toString(), "someotherstringbuf2");
+            assertEquals(bean2.getPropertyStringBuffer().toString(), "someotherstringbuf2");
             // don't compare milliseconds since each db stores it differently
             assertEquals((bean2.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
             assertEquals((bean2.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
@@ -2762,7 +2762,7 @@ public class TestDbQueryManager {
             assertEquals(beans.size(), 1);
             bean2 = beans.get(0);
             assertEquals(bean2.getPropertyString(), "one");
-            assertEquals(bean2.getPropertyStringbuffer().toString(), "someotherstringbuf2");
+            assertEquals(bean2.getPropertyStringBuffer().toString(), "someotherstringbuf2");
             // don't compare milliseconds since each db stores it differently
             assertEquals((bean2.getPropertyDate().getTime() / 1000) * 1000, (bean_populated.getPropertyDate().getTime() / 1000) * 1000);
             assertEquals((bean2.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (bean_populated.getPropertyCalendar().getTime().getTime() / 1000) * 1000);

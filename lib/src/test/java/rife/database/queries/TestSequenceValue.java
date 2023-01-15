@@ -11,16 +11,16 @@ import rife.database.exceptions.DatabaseException;
 
 public abstract class TestSequenceValue extends TestQuery {
     public int execute(Datasource datasource, SequenceValue query) {
-        int result = -1;
+        var result = -1;
 
         try {
-            DbConnection connection = datasource.getConnection();
+            var connection = datasource.getConnection();
 
-            CreateSequence create_sequence = new CreateSequence(datasource);
+            var create_sequence = new CreateSequence(datasource);
             create_sequence.name(query.getName());
             connection.createStatement().executeUpdate(create_sequence);
 
-            DbStatement statement = connection.createStatement();
+            var statement = connection.createStatement();
             statement.executeQuery(new SequenceValue(datasource).name(query.getName()).next());
             statement = connection.createStatement();
             statement.executeQuery(query);

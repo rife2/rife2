@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDropTableHsqldb extends TestDropTable {
     @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testInstantiationHsqldb() {
-        DropTable query = new DropTable(HSQLDB);
+        var query = new DropTable(HSQLDB);
         assertNotNull(query);
         try {
             query.getSql();
@@ -26,7 +26,7 @@ public class TestDropTableHsqldb extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testIncompleteQueryHsqldb() {
-        DropTable query = new DropTable(HSQLDB);
+        var query = new DropTable(HSQLDB);
         try {
             query.getSql();
             fail();
@@ -39,7 +39,7 @@ public class TestDropTableHsqldb extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testClearHsqldb() {
-        DropTable query = new DropTable(HSQLDB);
+        var query = new DropTable(HSQLDB);
         query.table("tablename");
         assertNotNull(query.getSql());
         query.clear();
@@ -53,7 +53,7 @@ public class TestDropTableHsqldb extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testOneTableHsqldb() {
-        DropTable query = new DropTable(HSQLDB);
+        var query = new DropTable(HSQLDB);
         query.table("tabletodrop");
         assertEquals(query.getSql(), "DROP TABLE tabletodrop");
         execute(query);
@@ -61,7 +61,7 @@ public class TestDropTableHsqldb extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testMultipleTablesHsqldb() {
-        DropTable query = new DropTable(HSQLDB);
+        var query = new DropTable(HSQLDB);
         query.table("tabletodrop1")
             .table("tabletodrop2")
             .table("tabletodrop3");
@@ -75,9 +75,9 @@ public class TestDropTableHsqldb extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCloneHsqldb() {
-        DropTable query = new DropTable(HSQLDB);
+        var query = new DropTable(HSQLDB);
         query.table("tabletodrop");
-        DropTable query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
         execute(query_clone);

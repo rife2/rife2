@@ -14,11 +14,16 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.*;
 import java.util.Date;
 import java.util.Locale;
 
 public class BeanImpl3 extends MetaData {
     private Date propertyDate_ = null;
+    private Instant propertyInstant_ = null;
+    private LocalDateTime propertyLocalDateTime_ = null;
+    private LocalDate propertyLocalDate_ = null;
+    private LocalTime propertyLocalTime_ = null;
     private byte propertyByte_ = 0;
     private double propertyDouble_ = 0.0d;
     private float propertyFloat_ = 0.0f;
@@ -34,6 +39,10 @@ public class BeanImpl3 extends MetaData {
     private BigDecimal propertyBigDecimal_ = null;
     private SerializableType propertySerializableType_ = null;
     private Date[] propertyDateArray_ = null;
+    private Instant[] propertyInstantArray_ = null;
+    private LocalDateTime[] propertyLocalDateTimeArray_ = null;
+    private LocalDate[] propertyLocalDateArray_ = null;
+    private LocalTime[] propertyLocalTimeArray_ = null;
     private byte[] propertyByteArray_ = null;
     private double[] propertyDoubleArray_ = null;
     private float[] propertyFloatArray_ = null;
@@ -63,6 +72,10 @@ public class BeanImpl3 extends MetaData {
         SerializationFormatter serialization_formatter = new SerializationFormatter();
 
         addConstraint(new ConstrainedProperty("propertyDate").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyInstant").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyLocalDateTime").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyLocalDate").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyLocalTime").format(date_format));
         addConstraint(new ConstrainedProperty("propertyInt").format(int_format));
         addConstraint(new ConstrainedProperty("propertyIntegerObject").format(int_format));
         addConstraint(new ConstrainedProperty("propertyDouble").format(double_format));
@@ -79,6 +92,10 @@ public class BeanImpl3 extends MetaData {
         addConstraint(new ConstrainedProperty("propertySerializableType").format(serialization_formatter));
 
         addConstraint(new ConstrainedProperty("propertyDateArray").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyInstantArray").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyLocalDateTimeArray").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyLocalDateArray").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyLocalTimeArray").format(date_format));
         addConstraint(new ConstrainedProperty("propertyIntArray").format(int_format));
         addConstraint(new ConstrainedProperty("propertyIntegerObjectArray").format(int_format));
         addConstraint(new ConstrainedProperty("propertyDoubleArray").format(double_format));
@@ -120,6 +137,38 @@ public class BeanImpl3 extends MetaData {
 
     public void setPropertyDate(Date propertyDate) {
         propertyDate_ = propertyDate;
+    }
+
+    public Instant getPropertyInstant() {
+        return propertyInstant_;
+    }
+
+    public void setPropertyInstant(Instant propertyInstant) {
+        propertyInstant_ = propertyInstant;
+    }
+
+    public LocalDateTime getPropertyLocalDateTime() {
+        return propertyLocalDateTime_;
+    }
+
+    public void setPropertyLocalDateTime(LocalDateTime propertyLocalDateTime) {
+        propertyLocalDateTime_ = propertyLocalDateTime;
+    }
+
+    public LocalDate getPropertyLocalDate() {
+        return propertyLocalDate_;
+    }
+
+    public void setPropertyLocalDate(LocalDate propertyLocalDate) {
+        propertyLocalDate_ = propertyLocalDate;
+    }
+
+    public LocalTime getPropertyLocalTime() {
+        return propertyLocalTime_;
+    }
+
+    public void setPropertyLocalTime(LocalTime propertyLocalTime) {
+        propertyLocalTime_ = propertyLocalTime;
     }
 
     public byte getPropertyByte() {
@@ -224,6 +273,38 @@ public class BeanImpl3 extends MetaData {
 
     public void setPropertyDateArray(Date[] propertyDateArray) {
         propertyDateArray_ = propertyDateArray;
+    }
+
+    public Instant[] getPropertyInstantArray() {
+        return propertyInstantArray_;
+    }
+
+    public void setPropertyInstantArray(Instant[] propertyInstantArray) {
+        propertyInstantArray_ = propertyInstantArray;
+    }
+
+    public LocalDateTime[] getPropertyLocalDateTimeArray() {
+        return propertyLocalDateTimeArray_;
+    }
+
+    public void setPropertyLocalDateTimeArray(LocalDateTime[] propertyLocalDateTimeArray) {
+        propertyLocalDateTimeArray_ = propertyLocalDateTimeArray;
+    }
+
+    public LocalDate[] getPropertyLocalDateArray() {
+        return propertyLocalDateArray_;
+    }
+
+    public void setPropertyLocalDateArray(LocalDate[] propertyLocalDateArray) {
+        propertyLocalDateArray_ = propertyLocalDateArray;
+    }
+
+    public LocalTime[] getPropertyLocalTimeArray() {
+        return propertyLocalTimeArray_;
+    }
+
+    public void setPropertyLocalTimeArray(LocalTime[] propertyLocalTimeArray) {
+        propertyLocalTimeArray_ = propertyLocalTimeArray;
     }
 
     public byte[] getPropertyByteArray() {

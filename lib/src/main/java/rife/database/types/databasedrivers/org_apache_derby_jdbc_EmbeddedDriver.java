@@ -13,6 +13,7 @@ import rife.tools.ClassUtils;
 import rife.tools.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.*;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -52,6 +53,14 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends Common implements SqlC
             return "'" + StringUtils.encodeSql(new Timestamp(((Date) value).getTime()).toString()) + "'";
         } else if (value instanceof Calendar) {
             return "'" + StringUtils.encodeSql(new Timestamp(((Calendar) value).getTime().getTime()).toString()) + "'";
+        } else if (value instanceof Instant instant) {
+            return "'" + StringUtils.encodeSql(Timestamp.from(instant).toString()) + "'";
+        } else if (value instanceof LocalDateTime local) {
+            return "'" + StringUtils.encodeSql(Timestamp.valueOf(local).toString()) + "'";
+        } else if (value instanceof LocalDate local) {
+            return "'" + StringUtils.encodeSql(java.sql.Date.valueOf(local).toString()) + "'";
+        } else if (value instanceof LocalTime local) {
+            return "'" + StringUtils.encodeSql(java.sql.Time.valueOf(local).toString()) + "'";
         }
         // make sure that the Boolean type is correctly caught
         else if (value instanceof Boolean) {
@@ -79,22 +88,22 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends Common implements SqlC
         Object result = null;
 
         if (type == Types.BIT || type == Types.BOOLEAN) {
-            boolean value = resultSet.getBoolean(columnNumber);
+            var value = resultSet.getBoolean(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
         } else if (type == Types.TINYINT) {
-            byte value = resultSet.getByte(columnNumber);
+            var value = resultSet.getByte(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
         } else if (type == Types.SMALLINT || type == Types.INTEGER) {
-            int value = resultSet.getInt(columnNumber);
+            var value = resultSet.getInt(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
         } else if (type == Types.BIGINT) {
-            long value = resultSet.getLong(columnNumber);
+            var value = resultSet.getLong(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
@@ -109,7 +118,7 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends Common implements SqlC
         } else if (type == Types.NUMERIC || type == Types.DECIMAL) {
             result = resultSet.getBigDecimal(columnNumber);
         } else if (type == Types.DOUBLE || type == Types.FLOAT || type == Types.REAL) {
-            double value = resultSet.getDouble(columnNumber);
+            var value = resultSet.getDouble(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
@@ -141,7 +150,7 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends Common implements SqlC
                 return "VARCHAR(" + precision + ")";
             }
         } else if (type == Character.class ||
-            type == char.class) {
+                   type == char.class) {
             if (precision < 0) {
                 return "CHAR";
             } else {
@@ -149,38 +158,42 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends Common implements SqlC
             }
         }
         // handle the time / date types
-        else if (type == Time.class) {
+        else if (type == Time.class ||
+                 type == LocalTime.class) {
             return "TIME";
-        } else if (type == java.sql.Date.class) {
+        } else if (type == java.sql.Date.class ||
+                   type == LocalDate.class) {
             return "DATE";
         } else if (type == Timestamp.class ||
-            type == Date.class ||
-            type == Calendar.class) {
+                   type == Date.class ||
+                   type == Calendar.class ||
+                   type == Instant.class ||
+                   type == LocalDateTime.class) {
             return "TIMESTAMP";
         }
         // make sure that the Boolean type is correctly caught
         else if (type == Boolean.class ||
-            type == boolean.class) {
+                 type == boolean.class) {
             return "NUMERIC(1)";
         }
         // make sure that the Integer types are correctly caught
         else if (type == Byte.class ||
-            type == byte.class ||
-            type == Short.class ||
-            type == short.class) {
+                 type == byte.class ||
+                 type == Short.class ||
+                 type == short.class) {
             return "SMALLINT";
         } else if (type == Integer.class ||
-            type == int.class) {
+                   type == int.class) {
             return "INTEGER";
         } else if (type == Long.class ||
-            type == long.class) {
+                   type == long.class) {
             return "BIGINT";
         }
         // make sure that the Float types are correctly caught
         else if (type == Double.class ||
-            type == double.class ||
-            type == Float.class ||
-            type == float.class) {
+                 type == double.class ||
+                 type == Float.class ||
+                 type == float.class) {
             return "FLOAT";
         }
         // make sure that the BigDecimal type is correctly caught
@@ -195,14 +208,14 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends Common implements SqlC
         }
         // make sure that the Blob type is correctly caught
         else if (type == Blob.class ||
-            type == byte[].class) {
+                 type == byte[].class) {
             return "BLOB";
         }
         // make sure that the Clob type is correctly caught
         else if (type == Clob.class) {
             return "CLOB";
         } else {
-            String result = handleCommonSqlType(type, precision, scale);
+            var result = handleCommonSqlType(type, precision, scale);
             if (result != null) {
                 return result;
             }

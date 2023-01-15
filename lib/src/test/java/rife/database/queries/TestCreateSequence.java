@@ -11,7 +11,7 @@ import rife.database.exceptions.DatabaseException;
 public abstract class TestCreateSequence extends TestQuery {
     public void execute(Datasource datasource, CreateSequence query) {
         DbConnection connection = null;
-        DropSequence drop_sequence = new DropSequence(datasource);
+        var drop_sequence = new DropSequence(datasource);
 
         try {
             connection = datasource.getConnection();

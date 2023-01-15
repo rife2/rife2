@@ -15,6 +15,7 @@ import rife.validation.*;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 
 public class BeanImpl extends Validation {
@@ -45,12 +46,15 @@ public class BeanImpl extends Validation {
     private Date date_;
     private Date dateFormatted_;
     private Date[] datesFormatted_;
+    private Instant instant_;
+    private Instant instantFormatted_;
+    private Instant[] instantsFormatted_;
     private SerializableParam serializableParam_;
     private SerializableParam[] serializableParams_;
 
     public void printToContext(Context c) {
-        Set<ValidationError> errors = getValidationErrors();
-        for (ValidationError error : errors) {
+        var errors = getValidationErrors();
+        for (var error : errors) {
             c.print(error.getIdentifier() + " : " + error.getSubject() + "\n");
         }
         c.print(getEnum() + "," + getString() + "," + getStringbuffer() + "," + getInt() + "," + getInteger() + "," + getChar() + "," + getCharacter() + "," + isBoolean() + "," + getBooleanObject() + "," + getByte() + "," + getByteObject() + "," + getDouble() + "," + getDoubleObject() + "," + getFloat() + "," + getFloatObject() + "," + getLong() + "," + getLongObject() + "," + getShort() + "," + getShortObject());
@@ -82,13 +86,15 @@ public class BeanImpl extends Validation {
             } else {
                 c.print("," + Arrays.equals(image_bytes, FileUtils.readBytes(getStreamFile())));
             }
-            SimpleDateFormat sf = new SimpleDateFormat("EEE d MMM yyyy HH:mm:ss");
+
+            var sf = new SimpleDateFormat("EEE d MMM yyyy HH:mm:ss");
             sf.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+            
             c.print("," + (null == getDate() ? null : sf.format(getDate())));
             if (null == getDatesFormatted()) {
                 c.print(",null");
             } else {
-                for (Date date : getDatesFormatted()) {
+                for (var date : getDatesFormatted()) {
                     c.print(",");
                     if (null == date) {
                         c.print("null");
@@ -97,6 +103,21 @@ public class BeanImpl extends Validation {
                     }
                 }
             }
+            
+            c.print("," + (null == getInstant() ? null : sf.format(Convert.toDate(getInstant()))));
+            if (null == getInstantsFormatted()) {
+                c.print(",null");
+            } else {
+                for (var instant : getInstantsFormatted()) {
+                    c.print(",");
+                    if (null == instant) {
+                        c.print("null");
+                    } else {
+                        c.print(sf.format(Convert.toDate(instant)));
+                    }
+                }
+            }
+
             c.print("," + getSerializableParam());
             if (null == getSerializableParams()) {
                 c.print(",null");
@@ -133,6 +154,8 @@ public class BeanImpl extends Validation {
         sf.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
         addConstraint(new ConstrainedProperty("dateFormatted").format(sf));
         addConstraint(new ConstrainedProperty("datesFormatted").format(sf));
+        addConstraint(new ConstrainedProperty("instantFormatted").format(sf));
+        addConstraint(new ConstrainedProperty("instantsFormatted").format(sf));
         addConstraint(new ConstrainedProperty("serializableParam").format(new SerializationFormatter()));
         addConstraint(new ConstrainedProperty("serializableParams").format(new SerializationFormatter()));
     }
@@ -335,6 +358,30 @@ public class BeanImpl extends Validation {
 
     public Date[] getDatesFormatted() {
         return datesFormatted_;
+    }
+
+    public void setInstant(Instant instant) {
+        instant_ = instant;
+    }
+
+    public Instant getInstant() {
+        return instant_;
+    }
+
+    public void setInstantFormatted(Instant instantFormatted) {
+        instantFormatted_ = instantFormatted;
+    }
+
+    public Instant getInstantFormatted() {
+        return instantFormatted_;
+    }
+
+    public void setInstantsFormatted(Instant[] instantsFormatted) {
+        instantsFormatted_ = instantsFormatted;
+    }
+
+    public Instant[] getInstantsFormatted() {
+        return instantsFormatted_;
     }
 
     public void setSerializableParam(SerializableParam serializableParam) {

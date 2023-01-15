@@ -14,6 +14,7 @@ import rife.tools.StringUtils;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.*;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -46,16 +47,26 @@ public class com_mysql_cj_jdbc_Driver extends Common implements SqlConversion {
         else if (value instanceof Time) {
             return "'" + StringUtils.encodeSql(value.toString()) + "'";
         } else if (value instanceof Timestamp) {
-            SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
+            var dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
             return "'" + StringUtils.encodeSql(dateformat.format(value)) + "'";
         } else if (value instanceof java.sql.Date) {
             return "'" + StringUtils.encodeSql(value.toString()) + "'";
         } else if (value instanceof Date) {
-            SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
+            var dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
             return "'" + StringUtils.encodeSql(dateformat.format(new Timestamp(((Date) value).getTime()))) + "'";
         } else if (value instanceof Calendar) {
-            SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
+            var dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
             return "'" + StringUtils.encodeSql(dateformat.format(new Timestamp(((Calendar) value).getTime().getTime()))) + "'";
+        } else if (value instanceof Instant instant) {
+            var dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
+            return "'" + StringUtils.encodeSql(dateformat.format(Timestamp.from(instant))) + "'";
+        } else if (value instanceof LocalDateTime local) {
+            var dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
+            return "'" + StringUtils.encodeSql(dateformat.format(Timestamp.valueOf(local))) + "'";
+        } else if (value instanceof LocalDate local) {
+            return "'" + StringUtils.encodeSql(java.sql.Date.valueOf(local).toString()) + "'";
+        } else if (value instanceof LocalTime local) {
+            return "'" + StringUtils.encodeSql(java.sql.Time.valueOf(local).toString()) + "'";
         }
         // make sure that the Boolean type is correctly caught
         else if (value instanceof Boolean) {
@@ -83,22 +94,22 @@ public class com_mysql_cj_jdbc_Driver extends Common implements SqlConversion {
         Object result = null;
 
         if (type == Types.BIT || type == Types.BOOLEAN) {
-            boolean value = resultSet.getBoolean(columnNumber);
+            var value = resultSet.getBoolean(columnNumber);
             if (!resultSet.wasNull()) {
-                result = Boolean.valueOf(value);
+                result = value;
             }
         } else if (type == Types.TINYINT) {
-            byte value = resultSet.getByte(columnNumber);
+            var value = resultSet.getByte(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
         } else if (type == Types.SMALLINT || type == Types.INTEGER) {
-            int value = resultSet.getInt(columnNumber);
+            var value = resultSet.getInt(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
         } else if (type == Types.BIGINT) {
-            long value = resultSet.getLong(columnNumber);
+            var value = resultSet.getLong(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
@@ -113,7 +124,7 @@ public class com_mysql_cj_jdbc_Driver extends Common implements SqlConversion {
         } else if (type == Types.NUMERIC || type == Types.DECIMAL) {
             result = resultSet.getBigDecimal(columnNumber);
         } else if (type == Types.DOUBLE || type == Types.FLOAT || type == Types.REAL) {
-            double value = resultSet.getDouble(columnNumber);
+            var value = resultSet.getDouble(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
@@ -161,7 +172,7 @@ public class com_mysql_cj_jdbc_Driver extends Common implements SqlConversion {
                 return "VARCHAR(" + precision + ")";
             }
         } else if (type == Character.class ||
-            type == char.class) {
+                   type == char.class) {
             if (precision < 0) {
                 return "CHAR";
             } else {
@@ -169,37 +180,41 @@ public class com_mysql_cj_jdbc_Driver extends Common implements SqlConversion {
             }
         }
         // handle the time / date types
-        else if (type == Time.class) {
+        else if (type == Time.class ||
+                 type == LocalTime.class) {
             return "TIME";
-        } else if (type == java.sql.Date.class) {
+        } else if (type == java.sql.Date.class ||
+                   type == LocalDate.class) {
             return "DATE";
         } else if (type == Timestamp.class ||
-            type == Date.class ||
-            type == Calendar.class) {
+                   type == Date.class ||
+                   type == Calendar.class ||
+                   type == Instant.class ||
+                   type == LocalDateTime.class) {
             return "DATETIME";
         }
         // make sure that the Boolean type is correctly caught
         else if (type == Boolean.class ||
-            type == boolean.class) {
+                 type == boolean.class) {
             return "BIT";
         }
         // make sure that the Integer types are correctly caught
         else if (type == Byte.class ||
-            type == byte.class) {
+                 type == byte.class) {
             return "TINYINT";
         } else if (type == Short.class ||
-            type == short.class) {
+                   type == short.class) {
             return "SMALLINT";
         } else if (type == Integer.class ||
-            type == int.class) {
+                   type == int.class) {
             return "INT";
         } else if (type == Long.class ||
-            type == long.class) {
+                   type == long.class) {
             return "BIGINT";
         }
         // make sure that the Double types are correctly caught
         else if (type == Double.class ||
-            type == double.class) {
+                 type == double.class) {
             if (precision < 0) {
                 return "DOUBLE";
             } else if (scale < 0) {
@@ -208,7 +223,7 @@ public class com_mysql_cj_jdbc_Driver extends Common implements SqlConversion {
                 return "DOUBLE(" + precision + "," + scale + ")";
             }
         } else if (type == Float.class ||
-            type == float.class) {
+                   type == float.class) {
             if (precision < 0) {
                 return "FLOAT";
             } else if (scale < 0) {
@@ -229,14 +244,14 @@ public class com_mysql_cj_jdbc_Driver extends Common implements SqlConversion {
         }
         // make sure that the Blob type is correctly caught
         else if (type == Blob.class ||
-            type == byte[].class) {
+                 type == byte[].class) {
             return "LONGBLOB";
         }
         // make sure that the Clob type is correctly caught
         else if (type == Clob.class) {
             return "LONGTEXT";
         } else {
-            String result = handleCommonSqlType(type, precision, scale);
+            var result = handleCommonSqlType(type, precision, scale);
             if (result != null) {
                 return result;
             }

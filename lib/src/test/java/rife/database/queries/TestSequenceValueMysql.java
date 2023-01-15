@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestSequenceValueMysql extends TestSequenceValue {
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInstantiationMysql() {
-        SequenceValue query = new SequenceValue(MYSQL);
+        var query = new SequenceValue(MYSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -25,7 +25,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInvalidMysql() {
-        SequenceValue query = new SequenceValue(MYSQL);
+        var query = new SequenceValue(MYSQL);
         try {
             query.getSql();
             fail();
@@ -52,7 +52,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testClearMysql() {
-        SequenceValue query = new SequenceValue(MYSQL);
+        var query = new SequenceValue(MYSQL);
         query
             .name("sequencename")
             .next();
@@ -74,7 +74,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testNextMysql() {
-        SequenceValue query = new SequenceValue(MYSQL);
+        var query = new SequenceValue(MYSQL);
         query
             .name("sequencename")
             .next();
@@ -88,7 +88,7 @@ public class TestSequenceValueMysql extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCurrentMysql() {
-        SequenceValue query = new SequenceValue(MYSQL);
+        var query = new SequenceValue(MYSQL);
         query
             .name("sequencename")
             .current();
@@ -102,11 +102,11 @@ public class TestSequenceValueMysql extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCloneMysql() {
-        SequenceValue query = new SequenceValue(MYSQL);
+        var query = new SequenceValue(MYSQL);
         query
             .name("sequencename")
             .next();
-        SequenceValue query_clone = query.clone();
+        var query_clone = query.clone();
         try {
             query_clone.getSql();
             fail();

@@ -8,6 +8,7 @@ import rife.database.*;
 import rife.database.exceptions.FieldsRequiredException;
 import rife.database.exceptions.TableNameRequiredException;
 import rife.database.types.SqlNull;
+import rife.tools.Convert;
 
 import java.math.BigDecimal;
 import java.sql.Time;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestInsertMysql extends TestInsert {
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInstantiationMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -31,7 +32,7 @@ public class TestInsertMysql extends TestInsert {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testIncompleteQueryMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         try {
             query.getSql();
             fail();
@@ -51,7 +52,7 @@ public class TestInsertMysql extends TestInsert {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testClearMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename")
             .field("col1", "val1");
         assertNotNull(query.getSql());
@@ -66,7 +67,7 @@ public class TestInsertMysql extends TestInsert {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testParameterMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename")
             .fieldParameter("col1");
         assertEquals(query.getSql(), "INSERT INTO tablename (col1) VALUES (?)");
@@ -74,7 +75,7 @@ public class TestInsertMysql extends TestInsert {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testHintMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query
             .hint("DELAYED")
             .into("tablename")
@@ -85,9 +86,9 @@ public class TestInsertMysql extends TestInsert {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldMysql() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(2002, 7, 19, 12, 17, 52);
-        Insert query = new Insert(MYSQL);
+        var cal = Calendar.getInstance();
+        cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
+        var query = new Insert(MYSQL);
         query.into("tablename")
             .field("nullColumn", SqlNull.NULL)
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))
@@ -103,16 +104,16 @@ public class TestInsertMysql extends TestInsert {
             .field("propertyShort", (short) 12)
             .field("propertySqlDate", new java.sql.Date(cal.getTime().getTime()))
             .field("propertyString", "string'value")
-            .field("propertyStringbuffer", new StringBuffer("stringbuffer'value"))
+            .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
             .field("propertyTime", new Time(cal.getTime().getTime()))
             .field("propertyTimestamp", new Timestamp(cal.getTime().getTime()));
-        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (NULL, 98347.876438637, 1, 16, '2002-08-19 12:17:52.0', 'M', '2002-08-19 12:17:52.0', 12.3, 13.4, 34, 45, 12, '2002-08-19', 'string''value', 'stringbuffer''value', '12:17:52', '2002-08-19 12:17:52.0')");
+        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (NULL, 98347.876438637, 1, 16, '2002-08-19 12:17:52.0', 'M', '2002-08-19 12:17:52.0', 12.3, 13.4, 34, 45, 12, '2002-08-19', 'string''value', 'stringbuffer''value', '12:17:52', '2002-08-19 12:17:52.0')");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldCustomMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename")
             .fieldCustom("propertySqlDate", "now()");
         assertEquals(query.getSql(), "INSERT INTO tablename (propertySqlDate) VALUES (now())");
@@ -121,9 +122,9 @@ public class TestInsertMysql extends TestInsert {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsMysql() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(2002, 7, 19, 12, 17, 52);
-        Insert query = new Insert(MYSQL);
+        var cal = Calendar.getInstance();
+        cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
+        var query = new Insert(MYSQL);
         query.into("tablename")
             .fields(new Object[]{
                 "nullColumn", SqlNull.NULL,
@@ -140,17 +141,17 @@ public class TestInsertMysql extends TestInsert {
                 "propertyShort", (short) 12,
                 "propertySqlDate", new java.sql.Date(cal.getTime().getTime()),
                 "propertyString", new String("string'value"),
-                "propertyStringbuffer", new StringBuffer("stringbuffer'value"),
+                "propertyStringBuffer", new StringBuffer("stringbuffer'value"),
                 "propertyTime", new Time(cal.getTime().getTime()),
                 "propertyTimestamp", new Timestamp(cal.getTime().getTime())
             });
-        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (NULL, 98347.876438637, 1, 16, '2002-08-19 12:17:52.0', 'M', '2002-08-19 12:17:52.0', 12.3, 13.4, 34, 45, 12, '2002-08-19', 'string''value', 'stringbuffer''value', '12:17:52', '2002-08-19 12:17:52.0')");
+        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (NULL, 98347.876438637, 1, 16, '2002-08-19 12:17:52.0', 'M', '2002-08-19 12:17:52.0', 12.3, 13.4, 34, 45, 12, '2002-08-19', 'string''value', 'stringbuffer''value', '12:17:52', '2002-08-19 12:17:52.0')");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldParametersMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename");
 
         assertNull(query.getParameters());
@@ -169,7 +170,7 @@ public class TestInsertMysql extends TestInsert {
             .fieldParameter("propertyShort")
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
-            .fieldParameter("propertyStringbuffer")
+            .fieldParameter("propertyStringBuffer")
             .fieldParameter("propertyTime")
             .fieldParameter("propertyTimestamp");
 
@@ -188,7 +189,7 @@ public class TestInsertMysql extends TestInsert {
         assertEquals(query.getParameters().getOrderedNames().get(11), "propertyShort");
         assertEquals(query.getParameters().getOrderedNames().get(12), "propertySqlDate");
         assertEquals(query.getParameters().getOrderedNames().get(13), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyStringbuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyStringBuffer");
         assertEquals(query.getParameters().getOrderedNames().get(15), "propertyTime");
         assertEquals(query.getParameters().getOrderedNames().get(16), "propertyTimestamp");
         assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{
@@ -206,16 +207,16 @@ public class TestInsertMysql extends TestInsert {
             "propertyShort",
             "propertySqlDate",
             "propertyString",
-            "propertyStringbuffer",
+            "propertyStringBuffer",
             "propertyTime",
             "propertyTimestamp"});
 
-        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2002, 7, 19, 12, 17, 52);
+                var cal = Calendar.getInstance();
+                cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
                 cal.set(Calendar.MILLISECOND, 462);
                 statement
                     .setString(1, null)
@@ -241,13 +242,13 @@ public class TestInsertMysql extends TestInsert {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldParametersMixedMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename");
 
         assertNull(query.getParameters());
 
-        final Calendar cal = Calendar.getInstance();
-        cal.set(2002, 7, 19, 12, 17, 52);
+        final var cal = Calendar.getInstance();
+        cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
         query.fieldParameter("nullColumn")
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))
@@ -263,7 +264,7 @@ public class TestInsertMysql extends TestInsert {
             .field("propertyShort", (short) 12)
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
-            .field("propertyStringbuffer", new StringBuffer("stringbuffer'value"))
+            .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
             .field("propertyTime", new Time(cal.getTime().getTime()))
             .fieldParameter("propertyTimestamp");
 
@@ -288,7 +289,7 @@ public class TestInsertMysql extends TestInsert {
             "propertyString",
             "propertyTimestamp"});
 
-        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (?, 98347.876438637, ?, ?, '2002-08-19 12:17:52.0', ?, '2002-08-19 12:17:52.0', 12.3, ?, ?, 45, 12, ?, ?, 'stringbuffer''value', '12:17:52', ?)");
+        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (?, 98347.876438637, ?, ?, '2002-08-19 12:17:52.0', ?, '2002-08-19 12:17:52.0', 12.3, ?, ?, 45, 12, ?, ?, 'stringbuffer''value', '12:17:52', ?)");
         assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
                 statement
@@ -307,25 +308,25 @@ public class TestInsertMysql extends TestInsert {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename")
             .fields(BeanImpl.getPopulatedBean());
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (219038743.392874, 1, 0, 89, 34, '2002-06-18 15:26:14.0', 'v', 'r', '2002-06-18 15:26:14.0', 53348.34, 143298.692, 'VALUE_THREE', 98634.2, 8734.7, 545, 968, 34563, 66875, 43, 68, '2002-06-18', 'someotherstring', 'someotherstringbuff', '15:26:14', '2002-06-18 15:26:14.0')");
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInstant, propertyInt, propertyIntegerObject, propertyLocalDate, propertyLocalDateTime, propertyLocalTime, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (219038743.392874, 1, 0, 89, 34, '2002-06-18 15:26:14.0', 'v', 'r', '2002-06-18 15:26:14.0', 53348.34, 143298.692, 'VALUE_THREE', 98634.2, 8734.7, '2002-06-18 15:26:14.0', 545, 968, '2002-06-18', '2002-06-18 15:26:14.0', '15:26:14', 34563, 66875, 43, 68, '2002-06-18', 'someotherstring', 'someotherstringbuff', '15:26:14', '2002-06-18 15:26:14.0')");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanConstrainedMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename")
             .fields(BeanImplConstrained.getPopulatedBean());
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLongObject, propertyShort, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (219038743.392874, 1, 0, 34, '2002-06-18 15:26:14.0', 'v', 'r', '2002-06-18 15:26:14.0', 53348.34, 143298.692, 98634.2, 8734.7, 545, 968, 66875, 43, '2002-06-18', 'someotherstring', 'someotherstringbuff', '15:26:14', '2002-06-18 15:26:14.0')");
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInstant, propertyInt, propertyIntegerObject, propertyLocalDate, propertyLocalDateTime, propertyLocalTime, propertyLongObject, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (219038743.392874, 1, 0, 34, '2002-06-18 15:26:14.0', 'v', 'r', '2002-06-18 15:26:14.0', 53348.34, 143298.692, 98634.2, 8734.7, '2002-06-18 15:26:14.0', 545, 968, '2002-06-18', '2002-06-18 15:26:14.0', '15:26:14', 66875, 43, '2002-06-18', 'someotherstring', 'someotherstringbuff', '15:26:14', '2002-06-18 15:26:14.0')");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanNullValuesMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename")
             .fields(BeanImpl.getNullBean());
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject) VALUES (0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0)");
@@ -334,34 +335,34 @@ public class TestInsertMysql extends TestInsert {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanIncludedMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename")
-            .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyByte, propertyDouble, propertyShort, propertyStringbuffer, propertyTime) VALUES (89, 53348.34, 43, 'someotherstringbuff', '15:26:14')");
+            .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyByte, propertyDouble, propertyShort, propertyStringBuffer, propertyTime) VALUES (89, 53348.34, 43, 'someotherstringbuff', '15:26:14')");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanExcludedMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename")
-            .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShortObject, propertySqlDate, propertyString, propertyTimestamp) VALUES (219038743.392874, 1, 0, 34, '2002-06-18 15:26:14.0', 'v', 'r', '2002-06-18 15:26:14.0', 143298.692, 'VALUE_THREE', 98634.2, 8734.7, 545, 968, 34563, 66875, 68, '2002-06-18', 'someotherstring', '2002-06-18 15:26:14.0')");
+            .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInstant, propertyInt, propertyIntegerObject, propertyLocalDate, propertyLocalDateTime, propertyLocalTime, propertyLong, propertyLongObject, propertyShortObject, propertySqlDate, propertyString, propertyTimestamp) VALUES (219038743.392874, 1, 0, 34, '2002-06-18 15:26:14.0', 'v', 'r', '2002-06-18 15:26:14.0', 143298.692, 'VALUE_THREE', 98634.2, 8734.7, '2002-06-18 15:26:14.0', 545, 968, '2002-06-18', '2002-06-18 15:26:14.0', '15:26:14', 34563, 66875, 68, '2002-06-18', 'someotherstring', '2002-06-18 15:26:14.0')");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsBeanFilteredMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename")
-            .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyDouble, propertyStringbuffer) VALUES (53348.34, 'someotherstringbuff')");
+            .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringBuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyDouble, propertyStringBuffer) VALUES (53348.34, 'someotherstringbuff')");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testMultipleRowsMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename")
             .field("propertyChar", 'M')
             .field("propertyDouble", 12.3d)
@@ -377,12 +378,12 @@ public class TestInsertMysql extends TestInsert {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsParametersBeanMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsParameters(BeanImpl.class);
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInstant, propertyInt, propertyIntegerObject, propertyLocalDate, propertyLocalDateTime, propertyLocalTime, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-        assertEquals(query.getParameters().getOrderedNames().size(), 25);
+        assertEquals(query.getParameters().getOrderedNames().size(), 29);
         assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
         assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
         assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
@@ -397,62 +398,70 @@ public class TestInsertMysql extends TestInsert {
         assertEquals(query.getParameters().getOrderedNames().get(11), "propertyEnum");
         assertEquals(query.getParameters().getOrderedNames().get(12), "propertyFloat");
         assertEquals(query.getParameters().getOrderedNames().get(13), "propertyFloatObject");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyInt");
-        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyIntegerObject");
-        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyLong");
-        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyLongObject");
-        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyShort");
-        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyShortObject");
-        assertEquals(query.getParameters().getOrderedNames().get(20), "propertySqlDate");
-        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(22), "propertyStringbuffer");
-        assertEquals(query.getParameters().getOrderedNames().get(23), "propertyTime");
-        assertEquals(query.getParameters().getOrderedNames().get(24), "propertyTimestamp");
-        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLong", "propertyLongObject", "propertyShort", "propertyShortObject", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"});
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyInstant");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyInt");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyLocalDate");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyLocalDateTime");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyLocalTime");
+        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyLong");
+        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(22), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(23), "propertyShortObject");
+        assertEquals(query.getParameters().getOrderedNames().get(24), "propertySqlDate");
+        assertEquals(query.getParameters().getOrderedNames().get(25), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(26), "propertyStringBuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(27), "propertyTime");
+        assertEquals(query.getParameters().getOrderedNames().get(28), "propertyTimestamp");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyInstant", "propertyInt", "propertyIntegerObject", "propertyLocalDate", "propertyLocalDateTime", "propertyLocalTime", "propertyLong", "propertyLongObject", "propertyShort", "propertyShortObject", "propertySqlDate", "propertyString", "propertyStringBuffer", "propertyTime", "propertyTimestamp"});
 
         assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2002, 7, 19, 12, 17, 52);
-                cal.set(Calendar.MILLISECOND, 462);
+                var cal = Calendar.getInstance();
+                cal.set(2002, Calendar.JUNE, 18, 15, 26, 14);
+                cal.set(Calendar.MILLISECOND, 167);
                 statement
-                    .setBigDecimal(1, new BigDecimal("98347.876438637"))
-                    .setBoolean(2, false)
-                    .setBoolean(3, true)
-                    .setByte(4, (byte) 16)
-                    .setByte(5, (byte) 72)
+                    .setBigDecimal(1, new BigDecimal("219038743.392874"))
+                    .setBoolean(2, true)
+                    .setBoolean(3, false)
+                    .setByte(4, (byte) 89)
+                    .setByte(5, (byte) 34)
                     .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
-                    .setString(7, "M")
-                    .setString(8, "p")
+                    .setString(7, "v")
+                    .setString(8, "r")
                     .setTimestamp(9, new java.sql.Timestamp(cal.getTime().getTime()))
-                    .setDouble(10, 12.3d)
-                    .setDouble(11, 68.7d)
+                    .setDouble(10, 53348.34d)
+                    .setDouble(11, 143298.692d)
                     .setString(12, "VALUE_THREE")
-                    .setFloat(13, 13.4f)
-                    .setFloat(14, 42.1f)
-                    .setInt(15, 92)
-                    .setInt(16, 34)
-                    .setLong(17, 687L)
-                    .setLong(18, 92)
-                    .setShort(19, (short) 7)
-                    .setShort(20, (short) 12)
-                    .setDate(21, new java.sql.Date(cal.getTime().getTime()))
-                    .setString(22, "string'value")
-                    .setString(23, "string'value2")
-                    .setTime(24, new Time(cal.getTime().getTime()))
-                    .setTimestamp(25, new Timestamp(cal.getTime().getTime()));
+                    .setDouble(13, 98634.2d)
+                    .setDouble(14, 8734.7d)
+                    .setTimestamp(15, Timestamp.from(cal.toInstant()))
+                    .setInt(16, 545)
+                    .setInt(17, 968)
+                    .setDate(18, new java.sql.Date(cal.getTime().getTime()))
+                    .setTimestamp(19, Timestamp.from(cal.toInstant()))
+                    .setTime(20, Convert.toTime(cal))
+                    .setLong(21, 34563L)
+                    .setLong(22, 66875L)
+                    .setShort(23, (short) 43)
+                    .setShort(24, (short) 68)
+                    .setDate(25, new java.sql.Date(cal.getTime().getTime()))
+                    .setString(26, "someotherstring")
+                    .setString(27, "someotherstringbuff")
+                    .setTime(28, Convert.toTime(cal))
+                    .setTimestamp(29, new Timestamp(cal.getTime().getTime()));
             }
         }));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsParametersBeanConstrainedMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsParameters(BeanImplConstrained.class);
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLongObject, propertyShort, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInstant, propertyInt, propertyIntegerObject, propertyLocalDate, propertyLocalDateTime, propertyLocalTime, propertyLongObject, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-        assertEquals(query.getParameters().getOrderedNames().size(), 21);
+        assertEquals(query.getParameters().getOrderedNames().size(), 25);
         assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
         assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
         assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
@@ -465,22 +474,26 @@ public class TestInsertMysql extends TestInsert {
         assertEquals(query.getParameters().getOrderedNames().get(9), "propertyDoubleObject");
         assertEquals(query.getParameters().getOrderedNames().get(10), "propertyFloat");
         assertEquals(query.getParameters().getOrderedNames().get(11), "propertyFloatObject");
-        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyInt");
-        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyIntegerObject");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyLongObject");
-        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyShort");
-        assertEquals(query.getParameters().getOrderedNames().get(16), "propertySqlDate");
-        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyStringbuffer");
-        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyTime");
-        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyTimestamp");
-        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"});
+        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyInstant");
+        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyInt");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyLocalDate");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyLocalDateTime");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyLocalTime");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(20), "propertySqlDate");
+        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(22), "propertyStringBuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(23), "propertyTime");
+        assertEquals(query.getParameters().getOrderedNames().get(24), "propertyTimestamp");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInstant", "propertyInt", "propertyIntegerObject", "propertyLocalDate", "propertyLocalDateTime", "propertyLocalTime", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringBuffer", "propertyTime", "propertyTimestamp"});
 
         assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2002, 5, 18, 15, 26, 14);
-                cal.set(Calendar.MILLISECOND, 764);
+                var cal = Calendar.getInstance();
+                cal.set(2002, Calendar.JUNE, 18, 15, 26, 14);
+                cal.set(Calendar.MILLISECOND, 167);
                 statement
                     .setBigDecimal(1, new BigDecimal("219038743.392874"))
                     .setBoolean(2, true)
@@ -492,32 +505,36 @@ public class TestInsertMysql extends TestInsert {
                     .setTimestamp(8, new java.sql.Timestamp(cal.getTime().getTime()))
                     .setDouble(9, 53348.34d)
                     .setDouble(10, 143298.692d)
-                    .setFloat(11, 98634.2f)
-                    .setFloat(12, 8734.7f)
-                    .setInt(13, 545)
-                    .setInt(14, 968)
-                    .setLong(15, 66875L)
-                    .setShort(16, (short) 43)
-                    .setDate(17, new java.sql.Date(cal.getTime().getTime()))
-                    .setString(18, "someotherstring")
-                    .setString(19, "someotherstringbuff")
-                    .setTime(20, new Time(cal.getTime().getTime()))
-                    .setTimestamp(21, new Timestamp(cal.getTime().getTime()));
+                    .setDouble(11, 98634.2d)
+                    .setDouble(12, 8734.7d)
+                    .setTimestamp(13, Timestamp.from(cal.toInstant()))
+                    .setInt(14, 545)
+                    .setInt(15, 968)
+                    .setDate(16, new java.sql.Date(cal.getTime().getTime()))
+                    .setTimestamp(17, Timestamp.from(cal.toInstant()))
+                    .setTime(18, Convert.toTime(cal))
+                    .setLong(19, 66875L)
+                    .setShort(20, (short) 43)
+                    .setDate(21, new java.sql.Date(cal.getTime().getTime()))
+                    .setString(22, "someotherstring")
+                    .setString(23, "someotherstringbuff")
+                    .setTime(24, Convert.toTime(cal))
+                    .setTimestamp(25, new Timestamp(cal.getTime().getTime()));
             }
         }));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testFieldsParametersBeanExcludedMysql() {
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query.into("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
                     "propertyDouble", "propertyInt", "propertyLong",
-                    "propertySqlDate", "propertyStringbuffer", "propertyTimestamp"});
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyCharacterObject, propertyDate, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyIntegerObject, propertyLongObject, propertyShort, propertyShortObject, propertyString, propertyTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    "propertySqlDate", "propertyStringBuffer", "propertyTimestamp"});
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyCharacterObject, propertyDate, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInstant, propertyIntegerObject, propertyLocalDate, propertyLocalDateTime, propertyLocalTime, propertyLongObject, propertyShort, propertyShortObject, propertyString, propertyTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-        assertEquals(query.getParameters().getOrderedNames().size(), 16);
+        assertEquals(query.getParameters().getOrderedNames().size(), 20);
         assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
         assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBooleanObject");
         assertEquals(query.getParameters().getOrderedNames().get(2), "propertyByteObject");
@@ -528,18 +545,22 @@ public class TestInsertMysql extends TestInsert {
         assertEquals(query.getParameters().getOrderedNames().get(7), "propertyEnum");
         assertEquals(query.getParameters().getOrderedNames().get(8), "propertyFloat");
         assertEquals(query.getParameters().getOrderedNames().get(9), "propertyFloatObject");
-        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyIntegerObject");
-        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyLongObject");
-        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyShort");
-        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyShortObject");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyTime");
-        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyCharacterObject", "propertyDate", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertyShortObject", "propertyString", "propertyTime"});
+        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyInstant");
+        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyLocalDate");
+        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyLocalDateTime");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyLocalTime");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyShortObject");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyTime");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyCharacterObject", "propertyDate", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyInstant", "propertyIntegerObject", "propertyLocalDate", "propertyLocalDateTime", "propertyLocalTime", "propertyLongObject", "propertyShort", "propertyShortObject", "propertyString", "propertyTime"});
 
         assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2002, 7, 19, 12, 17, 52);
+                var cal = Calendar.getInstance();
+                cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
                 cal.set(Calendar.MILLISECOND, 462);
                 statement
                     .setBigDecimal(1, new BigDecimal("98347.876438637"))
@@ -552,12 +573,16 @@ public class TestInsertMysql extends TestInsert {
                     .setString(8, "VALUE_THREE")
                     .setFloat(9, 13.4f)
                     .setFloat(10, 32.8f)
-                    .setInt(11, 358)
-                    .setLong(12, 9680L)
-                    .setShort(13, (short) 12)
-                    .setShort(14, (short) 78)
-                    .setString(15, "string'value")
-                    .setTime(16, new Time(cal.getTime().getTime()));
+                    .setTimestamp(11, Timestamp.from(cal.toInstant()))
+                    .setInt(12, 358)
+                    .setDate(13, new java.sql.Date(cal.getTime().getTime()))
+                    .setTimestamp(14, Timestamp.from(cal.toInstant()))
+                    .setTime(15, Convert.toTime(cal))
+                    .setLong(16, 9680L)
+                    .setShort(17, (short) 12)
+                    .setShort(18, (short) 78)
+                    .setString(19, "string'value")
+                    .setTime(20, new Time(cal.getTime().getTime()));
             }
         }));
     }
@@ -569,10 +594,10 @@ public class TestInsertMysql extends TestInsert {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCloneMysql() {
-        final Calendar cal = Calendar.getInstance();
-        cal.set(2002, 7, 19, 12, 17, 52);
+        final var cal = Calendar.getInstance();
+        cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Insert query = new Insert(MYSQL);
+        var query = new Insert(MYSQL);
         query
             .hint("DELAYED")
             .into("tablename")
@@ -589,7 +614,7 @@ public class TestInsertMysql extends TestInsert {
             .field("propertyShort", (short) 12)
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
-            .field("propertyStringbuffer", new StringBuffer("stringbuffer'value"))
+            .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
             .field("propertyTime", new Time(cal.getTime().getTime()))
             .fieldParameter("propertyTimestamp")
 
@@ -606,11 +631,11 @@ public class TestInsertMysql extends TestInsert {
             .field("propertyShort", (short) 12)
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
-            .field("propertyStringbuffer", new StringBuffer("stringbuffer'value"))
+            .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
             .field("propertyTime", new Time(cal.getTime().getTime()))
             .fieldParameter("propertyTimestamp");
 
-        Insert query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
 

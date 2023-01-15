@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDropSequenceMysql extends TestDropSequence {
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInstantiationMysql() {
-        DropSequence query = new DropSequence(MYSQL);
+        var query = new DropSequence(MYSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -26,7 +26,7 @@ public class TestDropSequenceMysql extends TestDropSequence {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testClearMysql() {
-        DropSequence query = new DropSequence(MYSQL);
+        var query = new DropSequence(MYSQL);
         query.name("sequencename");
         try {
             query.getSql();
@@ -38,7 +38,7 @@ public class TestDropSequenceMysql extends TestDropSequence {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCreateMysql() {
-        DropSequence query = new DropSequence(MYSQL);
+        var query = new DropSequence(MYSQL);
         query.name("sequencename");
         try {
             query.getSql();

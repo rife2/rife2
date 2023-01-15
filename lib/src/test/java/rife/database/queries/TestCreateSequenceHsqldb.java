@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCreateSequenceHsqldb extends TestCreateSequence {
     @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testInstantiationHsqldb() {
-        CreateSequence query = new CreateSequence(HSQLDB);
+        var query = new CreateSequence(HSQLDB);
         assertNotNull(query);
         try {
             query.getSql();
@@ -25,7 +25,7 @@ public class TestCreateSequenceHsqldb extends TestCreateSequence {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testClearHsqldb() {
-        CreateSequence query = new CreateSequence(HSQLDB);
+        var query = new CreateSequence(HSQLDB);
         query.name("sequencename");
         assertNotNull(query.getSql());
         query.clear();
@@ -39,7 +39,7 @@ public class TestCreateSequenceHsqldb extends TestCreateSequence {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCreateHsqldb() {
-        CreateSequence query = new CreateSequence(HSQLDB);
+        var query = new CreateSequence(HSQLDB);
         query.name("sequencename");
         assertEquals(query.getSql(), "CREATE SEQUENCE sequencename");
         execute(HSQLDB, query);
@@ -47,9 +47,9 @@ public class TestCreateSequenceHsqldb extends TestCreateSequence {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
     void testCloneHsqldb() {
-        CreateSequence query = new CreateSequence(HSQLDB);
+        var query = new CreateSequence(HSQLDB);
         query.name("sequencename");
-        CreateSequence query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
         execute(HSQLDB, query_clone);

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDropTableDerby extends TestDropTable {
     @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testInstantiationDerby() {
-        DropTable query = new DropTable(DERBY);
+        var query = new DropTable(DERBY);
         assertNotNull(query);
         try {
             query.getSql();
@@ -26,7 +26,7 @@ public class TestDropTableDerby extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testIncompleteQueryDerby() {
-        DropTable query = new DropTable(DERBY);
+        var query = new DropTable(DERBY);
         try {
             query.getSql();
             fail();
@@ -39,7 +39,7 @@ public class TestDropTableDerby extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testClearDerby() {
-        DropTable query = new DropTable(DERBY);
+        var query = new DropTable(DERBY);
         query.table("tablename");
         assertNotNull(query.getSql());
         query.clear();
@@ -53,7 +53,7 @@ public class TestDropTableDerby extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testOneTableDerby() {
-        DropTable query = new DropTable(DERBY);
+        var query = new DropTable(DERBY);
         query.table("tabletodrop");
         assertEquals(query.getSql(), "DROP TABLE tabletodrop");
         execute(query);
@@ -61,7 +61,7 @@ public class TestDropTableDerby extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testMultipleTablesDerby() {
-        DropTable query = new DropTable(DERBY);
+        var query = new DropTable(DERBY);
         query.table("tabletodrop1")
             .table("tabletodrop2")
             .table("tabletodrop3");
@@ -75,11 +75,11 @@ public class TestDropTableDerby extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCloneDerby() {
-        DropTable query = new DropTable(DERBY);
+        var query = new DropTable(DERBY);
         query.table("tabletodrop1");
 //			.table("tabletodrop2")
 //			.table("tabletodrop3");
-        DropTable query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
         execute(query_clone);

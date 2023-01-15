@@ -11,16 +11,21 @@ import rife.validation.Validation;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.*;
 import java.util.Calendar;
 
 public class BeanImplConstrained extends Validation {
     private String propertyString_ = null;
-    private StringBuffer propertyStringbuffer_ = null;
+    private StringBuffer propertyStringBuffer_ = null;
     private java.util.Date propertyDate_ = null;
     private java.util.Calendar propertyCalendar_ = null;
     private java.sql.Date propertySqlDate_ = null;
     private java.sql.Time propertyTime_ = null;
     private java.sql.Timestamp propertyTimestamp_ = null;
+    private Instant propertyInstant_ = null;
+    private LocalDateTime propertyLocalDateTime_ = null;
+    private LocalDate propertyLocalDate_ = null;
+    private LocalTime propertyLocalTime_ = null;
     private char propertyChar_ = 0;
     private Character propertyCharacterObject_ = null;
     private boolean propertyBoolean_ = false;
@@ -43,10 +48,10 @@ public class BeanImplConstrained extends Validation {
     }
 
     protected void activateValidation() {
-        addConstraint(new ConstrainedBean().unique("propertyStringbuffer", "propertyByteObject").defaultOrder("propertyString").defaultOrder("propertyInt", ConstrainedBean.DESC));
+        addConstraint(new ConstrainedBean().unique("propertyStringBuffer", "propertyByteObject").defaultOrder("propertyString").defaultOrder("propertyInt", ConstrainedBean.DESC));
 
         addConstraint(new ConstrainedProperty("propertyString").identifier(true).maxLength(30).inList("one", "tw''o", "someotherstring").defaultValue("one"));
-        addConstraint(new ConstrainedProperty("propertyStringbuffer").maxLength(20).unique(true).notEmpty(true).notNull(true).notEqual("some'blurp"));
+        addConstraint(new ConstrainedProperty("propertyStringBuffer").maxLength(20).unique(true).notEmpty(true).notNull(true).notEqual("some'blurp"));
         addConstraint(new ConstrainedProperty("propertyInt").notEmpty(true).defaultValue(23));
         addConstraint(new ConstrainedProperty("propertyByteObject").notEqual(-1).notNull(true));
         addConstraint(new ConstrainedProperty("propertyLongObject").inList("89", "1221", "66875", "878"));
@@ -64,12 +69,12 @@ public class BeanImplConstrained extends Validation {
         propertyString_ = propertyString;
     }
 
-    public StringBuffer getPropertyStringbuffer() {
-        return propertyStringbuffer_;
+    public StringBuffer getPropertyStringBuffer() {
+        return propertyStringBuffer_;
     }
 
-    public void setPropertyStringbuffer(StringBuffer propertyStringbuffer) {
-        propertyStringbuffer_ = propertyStringbuffer;
+    public void setPropertyStringBuffer(StringBuffer propertyStringBuffer) {
+        propertyStringBuffer_ = propertyStringBuffer;
     }
 
     public java.util.Date getPropertyDate() {
@@ -110,6 +115,38 @@ public class BeanImplConstrained extends Validation {
 
     public void setPropertyTimestamp(java.sql.Timestamp propertyTimestamp) {
         propertyTimestamp_ = propertyTimestamp;
+    }
+
+    public Instant getPropertyInstant() {
+        return propertyInstant_;
+    }
+
+    public void setPropertyInstant(Instant propertyInstant_) {
+        this.propertyInstant_ = propertyInstant_;
+    }
+
+    public LocalDateTime getPropertyLocalDateTime() {
+        return propertyLocalDateTime_;
+    }
+
+    public void setPropertyLocalDateTime(LocalDateTime propertyLocalDateTime) {
+        this.propertyLocalDateTime_ = propertyLocalDateTime;
+    }
+
+    public LocalDate getPropertyLocalDate() {
+        return propertyLocalDate_;
+    }
+
+    public void setPropertyLocalDate(LocalDate propertyLocalDate) {
+        this.propertyLocalDate_ = propertyLocalDate;
+    }
+
+    public LocalTime getPropertyLocalTime() {
+        return propertyLocalTime_;
+    }
+
+    public void setPropertyLocalTime(LocalTime propertyLocalTime) {
+        this.propertyLocalTime_ = propertyLocalTime;
     }
 
     public boolean isPropertyBoolean() {
@@ -249,10 +286,11 @@ public class BeanImplConstrained extends Validation {
     }
 
     public static BeanImplConstrained getPopulatedBean() {
-        BeanImplConstrained bean = new BeanImplConstrained();
-        Calendar cal = Calendar.getInstance();
-        cal.set(2002, 5, 18, 15, 26, 14);
-        cal.set(Calendar.MILLISECOND, 764);
+        var bean = new BeanImplConstrained();
+        var cal = Calendar.getInstance();
+        cal.set(2002, Calendar.JUNE, 18, 15, 26, 14);
+        cal.set(Calendar.MILLISECOND, 167);
+        var local_date_time = LocalDateTime.of(2002, Month.JUNE, 18, 15, 26, 14, 167000000);
         bean.setPropertyBigDecimal(new BigDecimal("219038743.392874"));
         bean.setPropertyBoolean(true);
         bean.setPropertyBooleanObject(false);
@@ -274,15 +312,19 @@ public class BeanImplConstrained extends Validation {
         bean.setPropertyShortObject((short) 68);
         bean.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
         bean.setPropertyString("someotherstring");
-        bean.setPropertyStringbuffer(new StringBuffer("someotherstringbuff"));
+        bean.setPropertyStringBuffer(new StringBuffer("someotherstringbuff"));
         bean.setPropertyTime(new Time(cal.getTime().getTime()));
         bean.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+        bean.setPropertyInstant(cal.toInstant());
+        bean.setPropertyLocalDateTime(local_date_time);
+        bean.setPropertyLocalDate(local_date_time.toLocalDate());
+        bean.setPropertyLocalTime(local_date_time.toLocalTime());
 
         return bean;
     }
 
     public static BeanImplConstrained getNullBean() {
-        BeanImplConstrained bean = new BeanImplConstrained();
+        var bean = new BeanImplConstrained();
         bean.setPropertyBigDecimal(null);
         bean.setPropertyBoolean(false);
         bean.setPropertyBooleanObject(false);
@@ -304,7 +346,7 @@ public class BeanImplConstrained extends Validation {
         bean.setPropertyShortObject((short) 0);
         bean.setPropertySqlDate(null);
         bean.setPropertyString(null);
-        bean.setPropertyStringbuffer(null);
+        bean.setPropertyStringBuffer(null);
         bean.setPropertyTime(null);
         bean.setPropertyTimestamp(null);
 

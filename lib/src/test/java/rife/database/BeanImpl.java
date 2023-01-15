@@ -4,246 +4,286 @@
  */
 package rife.database;
 
+import rife.tools.Convert;
+
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.*;
 import java.util.Calendar;
 
 public class BeanImpl {
-    private String mPropertyString = null;
-    private StringBuffer mPropertyStringbuffer = null;
-    private java.util.Date mPropertyDate = null;
-    private java.util.Calendar mPropertyCalendar = null;
-    private java.sql.Date mPropertySqlDate = null;
-    private java.sql.Time mPropertyTime = null;
-    private java.sql.Timestamp mPropertyTimestamp = null;
-    private char mPropertyChar = 0;
-    private Character mPropertyCharacterObject = null;
-    private boolean mPropertyBoolean = false;
-    private Boolean mPropertyBooleanObject = null;
-    private byte mPropertyByte = 0;
-    private Byte mPropertyByteObject = null;
-    private double mPropertyDouble = 0.0d;
-    private Double mPropertyDoubleObject = null;
-    private float mPropertyFloat = 0.0f;
-    private Float mPropertyFloatObject = null;
-    private int mPropertyInt = 0;
-    private Integer mPropertyIntegerObject = null;
-    private long mPropertyLong = 0;
-    private Long mPropertyLongObject = null;
-    private short mPropertyShort = 0;
-    private Short mPropertyShortObject = null;
-    private BigDecimal mPropertyBigDecimal = null;
-    private SomeEnum mPropertyEnum = null;
+    private String propertyString_ = null;
+    private StringBuffer propertyStringBuffer_ = null;
+    private java.util.Date propertyDate_ = null;
+    private java.util.Calendar propertyCalendar_ = null;
+    private java.sql.Date propertySqlDate_ = null;
+    private java.sql.Time propertyTime_ = null;
+    private java.sql.Timestamp propertyTimestamp_ = null;
+    private Instant propertyInstant_ = null;
+    private LocalDateTime propertyLocalDateTime_ = null;
+    private LocalDate propertyLocalDate_ = null;
+    private LocalTime propertyLocalTime_ = null;
+    private char propertyChar_ = 0;
+    private Character propertyCharacterObject_ = null;
+    private boolean propertyBoolean_ = false;
+    private Boolean propertyBooleanObject_ = null;
+    private byte propertyByte_ = 0;
+    private Byte propertyByteObject_ = null;
+    private double propertyDouble_ = 0.0d;
+    private Double propertyDoubleObject_ = null;
+    private float propertyFloat_ = 0.0f;
+    private Float propertyFloatObject_ = null;
+    private int propertyInt_ = 0;
+    private Integer propertyIntegerObject_ = null;
+    private long propertyLong_ = 0;
+    private Long propertyLongObject_ = null;
+    private short propertyShort_ = 0;
+    private Short propertyShortObject_ = null;
+    private BigDecimal propertyBigDecimal_ = null;
+    private SomeEnum propertyEnum_ = null;
 
     public BeanImpl() {
     }
 
     public String getPropertyString() {
-        return mPropertyString;
+        return propertyString_;
     }
 
     public void setPropertyString(String propertyString) {
-        mPropertyString = propertyString;
+        propertyString_ = propertyString;
     }
 
-    public StringBuffer getPropertyStringbuffer() {
-        return mPropertyStringbuffer;
+    public StringBuffer getPropertyStringBuffer() {
+        return propertyStringBuffer_;
     }
 
-    public void setPropertyStringbuffer(StringBuffer propertyStringbuffer) {
-        mPropertyStringbuffer = propertyStringbuffer;
+    public void setPropertyStringBuffer(StringBuffer propertyStringBuffer) {
+        propertyStringBuffer_ = propertyStringBuffer;
     }
 
     public java.util.Date getPropertyDate() {
-        return mPropertyDate;
+        return propertyDate_;
     }
 
     public void setPropertyDate(java.util.Date propertyDate) {
-        mPropertyDate = propertyDate;
+        propertyDate_ = propertyDate;
     }
 
     public java.util.Calendar getPropertyCalendar() {
-        return mPropertyCalendar;
+        return propertyCalendar_;
     }
 
     public void setPropertyCalendar(java.util.Calendar propertyCalendar) {
-        mPropertyCalendar = propertyCalendar;
+        propertyCalendar_ = propertyCalendar;
     }
 
     public java.sql.Date getPropertySqlDate() {
-        return mPropertySqlDate;
+        return propertySqlDate_;
     }
 
     public void setPropertySqlDate(java.sql.Date propertySqlDate) {
-        mPropertySqlDate = propertySqlDate;
+        propertySqlDate_ = propertySqlDate;
     }
 
     public java.sql.Time getPropertyTime() {
-        return mPropertyTime;
+        return propertyTime_;
     }
 
     public void setPropertyTime(java.sql.Time propertyTime) {
-        mPropertyTime = propertyTime;
+        propertyTime_ = propertyTime;
     }
 
     public java.sql.Timestamp getPropertyTimestamp() {
-        return mPropertyTimestamp;
+        return propertyTimestamp_;
     }
 
     public void setPropertyTimestamp(java.sql.Timestamp propertyTimestamp) {
-        mPropertyTimestamp = propertyTimestamp;
+        propertyTimestamp_ = propertyTimestamp;
+    }
+
+    public Instant getPropertyInstant() {
+        return propertyInstant_;
+    }
+
+    public void setPropertyInstant(Instant propertyInstant_) {
+        this.propertyInstant_ = propertyInstant_;
+    }
+
+    public LocalDateTime getPropertyLocalDateTime() {
+        return propertyLocalDateTime_;
+    }
+
+    public void setPropertyLocalDateTime(LocalDateTime propertyLocalDateTime) {
+        this.propertyLocalDateTime_ = propertyLocalDateTime;
+    }
+
+    public LocalDate getPropertyLocalDate() {
+        return propertyLocalDate_;
+    }
+
+    public void setPropertyLocalDate(LocalDate propertyLocalDate) {
+        this.propertyLocalDate_ = propertyLocalDate;
+    }
+
+    public LocalTime getPropertyLocalTime() {
+        return propertyLocalTime_;
+    }
+
+    public void setPropertyLocalTime(LocalTime propertyLocalTime) {
+        this.propertyLocalTime_ = propertyLocalTime;
     }
 
     public boolean isPropertyBoolean() {
-        return mPropertyBoolean;
+        return propertyBoolean_;
     }
 
     public void setPropertyBoolean(boolean propertyBoolean) {
-        mPropertyBoolean = propertyBoolean;
+        propertyBoolean_ = propertyBoolean;
     }
 
     public Boolean getPropertyBooleanObject() {
-        return mPropertyBooleanObject;
+        return propertyBooleanObject_;
     }
 
     public void setPropertyBooleanObject(Boolean propertyBooleanObject) {
-        mPropertyBooleanObject = propertyBooleanObject;
+        propertyBooleanObject_ = propertyBooleanObject;
     }
 
     public byte getPropertyByte() {
-        return mPropertyByte;
+        return propertyByte_;
     }
 
     public Byte getPropertyByteObject() {
-        return mPropertyByteObject;
+        return propertyByteObject_;
     }
 
     public void setPropertyByte(byte propertyByte) {
-        mPropertyByte = propertyByte;
+        propertyByte_ = propertyByte;
     }
 
     public void setPropertyByteObject(Byte propertyByteObject) {
-        mPropertyByteObject = propertyByteObject;
+        propertyByteObject_ = propertyByteObject;
     }
 
     public double getPropertyDouble() {
-        return mPropertyDouble;
+        return propertyDouble_;
     }
 
     public void setPropertyDouble(double propertyDouble) {
-        mPropertyDouble = propertyDouble;
+        propertyDouble_ = propertyDouble;
     }
 
     public void setPropertyDoubleObject(Double propertyDoubleObject) {
-        mPropertyDoubleObject = propertyDoubleObject;
+        propertyDoubleObject_ = propertyDoubleObject;
     }
 
     public Double getPropertyDoubleObject() {
-        return mPropertyDoubleObject;
+        return propertyDoubleObject_;
     }
 
     public float getPropertyFloat() {
-        return mPropertyFloat;
+        return propertyFloat_;
     }
 
     public void setPropertyFloat(float propertyFloat) {
-        mPropertyFloat = propertyFloat;
+        propertyFloat_ = propertyFloat;
     }
 
     public void setPropertyFloatObject(Float propertyFloatObject) {
-        mPropertyFloatObject = propertyFloatObject;
+        propertyFloatObject_ = propertyFloatObject;
     }
 
     public Float getPropertyFloatObject() {
-        return mPropertyFloatObject;
+        return propertyFloatObject_;
     }
 
     public int getPropertyInt() {
-        return mPropertyInt;
+        return propertyInt_;
     }
 
     public void setPropertyInt(int propertyInt) {
-        mPropertyInt = propertyInt;
+        propertyInt_ = propertyInt;
     }
 
     public Integer getPropertyIntegerObject() {
-        return mPropertyIntegerObject;
+        return propertyIntegerObject_;
     }
 
     public void setPropertyIntegerObject(Integer propertyIntegerObject) {
-        mPropertyIntegerObject = propertyIntegerObject;
+        propertyIntegerObject_ = propertyIntegerObject;
     }
 
     public long getPropertyLong() {
-        return mPropertyLong;
+        return propertyLong_;
     }
 
     public void setPropertyLong(long propertyLong) {
-        mPropertyLong = propertyLong;
+        propertyLong_ = propertyLong;
     }
 
     public Long getPropertyLongObject() {
-        return mPropertyLongObject;
+        return propertyLongObject_;
     }
 
     public void setPropertyLongObject(Long propertyLongObject) {
-        mPropertyLongObject = propertyLongObject;
+        propertyLongObject_ = propertyLongObject;
     }
 
     public short getPropertyShort() {
-        return mPropertyShort;
+        return propertyShort_;
     }
 
     public void setPropertyShort(short propertyShort) {
-        mPropertyShort = propertyShort;
+        propertyShort_ = propertyShort;
     }
 
     public Short getPropertyShortObject() {
-        return mPropertyShortObject;
+        return propertyShortObject_;
     }
 
     public void setPropertyShortObject(Short propertyShortObject) {
-        mPropertyShortObject = propertyShortObject;
+        propertyShortObject_ = propertyShortObject;
     }
 
     public char getPropertyChar() {
-        return mPropertyChar;
+        return propertyChar_;
     }
 
     public void setPropertyChar(char propertyChar) {
-        mPropertyChar = propertyChar;
+        propertyChar_ = propertyChar;
     }
 
     public Character getPropertyCharacterObject() {
-        return mPropertyCharacterObject;
+        return propertyCharacterObject_;
     }
 
     public void setPropertyCharacterObject(Character propertyCharacterObject) {
-        mPropertyCharacterObject = propertyCharacterObject;
+        propertyCharacterObject_ = propertyCharacterObject;
     }
 
     public BigDecimal getPropertyBigDecimal() {
-        return mPropertyBigDecimal;
+        return propertyBigDecimal_;
     }
 
     public void setPropertyBigDecimal(BigDecimal propertyBigDecimal) {
-        mPropertyBigDecimal = propertyBigDecimal;
+        propertyBigDecimal_ = propertyBigDecimal;
     }
 
     public void setPropertyEnum(SomeEnum propertyEnum) {
-        mPropertyEnum = propertyEnum;
+        propertyEnum_ = propertyEnum;
     }
 
     public SomeEnum getPropertyEnum() {
-        return mPropertyEnum;
+        return propertyEnum_;
     }
 
     public static BeanImpl getPopulatedBean() {
-        BeanImpl bean = new BeanImpl();
-        Calendar cal = Calendar.getInstance();
-        cal.set(2002, 5, 18, 15, 26, 14);
-        cal.set(Calendar.MILLISECOND, 764);
+        var bean = new BeanImpl();
+        var cal = Calendar.getInstance();
+        cal.set(2002, Calendar.JUNE, 18, 15, 26, 14);
+        cal.set(Calendar.MILLISECOND, 167);
+        var local_date_time = LocalDateTime.of(2002, Month.JUNE, 18, 15, 26, 14, 167000000);
         bean.setPropertyBigDecimal(new BigDecimal("219038743.392874"));
         bean.setPropertyBoolean(true);
         bean.setPropertyBooleanObject(false);
@@ -265,16 +305,20 @@ public class BeanImpl {
         bean.setPropertyShortObject((short) 68);
         bean.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
         bean.setPropertyString("someotherstring");
-        bean.setPropertyStringbuffer(new StringBuffer("someotherstringbuff"));
-        bean.setPropertyTime(new Time(cal.getTime().getTime()));
+        bean.setPropertyStringBuffer(new StringBuffer("someotherstringbuff"));
+        bean.setPropertyTime(Convert.toTime(cal));
         bean.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+        bean.setPropertyInstant(cal.toInstant());
+        bean.setPropertyLocalDateTime(local_date_time);
+        bean.setPropertyLocalDate(local_date_time.toLocalDate());
+        bean.setPropertyLocalTime(local_date_time.toLocalTime());
         bean.setPropertyEnum(SomeEnum.VALUE_THREE);
 
         return bean;
     }
 
     public static BeanImpl getNullBean() {
-        BeanImpl bean = new BeanImpl();
+        var bean = new BeanImpl();
         bean.setPropertyBigDecimal(null);
         bean.setPropertyBoolean(false);
         bean.setPropertyBooleanObject(false);
@@ -296,12 +340,15 @@ public class BeanImpl {
         bean.setPropertyShortObject((short) 0);
         bean.setPropertySqlDate(null);
         bean.setPropertyString(null);
-        bean.setPropertyStringbuffer(null);
+        bean.setPropertyStringBuffer(null);
         bean.setPropertyTime(null);
         bean.setPropertyTimestamp(null);
+        bean.setPropertyInstant(null);
+        bean.setPropertyLocalDateTime(null);
+        bean.setPropertyLocalDate(null);
+        bean.setPropertyLocalTime(null);
         bean.setPropertyEnum(null);
 
         return bean;
     }
 }
-

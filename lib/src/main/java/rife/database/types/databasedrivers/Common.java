@@ -7,16 +7,17 @@ package rife.database.types.databasedrivers;
 import java.io.StringReader;
 import java.sql.*;
 
+import rife.config.RifeConfig;
 import rife.database.DbPreparedStatement;
 import rife.database.exceptions.DatabaseException;
 import rife.database.types.SqlConversion;
-import rife.tools.FileUtils;
-import rife.tools.StringUtils;
+import rife.tools.*;
 import rife.validation.Constrained;
 import rife.validation.ConstrainedProperty;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -95,23 +96,31 @@ public abstract class Common implements SqlConversion {
                         }
                         // convert the Timestamp type into other time / date types
                         else if (targetType == Calendar.class &&
-                            (result_class == Timestamp.class ||
-                                result instanceof Timestamp)) {
+                                 (result_class == Timestamp.class || result instanceof Timestamp)) {
                             Calendar cal = Calendar.getInstance();
                             cal.setTime((Timestamp) result);
                             return cal;
                         } else if (targetType == Date.class &&
-                            (result_class == Timestamp.class ||
-                                result instanceof Timestamp)) {
+                                   (result_class == Timestamp.class || result instanceof Timestamp)) {
                             return new Date(((Timestamp) result).getTime());
                         } else if (targetType == java.sql.Date.class &&
-                            (result_class == Timestamp.class ||
-                                result instanceof Timestamp)) {
+                                   (result_class == Timestamp.class || result instanceof Timestamp)) {
                             return new java.sql.Date(((Timestamp) result).getTime());
                         } else if (targetType == Time.class &&
-                            (result_class == Timestamp.class ||
-                                result instanceof Timestamp)) {
-                            return new Time(((Timestamp) result).getTime());
+                                   (result_class == Timestamp.class || result instanceof Timestamp)) {
+                            return Convert.toTime(result);
+                        } else if (targetType == Instant.class &&
+                                   (result_class == Timestamp.class || result instanceof Timestamp)) {
+                            return ((Timestamp) result).toInstant();
+                        } else if (targetType == LocalDateTime.class &&
+                                   (result_class == Timestamp.class || result instanceof Timestamp)) {
+                            return ((Timestamp) result).toLocalDateTime();
+                        } else if (targetType == LocalDate.class &&
+                                   (result_class == Timestamp.class || result instanceof Timestamp)) {
+                            return ((Timestamp) result).toLocalDateTime().toLocalDate();
+                        } else if (targetType == LocalTime.class &&
+                                   (result_class == Timestamp.class || result instanceof Timestamp)) {
+                            return ((Timestamp) result).toLocalDateTime().toLocalTime();
                         }
                         // convert the java.sql.Date type into other time / date types
                         else if (targetType == Calendar.class && result_class == java.sql.Date.class) {
@@ -121,9 +130,17 @@ public abstract class Common implements SqlConversion {
                         } else if (targetType == Date.class && result_class == java.sql.Date.class) {
                             return new Date(((java.sql.Date) result).getTime());
                         } else if (targetType == Time.class && result_class == java.sql.Date.class) {
-                            return new Time(((java.sql.Date) result).getTime());
+                            return LocalTime.of(0, 0);
                         } else if (targetType == Timestamp.class && result_class == java.sql.Date.class) {
                             return new Timestamp(((java.sql.Date) result).getTime());
+                        } else if (targetType == Instant.class && result_class == java.sql.Date.class) {
+                            return ((java.sql.Date) result).toLocalDate().atStartOfDay(RifeConfig.tools().getDefaultZoneId()).toInstant();
+                        } else if (targetType == LocalDateTime.class && result_class == java.sql.Date.class) {
+                            return ((java.sql.Date) result).toLocalDate().atStartOfDay(RifeConfig.tools().getDefaultZoneId());
+                        } else if (targetType == LocalDate.class && result_class == java.sql.Date.class) {
+                            return ((java.sql.Date) result).toLocalDate();
+                        } else if (targetType == LocalTime.class && result_class == java.sql.Date.class) {
+                            return LocalTime.of(0, 0);
                         }
                         // convert the Time type into other time / date types
                         else if (targetType == Calendar.class && result_class == Time.class) {
@@ -136,7 +153,11 @@ public abstract class Common implements SqlConversion {
                             return new java.sql.Date(((Time) result).getTime());
                         } else if (targetType == Timestamp.class && result_class == Time.class) {
                             return new Timestamp(((Time) result).getTime());
-                        } else if (targetType == byte[].class && Blob.class.isAssignableFrom(result_class)) {
+                        } else if (targetType == LocalTime.class && result_class == Time.class) {
+                            return ((Time) result).toLocalTime();
+                        }
+                        // other types
+                        else if (targetType == byte[].class && Blob.class.isAssignableFrom(result_class)) {
                             Blob blob = (Blob) result;
                             return FileUtils.readBytes(blob.getBinaryStream());
                         } else if (targetType == byte[].class && InputStream.class.isAssignableFrom(result_class)) {
@@ -185,51 +206,79 @@ public abstract class Common implements SqlConversion {
                 }
             }
         } else if (targetType == Character.class ||
-            targetType == char.class) {
+                   targetType == char.class) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.CHAR);
             } else {
                 statement.setString(parameterIndex, value.toString());
             }
         } else if (targetType == Time.class ||
-            Time.class.isAssignableFrom(targetType)) {
+                   Time.class.isAssignableFrom(targetType)) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.TIME);
             } else {
                 statement.setTime(parameterIndex, (Time) value);
             }
+        } else if (targetType == LocalTime.class ||
+                   LocalTime.class.isAssignableFrom(targetType)) {
+            if (null == value) {
+                statement.setNull(parameterIndex, Types.TIME);
+            } else {
+                statement.setTime(parameterIndex, Time.valueOf((LocalTime) value));
+            }
         } else if (targetType == java.sql.Date.class ||
-            java.sql.Date.class.isAssignableFrom(targetType)) {
+                   java.sql.Date.class.isAssignableFrom(targetType)) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.DATE);
             } else {
                 statement.setDate(parameterIndex, (java.sql.Date) value);
             }
+        } else if (targetType == LocalDate.class ||
+                   LocalDate.class.isAssignableFrom(targetType)) {
+            if (null == value) {
+                statement.setNull(parameterIndex, Types.DATE);
+            } else {
+                statement.setDate(parameterIndex, java.sql.Date.valueOf((LocalDate) value));
+            }
         } else if (targetType == Date.class ||
-            Date.class.isAssignableFrom(targetType)) {
+                   Date.class.isAssignableFrom(targetType)) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.TIMESTAMP);
             } else {
-                statement.setTimestamp(parameterIndex, new java.sql.Timestamp(((Date) value).getTime()));
+                statement.setTimestamp(parameterIndex, new Timestamp(((Date) value).getTime()));
             }
         } else if (targetType == Calendar.class ||
-            Calendar.class.isAssignableFrom(targetType)) {
+                   Calendar.class.isAssignableFrom(targetType)) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.TIMESTAMP);
             } else {
-                statement.setTimestamp(parameterIndex, new java.sql.Timestamp(((Calendar) value).getTime().getTime()));
+                statement.setTimestamp(parameterIndex, new Timestamp(((Calendar) value).getTime().getTime()));
             }
         } else if (targetType == Timestamp.class ||
-            Timestamp.class.isAssignableFrom(targetType)) {
+                   Timestamp.class.isAssignableFrom(targetType)) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.TIMESTAMP);
             } else {
                 statement.setTimestamp(parameterIndex, (Timestamp) value);
             }
+        } else if (targetType == Instant.class ||
+                   Instant.class.isAssignableFrom(targetType)) {
+            if (null == value) {
+                statement.setNull(parameterIndex, Types.TIMESTAMP);
+            } else {
+                statement.setTimestamp(parameterIndex, Timestamp.from((Instant) value));
+            }
+        } else if (targetType == LocalDateTime.class ||
+                   LocalDateTime.class.isAssignableFrom(targetType)) {
+            if (null == value) {
+                statement.setNull(parameterIndex, Types.TIMESTAMP);
+            } else {
+                statement.setTimestamp(parameterIndex, Timestamp.valueOf((LocalDateTime)value));
+            }
         }
         // make sure that the Boolean type is correctly caught
         else if (targetType == Boolean.class ||
-            targetType == boolean.class) {
+                 targetType == boolean.class) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.BOOLEAN);
             } else {
@@ -238,28 +287,28 @@ public abstract class Common implements SqlConversion {
         }
         // make sure that the Integer types are correctly caught
         else if (targetType == Byte.class ||
-            targetType == byte.class) {
+                 targetType == byte.class) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.TINYINT);
             } else {
                 statement.setByte(parameterIndex, (Byte) value);
             }
         } else if (targetType == Short.class ||
-            targetType == short.class) {
+                   targetType == short.class) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.SMALLINT);
             } else {
                 statement.setShort(parameterIndex, (Short) value);
             }
         } else if (targetType == Integer.class ||
-            targetType == int.class) {
+                   targetType == int.class) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.INTEGER);
             } else {
                 statement.setInt(parameterIndex, (Integer) value);
             }
         } else if (targetType == Long.class ||
-            targetType == long.class) {
+                   targetType == long.class) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.BIGINT);
             } else {
@@ -268,21 +317,21 @@ public abstract class Common implements SqlConversion {
         }
         // make sure that the Float types are correctly caught
         else if (targetType == Float.class ||
-            targetType == float.class) {
+                 targetType == float.class) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.FLOAT);
             } else {
                 statement.setFloat(parameterIndex, (Float) value);
             }
         } else if (targetType == Double.class ||
-            targetType == double.class) {
+                   targetType == double.class) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.DOUBLE);
             } else {
                 statement.setDouble(parameterIndex, (Double) value);
             }
         } else if (targetType == BigDecimal.class ||
-            BigDecimal.class.isAssignableFrom(targetType)) {
+                   BigDecimal.class.isAssignableFrom(targetType)) {
             if (null == value) {
                 statement.setNull(parameterIndex, Types.NUMERIC);
             } else {

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDropSequenceDerby extends TestDropSequence {
     @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testInstantiationDerby() {
-        DropSequence query = new DropSequence(DERBY);
+        var query = new DropSequence(DERBY);
         assertNotNull(query);
         try {
             query.getSql();
@@ -26,7 +26,7 @@ public class TestDropSequenceDerby extends TestDropSequence {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testClearDerby() {
-        DropSequence query = new DropSequence(DERBY);
+        var query = new DropSequence(DERBY);
         query.name("sequencename");
         try {
             query.getSql();
@@ -38,7 +38,7 @@ public class TestDropSequenceDerby extends TestDropSequence {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCreateDerby() {
-        DropSequence query = new DropSequence(DERBY);
+        var query = new DropSequence(DERBY);
         query.name("sequencename");
         try {
             query.getSql();

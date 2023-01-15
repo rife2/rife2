@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestSequenceValueOracle extends TestSequenceValue {
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInstantiationOracle() {
-        SequenceValue query = new SequenceValue(ORACLE);
+        var query = new SequenceValue(ORACLE);
         assertNotNull(query);
         try {
             query.getSql();
@@ -26,7 +26,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInvalidOracle() {
-        SequenceValue query = new SequenceValue(ORACLE);
+        var query = new SequenceValue(ORACLE);
         try {
             query.getSql();
             fail();
@@ -53,7 +53,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testClearOracle() {
-        SequenceValue query = new SequenceValue(ORACLE);
+        var query = new SequenceValue(ORACLE);
         query
             .name("sequencename")
             .next();
@@ -70,7 +70,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testNextOracle() {
-        SequenceValue query = new SequenceValue(ORACLE);
+        var query = new SequenceValue(ORACLE);
         query
             .name("sequencename")
             .next();
@@ -80,7 +80,7 @@ public class TestSequenceValueOracle extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCurrentOracle() {
-        SequenceValue query = new SequenceValue(ORACLE);
+        var query = new SequenceValue(ORACLE);
         query
             .name("sequencename")
             .current();
@@ -90,11 +90,11 @@ public class TestSequenceValueOracle extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCloneOracle() {
-        SequenceValue query = new SequenceValue(ORACLE);
+        var query = new SequenceValue(ORACLE);
         query
             .name("sequencename")
             .next();
-        SequenceValue query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
         assertTrue(execute(ORACLE, query_clone) >= 0);

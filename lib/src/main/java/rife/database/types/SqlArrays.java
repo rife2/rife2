@@ -15,11 +15,11 @@ public final class SqlArrays {
         if (null == array) {
             return SqlNull.NULL.toString();
         } else {
-            StringBuilder result = new StringBuilder("{");
+            var result = new StringBuilder("{");
 
-            for (Object array_field : array) {
+            for (var array_field : array) {
                 if (null == array_field) {
-                    result.append(SqlNull.NULL.toString());
+                    result.append(SqlNull.NULL);
                 } else if (array_field instanceof String) {
                     result.append("'").append(StringUtils.encodeSql((String) array_field)).append("'");
                 } else if (array_field instanceof StringBuilder) {
@@ -29,7 +29,7 @@ public final class SqlArrays {
                 } else if (array_field instanceof Object[]) {
                     result.append(convertArray((Object[]) array_field));
                 } else {
-                    result.append(array_field.toString());
+                    result.append(array_field);
                 }
                 result.append(",");
             }

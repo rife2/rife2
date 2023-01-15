@@ -8,10 +8,10 @@ import rife.database.Datasource;
 import rife.database.TestDatasources;
 
 public class TestQuery {
-    protected static Datasource PGSQL = TestDatasources.PGSQL;
-    protected static Datasource ORACLE = TestDatasources.ORACLE;
-    protected static Datasource HSQLDB = TestDatasources.HSQLDB;
-    protected static Datasource H2 = TestDatasources.H2;
-    protected static Datasource MYSQL = TestDatasources.MYSQL;
-    protected static Datasource DERBY = TestDatasources.DERBY;
+    protected static final Datasource PGSQL = TestDatasources.PGSQL;
+    protected static final Datasource ORACLE = TestDatasources.ORACLE;
+    protected static final Datasource HSQLDB = TestDatasources.HSQLDB;
+    protected static final Datasource H2 = TestDatasources.H2;
+    protected static final Datasource MYSQL = TestDatasources.MYSQL;
+    protected static final Datasource DERBY = TestDatasources.DERBY;
 }

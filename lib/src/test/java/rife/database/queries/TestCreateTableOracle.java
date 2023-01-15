@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCreateTableOracle extends TestCreateTable {
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInstantiationOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         assertNotNull(query);
         try {
             query.getSql();
@@ -27,7 +27,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testIncompleteQueryOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         try {
             query.getSql();
             fail();
@@ -48,7 +48,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testClearOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("string", String.class);
         assertNotNull(query.getSql());
@@ -63,7 +63,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename1")
             .column("string", String.class)
             .column("stringbuffer", StringBuffer.class)
@@ -92,7 +92,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnPrecisionOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -120,46 +120,46 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnsBeanOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .columns(BeanImpl.class);
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyBoolean NUMBER(1), propertyBooleanObject NUMBER(1), propertyByte NUMBER(3), propertyByteObject NUMBER(3), propertyCalendar DATE, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATE, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt NUMBER(10), propertyIntegerObject NUMBER(10), propertyLong NUMBER(19), propertyLongObject NUMBER(19), propertyShort NUMBER(5), propertyShortObject NUMBER(5), propertySqlDate DATE, propertyString VARCHAR2(4000), propertyStringbuffer VARCHAR2(4000), propertyTime DATE, propertyTimestamp DATE, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyBoolean NUMBER(1), propertyBooleanObject NUMBER(1), propertyByte NUMBER(3), propertyByteObject NUMBER(3), propertyCalendar DATE, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATE, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInstant DATE, propertyInt NUMBER(10), propertyIntegerObject NUMBER(10), propertyLocalDate DATE, propertyLocalDateTime DATE, propertyLocalTime DATE, propertyLong NUMBER(19), propertyLongObject NUMBER(19), propertyShort NUMBER(5), propertyShortObject NUMBER(5), propertySqlDate DATE, propertyString VARCHAR2(4000), propertyStringBuffer VARCHAR2(4000), propertyTime DATE, propertyTimestamp DATE, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
         // this is invalid to execute with Oracle
         // VARCHAR2 and CHAR need size specification
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnsBeanIncludedOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
-            .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyByte NUMBER(3), propertyFloat FLOAT, propertyStringbuffer VARCHAR2(4000), propertyTime DATE)");
+            .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyByte NUMBER(3), propertyFloat FLOAT, propertyStringBuffer VARCHAR2(4000), propertyTime DATE)");
         // this is invalid to execute with Oracle
         // VARCHAR2 and CHAR need size specification
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnsBeanExcludedOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
-            .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBoolean NUMBER(1), propertyBooleanObject NUMBER(1), propertyByteObject NUMBER(3), propertyCalendar DATE, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATE, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloatObject FLOAT, propertyInt NUMBER(10), propertyIntegerObject NUMBER(10), propertyLong NUMBER(19), propertyLongObject NUMBER(19), propertyShort NUMBER(5), propertyShortObject NUMBER(5), propertySqlDate DATE, propertyString VARCHAR2(4000), propertyTimestamp DATE, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
+            .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBoolean NUMBER(1), propertyBooleanObject NUMBER(1), propertyByteObject NUMBER(3), propertyCalendar DATE, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATE, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloatObject FLOAT, propertyInstant DATE, propertyInt NUMBER(10), propertyIntegerObject NUMBER(10), propertyLocalDate DATE, propertyLocalDateTime DATE, propertyLocalTime DATE, propertyLong NUMBER(19), propertyLongObject NUMBER(19), propertyShort NUMBER(5), propertyShortObject NUMBER(5), propertySqlDate DATE, propertyString VARCHAR2(4000), propertyTimestamp DATE, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
         // this is invalid to execute with Oracle
         // VARCHAR2 and CHAR need size specification
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnsBeanFilteredOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
-            .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringbuffer"});
+            .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringBuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringBuffer"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyFloat FLOAT, propertyTime DATE)");
         execute(query);
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnsBeanPrecisionOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)
@@ -175,34 +175,38 @@ public class TestCreateTableOracle extends TestCreateTable {
             .precision("propertyDoubleObject", 14, 4)
             .precision("propertyFloat", 13, 2)
             .precision("propertyFloatObject", 12, 1)
+            .precision("propertyInstant", 7)
             .precision("propertyInt", 10)
             .precision("propertyIntegerObject", 8)
+            .precision("propertyLocalDateTime", 5)
+            .precision("propertyLocalDate", 32)
+            .precision("propertyLocalTime", 10)
             .precision("propertyLong", 12)
             .precision("propertyLongObject", 11)
             .precision("propertyShort", 9)
             .precision("propertyShortObject", 6)
             .precision("propertySqlDate", 8)
             .precision("propertyString", 255)
-            .precision("propertyStringbuffer", 100)
+            .precision("propertyStringBuffer", 100)
             .precision("propertyTime", 9)
             .precision("propertyTimestamp", 30, 2)
             .precision("propertyEnum", 14);
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(19,9), propertyBoolean NUMBER(1), propertyBooleanObject NUMBER(1), propertyByte NUMBER(3), propertyByteObject NUMBER(3), propertyCalendar DATE, propertyChar CHAR(10), propertyCharacterObject CHAR(12), propertyDate DATE, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt NUMBER(10), propertyIntegerObject NUMBER(10), propertyLong NUMBER(19), propertyLongObject NUMBER(19), propertyShort NUMBER(5), propertyShortObject NUMBER(5), propertySqlDate DATE, propertyString VARCHAR2(255), propertyStringbuffer VARCHAR2(100), propertyTime DATE, propertyTimestamp DATE, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(19,9), propertyBoolean NUMBER(1), propertyBooleanObject NUMBER(1), propertyByte NUMBER(3), propertyByteObject NUMBER(3), propertyCalendar DATE, propertyChar CHAR(10), propertyCharacterObject CHAR(12), propertyDate DATE, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInstant DATE, propertyInt NUMBER(10), propertyIntegerObject NUMBER(10), propertyLocalDate DATE, propertyLocalDateTime DATE, propertyLocalTime DATE, propertyLong NUMBER(19), propertyLongObject NUMBER(19), propertyShort NUMBER(5), propertyShortObject NUMBER(5), propertySqlDate DATE, propertyString VARCHAR2(255), propertyStringBuffer VARCHAR2(100), propertyTime DATE, propertyTimestamp DATE, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
         execute(query);
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testColumnsBeanConstrainedOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .columns(BeanImplConstrained.class);
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(17,6), propertyBoolean NUMBER(1), propertyBooleanObject NUMBER(1), propertyByte NUMBER(3), propertyByteObject NUMBER(3) NOT NULL, propertyCalendar DATE, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATE, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt NUMBER(10) DEFAULT 23, propertyIntegerObject NUMBER(10), propertyLongObject NUMBER(19), propertyShort NUMBER(5), propertySqlDate DATE, propertyString VARCHAR2(30) DEFAULT 'one' NOT NULL, propertyStringbuffer VARCHAR2(20) NOT NULL, propertyTime DATE, propertyTimestamp DATE, PRIMARY KEY (propertyString), UNIQUE (propertyStringbuffer, propertyByteObject), UNIQUE (propertyStringbuffer), CHECK (propertyByteObject != -1), CHECK (propertyInt != 0), CHECK (propertyLongObject IS NULL OR propertyLongObject IN (89,1221,66875,878)), CHECK (propertyString IS NULL OR propertyString IN ('one','tw''''o','someotherstring')), CHECK (propertyStringbuffer != ''), CHECK (propertyStringbuffer != 'some''blurp'))");
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(17,6), propertyBoolean NUMBER(1), propertyBooleanObject NUMBER(1), propertyByte NUMBER(3), propertyByteObject NUMBER(3) NOT NULL, propertyCalendar DATE, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATE, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInstant DATE, propertyInt NUMBER(10) DEFAULT 23, propertyIntegerObject NUMBER(10), propertyLocalDate DATE, propertyLocalDateTime DATE, propertyLocalTime DATE, propertyLongObject NUMBER(19), propertyShort NUMBER(5), propertySqlDate DATE, propertyString VARCHAR2(30) DEFAULT 'one' NOT NULL, propertyStringBuffer VARCHAR2(20) NOT NULL, propertyTime DATE, propertyTimestamp DATE, PRIMARY KEY (propertyString), UNIQUE (propertyStringBuffer, propertyByteObject), UNIQUE (propertyStringBuffer), CHECK (propertyByteObject != -1), CHECK (propertyInt != 0), CHECK (propertyLongObject IS NULL OR propertyLongObject IN (89,1221,66875,878)), CHECK (propertyString IS NULL OR propertyString IN ('one','tw''''o','someotherstring')), CHECK (propertyStringBuffer != ''), CHECK (propertyStringBuffer != 'some''blurp'))");
         execute(query);
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testNullableOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn1", int.class, CreateTable.NULL)
             .column("stringColumn", String.class, 12, CreateTable.NOTNULL)
@@ -218,7 +222,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testDefaultOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -264,7 +268,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testDefaultFunctionOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename1")
             .column("intcolumn", int.class)
             .defaultFunction("intcolumn", "6+1");
@@ -274,7 +278,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCustomAttributeOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename1")
             .column("intColumn", Integer.class)
             .customAttribute("intColumn", "CHECK (intColumn > 0)");
@@ -284,7 +288,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testTemporaryOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .temporary(true)
             .column("boolColumn", boolean.class);
@@ -294,7 +298,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testPrimaryKeySimpleOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("intColumn");
@@ -304,7 +308,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testPrimaryKeyMultipleOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -315,7 +319,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testPrimaryKeyNamedOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("constraint_name", "intColumn");
@@ -325,7 +329,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testPrimaryKeyMultipleNamedOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -336,7 +340,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testUniqueSimpleOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .unique("intColumn");
@@ -346,7 +350,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testUniqueMultipleOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -357,7 +361,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testUniqueNamedOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .unique("constraint_name", "intColumn");
@@ -367,7 +371,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testUniqueMultipleNamedOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -378,7 +382,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeySimpleOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn");
@@ -388,7 +392,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeyMultipleOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -399,7 +403,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeySimpleNamedOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("constraint_name", "foreigntable", "intColumn", "foreignIntColumn");
@@ -409,7 +413,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeyMultipleNamedOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -420,7 +424,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeyViolationsSingleOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, null);
@@ -526,7 +530,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeyViolationsOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, CreateTable.NOACTION);
@@ -540,7 +544,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testForeignKeyMultipleViolationsOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -555,7 +559,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCheckSimpleOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("intColumn > 0");
@@ -565,7 +569,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCheckNamedOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("NAME_CK", "intColumn > 0");
@@ -575,7 +579,7 @@ public class TestCreateTableOracle extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCloneOracle() {
-        CreateTable query = new CreateTable(ORACLE);
+        var query = new CreateTable(ORACLE);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)
@@ -591,19 +595,19 @@ public class TestCreateTableOracle extends TestCreateTable {
             .precision("propertyShort", 9)
             .precision("propertySqlDate", 8)
             .precision("propertyString", 255)
-            .precision("propertyStringbuffer", 100)
+            .precision("propertyStringBuffer", 100)
             .precision("propertyTime", 9)
             .precision("propertyTimestamp", 30, 2)
             .nullable("propertyString", CreateTable.NULL)
             .nullable("propertyInt", CreateTable.NOTNULL)
-            .defaultValue("propertyStringbuffer", "stringDefault")
+            .defaultValue("propertyStringBuffer", "stringDefault")
             .defaultFunction("propertyLong", "6+1")
             .customAttribute("propertyInt", "CHECK (propertyInt > 0)")
             .primaryKey("constraint_name1", new String[]{"propertyInt", "propertyString"})
             .unique("constraint_name2", new String[]{"propertyLong", "propertyString"})
             .foreignKey("foreigntable", new String[]{"propertyInt", "foreignIntColumn", "propertyString", "foreignStringColumn"}, null, CreateTable.CASCADE)
             .check("NAME_CK", "propertyInt > 0");
-        CreateTable query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
         execute(query_clone);

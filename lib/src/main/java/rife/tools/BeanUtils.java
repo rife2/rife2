@@ -4,9 +4,13 @@
  */
 package rife.tools;
 
+import java.sql.Time;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import rife.config.RifeConfig;
+import rife.config.exceptions.DateFormatInitializationException;
 import rife.engine.UploadedFile;
 import rife.tools.exceptions.BeanUtilsException;
 import rife.tools.exceptions.ConversionException;
@@ -48,6 +52,20 @@ public final class BeanUtils {
         var sf = new SimpleDateFormat("yyyyMMddHHmmssSSSZ", Localization.getLocale());
         sf.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
         return sf;
+    }
+
+    public static DateFormat getConcisePreciseTimeFormat() {
+        var sf = new SimpleDateFormat("HHmmssSSSZ", Localization.getLocale());
+        sf.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+        return sf;
+    }
+
+    public static DateTimeFormatter getConcisePreciseDateTimeFormatter() {
+        return DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSSZ", Localization.getLocale());
+    }
+
+    public static DateTimeFormatter getConcisePreciseTimeFormatter() {
+        return DateTimeFormatter.ofPattern("HHmmssSSSZ", Localization.getLocale());
     }
 
     public static BeanInfo getBeanInfo(Class beanClass)
@@ -353,14 +371,43 @@ public final class BeanUtils {
         }
 
         Format format = null;
+
         if (constrainedProperty != null &&
             constrainedProperty.isFormatted()) {
             format = constrainedProperty.getFormat();
-        } else if (propertyValue instanceof Date) {
-            format = getConcisePreciseDateFormat();
         }
 
-        if (format != null) {
+        if (propertyValue instanceof Time ||
+            propertyValue instanceof LocalTime) {
+            if (format == null) {
+                format = getConcisePreciseTimeFormat();
+            }
+            try {
+                return format.format(Convert.toDate(propertyValue));
+            } catch (ConversionException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (propertyValue instanceof Date ||
+                   propertyValue instanceof Instant ||
+                   propertyValue instanceof LocalDateTime ||
+                   propertyValue instanceof LocalDate) {
+            if (format == null) {
+                format = getConcisePreciseDateFormat();
+            }
+            try {
+                return format.format(Convert.toDate(propertyValue));
+            } catch (ConversionException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            if (format != null) {
+                return format.format(propertyValue);
+            }
+        }
+
+        if (constrainedProperty != null &&
+            constrainedProperty.isFormatted()) {
+            format = constrainedProperty.getFormat();
             return format.format(propertyValue);
         }
 
@@ -770,7 +817,12 @@ public final class BeanUtils {
                                 }
                             }
                             write_method.invoke(beanInstance, new Object[]{parameter_values_typed});
-                        } else if (Date.class.isAssignableFrom(component_type)) {
+                        } else if (Date.class.isAssignableFrom(component_type) ||
+                                   Instant.class.isAssignableFrom(component_type) ||
+                                   LocalDateTime.class.isAssignableFrom(component_type) ||
+                                   LocalDate.class.isAssignableFrom(component_type) ||
+                                   Time.class.isAssignableFrom(component_type) ||
+                                   LocalTime.class.isAssignableFrom(component_type)) {
                             Format custom_format = null;
                             if (constrained_property != null &&
                                 constrained_property.isFormatted()) {
@@ -778,7 +830,7 @@ public final class BeanUtils {
                             }
 
                             try {
-                                var parameter_values_typed = new Date[propertyValues.length];
+                                var parameter_values_typed = Array.newInstance(component_type, propertyValues.length);
                                 for (var i = 0; i < propertyValues.length; i++) {
                                     if (propertyValues[i] != null && propertyValues[i].length() > 0) {
                                         Format used_format = null;
@@ -786,11 +838,19 @@ public final class BeanUtils {
                                         Object parameter_value_typed = null;
                                         if (null == custom_format) {
                                             try {
-                                                used_format = BeanUtils.getConcisePreciseDateFormat();
+                                                if (Time.class.isAssignableFrom(component_type) || LocalTime.class.isAssignableFrom(component_type)) {
+                                                    used_format = BeanUtils.getConcisePreciseTimeFormat();
+                                                } else {
+                                                    used_format = BeanUtils.getConcisePreciseDateFormat();
+                                                }
                                                 parameter_value_typed = used_format.parseObject(propertyValues[i]);
                                             } catch (ParseException e) {
                                                 try {
-                                                    used_format = RifeConfig.tools().getDefaultInputDateFormat();
+                                                    if (Time.class.isAssignableFrom(component_type) || LocalTime.class.isAssignableFrom(component_type)) {
+                                                        used_format = RifeConfig.tools().getDefaultInputTimeFormat();
+                                                    } else {
+                                                        used_format = RifeConfig.tools().getDefaultInputDateFormat();
+                                                    }
                                                     parameter_value_typed = used_format.parseObject(propertyValues[i]);
                                                 } catch (ParseException e2) {
                                                     throw e;
@@ -802,7 +862,19 @@ public final class BeanUtils {
                                         }
 
                                         if (propertyValues[i].equals(used_format.format(parameter_value_typed))) {
-                                            parameter_values_typed[i] = (Date) parameter_value_typed;
+                                            if (Date.class.isAssignableFrom(component_type)) {
+                                                Array.set(parameter_values_typed, i, Convert.toDate(parameter_value_typed));
+                                            } else if (Instant.class.isAssignableFrom(component_type)) {
+                                                Array.set(parameter_values_typed, i, Convert.toInstant(parameter_value_typed));
+                                            } else if (LocalDateTime.class.isAssignableFrom(component_type)) {
+                                                Array.set(parameter_values_typed, i, Convert.toLocalDateTime(parameter_value_typed));
+                                            } else if (LocalDate.class.isAssignableFrom(component_type)) {
+                                                Array.set(parameter_values_typed, i, Convert.toLocalDate(parameter_value_typed));
+                                            } else if (Time.class.isAssignableFrom(component_type)) {
+                                                Array.set(parameter_values_typed, i, Convert.toTime(parameter_value_typed));
+                                            } else if (LocalTime.class.isAssignableFrom(component_type)) {
+                                                Array.set(parameter_values_typed, i, Convert.toLocalTime(parameter_value_typed));
+                                            }
                                         } else {
                                             if (validated != null) {
                                                 validated.addValidationError(new ValidationError.INVALID(propertyName).erroneousValue(propertyValues[i]));
@@ -810,7 +882,7 @@ public final class BeanUtils {
                                         }
                                     }
                                 }
-                                write_method.invoke(beanInstance, new Object[]{parameter_values_typed});
+                                write_method.invoke(beanInstance, parameter_values_typed);
                             } catch (ParseException e) {
                                 if (validated != null) {
                                     validated.addValidationError(new ValidationError.INVALID(propertyName).erroneousValue(propertyValues[0]));
@@ -913,7 +985,12 @@ public final class BeanUtils {
                             parameter_value_typed = new StringBuffer(propertyValues[0]);
                         } else if (property_type == StringBuilder.class) {
                             parameter_value_typed = new StringBuilder(propertyValues[0]);
-                        } else if (Date.class.isAssignableFrom(property_type)) {
+                        } else if (Date.class.isAssignableFrom(property_type) ||
+                                   Instant.class.isAssignableFrom(property_type) ||
+                                   LocalDateTime.class.isAssignableFrom(property_type) ||
+                                   LocalDate.class.isAssignableFrom(property_type) ||
+                                   Time.class.isAssignableFrom(property_type) ||
+                                   LocalTime.class.isAssignableFrom(property_type)) {
                             Format custom_format = null;
                             if (constrained_property != null &&
                                 constrained_property.isFormatted()) {
@@ -925,11 +1002,19 @@ public final class BeanUtils {
 
                                 if (null == custom_format) {
                                     try {
-                                        used_format = BeanUtils.getConcisePreciseDateFormat();
+                                        if (Time.class.isAssignableFrom(property_type) || LocalTime.class.isAssignableFrom(property_type)) {
+                                            used_format = BeanUtils.getConcisePreciseTimeFormat();
+                                        } else {
+                                            used_format = BeanUtils.getConcisePreciseDateFormat();
+                                        }
                                         parameter_value_typed = used_format.parseObject(propertyValues[0]);
                                     } catch (ParseException e) {
                                         try {
-                                            used_format = RifeConfig.tools().getDefaultInputDateFormat();
+                                            if (Time.class.isAssignableFrom(property_type) || LocalTime.class.isAssignableFrom(property_type)) {
+                                                used_format = RifeConfig.tools().getDefaultInputTimeFormat();
+                                            } else {
+                                                used_format = RifeConfig.tools().getDefaultInputDateFormat();
+                                            }
                                             parameter_value_typed = used_format.parseObject(propertyValues[0]);
                                         } catch (ParseException e2) {
                                             throw e;
@@ -940,7 +1025,21 @@ public final class BeanUtils {
                                     parameter_value_typed = used_format.parseObject(propertyValues[0]);
                                 }
 
-                                if (!propertyValues[0].equals(used_format.format(parameter_value_typed))) {
+                                if (propertyValues[0].equals(used_format.format(parameter_value_typed))) {
+                                    if (Date.class.isAssignableFrom(property_type)) {
+                                        parameter_value_typed = Convert.toDate(parameter_value_typed);
+                                    } else if (Instant.class.isAssignableFrom(property_type)) {
+                                        parameter_value_typed = Convert.toInstant(parameter_value_typed);
+                                    } else if (LocalDateTime.class.isAssignableFrom(property_type)) {
+                                        parameter_value_typed = Convert.toLocalDateTime(parameter_value_typed);
+                                    } else if (LocalDate.class.isAssignableFrom(property_type)) {
+                                        parameter_value_typed = Convert.toLocalDate(parameter_value_typed);
+                                    } else if (Time.class.isAssignableFrom(property_type)) {
+                                        parameter_value_typed = Convert.toTime(parameter_value_typed);
+                                    } else if (LocalTime.class.isAssignableFrom(property_type)) {
+                                        parameter_value_typed = Convert.toLocalTime(parameter_value_typed);
+                                    }
+                                } else {
                                     parameter_value_typed = null;
 
                                     if (validated != null) {

@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDropTablePgsql extends TestDropTable {
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testInstantiationPgsql() {
-        DropTable query = new DropTable(PGSQL);
+        var query = new DropTable(PGSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -25,7 +25,7 @@ public class TestDropTablePgsql extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testIncompleteQueryPgsql() {
-        DropTable query = new DropTable(PGSQL);
+        var query = new DropTable(PGSQL);
         try {
             query.getSql();
             fail();
@@ -38,7 +38,7 @@ public class TestDropTablePgsql extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClearPgsql() {
-        DropTable query = new DropTable(PGSQL);
+        var query = new DropTable(PGSQL);
         query.table("tablename");
         assertNotNull(query.getSql());
         query.clear();
@@ -52,7 +52,7 @@ public class TestDropTablePgsql extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testOneTablePgsql() {
-        DropTable query = new DropTable(PGSQL);
+        var query = new DropTable(PGSQL);
         query.table("tabletodrop");
         assertEquals(query.getSql(), "DROP TABLE tabletodrop");
         execute(query);
@@ -60,7 +60,7 @@ public class TestDropTablePgsql extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testMultipleTablesPgsql() {
-        DropTable query = new DropTable(PGSQL);
+        var query = new DropTable(PGSQL);
         query.table("tabletodrop1")
             .table("tabletodrop2")
             .table("tabletodrop3");
@@ -70,11 +70,11 @@ public class TestDropTablePgsql extends TestDropTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClonePgsql() {
-        DropTable query = new DropTable(PGSQL);
+        var query = new DropTable(PGSQL);
         query.table("tabletodrop1")
             .table("tabletodrop2")
             .table("tabletodrop3");
-        DropTable query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertTrue(query != query_clone);
         execute(query_clone);

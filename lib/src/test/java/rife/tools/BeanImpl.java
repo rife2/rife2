@@ -5,6 +5,7 @@
 package rife.tools;
 
 import java.math.BigDecimal;
+import java.time.*;
 
 public class BeanImpl {
     private int propertyReadonly_ = 23;
@@ -15,6 +16,10 @@ public class BeanImpl {
     private java.sql.Date propertySqlDate_ = null;
     private java.sql.Time propertyTime_ = null;
     private java.sql.Timestamp propertyTimestamp_ = null;
+    private Instant propertyInstant_ = null;
+    private LocalDateTime propertyLocalDateTime_ = null;
+    private LocalDate propertyLocalDate_ = null;
+    private LocalTime propertyLocalTime_ = null;
     private char propertyChar_ = 0;
     private boolean propertyBoolean_ = false;
     private byte propertyByte_ = 0;
@@ -32,7 +37,7 @@ public class BeanImpl {
         return propertyReadonly_;
     }
 
-    public void setPropertyWriteonly(long propertyWriteonly) {
+    public void setPropertyWriteOnly(long propertyWriteOnly) {
     }
 
     public int getPropertyInt() {
@@ -105,6 +110,38 @@ public class BeanImpl {
 
     public void setPropertyTimestamp(java.sql.Timestamp propertyTimestamp) {
         propertyTimestamp_ = propertyTimestamp;
+    }
+
+    public Instant getPropertyInstant() {
+        return propertyInstant_;
+    }
+
+    public void setPropertyInstant(Instant propertyInstant) {
+        propertyInstant_ = propertyInstant;
+    }
+
+    public LocalDateTime getPropertyLocalDateTime() {
+        return propertyLocalDateTime_;
+    }
+
+    public void setPropertyLocalDateTime(LocalDateTime propertyLocalDateTime) {
+        propertyLocalDateTime_ = propertyLocalDateTime;
+    }
+
+    public LocalDate getPropertyLocalDate() {
+        return propertyLocalDate_;
+    }
+
+    public void setPropertyLocalDate(LocalDate propertyLocalDate) {
+        propertyLocalDate_ = propertyLocalDate;
+    }
+
+    public LocalTime getPropertyLocalTime() {
+        return propertyLocalTime_;
+    }
+
+    public void setPropertyLocalTime(LocalTime propertyLocalTime) {
+        propertyLocalTime_ = propertyLocalTime;
     }
 
     public boolean isPropertyBoolean() {

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestSequenceValuePgsql extends TestSequenceValue {
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testInstantiationPgsql() {
-        SequenceValue query = new SequenceValue(PGSQL);
+        var query = new SequenceValue(PGSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -26,7 +26,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testInvalidPgsql() {
-        SequenceValue query = new SequenceValue(PGSQL);
+        var query = new SequenceValue(PGSQL);
         try {
             query.getSql();
             fail();
@@ -53,7 +53,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClearPgsql() {
-        SequenceValue query = new SequenceValue(PGSQL);
+        var query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
             .next();
@@ -70,7 +70,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testNextPgsql() {
-        SequenceValue query = new SequenceValue(PGSQL);
+        var query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
             .next();
@@ -80,7 +80,7 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testCurrentPgsql() {
-        SequenceValue query = new SequenceValue(PGSQL);
+        var query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
             .current();
@@ -90,11 +90,11 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClonePgsql() {
-        SequenceValue query = new SequenceValue(PGSQL);
+        var query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
             .next();
-        SequenceValue query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertTrue(query != query_clone);
         assertTrue(execute(PGSQL, query_clone) >= 0);

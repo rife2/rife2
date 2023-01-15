@@ -7,6 +7,7 @@ package rife.database.queries;
 import rife.database.*;
 import rife.database.exceptions.*;
 import rife.database.types.SqlNull;
+import rife.tools.Convert;
 
 import java.math.BigDecimal;
 import java.sql.Time;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestUpdatePgsql extends TestUpdate {
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testInstantiationPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -31,7 +32,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testIncompleteQueryPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         try {
             query.getSql();
             fail();
@@ -51,7 +52,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClearPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename4")
             .field("col1", "val1");
         assertNotNull(query.getSql());
@@ -66,7 +67,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testHintPgsql() {
-        Update query = new Update(PGSQL)
+        var query = new Update(PGSQL)
             .hint("NO_INDEX")
             .table("tablename")
             .field("propertyByte", (byte) 16);
@@ -80,10 +81,10 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldPgsql() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(2002, 7, 19, 12, 17, 52);
+        var cal = Calendar.getInstance();
+        cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyByte = 89")
             .field("nullColumn", SqlNull.NULL)
@@ -100,16 +101,16 @@ public class TestUpdatePgsql extends TestUpdate {
             .field("propertyShort", (short) 12)
             .field("propertySqlDate", new java.sql.Date(cal.getTime().getTime()))
             .field("propertyString", "string'value")
-            .field("propertyStringbuffer", new StringBuffer("stringbuffer'value"))
+            .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
             .field("propertyTime", new Time(cal.getTime().getTime()))
             .field("propertyTimestamp", new Timestamp(cal.getTime().getTime()));
-        assertEquals(query.getSql(), "UPDATE tablename SET nullColumn = NULL, propertyBigDecimal = 98347.876438637, propertyBoolean = true, propertyByte = 16, propertyCalendar = '2002-08-19 12:17:52.462', propertyChar = 'M', propertyDate = '2002-08-19 12:17:52.462', propertyDouble = 12.3, propertyFloat = 13.4, propertyInt = 34, propertyLong = 45, propertyShort = 12, propertySqlDate = '2002-08-19', propertyString = 'string''value', propertyStringbuffer = 'stringbuffer''value', propertyTime = '12:17:52', propertyTimestamp = '2002-08-19 12:17:52.462' WHERE propertyByte = 89");
+        assertEquals(query.getSql(), "UPDATE tablename SET nullColumn = NULL, propertyBigDecimal = 98347.876438637, propertyBoolean = true, propertyByte = 16, propertyCalendar = '2002-08-19 12:17:52.462', propertyChar = 'M', propertyDate = '2002-08-19 12:17:52.462', propertyDouble = 12.3, propertyFloat = 13.4, propertyInt = 34, propertyLong = 45, propertyShort = 12, propertySqlDate = '2002-08-19', propertyString = 'string''value', propertyStringBuffer = 'stringbuffer''value', propertyTime = '12:17:52', propertyTimestamp = '2002-08-19 12:17:52.462' WHERE propertyByte = 89");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldCustomPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .fieldCustom("propertySqlDate", "now()");
         assertEquals(query.getSql(), "UPDATE tablename SET propertySqlDate = now()");
@@ -118,7 +119,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldParametersPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename");
 
         assertNull(query.getParameters());
@@ -137,7 +138,7 @@ public class TestUpdatePgsql extends TestUpdate {
             .fieldParameter("propertyShort")
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
-            .fieldParameter("propertyStringbuffer")
+            .fieldParameter("propertyStringBuffer")
             .fieldParameter("propertyTime")
             .fieldParameter("propertyTimestamp");
 
@@ -156,7 +157,7 @@ public class TestUpdatePgsql extends TestUpdate {
         assertEquals(query.getParameters().getOrderedNames().get(11), "propertyShort");
         assertEquals(query.getParameters().getOrderedNames().get(12), "propertySqlDate");
         assertEquals(query.getParameters().getOrderedNames().get(13), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyStringbuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyStringBuffer");
         assertEquals(query.getParameters().getOrderedNames().get(15), "propertyTime");
         assertEquals(query.getParameters().getOrderedNames().get(16), "propertyTimestamp");
         assertTrue(Arrays.equals(query.getParameters().getOrderedNamesArray(), new String[]{
@@ -174,16 +175,16 @@ public class TestUpdatePgsql extends TestUpdate {
             "propertyShort",
             "propertySqlDate",
             "propertyString",
-            "propertyStringbuffer",
+            "propertyStringBuffer",
             "propertyTime",
             "propertyTimestamp"}));
 
-        assertEquals(query.getSql(), "UPDATE tablename SET nullColumn = ?, propertyBigDecimal = ?, propertyBoolean = ?, propertyByte = ?, propertyCalendar = ?, propertyChar = ?, propertyDate = ?, propertyDouble = ?, propertyFloat = ?, propertyInt = ?, propertyLong = ?, propertyShort = ?, propertySqlDate = ?, propertyString = ?, propertyStringbuffer = ?, propertyTime = ?, propertyTimestamp = ?");
+        assertEquals(query.getSql(), "UPDATE tablename SET nullColumn = ?, propertyBigDecimal = ?, propertyBoolean = ?, propertyByte = ?, propertyCalendar = ?, propertyChar = ?, propertyDate = ?, propertyDouble = ?, propertyFloat = ?, propertyInt = ?, propertyLong = ?, propertyShort = ?, propertySqlDate = ?, propertyString = ?, propertyStringBuffer = ?, propertyTime = ?, propertyTimestamp = ?");
 
         assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2002, 7, 19, 12, 17, 52);
+                var cal = Calendar.getInstance();
+                cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
                 cal.set(Calendar.MILLISECOND, 462);
                 statement
                     .setString(1, null)
@@ -209,13 +210,13 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldParametersMixedPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename");
 
         assertNull(query.getParameters());
 
-        final Calendar cal = Calendar.getInstance();
-        cal.set(2002, 7, 19, 12, 17, 52);
+        final var cal = Calendar.getInstance();
+        cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
         query.fieldParameter("nullColumn")
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))
@@ -231,7 +232,7 @@ public class TestUpdatePgsql extends TestUpdate {
             .field("propertyShort", (short) 12)
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
-            .field("propertyStringbuffer", new StringBuffer("stringbuffer'value"))
+            .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
             .field("propertyTime", new Time(cal.getTime().getTime()))
             .fieldParameter("propertyTimestamp");
 
@@ -256,7 +257,7 @@ public class TestUpdatePgsql extends TestUpdate {
             "propertyString",
             "propertyTimestamp"}));
 
-        assertEquals(query.getSql(), "UPDATE tablename SET nullColumn = ?, propertyBigDecimal = 98347.876438637, propertyBoolean = ?, propertyByte = ?, propertyCalendar = '2002-08-19 12:17:52.462', propertyChar = ?, propertyDate = '2002-08-19 12:17:52.462', propertyDouble = 12.3, propertyFloat = ?, propertyInt = ?, propertyLong = 45, propertyShort = 12, propertySqlDate = ?, propertyString = ?, propertyStringbuffer = 'stringbuffer''value', propertyTime = '12:17:52', propertyTimestamp = ?");
+        assertEquals(query.getSql(), "UPDATE tablename SET nullColumn = ?, propertyBigDecimal = 98347.876438637, propertyBoolean = ?, propertyByte = ?, propertyCalendar = '2002-08-19 12:17:52.462', propertyChar = ?, propertyDate = '2002-08-19 12:17:52.462', propertyDouble = 12.3, propertyFloat = ?, propertyInt = ?, propertyLong = 45, propertyShort = 12, propertySqlDate = ?, propertyString = ?, propertyStringBuffer = 'stringbuffer''value', propertyTime = '12:17:52', propertyTimestamp = ?");
 
         assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
@@ -276,10 +277,10 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsPgsql() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(2002, 7, 19, 12, 17, 52);
+        var cal = Calendar.getInstance();
+        cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyByte = 89")
             .fields(new Object[]{
@@ -297,17 +298,17 @@ public class TestUpdatePgsql extends TestUpdate {
                 "propertyShort", (short) 12,
                 "propertySqlDate", new java.sql.Date(cal.getTime().getTime()),
                 "propertyString", new String("string'value"),
-                "propertyStringbuffer", new StringBuffer("stringbuffer'value"),
+                "propertyStringBuffer", new StringBuffer("stringbuffer'value"),
                 "propertyTime", new Time(cal.getTime().getTime()),
                 "propertyTimestamp", new Timestamp(cal.getTime().getTime())
             });
-        assertEquals(query.getSql(), "UPDATE tablename SET nullColumn = NULL, propertyBigDecimal = 98347.876438637, propertyBoolean = true, propertyByte = 16, propertyCalendar = '2002-08-19 12:17:52.462', propertyChar = 'M', propertyDate = '2002-08-19 12:17:52.462', propertyDouble = 12.3, propertyFloat = 13.4, propertyInt = 34, propertyLong = 45, propertyShort = 12, propertySqlDate = '2002-08-19', propertyString = 'string''value', propertyStringbuffer = 'stringbuffer''value', propertyTime = '12:17:52', propertyTimestamp = '2002-08-19 12:17:52.462' WHERE propertyByte = 89");
+        assertEquals(query.getSql(), "UPDATE tablename SET nullColumn = NULL, propertyBigDecimal = 98347.876438637, propertyBoolean = true, propertyByte = 16, propertyCalendar = '2002-08-19 12:17:52.462', propertyChar = 'M', propertyDate = '2002-08-19 12:17:52.462', propertyDouble = 12.3, propertyFloat = 13.4, propertyInt = 34, propertyLong = 45, propertyShort = 12, propertySqlDate = '2002-08-19', propertyString = 'string''value', propertyStringBuffer = 'stringbuffer''value', propertyTime = '12:17:52', propertyTimestamp = '2002-08-19 12:17:52.462' WHERE propertyByte = 89");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereConstructionPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -320,7 +321,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereConstructionGroupPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -331,35 +332,35 @@ public class TestUpdatePgsql extends TestUpdate {
             .whereAnd("propertyByte", "<=", (byte) 0)
             .startWhereAnd()
             .where("propertyBoolean", "!=", true)
-            .whereParameterOr("propertyStringbuffer", "LIKE")
+            .whereParameterOr("propertyStringBuffer", "LIKE")
             .end()
             .end()
             .whereOr("propertyChar = 'v'");
 
         assertEquals(query.getParameters().getOrderedNames().get(0), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(1), "propertyStringbuffer");
-        assertTrue(Arrays.equals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyString", "propertyStringbuffer"}));
+        assertEquals(query.getParameters().getOrderedNames().get(1), "propertyStringBuffer");
+        assertTrue(Arrays.equals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyString", "propertyStringBuffer"}));
 
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyInt = 545 AND propertyLong < 50000 OR (propertyString = ? AND propertyByte <= 0 AND (propertyBoolean != true OR propertyStringbuffer LIKE ?)) OR propertyChar = 'v'");
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyInt = 545 AND propertyLong < 50000 OR (propertyString = ? AND propertyByte <= 0 AND (propertyBoolean != true OR propertyStringBuffer LIKE ?)) OR propertyChar = 'v'");
 
         assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
                 statement
                     .setString("propertyString", "someotherstring")
-                    .setString("propertyStringbuffer", "stringbuff");
+                    .setString("propertyStringBuffer", "stringbuff");
             }
         }));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereTypedPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16);
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(2003, 2, 3, 10, 1, 28);
+        var cal = Calendar.getInstance();
+        cal.set(2003, Calendar.MARCH, 3, 10, 1, 28);
         cal.set(Calendar.MILLISECOND, 154);
 
         query
@@ -376,23 +377,23 @@ public class TestUpdatePgsql extends TestUpdate {
             .whereAnd("propertyShort", "=", (short) 78)
             .whereOr("propertySqlDate", "=", new java.sql.Date(cal.getTime().getTime()))
             .whereAnd("propertyString", "LIKE", "someotherstring%")
-            .whereAnd("propertyStringbuffer", "=", new StringBuffer("someotherstringbuff"))
+            .whereAnd("propertyStringBuffer", "=", new StringBuffer("someotherstringbuff"))
             .whereOr("propertyTime", "=", new Time(cal.getTime().getTime()))
             .whereAnd("propertyTimestamp", "<=", new Timestamp(cal.getTime().getTime()));
 
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal >= 53443433.9784567 AND propertyBoolean = false OR propertyByte = 54 AND propertyCalendar <= '2003-03-03 10:01:28.154' OR propertyChar = 'f' AND propertyDate = '2003-03-03 10:01:28.154' AND propertyDouble != 73453.71 OR propertyFloat >= 1987.14 AND propertyInt = 973 AND propertyLong < 347678 AND propertyShort = 78 OR propertySqlDate = '2003-03-03' AND propertyString LIKE 'someotherstring%' AND propertyStringbuffer = 'someotherstringbuff' OR propertyTime = '10:01:28' AND propertyTimestamp <= '2003-03-03 10:01:28.154'");
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal >= 53443433.9784567 AND propertyBoolean = false OR propertyByte = 54 AND propertyCalendar <= '2003-03-03 10:01:28.154' OR propertyChar = 'f' AND propertyDate = '2003-03-03 10:01:28.154' AND propertyDouble != 73453.71 OR propertyFloat >= 1987.14 AND propertyInt = 973 AND propertyLong < 347678 AND propertyShort = 78 OR propertySqlDate = '2003-03-03' AND propertyString LIKE 'someotherstring%' AND propertyStringBuffer = 'someotherstringbuff' OR propertyTime = '10:01:28' AND propertyTimestamp <= '2003-03-03 10:01:28.154'");
         assertFalse(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereTypedMixedPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16);
 
-        final Calendar cal = Calendar.getInstance();
-        cal.set(2003, 2, 3, 10, 1, 28);
+        final var cal = Calendar.getInstance();
+        cal.set(2003, Calendar.MARCH, 3, 10, 1, 28);
         cal.set(Calendar.MILLISECOND, 154);
 
         query
@@ -409,11 +410,11 @@ public class TestUpdatePgsql extends TestUpdate {
             .whereAnd("propertyShort", "=", (short) 78)
             .whereParameterOr("propertySqlDate", "=")
             .whereAnd("propertyString", "LIKE", "someotherstring%")
-            .whereAnd("propertyStringbuffer", "=", new StringBuffer("someotherstringbuff"))
+            .whereAnd("propertyStringBuffer", "=", new StringBuffer("someotherstringbuff"))
             .whereOr("propertyTime", "=", new Time(cal.getTime().getTime()))
             .whereAnd("propertyTimestamp", "<=", new Timestamp(cal.getTime().getTime()));
 
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal >= 53443433.9784567 AND propertyBoolean = false OR propertyByte = 54 AND propertyCalendar <= '2003-03-03 10:01:28.154' OR propertyChar = 'f' AND propertyDate = '2003-03-03 10:01:28.154' AND propertyDouble != 73453.71 OR propertyFloat >= 1987.14 AND propertyInt = 973 AND propertyLong < 347678 AND propertyShort = 78 OR propertySqlDate = ? AND propertyString LIKE 'someotherstring%' AND propertyStringbuffer = 'someotherstringbuff' OR propertyTime = '10:01:28' AND propertyTimestamp <= '2003-03-03 10:01:28.154'");
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal >= 53443433.9784567 AND propertyBoolean = false OR propertyByte = 54 AND propertyCalendar <= '2003-03-03 10:01:28.154' OR propertyChar = 'f' AND propertyDate = '2003-03-03 10:01:28.154' AND propertyDouble != 73453.71 OR propertyFloat >= 1987.14 AND propertyInt = 973 AND propertyLong < 347678 AND propertyShort = 78 OR propertySqlDate = ? AND propertyString LIKE 'someotherstring%' AND propertyStringBuffer = 'someotherstringbuff' OR propertyTime = '10:01:28' AND propertyTimestamp <= '2003-03-03 10:01:28.154'");
 
         assertFalse(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
@@ -425,7 +426,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereParametersPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16);
@@ -459,7 +460,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereParametersMixedPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -488,7 +489,7 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldWhereParametersPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename");
 
         assertNull(query.getParameters());
@@ -537,26 +538,27 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyInt = 545")
             .fields(BeanImpl.getPopulatedBean());
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = 219038743.392874, propertyBoolean = true, propertyBooleanObject = false, propertyByte = 89, propertyByteObject = 34, propertyCalendar = '2002-06-18 15:26:14.764', propertyChar = 'v', propertyCharacterObject = 'r', propertyDate = '2002-06-18 15:26:14.764', propertyDouble = 53348.34, propertyDoubleObject = 143298.692, propertyEnum = 'VALUE_THREE', propertyFloat = 98634.2, propertyFloatObject = 8734.7, propertyInt = 545, propertyIntegerObject = 968, propertyLong = 34563, propertyLongObject = 66875, propertyShort = 43, propertyShortObject = 68, propertySqlDate = '2002-06-18', propertyString = 'someotherstring', propertyStringbuffer = 'someotherstringbuff', propertyTime = '15:26:14', propertyTimestamp = '2002-06-18 15:26:14.764' WHERE propertyInt = 545");
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = 219038743.392874, propertyBoolean = true, propertyBooleanObject = false, propertyByte = 89, propertyByteObject = 34, propertyCalendar = '2002-06-18 15:26:14.167', propertyChar = 'v', propertyCharacterObject = 'r', propertyDate = '2002-06-18 15:26:14.167', propertyDouble = 53348.34, propertyDoubleObject = 143298.692, propertyEnum = 'VALUE_THREE', propertyFloat = 98634.2, propertyFloatObject = 8734.7, propertyInstant = '2002-06-18 15:26:14.167', propertyInt = 545, propertyIntegerObject = 968, propertyLocalDate = '2002-06-18', propertyLocalDateTime = '2002-06-18 15:26:14.167', propertyLocalTime = '15:26:14', propertyLong = 34563, propertyLongObject = 66875, propertyShort = 43, propertyShortObject = 68, propertySqlDate = '2002-06-18', propertyString = 'someotherstring', propertyStringBuffer = 'someotherstringbuff', propertyTime = '15:26:14', propertyTimestamp = '2002-06-18 15:26:14.167' WHERE propertyInt = 545");
         assertTrue(execute(query));
     }
 
-    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL) void testFieldsBeanConstrainedPgsql() {
-        Update query = new Update(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testFieldsBeanConstrainedPgsql() {
+        var query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyInt = 545")
             .fields(BeanImplConstrained.getPopulatedBean());
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = 219038743.392874, propertyBoolean = true, propertyBooleanObject = false, propertyByteObject = 34, propertyCalendar = '2002-06-18 15:26:14.764', propertyChar = 'v', propertyCharacterObject = 'r', propertyDate = '2002-06-18 15:26:14.764', propertyDouble = 53348.34, propertyDoubleObject = 143298.692, propertyFloat = 98634.2, propertyFloatObject = 8734.7, propertyInt = 545, propertyIntegerObject = 968, propertyLongObject = 66875, propertyShort = 43, propertySqlDate = '2002-06-18', propertyString = 'someotherstring', propertyStringbuffer = 'someotherstringbuff', propertyTime = '15:26:14', propertyTimestamp = '2002-06-18 15:26:14.764' WHERE propertyInt = 545");
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = 219038743.392874, propertyBoolean = true, propertyBooleanObject = false, propertyByteObject = 34, propertyCalendar = '2002-06-18 15:26:14.167', propertyChar = 'v', propertyCharacterObject = 'r', propertyDate = '2002-06-18 15:26:14.167', propertyDouble = 53348.34, propertyDoubleObject = 143298.692, propertyFloat = 98634.2, propertyFloatObject = 8734.7, propertyInstant = '2002-06-18 15:26:14.167', propertyInt = 545, propertyIntegerObject = 968, propertyLocalDate = '2002-06-18', propertyLocalDateTime = '2002-06-18 15:26:14.167', propertyLocalTime = '15:26:14', propertyLongObject = 66875, propertyShort = 43, propertySqlDate = '2002-06-18', propertyString = 'someotherstring', propertyStringBuffer = 'someotherstringbuff', propertyTime = '15:26:14', propertyTimestamp = '2002-06-18 15:26:14.167' WHERE propertyInt = 545");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanNullValuesPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyInt = 545")
             .fields(BeanImpl.getNullBean());
@@ -566,42 +568,42 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanIncludedPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyInt = 545")
-            .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyByte = 89, propertyDouble = 53348.34, propertyShort = 43, propertyStringbuffer = 'someotherstringbuff', propertyTime = '15:26:14' WHERE propertyInt = 545");
+            .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyByte = 89, propertyDouble = 53348.34, propertyShort = 43, propertyStringBuffer = 'someotherstringbuff', propertyTime = '15:26:14' WHERE propertyInt = 545");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanExcludedPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyInt = 545")
-            .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = 219038743.392874, propertyBoolean = true, propertyBooleanObject = false, propertyByteObject = 34, propertyCalendar = '2002-06-18 15:26:14.764', propertyChar = 'v', propertyCharacterObject = 'r', propertyDate = '2002-06-18 15:26:14.764', propertyDoubleObject = 143298.692, propertyEnum = 'VALUE_THREE', propertyFloat = 98634.2, propertyFloatObject = 8734.7, propertyInt = 545, propertyIntegerObject = 968, propertyLong = 34563, propertyLongObject = 66875, propertyShortObject = 68, propertySqlDate = '2002-06-18', propertyString = 'someotherstring', propertyTimestamp = '2002-06-18 15:26:14.764' WHERE propertyInt = 545");
+            .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = 219038743.392874, propertyBoolean = true, propertyBooleanObject = false, propertyByteObject = 34, propertyCalendar = '2002-06-18 15:26:14.167', propertyChar = 'v', propertyCharacterObject = 'r', propertyDate = '2002-06-18 15:26:14.167', propertyDoubleObject = 143298.692, propertyEnum = 'VALUE_THREE', propertyFloat = 98634.2, propertyFloatObject = 8734.7, propertyInstant = '2002-06-18 15:26:14.167', propertyInt = 545, propertyIntegerObject = 968, propertyLocalDate = '2002-06-18', propertyLocalDateTime = '2002-06-18 15:26:14.167', propertyLocalTime = '15:26:14', propertyLong = 34563, propertyLongObject = 66875, propertyShortObject = 68, propertySqlDate = '2002-06-18', propertyString = 'someotherstring', propertyTimestamp = '2002-06-18 15:26:14.167' WHERE propertyInt = 545");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsBeanFilteredPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .where("propertyInt = 545")
-            .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyDouble = 53348.34, propertyStringbuffer = 'someotherstringbuff' WHERE propertyInt = 545");
+            .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringBuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyDouble = 53348.34, propertyStringBuffer = 'someotherstringbuff' WHERE propertyInt = 545");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsParametersBeanPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .fieldsParameters(BeanImpl.class);
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = ?, propertyBoolean = ?, propertyBooleanObject = ?, propertyByte = ?, propertyByteObject = ?, propertyCalendar = ?, propertyChar = ?, propertyCharacterObject = ?, propertyDate = ?, propertyDouble = ?, propertyDoubleObject = ?, propertyEnum = ?, propertyFloat = ?, propertyFloatObject = ?, propertyInt = ?, propertyIntegerObject = ?, propertyLong = ?, propertyLongObject = ?, propertyShort = ?, propertyShortObject = ?, propertySqlDate = ?, propertyString = ?, propertyStringbuffer = ?, propertyTime = ?, propertyTimestamp = ?");
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = ?, propertyBoolean = ?, propertyBooleanObject = ?, propertyByte = ?, propertyByteObject = ?, propertyCalendar = ?, propertyChar = ?, propertyCharacterObject = ?, propertyDate = ?, propertyDouble = ?, propertyDoubleObject = ?, propertyEnum = ?, propertyFloat = ?, propertyFloatObject = ?, propertyInstant = ?, propertyInt = ?, propertyIntegerObject = ?, propertyLocalDate = ?, propertyLocalDateTime = ?, propertyLocalTime = ?, propertyLong = ?, propertyLongObject = ?, propertyShort = ?, propertyShortObject = ?, propertySqlDate = ?, propertyString = ?, propertyStringBuffer = ?, propertyTime = ?, propertyTimestamp = ?");
 
-        assertEquals(query.getParameters().getOrderedNames().size(), 25);
+        assertEquals(query.getParameters().getOrderedNames().size(), 29);
         assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
         assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
         assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
@@ -616,23 +618,27 @@ public class TestUpdatePgsql extends TestUpdate {
         assertEquals(query.getParameters().getOrderedNames().get(11), "propertyEnum");
         assertEquals(query.getParameters().getOrderedNames().get(12), "propertyFloat");
         assertEquals(query.getParameters().getOrderedNames().get(13), "propertyFloatObject");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyInt");
-        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyIntegerObject");
-        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyLong");
-        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyLongObject");
-        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyShort");
-        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyShortObject");
-        assertEquals(query.getParameters().getOrderedNames().get(20), "propertySqlDate");
-        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(22), "propertyStringbuffer");
-        assertEquals(query.getParameters().getOrderedNames().get(23), "propertyTime");
-        assertEquals(query.getParameters().getOrderedNames().get(24), "propertyTimestamp");
-        assertTrue(Arrays.equals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLong", "propertyLongObject", "propertyShort", "propertyShortObject", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"}));
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyInstant");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyInt");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyLocalDate");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyLocalDateTime");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyLocalTime");
+        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyLong");
+        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(22), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(23), "propertyShortObject");
+        assertEquals(query.getParameters().getOrderedNames().get(24), "propertySqlDate");
+        assertEquals(query.getParameters().getOrderedNames().get(25), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(26), "propertyStringBuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(27), "propertyTime");
+        assertEquals(query.getParameters().getOrderedNames().get(28), "propertyTimestamp");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyInstant", "propertyInt", "propertyIntegerObject", "propertyLocalDate", "propertyLocalDateTime", "propertyLocalTime", "propertyLong", "propertyLongObject", "propertyShort", "propertyShortObject", "propertySqlDate", "propertyString", "propertyStringBuffer", "propertyTime", "propertyTimestamp"});
 
         assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2002, 7, 19, 12, 17, 52);
+                var cal = Calendar.getInstance();
+                cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
                 cal.set(Calendar.MILLISECOND, 462);
                 statement
                     .setBigDecimal(1, new BigDecimal("98347.876438637"))
@@ -649,28 +655,33 @@ public class TestUpdatePgsql extends TestUpdate {
                     .setString(12, "VALUE_THREE")
                     .setFloat(13, 13.4f)
                     .setFloat(14, 42.1f)
-                    .setInt(15, 92)
-                    .setInt(16, 34)
-                    .setLong(17, 687L)
-                    .setLong(18, 92)
-                    .setShort(19, (short) 7)
-                    .setShort(20, (short) 12)
-                    .setDate(21, new java.sql.Date(cal.getTime().getTime()))
-                    .setString(22, "string'value")
-                    .setString(23, "string'value2")
-                    .setTime(24, new Time(cal.getTime().getTime()))
-                    .setTimestamp(25, new Timestamp(cal.getTime().getTime()));
+                    .setTimestamp(15, Timestamp.from(cal.toInstant()))
+                    .setInt(16, 92)
+                    .setInt(17, 34)
+                    .setDate(18, new java.sql.Date(cal.getTime().getTime()))
+                    .setTimestamp(19, Timestamp.from(cal.toInstant()))
+                    .setTime(20, Convert.toTime(cal))
+                    .setLong(21, 687L)
+                    .setLong(22, 92)
+                    .setShort(23, (short) 7)
+                    .setShort(24, (short) 12)
+                    .setDate(25, new java.sql.Date(cal.getTime().getTime()))
+                    .setString(26, "string'value")
+                    .setString(27, "string'value2")
+                    .setTime(28, new Time(cal.getTime().getTime()))
+                    .setTimestamp(29, new Timestamp(cal.getTime().getTime()));
             }
         }));
     }
 
-    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL) void testFieldsParametersBeanConstrainedPgsql() {
-        Update query = new Update(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testFieldsParametersBeanConstrainedPgsql() {
+        var query = new Update(PGSQL);
         query.table("tablename")
             .fieldsParameters(BeanImplConstrained.class);
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = ?, propertyBoolean = ?, propertyBooleanObject = ?, propertyByteObject = ?, propertyCalendar = ?, propertyChar = ?, propertyCharacterObject = ?, propertyDate = ?, propertyDouble = ?, propertyDoubleObject = ?, propertyFloat = ?, propertyFloatObject = ?, propertyInt = ?, propertyIntegerObject = ?, propertyLongObject = ?, propertyShort = ?, propertySqlDate = ?, propertyString = ?, propertyStringbuffer = ?, propertyTime = ?, propertyTimestamp = ?");
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = ?, propertyBoolean = ?, propertyBooleanObject = ?, propertyByteObject = ?, propertyCalendar = ?, propertyChar = ?, propertyCharacterObject = ?, propertyDate = ?, propertyDouble = ?, propertyDoubleObject = ?, propertyFloat = ?, propertyFloatObject = ?, propertyInstant = ?, propertyInt = ?, propertyIntegerObject = ?, propertyLocalDate = ?, propertyLocalDateTime = ?, propertyLocalTime = ?, propertyLongObject = ?, propertyShort = ?, propertySqlDate = ?, propertyString = ?, propertyStringBuffer = ?, propertyTime = ?, propertyTimestamp = ?");
 
-        assertEquals(query.getParameters().getOrderedNames().size(), 21);
+        assertEquals(query.getParameters().getOrderedNames().size(), 25);
         assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
         assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
         assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
@@ -683,21 +694,25 @@ public class TestUpdatePgsql extends TestUpdate {
         assertEquals(query.getParameters().getOrderedNames().get(9), "propertyDoubleObject");
         assertEquals(query.getParameters().getOrderedNames().get(10), "propertyFloat");
         assertEquals(query.getParameters().getOrderedNames().get(11), "propertyFloatObject");
-        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyInt");
-        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyIntegerObject");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyLongObject");
-        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyShort");
-        assertEquals(query.getParameters().getOrderedNames().get(16), "propertySqlDate");
-        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyStringbuffer");
-        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyTime");
-        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyTimestamp");
-        assertTrue(Arrays.equals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"}));
+        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyInstant");
+        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyInt");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyLocalDate");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyLocalDateTime");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyLocalTime");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(20), "propertySqlDate");
+        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(22), "propertyStringBuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(23), "propertyTime");
+        assertEquals(query.getParameters().getOrderedNames().get(24), "propertyTimestamp");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInstant", "propertyInt", "propertyIntegerObject", "propertyLocalDate", "propertyLocalDateTime", "propertyLocalTime", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringBuffer", "propertyTime", "propertyTimestamp"});
 
         assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2002, 7, 19, 12, 17, 52);
+                var cal = Calendar.getInstance();
+                cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
                 cal.set(Calendar.MILLISECOND, 462);
                 statement
                     .setBigDecimal(1, new BigDecimal("98347.876438637"))
@@ -712,30 +727,34 @@ public class TestUpdatePgsql extends TestUpdate {
                     .setDouble(10, 68.7d)
                     .setFloat(11, 13.4f)
                     .setFloat(12, 42.1f)
-                    .setInt(13, 92)
-                    .setInt(14, 34)
-                    .setLong(15, 92)
-                    .setShort(16, (short) 7)
-                    .setDate(17, new java.sql.Date(cal.getTime().getTime()))
-                    .setString(18, "string'value")
-                    .setString(19, "string'value2")
-                    .setTime(20, new Time(cal.getTime().getTime()))
-                    .setTimestamp(21, new Timestamp(cal.getTime().getTime()));
+                    .setTimestamp(13, Timestamp.from(cal.toInstant()))
+                    .setInt(14, 92)
+                    .setInt(15, 34)
+                    .setDate(16, new java.sql.Date(cal.getTime().getTime()))
+                    .setTimestamp(17, Timestamp.from(cal.toInstant()))
+                    .setTime(18, Convert.toTime(cal))
+                    .setLong(19, 92)
+                    .setShort(20, (short) 7)
+                    .setDate(21, new java.sql.Date(cal.getTime().getTime()))
+                    .setString(22, "string'value")
+                    .setString(23, "string'value2")
+                    .setTime(24, new Time(cal.getTime().getTime()))
+                    .setTimestamp(25, new Timestamp(cal.getTime().getTime()));
             }
         }));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testFieldsParametersBeanExcludedPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
                     "propertyDouble", "propertyInt", "propertyLong",
-                    "propertySqlDate", "propertyStringbuffer", "propertyTimestamp"});
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = ?, propertyBooleanObject = ?, propertyByteObject = ?, propertyCalendar = ?, propertyCharacterObject = ?, propertyDate = ?, propertyDoubleObject = ?, propertyEnum = ?, propertyFloat = ?, propertyFloatObject = ?, propertyIntegerObject = ?, propertyLongObject = ?, propertyShort = ?, propertyShortObject = ?, propertyString = ?, propertyTime = ?");
+                    "propertySqlDate", "propertyStringBuffer", "propertyTimestamp"});
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBigDecimal = ?, propertyBooleanObject = ?, propertyByteObject = ?, propertyCalendar = ?, propertyCharacterObject = ?, propertyDate = ?, propertyDoubleObject = ?, propertyEnum = ?, propertyFloat = ?, propertyFloatObject = ?, propertyInstant = ?, propertyIntegerObject = ?, propertyLocalDate = ?, propertyLocalDateTime = ?, propertyLocalTime = ?, propertyLongObject = ?, propertyShort = ?, propertyShortObject = ?, propertyString = ?, propertyTime = ?");
 
-        assertEquals(query.getParameters().getOrderedNames().size(), 16);
+        assertEquals(query.getParameters().getOrderedNames().size(), 20);
         assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
         assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBooleanObject");
         assertEquals(query.getParameters().getOrderedNames().get(2), "propertyByteObject");
@@ -746,18 +765,22 @@ public class TestUpdatePgsql extends TestUpdate {
         assertEquals(query.getParameters().getOrderedNames().get(7), "propertyEnum");
         assertEquals(query.getParameters().getOrderedNames().get(8), "propertyFloat");
         assertEquals(query.getParameters().getOrderedNames().get(9), "propertyFloatObject");
-        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyIntegerObject");
-        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyLongObject");
-        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyShort");
-        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyShortObject");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyTime");
-        assertTrue(Arrays.equals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyCharacterObject", "propertyDate", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertyShortObject", "propertyString", "propertyTime"}));
+        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyInstant");
+        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyLocalDate");
+        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyLocalDateTime");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyLocalTime");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyShortObject");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyTime");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyCharacterObject", "propertyDate", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyInstant", "propertyIntegerObject", "propertyLocalDate", "propertyLocalDateTime", "propertyLocalTime", "propertyLongObject", "propertyShort", "propertyShortObject", "propertyString", "propertyTime"});
 
         assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2002, 7, 19, 12, 17, 52);
+                var cal = Calendar.getInstance();
+                cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
                 cal.set(Calendar.MILLISECOND, 462);
                 statement
                     .setBigDecimal(1, new BigDecimal("98347.876438637"))
@@ -770,40 +793,45 @@ public class TestUpdatePgsql extends TestUpdate {
                     .setString(8, "VALUE_THREE")
                     .setFloat(9, 13.4f)
                     .setFloat(10, 32.8f)
-                    .setInt(11, 358)
-                    .setLong(12, 9680L)
-                    .setShort(13, (short) 12)
-                    .setShort(14, (short) 78)
-                    .setString(15, "string'value")
-                    .setTime(16, new Time(cal.getTime().getTime()));
+                    .setTimestamp(11, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setInt(12, 358)
+                    .setDate(13, new java.sql.Date(cal.getTime().getTime()))
+                    .setTimestamp(14, Timestamp.from(cal.toInstant()))
+                    .setTime(15, Convert.toTime(cal))
+                    .setLong(16, 9680L)
+                    .setShort(17, (short) 12)
+                    .setShort(18, (short) 78)
+                    .setString(19, "string'value")
+                    .setTime(20, new Time(cal.getTime().getTime()));
             }
         }));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
             .where(BeanImpl.getPopulatedBean());
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = true AND propertyBooleanObject = false AND propertyByte = 89 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.764' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.764' AND propertyDouble = 53348.34 AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShort = 43 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14' AND propertyTimestamp = '2002-06-18 15:26:14.764'");
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = true AND propertyBooleanObject = false AND propertyByte = 89 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.167' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.167' AND propertyDouble = 53348.34 AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInstant = '2002-06-18 15:26:14.167' AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLocalDate = '2002-06-18' AND propertyLocalDateTime = '2002-06-18 15:26:14.167' AND propertyLocalTime = '15:26:14' AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShort = 43 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyStringBuffer = 'someotherstringbuff' AND propertyTime = '15:26:14' AND propertyTimestamp = '2002-06-18 15:26:14.167'");
         assertTrue(execute(query));
     }
 
-    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL) void testWhereBeanConstrainedPgsql() {
-        Update query = new Update(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testWhereBeanConstrainedPgsql() {
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
             .where(BeanImplConstrained.getPopulatedBean());
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = true AND propertyBooleanObject = false AND propertyByte = 89 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.764' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.764' AND propertyDouble = 53348.34 AND propertyDoubleObject = 143298.692 AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLongObject = 66875 AND propertyShort = 43 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14' AND propertyTimestamp = '2002-06-18 15:26:14.764'");
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = true AND propertyBooleanObject = false AND propertyByte = 89 AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.167' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.167' AND propertyDouble = 53348.34 AND propertyDoubleObject = 143298.692 AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInstant = '2002-06-18 15:26:14.167' AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLocalDate = '2002-06-18' AND propertyLocalDateTime = '2002-06-18 15:26:14.167' AND propertyLocalTime = '15:26:14' AND propertyLongObject = 66875 AND propertyShort = 43 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyStringBuffer = 'someotherstringbuff' AND propertyTime = '15:26:14' AND propertyTimestamp = '2002-06-18 15:26:14.167'");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanNullValuesPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
@@ -814,47 +842,47 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanIncludedPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
-            .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyByte = 89 AND propertyDouble = 53348.34 AND propertyShort = 43 AND propertyStringbuffer = 'someotherstringbuff' AND propertyTime = '15:26:14'");
+            .whereIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyByte = 89 AND propertyDouble = 53348.34 AND propertyShort = 43 AND propertyStringBuffer = 'someotherstringbuff' AND propertyTime = '15:26:14'");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanExcludedPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
-            .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = true AND propertyBooleanObject = false AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.764' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.764' AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyTimestamp = '2002-06-18 15:26:14.764'");
+            .whereExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = 219038743.392874 AND propertyBoolean = true AND propertyBooleanObject = false AND propertyByteObject = 34 AND propertyCalendar = '2002-06-18 15:26:14.167' AND propertyChar = 'v' AND propertyCharacterObject = 'r' AND propertyDate = '2002-06-18 15:26:14.167' AND propertyDoubleObject = 143298.692 AND propertyEnum = 'VALUE_THREE' AND propertyFloat = 98634.2 AND propertyFloatObject = 8734.7 AND propertyInstant = '2002-06-18 15:26:14.167' AND propertyInt = 545 AND propertyIntegerObject = 968 AND propertyLocalDate = '2002-06-18' AND propertyLocalDateTime = '2002-06-18 15:26:14.167' AND propertyLocalTime = '15:26:14' AND propertyLong = 34563 AND propertyLongObject = 66875 AND propertyShortObject = 68 AND propertySqlDate = '2002-06-18' AND propertyString = 'someotherstring' AND propertyTimestamp = '2002-06-18 15:26:14.167'");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereBeanFilteredPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
-            .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyDouble = 53348.34 AND propertyStringbuffer = 'someotherstringbuff'");
+            .whereFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringBuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyDouble = 53348.34 AND propertyStringBuffer = 'someotherstringbuff'");
         assertTrue(execute(query));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereParametersBeanPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
             .whereParameters(BeanImpl.class);
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = ? AND propertyBoolean = ? AND propertyBooleanObject = ? AND propertyByte = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyChar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDouble = ? AND propertyDoubleObject = ? AND propertyEnum = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInt = ? AND propertyIntegerObject = ? AND propertyLong = ? AND propertyLongObject = ? AND propertyShort = ? AND propertyShortObject = ? AND propertySqlDate = ? AND propertyString = ? AND propertyStringbuffer = ? AND propertyTime = ? AND propertyTimestamp = ?");
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = ? AND propertyBoolean = ? AND propertyBooleanObject = ? AND propertyByte = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyChar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDouble = ? AND propertyDoubleObject = ? AND propertyEnum = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInstant = ? AND propertyInt = ? AND propertyIntegerObject = ? AND propertyLocalDate = ? AND propertyLocalDateTime = ? AND propertyLocalTime = ? AND propertyLong = ? AND propertyLongObject = ? AND propertyShort = ? AND propertyShortObject = ? AND propertySqlDate = ? AND propertyString = ? AND propertyStringBuffer = ? AND propertyTime = ? AND propertyTimestamp = ?");
 
-        assertEquals(query.getParameters().getOrderedNames().size(), 25);
+        assertEquals(query.getParameters().getOrderedNames().size(), 29);
         assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
         assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
         assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
@@ -869,24 +897,28 @@ public class TestUpdatePgsql extends TestUpdate {
         assertEquals(query.getParameters().getOrderedNames().get(11), "propertyEnum");
         assertEquals(query.getParameters().getOrderedNames().get(12), "propertyFloat");
         assertEquals(query.getParameters().getOrderedNames().get(13), "propertyFloatObject");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyInt");
-        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyIntegerObject");
-        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyLong");
-        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyLongObject");
-        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyShort");
-        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyShortObject");
-        assertEquals(query.getParameters().getOrderedNames().get(20), "propertySqlDate");
-        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(22), "propertyStringbuffer");
-        assertEquals(query.getParameters().getOrderedNames().get(23), "propertyTime");
-        assertEquals(query.getParameters().getOrderedNames().get(24), "propertyTimestamp");
-        assertTrue(Arrays.equals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLong", "propertyLongObject", "propertyShort", "propertyShortObject", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"}));
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyInstant");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyInt");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyLocalDate");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyLocalDateTime");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyLocalTime");
+        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyLong");
+        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(22), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(23), "propertyShortObject");
+        assertEquals(query.getParameters().getOrderedNames().get(24), "propertySqlDate");
+        assertEquals(query.getParameters().getOrderedNames().get(25), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(26), "propertyStringBuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(27), "propertyTime");
+        assertEquals(query.getParameters().getOrderedNames().get(28), "propertyTimestamp");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyInstant", "propertyInt", "propertyIntegerObject", "propertyLocalDate", "propertyLocalDateTime", "propertyLocalTime", "propertyLong", "propertyLongObject", "propertyShort", "propertyShortObject", "propertySqlDate", "propertyString", "propertyStringBuffer", "propertyTime", "propertyTimestamp"});
 
         assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2002, 5, 18, 15, 26, 14);
-                cal.set(Calendar.MILLISECOND, 764);
+                var cal = Calendar.getInstance();
+                cal.set(2002, Calendar.JUNE, 18, 15, 26, 14);
+                cal.set(Calendar.MILLISECOND, 167);
                 statement
                     .setBigDecimal(1, new BigDecimal("219038743.392874"))
                     .setBoolean(2, true)
@@ -902,30 +934,35 @@ public class TestUpdatePgsql extends TestUpdate {
                     .setString(12, "VALUE_THREE")
                     .setDouble(13, 98634.2d)
                     .setDouble(14, 8734.7d)
-                    .setInt(15, 545)
-                    .setInt(16, 968)
-                    .setLong(17, 34563L)
-                    .setLong(18, 66875L)
-                    .setShort(19, (short) 43)
-                    .setShort(20, (short) 68)
-                    .setDate(21, new java.sql.Date(cal.getTime().getTime()))
-                    .setString(22, "someotherstring")
-                    .setString(23, "someotherstringbuff")
-                    .setTime(24, new Time(15, 26, 14))
-                    .setTimestamp(25, new Timestamp(cal.getTime().getTime()));
+                    .setTimestamp(15, Timestamp.from(cal.toInstant()))
+                    .setInt(16, 545)
+                    .setInt(17, 968)
+                    .setDate(18, new java.sql.Date(cal.getTime().getTime()))
+                    .setTimestamp(19, Timestamp.from(cal.toInstant()))
+                    .setTime(20, Convert.toTime(cal))
+                    .setLong(21, 34563L)
+                    .setLong(22, 66875L)
+                    .setShort(23, (short) 43)
+                    .setShort(24, (short) 68)
+                    .setDate(25, new java.sql.Date(cal.getTime().getTime()))
+                    .setString(26, "someotherstring")
+                    .setString(27, "someotherstringbuff")
+                    .setTime(28, Convert.toTime(cal))
+                    .setTimestamp(29, new Timestamp(cal.getTime().getTime()));
             }
         }));
     }
 
-    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL) void testWhereParametersBeanConstrainedPgsql() {
-        Update query = new Update(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testWhereParametersBeanConstrainedPgsql() {
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
             .whereParameters(BeanImplConstrained.class);
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = ? AND propertyBoolean = ? AND propertyBooleanObject = ? AND propertyByte = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyChar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDouble = ? AND propertyDoubleObject = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInt = ? AND propertyIntegerObject = ? AND propertyLongObject = ? AND propertyShort = ? AND propertySqlDate = ? AND propertyString = ? AND propertyStringbuffer = ? AND propertyTime = ? AND propertyTimestamp = ?");
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = ? AND propertyBoolean = ? AND propertyBooleanObject = ? AND propertyByte = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyChar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDouble = ? AND propertyDoubleObject = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInstant = ? AND propertyInt = ? AND propertyIntegerObject = ? AND propertyLocalDate = ? AND propertyLocalDateTime = ? AND propertyLocalTime = ? AND propertyLongObject = ? AND propertyShort = ? AND propertySqlDate = ? AND propertyString = ? AND propertyStringBuffer = ? AND propertyTime = ? AND propertyTimestamp = ?");
 
-        assertEquals(query.getParameters().getOrderedNames().size(), 22);
+        assertEquals(query.getParameters().getOrderedNames().size(), 26);
         assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
         assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
         assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
@@ -939,22 +976,28 @@ public class TestUpdatePgsql extends TestUpdate {
         assertEquals(query.getParameters().getOrderedNames().get(10), "propertyDoubleObject");
         assertEquals(query.getParameters().getOrderedNames().get(11), "propertyFloat");
         assertEquals(query.getParameters().getOrderedNames().get(12), "propertyFloatObject");
-        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyInt");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyIntegerObject");
-        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyLongObject");
-        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyShort");
-        assertEquals(query.getParameters().getOrderedNames().get(17), "propertySqlDate");
-        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyStringbuffer");
-        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyTime");
-        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyTimestamp");
-        assertTrue(Arrays.equals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"}));
+        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyInstant");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyInt");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyLocalDate");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyLocalDateTime");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyLocalTime");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(21), "propertySqlDate");
+        assertEquals(query.getParameters().getOrderedNames().get(22), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(23), "propertyStringBuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(24), "propertyTime");
+        assertEquals(query.getParameters().getOrderedNames().get(25), "propertyTimestamp");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInstant", "propertyInt", "propertyIntegerObject", "propertyLocalDate", "propertyLocalDateTime", "propertyLocalTime", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringBuffer", "propertyTime", "propertyTimestamp"});
 
-        assertTrue(execute(query, new DbPreparedStatementHandler() {
+        // don't check if actual rows were returned, since Derby doesn't
+        // match on the float
+        execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2002, 5, 18, 15, 26, 14);
-                cal.set(Calendar.MILLISECOND, 764);
+                var cal = Calendar.getInstance();
+                cal.set(2002, Calendar.JUNE, 18, 15, 26, 14);
+                cal.set(Calendar.MILLISECOND, 167);
                 statement
                     .setBigDecimal(1, new BigDecimal("219038743.392874"))
                     .setBoolean(2, true)
@@ -967,34 +1010,38 @@ public class TestUpdatePgsql extends TestUpdate {
                     .setTimestamp(9, new java.sql.Timestamp(cal.getTime().getTime()))
                     .setDouble(10, 53348.34d)
                     .setDouble(11, 143298.692d)
-                    .setDouble(12, 98634.2d)
-                    .setDouble(13, 8734.7d)
-                    .setInt(14, 545)
-                    .setInt(15, 968)
-                    .setLong(16, 66875L)
-                    .setShort(17, (short) 43)
-                    .setDate(18, new java.sql.Date(cal.getTime().getTime()))
-                    .setString(19, "someotherstring")
-                    .setString(20, "someotherstringbuff")
-                    .setTime(21, new Time(15, 26, 14))
-                    .setTimestamp(22, new Timestamp(cal.getTime().getTime()));
+                    .setFloat(12, 98634.2f)
+                    .setFloat(13, 8734.7f)
+                    .setTimestamp(14, Timestamp.from(cal.toInstant()))
+                    .setInt(15, 545)
+                    .setInt(16, 968)
+                    .setDate(17, new java.sql.Date(cal.getTime().getTime()))
+                    .setTimestamp(18, Timestamp.from(cal.toInstant()))
+                    .setTime(19, Convert.toTime(cal))
+                    .setLong(20, 66875L)
+                    .setShort(21, (short) 43)
+                    .setDate(22, new java.sql.Date(cal.getTime().getTime()))
+                    .setString(23, "someotherstring")
+                    .setString(24, "someotherstringbuff")
+                    .setTime(25, new Time(cal.getTime().getTime()))
+                    .setTimestamp(26, new Timestamp(cal.getTime().getTime()));
             }
-        }));
+        });
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testWhereParametersBeanExcludedPgsql() {
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .field("propertyBoolean", true)
             .field("propertyByte", (byte) 16)
             .whereParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
                     "propertyDouble", "propertyInt", "propertyLong",
-                    "propertySqlDate", "propertyStringbuffer", "propertyTimestamp"});
-        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = ? AND propertyBooleanObject = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDoubleObject = ? AND propertyEnum = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyIntegerObject = ? AND propertyLongObject = ? AND propertyShort = ? AND propertyShortObject = ? AND propertyString = ? AND propertyTime = ?");
+                    "propertySqlDate", "propertyStringBuffer", "propertyTimestamp"});
+        assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = true, propertyByte = 16 WHERE propertyBigDecimal = ? AND propertyBooleanObject = ? AND propertyByteObject = ? AND propertyCalendar = ? AND propertyCharacterObject = ? AND propertyDate = ? AND propertyDoubleObject = ? AND propertyEnum = ? AND propertyFloat = ? AND propertyFloatObject = ? AND propertyInstant = ? AND propertyIntegerObject = ? AND propertyLocalDate = ? AND propertyLocalDateTime = ? AND propertyLocalTime = ? AND propertyLongObject = ? AND propertyShort = ? AND propertyShortObject = ? AND propertyString = ? AND propertyTime = ?");
 
-        assertEquals(query.getParameters().getOrderedNames().size(), 16);
+        assertEquals(query.getParameters().getOrderedNames().size(), 20);
         assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
         assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBooleanObject");
         assertEquals(query.getParameters().getOrderedNames().get(2), "propertyByteObject");
@@ -1005,19 +1052,23 @@ public class TestUpdatePgsql extends TestUpdate {
         assertEquals(query.getParameters().getOrderedNames().get(7), "propertyEnum");
         assertEquals(query.getParameters().getOrderedNames().get(8), "propertyFloat");
         assertEquals(query.getParameters().getOrderedNames().get(9), "propertyFloatObject");
-        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyIntegerObject");
-        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyLongObject");
-        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyShort");
-        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyShortObject");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyTime");
-        assertTrue(Arrays.equals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyCharacterObject", "propertyDate", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertyShortObject", "propertyString", "propertyTime"}));
+        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyInstant");
+        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyLocalDate");
+        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyLocalDateTime");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyLocalTime");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyShortObject");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyTime");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyCharacterObject", "propertyDate", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyInstant", "propertyIntegerObject", "propertyLocalDate", "propertyLocalDateTime", "propertyLocalTime", "propertyLongObject", "propertyShort", "propertyShortObject", "propertyString", "propertyTime"});
 
         assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2002, 5, 18, 15, 26, 14);
-                cal.set(Calendar.MILLISECOND, 764);
+                var cal = Calendar.getInstance();
+                cal.set(2002, Calendar.JUNE, 18, 15, 26, 14);
+                cal.set(Calendar.MILLISECOND, 167);
                 statement
                     .setBigDecimal(1, new BigDecimal("219038743.392874"))
                     .setBoolean(2, false)
@@ -1029,31 +1080,35 @@ public class TestUpdatePgsql extends TestUpdate {
                     .setString(8, "VALUE_THREE")
                     .setDouble(9, 98634.2d)
                     .setDouble(10, 8734.7d)
-                    .setInt(11, 968)
-                    .setLong(12, 66875L)
-                    .setShort(13, (short) 43)
-                    .setShort(14, (short) 68)
-                    .setString(15, "someotherstring")
-                    .setTime(16, new Time(15, 26, 14));
+                    .setTimestamp(11, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setInt(12, 968)
+                    .setDate(13, new java.sql.Date(cal.getTime().getTime()))
+                    .setTimestamp(14, Timestamp.from(cal.toInstant()))
+                    .setTime(15, Convert.toTime(cal))
+                    .setLong(16, 66875L)
+                    .setShort(17, (short) 43)
+                    .setShort(18, (short) 68)
+                    .setString(19, "someotherstring")
+                    .setTime(20, Convert.toTime(cal));
             }
         }));
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testSubselectParamsPgsql() {
-        Select fieldquery = new Select(PGSQL);
+        var fieldquery = new Select(PGSQL);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
-        Select wherequery = new Select(PGSQL);
+        var wherequery = new Select(PGSQL);
         wherequery
             .from("table2")
             .field("max(propertyShort)")
             .whereParameter("propertyShort", "!=");
 
         // Manual subselect creation
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         // shuffled the structure around a bit to test the correct order usage
         query
             .where("propertyShort >= (" + wherequery + ")")
@@ -1064,7 +1119,7 @@ public class TestUpdatePgsql extends TestUpdate {
             .fieldCustom("propertyLong", "(" + fieldquery + ")")
             .fieldSubselect(fieldquery);
         assertEquals(query.getSql(), "UPDATE tablename SET propertyString = ?, propertyLong = (SELECT max(propertyLong) FROM table2 WHERE propertyInt > ?) WHERE propertyShort >= (SELECT max(propertyShort) FROM table2 WHERE propertyShort != ?) OR propertyString = ?");
-        String[] parameters = query.getParameters().getOrderedNamesArray();
+        var parameters = query.getParameters().getOrderedNamesArray();
         assertEquals(4, parameters.length);
         assertEquals(parameters[0], "propertyString");
         assertEquals(parameters[1], "propertyInt");
@@ -1119,21 +1174,21 @@ public class TestUpdatePgsql extends TestUpdate {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
     void testClonePgsql() {
-        Select fieldquery = new Select(PGSQL);
+        var fieldquery = new Select(PGSQL);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
-        Select wherequery = new Select(PGSQL);
+        var wherequery = new Select(PGSQL);
         wherequery
             .from("table2")
             .field("max(propertyShort)")
             .whereParameter("propertyShort", "!=");
 
-        final Calendar cal = Calendar.getInstance();
-        cal.set(2002, 7, 19, 12, 17, 52);
+        final var cal = Calendar.getInstance();
+        cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Update query = new Update(PGSQL);
+        var query = new Update(PGSQL);
         query.table("tablename")
             .fieldParameter("nullColumn")
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))
@@ -1148,7 +1203,7 @@ public class TestUpdatePgsql extends TestUpdate {
             .field("propertyShort", (short) 12)
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
-            .field("propertyStringbuffer", new StringBuffer("stringbuffer'value"))
+            .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
             .field("propertyTime", new Time(cal.getTime().getTime()))
             .fieldParameter("propertyTimestamp")
             .fieldCustom("propertyLong", "(" + fieldquery + ")")
@@ -1162,7 +1217,7 @@ public class TestUpdatePgsql extends TestUpdate {
             .whereParameterAnd("tablename.propertyLong", "propertyLong", "<")
             .whereParameterOr("tablename.propertyChar", "propertyChar", "=");
 
-        Update query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertTrue(query != query_clone);
         execute(query, new DbPreparedStatementHandler() {

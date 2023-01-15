@@ -5,13 +5,18 @@
 package rife.tools;
 
 import org.junit.jupiter.api.Test;
+import rife.config.RifeConfig;
 import rife.tools.exceptions.ConversionException;
+
+import java.time.*;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestConvert {
     @Test
-    void testToType() throws ConversionException {
+    void testToType()
+    throws ConversionException {
         assertEquals(true, Convert.toType(1, boolean.class));
         assertEquals(false, Convert.toType(0, boolean.class));
         assertEquals(true, Convert.toType("1", boolean.class));
@@ -140,7 +145,7 @@ public class TestConvert {
 
     @Test
     void testToBoolean()
-        throws ConversionException {
+    throws ConversionException {
         assertTrue(Convert.toBoolean(1));
         assertFalse(Convert.toBoolean(0));
         assertTrue(Convert.toBoolean("1"));
@@ -186,7 +191,7 @@ public class TestConvert {
 
     @Test
     void testToChar()
-        throws ConversionException {
+    throws ConversionException {
         assertEquals((char) 23, Convert.toChar(23L));
         assertEquals((char) 89, Convert.toChar(89.7d));
         assertEquals('I', Convert.toChar('I'));
@@ -233,7 +238,7 @@ public class TestConvert {
 
     @Test
     void testToByte()
-        throws ConversionException {
+    throws ConversionException {
         assertEquals((byte) 23, Convert.toByte(23L));
         assertEquals((byte) 89, Convert.toByte(89.7d));
         assertEquals((byte) 12, Convert.toByte("12"));
@@ -278,7 +283,7 @@ public class TestConvert {
 
     @Test
     void testToShort()
-        throws ConversionException {
+    throws ConversionException {
         assertEquals((short) 23, Convert.toShort(23L));
         assertEquals((short) 89, Convert.toShort(89.7d));
         assertEquals((short) 1247, Convert.toShort("1247"));
@@ -323,7 +328,7 @@ public class TestConvert {
 
     @Test
     void testToInt()
-        throws ConversionException {
+    throws ConversionException {
         assertEquals(23, Convert.toInt(23L));
         assertEquals(89, Convert.toInt(89.7d));
         assertEquals(239, Convert.toInt("239"));
@@ -368,7 +373,7 @@ public class TestConvert {
 
     @Test
     void testToLong()
-        throws ConversionException {
+    throws ConversionException {
         assertEquals(23L, Convert.toLong(23));
         assertEquals(890L, Convert.toLong(890.7d));
         assertEquals(86980L, Convert.toLong("86980"));
@@ -413,7 +418,7 @@ public class TestConvert {
 
     @Test
     void testToFloat()
-        throws ConversionException {
+    throws ConversionException {
         assertEquals(23f, Convert.toFloat(23));
         assertEquals(23.9f, Convert.toFloat(23.9f));
         assertEquals(890.7f, Convert.toFloat(890.7d));
@@ -459,7 +464,7 @@ public class TestConvert {
 
     @Test
     void testToDouble()
-        throws ConversionException {
+    throws ConversionException {
         assertEquals(23d, Convert.toDouble(23));
         assertEquals(23.9d, Convert.toDouble(23.9f), 0.01d);
         assertEquals(869232.98792d, Convert.toDouble(869232.98792d), 0.000001d);
@@ -471,5 +476,224 @@ public class TestConvert {
         assertEquals(89.76d, Convert.toDouble(null, 89.76d), 0.01d);
         assertEquals(869232.98792d, Convert.toDouble(new Object(), 869232.98792d), 0.000001d);
         assertEquals(2248682.24242d, Convert.toDouble("dfjhoij", 2248682.24242d), 0.000001d);
+    }
+
+    @Test void testToDate()
+    throws ConversionException {
+        var cal = new GregorianCalendar(RifeConfig.tools().getDefaultTimeZone());
+        cal.set(2023, Calendar.JANUARY, 23, 13, 45, 23);
+        assertEquals("Mon Jan 23 13:45:23 EST 2023", Convert.toDate(cal).toString());
+        assertEquals("Mon Jan 23 13:45:23 EST 2023", Convert.toDate(Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("Mon Jan 23 13:45:23 EST 2023", Convert.toDate(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("Mon Jan 23 00:00:00 EST 2023", Convert.toDate(LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("Thu Jan 01 13:45:23 EST 1970", Convert.toDate(LocalTime.of(13, 45, 23)).toString());
+        assertEquals("Mon Jan 23 13:45:23 EST 2023", Convert.toDate(Long.valueOf(1674499523142L)).toString());
+        assertEquals("Mon Jan 23 13:45:23 EST 2023", Convert.toDate("1674499523142").toString());
+        assertEquals("Mon Jan 23 13:45:23 EST 2023", Convert.toDate("20230123134523000-0500").toString());
+        assertEquals("Mon Jan 23 13:45:00 EST 2023", Convert.toDate("2023-01-23 13:45").toString());
+
+        assertEquals("Mon Jan 23 13:45:23 EST 2023", Convert.toDate((Object)cal).toString());
+        assertEquals("Mon Jan 23 13:45:23 EST 2023", Convert.toDate((Object)Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("Mon Jan 23 13:45:23 EST 2023", Convert.toDate((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("Mon Jan 23 00:00:00 EST 2023", Convert.toDate((Object)LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("Thu Jan 01 13:45:23 EST 1970", Convert.toDate((Object)LocalTime.of(13, 45, 23)).toString());
+        assertEquals("Mon Jan 23 13:45:23 EST 2023", Convert.toDate((Object)Long.valueOf(1674499523142L)).toString());
+        assertEquals("Mon Jan 23 13:45:23 EST 2023", Convert.toDate((Object)"1674499523142").toString());
+        assertEquals("Mon Jan 23 13:45:23 EST 2023", Convert.toDate((Object)"20230123134523000-0500").toString());
+        assertEquals("Mon Jan 23 13:45:00 EST 2023", Convert.toDate((Object)"2023-01-23 13:45").toString());
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test void testToSqlDate()
+    throws ConversionException {
+        var cal = new GregorianCalendar(RifeConfig.tools().getDefaultTimeZone());
+        cal.set(2023, Calendar.JANUARY, 23, 13, 45, 23);
+        assertEquals("2023-01-23", Convert.toSqlDate(new Date(123, Calendar.JANUARY, 23)).toString());
+        assertEquals("2023-01-23", Convert.toSqlDate(cal).toString());
+        assertEquals("2023-01-23", Convert.toSqlDate(Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("2023-01-23", Convert.toSqlDate(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("2023-01-23", Convert.toSqlDate(LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("1970-01-01", Convert.toSqlDate(LocalTime.of(13, 45, 23)).toString());
+        assertEquals("2023-01-23", Convert.toSqlDate(Long.valueOf(1674499523142L)).toString());
+        assertEquals("2023-01-23", Convert.toSqlDate("1674499523142").toString());
+        assertEquals("2023-01-23", Convert.toSqlDate("20230123134523000-0500").toString());
+        assertEquals("2023-01-23", Convert.toSqlDate("2023-01-23 13:45").toString());
+
+        assertEquals("2023-01-23", Convert.toSqlDate((Object)new Date(123, Calendar.JANUARY, 23)).toString());
+        assertEquals("2023-01-23", Convert.toSqlDate((Object)cal).toString());
+        assertEquals("2023-01-23", Convert.toSqlDate((Object)Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("2023-01-23", Convert.toSqlDate((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("2023-01-23", Convert.toSqlDate((Object)LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("1970-01-01", Convert.toSqlDate((Object)LocalTime.of(13, 45, 23)).toString());
+        assertEquals("2023-01-23", Convert.toSqlDate((Object)Long.valueOf(1674499523142L)).toString());
+        assertEquals("2023-01-23", Convert.toSqlDate((Object)"1674499523142").toString());
+        assertEquals("2023-01-23", Convert.toSqlDate((Object)"20230123134523000-0500").toString());
+        assertEquals("2023-01-23", Convert.toSqlDate((Object)"2023-01-23 13:45").toString());
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test void testToTimestamp()
+    throws ConversionException {
+        var cal = new GregorianCalendar(RifeConfig.tools().getDefaultTimeZone());
+        cal.set(2023, Calendar.JANUARY, 23, 13, 45, 23);
+        cal.set(Calendar.MILLISECOND, 142);
+        assertEquals("2023-01-23 13:45:23.0",   Convert.toTimestamp(new Date(123, Calendar.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("2023-01-23 13:45:23.142", Convert.toTimestamp(cal).toString());
+        assertEquals("2023-01-23 13:45:23.0",   Convert.toTimestamp(Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("2023-01-23 13:45:23.142", Convert.toTimestamp(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
+        assertEquals("2023-01-23 00:00:00.0",   Convert.toTimestamp(LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("1970-01-01 13:45:23.0",   Convert.toTimestamp(LocalTime.of(13, 45, 23)).toString());
+        assertEquals("2023-01-23 13:45:23.142", Convert.toTimestamp(Long.valueOf(1674499523142L)).toString());
+        assertEquals("2023-01-23 13:45:23.142", Convert.toTimestamp("1674499523142").toString());
+        assertEquals("2023-01-23 13:45:23.0",   Convert.toTimestamp("20230123134523000-0500").toString());
+        assertEquals("2023-01-23 13:45:00.0",   Convert.toTimestamp("2023-01-23 13:45").toString());
+
+        assertEquals("2023-01-23 13:45:23.0",   Convert.toTimestamp((Object)new Date(123, Calendar.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("2023-01-23 13:45:23.142", Convert.toTimestamp((Object)cal).toString());
+        assertEquals("2023-01-23 13:45:23.0",   Convert.toTimestamp((Object)Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("2023-01-23 13:45:23.142", Convert.toTimestamp((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
+        assertEquals("2023-01-23 00:00:00.0",   Convert.toTimestamp((Object)LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("1970-01-01 13:45:23.0",   Convert.toTimestamp((Object)LocalTime.of(13, 45, 23)).toString());
+        assertEquals("2023-01-23 13:45:23.142", Convert.toTimestamp((Object)Long.valueOf(1674499523142L)).toString());
+        assertEquals("2023-01-23 13:45:23.142", Convert.toTimestamp((Object)"1674499523142").toString());
+        assertEquals("2023-01-23 13:45:23.0",   Convert.toTimestamp((Object)"20230123134523000-0500").toString());
+        assertEquals("2023-01-23 13:45:00.0",   Convert.toTimestamp((Object)"2023-01-23 13:45").toString());
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test void testToTime()
+    throws ConversionException {
+        var cal = new GregorianCalendar(RifeConfig.tools().getDefaultTimeZone());
+        cal.set(2023, Calendar.JANUARY, 23, 13, 45, 23);
+        cal.set(Calendar.MILLISECOND, 142);
+        assertEquals("13:45:23", Convert.toTime(new Date(123, Calendar.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("13:45:23", Convert.toTime(cal).toString());
+        assertEquals("13:45:23", Convert.toTime(Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("13:45:23", Convert.toTime(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
+        assertEquals("00:00:00", Convert.toTime(LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("13:45:23", Convert.toTime(LocalTime.of(13, 45, 23)).toString());
+        assertEquals("13:45:23", Convert.toTime(Long.valueOf(1674499523142L)).toString());
+        assertEquals("13:45:23", Convert.toTime("1674499523142").toString());
+        assertEquals("13:45:23", Convert.toTime("134523000-0500").toString());
+        assertEquals("13:45:00", Convert.toTime("13:45").toString());
+
+        assertEquals("13:45:23", Convert.toTime((Object)new Date(123, Calendar.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("13:45:23", Convert.toTime((Object)cal).toString());
+        assertEquals("13:45:23", Convert.toTime((Object)Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("13:45:23", Convert.toTime((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
+        assertEquals("00:00:00", Convert.toTime((Object)LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("13:45:23", Convert.toTime((Object)LocalTime.of(13, 45, 23)).toString());
+        assertEquals("13:45:23", Convert.toTime((Object)Long.valueOf(1674499523142L)).toString());
+        assertEquals("13:45:23", Convert.toTime((Object)"1674499523142").toString());
+        assertEquals("13:45:23", Convert.toTime((Object)"134523000-0500").toString());
+        assertEquals("13:45:00", Convert.toTime((Object)"13:45").toString());
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test void testToInstant()
+    throws ConversionException {
+        var cal = new GregorianCalendar(RifeConfig.tools().getDefaultTimeZone());
+        cal.set(2023, Calendar.JANUARY, 23, 13, 45, 23);
+        cal.set(Calendar.MILLISECOND, 142);
+        assertEquals("2023-01-23T18:45:23Z",     Convert.toInstant(new Date(123, Calendar.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant(cal).toString());
+        assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
+        assertEquals("2023-01-23T05:00:00Z",     Convert.toInstant(LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("1970-01-01T18:45:23Z",     Convert.toInstant(LocalTime.of(13, 45, 23)).toString());
+        assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant(Long.valueOf(1674499523142L)).toString());
+        assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant("1674499523142").toString());
+        assertEquals("2023-01-23T18:45:23Z",     Convert.toInstant("20230123134523000-0500").toString());
+        assertEquals("2023-01-23T18:45:00Z",     Convert.toInstant("2023-01-23 13:45").toString());
+
+        assertEquals("2023-01-23T18:45:23Z",     Convert.toInstant((Object)new Date(123, Calendar.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant((Object)cal).toString());
+        assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
+        assertEquals("2023-01-23T05:00:00Z",     Convert.toInstant((Object)LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("1970-01-01T18:45:23Z",     Convert.toInstant((Object)LocalTime.of(13, 45, 23)).toString());
+        assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant((Object)Long.valueOf(1674499523142L)).toString());
+        assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant((Object)"1674499523142").toString());
+        assertEquals("2023-01-23T18:45:23Z",     Convert.toInstant((Object)"20230123134523000-0500").toString());
+        assertEquals("2023-01-23T18:45:00Z",     Convert.toInstant((Object)"2023-01-23 13:45").toString());
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test void testToLocalDateTime()
+    throws ConversionException {
+        var cal = new GregorianCalendar(RifeConfig.tools().getDefaultTimeZone());
+        cal.set(2023, Calendar.JANUARY, 23, 13, 45, 23);
+        cal.set(Calendar.MILLISECOND, 142);
+        assertEquals("2023-01-23T13:45:23",     Convert.toLocalDateTime(new Date(123, Calendar.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("2023-01-23T13:45:23.142", Convert.toLocalDateTime(cal).toString());
+        assertEquals("2023-01-23T13:45:23",     Convert.toLocalDateTime(Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("2023-01-23T00:00",        Convert.toLocalDateTime(LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("1970-01-01T13:45:23",     Convert.toLocalDateTime(LocalTime.of(13, 45, 23)).toString());
+        assertEquals("2023-01-23T13:45:23.142", Convert.toLocalDateTime(Long.valueOf(1674499523142L)).toString());
+        assertEquals("2023-01-23T13:45:23.142", Convert.toLocalDateTime("1674499523142").toString());
+        assertEquals("2023-01-23T13:45:23",     Convert.toLocalDateTime("20230123134523000-0500").toString());
+        assertEquals("2023-01-23T13:45",        Convert.toLocalDateTime("2023-01-23 13:45").toString());
+
+        assertEquals("2023-01-23T13:45:23",     Convert.toLocalDateTime((Object)new Date(123, Calendar.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("2023-01-23T13:45:23.142", Convert.toLocalDateTime((Object)cal).toString());
+        assertEquals("2023-01-23T13:45:23",     Convert.toLocalDateTime((Object)Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("2023-01-23T00:00",        Convert.toLocalDateTime((Object)LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("1970-01-01T13:45:23",     Convert.toLocalDateTime((Object)LocalTime.of(13, 45, 23)).toString());
+        assertEquals("2023-01-23T13:45:23.142", Convert.toLocalDateTime((Object)Long.valueOf(1674499523142L)).toString());
+        assertEquals("2023-01-23T13:45:23.142", Convert.toLocalDateTime((Object)"1674499523142").toString());
+        assertEquals("2023-01-23T13:45:23",     Convert.toLocalDateTime((Object)"20230123134523000-0500").toString());
+        assertEquals("2023-01-23T13:45",        Convert.toLocalDateTime((Object)"2023-01-23 13:45").toString());
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test void testToLocalDate()
+    throws ConversionException {
+        var cal = new GregorianCalendar(RifeConfig.tools().getDefaultTimeZone());
+        cal.set(2023, Calendar.JANUARY, 23, 13, 45, 23);
+        cal.set(Calendar.MILLISECOND, 142);
+        assertEquals("2023-01-23", Convert.toLocalDate(new Date(123, Calendar.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("2023-01-23", Convert.toLocalDate(cal).toString());
+        assertEquals("2023-01-23", Convert.toLocalDate(Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("2023-01-23", Convert.toLocalDate(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
+        assertEquals("1970-01-01", Convert.toLocalDate(LocalTime.of(13, 45, 23)).toString());
+        assertEquals("2023-01-23", Convert.toLocalDate(Long.valueOf(1674499523142L)).toString());
+        assertEquals("2023-01-23", Convert.toLocalDate("1674499523142").toString());
+        assertEquals("2023-01-23", Convert.toLocalDate("20230123134523000-0500").toString());
+        assertEquals("2023-01-23", Convert.toLocalDate("2023-01-23 13:45").toString());
+
+        assertEquals("2023-01-23", Convert.toLocalDate((Object)new Date(123, Calendar.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("2023-01-23", Convert.toLocalDate((Object)cal).toString());
+        assertEquals("2023-01-23", Convert.toLocalDate((Object)Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("2023-01-23", Convert.toLocalDate((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
+        assertEquals("1970-01-01", Convert.toLocalDate((Object)LocalTime.of(13, 45, 23)).toString());
+        assertEquals("2023-01-23", Convert.toLocalDate((Object)Long.valueOf(1674499523142L)).toString());
+        assertEquals("2023-01-23", Convert.toLocalDate((Object)"1674499523142").toString());
+        assertEquals("2023-01-23", Convert.toLocalDate((Object)"20230123134523000-0500").toString());
+        assertEquals("2023-01-23", Convert.toLocalDate((Object)"2023-01-23 13:45").toString());
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test void testToLocalTime()
+    throws ConversionException {
+        var cal = new GregorianCalendar(RifeConfig.tools().getDefaultTimeZone());
+        cal.set(2023, Calendar.JANUARY, 23, 13, 45, 23);
+        cal.set(Calendar.MILLISECOND, 142);
+        assertEquals("13:45:23",     Convert.toLocalTime(new Date(123, Calendar.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("13:45:23.142", Convert.toLocalTime(cal).toString());
+        assertEquals("13:45:23",     Convert.toLocalTime(Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("00:00",        Convert.toLocalTime(LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("13:45:23.142", Convert.toLocalTime(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
+        assertEquals("13:45:23.142", Convert.toLocalTime(Long.valueOf(1674499523142L)).toString());
+        assertEquals("13:45:23.142", Convert.toLocalTime("1674499523142").toString());
+        assertEquals("13:45:23",     Convert.toLocalTime("134523000-0500").toString());
+        assertEquals("13:45",        Convert.toLocalTime("13:45").toString());
+
+        assertEquals("13:45:23",     Convert.toLocalTime((Object)new Date(123, Calendar.JANUARY, 23, 13, 45, 23)).toString());
+        assertEquals("13:45:23.142", Convert.toLocalTime((Object)cal).toString());
+        assertEquals("13:45:23",     Convert.toLocalTime((Object)Instant.parse("2023-01-23T18:45:23.00Z")).toString());
+        assertEquals("00:00",        Convert.toLocalTime((Object)LocalDate.of(2023, Month.JANUARY, 23)).toString());
+        assertEquals("13:45:23.142", Convert.toLocalTime((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
+        assertEquals("13:45:23.142", Convert.toLocalTime((Object)Long.valueOf(1674499523142L)).toString());
+        assertEquals("13:45:23.142", Convert.toLocalTime((Object)"1674499523142").toString());
+        assertEquals("13:45:23",     Convert.toLocalTime((Object)"134523000-0500").toString());
+        assertEquals("13:45",        Convert.toLocalTime((Object)"13:45").toString());
     }
 }

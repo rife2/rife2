@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCreateTableH2 extends TestCreateTable {
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testInstantiationH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         assertNotNull(query);
         try {
             query.getSql();
@@ -28,7 +28,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testIncompleteQueryH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         try {
             query.getSql();
             fail();
@@ -49,7 +49,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testClearH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("string", String.class);
         assertNotNull(query.getSql());
@@ -64,7 +64,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename1")
             .column("string", String.class)
             .column("stringbuffer", StringBuffer.class)
@@ -92,7 +92,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnPrecisionH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -120,43 +120,43 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnsBeanH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .columns(BeanImpl.class);
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByte SMALLINT, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString LONGVARCHAR, propertyStringbuffer LONGVARCHAR, propertyTime TIME, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByte SMALLINT, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInstant TIMESTAMP, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLocalDate DATE, propertyLocalDateTime TIMESTAMP, propertyLocalTime TIME, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString LONGVARCHAR, propertyStringBuffer LONGVARCHAR, propertyTime TIME, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
         execute(query);
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnsBeanIncludedH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
-            .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyByte SMALLINT, propertyFloat FLOAT, propertyStringbuffer LONGVARCHAR, propertyTime TIME)");
+            .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyByte SMALLINT, propertyFloat FLOAT, propertyStringBuffer LONGVARCHAR, propertyTime TIME)");
         execute(query);
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnsBeanExcludedH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
-            .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloatObject FLOAT, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString LONGVARCHAR, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
+            .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloatObject FLOAT, propertyInstant TIMESTAMP, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLocalDate DATE, propertyLocalDateTime TIMESTAMP, propertyLocalTime TIME, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString LONGVARCHAR, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
         execute(query);
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnsBeanFilteredH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
-            .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringbuffer"});
+            .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringBuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringBuffer"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyFloat FLOAT, propertyTime TIME)");
         execute(query);
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnsBeanPrecisionH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)
@@ -172,34 +172,38 @@ public class TestCreateTableH2 extends TestCreateTable {
             .precision("propertyDoubleObject", 14, 4)
             .precision("propertyFloat", 13, 2)
             .precision("propertyFloatObject", 12, 1)
+            .precision("propertyInstant", 7)
             .precision("propertyInt", 10)
             .precision("propertyIntegerObject", 8)
+            .precision("propertyLocalDateTime", 5)
+            .precision("propertyLocalDate", 32)
+            .precision("propertyLocalTime", 10)
             .precision("propertyLong", 12)
             .precision("propertyLongObject", 11)
             .precision("propertyShort", 9)
             .precision("propertyShortObject", 6)
             .precision("propertySqlDate", 8)
             .precision("propertyString", 255)
-            .precision("propertyStringbuffer", 100)
+            .precision("propertyStringBuffer", 100)
             .precision("propertyTime", 9)
             .precision("propertyTimestamp", 30, 2)
             .precision("propertyEnum", 12);
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(19,9), propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByte SMALLINT, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR(10), propertyCharacterObject CHAR(12), propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString VARCHAR(255), propertyStringbuffer VARCHAR(100), propertyTime TIME, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(19,9), propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByte SMALLINT, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR(10), propertyCharacterObject CHAR(12), propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInstant TIMESTAMP, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLocalDate DATE, propertyLocalDateTime TIMESTAMP, propertyLocalTime TIME, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString VARCHAR(255), propertyStringBuffer VARCHAR(100), propertyTime TIME, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
         execute(query);
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testColumnsBeanConstrainedH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .columns(BeanImplConstrained.class);
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(17,6), propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByte SMALLINT, propertyByteObject SMALLINT NOT NULL, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INTEGER DEFAULT 23, propertyIntegerObject INTEGER, propertyLongObject BIGINT, propertyShort SMALLINT, propertySqlDate DATE, propertyString VARCHAR(30) DEFAULT 'one' NOT NULL, propertyStringbuffer VARCHAR(20) NOT NULL, propertyTime TIME, propertyTimestamp TIMESTAMP, PRIMARY KEY (propertyString), UNIQUE (propertyStringbuffer, propertyByteObject), UNIQUE (propertyStringbuffer), CHECK (propertyByteObject != -1), CHECK (propertyInt != 0), CHECK (propertyLongObject IS NULL OR propertyLongObject IN (89,1221,66875,878)), CHECK (propertyString IS NULL OR propertyString IN ('one','tw''''o','someotherstring')), CHECK (propertyStringbuffer != ''), CHECK (propertyStringbuffer != 'some''blurp'))");
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(17,6), propertyBoolean BOOLEAN, propertyBooleanObject BOOLEAN, propertyByte SMALLINT, propertyByteObject SMALLINT NOT NULL, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInstant TIMESTAMP, propertyInt INTEGER DEFAULT 23, propertyIntegerObject INTEGER, propertyLocalDate DATE, propertyLocalDateTime TIMESTAMP, propertyLocalTime TIME, propertyLongObject BIGINT, propertyShort SMALLINT, propertySqlDate DATE, propertyString VARCHAR(30) DEFAULT 'one' NOT NULL, propertyStringBuffer VARCHAR(20) NOT NULL, propertyTime TIME, propertyTimestamp TIMESTAMP, PRIMARY KEY (propertyString), UNIQUE (propertyStringBuffer, propertyByteObject), UNIQUE (propertyStringBuffer), CHECK (propertyByteObject != -1), CHECK (propertyInt != 0), CHECK (propertyLongObject IS NULL OR propertyLongObject IN (89,1221,66875,878)), CHECK (propertyString IS NULL OR propertyString IN ('one','tw''''o','someotherstring')), CHECK (propertyStringBuffer != ''), CHECK (propertyStringBuffer != 'some''blurp'))");
         execute(query);
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testNullableH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn1", int.class, CreateTable.NULL)
             .column("stringColumn", String.class, 12, CreateTable.NOTNULL)
@@ -215,7 +219,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testDefaultH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -261,7 +265,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testDefaultFunctionH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename1")
             .column("dateobject", java.sql.Date.class)
             .defaultFunction("dateobject", "now()");
@@ -271,7 +275,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCustomAttributeH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename1")
             .column("intColumn", Integer.class)
             .customAttribute("intColumn", "CHECK (intColumn > 0)");
@@ -281,7 +285,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testTemporaryH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .temporary(true)
             .column("boolColumn", boolean.class);
@@ -291,7 +295,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testPrimaryKeySimpleH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("intColumn");
@@ -301,7 +305,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testPrimaryKeyMultipleH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -312,7 +316,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testPrimaryKeyNamedH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("constraint_name", "intColumn");
@@ -322,7 +326,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testPrimaryKeyMultipleNamedH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -333,7 +337,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testUniqueSimpleH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .unique("intColumn");
@@ -343,7 +347,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testUniqueMultipleH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -354,7 +358,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testUniqueNamedH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .unique("constraint_name", "intColumn");
@@ -364,7 +368,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testUniqueMultipleNamedH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -375,7 +379,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeySimpleH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn");
@@ -385,7 +389,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeyMultipleH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -396,7 +400,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeySimpleNamedH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("constraint_name", "foreigntable", "intColumn", "foreignIntColumn");
@@ -406,7 +410,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeyMultipleNamedH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -417,7 +421,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeyViolationsSingleH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, null);
@@ -491,7 +495,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeyViolationsH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, CreateTable.NOACTION);
@@ -501,7 +505,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testForeignKeyMultipleViolationsH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -512,7 +516,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCheckSimpleH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("intColumn > 0");
@@ -522,7 +526,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCheckNamedH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("NAME_CK", "intColumn > 0");
@@ -532,7 +536,7 @@ public class TestCreateTableH2 extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
     void testCloneH2() {
-        CreateTable query = new CreateTable(H2);
+        var query = new CreateTable(H2);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)
@@ -548,7 +552,7 @@ public class TestCreateTableH2 extends TestCreateTable {
             .precision("propertyShort", 9)
             .precision("propertySqlDate", 8)
             .precision("propertyString", 255)
-            .precision("propertyStringbuffer", 100)
+            .precision("propertyStringBuffer", 100)
             .precision("propertyTime", 9)
             .precision("propertyTimestamp", 30, 2)
             .nullable("propertyString", CreateTable.NULL)
@@ -561,7 +565,7 @@ public class TestCreateTableH2 extends TestCreateTable {
             .unique("constraint_name2", new String[]{"propertyLong", "propertyString"})
             .foreignKey("foreigntable", new String[]{"propertyInt", "foreignIntColumn", "propertyString", "foreignStringColumn"}, CreateTable.RESTRICT, CreateTable.SETDEFAULT)
             .check("NAME_CK", "propertyInt > 0");
-        CreateTable query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
         execute(query_clone);

@@ -6,8 +6,10 @@ package rife.engine;
 
 import rife.config.RifeConfig;
 import rife.engine.annotations.*;
+import rife.tools.Convert;
 import rife.tools.SerializationUtils;
 
+import java.time.Instant;
 import java.util.*;
 
 public class AnnotationParametersSite extends Site {
@@ -83,14 +85,25 @@ public class AnnotationParametersSite extends Site {
             paramsBean.setShortObject((short) 12);
 
             var cal1 = new GregorianCalendar(2005, Calendar.AUGUST, 20, 9, 44, 0);
+            var cal2 = new GregorianCalendar(2005, Calendar.AUGUST, 21, 11, 6, 14);
+            var cal3 = new GregorianCalendar(2006, Calendar.JULY, 17, 16, 5, 31);
             cal1.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+            cal2.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+            cal3.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
             paramsBean.setDate(cal1.getTime());
             paramsBean.setDateFormatted(cal1.getTime());
-            var cal2 = new GregorianCalendar(2005, Calendar.AUGUST, 21, 11, 6, 14);
-            cal2.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
-            var cal3 = new GregorianCalendar(2006, Calendar.JULY, 17, 16, 5, 31);
-            cal3.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
             paramsBean.setDatesFormatted(new Date[]{cal2.getTime(), cal3.getTime()});
+
+            var cal4 = new GregorianCalendar(2006, Calendar.AUGUST, 20, 8, 44, 0);
+            var cal5 = new GregorianCalendar(2007, Calendar.AUGUST, 21, 10, 6, 14);
+            var cal6 = new GregorianCalendar(2008, Calendar.JULY, 17, 15, 5, 31);
+            cal4.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+            cal5.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+            cal6.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+            paramsBean.setInstant(Convert.toInstant(cal4));
+            paramsBean.setInstantFormatted(Convert.toInstant(cal4));
+            paramsBean.setInstantsFormatted(new Instant[]{Convert.toInstant(cal5), Convert.toInstant(cal6)});
+            
             paramsBean.setSerializableParam(new BeanImpl.SerializableParam(13, "Thirteen"));
             paramsBean.setSerializableParams(new BeanImpl.SerializableParam[]{
                 new BeanImpl.SerializableParam(9, "Nine"),

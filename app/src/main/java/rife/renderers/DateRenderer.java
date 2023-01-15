@@ -8,7 +8,6 @@ import rife.config.RifeConfig;
 import rife.template.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class DateRenderer implements ValueRenderer {
     public String render(Template template, String valueId, String differentiator) {

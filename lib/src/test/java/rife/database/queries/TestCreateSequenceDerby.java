@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCreateSequenceDerby extends TestCreateSequence {
     @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testInstantiationDerby() {
-        CreateSequence query = new CreateSequence(DERBY);
+        var query = new CreateSequence(DERBY);
         assertNotNull(query);
         try {
             query.getSql();
@@ -26,7 +26,7 @@ public class TestCreateSequenceDerby extends TestCreateSequence {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testClearDerby() {
-        CreateSequence query = new CreateSequence(DERBY);
+        var query = new CreateSequence(DERBY);
         query.name("sequencename");
         try {
             query.getSql();
@@ -38,7 +38,7 @@ public class TestCreateSequenceDerby extends TestCreateSequence {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
     void testCreateDerby() {
-        CreateSequence query = new CreateSequence(DERBY);
+        var query = new CreateSequence(DERBY);
         query.name("sequencename");
         try {
             query.getSql();

@@ -8,13 +8,15 @@ import org.junit.jupiter.api.Test;
 import rife.config.RifeConfig;
 import rife.tools.exceptions.BeanUtilsException;
 import rife.tools.exceptions.SerializationUtilsErrorException;
+import rife.validation.ConstrainedProperty;
 
 import java.beans.PropertyDescriptor;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,11 +29,15 @@ public class TestBeanUtils {
         cal.set(Calendar.MILLISECOND, 153);
         bean.setPropertyString("thisisastring");
         bean.setPropertyStringBuffer(new StringBuffer("butthisisastringbuffer"));
-        bean.setPropertyDate(cal.getTime());
+        bean.setPropertyDate(Convert.toDate(cal));
         bean.setPropertyCalendar(cal);
-        bean.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
-        bean.setPropertyTime(new Time(cal.getTime().getTime()));
-        bean.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+        bean.setPropertySqlDate(Convert.toSqlDate(cal));
+        bean.setPropertyTime(Convert.toTime(cal));
+        bean.setPropertyTimestamp(Convert.toTimestamp(cal));
+        bean.setPropertyInstant(Convert.toInstant(cal));
+        bean.setPropertyLocalDateTime(Convert.toLocalDateTime(cal));
+        bean.setPropertyLocalDate(Convert.toLocalDate(cal));
+        bean.setPropertyLocalTime(Convert.toLocalTime(cal));
         bean.setPropertyChar('g');
         bean.setPropertyBoolean(false);
         bean.setPropertyByte((byte) 53);
@@ -196,6 +202,22 @@ public class TestBeanUtils {
         BeanUtils.setUppercasedBeanProperty("propertyDate", new String[]{"2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl2());
         assertEquals(bean.getPropertyDate(), RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45"));
 
+        bean = new BeanImpl2();
+        BeanUtils.setUppercasedBeanProperty("propertyInstant", new String[]{"2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl2());
+        assertEquals(bean.getPropertyInstant(), Convert.toInstant(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45")));
+
+        bean = new BeanImpl2();
+        BeanUtils.setUppercasedBeanProperty("propertyLocalDateTime", new String[]{"2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl2());
+        assertEquals(bean.getPropertyLocalDateTime(), Convert.toLocalDateTime(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45")));
+
+        bean = new BeanImpl2();
+        BeanUtils.setUppercasedBeanProperty("propertyLocalDate", new String[]{"2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl2());
+        assertEquals(bean.getPropertyLocalDate(), Convert.toLocalDate(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 00:00")));
+
+        bean = new BeanImpl2();
+        BeanUtils.setUppercasedBeanProperty("propertyLocalTime", new String[]{"10:45", "two"}, null, bean_properties, bean, new BeanImpl2());
+        assertEquals(bean.getPropertyLocalTime(), Convert.toLocalTime(RifeConfig.tools().getDefaultInputTimeFormat().parse("10:45")));
+
 
         bean = new BeanImpl2();
         BeanUtils.setUppercasedBeanProperty("propertyStringArray", new String[]{"one", "two"}, null, bean_properties, bean, new BeanImpl2());
@@ -280,6 +302,22 @@ public class TestBeanUtils {
         bean = new BeanImpl2();
         BeanUtils.setUppercasedBeanProperty("propertyDateArray", new String[]{"2006-08-04 10:45", "2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl2());
         assertArrayEquals(bean.getPropertyDateArray(), new Date[]{RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45"), RifeConfig.tools().getDefaultInputDateFormat().parse("2006-07-08 11:05")});
+
+        bean = new BeanImpl2();
+        BeanUtils.setUppercasedBeanProperty("propertyInstantArray", new String[]{"2006-08-04 10:45", "2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl2());
+        assertArrayEquals(bean.getPropertyInstantArray(), new Instant[]{Convert.toInstant(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45")), Convert.toInstant(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-07-08 11:05"))});
+
+        bean = new BeanImpl2();
+        BeanUtils.setUppercasedBeanProperty("propertyLocalDateTimeArray", new String[]{"2006-08-04 10:45", "2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl2());
+        assertArrayEquals(bean.getPropertyLocalDateTimeArray(), new LocalDateTime[]{Convert.toLocalDateTime(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45")), Convert.toLocalDateTime(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-07-08 11:05"))});
+
+        bean = new BeanImpl2();
+        BeanUtils.setUppercasedBeanProperty("propertyLocalDateArray", new String[]{"2006-08-04 10:45", "2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl2());
+        assertArrayEquals(bean.getPropertyLocalDateArray(), new LocalDate[]{Convert.toLocalDate(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 00:00")), Convert.toLocalDate(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-07-08 00:00"))});
+
+        bean = new BeanImpl2();
+        BeanUtils.setUppercasedBeanProperty("propertyLocalTimeArray", new String[]{"10:45", "11:05"}, null, bean_properties, bean, new BeanImpl2());
+        assertArrayEquals(bean.getPropertyLocalTimeArray(), new LocalTime[]{Convert.toLocalTime(RifeConfig.tools().getDefaultInputTimeFormat().parse("10:45")), Convert.toLocalTime(RifeConfig.tools().getDefaultInputTimeFormat().parse("11:05"))});
     }
 
     @Test
@@ -291,6 +329,22 @@ public class TestBeanUtils {
         bean = new BeanImpl3();
         BeanUtils.setUppercasedBeanProperty("propertyDate", new String[]{"custom format 2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl3());
         assertEquals(bean.getPropertyDate(), RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45"));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyInstant", new String[]{"custom format 2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyInstant(), Convert.toInstant(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45")));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyLocalDateTime", new String[]{"custom format 2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyLocalDateTime(), Convert.toLocalDateTime(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45")));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyLocalDate", new String[]{"custom format 2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyLocalDate(), Convert.toLocalDate(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 00:00")));
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyLocalTime", new String[]{"custom format 2006-08-04 10:45", "two"}, null, bean_properties, bean, new BeanImpl3());
+        assertEquals(bean.getPropertyLocalTime(), Convert.toLocalTime(RifeConfig.tools().getDefaultInputTimeFormat().parse("10:45")));
 
         bean = new BeanImpl3();
         BeanUtils.setUppercasedBeanProperty("propertyInt", new String[]{"$438", "two"}, null, bean_properties, bean, new BeanImpl3());
@@ -352,6 +406,22 @@ public class TestBeanUtils {
         bean = new BeanImpl3();
         BeanUtils.setUppercasedBeanProperty("propertyDateArray", new String[]{"custom format 2006-08-04 10:45", "custom format 2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl3());
         assertArrayEquals(bean.getPropertyDateArray(), new Date[]{RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45"), RifeConfig.tools().getDefaultInputDateFormat().parse("2006-07-08 11:05")});
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyInstantArray", new String[]{"custom format 2006-08-04 10:45", "custom format 2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl3());
+        assertArrayEquals(bean.getPropertyInstantArray(), new Instant[]{Convert.toInstant(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45")), Convert.toInstant(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-07-08 11:05"))});
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyLocalDateTimeArray", new String[]{"custom format 2006-08-04 10:45", "custom format 2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl3());
+        assertArrayEquals(bean.getPropertyLocalDateTimeArray(), new LocalDateTime[]{Convert.toLocalDateTime(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 10:45")), Convert.toLocalDateTime(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-07-08 11:05"))});
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyLocalDateArray", new String[]{"custom format 2006-08-04 10:45", "custom format 2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl3());
+        assertArrayEquals(bean.getPropertyLocalDateArray(), new LocalDate[]{Convert.toLocalDate(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-08-04 00:00")), Convert.toLocalDate(RifeConfig.tools().getDefaultInputDateFormat().parse("2006-07-08 00:00"))});
+
+        bean = new BeanImpl3();
+        BeanUtils.setUppercasedBeanProperty("propertyLocalTimeArray", new String[]{"custom format 2006-08-04 10:45", "custom format 2006-07-08 11:05"}, null, bean_properties, bean, new BeanImpl3());
+        assertArrayEquals(bean.getPropertyLocalTimeArray(), new LocalTime[]{Convert.toLocalTime(RifeConfig.tools().getDefaultInputTimeFormat().parse("10:45")), Convert.toLocalTime(RifeConfig.tools().getDefaultInputTimeFormat().parse("11:05"))});
 
         bean = new BeanImpl3();
         BeanUtils.setUppercasedBeanProperty("propertyIntArray", new String[]{"$438", "$98455", "$711"}, null, bean_properties, bean, new BeanImpl3());
@@ -434,7 +504,7 @@ public class TestBeanUtils {
     void testPropertyNames() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class, null, null, null);
-            assertEquals(property_names.size(), 16);
+            assertEquals(property_names.size(), 20);
             assertTrue(property_names.contains("propertyString"));
             assertTrue(property_names.contains("propertyStringBuffer"));
             assertTrue(property_names.contains("propertyDate"));
@@ -442,6 +512,10 @@ public class TestBeanUtils {
             assertTrue(property_names.contains("propertySqlDate"));
             assertTrue(property_names.contains("propertyTime"));
             assertTrue(property_names.contains("propertyTimestamp"));
+            assertTrue(property_names.contains("propertyInstant"));
+            assertTrue(property_names.contains("propertyLocalDateTime"));
+            assertTrue(property_names.contains("propertyLocalDate"));
+            assertTrue(property_names.contains("propertyLocalTime"));
             assertTrue(property_names.contains("propertyChar"));
             assertTrue(property_names.contains("propertyBoolean"));
             assertTrue(property_names.contains("propertyByte"));
@@ -460,7 +534,7 @@ public class TestBeanUtils {
     void testPropertyNamesGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class, null, null, null);
-            assertEquals(property_names.size(), 17);
+            assertEquals(property_names.size(), 21);
             assertTrue(property_names.contains("propertyReadonly"));
             assertTrue(property_names.contains("propertyString"));
             assertTrue(property_names.contains("propertyStringBuffer"));
@@ -469,6 +543,10 @@ public class TestBeanUtils {
             assertTrue(property_names.contains("propertySqlDate"));
             assertTrue(property_names.contains("propertyTime"));
             assertTrue(property_names.contains("propertyTimestamp"));
+            assertTrue(property_names.contains("propertyInstant"));
+            assertTrue(property_names.contains("propertyLocalDateTime"));
+            assertTrue(property_names.contains("propertyLocalDate"));
+            assertTrue(property_names.contains("propertyLocalTime"));
             assertTrue(property_names.contains("propertyChar"));
             assertTrue(property_names.contains("propertyBoolean"));
             assertTrue(property_names.contains("propertyByte"));
@@ -487,8 +565,8 @@ public class TestBeanUtils {
     void testPropertyNamesSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class, null, null, null);
-            assertEquals(property_names.size(), 17);
-            assertTrue(property_names.contains("propertyWriteonly"));
+            assertEquals(property_names.size(), 21);
+            assertTrue(property_names.contains("propertyWriteOnly"));
             assertTrue(property_names.contains("propertyString"));
             assertTrue(property_names.contains("propertyStringBuffer"));
             assertTrue(property_names.contains("propertyDate"));
@@ -496,6 +574,10 @@ public class TestBeanUtils {
             assertTrue(property_names.contains("propertySqlDate"));
             assertTrue(property_names.contains("propertyTime"));
             assertTrue(property_names.contains("propertyTimestamp"));
+            assertTrue(property_names.contains("propertyInstant"));
+            assertTrue(property_names.contains("propertyLocalDateTime"));
+            assertTrue(property_names.contains("propertyLocalDate"));
+            assertTrue(property_names.contains("propertyLocalTime"));
             assertTrue(property_names.contains("propertyChar"));
             assertTrue(property_names.contains("propertyBoolean"));
             assertTrue(property_names.contains("propertyByte"));
@@ -514,7 +596,7 @@ public class TestBeanUtils {
     void testPropertyNamesPrefix() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class, null, null, "PREFIX:");
-            assertEquals(property_names.size(), 16);
+            assertEquals(property_names.size(), 20);
             assertTrue(property_names.contains("PREFIX:propertyString"));
             assertTrue(property_names.contains("PREFIX:propertyStringBuffer"));
             assertTrue(property_names.contains("PREFIX:propertyDate"));
@@ -522,6 +604,10 @@ public class TestBeanUtils {
             assertTrue(property_names.contains("PREFIX:propertySqlDate"));
             assertTrue(property_names.contains("PREFIX:propertyTime"));
             assertTrue(property_names.contains("PREFIX:propertyTimestamp"));
+            assertTrue(property_names.contains("PREFIX:propertyInstant"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalDate"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalTime"));
             assertTrue(property_names.contains("PREFIX:propertyChar"));
             assertTrue(property_names.contains("PREFIX:propertyBoolean"));
             assertTrue(property_names.contains("PREFIX:propertyByte"));
@@ -540,7 +626,7 @@ public class TestBeanUtils {
     void testPropertyNamesPrefixGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class, null, null, "PREFIX:");
-            assertEquals(property_names.size(), 17);
+            assertEquals(property_names.size(), 21);
             assertTrue(property_names.contains("PREFIX:propertyReadonly"));
             assertTrue(property_names.contains("PREFIX:propertyString"));
             assertTrue(property_names.contains("PREFIX:propertyStringBuffer"));
@@ -549,6 +635,10 @@ public class TestBeanUtils {
             assertTrue(property_names.contains("PREFIX:propertySqlDate"));
             assertTrue(property_names.contains("PREFIX:propertyTime"));
             assertTrue(property_names.contains("PREFIX:propertyTimestamp"));
+            assertTrue(property_names.contains("PREFIX:propertyInstant"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalDate"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalTime"));
             assertTrue(property_names.contains("PREFIX:propertyChar"));
             assertTrue(property_names.contains("PREFIX:propertyBoolean"));
             assertTrue(property_names.contains("PREFIX:propertyByte"));
@@ -567,8 +657,8 @@ public class TestBeanUtils {
     void testPropertyNamesPrefixSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class, null, null, "PREFIX:");
-            assertEquals(property_names.size(), 17);
-            assertTrue(property_names.contains("PREFIX:propertyWriteonly"));
+            assertEquals(property_names.size(), 21);
+            assertTrue(property_names.contains("PREFIX:propertyWriteOnly"));
             assertTrue(property_names.contains("PREFIX:propertyString"));
             assertTrue(property_names.contains("PREFIX:propertyStringBuffer"));
             assertTrue(property_names.contains("PREFIX:propertyDate"));
@@ -576,6 +666,10 @@ public class TestBeanUtils {
             assertTrue(property_names.contains("PREFIX:propertySqlDate"));
             assertTrue(property_names.contains("PREFIX:propertyTime"));
             assertTrue(property_names.contains("PREFIX:propertyTimestamp"));
+            assertTrue(property_names.contains("PREFIX:propertyInstant"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalDate"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalTime"));
             assertTrue(property_names.contains("PREFIX:propertyChar"));
             assertTrue(property_names.contains("PREFIX:propertyBoolean"));
             assertTrue(property_names.contains("PREFIX:propertyByte"));
@@ -594,15 +688,18 @@ public class TestBeanUtils {
     void testPropertyNamesIncluded() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
                 null,
                 null);
-            assertEquals(property_names.size(), 7);
+            assertEquals(property_names.size(), 9);
             assertTrue(property_names.contains("propertyStringBuffer"));
             assertTrue(property_names.contains("propertyCalendar"));
             assertTrue(property_names.contains("propertySqlDate"));
+            assertTrue(property_names.contains("propertyInstant"));
+            assertTrue(property_names.contains("propertyLocalDate"));
             assertTrue(property_names.contains("propertyChar"));
             assertTrue(property_names.contains("propertyByte"));
             assertTrue(property_names.contains("propertyDouble"));
@@ -616,16 +713,19 @@ public class TestBeanUtils {
     void testPropertyNamesIncludedGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
                 null,
                 null);
-            assertEquals(property_names.size(), 8);
+            assertEquals(property_names.size(), 10);
             assertTrue(property_names.contains("propertyReadonly"));
             assertTrue(property_names.contains("propertyStringBuffer"));
             assertTrue(property_names.contains("propertyCalendar"));
             assertTrue(property_names.contains("propertySqlDate"));
+            assertTrue(property_names.contains("propertyInstant"));
+            assertTrue(property_names.contains("propertyLocalDate"));
             assertTrue(property_names.contains("propertyChar"));
             assertTrue(property_names.contains("propertyByte"));
             assertTrue(property_names.contains("propertyDouble"));
@@ -639,16 +739,19 @@ public class TestBeanUtils {
     void testPropertyNamesIncludedSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
                 null,
                 null);
-            assertEquals(property_names.size(), 8);
-            assertTrue(property_names.contains("propertyWriteonly"));
+            assertEquals(property_names.size(), 10);
+            assertTrue(property_names.contains("propertyWriteOnly"));
             assertTrue(property_names.contains("propertyStringBuffer"));
             assertTrue(property_names.contains("propertyCalendar"));
             assertTrue(property_names.contains("propertySqlDate"));
+            assertTrue(property_names.contains("propertyInstant"));
+            assertTrue(property_names.contains("propertyLocalDate"));
             assertTrue(property_names.contains("propertyChar"));
             assertTrue(property_names.contains("propertyByte"));
             assertTrue(property_names.contains("propertyDouble"));
@@ -662,15 +765,18 @@ public class TestBeanUtils {
     void testPropertyNamesIncludedPrefix() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
                 null,
                 "PREFIX:");
-            assertEquals(property_names.size(), 7);
+            assertEquals(property_names.size(), 9);
             assertTrue(property_names.contains("PREFIX:propertyStringBuffer"));
             assertTrue(property_names.contains("PREFIX:propertyCalendar"));
             assertTrue(property_names.contains("PREFIX:propertySqlDate"));
+            assertTrue(property_names.contains("PREFIX:propertyInstant"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalDate"));
             assertTrue(property_names.contains("PREFIX:propertyChar"));
             assertTrue(property_names.contains("PREFIX:propertyByte"));
             assertTrue(property_names.contains("PREFIX:propertyDouble"));
@@ -684,16 +790,19 @@ public class TestBeanUtils {
     void testPropertyNamesIncludedPrefixGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
                 null,
                 "PREFIX:");
-            assertEquals(property_names.size(), 8);
+            assertEquals(property_names.size(), 10);
             assertTrue(property_names.contains("PREFIX:propertyReadonly"));
             assertTrue(property_names.contains("PREFIX:propertyStringBuffer"));
             assertTrue(property_names.contains("PREFIX:propertyCalendar"));
             assertTrue(property_names.contains("PREFIX:propertySqlDate"));
+            assertTrue(property_names.contains("PREFIX:propertyInstant"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalDate"));
             assertTrue(property_names.contains("PREFIX:propertyChar"));
             assertTrue(property_names.contains("PREFIX:propertyByte"));
             assertTrue(property_names.contains("PREFIX:propertyDouble"));
@@ -707,16 +816,19 @@ public class TestBeanUtils {
     void testPropertyNamesIncludedPrefixSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
                 null,
                 "PREFIX:");
-            assertEquals(property_names.size(), 8);
-            assertTrue(property_names.contains("PREFIX:propertyWriteonly"));
+            assertEquals(property_names.size(), 10);
+            assertTrue(property_names.contains("PREFIX:propertyWriteOnly"));
             assertTrue(property_names.contains("PREFIX:propertyStringBuffer"));
             assertTrue(property_names.contains("PREFIX:propertyCalendar"));
             assertTrue(property_names.contains("PREFIX:propertySqlDate"));
+            assertTrue(property_names.contains("PREFIX:propertyInstant"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalDate"));
             assertTrue(property_names.contains("PREFIX:propertyChar"));
             assertTrue(property_names.contains("PREFIX:propertyByte"));
             assertTrue(property_names.contains("PREFIX:propertyDouble"));
@@ -731,14 +843,17 @@ public class TestBeanUtils {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class,
                 null,
-                new String[]{"propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                new String[]{"propertyStringBuffer", "propertyCalendar", "propertySqlDate", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
                 null);
-            assertEquals(property_names.size(), 9);
+            assertEquals(property_names.size(), 12);
             assertTrue(property_names.contains("propertyString"));
             assertTrue(property_names.contains("propertyDate"));
             assertTrue(property_names.contains("propertyTime"));
             assertTrue(property_names.contains("propertyTimestamp"));
+            assertTrue(property_names.contains("propertyInstant"));
+            assertTrue(property_names.contains("propertyLocalDateTime"));
+            assertTrue(property_names.contains("propertyLocalTime"));
             assertTrue(property_names.contains("propertyBoolean"));
             assertTrue(property_names.contains("propertyFloat"));
             assertTrue(property_names.contains("propertyInt"));
@@ -754,15 +869,18 @@ public class TestBeanUtils {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 null,
-                new String[]{"propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                new String[]{"propertyStringBuffer", "propertyCalendar", "propertySqlDate", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
                 null);
-            assertEquals(property_names.size(), 10);
+            assertEquals(property_names.size(), 13);
             assertTrue(property_names.contains("propertyReadonly"));
             assertTrue(property_names.contains("propertyString"));
             assertTrue(property_names.contains("propertyDate"));
             assertTrue(property_names.contains("propertyTime"));
             assertTrue(property_names.contains("propertyTimestamp"));
+            assertTrue(property_names.contains("propertyInstant"));
+            assertTrue(property_names.contains("propertyLocalDateTime"));
+            assertTrue(property_names.contains("propertyLocalTime"));
             assertTrue(property_names.contains("propertyBoolean"));
             assertTrue(property_names.contains("propertyFloat"));
             assertTrue(property_names.contains("propertyInt"));
@@ -778,15 +896,18 @@ public class TestBeanUtils {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 null,
-                new String[]{"propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                new String[]{"propertyStringBuffer", "propertyCalendar", "propertySqlDate", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
                 null);
-            assertEquals(property_names.size(), 10);
-            assertTrue(property_names.contains("propertyWriteonly"));
+            assertEquals(property_names.size(), 13);
+            assertTrue(property_names.contains("propertyWriteOnly"));
             assertTrue(property_names.contains("propertyString"));
             assertTrue(property_names.contains("propertyDate"));
             assertTrue(property_names.contains("propertyTime"));
             assertTrue(property_names.contains("propertyTimestamp"));
+            assertTrue(property_names.contains("propertyInstant"));
+            assertTrue(property_names.contains("propertyLocalDateTime"));
+            assertTrue(property_names.contains("propertyLocalTime"));
             assertTrue(property_names.contains("propertyBoolean"));
             assertTrue(property_names.contains("propertyFloat"));
             assertTrue(property_names.contains("propertyInt"));
@@ -802,14 +923,17 @@ public class TestBeanUtils {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class,
                 null,
-                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
                 "PREFIX:");
-            assertEquals(property_names.size(), 9);
+            assertEquals(property_names.size(), 12);
             assertTrue(property_names.contains("PREFIX:propertyString"));
             assertTrue(property_names.contains("PREFIX:propertyDate"));
             assertTrue(property_names.contains("PREFIX:propertyTime"));
             assertTrue(property_names.contains("PREFIX:propertyTimestamp"));
+            assertTrue(property_names.contains("PREFIX:propertyInstant"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalTime"));
             assertTrue(property_names.contains("PREFIX:propertyBoolean"));
             assertTrue(property_names.contains("PREFIX:propertyFloat"));
             assertTrue(property_names.contains("PREFIX:propertyInt"));
@@ -825,15 +949,18 @@ public class TestBeanUtils {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 null,
-                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
                 "PREFIX:");
-            assertEquals(property_names.size(), 10);
+            assertEquals(property_names.size(), 13);
             assertTrue(property_names.contains("PREFIX:propertyReadonly"));
             assertTrue(property_names.contains("PREFIX:propertyString"));
             assertTrue(property_names.contains("PREFIX:propertyDate"));
             assertTrue(property_names.contains("PREFIX:propertyTime"));
             assertTrue(property_names.contains("PREFIX:propertyTimestamp"));
+            assertTrue(property_names.contains("PREFIX:propertyInstant"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalTime"));
             assertTrue(property_names.contains("PREFIX:propertyBoolean"));
             assertTrue(property_names.contains("PREFIX:propertyFloat"));
             assertTrue(property_names.contains("PREFIX:propertyInt"));
@@ -849,15 +976,18 @@ public class TestBeanUtils {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 null,
-                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
                 "PREFIX:");
-            assertEquals(property_names.size(), 10);
-            assertTrue(property_names.contains("PREFIX:propertyWriteonly"));
+            assertEquals(property_names.size(), 13);
+            assertTrue(property_names.contains("PREFIX:propertyWriteOnly"));
             assertTrue(property_names.contains("PREFIX:propertyString"));
             assertTrue(property_names.contains("PREFIX:propertyDate"));
             assertTrue(property_names.contains("PREFIX:propertyTime"));
             assertTrue(property_names.contains("PREFIX:propertyTimestamp"));
+            assertTrue(property_names.contains("PREFIX:propertyInstant"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_names.contains("PREFIX:propertyLocalTime"));
             assertTrue(property_names.contains("PREFIX:propertyBoolean"));
             assertTrue(property_names.contains("PREFIX:propertyFloat"));
             assertTrue(property_names.contains("PREFIX:propertyInt"));
@@ -872,14 +1002,16 @@ public class TestBeanUtils {
     void testPropertyNamesFiltered() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
-                new String[]{"propertySqlDate", "propertyByte", "propertyShort"},
+                new String[]{"propertySqlDate", "propertyLocalDate", "propertyByte", "propertyShort"},
                 null);
-            assertEquals(property_names.size(), 4);
+            assertEquals(property_names.size(), 5);
             assertTrue(property_names.contains("propertyStringBuffer"));
             assertTrue(property_names.contains("propertyCalendar"));
+            assertTrue(property_names.contains("propertyInstant"));
             assertTrue(property_names.contains("propertyChar"));
             assertTrue(property_names.contains("propertyDouble"));
         } catch (BeanUtilsException e) {
@@ -891,15 +1023,17 @@ public class TestBeanUtils {
     void testPropertyNamesFilteredGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
-                new String[]{"propertySqlDate", "propertyByte", "propertyShort"},
+                new String[]{"propertySqlDate", "propertyLocalDate", "propertyByte", "propertyShort"},
                 null);
-            assertEquals(property_names.size(), 5);
+            assertEquals(property_names.size(), 6);
             assertTrue(property_names.contains("propertyReadonly"));
             assertTrue(property_names.contains("propertyStringBuffer"));
             assertTrue(property_names.contains("propertyCalendar"));
+            assertTrue(property_names.contains("propertyInstant"));
             assertTrue(property_names.contains("propertyChar"));
             assertTrue(property_names.contains("propertyDouble"));
         } catch (BeanUtilsException e) {
@@ -911,15 +1045,17 @@ public class TestBeanUtils {
     void testPropertyNamesFilteredSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
-                new String[]{"propertySqlDate", "propertyByte", "propertyShort"},
+                new String[]{"propertySqlDate", "propertyLocalDate", "propertyByte", "propertyShort"},
                 null);
-            assertEquals(property_names.size(), 5);
-            assertTrue(property_names.contains("propertyWriteonly"));
+            assertEquals(property_names.size(), 6);
+            assertTrue(property_names.contains("propertyWriteOnly"));
             assertTrue(property_names.contains("propertyStringBuffer"));
             assertTrue(property_names.contains("propertyCalendar"));
+            assertTrue(property_names.contains("propertyInstant"));
             assertTrue(property_names.contains("propertyChar"));
             assertTrue(property_names.contains("propertyDouble"));
         } catch (BeanUtilsException e) {
@@ -931,14 +1067,16 @@ public class TestBeanUtils {
     void testPropertyNamesFilteredPrefix() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
-                new String[]{"PREFIX:propertySqlDate", "PREFIX:propertyByte", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyByte", "PREFIX:propertyShort"},
                 "PREFIX:");
-            assertEquals(property_names.size(), 4);
+            assertEquals(property_names.size(), 5);
             assertTrue(property_names.contains("PREFIX:propertyStringBuffer"));
             assertTrue(property_names.contains("PREFIX:propertyCalendar"));
+            assertTrue(property_names.contains("PREFIX:propertyInstant"));
             assertTrue(property_names.contains("PREFIX:propertyChar"));
             assertTrue(property_names.contains("PREFIX:propertyDouble"));
         } catch (BeanUtilsException e) {
@@ -950,15 +1088,17 @@ public class TestBeanUtils {
     void testPropertyNamesFilteredPrefixGetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.GETTERS, BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
-                new String[]{"PREFIX:propertySqlDate", "PREFIX:propertyByte", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyByte", "PREFIX:propertyShort"},
                 "PREFIX:");
-            assertEquals(property_names.size(), 5);
+            assertEquals(property_names.size(), 6);
             assertTrue(property_names.contains("PREFIX:propertyReadonly"));
             assertTrue(property_names.contains("PREFIX:propertyStringBuffer"));
             assertTrue(property_names.contains("PREFIX:propertyCalendar"));
+            assertTrue(property_names.contains("PREFIX:propertyInstant"));
             assertTrue(property_names.contains("PREFIX:propertyChar"));
             assertTrue(property_names.contains("PREFIX:propertyDouble"));
         } catch (BeanUtilsException e) {
@@ -970,15 +1110,17 @@ public class TestBeanUtils {
     void testPropertyNamesFilteredPrefixSetters() {
         try {
             Set<String> property_names = BeanUtils.getPropertyNames(BeanUtils.Accessors.SETTERS, BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
-                new String[]{"PREFIX:propertySqlDate", "PREFIX:propertyByte", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyByte", "PREFIX:propertyShort"},
                 "PREFIX:");
-            assertEquals(property_names.size(), 5);
-            assertTrue(property_names.contains("PREFIX:propertyWriteonly"));
+            assertEquals(property_names.size(), 6);
+            assertTrue(property_names.contains("PREFIX:propertyWriteOnly"));
             assertTrue(property_names.contains("PREFIX:propertyStringBuffer"));
             assertTrue(property_names.contains("PREFIX:propertyCalendar"));
+            assertTrue(property_names.contains("PREFIX:propertyInstant"));
             assertTrue(property_names.contains("PREFIX:propertyChar"));
             assertTrue(property_names.contains("PREFIX:propertyDouble"));
         } catch (BeanUtilsException e) {
@@ -999,7 +1141,7 @@ public class TestBeanUtils {
     void testCountProperties() {
         try {
             int count = BeanUtils.countProperties(BeanImpl.class, null, null, null);
-            assertEquals(count, 16);
+            assertEquals(count, 20);
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -1009,7 +1151,7 @@ public class TestBeanUtils {
     void testCountPropertiesGetters() {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class, null, null, null);
-            assertEquals(count, 17);
+            assertEquals(count, 21);
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -1019,7 +1161,7 @@ public class TestBeanUtils {
     void testCountPropertiesSetters() {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class, null, null, null);
-            assertEquals(count, 17);
+            assertEquals(count, 21);
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -1029,7 +1171,7 @@ public class TestBeanUtils {
     void testCountPropertiesPrefix() {
         try {
             int count = BeanUtils.countProperties(BeanImpl.class, null, null, "PREFIX:");
-            assertEquals(count, 16);
+            assertEquals(count, 20);
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -1039,7 +1181,7 @@ public class TestBeanUtils {
     void testCountPropertiesPrefixGetters() {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class, null, null, "PREFIX:");
-            assertEquals(count, 17);
+            assertEquals(count, 21);
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -1049,7 +1191,7 @@ public class TestBeanUtils {
     void testCountPropertiesPrefixSetters() {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class, null, null, "PREFIX:");
-            assertEquals(count, 17);
+            assertEquals(count, 21);
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -1058,9 +1200,10 @@ public class TestBeanUtils {
     @Test
     void testCountPropertiesIncluded() {
         try {
-            assertEquals(7, BeanUtils.countProperties(BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+            assertEquals(9, BeanUtils.countProperties(BeanImpl.class,
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
                 null,
                 null));
@@ -1072,9 +1215,10 @@ public class TestBeanUtils {
     @Test
     void testCountPropertiesIncludedGetters() {
         try {
-            assertEquals(8, BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+            assertEquals(10, BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
                 null,
                 null));
@@ -1086,9 +1230,10 @@ public class TestBeanUtils {
     @Test
     void testCountPropertiesIncludedSetters() {
         try {
-            assertEquals(8, BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+            assertEquals(10, BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
                 null,
                 null));
@@ -1100,9 +1245,10 @@ public class TestBeanUtils {
     @Test
     void testCountPropertiesIncludedPrefix() {
         try {
-            assertEquals(7, BeanUtils.countProperties(BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+            assertEquals(9, BeanUtils.countProperties(BeanImpl.class,
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
                 null,
                 "PREFIX:"));
@@ -1114,9 +1260,10 @@ public class TestBeanUtils {
     @Test
     void testCountPropertiesIncludedPrefixGetters() {
         try {
-            assertEquals(8, BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+            assertEquals(10, BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
                 null,
                 "PREFIX:"));
@@ -1128,9 +1275,10 @@ public class TestBeanUtils {
     @Test
     void testCountPropertiesIncludedPrefixSetters() {
         try {
-            assertEquals(8, BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+            assertEquals(10, BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
                 null,
                 "PREFIX:"));
@@ -1144,10 +1292,10 @@ public class TestBeanUtils {
         try {
             int count = BeanUtils.countProperties(BeanImpl.class,
                 null,
-                new String[]{"propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                new String[]{"propertyStringBuffer", "propertyCalendar", "propertySqlDate", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
                 null);
-            assertEquals(count, 9);
+            assertEquals(count, 12);
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -1158,10 +1306,10 @@ public class TestBeanUtils {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 null,
-                new String[]{"propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                new String[]{"propertyStringBuffer", "propertyCalendar", "propertySqlDate", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
                 null);
-            assertEquals(count, 10);
+            assertEquals(count, 13);
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -1172,10 +1320,10 @@ public class TestBeanUtils {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 null,
-                new String[]{"propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                new String[]{"propertyStringBuffer", "propertyCalendar", "propertySqlDate", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
                 null);
-            assertEquals(count, 10);
+            assertEquals(count, 13);
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -1186,10 +1334,10 @@ public class TestBeanUtils {
         try {
             int count = BeanUtils.countProperties(BeanImpl.class,
                 null,
-                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
                 "PREFIX:");
-            assertEquals(count, 9);
+            assertEquals(count, 12);
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -1200,10 +1348,10 @@ public class TestBeanUtils {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 null,
-                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
                 "PREFIX:");
-            assertEquals(count, 10);
+            assertEquals(count, 13);
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -1214,10 +1362,10 @@ public class TestBeanUtils {
         try {
             int count = BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 null,
-                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
                 "PREFIX:");
-            assertEquals(count, 10);
+            assertEquals(count, 13);
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -1226,11 +1374,12 @@ public class TestBeanUtils {
     @Test
     void testCountPropertiesFiltered() {
         try {
-            assertEquals(3, BeanUtils.countProperties(BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+            assertEquals(4, BeanUtils.countProperties(BeanImpl.class,
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
-                new String[]{"propertyStringBuffer", "propertyChar", "propertyByte", "propertyShort"},
+                new String[]{"propertyStringBuffer", "propertyLocalDate", "propertyChar", "propertyByte", "propertyShort"},
                 null));
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -1240,11 +1389,12 @@ public class TestBeanUtils {
     @Test
     void testCountPropertiesFilteredGetters() {
         try {
-            assertEquals(4, BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+            assertEquals(5, BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
-                new String[]{"propertyStringBuffer", "propertyChar", "propertyByte", "propertyShort"},
+                new String[]{"propertyStringBuffer", "propertyLocalDate", "propertyChar", "propertyByte", "propertyShort"},
                 null));
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -1254,11 +1404,12 @@ public class TestBeanUtils {
     @Test
     void testCountPropertiesFilteredSetters() {
         try {
-            assertEquals(4, BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+            assertEquals(5, BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyStringBuffer", "propertyCalendar", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyChar", "propertyByte", "propertyDouble", "propertyShort"},
-                new String[]{"propertyStringBuffer", "propertyChar", "propertyByte", "propertyShort"},
+                new String[]{"propertyStringBuffer", "propertyLocalDate", "propertyChar", "propertyByte", "propertyShort"},
                 null));
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -1268,11 +1419,12 @@ public class TestBeanUtils {
     @Test
     void testCountPropertiesFilteredPrefix() {
         try {
-            assertEquals(3, BeanUtils.countProperties(BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+            assertEquals(4, BeanUtils.countProperties(BeanImpl.class,
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
-                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyLocalDate", "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyShort"},
                 "PREFIX:"));
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -1282,11 +1434,12 @@ public class TestBeanUtils {
     @Test
     void testCountPropertiesFilteredPrefixGetters() {
         try {
-            assertEquals(4, BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+            assertEquals(5, BeanUtils.countProperties(BeanUtils.Accessors.GETTERS, BeanImpl.class,
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
-                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyLocalDate", "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyShort"},
                 "PREFIX:"));
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -1296,11 +1449,12 @@ public class TestBeanUtils {
     @Test
     void testCountPropertiesFilteredPrefixSetters() {
         try {
-            assertEquals(4, BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+            assertEquals(5, BeanUtils.countProperties(BeanUtils.Accessors.SETTERS, BeanImpl.class,
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyStringBuffer", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyDouble", "PREFIX:propertyShort"},
-                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertyStringBuffer", "PREFIX:propertyLocalDate", "PREFIX:propertyChar", "PREFIX:propertyByte", "PREFIX:propertyShort"},
                 "PREFIX:"));
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -1347,6 +1501,10 @@ public class TestBeanUtils {
             assertSame(BeanUtils.getPropertyType(BeanImpl.class, "propertySqlDate"), java.sql.Date.class);
             assertSame(BeanUtils.getPropertyType(BeanImpl.class, "propertyTime"), java.sql.Time.class);
             assertSame(BeanUtils.getPropertyType(BeanImpl.class, "propertyTimestamp"), java.sql.Timestamp.class);
+            assertSame(BeanUtils.getPropertyType(BeanImpl.class, "propertyInstant"), Instant.class);
+            assertSame(BeanUtils.getPropertyType(BeanImpl.class, "propertyLocalDateTime"), LocalDateTime.class);
+            assertSame(BeanUtils.getPropertyType(BeanImpl.class, "propertyLocalDate"), LocalDate.class);
+            assertSame(BeanUtils.getPropertyType(BeanImpl.class, "propertyLocalTime"), LocalTime.class);
             assertSame(BeanUtils.getPropertyType(BeanImpl.class, "propertyChar"), char.class);
             assertSame(BeanUtils.getPropertyType(BeanImpl.class, "propertyBoolean"), boolean.class);
             assertSame(BeanUtils.getPropertyType(BeanImpl.class, "propertyByte"), byte.class);
@@ -1381,7 +1539,7 @@ public class TestBeanUtils {
     void testPropertyTypes() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class, null, null, null);
-            assertEquals(property_types.size(), 16);
+            assertEquals(property_types.size(), 20);
             assertTrue(property_types.containsKey("propertyString"));
             assertTrue(property_types.containsKey("propertyStringBuffer"));
             assertTrue(property_types.containsKey("propertyDate"));
@@ -1389,6 +1547,10 @@ public class TestBeanUtils {
             assertTrue(property_types.containsKey("propertySqlDate"));
             assertTrue(property_types.containsKey("propertyTime"));
             assertTrue(property_types.containsKey("propertyTimestamp"));
+            assertTrue(property_types.containsKey("propertyInstant"));
+            assertTrue(property_types.containsKey("propertyLocalDateTime"));
+            assertTrue(property_types.containsKey("propertyLocalDate"));
+            assertTrue(property_types.containsKey("propertyLocalTime"));
             assertTrue(property_types.containsKey("propertyChar"));
             assertTrue(property_types.containsKey("propertyBoolean"));
             assertTrue(property_types.containsKey("propertyByte"));
@@ -1405,6 +1567,10 @@ public class TestBeanUtils {
             assertSame(property_types.get("propertySqlDate"), java.sql.Date.class);
             assertSame(property_types.get("propertyTime"), java.sql.Time.class);
             assertSame(property_types.get("propertyTimestamp"), java.sql.Timestamp.class);
+            assertSame(property_types.get("propertyInstant"), Instant.class);
+            assertSame(property_types.get("propertyLocalDateTime"), LocalDateTime.class);
+            assertSame(property_types.get("propertyLocalDate"), LocalDate.class);
+            assertSame(property_types.get("propertyLocalTime"), LocalTime.class);
             assertSame(property_types.get("propertyChar"), char.class);
             assertSame(property_types.get("propertyBoolean"), boolean.class);
             assertSame(property_types.get("propertyByte"), byte.class);
@@ -1423,7 +1589,7 @@ public class TestBeanUtils {
     void testPropertyTypesGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class, null, null, null);
-            assertEquals(property_types.size(), 17);
+            assertEquals(property_types.size(), 21);
             assertTrue(property_types.containsKey("propertyReadonly"));
             assertTrue(property_types.containsKey("propertyString"));
             assertTrue(property_types.containsKey("propertyStringBuffer"));
@@ -1432,6 +1598,10 @@ public class TestBeanUtils {
             assertTrue(property_types.containsKey("propertySqlDate"));
             assertTrue(property_types.containsKey("propertyTime"));
             assertTrue(property_types.containsKey("propertyTimestamp"));
+            assertTrue(property_types.containsKey("propertyInstant"));
+            assertTrue(property_types.containsKey("propertyLocalDateTime"));
+            assertTrue(property_types.containsKey("propertyLocalDate"));
+            assertTrue(property_types.containsKey("propertyLocalTime"));
             assertTrue(property_types.containsKey("propertyChar"));
             assertTrue(property_types.containsKey("propertyBoolean"));
             assertTrue(property_types.containsKey("propertyByte"));
@@ -1449,6 +1619,10 @@ public class TestBeanUtils {
             assertSame(property_types.get("propertySqlDate"), java.sql.Date.class);
             assertSame(property_types.get("propertyTime"), java.sql.Time.class);
             assertSame(property_types.get("propertyTimestamp"), java.sql.Timestamp.class);
+            assertSame(property_types.get("propertyInstant"), Instant.class);
+            assertSame(property_types.get("propertyLocalDateTime"), LocalDateTime.class);
+            assertSame(property_types.get("propertyLocalDate"), LocalDate.class);
+            assertSame(property_types.get("propertyLocalTime"), LocalTime.class);
             assertSame(property_types.get("propertyChar"), char.class);
             assertSame(property_types.get("propertyBoolean"), boolean.class);
             assertSame(property_types.get("propertyByte"), byte.class);
@@ -1467,8 +1641,8 @@ public class TestBeanUtils {
     void testPropertyTypesSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class, null, null, null);
-            assertEquals(property_types.size(), 17);
-            assertTrue(property_types.containsKey("propertyWriteonly"));
+            assertEquals(property_types.size(), 21);
+            assertTrue(property_types.containsKey("propertyWriteOnly"));
             assertTrue(property_types.containsKey("propertyString"));
             assertTrue(property_types.containsKey("propertyStringBuffer"));
             assertTrue(property_types.containsKey("propertyDate"));
@@ -1476,6 +1650,10 @@ public class TestBeanUtils {
             assertTrue(property_types.containsKey("propertySqlDate"));
             assertTrue(property_types.containsKey("propertyTime"));
             assertTrue(property_types.containsKey("propertyTimestamp"));
+            assertTrue(property_types.containsKey("propertyInstant"));
+            assertTrue(property_types.containsKey("propertyLocalDateTime"));
+            assertTrue(property_types.containsKey("propertyLocalDate"));
+            assertTrue(property_types.containsKey("propertyLocalTime"));
             assertTrue(property_types.containsKey("propertyChar"));
             assertTrue(property_types.containsKey("propertyBoolean"));
             assertTrue(property_types.containsKey("propertyByte"));
@@ -1485,7 +1663,7 @@ public class TestBeanUtils {
             assertTrue(property_types.containsKey("propertyLong"));
             assertTrue(property_types.containsKey("propertyShort"));
             assertTrue(property_types.containsKey("propertyBigDecimal"));
-            assertSame(property_types.get("propertyWriteonly"), long.class);
+            assertSame(property_types.get("propertyWriteOnly"), long.class);
             assertSame(property_types.get("propertyString"), String.class);
             assertSame(property_types.get("propertyStringBuffer"), StringBuffer.class);
             assertSame(property_types.get("propertyDate"), java.util.Date.class);
@@ -1493,6 +1671,10 @@ public class TestBeanUtils {
             assertSame(property_types.get("propertySqlDate"), java.sql.Date.class);
             assertSame(property_types.get("propertyTime"), java.sql.Time.class);
             assertSame(property_types.get("propertyTimestamp"), java.sql.Timestamp.class);
+            assertSame(property_types.get("propertyInstant"), Instant.class);
+            assertSame(property_types.get("propertyLocalDateTime"), LocalDateTime.class);
+            assertSame(property_types.get("propertyLocalDate"), LocalDate.class);
+            assertSame(property_types.get("propertyLocalTime"), LocalTime.class);
             assertSame(property_types.get("propertyChar"), char.class);
             assertSame(property_types.get("propertyBoolean"), boolean.class);
             assertSame(property_types.get("propertyByte"), byte.class);
@@ -1511,7 +1693,7 @@ public class TestBeanUtils {
     void testPropertyTypesPrefix() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class, null, null, "PREFIX:");
-            assertEquals(property_types.size(), 16);
+            assertEquals(property_types.size(), 20);
             assertTrue(property_types.containsKey("PREFIX:propertyString"));
             assertTrue(property_types.containsKey("PREFIX:propertyStringBuffer"));
             assertTrue(property_types.containsKey("PREFIX:propertyDate"));
@@ -1519,6 +1701,10 @@ public class TestBeanUtils {
             assertTrue(property_types.containsKey("PREFIX:propertySqlDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyTime"));
             assertTrue(property_types.containsKey("PREFIX:propertyTimestamp"));
+            assertTrue(property_types.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalDate"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalTime"));
             assertTrue(property_types.containsKey("PREFIX:propertyChar"));
             assertTrue(property_types.containsKey("PREFIX:propertyBoolean"));
             assertTrue(property_types.containsKey("PREFIX:propertyByte"));
@@ -1535,6 +1721,10 @@ public class TestBeanUtils {
             assertSame(property_types.get("PREFIX:propertySqlDate"), java.sql.Date.class);
             assertSame(property_types.get("PREFIX:propertyTime"), java.sql.Time.class);
             assertSame(property_types.get("PREFIX:propertyTimestamp"), java.sql.Timestamp.class);
+            assertSame(property_types.get("PREFIX:propertyInstant"), Instant.class);
+            assertSame(property_types.get("PREFIX:propertyLocalDateTime"), LocalDateTime.class);
+            assertSame(property_types.get("PREFIX:propertyLocalDate"), LocalDate.class);
+            assertSame(property_types.get("PREFIX:propertyLocalTime"), LocalTime.class);
             assertSame(property_types.get("PREFIX:propertyChar"), char.class);
             assertSame(property_types.get("PREFIX:propertyBoolean"), boolean.class);
             assertSame(property_types.get("PREFIX:propertyByte"), byte.class);
@@ -1553,7 +1743,7 @@ public class TestBeanUtils {
     void testPropertyTypesPrefixGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class, null, null, "PREFIX:");
-            assertEquals(property_types.size(), 17);
+            assertEquals(property_types.size(), 21);
             assertTrue(property_types.containsKey("PREFIX:propertyReadonly"));
             assertTrue(property_types.containsKey("PREFIX:propertyString"));
             assertTrue(property_types.containsKey("PREFIX:propertyStringBuffer"));
@@ -1562,6 +1752,10 @@ public class TestBeanUtils {
             assertTrue(property_types.containsKey("PREFIX:propertySqlDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyTime"));
             assertTrue(property_types.containsKey("PREFIX:propertyTimestamp"));
+            assertTrue(property_types.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalDate"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalTime"));
             assertTrue(property_types.containsKey("PREFIX:propertyChar"));
             assertTrue(property_types.containsKey("PREFIX:propertyBoolean"));
             assertTrue(property_types.containsKey("PREFIX:propertyByte"));
@@ -1579,6 +1773,10 @@ public class TestBeanUtils {
             assertSame(property_types.get("PREFIX:propertySqlDate"), java.sql.Date.class);
             assertSame(property_types.get("PREFIX:propertyTime"), java.sql.Time.class);
             assertSame(property_types.get("PREFIX:propertyTimestamp"), java.sql.Timestamp.class);
+            assertSame(property_types.get("PREFIX:propertyInstant"), Instant.class);
+            assertSame(property_types.get("PREFIX:propertyLocalDateTime"), LocalDateTime.class);
+            assertSame(property_types.get("PREFIX:propertyLocalDate"), LocalDate.class);
+            assertSame(property_types.get("PREFIX:propertyLocalTime"), LocalTime.class);
             assertSame(property_types.get("PREFIX:propertyChar"), char.class);
             assertSame(property_types.get("PREFIX:propertyBoolean"), boolean.class);
             assertSame(property_types.get("PREFIX:propertyByte"), byte.class);
@@ -1597,8 +1795,8 @@ public class TestBeanUtils {
     void testPropertyTypesPrefixSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class, null, null, "PREFIX:");
-            assertEquals(property_types.size(), 17);
-            assertTrue(property_types.containsKey("PREFIX:propertyWriteonly"));
+            assertEquals(property_types.size(), 21);
+            assertTrue(property_types.containsKey("PREFIX:propertyWriteOnly"));
             assertTrue(property_types.containsKey("PREFIX:propertyString"));
             assertTrue(property_types.containsKey("PREFIX:propertyStringBuffer"));
             assertTrue(property_types.containsKey("PREFIX:propertyDate"));
@@ -1606,6 +1804,10 @@ public class TestBeanUtils {
             assertTrue(property_types.containsKey("PREFIX:propertySqlDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyTime"));
             assertTrue(property_types.containsKey("PREFIX:propertyTimestamp"));
+            assertTrue(property_types.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalDate"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalTime"));
             assertTrue(property_types.containsKey("PREFIX:propertyChar"));
             assertTrue(property_types.containsKey("PREFIX:propertyBoolean"));
             assertTrue(property_types.containsKey("PREFIX:propertyByte"));
@@ -1615,7 +1817,7 @@ public class TestBeanUtils {
             assertTrue(property_types.containsKey("PREFIX:propertyLong"));
             assertTrue(property_types.containsKey("PREFIX:propertyShort"));
             assertTrue(property_types.containsKey("PREFIX:propertyBigDecimal"));
-            assertSame(property_types.get("PREFIX:propertyWriteonly"), long.class);
+            assertSame(property_types.get("PREFIX:propertyWriteOnly"), long.class);
             assertSame(property_types.get("PREFIX:propertyString"), String.class);
             assertSame(property_types.get("PREFIX:propertyStringBuffer"), StringBuffer.class);
             assertSame(property_types.get("PREFIX:propertyDate"), java.util.Date.class);
@@ -1623,6 +1825,10 @@ public class TestBeanUtils {
             assertSame(property_types.get("PREFIX:propertySqlDate"), java.sql.Date.class);
             assertSame(property_types.get("PREFIX:propertyTime"), java.sql.Time.class);
             assertSame(property_types.get("PREFIX:propertyTimestamp"), java.sql.Timestamp.class);
+            assertSame(property_types.get("PREFIX:propertyInstant"), Instant.class);
+            assertSame(property_types.get("PREFIX:propertyLocalDateTime"), LocalDateTime.class);
+            assertSame(property_types.get("PREFIX:propertyLocalDate"), LocalDate.class);
+            assertSame(property_types.get("PREFIX:propertyLocalTime"), LocalTime.class);
             assertSame(property_types.get("PREFIX:propertyChar"), char.class);
             assertSame(property_types.get("PREFIX:propertyBoolean"), boolean.class);
             assertSame(property_types.get("PREFIX:propertyByte"), byte.class);
@@ -1641,16 +1847,19 @@ public class TestBeanUtils {
     void testPropertyTypesIncluded() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyString", "propertyDate", "propertySqlDate", "propertyTime",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyByte", "propertyFloat", "propertyShort"},
                 null,
                 null);
-            assertEquals(property_types.size(), 7);
+            assertEquals(property_types.size(), 9);
             assertTrue(property_types.containsKey("propertyString"));
             assertTrue(property_types.containsKey("propertyDate"));
             assertTrue(property_types.containsKey("propertySqlDate"));
             assertTrue(property_types.containsKey("propertyTime"));
+            assertTrue(property_types.containsKey("propertyInstant"));
+            assertTrue(property_types.containsKey("propertyLocalDate"));
             assertTrue(property_types.containsKey("propertyByte"));
             assertTrue(property_types.containsKey("propertyFloat"));
             assertTrue(property_types.containsKey("propertyShort"));
@@ -1658,6 +1867,8 @@ public class TestBeanUtils {
             assertSame(property_types.get("propertyDate"), java.util.Date.class);
             assertSame(property_types.get("propertySqlDate"), java.sql.Date.class);
             assertSame(property_types.get("propertyTime"), java.sql.Time.class);
+            assertSame(property_types.get("propertyInstant"), Instant.class);
+            assertSame(property_types.get("propertyLocalDate"), LocalDate.class);
             assertSame(property_types.get("propertyByte"), byte.class);
             assertSame(property_types.get("propertyFloat"), float.class);
             assertSame(property_types.get("propertyShort"), short.class);
@@ -1670,17 +1881,20 @@ public class TestBeanUtils {
     void testPropertyTypesIncludedGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyString", "propertyDate", "propertySqlDate", "propertyTime",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyByte", "propertyFloat", "propertyShort"},
                 null,
                 null);
-            assertEquals(property_types.size(), 8);
+            assertEquals(property_types.size(), 10);
             assertTrue(property_types.containsKey("propertyReadonly"));
             assertTrue(property_types.containsKey("propertyString"));
             assertTrue(property_types.containsKey("propertyDate"));
             assertTrue(property_types.containsKey("propertySqlDate"));
             assertTrue(property_types.containsKey("propertyTime"));
+            assertTrue(property_types.containsKey("propertyInstant"));
+            assertTrue(property_types.containsKey("propertyLocalDate"));
             assertTrue(property_types.containsKey("propertyByte"));
             assertTrue(property_types.containsKey("propertyFloat"));
             assertTrue(property_types.containsKey("propertyShort"));
@@ -1689,6 +1903,8 @@ public class TestBeanUtils {
             assertSame(property_types.get("propertyDate"), java.util.Date.class);
             assertSame(property_types.get("propertySqlDate"), java.sql.Date.class);
             assertSame(property_types.get("propertyTime"), java.sql.Time.class);
+            assertSame(property_types.get("propertyInstant"), Instant.class);
+            assertSame(property_types.get("propertyLocalDate"), LocalDate.class);
             assertSame(property_types.get("propertyByte"), byte.class);
             assertSame(property_types.get("propertyFloat"), float.class);
             assertSame(property_types.get("propertyShort"), short.class);
@@ -1701,25 +1917,30 @@ public class TestBeanUtils {
     void testPropertyTypesIncludedSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly",
+                new String[]{"propertyReadonly", "propertyWriteOnly",
                     "propertyString", "propertyDate", "propertySqlDate", "propertyTime",
+                    "propertyInstant", "propertyLocalDate",
                     "propertyByte", "propertyFloat", "propertyShort"},
                 null,
                 null);
-            assertEquals(property_types.size(), 8);
-            assertTrue(property_types.containsKey("propertyWriteonly"));
+            assertEquals(property_types.size(), 10);
+            assertTrue(property_types.containsKey("propertyWriteOnly"));
             assertTrue(property_types.containsKey("propertyString"));
             assertTrue(property_types.containsKey("propertyDate"));
             assertTrue(property_types.containsKey("propertySqlDate"));
             assertTrue(property_types.containsKey("propertyTime"));
+            assertTrue(property_types.containsKey("propertyInstant"));
+            assertTrue(property_types.containsKey("propertyLocalDate"));
             assertTrue(property_types.containsKey("propertyByte"));
             assertTrue(property_types.containsKey("propertyFloat"));
             assertTrue(property_types.containsKey("propertyShort"));
-            assertSame(property_types.get("propertyWriteonly"), long.class);
+            assertSame(property_types.get("propertyWriteOnly"), long.class);
             assertSame(property_types.get("propertyString"), String.class);
             assertSame(property_types.get("propertyDate"), java.util.Date.class);
             assertSame(property_types.get("propertySqlDate"), java.sql.Date.class);
             assertSame(property_types.get("propertyTime"), java.sql.Time.class);
+            assertSame(property_types.get("propertyInstant"), Instant.class);
+            assertSame(property_types.get("propertyLocalDate"), LocalDate.class);
             assertSame(property_types.get("propertyByte"), byte.class);
             assertSame(property_types.get("propertyFloat"), float.class);
             assertSame(property_types.get("propertyShort"), short.class);
@@ -1732,16 +1953,19 @@ public class TestBeanUtils {
     void testPropertyTypesIncludedPrefix() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
                 null,
                 "PREFIX:");
-            assertEquals(property_types.size(), 7);
+            assertEquals(property_types.size(), 9);
             assertTrue(property_types.containsKey("PREFIX:propertyString"));
             assertTrue(property_types.containsKey("PREFIX:propertyDate"));
             assertTrue(property_types.containsKey("PREFIX:propertySqlDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyTime"));
+            assertTrue(property_types.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyByte"));
             assertTrue(property_types.containsKey("PREFIX:propertyFloat"));
             assertTrue(property_types.containsKey("PREFIX:propertyShort"));
@@ -1749,6 +1973,8 @@ public class TestBeanUtils {
             assertSame(property_types.get("PREFIX:propertyDate"), java.util.Date.class);
             assertSame(property_types.get("PREFIX:propertySqlDate"), java.sql.Date.class);
             assertSame(property_types.get("PREFIX:propertyTime"), java.sql.Time.class);
+            assertSame(property_types.get("PREFIX:propertyInstant"), Instant.class);
+            assertSame(property_types.get("PREFIX:propertyLocalDate"), LocalDate.class);
             assertSame(property_types.get("PREFIX:propertyByte"), byte.class);
             assertSame(property_types.get("PREFIX:propertyFloat"), float.class);
             assertSame(property_types.get("PREFIX:propertyShort"), short.class);
@@ -1761,17 +1987,20 @@ public class TestBeanUtils {
     void testPropertyTypesIncludedPrefixGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
                 null,
                 "PREFIX:");
-            assertEquals(property_types.size(), 8);
+            assertEquals(property_types.size(), 10);
             assertTrue(property_types.containsKey("PREFIX:propertyReadonly"));
             assertTrue(property_types.containsKey("PREFIX:propertyString"));
             assertTrue(property_types.containsKey("PREFIX:propertyDate"));
             assertTrue(property_types.containsKey("PREFIX:propertySqlDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyTime"));
+            assertTrue(property_types.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyByte"));
             assertTrue(property_types.containsKey("PREFIX:propertyFloat"));
             assertTrue(property_types.containsKey("PREFIX:propertyShort"));
@@ -1780,6 +2009,8 @@ public class TestBeanUtils {
             assertSame(property_types.get("PREFIX:propertyDate"), java.util.Date.class);
             assertSame(property_types.get("PREFIX:propertySqlDate"), java.sql.Date.class);
             assertSame(property_types.get("PREFIX:propertyTime"), java.sql.Time.class);
+            assertSame(property_types.get("PREFIX:propertyInstant"), Instant.class);
+            assertSame(property_types.get("PREFIX:propertyLocalDate"), LocalDate.class);
             assertSame(property_types.get("PREFIX:propertyByte"), byte.class);
             assertSame(property_types.get("PREFIX:propertyFloat"), float.class);
             assertSame(property_types.get("PREFIX:propertyShort"), short.class);
@@ -1792,25 +2023,30 @@ public class TestBeanUtils {
     void testPropertyTypesIncludedPrefixSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly",
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly",
                     "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate",
                     "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
                 null,
                 "PREFIX:");
-            assertEquals(property_types.size(), 8);
-            assertTrue(property_types.containsKey("PREFIX:propertyWriteonly"));
+            assertEquals(property_types.size(), 10);
+            assertTrue(property_types.containsKey("PREFIX:propertyWriteOnly"));
             assertTrue(property_types.containsKey("PREFIX:propertyString"));
             assertTrue(property_types.containsKey("PREFIX:propertyDate"));
             assertTrue(property_types.containsKey("PREFIX:propertySqlDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyTime"));
+            assertTrue(property_types.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyByte"));
             assertTrue(property_types.containsKey("PREFIX:propertyFloat"));
             assertTrue(property_types.containsKey("PREFIX:propertyShort"));
-            assertSame(property_types.get("PREFIX:propertyWriteonly"), long.class);
+            assertSame(property_types.get("PREFIX:propertyWriteOnly"), long.class);
             assertSame(property_types.get("PREFIX:propertyString"), String.class);
             assertSame(property_types.get("PREFIX:propertyDate"), java.util.Date.class);
             assertSame(property_types.get("PREFIX:propertySqlDate"), java.sql.Date.class);
             assertSame(property_types.get("PREFIX:propertyTime"), java.sql.Time.class);
+            assertSame(property_types.get("PREFIX:propertyInstant"), Instant.class);
+            assertSame(property_types.get("PREFIX:propertyLocalDate"), LocalDate.class);
             assertSame(property_types.get("PREFIX:propertyByte"), byte.class);
             assertSame(property_types.get("PREFIX:propertyFloat"), float.class);
             assertSame(property_types.get("PREFIX:propertyShort"), short.class);
@@ -1824,13 +2060,16 @@ public class TestBeanUtils {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class,
                 null,
-                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
+                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyLocalDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
                 null);
-            assertEquals(property_types.size(), 10);
+            assertEquals(property_types.size(), 13);
             assertTrue(property_types.containsKey("propertyStringBuffer"));
             assertTrue(property_types.containsKey("propertyDate"));
             assertTrue(property_types.containsKey("propertyTime"));
             assertTrue(property_types.containsKey("propertyTimestamp"));
+            assertTrue(property_types.containsKey("propertyInstant"));
+            assertTrue(property_types.containsKey("propertyLocalDateTime"));
+            assertTrue(property_types.containsKey("propertyLocalTime"));
             assertTrue(property_types.containsKey("propertyChar"));
             assertTrue(property_types.containsKey("propertyByte"));
             assertTrue(property_types.containsKey("propertyDouble"));
@@ -1841,6 +2080,9 @@ public class TestBeanUtils {
             assertSame(property_types.get("propertyDate"), java.util.Date.class);
             assertSame(property_types.get("propertyTime"), java.sql.Time.class);
             assertSame(property_types.get("propertyTimestamp"), java.sql.Timestamp.class);
+            assertSame(property_types.get("propertyInstant"), Instant.class);
+            assertSame(property_types.get("propertyLocalDateTime"), LocalDateTime.class);
+            assertSame(property_types.get("propertyLocalTime"), LocalTime.class);
             assertSame(property_types.get("propertyChar"), char.class);
             assertSame(property_types.get("propertyByte"), byte.class);
             assertSame(property_types.get("propertyDouble"), double.class);
@@ -1857,14 +2099,17 @@ public class TestBeanUtils {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 null,
-                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
+                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyLocalDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
                 null);
-            assertEquals(property_types.size(), 11);
+            assertEquals(property_types.size(), 14);
             assertTrue(property_types.containsKey("propertyReadonly"));
             assertTrue(property_types.containsKey("propertyStringBuffer"));
             assertTrue(property_types.containsKey("propertyDate"));
             assertTrue(property_types.containsKey("propertyTime"));
             assertTrue(property_types.containsKey("propertyTimestamp"));
+            assertTrue(property_types.containsKey("propertyInstant"));
+            assertTrue(property_types.containsKey("propertyLocalDateTime"));
+            assertTrue(property_types.containsKey("propertyLocalTime"));
             assertTrue(property_types.containsKey("propertyChar"));
             assertTrue(property_types.containsKey("propertyByte"));
             assertTrue(property_types.containsKey("propertyDouble"));
@@ -1876,6 +2121,9 @@ public class TestBeanUtils {
             assertSame(property_types.get("propertyDate"), java.util.Date.class);
             assertSame(property_types.get("propertyTime"), java.sql.Time.class);
             assertSame(property_types.get("propertyTimestamp"), java.sql.Timestamp.class);
+            assertSame(property_types.get("propertyInstant"), Instant.class);
+            assertSame(property_types.get("propertyLocalDateTime"), LocalDateTime.class);
+            assertSame(property_types.get("propertyLocalTime"), LocalTime.class);
             assertSame(property_types.get("propertyChar"), char.class);
             assertSame(property_types.get("propertyByte"), byte.class);
             assertSame(property_types.get("propertyDouble"), double.class);
@@ -1892,25 +2140,31 @@ public class TestBeanUtils {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 null,
-                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
+                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyLocalDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
                 null);
-            assertEquals(property_types.size(), 11);
-            assertTrue(property_types.containsKey("propertyWriteonly"));
+            assertEquals(property_types.size(), 14);
+            assertTrue(property_types.containsKey("propertyWriteOnly"));
             assertTrue(property_types.containsKey("propertyStringBuffer"));
             assertTrue(property_types.containsKey("propertyDate"));
             assertTrue(property_types.containsKey("propertyTime"));
             assertTrue(property_types.containsKey("propertyTimestamp"));
+            assertTrue(property_types.containsKey("propertyInstant"));
+            assertTrue(property_types.containsKey("propertyLocalDateTime"));
+            assertTrue(property_types.containsKey("propertyLocalTime"));
             assertTrue(property_types.containsKey("propertyChar"));
             assertTrue(property_types.containsKey("propertyByte"));
             assertTrue(property_types.containsKey("propertyDouble"));
             assertTrue(property_types.containsKey("propertyInt"));
             assertTrue(property_types.containsKey("propertyLong"));
             assertTrue(property_types.containsKey("propertyShort"));
-            assertSame(property_types.get("propertyWriteonly"), long.class);
+            assertSame(property_types.get("propertyWriteOnly"), long.class);
             assertSame(property_types.get("propertyStringBuffer"), StringBuffer.class);
             assertSame(property_types.get("propertyDate"), java.util.Date.class);
             assertSame(property_types.get("propertyTime"), java.sql.Time.class);
             assertSame(property_types.get("propertyTimestamp"), java.sql.Timestamp.class);
+            assertSame(property_types.get("propertyInstant"), Instant.class);
+            assertSame(property_types.get("propertyLocalDateTime"), LocalDateTime.class);
+            assertSame(property_types.get("propertyLocalTime"), LocalTime.class);
             assertSame(property_types.get("propertyChar"), char.class);
             assertSame(property_types.get("propertyByte"), byte.class);
             assertSame(property_types.get("propertyDouble"), double.class);
@@ -1927,13 +2181,16 @@ public class TestBeanUtils {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class,
                 null,
-                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
+                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
                 "PREFIX:");
-            assertEquals(property_types.size(), 10);
+            assertEquals(property_types.size(), 13);
             assertTrue(property_types.containsKey("PREFIX:propertyStringBuffer"));
             assertTrue(property_types.containsKey("PREFIX:propertyDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyTime"));
             assertTrue(property_types.containsKey("PREFIX:propertyTimestamp"));
+            assertTrue(property_types.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalTime"));
             assertTrue(property_types.containsKey("PREFIX:propertyChar"));
             assertTrue(property_types.containsKey("PREFIX:propertyByte"));
             assertTrue(property_types.containsKey("PREFIX:propertyDouble"));
@@ -1944,6 +2201,9 @@ public class TestBeanUtils {
             assertSame(property_types.get("PREFIX:propertyDate"), java.util.Date.class);
             assertSame(property_types.get("PREFIX:propertyTime"), java.sql.Time.class);
             assertSame(property_types.get("PREFIX:propertyTimestamp"), java.sql.Timestamp.class);
+            assertSame(property_types.get("PREFIX:propertyInstant"), Instant.class);
+            assertSame(property_types.get("PREFIX:propertyLocalDateTime"), LocalDateTime.class);
+            assertSame(property_types.get("PREFIX:propertyLocalTime"), LocalTime.class);
             assertSame(property_types.get("PREFIX:propertyChar"), char.class);
             assertSame(property_types.get("PREFIX:propertyByte"), byte.class);
             assertSame(property_types.get("PREFIX:propertyDouble"), double.class);
@@ -1960,14 +2220,17 @@ public class TestBeanUtils {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class,
                 null,
-                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
+                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
                 "PREFIX:");
-            assertEquals(property_types.size(), 11);
+            assertEquals(property_types.size(), 14);
             assertTrue(property_types.containsKey("PREFIX:propertyReadonly"));
             assertTrue(property_types.containsKey("PREFIX:propertyStringBuffer"));
             assertTrue(property_types.containsKey("PREFIX:propertyDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyTime"));
             assertTrue(property_types.containsKey("PREFIX:propertyTimestamp"));
+            assertTrue(property_types.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalTime"));
             assertTrue(property_types.containsKey("PREFIX:propertyChar"));
             assertTrue(property_types.containsKey("PREFIX:propertyByte"));
             assertTrue(property_types.containsKey("PREFIX:propertyDouble"));
@@ -1979,6 +2242,9 @@ public class TestBeanUtils {
             assertSame(property_types.get("PREFIX:propertyDate"), java.util.Date.class);
             assertSame(property_types.get("PREFIX:propertyTime"), java.sql.Time.class);
             assertSame(property_types.get("PREFIX:propertyTimestamp"), java.sql.Timestamp.class);
+            assertSame(property_types.get("PREFIX:propertyInstant"), Instant.class);
+            assertSame(property_types.get("PREFIX:propertyLocalDateTime"), LocalDateTime.class);
+            assertSame(property_types.get("PREFIX:propertyLocalTime"), LocalTime.class);
             assertSame(property_types.get("PREFIX:propertyChar"), char.class);
             assertSame(property_types.get("PREFIX:propertyByte"), byte.class);
             assertSame(property_types.get("PREFIX:propertyDouble"), double.class);
@@ -1995,25 +2261,31 @@ public class TestBeanUtils {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class,
                 null,
-                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
+                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
                 "PREFIX:");
-            assertEquals(property_types.size(), 11);
-            assertTrue(property_types.containsKey("PREFIX:propertyWriteonly"));
+            assertEquals(property_types.size(), 14);
+            assertTrue(property_types.containsKey("PREFIX:propertyWriteOnly"));
             assertTrue(property_types.containsKey("PREFIX:propertyStringBuffer"));
             assertTrue(property_types.containsKey("PREFIX:propertyDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyTime"));
             assertTrue(property_types.containsKey("PREFIX:propertyTimestamp"));
+            assertTrue(property_types.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_types.containsKey("PREFIX:propertyLocalTime"));
             assertTrue(property_types.containsKey("PREFIX:propertyChar"));
             assertTrue(property_types.containsKey("PREFIX:propertyByte"));
             assertTrue(property_types.containsKey("PREFIX:propertyDouble"));
             assertTrue(property_types.containsKey("PREFIX:propertyInt"));
             assertTrue(property_types.containsKey("PREFIX:propertyLong"));
             assertTrue(property_types.containsKey("PREFIX:propertyShort"));
-            assertSame(property_types.get("PREFIX:propertyWriteonly"), long.class);
+            assertSame(property_types.get("PREFIX:propertyWriteOnly"), long.class);
             assertSame(property_types.get("PREFIX:propertyStringBuffer"), StringBuffer.class);
             assertSame(property_types.get("PREFIX:propertyDate"), java.util.Date.class);
             assertSame(property_types.get("PREFIX:propertyTime"), java.sql.Time.class);
             assertSame(property_types.get("PREFIX:propertyTimestamp"), java.sql.Timestamp.class);
+            assertSame(property_types.get("PREFIX:propertyInstant"), Instant.class);
+            assertSame(property_types.get("PREFIX:propertyLocalDateTime"), LocalDateTime.class);
+            assertSame(property_types.get("PREFIX:propertyLocalTime"), LocalTime.class);
             assertSame(property_types.get("PREFIX:propertyChar"), char.class);
             assertSame(property_types.get("PREFIX:propertyByte"), byte.class);
             assertSame(property_types.get("PREFIX:propertyDouble"), double.class);
@@ -2029,16 +2301,19 @@ public class TestBeanUtils {
     void testPropertyTypesFiltered() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
-                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
+                new String[]{"propertyReadonly", "propertyWriteOnly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime",
+                    "propertyInstant", "propertyLocalDate", "propertyByte", "propertyFloat", "propertyShort"},
+                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyLocalDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
                 null);
-            assertEquals(property_types.size(), 4);
+            assertEquals(property_types.size(), 5);
             assertTrue(property_types.containsKey("propertyDate"));
             assertTrue(property_types.containsKey("propertyTime"));
+            assertTrue(property_types.containsKey("propertyInstant"));
             assertTrue(property_types.containsKey("propertyByte"));
             assertTrue(property_types.containsKey("propertyShort"));
             assertSame(property_types.get("propertyDate"), java.util.Date.class);
             assertSame(property_types.get("propertyTime"), java.sql.Time.class);
+            assertSame(property_types.get("propertyInstant"), Instant.class);
             assertSame(property_types.get("propertyByte"), byte.class);
             assertSame(property_types.get("propertyShort"), short.class);
         } catch (BeanUtilsException e) {
@@ -2050,18 +2325,21 @@ public class TestBeanUtils {
     void testPropertyTypesFilteredGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
-                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
+                new String[]{"propertyReadonly", "propertyWriteOnly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime",
+                    "propertyInstant", "propertyLocalDate", "propertyByte", "propertyFloat", "propertyShort"},
+                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyLocalDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
                 null);
-            assertEquals(property_types.size(), 5);
+            assertEquals(property_types.size(), 6);
             assertTrue(property_types.containsKey("propertyReadonly"));
             assertTrue(property_types.containsKey("propertyDate"));
             assertTrue(property_types.containsKey("propertyTime"));
+            assertTrue(property_types.containsKey("propertyInstant"));
             assertTrue(property_types.containsKey("propertyByte"));
             assertTrue(property_types.containsKey("propertyShort"));
             assertSame(property_types.get("propertyReadonly"), int.class);
             assertSame(property_types.get("propertyDate"), java.util.Date.class);
             assertSame(property_types.get("propertyTime"), java.sql.Time.class);
+            assertSame(property_types.get("propertyInstant"), Instant.class);
             assertSame(property_types.get("propertyByte"), byte.class);
             assertSame(property_types.get("propertyShort"), short.class);
         } catch (BeanUtilsException e) {
@@ -2073,18 +2351,21 @@ public class TestBeanUtils {
     void testPropertyTypesFilteredSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class,
-                new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
-                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
+                new String[]{"propertyReadonly", "propertyWriteOnly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime",
+                    "propertyInstant", "propertyLocalDate", "propertyByte", "propertyFloat", "propertyShort"},
+                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyLocalDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
                 null);
-            assertEquals(property_types.size(), 5);
-            assertTrue(property_types.containsKey("propertyWriteonly"));
+            assertEquals(property_types.size(), 6);
+            assertTrue(property_types.containsKey("propertyWriteOnly"));
             assertTrue(property_types.containsKey("propertyDate"));
             assertTrue(property_types.containsKey("propertyTime"));
+            assertTrue(property_types.containsKey("propertyInstant"));
             assertTrue(property_types.containsKey("propertyByte"));
             assertTrue(property_types.containsKey("propertyShort"));
-            assertSame(property_types.get("propertyWriteonly"), long.class);
+            assertSame(property_types.get("propertyWriteOnly"), long.class);
             assertSame(property_types.get("propertyDate"), java.util.Date.class);
             assertSame(property_types.get("propertyTime"), java.sql.Time.class);
+            assertSame(property_types.get("propertyInstant"), Instant.class);
             assertSame(property_types.get("propertyByte"), byte.class);
             assertSame(property_types.get("propertyShort"), short.class);
         } catch (BeanUtilsException e) {
@@ -2096,16 +2377,19 @@ public class TestBeanUtils {
     void testPropertyTypesFilteredPrefix() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
-                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
                 "PREFIX:");
-            assertEquals(property_types.size(), 4);
+            assertEquals(property_types.size(), 5);
             assertTrue(property_types.containsKey("PREFIX:propertyDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyTime"));
+            assertTrue(property_types.containsKey("PREFIX:propertyInstant"));
             assertTrue(property_types.containsKey("PREFIX:propertyByte"));
             assertTrue(property_types.containsKey("PREFIX:propertyShort"));
             assertSame(property_types.get("PREFIX:propertyDate"), java.util.Date.class);
             assertSame(property_types.get("PREFIX:propertyTime"), java.sql.Time.class);
+            assertSame(property_types.get("PREFIX:propertyInstant"), Instant.class);
             assertSame(property_types.get("PREFIX:propertyByte"), byte.class);
             assertSame(property_types.get("PREFIX:propertyShort"), short.class);
         } catch (BeanUtilsException e) {
@@ -2117,18 +2401,21 @@ public class TestBeanUtils {
     void testPropertyTypesFilteredPrefixGetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.GETTERS, BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
-                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
                 "PREFIX:");
-            assertEquals(property_types.size(), 5);
+            assertEquals(property_types.size(), 6);
             assertTrue(property_types.containsKey("PREFIX:propertyReadonly"));
             assertTrue(property_types.containsKey("PREFIX:propertyDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyTime"));
+            assertTrue(property_types.containsKey("PREFIX:propertyInstant"));
             assertTrue(property_types.containsKey("PREFIX:propertyByte"));
             assertTrue(property_types.containsKey("PREFIX:propertyShort"));
             assertSame(property_types.get("PREFIX:propertyReadonly"), int.class);
             assertSame(property_types.get("PREFIX:propertyDate"), java.util.Date.class);
             assertSame(property_types.get("PREFIX:propertyTime"), java.sql.Time.class);
+            assertSame(property_types.get("PREFIX:propertyInstant"), Instant.class);
             assertSame(property_types.get("PREFIX:propertyByte"), byte.class);
             assertSame(property_types.get("PREFIX:propertyShort"), short.class);
         } catch (BeanUtilsException e) {
@@ -2140,18 +2427,21 @@ public class TestBeanUtils {
     void testPropertyTypesFilteredPrefixSetters() {
         try {
             var property_types = BeanUtils.getPropertyTypes(BeanUtils.Accessors.SETTERS, BeanImpl.class,
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
-                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
                 "PREFIX:");
-            assertEquals(property_types.size(), 5);
-            assertTrue(property_types.containsKey("PREFIX:propertyWriteonly"));
+            assertEquals(property_types.size(), 6);
+            assertTrue(property_types.containsKey("PREFIX:propertyWriteOnly"));
             assertTrue(property_types.containsKey("PREFIX:propertyDate"));
             assertTrue(property_types.containsKey("PREFIX:propertyTime"));
+            assertTrue(property_types.containsKey("PREFIX:propertyInstant"));
             assertTrue(property_types.containsKey("PREFIX:propertyByte"));
             assertTrue(property_types.containsKey("PREFIX:propertyShort"));
-            assertSame(property_types.get("PREFIX:propertyWriteonly"), long.class);
+            assertSame(property_types.get("PREFIX:propertyWriteOnly"), long.class);
             assertSame(property_types.get("PREFIX:propertyDate"), java.util.Date.class);
             assertSame(property_types.get("PREFIX:propertyTime"), java.sql.Time.class);
+            assertSame(property_types.get("PREFIX:propertyInstant"), Instant.class);
             assertSame(property_types.get("PREFIX:propertyByte"), byte.class);
             assertSame(property_types.get("PREFIX:propertyShort"), short.class);
         } catch (BeanUtilsException e) {
@@ -2207,11 +2497,15 @@ public class TestBeanUtils {
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyString"), "thisisastring");
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyStringBuffer").toString(), "butthisisastringbuffer");
-            assertEquals(BeanUtils.getPropertyValue(bean, "propertyDate"), cal.getTime());
+            assertEquals(BeanUtils.getPropertyValue(bean, "propertyDate"), Convert.toDate(cal));
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyCalendar"), cal);
-            assertEquals(BeanUtils.getPropertyValue(bean, "propertySqlDate"), new java.sql.Date(cal.getTime().getTime()));
-            assertEquals(BeanUtils.getPropertyValue(bean, "propertyTime"), new Time(cal.getTime().getTime()));
-            assertEquals(BeanUtils.getPropertyValue(bean, "propertyTimestamp"), new Timestamp(cal.getTime().getTime()));
+            assertEquals(BeanUtils.getPropertyValue(bean, "propertySqlDate"), Convert.toSqlDate(cal));
+            assertEquals(BeanUtils.getPropertyValue(bean, "propertyTime"), Convert.toTime(cal));
+            assertEquals(BeanUtils.getPropertyValue(bean, "propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(BeanUtils.getPropertyValue(bean, "propertyInstant"), Convert.toInstant(cal));
+            assertEquals(BeanUtils.getPropertyValue(bean, "propertyLocalDateTime"), Convert.toLocalDateTime(cal));
+            assertEquals(BeanUtils.getPropertyValue(bean, "propertyLocalDate"), Convert.toLocalDate(cal));
+            assertEquals(BeanUtils.getPropertyValue(bean, "propertyLocalTime"), Convert.toLocalTime(cal));
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyChar"), 'g');
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyBoolean"), Boolean.FALSE);
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyByte"), (byte) 53);
@@ -2242,11 +2536,15 @@ public class TestBeanUtils {
             cal.set(Calendar.MILLISECOND, 153);
             BeanUtils.setPropertyValue(bean, "propertyString", "thisisastring");
             BeanUtils.setPropertyValue(bean, "propertyStringBuffer", new StringBuffer("butthisisastringbuffer"));
-            BeanUtils.setPropertyValue(bean, "propertyDate", cal.getTime());
+            BeanUtils.setPropertyValue(bean, "propertyDate", Convert.toDate(cal));
             BeanUtils.setPropertyValue(bean, "propertyCalendar", cal);
-            BeanUtils.setPropertyValue(bean, "propertySqlDate", new java.sql.Date(cal.getTime().getTime()));
-            BeanUtils.setPropertyValue(bean, "propertyTime", new Time(cal.getTime().getTime()));
-            BeanUtils.setPropertyValue(bean, "propertyTimestamp", new Timestamp(cal.getTime().getTime()));
+            BeanUtils.setPropertyValue(bean, "propertySqlDate", Convert.toSqlDate(cal));
+            BeanUtils.setPropertyValue(bean, "propertyTime", Convert.toTime(cal));
+            BeanUtils.setPropertyValue(bean, "propertyTimestamp", Convert.toTimestamp(cal));
+            BeanUtils.setPropertyValue(bean, "propertyInstant", Convert.toInstant(cal));
+            BeanUtils.setPropertyValue(bean, "propertyLocalDateTime", Convert.toLocalDateTime(cal));
+            BeanUtils.setPropertyValue(bean, "propertyLocalDate", Convert.toLocalDate(cal));
+            BeanUtils.setPropertyValue(bean, "propertyLocalTime", Convert.toLocalTime(cal));
             BeanUtils.setPropertyValue(bean, "propertyChar", 'g');
             BeanUtils.setPropertyValue(bean, "propertyBoolean", Boolean.FALSE);
             BeanUtils.setPropertyValue(bean, "propertyByte", (byte) 53);
@@ -2308,7 +2606,7 @@ public class TestBeanUtils {
     void testGetPropertyValues() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(), null, null, null);
-            assertEquals(property_values.size(), 16);
+            assertEquals(property_values.size(), 20);
             assertTrue(property_values.containsKey("propertyString"));
             assertTrue(property_values.containsKey("propertyStringBuffer"));
             assertTrue(property_values.containsKey("propertyDate"));
@@ -2316,6 +2614,10 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertySqlDate"));
             assertTrue(property_values.containsKey("propertyTime"));
             assertTrue(property_values.containsKey("propertyTimestamp"));
+            assertTrue(property_values.containsKey("propertyInstant"));
+            assertTrue(property_values.containsKey("propertyLocalDateTime"));
+            assertTrue(property_values.containsKey("propertyLocalDate"));
+            assertTrue(property_values.containsKey("propertyLocalTime"));
             assertTrue(property_values.containsKey("propertyChar"));
             assertTrue(property_values.containsKey("propertyBoolean"));
             assertTrue(property_values.containsKey("propertyByte"));
@@ -2331,11 +2633,15 @@ public class TestBeanUtils {
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("propertyString"), "thisisastring");
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
-            assertEquals(property_values.get("propertyDate"), cal.getTime());
+            assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertyCalendar"), cal);
-            assertEquals(property_values.get("propertySqlDate"), new java.sql.Date(cal.getTime().getTime()));
-            assertEquals(property_values.get("propertyTime"), new Time(cal.getTime().getTime()));
-            assertEquals(property_values.get("propertyTimestamp"), new Timestamp(cal.getTime().getTime()));
+            assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("propertyLocalDateTime"), Convert.toLocalDateTime(cal));
+            assertEquals(property_values.get("propertyLocalDate"), Convert.toLocalDate(cal));
+            assertEquals(property_values.get("propertyLocalTime"), Convert.toLocalTime(cal));
             assertEquals(property_values.get("propertyChar"), 'g');
             assertEquals(property_values.get("propertyBoolean"), Boolean.FALSE);
             assertEquals(property_values.get("propertyByte"), (byte) 53);
@@ -2354,7 +2660,7 @@ public class TestBeanUtils {
     void testGetPropertyValuesGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(), null, null, null);
-            assertEquals(property_values.size(), 17);
+            assertEquals(property_values.size(), 21);
             assertTrue(property_values.containsKey("propertyReadonly"));
             assertTrue(property_values.containsKey("propertyString"));
             assertTrue(property_values.containsKey("propertyStringBuffer"));
@@ -2363,6 +2669,10 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertySqlDate"));
             assertTrue(property_values.containsKey("propertyTime"));
             assertTrue(property_values.containsKey("propertyTimestamp"));
+            assertTrue(property_values.containsKey("propertyInstant"));
+            assertTrue(property_values.containsKey("propertyLocalDateTime"));
+            assertTrue(property_values.containsKey("propertyLocalDate"));
+            assertTrue(property_values.containsKey("propertyLocalTime"));
             assertTrue(property_values.containsKey("propertyChar"));
             assertTrue(property_values.containsKey("propertyBoolean"));
             assertTrue(property_values.containsKey("propertyByte"));
@@ -2379,11 +2689,15 @@ public class TestBeanUtils {
             assertEquals(property_values.get("propertyReadonly"), 23);
             assertEquals(property_values.get("propertyString"), "thisisastring");
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
-            assertEquals(property_values.get("propertyDate"), cal.getTime());
+            assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertyCalendar"), cal);
-            assertEquals(property_values.get("propertySqlDate"), new java.sql.Date(cal.getTime().getTime()));
-            assertEquals(property_values.get("propertyTime"), new Time(cal.getTime().getTime()));
-            assertEquals(property_values.get("propertyTimestamp"), new Timestamp(cal.getTime().getTime()));
+            assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("propertyLocalDateTime"), Convert.toLocalDateTime(cal));
+            assertEquals(property_values.get("propertyLocalDate"), Convert.toLocalDate(cal));
+            assertEquals(property_values.get("propertyLocalTime"), Convert.toLocalTime(cal));
             assertEquals(property_values.get("propertyChar"), 'g');
             assertEquals(property_values.get("propertyBoolean"), Boolean.FALSE);
             assertEquals(property_values.get("propertyByte"), (byte) 53);
@@ -2402,7 +2716,7 @@ public class TestBeanUtils {
     void testGetPropertyValuesSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(), null, null, null);
-            assertEquals(property_values.size(), 16);
+            assertEquals(property_values.size(), 20);
             assertTrue(property_values.containsKey("propertyString"));
             assertTrue(property_values.containsKey("propertyStringBuffer"));
             assertTrue(property_values.containsKey("propertyDate"));
@@ -2410,6 +2724,10 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("propertySqlDate"));
             assertTrue(property_values.containsKey("propertyTime"));
             assertTrue(property_values.containsKey("propertyTimestamp"));
+            assertTrue(property_values.containsKey("propertyInstant"));
+            assertTrue(property_values.containsKey("propertyLocalDateTime"));
+            assertTrue(property_values.containsKey("propertyLocalDate"));
+            assertTrue(property_values.containsKey("propertyLocalTime"));
             assertTrue(property_values.containsKey("propertyChar"));
             assertTrue(property_values.containsKey("propertyBoolean"));
             assertTrue(property_values.containsKey("propertyByte"));
@@ -2425,11 +2743,15 @@ public class TestBeanUtils {
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("propertyString"), "thisisastring");
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
-            assertEquals(property_values.get("propertyDate"), cal.getTime());
+            assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertyCalendar"), cal);
-            assertEquals(property_values.get("propertySqlDate"), new java.sql.Date(cal.getTime().getTime()));
-            assertEquals(property_values.get("propertyTime"), new Time(cal.getTime().getTime()));
-            assertEquals(property_values.get("propertyTimestamp"), new Timestamp(cal.getTime().getTime()));
+            assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("propertyLocalDateTime"), Convert.toLocalDateTime(cal));
+            assertEquals(property_values.get("propertyLocalDate"), Convert.toLocalDate(cal));
+            assertEquals(property_values.get("propertyLocalTime"), Convert.toLocalTime(cal));
             assertEquals(property_values.get("propertyChar"), 'g');
             assertEquals(property_values.get("propertyBoolean"), Boolean.FALSE);
             assertEquals(property_values.get("propertyByte"), (byte) 53);
@@ -2448,7 +2770,7 @@ public class TestBeanUtils {
     void testGetPropertyValuesPrefix() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(), null, null, "PREFIX:");
-            assertEquals(property_values.size(), 16);
+            assertEquals(property_values.size(), 20);
             assertTrue(property_values.containsKey("PREFIX:propertyString"));
             assertTrue(property_values.containsKey("PREFIX:propertyStringBuffer"));
             assertTrue(property_values.containsKey("PREFIX:propertyDate"));
@@ -2456,6 +2778,10 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertySqlDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyTime"));
             assertTrue(property_values.containsKey("PREFIX:propertyTimestamp"));
+            assertTrue(property_values.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalDate"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalTime"));
             assertTrue(property_values.containsKey("PREFIX:propertyChar"));
             assertTrue(property_values.containsKey("PREFIX:propertyBoolean"));
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
@@ -2471,11 +2797,15 @@ public class TestBeanUtils {
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
-            assertEquals(property_values.get("PREFIX:propertyDate"), cal.getTime());
+            assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertyCalendar"), cal);
-            assertEquals(property_values.get("PREFIX:propertySqlDate"), new java.sql.Date(cal.getTime().getTime()));
-            assertEquals(property_values.get("PREFIX:propertyTime"), new Time(cal.getTime().getTime()));
-            assertEquals(property_values.get("PREFIX:propertyTimestamp"), new Timestamp(cal.getTime().getTime()));
+            assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalDateTime"), Convert.toLocalDateTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalDate"), Convert.toLocalDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalTime"), Convert.toLocalTime(cal));
             assertEquals(property_values.get("PREFIX:propertyChar"), 'g');
             assertEquals(property_values.get("PREFIX:propertyBoolean"), Boolean.FALSE);
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
@@ -2494,7 +2824,7 @@ public class TestBeanUtils {
     void testGetPropertyValuesPrefixGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(), null, null, "PREFIX:");
-            assertEquals(property_values.size(), 17);
+            assertEquals(property_values.size(), 21);
             assertTrue(property_values.containsKey("PREFIX:propertyReadonly"));
             assertTrue(property_values.containsKey("PREFIX:propertyString"));
             assertTrue(property_values.containsKey("PREFIX:propertyStringBuffer"));
@@ -2503,6 +2833,10 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertySqlDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyTime"));
             assertTrue(property_values.containsKey("PREFIX:propertyTimestamp"));
+            assertTrue(property_values.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalDate"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalTime"));
             assertTrue(property_values.containsKey("PREFIX:propertyChar"));
             assertTrue(property_values.containsKey("PREFIX:propertyBoolean"));
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
@@ -2519,11 +2853,15 @@ public class TestBeanUtils {
             assertEquals(property_values.get("PREFIX:propertyReadonly"), 23);
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
-            assertEquals(property_values.get("PREFIX:propertyDate"), cal.getTime());
+            assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertyCalendar"), cal);
-            assertEquals(property_values.get("PREFIX:propertySqlDate"), new java.sql.Date(cal.getTime().getTime()));
-            assertEquals(property_values.get("PREFIX:propertyTime"), new Time(cal.getTime().getTime()));
-            assertEquals(property_values.get("PREFIX:propertyTimestamp"), new Timestamp(cal.getTime().getTime()));
+            assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalDateTime"), Convert.toLocalDateTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalDate"), Convert.toLocalDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalTime"), Convert.toLocalTime(cal));
             assertEquals(property_values.get("PREFIX:propertyChar"), 'g');
             assertEquals(property_values.get("PREFIX:propertyBoolean"), Boolean.FALSE);
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
@@ -2542,7 +2880,7 @@ public class TestBeanUtils {
     void testGetPropertyValuesPrefixSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(), null, null, "PREFIX:");
-            assertEquals(property_values.size(), 16);
+            assertEquals(property_values.size(), 20);
             assertTrue(property_values.containsKey("PREFIX:propertyString"));
             assertTrue(property_values.containsKey("PREFIX:propertyStringBuffer"));
             assertTrue(property_values.containsKey("PREFIX:propertyDate"));
@@ -2550,6 +2888,10 @@ public class TestBeanUtils {
             assertTrue(property_values.containsKey("PREFIX:propertySqlDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyTime"));
             assertTrue(property_values.containsKey("PREFIX:propertyTimestamp"));
+            assertTrue(property_values.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalDate"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalTime"));
             assertTrue(property_values.containsKey("PREFIX:propertyChar"));
             assertTrue(property_values.containsKey("PREFIX:propertyBoolean"));
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
@@ -2565,11 +2907,15 @@ public class TestBeanUtils {
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
-            assertEquals(property_values.get("PREFIX:propertyDate"), cal.getTime());
+            assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertyCalendar"), cal);
-            assertEquals(property_values.get("PREFIX:propertySqlDate"), new java.sql.Date(cal.getTime().getTime()));
-            assertEquals(property_values.get("PREFIX:propertyTime"), new Time(cal.getTime().getTime()));
-            assertEquals(property_values.get("PREFIX:propertyTimestamp"), new Timestamp(cal.getTime().getTime()));
+            assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalDateTime"), Convert.toLocalDateTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalDate"), Convert.toLocalDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalTime"), Convert.toLocalTime(cal));
             assertEquals(property_values.get("PREFIX:propertyChar"), 'g');
             assertEquals(property_values.get("PREFIX:propertyBoolean"), Boolean.FALSE);
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
@@ -2588,14 +2934,17 @@ public class TestBeanUtils {
     void testGetPropertyValuesIncluded() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(),
-                new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
+                new String[]{"propertyReadonly", "propertyWriteOnly", "propertyString", "propertyDate", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
                 null,
                 null);
-            assertEquals(property_values.size(), 7);
+            assertEquals(property_values.size(), 9);
             assertTrue(property_values.containsKey("propertyString"));
             assertTrue(property_values.containsKey("propertyDate"));
             assertTrue(property_values.containsKey("propertySqlDate"));
             assertTrue(property_values.containsKey("propertyTime"));
+            assertTrue(property_values.containsKey("propertyInstant"));
+            assertTrue(property_values.containsKey("propertyLocalDate"));
             assertTrue(property_values.containsKey("propertyByte"));
             assertTrue(property_values.containsKey("propertyFloat"));
             assertTrue(property_values.containsKey("propertyShort"));
@@ -2604,9 +2953,11 @@ public class TestBeanUtils {
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("propertyString"), "thisisastring");
-            assertEquals(property_values.get("propertyDate"), cal.getTime());
-            assertEquals(property_values.get("propertySqlDate"), new java.sql.Date(cal.getTime().getTime()));
-            assertEquals(property_values.get("propertyTime"), new Time(cal.getTime().getTime()));
+            assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("propertyLocalDate"), Convert.toLocalDate(cal));
             assertEquals(property_values.get("propertyByte"), (byte) 53);
             assertEquals(property_values.get("propertyFloat"), 35523.967f);
             assertEquals(property_values.get("propertyShort"), (short) 31);
@@ -2619,15 +2970,18 @@ public class TestBeanUtils {
     void testGetPropertyValuesIncludedGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(),
-                new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
+                new String[]{"propertyReadonly", "propertyWriteOnly", "propertyString", "propertyDate", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
                 null,
                 null);
-            assertEquals(property_values.size(), 8);
+            assertEquals(property_values.size(), 10);
             assertTrue(property_values.containsKey("propertyReadonly"));
             assertTrue(property_values.containsKey("propertyString"));
             assertTrue(property_values.containsKey("propertyDate"));
             assertTrue(property_values.containsKey("propertySqlDate"));
             assertTrue(property_values.containsKey("propertyTime"));
+            assertTrue(property_values.containsKey("propertyInstant"));
+            assertTrue(property_values.containsKey("propertyLocalDate"));
             assertTrue(property_values.containsKey("propertyByte"));
             assertTrue(property_values.containsKey("propertyFloat"));
             assertTrue(property_values.containsKey("propertyShort"));
@@ -2637,9 +2991,11 @@ public class TestBeanUtils {
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("propertyReadonly"), 23);
             assertEquals(property_values.get("propertyString"), "thisisastring");
-            assertEquals(property_values.get("propertyDate"), cal.getTime());
-            assertEquals(property_values.get("propertySqlDate"), new java.sql.Date(cal.getTime().getTime()));
-            assertEquals(property_values.get("propertyTime"), new Time(cal.getTime().getTime()));
+            assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("propertyLocalDate"), Convert.toLocalDate(cal));
             assertEquals(property_values.get("propertyByte"), (byte) 53);
             assertEquals(property_values.get("propertyFloat"), 35523.967f);
             assertEquals(property_values.get("propertyShort"), (short) 31);
@@ -2652,14 +3008,17 @@ public class TestBeanUtils {
     void testGetPropertyValuesIncludedSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(),
-                new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
+                new String[]{"propertyReadonly", "propertyWriteOnly", "propertyString", "propertyDate", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
                 null,
                 null);
-            assertEquals(property_values.size(), 7);
+            assertEquals(property_values.size(), 9);
             assertTrue(property_values.containsKey("propertyString"));
             assertTrue(property_values.containsKey("propertyDate"));
             assertTrue(property_values.containsKey("propertySqlDate"));
             assertTrue(property_values.containsKey("propertyTime"));
+            assertTrue(property_values.containsKey("propertyInstant"));
+            assertTrue(property_values.containsKey("propertyLocalDate"));
             assertTrue(property_values.containsKey("propertyByte"));
             assertTrue(property_values.containsKey("propertyFloat"));
             assertTrue(property_values.containsKey("propertyShort"));
@@ -2668,9 +3027,11 @@ public class TestBeanUtils {
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("propertyString"), "thisisastring");
-            assertEquals(property_values.get("propertyDate"), cal.getTime());
-            assertEquals(property_values.get("propertySqlDate"), new java.sql.Date(cal.getTime().getTime()));
-            assertEquals(property_values.get("propertyTime"), new Time(cal.getTime().getTime()));
+            assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("propertyLocalDate"), Convert.toLocalDate(cal));
             assertEquals(property_values.get("propertyByte"), (byte) 53);
             assertEquals(property_values.get("propertyFloat"), 35523.967f);
             assertEquals(property_values.get("propertyShort"), (short) 31);
@@ -2683,14 +3044,17 @@ public class TestBeanUtils {
     void testGetPropertyValuesIncludedPrefix() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(),
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
                 null,
                 "PREFIX:");
-            assertEquals(property_values.size(), 7);
+            assertEquals(property_values.size(), 9);
             assertTrue(property_values.containsKey("PREFIX:propertyString"));
             assertTrue(property_values.containsKey("PREFIX:propertyDate"));
             assertTrue(property_values.containsKey("PREFIX:propertySqlDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyTime"));
+            assertTrue(property_values.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
             assertTrue(property_values.containsKey("PREFIX:propertyFloat"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
@@ -2699,9 +3063,11 @@ public class TestBeanUtils {
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
-            assertEquals(property_values.get("PREFIX:propertyDate"), cal.getTime());
-            assertEquals(property_values.get("PREFIX:propertySqlDate"), new java.sql.Date(cal.getTime().getTime()));
-            assertEquals(property_values.get("PREFIX:propertyTime"), new Time(cal.getTime().getTime()));
+            assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalDate"), Convert.toLocalDate(cal));
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
             assertEquals(property_values.get("PREFIX:propertyFloat"), 35523.967f);
             assertEquals(property_values.get("PREFIX:propertyShort"), (short) 31);
@@ -2714,15 +3080,18 @@ public class TestBeanUtils {
     void testGetPropertyValuesIncludedPrefixGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(),
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
                 null,
                 "PREFIX:");
-            assertEquals(property_values.size(), 8);
+            assertEquals(property_values.size(), 10);
             assertTrue(property_values.containsKey("PREFIX:propertyReadonly"));
             assertTrue(property_values.containsKey("PREFIX:propertyString"));
             assertTrue(property_values.containsKey("PREFIX:propertyDate"));
             assertTrue(property_values.containsKey("PREFIX:propertySqlDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyTime"));
+            assertTrue(property_values.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
             assertTrue(property_values.containsKey("PREFIX:propertyFloat"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
@@ -2732,9 +3101,11 @@ public class TestBeanUtils {
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("PREFIX:propertyReadonly"), 23);
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
-            assertEquals(property_values.get("PREFIX:propertyDate"), cal.getTime());
-            assertEquals(property_values.get("PREFIX:propertySqlDate"), new java.sql.Date(cal.getTime().getTime()));
-            assertEquals(property_values.get("PREFIX:propertyTime"), new Time(cal.getTime().getTime()));
+            assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalDate"), Convert.toLocalDate(cal));
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
             assertEquals(property_values.get("PREFIX:propertyFloat"), 35523.967f);
             assertEquals(property_values.get("PREFIX:propertyShort"), (short) 31);
@@ -2747,14 +3118,17 @@ public class TestBeanUtils {
     void testGetPropertyValuesIncludedPrefixSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(),
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
                 null,
                 "PREFIX:");
-            assertEquals(property_values.size(), 7);
+            assertEquals(property_values.size(), 9);
             assertTrue(property_values.containsKey("PREFIX:propertyString"));
             assertTrue(property_values.containsKey("PREFIX:propertyDate"));
             assertTrue(property_values.containsKey("PREFIX:propertySqlDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyTime"));
+            assertTrue(property_values.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
             assertTrue(property_values.containsKey("PREFIX:propertyFloat"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
@@ -2763,9 +3137,11 @@ public class TestBeanUtils {
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
-            assertEquals(property_values.get("PREFIX:propertyDate"), cal.getTime());
-            assertEquals(property_values.get("PREFIX:propertySqlDate"), new java.sql.Date(cal.getTime().getTime()));
-            assertEquals(property_values.get("PREFIX:propertyTime"), new Time(cal.getTime().getTime()));
+            assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalDate"), Convert.toLocalDate(cal));
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
             assertEquals(property_values.get("PREFIX:propertyFloat"), 35523.967f);
             assertEquals(property_values.get("PREFIX:propertyShort"), (short) 31);
@@ -2779,13 +3155,16 @@ public class TestBeanUtils {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(),
                 null,
-                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
+                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyLocalDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
                 null);
-            assertEquals(property_values.size(), 10);
+            assertEquals(property_values.size(), 13);
             assertTrue(property_values.containsKey("propertyStringBuffer"));
             assertTrue(property_values.containsKey("propertyDate"));
             assertTrue(property_values.containsKey("propertyTime"));
             assertTrue(property_values.containsKey("propertyTimestamp"));
+            assertTrue(property_values.containsKey("propertyInstant"));
+            assertTrue(property_values.containsKey("propertyLocalDateTime"));
+            assertTrue(property_values.containsKey("propertyLocalTime"));
             assertTrue(property_values.containsKey("propertyChar"));
             assertTrue(property_values.containsKey("propertyByte"));
             assertTrue(property_values.containsKey("propertyDouble"));
@@ -2797,9 +3176,12 @@ public class TestBeanUtils {
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
-            assertEquals(property_values.get("propertyDate"), cal.getTime());
-            assertEquals(property_values.get("propertyTime"), new Time(cal.getTime().getTime()));
-            assertEquals(property_values.get("propertyTimestamp"), new Timestamp(cal.getTime().getTime()));
+            assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("propertyLocalDateTime"), Convert.toLocalDateTime(cal));
+            assertEquals(property_values.get("propertyLocalTime"), Convert.toLocalTime(cal));
             assertEquals(property_values.get("propertyChar"), 'g');
             assertEquals(property_values.get("propertyByte"), (byte) 53);
             assertEquals(property_values.get("propertyDouble"), 84578.42d);
@@ -2816,14 +3198,17 @@ public class TestBeanUtils {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(),
                 null,
-                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
+                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyLocalDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
                 null);
-            assertEquals(property_values.size(), 11);
+            assertEquals(property_values.size(), 14);
             assertTrue(property_values.containsKey("propertyReadonly"));
             assertTrue(property_values.containsKey("propertyStringBuffer"));
             assertTrue(property_values.containsKey("propertyDate"));
             assertTrue(property_values.containsKey("propertyTime"));
             assertTrue(property_values.containsKey("propertyTimestamp"));
+            assertTrue(property_values.containsKey("propertyInstant"));
+            assertTrue(property_values.containsKey("propertyLocalDateTime"));
+            assertTrue(property_values.containsKey("propertyLocalTime"));
             assertTrue(property_values.containsKey("propertyChar"));
             assertTrue(property_values.containsKey("propertyByte"));
             assertTrue(property_values.containsKey("propertyDouble"));
@@ -2836,9 +3221,12 @@ public class TestBeanUtils {
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("propertyReadonly"), 23);
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
-            assertEquals(property_values.get("propertyDate"), cal.getTime());
-            assertEquals(property_values.get("propertyTime"), new Time(cal.getTime().getTime()));
-            assertEquals(property_values.get("propertyTimestamp"), new Timestamp(cal.getTime().getTime()));
+            assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("propertyLocalDateTime"), Convert.toLocalDateTime(cal));
+            assertEquals(property_values.get("propertyLocalTime"), Convert.toLocalTime(cal));
             assertEquals(property_values.get("propertyChar"), 'g');
             assertEquals(property_values.get("propertyByte"), (byte) 53);
             assertEquals(property_values.get("propertyDouble"), 84578.42d);
@@ -2855,13 +3243,16 @@ public class TestBeanUtils {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(),
                 null,
-                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
+                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyLocalDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
                 null);
-            assertEquals(property_values.size(), 10);
+            assertEquals(property_values.size(), 13);
             assertTrue(property_values.containsKey("propertyStringBuffer"));
             assertTrue(property_values.containsKey("propertyDate"));
             assertTrue(property_values.containsKey("propertyTime"));
             assertTrue(property_values.containsKey("propertyTimestamp"));
+            assertTrue(property_values.containsKey("propertyInstant"));
+            assertTrue(property_values.containsKey("propertyLocalDateTime"));
+            assertTrue(property_values.containsKey("propertyLocalTime"));
             assertTrue(property_values.containsKey("propertyChar"));
             assertTrue(property_values.containsKey("propertyByte"));
             assertTrue(property_values.containsKey("propertyDouble"));
@@ -2873,9 +3264,12 @@ public class TestBeanUtils {
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
-            assertEquals(property_values.get("propertyDate"), cal.getTime());
-            assertEquals(property_values.get("propertyTime"), new Time(cal.getTime().getTime()));
-            assertEquals(property_values.get("propertyTimestamp"), new Timestamp(cal.getTime().getTime()));
+            assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("propertyLocalDateTime"), Convert.toLocalDateTime(cal));
+            assertEquals(property_values.get("propertyLocalTime"), Convert.toLocalTime(cal));
             assertEquals(property_values.get("propertyChar"), 'g');
             assertEquals(property_values.get("propertyByte"), (byte) 53);
             assertEquals(property_values.get("propertyDouble"), 84578.42d);
@@ -2892,13 +3286,16 @@ public class TestBeanUtils {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(),
                 null,
-                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
+                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
                 "PREFIX:");
-            assertEquals(property_values.size(), 10);
+            assertEquals(property_values.size(), 13);
             assertTrue(property_values.containsKey("PREFIX:propertyStringBuffer"));
             assertTrue(property_values.containsKey("PREFIX:propertyDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyTime"));
             assertTrue(property_values.containsKey("PREFIX:propertyTimestamp"));
+            assertTrue(property_values.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalTime"));
             assertTrue(property_values.containsKey("PREFIX:propertyChar"));
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
             assertTrue(property_values.containsKey("PREFIX:propertyDouble"));
@@ -2910,9 +3307,12 @@ public class TestBeanUtils {
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
-            assertEquals(property_values.get("PREFIX:propertyDate"), cal.getTime());
-            assertEquals(property_values.get("PREFIX:propertyTime"), new Time(cal.getTime().getTime()));
-            assertEquals(property_values.get("PREFIX:propertyTimestamp"), new Timestamp(cal.getTime().getTime()));
+            assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalDateTime"), Convert.toLocalDateTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalTime"), Convert.toLocalTime(cal));
             assertEquals(property_values.get("PREFIX:propertyChar"), 'g');
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
             assertEquals(property_values.get("PREFIX:propertyDouble"), 84578.42d);
@@ -2929,14 +3329,17 @@ public class TestBeanUtils {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(),
                 null,
-                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
+                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
                 "PREFIX:");
-            assertEquals(property_values.size(), 11);
+            assertEquals(property_values.size(), 14);
             assertTrue(property_values.containsKey("PREFIX:propertyReadonly"));
             assertTrue(property_values.containsKey("PREFIX:propertyStringBuffer"));
             assertTrue(property_values.containsKey("PREFIX:propertyDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyTime"));
             assertTrue(property_values.containsKey("PREFIX:propertyTimestamp"));
+            assertTrue(property_values.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalTime"));
             assertTrue(property_values.containsKey("PREFIX:propertyChar"));
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
             assertTrue(property_values.containsKey("PREFIX:propertyDouble"));
@@ -2949,9 +3352,12 @@ public class TestBeanUtils {
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("PREFIX:propertyReadonly"), 23);
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
-            assertEquals(property_values.get("PREFIX:propertyDate"), cal.getTime());
-            assertEquals(property_values.get("PREFIX:propertyTime"), new Time(cal.getTime().getTime()));
-            assertEquals(property_values.get("PREFIX:propertyTimestamp"), new Timestamp(cal.getTime().getTime()));
+            assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalDateTime"), Convert.toLocalDateTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalTime"), Convert.toLocalTime(cal));
             assertEquals(property_values.get("PREFIX:propertyChar"), 'g');
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
             assertEquals(property_values.get("PREFIX:propertyDouble"), 84578.42d);
@@ -2968,13 +3374,16 @@ public class TestBeanUtils {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(),
                 null,
-                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
+                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
                 "PREFIX:");
-            assertEquals(property_values.size(), 10);
+            assertEquals(property_values.size(), 13);
             assertTrue(property_values.containsKey("PREFIX:propertyStringBuffer"));
             assertTrue(property_values.containsKey("PREFIX:propertyDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyTime"));
             assertTrue(property_values.containsKey("PREFIX:propertyTimestamp"));
+            assertTrue(property_values.containsKey("PREFIX:propertyInstant"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalDateTime"));
+            assertTrue(property_values.containsKey("PREFIX:propertyLocalTime"));
             assertTrue(property_values.containsKey("PREFIX:propertyChar"));
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
             assertTrue(property_values.containsKey("PREFIX:propertyDouble"));
@@ -2986,9 +3395,12 @@ public class TestBeanUtils {
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
-            assertEquals(property_values.get("PREFIX:propertyDate"), cal.getTime());
-            assertEquals(property_values.get("PREFIX:propertyTime"), new Time(cal.getTime().getTime()));
-            assertEquals(property_values.get("PREFIX:propertyTimestamp"), new Timestamp(cal.getTime().getTime()));
+            assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalDateTime"), Convert.toLocalDateTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyLocalTime"), Convert.toLocalTime(cal));
             assertEquals(property_values.get("PREFIX:propertyChar"), 'g');
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
             assertEquals(property_values.get("PREFIX:propertyDouble"), 84578.42d);
@@ -3004,20 +3416,23 @@ public class TestBeanUtils {
     void testGetPropertyValuesFiltered() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(),
-                new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
-                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
+                new String[]{"propertyReadonly", "propertyWriteOnly", "propertyString", "propertyDate", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
+                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyLocalDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
                 null);
-            assertEquals(property_values.size(), 4);
+            assertEquals(property_values.size(), 5);
             assertTrue(property_values.containsKey("propertyDate"));
             assertTrue(property_values.containsKey("propertyTime"));
+            assertTrue(property_values.containsKey("propertyInstant"));
             assertTrue(property_values.containsKey("propertyByte"));
             assertTrue(property_values.containsKey("propertyShort"));
 
             var cal = Calendar.getInstance();
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
-            assertEquals(property_values.get("propertyDate"), cal.getTime());
-            assertEquals(property_values.get("propertyTime"), new Time(cal.getTime().getTime()));
+            assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyByte"), (byte) 53);
             assertEquals(property_values.get("propertyShort"), (short) 31);
         } catch (BeanUtilsException e) {
@@ -3029,13 +3444,15 @@ public class TestBeanUtils {
     void testGetPropertyValuesFilteredGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(),
-                new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
-                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
+                new String[]{"propertyReadonly", "propertyWriteOnly", "propertyString", "propertyDate", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
+                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyLocalDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
                 null);
-            assertEquals(property_values.size(), 5);
+            assertEquals(property_values.size(), 6);
             assertTrue(property_values.containsKey("propertyReadonly"));
             assertTrue(property_values.containsKey("propertyDate"));
             assertTrue(property_values.containsKey("propertyTime"));
+            assertTrue(property_values.containsKey("propertyInstant"));
             assertTrue(property_values.containsKey("propertyByte"));
             assertTrue(property_values.containsKey("propertyShort"));
 
@@ -3043,8 +3460,9 @@ public class TestBeanUtils {
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("propertyReadonly"), 23);
-            assertEquals(property_values.get("propertyDate"), cal.getTime());
-            assertEquals(property_values.get("propertyTime"), new Time(cal.getTime().getTime()));
+            assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyByte"), (byte) 53);
             assertEquals(property_values.get("propertyShort"), (short) 31);
         } catch (BeanUtilsException e) {
@@ -3056,20 +3474,23 @@ public class TestBeanUtils {
     void testGetPropertyValuesFilteredSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(),
-                new String[]{"propertyReadonly", "propertyWriteonly", "propertyString", "propertyDate", "propertySqlDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
-                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
+                new String[]{"propertyReadonly", "propertyWriteOnly", "propertyString", "propertyDate", "propertySqlDate",
+                    "propertyInstant", "propertyLocalDate", "propertyTime", "propertyByte", "propertyFloat", "propertyShort"},
+                new String[]{"propertyString", "propertyCalendar", "propertySqlDate", "propertyLocalDate", "propertyBoolean", "propertyFloat", "propertyBigDecimal"},
                 null);
-            assertEquals(property_values.size(), 4);
+            assertEquals(property_values.size(), 5);
             assertTrue(property_values.containsKey("propertyDate"));
             assertTrue(property_values.containsKey("propertyTime"));
+            assertTrue(property_values.containsKey("propertyInstant"));
             assertTrue(property_values.containsKey("propertyByte"));
             assertTrue(property_values.containsKey("propertyShort"));
 
             var cal = Calendar.getInstance();
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
-            assertEquals(property_values.get("propertyDate"), cal.getTime());
-            assertEquals(property_values.get("propertyTime"), new Time(cal.getTime().getTime()));
+            assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyByte"), (byte) 53);
             assertEquals(property_values.get("propertyShort"), (short) 31);
         } catch (BeanUtilsException e) {
@@ -3081,20 +3502,23 @@ public class TestBeanUtils {
     void testGetPropertyValuesFilteredPrefix() {
         try {
             var property_values = BeanUtils.getPropertyValues(getPopulatedBean(),
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
-                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly", "PREFIX:propertyString", "PREFIX:propertyDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
                 "PREFIX:");
-            assertEquals(property_values.size(), 4);
+            assertEquals(property_values.size(), 5);
             assertTrue(property_values.containsKey("PREFIX:propertyDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyTime"));
+            assertTrue(property_values.containsKey("PREFIX:propertyInstant"));
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
 
             var cal = Calendar.getInstance();
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
-            assertEquals(property_values.get("PREFIX:propertyDate"), cal.getTime());
-            assertEquals(property_values.get("PREFIX:propertyTime"), new Time(cal.getTime().getTime()));
+            assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
             assertEquals(property_values.get("PREFIX:propertyShort"), (short) 31);
         } catch (BeanUtilsException e) {
@@ -3106,13 +3530,15 @@ public class TestBeanUtils {
     void testGetPropertyValuesFilteredPrefixGetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.GETTERS, getPopulatedBean(),
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
-                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly", "PREFIX:propertyString", "PREFIX:propertyDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
                 "PREFIX:");
-            assertEquals(property_values.size(), 5);
+            assertEquals(property_values.size(), 6);
             assertTrue(property_values.containsKey("PREFIX:propertyReadonly"));
             assertTrue(property_values.containsKey("PREFIX:propertyDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyTime"));
+            assertTrue(property_values.containsKey("PREFIX:propertyInstant"));
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
 
@@ -3120,8 +3546,9 @@ public class TestBeanUtils {
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
             assertEquals(property_values.get("PREFIX:propertyReadonly"), 23);
-            assertEquals(property_values.get("PREFIX:propertyDate"), cal.getTime());
-            assertEquals(property_values.get("PREFIX:propertyTime"), new Time(cal.getTime().getTime()));
+            assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
             assertEquals(property_values.get("PREFIX:propertyShort"), (short) 31);
         } catch (BeanUtilsException e) {
@@ -3133,24 +3560,49 @@ public class TestBeanUtils {
     void testGetPropertyValuesFilteredPrefixSetters() {
         try {
             var property_values = BeanUtils.getPropertyValues(BeanUtils.Accessors.SETTERS, getPopulatedBean(),
-                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteonly", "PREFIX:propertyString", "PREFIX:propertyDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
-                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
+                new String[]{"PREFIX:propertyReadonly", "PREFIX:propertyWriteOnly", "PREFIX:propertyString", "PREFIX:propertyDate",
+                    "PREFIX:propertyInstant", "PREFIX:propertyLocalDate", "PREFIX:propertySqlDate", "PREFIX:propertyTime", "PREFIX:propertyByte", "PREFIX:propertyFloat", "PREFIX:propertyShort"},
+                new String[]{"PREFIX:propertyString", "PREFIX:propertyCalendar", "PREFIX:propertySqlDate", "PREFIX:propertyLocalDate", "PREFIX:propertyBoolean", "PREFIX:propertyFloat", "PREFIX:propertyBigDecimal"},
                 "PREFIX:");
-            assertEquals(property_values.size(), 4);
+            assertEquals(property_values.size(), 5);
             assertTrue(property_values.containsKey("PREFIX:propertyDate"));
             assertTrue(property_values.containsKey("PREFIX:propertyTime"));
+            assertTrue(property_values.containsKey("PREFIX:propertyInstant"));
             assertTrue(property_values.containsKey("PREFIX:propertyByte"));
             assertTrue(property_values.containsKey("PREFIX:propertyShort"));
 
             var cal = Calendar.getInstance();
             cal.set(2002, Calendar.DECEMBER, 26, 22, 52, 31);
             cal.set(Calendar.MILLISECOND, 153);
-            assertEquals(property_values.get("PREFIX:propertyDate"), cal.getTime());
-            assertEquals(property_values.get("PREFIX:propertyTime"), new Time(cal.getTime().getTime()));
+            assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
             assertEquals(property_values.get("PREFIX:propertyShort"), (short) 31);
         } catch (BeanUtilsException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
+    }
+
+    @SuppressWarnings("deprecated")
+    @Test
+    void testFormatPropertyValues() {
+        assertEquals("20230123134523000-0500", BeanUtils.formatPropertyValue(new Date(123, Calendar.JANUARY, 23, 13, 45, 23), null));
+        assertEquals("134523000-0500", BeanUtils.formatPropertyValue(new Time(13, 45, 23), null));
+        assertEquals("20230123134523000-0500", BeanUtils.formatPropertyValue(Instant.parse("2023-01-23T18:45:23.00Z"), null));
+        assertEquals("20230123134523142-0500", BeanUtils.formatPropertyValue(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000), null));
+        assertEquals("20230123000000000-0500", BeanUtils.formatPropertyValue(LocalDate.of(2023, Month.JANUARY, 23), null));
+        assertEquals("134523000-0500", BeanUtils.formatPropertyValue(LocalTime.of(13, 45, 23, 142000000), null));
+    }
+
+    @SuppressWarnings("deprecated")
+    @Test
+    void testFormatPropertyValuesConstrained() {
+        assertEquals("23 Jan 2023 13:45:23", BeanUtils.formatPropertyValue(new Date(123, Calendar.JANUARY, 23, 13, 45, 23), new ConstrainedProperty("property").format(new SimpleDateFormat("d MMM yyyy HH:mm:ss"))));
+        assertEquals("1 Jan 1970 13:45:23", BeanUtils.formatPropertyValue(new Time(13, 45, 23), new ConstrainedProperty("property").format(new SimpleDateFormat("d MMM yyyy HH:mm:ss"))));
+        assertEquals("23 Jan 2023 13:45:23", BeanUtils.formatPropertyValue(Instant.parse("2023-01-23T18:45:23.00Z"), new ConstrainedProperty("property").format(new SimpleDateFormat("d MMM yyyy HH:mm:ss"))));
+        assertEquals("23 Jan 2023 13:45:23", BeanUtils.formatPropertyValue(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000), new ConstrainedProperty("property").format(new SimpleDateFormat("d MMM yyyy HH:mm:ss"))));
+        assertEquals("23 Jan 2023 00:00:00", BeanUtils.formatPropertyValue(LocalDate.of(2023, Month.JANUARY, 23), new ConstrainedProperty("property").format(new SimpleDateFormat("d MMM yyyy HH:mm:ss"))));
+        assertEquals("1 Jan 1970 13:45:23", BeanUtils.formatPropertyValue(LocalTime.of(13, 45, 23, 142000000), new ConstrainedProperty("property").format(new SimpleDateFormat("d MMM yyyy HH:mm:ss"))));
     }
 }

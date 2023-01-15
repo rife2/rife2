@@ -51,11 +51,19 @@ public class TestBeans {
                 form.getInputByName("longObject").setValueAttribute("2335454");
                 form.getInputByName("short").setValueAttribute("32");
                 form.getInputByName("shortObject").setValueAttribute("12");
+
                 form.getInputByName("date").setValueAttribute("2005-08-20 09:44");
                 form.getInputByName("dateFormatted").setValueAttribute("Sat 20 Aug 2005 09:44:00");
                 var dates_formatted_inputs = form.getInputsByName("datesFormatted");
                 dates_formatted_inputs.get(0).setValueAttribute("Sun 21 Aug 2005 11:06:14");
                 dates_formatted_inputs.get(1).setValueAttribute("Mon 17 Jul 2006 16:05:31");
+
+                form.getInputByName("instant").setValueAttribute("2006-08-20 08:44");
+                form.getInputByName("instantFormatted").setValueAttribute("Sun 20 Aug 2006 08:44:00");
+                var instants_formatted_inputs = form.getInputsByName("instantsFormatted");
+                instants_formatted_inputs.get(0).setValueAttribute("Tue 21 Aug 2007 10:06:14");
+                instants_formatted_inputs.get(1).setValueAttribute("Thu 17 Jul 2008 15:05:31");
+
                 form.getInputByName("serializableParam").setValueAttribute(SerializationUtils.serializeToString(new BeanImpl.SerializableParam(13, "Thirteen")));
                 var serializable_params_inputs = form.getInputsByName("serializableParams");
                 serializable_params_inputs.get(0).setValueAttribute(SerializationUtils.serializeToString(new BeanImpl.SerializableParam(9, "Nine")));
@@ -89,7 +97,10 @@ public class TestBeans {
 
                 page = page.getHtmlElementById("beanSubmit").click();
 
-                assertEquals("WEDNESDAY,the string,the stringbuffer,23154,893749,u,null,true,false,0,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true,Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31,13:Thirteen,9:Nine,91:NinetyOne", page.getWebResponse().getContentAsString());
+                assertEquals("WEDNESDAY,the string,the stringbuffer,23154,893749,u,null,true,false,0,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true," +
+                             "Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31," +
+                             "Sun 20 Aug 2006 08:44:00,Tue 21 Aug 2007 10:06:14,Thu 17 Jul 2008 15:05:31," +
+                             "13:Thirteen,9:Nine,91:NinetyOne", page.getWebResponse().getContentAsString());
 
                 page = webClient.getPage("http://localhost:8181/bean/get");
                 form = page.getFormByName("submissionform");
@@ -111,9 +122,15 @@ public class TestBeans {
                 form.getInputByName("longObject").setValueAttribute("233f5454");
                 form.getInputByName("short").setValueAttribute("32");
                 form.getInputByName("shortObject").setValueAttribute("");
+
                 dates_formatted_inputs = form.getInputsByName("datesFormatted");
                 dates_formatted_inputs.get(0).setValueAttribute("Sun 21 Aug 2005 11:06:14");
                 dates_formatted_inputs.get(1).setValueAttribute("Mon 18 Jul 2006 16:05:31");
+
+                instants_formatted_inputs = form.getInputsByName("instantsFormatted");
+                instants_formatted_inputs.get(0).setValueAttribute("Tue 21 Aug 2007 10:06:14");
+                instants_formatted_inputs.get(1).setValueAttribute("Thu 16 Jul 2008 15:05:31");
+
                 form.getInputByName("serializableParam").setValueAttribute("invalid");
                 serializable_params_inputs = form.getInputsByName("serializableParams");
                 serializable_params_inputs.get(0).setValueAttribute("invalid");
@@ -127,9 +144,10 @@ public class TestBeans {
                     notNumeric : double
                     notNumeric : longObject
                     invalid : datesFormatted
+                    invalid : instantsFormatted
                     invalid : serializableParam
                     invalid : serializableParams
-                    null,the string,the stringbuffer,0,null,u,null,true,false,0,21,0.0,25435.98,3434.76,6534.8,34347897,null,32,null,,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,null,91:NinetyOne""", page.getWebResponse().getContentAsString());
+                    null,the string,the stringbuffer,0,null,u,null,true,false,0,21,0.0,25435.98,3434.76,6534.8,34347897,null,32,null,,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,Tue 21 Aug 2007 10:06:14,null,null,null,91:NinetyOne""", page.getWebResponse().getContentAsString());
             }
         }
     }
@@ -168,6 +186,11 @@ public class TestBeans {
                 var dates_formatted_inputs = form.getInputsByName("prefix_datesFormatted");
                 dates_formatted_inputs.get(0).setValueAttribute("Sun 21 Aug 2005 11:06:14");
                 dates_formatted_inputs.get(1).setValueAttribute("Mon 17 Jul 2006 16:05:31");
+                form.getInputByName("prefix_instant").setValueAttribute("2006-08-20 08:44");
+                form.getInputByName("prefix_instantFormatted").setValueAttribute("Sun 20 Aug 2006 08:44:00");
+                var instants_formatted_inputs = form.getInputsByName("prefix_instantsFormatted");
+                instants_formatted_inputs.get(0).setValueAttribute("Tue 21 Aug 2007 10:06:14");
+                instants_formatted_inputs.get(1).setValueAttribute("Thu 17 Jul 2008 15:05:31");
                 form.getInputByName("prefix_serializableParam").setValueAttribute(SerializationUtils.serializeToString(new BeanImpl.SerializableParam(13, "Thirteen")));
                 var serializable_params_inputs = form.getInputsByName("prefix_serializableParams");
                 serializable_params_inputs.get(0).setValueAttribute(SerializationUtils.serializeToString(new BeanImpl.SerializableParam(9, "Nine")));
@@ -201,7 +224,10 @@ public class TestBeans {
 
                 page = page.getHtmlElementById("beanSubmit").click();
 
-                assertEquals("WEDNESDAY,the string,the stringbuffer,23154,893749,u,null,true,false,0,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true,Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31,13:Thirteen,9:Nine,91:NinetyOne", page.getWebResponse().getContentAsString());
+                assertEquals("WEDNESDAY,the string,the stringbuffer,23154,893749,u,null,true,false,0,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true," +
+                             "Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31," +
+                             "Sun 20 Aug 2006 08:44:00,Tue 21 Aug 2007 10:06:14,Thu 17 Jul 2008 15:05:31," +
+                             "13:Thirteen,9:Nine,91:NinetyOne", page.getWebResponse().getContentAsString());
 
                 page = webClient.getPage("http://localhost:8181/bean/get");
                 form = page.getFormByName("submissionform");
@@ -223,9 +249,15 @@ public class TestBeans {
                 form.getInputByName("prefix_longObject").setValueAttribute("233f5454");
                 form.getInputByName("prefix_short").setValueAttribute("32");
                 form.getInputByName("prefix_shortObject").setValueAttribute("");
+
                 dates_formatted_inputs = form.getInputsByName("prefix_datesFormatted");
                 dates_formatted_inputs.get(0).setValueAttribute("Sun 21 Aug 2005 11:06:14");
                 dates_formatted_inputs.get(1).setValueAttribute("Mon 18 Jul 2006 16:05:31");
+
+                instants_formatted_inputs = form.getInputsByName("prefix_instantsFormatted");
+                instants_formatted_inputs.get(0).setValueAttribute("Tue 21 Aug 2007 10:06:14");
+                instants_formatted_inputs.get(1).setValueAttribute("Thu 16 Jul 2008 15:05:31");
+
                 form.getInputByName("prefix_serializableParam").setValueAttribute("invalid");
                 serializable_params_inputs = form.getInputsByName("prefix_serializableParams");
                 serializable_params_inputs.get(0).setValueAttribute("invalid");
@@ -239,9 +271,10 @@ public class TestBeans {
                     notNumeric : double
                     notNumeric : longObject
                     invalid : datesFormatted
+                    invalid : instantsFormatted
                     invalid : serializableParam
                     invalid : serializableParams
-                    null,the string,the stringbuffer,0,null,u,null,true,false,0,21,0.0,25435.98,3434.76,6534.8,34347897,null,32,null,,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,null,91:NinetyOne""", page.getWebResponse().getContentAsString());
+                    null,the string,the stringbuffer,0,null,u,null,true,false,0,21,0.0,25435.98,3434.76,6534.8,34347897,null,32,null,,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,Tue 21 Aug 2007 10:06:14,null,null,null,91:NinetyOne""", page.getWebResponse().getContentAsString());
             }
         }
     }
@@ -282,6 +315,13 @@ public class TestBeans {
                 var dates_formatted_inputs = form.getInputsByName("datesFormatted");
                 dates_formatted_inputs.get(0).setValueAttribute("Sun 21 Aug 2005 11:06:14");
                 dates_formatted_inputs.get(1).setValueAttribute("Mon 17 Jul 2006 16:05:31");
+
+                form.getInputByName("instant").setValueAttribute("2006-08-20 08:44");
+                form.getInputByName("instantFormatted").setValueAttribute("Sun 20 Aug 2006 08:44:00");
+                var instants_formatted_inputs = form.getInputsByName("instantsFormatted");
+                instants_formatted_inputs.get(0).setValueAttribute("Tue 21 Aug 2007 10:06:14");
+                instants_formatted_inputs.get(1).setValueAttribute("Thu 17 Jul 2008 15:05:31");
+
                 form.getInputByName("serializableParam").setValueAttribute(SerializationUtils.serializeToString(new BeanImpl.SerializableParam(13, "Thirteen")));
                 var serializable_params_inputs = form.getInputsByName("serializableParams");
                 serializable_params_inputs.get(0).setValueAttribute(SerializationUtils.serializeToString(new BeanImpl.SerializableParam(9, "Nine")));
@@ -315,7 +355,10 @@ public class TestBeans {
 
                 page = page.getHtmlElementById("beanSubmit").click();
 
-                assertEquals("MONDAY,the string,the stringbuffer,23154,893749,u,b,true,false,22,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true,Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31,13:Thirteen,9:Nine,91:NinetyOne", page.getWebResponse().getContentAsString());
+                assertEquals("MONDAY,the string,the stringbuffer,23154,893749,u,b,true,false,22,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true," +
+                    "Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31," +
+                    "Sun 20 Aug 2006 08:44:00,Tue 21 Aug 2007 10:06:14,Thu 17 Jul 2008 15:05:31," +
+                    "13:Thirteen,9:Nine,91:NinetyOne", page.getWebResponse().getContentAsString());
 
                 page = webClient.getPage("http://localhost:8181/bean/fill");
                 form = page.getFormByName("submissionform");
@@ -339,9 +382,15 @@ public class TestBeans {
                 form.getInputByName("longObject").setValueAttribute("233f5454");
                 form.getInputByName("short").setValueAttribute("32");
                 form.getInputByName("shortObject").setValueAttribute("");
+
                 dates_formatted_inputs = form.getInputsByName("datesFormatted");
                 dates_formatted_inputs.get(0).setValueAttribute("Sun 21 Aug 2005 11:06:14");
                 dates_formatted_inputs.get(1).setValueAttribute("Mon 18 Jul 2006 16:05:31");
+
+                instants_formatted_inputs = form.getInputsByName("instantsFormatted");
+                instants_formatted_inputs.get(0).setValueAttribute("Tue 21 Aug 2007 10:06:14");
+                instants_formatted_inputs.get(1).setValueAttribute("Thu 16 Jul 2008 15:05:31");
+
                 form.getInputByName("serializableParam").setValueAttribute("invalid");
                 serializable_params_inputs = form.getInputsByName("serializableParams");
                 serializable_params_inputs.get(0).setValueAttribute("invalid");
@@ -355,9 +404,10 @@ public class TestBeans {
                     notNumeric : double
                     notNumeric : longObject
                     invalid : datesFormatted
+                    invalid : instantsFormatted
                     invalid : serializableParam
                     invalid : serializableParams
-                    FRIDAY,the string,the stringbuffer,999,null,u,b,true,false,22,21,123.45,25435.98,3434.76,6534.8,34347897,55,32,null,,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,null,91:NinetyOne""", page.getWebResponse().getContentAsString());
+                    FRIDAY,the string,the stringbuffer,999,null,u,b,true,false,22,21,123.45,25435.98,3434.76,6534.8,34347897,55,32,null,,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,Tue 21 Aug 2007 10:06:14,null,null,null,91:NinetyOne""", page.getWebResponse().getContentAsString());
             }
         }
     }
@@ -398,6 +448,13 @@ public class TestBeans {
                 var dates_formatted_inputs = form.getInputsByName("prefix_datesFormatted");
                 dates_formatted_inputs.get(0).setValueAttribute("Sun 21 Aug 2005 11:06:14");
                 dates_formatted_inputs.get(1).setValueAttribute("Mon 17 Jul 2006 16:05:31");
+
+                form.getInputByName("prefix_instant").setValueAttribute("2006-08-20 08:44");
+                form.getInputByName("prefix_instantFormatted").setValueAttribute("Sun 20 Aug 2006 08:44:00");
+                var instants_formatted_inputs = form.getInputsByName("prefix_instantsFormatted");
+                instants_formatted_inputs.get(0).setValueAttribute("Tue 21 Aug 2007 10:06:14");
+                instants_formatted_inputs.get(1).setValueAttribute("Thu 17 Jul 2008 15:05:31");
+
                 form.getInputByName("prefix_serializableParam").setValueAttribute(SerializationUtils.serializeToString(new BeanImpl.SerializableParam(13, "Thirteen")));
                 var serializable_params_inputs = form.getInputsByName("prefix_serializableParams");
                 serializable_params_inputs.get(0).setValueAttribute(SerializationUtils.serializeToString(new BeanImpl.SerializableParam(9, "Nine")));
@@ -431,7 +488,10 @@ public class TestBeans {
 
                 page = page.getHtmlElementById("beanSubmit").click();
 
-                assertEquals("MONDAY,the string,the stringbuffer,23154,893749,u,b,true,false,22,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true,Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31,13:Thirteen,9:Nine,91:NinetyOne", page.getWebResponse().getContentAsString());
+                assertEquals("MONDAY,the string,the stringbuffer,23154,893749,u,b,true,false,22,21,34878.34,25435.98,3434.76,6534.8,34347897,2335454,32,12,this is some html content,true,someimage.png,true," +
+                             "Sat 20 Aug 2005 09:44:00,Sun 21 Aug 2005 11:06:14,Mon 17 Jul 2006 16:05:31," +
+                             "Sun 20 Aug 2006 08:44:00,Tue 21 Aug 2007 10:06:14,Thu 17 Jul 2008 15:05:31," +
+                             "13:Thirteen,9:Nine,91:NinetyOne", page.getWebResponse().getContentAsString());
 
                 page = webClient.getPage("http://localhost:8181/bean/fill");
                 form = page.getFormByName("submissionform");
@@ -455,9 +515,15 @@ public class TestBeans {
                 form.getInputByName("prefix_longObject").setValueAttribute("233f5454");
                 form.getInputByName("prefix_short").setValueAttribute("32");
                 form.getInputByName("prefix_shortObject").setValueAttribute("");
+
                 dates_formatted_inputs = form.getInputsByName("prefix_datesFormatted");
                 dates_formatted_inputs.get(0).setValueAttribute("Sun 21 Aug 2005 11:06:14");
                 dates_formatted_inputs.get(1).setValueAttribute("Mon 18 Jul 2006 16:05:31");
+
+                instants_formatted_inputs = form.getInputsByName("prefix_instantsFormatted");
+                instants_formatted_inputs.get(0).setValueAttribute("Tue 21 Aug 2007 10:06:14");
+                instants_formatted_inputs.get(1).setValueAttribute("Thu 16 Jul 2008 15:05:31");
+
                 form.getInputByName("prefix_serializableParam").setValueAttribute("invalid");
                 serializable_params_inputs = form.getInputsByName("prefix_serializableParams");
                 serializable_params_inputs.get(0).setValueAttribute("invalid");
@@ -471,9 +537,10 @@ public class TestBeans {
                     notNumeric : double
                     notNumeric : longObject
                     invalid : datesFormatted
+                    invalid : instantsFormatted
                     invalid : serializableParam
                     invalid : serializableParams
-                    FRIDAY,the string,the stringbuffer,999,null,u,b,true,false,22,21,123.45,25435.98,3434.76,6534.8,34347897,55,32,null,,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,null,91:NinetyOne""", page.getWebResponse().getContentAsString());
+                    FRIDAY,the string,the stringbuffer,999,null,u,b,true,false,22,21,123.45,25435.98,3434.76,6534.8,34347897,55,32,null,,false,null,false,null,Sun 21 Aug 2005 11:06:14,null,null,Tue 21 Aug 2007 10:06:14,null,null,null,91:NinetyOne""", page.getWebResponse().getContentAsString());
             }
         }
     }

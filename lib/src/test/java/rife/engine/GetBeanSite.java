@@ -45,6 +45,10 @@ public class GetBeanSite extends Site {
                     c.print("<input type=\"text\" name=\"" + prefix_ + "dateFormatted\">");
                     c.print("<input type=\"text\" name=\"" + prefix_ + "datesFormatted\">");
                     c.print("<input type=\"text\" name=\"" + prefix_ + "datesFormatted\">");
+                    c.print("<input type=\"text\" name=\"" + prefix_ + "instant\">");
+                    c.print("<input type=\"text\" name=\"" + prefix_ + "instantFormatted\">");
+                    c.print("<input type=\"text\" name=\"" + prefix_ + "instantsFormatted\">");
+                    c.print("<input type=\"text\" name=\"" + prefix_ + "instantsFormatted\">");
                     c.print("<input type=\"text\" name=\"" + prefix_ + "serializableParam\">");
                     c.print("<input type=\"text\" name=\"" + prefix_ + "serializableParams\">");
                     c.print("<input type=\"text\" name=\"" + prefix_ + "serializableParams\">");

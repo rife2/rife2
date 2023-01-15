@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDropSequenceOracle extends TestDropSequence {
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testInstantiationOracle() {
-        DropSequence query = new DropSequence(ORACLE);
+        var query = new DropSequence(ORACLE);
         assertNotNull(query);
         try {
             query.getSql();
@@ -25,7 +25,7 @@ public class TestDropSequenceOracle extends TestDropSequence {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testClearOracle() {
-        DropSequence query = new DropSequence(ORACLE);
+        var query = new DropSequence(ORACLE);
         query.name("sequencename");
         assertNotNull(query.getSql());
         query.clear();
@@ -39,7 +39,7 @@ public class TestDropSequenceOracle extends TestDropSequence {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCreateOracle() {
-        DropSequence query = new DropSequence(ORACLE);
+        var query = new DropSequence(ORACLE);
         query.name("sequencename");
         assertEquals(query.getSql(), "DROP SEQUENCE sequencename");
         execute(ORACLE, query);
@@ -47,9 +47,9 @@ public class TestDropSequenceOracle extends TestDropSequence {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
     void testCloneOracle() {
-        DropSequence query = new DropSequence(ORACLE);
+        var query = new DropSequence(ORACLE);
         query.name("sequencename");
-        DropSequence query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
         execute(ORACLE, query_clone);

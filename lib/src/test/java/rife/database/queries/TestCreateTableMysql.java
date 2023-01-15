@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCreateTableMysql extends TestCreateTable {
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testInstantiationMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         try {
             query.getSql();
             fail();
@@ -27,7 +27,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testIncompleteQueryMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         try {
             query.getSql();
             fail();
@@ -48,7 +48,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testClearMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("string", String.class);
         assertNotNull(query.getSql());
@@ -63,7 +63,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename1")
             .column("string", String.class)
             .column("stringbuffer", StringBuffer.class)
@@ -92,7 +92,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnPrecisionMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -120,45 +120,45 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnsBeanMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .columns(BeanImpl.class);
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyBoolean BIT, propertyBooleanObject BIT, propertyByte TINYINT, propertyByteObject TINYINT, propertyCalendar DATETIME, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATETIME, propertyDouble DOUBLE, propertyDoubleObject DOUBLE, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INT, propertyIntegerObject INT, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString LONGTEXT, propertyStringbuffer LONGTEXT, propertyTime TIME, propertyTimestamp DATETIME, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyBoolean BIT, propertyBooleanObject BIT, propertyByte TINYINT, propertyByteObject TINYINT, propertyCalendar DATETIME, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATETIME, propertyDouble DOUBLE, propertyDoubleObject DOUBLE, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInstant DATETIME, propertyInt INT, propertyIntegerObject INT, propertyLocalDate DATE, propertyLocalDateTime DATETIME, propertyLocalTime TIME, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString LONGTEXT, propertyStringBuffer LONGTEXT, propertyTime TIME, propertyTimestamp DATETIME, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
         // this is invalid to execute with Mysql
         // CHAR needs size specification
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnsBeanIncludedMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
-            .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyByte TINYINT, propertyFloat FLOAT, propertyStringbuffer LONGTEXT, propertyTime TIME)");
+            .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyByte TINYINT, propertyFloat FLOAT, propertyStringBuffer LONGTEXT, propertyTime TIME)");
         execute(query);
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnsBeanExcludedMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
-            .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBoolean BIT, propertyBooleanObject BIT, propertyByteObject TINYINT, propertyCalendar DATETIME, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATETIME, propertyDouble DOUBLE, propertyDoubleObject DOUBLE, propertyEnum VARCHAR(255), propertyFloatObject FLOAT, propertyInt INT, propertyIntegerObject INT, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString LONGTEXT, propertyTimestamp DATETIME, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
+            .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBoolean BIT, propertyBooleanObject BIT, propertyByteObject TINYINT, propertyCalendar DATETIME, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATETIME, propertyDouble DOUBLE, propertyDoubleObject DOUBLE, propertyEnum VARCHAR(255), propertyFloatObject FLOAT, propertyInstant DATETIME, propertyInt INT, propertyIntegerObject INT, propertyLocalDate DATE, propertyLocalDateTime DATETIME, propertyLocalTime TIME, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString LONGTEXT, propertyTimestamp DATETIME, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
         // this is invalid to execute with Mysql
         // VARCHAR and CHAR need size specification
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnsBeanFilteredMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
-            .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringbuffer"});
+            .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringBuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringBuffer"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyFloat FLOAT, propertyTime TIME)");
         execute(query);
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnsBeanPrecisionMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)
@@ -174,34 +174,38 @@ public class TestCreateTableMysql extends TestCreateTable {
             .precision("propertyDoubleObject", 14, 4)
             .precision("propertyFloat", 13, 2)
             .precision("propertyFloatObject", 12, 1)
+            .precision("propertyInstant", 7)
             .precision("propertyInt", 10)
             .precision("propertyIntegerObject", 8)
+            .precision("propertyLocalDateTime", 5)
+            .precision("propertyLocalDate", 32)
+            .precision("propertyLocalTime", 10)
             .precision("propertyLong", 12)
             .precision("propertyLongObject", 11)
             .precision("propertyShort", 9)
             .precision("propertyShortObject", 6)
             .precision("propertySqlDate", 8)
             .precision("propertyString", 255)
-            .precision("propertyStringbuffer", 100)
+            .precision("propertyStringBuffer", 100)
             .precision("propertyTime", 9)
             .precision("propertyTimestamp", 30, 2)
             .precision("propertyEnum", 12);
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(19,9), propertyBoolean BIT, propertyBooleanObject BIT, propertyByte TINYINT, propertyByteObject TINYINT, propertyCalendar DATETIME, propertyChar CHAR(10), propertyCharacterObject CHAR(12), propertyDate DATETIME, propertyDouble DOUBLE(12,3), propertyDoubleObject DOUBLE(14,4), propertyEnum VARCHAR(255), propertyFloat FLOAT(13,2), propertyFloatObject FLOAT(12,1), propertyInt INT, propertyIntegerObject INT, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString VARCHAR(255), propertyStringbuffer VARCHAR(100), propertyTime TIME, propertyTimestamp DATETIME, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(19,9), propertyBoolean BIT, propertyBooleanObject BIT, propertyByte TINYINT, propertyByteObject TINYINT, propertyCalendar DATETIME, propertyChar CHAR(10), propertyCharacterObject CHAR(12), propertyDate DATETIME, propertyDouble DOUBLE(12,3), propertyDoubleObject DOUBLE(14,4), propertyEnum VARCHAR(255), propertyFloat FLOAT(13,2), propertyFloatObject FLOAT(12,1), propertyInstant DATETIME, propertyInt INT, propertyIntegerObject INT, propertyLocalDate DATE, propertyLocalDateTime DATETIME, propertyLocalTime TIME, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString VARCHAR(255), propertyStringBuffer VARCHAR(100), propertyTime TIME, propertyTimestamp DATETIME, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
         execute(query);
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testColumnsBeanConstrainedMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .columns(BeanImplConstrained.class);
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(17,6), propertyBoolean BIT, propertyBooleanObject BIT, propertyByte TINYINT, propertyByteObject TINYINT NOT NULL, propertyCalendar DATETIME, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATETIME, propertyDouble DOUBLE, propertyDoubleObject DOUBLE, propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INT DEFAULT 23, propertyIntegerObject INT, propertyLongObject BIGINT, propertyShort SMALLINT, propertySqlDate DATE, propertyString VARCHAR(30) DEFAULT 'one' NOT NULL, propertyStringbuffer VARCHAR(20) NOT NULL, propertyTime TIME, propertyTimestamp DATETIME, PRIMARY KEY (propertyString), UNIQUE (propertyStringbuffer, propertyByteObject), UNIQUE (propertyStringbuffer), CHECK (propertyByteObject != -1), CHECK (propertyInt != 0), CHECK (propertyLongObject IS NULL OR propertyLongObject IN (89,1221,66875,878)), CHECK (propertyString IS NULL OR propertyString IN ('one','tw''''o','someotherstring')), CHECK (propertyStringbuffer != ''), CHECK (propertyStringbuffer != 'some''blurp'))");
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(17,6), propertyBoolean BIT, propertyBooleanObject BIT, propertyByte TINYINT, propertyByteObject TINYINT NOT NULL, propertyCalendar DATETIME, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate DATETIME, propertyDouble DOUBLE, propertyDoubleObject DOUBLE, propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInstant DATETIME, propertyInt INT DEFAULT 23, propertyIntegerObject INT, propertyLocalDate DATE, propertyLocalDateTime DATETIME, propertyLocalTime TIME, propertyLongObject BIGINT, propertyShort SMALLINT, propertySqlDate DATE, propertyString VARCHAR(30) DEFAULT 'one' NOT NULL, propertyStringBuffer VARCHAR(20) NOT NULL, propertyTime TIME, propertyTimestamp DATETIME, PRIMARY KEY (propertyString), UNIQUE (propertyStringBuffer, propertyByteObject), UNIQUE (propertyStringBuffer), CHECK (propertyByteObject != -1), CHECK (propertyInt != 0), CHECK (propertyLongObject IS NULL OR propertyLongObject IN (89,1221,66875,878)), CHECK (propertyString IS NULL OR propertyString IN ('one','tw''''o','someotherstring')), CHECK (propertyStringBuffer != ''), CHECK (propertyStringBuffer != 'some''blurp'))");
         execute(query);
     }
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testNullableMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn1", int.class, CreateTable.NULL)
             .column("stringColumn", String.class, 12, CreateTable.NOTNULL)
@@ -217,7 +221,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testDefaultMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -263,7 +267,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testDefaultFunctionMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename1")
             .column("dateobject", java.sql.Date.class)
             .defaultFunction("dateobject", "now()");
@@ -274,7 +278,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCustomAttributeMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename1")
             .column("intColumn", Integer.class)
             .customAttribute("intColumn", "AUTO_INCREMENT")
@@ -285,7 +289,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testTemporaryMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .temporary(true)
             .column("boolColumn", boolean.class);
@@ -295,7 +299,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testPrimaryKeySimpleMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("intColumn");
@@ -305,7 +309,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testPrimaryKeyMultipleMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -316,7 +320,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testPrimaryKeyNamedMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("constraint_name", "intColumn");
@@ -326,7 +330,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testPrimaryKeyMultipleNamedMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -337,7 +341,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testUniqueSimpleMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .unique("intColumn");
@@ -347,7 +351,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testUniqueMultipleMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -358,7 +362,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testUniqueNamedMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .unique("constraint_name", "intColumn");
@@ -368,7 +372,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testUniqueMultipleNamedMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -379,7 +383,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeySimpleMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn");
@@ -389,7 +393,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeyMultipleMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -400,7 +404,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeySimpleNamedMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("constraint_name", "foreigntable", "intColumn", "foreignIntColumn");
@@ -410,7 +414,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeyMultipleNamedMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -421,7 +425,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeyViolationsSingleMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, null);
@@ -495,7 +499,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeyViolationsMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, CreateTable.NOACTION);
@@ -505,7 +509,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testForeignKeyMultipleViolationsMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -516,7 +520,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCheckSimpleMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("intColumn > 0");
@@ -526,7 +530,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 
     @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
     void testCheckNamedMysql() {
-        CreateTable query = new CreateTable(MYSQL);
+        var query = new CreateTable(MYSQL);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("NAME_CK", "intColumn > 0");
@@ -553,7 +557,7 @@ public class TestCreateTableMysql extends TestCreateTable {
 //            .precision("propertyShort", 9)
 //            .precision("propertySqlDate", 8)
 //            .precision("propertyString", 255)
-//            .precision("propertyStringbuffer", 100)
+//            .precision("propertyStringBuffer", 100)
 //            .precision("propertyTime", 9)
 //            .precision("propertyTimestamp", 30, 2)
 //            .nullable("propertyString", CreateTable.NULL)

@@ -4,12 +4,15 @@
  */
 package rife.database.querymanagers.generic.beans;
 
+import rife.database.SomeEnum;
+import rife.tools.Convert;
 import rife.validation.ConstrainedProperty;
 import rife.validation.Validation;
 
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.*;
 import java.util.Calendar;
 
 public class BeanImpl extends Validation {
@@ -22,6 +25,10 @@ public class BeanImpl extends Validation {
     private java.sql.Date propertySqlDate_ = null;
     private java.sql.Time propertyTime_ = null;
     private java.sql.Timestamp propertyTimestamp_ = null;
+    private Instant propertyInstant_ = null;
+    private LocalDateTime propertyLocalDateTime_ = null;
+    private LocalDate propertyLocalDate_ = null;
+    private LocalTime propertyLocalTime_ = null;
     private char propertyChar_ = 0;
     private Character propertyCharacterObject_ = null;
     private boolean propertyBoolean_ = false;
@@ -68,7 +75,7 @@ public class BeanImpl extends Validation {
     }
 
     public void setPropertyStringBuffer(StringBuffer propertyStringBuffer) {
-        propertyStringBuffer = propertyStringBuffer;
+        propertyStringBuffer_ = propertyStringBuffer;
     }
 
     public java.util.Date getPropertyDate() {
@@ -109,6 +116,38 @@ public class BeanImpl extends Validation {
 
     public void setPropertyTimestamp(java.sql.Timestamp propertyTimestamp) {
         propertyTimestamp_ = propertyTimestamp;
+    }
+
+    public Instant getPropertyInstant() {
+        return propertyInstant_;
+    }
+
+    public void setPropertyInstant(Instant propertyInstant_) {
+        this.propertyInstant_ = propertyInstant_;
+    }
+
+    public LocalDateTime getPropertyLocalDateTime() {
+        return propertyLocalDateTime_;
+    }
+
+    public void setPropertyLocalDateTime(LocalDateTime propertyLocalDateTime) {
+        this.propertyLocalDateTime_ = propertyLocalDateTime;
+    }
+
+    public LocalDate getPropertyLocalDate() {
+        return propertyLocalDate_;
+    }
+
+    public void setPropertyLocalDate(LocalDate propertyLocalDate) {
+        this.propertyLocalDate_ = propertyLocalDate;
+    }
+
+    public LocalTime getPropertyLocalTime() {
+        return propertyLocalTime_;
+    }
+
+    public void setPropertyLocalTime(LocalTime propertyLocalTime) {
+        this.propertyLocalTime_ = propertyLocalTime;
     }
 
     public boolean isPropertyBoolean() {
@@ -248,10 +287,11 @@ public class BeanImpl extends Validation {
     }
 
     public static BeanImpl getPopulatedBean() {
-        BeanImpl bean = new BeanImpl();
-        Calendar cal = Calendar.getInstance();
+        var bean = new BeanImpl();
+        var cal = Calendar.getInstance();
         cal.set(2002, Calendar.JUNE, 18, 15, 26, 14);
-        cal.set(Calendar.MILLISECOND, 764);
+        cal.set(Calendar.MILLISECOND, 167);
+        var local_date_time = LocalDateTime.of(2002, Month.JUNE, 18, 15, 26, 14, 167000000);
         bean.setPropertyBigDecimal(new BigDecimal("219038743.392874"));
         bean.setPropertyBoolean(true);
         bean.setPropertyBooleanObject(false);
@@ -274,14 +314,18 @@ public class BeanImpl extends Validation {
         bean.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
         bean.setPropertyString("someotherstring");
         bean.setPropertyStringBuffer(new StringBuffer("someotherstringbuff"));
-        bean.setPropertyTime(new Time(cal.getTime().getTime()));
+        bean.setPropertyTime(Convert.toTime(cal));
         bean.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+        bean.setPropertyInstant(cal.toInstant());
+        bean.setPropertyLocalDateTime(local_date_time);
+        bean.setPropertyLocalDate(local_date_time.toLocalDate());
+        bean.setPropertyLocalTime(local_date_time.toLocalTime());
 
         return bean;
     }
 
     public static BeanImpl getNullBean() {
-        BeanImpl bean = new BeanImpl();
+        var bean = new BeanImpl();
         bean.setPropertyBigDecimal(null);
         bean.setPropertyBoolean(false);
         bean.setPropertyBooleanObject(false);
@@ -306,6 +350,10 @@ public class BeanImpl extends Validation {
         bean.setPropertyStringBuffer(null);
         bean.setPropertyTime(null);
         bean.setPropertyTimestamp(null);
+        bean.setPropertyInstant(null);
+        bean.setPropertyLocalDateTime(null);
+        bean.setPropertyLocalDate(null);
+        bean.setPropertyLocalTime(null);
 
         return bean;
     }
