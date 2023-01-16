@@ -1372,7 +1372,7 @@ public class TestTemplateFactory {
 
             // wait a second
             try {
-                Thread.sleep(1000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
@@ -1433,7 +1433,7 @@ public class TestTemplateFactory {
 
             // wait a second
             try {
-                Thread.sleep(1000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
