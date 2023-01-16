@@ -1370,6 +1370,13 @@ public class TestTemplateFactory {
                          "a block with value 3" +
                          "a block with value 4", template.getContent());
 
+            // wait a second
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                fail(ExceptionUtils.getExceptionStackTrace(e));
+            }
+
             resources.updateResource("db_template_name.txt", "{{b block1}}another block with value {{v value1/}}{{/b}}{{v value3/}}");
 
             template = factory.get("db_template_name");
@@ -1399,7 +1406,7 @@ public class TestTemplateFactory {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testOtherResourceFinderCommonFactory(Datasource datasource) {
+    public void testOtherResourceFinderCommonFactory(Datasource datasource) throws Exception {
         var resources = DatabaseResourcesFactory.instance(datasource);
         var previous = TemplateFactory.HTML.getResourceFinder();
         TemplateFactory.HTML.setResourceFinder(resources);
@@ -1423,6 +1430,13 @@ public class TestTemplateFactory {
                          "a block with value 2" +
                          "a block with value 3" +
                          "a block with value 4", template.getContent());
+
+            // wait a second
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                fail(ExceptionUtils.getExceptionStackTrace(e));
+            }
 
             resources.updateResource("db_template_name.html", "<!--b block1-->another block with value <!--v value1/--><!--/b--><!--v value3/-->");
 
