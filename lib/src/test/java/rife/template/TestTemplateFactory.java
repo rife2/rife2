@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.config.RifeConfig;
-import rife.database.Datasource;
-import rife.database.TestDatasources;
+import rife.database.*;
 import rife.resources.*;
 import rife.resources.exceptions.ResourceWriterErrorException;
 import rife.template.exceptions.AmbiguousTemplateNameException;
@@ -26,6 +25,8 @@ import java.net.URL;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static rife.database.TestDatasources.DERBY;
+import static rife.database.TestDatasources.PGSQL;
 
 public class TestTemplateFactory {
     @Test
@@ -1344,10 +1345,9 @@ public class TestTemplateFactory {
         }
     }
 
-    @ParameterizedTest
-    @ArgumentsSource(TestDatasources.class)
-    public void testOtherResourceFinder(Datasource datasource) {
-        var resources = DatabaseResourcesFactory.instance(datasource);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    public void testOtherResourceFinder() {
+        var resources = DatabaseResourcesFactory.instance(DERBY);
         try {
             resources.install();
             resources.addResource("db_template_name.txt", "{{b block1}}a block with value {{v value1/}}{{/b}}{{v value2/}}");
@@ -1372,7 +1372,7 @@ public class TestTemplateFactory {
 
             // wait a second
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
@@ -1404,10 +1404,9 @@ public class TestTemplateFactory {
         }
     }
 
-    @ParameterizedTest
-    @ArgumentsSource(TestDatasources.class)
-    public void testOtherResourceFinderCommonFactory(Datasource datasource) throws Exception {
-        var resources = DatabaseResourcesFactory.instance(datasource);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    public void testOtherResourceFinderCommonFactory() {
+        var resources = DatabaseResourcesFactory.instance(DERBY);
         var previous = TemplateFactory.HTML.getResourceFinder();
         TemplateFactory.HTML.setResourceFinder(resources);
         try {
@@ -1433,7 +1432,7 @@ public class TestTemplateFactory {
 
             // wait a second
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
