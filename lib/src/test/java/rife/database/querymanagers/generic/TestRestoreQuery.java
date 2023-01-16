@@ -13,10 +13,9 @@ import rife.database.queries.Select;
 import rife.database.querymanagers.generic.beans.BeanImpl;
 import rife.database.querymanagers.generic.beans.LinkBean;
 import rife.database.querymanagers.generic.beans.SimpleBean;
+import rife.tools.Convert;
 
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -638,11 +637,11 @@ public class TestRestoreQuery {
             bean1.setPropertyShort((short) 44);
             bean1.setPropertyShortObject((short) 69);
             bean1.setPropertyIntegerObject(421);
-            bean1.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
+            bean1.setPropertySqlDate(Convert.toSqlDate(cal));
             bean1.setPropertyString("nostringhere");
             bean1.setPropertyStringBuffer(new StringBuffer("buffbuffbuff"));
-            bean1.setPropertyTime(new Time(cal.getTime().getTime()));
-            bean1.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+            bean1.setPropertyTime(Convert.toSqlTime(cal));
+            bean1.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
 
             bigBeanManager_.save(bean1);
 
@@ -734,11 +733,11 @@ public class TestRestoreQuery {
             bean1.setPropertyShort((short) 44);
             bean1.setPropertyShortObject((short) 69);
             bean1.setPropertyIntegerObject(421);
-            bean1.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
+            bean1.setPropertySqlDate(Convert.toSqlDate(cal));
             bean1.setPropertyString("nostringhere");
             bean1.setPropertyStringBuffer(new StringBuffer("buffbuffbuff"));
-            bean1.setPropertyTime(new Time(cal.getTime().getTime()));
-            bean1.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+            bean1.setPropertyTime(Convert.toSqlTime(cal));
+            bean1.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
 
             bigBeanManager_.save(bean1);
 
@@ -794,11 +793,11 @@ public class TestRestoreQuery {
             bean1.setPropertyShort((short) 44);
             bean1.setPropertyShortObject((short) 69);
             bean1.setPropertyIntegerObject(421);
-            bean1.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
+            bean1.setPropertySqlDate(Convert.toSqlDate(cal));
             bean1.setPropertyString("nostringhere");
             bean1.setPropertyStringBuffer(new StringBuffer("buffbuffbuff"));
-            bean1.setPropertyTime(new Time(cal.getTime().getTime()));
-            bean1.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+            bean1.setPropertyTime(Convert.toSqlTime(cal));
+            bean1.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
 
             bigBeanManager_.save(bean1);
 

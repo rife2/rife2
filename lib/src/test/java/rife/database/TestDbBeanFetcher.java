@@ -11,12 +11,9 @@ import rife.database.queries.CreateTable;
 import rife.database.queries.DropTable;
 import rife.database.queries.Insert;
 import rife.database.queries.Select;
-import rife.tools.ExceptionUtils;
-import rife.tools.InnerClassException;
+import rife.tools.*;
 
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -61,9 +58,9 @@ public class TestDbBeanFetcher {
                         bean_populated.setPropertyStringBuffer(new StringBuffer("somestringbuffer"));
                         bean_populated.setPropertyDate(cal.getTime());
                         bean_populated.setPropertyCalendar(cal);
-                        bean_populated.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
-                        bean_populated.setPropertyTime(new Time(cal.getTime().getTime()));
-                        bean_populated.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+                        bean_populated.setPropertySqlDate(Convert.toSqlDate(cal));
+                        bean_populated.setPropertyTime(Convert.toSqlTime(cal));
+                        bean_populated.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
                         bean_populated.setPropertyChar('v');
                         bean_populated.setPropertyBoolean(true);
                         bean_populated.setPropertyByte((byte) 127);

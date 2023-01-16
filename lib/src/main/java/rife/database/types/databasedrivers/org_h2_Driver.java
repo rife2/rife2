@@ -9,9 +9,7 @@ import java.sql.*;
 import rife.database.types.SqlArrays;
 import rife.database.types.SqlConversion;
 import rife.database.types.SqlNull;
-import rife.database.types.databasedrivers.Common;
-import rife.tools.ClassUtils;
-import rife.tools.StringUtils;
+import rife.tools.*;
 
 import java.math.BigDecimal;
 import java.time.*;
@@ -50,18 +48,18 @@ public class org_h2_Driver extends Common implements SqlConversion {
             return "'" + StringUtils.encodeSql(value.toString()) + "'";
         } else if (value instanceof java.sql.Date) {
             return "'" + StringUtils.encodeSql(value.toString()) + "'";
-        } else if (value instanceof Date) {
-            return "'" + StringUtils.encodeSql(new Timestamp(((Date) value).getTime()).toString()) + "'";
-        } else if (value instanceof Calendar) {
-            return "'" + StringUtils.encodeSql(new Timestamp(((Calendar) value).getTime().getTime()).toString()) + "'";
+        } else if (value instanceof Date date) {
+            return "'" + StringUtils.encodeSql(Convert.toSqlTimestamp(date).toString()) + "'";
+        } else if (value instanceof Calendar cal) {
+            return "'" + StringUtils.encodeSql(Convert.toSqlTimestamp(cal).toString()) + "'";
         } else if (value instanceof Instant instant) {
-            return "'" + StringUtils.encodeSql(Timestamp.from(instant).toString()) + "'";
+            return "'" + StringUtils.encodeSql(Convert.toSqlTimestamp(instant).toString()) + "'";
         } else if (value instanceof LocalDateTime local) {
-            return "'" + StringUtils.encodeSql(Timestamp.valueOf(local).toString()) + "'";
+            return "'" + StringUtils.encodeSql(Convert.toSqlTimestamp(local).toString()) + "'";
         } else if (value instanceof LocalDate local) {
-            return "'" + StringUtils.encodeSql(java.sql.Date.valueOf(local).toString()) + "'";
+            return "'" + StringUtils.encodeSql(Convert.toSqlDate(local).toString()) + "'";
         } else if (value instanceof LocalTime local) {
-            return "'" + StringUtils.encodeSql(java.sql.Time.valueOf(local).toString()) + "'";
+            return "'" + StringUtils.encodeSql(Convert.toSqlTime(local).toString()) + "'";
         }
         // make sure that the Boolean type is correctly caught
         else if (value instanceof Boolean) {

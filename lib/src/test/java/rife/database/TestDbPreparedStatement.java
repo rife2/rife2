@@ -8,15 +8,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.database.exceptions.*;
 import rife.database.queries.*;
+import rife.tools.Convert;
 import rife.tools.ExceptionUtils;
 import rife.tools.exceptions.BeanUtilsException;
 
-import javax.xml.crypto.Data;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.*;
-import java.time.temporal.TemporalField;
 import java.util.Calendar;
 
 import static java.time.temporal.ChronoField.NANO_OF_SECOND;
@@ -566,7 +565,7 @@ public class TestDbPreparedStatement {
                     // mysql automatically set the current time to timestamps
                     null_bean.setPropertyDate(cal.getTime());
                     null_bean.setPropertyCalendar(cal);
-                    null_bean.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+                    null_bean.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
                 }
                 statement_insert.setBean(null_bean);
                 statement_insert.executeUpdate();
@@ -583,7 +582,7 @@ public class TestDbPreparedStatement {
                     // mysql automatically set the current time to timestamps
                     new_bean.setPropertyDate(cal.getTime());
                     new_bean.setPropertyCalendar(cal);
-                    new_bean.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+                    new_bean.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
                 }
                 assertEquals(retrieved_bean.getPropertyString(), new_bean.getPropertyString());
                 assertEquals(retrieved_bean.getPropertyStringBuffer(), new_bean.getPropertyStringBuffer());
@@ -643,15 +642,15 @@ public class TestDbPreparedStatement {
                 cal.set(Calendar.MILLISECOND, 167);
                 statement_insert.setString("propertyString", "someotherstring");
                 statement_insert.setString("propertyStringBuffer", "someotherstringbuff");
-                statement_insert.setTimestamp("propertyDate", new Timestamp(cal.getTime().getTime()));
-                statement_insert.setTimestamp("propertyCalendar", new Timestamp(cal.getTime().getTime()));
-                statement_insert.setDate("propertySqlDate", new java.sql.Date(cal.getTime().getTime()));
-                statement_insert.setTime("propertyTime", new Time(cal.getTime().getTime()));
-                statement_insert.setTimestamp("propertyTimestamp", new Timestamp(cal.getTime().getTime()));
-                statement_insert.setTimestamp("propertyInstant", new Timestamp(cal.getTime().getTime()));
-                statement_insert.setDate("propertyLocalDate", new java.sql.Date(cal.getTime().getTime()));
-                statement_insert.setTimestamp("propertyLocalDateTime", new Timestamp(cal.getTime().getTime()));
-                statement_insert.setTime("propertyLocalTime", new Time(cal.getTime().getTime()));
+                statement_insert.setTimestamp("propertyDate", Convert.toSqlTimestamp(cal));
+                statement_insert.setTimestamp("propertyCalendar", Convert.toSqlTimestamp(cal));
+                statement_insert.setDate("propertySqlDate", Convert.toSqlDate(cal));
+                statement_insert.setTime("propertyTime", Convert.toSqlTime(cal));
+                statement_insert.setTimestamp("propertyTimestamp", Convert.toSqlTimestamp(cal));
+                statement_insert.setTimestamp("propertyInstant", Convert.toSqlTimestamp(cal));
+                statement_insert.setDate("propertyLocalDate", Convert.toSqlDate(cal));
+                statement_insert.setTimestamp("propertyLocalDateTime", Convert.toSqlTimestamp(cal));
+                statement_insert.setTime("propertyLocalTime", Convert.toSqlTime(cal));
                 statement_insert.setString("propertyChar", "v");
                 statement_insert.setString("propertyCharacterObject", "r");
                 statement_insert.setBoolean("propertyBoolean", true);

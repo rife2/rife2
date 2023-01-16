@@ -4,16 +4,14 @@
  */
 package rife.database.types;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Calendar;
-import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 import rife.database.SomeEnum;
 import rife.database.types.databasedrivers.com_mysql_cj_jdbc_Driver;
+import rife.tools.Convert;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,10 +29,10 @@ public class Test_com_mysql_cj_jdbc_Driver {
         assertEquals(db_types.getSqlValue('\''), "''''");
         var cal = Calendar.getInstance();
         cal.set(2002, Calendar.JUNE, 18, 18, 45, 40);
-        assertEquals(db_types.getSqlValue(new Time(cal.getTime().getTime())), "'18:45:40'");
-        assertEquals(db_types.getSqlValue(new Timestamp(cal.getTime().getTime())), "'2002-06-18 18:45:40.0'");
-        assertEquals(db_types.getSqlValue(new java.sql.Date(cal.getTime().getTime())), "'2002-06-18'");
-        assertEquals(db_types.getSqlValue(new Date(cal.getTime().getTime())), "'2002-06-18 18:45:40.0'");
+        assertEquals(db_types.getSqlValue(Convert.toSqlTime(cal)), "'18:45:40'");
+        assertEquals(db_types.getSqlValue(Convert.toSqlTimestamp(cal)), "'2002-06-18 18:45:40.0'");
+        assertEquals(db_types.getSqlValue(Convert.toSqlDate(cal)), "'2002-06-18'");
+        assertEquals(db_types.getSqlValue(Convert.toDate(cal)), "'2002-06-18 18:45:40.0'");
         assertEquals(db_types.getSqlValue(cal), "'2002-06-18 18:45:40.0'");
         assertEquals(db_types.getSqlValue(cal.toInstant()), "'2002-06-18 18:45:40.0'");
         var local_date_time = LocalDateTime.of(2002, Month.JUNE, 18, 18, 45, 40);

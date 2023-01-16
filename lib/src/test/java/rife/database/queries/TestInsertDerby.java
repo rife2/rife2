@@ -10,9 +10,6 @@ import rife.database.types.SqlNull;
 import rife.tools.Convert;
 
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -106,11 +103,11 @@ public class TestInsertDerby extends TestInsert {
             .field("propertyInt", 34)
             .field("propertyLong", 45L)
             .field("propertyShort", (short) 12)
-            .field("propertySqlDate", new java.sql.Date(cal.getTime().getTime()))
+            .field("propertySqlDate", Convert.toSqlDate(cal))
             .field("propertyString", "string'value")
             .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
-            .field("propertyTime", new Time(cal.getTime().getTime()))
-            .field("propertyTimestamp", new Timestamp(cal.getTime().getTime()));
+            .field("propertyTime", Convert.toSqlTime(cal))
+            .field("propertyTimestamp", Convert.toSqlTimestamp(cal));
         assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (NULL, 98347.876438637, 1, 16, '2002-08-19 12:17:52.462', 'M', '2002-08-19 12:17:52.462', 12.3, 13.4, 34, 45, 12, '2002-08-19', 'string''value', 'stringbuffer''value', '12:17:52', '2002-08-19 12:17:52.462')");
         assertTrue(execute(query));
     }
@@ -144,11 +141,11 @@ public class TestInsertDerby extends TestInsert {
                 "propertyInt", 34,
                 "propertyLong", 45L,
                 "propertyShort", (short) 12,
-                "propertySqlDate", new java.sql.Date(cal.getTime().getTime()),
+                "propertySqlDate", Convert.toSqlDate(cal),
                 "propertyString", "string'value",
                 "propertyStringBuffer", new StringBuffer("stringbuffer'value"),
-                "propertyTime", new Time(cal.getTime().getTime()),
-                "propertyTimestamp", new Timestamp(cal.getTime().getTime())
+                "propertyTime", Convert.toSqlTime(cal),
+                "propertyTimestamp", Convert.toSqlTimestamp(cal)
             });
         assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (NULL, 98347.876438637, 1, 16, '2002-08-19 12:17:52.462', 'M', '2002-08-19 12:17:52.462', 12.3, 13.4, 34, 45, 12, '2002-08-19', 'string''value', 'stringbuffer''value', '12:17:52', '2002-08-19 12:17:52.462')");
         assertTrue(execute(query));
@@ -228,19 +225,19 @@ public class TestInsertDerby extends TestInsert {
                     .setBigDecimal(2, new BigDecimal("98347.876438637"))
                     .setBoolean(3, true)
                     .setByte(4, (byte) 16)
-                    .setDate(5, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(5, Convert.toSqlDate(cal))
                     .setString(6, "M")
-                    .setDate(7, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(7, Convert.toSqlDate(cal))
                     .setDouble(8, 12.3d)
                     .setFloat(9, 13.4f)
                     .setInt(10, 34)
                     .setLong(11, 45L)
                     .setShort(12, (short) 12)
-                    .setDate(13, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(13, Convert.toSqlDate(cal))
                     .setString(14, "string'value")
                     .setString(15, "string'value2")
-                    .setTime(16, new Time(cal.getTime().getTime()))
-                    .setTimestamp(17, new Timestamp(cal.getTime().getTime()));
+                    .setTime(16, Convert.toSqlTime(cal))
+                    .setTimestamp(17, Convert.toSqlTimestamp(cal));
             }
         }));
     }
@@ -270,7 +267,7 @@ public class TestInsertDerby extends TestInsert {
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
             .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
-            .field("propertyTime", new Time(cal.getTime().getTime()))
+            .field("propertyTime", Convert.toSqlTime(cal))
             .fieldParameter("propertyTimestamp");
 
         assertEquals(query.getParameters().getOrderedNames().size(), 9);
@@ -304,9 +301,9 @@ public class TestInsertDerby extends TestInsert {
                     .setString(4, "M")
                     .setFloat(5, 13.4f)
                     .setInt(6, 34)
-                    .setDate(7, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(7, Convert.toSqlDate(cal))
                     .setString(8, "string'value")
-                    .setTimestamp(9, new Timestamp(cal.getTime().getTime()));
+                    .setTimestamp(9, Convert.toSqlTimestamp(cal));
             }
         }));
     }
@@ -435,30 +432,30 @@ public class TestInsertDerby extends TestInsert {
                     .setBoolean(3, false)
                     .setByte(4, (byte) 89)
                     .setByte(5, (byte) 34)
-                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(6, Convert.toSqlTimestamp(cal))
                     .setString(7, "v")
                     .setString(8, "r")
-                    .setTimestamp(9, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(9, Convert.toSqlTimestamp(cal))
                     .setDouble(10, 53348.34d)
                     .setDouble(11, 143298.692d)
                     .setString(12, "VALUE_THREE")
                     .setDouble(13, 98634.2d)
                     .setDouble(14, 8734.7d)
-                    .setTimestamp(15, Timestamp.from(cal.toInstant()))
+                    .setTimestamp(15, Convert.toSqlTimestamp(cal))
                     .setInt(16, 545)
                     .setInt(17, 968)
-                    .setDate(18, new java.sql.Date(cal.getTime().getTime()))
-                    .setTimestamp(19, Timestamp.from(cal.toInstant()))
-                    .setTime(20, Convert.toTime(cal))
+                    .setDate(18, Convert.toSqlDate(cal))
+                    .setTimestamp(19, Convert.toSqlTimestamp(cal))
+                    .setTime(20, Convert.toSqlTime(cal))
                     .setLong(21, 34563L)
                     .setLong(22, 66875L)
                     .setShort(23, (short) 43)
                     .setShort(24, (short) 68)
-                    .setDate(25, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(25, Convert.toSqlDate(cal))
                     .setString(26, "someotherstring")
                     .setString(27, "someotherstringbuff")
-                    .setTime(28, Convert.toTime(cal))
-                    .setTimestamp(29, new Timestamp(cal.getTime().getTime()));
+                    .setTime(28, Convert.toSqlTime(cal))
+                    .setTimestamp(29, Convert.toSqlTimestamp(cal));
             }
         }));
     }
@@ -508,27 +505,27 @@ public class TestInsertDerby extends TestInsert {
                     .setBoolean(2, true)
                     .setBoolean(3, false)
                     .setByte(4, (byte) 34)
-                    .setTimestamp(5, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(5, Convert.toSqlTimestamp(cal))
                     .setString(6, "v")
                     .setString(7, "r")
-                    .setTimestamp(8, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(8, Convert.toSqlTimestamp(cal))
                     .setDouble(9, 53348.34d)
                     .setDouble(10, 143298.692d)
                     .setDouble(11, 98634.2d)
                     .setDouble(12, 8734.7d)
-                    .setTimestamp(13, Timestamp.from(cal.toInstant()))
+                    .setTimestamp(13, Convert.toSqlTimestamp(cal))
                     .setInt(14, 545)
                     .setInt(15, 968)
-                    .setDate(16, new java.sql.Date(cal.getTime().getTime()))
-                    .setTimestamp(17, Timestamp.from(cal.toInstant()))
-                    .setTime(18, Convert.toTime(cal))
+                    .setDate(16, Convert.toSqlDate(cal))
+                    .setTimestamp(17, Convert.toSqlTimestamp(cal))
+                    .setTime(18, Convert.toSqlTime(cal))
                     .setLong(19, 66875L)
                     .setShort(20, (short) 43)
-                    .setDate(21, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(21, Convert.toSqlDate(cal))
                     .setString(22, "someotherstring")
                     .setString(23, "someotherstringbuff")
-                    .setTime(24, Convert.toTime(cal))
-                    .setTimestamp(25, new Timestamp(cal.getTime().getTime()));
+                    .setTime(24, Convert.toSqlTime(cal))
+                    .setTimestamp(25, Convert.toSqlTimestamp(cal));
             }
         }));
     }
@@ -575,23 +572,23 @@ public class TestInsertDerby extends TestInsert {
                     .setBigDecimal(1, new BigDecimal("98347.876438637"))
                     .setBoolean(2, true)
                     .setByte(3, (byte) 72)
-                    .setTimestamp(4, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(4, Convert.toSqlTimestamp(cal))
                     .setString(5, "o")
-                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(6, Convert.toSqlTimestamp(cal))
                     .setDouble(7, 86.7d)
                     .setString(8, "VALUE_THREE")
                     .setFloat(9, 13.4f)
                     .setFloat(10, 32.8f)
-                    .setTimestamp(11, Timestamp.from(cal.toInstant()))
+                    .setTimestamp(11, Convert.toSqlTimestamp(cal))
                     .setInt(12, 358)
-                    .setDate(13, new java.sql.Date(cal.getTime().getTime()))
-                    .setTimestamp(14, Timestamp.from(cal.toInstant()))
-                    .setTime(15, Convert.toTime(cal))
+                    .setDate(13, Convert.toSqlDate(cal))
+                    .setTimestamp(14, Convert.toSqlTimestamp(cal))
+                    .setTime(15, Convert.toSqlTime(cal))
                     .setLong(16, 9680L)
                     .setShort(17, (short) 12)
                     .setShort(18, (short) 78)
                     .setString(19, "string'value")
-                    .setTime(20, new Time(cal.getTime().getTime()));
+                    .setTime(20, Convert.toSqlTime(cal));
             }
         }));
     }
@@ -673,7 +670,7 @@ public class TestInsertDerby extends TestInsert {
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
             .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
-            .field("propertyTime", new Time(cal.getTime().getTime()))
+            .field("propertyTime", Convert.toSqlTime(cal))
             .fieldParameter("propertyTimestamp")
             .fieldCustom("propertyLong", "(" + fieldquery + ")")
             .fieldSubselect(fieldquery);
@@ -690,9 +687,9 @@ public class TestInsertDerby extends TestInsert {
                     .setString("propertyChar", "M")
                     .setFloat("propertyFloat", 13.4f)
                     .setInt("propertyInt", 34)
-                    .setDate("propertySqlDate", new java.sql.Date(cal.getTime().getTime()))
+                    .setDate("propertySqlDate", Convert.toSqlDate(cal))
                     .setString("propertyString", "string'value")
-                    .setTimestamp("propertyTimestamp", new Timestamp(cal.getTime().getTime()));
+                    .setTimestamp("propertyTimestamp", Convert.toSqlTimestamp(cal));
             }
         }));
     }

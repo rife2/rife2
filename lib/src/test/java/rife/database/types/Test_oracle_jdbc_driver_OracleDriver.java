@@ -7,13 +7,11 @@ package rife.database.types;
 import org.junit.jupiter.api.Test;
 import rife.database.SomeEnum;
 import rife.database.types.databasedrivers.oracle_jdbc_driver_OracleDriver;
+import rife.tools.Convert;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Calendar;
-import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,10 +29,10 @@ public class Test_oracle_jdbc_driver_OracleDriver {
         assertEquals(db_types.getSqlValue('\''), "''''");
         var cal = Calendar.getInstance();
         cal.set(2002, Calendar.JUNE, 18, 18, 45, 40);
-        assertEquals(db_types.getSqlValue(new Time(cal.getTime().getTime())), "TO_DATE('18:45:40', 'HH24:MI:SS')");
-        assertEquals(db_types.getSqlValue(new Timestamp(cal.getTime().getTime())), "TO_DATE('2002/06/18 18:45:40', 'YYYY/MM/DD HH24:MI:SS')");
-        assertEquals(db_types.getSqlValue(new java.sql.Date(cal.getTime().getTime())), "TO_DATE('2002/06/18 00:00:00', 'YYYY/MM/DD HH24:MI:SS')");
-        assertEquals(db_types.getSqlValue(new Date(cal.getTime().getTime())), "TO_DATE('2002/06/18 18:45:40', 'YYYY/MM/DD HH24:MI:SS')");
+        assertEquals(db_types.getSqlValue(Convert.toSqlTime(cal)), "TO_DATE('18:45:40', 'HH24:MI:SS')");
+        assertEquals(db_types.getSqlValue(Convert.toSqlTimestamp(cal)), "TO_DATE('2002/06/18 18:45:40', 'YYYY/MM/DD HH24:MI:SS')");
+        assertEquals(db_types.getSqlValue(Convert.toSqlDate(cal)), "TO_DATE('2002/06/18 00:00:00', 'YYYY/MM/DD HH24:MI:SS')");
+        assertEquals(db_types.getSqlValue(Convert.toDate(cal)), "TO_DATE('2002/06/18 18:45:40', 'YYYY/MM/DD HH24:MI:SS')");
         assertEquals(db_types.getSqlValue(cal), "TO_DATE('2002/06/18 18:45:40', 'YYYY/MM/DD HH24:MI:SS')");
         assertEquals(db_types.getSqlValue(cal.toInstant()), "TO_DATE('2002/06/18 18:45:40', 'YYYY/MM/DD HH24:MI:SS')");
         var local_date_time = LocalDateTime.of(2002, Month.JUNE, 18, 18, 45, 40);

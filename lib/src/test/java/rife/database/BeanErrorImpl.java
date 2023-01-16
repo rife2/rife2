@@ -4,9 +4,9 @@
  */
 package rife.database;
 
+import rife.tools.Convert;
+
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 public class BeanErrorImpl {
@@ -150,9 +150,9 @@ public class BeanErrorImpl {
         bean.setPropertyStringBuffer(new StringBuffer("someotherstringbuff"));
         bean.setPropertyDate(cal.getTime());
         bean.setPropertyCalendar(cal);
-        bean.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
-        bean.setPropertyTime(new Time(cal.getTime().getTime()));
-        bean.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+        bean.setPropertySqlDate(Convert.toSqlDate(cal));
+        bean.setPropertyTime(Convert.toSqlTime(cal));
+        bean.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
         bean.setPropertyChar('v');
         bean.setPropertyBoolean(true);
         bean.setPropertyByte((byte) 89);

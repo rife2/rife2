@@ -9,8 +9,7 @@ import java.sql.*;
 import rife.database.types.SqlArrays;
 import rife.database.types.SqlConversion;
 import rife.database.types.SqlNull;
-import rife.tools.ClassUtils;
-import rife.tools.StringUtils;
+import rife.tools.*;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -51,22 +50,22 @@ public class com_mysql_cj_jdbc_Driver extends Common implements SqlConversion {
             return "'" + StringUtils.encodeSql(dateformat.format(value)) + "'";
         } else if (value instanceof java.sql.Date) {
             return "'" + StringUtils.encodeSql(value.toString()) + "'";
-        } else if (value instanceof Date) {
+        } else if (value instanceof Date date) {
             var dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
-            return "'" + StringUtils.encodeSql(dateformat.format(new Timestamp(((Date) value).getTime()))) + "'";
-        } else if (value instanceof Calendar) {
+            return "'" + StringUtils.encodeSql(dateformat.format(Convert.toSqlTimestamp(date))) + "'";
+        } else if (value instanceof Calendar cal) {
             var dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
-            return "'" + StringUtils.encodeSql(dateformat.format(new Timestamp(((Calendar) value).getTime().getTime()))) + "'";
+            return "'" + StringUtils.encodeSql(dateformat.format(Convert.toSqlTimestamp(cal))) + "'";
         } else if (value instanceof Instant instant) {
             var dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
-            return "'" + StringUtils.encodeSql(dateformat.format(Timestamp.from(instant))) + "'";
+            return "'" + StringUtils.encodeSql(dateformat.format(Convert.toSqlTimestamp(instant))) + "'";
         } else if (value instanceof LocalDateTime local) {
             var dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
-            return "'" + StringUtils.encodeSql(dateformat.format(Timestamp.valueOf(local))) + "'";
+            return "'" + StringUtils.encodeSql(dateformat.format(Convert.toSqlTimestamp(local))) + "'";
         } else if (value instanceof LocalDate local) {
-            return "'" + StringUtils.encodeSql(java.sql.Date.valueOf(local).toString()) + "'";
+            return "'" + StringUtils.encodeSql(Convert.toSqlDate(local).toString()) + "'";
         } else if (value instanceof LocalTime local) {
-            return "'" + StringUtils.encodeSql(java.sql.Time.valueOf(local).toString()) + "'";
+            return "'" + StringUtils.encodeSql(Convert.toSqlTime(local).toString()) + "'";
         }
         // make sure that the Boolean type is correctly caught
         else if (value instanceof Boolean) {

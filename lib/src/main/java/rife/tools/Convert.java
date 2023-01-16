@@ -45,7 +45,7 @@ public final class Convert {
         if (target == Long.class) return toLong(value);
         if (target == Float.class) return toFloat(value);
         if (target == Double.class) return toDouble(value);
-        if (target == Time.class) return toTime(value);
+        if (target == Time.class) return toSqlTime(value);
         if (target == Date.class) return toDate(value);
         if (target == Instant.class) return toInstant(value);
         if (target == LocalDateTime.class) return toLocalDateTime(value);
@@ -329,6 +329,13 @@ public final class Convert {
         return Date.from(toInstant(time));
     }
 
+    public static Date toDate(Timestamp ts) {
+        if (null == ts) {
+            return null;
+        }
+        return Date.from(toInstant(ts));
+    }
+
     public static Date toDate(Instant instant) {
         if (null == instant) {
             return null;
@@ -390,6 +397,9 @@ public final class Convert {
             return null;
         }
 
+        if (value instanceof Timestamp ts) {
+            return toDate(ts);
+        }
         if (value instanceof java.sql.Date date) {
             return toDate(date);
         }
@@ -449,21 +459,22 @@ public final class Convert {
         if (null == localDateTime) {
             return null;
         }
-        return new java.sql.Date(toDate(localDateTime).getTime());
+        return new java.sql.Date(localDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant().toEpochMilli());
     }
 
     public static java.sql.Date toSqlDate(LocalDate localDate) {
         if (null == localDate) {
             return null;
         }
-        return new java.sql.Date(toDate(localDate).getTime());
+
+        return new java.sql.Date(localDate.atStartOfDay(TimeZone.getDefault().toZoneId()).toInstant().toEpochMilli());
     }
 
     public static java.sql.Date toSqlDate(LocalTime localTime) {
         if (null == localTime) {
             return null;
         }
-        return new java.sql.Date(toDate(localTime).getTime());
+        return new java.sql.Date(localTime.atDate(LocalDate.EPOCH).atZone(TimeZone.getDefault().toZoneId()).toInstant().toEpochMilli());
     }
 
     public static java.sql.Date toSqlDate(Number number) {
@@ -530,70 +541,70 @@ public final class Convert {
         throw new ConversionException(value, java.sql.Date.class, null);
     }
 
-    public static Timestamp toTimestamp(java.sql.Date date) {
-        if (null == date) {
-            return null;
-        }
-        return Timestamp.from(toInstant(date));
-    }
-
-    public static Timestamp toTimestamp(Time time) {
-        if (null == time) {
-            return null;
-        }
-        return Timestamp.from(toInstant(time));
-    }
-
-    public static Timestamp toTimestamp(Date date) {
+    public static Timestamp toSqlTimestamp(java.sql.Date date) {
         if (null == date) {
             return null;
         }
         return new Timestamp(date.getTime());
     }
 
-    public static Timestamp toTimestamp(Calendar cal) {
+    public static Timestamp toSqlTimestamp(Time time) {
+        if (null == time) {
+            return null;
+        }
+        return new Timestamp(time.getTime());
+    }
+
+    public static Timestamp toSqlTimestamp(Date date) {
+        if (null == date) {
+            return null;
+        }
+        return new Timestamp(date.getTime());
+    }
+
+    public static Timestamp toSqlTimestamp(Calendar cal) {
         if (null == cal) {
             return null;
         }
         return new Timestamp(cal.getTime().getTime());
     }
 
-    public static Timestamp toTimestamp(Instant instant) {
+    public static Timestamp toSqlTimestamp(Instant instant) {
         if (null == instant) {
             return null;
         }
         return Timestamp.from(instant);
     }
 
-    public static Timestamp toTimestamp(LocalDateTime localDateTime) {
+    public static Timestamp toSqlTimestamp(LocalDateTime localDateTime) {
         if (null == localDateTime) {
             return null;
         }
-        return Timestamp.from(toInstant(localDateTime));
+        return Timestamp.valueOf(localDateTime);
     }
 
-    public static Timestamp toTimestamp(LocalDate localDate) {
+    public static Timestamp toSqlTimestamp(LocalDate localDate) {
         if (null == localDate) {
             return null;
         }
-        return Timestamp.from(toInstant(localDate));
+        return Timestamp.valueOf(toLocalDateTime(localDate));
     }
 
-    public static Timestamp toTimestamp(LocalTime localTime) {
+    public static Timestamp toSqlTimestamp(LocalTime localTime) {
         if (null == localTime) {
             return null;
         }
-        return Timestamp.from(toInstant(localTime));
+        return Timestamp.valueOf(toLocalDateTime(localTime));
     }
 
-    public static Timestamp toTimestamp(Number number) {
+    public static Timestamp toSqlTimestamp(Number number) {
         if (null == number) {
             return null;
         }
         return new Timestamp(number.longValue());
     }
 
-    public static Timestamp toTimestamp(String string)
+    public static Timestamp toSqlTimestamp(String string)
     throws ConversionException {
         if (null == string) {
             return null;
@@ -602,18 +613,16 @@ public final class Convert {
             return new Timestamp(Long.parseLong(string));
         } catch (NumberFormatException e) {
             try {
-                return new Timestamp(RifeConfig.tools().getConcisePreciseDateFormat().parse(string).getTime());
+                var df = RifeConfig.tools().getDefaultInputDateFormat();
+                df.setTimeZone(TimeZone.getDefault());
+                return new Timestamp(df.parse(string).getTime());
             } catch (ParseException e2) {
-                try {
-                    return new Timestamp(RifeConfig.tools().getDefaultInputDateFormat().parse(string).getTime());
-                } catch (ParseException e3) {
-                    throw new ConversionException(string, Timestamp.class, e2);
-                }
+                throw new ConversionException(string, Timestamp.class, e2);
             }
         }
     }
 
-    public static Timestamp toTimestamp(Object value)
+    public static Timestamp toSqlTimestamp(Object value)
     throws ConversionException {
         if (null == value) {
             return null;
@@ -623,66 +632,73 @@ public final class Convert {
             return ts;
         }
         if (value instanceof java.sql.Date date) {
-            return toTimestamp(date);
+            return toSqlTimestamp(date);
         }
         if (value instanceof Time time) {
-            return toTimestamp(time);
+            return toSqlTimestamp(time);
         }
         if (value instanceof Date date) {
-            return toTimestamp(date);
+            return toSqlTimestamp(date);
         }
         if (value instanceof Calendar cal) {
-            return toTimestamp(cal);
+            return toSqlTimestamp(cal);
         }
         if (value instanceof Instant instant) {
-            return toTimestamp(instant);
+            return toSqlTimestamp(instant);
         }
         if (value instanceof LocalDateTime localDateTime) {
-            return toTimestamp(localDateTime);
+            return toSqlTimestamp(localDateTime);
         }
         if (value instanceof LocalDate localDate) {
-            return toTimestamp(localDate);
+            return toSqlTimestamp(localDate);
         }
         if (value instanceof LocalTime localTime) {
-            return toTimestamp(localTime);
+            return toSqlTimestamp(localTime);
         }
         if (value instanceof Number number) {
-            return toTimestamp(number);
+            return toSqlTimestamp(number);
         }
         if (value instanceof String string) {
-            return toTimestamp(string);
+            return toSqlTimestamp(string);
         }
 
         throw new ConversionException(value, Timestamp.class, null);
     }
 
-    public static Time toTime(java.sql.Date date) {
+    public static Time toSqlTime(Timestamp ts) {
+        if (null == ts) {
+            return null;
+        }
+        return new Time(ts.getTime());
+    }
+
+    public static Time toSqlTime(java.sql.Date date) {
         if (null == date) {
             return null;
         }
-        return toTime(toInstant(date));
+        return new Time(date.getTime());
     }
 
     @SuppressWarnings("deprecated")
-    public static Time toTime(Date date) {
+    public static Time toSqlTime(Date date) {
         if (null == date) {
             return null;
         }
         var cal = RifeConfig.tools().getCalendarInstance();
         cal.setTime(date);
-        return toTime(cal);
+        return toSqlTime(cal);
     }
 
     @SuppressWarnings("deprecated")
-    public static Time toTime(Calendar cal) {
+    public static Time toSqlTime(Calendar cal) {
         if (null == cal) {
             return null;
         }
-        return toTime(cal.toInstant());
+        return toSqlTime(cal.toInstant());
     }
 
     @SuppressWarnings("deprecated")
-    public static Time toTime(Instant instant) {
+    public static Time toSqlTime(Instant instant) {
         if (null == instant) {
             return null;
         }
@@ -690,61 +706,58 @@ public final class Convert {
         return new Time(zoned.getHour(), zoned.getMinute(), zoned.getSecond());
     }
 
-    public static Time toTime(LocalDateTime localDateTime) {
+    public static Time toSqlTime(LocalDateTime localDateTime) {
         if (null == localDateTime) {
             return null;
         }
-        return toTime(localDateTime.atZone(RifeConfig.tools().getDefaultZoneId()).toInstant());
+        return toSqlTime(localDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
     }
 
     @SuppressWarnings("deprecated")
-    public static Time toTime(LocalDate localDate) {
+    public static Time toSqlTime(LocalDate localDate) {
         if (null == localDate) {
             return null;
         }
-        return toTime(LocalTime.MIDNIGHT);
+        return toSqlTime(LocalTime.MIDNIGHT);
     }
 
-    public static Time toTime(LocalTime localTime) {
+    public static Time toSqlTime(LocalTime localTime) {
         if (null == localTime) {
             return null;
         }
-        return toTime(localTime.atDate(LocalDate.EPOCH));
+        return toSqlTime(localTime.atDate(LocalDate.EPOCH));
     }
 
-    public static Time toTime(Number number) {
+    public static Time toSqlTime(Number number) {
         if (null == number) {
             return null;
         }
-        return toTime(new Date(number.longValue()));
+        return toSqlTime(new Date(number.longValue()));
     }
 
     @SuppressWarnings("deprecated")
-    public static Time toTime(String string)
+    public static Time toSqlTime(String string)
     throws ConversionException {
         if (null == string) {
             return null;
         }
 
         try {
-            return toTime(Long.parseLong(string));
+            return toSqlTime(Long.parseLong(string));
         } catch (NumberFormatException e) {
             try {
-                var date = RifeConfig.tools().getConcisePreciseTimeFormat().parse(string);
-                return toTime(date);
+                var df = RifeConfig.tools().getDefaultInputTimeFormat();
+                df.setTimeZone(TimeZone.getDefault());
+                var date = df.parse(string);
+                return toSqlTime(date);
             } catch (ParseException e2) {
-                try {
-                    var date = RifeConfig.tools().getDefaultInputTimeFormat().parse(string);
-                    return toTime(date);
-                } catch (ParseException e3) {
-                    throw new ConversionException(string, Time.class, e2);
-                }
+                throw new ConversionException(string, Time.class, e2);
             }
         }
     }
 
     @SuppressWarnings("deprecated")
-    public static Time toTime(Object value)
+    public static Time toSqlTime(Object value)
     throws ConversionException {
         if (null == value) {
             return null;
@@ -753,32 +766,35 @@ public final class Convert {
         if (value instanceof Time time) {
             return time;
         }
+        if (value instanceof Timestamp ts) {
+            return toSqlTime(ts);
+        }
         if (value instanceof java.sql.Date date) {
-            return toTime(date);
+            return toSqlTime(date);
         }
         if (value instanceof Date date) {
-            return toTime(date);
+            return toSqlTime(date);
         }
         if (value instanceof Calendar cal) {
-            return toTime(cal);
+            return toSqlTime(cal);
         }
         if (value instanceof Instant instant) {
-            return toTime(instant);
+            return toSqlTime(instant);
         }
         if (value instanceof LocalDateTime localDateTime) {
-            return toTime(localDateTime);
+            return toSqlTime(localDateTime);
         }
         if (value instanceof LocalDate localDate) {
-            return toTime(localDate);
+            return toSqlTime(localDate);
         }
         if (value instanceof LocalTime localTime) {
-            return toTime(localTime);
+            return toSqlTime(localTime);
         }
         if (value instanceof Number number) {
-            return toTime(number);
+            return toSqlTime(number);
         }
         if (value instanceof String string) {
-            return toTime(string);
+            return toSqlTime(string);
         }
 
         throw new ConversionException(value, Time.class, null);
@@ -798,6 +814,14 @@ public final class Convert {
         }
 
         return time.toLocalTime().atDate(LocalDate.EPOCH).atZone(RifeConfig.tools().getDefaultZoneId()).toInstant();
+    }
+
+    public static Instant toInstant(Timestamp ts) {
+        if (null == ts) {
+            return null;
+        }
+
+        return ts.toLocalDateTime().atZone(RifeConfig.tools().getDefaultZoneId()).toInstant();
     }
 
     public static Instant toInstant(Date date) {
@@ -878,6 +902,9 @@ public final class Convert {
         if (value instanceof Instant instant) {
             return instant;
         }
+        if (value instanceof Timestamp ts) {
+            return toInstant(ts);
+        }
         if (value instanceof java.sql.Date date) {
             return toInstant(date);
         }
@@ -907,6 +934,14 @@ public final class Convert {
         }
 
         throw new ConversionException(value, Instant.class, null);
+    }
+
+    public static LocalDateTime toLocalDateTime(Timestamp ts) {
+        if (null == ts) {
+            return null;
+        }
+
+        return ts.toLocalDateTime();
     }
 
     public static LocalDateTime toLocalDateTime(java.sql.Date date) {
@@ -1003,6 +1038,9 @@ public final class Convert {
         if (value instanceof LocalDateTime localDateTime) {
             return localDateTime;
         }
+        if (value instanceof Timestamp ts) {
+            return toLocalDateTime(ts);
+        }
         if (value instanceof java.sql.Date date) {
             return toLocalDateTime(date);
         }
@@ -1032,6 +1070,14 @@ public final class Convert {
         }
 
         throw new ConversionException(value, LocalDateTime.class, null);
+    }
+
+    public static LocalDate toLocalDate(Timestamp ts) {
+        if (null == ts) {
+            return null;
+        }
+
+        return ts.toLocalDateTime().toLocalDate();
     }
 
     public static LocalDate toLocalDate(java.sql.Date date) {
@@ -1128,6 +1174,9 @@ public final class Convert {
         if (value instanceof LocalDate localDate) {
             return localDate;
         }
+        if (value instanceof Timestamp ts) {
+            return toLocalDate(ts);
+        }
         if (value instanceof java.sql.Date date) {
             return toLocalDate(date);
         }
@@ -1165,6 +1214,14 @@ public final class Convert {
         }
 
         return LocalTime.MIDNIGHT;
+    }
+
+    public static LocalTime toLocalTime(Timestamp ts) {
+        if (null == ts) {
+            return null;
+        }
+
+        return ts.toLocalDateTime().toLocalTime();
     }
 
     public static LocalTime toLocalTime(Time time) {
@@ -1252,6 +1309,9 @@ public final class Convert {
 
         if (value instanceof LocalTime localTime) {
             return localTime;
+        }
+        if (value instanceof Timestamp ts) {
+            return toLocalTime(ts);
         }
         if (value instanceof java.sql.Date date) {
             return toLocalTime(date);

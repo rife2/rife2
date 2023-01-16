@@ -4,13 +4,12 @@
  */
 package rife.database;
 
+import rife.tools.Convert;
 import rife.validation.ConstrainedBean;
 import rife.validation.ConstrainedProperty;
 import rife.validation.Validation;
 
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.*;
 import java.util.Calendar;
 
@@ -310,11 +309,11 @@ public class BeanImplConstrained extends Validation {
         bean.setPropertyLongObject(66875L);
         bean.setPropertyShort((short) 43);
         bean.setPropertyShortObject((short) 68);
-        bean.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
+        bean.setPropertySqlDate(Convert.toSqlDate(cal));
         bean.setPropertyString("someotherstring");
         bean.setPropertyStringBuffer(new StringBuffer("someotherstringbuff"));
-        bean.setPropertyTime(new Time(cal.getTime().getTime()));
-        bean.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+        bean.setPropertyTime(Convert.toSqlTime(cal));
+        bean.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
         bean.setPropertyInstant(cal.toInstant());
         bean.setPropertyLocalDateTime(local_date_time);
         bean.setPropertyLocalDate(local_date_time.toLocalDate());

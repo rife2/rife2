@@ -11,8 +11,6 @@ import rife.database.types.SqlNull;
 import rife.tools.Convert;
 
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -94,11 +92,11 @@ public class TestUpdateOracle extends TestUpdate {
             .field("propertyInt", 34)
             .field("propertyLong", 45L)
             .field("propertyShort", (short) 12)
-            .field("propertySqlDate", new java.sql.Date(cal.getTime().getTime()))
+            .field("propertySqlDate", Convert.toSqlDate(cal))
             .field("propertyString", "string'value")
             .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
-            .field("propertyTime", new Time(cal.getTime().getTime()))
-            .field("propertyTimestamp", new Timestamp(cal.getTime().getTime()));
+            .field("propertyTime", Convert.toSqlTime(cal))
+            .field("propertyTimestamp", Convert.toSqlTimestamp(cal));
         assertEquals(query.getSql(), "UPDATE tablename SET nullColumn = NULL, propertyBigDecimal = 98347.876438637, propertyBoolean = 1, propertyByte = 16, propertyCalendar = TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), propertyChar = 'M', propertyDate = TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), propertyDouble = 12.3, propertyFloat = 13.4, propertyInt = 34, propertyLong = 45, propertyShort = 12, propertySqlDate = TO_DATE('2002/08/19 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), propertyString = 'string''value', propertyStringBuffer = 'stringbuffer''value', propertyTime = TO_DATE('12:17:52', 'HH24:MI:SS'), propertyTimestamp = TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS') WHERE propertyByte = 89");
         assertTrue(execute(query));
     }
@@ -186,19 +184,19 @@ public class TestUpdateOracle extends TestUpdate {
                     .setBigDecimal(2, new BigDecimal("98347.876438637"))
                     .setBoolean(3, true)
                     .setByte(4, (byte) 16)
-                    .setDate(5, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(5, Convert.toSqlDate(cal))
                     .setString(6, "M")
-                    .setDate(7, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(7, Convert.toSqlDate(cal))
                     .setDouble(8, 12.3d)
                     .setFloat(9, 13.4f)
                     .setInt(10, 34)
                     .setLong(11, 45L)
                     .setShort(12, (short) 12)
-                    .setDate(13, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(13, Convert.toSqlDate(cal))
                     .setString(14, "string'value")
                     .setString(15, "string'value2")
-                    .setTime(16, new Time(cal.getTime().getTime()))
-                    .setTimestamp(17, new Timestamp(cal.getTime().getTime()));
+                    .setTime(16, Convert.toSqlTime(cal))
+                    .setTimestamp(17, Convert.toSqlTimestamp(cal));
             }
         }));
     }
@@ -228,7 +226,7 @@ public class TestUpdateOracle extends TestUpdate {
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
             .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
-            .field("propertyTime", new Time(cal.getTime().getTime()))
+            .field("propertyTime", Convert.toSqlTime(cal))
             .fieldParameter("propertyTimestamp");
 
         assertEquals(query.getParameters().getOrderedNames().size(), 9);
@@ -263,9 +261,9 @@ public class TestUpdateOracle extends TestUpdate {
                     .setString(4, "M")
                     .setFloat(5, 13.4f)
                     .setInt(6, 34)
-                    .setDate(7, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(7, Convert.toSqlDate(cal))
                     .setString(8, "string'value")
-                    .setTimestamp(9, new Timestamp(cal.getTime().getTime()));
+                    .setTimestamp(9, Convert.toSqlTimestamp(cal));
             }
         }));
     }
@@ -290,11 +288,11 @@ public class TestUpdateOracle extends TestUpdate {
                 "propertyInt", 34,
                 "propertyLong", 45L,
                 "propertyShort", (short) 12,
-                "propertySqlDate", new java.sql.Date(cal.getTime().getTime()),
+                "propertySqlDate", Convert.toSqlDate(cal),
                 "propertyString", new String("string'value"),
                 "propertyStringBuffer", new StringBuffer("stringbuffer'value"),
-                "propertyTime", new Time(cal.getTime().getTime()),
-                "propertyTimestamp", new Timestamp(cal.getTime().getTime())
+                "propertyTime", Convert.toSqlTime(cal),
+                "propertyTimestamp", Convert.toSqlTimestamp(cal)
             });
         assertEquals(query.getSql(), "UPDATE tablename SET nullColumn = NULL, propertyBigDecimal = 98347.876438637, propertyBoolean = 1, propertyByte = 16, propertyCalendar = TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), propertyChar = 'M', propertyDate = TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), propertyDouble = 12.3, propertyFloat = 13.4, propertyInt = 34, propertyLong = 45, propertyShort = 12, propertySqlDate = TO_DATE('2002/08/19 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), propertyString = 'string''value', propertyStringBuffer = 'stringbuffer''value', propertyTime = TO_DATE('12:17:52', 'HH24:MI:SS'), propertyTimestamp = TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS') WHERE propertyByte = 89");
         assertTrue(execute(query));
@@ -369,11 +367,11 @@ public class TestUpdateOracle extends TestUpdate {
             .whereAnd("propertyInt", "=", 973)
             .whereAnd("propertyLong", "<", 347678L)
             .whereAnd("propertyShort", "=", (short) 78)
-            .whereOr("propertySqlDate", "=", new java.sql.Date(cal.getTime().getTime()))
+            .whereOr("propertySqlDate", "=", Convert.toSqlDate(cal))
             .whereAnd("propertyString", "LIKE", "someotherstring%")
             .whereAnd("propertyStringBuffer", "=", new StringBuffer("someotherstringbuff"))
-            .whereOr("propertyTime", "=", new Time(cal.getTime().getTime()))
-            .whereAnd("propertyTimestamp", "<=", new Timestamp(cal.getTime().getTime()));
+            .whereOr("propertyTime", "=", Convert.toSqlTime(cal))
+            .whereAnd("propertyTimestamp", "<=", Convert.toSqlTimestamp(cal));
 
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = 1, propertyByte = 16 WHERE propertyBigDecimal >= 53443433.9784567 AND propertyBoolean = 0 OR propertyByte = 54 AND propertyCalendar <= TO_DATE('2003/03/03 10:01:28', 'YYYY/MM/DD HH24:MI:SS') OR propertyChar = 'f' AND propertyDate = TO_DATE('2003/03/03 10:01:28', 'YYYY/MM/DD HH24:MI:SS') AND propertyDouble != 73453.71 OR propertyFloat >= 1987.14 AND propertyInt = 973 AND propertyLong < 347678 AND propertyShort = 78 OR propertySqlDate = TO_DATE('2003/03/03 00:00:00', 'YYYY/MM/DD HH24:MI:SS') AND propertyString LIKE 'someotherstring%' AND propertyStringBuffer = 'someotherstringbuff' OR propertyTime = TO_DATE('10:01:28', 'HH24:MI:SS') AND propertyTimestamp <= TO_DATE('2003/03/03 10:01:28', 'YYYY/MM/DD HH24:MI:SS')");
         assertFalse(execute(query));
@@ -405,15 +403,15 @@ public class TestUpdateOracle extends TestUpdate {
             .whereParameterOr("propertySqlDate", "=")
             .whereAnd("propertyString", "LIKE", "someotherstring%")
             .whereAnd("propertyStringBuffer", "=", new StringBuffer("someotherstringbuff"))
-            .whereOr("propertyTime", "=", new Time(cal.getTime().getTime()))
-            .whereAnd("propertyTimestamp", "<=", new Timestamp(cal.getTime().getTime()));
+            .whereOr("propertyTime", "=", Convert.toSqlTime(cal))
+            .whereAnd("propertyTimestamp", "<=", Convert.toSqlTimestamp(cal));
 
         assertEquals(query.getSql(), "UPDATE tablename SET propertyBoolean = 1, propertyByte = 16 WHERE propertyBigDecimal >= 53443433.9784567 AND propertyBoolean = 0 OR propertyByte = 54 AND propertyCalendar <= TO_DATE('2003/03/03 10:01:28', 'YYYY/MM/DD HH24:MI:SS') OR propertyChar = 'f' AND propertyDate = TO_DATE('2003/03/03 10:01:28', 'YYYY/MM/DD HH24:MI:SS') AND propertyDouble != 73453.71 OR propertyFloat >= 1987.14 AND propertyInt = 973 AND propertyLong < 347678 AND propertyShort = 78 OR propertySqlDate = ? AND propertyString LIKE 'someotherstring%' AND propertyStringBuffer = 'someotherstringbuff' OR propertyTime = TO_DATE('10:01:28', 'HH24:MI:SS') AND propertyTimestamp <= TO_DATE('2003/03/03 10:01:28', 'YYYY/MM/DD HH24:MI:SS')");
 
         assertFalse(execute(query, new DbPreparedStatementHandler<>() {
             public void setParameters(DbPreparedStatement statement) {
                 statement
-                    .setDate("propertySqlDate", new java.sql.Date(cal.getTime().getTime()));
+                    .setDate("propertySqlDate", Convert.toSqlDate(cal));
             }
         }));
     }
@@ -641,30 +639,30 @@ public class TestUpdateOracle extends TestUpdate {
                     .setBoolean(3, true)
                     .setByte(4, (byte) 16)
                     .setByte(5, (byte) 72)
-                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(6, Convert.toSqlTimestamp(cal))
                     .setString(7, "M")
                     .setString(8, "p")
-                    .setTimestamp(9, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(9, Convert.toSqlTimestamp(cal))
                     .setDouble(10, 12.3d)
                     .setDouble(11, 68.7d)
                     .setString(12, "VALUE_THREE")
                     .setFloat(13, 13.4f)
                     .setFloat(14, 42.1f)
-                    .setTimestamp(15, Timestamp.from(cal.toInstant()))
+                    .setTimestamp(15, Convert.toSqlTimestamp(cal))
                     .setInt(16, 92)
                     .setInt(17, 34)
-                    .setDate(18, new java.sql.Date(cal.getTime().getTime()))
-                    .setTimestamp(19, Timestamp.from(cal.toInstant()))
-                    .setTime(20, Convert.toTime(cal))
+                    .setDate(18, Convert.toSqlDate(cal))
+                    .setTimestamp(19, Convert.toSqlTimestamp(cal))
+                    .setTime(20, Convert.toSqlTime(cal))
                     .setLong(21, 687L)
                     .setLong(22, 92)
                     .setShort(23, (short) 7)
                     .setShort(24, (short) 12)
-                    .setDate(25, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(25, Convert.toSqlDate(cal))
                     .setString(26, "string'value")
                     .setString(27, "string'value2")
-                    .setTime(28, new Time(cal.getTime().getTime()))
-                    .setTimestamp(29, new Timestamp(cal.getTime().getTime()));
+                    .setTime(28, Convert.toSqlTime(cal))
+                    .setTimestamp(29, Convert.toSqlTimestamp(cal));
             }
         }));
     }
@@ -714,27 +712,27 @@ public class TestUpdateOracle extends TestUpdate {
                     .setBoolean(2, false)
                     .setBoolean(3, true)
                     .setByte(4, (byte) 72)
-                    .setTimestamp(5, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(5, Convert.toSqlTimestamp(cal))
                     .setString(6, "M")
                     .setString(7, "p")
-                    .setTimestamp(8, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(8, Convert.toSqlTimestamp(cal))
                     .setDouble(9, 12.3d)
                     .setDouble(10, 68.7d)
                     .setFloat(11, 13.4f)
                     .setFloat(12, 42.1f)
-                    .setTimestamp(13, Timestamp.from(cal.toInstant()))
+                    .setTimestamp(13, Convert.toSqlTimestamp(cal))
                     .setInt(14, 92)
                     .setInt(15, 34)
-                    .setDate(16, new java.sql.Date(cal.getTime().getTime()))
-                    .setTimestamp(17, Timestamp.from(cal.toInstant()))
-                    .setTime(18, Convert.toTime(cal))
+                    .setDate(16, Convert.toSqlDate(cal))
+                    .setTimestamp(17, Convert.toSqlTimestamp(cal))
+                    .setTime(18, Convert.toSqlTime(cal))
                     .setLong(19, 92)
                     .setShort(20, (short) 7)
-                    .setDate(21, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(21, Convert.toSqlDate(cal))
                     .setString(22, "string'value")
                     .setString(23, "string'value2")
-                    .setTime(24, new Time(cal.getTime().getTime()))
-                    .setTimestamp(25, new Timestamp(cal.getTime().getTime()));
+                    .setTime(24, Convert.toSqlTime(cal))
+                    .setTimestamp(25, Convert.toSqlTimestamp(cal));
             }
         }));
     }
@@ -781,23 +779,23 @@ public class TestUpdateOracle extends TestUpdate {
                     .setBigDecimal(1, new BigDecimal("98347.876438637"))
                     .setBoolean(2, true)
                     .setByte(3, (byte) 72)
-                    .setTimestamp(4, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(4, Convert.toSqlTimestamp(cal))
                     .setString(5, "o")
-                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(6, Convert.toSqlTimestamp(cal))
                     .setDouble(7, 86.7d)
                     .setString(8, "VALUE_THREE")
                     .setFloat(9, 13.4f)
                     .setFloat(10, 32.8f)
-                    .setTimestamp(11, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(11, Convert.toSqlTimestamp(cal))
                     .setInt(12, 358)
-                    .setDate(13, new java.sql.Date(cal.getTime().getTime()))
-                    .setTimestamp(14, Timestamp.from(cal.toInstant()))
-                    .setTime(15, Convert.toTime(cal))
+                    .setDate(13, Convert.toSqlDate(cal))
+                    .setTimestamp(14, Convert.toSqlTimestamp(cal))
+                    .setTime(15, Convert.toSqlTime(cal))
                     .setLong(16, 9680L)
                     .setShort(17, (short) 12)
                     .setShort(18, (short) 78)
                     .setString(19, "string'value")
-                    .setTime(20, new Time(cal.getTime().getTime()));
+                    .setTime(20, Convert.toSqlTime(cal));
             }
         }));
     }
@@ -922,30 +920,30 @@ public class TestUpdateOracle extends TestUpdate {
                     .setBoolean(3, false)
                     .setByte(4, (byte) 89)
                     .setByte(5, (byte) 34)
-                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(6, Convert.toSqlTimestamp(cal))
                     .setString(7, "v")
                     .setString(8, "r")
-                    .setTimestamp(9, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(9, Convert.toSqlTimestamp(cal))
                     .setDouble(10, 53348.34d)
                     .setDouble(11, 143298.692d)
                     .setString(12, "VALUE_THREE")
                     .setDouble(13, 98634.2d)
                     .setDouble(14, 8734.7d)
-                    .setTimestamp(15, Timestamp.from(cal.toInstant()))
+                    .setTimestamp(15, Convert.toSqlTimestamp(cal))
                     .setInt(16, 545)
                     .setInt(17, 968)
-                    .setDate(18, new java.sql.Date(cal.getTime().getTime()))
-                    .setTimestamp(19, Timestamp.from(cal.toInstant()))
-                    .setTime(20, Convert.toTime(cal))
+                    .setDate(18, Convert.toSqlDate(cal))
+                    .setTimestamp(19, Convert.toSqlTimestamp(cal))
+                    .setTime(20, Convert.toSqlTime(cal))
                     .setLong(21, 34563L)
                     .setLong(22, 66875L)
                     .setShort(23, (short) 43)
                     .setShort(24, (short) 68)
-                    .setDate(25, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(25, Convert.toSqlDate(cal))
                     .setString(26, "someotherstring")
                     .setString(27, "someotherstringbuff")
-                    .setTime(28, Convert.toTime(cal))
-                    .setTimestamp(29, new Timestamp(cal.getTime().getTime()));
+                    .setTime(28, Convert.toSqlTime(cal))
+                    .setTimestamp(29, Convert.toSqlTimestamp(cal));
             }
         });
     }
@@ -1001,27 +999,27 @@ public class TestUpdateOracle extends TestUpdate {
                     .setBoolean(3, false)
                     .setByte(4, (byte) 89)
                     .setByte(5, (byte) 34)
-                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(6, Convert.toSqlTimestamp(cal))
                     .setString(7, "v")
                     .setString(8, "r")
-                    .setTimestamp(9, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(9, Convert.toSqlTimestamp(cal))
                     .setDouble(10, 53348.34d)
                     .setDouble(11, 143298.692d)
                     .setFloat(12, 98634.2f)
                     .setFloat(13, 8734.7f)
-                    .setTimestamp(14, Timestamp.from(cal.toInstant()))
+                    .setTimestamp(14, Convert.toSqlTimestamp(cal))
                     .setInt(15, 545)
                     .setInt(16, 968)
-                    .setDate(17, new java.sql.Date(cal.getTime().getTime()))
-                    .setTimestamp(18, Timestamp.from(cal.toInstant()))
-                    .setTime(19, Convert.toTime(cal))
+                    .setDate(17, Convert.toSqlDate(cal))
+                    .setTimestamp(18, Convert.toSqlTimestamp(cal))
+                    .setTime(19, Convert.toSqlTime(cal))
                     .setLong(20, 66875L)
                     .setShort(21, (short) 43)
-                    .setDate(22, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(22, Convert.toSqlDate(cal))
                     .setString(23, "someotherstring")
                     .setString(24, "someotherstringbuff")
-                    .setTime(25, new Time(cal.getTime().getTime()))
-                    .setTimestamp(26, new Timestamp(cal.getTime().getTime()));
+                    .setTime(25, Convert.toSqlTime(cal))
+                    .setTimestamp(26, Convert.toSqlTimestamp(cal));
             }
         });
     }
@@ -1072,12 +1070,12 @@ public class TestUpdateOracle extends TestUpdate {
                     .setFloat(7, 98634.2f)
                     .setFloat(8, 8734.7f)
                     .setInt(9, 968)
-                    .setTimestamp(10, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(10, Convert.toSqlTimestamp(cal))
                     .setLong(11, 66875L)
                     .setShort(12, (short) 43)
                     .setShort(13, (short) 68)
                     .setString(14, "someotherstring")
-                    .setTimestamp(15, new java.sql.Timestamp(cal.getTime().getTime()));
+                    .setTimestamp(15, Convert.toSqlTimestamp(cal));
             }
         }));
     }
@@ -1193,7 +1191,7 @@ public class TestUpdateOracle extends TestUpdate {
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
             .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
-            .field("propertyTime", new Time(cal.getTime().getTime()))
+            .field("propertyTime", Convert.toSqlTime(cal))
             .fieldParameter("propertyTimestamp")
             .fieldCustom("propertyLong", "(" + fieldquery + ")")
             .fieldSubselect(fieldquery)
@@ -1218,9 +1216,9 @@ public class TestUpdateOracle extends TestUpdate {
                     .setString("propertyChar", "M")
                     .setFloat("propertyFloat", 13.4f)
                     .setInt("propertyInt", 34)
-                    .setDate("propertySqlDate", new java.sql.Date(cal.getTime().getTime()))
+                    .setDate("propertySqlDate", Convert.toSqlDate(cal))
                     .setString("propertyString", "string'value")
-                    .setTimestamp("propertyTimestamp", new Timestamp(cal.getTime().getTime()))
+                    .setTimestamp("propertyTimestamp", Convert.toSqlTimestamp(cal))
                     .setShort("propertyShort", (short) 4)
                     .setLong("propertyLong", 34543);
             }

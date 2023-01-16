@@ -9,9 +9,6 @@ import rife.database.exceptions.TableNameRequiredException;
 import rife.tools.Convert;
 
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -112,11 +109,11 @@ public class TestDeleteMysql extends TestDelete {
             .whereAnd("propertyInt", "=", 973)
             .whereAnd("propertyLong", "<", 347678L)
             .whereAnd("propertyShort", "=", (short) 78)
-            .whereOr("propertySqlDate", "=", new java.sql.Date(cal.getTime().getTime()))
+            .whereOr("propertySqlDate", "=", Convert.toSqlDate(cal))
             .whereAnd("propertyString", "LIKE", "someotherstring%")
             .whereAnd("propertyStringBuffer", "=", new StringBuffer("someotherstringbuff"))
-            .whereOr("propertyTime", "=", Convert.toTime(cal))
-            .whereAnd("propertyTimestamp", "<=", new Timestamp(cal.getTime().getTime()));
+            .whereOr("propertyTime", "=", Convert.toSqlTime(cal))
+            .whereAnd("propertyTimestamp", "<=", Convert.toSqlTimestamp(cal));
 
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyBigDecimal >= 53443433.9784567 AND propertyBoolean = 0 OR propertyByte = 54 AND propertyCalendar <= '2003-03-03 10:01:28.0' OR propertyChar = 'f' AND propertyDate = '2003-03-03 10:01:28.0' AND propertyDouble != 73453.71 OR propertyFloat >= 1987.14 AND propertyInt = 973 AND propertyLong < 347678 AND propertyShort = 78 OR propertySqlDate = '2003-03-03' AND propertyString LIKE 'someotherstring%' AND propertyStringBuffer = 'someotherstringbuff' OR propertyTime = '10:01:28' AND propertyTimestamp <= '2003-03-03 10:01:28.0'");
         assertFalse(execute(query));
@@ -146,15 +143,15 @@ public class TestDeleteMysql extends TestDelete {
             .whereParameterOr("propertySqlDate", "=")
             .whereAnd("propertyString", "LIKE", "someotherstring%")
             .whereAnd("propertyStringBuffer", "=", new StringBuffer("someotherstringbuff"))
-            .whereOr("propertyTime", "=", Convert.toTime(cal))
-            .whereAnd("propertyTimestamp", "<=", new Timestamp(cal.getTime().getTime()));
+            .whereOr("propertyTime", "=", Convert.toSqlTime(cal))
+            .whereAnd("propertyTimestamp", "<=", Convert.toSqlTimestamp(cal));
 
         assertEquals(query.getSql(), "DELETE FROM tablename WHERE propertyBigDecimal >= 53443433.9784567 AND propertyBoolean = 0 OR propertyByte = 54 AND propertyCalendar <= '2003-03-03 10:01:28.0' OR propertyChar = 'f' AND propertyDate = '2003-03-03 10:01:28.0' AND propertyDouble != 73453.71 OR propertyFloat >= 1987.14 AND propertyInt = 973 AND propertyLong < 347678 AND propertyShort = 78 OR propertySqlDate = ? AND propertyString LIKE 'someotherstring%' AND propertyStringBuffer = 'someotherstringbuff' OR propertyTime = '10:01:28' AND propertyTimestamp <= '2003-03-03 10:01:28.0'");
 
         assertFalse(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
                 statement
-                    .setDate("propertySqlDate", new java.sql.Date(cal.getTime().getTime()));
+                    .setDate("propertySqlDate", Convert.toSqlDate(cal));
             }
         }));
     }
@@ -367,30 +364,30 @@ public class TestDeleteMysql extends TestDelete {
                     .setBoolean(3, false)
                     .setByte(4, (byte) 89)
                     .setByte(5, (byte) 34)
-                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(6, Convert.toSqlTimestamp(cal))
                     .setString(7, "v")
                     .setString(8, "r")
-                    .setTimestamp(9, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(9, Convert.toSqlTimestamp(cal))
                     .setDouble(10, 53348.34d)
                     .setDouble(11, 143298.692d)
                     .setString(12, "VALUE_THREE")
                     .setDouble(13, 98634.2d)
                     .setDouble(14, 8734.7d)
-                    .setTimestamp(15, Timestamp.from(cal.toInstant()))
+                    .setTimestamp(15, Convert.toSqlTimestamp(cal))
                     .setInt(16, 545)
                     .setInt(17, 968)
-                    .setDate(18, new java.sql.Date(cal.getTime().getTime()))
-                    .setTimestamp(19, Timestamp.from(cal.toInstant()))
-                    .setTime(20, Convert.toTime(cal))
+                    .setDate(18, Convert.toSqlDate(cal))
+                    .setTimestamp(19, Convert.toSqlTimestamp(cal))
+                    .setTime(20, Convert.toSqlTime(cal))
                     .setLong(21, 34563L)
                     .setLong(22, 66875L)
                     .setShort(23, (short) 43)
                     .setShort(24, (short) 68)
-                    .setDate(25, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(25, Convert.toSqlDate(cal))
                     .setString(26, "someotherstring")
                     .setString(27, "someotherstringbuff")
-                    .setTime(28, Convert.toTime(cal))
-                    .setTimestamp(29, new Timestamp(cal.getTime().getTime()));
+                    .setTime(28, Convert.toSqlTime(cal))
+                    .setTimestamp(29, Convert.toSqlTimestamp(cal));
             }
         });
     }
@@ -444,27 +441,27 @@ public class TestDeleteMysql extends TestDelete {
                     .setBoolean(3, false)
                     .setByte(4, (byte) 89)
                     .setByte(5, (byte) 34)
-                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(6, Convert.toSqlTimestamp(cal))
                     .setString(7, "v")
                     .setString(8, "r")
-                    .setTimestamp(9, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(9, Convert.toSqlTimestamp(cal))
                     .setDouble(10, 53348.34d)
                     .setDouble(11, 143298.692d)
                     .setDouble(12, 98634.2d)
                     .setDouble(13, 8734.7d)
-                    .setTimestamp(14, Timestamp.from(cal.toInstant()))
+                    .setTimestamp(14, Convert.toSqlTimestamp(cal))
                     .setInt(15, 545)
                     .setInt(16, 968)
-                    .setDate(17, new java.sql.Date(cal.getTime().getTime()))
-                    .setTimestamp(18, Timestamp.from(cal.toInstant()))
-                    .setTime(19, Convert.toTime(cal))
+                    .setDate(17, Convert.toSqlDate(cal))
+                    .setTimestamp(18, Convert.toSqlTimestamp(cal))
+                    .setTime(19, Convert.toSqlTime(cal))
                     .setLong(20, 66875L)
                     .setShort(21, (short) 43)
-                    .setDate(22, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(22, Convert.toSqlDate(cal))
                     .setString(23, "someotherstring")
                     .setString(24, "someotherstringbuff")
-                    .setTime(25, Convert.toTime(cal))
-                    .setTimestamp(26, new Timestamp(cal.getTime().getTime()));
+                    .setTime(25, Convert.toSqlTime(cal))
+                    .setTimestamp(26, Convert.toSqlTimestamp(cal));
             }
         });
     }
@@ -504,9 +501,9 @@ public class TestDeleteMysql extends TestDelete {
 //                    .setBigDecimal(1, new BigDecimal("219038743.392874"))
 //                    .setBoolean(2, false)
 //                    .setByte(3, (byte) 34)
-//                    .setTimestamp(4, new java.sql.Timestamp(cal.getTime().getTime()))
+//                    .setTimestamp(4, Convert.toTimestamp(cal))
 //                    .setString(5, "r")
-//                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
+//                    .setTimestamp(6, Convert.toTimestamp(cal))
 //                    .setString(7, "VALUE_THREE")
 //                    .setInt(8, 968)
 //                    .setLong(9, 66875L)

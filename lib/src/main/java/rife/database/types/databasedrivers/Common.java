@@ -97,64 +97,64 @@ public abstract class Common implements SqlConversion {
                         // convert the Timestamp type into other time / date types
                         else if (targetType == Calendar.class &&
                                  (result_class == Timestamp.class || result instanceof Timestamp)) {
-                            Calendar cal = Calendar.getInstance();
+                            var cal = RifeConfig.tools().getSystemCalendarInstance();
                             cal.setTime((Timestamp) result);
                             return cal;
                         } else if (targetType == Date.class &&
                                    (result_class == Timestamp.class || result instanceof Timestamp)) {
-                            return new Date(((Timestamp) result).getTime());
+                            return Convert.toDate((Timestamp) result);
                         } else if (targetType == java.sql.Date.class &&
                                    (result_class == Timestamp.class || result instanceof Timestamp)) {
-                            return new java.sql.Date(((Timestamp) result).getTime());
+                            return Convert.toSqlDate((Timestamp) result);
                         } else if (targetType == Time.class &&
                                    (result_class == Timestamp.class || result instanceof Timestamp)) {
-                            return Convert.toTime(result);
+                            return Convert.toSqlTime((Timestamp) result);
                         } else if (targetType == Instant.class &&
                                    (result_class == Timestamp.class || result instanceof Timestamp)) {
                             return ((Timestamp) result).toInstant();
                         } else if (targetType == LocalDateTime.class &&
                                    (result_class == Timestamp.class || result instanceof Timestamp)) {
-                            return ((Timestamp) result).toLocalDateTime();
+                            return Convert.toLocalDateTime((Timestamp) result);
                         } else if (targetType == LocalDate.class &&
                                    (result_class == Timestamp.class || result instanceof Timestamp)) {
-                            return ((Timestamp) result).toLocalDateTime().toLocalDate();
+                            return Convert.toLocalDate((Timestamp) result);
                         } else if (targetType == LocalTime.class &&
                                    (result_class == Timestamp.class || result instanceof Timestamp)) {
-                            return ((Timestamp) result).toLocalDateTime().toLocalTime();
+                            return Convert.toLocalTime((Timestamp) result);
                         }
                         // convert the java.sql.Date type into other time / date types
                         else if (targetType == Calendar.class && result_class == java.sql.Date.class) {
-                            Calendar cal = Calendar.getInstance();
+                            var cal = RifeConfig.tools().getSystemCalendarInstance();
                             cal.setTime((java.sql.Date) result);
                             return cal;
                         } else if (targetType == Date.class && result_class == java.sql.Date.class) {
-                            return new Date(((java.sql.Date) result).getTime());
+                            return Convert.toDate((java.sql.Date) result);
                         } else if (targetType == Time.class && result_class == java.sql.Date.class) {
-                            return LocalTime.of(0, 0);
+                            return Convert.toSqlTime((java.sql.Date) result);
                         } else if (targetType == Timestamp.class && result_class == java.sql.Date.class) {
-                            return new Timestamp(((java.sql.Date) result).getTime());
+                            return Convert.toSqlTimestamp((java.sql.Date) result);
                         } else if (targetType == Instant.class && result_class == java.sql.Date.class) {
-                            return ((java.sql.Date) result).toLocalDate().atStartOfDay(RifeConfig.tools().getDefaultZoneId()).toInstant();
+                            return Convert.toInstant((java.sql.Date) result);
                         } else if (targetType == LocalDateTime.class && result_class == java.sql.Date.class) {
-                            return ((java.sql.Date) result).toLocalDate().atStartOfDay(RifeConfig.tools().getDefaultZoneId());
+                            return Convert.toLocalDateTime((java.sql.Date) result);
                         } else if (targetType == LocalDate.class && result_class == java.sql.Date.class) {
-                            return ((java.sql.Date) result).toLocalDate();
+                            return Convert.toLocalDate((java.sql.Date) result);
                         } else if (targetType == LocalTime.class && result_class == java.sql.Date.class) {
-                            return LocalTime.of(0, 0);
+                            return Convert.toLocalTime((java.sql.Date) result);
                         }
                         // convert the Time type into other time / date types
                         else if (targetType == Calendar.class && result_class == Time.class) {
-                            Calendar cal = Calendar.getInstance();
+                            var cal = RifeConfig.tools().getSystemCalendarInstance();
                             cal.setTime((Time) result);
                             return cal;
                         } else if (targetType == Date.class && result_class == Time.class) {
-                            return new Date(((Time) result).getTime());
+                            return Convert.toDate((Time) result);
                         } else if (targetType == java.sql.Date.class && result_class == Time.class) {
-                            return new java.sql.Date(((Time) result).getTime());
+                            return Convert.toSqlDate((Time) result);
                         } else if (targetType == Timestamp.class && result_class == Time.class) {
-                            return new Timestamp(((Time) result).getTime());
+                            return Convert.toSqlTimestamp((Time) result);
                         } else if (targetType == LocalTime.class && result_class == Time.class) {
-                            return ((Time) result).toLocalTime();
+                            return Convert.toLocalTime((Time) result);
                         }
                         // other types
                         else if (targetType == byte[].class && Blob.class.isAssignableFrom(result_class)) {

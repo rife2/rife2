@@ -13,7 +13,6 @@ import rife.tools.StringUtils;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -1189,6 +1188,21 @@ public class RifeConfig {
 
         public Calendar getCalendarInstance() {
             return GregorianCalendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+        }
+
+        public Calendar getSystemCalendarInstance(int year, int month, int date, int hourOfDay, int minute, int seconds) {
+            return getSystemCalendarInstance(year, month, date, hourOfDay, minute, seconds, 0);
+        }
+
+        public Calendar getSystemCalendarInstance(int year, int month, int date, int hourOfDay, int minute, int seconds, int milliseconds) {
+            var cal = getSystemCalendarInstance();
+            cal.set(year, month, date, hourOfDay, minute, seconds);
+            cal.set(Calendar.MILLISECOND, milliseconds);
+            return cal;
+        }
+
+        public Calendar getSystemCalendarInstance() {
+            return GregorianCalendar.getInstance(TimeZone.getDefault(), Localization.getLocale());
         }
 
         public DateFormat getDefaultShortDateFormat() {

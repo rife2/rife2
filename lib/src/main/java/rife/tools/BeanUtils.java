@@ -6,16 +6,13 @@ package rife.tools;
 
 import java.sql.Time;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import rife.config.RifeConfig;
-import rife.config.exceptions.DateFormatInitializationException;
 import rife.engine.UploadedFile;
 import rife.tools.exceptions.BeanUtilsException;
 import rife.tools.exceptions.ConversionException;
 import rife.tools.exceptions.FileUtilsErrorException;
-import rife.tools.exceptions.SerializationUtilsErrorException;
 import rife.validation.*;
 
 import java.beans.BeanInfo;
@@ -25,15 +22,12 @@ import java.beans.PropertyDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.Format;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import static rife.tools.BeanUtils.Accessors.*;
 
@@ -357,16 +351,12 @@ public final class BeanUtils {
             format = constrainedProperty.getFormat();
         }
 
-        if (propertyValue instanceof Time ||
-            propertyValue instanceof LocalTime) {
+        if (propertyValue instanceof LocalTime) {
             if (format == null) {
                 format = RifeConfig.tools().getConcisePreciseTimeFormat();
             }
             try {
-                if (propertyValue instanceof LocalTime) {
-                    propertyValue = Convert.toDate(propertyValue);
-                }
-                return format.format(propertyValue);
+                return format.format(Convert.toDate(propertyValue));
             } catch (ConversionException e) {
                 throw new RuntimeException(e);
             }
@@ -854,7 +844,7 @@ public final class BeanUtils {
                                             } else if (LocalDate.class.isAssignableFrom(component_type)) {
                                                 Array.set(parameter_values_typed, i, Convert.toLocalDate(parameter_value_typed));
                                             } else if (Time.class.isAssignableFrom(component_type)) {
-                                                Array.set(parameter_values_typed, i, Convert.toTime(parameter_value_typed));
+                                                Array.set(parameter_values_typed, i, Convert.toSqlTime(parameter_value_typed));
                                             } else if (LocalTime.class.isAssignableFrom(component_type)) {
                                                 Array.set(parameter_values_typed, i, Convert.toLocalTime(parameter_value_typed));
                                             }
@@ -1018,7 +1008,7 @@ public final class BeanUtils {
                                     } else if (LocalDate.class.isAssignableFrom(property_type)) {
                                         parameter_value_typed = Convert.toLocalDate(parameter_value_typed);
                                     } else if (Time.class.isAssignableFrom(property_type)) {
-                                        parameter_value_typed = Convert.toTime(parameter_value_typed);
+                                        parameter_value_typed = Convert.toSqlTime(parameter_value_typed);
                                     } else if (LocalTime.class.isAssignableFrom(property_type)) {
                                         parameter_value_typed = Convert.toLocalTime(parameter_value_typed);
                                     }

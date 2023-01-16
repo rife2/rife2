@@ -27,8 +27,8 @@ public class TestBeanUtils {
         bean.setPropertyDate(Convert.toDate(cal));
         bean.setPropertyCalendar(cal);
         bean.setPropertySqlDate(Convert.toSqlDate(cal));
-        bean.setPropertyTime(Convert.toTime(cal));
-        bean.setPropertyTimestamp(Convert.toTimestamp(cal));
+        bean.setPropertyTime(Convert.toSqlTime(cal));
+        bean.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
         bean.setPropertyInstant(Convert.toInstant(cal));
         bean.setPropertyLocalDateTime(Convert.toLocalDateTime(cal));
         bean.setPropertyLocalDate(Convert.toLocalDate(cal));
@@ -2493,8 +2493,8 @@ public class TestBeanUtils {
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyDate"), Convert.toDate(cal));
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyCalendar"), cal);
             assertEquals(BeanUtils.getPropertyValue(bean, "propertySqlDate"), Convert.toSqlDate(cal));
-            assertEquals(BeanUtils.getPropertyValue(bean, "propertyTime"), Convert.toTime(cal));
-            assertEquals(BeanUtils.getPropertyValue(bean, "propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(BeanUtils.getPropertyValue(bean, "propertyTime"), Convert.toSqlTime(cal));
+            assertEquals(BeanUtils.getPropertyValue(bean, "propertyTimestamp"), Convert.toSqlTimestamp(cal));
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyInstant"), Convert.toInstant(cal));
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyLocalDateTime"), Convert.toLocalDateTime(cal));
             assertEquals(BeanUtils.getPropertyValue(bean, "propertyLocalDate"), Convert.toLocalDate(cal));
@@ -2530,8 +2530,8 @@ public class TestBeanUtils {
             BeanUtils.setPropertyValue(bean, "propertyDate", Convert.toDate(cal));
             BeanUtils.setPropertyValue(bean, "propertyCalendar", cal);
             BeanUtils.setPropertyValue(bean, "propertySqlDate", Convert.toSqlDate(cal));
-            BeanUtils.setPropertyValue(bean, "propertyTime", Convert.toTime(cal));
-            BeanUtils.setPropertyValue(bean, "propertyTimestamp", Convert.toTimestamp(cal));
+            BeanUtils.setPropertyValue(bean, "propertyTime", Convert.toSqlTime(cal));
+            BeanUtils.setPropertyValue(bean, "propertyTimestamp", Convert.toSqlTimestamp(cal));
             BeanUtils.setPropertyValue(bean, "propertyInstant", Convert.toInstant(cal));
             BeanUtils.setPropertyValue(bean, "propertyLocalDateTime", Convert.toLocalDateTime(cal));
             BeanUtils.setPropertyValue(bean, "propertyLocalDate", Convert.toLocalDate(cal));
@@ -2625,8 +2625,8 @@ public class TestBeanUtils {
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertyCalendar"), cal);
             assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
-            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
-            assertEquals(property_values.get("propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toSqlTime(cal));
+            assertEquals(property_values.get("propertyTimestamp"), Convert.toSqlTimestamp(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyLocalDateTime"), Convert.toLocalDateTime(cal));
             assertEquals(property_values.get("propertyLocalDate"), Convert.toLocalDate(cal));
@@ -2679,8 +2679,8 @@ public class TestBeanUtils {
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertyCalendar"), cal);
             assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
-            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
-            assertEquals(property_values.get("propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toSqlTime(cal));
+            assertEquals(property_values.get("propertyTimestamp"), Convert.toSqlTimestamp(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyLocalDateTime"), Convert.toLocalDateTime(cal));
             assertEquals(property_values.get("propertyLocalDate"), Convert.toLocalDate(cal));
@@ -2731,8 +2731,8 @@ public class TestBeanUtils {
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertyCalendar"), cal);
             assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
-            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
-            assertEquals(property_values.get("propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toSqlTime(cal));
+            assertEquals(property_values.get("propertyTimestamp"), Convert.toSqlTimestamp(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyLocalDateTime"), Convert.toLocalDateTime(cal));
             assertEquals(property_values.get("propertyLocalDate"), Convert.toLocalDate(cal));
@@ -2783,8 +2783,8 @@ public class TestBeanUtils {
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertyCalendar"), cal);
             assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
-            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
-            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toSqlTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toSqlTimestamp(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalDateTime"), Convert.toLocalDateTime(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalDate"), Convert.toLocalDate(cal));
@@ -2837,8 +2837,8 @@ public class TestBeanUtils {
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertyCalendar"), cal);
             assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
-            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
-            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toSqlTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toSqlTimestamp(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalDateTime"), Convert.toLocalDateTime(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalDate"), Convert.toLocalDate(cal));
@@ -2889,8 +2889,8 @@ public class TestBeanUtils {
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertyCalendar"), cal);
             assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
-            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
-            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toSqlTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toSqlTimestamp(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalDateTime"), Convert.toLocalDateTime(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalDate"), Convert.toLocalDate(cal));
@@ -2932,7 +2932,7 @@ public class TestBeanUtils {
             assertEquals(property_values.get("propertyString"), "thisisastring");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
-            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toSqlTime(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyLocalDate"), Convert.toLocalDate(cal));
             assertEquals(property_values.get("propertyByte"), (byte) 53);
@@ -2968,7 +2968,7 @@ public class TestBeanUtils {
             assertEquals(property_values.get("propertyString"), "thisisastring");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
-            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toSqlTime(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyLocalDate"), Convert.toLocalDate(cal));
             assertEquals(property_values.get("propertyByte"), (byte) 53);
@@ -3002,7 +3002,7 @@ public class TestBeanUtils {
             assertEquals(property_values.get("propertyString"), "thisisastring");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("propertySqlDate"), Convert.toSqlDate(cal));
-            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toSqlTime(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyLocalDate"), Convert.toLocalDate(cal));
             assertEquals(property_values.get("propertyByte"), (byte) 53);
@@ -3036,7 +3036,7 @@ public class TestBeanUtils {
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
-            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toSqlTime(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalDate"), Convert.toLocalDate(cal));
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
@@ -3072,7 +3072,7 @@ public class TestBeanUtils {
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
-            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toSqlTime(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalDate"), Convert.toLocalDate(cal));
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
@@ -3106,7 +3106,7 @@ public class TestBeanUtils {
             assertEquals(property_values.get("PREFIX:propertyString"), "thisisastring");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
             assertEquals(property_values.get("PREFIX:propertySqlDate"), Convert.toSqlDate(cal));
-            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toSqlTime(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalDate"), Convert.toLocalDate(cal));
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
@@ -3142,8 +3142,8 @@ public class TestBeanUtils {
             var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
-            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
-            assertEquals(property_values.get("propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toSqlTime(cal));
+            assertEquals(property_values.get("propertyTimestamp"), Convert.toSqlTimestamp(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyLocalDateTime"), Convert.toLocalDateTime(cal));
             assertEquals(property_values.get("propertyLocalTime"), Convert.toLocalTime(cal));
@@ -3185,8 +3185,8 @@ public class TestBeanUtils {
             assertEquals(property_values.get("propertyReadonly"), 23);
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
-            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
-            assertEquals(property_values.get("propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toSqlTime(cal));
+            assertEquals(property_values.get("propertyTimestamp"), Convert.toSqlTimestamp(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyLocalDateTime"), Convert.toLocalDateTime(cal));
             assertEquals(property_values.get("propertyLocalTime"), Convert.toLocalTime(cal));
@@ -3226,8 +3226,8 @@ public class TestBeanUtils {
             var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
-            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
-            assertEquals(property_values.get("propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toSqlTime(cal));
+            assertEquals(property_values.get("propertyTimestamp"), Convert.toSqlTimestamp(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyLocalDateTime"), Convert.toLocalDateTime(cal));
             assertEquals(property_values.get("propertyLocalTime"), Convert.toLocalTime(cal));
@@ -3267,8 +3267,8 @@ public class TestBeanUtils {
             var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
-            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
-            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toSqlTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toSqlTimestamp(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalDateTime"), Convert.toLocalDateTime(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalTime"), Convert.toLocalTime(cal));
@@ -3310,8 +3310,8 @@ public class TestBeanUtils {
             assertEquals(property_values.get("PREFIX:propertyReadonly"), 23);
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
-            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
-            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toSqlTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toSqlTimestamp(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalDateTime"), Convert.toLocalDateTime(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalTime"), Convert.toLocalTime(cal));
@@ -3351,8 +3351,8 @@ public class TestBeanUtils {
             var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyStringBuffer").toString(), "butthisisastringbuffer");
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
-            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
-            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toTimestamp(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toSqlTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTimestamp"), Convert.toSqlTimestamp(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalDateTime"), Convert.toLocalDateTime(cal));
             assertEquals(property_values.get("PREFIX:propertyLocalTime"), Convert.toLocalTime(cal));
@@ -3384,7 +3384,7 @@ public class TestBeanUtils {
 
             var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
-            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toSqlTime(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyByte"), (byte) 53);
             assertEquals(property_values.get("propertyShort"), (short) 31);
@@ -3412,7 +3412,7 @@ public class TestBeanUtils {
             var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyReadonly"), 23);
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
-            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toSqlTime(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyByte"), (byte) 53);
             assertEquals(property_values.get("propertyShort"), (short) 31);
@@ -3438,7 +3438,7 @@ public class TestBeanUtils {
 
             var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("propertyDate"), Convert.toDate(cal));
-            assertEquals(property_values.get("propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("propertyTime"), Convert.toSqlTime(cal));
             assertEquals(property_values.get("propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("propertyByte"), (byte) 53);
             assertEquals(property_values.get("propertyShort"), (short) 31);
@@ -3464,7 +3464,7 @@ public class TestBeanUtils {
 
             var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
-            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toSqlTime(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
             assertEquals(property_values.get("PREFIX:propertyShort"), (short) 31);
@@ -3492,7 +3492,7 @@ public class TestBeanUtils {
             var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyReadonly"), 23);
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
-            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toSqlTime(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
             assertEquals(property_values.get("PREFIX:propertyShort"), (short) 31);
@@ -3518,7 +3518,7 @@ public class TestBeanUtils {
 
             var cal = RifeConfig.tools().getCalendarInstance(2002, Calendar.DECEMBER, 26, 22, 52, 31, 153);
             assertEquals(property_values.get("PREFIX:propertyDate"), Convert.toDate(cal));
-            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toTime(cal));
+            assertEquals(property_values.get("PREFIX:propertyTime"), Convert.toSqlTime(cal));
             assertEquals(property_values.get("PREFIX:propertyInstant"), Convert.toInstant(cal));
             assertEquals(property_values.get("PREFIX:propertyByte"), (byte) 53);
             assertEquals(property_values.get("PREFIX:propertyShort"), (short) 31);
@@ -3532,7 +3532,6 @@ public class TestBeanUtils {
     void testFormatPropertyValues() {
         var cal = RifeConfig.tools().getCalendarInstance(2023, Calendar.JANUARY, 23, 13, 45, 23, 142);
         assertEquals("20230123134523142-0500", BeanUtils.formatPropertyValue(Convert.toDate(cal), null));
-        assertEquals("134523000-0500", BeanUtils.formatPropertyValue(Convert.toTime(cal), null));
         assertEquals("20230123134523142-0500", BeanUtils.formatPropertyValue(Convert.toInstant(cal), null));
         assertEquals("20230123134523142-0500", BeanUtils.formatPropertyValue(Convert.toLocalDateTime(cal), null));
         assertEquals("20230123000000000-0500", BeanUtils.formatPropertyValue(Convert.toLocalDate(cal), null));
@@ -3544,7 +3543,6 @@ public class TestBeanUtils {
         var cal = RifeConfig.tools().getCalendarInstance(2023, Calendar.JANUARY, 23, 13, 45, 23, 142);
         var format = RifeConfig.tools().getSimpleDateFormat("d MMM yyyy HH:mm:ss");
         assertEquals("23 Jan 2023 13:45:23", BeanUtils.formatPropertyValue(Convert.toDate(cal), new ConstrainedProperty("property").format(format)));
-        assertEquals("1 Jan 1970 13:45:23", BeanUtils.formatPropertyValue(Convert.toTime(cal), new ConstrainedProperty("property").format(format)));
         assertEquals("23 Jan 2023 13:45:23", BeanUtils.formatPropertyValue(Instant.parse("2023-01-23T18:45:23.00Z"), new ConstrainedProperty("property").format(format)));
         assertEquals("23 Jan 2023 13:45:23", BeanUtils.formatPropertyValue(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000), new ConstrainedProperty("property").format(format)));
         assertEquals("23 Jan 2023 00:00:00", BeanUtils.formatPropertyValue(LocalDate.of(2023, Month.JANUARY, 23), new ConstrainedProperty("property").format(format)));

@@ -6,12 +6,10 @@ package rife.database.types.databasedrivers;
 
 import java.sql.*;
 
-import rife.config.RifeConfig;
 import rife.database.types.SqlArrays;
 import rife.database.types.SqlConversion;
 import rife.database.types.SqlNull;
-import rife.tools.ClassUtils;
-import rife.tools.StringUtils;
+import rife.tools.*;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -53,23 +51,23 @@ public class oracle_jdbc_driver_OracleDriver extends Common implements SqlConver
         } else if (value instanceof java.sql.Date) {
             var dateformat = new SimpleDateFormat("yyyy/MM/dd 00:00:00");
             return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(value)) + "', 'YYYY/MM/DD HH24:MI:SS')";
-        } else if (value instanceof Date) {
+        } else if (value instanceof Date date) {
             var dateformat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(new Timestamp(((Date) value).getTime()))) + "', 'YYYY/MM/DD HH24:MI:SS')";
-        } else if (value instanceof Calendar) {
+            return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(Convert.toSqlTimestamp(date))) + "', 'YYYY/MM/DD HH24:MI:SS')";
+        } else if (value instanceof Calendar cal) {
             var dateformat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(new Timestamp(((Calendar) value).getTime().getTime()))) + "', 'YYYY/MM/DD HH24:MI:SS')";
+            return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(Convert.toSqlTimestamp(cal))) + "', 'YYYY/MM/DD HH24:MI:SS')";
         } else if (value instanceof Instant instant) {
             var dateformat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(Timestamp.from(instant))) + "', 'YYYY/MM/DD HH24:MI:SS')";
+            return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(Convert.toSqlTimestamp(instant))) + "', 'YYYY/MM/DD HH24:MI:SS')";
         } else if (value instanceof LocalDateTime local) {
             var dateformat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(Timestamp.valueOf(local))) + "', 'YYYY/MM/DD HH24:MI:SS')";
+            return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(Convert.toSqlTimestamp(local))) + "', 'YYYY/MM/DD HH24:MI:SS')";
         } else if (value instanceof LocalDate local) {
             var dateformat = new SimpleDateFormat("yyyy/MM/dd 00:00:00");
-            return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(java.sql.Date.valueOf(local))) + "', 'YYYY/MM/DD HH24:MI:SS')";
+            return "TO_DATE('" + StringUtils.encodeSql(dateformat.format(Convert.toSqlDate(local))) + "', 'YYYY/MM/DD HH24:MI:SS')";
         } else if (value instanceof LocalTime local) {
-            return "TO_DATE('" + StringUtils.encodeSql(java.sql.Time.valueOf(local).toString()) + "', 'HH24:MI:SS')";
+            return "TO_DATE('" + StringUtils.encodeSql(Convert.toSqlTime(local).toString()) + "', 'HH24:MI:SS')";
         }
         // make sure that the Boolean type is correctly caught
         else if (value instanceof Boolean) {
