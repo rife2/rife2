@@ -5,10 +5,13 @@
 package rife.template;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.config.RifeConfig;
-import rife.resources.ResourceFinderClasspath;
-import rife.resources.ResourceFinderDirectories;
-import rife.resources.ResourceFinderGroup;
+import rife.database.Datasource;
+import rife.database.TestDatasources;
+import rife.resources.*;
+import rife.resources.exceptions.ResourceWriterErrorException;
 import rife.template.exceptions.AmbiguousTemplateNameException;
 import rife.template.exceptions.ResourceBundleNotFoundException;
 import rife.template.exceptions.TemplateException;
@@ -20,8 +23,7 @@ import rife.tools.exceptions.FileUtilsErrorException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.ListResourceBundle;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -225,19 +227,19 @@ public class TestTemplateFactory {
     @Test
     void testFilteredTagsRenderHtml() {
         RendererImpl.sCount = 0;
-        Template t = TemplateFactory.HTML.get("filtered_tags_render");
+        var t = TemplateFactory.HTML.get("filtered_tags_render");
         assertEquals("This is the render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
-            "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
-            "This is the render value with a differentiator 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:DIFFERENT:different:2'.\n", t.getContent());
+                     "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
+                     "This is the render value with a differentiator 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:DIFFERENT:different:2'.\n", t.getContent());
     }
 
     @Test
     void testFilteredTagsRenderTxt() {
         RendererImpl.sCount = 0;
-        Template t = TemplateFactory.TXT.get("filtered_tags_render");
+        var t = TemplateFactory.TXT.get("filtered_tags_render");
         assertEquals("This is the render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
-            "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
-            "This is the render value with a differentiator 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:DIFFERENT:different:2'.\n", t.getContent());
+                     "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
+                     "This is the render value with a differentiator 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:DIFFERENT:different:2'.\n", t.getContent());
     }
 
     @Test
@@ -630,19 +632,19 @@ public class TestTemplateFactory {
 
         try {
             // set up the temporary directory
-            String template_dir = RifeConfig.global().getTempPath();
-            File template_dir_file = new File(template_dir);
+            var template_dir = RifeConfig.global().getTempPath();
+            var template_dir_file = new File(template_dir);
             template_dir_file.mkdirs();
 
             // set up the first template file
-            ResourceFinderGroup group = new ResourceFinderGroup()
+            var group = new ResourceFinderGroup()
                 .add(new ResourceFinderDirectories(new File[]{template_dir_file}))
                 .add(ResourceFinderClasspath.instance());
             TemplateFactory.HTML.setResourceFinder(group);
 
-            URL template1_resource = TemplateFactory.HTML.getParser().resolve("defaultvalues_in");
-            String template1_name = "reload_basic";
-            File template1_file = new File(template_dir + File.separator + template1_name + TemplateFactory.HTML.getParser().getExtension());
+            var template1_resource = TemplateFactory.HTML.getParser().resolve("defaultvalues_in");
+            var template1_name = "reload_basic";
+            var template1_file = new File(template_dir + File.separator + template1_name + TemplateFactory.HTML.getParser().getExtension());
             template1_file.delete();
             try {
                 FileUtils.copy(template1_resource.openStream(), template1_file);
@@ -667,7 +669,7 @@ public class TestTemplateFactory {
             }
 
             // overwrite the template file with new content
-            URL template2_resource = TemplateFactory.HTML.getParser().resolve("noblocks_in");
+            var template2_resource = TemplateFactory.HTML.getParser().resolve("noblocks_in");
             try {
                 FileUtils.copy(template2_resource.openStream(), template1_file);
             } catch (FileUtilsErrorException | IOException e) {
@@ -697,24 +699,356 @@ public class TestTemplateFactory {
     }
 
     @Test
+    public void testFilteredBlocks() {
+        var filter1 = "^FILTER1:(\\w+):CONST:(\\w+)$";
+        var filter2 = "^FILTER2:(\\w+)$";
+        var filter3 = "^CONST-FILTER3:(\\w+)$";
+        var filter4 = "(\\w+)";
+
+        TemplateFactory factory = null;
+        Template template = null;
+
+        try {
+            factory = new TemplateFactory(TemplateConfig.XML, ResourceFinderClasspath.instance(), "html", "text/html", ".html", new String[]{filter1, filter2, filter3, filter4}, null, null, null, null);
+
+            template = factory.get("blocks_filtered_in");
+
+            assertTrue(template.hasFilteredBlocks(filter1));
+            assertTrue(template.hasFilteredBlocks(filter2));
+            assertTrue(template.hasFilteredBlocks(filter3));
+            assertFalse(template.hasFilteredBlocks(filter4));
+
+            List<String[]> filtered_blocks = null;
+
+            filtered_blocks = template.getFilteredBlocks(filter1);
+            assertEquals(3, filtered_blocks.size());
+
+            var filter1_got_block1 = false;
+            var filter1_got_block2 = false;
+            var filter1_got_block3 = false;
+            for (var block_groups : filtered_blocks) {
+                assertEquals(3, block_groups.length);
+                if (block_groups[0].equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
+                    block_groups[1].equals("BLOCK1a") &&
+                    block_groups[2].equals("BLOCK1b")) {
+                    filter1_got_block1 = true;
+                } else if (block_groups[0].equals("FILTER1:BLOCK2a:CONST:BLOCK2b") &&
+                           block_groups[1].equals("BLOCK2a") &&
+                           block_groups[2].equals("BLOCK2b")) {
+                    filter1_got_block2 = true;
+                } else if (block_groups[0].equals("FILTER1:BLOCK3a:CONST:BLOCK3b") &&
+                           block_groups[1].equals("BLOCK3a") &&
+                           block_groups[2].equals("BLOCK3b")) {
+                    filter1_got_block3 = true;
+                }
+            }
+            assertTrue(filter1_got_block1 && filter1_got_block2 && filter1_got_block3);
+
+            filtered_blocks = template.getFilteredBlocks(filter2);
+            assertEquals(2, filtered_blocks.size());
+
+            var filter2_got_block1 = false;
+            var filter2_got_block2 = false;
+            for (var block_groups : filtered_blocks) {
+                assertEquals(2, block_groups.length);
+                if (block_groups[0].equals("FILTER2:BLOCK1") &&
+                    block_groups[1].equals("BLOCK1")) {
+                    filter2_got_block1 = true;
+                } else if (block_groups[0].equals("FILTER2:BLOCK2") &&
+                           block_groups[1].equals("BLOCK2")) {
+                    filter2_got_block2 = true;
+                }
+            }
+            assertTrue(filter2_got_block1 && filter2_got_block2);
+
+            filtered_blocks = template.getFilteredBlocks(filter3);
+            assertEquals(2, filtered_blocks.size());
+
+            var filter3_got_block1 = false;
+            var filter3_got_block2 = false;
+            for (var block_groups : filtered_blocks) {
+                assertEquals(2, block_groups.length);
+                if (block_groups[0].equals("CONST-FILTER3:BLOCK1") &&
+                    block_groups[1].equals("BLOCK1")) {
+                    filter3_got_block1 = true;
+                } else if (block_groups[0].equals("CONST-FILTER3:BLOCK2") &&
+                           block_groups[1].equals("BLOCK2")) {
+                    filter3_got_block2 = true;
+                }
+            }
+            assertTrue(filter3_got_block1 && filter3_got_block2);
+
+            factory = new TemplateFactory(TemplateConfig.XML, ResourceFinderClasspath.instance(), "html", "text/html", ".html", new String[]{filter4, filter1, filter2, filter3}, null, null, null, null);
+
+            template = factory.get("blocks_filtered_in");
+
+            assertFalse(template.hasFilteredBlocks(filter1));
+            assertFalse(template.hasFilteredBlocks(filter2));
+            assertFalse(template.hasFilteredBlocks(filter3));
+            assertTrue(template.hasFilteredBlocks(filter4));
+
+            filtered_blocks = template.getFilteredBlocks(filter4);
+            assertEquals(7, filtered_blocks.size());
+
+            var filter4_got_block1 = false;
+            var filter4_got_block2 = false;
+            var filter4_got_block3 = false;
+            var filter4_got_block4 = false;
+            var filter4_got_block5 = false;
+            var filter4_got_block6 = false;
+            var filter4_got_block7 = false;
+            for (var block_groups : filtered_blocks) {
+                if (block_groups[0].equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
+                    block_groups[1].equals("FILTER1") &&
+                    block_groups[2].equals("BLOCK1a") &&
+                    block_groups[3].equals("CONST") &&
+                    block_groups[4].equals("BLOCK1b")) {
+                    assertEquals(5, block_groups.length);
+                    filter4_got_block1 = true;
+                    continue;
+                }
+                if (block_groups[0].equals("FILTER1:BLOCK2a:CONST:BLOCK2b") &&
+                    block_groups[1].equals("FILTER1") &&
+                    block_groups[2].equals("BLOCK2a") &&
+                    block_groups[3].equals("CONST") &&
+                    block_groups[4].equals("BLOCK2b")) {
+                    assertEquals(5, block_groups.length);
+                    filter4_got_block2 = true;
+                    continue;
+                }
+                if (block_groups[0].equals("FILTER1:BLOCK3a:CONST:BLOCK3b") &&
+                    block_groups[1].equals("FILTER1") &&
+                    block_groups[2].equals("BLOCK3a") &&
+                    block_groups[3].equals("CONST") &&
+                    block_groups[4].equals("BLOCK3b")) {
+                    assertEquals(5, block_groups.length);
+                    filter4_got_block3 = true;
+                    continue;
+                }
+                if (block_groups[0].equals("FILTER2:BLOCK1") &&
+                    block_groups[1].equals("FILTER2") &&
+                    block_groups[2].equals("BLOCK1")) {
+                    assertEquals(3, block_groups.length);
+                    filter4_got_block4 = true;
+                    continue;
+                }
+                if (block_groups[0].equals("FILTER2:BLOCK2") &&
+                    block_groups[1].equals("FILTER2") &&
+                    block_groups[2].equals("BLOCK2")) {
+                    assertEquals(3, block_groups.length);
+                    filter4_got_block5 = true;
+                    continue;
+                }
+                if (block_groups[0].equals("CONST-FILTER3:BLOCK1") &&
+                    block_groups[1].equals("CONST") &&
+                    block_groups[2].equals("FILTER3") &&
+                    block_groups[3].equals("BLOCK1")) {
+                    assertEquals(4, block_groups.length);
+                    filter4_got_block6 = true;
+                    continue;
+                }
+                if (block_groups[0].equals("CONST-FILTER3:BLOCK2") &&
+                    block_groups[1].equals("CONST") &&
+                    block_groups[2].equals("FILTER3") &&
+                    block_groups[3].equals("BLOCK2")) {
+                    assertEquals(4, block_groups.length);
+                    filter4_got_block7 = true;
+                    continue;
+                }
+            }
+            assertTrue(filter4_got_block1 && filter4_got_block2 && filter4_got_block3 &&
+                       filter4_got_block4 && filter4_got_block5 && filter4_got_block6 &&
+                       filter4_got_block7);
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
+    public void testFilteredValues() {
+        var filter1 = "^FILTER1:(\\w+):CONST:(\\w+)$";
+        var filter2 = "^FILTER2:(\\w+)$";
+        var filter3 = "^CONST-FILTER3:(\\w+)$";
+        var filter4 = "(\\w+)";
+
+        TemplateFactory factory = null;
+        Template template = null;
+
+        try {
+            factory = new TemplateFactory(TemplateConfig.XML, ResourceFinderClasspath.instance(), "html", "text/html", ".html", null, new String[]{filter1, filter2, filter3, filter4}, null, null, null);
+
+            template = factory.get("values_filtered_in");
+
+            assertTrue(template.hasFilteredValues(filter1));
+            assertTrue(template.hasFilteredValues(filter2));
+            assertTrue(template.hasFilteredValues(filter3));
+            assertFalse(template.hasFilteredValues(filter4));
+
+            List<String[]> filtered_values = null;
+
+            filtered_values = template.getFilteredValues(filter1);
+            assertEquals(3, filtered_values.size());
+
+            var filter1_got_value1 = false;
+            var filter1_got_value2 = false;
+            var filter1_got_value3 = false;
+            for (var value_groups : filtered_values) {
+                assertEquals(3, value_groups.length);
+                if (value_groups[0].equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
+                    value_groups[1].equals("VALUE1a") &&
+                    value_groups[2].equals("VALUE1b")) {
+                    filter1_got_value1 = true;
+                } else if (value_groups[0].equals("FILTER1:VALUE2a:CONST:VALUE2b") &&
+                           value_groups[1].equals("VALUE2a") &&
+                           value_groups[2].equals("VALUE2b")) {
+                    filter1_got_value2 = true;
+                } else if (value_groups[0].equals("FILTER1:VALUE3a:CONST:VALUE3b") &&
+                           value_groups[1].equals("VALUE3a") &&
+                           value_groups[2].equals("VALUE3b")) {
+                    filter1_got_value3 = true;
+                }
+            }
+            assertTrue(filter1_got_value1 && filter1_got_value2 && filter1_got_value3);
+
+            filtered_values = template.getFilteredValues(filter2);
+            assertEquals(2, filtered_values.size());
+
+            var filter2_got_value1 = false;
+            var filter2_got_value2 = false;
+            for (var value_groups : filtered_values) {
+                assertEquals(2, value_groups.length);
+                if (value_groups[0].equals("FILTER2:VALUE1") &&
+                    value_groups[1].equals("VALUE1")) {
+                    filter2_got_value1 = true;
+                } else if (value_groups[0].equals("FILTER2:VALUE2") &&
+                           value_groups[1].equals("VALUE2")) {
+                    filter2_got_value2 = true;
+                }
+            }
+            assertTrue(filter2_got_value1 && filter2_got_value2);
+
+            filtered_values = template.getFilteredValues(filter3);
+            assertEquals(2, filtered_values.size());
+
+            var filter3_got_value1 = false;
+            var filter3_got_value2 = false;
+            for (var value_groups : filtered_values) {
+                assertEquals(2, value_groups.length);
+                if (value_groups[0].equals("CONST-FILTER3:VALUE1") &&
+                    value_groups[1].equals("VALUE1")) {
+                    filter3_got_value1 = true;
+                } else if (value_groups[0].equals("CONST-FILTER3:VALUE2") &&
+                           value_groups[1].equals("VALUE2")) {
+                    filter3_got_value2 = true;
+                }
+            }
+            assertTrue(filter3_got_value1 && filter3_got_value2);
+
+            factory = new TemplateFactory(TemplateConfig.XML, ResourceFinderClasspath.instance(), "html", "text/html", ".html", null, new String[]{filter4, filter1, filter2, filter3}, null, null, null);
+
+            template = factory.get("values_filtered_in");
+
+            assertFalse(template.hasFilteredValues(filter1));
+            assertFalse(template.hasFilteredValues(filter2));
+            assertFalse(template.hasFilteredValues(filter3));
+            assertTrue(template.hasFilteredValues(filter4));
+
+            filtered_values = template.getFilteredValues(filter4);
+            assertEquals(7, filtered_values.size());
+
+            var filter4_got_value1 = false;
+            var filter4_got_value2 = false;
+            var filter4_got_value3 = false;
+            var filter4_got_value4 = false;
+            var filter4_got_value5 = false;
+            var filter4_got_value6 = false;
+            var filter4_got_value7 = false;
+            for (var value_groups : filtered_values) {
+                if (value_groups[0].equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
+                    value_groups[1].equals("FILTER1") &&
+                    value_groups[2].equals("VALUE1a") &&
+                    value_groups[3].equals("CONST") &&
+                    value_groups[4].equals("VALUE1b")) {
+                    assertEquals(5, value_groups.length);
+                    filter4_got_value1 = true;
+                    continue;
+                }
+                if (value_groups[0].equals("FILTER1:VALUE2a:CONST:VALUE2b") &&
+                    value_groups[1].equals("FILTER1") &&
+                    value_groups[2].equals("VALUE2a") &&
+                    value_groups[3].equals("CONST") &&
+                    value_groups[4].equals("VALUE2b")) {
+                    assertEquals(5, value_groups.length);
+                    filter4_got_value2 = true;
+                    continue;
+                }
+                if (value_groups[0].equals("FILTER1:VALUE3a:CONST:VALUE3b") &&
+                    value_groups[1].equals("FILTER1") &&
+                    value_groups[2].equals("VALUE3a") &&
+                    value_groups[3].equals("CONST") &&
+                    value_groups[4].equals("VALUE3b")) {
+                    assertEquals(5, value_groups.length);
+                    filter4_got_value3 = true;
+                    continue;
+                }
+                if (value_groups[0].equals("FILTER2:VALUE1") &&
+                    value_groups[1].equals("FILTER2") &&
+                    value_groups[2].equals("VALUE1")) {
+                    assertEquals(3, value_groups.length);
+                    filter4_got_value4 = true;
+                    continue;
+                }
+                if (value_groups[0].equals("FILTER2:VALUE2") &&
+                    value_groups[1].equals("FILTER2") &&
+                    value_groups[2].equals("VALUE2")) {
+                    assertEquals(3, value_groups.length);
+                    filter4_got_value5 = true;
+                    continue;
+                }
+                if (value_groups[0].equals("CONST-FILTER3:VALUE1") &&
+                    value_groups[1].equals("CONST") &&
+                    value_groups[2].equals("FILTER3") &&
+                    value_groups[3].equals("VALUE1")) {
+                    assertEquals(4, value_groups.length);
+                    filter4_got_value6 = true;
+                    continue;
+                }
+                if (value_groups[0].equals("CONST-FILTER3:VALUE2") &&
+                    value_groups[1].equals("CONST") &&
+                    value_groups[2].equals("FILTER3") &&
+                    value_groups[3].equals("VALUE2")) {
+                    assertEquals(4, value_groups.length);
+                    filter4_got_value7 = true;
+                    continue;
+                }
+            }
+            assertTrue(filter4_got_value1 && filter4_got_value2 && filter4_got_value3 &&
+                       filter4_got_value4 && filter4_got_value5 && filter4_got_value6 &&
+                       filter4_got_value7);
+        } catch (TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
     void testReloadBasicTxt() {
         var resource_finder = TemplateFactory.TXT.getResourceFinder();
 
         try {
             // set up the temporary directory
-            String template_dir = RifeConfig.global().getTempPath();
-            File template_dir_file = new File(template_dir);
+            var template_dir = RifeConfig.global().getTempPath();
+            var template_dir_file = new File(template_dir);
             template_dir_file.mkdirs();
 
             // set up the first template file
-            ResourceFinderGroup group = new ResourceFinderGroup()
+            var group = new ResourceFinderGroup()
                 .add(new ResourceFinderDirectories(new File[]{template_dir_file}))
                 .add(ResourceFinderClasspath.instance());
             TemplateFactory.TXT.setResourceFinder(group);
 
-            URL template1_resource = TemplateFactory.TXT.getParser().resolve("defaultvalues_in");
-            String template1_name = "reload_basic";
-            File template1_file = new File(template_dir + File.separator + template1_name + TemplateFactory.TXT.getParser().getExtension());
+            var template1_resource = TemplateFactory.TXT.getParser().resolve("defaultvalues_in");
+            var template1_name = "reload_basic";
+            var template1_file = new File(template_dir + File.separator + template1_name + TemplateFactory.TXT.getParser().getExtension());
             template1_file.delete();
             try {
                 FileUtils.copy(template1_resource.openStream(), template1_file);
@@ -739,7 +1073,7 @@ public class TestTemplateFactory {
             }
 
             // overwrite the template file with new content
-            URL template2_resource = TemplateFactory.TXT.getParser().resolve("noblocks_in");
+            var template2_resource = TemplateFactory.TXT.getParser().resolve("noblocks_in");
             try {
                 FileUtils.copy(template2_resource.openStream(), template1_file);
             } catch (FileUtilsErrorException | IOException e) {
@@ -1007,6 +1341,114 @@ public class TestTemplateFactory {
             template1_included_file.delete();
         } finally {
             TemplateFactory.HTML.setResourceFinder(resource_finder);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    public void testOtherResourceFinder(Datasource datasource) {
+        var resources = DatabaseResourcesFactory.instance(datasource);
+        try {
+            resources.install();
+            resources.addResource("db_template_name.txt", "{{b block1}}a block with value {{v value1/}}{{/b}}{{v value2/}}");
+
+            var factory = new TemplateFactory(TemplateConfig.TXT, resources, "databasetext", "text/txt", ".txt", new String[]{TemplateFactoryFilters.TAG_PROPERTY, TemplateFactoryFilters.TAG_L10N}, null, BeanHandlerPlainSingleton.INSTANCE, null, null);
+            Template template = null;
+
+            template = factory.get("db_template_name");
+            assertEquals("{{v value2/}}", template.getContent());
+            template.setValue("value1", 1);
+            template.appendBlock("value2", "block1");
+            template.setValue("value1", 2);
+            template.appendBlock("value2", "block1");
+            template.setValue("value1", 3);
+            template.appendBlock("value2", "block1");
+            template.setValue("value1", 4);
+            template.appendBlock("value2", "block1");
+            assertEquals("a block with value 1" +
+                         "a block with value 2" +
+                         "a block with value 3" +
+                         "a block with value 4", template.getContent());
+
+            resources.updateResource("db_template_name.txt", "{{b block1}}another block with value {{v value1/}}{{/b}}{{v value3/}}");
+
+            template = factory.get("db_template_name");
+            assertEquals("{{v value3/}}", template.getContent());
+            template.setValue("value1", 1);
+            template.appendBlock("value3", "block1");
+            template.setValue("value1", 2);
+            template.appendBlock("value3", "block1");
+            template.setValue("value1", 3);
+            template.appendBlock("value3", "block1");
+            template.setValue("value1", 4);
+            template.appendBlock("value3", "block1");
+            assertEquals("another block with value 1" +
+                         "another block with value 2" +
+                         "another block with value 3" +
+                         "another block with value 4", template.getContent());
+        } catch (ResourceWriterErrorException | TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        } finally {
+            try {
+                resources.remove();
+            } catch (ResourceWriterErrorException e) {
+                fail(ExceptionUtils.getExceptionStackTrace(e));
+            }
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    public void testOtherResourceFinderCommonFactory(Datasource datasource) {
+        var resources = DatabaseResourcesFactory.instance(datasource);
+        var previous = TemplateFactory.HTML.getResourceFinder();
+        TemplateFactory.HTML.setResourceFinder(resources);
+        try {
+            resources.install();
+            resources.addResource("db_template_name.html", "<!--b block1-->a block with value <!--v value1/--><!--/b--><!--v value2/-->");
+
+            Template template = null;
+
+            template = TemplateFactory.HTML.get("db_template_name");
+            assertEquals("<!--v value2/-->", template.getContent());
+            template.setValue("value1", 1);
+            template.appendBlock("value2", "block1");
+            template.setValue("value1", 2);
+            template.appendBlock("value2", "block1");
+            template.setValue("value1", 3);
+            template.appendBlock("value2", "block1");
+            template.setValue("value1", 4);
+            template.appendBlock("value2", "block1");
+            assertEquals("a block with value 1" +
+                         "a block with value 2" +
+                         "a block with value 3" +
+                         "a block with value 4", template.getContent());
+
+            resources.updateResource("db_template_name.html", "<!--b block1-->another block with value <!--v value1/--><!--/b--><!--v value3/-->");
+
+            template = TemplateFactory.HTML.get("db_template_name");
+            assertEquals("<!--v value3/-->", template.getContent());
+            template.setValue("value1", 1);
+            template.appendBlock("value3", "block1");
+            template.setValue("value1", 2);
+            template.appendBlock("value3", "block1");
+            template.setValue("value1", 3);
+            template.appendBlock("value3", "block1");
+            template.setValue("value1", 4);
+            template.appendBlock("value3", "block1");
+            assertEquals("another block with value 1" +
+                         "another block with value 2" +
+                         "another block with value 3" +
+                         "another block with value 4", template.getContent());
+        } catch (ResourceWriterErrorException | TemplateException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        } finally {
+            TemplateFactory.HTML.setResourceFinder(previous);
+            try {
+                resources.remove();
+            } catch (ResourceWriterErrorException e) {
+                fail(ExceptionUtils.getExceptionStackTrace(e));
+            }
         }
     }
 }
