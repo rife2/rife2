@@ -363,7 +363,10 @@ public final class BeanUtils {
                 format = RifeConfig.tools().getConcisePreciseTimeFormat();
             }
             try {
-                return format.format(Convert.toDate(propertyValue));
+                if (propertyValue instanceof LocalTime) {
+                    propertyValue = Convert.toDate(propertyValue);
+                }
+                return format.format(propertyValue);
             } catch (ConversionException e) {
                 throw new RuntimeException(e);
             }
