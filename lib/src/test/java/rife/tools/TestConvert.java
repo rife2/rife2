@@ -9,6 +9,7 @@ import rife.config.RifeConfig;
 import rife.config.TestRifeConfig;
 import rife.tools.exceptions.ConversionException;
 
+import java.sql.Time;
 import java.time.*;
 import java.util.*;
 
@@ -495,6 +496,8 @@ public class TestConvert {
     throws ConversionException {
         var cal = RifeConfig.tools().getCalendarInstance(2023, Calendar.JANUARY, 23, 13, 45, 23);
         assertEquals("20230123134523000-0500", formatPreciseDate(Convert.toDate(cal)));
+        assertEquals("20230123000000000-0500", formatPreciseDate(Convert.toDate(new java.sql.Date(123, Calendar.JANUARY, 23))));
+        assertEquals("19700101134523000-0500", formatPreciseDate(Convert.toDate(new Time(13, 45, 23))));
         assertEquals("20230123134523000-0500", formatPreciseDate(Convert.toDate(Instant.parse("2023-01-23T18:45:23.00Z"))));
         assertEquals("20230123134523000-0500", formatPreciseDate(Convert.toDate(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23))));
         assertEquals("20230123000000000-0500", formatPreciseDate(Convert.toDate(LocalDate.of(2023, Month.JANUARY, 23))));
@@ -505,6 +508,8 @@ public class TestConvert {
         assertEquals("20230123134500000-0500", formatPreciseDate(Convert.toDate("2023-01-23 13:45")));
 
         assertEquals("20230123134523000-0500", formatPreciseDate(Convert.toDate((Object)cal)));
+        assertEquals("20230123000000000-0500", formatPreciseDate(Convert.toDate((Object)new java.sql.Date(123, Calendar.JANUARY, 23))));
+        assertEquals("19700101134523000-0500", formatPreciseDate(Convert.toDate((Object)new Time(13, 45, 23))));
         assertEquals("20230123134523000-0500", formatPreciseDate(Convert.toDate((Object)Instant.parse("2023-01-23T18:45:23.00Z"))));
         assertEquals("20230123134523000-0500", formatPreciseDate(Convert.toDate((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23))));
         assertEquals("20230123000000000-0500", formatPreciseDate(Convert.toDate((Object)LocalDate.of(2023, Month.JANUARY, 23))));
@@ -520,6 +525,7 @@ public class TestConvert {
         var cal = RifeConfig.tools().getCalendarInstance(2023, Calendar.JANUARY, 23, 13, 45, 23);
         assertEquals("1/23/23", formatShortDate(Convert.toSqlDate(cal.getTime())));
         assertEquals("1/23/23", formatShortDate(Convert.toSqlDate(cal)));
+        assertEquals("1/1/70",  formatShortDate(Convert.toSqlDate(new Time(13, 45, 23))));
         assertEquals("1/23/23", formatShortDate(Convert.toSqlDate(Instant.parse("2023-01-23T18:45:23.00Z"))));
         assertEquals("1/23/23", formatShortDate(Convert.toSqlDate(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23))));
         assertEquals("1/23/23", formatShortDate(Convert.toSqlDate(LocalDate.of(2023, Month.JANUARY, 23))));
@@ -531,6 +537,7 @@ public class TestConvert {
 
         assertEquals("1/23/23", formatShortDate(Convert.toSqlDate((Object)cal.getTime())));
         assertEquals("1/23/23", formatShortDate(Convert.toSqlDate((Object)cal)));
+        assertEquals("1/1/70",  formatShortDate(Convert.toSqlDate((Object)new Time(13, 45, 23))));
         assertEquals("1/23/23", formatShortDate(Convert.toSqlDate((Object)Instant.parse("2023-01-23T18:45:23.00Z"))));
         assertEquals("1/23/23", formatShortDate(Convert.toSqlDate((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23))));
         assertEquals("1/23/23", formatShortDate(Convert.toSqlDate((Object)LocalDate.of(2023, Month.JANUARY, 23))));
@@ -546,6 +553,8 @@ public class TestConvert {
         var cal = RifeConfig.tools().getCalendarInstance(2023, Calendar.JANUARY, 23, 13, 45, 23, 142);
         assertEquals("20230123134523142-0500", formatPreciseDate(Convert.toTimestamp(cal.getTime())));
         assertEquals("20230123134523142-0500", formatPreciseDate(Convert.toTimestamp(cal)));
+        assertEquals("20230123000000000-0500", formatPreciseDate(Convert.toTimestamp(new java.sql.Date(123, Calendar.JANUARY, 23))));
+        assertEquals("19700101134523000-0500", formatPreciseDate(Convert.toTimestamp(new Time(13, 45, 23))));
         assertEquals("20230123134523000-0500", formatPreciseDate(Convert.toTimestamp(Instant.parse("2023-01-23T18:45:23.00Z"))));
         assertEquals("20230123134523142-0500", formatPreciseDate(Convert.toTimestamp(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000))));
         assertEquals("20230123000000000-0500", formatPreciseDate(Convert.toTimestamp(LocalDate.of(2023, Month.JANUARY, 23))));
@@ -557,6 +566,8 @@ public class TestConvert {
 
         assertEquals("20230123134523142-0500", formatPreciseDate(Convert.toTimestamp((Object)cal.getTime())));
         assertEquals("20230123134523142-0500", formatPreciseDate(Convert.toTimestamp((Object)cal)));
+        assertEquals("20230123000000000-0500", formatPreciseDate(Convert.toTimestamp((Object)new java.sql.Date(123, Calendar.JANUARY, 23))));
+        assertEquals("19700101134523000-0500", formatPreciseDate(Convert.toTimestamp((Object)new Time(13, 45, 23))));
         assertEquals("20230123134523000-0500", formatPreciseDate(Convert.toTimestamp((Object)Instant.parse("2023-01-23T18:45:23.00Z"))));
         assertEquals("20230123134523142-0500", formatPreciseDate(Convert.toTimestamp((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000))));
         assertEquals("20230123000000000-0500", formatPreciseDate(Convert.toTimestamp((Object)LocalDate.of(2023, Month.JANUARY, 23))));
@@ -572,6 +583,8 @@ public class TestConvert {
         var cal = RifeConfig.tools().getCalendarInstance(2023, Calendar.JANUARY, 23, 13, 45, 23, 142);
         assertEquals("134523000-0500", formatTime(Convert.toTime(cal.getTime())));
         assertEquals("134523000-0500", formatTime(Convert.toTime(cal)));
+        assertEquals("000000000-0500", formatTime(Convert.toTime(new java.sql.Date(123, Calendar.JANUARY, 23))));
+        assertEquals("134523000-0500", formatTime(Convert.toTime(new Time(13, 45, 23))));
         assertEquals("134523000-0500", formatTime(Convert.toTime(Instant.parse("2023-01-23T18:45:23.00Z"))));
         assertEquals("134523000-0500", formatTime(Convert.toTime(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000))));
         assertEquals("000000000-0500", formatTime(Convert.toTime(LocalDate.of(2023, Month.JANUARY, 23))));
@@ -583,6 +596,8 @@ public class TestConvert {
 
         assertEquals("134523000-0500", formatTime(Convert.toTime((Object)cal.getTime())));
         assertEquals("134523000-0500", formatTime(Convert.toTime((Object)cal)));
+        assertEquals("000000000-0500", formatTime(Convert.toTime((Object)new java.sql.Date(123, Calendar.JANUARY, 23))));
+        assertEquals("134523000-0500", formatTime(Convert.toTime((Object)new Time(13, 45, 23))));
         assertEquals("134523000-0500", formatTime(Convert.toTime((Object)Instant.parse("2023-01-23T18:45:23.00Z"))));
         assertEquals("134523000-0500", formatTime(Convert.toTime((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000))));
         assertEquals("000000000-0500", formatTime(Convert.toTime((Object)LocalDate.of(2023, Month.JANUARY, 23))));
@@ -598,6 +613,8 @@ public class TestConvert {
         var cal = RifeConfig.tools().getCalendarInstance(2023, Calendar.JANUARY, 23, 13, 45, 23, 142);
         assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant(cal.getTime()).toString());
         assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant(cal).toString());
+        assertEquals("2023-01-23T05:00:00Z",     Convert.toInstant(new java.sql.Date(123, Calendar.JANUARY, 23)).toString());
+        assertEquals("1970-01-01T18:45:23Z",     Convert.toInstant(new Time(13, 45, 23)).toString());
         assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
         assertEquals("2023-01-23T05:00:00Z",     Convert.toInstant(LocalDate.of(2023, Month.JANUARY, 23)).toString());
         assertEquals("1970-01-01T18:45:23Z",     Convert.toInstant(LocalTime.of(13, 45, 23)).toString());
@@ -608,6 +625,8 @@ public class TestConvert {
 
         assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant((Object)cal.getTime()).toString());
         assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant((Object)cal).toString());
+        assertEquals("2023-01-23T05:00:00Z",     Convert.toInstant((Object)new java.sql.Date(123, Calendar.JANUARY, 23)).toString());
+        assertEquals("1970-01-01T18:45:23Z",     Convert.toInstant((Object)new Time(13, 45, 23)).toString());
         assertEquals("2023-01-23T18:45:23.142Z", Convert.toInstant((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
         assertEquals("2023-01-23T05:00:00Z",     Convert.toInstant((Object)LocalDate.of(2023, Month.JANUARY, 23)).toString());
         assertEquals("1970-01-01T18:45:23Z",     Convert.toInstant((Object)LocalTime.of(13, 45, 23)).toString());
@@ -622,6 +641,8 @@ public class TestConvert {
         var cal = RifeConfig.tools().getCalendarInstance(2023, Calendar.JANUARY, 23, 13, 45, 23, 142);
         assertEquals("2023-01-23T13:45:23.142", Convert.toLocalDateTime(cal.getTime()).toString());
         assertEquals("2023-01-23T13:45:23.142", Convert.toLocalDateTime(cal).toString());
+        assertEquals("2023-01-23T00:00",        Convert.toLocalDateTime(new java.sql.Date(123, Calendar.JANUARY, 23)).toString());
+        assertEquals("1970-01-01T13:45:23",     Convert.toLocalDateTime(new Time(13, 45, 23)).toString());
         assertEquals("2023-01-23T13:45:23",     Convert.toLocalDateTime(Instant.parse("2023-01-23T18:45:23.00Z")).toString());
         assertEquals("2023-01-23T00:00",        Convert.toLocalDateTime(LocalDate.of(2023, Month.JANUARY, 23)).toString());
         assertEquals("1970-01-01T13:45:23",     Convert.toLocalDateTime(LocalTime.of(13, 45, 23)).toString());
@@ -632,6 +653,8 @@ public class TestConvert {
 
         assertEquals("2023-01-23T13:45:23.142", Convert.toLocalDateTime((Object)cal.getTime()).toString());
         assertEquals("2023-01-23T13:45:23.142", Convert.toLocalDateTime((Object)cal).toString());
+        assertEquals("2023-01-23T00:00",        Convert.toLocalDateTime((Object)new java.sql.Date(123, Calendar.JANUARY, 23)).toString());
+        assertEquals("1970-01-01T13:45:23",     Convert.toLocalDateTime((Object)new Time(13, 45, 23)).toString());
         assertEquals("2023-01-23T13:45:23",     Convert.toLocalDateTime((Object)Instant.parse("2023-01-23T18:45:23.00Z")).toString());
         assertEquals("2023-01-23T00:00",        Convert.toLocalDateTime((Object)LocalDate.of(2023, Month.JANUARY, 23)).toString());
         assertEquals("1970-01-01T13:45:23",     Convert.toLocalDateTime((Object)LocalTime.of(13, 45, 23)).toString());
@@ -646,6 +669,8 @@ public class TestConvert {
         var cal = RifeConfig.tools().getCalendarInstance(2023, Calendar.JANUARY, 23, 13, 45, 23, 142);
         assertEquals("2023-01-23", Convert.toLocalDate(cal.getTime()).toString());
         assertEquals("2023-01-23", Convert.toLocalDate(cal).toString());
+        assertEquals("2023-01-23", Convert.toLocalDate(new java.sql.Date(123, Calendar.JANUARY, 23)).toString());
+        assertEquals("1970-01-01", Convert.toLocalDate(new Time(13, 45, 23)).toString());
         assertEquals("2023-01-23", Convert.toLocalDate(Instant.parse("2023-01-23T18:45:23.00Z")).toString());
         assertEquals("2023-01-23", Convert.toLocalDate(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
         assertEquals("1970-01-01", Convert.toLocalDate(LocalTime.of(13, 45, 23)).toString());
@@ -656,6 +681,8 @@ public class TestConvert {
 
         assertEquals("2023-01-23", Convert.toLocalDate((Object)cal.getTime()).toString());
         assertEquals("2023-01-23", Convert.toLocalDate((Object)cal).toString());
+        assertEquals("2023-01-23", Convert.toLocalDate((Object)new java.sql.Date(123, Calendar.JANUARY, 23)).toString());
+        assertEquals("1970-01-01", Convert.toLocalDate((Object)new Time(13, 45, 23)).toString());
         assertEquals("2023-01-23", Convert.toLocalDate((Object)Instant.parse("2023-01-23T18:45:23.00Z")).toString());
         assertEquals("2023-01-23", Convert.toLocalDate((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
         assertEquals("1970-01-01", Convert.toLocalDate((Object)LocalTime.of(13, 45, 23)).toString());
@@ -670,6 +697,8 @@ public class TestConvert {
         var cal = RifeConfig.tools().getCalendarInstance(2023, Calendar.JANUARY, 23, 13, 45, 23, 142);
         assertEquals("13:45:23.142", Convert.toLocalTime(cal.getTime()).toString());
         assertEquals("13:45:23.142", Convert.toLocalTime(cal).toString());
+        assertEquals("00:00",        Convert.toLocalTime(new java.sql.Date(123, Calendar.JANUARY, 23)).toString());
+        assertEquals("13:45:23",     Convert.toLocalTime(new Time(13, 45, 23)).toString());
         assertEquals("13:45:23",     Convert.toLocalTime(Instant.parse("2023-01-23T18:45:23.00Z")).toString());
         assertEquals("00:00",        Convert.toLocalTime(LocalDate.of(2023, Month.JANUARY, 23)).toString());
         assertEquals("13:45:23.142", Convert.toLocalTime(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());
@@ -680,6 +709,8 @@ public class TestConvert {
 
         assertEquals("13:45:23.142", Convert.toLocalTime((Object)cal.getTime()).toString());
         assertEquals("13:45:23.142", Convert.toLocalTime((Object)cal).toString());
+        assertEquals("00:00",        Convert.toLocalTime((Object)new java.sql.Date(123, Calendar.JANUARY, 23)).toString());
+        assertEquals("13:45:23",     Convert.toLocalTime((Object)new Time(13, 45, 23)).toString());
         assertEquals("13:45:23",     Convert.toLocalTime((Object)Instant.parse("2023-01-23T18:45:23.00Z")).toString());
         assertEquals("00:00",        Convert.toLocalTime((Object)LocalDate.of(2023, Month.JANUARY, 23)).toString());
         assertEquals("13:45:23.142", Convert.toLocalTime((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000)).toString());

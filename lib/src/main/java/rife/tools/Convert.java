@@ -734,6 +734,22 @@ public final class Convert {
         throw new ConversionException(value, Time.class, null);
     }
 
+    public static Instant toInstant(java.sql.Date date) {
+        if (null == date) {
+            return null;
+        }
+
+        return date.toLocalDate().atStartOfDay().atZone(RifeConfig.tools().getDefaultZoneId()).toInstant();
+    }
+
+    public static Instant toInstant(Time time) {
+        if (null == time) {
+            return null;
+        }
+
+        return time.toLocalTime().atDate(LocalDate.EPOCH).atZone(RifeConfig.tools().getDefaultZoneId()).toInstant();
+    }
+
     public static Instant toInstant(Date date) {
         if (null == date) {
             return null;
@@ -812,6 +828,12 @@ public final class Convert {
         if (value instanceof Instant instant) {
             return instant;
         }
+        if (value instanceof java.sql.Date date) {
+            return toInstant(date);
+        }
+        if (value instanceof Time time) {
+            return toInstant(time);
+        }
         if (value instanceof Date date) {
             return toInstant(date);
         }
@@ -835,6 +857,22 @@ public final class Convert {
         }
 
         throw new ConversionException(value, Instant.class, null);
+    }
+
+    public static LocalDateTime toLocalDateTime(java.sql.Date date) {
+        if (null == date) {
+            return null;
+        }
+
+        return date.toLocalDate().atStartOfDay();
+    }
+
+    public static LocalDateTime toLocalDateTime(Time time) {
+        if (null == time) {
+            return null;
+        }
+
+        return time.toLocalTime().atDate(LocalDate.EPOCH);
     }
 
     public static LocalDateTime toLocalDateTime(Date date) {
@@ -915,6 +953,12 @@ public final class Convert {
         if (value instanceof LocalDateTime localDateTime) {
             return localDateTime;
         }
+        if (value instanceof java.sql.Date date) {
+            return toLocalDateTime(date);
+        }
+        if (value instanceof Time time) {
+            return toLocalDateTime(time);
+        }
         if (value instanceof Date date) {
             return toLocalDateTime(date);
         }
@@ -938,6 +982,22 @@ public final class Convert {
         }
 
         throw new ConversionException(value, LocalDateTime.class, null);
+    }
+
+    public static LocalDate toLocalDate(java.sql.Date date) {
+        if (null == date) {
+            return null;
+        }
+
+        return date.toLocalDate();
+    }
+
+    public static LocalDate toLocalDate(Time time) {
+        if (null == time) {
+            return null;
+        }
+
+        return LocalDate.EPOCH;
     }
 
     public static LocalDate toLocalDate(Date date) {
@@ -1018,6 +1078,12 @@ public final class Convert {
         if (value instanceof LocalDate localDate) {
             return localDate;
         }
+        if (value instanceof java.sql.Date date) {
+            return toLocalDate(date);
+        }
+        if (value instanceof Time time) {
+            return toLocalDate(time);
+        }
         if (value instanceof Date date) {
             return toLocalDate(date);
         }
@@ -1041,6 +1107,22 @@ public final class Convert {
         }
 
         throw new ConversionException(value, LocalDate.class, null);
+    }
+
+    public static LocalTime toLocalTime(java.sql.Date date) {
+        if (null == date) {
+            return null;
+        }
+
+        return LocalTime.MIDNIGHT;
+    }
+
+    public static LocalTime toLocalTime(Time time) {
+        if (null == time) {
+            return null;
+        }
+
+        return time.toLocalTime();
     }
 
     public static LocalTime toLocalTime(Date date) {
@@ -1120,6 +1202,12 @@ public final class Convert {
 
         if (value instanceof LocalTime localTime) {
             return localTime;
+        }
+        if (value instanceof java.sql.Date date) {
+            return toLocalTime(date);
+        }
+        if (value instanceof Time time) {
+            return toLocalTime(time);
         }
         if (value instanceof Date date) {
             return toLocalTime(date);
