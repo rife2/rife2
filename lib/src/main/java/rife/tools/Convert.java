@@ -315,6 +315,20 @@ public final class Convert {
         return cal.getTime();
     }
 
+    public static Date toDate(java.sql.Date date) {
+        if (null == date) {
+            return null;
+        }
+        return Date.from(toInstant(date));
+    }
+
+    public static Date toDate(Time time) {
+        if (null == time) {
+            return null;
+        }
+        return Date.from(toInstant(time));
+    }
+
     public static Date toDate(Instant instant) {
         if (null == instant) {
             return null;
@@ -376,6 +390,12 @@ public final class Convert {
             return null;
         }
 
+        if (value instanceof java.sql.Date date) {
+            return toDate(date);
+        }
+        if (value instanceof Time time) {
+            return toDate(time);
+        }
         if (value instanceof Date date) {
             return date;
         }
@@ -510,6 +530,20 @@ public final class Convert {
         throw new ConversionException(value, java.sql.Date.class, null);
     }
 
+    public static Timestamp toTimestamp(java.sql.Date date) {
+        if (null == date) {
+            return null;
+        }
+        return Timestamp.from(toInstant(date));
+    }
+
+    public static Timestamp toTimestamp(Time time) {
+        if (null == time) {
+            return null;
+        }
+        return Timestamp.from(toInstant(time));
+    }
+
     public static Timestamp toTimestamp(Date date) {
         if (null == date) {
             return null;
@@ -588,6 +622,12 @@ public final class Convert {
         if (value instanceof Timestamp ts) {
             return ts;
         }
+        if (value instanceof java.sql.Date date) {
+            return toTimestamp(date);
+        }
+        if (value instanceof Time time) {
+            return toTimestamp(time);
+        }
         if (value instanceof Date date) {
             return toTimestamp(date);
         }
@@ -614,6 +654,13 @@ public final class Convert {
         }
 
         throw new ConversionException(value, Timestamp.class, null);
+    }
+
+    public static Time toTime(java.sql.Date date) {
+        if (null == date) {
+            return null;
+        }
+        return toTime(toInstant(date));
     }
 
     @SuppressWarnings("deprecated")
@@ -705,6 +752,9 @@ public final class Convert {
 
         if (value instanceof Time time) {
             return time;
+        }
+        if (value instanceof java.sql.Date date) {
+            return toTime(date);
         }
         if (value instanceof Date date) {
             return toTime(date);

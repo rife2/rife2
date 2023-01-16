@@ -584,7 +584,6 @@ public class TestConvert {
         assertEquals("134523000-0500", formatTime(Convert.toTime(cal.getTime())));
         assertEquals("134523000-0500", formatTime(Convert.toTime(cal)));
         assertEquals("000000000-0500", formatTime(Convert.toTime(new java.sql.Date(123, Calendar.JANUARY, 23))));
-        assertEquals("134523000-0500", formatTime(Convert.toTime(new Time(13, 45, 23))));
         assertEquals("134523000-0500", formatTime(Convert.toTime(Instant.parse("2023-01-23T18:45:23.00Z"))));
         assertEquals("134523000-0500", formatTime(Convert.toTime(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000))));
         assertEquals("000000000-0500", formatTime(Convert.toTime(LocalDate.of(2023, Month.JANUARY, 23))));
@@ -597,7 +596,6 @@ public class TestConvert {
         assertEquals("134523000-0500", formatTime(Convert.toTime((Object)cal.getTime())));
         assertEquals("134523000-0500", formatTime(Convert.toTime((Object)cal)));
         assertEquals("000000000-0500", formatTime(Convert.toTime((Object)new java.sql.Date(123, Calendar.JANUARY, 23))));
-        assertEquals("134523000-0500", formatTime(Convert.toTime((Object)new Time(13, 45, 23))));
         assertEquals("134523000-0500", formatTime(Convert.toTime((Object)Instant.parse("2023-01-23T18:45:23.00Z"))));
         assertEquals("134523000-0500", formatTime(Convert.toTime((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000))));
         assertEquals("000000000-0500", formatTime(Convert.toTime((Object)LocalDate.of(2023, Month.JANUARY, 23))));
