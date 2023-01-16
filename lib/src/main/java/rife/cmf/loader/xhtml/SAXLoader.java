@@ -39,11 +39,37 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
     }
 
     private static class LoaderDelegate extends DefaultHandler {
+        private final XmlErrorRedirector errorRedirector_ = new LoggingErrorRedirector();
+        private final XmlEntityResolver entityResolver_ = new XmlEntityResolver(ResourceFinderClasspath.instance())
+            .addToCatalog("http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd", "/dtd/cmf/xhtml1-transitional.dtd")
+            .addToCatalog("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd", "/dtd/cmf/xhtml1-strict.dtd")
+            .addToCatalog("http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd", "/dtd/cmf/xhtml1-frameset.dtd")
+            .addToCatalog("http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent", "/dtd/cmf/xhtml-lat1.ent")
+            .addToCatalog("http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent", "/dtd/cmf/xhtml-symbol.ent")
+            .addToCatalog("http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent", "/dtd/cmf/xhtml-special.ent")
+            .restrictToCatalog(true);
+
+        public InputSource resolveEntity(String publicId, String systemId) {
+            return entityResolver_.resolveEntity(publicId, systemId);
+        }
+
+        public void warning(SAXParseException e)
+        throws SAXException {
+            errorRedirector_.warning(e);
+        }
+
+        public void fatalError(SAXParseException e)
+        throws SAXException {
+            errorRedirector_.fatalError(e);
+        }
+
+        public void error(SAXParseException e)
+        throws SAXException {
+            errorRedirector_.error(e);
+        }
+
         public String load(String data, boolean fragment, Set<String> errors)
         throws ContentManagerException {
-            XmlEntityResolver entity_resolver = null;
-            XmlErrorRedirector error_redirector = null;
-
             var complete_page = data;
 
             Reader reader = null;
@@ -59,23 +85,10 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
             try {
                 var inputsource = new InputSource(reader);
 
-                entity_resolver = new XmlEntityResolver(ResourceFinderClasspath.instance())
-                    .addToCatalog("http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd", "/dtd/cmf/xhtml1-transitional.dtd")
-                    .addToCatalog("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd", "/dtd/cmf/xhtml1-strict.dtd")
-                    .addToCatalog("http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd", "/dtd/cmf/xhtml1-frameset.dtd")
-                    .addToCatalog("http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent", "/dtd/cmf/xhtml-lat1.ent")
-                    .addToCatalog("http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent", "/dtd/cmf/xhtml-symbol.ent")
-                    .addToCatalog("http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent", "/dtd/cmf/xhtml-special.ent")
-                    .restrictToCatalog(true);
-                error_redirector = new LoggingErrorRedirector();
-
                 SAXParser parser = null;
 
                 try {
                     parser = SAXParserFactory.newInstance().newSAXParser();
-
-                    parser.getXMLReader().setEntityResolver(entity_resolver);
-                    parser.getXMLReader().setErrorHandler(error_redirector);
                 } catch (ParserConfigurationException | SAXException e) {
                     throw new XmlErrorException(e);
                 }
@@ -105,11 +118,11 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
                 }
 
                 if (errors != null) {
-                    if (error_redirector.hasErrors()) {
-                        errors.addAll(formatExceptions(fragment, error_redirector.getErrors()));
+                    if (errorRedirector_.hasErrors()) {
+                        errors.addAll(formatExceptions(fragment, errorRedirector_.getErrors()));
                     }
-                    if (error_redirector.hasFatalErrors()) {
-                        errors.addAll(formatExceptions(fragment, error_redirector.getFatalErrors()));
+                    if (errorRedirector_.hasFatalErrors()) {
+                        errors.addAll(formatExceptions(fragment, errorRedirector_.getFatalErrors()));
                     }
                 }
             } catch (RuntimeException e) {
@@ -122,8 +135,8 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
             if (sax_parse_exception ||
                 (errors != null &&
                  errors.size() > 0) ||
-                (error_redirector.hasErrors() ||
-                 error_redirector.hasFatalErrors())) {
+                (errorRedirector_.hasErrors() ||
+                 errorRedirector_.hasFatalErrors())) {
                 return null;
             }
 
