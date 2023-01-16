@@ -576,8 +576,8 @@ public class TestConvert {
         assertEquals("134523000-0500", formatTime(Convert.toTime(LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000))));
         assertEquals("000000000-0500", formatTime(Convert.toTime(LocalDate.of(2023, Month.JANUARY, 23))));
         assertEquals("134523000-0500", formatTime(Convert.toTime(LocalTime.of(13, 45, 23))));
-        assertEquals("134523142-0500", formatTime(Convert.toTime(Long.valueOf(1674499523142L))));
-        assertEquals("134523142-0500", formatTime(Convert.toTime("1674499523142")));
+        assertEquals("134523000-0500", formatTime(Convert.toTime(Long.valueOf(1674499523142L))));
+        assertEquals("134523000-0500", formatTime(Convert.toTime("1674499523142")));
         assertEquals("134523000-0500", formatTime(Convert.toTime("134523000-0500")));
         assertEquals("134500000-0500", formatTime(Convert.toTime("13:45")));
 
@@ -587,8 +587,8 @@ public class TestConvert {
         assertEquals("134523000-0500", formatTime(Convert.toTime((Object)LocalDateTime.of(2023, Month.JANUARY, 23, 13, 45, 23, 142000000))));
         assertEquals("000000000-0500", formatTime(Convert.toTime((Object)LocalDate.of(2023, Month.JANUARY, 23))));
         assertEquals("134523000-0500", formatTime(Convert.toTime((Object)LocalTime.of(13, 45, 23))));
-        assertEquals("134523142-0500", formatTime(Convert.toTime((Object)Long.valueOf(1674499523142L))));
-        assertEquals("134523142-0500", formatTime(Convert.toTime((Object)"1674499523142")));
+        assertEquals("134523000-0500", formatTime(Convert.toTime((Object)Long.valueOf(1674499523142L))));
+        assertEquals("134523000-0500", formatTime(Convert.toTime((Object)"1674499523142")));
         assertEquals("134523000-0500", formatTime(Convert.toTime((Object)"134523000-0500")));
         assertEquals("134500000-0500", formatTime(Convert.toTime((Object)"13:45")));
     }

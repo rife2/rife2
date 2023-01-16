@@ -13,9 +13,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.time.*;
 import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoField;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 public final class Convert {
     private Convert() {
@@ -623,7 +621,9 @@ public final class Convert {
         if (null == date) {
             return null;
         }
-        return new Time(date.getHours(), date.getMinutes(), date.getSeconds());
+        var cal = RifeConfig.tools().getCalendarInstance();
+        cal.setTime(date);
+        return toTime(cal);
     }
 
     @SuppressWarnings("deprecated")
@@ -631,7 +631,7 @@ public final class Convert {
         if (null == cal) {
             return null;
         }
-        return new Time(cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+        return toTime(cal.toInstant());
     }
 
     @SuppressWarnings("deprecated")
@@ -639,7 +639,7 @@ public final class Convert {
         if (null == instant) {
             return null;
         }
-        var zoned = instant.atZone(RifeConfig.tools().getDefaultZoneId());
+        var zoned = instant.atZone(TimeZone.getDefault().toZoneId());
         return new Time(zoned.getHour(), zoned.getMinute(), zoned.getSecond());
     }
 
@@ -647,7 +647,7 @@ public final class Convert {
         if (null == localDateTime) {
             return null;
         }
-        return Time.valueOf(localDateTime.toLocalTime());
+        return toTime(localDateTime.atZone(RifeConfig.tools().getDefaultZoneId()).toInstant());
     }
 
     @SuppressWarnings("deprecated")
@@ -655,21 +655,21 @@ public final class Convert {
         if (null == localDate) {
             return null;
         }
-        return new Time(0, 0, 0);
+        return toTime(LocalTime.MIDNIGHT);
     }
 
     public static Time toTime(LocalTime localTime) {
         if (null == localTime) {
             return null;
         }
-        return Time.valueOf(localTime);
+        return toTime(localTime.atDate(LocalDate.EPOCH));
     }
 
     public static Time toTime(Number number) {
         if (null == number) {
             return null;
         }
-        return new Time(number.longValue());
+        return toTime(new Date(number.longValue()));
     }
 
     @SuppressWarnings("deprecated")
@@ -680,15 +680,15 @@ public final class Convert {
         }
 
         try {
-            return new Time(Long.parseLong(string));
+            return toTime(Long.parseLong(string));
         } catch (NumberFormatException e) {
             try {
                 var date = RifeConfig.tools().getConcisePreciseTimeFormat().parse(string);
-                return new Time(date.getHours(), date.getMinutes(), date.getSeconds());
+                return toTime(date);
             } catch (ParseException e2) {
                 try {
                     var date = RifeConfig.tools().getDefaultInputTimeFormat().parse(string);
-                    return new Time(date.getHours(), date.getMinutes(), date.getSeconds());
+                    return toTime(date);
                 } catch (ParseException e3) {
                     throw new ConversionException(string, Time.class, e2);
                 }
