@@ -201,6 +201,11 @@ tasks {
         exclude("rife/antlr/**")
         exclude("rife/asm/**")
         exclude("rife/template/antlr/**")
+        exclude("rife/**/databasedrivers/**")
+        exclude("rife/**/imagestoredrivers/**")
+        exclude("rife/**/rawstoredrivers/**")
+        exclude("rife/**/textstoredrivers/**")
+        exclude("rife/database/capabilities/**")
     }
 }
 
