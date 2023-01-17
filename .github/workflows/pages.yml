@@ -1,4 +1,4 @@
-name: Deploy Javadocs to Pages
+name: javadocs-pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -71,3 +71,8 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
+
+      - name: Cleanup Gradle Cache
+        run: |
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties

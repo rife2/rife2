@@ -28,6 +28,8 @@ many Java conferences.
 **This is a quick tutorial, the [full documentation](https://github.com/gbevin/rife2/wiki)
 contains a lot more information.**
 
+**The [RIFE2 Javadocs](https://gbevin.github.io/rife2/) complement the documentation with many more details.**
+
 ## Why RIFE2?
 
 A frequently asked question is: "Why choose RIFE2 over other popular frameworks"?
@@ -275,4 +277,4 @@ class HelloTest {
 ```
 
 
-**Read more in the [full documentation](https://github.com/gbevin/rife2/wiki).**
+**Read more in the [full documentation](https://github.com/gbevin/rife2/wiki) and  [RIFE2 Javadocs](https://gbevin.github.io/rife2/).**
