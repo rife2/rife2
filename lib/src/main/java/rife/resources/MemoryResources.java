@@ -8,12 +8,11 @@ import rife.resources.exceptions.ResourceFinderErrorException;
 import rife.tools.*;
 
 import java.io.ByteArrayInputStream;
-import java.io.StringBufferInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class offers {@code ResourceFinder} and {@code ResourceWriter}
@@ -28,7 +27,7 @@ public class MemoryResources extends AbstractResourceFinder implements ResourceW
     }
 
     private static final String PROTOCOL = "file";
-    private final Map<String, MemoryResource> resources_ = new HashMap<>();
+    private final Map<String, MemoryResource> resources_ = new ConcurrentHashMap<>();
 
     /**
      * Creates a new instance.
