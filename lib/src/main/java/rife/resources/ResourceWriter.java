@@ -36,6 +36,8 @@ public interface ResourceWriter {
      *
      * @param name    the name of the resource
      * @param content the content of the resource
+     * @return {@code true} when the resource was updated;
+     * {@code false} otherwise
      * @throws ResourceWriterErrorException if an error occurred during the
      *                                      resource update.
      * @since 1.0
@@ -47,6 +49,8 @@ public interface ResourceWriter {
      * Removes the resource with the provided name.
      *
      * @param name the name of the resource
+     * @return {@code true} when the resource was removed;
+     * {@code false} otherwise
      * @throws ResourceWriterErrorException if an error occurred during the
      *                                      resource removal.
      * @since 1.0

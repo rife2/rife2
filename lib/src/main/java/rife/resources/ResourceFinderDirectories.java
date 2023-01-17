@@ -15,8 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 
 /**
@@ -33,7 +31,7 @@ import java.util.ArrayList;
  * @since 1.0
  */
 public class ResourceFinderDirectories extends AbstractResourceFinder {
-    private ArrayList<File> mDirectories = null;
+    private ArrayList<File> directories_ = null;
 
     /**
      * Creates a new instance for the provided array of directories.
@@ -43,14 +41,14 @@ public class ResourceFinderDirectories extends AbstractResourceFinder {
      * @since 1.0
      */
     public ResourceFinderDirectories(File[] directories) {
-        mDirectories = new ArrayList<File>();
+        directories_ = new ArrayList<File>();
 
         if (directories != null) {
             for (var directory : directories) {
                 if (directory != null &&
                     directory.canRead() &&
                     directory.isDirectory()) {
-                    mDirectories.add(directory);
+                    directories_.add(directory);
                 }
             }
         }
@@ -58,14 +56,14 @@ public class ResourceFinderDirectories extends AbstractResourceFinder {
 
     public URL getResource(String name) {
         File resource = null;
-        for (var directory : mDirectories) {
+        for (var directory : directories_) {
             var local_name = name.replace('/', File.separatorChar);
             resource = new File(directory.getAbsolutePath() + File.separator + local_name);
             if (resource.exists() &&
                 resource.canRead() &&
                 resource.isFile()) {
                 try {
-                    return resource.toURL();
+                    return resource.toURI().toURL();
                 } catch (IOException e) {
                     continue;
                 }

@@ -13,6 +13,7 @@ public class HelloAll extends Site {
     Router continuations;
     Router gqm;
     Router group;
+    Router resources;
 
     public void setup() {
         group(authentication = new HelloAuthentication());
@@ -28,6 +29,7 @@ public class HelloAll extends Site {
         group(group = new HelloGroup());
         group(new HelloLink());
         group(new HelloPathInfoMapping());
+        group("/resources", resources = new HelloResources());
         group("/scheduler", new HelloScheduler());
         group(new HelloSvg());
         group(new HelloTemplate());

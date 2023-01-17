@@ -22,7 +22,7 @@ import java.util.List;
  * @since 1.0
  */
 public class ResourceFinderGroup extends AbstractResourceFinder {
-    private final List<ResourceFinder> resourceFinders_ = new ArrayList<ResourceFinder>();
+    private final List<ResourceFinder> resourceFinders_ = new ArrayList<>();
 
     public ResourceFinderGroup add(ResourceFinder resourceFinder) {
         resourceFinders_.add(resourceFinder);

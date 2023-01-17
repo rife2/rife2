@@ -104,14 +104,10 @@ public abstract class DatabaseResources extends DbQueryManager implements Resour
         if (null == content) throw new IllegalArgumentException("content can't be null.");
 
         try {
-            executeUpdate(addResource, new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString(COLUMN_NAME, name)
-                        .setString(COLUMN_CONTENT, content)
-                        .setTimestamp(COLUMN_MODIFIED, new java.sql.Timestamp(System.currentTimeMillis()));
-                }
-            });
+            executeUpdate(addResource, s -> s
+                .setString(COLUMN_NAME, name)
+                .setString(COLUMN_CONTENT, content)
+                .setTimestamp(COLUMN_MODIFIED, new java.sql.Timestamp(System.currentTimeMillis())));
         } catch (DatabaseException e) {
             throw new ResourceAdditionErrorException(name, content, e);
         }
@@ -128,14 +124,10 @@ public abstract class DatabaseResources extends DbQueryManager implements Resour
         var result = false;
 
         try {
-            if (0 != executeUpdate(updateResource, new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString(COLUMN_CONTENT, content)
-                        .setTimestamp(COLUMN_MODIFIED, new java.sql.Timestamp(System.currentTimeMillis()))
-                        .setString(COLUMN_NAME, name);
-                }
-            })) {
+            if (0 != executeUpdate(updateResource, s -> s
+                .setString(COLUMN_CONTENT, content)
+                .setTimestamp(COLUMN_MODIFIED, new java.sql.Timestamp(System.currentTimeMillis()))
+                .setString(COLUMN_NAME, name))) {
                 result = true;
             }
         } catch (DatabaseException e) {
@@ -155,12 +147,7 @@ public abstract class DatabaseResources extends DbQueryManager implements Resour
         var result = false;
 
         try {
-            if (0 != executeUpdate(removeResource, new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString(COLUMN_NAME, name);
-                }
-            })) {
+            if (0 != executeUpdate(removeResource, s -> s.setString(COLUMN_NAME, name))) {
                 result = true;
             }
         } catch (DatabaseException e) {
@@ -180,12 +167,7 @@ public abstract class DatabaseResources extends DbQueryManager implements Resour
         URL resource = null;
 
         try {
-            if (executeHasResultRows(hasResource, new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString(COLUMN_NAME, name);
-                }
-            })) {
+            if (executeHasResultRows(hasResource, s -> s.setString(COLUMN_NAME, name))) {
                 resource = new URL(PROTOCOL, "", name);
             }
         } catch (MalformedURLException e) {
@@ -212,12 +194,8 @@ public abstract class DatabaseResources extends DbQueryManager implements Resour
         }
 
         try {
-            return executeUseFirstBinaryStream(getResourceContent, user, new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString(COLUMN_NAME, StringUtils.decodeUrl(resource.getFile()));
-                }
-            });
+            return executeUseFirstBinaryStream(getResourceContent, user, s -> s
+                .setString(COLUMN_NAME, StringUtils.decodeUrl(resource.getFile())));
         } catch (DatabaseException e) {
             throw new CantOpenResourceStreamException(resource, e);
         }
@@ -237,12 +215,8 @@ public abstract class DatabaseResources extends DbQueryManager implements Resour
 
         String result = null;
         try {
-            result = executeGetFirstString(getResourceContent, new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString(COLUMN_NAME, StringUtils.decodeUrl(resource.getFile()));
-                }
-            });
+            result = executeGetFirstString(getResourceContent, s -> s
+                .setString(COLUMN_NAME, StringUtils.decodeUrl(resource.getFile())));
         } catch (DatabaseException e) {
             throw new CantRetrieveResourceContentException(resource, encoding, e);
         }
@@ -264,12 +238,8 @@ public abstract class DatabaseResources extends DbQueryManager implements Resour
         try {
             long result = -1;
 
-            var timestamp = executeGetFirstTimestamp(getResourceModified, new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString(COLUMN_NAME, StringUtils.decodeUrl(resource.getFile()));
-                }
-            });
+            var timestamp = executeGetFirstTimestamp(getResourceModified, s -> s
+                .setString(COLUMN_NAME, StringUtils.decodeUrl(resource.getFile())));
             if (null == timestamp) {
                 return -1;
             }
