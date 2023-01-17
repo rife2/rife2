@@ -586,14 +586,21 @@ public final class StringUtils {
         return UNRESERVED_URI_CHARS.get(ch);
     }
 
-    private static void appendUrlEncodedDigit(StringBuilder out, int digit) {
-        out.append(HEX_DIGITS[digit & 0x0F]);
+    /**
+     * Appends the hexadecimal digit of the provided number.
+     *
+     * @param out the string builder to append to
+     * @param number the number who's first digit will be appended in hexadecimal
+     * @since 1.0
+     */
+    public static void appendHexDigit(StringBuilder out, int number) {
+        out.append(HEX_DIGITS[number & 0x0F]);
     }
 
     private static void appendUrlEncodedByte(StringBuilder out, int ch) {
         out.append("%");
-        appendUrlEncodedDigit(out, ch >> 4);
-        appendUrlEncodedDigit(out, ch);
+        appendHexDigit(out, ch >> 4);
+        appendHexDigit(out, ch);
     }
 
     /**
@@ -1155,13 +1162,20 @@ public final class StringUtils {
         return buffer.toString();
     }
 
-
+    /**
+     * Generates a hexadecimal string for the provided byte array.
+     *
+     * @param bytes the byte array to convert to a hex string
+     * @return the converted hexadecimal string
+     * @since 1.0
+     */
     public static String encodeHex(byte[] bytes) {
-        var sb = new StringBuilder();
+        var out = new StringBuilder();
         for (byte b : bytes) {
-            sb.append(Integer.toHexString((b & 0xFF) | 0x100), 1, 3);
+            appendHexDigit(out, b >> 4);
+            appendHexDigit(out, b);
         }
-        return sb.toString();
+        return out.toString();
     }
 
     /**

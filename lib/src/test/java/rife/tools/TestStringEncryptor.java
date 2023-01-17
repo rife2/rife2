@@ -13,15 +13,15 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestStringEncryptor {
     @Test
     void testAdaptiveEncrypt() {
-        String encrypted_value_sha = "SHA:Hw/gszrpwzs0GnKTaKbwetEqBb0=";
-        String encrypted_value_shahex = "SHAHEX:1f0fe0b33ae9c33b341a729368a6f07ad12a05bd";
-        String encrypted_value_md5 = "MD5:JZ3Y+j2LYEvTmtYRY1Khsw==";
-        String encrypted_value_md5hex = "MD5HEX:259dd8fa3d8b604bd39ad6116352a1b3";
-        String encrypted_value_obf = "OBF:1w261wtu1ugo1vo41vmy1uh21wuk1w1c";
-        String encrypted_value_wrp = "WRP:XRadzcqykoN26sWuGe0j85TRoOaErinQr0+QKWsy1hlTMJdtRMkLUo+A4S/Wr3xcj+Va6jc0XLGfcWusuNMrcg==";
-        String encrypted_value_wrphex = "WRPHEX:5d169dcdcab2928376eac5ae19ed23f394d1a0e684ae29d0af4f90296b32d6195330976d44c90b528f80e12fd6af7c5c8fe55aea37345cb19f716bacb8d32b72";
-        String encrypted_value_none = "thevalue";
-        String value = "thevalue";
+        var encrypted_value_sha = "SHA:Hw/gszrpwzs0GnKTaKbwetEqBb0=";
+        var encrypted_value_shahex = "SHAHEX:1F0FE0B33AE9C33B341A729368A6F07AD12A05BD";
+        var encrypted_value_md5 = "MD5:JZ3Y+j2LYEvTmtYRY1Khsw==";
+        var encrypted_value_md5hex = "MD5HEX:259DD8FA3D8B604BD39AD6116352A1B3";
+        var encrypted_value_obf = "OBF:1w261wtu1ugo1vo41vmy1uh21wuk1w1c";
+        var encrypted_value_wrp = "WRP:XRadzcqykoN26sWuGe0j85TRoOaErinQr0+QKWsy1hlTMJdtRMkLUo+A4S/Wr3xcj+Va6jc0XLGfcWusuNMrcg==";
+        var encrypted_value_wrphex = "WRPHEX:5D169DCDCAB2928376EAC5AE19ED23F394D1A0E684AE29D0AF4F90296B32D6195330976D44C90B528F80E12FD6AF7C5C8FE55AEA37345CB19F716BACB8D32B72";
+        var encrypted_value_none = "thevalue";
+        var value = "thevalue";
 
         try {
             assertEquals(encrypted_value_sha, StringEncryptor.adaptiveEncrypt(value, "SHA:123"));
@@ -39,14 +39,14 @@ public class TestStringEncryptor {
 
     @Test
     void testEncryptorInstance() {
-        String encrypted_value_sha = "SHA:Hw/gszrpwzs0GnKTaKbwetEqBb0=";
-        String encrypted_value_shahex = "SHAHEX:1f0fe0b33ae9c33b341a729368a6f07ad12a05bd";
-        String encrypted_value_md5 = "MD5:JZ3Y+j2LYEvTmtYRY1Khsw==";
-        String encrypted_value_md5hex = "MD5HEX:259dd8fa3d8b604bd39ad6116352a1b3";
-        String encrypted_value_obf = "OBF:1w261wtu1ugo1vo41vmy1uh21wuk1w1c";
-        String encrypted_value_wrp = "WRP:XRadzcqykoN26sWuGe0j85TRoOaErinQr0+QKWsy1hlTMJdtRMkLUo+A4S/Wr3xcj+Va6jc0XLGfcWusuNMrcg==";
-        String encrypted_value_wrphex = "WRPHEX:5d169dcdcab2928376eac5ae19ed23f394d1a0e684ae29d0af4f90296b32d6195330976d44c90b528f80e12fd6af7c5c8fe55aea37345cb19f716bacb8d32b72";
-        String value = "thevalue";
+        var encrypted_value_sha = "SHA:Hw/gszrpwzs0GnKTaKbwetEqBb0=";
+        var encrypted_value_shahex = "SHAHEX:1F0FE0B33AE9C33B341A729368A6F07AD12A05BD";
+        var encrypted_value_md5 = "MD5:JZ3Y+j2LYEvTmtYRY1Khsw==";
+        var encrypted_value_md5hex = "MD5HEX:259DD8FA3D8B604BD39AD6116352A1B3";
+        var encrypted_value_obf = "OBF:1w261wtu1ugo1vo41vmy1uh21wuk1w1c";
+        var encrypted_value_wrp = "WRP:XRadzcqykoN26sWuGe0j85TRoOaErinQr0+QKWsy1hlTMJdtRMkLUo+A4S/Wr3xcj+Va6jc0XLGfcWusuNMrcg==";
+        var encrypted_value_wrphex = "WRPHEX:5D169DCDCAB2928376EAC5AE19ED23F394D1A0E684AE29D0AF4F90296B32D6195330976D44C90B528F80E12FD6AF7C5C8FE55AEA37345CB19F716BACB8D32B72";
+        var value = "thevalue";
 
         try {
             assertEquals(encrypted_value_sha, StringEncryptor.SHA.encrypt(value));
@@ -64,14 +64,14 @@ public class TestStringEncryptor {
 
     @Test
     void testGetEncryptor() {
-        String encrypted_value_sha = "SHA:Hw/gszrpwzs0GnKTaKbwetEqBb0=";
-        String encrypted_value_shahex = "SHAHEX:1f0fe0b33ae9c33b341a729368a6f07ad12a05bd";
-        String encrypted_value_md5 = "MD5:JZ3Y+j2LYEvTmtYRY1Khsw==";
-        String encrypted_value_md5hex = "MD5HEX:259dd8fa3d8b604bd39ad6116352a1b3";
-        String encrypted_value_obf = "OBF:1w261wtu1ugo1vo41vmy1uh21wuk1w1c";
-        String encrypted_value_wrp = "WRP:XRadzcqykoN26sWuGe0j85TRoOaErinQr0+QKWsy1hlTMJdtRMkLUo+A4S/Wr3xcj+Va6jc0XLGfcWusuNMrcg==";
-        String encrypted_value_wrphex = "WRPHEX:5d169dcdcab2928376eac5ae19ed23f394d1a0e684ae29d0af4f90296b32d6195330976d44c90b528f80e12fd6af7c5c8fe55aea37345cb19f716bacb8d32b72";
-        String value = "thevalue";
+        var encrypted_value_sha = "SHA:Hw/gszrpwzs0GnKTaKbwetEqBb0=";
+        var encrypted_value_shahex = "SHAHEX:1F0FE0B33AE9C33B341A729368A6F07AD12A05BD";
+        var encrypted_value_md5 = "MD5:JZ3Y+j2LYEvTmtYRY1Khsw==";
+        var encrypted_value_md5hex = "MD5HEX:259DD8FA3D8B604BD39AD6116352A1B3";
+        var encrypted_value_obf = "OBF:1w261wtu1ugo1vo41vmy1uh21wuk1w1c";
+        var encrypted_value_wrp = "WRP:XRadzcqykoN26sWuGe0j85TRoOaErinQr0+QKWsy1hlTMJdtRMkLUo+A4S/Wr3xcj+Va6jc0XLGfcWusuNMrcg==";
+        var encrypted_value_wrphex = "WRPHEX:5D169DCDCAB2928376EAC5AE19ED23F394D1A0E684AE29D0AF4F90296B32D6195330976D44C90B528F80E12FD6AF7C5C8FE55AEA37345CB19F716BACB8D32B72";
+        var value = "thevalue";
 
         try {
             assertEquals(encrypted_value_sha, StringEncryptor.getEncryptor(StringEncryptor.SHA.name()).encrypt(value));
@@ -89,10 +89,10 @@ public class TestStringEncryptor {
 
     @Test
     void testEncryptPlain() {
-        String value = "somevalue";
+        var value = "somevalue";
 
         try {
-            String encrypted = StringEncryptor.autoEncrypt(value);
+            var encrypted = StringEncryptor.autoEncrypt(value);
             assertEquals(encrypted, value);
             assertTrue(StringEncryptor.matches(value, encrypted));
         } catch (NoSuchAlgorithmException e) {
@@ -102,13 +102,13 @@ public class TestStringEncryptor {
 
     @Test
     void testEncryptOBF() {
-        String value = "somevalue";
-        String value2 = "somevalue";
-        String value3 = "somevalue2";
-        String value4 = "SHA:somevalue";
+        var value = "somevalue";
+        var value2 = "somevalue";
+        var value3 = "somevalue2";
+        var value4 = "SHA:somevalue";
 
         try {
-            String encrypted = StringEncryptor.autoEncrypt("OBF:" + value);
+            var encrypted = StringEncryptor.autoEncrypt("OBF:" + value);
             assertTrue(StringEncryptor.matches(value2, encrypted));
             assertFalse(StringEncryptor.matches(value3, encrypted));
             assertFalse(StringEncryptor.matches(value4, encrypted));
@@ -121,13 +121,13 @@ public class TestStringEncryptor {
 
     @Test
     void testEncryptMD5() {
-        String value = "MD5:somevalue";
-        String value2 = "somevalue";
-        String value3 = "somevalue2";
-        String value4 = "SHA:somevalue";
+        var value = "MD5:somevalue";
+        var value2 = "somevalue";
+        var value3 = "somevalue2";
+        var value4 = "SHA:somevalue";
 
         try {
-            String encrypted = StringEncryptor.autoEncrypt(value);
+            var encrypted = StringEncryptor.autoEncrypt(value);
             assertTrue(StringEncryptor.matches(value2, encrypted));
             assertFalse(StringEncryptor.matches(value3, encrypted));
             assertFalse(StringEncryptor.matches(value4, encrypted));
@@ -138,13 +138,13 @@ public class TestStringEncryptor {
 
     @Test
     void testEncryptMD5HEX() {
-        String value = "MD5HEX:somevalue";
-        String value2 = "somevalue";
-        String value3 = "somevalue2";
-        String value4 = "SHA:somevalue";
+        var value = "MD5HEX:somevalue";
+        var value2 = "somevalue";
+        var value3 = "somevalue2";
+        var value4 = "SHA:somevalue";
 
         try {
-            String encrypted = StringEncryptor.autoEncrypt(value);
+            var encrypted = StringEncryptor.autoEncrypt(value);
             assertTrue(StringEncryptor.matches(value2, encrypted));
             assertFalse(StringEncryptor.matches(value3, encrypted));
             assertFalse(StringEncryptor.matches(value4, encrypted));
@@ -155,13 +155,13 @@ public class TestStringEncryptor {
 
     @Test
     void testEncryptSHA() {
-        String value = "SHA:somevalue";
-        String value2 = "somevalue";
-        String value3 = "somevalue2";
-        String value4 = "MD5:somevalue";
+        var value = "SHA:somevalue";
+        var value2 = "somevalue";
+        var value3 = "somevalue2";
+        var value4 = "MD5:somevalue";
 
         try {
-            String encrypted = StringEncryptor.autoEncrypt(value);
+            var encrypted = StringEncryptor.autoEncrypt(value);
             assertTrue(StringEncryptor.matches(value2, encrypted));
             assertFalse(StringEncryptor.matches(value3, encrypted));
             assertFalse(StringEncryptor.matches(value4, encrypted));
@@ -172,13 +172,13 @@ public class TestStringEncryptor {
 
     @Test
     void testEncryptSHAHEX() {
-        String value = "SHAHEX:somevalue";
-        String value2 = "somevalue";
-        String value3 = "somevalue2";
-        String value4 = "MD5HEX:somevalue";
+        var value = "SHAHEX:somevalue";
+        var value2 = "somevalue";
+        var value3 = "somevalue2";
+        var value4 = "MD5HEX:somevalue";
 
         try {
-            String encrypted = StringEncryptor.autoEncrypt(value);
+            var encrypted = StringEncryptor.autoEncrypt(value);
             assertTrue(StringEncryptor.matches(value2, encrypted));
             assertFalse(StringEncryptor.matches(value3, encrypted));
             assertFalse(StringEncryptor.matches(value4, encrypted));
@@ -189,13 +189,13 @@ public class TestStringEncryptor {
 
     @Test
     void testEncryptWRP() {
-        String value = "WRP:somevalue";
-        String value2 = "somevalue";
-        String value3 = "somevalue2";
-        String value4 = "MD5:somevalue";
+        var value = "WRP:somevalue";
+        var value2 = "somevalue";
+        var value3 = "somevalue2";
+        var value4 = "MD5:somevalue";
 
         try {
-            String encrypted = StringEncryptor.autoEncrypt(value);
+            var encrypted = StringEncryptor.autoEncrypt(value);
             assertTrue(StringEncryptor.matches(value2, encrypted));
             assertFalse(StringEncryptor.matches(value3, encrypted));
             assertFalse(StringEncryptor.matches(value4, encrypted));
@@ -206,13 +206,13 @@ public class TestStringEncryptor {
 
     @Test
     void testEncryptWRPHEX() {
-        String value = "WRPHEX:somevalue";
-        String value2 = "somevalue";
-        String value3 = "somevalue2";
-        String value4 = "MD5HEX:somevalue";
+        var value = "WRPHEX:somevalue";
+        var value2 = "somevalue";
+        var value3 = "somevalue2";
+        var value4 = "MD5HEX:somevalue";
 
         try {
-            String encrypted = StringEncryptor.autoEncrypt(value);
+            var encrypted = StringEncryptor.autoEncrypt(value);
             assertTrue(StringEncryptor.matches(value2, encrypted));
             assertFalse(StringEncryptor.matches(value3, encrypted));
             assertFalse(StringEncryptor.matches(value4, encrypted));
