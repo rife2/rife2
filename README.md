@@ -12,15 +12,21 @@
 
 # Welcome
 
-RIFE2 is a full-stack, no-declaration, framework to quickly and effortlessly create web applications with modern Java.
+RIFE2 is a full-stack, no-declaration, framework to quickly and effortlessly
+create web applications with modern Java.
 
-RIFE2 is built on the foundations of the original RIFE framework that was popular from 2002-2010.
-Since then, the world and Java have changed and many of the original RIFE APIs can finally be replaced with pure Java, no-XML, no-YAML, leaving only type-safe expressive code.  
+RIFE2 is built on the foundations of the original RIFE framework that was
+popular from 2002-2010. Since then, the world and Java have changed and many of
+the original RIFE APIs could finally be replaced with pure Java, no-XML,
+no-YAML, leaving only type-safe expressive code.
+
+RIFE2 preserves most of the original features and adds new ones, for a fraction
+of the footprint and with even greater developer productivity than before.
+RIFE2 was created by Geert Bevin, one of the first Java Champions and speaker at
+many Java conferences.
 
 **This is a quick tutorial, the [full documentation](https://github.com/gbevin/rife2/wiki)
 contains a lot more information.**
-
-_NOTE: The documentation and this readme are work-in-progress_
 
 ## Why RIFE2?
 
@@ -104,7 +110,7 @@ application {
 
 dependencies {
     implementation("com.uwyn.rife2:rife2:0.9.8")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
     testImplementation("org.jsoup:jsoup:1.15.3")
     runtimeOnly("org.eclipse.jetty:jetty-server:11.0.13")
     runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.13")

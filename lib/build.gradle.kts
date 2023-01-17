@@ -37,13 +37,13 @@ dependencies {
     compileOnly("org.eclipse.jetty:jetty-server:11.0.13")
     compileOnly("org.eclipse.jetty:jetty-servlet:11.0.13")
     compileOnly("jakarta.servlet:jakarta.servlet-api:5.0.0")
-    compileOnly("net.imagej:ij:1.53v")
+    compileOnly("net.imagej:ij:1.54b")
     testImplementation("org.jsoup:jsoup:1.15.3")
     testImplementation("org.eclipse.jetty:jetty-server:11.0.13")
     testImplementation("org.eclipse.jetty:jetty-servlet:11.0.13")
-    testImplementation("net.sourceforge.htmlunit:htmlunit:2.68.0")
+    testImplementation("net.sourceforge.htmlunit:htmlunit:2.69.0")
     testImplementation("jakarta.servlet:jakarta.servlet-api:5.0.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
     testImplementation("org.postgresql:postgresql:42.5.1")
     testImplementation("mysql:mysql-connector-java:8.0.31")
     testImplementation("org.hsqldb:hsqldb:2.7.1")
@@ -51,7 +51,7 @@ dependencies {
     testImplementation("org.apache.derby:derby:10.16.1.1")
     testImplementation("org.apache.derby:derbytools:10.16.1.1")
     testImplementation("com.oracle.database.jdbc:ojdbc11:21.8.0.0")
-    testImplementation("net.imagej:ij:1.53v")
+    testImplementation("net.imagej:ij:1.54b")
 }
 
 configurations[JavaPlugin.API_CONFIGURATION_NAME].let { apiConfiguration ->
