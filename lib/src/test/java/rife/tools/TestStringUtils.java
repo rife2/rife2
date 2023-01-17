@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import rife.datastructures.DocumentPosition;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import java.util.regex.Pattern;
@@ -145,6 +146,16 @@ public class TestStringUtils {
             a\\wx/y\bz
             fde\fde\rjk\tos\\u218Foi"""), """
             abcd\\"\\na\\\\wx/y\\bz\\nfde\\fde\\rjk\\tos\\\\u218Foi""");
+    }
+
+    @Test
+    void testEncodeBase32() {
+        assertNull(StringUtils.encodeBase32(null));
+        var characterStr = "2b49ec9c-969f-11ed-a1eb-0242ac120002?!@#$^^&*/\2345";
+        var encoded = StringUtils.encodeBase32(characterStr.getBytes());
+        for (var character : encoded.toCharArray()) {
+            assertTrue("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567".indexOf(character) > -1);
+        }
     }
 
     @Test
