@@ -1,16 +1,21 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-<!--i Common/-->
+<!--i common/-->
 <!--bv title-->Welcome Universe<!--/bv-->
 </head>
 <body>
+
 <!--v content/-->
 <!--b form-->
-<form action="{{v route:hello/}}" method="post" name="hello">
-  <input type="submit" name="Submit">
-</form>
+  <form action="{{v route:action:/}}" method="post" name="hello">
+    <!--v route:inputs:/-->
+    <input type="text" name="name" />
+    <input type="submit" name="Submit" />
+  </form>
 <!--/b-->
-<!--b text--><p id="greeting">Hello World</p><!--/b-->
+<!--b greeting-->
+  <p id="greeting">Hello <!--v name/--></p>
+<!--/b-->
+
 </body>
 </html>

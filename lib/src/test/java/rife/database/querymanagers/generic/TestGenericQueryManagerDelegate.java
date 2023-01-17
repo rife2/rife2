@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.querymanagers.generic;
@@ -47,7 +47,7 @@ public class TestGenericQueryManagerDelegate {
     private GQMChildBean childManager_ = null;
     private GQMConstrainedBean constrainedManager_ = null;
 
-    protected void setUp(Datasource datasource) {
+    protected void setup(Datasource datasource) {
         manager_ = new GQMSimpleBean(datasource);
         linkManager_ = new GQMLinkBean(datasource);
         childManager_ = new GQMChildBean(datasource);
@@ -68,8 +68,8 @@ public class TestGenericQueryManagerDelegate {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveRestore(Datasource datasource) {
-        setUp(datasource);
+    void testSaveRestore(Datasource datasource) {
+        setup(datasource);
         try {
             var bean = new SimpleBean();
             SimpleBean newbean = null;
@@ -110,8 +110,8 @@ public class TestGenericQueryManagerDelegate {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveRestoreConstrained(Datasource datasource) {
-        setUp(datasource);
+    void testSaveRestoreConstrained(Datasource datasource) {
+        setup(datasource);
         try {
             var bean = new ConstrainedBean();
             ConstrainedBean newbean = null;
@@ -152,8 +152,8 @@ public class TestGenericQueryManagerDelegate {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDelete(Datasource datasource) {
-        setUp(datasource);
+    void testDelete(Datasource datasource) {
+        setup(datasource);
         try {
             var bean = new SimpleBean();
 
@@ -175,8 +175,8 @@ public class TestGenericQueryManagerDelegate {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestore(Datasource datasource) {
-        setUp(datasource);
+    void testRestore(Datasource datasource) {
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -209,8 +209,8 @@ public class TestGenericQueryManagerDelegate {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreRowProcessor(Datasource datasource) {
-        setUp(datasource);
+    void testRestoreRowProcessor(Datasource datasource) {
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -248,8 +248,8 @@ public class TestGenericQueryManagerDelegate {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreQueryRowProcessor(Datasource datasource) {
-        setUp(datasource);
+    void testRestoreQueryRowProcessor(Datasource datasource) {
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -284,8 +284,8 @@ public class TestGenericQueryManagerDelegate {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testChildBean(Datasource datasource) {
-        setUp(datasource);
+    void testChildBean(Datasource datasource) {
+        setup(datasource);
         try {
             var bean = new ChildBean();
 
@@ -305,8 +305,8 @@ public class TestGenericQueryManagerDelegate {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testCount(Datasource datasource) {
-        setUp(datasource);
+    void testCount(Datasource datasource) {
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();

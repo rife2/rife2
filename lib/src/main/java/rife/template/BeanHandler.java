@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.template;
@@ -19,7 +19,7 @@ public interface BeanHandler {
     /**
      * Sets all values in the given template whose names match names of
      * properties in the given bean, preceded by the given prefix, if present.
-     * If the given prefix is <code>null</code>, it is ignored.
+     * If the given prefix is {@code null}, it is ignored.
      * <p>For example, given a class:
      * <pre>class Person {
      *    private String first;
@@ -34,13 +34,13 @@ public interface BeanHandler {
      * <p>And given a template:
      * <pre>Hello &lt;!--V 'NAME:firstName'/--&gt; &lt;!--V 'NAME:lastName'/--&gt;.</pre>
      * <p>Calling this method with an instance of Person where
-     * <code>first</code> was "<code>Jim</code>" and <code>last</code> was "<code>James</code>",
-     * and the prefix "<code>NAME:</code>", would produce:
+     * {@code first} was "{@code Jim}" and {@code last} was "{@code James}",
+     * and the prefix "{@code NAME:}", would produce:
      * <pre>Hello Jim James.</pre>
      * <p>Calling this method is equivalent to calling {@link
      * Template#setValue(String, String) setValue} individually for each
      * property of the bean prefixed with the given prefix.
-     * <p>If <code>encode</code> is <code>true</code>, this method will use
+     * <p>If {@code encode} is {@code true}, this method will use
      * the template's {@linkplain Template#getEncoder encoder} to encode the
      * bean properties before setting the values.
      * <p>Only <em>bean properties</em> will be considered for insertion in

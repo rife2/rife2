@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
@@ -56,7 +56,7 @@ public class DropSequence extends AbstractQuery implements Cloneable {
             if (null == name_) {
                 throw new SequenceNameRequiredException("DropSequence");
             } else {
-                Template template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".drop_sequence");
+                var template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".drop_sequence");
 
                 if (template.hasValueId("NAME")) {
                     template.setValue("NAME", name_);

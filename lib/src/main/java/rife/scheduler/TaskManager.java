@@ -1,10 +1,9 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler;
 
-import rife.scheduler.Task;
 import rife.scheduler.exceptions.TaskManagerException;
 
 import java.util.Collection;
@@ -23,6 +22,9 @@ public interface TaskManager {
     Task getTask(int id)
     throws TaskManagerException;
 
+    Collection<Task> getAllTasks()
+    throws TaskManagerException;
+
     Collection<Task> getTasksToProcess()
     throws TaskManagerException;
 
@@ -32,7 +34,7 @@ public interface TaskManager {
     boolean removeTask(int id)
     throws TaskManagerException;
 
-    boolean rescheduleTask(Task task, long interval, String frequency)
+    boolean rescheduleTask(Task task, long interval, Frequency frequency)
     throws TaskManagerException;
 
     boolean concludeTask(Task task)

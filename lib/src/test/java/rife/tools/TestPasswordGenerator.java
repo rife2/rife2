@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPasswordGenerator {
     @Test
-    public void testIllegalArguments() {
+    void testIllegalArguments() {
         try {
             PasswordGenerator.get(0);
             fail();
@@ -30,7 +30,7 @@ public class TestPasswordGenerator {
     }
 
     @Test
-    public void testLength() {
+    void testLength() {
         String password = null;
 
         password = PasswordGenerator.get(10);
@@ -42,7 +42,7 @@ public class TestPasswordGenerator {
     }
 
     @Test
-    public void testDefaultMixed() {
+    void testDefaultMixed() {
         String password = null;
 
         Pattern mixed_pattern = null;
@@ -65,7 +65,7 @@ public class TestPasswordGenerator {
     }
 
     @Test
-    public void testMixed() {
+    void testMixed() {
         String password = null;
 
         Pattern mixed_pattern = null;
@@ -88,7 +88,7 @@ public class TestPasswordGenerator {
     }
 
     @Test
-    public void testDigitsOnly() {
+    void testDigitsOnly() {
         String password = null;
 
         Pattern mixed_pattern = null;
@@ -111,7 +111,7 @@ public class TestPasswordGenerator {
     }
 
     @Test
-    public void testLettersOnly() {
+    void testLettersOnly() {
         String password = null;
 
         Pattern mixed_pattern = null;
@@ -134,7 +134,7 @@ public class TestPasswordGenerator {
     }
 
     @Test
-    public void testRandom() {
+    void testRandom() {
         Random random1 = new Random(System.currentTimeMillis());
         Random random2 = new Random("the seed".hashCode());
 

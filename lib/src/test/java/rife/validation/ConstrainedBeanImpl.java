@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -13,6 +13,8 @@ public class ConstrainedBeanImpl extends Validation {
     private String anotherlogin_ = null;
     private String password_ = null;
     private String anotherpassword_ = null;
+    private String email_ = null;
+    private String url_ = null;
     private String comment_ = null;
     private String anothercomment_ = null;
     private Question question_ = null;
@@ -32,10 +34,12 @@ public class ConstrainedBeanImpl extends Validation {
     public ConstrainedBeanImpl() {
         addConstraint(new ConstrainedProperty("hidden").maxLength(16).notNull(true));
         addConstraint(new ConstrainedProperty("anotherhidden").maxLength(20).notNull(true).defaultValue("weg").editable(false));
-        addConstraint(new ConstrainedProperty("login").maxLength(6).notNull(true));
+        addConstraint(new ConstrainedProperty("login").minLength(2).maxLength(6).notNull(true));
         addConstraint(new ConstrainedProperty("anotherlogin").maxLength(10).notNull(true).defaultValue("jij").editable(false));
         addConstraint(new ConstrainedProperty("password").maxLength(8).notNull(true));
         addConstraint(new ConstrainedProperty("anotherpassword").maxLength(12).notNull(true).defaultValue("secrettoo").editable(false));
+        addConstraint(new ConstrainedProperty("email").email(true));
+        addConstraint(new ConstrainedProperty("url").url(true));
         addConstraint(new ConstrainedProperty("comment").editable(false));
         addConstraint(new ConstrainedProperty("anothercomment").defaultValue("the comment"));
         addConstraint(new ConstrainedProperty("question").notNull(true));
@@ -99,6 +103,22 @@ public class ConstrainedBeanImpl extends Validation {
 
     public String getAnotherpassword() {
         return anotherpassword_;
+    }
+
+    public void setEmail(String email) {
+        email_ = email;
+    }
+
+    public String getEmail() {
+        return email_;
+    }
+
+    public void setUrl(String url) {
+        url_ = url;
+    }
+
+    public String getUrl() {
+        return url_;
     }
 
     public void setComment(String comment) {

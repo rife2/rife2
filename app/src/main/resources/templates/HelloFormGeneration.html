@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+<!--i common/-->
+<!--bv title-->Hello Form Generation<!--/bv-->
+</head>
+<body>
+
+<!--v content/-->
+<!--b form-->
+  <!--v errors:*--><!--/v-->
+  <!--b errormessage:*--><!--v errormessage/--><br><!--/b-->
+  <form action="{{v route:action:/}}" method="post" name="hello">
+    <!--v route:inputs:/-->
+    <!--v form-fields/-->
+    <!--bv form-fields-->
+    <label>Title<br>
+      <!--v form:input:title-->size="50"<!--/v-->
+    </label><br>
+    <label>Email<br>
+      <!--v form:input:email-->size="50"<!--/v-->
+    </label><br>
+    <label>Body<br>
+      <!--v form:textarea:body-->cols="50"<!--/v-->
+    </label><br>
+    <!--/bv-->
+    <input type="submit" name="Submit" />
+  </form>
+<!--/b-->
+<!--b display-->
+  <h2>Title</h2>
+  <p><!--v title/--></p>
+  <h2>Email</h2>
+  <p><!--v email/--></p>
+  <h2>Body</h2>
+  <p><!--v body/--></p>
+<!--/b-->
+
+</body>
+</html>

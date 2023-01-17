@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.datastructures;
@@ -11,8 +11,8 @@ import java.util.HashMap;
  * The purpose of this abstract base class is to allow the creation of
  * type-safe enumerations.
  * <p>Only the derived class is allowed to create instances and should do so
- * as <code>public static final</code> objects.
- * <p>Each instance of a <code>EnumClass</code> class needs an identifier to
+ * as {@code public static final} objects.
+ * <p>Each instance of a {@code EnumClass} class needs an identifier to
  * its constructor. This identifier is used to uniquely differentiate
  * enumeration members amongst each-other.
  *

@@ -1,0 +1,22 @@
+<html lang="en">
+<body>
+<!--v content/-->
+<!--bv content-->
+  <p>Guess a number from 1 to 100</p>
+  <p><i><!--v msg--><!--/v--></i></p>
+  <!--b range-->Your guess is out-of-range.<!--/b-->
+  <!--b lower-->The answer is lower.<!--/b-->
+  <!--b higher-->The answer is higher.<!--/b-->
+  <form name="perform_guess" action="{{v route:action:/}}" method="post">
+    <!--v route:inputs:/-->
+    <input type="text" name="guess" value="{{v param:guess}}{{/v}}" autofocus /><br/>
+    <input type="submit" name="submit" value="Guess" /><br/>
+  </form>
+<!--/bv-->
+<!--b success-->
+  <p>Yes, the answer was <!--v answer/-->.</p>
+  <p>You guessed it in <!--v guesses/--> tries.</p>
+  <p><a href="{{v route:/}}">try again</a></p>
+<!--/b-->
+</body>
+</html>

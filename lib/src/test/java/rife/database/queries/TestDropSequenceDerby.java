@@ -1,19 +1,20 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropSequenceDerby extends TestDropSequence {
-    @Test
-    public void testInstantiationDerby() {
-        DropSequence query = new DropSequence(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testInstantiationDerby() {
+        var query = new DropSequence(DERBY);
         assertNotNull(query);
         try {
             query.getSql();
@@ -23,9 +24,9 @@ public class TestDropSequenceDerby extends TestDropSequence {
         }
     }
 
-    @Test
-    public void testClearDerby() {
-        DropSequence query = new DropSequence(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testClearDerby() {
+        var query = new DropSequence(DERBY);
         query.name("sequencename");
         try {
             query.getSql();
@@ -35,9 +36,9 @@ public class TestDropSequenceDerby extends TestDropSequence {
         }
     }
 
-    @Test
-    public void testCreateDerby() {
-        DropSequence query = new DropSequence(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testCreateDerby() {
+        var query = new DropSequence(DERBY);
         query.name("sequencename");
         try {
             query.getSql();
@@ -47,8 +48,8 @@ public class TestDropSequenceDerby extends TestDropSequence {
         }
     }
 
-    @Test
-    public void testCloneDerby() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testCloneDerby() {
         // sequences are not supported on mysql
     }
 }

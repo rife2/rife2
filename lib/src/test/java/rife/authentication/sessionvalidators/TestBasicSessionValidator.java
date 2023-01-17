@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.sessionvalidators;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestBasicSessionValidator {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         AbstractSessionValidator validator = null;
 
         validator = new BasicSessionValidator();
@@ -27,51 +27,51 @@ public class TestBasicSessionValidator {
     }
 
     @Test
-    public void testValidSessionId() {
-        BasicSessionValidator validator = new BasicSessionValidator();
+    void testValidSessionId() {
+        var validator = new BasicSessionValidator();
 
         assertTrue(validator.isAccessAuthorized(1));
     }
 
     @Test
-    public void testSessionValidity() {
-        BasicSessionValidator validator = new BasicSessionValidator();
-        MemorySessions sessions = new MemorySessions();
+    void testSessionValidity() {
+        var validator = new BasicSessionValidator();
+        var sessions = new MemorySessions();
         sessions.setSessionDuration(120000);
         validator.setSessionManager(sessions);
 
-        int user_id = 9478;
-        String host_ip = "98.232.12.456";
+        var user_id = 9478;
+        var auth_data = "98.232.12.456";
 
         String auth_id = null;
         try {
-            auth_id = sessions.startSession(user_id, host_ip, false);
-            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id, host_ip, new DummyAttributes())));
-            sessions.setRestrictHostIp(true);
+            auth_id = sessions.startSession(user_id, auth_data, false);
+            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id, auth_data, new DummyAttributes())));
+            sessions.setRestrictAuthData(true);
             assertEquals(AbstractSessionValidator.SESSION_INVALID, validator.validateSession(auth_id, "1.1.1.1", new DummyAttributes()));
-            sessions.setRestrictHostIp(false);
+            sessions.setRestrictAuthData(false);
             assertEquals(AbstractSessionValidator.SESSION_VALID, validator.validateSession(auth_id, "1.1.1.1", new DummyAttributes()));
-            assertEquals(AbstractSessionValidator.SESSION_INVALID, validator.validateSession("not_valid", host_ip, new DummyAttributes()));
+            assertEquals(AbstractSessionValidator.SESSION_INVALID, validator.validateSession("not_valid", auth_data, new DummyAttributes()));
 
             sessions.setSessionDuration(0);
 
             Thread.sleep(2);
-            assertEquals(AbstractSessionValidator.SESSION_INVALID, validator.validateSession(auth_id, host_ip, new DummyAttributes()));
+            assertEquals(AbstractSessionValidator.SESSION_INVALID, validator.validateSession(auth_id, auth_data, new DummyAttributes()));
         } catch (InterruptedException | SessionManagerException | SessionValidatorException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
     }
 
     @Test
-    public void testSessionValidityRole() {
-        BasicSessionValidator validator = new BasicSessionValidator();
-        MemoryUsers users = new MemoryUsers();
-        MemorySessions sessions = new MemorySessions();
+    void testSessionValidityRole() {
+        var validator = new BasicSessionValidator();
+        var users = new MemoryUsers();
+        var sessions = new MemorySessions();
         sessions.setSessionDuration(120000);
         validator.setSessionManager(sessions);
         validator.setCredentialsManager(users);
 
-        String host_ip = "98.232.12.456";
+        var auth_data = "98.232.12.456";
 
         String auth_id1 = null;
         String auth_id2 = null;
@@ -84,21 +84,21 @@ public class TestBasicSessionValidator {
             users.addUser("login2", new RoleUserAttributes(2, "thepassword", new String[]{"maint"}));
             users.addUser("login3", new RoleUserAttributes(3, "thepassword"));
 
-            auth_id1 = sessions.startSession(1, host_ip, false);
-            auth_id2 = sessions.startSession(2, host_ip, false);
-            auth_id3 = sessions.startSession(3, host_ip, false);
+            auth_id1 = sessions.startSession(1, auth_data, false);
+            auth_id2 = sessions.startSession(2, auth_data, false);
+            auth_id3 = sessions.startSession(3, auth_data, false);
 
-            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id1, host_ip, new DummyAttributes())));
-            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id1, host_ip, new RoleAdminAttributes())));
-            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id1, host_ip, new RoleMaintAttributes())));
+            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id1, auth_data, new DummyAttributes())));
+            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id1, auth_data, new RoleAdminAttributes())));
+            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id1, auth_data, new RoleMaintAttributes())));
 
-            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id2, host_ip, new DummyAttributes())));
-            assertEquals(AbstractSessionValidator.SESSION_INVALID, validator.validateSession(auth_id2, host_ip, new RoleAdminAttributes()));
-            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id2, host_ip, new RoleMaintAttributes())));
+            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id2, auth_data, new DummyAttributes())));
+            assertEquals(AbstractSessionValidator.SESSION_INVALID, validator.validateSession(auth_id2, auth_data, new RoleAdminAttributes()));
+            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id2, auth_data, new RoleMaintAttributes())));
 
-            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id3, host_ip, new DummyAttributes())));
-            assertEquals(AbstractSessionValidator.SESSION_INVALID, validator.validateSession(auth_id3, host_ip, new RoleAdminAttributes()));
-            assertEquals(AbstractSessionValidator.SESSION_INVALID, validator.validateSession(auth_id3, host_ip, new RoleMaintAttributes()));
+            assertTrue(validator.isAccessAuthorized(validator.validateSession(auth_id3, auth_data, new DummyAttributes())));
+            assertEquals(AbstractSessionValidator.SESSION_INVALID, validator.validateSession(auth_id3, auth_data, new RoleAdminAttributes()));
+            assertEquals(AbstractSessionValidator.SESSION_INVALID, validator.validateSession(auth_id3, auth_data, new RoleMaintAttributes()));
         } catch (SessionManagerException | SessionValidatorException | CredentialsManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }

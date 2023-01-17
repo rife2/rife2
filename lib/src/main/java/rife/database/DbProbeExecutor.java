@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Steven Grimm (koreth[remove] at midwinter dot com)
+ * Copyright 2001-2023 Steven Grimm (koreth[remove] at midwinter dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -15,10 +15,10 @@ import rife.scheduler.Task;
  *
  * <p>There are two optional parameters.
  * <dl>
- * <dt><code>datasource</code></dt>
+ * <dt>{@code datasource}</dt>
  * <dd>The name of the Datasource to probe. If not specified, the
  * default is "datasource".</dd>
- * <dt><code>query</code></dt>
+ * <dt>{@code query}</dt>
  * <dd>The dummy query to send. If not specified, the default is
  * "select 1".</dd>
  * </dl>
@@ -30,22 +30,22 @@ public class DbProbeExecutor extends Executor {
     @Override
     public boolean executeTask(Task task) {
         try {
-            String ds_name = task.getTaskOptionValue("datasource");
+            var ds_name = task.getTaskOptionValue("datasource");
             if (null == ds_name) {
                 ds_name = "datasource";
             }
 
-            String query = task.getTaskOptionValue("query");
+            var query = task.getTaskOptionValue("query");
             if (null == query) {
                 query = "select 1";
             }
 
-            Datasource ds = Datasources.instance().getDatasource(ds_name);
+            var ds = Datasources.instance().getDatasource(ds_name);
             if (null == ds) {
                 throw new DbQueryException("Can't find Datasource '" + ds_name + "'");
             }
 
-            ConnectionPool cp = ds.getPool();
+            var cp = ds.getPool();
             if (null == cp) {
                 throw new DbQueryException("Datasource '" + ds_name + "' has no ConnectionPool");
             }
@@ -67,13 +67,13 @@ public class DbProbeExecutor extends Executor {
              * transaction isn't idle anyway so doesn't need to be probed.
              */
             synchronized (cp) {
-                for (int i = 0; i < cp.getPoolSize(); i++) {
-                    DbConnection conn = ds.getConnection();
+                for (var i = 0; i < cp.getPoolSize(); i++) {
+                    var conn = ds.getConnection();
                     if (null == conn) {
                         throw new DbQueryException("Can't get connection");
                     }
 
-                    DbPreparedStatement stmt = conn.getPreparedStatement(query);
+                    var stmt = conn.getPreparedStatement(query);
                     if (null == stmt) {
                         throw new DbQueryException("Can't prepare dummy statement");
                     }
@@ -98,7 +98,7 @@ public class DbProbeExecutor extends Executor {
     }
 
     @Override
-    public String getHandledTasktype() {
+    public String getHandledTaskType() {
         return "DbProbe";
     }
 }

@@ -1,17 +1,8 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
-
-/**
- * General purpose class containing common <code>Object</code> manipulation
- * methods.
- *
- * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @author Thomas McGlynn
- * @since 1.0
- */
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -20,7 +11,19 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class ObjectUtils {
+/**
+ * General purpose class containing common {@code Object} manipulation
+ * methods.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @author Thomas McGlynn
+ * @since 1.0
+ */
+public final class ObjectUtils {
+    private ObjectUtils() {
+        // no-op
+    }
+
     /**
      * Clone an Object if possible.
      * <p>
@@ -30,9 +33,9 @@ public class ObjectUtils {
      * the clone method.
      *
      * @param object The object to be cloned.
-     * @return <code>null</code> if the cloning failed; or
+     * @return {@code null} if the cloning failed; or
      * <p>
-     * the cloned <code>Object</code> instance.
+     * the cloned {@code Object} instance.
      */
     public static <T> T genericClone(T object) {
         if (object == null) {
@@ -84,7 +87,7 @@ public class ObjectUtils {
     /**
      * Try to create a deep clone of the provides object. This handles arrays,
      * collections and maps. If the class in not a supported standard JDK
-     * collection type the <code>genericClone</code> will be used instead.
+     * collection type the {@code genericClone} will be used instead.
      *
      * @param object The object to be copied.
      */
@@ -101,25 +104,34 @@ public class ObjectUtils {
             // handle 1 dimensional primitive arrays
             if (classname.charAt(1) != '[' && classname.charAt(1) != 'L') {
                 switch (classname.charAt(1)) {
-                    case 'B':
+                    case 'B' -> {
                         return (T) ((byte[]) object).clone();
-                    case 'Z':
+                    }
+                    case 'Z' -> {
                         return (T) ((boolean[]) object).clone();
-                    case 'C':
+                    }
+                    case 'C' -> {
                         return (T) ((char[]) object).clone();
-                    case 'S':
+                    }
+                    case 'S' -> {
                         return (T) ((short[]) object).clone();
-                    case 'I':
+                    }
+                    case 'I' -> {
                         return (T) ((int[]) object).clone();
-                    case 'J':
+                    }
+                    case 'J' -> {
                         return (T) ((long[]) object).clone();
-                    case 'F':
+                    }
+                    case 'F' -> {
                         return (T) ((float[]) object).clone();
-                    case 'D':
+                    }
+                    case 'D' -> {
                         return (T) ((double[]) object).clone();
-                    default:
+                    }
+                    default -> {
                         Logger.getLogger("rife.tools").severe("Unknown primitive array class: " + classname);
                         return null;
+                    }
                 }
             }
 
@@ -225,31 +237,41 @@ public class ObjectUtils {
 
         switch (className.charAt(dims)) {
             // handle the boxed primitives
-            case 'Z':
+            case 'Z' -> {
                 return Boolean.TYPE;
-            case 'B':
+            }
+            case 'B' -> {
                 return Byte.TYPE;
-            case 'S':
+            }
+            case 'S' -> {
                 return Short.TYPE;
-            case 'C':
+            }
+            case 'C' -> {
                 return Character.TYPE;
-            case 'I':
+            }
+            case 'I' -> {
                 return Integer.TYPE;
-            case 'J':
+            }
+            case 'J' -> {
                 return Long.TYPE;
-            case 'F':
+            }
+            case 'F' -> {
                 return Float.TYPE;
-            case 'D':
+            }
+            case 'D' -> {
                 return Double.TYPE;
+            }
             // look up the class of another reference type
-            case 'L':
+            case 'L' -> {
                 try {
                     return Class.forName(className.substring(dims + 1, className.length() - 1));
                 } catch (ClassNotFoundException e) {
                     return null;
                 }
-            default:
+            }
+            default -> {
                 return null;
+            }
         }
     }
 }

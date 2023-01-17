@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication;
@@ -65,8 +65,7 @@ public interface SessionValidator<C extends CredentialsManager, S extends Sessio
      *
      * @param authId     The unique id of the authentication session that needs
      *                   to be validated.
-     * @param hostIp     The ip address of the host from which the user accesses
-     *                   the application.
+     * @param authData   Data that was associated with the session
      * @param attributes Access to the attributes that define that context
      *                   in which the session has to be validated.
      * @return A number that indicates the validation state of the session.
@@ -81,7 +80,7 @@ public interface SessionValidator<C extends CredentialsManager, S extends Sessio
      *                                   this interface to give more specific meanings to these exceptions.
      * @since 1.0
      */
-    int validateSession(String authId, String hostIp, SessionAttributes attributes)
+    int validateSession(String authId, String authData, SessionAttributes attributes)
     throws SessionValidatorException;
 
     /**

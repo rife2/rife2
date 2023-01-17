@@ -18,18 +18,18 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestPurgingDatabaseSessions {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testStartSession(Datasource datasource) {
-        PurgingSessionManager sessions = new PurgingSessionManager(DatabaseSessionsFactory.getInstance(datasource));
+    void testStartSession(Datasource datasource) {
+        var sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionPurgeFrequency(0);
 
-        int user_id = 143;
-        String host_ip = "189.38.987.43";
+        var user_id = 143;
+        var auth_data = "189.38.987.43";
 
         String auth_id = null;
         try {
-            ((DatabaseSessions) sessions.getSessionManager()).install();
+            sessions.install();
 
-            auth_id = sessions.startSession(user_id, host_ip, false);
+            auth_id = sessions.startSession(user_id, auth_data, false);
 
             assertEquals(1, sessions.countSessions());
 
@@ -39,7 +39,7 @@ public class TestPurgingDatabaseSessions {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
             try {
-                ((DatabaseSessions) sessions.getSessionManager()).remove();
+                sessions.remove();
             } catch (SessionManagerException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
@@ -48,33 +48,33 @@ public class TestPurgingDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testPurgeSessions(Datasource datasource) {
-        PurgingSessionManager sessions = new PurgingSessionManager(DatabaseSessionsFactory.getInstance(datasource));
+    void testPurgeSessions(Datasource datasource) {
+        var sessions = DatabaseSessionsFactory.instance(datasource);
         sessions.setSessionDuration(2000);
         sessions.setSessionPurgeFrequency(1);
         sessions.setSessionPurgeScale(1);
 
-        int user_id = 9478;
-        String host_ip = "98.232.12.456";
+        var user_id = 9478;
+        var auth_data = "98.232.12.456";
 
         try {
-            ((DatabaseSessions) sessions.getSessionManager()).install();
+            sessions.install();
 
             sessions.eraseAllSessions();
             assertEquals(0, sessions.countSessions());
 
-            sessions.startSession(user_id, host_ip, false);
+            sessions.startSession(user_id, auth_data, false);
             assertEquals(1, sessions.countSessions());
 
             Thread.sleep(2010);
 
-            sessions.startSession(user_id, host_ip, false);
+            sessions.startSession(user_id, auth_data, false);
             assertEquals(1, sessions.countSessions());
         } catch (InterruptedException | SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
             try {
-                ((DatabaseSessions) sessions.getSessionManager()).remove();
+                sessions.remove();
             } catch (SessionManagerException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }

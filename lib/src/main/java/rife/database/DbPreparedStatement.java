@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -24,18 +24,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Provides a wrapper around the regular JDBC <code>PreparedStatement</code>
+ * Provides a wrapper around the regular JDBC {@code PreparedStatement}
  * class. It can only be instantiated by calling the
- * <code>getPreparedStatement</code> method on an existing
- * <code>DbConnection</code> instance.
+ * {@code getPreparedStatement} method on an existing
+ * {@code DbConnection} instance.
  * <p>This class hooks into the database connection pool and cleans up as much
- * as possible in case of errors. The thrown <code>DatabaseException</code>
+ * as possible in case of errors. The thrown {@code DatabaseException}
  * exceptions should thus only be used for error reporting and not for
  * releasing resources used by the framework.
- * <p>The <code>executeQuery</code> method stores its resultset in the
- * executing <code>DbPreparedStatement</code> instance. It's recommended to
- * use the <code>DbQueryManager</code>'s <code>fetch</code> method to process
- * the result set. If needed, one can also use the <code>getResultSet</code>
+ * <p>The {@code executeQuery} method stores its resultset in the
+ * executing {@code DbPreparedStatement} instance. It's recommended to
+ * use the {@code DbQueryManager}'s {@code fetch} method to process
+ * the result set. If needed, one can also use the {@code getResultSet}
  * method to manually process the results through plain JDBC. However, when
  * exceptions are thrown during this procedure, it's also the responsability
  * of the user to correctly clean up all resources.
@@ -67,15 +67,15 @@ public class DbPreparedStatement extends DbStatement {
     private VirtualParameters virtualParameters_ = null;
 
     /**
-     * Constructs a new <code>DbStatement</code> from a SQL query string,
-     * a <code>DbConnection</code> and a <code>PreparedStatement</code>.
+     * Constructs a new {@code DbStatement} from a SQL query string,
+     * a {@code DbConnection} and a {@code PreparedStatement}.
      * This constructor will never be called by a user of the api. The
-     * <code>getPreparedStatement</code> of an existing
-     * <code>DbConnection</code> instance should be used instead.
+     * {@code getPreparedStatement} of an existing
+     * {@code DbConnection} instance should be used instead.
      *
-     * @param connection        a <code>DbConnection</code> instance
-     * @param sql               a <code>String</code> with the sql statement
-     * @param preparedStatement a JDBC <code>PreparedStatement</code>
+     * @param connection        a {@code DbConnection} instance
+     * @param sql               a {@code String} with the sql statement
+     * @param preparedStatement a JDBC {@code PreparedStatement}
      *                          instance
      * @throws DatabaseException if a database access error occurs
      * @since 1.0
@@ -93,16 +93,16 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Constructs a new <code>DbStatement</code> from a
-     * <code>ParametrizedQuery</code>, a <code>DbConnection</code> and a
-     * <code>PreparedStatement</code>. This constructor will never be
-     * called by a user of the api. The <code>getPreparedStatement</code>
-     * of an existing <code>DbConnection</code> instance should be used
+     * Constructs a new {@code DbStatement} from a
+     * {@code ParametrizedQuery}, a {@code DbConnection} and a
+     * {@code PreparedStatement}. This constructor will never be
+     * called by a user of the api. The {@code getPreparedStatement}
+     * of an existing {@code DbConnection} instance should be used
      * instead.
      *
-     * @param connection        a <code>DbConnection</code> instance
-     * @param query             a <code>Query</code> with the sql statement
-     * @param preparedStatement a JDBC <code>PreparedStatement</code>
+     * @param connection        a {@code DbConnection} instance
+     * @param query             a {@code Query} with the sql statement
+     * @param preparedStatement a JDBC {@code PreparedStatement}
      *                          instance
      * @throws DatabaseException if a database access error occurs
      * @since 1.0
@@ -125,7 +125,7 @@ public class DbPreparedStatement extends DbStatement {
      * Returns the SQL query that will be executed by this prepared
      * statement.
      *
-     * @return a <code>String</code> with the SQL query of this prepared
+     * @return a {@code String} with the SQL query of this prepared
      * statement
      * @since 1.0
      */
@@ -137,9 +137,9 @@ public class DbPreparedStatement extends DbStatement {
      * Returns the query builder that provides the SQL query that will be
      * executed by this prepared statement.
      *
-     * @return a <code>Query</code> object with the query builder
+     * @return a {@code Query} object with the query builder
      * instance; or
-     * <p><code>null</code> if the prepared statement was initialized from
+     * <p>{@code null} if the prepared statement was initialized from
      * a string SQL query
      * @since 1.0
      */
@@ -148,16 +148,16 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Executes the SQL query in this <code>DbPreparedStatement</code>
-     * object. The <code>ResultSet</code> object generated by the query is
-     * stored and can be retrieved with the <code>getResultSet</code>
+     * Executes the SQL query in this {@code DbPreparedStatement}
+     * object. The {@code ResultSet} object generated by the query is
+     * stored and can be retrieved with the {@code getResultSet}
      * method.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @throws DatabaseException if a database access error occurs or
-     *                           the SQL statement does not return a <code>ResultSet</code> object
+     *                           the SQL statement does not return a {@code ResultSet} object
      * @see #getResultSet()
      * @since 1.0
      */
@@ -184,19 +184,19 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Executes the SQL statement in this <code>DbPreparedStatement</code>
-     * object, which must be an SQL <code>INSERT</code>,
-     * <code>UPDATE</code> or <code>DELETE</code> statement; or a SQL
+     * Executes the SQL statement in this {@code DbPreparedStatement}
+     * object, which must be an SQL {@code INSERT},
+     * {@code UPDATE} or {@code DELETE} statement; or a SQL
      * statement that returns nothing, such as a DDL statement.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
-     * @return the row count for <code>INSERT</code>, <code>UPDATE</code>,
-     * or <code>DELETE</code> statements; or
+     * @return the row count for {@code INSERT}, {@code UPDATE},
+     * or {@code DELETE} statements; or
      * <p>0 for SQL statements that return nothing
      * @throws DatabaseException if a database access error occurs or
-     *                           the SQL statement returns a <code>ResultSet</code> object
+     *                           the SQL statement returns a {@code ResultSet} object
      * @since 1.0
      */
     public int executeUpdate()
@@ -219,9 +219,9 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Adds a set of parameters to this <code>DbPreparedStatement</code>
+     * Adds a set of parameters to this {@code DbPreparedStatement}
      * object's batch of commands.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
@@ -241,18 +241,18 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Releases this <code>DbPreparedStatement</code> object's database
+     * Releases this {@code DbPreparedStatement} object's database
      * and JDBC resources immediately instead of waiting for this to
      * happen when it is automatically closed. It is generally good
      * practice to release resources as soon as you are finished with them
      * to avoid tying up database resources.
-     * <p>Calling the method <code>close</code> on a
-     * <code>DbPreparedStatement</code> object that is already closed has
+     * <p>Calling the method {@code close} on a
+     * {@code DbPreparedStatement} object that is already closed has
      * no effect.
-     * <p><b>Note:</b> A <code>DbPreparedStatement</code> object is
+     * <p><b>Note:</b> A {@code DbPreparedStatement} object is
      * automatically closed when it is garbage collected. When a
-     * <code>DbPreparedStatement</code> object is closed, its current
-     * <code>ResultSet</code> object, if one exists, is also closed.
+     * {@code DbPreparedStatement} object is closed, its current
+     * {@code ResultSet} object, if one exists, is also closed.
      *
      * @throws DatabaseException if a database access error occurs
      * @since 1.0
@@ -263,28 +263,28 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Retrieves a <code>ResultSetMetaData</code> object that contains
-     * information about the columns of the <code>ResultSet</code> object
-     * that will be returned when this <code>PDbreparedStatement</code>
+     * Retrieves a {@code ResultSetMetaData} object that contains
+     * information about the columns of the {@code ResultSet} object
+     * that will be returned when this {@code PDbreparedStatement}
      * object is executed.
-     * <p>Because a <code>DbPreparedStatement</code> object is
+     * <p>Because a {@code DbPreparedStatement} object is
      * precompiled, it is possible to know about the
-     * <code>ResultSet</code> object that it will return without having to
+     * {@code ResultSet} object that it will return without having to
      * execute it. Consequently, it is possible to invoke the method
-     * <code>getMetaData</code> on a <code>DbPreparedStatement</code>
+     * {@code getMetaData} on a {@code DbPreparedStatement}
      * object rather than waiting to execute it and then invoking the
-     * <code>ResultSet.getMetaData</code> method on the
-     * <code>ResultSet</code> object that is returned.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * {@code ResultSet.getMetaData} method on the
+     * {@code ResultSet} object that is returned.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      * <p><b>NOTE:</b> Using this method may be expensive for some drivers
      * due to the lack of underlying DBMS support.
      *
-     * @return the description of a <code>ResultSet</code> object's
+     * @return the description of a {@code ResultSet} object's
      * columns; or
-     * <p><code>null</code> if the driver cannot return a
-     * <code>ResultSetMetaData</code> object
+     * <p>{@code null} if the driver cannot return a
+     * {@code ResultSetMetaData} object
      * @throws DatabaseException if a database access error occurs
      * @since 1.0
      */
@@ -300,14 +300,14 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Retrieves the number, types and properties of this
-     * <code>DbPreparedStatement</code> object's parameters.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * {@code DbPreparedStatement} object's parameters.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
-     * @return a <code>ParameterMetaData</code> object that contains
+     * @return a {@code ParameterMetaData} object that contains
      * information about the number, types and properties of this
-     * <code>DbPreparedStatement</code> object's parameters.
+     * {@code DbPreparedStatement} object's parameters.
      * @throws DatabaseException if a database access error occurs
      * @see java.sql.ParameterMetaData
      * @since 1.0
@@ -323,14 +323,14 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Ensures that this <code>DbPrepareStatement</code> instance has been
-     * defined by a valid <code>ParametrizedQuery</code> and initializes
+     * Ensures that this {@code DbPrepareStatement} instance has been
+     * defined by a valid {@code ParametrizedQuery} and initializes
      * all parameter-related instance variables.
      *
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters.
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters.
      * @since 1.0
      */
     private void validateParametrizedQuery()
@@ -400,21 +400,20 @@ public class DbPreparedStatement extends DbStatement {
     /**
      * Automatically retrieves all the values of a bean's properties and
      * sets them for the parameters that have been defined by the
-     * <code>ParametrizedQuery</code> object of this
-     * <code>DbPrepareStatement</code> instance.
+     * {@code ParametrizedQuery} object of this
+     * {@code DbPrepareStatement} instance.
      *
      * @param bean the bean whose properties should be assigned to the
      *             query's parameters.
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if an error occurred during the manipulation of the bean's
      *                           properties.
      * @since 1.0
      */
-    // TODO : handle records
     public DbPreparedStatement setBean(Object bean)
     throws DatabaseException {
         if (null == bean) throw new IllegalArgumentException("bean can't be null.");
@@ -451,10 +450,10 @@ public class DbPreparedStatement extends DbStatement {
     /**
      * Sets the parameters that should be handled as virtual parameters.
      * These parameters are not sent to the backend, but their values will
-     * be stored in this <code>DbPreparedStatement</code> instance for
+     * be stored in this {@code DbPreparedStatement} instance for
      * retrieval by other functionalities like capabilities.
      *
-     * @param parameters the <code>VirtualParameters</code> instance that
+     * @param parameters the {@code VirtualParameters} instance that
      *                   will determine the virtual parameters
      * @since 1.0
      */
@@ -465,17 +464,17 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Retrieves all the parameter indices that correspond to the name of
-     * a parameter of the <code>ParametrizedQuery</code> object that is
-     * used by this <code>DbPreparedStatement</code> instance.
+     * a parameter of the {@code ParametrizedQuery} object that is
+     * used by this {@code DbPreparedStatement} instance.
      *
      * @param parameterName the name of the parameter that should be
      *                      looked up
-     * @return an <code>int</code> array with all the corresponding
+     * @return an {@code int} array with all the corresponding
      * indices
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found.
      * @since 1.0
      */
@@ -504,19 +503,19 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to the given Java <code>double</code>
-     * value. The driver converts this to a SQL <code>DOUBLE</code> value
+     * Sets the named parameters to the given Java {@code double}
+     * value. The driver converts this to a SQL {@code DOUBLE} value
      * when it sends it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setDoubles(int[], double)
@@ -532,16 +531,16 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameters to the given Java
-     * <code>double</code> value. The driver converts this to a SQL
-     * <code>DOUBLE</code> value when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * {@code double} value. The driver converts this to a SQL
+     * {@code DOUBLE} value when it sends it to the database.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setDouble(String, double)
      * @see #setDouble(int, double)
@@ -559,17 +558,17 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameter to the given Java <code>double</code>
-     * value. The driver converts this to a SQL <code>DOUBLE</code> value
+     * Sets the designated parameter to the given Java {@code double}
+     * value. The driver converts this to a SQL {@code DOUBLE} value
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setDouble(String, double)
      * @see #setDoubles(int[], double)
@@ -601,19 +600,19 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to the given Java <code>short</code>
-     * value. The driver converts this to a SQL <code>SMALLINT</code>
+     * Sets the named parameters to the given Java {@code short}
+     * value. The driver converts this to a SQL {@code SMALLINT}
      * value when it sends it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setShorts(int[], short)
@@ -628,17 +627,17 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameters to the given Java <code>short</code>
-     * value. The driver converts this to a SQL <code>SMALLINT</code>
+     * Sets the designated parameters to the given Java {@code short}
+     * value. The driver converts this to a SQL {@code SMALLINT}
      * value when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setShort(String, short)
      * @see #setShort(int, short)
@@ -656,17 +655,17 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameter to the given Java <code>short</code>
-     * value. The driver converts this to a SQL <code>SMALLINT</code>
+     * Sets the designated parameter to the given Java {@code short}
+     * value. The driver converts this to a SQL {@code SMALLINT}
      * value when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setShort(String, short)
      * @see #setShorts(int[], short)
@@ -698,19 +697,19 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to SQL <code>NULL</code>.
+     * Sets the named parameters to SQL {@code NULL}.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      * <p><b>Note:</b> You must specify the parameter's SQL type.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param sqlType       the SQL type code defined in
-     *                      <code>java.sql.Types</code>
-     * @return this <code>DbPreparedStatement</code> instance.
+     *                      {@code java.sql.Types}
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see java.sql.Types
@@ -726,8 +725,8 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameters to SQL <code>NULL</code>.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * Sets the designated parameters to SQL {@code NULL}.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      * <p><b>Note:</b> You must specify the parameter's SQL type.
@@ -735,8 +734,8 @@ public class DbPreparedStatement extends DbStatement {
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param sqlType          the SQL type code defined in
-     *                         <code>java.sql.Types</code>
-     * @return this <code>DbPreparedStatement</code> instance.
+     *                         {@code java.sql.Types}
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see java.sql.Types
      * @see #setNull(String, int)
@@ -755,8 +754,8 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameter to SQL <code>NULL</code>.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * Sets the designated parameter to SQL {@code NULL}.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      * <p><b>Note:</b> You must specify the parameter's SQL type.
@@ -764,8 +763,8 @@ public class DbPreparedStatement extends DbStatement {
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param sqlType        the SQL type code defined in
-     *                       <code>java.sql.Types</code>
-     * @return this <code>DbPreparedStatement</code> instance.
+     *                       {@code java.sql.Types}
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see java.sql.Types
      * @see #setNull(String, int)
@@ -798,8 +797,8 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to SQL <code>NULL</code>. This version of
-     * the method <code>setNull</code> should be used for user-defined
+     * Sets the named parameters to SQL {@code NULL}. This version of
+     * the method {@code setNull} should be used for user-defined
      * types and REF type parameters. Examples of user-defined types
      * include: STRUCT, DISTINCT, JAVA_OBJECT, and named array types.
      * <p><b>Note:</b> To be portable, applications must give the SQL type
@@ -814,17 +813,17 @@ public class DbPreparedStatement extends DbStatement {
      * If the parameter does not have a user-defined or REF type, the
      * given typeName is ignored.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
-     * @param sqlType       a value from <code>java.sql.Types</code>
+     * @param sqlType       a value from {@code java.sql.Types}
      * @param typeName      the fully-qualified name of an SQL user-defined
      *                      type; ignored if the parameter is not a user-defined type or REF
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see java.sql.Types
@@ -840,8 +839,8 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameters to SQL <code>NULL</code>. This
-     * version of the method <code>setNull</code> should be used for
+     * Sets the designated parameters to SQL {@code NULL}. This
+     * version of the method {@code setNull} should be used for
      * user-defined types and REF type parameters. Examples of
      * user-defined types include: STRUCT, DISTINCT, JAVA_OBJECT, and
      * named array types.
@@ -856,16 +855,16 @@ public class DbPreparedStatement extends DbStatement {
      * this method may be used to set a null parameter of any JDBC type.
      * If the parameter does not have a user-defined or REF type, the
      * given typeName is ignored.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
-     * @param sqlType          a value from <code>java.sql.Types</code>
+     * @param sqlType          a value from {@code java.sql.Types}
      * @param typeName         the fully-qualified name of an SQL user-defined
      *                         type; ignored if the parameter is not a user-defined type or REF
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see java.sql.Types
      * @see #setNull(String, int, String)
@@ -884,8 +883,8 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameter to SQL <code>NULL</code>. This
-     * version of the method <code>setNull</code> should be used for
+     * Sets the designated parameter to SQL {@code NULL}. This
+     * version of the method {@code setNull} should be used for
      * user-defined types and REF type parameters. Examples of
      * user-defined types include: STRUCT, DISTINCT, JAVA_OBJECT, and
      * named array types.
@@ -900,16 +899,16 @@ public class DbPreparedStatement extends DbStatement {
      * this method may be used to set a null parameter of any JDBC type.
      * If the parameter does not have a user-defined or REF type, the
      * given typeName is ignored.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
-     * @param sqlType        a value from <code>java.sql.Types</code>
+     * @param sqlType        a value from {@code java.sql.Types}
      * @param typeName       the fully-qualified name of an SQL user-defined
      *                       type; ignored if the parameter is not a user-defined type or REF
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see java.sql.Types
      * @see #setNull(String, int, String)
@@ -942,19 +941,19 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to the given Java <code>boolean</code>
-     * value. The driver converts this to a SQL <code>BIT</code> value
+     * Sets the named parameters to the given Java {@code boolean}
+     * value. The driver converts this to a SQL {@code BIT} value
      * when it sends it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setBoolean(String, boolean)
@@ -970,16 +969,16 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameters to the given Java
-     * <code>boolean</code> value. The driver converts this to a SQL
-     * <code>BIT</code> value when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * {@code boolean} value. The driver converts this to a SQL
+     * {@code BIT} value when it sends it to the database.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setBoolean(String, boolean)
      * @see #setBoolean(int, boolean)
@@ -998,16 +997,16 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameter to the given Java
-     * <code>boolean</code> value. The driver converts this to a SQL
-     * <code>BIT</code> value when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * {@code boolean} value. The driver converts this to a SQL
+     * {@code BIT} value when it sends it to the database.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setBoolean(String, boolean)
      * @see #setBooleans(int[], boolean)
@@ -1039,19 +1038,19 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to the given Java <code>byte</code>
-     * value. The driver converts this to a SQL <code>TINYINT</code> value
+     * Sets the named parameters to the given Java {@code byte}
+     * value. The driver converts this to a SQL {@code TINYINT} value
      * when it sends it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setByte(int, byte)
@@ -1066,17 +1065,17 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameters to the given Java <code>byte</code>
-     * value. The driver converts this to a SQL <code>TINYINT</code> value
+     * Sets the designated parameters to the given Java {@code byte}
+     * value. The driver converts this to a SQL {@code TINYINT} value
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setByte(String, byte)
      * @see #setByte(int, byte)
@@ -1094,17 +1093,17 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameter to the given Java <code>byte</code>
-     * value. The driver converts this to a SQL <code>TINYINT</code> value
+     * Sets the designated parameter to the given Java {@code byte}
+     * value. The driver converts this to a SQL {@code TINYINT} value
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setByte(String, byte)
      * @see #setBytes(int[], byte)
@@ -1136,19 +1135,19 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to the given <code>java.sql.Date</code>
-     * value. The driver converts this to a SQL <code>DATE</code> value
+     * Sets the named parameters to the given {@code java.sql.Date}
+     * value. The driver converts this to a SQL {@code DATE} value
      * when it sends it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setDates(int[], Date)
@@ -1164,16 +1163,16 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameters to the given
-     * <code>java.sql.Date</code> value. The driver converts this to a SQL
-     * <code>DATE</code> value when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * {@code java.sql.Date} value. The driver converts this to a SQL
+     * {@code DATE} value when it sends it to the database.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setDate(String, Date)
      * @see #setDate(int, Date)
@@ -1192,16 +1191,16 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameter to the given
-     * <code>java.sql.Date</code> value. The driver converts this to a SQL
-     * <code>DATE</code> value when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * {@code java.sql.Date} value. The driver converts this to a SQL
+     * {@code DATE} value when it sends it to the database.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setDate(String, Date)
      * @see #setDates(int[], Date)
@@ -1233,27 +1232,27 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to the given <code>java.sql.Date</code>
-     * value, using the given <code>Calendar</code> object. The driver
-     * uses the <code>Calendar</code> object to construct an SQL
-     * <code>DATE</code> value, which the driver then sends to the
-     * database. With a <code>Calendar</code> object, the driver can
+     * Sets the named parameters to the given {@code java.sql.Date}
+     * value, using the given {@code Calendar} object. The driver
+     * uses the {@code Calendar} object to construct an SQL
+     * {@code DATE} value, which the driver then sends to the
+     * database. With a {@code Calendar} object, the driver can
      * calculate the date taking into account a custom timezone. If no
-     * <code>Calendar</code> object is specified, the driver uses the
+     * {@code Calendar} object is specified, the driver uses the
      * default timezone, which is that of the virtual machine running the
      * application.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @param cal           the <code>Calendar</code> object the driver will use to
+     * @param cal           the {@code Calendar} object the driver will use to
      *                      construct the date
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setDates(int[], Date, Calendar)
@@ -1269,24 +1268,24 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameters to the given
-     * <code>java.sql.Date</code> value, using the given
-     * <code>Calendar</code> object. The driver uses the
-     * <code>Calendar</code> object to construct an SQL <code>DATE</code>
+     * {@code java.sql.Date} value, using the given
+     * {@code Calendar} object. The driver uses the
+     * {@code Calendar} object to construct an SQL {@code DATE}
      * value, which the driver then sends to the database. With a
-     * <code>Calendar</code> object, the driver can calculate the date
-     * taking into account a custom timezone. If no <code>Calendar</code>
+     * {@code Calendar} object, the driver can calculate the date
+     * taking into account a custom timezone. If no {@code Calendar}
      * object is specified, the driver uses the default timezone, which is
      * that of the virtual machine running the application.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @param cal              the <code>Calendar</code> object the driver will use to
+     * @param cal              the {@code Calendar} object the driver will use to
      *                         construct the date
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setDate(String, Date, Calendar)
      * @see #setDate(int, Date, Calendar)
@@ -1305,24 +1304,24 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameter to the given
-     * <code>java.sql.Date</code> value, using the given
-     * <code>Calendar</code> object. The driver uses the
-     * <code>Calendar</code> object to construct an SQL <code>DATE</code>
+     * {@code java.sql.Date} value, using the given
+     * {@code Calendar} object. The driver uses the
+     * {@code Calendar} object to construct an SQL {@code DATE}
      * value, which the driver then sends to the database. With a
-     * <code>Calendar</code> object, the driver can calculate the date
-     * taking into account a custom timezone. If no <code>Calendar</code>
+     * {@code Calendar} object, the driver can calculate the date
+     * taking into account a custom timezone. If no {@code Calendar}
      * object is specified, the driver uses the default timezone, which is
      * that of the virtual machine running the application.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @param cal            the <code>Calendar</code> object the driver will use to
+     * @param cal            the {@code Calendar} object the driver will use to
      *                       construct the date
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setDate(String, Date, Calendar)
      * @see #setDates(int[], Date, Calendar)
@@ -1353,19 +1352,19 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameter to the given Java <code>int</code> value.
-     * The driver converts this to a SQL <code>INTEGER</code> value when
+     * Sets the named parameter to the given Java {@code int} value.
+     * The driver converts this to a SQL {@code INTEGER} value when
      * it sends it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setInt(int, int)
@@ -1380,17 +1379,17 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameters to the given Java <code>int</code>
-     * value. The driver converts this to a SQL <code>INTEGER</code> value
+     * Sets the designated parameters to the given Java {@code int}
+     * value. The driver converts this to a SQL {@code INTEGER} value
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setInt(String, int)
      * @see #setInt(int, int)
@@ -1408,17 +1407,17 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameter to the given Java <code>int</code>
-     * value. The driver converts this to a SQL <code>INTEGER</code> value
+     * Sets the designated parameter to the given Java {@code int}
+     * value. The driver converts this to a SQL {@code INTEGER} value
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setInt(String, int)
      * @see #setInts(int[], int)
@@ -1450,19 +1449,19 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to the given Java <code>long</code>
-     * value. The driver converts this to a SQL <code>BIGINT</code> value
+     * Sets the named parameters to the given Java {@code long}
+     * value. The driver converts this to a SQL {@code BIGINT} value
      * when it sends it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setLongs(int[], long)
@@ -1477,17 +1476,17 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameters to the given Java <code>long</code>
-     * value. The driver converts this to a SQL <code>BIGINT</code> value
+     * Sets the designated parameters to the given Java {@code long}
+     * value. The driver converts this to a SQL {@code BIGINT} value
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setLong(String, long)
      * @see #setLong(int, long)
@@ -1505,17 +1504,17 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameter to the given Java <code>long</code>
-     * value. The driver converts this to a SQL <code>BIGINT</code> value
+     * Sets the designated parameter to the given Java {@code long}
+     * value. The driver converts this to a SQL {@code BIGINT} value
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setLong(String, long)
      * @see #setLongs(int[], long)
@@ -1547,19 +1546,19 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to the given Java <code>float</code>
-     * value. The driver converts this to a SQL <code>FLOAT</code> value
+     * Sets the named parameters to the given Java {@code float}
+     * value. The driver converts this to a SQL {@code FLOAT} value
      * when it sends it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setFloats(int[], float)
@@ -1574,17 +1573,17 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameters to the given Java <code>float</code>
-     * value. The driver converts this to a SQL <code>FLOAT</code> value
+     * Sets the designated parameters to the given Java {@code float}
+     * value. The driver converts this to a SQL {@code FLOAT} value
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setFloat(String, float)
      * @see #setFloat(int, float)
@@ -1602,17 +1601,17 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameter to the given Java <code>float</code>
-     * value. The driver converts this to a SQL <code>FLOAT</code> value
+     * Sets the designated parameter to the given Java {@code float}
+     * value. The driver converts this to a SQL {@code FLOAT} value
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setFloat(String, float)
      * @see #setFloats(int[], float)
@@ -1645,19 +1644,19 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the named parameters to the given
-     * <code>java.math.BigDecimal</code> value. The driver converts this
-     * to a SQL <code>NUMERIC</code> value when it sends it to the
+     * {@code java.math.BigDecimal} value. The driver converts this
+     * to a SQL {@code NUMERIC} value when it sends it to the
      * database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setBigDecimal(int, BigDecimal)
@@ -1673,17 +1672,17 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameters to the given
-     * <code>java.math.BigDecimal</code> value. The driver converts this
-     * to a SQL <code>NUMERIC</code> value when it sends it to the
+     * {@code java.math.BigDecimal} value. The driver converts this
+     * to a SQL {@code NUMERIC} value when it sends it to the
      * database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setBigDecimal(String, BigDecimal)
      * @see #setBigDecimal(int, BigDecimal)
@@ -1702,17 +1701,17 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameter to the given
-     * <code>java.math.BigDecimal</code> value. The driver converts this
-     * to a SQL <code>NUMERIC</code> value when it sends it to the
+     * {@code java.math.BigDecimal} value. The driver converts this
+     * to a SQL {@code NUMERIC} value when it sends it to the
      * database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setBigDecimal(String, BigDecimal)
      * @see #setBigDecimals(int[], BigDecimal)
@@ -1744,21 +1743,21 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to the given Java <code>String</code>
-     * value. The driver converts this to a SQL <code>VARCHAR</code> or
-     * <code>LONGVARCHAR</code> value (depending on the argument's size
-     * relative to the driver's limits on <code>VARCHAR</code> values)
+     * Sets the named parameters to the given Java {@code String}
+     * value. The driver converts this to a SQL {@code VARCHAR} or
+     * {@code LONGVARCHAR} value (depending on the argument's size
+     * relative to the driver's limits on {@code VARCHAR} values)
      * when it sends it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setString(int, String)
@@ -1774,18 +1773,18 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameters to the given Java
-     * <code>String</code> value. The driver converts this to a SQL
-     * <code>VARCHAR</code> or <code>LONGVARCHAR</code> value (depending
+     * {@code String} value. The driver converts this to a SQL
+     * {@code VARCHAR} or {@code LONGVARCHAR} value (depending
      * on the argument's size relative to the driver's limits on
-     * <code>VARCHAR</code> values) when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * {@code VARCHAR} values) when it sends it to the database.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setString(String, String)
      * @see #setString(int, String)
@@ -1803,19 +1802,19 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameter to the given Java <code>String</code>
-     * value. The driver converts this to a SQL <code>VARCHAR</code> or
-     * <code>LONGVARCHAR</code> value (depending on the argument's size
-     * relative to the driver's limits on <code>VARCHAR</code> values)
+     * Sets the designated parameter to the given Java {@code String}
+     * value. The driver converts this to a SQL {@code VARCHAR} or
+     * {@code LONGVARCHAR} value (depending on the argument's size
+     * relative to the driver's limits on {@code VARCHAR} values)
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setString(String, String)
      * @see #setStrings(int[], String)
@@ -1848,20 +1847,20 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the named parameters to the given Java array of bytes. The
-     * driver converts this to a SQL <code>VARBINARY</code> or
-     * <code>LONGVARBINARY</code> (depending on the argument's size
-     * relative to the driver's limits on <code>VARBINARY</code> values)
+     * driver converts this to a SQL {@code VARBINARY} or
+     * {@code LONGVARBINARY} (depending on the argument's size
+     * relative to the driver's limits on {@code VARBINARY} values)
      * when it sends it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setBytes(int[], byte[])
@@ -1877,18 +1876,18 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameters to the given Java array of bytes.
-     * The driver converts this to a SQL <code>VARBINARY</code> or
-     * <code>LONGVARBINARY</code> (depending on the argument's size
-     * relative to the driver's limits on <code>VARBINARY</code> values)
+     * The driver converts this to a SQL {@code VARBINARY} or
+     * {@code LONGVARBINARY} (depending on the argument's size
+     * relative to the driver's limits on {@code VARBINARY} values)
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setBytes(String, byte[])
      * @see #setBytes(int, byte[])
@@ -1907,18 +1906,18 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameter to the given Java array of bytes. The
-     * driver converts this to a SQL <code>VARBINARY</code> or
-     * <code>LONGVARBINARY</code> (depending on the argument's size
-     * relative to the driver's limits on <code>VARBINARY</code> values)
+     * driver converts this to a SQL {@code VARBINARY} or
+     * {@code LONGVARBINARY} (depending on the argument's size
+     * relative to the driver's limits on {@code VARBINARY} values)
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setBytes(String, byte[])
      * @see #setBytes(int[], byte[])
@@ -1952,18 +1951,18 @@ public class DbPreparedStatement extends DbStatement {
     /**
      * Sets the value of the named parameters with the given object. The
      * second argument must be an object type; for integral values, the
-     * <code>java.lang</code> equivalent objects should be used.
+     * {@code java.lang} equivalent objects should be used.
      * <p>The given Java object will be converted to the given
      * targetSqlType before being sent to the database.
      * <p>If the object has a custom mapping (is of a class implementing
-     * the interface <code>SQLData</code>), the JDBC driver should call
-     * the method <code>SQLData.writeSQL</code> to write it to the SQL
+     * the interface {@code SQLData}), the JDBC driver should call
+     * the method {@code SQLData.writeSQL} to write it to the SQL
      * data stream. If, on the other hand, the object is of a class
-     * implementing <code>Ref</code>, <code>Blob</code>, <code>Clob</code>,
-     * <code>Struct</code>, or <code>Array</code>, the driver should pass
+     * implementing {@code Ref}, {@code Blob}, {@code Clob},
+     * {@code Struct}, or {@code Array}, the driver should pass
      * it to the database as a value of the corresponding SQL type.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      * <p>Note that this method may be used to pass database-specific
      * abstract data types.
      *
@@ -1975,11 +1974,11 @@ public class DbPreparedStatement extends DbStatement {
      * @param scale         for java.sql.Types.DECIMAL or java.sql.Types.NUMERIC
      *                      types, this is the number of digits after the decimal point. For
      *                      all other types, this value will be ignored.
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see java.sql.Types
@@ -1997,17 +1996,17 @@ public class DbPreparedStatement extends DbStatement {
     /**
      * Sets the value of the designated parameters with the given object.
      * The second argument must be an object type; for integral values,
-     * the <code>java.lang</code> equivalent objects should be used.
+     * the {@code java.lang} equivalent objects should be used.
      * <p>The given Java object will be converted to the given
      * targetSqlType before being sent to the database.
      * <p>If the object has a custom mapping (is of a class implementing
-     * the interface <code>SQLData</code>), the JDBC driver should call
-     * the method <code>SQLData.writeSQL</code> to write it to the SQL
+     * the interface {@code SQLData}), the JDBC driver should call
+     * the method {@code SQLData.writeSQL} to write it to the SQL
      * data stream. If, on the other hand, the object is of a class
-     * implementing <code>Ref</code>, <code>Blob</code>, <code>Clob</code>,
-     * <code>Struct</code>, or <code>Array</code>, the driver should pass
+     * implementing {@code Ref}, {@code Blob}, {@code Clob},
+     * {@code Struct}, or {@code Array}, the driver should pass
      * it to the database as a value of the corresponding SQL type.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      * <p>Note that this method may be used to pass database-specific
@@ -2022,7 +2021,7 @@ public class DbPreparedStatement extends DbStatement {
      * @param scale            for java.sql.Types.DECIMAL or java.sql.Types.NUMERIC
      *                         types, this is the number of digits after the decimal point. For
      *                         all other types, this value will be ignored.
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see java.sql.Types
      * @see #setObject(String, Object, int, int)
@@ -2043,17 +2042,17 @@ public class DbPreparedStatement extends DbStatement {
     /**
      * Sets the value of the designated parameter with the given object.
      * The second argument must be an object type; for integral values,
-     * the <code>java.lang</code> equivalent objects should be used.
+     * the {@code java.lang} equivalent objects should be used.
      * <p>The given Java object will be converted to the given
      * targetSqlType before being sent to the database.
      * <p>If the object has a custom mapping (is of a class implementing
-     * the interface <code>SQLData</code>), the JDBC driver should call
-     * the method <code>SQLData.writeSQL</code> to write it to the SQL
+     * the interface {@code SQLData}), the JDBC driver should call
+     * the method {@code SQLData.writeSQL} to write it to the SQL
      * data stream. If, on the other hand, the object is of a class
-     * implementing <code>Ref</code>, <code>Blob</code>, <code>Clob</code>,
-     * <code>Struct</code>, or <code>Array</code>, the driver should pass
+     * implementing {@code Ref}, {@code Blob}, {@code Clob},
+     * {@code Struct}, or {@code Array}, the driver should pass
      * it to the database as a value of the corresponding SQL type.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      * <p>Note that this method may be used to pass database-specific
@@ -2068,7 +2067,7 @@ public class DbPreparedStatement extends DbStatement {
      * @param scale          for java.sql.Types.DECIMAL or java.sql.Types.NUMERIC
      *                       types, this is the number of digits after the decimal point. For
      *                       all other types, this value will be ignored.
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see java.sql.Types
      * @see #setObject(String, Object, int, int)
@@ -2101,20 +2100,20 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the value of the named parameters with the given object. This
-     * method is like the method <code>setObject</code> above, except that
+     * method is like the method {@code setObject} above, except that
      * it assumes a scale of zero.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the object containing the input parameter value
      * @param targetSqlType the SQL type (as defined in java.sql.Types) to
      *                      be sent to the database
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see java.sql.Types
@@ -2131,9 +2130,9 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the value of the designated parameters with the given object.
-     * This method is like the method <code>setObject</code> above, except
+     * This method is like the method {@code setObject} above, except
      * that it assumes a scale of zero.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
@@ -2142,7 +2141,7 @@ public class DbPreparedStatement extends DbStatement {
      * @param x                the object containing the input parameter value
      * @param targetSqlType    the SQL type (as defined in java.sql.Types) to
      *                         be sent to the database
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see java.sql.Types
      * @see #setObject(String, Object, int)
@@ -2162,9 +2161,9 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the value of the designated parameter with the given object.
-     * This method is like the method <code>setObject</code> above, except
+     * This method is like the method {@code setObject} above, except
      * that it assumes a scale of zero.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
@@ -2173,7 +2172,7 @@ public class DbPreparedStatement extends DbStatement {
      * @param x              the object containing the input parameter value
      * @param targetSqlType  the SQL type (as defined in java.sql.Types) to
      *                       be sent to the database
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see java.sql.Types
      * @see #setObject(String, Object, int)
@@ -2204,19 +2203,19 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to the given <code>java.sql.Time</code>
-     * value. The driver converts this to a SQL <code>TIME</code> value
+     * Sets the named parameters to the given {@code java.sql.Time}
+     * value. The driver converts this to a SQL {@code TIME} value
      * when it sends it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setTimes(int[], Time)
@@ -2232,16 +2231,16 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameters to the given
-     * <code>java.sql.Time</code> value. The driver converts this to a SQL
-     * <code>TIME</code> value when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * {@code java.sql.Time} value. The driver converts this to a SQL
+     * {@code TIME} value when it sends it to the database.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setTime(String, Time)
      * @see #setTime(int, Time)
@@ -2260,16 +2259,16 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameter to the given
-     * <code>java.sql.Time</code> value. The driver converts this to a SQL
-     * <code>TIME</code> value when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * {@code java.sql.Time} value. The driver converts this to a SQL
+     * {@code TIME} value when it sends it to the database.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setTime(String, Time)
      * @see #setTimes(int[], Time)
@@ -2301,27 +2300,27 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to the given <code>java.sql.Time</code>
-     * value, using the given <code>Calendar</code> object. The driver
-     * uses the <code>Calendar</code> object to construct an SQL
-     * <code>TIME</code> value, which the driver then sends to the
-     * database. With a <code>Calendar</code> object, the driver can
+     * Sets the named parameters to the given {@code java.sql.Time}
+     * value, using the given {@code Calendar} object. The driver
+     * uses the {@code Calendar} object to construct an SQL
+     * {@code TIME} value, which the driver then sends to the
+     * database. With a {@code Calendar} object, the driver can
      * calculate the time taking into account a custom timezone. If no
-     * <code>Calendar</code> object is specified, the driver uses the
+     * {@code Calendar} object is specified, the driver uses the
      * default timezone, which is that of the virtual machine running the
      * application.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @param cal           the <code>Calendar</code> object the driver will use to
+     * @param cal           the {@code Calendar} object the driver will use to
      *                      construct the time
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setTimes(int[], Time, Calendar)
@@ -2337,24 +2336,24 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameters to the given
-     * <code>java.sql.Time</code> value, using the given
-     * <code>Calendar</code> object. The driver uses the
-     * <code>Calendar</code> object to construct an SQL <code>TIME</code>
+     * {@code java.sql.Time} value, using the given
+     * {@code Calendar} object. The driver uses the
+     * {@code Calendar} object to construct an SQL {@code TIME}
      * value, which the driver then sends to the database. With a
-     * <code>Calendar</code> object, the driver can calculate the time
-     * taking into account a custom timezone. If no <code>Calendar</code>
+     * {@code Calendar} object, the driver can calculate the time
+     * taking into account a custom timezone. If no {@code Calendar}
      * object is specified, the driver uses the default timezone, which is
      * that of the virtual machine running the application.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @param cal              the <code>Calendar</code> object the driver will use to
+     * @param cal              the {@code Calendar} object the driver will use to
      *                         construct the time
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setTime(String, Time, Calendar)
      * @see #setTime(int, Time, Calendar)
@@ -2373,24 +2372,24 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameter to the given
-     * <code>java.sql.Time</code> value, using the given
-     * <code>Calendar</code> object. The driver uses the
-     * <code>Calendar</code> object to construct an SQL <code>TIME</code>
+     * {@code java.sql.Time} value, using the given
+     * {@code Calendar} object. The driver uses the
+     * {@code Calendar} object to construct an SQL {@code TIME}
      * value, which the driver then sends to the database. With a
-     * <code>Calendar</code> object, the driver can calculate the time
-     * taking into account a custom timezone. If no <code>Calendar</code>
+     * {@code Calendar} object, the driver can calculate the time
+     * taking into account a custom timezone. If no {@code Calendar}
      * object is specified, the driver uses the default timezone, which is
      * that of the virtual machine running the application.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @param cal            the <code>Calendar</code> object the driver will use to
+     * @param cal            the {@code Calendar} object the driver will use to
      *                       construct the time
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setTime(String, Time, Calendar)
      * @see #setTimes(int[], Time, Calendar)
@@ -2422,19 +2421,19 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the named parameters to the given
-     * <code>java.sql.Timestamp</code> value. The driver converts this to
-     * a SQL <code>TIMESTAMP</code> value when it sends it to the
+     * {@code java.sql.Timestamp} value. The driver converts this to
+     * a SQL {@code TIMESTAMP} value when it sends it to the
      * database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setTimestamps(int[], Timestamp)
@@ -2450,17 +2449,17 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameters to the given
-     * <code>java.sql.Timestamp</code> value. The driver converts this to
-     * a SQL <code>TIMESTAMP</code> value when it sends it to the
+     * {@code java.sql.Timestamp} value. The driver converts this to
+     * a SQL {@code TIMESTAMP} value when it sends it to the
      * database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setTimestamp(String, Timestamp)
      * @see #setTimestamp(int, Timestamp)
@@ -2479,17 +2478,17 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameter to the given
-     * <code>java.sql.Timestamp</code> value. The driver converts this to
-     * a SQL <code>TIMESTAMP</code> value when it sends it to the
+     * {@code java.sql.Timestamp} value. The driver converts this to
+     * a SQL {@code TIMESTAMP} value when it sends it to the
      * database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setTimestamp(String, Timestamp)
      * @see #setTimestamps(int[], Timestamp)
@@ -2522,27 +2521,27 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the named parameters to the given
-     * <code>java.sql.Timestamp</code> value, using the given
-     * <code>Calendar</code> object. The driver uses the
-     * <code>Calendar</code> object to construct an SQL
-     * <code>TIMESTAMP</code> value, which the driver then sends to the
-     * database. With a <code>Calendar</code> object, the driver can
+     * {@code java.sql.Timestamp} value, using the given
+     * {@code Calendar} object. The driver uses the
+     * {@code Calendar} object to construct an SQL
+     * {@code TIMESTAMP} value, which the driver then sends to the
+     * database. With a {@code Calendar} object, the driver can
      * calculate the timestamp taking into account a custom timezone. If
-     * no <code>Calendar</code> object is specified, the driver uses the
+     * no {@code Calendar} object is specified, the driver uses the
      * default timezone, which is that of the virtual machine running the
      * application.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
      * @param x             the parameter value
-     * @param cal           the <code>Calendar</code> object the driver will use to
+     * @param cal           the {@code Calendar} object the driver will use to
      *                      construct the timestamp
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setTimestamps(int[], Timestamp, Calendar)
@@ -2558,25 +2557,25 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameters to the given
-     * <code>java.sql.Timestamp</code> value, using the given
-     * <code>Calendar</code> object. The driver uses the
-     * <code>Calendar</code> object to construct an SQL
-     * <code>TIMESTAMP</code> value, which the driver then sends to the
-     * database. With a <code>Calendar</code> object, the driver can
+     * {@code java.sql.Timestamp} value, using the given
+     * {@code Calendar} object. The driver uses the
+     * {@code Calendar} object to construct an SQL
+     * {@code TIMESTAMP} value, which the driver then sends to the
+     * database. With a {@code Calendar} object, the driver can
      * calculate the timestamp taking into account a custom timezone. If
-     * no <code>Calendar</code> object is specified, the driver uses the
+     * no {@code Calendar} object is specified, the driver uses the
      * default timezone, which is that of the virtual machine running the
      * application.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the parameter value
-     * @param cal              the <code>Calendar</code> object the driver will use to
+     * @param cal              the {@code Calendar} object the driver will use to
      *                         construct the timestamp
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setTimestamp(String, Timestamp, Calendar)
      * @see #setTimestamp(int, Timestamp, Calendar)
@@ -2595,25 +2594,25 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameter to the given
-     * <code>java.sql.Timestamp</code> value, using the given
-     * <code>Calendar</code> object. The driver uses the
-     * <code>Calendar</code> object to construct an SQL
-     * <code>TIMESTAMP</code> value, which the driver then sends to the
-     * database. With a <code>Calendar</code> object, the driver can
+     * {@code java.sql.Timestamp} value, using the given
+     * {@code Calendar} object. The driver uses the
+     * {@code Calendar} object to construct an SQL
+     * {@code TIMESTAMP} value, which the driver then sends to the
+     * database. With a {@code Calendar} object, the driver can
      * calculate the timestamp taking into account a custom timezone. If
-     * no <code>Calendar</code> object is specified, the driver uses the
+     * no {@code Calendar} object is specified, the driver uses the
      * default timezone, which is that of the virtual machine running the
      * application.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the parameter value
-     * @param cal            the <code>Calendar</code> object the driver will use to
+     * @param cal            the {@code Calendar} object the driver will use to
      *                       construct the timestamp
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setTimestamp(String, Timestamp, Calendar)
      * @see #setTimestamps(int[], Timestamp, Calendar)
@@ -2646,13 +2645,13 @@ public class DbPreparedStatement extends DbStatement {
     /**
      * Sets the named parameter to the given input stream, which will have
      * the specified number of bytes. When a very large ASCII value is
-     * input to a <code>LONGVARCHAR</code> parameter, it may be more
-     * practical to send it via a <code>java.io.InputStream</code>. Data
+     * input to a {@code LONGVARCHAR} parameter, it may be more
+     * practical to send it via a {@code java.io.InputStream}. Data
      * will be read from the stream as needed until end-of-file is
      * reached. The JDBC driver will do any necessary conversion from
      * ASCII to the database char format.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      * <p><b>Note:</b> This stream object can either be a standard Java
      * stream object or your own subclass that implements the standard
      * interface.
@@ -2662,11 +2661,11 @@ public class DbPreparedStatement extends DbStatement {
      * @param x             the Java input stream that contains the ASCII parameter
      *                      value
      * @param length        the number of bytes in the stream
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setAsciiStream(int, InputStream, int)
@@ -2682,12 +2681,12 @@ public class DbPreparedStatement extends DbStatement {
     /**
      * Sets the designated parameter to the given input stream, which will
      * have the specified number of bytes. When a very large ASCII value
-     * is input to a <code>LONGVARCHAR</code> parameter, it may be more
-     * practical to send it via a <code>java.io.InputStream</code>. Data
+     * is input to a {@code LONGVARCHAR} parameter, it may be more
+     * practical to send it via a {@code java.io.InputStream}. Data
      * will be read from the stream as needed until end-of-file is
      * reached. The JDBC driver will do any necessary conversion from
      * ASCII to the database char format.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      * <p><b>Note:</b> This stream object can either be a standard Java
@@ -2699,7 +2698,7 @@ public class DbPreparedStatement extends DbStatement {
      * @param x              the Java input stream that contains the ASCII parameter
      *                       value
      * @param length         the number of bytes in the stream
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setAsciiStream(String, InputStream, int)
      * @since 1.0
@@ -2729,29 +2728,29 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameter to the given <code>Reader</code> object,
+     * Sets the named parameter to the given {@code Reader} object,
      * which is the given number of characters long. When a very large
-     * UNICODE value is input to a <code>LONGVARCHAR</code> parameter, it
-     * may be more practical to send it via a <code>java.io.Reader</code>
+     * UNICODE value is input to a {@code LONGVARCHAR} parameter, it
+     * may be more practical to send it via a {@code java.io.Reader}
      * object. The data will be read from the stream as needed until
      * end-of-file is reached. The JDBC driver will do any necessary
      * conversion from UNICODE to the database char format.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      * <p><b>Note:</b> This stream object can either be a standard Java
      * stream object or your own subclass that implements the standard
      * interface.
      *
      * @param parameterName the name of the parameter that will be set
      *                      (the first parameter with the name will be used)
-     * @param x             the <code>java.io.Reader</code> object that contains
+     * @param x             the {@code java.io.Reader} object that contains
      *                      the Unicode data
      * @param length        the number of characters in the stream
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setCharacterStream(int, Reader, int)
@@ -2765,15 +2764,15 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameter to the given <code>Reader</code>
+     * Sets the designated parameter to the given {@code Reader}
      * object, which is the given number of characters long. When a very
-     * large UNICODE value is input to a <code>LONGVARCHAR</code>
+     * large UNICODE value is input to a {@code LONGVARCHAR}
      * parameter, it may be more practical to send it via a
-     * <code>java.io.Reader</code> object. The data will be read from the
+     * {@code java.io.Reader} object. The data will be read from the
      * stream as needed until end-of-file is reached. The JDBC driver will
      * do any necessary conversion from UNICODE to the database char
      * format.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      * <p><b>Note:</b> This stream object can either be a standard Java
@@ -2782,10 +2781,10 @@ public class DbPreparedStatement extends DbStatement {
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
-     * @param x              the <code>java.io.Reader</code> object that contains
+     * @param x              the {@code java.io.Reader} object that contains
      *                       the Unicode data
      * @param length         the number of characters in the stream
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setCharacterStream(String, Reader, int)
      * @since 1.0
@@ -2817,12 +2816,12 @@ public class DbPreparedStatement extends DbStatement {
     /**
      * Sets the named parameter to the given input stream, which will have
      * the specified number of bytes. When a very large binary value is
-     * input to a <code>LONGVARBINARY</code> parameter, it may be more
-     * practical to send it via a <code>java.io.InputStream</code> object.
+     * input to a {@code LONGVARBINARY} parameter, it may be more
+     * practical to send it via a {@code java.io.InputStream} object.
      * The data will be read from the stream as needed until end-of-file
      * is reached.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      * <p><b>Note:</b> This stream object can either be a standard Java
      * stream object or your own subclass that implements the standard
      * interface.
@@ -2832,11 +2831,11 @@ public class DbPreparedStatement extends DbStatement {
      * @param x             the java input stream which contains the binary parameter
      *                      value
      * @param length        the number of bytes in the stream
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setBinaryStream(int, InputStream, int)
@@ -2852,11 +2851,11 @@ public class DbPreparedStatement extends DbStatement {
     /**
      * Sets the designated parameter to the given input stream, which will
      * have the specified number of bytes. When a very large binary value
-     * is input to a <code>LONGVARBINARY</code> parameter, it may be more
-     * practical to send it via a <code>java.io.InputStream</code> object.
+     * is input to a {@code LONGVARBINARY} parameter, it may be more
+     * practical to send it via a {@code java.io.InputStream} object.
      * The data will be read from the stream as needed until end-of-file
      * is reached.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      * <p><b>Note:</b> This stream object can either be a standard Java
@@ -2868,7 +2867,7 @@ public class DbPreparedStatement extends DbStatement {
      * @param x              the java input stream which contains the binary parameter
      *                       value
      * @param length         the number of bytes in the stream
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setBinaryStream(String, InputStream, int)
      * @since 1.0
@@ -2898,20 +2897,20 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to the given <code>Array</code> object.
-     * The driver converts this to a SQL <code>ARRAY</code> value when it
+     * Sets the named parameters to the given {@code Array} object.
+     * The driver converts this to a SQL {@code ARRAY} value when it
      * sends it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameter that will be set
-     * @param x             an <code>Array</code> object that maps an SQL
-     *                      <code>ARRAY</code> value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @param x             an {@code Array} object that maps an SQL
+     *                      {@code ARRAY} value
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setArray(int, Array)
@@ -2925,18 +2924,18 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameter to the given <code>Array</code>
-     * object. The driver converts this to a SQL <code>ARRAY</code> value
+     * Sets the designated parameter to the given {@code Array}
+     * object. The driver converts this to a SQL {@code ARRAY} value
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
-     * @param x              an <code>Array</code> object that maps an SQL
-     *                       <code>ARRAY</code> value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @param x              an {@code Array} object that maps an SQL
+     *                       {@code ARRAY} value
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setArray(String, Array)
      * @since 1.0
@@ -2967,36 +2966,36 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the value of the named parameters using the given object. The
-     * second parameter must be of type <code>Object</code>; therefore,
-     * the <code>java.lang</code> equivalent objects should be used for
+     * second parameter must be of type {@code Object}; therefore,
+     * the {@code java.lang} equivalent objects should be used for
      * built-in types.
      * <p>The JDBC specification specifies a standard mapping from Java
-     * <code>Object</code> types to SQL types. The given argument will be
+     * {@code Object} types to SQL types. The given argument will be
      * converted to the corresponding SQL type before being sent to the
      * database.
      * <p>Note that this method may be used to pass datatabase-specific
      * abstract data types, by using a driver-specific Java type.
      * <p>If the object is of a class implementing the interface
-     * <code>SQLData</code>, the JDBC driver should call the method
-     * <code>SQLData.writeSQL</code> to write it to the SQL data stream.
+     * {@code SQLData}, the JDBC driver should call the method
+     * {@code SQLData.writeSQL} to write it to the SQL data stream.
      * If, on the other hand, the object is of a class implementing
-     * <code>Ref</code>, <code>Blob</code>, <code>Clob</code>,
-     * <code>Struct</code>, or <code>Array</code>, the driver should pass
+     * {@code Ref}, {@code Blob}, {@code Clob},
+     * {@code Struct}, or {@code Array}, the driver should pass
      * it to the database as a value of the corresponding SQL type.
      * <p>This method throws an exception if there is an ambiguity, for
      * example, if the object is of a class implementing more than one of
      * the interfaces named above.
      * <p>If such an ambiquity exception is thrown or if a database access
-     * error occurs, this <code>DbPreparedStatement</code> instance is
+     * error occurs, this {@code DbPreparedStatement} instance is
      * automatically closed.
      *
      * @param parameterName the name of the parameter that will be set
      * @param x             the object containing the input parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs, or if the type of the given object is
      *                           ambiguous.
@@ -3013,33 +3012,33 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the value of the designated parameters using the given object.
-     * The second parameter must be of type <code>Object</code>;
-     * therefore, the <code>java.lang</code> equivalent objects should be
+     * The second parameter must be of type {@code Object};
+     * therefore, the {@code java.lang} equivalent objects should be
      * used for built-in types.
      * <p>The JDBC specification specifies a standard mapping from Java
-     * <code>Object</code> types to SQL types. The given argument will be
+     * {@code Object} types to SQL types. The given argument will be
      * converted to the corresponding SQL type before being sent to the
      * database.
      * <p>Note that this method may be used to pass datatabase-specific
      * abstract data types, by using a driver-specific Java type.
      * <p>If the object is of a class implementing the interface
-     * <code>SQLData</code>, the JDBC driver should call the method
-     * <code>SQLData.writeSQL</code> to write it to the SQL data stream.
+     * {@code SQLData}, the JDBC driver should call the method
+     * {@code SQLData.writeSQL} to write it to the SQL data stream.
      * If, on the other hand, the object is of a class implementing
-     * <code>Ref</code>, <code>Blob</code>, <code>Clob</code>,
-     * <code>Struct</code>, or <code>Array</code>, the driver should pass
+     * {@code Ref}, {@code Blob}, {@code Clob},
+     * {@code Struct}, or {@code Array}, the driver should pass
      * it to the database as a value of the corresponding SQL type.
      * <p>This method throws an exception if there is an ambiguity, for
      * example, if the object is of a class implementing more than one of
      * the interfaces named above.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
      * @param x                the object containing the input parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs or
      *                           the type of the given object is ambiguous
      * @see #setObject(String, Object)
@@ -3059,33 +3058,33 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the value of the designated parameter using the given object.
-     * The second parameter must be of type <code>Object</code>;
-     * therefore, the <code>java.lang</code> equivalent objects should be
+     * The second parameter must be of type {@code Object};
+     * therefore, the {@code java.lang} equivalent objects should be
      * used for built-in types.
      * <p>The JDBC specification specifies a standard mapping from Java
-     * <code>Object</code> types to SQL types. The given argument will be
+     * {@code Object} types to SQL types. The given argument will be
      * converted to the corresponding SQL type before being sent to the
      * database.
      * <p>Note that this method may be used to pass datatabase-specific
      * abstract data types, by using a driver-specific Java type.
      * <p>If the object is of a class implementing the interface
-     * <code>SQLData</code>, the JDBC driver should call the method
-     * <code>SQLData.writeSQL</code> to write it to the SQL data stream.
+     * {@code SQLData}, the JDBC driver should call the method
+     * {@code SQLData.writeSQL} to write it to the SQL data stream.
      * If, on the other hand, the object is of a class implementing
-     * <code>Ref</code>, <code>Blob</code>, <code>Clob</code>,
-     * <code>Struct</code>, or <code>Array</code>, the driver should pass
+     * {@code Ref}, {@code Blob}, {@code Clob},
+     * {@code Struct}, or {@code Array}, the driver should pass
      * it to the database as a value of the corresponding SQL type.
      * <p>This method throws an exception if there is an ambiguity, for
      * example, if the object is of a class implementing more than one of
      * the interfaces named above.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
      * @param x              the object containing the input parameter value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs or
      *                           the type of the given object is ambiguous
      * @see #setObject(String, Object)
@@ -3119,20 +3118,20 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the named parameter to the given
-     * <code>REF(&lt;structured-type&gt;)</code> value. The driver
-     * converts this to a SQL <code>REF</code> value when it sends it to
+     * {@code REF(&lt;structured-type&gt;)} value. The driver
+     * converts this to a SQL {@code REF} value when it sends it to
      * the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameter that will be set
      *                      (the first parameter with the name will be used)
-     * @param x             an SQL <code>REF</code> value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @param x             an SQL {@code REF} value
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setRef(int, Ref)
@@ -3147,17 +3146,17 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameter to the given
-     * <code>REF(&lt;structured-type&gt;)</code> value. The driver
-     * converts this to a SQL <code>REF</code> value when it sends it to
+     * {@code REF(&lt;structured-type&gt;)} value. The driver
+     * converts this to a SQL {@code REF} value when it sends it to
      * the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
-     * @param x              an SQL <code>REF</code> value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @param x              an SQL {@code REF} value
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setRef(String, Ref)
      * @since 1.0
@@ -3187,21 +3186,21 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameter to the given <code>Blob</code> object. The
-     * driver converts this to a SQL <code>BLOB</code> value when it sends
+     * Sets the named parameter to the given {@code Blob} object. The
+     * driver converts this to a SQL {@code BLOB} value when it sends
      * it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameter that will be set
      *                      (the first parameter with the name will be used)
-     * @param x             a <code>Blob</code> object that maps an SQL
-     *                      <code>BLOB</code> value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @param x             a {@code Blob} object that maps an SQL
+     *                      {@code BLOB} value
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setBlob(String, Blob)
@@ -3215,18 +3214,18 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameter to the given <code>Blob</code>
-     * object. The driver converts this to a SQL <code>BLOB</code> value
+     * Sets the designated parameter to the given {@code Blob}
+     * object. The driver converts this to a SQL {@code BLOB} value
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
-     * @param x              a <code>Blob</code> object that maps an SQL
-     *                       <code>BLOB</code> value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @param x              a {@code Blob} object that maps an SQL
+     *                       {@code BLOB} value
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setBlob(String, Blob)
      * @since 1.0
@@ -3256,22 +3255,22 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameter to the given <code>Clob</code> object. The
-     * driver converts this to a SQL <code>CLOB</code> value when it sends
+     * Sets the named parameter to the given {@code Clob} object. The
+     * driver converts this to a SQL {@code CLOB} value when it sends
      * it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterName the name of the parameter that will be set
      *                      (the first parameter with the name will be used)
-     * @param x             a <code>Clob</code> object that maps an SQL
-     *                      <code>CLOB</code> value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @param x             a {@code Clob} object that maps an SQL
+     *                      {@code CLOB} value
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setClob(int, Clob)
@@ -3285,18 +3284,18 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the designated parameter to the given <code>Clob</code>
-     * object. The driver converts this to a SQL <code>CLOB</code> value
+     * Sets the designated parameter to the given {@code Clob}
+     * object. The driver converts this to a SQL {@code CLOB} value
      * when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2,
      *                       ...
-     * @param x              a <code>Clob</code> object that maps an SQL
-     *                       <code>CLOB</code> value
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @param x              a {@code Clob} object that maps an SQL
+     *                       {@code CLOB} value
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setClob(String, Clob)
      * @since 1.0
@@ -3326,19 +3325,19 @@ public class DbPreparedStatement extends DbStatement {
     }
 
     /**
-     * Sets the named parameters to the given <code>java.net.URL</code>
-     * value. The driver converts this to a SQL <code>DATALINK</code>
+     * Sets the named parameters to the given {@code java.net.URL}
+     * value. The driver converts this to a SQL {@code DATALINK}
      * value when it sends it to the database.
      * <p>If a database access error occurs, this
-     * <code>DbPreparedStatement</code> instance is automatically closed.
+     * {@code DbPreparedStatement} instance is automatically closed.
      *
      * @param parameterName the name of the parameters that have to be set
-     * @param x             the <code>java.net.URL</code> object to be set
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @param x             the {@code java.net.URL} object to be set
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException when this
-     *                           <code>DbPrepareStatement</code> instance wasn't defined by a
-     *                           <code>ParametrizedQuery</code> but by a regular sql string, or if
-     *                           the <code>ParametrizedQuery</code> doesn't contain any parameters,
+     *                           {@code DbPrepareStatement} instance wasn't defined by a
+     *                           {@code ParametrizedQuery} but by a regular sql string, or if
+     *                           the {@code ParametrizedQuery} doesn't contain any parameters,
      *                           or if no parameters with this name could be found, or if a database
      *                           access error occurs.
      * @see #setURLs(int[], URL)
@@ -3354,16 +3353,16 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameters to the given
-     * <code>java.net.URL</code> value. The driver converts this to a SQL
-     * <code>DATALINK</code> value when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * {@code java.net.URL} value. The driver converts this to a SQL
+     * {@code DATALINK} value when it sends it to the database.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndices the first parameter is 1, the second is 2,
      *                         ...
-     * @param x                the <code>java.net.URL</code> object to be set
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @param x                the {@code java.net.URL} object to be set
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setURL(String, URL)
      * @see #setURL(int, URL)
@@ -3382,15 +3381,15 @@ public class DbPreparedStatement extends DbStatement {
 
     /**
      * Sets the designated parameter to the given
-     * <code>java.net.URL</code> value. The driver converts this to a SQL
-     * <code>DATALINK</code> value when it sends it to the database.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * {@code java.net.URL} value. The driver converts this to a SQL
+     * {@code DATALINK} value when it sends it to the database.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
-     * @param x              the <code>java.net.URL</code> object to be set
-     * @return this <code>DbPreparedStatement</code> instance.
+     * @param x              the {@code java.net.URL} object to be set
+     * @return this {@code DbPreparedStatement} instance.
      * @throws DatabaseException if a database access error occurs
      * @see #setURL(String, URL)
      * @see #setURLs(int[], URL)
@@ -3427,8 +3426,8 @@ public class DbPreparedStatement extends DbStatement {
      * a statement. Setting a parameter value automatically clears its
      * previous value. However, in some cases it is useful to immediately
      * release the resources used by the current parameter values; this
-     * can be done by calling the method <code>clearParameters</code>.
-     * <p>If an exception is thrown, this <code>DbPreparedStatement</code>
+     * can be done by calling the method {@code clearParameters}.
+     * <p>If an exception is thrown, this {@code DbPreparedStatement}
      * is automatically closed and an ongoing transaction will be
      * automatically rolled back if it belongs to the executing thread.
      *

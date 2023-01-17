@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.sessionvalidators.exceptions;
@@ -12,23 +12,23 @@ public class SessionValidityCheckErrorException extends SessionValidatorExceptio
     @Serial private static final long serialVersionUID = 4277837804430634653L;
 
     private final String authId_;
-    private final String hostIp_;
+    private final String authData_;
 
-    public SessionValidityCheckErrorException(String authId, String hostIp) {
-        this(authId, hostIp, null);
+    public SessionValidityCheckErrorException(String authId, String authData) {
+        this(authId, authData, null);
     }
 
-    public SessionValidityCheckErrorException(String authId, String hostIp, Throwable cause) {
-        super("Unable to check the validity of the session with authid '" + authId + "' for hostip '" + hostIp + "'.", cause);
+    public SessionValidityCheckErrorException(String authId, String authData, Throwable cause) {
+        super("Unable to check the validity of the session with authid '" + authId + "' for auth data '" + authData + "'.", cause);
         authId_ = authId;
-        hostIp_ = hostIp;
+        authData_ = authData;
     }
 
     public String getAuthId() {
         return authId_;
     }
 
-    public String getHostIp() {
-        return hostIp_;
+    public String getAuthData() {
+        return authData_;
     }
 }

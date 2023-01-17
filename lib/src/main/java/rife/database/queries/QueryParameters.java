@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
@@ -54,7 +54,7 @@ public class QueryParameters implements Cloneable {
         if (type.isSingular()) {
             return value.equals(parameters_.get(type));
         } else {
-            List<String> list = (List<String>) parameters_.get(type);
+            var list = (List<String>) parameters_.get(type);
             if (null == list) {
                 return false;
             }
@@ -69,8 +69,8 @@ public class QueryParameters implements Cloneable {
             return null;
         }
 
-        HashSet<String> names = new HashSet<String>();
-        for (Map.Entry<QueryParameterType, Object> entry : parameters_.entrySet()) {
+        var names = new HashSet<String>();
+        for (var entry : parameters_.entrySet()) {
             if (entry.getKey().isSingular()) {
                 names.add((String) entry.getValue());
             } else {
@@ -88,9 +88,9 @@ public class QueryParameters implements Cloneable {
             if (parameters_ != null &&
                 parameters_.size() > 0) {
                 if (parameters_.containsKey(QueryParameterType.FIELD)) {
-                    combined_parameters = new ArrayList<String>();
+                    combined_parameters = new ArrayList<>();
 
-                    for (String parameter : (List<String>) parameters_.get(QueryParameterType.FIELD)) {
+                    for (var parameter : (List<String>) parameters_.get(QueryParameterType.FIELD)) {
                         // add the parameter to the combined list
                         combined_parameters.add(parameter);
                     }
@@ -98,10 +98,10 @@ public class QueryParameters implements Cloneable {
 
                 if (parameters_.containsKey(QueryParameterType.TABLE)) {
                     if (null == combined_parameters) {
-                        combined_parameters = new ArrayList<String>();
+                        combined_parameters = new ArrayList<>();
                     }
 
-                    for (String parameter : (List<String>) parameters_.get(QueryParameterType.TABLE)) {
+                    for (var parameter : (List<String>) parameters_.get(QueryParameterType.TABLE)) {
                         // add the parameter to the combined list
                         combined_parameters.add(parameter);
                     }
@@ -109,10 +109,10 @@ public class QueryParameters implements Cloneable {
 
                 if (parameters_.containsKey(QueryParameterType.WHERE)) {
                     if (null == combined_parameters) {
-                        combined_parameters = new ArrayList<String>();
+                        combined_parameters = new ArrayList<>();
                     }
 
-                    for (String parameter : (List<String>) parameters_.get(QueryParameterType.WHERE)) {
+                    for (var parameter : (List<String>) parameters_.get(QueryParameterType.WHERE)) {
                         // add the parameter to the combined list
                         combined_parameters.add(parameter);
                     }
@@ -120,10 +120,10 @@ public class QueryParameters implements Cloneable {
 
                 if (parameters_.containsKey(QueryParameterType.UNION)) {
                     if (null == combined_parameters) {
-                        combined_parameters = new ArrayList<String>();
+                        combined_parameters = new ArrayList<>();
                     }
 
-                    for (String parameter : (List<String>) parameters_.get(QueryParameterType.UNION)) {
+                    for (var parameter : (List<String>) parameters_.get(QueryParameterType.UNION)) {
                         // add the parameter to the combined list
                         combined_parameters.add(parameter);
                     }
@@ -134,44 +134,44 @@ public class QueryParameters implements Cloneable {
                     if (query_.isLimitBeforeOffset()) {
                         if (parameters_.containsKey(QueryParameterType.LIMIT)) {
                             if (null == combined_parameters) {
-                                combined_parameters = new ArrayList<String>();
+                                combined_parameters = new ArrayList<>();
                             }
 
                             // get the parameter value
-                            String value = (String) parameters_.get(QueryParameterType.LIMIT);
+                            var value = (String) parameters_.get(QueryParameterType.LIMIT);
                             // add the parameter to the combined list
                             combined_parameters.add(value);
                         }
 
                         if (parameters_.containsKey(QueryParameterType.OFFSET)) {
                             if (null == combined_parameters) {
-                                combined_parameters = new ArrayList<String>();
+                                combined_parameters = new ArrayList<>();
                             }
 
                             // get the parameter value
-                            String value = (String) parameters_.get(QueryParameterType.OFFSET);
+                            var value = (String) parameters_.get(QueryParameterType.OFFSET);
                             // add the parameter to the combined list
                             combined_parameters.add(value);
                         }
                     } else {
                         if (parameters_.containsKey(QueryParameterType.OFFSET)) {
                             if (null == combined_parameters) {
-                                combined_parameters = new ArrayList<String>();
+                                combined_parameters = new ArrayList<>();
                             }
 
                             // get the parameter value
-                            String value = (String) parameters_.get(QueryParameterType.OFFSET);
+                            var value = (String) parameters_.get(QueryParameterType.OFFSET);
                             // add the parameter to the combined list
                             combined_parameters.add(value);
                         }
 
                         if (parameters_.containsKey(QueryParameterType.LIMIT)) {
                             if (null == combined_parameters) {
-                                combined_parameters = new ArrayList<String>();
+                                combined_parameters = new ArrayList<>();
                             }
 
                             // get the parameter value
-                            String value = (String) parameters_.get(QueryParameterType.LIMIT);
+                            var value = (String) parameters_.get(QueryParameterType.LIMIT);
                             // add the parameter to the combined list
                             combined_parameters.add(value);
                         }
@@ -204,31 +204,31 @@ public class QueryParameters implements Cloneable {
             parameters_.size() > 0 &&
             virtualParameters != null &&
             virtualParameters.getNumberOfTypes() > 0) {
-            map = new HashMap<Integer, Integer>();
+            map = new HashMap<>();
 
-            int[] parameter_index = new int[]{1};
-            int[] real_index = new int[]{1};
+            var parameter_index = new int[]{1};
+            var real_index = new int[]{1};
 
             if (parameters_.containsKey(QueryParameterType.FIELD)) {
-                for (String parameter : (List<String>) parameters_.get(QueryParameterType.FIELD)) {
+                for (var parameter : (List<String>) parameters_.get(QueryParameterType.FIELD)) {
                     addVirtualIndexMapping(virtualParameters, map, parameter_index, real_index, QueryParameterType.FIELD, parameter);
                 }
             }
 
             if (parameters_.containsKey(QueryParameterType.TABLE)) {
-                for (String parameter : (List<String>) parameters_.get(QueryParameterType.TABLE)) {
+                for (var parameter : (List<String>) parameters_.get(QueryParameterType.TABLE)) {
                     addVirtualIndexMapping(virtualParameters, map, parameter_index, real_index, QueryParameterType.TABLE, parameter);
                 }
             }
 
             if (parameters_.containsKey(QueryParameterType.WHERE)) {
-                for (String parameter : (List<String>) parameters_.get(QueryParameterType.WHERE)) {
+                for (var parameter : (List<String>) parameters_.get(QueryParameterType.WHERE)) {
                     addVirtualIndexMapping(virtualParameters, map, parameter_index, real_index, QueryParameterType.WHERE, parameter);
                 }
             }
 
             if (parameters_.containsKey(QueryParameterType.UNION)) {
-                for (String parameter : (List<String>) parameters_.get(QueryParameterType.UNION)) {
+                for (var parameter : (List<String>) parameters_.get(QueryParameterType.UNION)) {
                     addVirtualIndexMapping(virtualParameters, map, parameter_index, real_index, QueryParameterType.UNION, parameter);
                 }
             }
@@ -237,22 +237,22 @@ public class QueryParameters implements Cloneable {
                 parameters_.containsKey(QueryParameterType.OFFSET)) {
                 if (query_.isLimitBeforeOffset()) {
                     if (parameters_.containsKey(QueryParameterType.LIMIT)) {
-                        String parameter = (String) parameters_.get(QueryParameterType.LIMIT);
+                        var parameter = (String) parameters_.get(QueryParameterType.LIMIT);
                         addVirtualIndexMapping(virtualParameters, map, parameter_index, real_index, QueryParameterType.LIMIT, parameter);
                     }
 
                     if (parameters_.containsKey(QueryParameterType.OFFSET)) {
-                        String parameter = (String) parameters_.get(QueryParameterType.OFFSET);
+                        var parameter = (String) parameters_.get(QueryParameterType.OFFSET);
                         addVirtualIndexMapping(virtualParameters, map, parameter_index, real_index, QueryParameterType.OFFSET, parameter);
                     }
                 } else {
                     if (parameters_.containsKey(QueryParameterType.OFFSET)) {
-                        String parameter = (String) parameters_.get(QueryParameterType.OFFSET);
+                        var parameter = (String) parameters_.get(QueryParameterType.OFFSET);
                         addVirtualIndexMapping(virtualParameters, map, parameter_index, real_index, QueryParameterType.OFFSET, parameter);
                     }
 
                     if (parameters_.containsKey(QueryParameterType.LIMIT)) {
-                        String parameter = (String) parameters_.get(QueryParameterType.LIMIT);
+                        var parameter = (String) parameters_.get(QueryParameterType.LIMIT);
                         addVirtualIndexMapping(virtualParameters, map, parameter_index, real_index, QueryParameterType.LIMIT, parameter);
                     }
                 }
@@ -269,9 +269,9 @@ public class QueryParameters implements Cloneable {
         }
 
         if (null == combinedParametersArray_) {
-            String[] array = new String[0];
+            var array = new String[0];
 
-            for (String parameter_name : getOrderedNames()) {
+            for (var parameter_name : getOrderedNames()) {
                 array = ArrayUtils.join(array, parameter_name);
             }
 
@@ -321,15 +321,15 @@ public class QueryParameters implements Cloneable {
         // obtain the existing typed parameters
         List<String> typed_parameters = null;
         if (null == parameters_) {
-            parameters_ = new HashMap<QueryParameterType, Object>();
+            parameters_ = new HashMap<>();
         } else {
             typed_parameters = (List<String>) parameters_.get(type);
         }
 
         // initialize the typed parameters collection if it didn't exist before
-        boolean new_collection = false;
+        var new_collection = false;
         if (null == typed_parameters) {
-            typed_parameters = new ArrayList<String>();
+            typed_parameters = new ArrayList<>();
             new_collection = true;
         }
 
@@ -350,7 +350,7 @@ public class QueryParameters implements Cloneable {
         if (value != null) {
             // initialize the parameters map if it doesn't exist yet
             if (null == parameters_) {
-                parameters_ = new HashMap<QueryParameterType, Object>();
+                parameters_ = new HashMap<>();
             }
 
             // remove the table-field separator dot
@@ -380,12 +380,12 @@ public class QueryParameters implements Cloneable {
             }
 
             // obtain the existing typed parameters
-            List<String> typed_parameters = (List<String>) parameters_.get(type);
+            var typed_parameters = (List<String>) parameters_.get(type);
 
             // initialize the typed parameters collection if it didn't exist before
-            boolean new_collection = false;
+            var new_collection = false;
             if (null == typed_parameters) {
-                typed_parameters = new ArrayList<String>();
+                typed_parameters = new ArrayList<>();
                 new_collection = true;
             }
 
@@ -412,17 +412,17 @@ public class QueryParameters implements Cloneable {
 
         if (new_instance != null) {
             if (combinedParameters_ != null) {
-                new_instance.combinedParameters_ = new ArrayList<String>();
+                new_instance.combinedParameters_ = new ArrayList<>();
                 new_instance.combinedParameters_.addAll(combinedParameters_);
             }
 
             if (parameters_ != null) {
-                new_instance.parameters_ = new HashMap<QueryParameterType, Object>();
-                for (Map.Entry<QueryParameterType, Object> entry : parameters_.entrySet()) {
+                new_instance.parameters_ = new HashMap<>();
+                for (var entry : parameters_.entrySet()) {
                     if (entry.getKey().isSingular()) {
                         new_instance.parameters_.put(entry.getKey(), entry.getValue());
                     } else {
-                        List<String> values = new ArrayList<String>();
+                        List<String> values = new ArrayList<>();
                         values.addAll((List<String>) entry.getValue());
                         new_instance.parameters_.put(entry.getKey(), values);
                     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
@@ -51,7 +51,7 @@ public class Update extends AbstractWhereQuery<Update> implements Cloneable {
         super.clear();
 
         hint_ = null;
-        fields_ = new LinkedHashMap<String, Object>();
+        fields_ = new LinkedHashMap<>();
         table_ = null;
 
         assert 0 == fields_.size();
@@ -80,7 +80,7 @@ public class Update extends AbstractWhereQuery<Update> implements Cloneable {
             } else if (0 == fields_.size()) {
                 throw new FieldsRequiredException("Update");
             } else {
-                Template template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".update");
+                var template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".update");
 
                 if (hint_ != null) {
                     if (!template.hasValueId("HINT")) {
@@ -93,9 +93,9 @@ public class Update extends AbstractWhereQuery<Update> implements Cloneable {
                 template.setValue("TABLE", table_);
 
                 if (fields_.size() > 0) {
-                    ArrayList<String> set_list = new ArrayList<String>();
+                    var set_list = new ArrayList<String>();
 
-                    for (String field : fields_.keySet()) {
+                    for (var field : fields_.keySet()) {
                         template.setValue("NAME", field);
                         template.setValue("V", fields_.get(field).toString());
                         set_list.add(template.getBlock("SET"));
@@ -180,7 +180,7 @@ public class Update extends AbstractWhereQuery<Update> implements Cloneable {
     public Update field(String field, Select query) {
         if (null == query) throw new IllegalArgumentException("query can't be null.");
 
-        StringBuilder buffer = new StringBuilder();
+        var buffer = new StringBuilder();
 
         buffer.append("(");
         buffer.append(query.toString());
@@ -219,7 +219,7 @@ public class Update extends AbstractWhereQuery<Update> implements Cloneable {
         if (null == keyValues) throw new IllegalArgumentException("keyValues can't be null.");
         if (0 == keyValues.length) throw new IllegalArgumentException("keyValues can't be empty.");
 
-        for (int i = 0; i < keyValues.length; i += 2) {
+        for (var i = 0; i < keyValues.length; i += 2) {
             if (null != keyValues[i]) {
                 field(keyValues[i].toString(), keyValues[i + 1]);
             }
@@ -247,10 +247,10 @@ public class Update extends AbstractWhereQuery<Update> implements Cloneable {
     throws DbQueryException {
         if (null == bean) throw new IllegalArgumentException("bean can't be null.");
 
-        Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
-        Map<String, String> property_values = QueryHelper.getBeanPropertyValues(bean, includedFields, excludedFields, getDatasource());
+        var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+        var property_values = QueryHelper.getBeanPropertyValues(bean, includedFields, excludedFields, getDatasource());
 
-        for (String property_name : property_values.keySet()) {
+        for (var property_name : property_values.keySet()) {
             if (!ConstrainedUtils.saveConstrainedProperty(constrained, property_name, null)) {
                 continue;
             }
@@ -272,10 +272,10 @@ public class Update extends AbstractWhereQuery<Update> implements Cloneable {
 
         clearGenerated();
 
-        Constrained constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
-        Set<String> property_names = QueryHelper.getBeanPropertyNames(beanClass, excludedFields);
+        var constrained = ConstrainedUtils.getConstrainedInstance(beanClass);
+        var property_names = QueryHelper.getBeanPropertyNames(beanClass, excludedFields);
 
-        for (String property_name : property_names) {
+        for (var property_name : property_names) {
             if (!ConstrainedUtils.saveConstrainedProperty(constrained, property_name, null)) {
                 continue;
             }
@@ -288,10 +288,10 @@ public class Update extends AbstractWhereQuery<Update> implements Cloneable {
     }
 
     public Update clone() {
-        Update new_instance = super.clone();
+        var new_instance = super.clone();
         if (new_instance != null) {
             if (fields_ != null) {
-                new_instance.fields_ = new LinkedHashMap<String, Object>();
+                new_instance.fields_ = new LinkedHashMap<>();
                 new_instance.fields_.putAll(fields_);
             }
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.querymanagers.generic;
@@ -22,8 +22,8 @@ public class TestGenericQueryManagerUnique {
         return new UniqueBean();
     }
 
-    protected void setUp(Datasource datasource) {
-        uniqueManager_ = GenericQueryManagerFactory.getInstance(datasource, UniqueBean.class);
+    protected void setup(Datasource datasource) {
+        uniqueManager_ = GenericQueryManagerFactory.instance(datasource, UniqueBean.class);
         uniqueManager_.install();
     }
 
@@ -33,8 +33,8 @@ public class TestGenericQueryManagerUnique {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetBaseClass(Datasource datasource) {
-        setUp(datasource);
+    void testGetBaseClass(Datasource datasource) {
+        setup(datasource);
         try {
             assertSame(UniqueBean.class, uniqueManager_.getBaseClass());
         } finally {
@@ -44,8 +44,8 @@ public class TestGenericQueryManagerUnique {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallCustomQuery(Datasource datasource) {
-        setUp(datasource);
+    void testInstallCustomQuery(Datasource datasource) {
+        setup(datasource);
         try {
             uniqueManager_.remove();
             uniqueManager_.install(uniqueManager_.getInstallTableQuery());
@@ -56,8 +56,8 @@ public class TestGenericQueryManagerUnique {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testValidationContextUnique(Datasource datasource) {
-        setUp(datasource);
+    void testValidationContextUnique(Datasource datasource) {
+        setup(datasource);
         try {
             // uniqueness of individual properties
             UniqueBean bean1 = createNewUniqueBean();
@@ -172,8 +172,8 @@ public class TestGenericQueryManagerUnique {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGroupValidationContextUnique(Datasource datasource) {
-        setUp(datasource);
+    void testGroupValidationContextUnique(Datasource datasource) {
+        setup(datasource);
         try {
             // uniqueness of individual properties
             UniqueBean bean1 = createNewUniqueBean();

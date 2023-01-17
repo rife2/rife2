@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTaskOption {
     @Test
-    public void testInstantiateTaskOption() {
+    void testInstantiateTaskOption() {
         TaskOption taskoption = null;
         assertNull(taskoption);
         taskoption = new TaskOption();
@@ -22,12 +22,12 @@ public class TestTaskOption {
     }
 
     @Test
-    public void testPopulateTaskOption() {
-        int taskid = 1;
-        String name = "name";
-        String value = "value";
+    void testPopulateTaskOption() {
+        var taskid = 1;
+        var name = "name";
+        var value = "value";
 
-        TaskOption taskoption = new TaskOption();
+        var taskoption = new TaskOption();
         taskoption.setTaskId(taskid);
         taskoption.setName(name);
         taskoption.setValue(value);
@@ -38,18 +38,18 @@ public class TestTaskOption {
     }
 
     @Test
-    public void testCloneTaskOption() {
+    void testCloneTaskOption() {
         try {
-            int taskid = 1;
-            String name = "name";
-            String value = "value";
+            var taskid = 1;
+            var name = "name";
+            var value = "value";
 
-            TaskOption taskoption = new TaskOption();
+            var taskoption = new TaskOption();
             taskoption.setTaskId(taskid);
             taskoption.setName(name);
             taskoption.setValue(value);
 
-            TaskOption taskoption_clone = taskoption.clone();
+            var taskoption_clone = taskoption.clone();
             assertNotSame(taskoption, taskoption_clone);
             assertNotNull(taskoption_clone);
             assertEquals(taskoption, taskoption_clone);
@@ -59,12 +59,12 @@ public class TestTaskOption {
     }
 
     @Test
-    public void testTaskOptionValidation() {
-        TaskOption taskoption = new TaskOption();
-        assertEquals(false, taskoption.validate());
+    void testTaskOptionValidation() {
+        var taskoption = new TaskOption();
+        assertFalse(taskoption.validate());
         assertEquals(3, taskoption.countValidationErrors());
         ValidationError error = null;
-        Iterator<ValidationError> it = taskoption.getValidationErrors().iterator();
+        var it = taskoption.getValidationErrors().iterator();
         error = it.next();
         assertEquals(error.getIdentifier(), "invalid");
         assertEquals(error.getSubject(), "taskId");

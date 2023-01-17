@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (jdevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (jdevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.elements;
@@ -18,7 +18,7 @@ public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
     AuthConfig configNotEnforced;
 
     public DatabaseAuthenticatedSite(Datasource datasource) {
-        validator = DatabaseSessionValidatorFactory.getInstance(datasource);
+        validator = DatabaseSessionValidatorFactory.instance(datasource);
         config = new AuthConfig(validator);
         configAdmin = new AuthConfig(validator);
         configMaint = new AuthConfig(validator);

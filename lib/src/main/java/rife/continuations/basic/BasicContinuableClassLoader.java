@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.continuations.basic;
@@ -62,7 +62,7 @@ public class BasicContinuableClassLoader extends ClassLoader implements ClassByt
     throws ClassNotFoundException {
         // disable this classloader and delegate to the parent if the continuations
         // agent is active
-        if (Boolean.getBoolean(ContinuationsTransformer.AGENT_ACTIVE_PROPERTY)) {
+        if (Boolean.getBoolean(ContinuationsAgent.AGENT_ACTIVE_PROPERTY)) {
             return getParent().loadClass(name);
         }
 

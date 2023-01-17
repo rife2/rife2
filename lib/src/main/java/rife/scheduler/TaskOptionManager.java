@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler;
@@ -19,10 +19,10 @@ public interface TaskOptionManager {
     boolean updateTaskOption(TaskOption taskoption)
     throws TaskOptionManagerException;
 
-    TaskOption getTaskOption(int taskid, String name)
+    TaskOption getTaskOption(int taskId, String name)
     throws TaskOptionManagerException;
 
-    Collection<TaskOption> getTaskOptions(int taskid)
+    Collection<TaskOption> getTaskOptions(int taskId)
     throws TaskOptionManagerException;
 
     boolean removeTaskOption(TaskOption taskoption)

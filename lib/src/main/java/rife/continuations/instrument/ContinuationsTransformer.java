@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.continuations.instrument;
@@ -20,9 +20,8 @@ import java.security.ProtectionDomain;
  * @since 1.0
  */
 public class ContinuationsTransformer extends RifeTransformer {
-    public static final String AGENT_ACTIVE_PROPERTY = "rife.agent.continuations";
-
     private final ContinuationConfigInstrument configInstrument_;
+    private final String property_;
 
     /**
      * Creates a new transformer.
@@ -31,12 +30,13 @@ public class ContinuationsTransformer extends RifeTransformer {
      *                         configuration that will be used for the transformation
      * @since 1.0
      */
-    public ContinuationsTransformer(ContinuationConfigInstrument configInstrument) {
+    public ContinuationsTransformer(ContinuationConfigInstrument configInstrument, String property) {
         configInstrument_ = configInstrument;
+        property_ = property;
     }
 
     protected byte[] transformRife(ClassLoader loader, String classNameInternal, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
-        System.getProperties().setProperty(AGENT_ACTIVE_PROPERTY, Boolean.TRUE.toString());
+        System.getProperties().setProperty(property_, Boolean.TRUE.toString());
 
         try {
             var result = ContinuationsBytecodeTransformer.transformIntoResumableBytes(configInstrument_, classfileBuffer, classNameInternal.replace('/', '.'));

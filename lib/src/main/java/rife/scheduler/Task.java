@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler;
@@ -13,7 +13,7 @@ import rife.validation.*;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Task extends Validation implements Cloneable {
+public class Task extends MetaData implements Cloneable {
     private int id_ = -1;
     private String type_ = null;
     private long planned_ = 0;
@@ -25,7 +25,7 @@ public class Task extends Validation implements Cloneable {
     public Task() {
     }
 
-    protected void activateValidation() {
+    public void activateMetaData() {
         addRule(new ValidationRuleNotNull("type"));
         addRule(new ValidationRuleNotEmpty("planned"));
         addRule(new InvalidPlanned());
@@ -48,17 +48,17 @@ public class Task extends Validation implements Cloneable {
             return null;
         }
 
-        Scheduler scheduler = taskManager_.getScheduler();
+        var scheduler = taskManager_.getScheduler();
         if (null == scheduler) {
             return null;
         }
 
-        TaskOptionManager taskoption_manager = scheduler.getTaskOptionManager();
-        if (null == taskoption_manager) {
+        var task_option_manager = scheduler.getTaskOptionManager();
+        if (null == task_option_manager) {
             return null;
         }
 
-        TaskOption taskoption = taskoption_manager.getTaskOption(getId(), name);
+        var taskoption = task_option_manager.getTaskOption(getId(), name);
         if (null == taskoption) {
             return null;
         }
@@ -69,10 +69,10 @@ public class Task extends Validation implements Cloneable {
     public long getNextDate()
     throws FrequencyException {
         // lower towards the minute, remove seconds and milliseconds
-        Calendar current_calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+        var current_calendar = RifeConfig.tools().getCalendarInstance();
         current_calendar.set(Calendar.SECOND, 0);
         current_calendar.set(Calendar.MILLISECOND, 0);
-        long current_time = current_calendar.getTimeInMillis();
+        var current_time = current_calendar.getTimeInMillis();
         if (planned_ <= current_time) {
             return getNextDate(current_time);
         }
@@ -101,6 +101,11 @@ public class Task extends Validation implements Cloneable {
         type_ = type;
     }
 
+    public Task type(String type) {
+        setType(type);
+        return this;
+    }
+
     public String getType() {
         return type_;
     }
@@ -111,7 +116,7 @@ public class Task extends Validation implements Cloneable {
 
     public void setPlanned(long planned) {
         // lower towards the minute, remove seconds and milliseconds
-        Calendar planned_calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+        var planned_calendar = RifeConfig.tools().getCalendarInstance();
         planned_calendar.setTimeInMillis(planned);
         planned_calendar.set(Calendar.SECOND, 0);
         planned_calendar.set(Calendar.MILLISECOND, 0);
@@ -119,32 +124,79 @@ public class Task extends Validation implements Cloneable {
         planned_ = planned_calendar.getTimeInMillis();
     }
 
+    public Task planned(Date planned) {
+        setPlanned(planned);
+        return this;
+    }
+
+    public Task planned(long planned) {
+        setPlanned(planned);
+        return this;
+    }
+
     public long getPlanned() {
         return planned_;
     }
 
-    public void setFrequency(String frequency)
+    public void setFrequency(Frequency frequency)
     throws FrequencyException {
         if (null == frequency) {
             frequency_ = null;
         } else {
-            frequency_ = new Frequency(frequency);
+            frequency_ = frequency;
         }
     }
 
-    public String getFrequency() {
+    public Task frequency(Frequency frequency)
+    throws FrequencyException {
+        setFrequency(frequency);
+        return this;
+    }
+
+    public Frequency getFrequency() {
         if (null == frequency_) {
             return null;
         }
-        return frequency_.getFrequency();
+        return frequency_;
+    }
+
+    public void setFrequencySpecification(String specification)
+    throws FrequencyException {
+        if (specification == null) {
+            frequency_ = null;
+        } else {
+            setFrequency(new Frequency(specification));
+        }
+    }
+
+    public Task frequencySpecification(String specification)
+    throws FrequencyException {
+        setFrequencySpecification(specification);
+        return this;
+    }
+
+    public String getFrequencySpecification() {
+        if (frequency_ == null) {
+            return null;
+        }
+        return frequency_.toString();
     }
 
     public void setBusy(boolean busy) {
         busy_ = busy;
     }
 
+    public Task busy(boolean busy) {
+        setBusy(busy);
+        return this;
+    }
+
     public boolean isBusy() {
         return busy_;
+    }
+
+    public TaskOption createTaskOption() {
+        return new TaskOption().taskId(id_);
     }
 
     public Task clone()
@@ -163,13 +215,13 @@ public class Task extends Validation implements Cloneable {
             return false;
         }
 
-        Task other_task = (Task) object;
+        var other_task = (Task) object;
 
         if (other_task.getId() == getId() &&
             other_task.getType().equals(getType()) &&
             other_task.getPlanned() == getPlanned() &&
             ((null == other_task.getFrequency() && null == getFrequency()) ||
-                (other_task.getFrequency() != null && other_task.getFrequency().equals(getFrequency()))) &&
+             (other_task.getFrequency() != null && other_task.getFrequency().equals(getFrequency()))) &&
             other_task.getTaskManager() == getTaskManager()) {
             return true;
         }
@@ -183,7 +235,7 @@ public class Task extends Validation implements Cloneable {
                 return true;
             }
 
-            Calendar current_calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var current_calendar = RifeConfig.tools().getCalendarInstance();
             current_calendar.set(Calendar.SECOND, 0);
             current_calendar.set(Calendar.MILLISECOND, 0);
             return planned_ >= current_calendar.getTimeInMillis();

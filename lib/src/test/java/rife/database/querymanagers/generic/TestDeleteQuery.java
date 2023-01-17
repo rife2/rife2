@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.querymanagers.generic;
@@ -13,10 +13,9 @@ import rife.database.queries.Select;
 import rife.database.querymanagers.generic.beans.BeanImpl;
 import rife.database.querymanagers.generic.beans.LinkBean;
 import rife.database.querymanagers.generic.beans.SimpleBean;
+import rife.tools.Convert;
 
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,10 +26,10 @@ public class TestDeleteQuery {
     private GenericQueryManager<SimpleBean> manager_ = null;
     private GenericQueryManager<LinkBean> linkManager_ = null;
 
-    protected void setUp(Datasource datasource) {
-        manager_ = GenericQueryManagerFactory.getInstance(datasource, SimpleBean.class);
-        linkManager_ = GenericQueryManagerFactory.getInstance(datasource, LinkBean.class);
-        bigBeanManager_ = GenericQueryManagerFactory.getInstance(datasource, BeanImpl.class);
+    protected void setup(Datasource datasource) {
+        manager_ = GenericQueryManagerFactory.instance(datasource, SimpleBean.class);
+        linkManager_ = GenericQueryManagerFactory.instance(datasource, LinkBean.class);
+        bigBeanManager_ = GenericQueryManagerFactory.instance(datasource, BeanImpl.class);
         manager_.install();
         linkManager_.install();
         bigBeanManager_.install();
@@ -44,8 +43,8 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testCloneToStringAndClear(Datasource datasource) {
-        setUp(datasource);
+    void testCloneToStringAndClear(Datasource datasource) {
+        setup(datasource);
         try {
             var query = bigBeanManager_.getDeleteQuery().where("propertyString", "=", "bean set 1");
 
@@ -73,8 +72,8 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetParameters(Datasource datasource) {
-        setUp(datasource);
+    void testGetParameters(Datasource datasource) {
+        setup(datasource);
         try {
             var delete = new Delete(datasource);
             delete
@@ -95,8 +94,8 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetDatasource(Datasource datasource) {
-        setUp(datasource);
+    void testGetDatasource(Datasource datasource) {
+        setup(datasource);
         try {
             assertEquals(datasource, bigBeanManager_.getDeleteQuery().getDatasource());
         } finally {
@@ -106,8 +105,8 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetFrom(Datasource datasource) {
-        setUp(datasource);
+    void testGetFrom(Datasource datasource) {
+        setup(datasource);
         try {
             assertEquals(bigBeanManager_
                 .getDeleteQuery()
@@ -123,8 +122,8 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testWhere(Datasource datasource) {
-        setUp(datasource);
+    void testWhere(Datasource datasource) {
+        setup(datasource);
         try {
             var bean1 = new BeanImpl();
 
@@ -149,11 +148,11 @@ public class TestDeleteQuery {
             bean1.setPropertyShort((short) 44);
             bean1.setPropertyShortObject((short) 69);
             bean1.setPropertyIntegerObject(421);
-            bean1.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
+            bean1.setPropertySqlDate(Convert.toSqlDate(cal));
             bean1.setPropertyString("nostringhere");
             bean1.setPropertyStringBuffer(new StringBuffer("buffbuffbuff"));
-            bean1.setPropertyTime(new Time(cal.getTime().getTime()));
-            bean1.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+            bean1.setPropertyTime(Convert.toSqlTime(cal));
+            bean1.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
 
             var bean1id = bigBeanManager_.save(bean1);
             bigBeanManager_.save(BeanImpl.getPopulatedBean());
@@ -257,8 +256,8 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testWhereAnd(Datasource datasource) {
-        setUp(datasource);
+    void testWhereAnd(Datasource datasource) {
+        setup(datasource);
         try {
             var bean1 = new BeanImpl();
 
@@ -283,11 +282,11 @@ public class TestDeleteQuery {
             bean1.setPropertyShort((short) 44);
             bean1.setPropertyShortObject((short) 69);
             bean1.setPropertyIntegerObject(421);
-            bean1.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
+            bean1.setPropertySqlDate(Convert.toSqlDate(cal));
             bean1.setPropertyString("nostringhere");
             bean1.setPropertyStringBuffer(new StringBuffer("buffbuffbuff"));
-            bean1.setPropertyTime(new Time(cal.getTime().getTime()));
-            bean1.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+            bean1.setPropertyTime(Convert.toSqlTime(cal));
+            bean1.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
 
             var bean1id = bigBeanManager_.save(bean1);
             bigBeanManager_.save(BeanImpl.getPopulatedBean());
@@ -320,8 +319,8 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testWhereOr(Datasource datasource) {
-        setUp(datasource);
+    void testWhereOr(Datasource datasource) {
+        setup(datasource);
         try {
             var bean1 = new BeanImpl();
 
@@ -346,11 +345,11 @@ public class TestDeleteQuery {
             bean1.setPropertyShort((short) 44);
             bean1.setPropertyShortObject((short) 69);
             bean1.setPropertyIntegerObject(421);
-            bean1.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
+            bean1.setPropertySqlDate(Convert.toSqlDate(cal));
             bean1.setPropertyString("nostringhere");
             bean1.setPropertyStringBuffer(new StringBuffer("buffbuffbuff"));
-            bean1.setPropertyTime(new Time(cal.getTime().getTime()));
-            bean1.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+            bean1.setPropertyTime(Convert.toSqlTime(cal));
+            bean1.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
 
             var bean1id = bigBeanManager_.save(bean1);
             bigBeanManager_.save(BeanImpl.getPopulatedBean());
@@ -384,8 +383,8 @@ public class TestDeleteQuery {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testWhereSubselect(Datasource datasource) {
-        setUp(datasource);
+    void testWhereSubselect(Datasource datasource) {
+        setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -8,32 +8,33 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.database.exceptions.*;
 import rife.database.queries.*;
+import rife.tools.Convert;
 import rife.tools.ExceptionUtils;
 import rife.tools.exceptions.BeanUtilsException;
 
-import javax.xml.crypto.Data;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.*;
 import java.util.Calendar;
 
+import static java.time.temporal.ChronoField.NANO_OF_SECOND;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDbPreparedStatement {
     public void setup(Datasource datasource) {
         // create the temporary table
-        CreateTable query_create = new CreateTable(datasource);
+        var query_create = new CreateTable(datasource);
         query_create.table("parametersbean")
             .columns(BeanImpl.class)
             .column("notbeanInt", int.class)
             .precision("propertyString", 255)
-            .precision("propertyStringbuffer", 255)
+            .precision("propertyStringBuffer", 255)
             .precision("propertyChar", 1)
             .precision("propertyDouble", 7, 2)
             .precision("propertyFloat", 8, 3)
             .precision("propertyBigDecimal", 16, 6);
-        DbStatement statement = datasource.getConnection().createStatement();
+        var statement = datasource.getConnection().createStatement();
         try {
             try {
                 statement.executeUpdate(query_create);
@@ -51,10 +52,10 @@ public class TestDbPreparedStatement {
 
     public void tearDown(Datasource datasource) {
         try {
-            DbConnection connection = datasource.getConnection();
+            var connection = datasource.getConnection();
 
             // drop temporary table
-            DropTable query_drop = new DropTable(datasource);
+            var query_drop = new DropTable(datasource);
             query_drop.table("parametersbean");
             connection.createStatement().executeUpdate(query_drop);
 
@@ -66,11 +67,11 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiationSql(Datasource datasource) {
+    void testInstantiationSql(Datasource datasource) {
         setup(datasource);
         try {
-            String sql = "DELETE FROM parametersbean";
-            DbPreparedStatement statement_delete = datasource.getConnection().getPreparedStatement(sql);
+            var sql = "DELETE FROM parametersbean";
+            var statement_delete = datasource.getConnection().getPreparedStatement(sql);
             assertEquals(sql, statement_delete.getSql());
             assertNull(statement_delete.getQuery());
             statement_delete.executeUpdate();
@@ -84,13 +85,13 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiationQuery(Datasource datasource) {
+    void testInstantiationQuery(Datasource datasource) {
         setup(datasource);
         try {
-            Delete query_delete = new Delete(datasource);
+            var query_delete = new Delete(datasource);
             query_delete
                 .from("parametersbean");
-            DbPreparedStatement statement_delete = datasource.getConnection().getPreparedStatement(query_delete);
+            var statement_delete = datasource.getConnection().getPreparedStatement(query_delete);
             assertEquals(query_delete.getSql(), statement_delete.getSql());
             assertEquals(query_delete, statement_delete.getQuery());
             statement_delete.executeUpdate();
@@ -104,13 +105,13 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteQuery(Datasource datasource) {
+    void testExecuteQuery(Datasource datasource) {
         setup(datasource);
         try {
-            Select query_select = new Select(datasource);
+            var query_select = new Select(datasource);
             query_select
                 .from("parametersbean");
-            DbPreparedStatement statement_select = datasource.getConnection().getPreparedStatement(query_select);
+            var statement_select = datasource.getConnection().getPreparedStatement(query_select);
             statement_select.executeQuery();
             assertNotNull(statement_select.getResultSet());
             statement_select.close();
@@ -123,10 +124,10 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteQueryException(Datasource datasource) {
+    void testExecuteQueryException(Datasource datasource) {
         setup(datasource);
         try {
-            Select query_select = new Select(datasource);
+            var query_select = new Select(datasource);
             query_select
                 .from("inexistenttable");
 
@@ -154,13 +155,13 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteUpdate(Datasource datasource) {
+    void testExecuteUpdate(Datasource datasource) {
         setup(datasource);
         try {
-            Delete query_delete = new Delete(datasource);
+            var query_delete = new Delete(datasource);
             query_delete
                 .from("parametersbean");
-            DbPreparedStatement statement_select = datasource.getConnection().getPreparedStatement(query_delete);
+            var statement_select = datasource.getConnection().getPreparedStatement(query_delete);
             statement_select.executeUpdate();
             statement_select.close();
         } catch (DatabaseException e) {
@@ -172,10 +173,10 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testExecuteUpdateException(Datasource datasource) {
+    void testExecuteUpdateException(Datasource datasource) {
         setup(datasource);
         try {
-            Delete query_delete = new Delete(datasource);
+            var query_delete = new Delete(datasource);
             query_delete
                 .from("inexistenttable");
             DbPreparedStatement statement_update = null;
@@ -201,11 +202,11 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testNotParametrized(Datasource datasource) {
+    void testNotParametrized(Datasource datasource) {
         setup(datasource);
         try {
-            String sql = "SELECT * FROM parametersbean WHERE propertyString = ?";
-            DbPreparedStatement statement_select = datasource.getConnection().getPreparedStatement(sql);
+            var sql = "SELECT * FROM parametersbean WHERE propertyString = ?";
+            var statement_select = datasource.getConnection().getPreparedStatement(sql);
             try {
                 statement_select.setString("propertyString", "ok");
                 fail();
@@ -223,12 +224,12 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testNoParameters(Datasource datasource) {
+    void testNoParameters(Datasource datasource) {
         setup(datasource);
         try {
-            Select query_select = new Select(datasource);
+            var query_select = new Select(datasource);
             query_select.from("parametersbean");
-            DbPreparedStatement statement_select = datasource.getConnection().getPreparedStatement(query_select);
+            var statement_select = datasource.getConnection().getPreparedStatement(query_select);
             try {
                 statement_select.setString("propertyString", "ok");
                 fail();
@@ -246,27 +247,27 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testAddBatch(Datasource datasource) {
+    void testAddBatch(Datasource datasource) {
         setup(datasource);
 
-        CreateTable query_create = new CreateTable(datasource);
+        var query_create = new CreateTable(datasource);
         query_create
             .table("batchtest")
             .column("intcol", int.class);
         try {
-            DbPreparedStatement statement_create = datasource.getConnection().getPreparedStatement(query_create);
+            var statement_create = datasource.getConnection().getPreparedStatement(query_create);
             statement_create.executeUpdate();
             statement_create.close();
 
-            Insert query_insert = new Insert(datasource);
+            var query_insert = new Insert(datasource);
             query_insert
                 .into(query_create.getTable())
                 .fieldParameter("intcol");
-            DbPreparedStatement statement_insert = datasource.getConnection().getPreparedStatement(query_insert);
-            int first = 1;
-            int second = 5;
-            int third = 9;
-            int fourth = 12;
+            var statement_insert = datasource.getConnection().getPreparedStatement(query_insert);
+            var first = 1;
+            var second = 5;
+            var third = 9;
+            var fourth = 12;
             statement_insert.setInt("intcol", first);
             statement_insert.addBatch();
             statement_insert.setInt("intcol", second);
@@ -278,17 +279,17 @@ public class TestDbPreparedStatement {
             statement_insert.executeBatch();
             statement_insert.close();
 
-            Select query_select = new Select(datasource);
+            var query_select = new Select(datasource);
             query_select
                 .from(query_create.getTable());
-            DbStatement statement_select = datasource.getConnection().createStatement();
+            var statement_select = datasource.getConnection().createStatement();
             statement_select.executeQuery(query_select);
-            boolean got_first = false;
-            boolean got_second = false;
-            boolean got_third = false;
-            boolean got_fourth = false;
+            var got_first = false;
+            var got_second = false;
+            var got_third = false;
+            var got_fourth = false;
             ResultSet resultset = statement_select.getResultSet();
-            int result = -1;
+            var result = -1;
             while (resultset.next()) {
                 result = resultset.getInt("intcol");
                 if (first == result) {
@@ -325,10 +326,10 @@ public class TestDbPreparedStatement {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
             try {
-                DropTable query_drop = new DropTable(datasource);
+                var query_drop = new DropTable(datasource);
                 query_drop
                     .table(query_create.getTable());
-                DbPreparedStatement statement_drop = datasource.getConnection().getPreparedStatement(query_drop);
+                var statement_drop = datasource.getConnection().getPreparedStatement(query_drop);
                 statement_drop.executeUpdate();
                 statement_drop.close();
             } catch (DatabaseException e) {
@@ -341,15 +342,15 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetMetaData(Datasource datasource) {
+    void testGetMetaData(Datasource datasource) {
         setup(datasource);
 
         try {
-            Select query_select = new Select(datasource);
+            var query_select = new Select(datasource);
             query_select
                 .from("parametersbean")
                 .whereParameter("propertyString", "=");
-            DbPreparedStatement statement_select = datasource.getConnection().getPreparedStatement(query_select);
+            var statement_select = datasource.getConnection().getPreparedStatement(query_select);
             statement_select.setString("propertyString", "ok");
             ResultSetMetaData metadata = null;
             metadata = statement_select.getMetaData();
@@ -376,15 +377,15 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetParameterMetaData(Datasource datasource) {
+    void testGetParameterMetaData(Datasource datasource) {
         setup(datasource);
 
         try {
-            Select query_select = new Select(datasource);
+            var query_select = new Select(datasource);
             query_select
                 .from("parametersbean")
                 .whereParameter("propertyString", "=");
-            DbPreparedStatement statement_select = datasource.getConnection().getPreparedStatement(query_select);
+            var statement_select = datasource.getConnection().getPreparedStatement(query_select);
             statement_select.setString("propertyString", "ok");
             ParameterMetaData metadata = null;
             try {
@@ -414,15 +415,15 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSetBeanNull(Datasource datasource) {
+    void testSetBeanNull(Datasource datasource) {
         setup(datasource);
 
         try {
             // insert some data
-            Insert query_insert = new Insert(datasource);
+            var query_insert = new Insert(datasource);
             query_insert.into("parametersbean")
                 .fieldsParameters(BeanImpl.class);
-            DbPreparedStatement statement_insert = datasource.getConnection().getPreparedStatement(query_insert);
+            var statement_insert = datasource.getConnection().getPreparedStatement(query_insert);
             try {
                 statement_insert.setBean(null);
                 fail();
@@ -440,15 +441,15 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSetBeanError(Datasource datasource) {
+    void testSetBeanError(Datasource datasource) {
         setup(datasource);
 
         try {
             // insert some data
-            Insert query_insert = new Insert(datasource);
+            var query_insert = new Insert(datasource);
             query_insert.into("parametersbean")
                 .fieldsParameters(BeanImpl.class);
-            DbPreparedStatement statement_insert = datasource.getConnection().getPreparedStatement(query_insert);
+            var statement_insert = datasource.getConnection().getPreparedStatement(query_insert);
             try {
                 statement_insert.setBean(BeanErrorImpl.getPopulatedBean());
                 fail();
@@ -464,16 +465,16 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSetBean(Datasource datasource) {
+    void testSetBean(Datasource datasource) {
         setup(datasource);
 
         try {
             // insert some data
-            Insert query_insert = new Insert(datasource);
+            var query_insert = new Insert(datasource);
             query_insert.into("parametersbean")
                 .fieldsParameters(BeanImpl.class)
                 .fieldParameter("notbeanInt");
-            DbPreparedStatement statement_insert = datasource.getConnection().getPreparedStatement(query_insert);
+            var statement_insert = datasource.getConnection().getPreparedStatement(query_insert);
             try {
                 try {
                     statement_insert.setBean(null);
@@ -486,11 +487,11 @@ public class TestDbPreparedStatement {
                 statement_insert.executeUpdate();
 
                 // retrieve the data
-                BeanManager bean_manager = new BeanManager(datasource);
-                BeanImpl retrieved_bean = bean_manager.fetchBean();
-                BeanImpl new_bean = BeanImpl.getPopulatedBean();
+                var bean_manager = new BeanManager(datasource);
+                var retrieved_bean = bean_manager.fetchBean();
+                var new_bean = BeanImpl.getPopulatedBean();
                 assertEquals(retrieved_bean.getPropertyString(), new_bean.getPropertyString());
-                assertEquals(retrieved_bean.getPropertyStringbuffer().toString(), new_bean.getPropertyStringbuffer().toString());
+                assertEquals(retrieved_bean.getPropertyStringBuffer().toString(), new_bean.getPropertyStringBuffer().toString());
 
                 // don't compare milliseconds since each db stores it differently
                 if (datasource.getAliasedDriver().equals("com.mysql.cj.jdbc.Driver")) {
@@ -542,21 +543,21 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSetBeanNulls(Datasource datasource) {
+    void testSetBeanNulls(Datasource datasource) {
         setup(datasource);
 
         try {
             // insert some data
-            Insert query_insert = new Insert(datasource);
+            var query_insert = new Insert(datasource);
             query_insert.into("parametersbean")
                 .fieldsParameters(BeanImpl.class);
-            DbPreparedStatement statement_insert = datasource.getConnection().getPreparedStatement(query_insert);
+            var statement_insert = datasource.getConnection().getPreparedStatement(query_insert);
             try {
-                BeanImpl null_bean = BeanImpl.getNullBean();
+                var null_bean = BeanImpl.getNullBean();
                 // each database has its oddities here, sadly
-                Calendar cal = Calendar.getInstance();
+                var cal = Calendar.getInstance();
                 cal.set(2002, 5, 18, 15, 26, 14);
-                cal.set(Calendar.MILLISECOND, 764);
+                cal.set(Calendar.MILLISECOND, 167);
                 if (datasource.getDriver().equals("org.postgresql.Driver")) {
                     // postgres doesn't handle null chars
                     null_bean.setPropertyChar(' ');
@@ -564,15 +565,15 @@ public class TestDbPreparedStatement {
                     // mysql automatically set the current time to timestamps
                     null_bean.setPropertyDate(cal.getTime());
                     null_bean.setPropertyCalendar(cal);
-                    null_bean.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+                    null_bean.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
                 }
                 statement_insert.setBean(null_bean);
                 statement_insert.executeUpdate();
 
                 // retrieve the data
-                BeanManager bean_manager = new BeanManager(datasource);
-                BeanImpl retrieved_bean = bean_manager.fetchBean();
-                BeanImpl new_bean = BeanImpl.getNullBean();
+                var bean_manager = new BeanManager(datasource);
+                var retrieved_bean = bean_manager.fetchBean();
+                var new_bean = BeanImpl.getNullBean();
                 // apply the database oddities
                 if (datasource.getDriver().equals("org.postgresql.Driver")) {
                     // postgres doesn't handle null chars
@@ -581,10 +582,10 @@ public class TestDbPreparedStatement {
                     // mysql automatically set the current time to timestamps
                     new_bean.setPropertyDate(cal.getTime());
                     new_bean.setPropertyCalendar(cal);
-                    new_bean.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+                    new_bean.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
                 }
                 assertEquals(retrieved_bean.getPropertyString(), new_bean.getPropertyString());
-                assertEquals(retrieved_bean.getPropertyStringbuffer(), new_bean.getPropertyStringbuffer());
+                assertEquals(retrieved_bean.getPropertyStringBuffer(), new_bean.getPropertyStringBuffer());
                 if (datasource.getAliasedDriver().equals("com.mysql.cj.jdbc.Driver")) {
                     // round up MySQL milliseconds since that's how it behaves
                     assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, ((new_bean.getPropertyDate().getTime() + 500) / 1000) * 1000);
@@ -626,26 +627,30 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSetNamedParameters(Datasource datasource) {
+    void testSetNamedParameters(Datasource datasource) {
         setup(datasource);
 
         try {
             // insert some data
-            Insert query_insert = new Insert(datasource);
+            var query_insert = new Insert(datasource);
             query_insert.into("parametersbean")
                 .fieldsParameters(BeanImpl.class);
-            DbPreparedStatement statement_insert = datasource.getConnection().getPreparedStatement(query_insert);
+            var statement_insert = datasource.getConnection().getPreparedStatement(query_insert);
             try {
-                Calendar cal = Calendar.getInstance();
+                var cal = Calendar.getInstance();
                 cal.set(2002, Calendar.JUNE, 18, 15, 26, 14);
-                cal.set(Calendar.MILLISECOND, 764);
+                cal.set(Calendar.MILLISECOND, 167);
                 statement_insert.setString("propertyString", "someotherstring");
-                statement_insert.setString("propertyStringbuffer", "someotherstringbuff");
-                statement_insert.setTimestamp("propertyDate", new Timestamp(cal.getTime().getTime()));
-                statement_insert.setTimestamp("propertyCalendar", new Timestamp(cal.getTime().getTime()));
-                statement_insert.setDate("propertySqlDate", new java.sql.Date(cal.getTime().getTime()));
-                statement_insert.setTime("propertyTime", new Time(cal.getTime().getTime()));
-                statement_insert.setTimestamp("propertyTimestamp", new Timestamp(cal.getTime().getTime()));
+                statement_insert.setString("propertyStringBuffer", "someotherstringbuff");
+                statement_insert.setTimestamp("propertyDate", Convert.toSqlTimestamp(cal));
+                statement_insert.setTimestamp("propertyCalendar", Convert.toSqlTimestamp(cal));
+                statement_insert.setDate("propertySqlDate", Convert.toSqlDate(cal));
+                statement_insert.setTime("propertyTime", Convert.toSqlTime(cal));
+                statement_insert.setTimestamp("propertyTimestamp", Convert.toSqlTimestamp(cal));
+                statement_insert.setTimestamp("propertyInstant", Convert.toSqlTimestamp(cal));
+                statement_insert.setDate("propertyLocalDate", Convert.toSqlDate(cal));
+                statement_insert.setTimestamp("propertyLocalDateTime", Convert.toSqlTimestamp(cal));
+                statement_insert.setTime("propertyLocalTime", Convert.toSqlTime(cal));
                 statement_insert.setString("propertyChar", "v");
                 statement_insert.setString("propertyCharacterObject", "r");
                 statement_insert.setBoolean("propertyBoolean", true);
@@ -668,32 +673,22 @@ public class TestDbPreparedStatement {
                 statement_insert.executeUpdate();
 
                 // retrieve the data
-                BeanManager bean_manager = new BeanManager(datasource);
-                BeanImpl retrieved_bean = bean_manager.fetchBean();
-                BeanImpl new_bean = BeanImpl.getPopulatedBean();
+                var bean_manager = new BeanManager(datasource);
+                var retrieved_bean = bean_manager.fetchBean();
+                var new_bean = BeanImpl.getPopulatedBean();
                 assertEquals(retrieved_bean.getPropertyString(), new_bean.getPropertyString());
-                assertEquals(retrieved_bean.getPropertyStringbuffer().toString(), new_bean.getPropertyStringbuffer().toString());
+                assertEquals(retrieved_bean.getPropertyStringBuffer().toString(), new_bean.getPropertyStringBuffer().toString());
 
                 // don't compare milliseconds since each db stores it differently
-                if (datasource.getAliasedDriver().equals("com.mysql.cj.jdbc.Driver")) {
-                    // round up MySQL and H2 milliseconds since that's how it behaves
-                    assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, ((new_bean.getPropertyDate().getTime() + 500) / 1000) * 1000);
-                    assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, ((new_bean.getPropertyCalendar().getTime().getTime() + 500) / 1000) * 1000);
-                    assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, ((new_bean.getPropertyTimestamp().getTime() + 500) / 1000) * 1000);
-                    assertEquals(new Time((retrieved_bean.getPropertyTime().getTime() / 1000) * 1000).toString(), new Time(((new_bean.getPropertyTime().getTime() + 500) / 1000) * 1000).toString());
-                } else if(datasource.getAliasedDriver().equals("org.h2.Driver")) {
-                    // H2 rounds up the SQL time
-                    assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, (new_bean.getPropertyDate().getTime() / 1000) * 1000);
-                    assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (new_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
-                    assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, (new_bean.getPropertyTimestamp().getTime() / 1000) * 1000);
-                    assertEquals(new Time((retrieved_bean.getPropertyTime().getTime() / 1000) * 1000).toString(), new Time(((new_bean.getPropertyTime().getTime() + 500) / 1000) * 1000).toString());
-                } else {
-                    assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, (new_bean.getPropertyDate().getTime() / 1000) * 1000);
-                    assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (new_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
-                    assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, (new_bean.getPropertyTimestamp().getTime() / 1000) * 1000);
-                    assertEquals(retrieved_bean.getPropertyTime().toString(), new_bean.getPropertyTime().toString());
-                }
+                assertEquals((retrieved_bean.getPropertyDate().getTime() / 1000) * 1000, (new_bean.getPropertyDate().getTime() / 1000) * 1000);
+                assertEquals((retrieved_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000, (new_bean.getPropertyCalendar().getTime().getTime() / 1000) * 1000);
+                assertEquals((retrieved_bean.getPropertyTimestamp().getTime() / 1000) * 1000, (new_bean.getPropertyTimestamp().getTime() / 1000) * 1000);
+                assertEquals(retrieved_bean.getPropertyInstant().with(NANO_OF_SECOND, 0), new_bean.getPropertyInstant().with(NANO_OF_SECOND, 0));
+                assertEquals(retrieved_bean.getPropertyLocalDateTime().with(NANO_OF_SECOND, 0), new_bean.getPropertyLocalDateTime().with(NANO_OF_SECOND, 0));
+                assertEquals(retrieved_bean.getPropertyLocalTime().withNano(0), new_bean.getPropertyLocalTime().withNano(0));
 
+                assertEquals(retrieved_bean.getPropertyLocalDate(), new_bean.getPropertyLocalDate());
+                assertEquals(retrieved_bean.getPropertyTime().toString(), new_bean.getPropertyTime().toString());
                 assertEquals(retrieved_bean.getPropertySqlDate().toString(), new_bean.getPropertySqlDate().toString());
                 assertEquals(retrieved_bean.getPropertyChar(), new_bean.getPropertyChar());
                 assertEquals(retrieved_bean.getPropertyCharacterObject(), new_bean.getPropertyCharacterObject());
@@ -724,11 +719,11 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalParameterName(Datasource datasource) {
+    void testIllegalParameterName(Datasource datasource) {
         setup(datasource);
 
         try {
-            Insert query_insert = new Insert(datasource);
+            var query_insert = new Insert(datasource);
             query_insert
                 .into("parametersbean")
                 .fieldParameter("intcol");
@@ -761,11 +756,11 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInexistantParameterName(Datasource datasource) {
+    void testInexistantParameterName(Datasource datasource) {
         setup(datasource);
 
         try {
-            Insert query_insert = new Insert(datasource);
+            var query_insert = new Insert(datasource);
             query_insert
                 .into("parametersbean")
                 .fieldParameter("intcol");
@@ -793,11 +788,11 @@ public class TestDbPreparedStatement {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testIllegalArgumentTypedParameters(Datasource datasource) {
+    void testIllegalArgumentTypedParameters(Datasource datasource) {
         setup(datasource);
 
         try {
-            Insert query_insert = new Insert(datasource);
+            var query_insert = new Insert(datasource);
             query_insert
                 .into("parametersbean")
                 .fieldParameter("intcol");
@@ -959,15 +954,15 @@ public class TestDbPreparedStatement {
 
         protected BeanImpl fetchBean()
         throws DatabaseException {
-            Select query_select = new Select(getDatasource());
+            var query_select = new Select(getDatasource());
             query_select
                 .from("parametersbean")
                 .fields(BeanImpl.class);
-            DbBeanFetcher<BeanImpl> fetcher = new DbBeanFetcher<BeanImpl>(getDatasource(), BeanImpl.class);
+            var fetcher = new DbBeanFetcher<BeanImpl>(getDatasource(), BeanImpl.class);
 
-            DbStatement statement = executeQuery(query_select);
+            var statement = executeQuery(query_select);
             fetch(statement.getResultSet(), fetcher);
-            BeanImpl bean = fetcher.getBeanInstance();
+            var bean = fetcher.getBeanInstance();
             statement.close();
 
             return bean;

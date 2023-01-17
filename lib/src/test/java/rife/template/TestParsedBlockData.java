@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.template;
@@ -11,14 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class TestParsedBlockData {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         ParsedBlockData block_data = new ParsedBlockData();
 
         assertEquals(block_data.countParts(), 0);
     }
 
     @Test
-    public void testParts() {
+    void testParts() {
         ParsedBlockData block_data = new ParsedBlockData();
         ParsedBlockPart block_part1 = new ParsedBlockText("text");
         ParsedBlockPart block_part2 = new ParsedBlockText("text");

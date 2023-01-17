@@ -58,3 +58,5 @@
 <field><value></value><id>otheroptions{{v form:value/}}</id></field>
 <field><value></value></field>
 <field><name>yourcolors</name><type>select</type><options></options></field>
+<field><name>email</name><type>text</type><size>20</size></field>
+<field><name>url</name><type>text</type><size>40</size></field>

@@ -1,0 +1,51 @@
+<svg version="1.1"
+     width="780" height="780"
+     preserveAspectRatio="xMinYMin meet"
+     viewBox="0 0 780 780"
+     xmlns="http://www.w3.org/2000/svg">
+    <title>RIFE2 SVG Clock</title>
+
+    <circle stroke="black" stroke-width="10" fill="rgb(230, 230, 240)"
+            cx="360" cy="360" r="354" />
+
+    <!--v marks/-->
+    <!--b hour-mark-->
+    <line stroke="rgb(128, 128, 138)" stroke-width="16"
+          x1="360" y1="20" x2="360" y2="75"
+          transform="rotate( {{v degree/}} 360 360)"/>
+    <!--/b-->
+    <!--b minute-mark-->
+    <line stroke="rgb(128, 128, 138)" stroke-width="6" class="minute-mark"
+          x1="360" y1="20" x2="360" y2="35"
+          transform="rotate( {{v degree/}} 360 360)"/>
+    <!--/b-->
+
+    <!--v wands/-->
+    <!--b hour-wand-->
+    <line stroke="black" stroke-width="26" stroke-linecap="round" stroke-opacity="0.15"
+          x1="360" y1="103" x2="360" y2="400"
+          transform="translate(4 4) rotate( {{v degree/}} 360 360)"/>
+    <line stroke="black" stroke-width="26" stroke-linecap="round"
+          x1="360" y1="103" x2="360" y2="400"
+          transform="rotate( {{v degree/}} 360 360)"/>
+    <!--/b-->
+    <!--b minute-wand-->
+    <line stroke="black" stroke-width="26" stroke-linecap="round" stroke-opacity="0.15"
+          x1="360" y1="58" x2="360" y2="400"
+          transform="translate(4 4) rotate( {{v degree/}} 360 360)"/>
+    <line stroke="black" stroke-width="26" stroke-linecap="round"
+          x1="360" y1="58" x2="360" y2="400"
+          transform="rotate( {{v degree/}} 360 360)"/>
+    <!--/b-->
+    <!--b second-wand-->
+    <line stroke="rgb(128, 128, 128)" stroke-width="8" stroke-opacity="0.15"
+          x1="360" y1="90" x2="360" y2="440"
+          transform="translate(4 4) rotate( {{v degree/}} 360 360)"/>
+    <line stroke="rgb(218, 0, 0)" stroke-width="8"
+          x1="360" y1="90" x2="360" y2="440"
+          transform="rotate( {{v degree/}} 360 360)"/>
+    <!--/b-->
+
+    <circle stroke-width="0" fill="rgb(218, 0, 0)"
+            cx="360" cy="360" r="12" />
+</svg>

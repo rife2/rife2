@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.querymanagers.generic;
@@ -21,9 +21,9 @@ public class TestGenericQueryManagerManyToMany {
     private GenericQueryManager<MMFirstBean> firstManager_ = null;
     private GenericQueryManager<MMSecondBean> secondManager_ = null;
 
-    protected void setUp(Datasource datasource) {
-        firstManager_ = GenericQueryManagerFactory.getInstance(datasource, MMFirstBean.class);
-        secondManager_ = GenericQueryManagerFactory.getInstance(datasource, MMSecondBean.class);
+    protected void setup(Datasource datasource) {
+        firstManager_ = GenericQueryManagerFactory.instance(datasource, MMFirstBean.class);
+        secondManager_ = GenericQueryManagerFactory.instance(datasource, MMSecondBean.class);
         secondManager_.install();
         firstManager_.install();
     }
@@ -35,8 +35,8 @@ public class TestGenericQueryManagerManyToMany {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetBaseClass(Datasource datasource) {
-        setUp(datasource);
+    void testGetBaseClass(Datasource datasource) {
+        setup(datasource);
         try {
             assertSame(MMFirstBean.class, firstManager_.getBaseClass());
             assertSame(MMSecondBean.class, secondManager_.getBaseClass());
@@ -47,8 +47,8 @@ public class TestGenericQueryManagerManyToMany {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallCustomQuery(Datasource datasource) {
-        setUp(datasource);
+    void testInstallCustomQuery(Datasource datasource) {
+        setup(datasource);
         try {
             firstManager_.remove();
             secondManager_.remove();
@@ -62,8 +62,8 @@ public class TestGenericQueryManagerManyToMany {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveRestoreConstrained(Datasource datasource) {
-        setUp(datasource);
+    void testSaveRestoreConstrained(Datasource datasource) {
+        setup(datasource);
         try {
             var bean = new MMFirstBean();
             MMFirstBean new_bean = null;
@@ -215,8 +215,8 @@ public class TestGenericQueryManagerManyToMany {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDelete(Datasource datasource) {
-        setUp(datasource);
+    void testDelete(Datasource datasource) {
+        setup(datasource);
         try {
             var bean = new MMFirstBean();
 
@@ -242,8 +242,8 @@ public class TestGenericQueryManagerManyToMany {
             assertEquals(2, new DbQueryManager(datasource)
                 .executeGetFirstInt(new Select(datasource)
                     .field("count(*)")
-                    .from("mmfirstbean_mmsecondbean")
-                    .where("mmfirstbean_identifier", "=", id1)));
+                    .from("MMFirstBean_MMSecondBean")
+                    .where("MMFirstBean_identifier", "=", id1)));
             assertEquals(2, secondManager_.count());
 
             // delete the first bean
@@ -254,8 +254,8 @@ public class TestGenericQueryManagerManyToMany {
             assertEquals(0, new DbQueryManager(datasource)
                 .executeGetFirstInt(new Select(datasource)
                     .field("count(*)")
-                    .from("mmfirstbean_mmsecondbean")
-                    .where("mmfirstbean_identifier", "=", id1)));
+                    .from("MMFirstBean_MMSecondBean")
+                    .where("MMFirstBean_identifier", "=", id1)));
             assertEquals(2, secondManager_.count());
 
             // add another many-to-many relationship
@@ -271,8 +271,8 @@ public class TestGenericQueryManagerManyToMany {
             assertEquals(3, new DbQueryManager(datasource)
                 .executeGetFirstInt(new Select(datasource)
                     .field("count(*)")
-                    .from("mmfirstbean_mmsecondbean")
-                    .where("mmfirstbean_identifier", "=", id2)));
+                    .from("MMFirstBean_MMSecondBean")
+                    .where("MMFirstBean_identifier", "=", id2)));
             assertEquals(3, secondManager_.count());
 
             // delete the second bean
@@ -283,8 +283,8 @@ public class TestGenericQueryManagerManyToMany {
             assertEquals(0, new DbQueryManager(datasource)
                 .executeGetFirstInt(new Select(datasource)
                     .field("count(*)")
-                    .from("mmfirstbean_mmsecondbean")
-                    .where("mmfirstbean_identifier", "=", id2)));
+                    .from("MMFirstBean_MMSecondBean")
+                    .where("MMFirstBean_identifier", "=", id2)));
             assertEquals(3, secondManager_.count());
         } finally {
             tearDown();
@@ -293,8 +293,8 @@ public class TestGenericQueryManagerManyToMany {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testValidationContextManyToMany(Datasource datasource) {
-        setUp(datasource);
+    void testValidationContextManyToMany(Datasource datasource) {
+        setup(datasource);
         try {
             var bean = new MMFirstBean();
 
@@ -346,8 +346,8 @@ public class TestGenericQueryManagerManyToMany {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testValidationContextManyToManyAssociation(Datasource datasource) {
-        setUp(datasource);
+    void testValidationContextManyToManyAssociation(Datasource datasource) {
+        setup(datasource);
         try {
             var bean2 = new MMSecondBean();
             bean2.setSecondString("This is my test string");

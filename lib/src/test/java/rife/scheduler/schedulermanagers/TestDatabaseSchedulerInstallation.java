@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler.schedulermanagers;
@@ -16,15 +16,15 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDatabaseSchedulerInstallation {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstantiateSchedulerManager(Datasource datasource) {
-        DatabaseScheduler manager = DatabaseSchedulerFactory.getInstance(datasource);
+    void testInstantiateSchedulerManager(Datasource datasource) {
+        var manager = DatabaseSchedulingFactory.instance(datasource);
         assertNotNull(manager);
     }
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstall(Datasource datasource) {
-        DatabaseScheduler manager = DatabaseSchedulerFactory.getInstance(datasource);
+    void testInstall(Datasource datasource) {
+        var manager = DatabaseSchedulingFactory.instance(datasource);
 
         try {
             assertTrue(manager.install());
@@ -35,8 +35,8 @@ public class TestDatabaseSchedulerInstallation {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRemove(Datasource datasource) {
-        DatabaseScheduler manager = DatabaseSchedulerFactory.getInstance(datasource);
+    void testRemove(Datasource datasource) {
+        var manager = DatabaseSchedulingFactory.instance(datasource);
 
         try {
             assertTrue(manager.remove());

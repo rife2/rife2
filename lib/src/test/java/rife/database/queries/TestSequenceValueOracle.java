@@ -1,19 +1,20 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 import rife.database.exceptions.SequenceOperationRequiredException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValueOracle extends TestSequenceValue {
-    @Test
-    public void testInstantiationOracle() {
-        SequenceValue query = new SequenceValue(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testInstantiationOracle() {
+        var query = new SequenceValue(ORACLE);
         assertNotNull(query);
         try {
             query.getSql();
@@ -23,9 +24,9 @@ public class TestSequenceValueOracle extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testInvalidOracle() {
-        SequenceValue query = new SequenceValue(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testInvalidOracle() {
+        var query = new SequenceValue(ORACLE);
         try {
             query.getSql();
             fail();
@@ -50,9 +51,9 @@ public class TestSequenceValueOracle extends TestSequenceValue {
         query.clear();
     }
 
-    @Test
-    public void testClearOracle() {
-        SequenceValue query = new SequenceValue(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testClearOracle() {
+        var query = new SequenceValue(ORACLE);
         query
             .name("sequencename")
             .next();
@@ -67,9 +68,9 @@ public class TestSequenceValueOracle extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testNextOracle() {
-        SequenceValue query = new SequenceValue(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testNextOracle() {
+        var query = new SequenceValue(ORACLE);
         query
             .name("sequencename")
             .next();
@@ -77,9 +78,9 @@ public class TestSequenceValueOracle extends TestSequenceValue {
         assertTrue(execute(ORACLE, query) >= 0);
     }
 
-    @Test
-    public void testCurrentOracle() {
-        SequenceValue query = new SequenceValue(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testCurrentOracle() {
+        var query = new SequenceValue(ORACLE);
         query
             .name("sequencename")
             .current();
@@ -87,13 +88,13 @@ public class TestSequenceValueOracle extends TestSequenceValue {
         assertTrue(execute(ORACLE, query) >= 0);
     }
 
-    @Test
-    public void testCloneOracle() {
-        SequenceValue query = new SequenceValue(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testCloneOracle() {
+        var query = new SequenceValue(ORACLE);
         query
             .name("sequencename")
             .next();
-        SequenceValue query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
         assertTrue(execute(ORACLE, query_clone) >= 0);

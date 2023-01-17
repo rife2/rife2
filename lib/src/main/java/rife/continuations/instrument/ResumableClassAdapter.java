@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.continuations.instrument;
@@ -62,7 +62,7 @@ class ResumableClassAdapter extends ClassVisitor {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest("Class:visitMethod             (" + access + ", \"" + name + "\", \"" + desc + "\", \"" + signature + "\", " + (null == exceptions ? null : join(exceptions, ",")) + ")");
 
-        // only adapt the processElement method
+        // only adapt the entry method
         if (entryMethodName_.equals(name) &&
             entryMethodDesc_.equals(desc)) {
             if (adapt_) {

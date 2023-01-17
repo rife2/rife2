@@ -1,12 +1,11 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
 
 import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import rife.config.RifeConfig;
 import rife.engine.annotations.Parameter;
@@ -25,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestEngine {
     @Test
-    public void testSimplePlain()
+    void testSimplePlain()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -44,7 +43,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testSimpleHtml()
+    void testSimpleHtml()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -60,7 +59,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testSimplePathInfo()
+    void testSimplePathInfo()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -98,7 +97,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testPathInfoMapping()
+    void testPathInfoMapping()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -128,7 +127,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testPathInfoMappingMultiple()
+    void testPathInfoMappingMultiple()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -166,7 +165,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testPathInfoMappingUrlGeneration()
+    void testPathInfoMappingUrlGeneration()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -176,7 +175,9 @@ public class TestEngine {
                     c.print(":" + c.parameter("param2"));
                 });
                 get("/", c -> {
-                    c.print(c.urlFor(path_info).param("param1", "v1").param("param2", "412"));
+                    c.setParameter("param1", "v1a");
+                    c.setParameter("param2", "412");
+                    c.print(c.urlFor(path_info).param("param1", "v1"));
                 });
 
             }
@@ -197,7 +198,44 @@ public class TestEngine {
     }
 
     @Test
-    public void testHeaders()
+    void testFormUrlGeneration()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            Route form;
+            public void setup() {
+                form = post("/form/map", PathInfoHandling.MAP(m -> m.t("text").s().t("x").p("param2", "\\d+")), c -> {
+                    c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo());
+                    c.print(":" + c.parameter("param1"));
+                    c.print(":" + c.parameter("param2"));
+                });
+                get("/", c -> {
+                    c.setParameter("param1", "v1");
+                    c.setParameter("param2", "412");
+                    c.print(c.template("form_url_generation"));
+                });
+
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page;
+
+                page = webClient.getPage("http://localhost:8181/");
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("""
+                    <form action="http://localhost:8181/form/map/text/x412" method="post">
+                      <input type="hidden" name="param1" value="v1" />
+                      <input type="submit" name="submit" />
+                    </form>""", page.getWebResponse().getContentAsString());
+
+                page = page.getForms().get(0).getInputsByName("submit").get(0).click();
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("Just some text 127.0.0.1:8181:text/x412:v1:412", page.asNormalizedText());
+            }
+        }
+    }
+
+    @Test
+    void testHeaders()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -205,7 +243,7 @@ public class TestEngine {
                     c.addHeader("Content-Disposition", "attachment; filename=thefile.zip");
                     Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
                     cal.set(2002, Calendar.OCTOBER, 25, 19, 20, 58);
-                    c.addHeader("DateHeader", cal.getTimeInMillis());
+                    c.addDateHeader("DateHeader", cal.getTimeInMillis());
                     c.addHeader("IntHeader", 1212);
 
                     c.print("headers");
@@ -223,7 +261,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testCookies()
+    void testCookies()
     throws IOException {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -268,7 +306,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testContentlength()
+    void testContentlength()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -289,7 +327,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testDynamicContenttype()
+    void testDynamicContenttype()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -309,7 +347,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testBinary()
+    void testBinary()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -327,7 +365,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testPrintAndWriteBuffer()
+    void testPrintAndWriteBuffer()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -349,7 +387,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testPrintAndWriteNoBuffer()
+    void testPrintAndWriteNoBuffer()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
@@ -371,7 +409,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testGenerateForm()
+    void testGenerateForm()
     throws Exception {
         try (final var server = new TestServerRunner(new GenerateFormSite())) {
             try (final var webClient = new WebClient()) {
@@ -385,7 +423,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testGenerateFormPrefix()
+    void testGenerateFormPrefix()
     throws Exception {
         try (final var server = new TestServerRunner(new GenerateFormSite())) {
             try (final var webClient = new WebClient()) {
@@ -399,7 +437,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testGenerateEmptyForm()
+    void testGenerateEmptyForm()
     throws Exception {
         try (final var server = new TestServerRunner(new GenerateEmptyFormSite())) {
             try (final var webClient = new WebClient()) {
@@ -413,7 +451,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testGenerateEmptyFormPrefix()
+    void testGenerateEmptyFormPrefix()
     throws Exception {
         try (final var server = new TestServerRunner(new GenerateEmptyFormSite())) {
             try (final var webClient = new WebClient()) {
@@ -434,7 +472,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testRouterSite() {
+    void testRouterSite() {
         var site = new Site() {
             final Routes routes = group("/routes", new Routes());
             final Routes moreRoutes = group("/moreRoutes", new Routes());
@@ -446,7 +484,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testResolveRoutes() {
+    void testResolveRoutes() {
         var site = new Site() {
             final Route route1 = route("/route1", c -> {
             });
@@ -520,7 +558,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testFallbacks()
+    void testFallbacks()
     throws Exception {
         try (final var server = new TestServerRunner(new FallbacksSite())) {
             try (final var webClient = new WebClient()) {
@@ -553,7 +591,7 @@ public class TestEngine {
     }
 
     @Test
-    public void testPreventElementInstanceAnnotations() {
+    void testPreventElementInstanceAnnotations() {
         RifeConfig.engine().setPrettyEngineExceptions(false);
         try {
             try (final var server = new TestServerRunner(new Site() {

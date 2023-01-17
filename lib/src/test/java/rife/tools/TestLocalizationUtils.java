@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class TestLocalizationUtils {
     @Test
-    public void testExtractLocalizedUrl() {
+    void testExtractLocalizedUrl() {
         assertEquals("/root", Localization.extractLocalizedUrl("en:/root,nl:/wortel"));
         assertEquals("/logout", Localization.extractLocalizedUrl("nl:/afmelden,/logout,fr:/deconnection"));
         assertNull(Localization.extractLocalizedUrl(null));

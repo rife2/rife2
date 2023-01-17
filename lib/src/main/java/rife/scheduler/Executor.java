@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler;
@@ -17,8 +17,8 @@ public abstract class Executor {
     throws SchedulerExecutionException {
         assert task != null;
 
-        ExecutorThread executor_thread = new ExecutorThread(this, task);
-        Thread thread = new Thread(executor_thread, getHandledTasktype());
+        var executor_thread = new ExecutorThread(this, task);
+        var thread = new Thread(executor_thread, getHandledTaskType());
         thread.start();
     }
 
@@ -30,7 +30,13 @@ public abstract class Executor {
         return 1000;
     }
 
-    public abstract boolean executeTask(Task task);
+    public Task createTask() {
+        return new Task().type(getHandledTaskType());
+    }
 
-    public abstract String getHandledTasktype();
+    public String getHandledTaskType() {
+        return getClass().getName();
+    };
+
+    public abstract boolean executeTask(Task task);
 }

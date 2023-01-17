@@ -1,17 +1,22 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
 
 import rife.config.RifeConfig;
-import rife.validation.ConstrainedProperty;
-import rife.validation.Validation;
+import rife.engine.exceptions.EngineException;
+import rife.resources.ResourceFinderClasspath;
+import rife.resources.exceptions.ResourceFinderErrorException;
+import rife.tools.*;
+import rife.tools.exceptions.FileUtilsErrorException;
+import rife.validation.*;
 
 import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Instant;
+import java.util.*;
 
 public class BeanImpl extends Validation {
     public enum Day {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY}
@@ -41,15 +46,96 @@ public class BeanImpl extends Validation {
     private Date date_;
     private Date dateFormatted_;
     private Date[] datesFormatted_;
+    private Instant instant_;
+    private Instant instantFormatted_;
+    private Instant[] instantsFormatted_;
     private SerializableParam serializableParam_;
     private SerializableParam[] serializableParams_;
 
+    public void printToContext(Context c) {
+        var errors = getValidationErrors();
+        for (var error : errors) {
+            c.print(error.getIdentifier() + " : " + error.getSubject() + "\n");
+        }
+        c.print(getEnum() + "," + getString() + "," + getStringbuffer() + "," + getInt() + "," + getInteger() + "," + getChar() + "," + getCharacter() + "," + isBoolean() + "," + getBooleanObject() + "," + getByte() + "," + getByteObject() + "," + getDouble() + "," + getDoubleObject() + "," + getFloat() + "," + getFloatObject() + "," + getLong() + "," + getLongObject() + "," + getShort() + "," + getShortObject());
+        c.print("," + getStringFile());
+
+        try {
+            byte[] image_bytes = ResourceFinderClasspath.instance().useStream("uwyn.png", new InputStreamUser<>() {
+                public byte[] useInputStream(InputStream stream)
+                throws InnerClassException {
+                    try {
+                        return FileUtils.readBytes(stream);
+                    } catch (FileUtilsErrorException e) {
+                        throwException(e);
+                    }
+
+                    return null;
+                }
+            });
+
+            if (null == getBytesFile()) {
+                c.print(",null");
+            } else {
+                c.print("," + Arrays.equals(image_bytes, getBytesFile()));
+            }
+            c.print("," + getConstrainedProperty("bytesFile").getName());
+
+            if (null == getStreamFile()) {
+                c.print(",null");
+            } else {
+                c.print("," + Arrays.equals(image_bytes, FileUtils.readBytes(getStreamFile())));
+            }
+
+            var sf = RifeConfig.tools().getSimpleDateFormat("EEE d MMM yyyy HH:mm:ss");
+            
+            c.print("," + (null == getDate() ? null : sf.format(getDate())));
+            if (null == getDatesFormatted()) {
+                c.print(",null");
+            } else {
+                for (var date : getDatesFormatted()) {
+                    c.print(",");
+                    if (null == date) {
+                        c.print("null");
+                    } else {
+                        c.print(sf.format(date));
+                    }
+                }
+            }
+            
+            c.print("," + (null == getInstant() ? null : sf.format(Convert.toDate(getInstant()))));
+            if (null == getInstantsFormatted()) {
+                c.print(",null");
+            } else {
+                for (var instant : getInstantsFormatted()) {
+                    c.print(",");
+                    if (null == instant) {
+                        c.print("null");
+                    } else {
+                        c.print(sf.format(Convert.toDate(instant)));
+                    }
+                }
+            }
+
+            c.print("," + getSerializableParam());
+            if (null == getSerializableParams()) {
+                c.print(",null");
+            } else {
+                for (Object param : getSerializableParams()) {
+                    c.print("," + param);
+                }
+            }
+        } catch (ResourceFinderErrorException | FileUtilsErrorException e) {
+            throw new EngineException(e);
+        }
+    }
+    
     public void activateValidation() {
         addConstraint(new ConstrainedProperty("character").editable(false));
         addConstraint(new ConstrainedProperty("byte").editable(false));
-        addConstraint(new ConstrainedProperty("stringFile").file(true));
-        addConstraint(new ConstrainedProperty("bytesFile").file(true));
-        addConstraint(new ConstrainedProperty("streamFile").file(true));
+        addConstraint(new ConstrainedProperty("stringFile"));
+        addConstraint(new ConstrainedProperty("bytesFile"));
+        addConstraint(new ConstrainedProperty("streamFile"));
 
         addGroup("somegroup")
             .addConstraint(new ConstrainedProperty("enum"))
@@ -63,10 +149,13 @@ public class BeanImpl extends Validation {
             .addConstraint(new ConstrainedProperty("long"))
             .addConstraint(new ConstrainedProperty("shortObject"));
 
-        SimpleDateFormat sf = new SimpleDateFormat("EEE d MMM yyyy HH:mm:ss");
-        sf.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+        var sf = RifeConfig.tools().getSimpleDateFormat("EEE d MMM yyyy HH:mm:ss");
         addConstraint(new ConstrainedProperty("dateFormatted").format(sf));
         addConstraint(new ConstrainedProperty("datesFormatted").format(sf));
+        addConstraint(new ConstrainedProperty("instantFormatted").format(sf));
+        addConstraint(new ConstrainedProperty("instantsFormatted").format(sf));
+        addConstraint(new ConstrainedProperty("serializableParam").format(new SerializationFormatter()));
+        addConstraint(new ConstrainedProperty("serializableParams").format(new SerializationFormatter()));
     }
 
     public void setEnum(Day day) {
@@ -269,6 +358,30 @@ public class BeanImpl extends Validation {
         return datesFormatted_;
     }
 
+    public void setInstant(Instant instant) {
+        instant_ = instant;
+    }
+
+    public Instant getInstant() {
+        return instant_;
+    }
+
+    public void setInstantFormatted(Instant instantFormatted) {
+        instantFormatted_ = instantFormatted;
+    }
+
+    public Instant getInstantFormatted() {
+        return instantFormatted_;
+    }
+
+    public void setInstantsFormatted(Instant[] instantsFormatted) {
+        instantsFormatted_ = instantsFormatted;
+    }
+
+    public Instant[] getInstantsFormatted() {
+        return instantsFormatted_;
+    }
+
     public void setSerializableParam(SerializableParam serializableParam) {
         serializableParam_ = serializableParam;
     }
@@ -323,19 +436,14 @@ public class BeanImpl extends Validation {
                 return false;
             }
 
-            if (!(other instanceof SerializableParam)) {
+            if (!(other instanceof SerializableParam other_serializable)) {
                 return false;
             }
 
-            SerializableParam other_serializable = (SerializableParam) other;
             if (!other_serializable.getString().equals(getString())) {
                 return false;
             }
-            if (other_serializable.getNumber() != getNumber()) {
-                return false;
-            }
-
-            return true;
+            return other_serializable.getNumber() == getNumber();
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.resources;
@@ -18,14 +18,14 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * This class offers <code>ResourceFinder</code> capabilities for resources that
+ * This class offers {@code ResourceFinder} capabilities for resources that
  * are available through the classloader. This is done for directories as well
  * as for jar files. Basically, this corresponds to the resources that are
  * available through the classpath.
  * <p>
  * Since the application's classloader isn't supposed to change in a global way,
- * the <code>ResourceFinderClasspath</code> class can only be instantiated
- * through the static <code>instance()</code> method that always returns
+ * the {@code ResourceFinderClasspath} class can only be instantiated
+ * through the static {@code instance()} method that always returns
  * the same instance as a singleton.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -38,9 +38,9 @@ public class ResourceFinderClasspath extends AbstractResourceFinder {
 
     /**
      * Returns the shared singleton instance of the
-     * <code>ResourceFinderClasspath</code> class.
+     * {@code ResourceFinderClasspath} class.
      *
-     * @return the singleton <code>ResourceFinderClasspath</code> instance
+     * @return the singleton {@code ResourceFinderClasspath} instance
      * @since 1.0
      */
     public static ResourceFinderClasspath instance() {

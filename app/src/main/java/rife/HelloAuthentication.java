@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife;
@@ -14,15 +14,17 @@ public class HelloAuthentication extends Site {
     final MemorySessionValidator validator = new MemorySessionValidator();
     final AuthConfig config = new AuthConfig(validator);
 
+    Route login;
     Route landing;
     Route logout;
 
     public void setup() {
-        var login = route("/login", new Login(config, TemplateFactory.HTML.get("HelloLogin")));
+        login = getPost("/login", new Login(config, TemplateFactory.HTML.get("HelloLogin")));
         group(new Router() {
             public void setup() {
                 before(new Authenticated(config));
-                landing = get("/hello", c -> {
+
+                landing = get("/authentication", c -> {
                     var t = c.template("HelloAuthenticated");
                     t.setValue("user", config.identityAttribute(c).getLogin());
                     c.print(t);
@@ -31,8 +33,11 @@ public class HelloAuthentication extends Site {
             }
         });
 
-        config.loginRoute(login).landingRoute(landing);
-        validator.getCredentialsManager().addUser("testUser", new RoleUserAttributes().password("testPassword"));
+        config
+            .loginRoute(login)
+            .landingRoute(landing);
+        validator.getCredentialsManager()
+            .addUser("testUser", new RoleUserAttributes().password("testPassword"));
     }
 
     public static void main(String[] args) {

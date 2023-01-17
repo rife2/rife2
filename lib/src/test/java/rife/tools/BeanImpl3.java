@@ -1,24 +1,29 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
 
 import rife.config.RifeConfig;
-import rife.validation.ConstrainedBean;
 import rife.validation.ConstrainedProperty;
 import rife.validation.MetaData;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.*;
 import java.util.Date;
 import java.util.Locale;
 
 public class BeanImpl3 extends MetaData {
     private Date propertyDate_ = null;
+    private Instant propertyInstant_ = null;
+    private LocalDateTime propertyLocalDateTime_ = null;
+    private LocalDate propertyLocalDate_ = null;
+    private LocalTime propertyLocalTime_ = null;
     private byte propertyByte_ = 0;
     private double propertyDouble_ = 0.0d;
     private float propertyFloat_ = 0.0f;
@@ -32,7 +37,12 @@ public class BeanImpl3 extends MetaData {
     private Long propertyLongObject_ = null;
     private Short propertyShortObject_ = null;
     private BigDecimal propertyBigDecimal_ = null;
+    private SerializableType propertySerializableType_ = null;
     private Date[] propertyDateArray_ = null;
+    private Instant[] propertyInstantArray_ = null;
+    private LocalDateTime[] propertyLocalDateTimeArray_ = null;
+    private LocalDate[] propertyLocalDateArray_ = null;
+    private LocalTime[] propertyLocalTimeArray_ = null;
     private byte[] propertyByteArray_ = null;
     private double[] propertyDoubleArray_ = null;
     private float[] propertyFloatArray_ = null;
@@ -46,20 +56,25 @@ public class BeanImpl3 extends MetaData {
     private Long[] propertyLongObjectArray_ = null;
     private Short[] propertyShortObjectArray_ = null;
     private BigDecimal[] propertyBigDecimalArray_ = null;
+    private SerializableType[] propertySerializableTypeArray_ = null;
 
     public void activateMetaData() {
-        DateFormat date_format = new SimpleDateFormat("'custom format' yyyy-MM-dd HH:mm");
-        date_format.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
-        NumberFormat int_format = NumberFormat.getCurrencyInstance(Locale.US);
-        NumberFormat double_format = NumberFormat.getNumberInstance(Locale.US);
-        NumberFormat byte_format = NumberFormat.getPercentInstance(Locale.US);
-        NumberFormat float_format = NumberFormat.getNumberInstance(Locale.FRANCE);
-        NumberFormat long_format = NumberFormat.getCurrencyInstance(Locale.US);
-        NumberFormat short_format = NumberFormat.getCurrencyInstance(Locale.ENGLISH);
-        DecimalFormat bigdecimal_format = (DecimalFormat) NumberFormat.getNumberInstance(Locale.FRANCE);
+        var date_format = RifeConfig.tools().getSimpleDateFormat("'custom format' yyyy-MM-dd HH:mm");
+        var int_format = NumberFormat.getCurrencyInstance(Locale.US);
+        var double_format = NumberFormat.getNumberInstance(Locale.US);
+        var byte_format = NumberFormat.getPercentInstance(Locale.US);
+        var float_format = NumberFormat.getNumberInstance(Locale.FRANCE);
+        var long_format = NumberFormat.getCurrencyInstance(Locale.US);
+        var short_format = NumberFormat.getCurrencyInstance(Locale.ENGLISH);
+        var bigdecimal_format = (DecimalFormat) NumberFormat.getNumberInstance(Locale.FRANCE);
         bigdecimal_format.setParseBigDecimal(true);
+        var serialization_formatter = new SerializationFormatter();
 
         addConstraint(new ConstrainedProperty("propertyDate").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyInstant").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyLocalDateTime").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyLocalDate").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyLocalTime").format(date_format));
         addConstraint(new ConstrainedProperty("propertyInt").format(int_format));
         addConstraint(new ConstrainedProperty("propertyIntegerObject").format(int_format));
         addConstraint(new ConstrainedProperty("propertyDouble").format(double_format));
@@ -73,8 +88,13 @@ public class BeanImpl3 extends MetaData {
         addConstraint(new ConstrainedProperty("propertyShort").format(short_format));
         addConstraint(new ConstrainedProperty("propertyShortObject").format(short_format));
         addConstraint(new ConstrainedProperty("propertyBigDecimal").format(bigdecimal_format));
+        addConstraint(new ConstrainedProperty("propertySerializableType").format(serialization_formatter));
 
         addConstraint(new ConstrainedProperty("propertyDateArray").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyInstantArray").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyLocalDateTimeArray").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyLocalDateArray").format(date_format));
+        addConstraint(new ConstrainedProperty("propertyLocalTimeArray").format(date_format));
         addConstraint(new ConstrainedProperty("propertyIntArray").format(int_format));
         addConstraint(new ConstrainedProperty("propertyIntegerObjectArray").format(int_format));
         addConstraint(new ConstrainedProperty("propertyDoubleArray").format(double_format));
@@ -88,6 +108,7 @@ public class BeanImpl3 extends MetaData {
         addConstraint(new ConstrainedProperty("propertyShortArray").format(short_format));
         addConstraint(new ConstrainedProperty("propertyShortObjectArray").format(short_format));
         addConstraint(new ConstrainedProperty("propertyBigDecimalArray").format(bigdecimal_format));
+        addConstraint(new ConstrainedProperty("propertySerializableTypeArray").format(serialization_formatter));
     }
 
     public BeanImpl3() {
@@ -115,6 +136,38 @@ public class BeanImpl3 extends MetaData {
 
     public void setPropertyDate(Date propertyDate) {
         propertyDate_ = propertyDate;
+    }
+
+    public Instant getPropertyInstant() {
+        return propertyInstant_;
+    }
+
+    public void setPropertyInstant(Instant propertyInstant) {
+        propertyInstant_ = propertyInstant;
+    }
+
+    public LocalDateTime getPropertyLocalDateTime() {
+        return propertyLocalDateTime_;
+    }
+
+    public void setPropertyLocalDateTime(LocalDateTime propertyLocalDateTime) {
+        propertyLocalDateTime_ = propertyLocalDateTime;
+    }
+
+    public LocalDate getPropertyLocalDate() {
+        return propertyLocalDate_;
+    }
+
+    public void setPropertyLocalDate(LocalDate propertyLocalDate) {
+        propertyLocalDate_ = propertyLocalDate;
+    }
+
+    public LocalTime getPropertyLocalTime() {
+        return propertyLocalTime_;
+    }
+
+    public void setPropertyLocalTime(LocalTime propertyLocalTime) {
+        propertyLocalTime_ = propertyLocalTime;
     }
 
     public byte getPropertyByte() {
@@ -205,12 +258,52 @@ public class BeanImpl3 extends MetaData {
         propertyLongObject_ = propertyLongObject;
     }
 
+    public SerializableType getPropertySerializableType() {
+        return propertySerializableType_;
+    }
+
+    public void setPropertySerializableType(SerializableType propertySerializableType) {
+        propertySerializableType_ = propertySerializableType;
+    }
+
     public Date[] getPropertyDateArray() {
         return propertyDateArray_;
     }
 
     public void setPropertyDateArray(Date[] propertyDateArray) {
         propertyDateArray_ = propertyDateArray;
+    }
+
+    public Instant[] getPropertyInstantArray() {
+        return propertyInstantArray_;
+    }
+
+    public void setPropertyInstantArray(Instant[] propertyInstantArray) {
+        propertyInstantArray_ = propertyInstantArray;
+    }
+
+    public LocalDateTime[] getPropertyLocalDateTimeArray() {
+        return propertyLocalDateTimeArray_;
+    }
+
+    public void setPropertyLocalDateTimeArray(LocalDateTime[] propertyLocalDateTimeArray) {
+        propertyLocalDateTimeArray_ = propertyLocalDateTimeArray;
+    }
+
+    public LocalDate[] getPropertyLocalDateArray() {
+        return propertyLocalDateArray_;
+    }
+
+    public void setPropertyLocalDateArray(LocalDate[] propertyLocalDateArray) {
+        propertyLocalDateArray_ = propertyLocalDateArray;
+    }
+
+    public LocalTime[] getPropertyLocalTimeArray() {
+        return propertyLocalTimeArray_;
+    }
+
+    public void setPropertyLocalTimeArray(LocalTime[] propertyLocalTimeArray) {
+        propertyLocalTimeArray_ = propertyLocalTimeArray;
     }
 
     public byte[] getPropertyByteArray() {
@@ -315,5 +408,67 @@ public class BeanImpl3 extends MetaData {
 
     public void setPropertyShortObjectArray(Short[] propertyShortObjectArray) {
         propertyShortObjectArray_ = propertyShortObjectArray;
+    }
+
+    public SerializableType[] getPropertySerializableTypeArray() {
+        return propertySerializableTypeArray_;
+    }
+
+    public void setPropertySerializableTypeArray(SerializableType[] propertySerializableTypeArray) {
+        propertySerializableTypeArray_ = propertySerializableTypeArray;
+    }
+
+    public static class SerializableType implements Serializable {
+        private int number_ = -1;
+        private String string_ = null;
+
+        public SerializableType(int number, String string) {
+            number_ = number;
+            string_ = string;
+        }
+
+        public void setNumber(int number) {
+            number_ = number;
+        }
+
+        public int getNumber() {
+            return number_;
+        }
+
+        public void setString(String string) {
+            string_ = string;
+        }
+
+        public String getString() {
+            return string_;
+        }
+
+        public String toString() {
+            return number_ + ":" + string_;
+        }
+
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+
+            if (null == other) {
+                return false;
+            }
+
+            if (!(other instanceof SerializableType)) {
+                return false;
+            }
+
+            var other_datalink = (SerializableType) other;
+            if (!other_datalink.getString().equals(getString())) {
+                return false;
+            }
+            if (other_datalink.getNumber() != getNumber()) {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

@@ -1,12 +1,11 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.credentials;
 
 import rife.config.RifeConfig;
-import rife.validation.ConstrainedProperty;
-import rife.validation.Validation;
+import rife.validation.*;
 
 /**
  * <p>Provides standard {@link RoleUserCredentials} functionalities by
@@ -18,16 +17,16 @@ import rife.validation.Validation;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public class RoleUser extends Validation implements RoleUserCredentials, RememberMe {
-    private String mLogin = null;
-    private String mPassword = null;
-    private String mRole = null;
-    private boolean mRemember = false;
+public class RoleUser extends MetaData implements RoleUserCredentials, RememberMe {
+    private String login_ = null;
+    private String password_ = null;
+    private String role_ = null;
+    private boolean remember_ = false;
 
     public RoleUser() {
     }
 
-    protected void activateValidation() {
+    public void activateMetaData() {
         addConstraint(new ConstrainedProperty("login")
             .notNull(true)
             .minLength(RifeConfig.authentication().getLoginMinimumLength())
@@ -39,20 +38,18 @@ public class RoleUser extends Validation implements RoleUserCredentials, Remembe
     }
 
     public RoleUser(String login, String password) {
-        this();
         setLogin(login);
         setPassword(password);
     }
 
     public RoleUser(String login, String password, String role) {
-        this();
         setLogin(login);
         setPassword(password);
         setRole(role);
     }
 
     public String getLogin() {
-        return mLogin;
+        return login_;
     }
 
     public RoleUser login(String login) {
@@ -62,11 +59,11 @@ public class RoleUser extends Validation implements RoleUserCredentials, Remembe
     }
 
     public void setLogin(String login) {
-        mLogin = login;
+        login_ = login;
     }
 
     public String getPassword() {
-        return mPassword;
+        return password_;
     }
 
     public RoleUser password(String password) {
@@ -76,11 +73,11 @@ public class RoleUser extends Validation implements RoleUserCredentials, Remembe
     }
 
     public void setPassword(String password) {
-        mPassword = password;
+        password_ = password;
     }
 
     public String getRole() {
-        return mRole;
+        return role_;
     }
 
     public RoleUser role(String role) {
@@ -90,11 +87,11 @@ public class RoleUser extends Validation implements RoleUserCredentials, Remembe
     }
 
     public void setRole(String role) {
-        mRole = role;
+        role_ = role;
     }
 
     public boolean getRemember() {
-        return mRemember;
+        return remember_;
     }
 
     public RoleUser remember(boolean remember) {
@@ -104,7 +101,7 @@ public class RoleUser extends Validation implements RoleUserCredentials, Remembe
     }
 
     public void setRemember(boolean remember) {
-        mRemember = remember;
+        remember_ = remember;
     }
 }
 

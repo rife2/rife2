@@ -1,19 +1,19 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
 
 import rife.engine.annotations.*;
 import rife.tools.FileUtils;
-import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
 
-import static rife.engine.annotations.FlowDirection.IN_OUT;
-
 public class AnnotationInSite extends Site {
     public static class ParentElement implements Element {
+        @ActiveSite AnnotationInSite site;
+        @ActiveSite Site baseSite;
+        @ActiveSite Object notSite;
         @Body int intBody = -1;
         @Cookie("cookie2") String stringCookie2 = "defaultCookie2";
         @FileUpload String fileString;
@@ -22,13 +22,20 @@ public class AnnotationInSite extends Site {
         @RequestAttribute int intRequestAttribute = -7;
         @SessionAttribute int intSessionAttribute = -9;
         @Header("header2") String stringHeader2 = "defaultHeader2";
+        @Property String prop1 = "defaultProp1";
+        @Property String prop2 = "defaultProp2";
+        @Property("prop1") String prop3 = "defaultProp3";
 
         public void process(Context c)
         throws Exception {
+            if (site == null) throw new RuntimeException("site should be filled");
+            if (baseSite == null) throw new RuntimeException("baseSite should be filled");
+            if (notSite != null) throw new RuntimeException("notSite should not be filled");
         }
     }
 
     public static class AnnotatedElement extends ParentElement {
+        @ActiveSite AnnotationInSite childSite;
         @Body String stringBody = "defaultBody";
 
         @Cookie String stringCookie = "defaultCookie";
@@ -59,9 +66,17 @@ public class AnnotationInSite extends Site {
         @Header int intHeader = -11;
         @Header("header3") int intHeader2 = -12;
 
+        @Property String prop1 = "defaultProp1";
+        @Property String prop2 = "defaultProp2";
+        @Property("prop1") String prop3 = "defaultProp3";
+
+        @ParametersBean BeanImpl beanParams = null;
+
         public void process(Context c)
         throws Exception {
             super.process(c);
+
+            if (childSite == null) throw new RuntimeException("childSite should be filled");
 
             c.print(stringBody + "\n");
             c.print(intBody + "\n");
@@ -72,7 +87,7 @@ public class AnnotationInSite extends Site {
             c.print(intCookie2 + "\n");
 
             if (uploadedFile != null) {
-                c.print(uploadedFile.getName() + ", " + uploadedFile.getType() + ", " + FileUtils.readString(uploadedFile.getFile()) + "\n");
+                c.print(uploadedFile.getName() + ", " + uploadedFile.getContentType() + ", " + FileUtils.readString(uploadedFile.getFile()) + "\n");
             } else {
                 c.print(uploadedFile + "\n");
             }
@@ -87,7 +102,7 @@ public class AnnotationInSite extends Site {
                 c.print(fileString + "\n");
             }
             if (uploadedFile2 != null) {
-                c.print(uploadedFile2.getName() + ", " + uploadedFile2.getType() + ", " + FileUtils.readString(uploadedFile2.getFile()) + "\n");
+                c.print(uploadedFile2.getName() + ", " + uploadedFile2.getContentType() + ", " + FileUtils.readString(uploadedFile2.getFile()) + "\n");
             } else {
                 c.print(uploadedFile2 + "\n");
             }
@@ -124,10 +139,17 @@ public class AnnotationInSite extends Site {
             c.print(intHeader + "\n");
             c.print(stringHeader2 + "\n");
             c.print(intHeader2 + "\n");
+
+            c.print(prop1 + "\n");
+            c.print(prop2 + "\n");
+            c.print(prop3 + "\n");
+
+            beanParams.printToContext(c);
         }
     }
 
     public void setup() {
+        properties().put("prop1", "propval1");
         before(c -> {
            if (c.parameterBoolean("generate")) {
                c.setAttribute("stringRequestAttribute", "value9");
@@ -152,6 +174,9 @@ public class AnnotationInSite extends Site {
     <input type="file" name="file2">
     <input type="file" name="file3">
     <input type="file" name="file4">
+    <input type="file" name="stringFile">
+    <input type="file" name="bytesFile">
+    <input type="file" name="streamFile">
     <button type="submit" id="submit">SEND</button>
 </form>
             """));

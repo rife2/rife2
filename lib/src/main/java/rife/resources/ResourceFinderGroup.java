@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.resources;
@@ -22,7 +22,7 @@ import java.util.List;
  * @since 1.0
  */
 public class ResourceFinderGroup extends AbstractResourceFinder {
-    private final List<ResourceFinder> resourceFinders_ = new ArrayList<ResourceFinder>();
+    private final List<ResourceFinder> resourceFinders_ = new ArrayList<>();
 
     public ResourceFinderGroup add(ResourceFinder resourceFinder) {
         resourceFinders_.add(resourceFinder);

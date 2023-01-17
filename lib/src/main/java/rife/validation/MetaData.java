@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 /**
  * This abstract base class can be conveniently used to added {@link
- * Constrained} and {@link ValidatedConstrained} metadata to a POJO.
+ * Constrained} and {@link Validated} metadata to a POJO.
  * <p>Besides implementing all the required interfaces for you, it also sets
  * up the underlying data structures in a lazy fashion. This allows you to
  * benefit from a rich API without the memory overhead when the metadata
@@ -22,9 +22,9 @@ import java.util.logging.Logger;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public abstract class MetaData implements ValidatedConstrained, Constrained, MetaDataMerged, MetaDataBeanAware, Cloneable {
+public abstract class MetaData implements Validated, Constrained, MetaDataMerged, MetaDataBeanAware, Cloneable {
     private Validated metaDataBean_ = this;
-    private Validation validation_;
+    private Validation validation_ = null;
 
     /**
      * This method is called at least once and maximum once when any meta-data

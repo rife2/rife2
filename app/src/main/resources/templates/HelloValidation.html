@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+  <title>RIFE2 Validation</title>
+  <style>
+      .error-area {
+          background: #ffcccc;
+          border: solid 1px red;
+          margin: 1em 0;
+          padding: 0 1em;
+      }
+      .error-mark {
+          color: red;
+          font-weight: bold;
+      }
+      input {
+          margin-top: 1em;
+      }
+  </style>
+</head>
+<body>
+
+<!--v content/-->
+
+<!--bv content-->
+  <!--v errors:*--><!--/v-->
+  <!--b errors:*-->
+    <div class="error-area">
+      <p>Please resolve the following errors:</p>
+      <ul>
+        <!--v errors/-->
+        <!--b errormessage:*-->
+          <li><!--v errormessage/--></li>
+        <!--/b-->
+      </ul>
+    </div>
+  <!--/b-->
+  <!--b mandatory:name-->The name is required.<!--/b-->
+  <!--b invalid:email-->The email has the wrong format.<!--/b-->
+  <!--b mark:error-->error-mark<!--/b-->
+  <form method="post">
+    <label class="{{v mark:name}}{{/v}}">Name
+      <input class="{{v mark:name/}}" name="name" value="{{v param:name}}{{/v}}" />
+    </label><br>
+
+    <label class="{{v mark:1-email}}{{/v}}">Email 1
+      <input class="{{v mark:1-email/}}" name="1-email" value="{{v param:1-email}}{{/v}}" />
+    </label><br>
+
+    <label class="{{v mark:2-email}}{{/v}}">Email 2
+      <input class="{{v mark:2-email/}}" name="2-email" value="{{v param:2-email}}{{/v}}" />
+    </label><br>
+
+    <input type="submit" />
+  </form>
+<!--/bv-->
+
+<!--b added-->
+  Added <!--v name/-->:<!--v email/--><br><br>
+  <a href="{{v route:addForm/}}">Add more</a><br>
+  <a href="{{v route:list/}}">List names</a><br>
+<!--/b-->
+
+<!--b list-->
+  <ol>
+    <!--v entries/-->
+    <!--b entry-->
+      <li><!--v name/-->:<!--v email/--></li>
+    <!--/b-->
+  </ol>
+  <a href="{{v route:addForm/}}">Add more</a><br>
+<!--/b-->
+
+</body>
+</html>

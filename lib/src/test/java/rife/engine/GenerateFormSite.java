@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
@@ -17,6 +17,8 @@ public class GenerateFormSite extends Site {
             bean.setAnotherlogin("jullie");
             bean.setPassword("secret");
             bean.setAnotherpassword("real secret");
+            bean.setEmail("my@email.com");
+            bean.setUrl("https://rife2.com");
             bean.setComment("één comment");
             bean.setAnothercomment("this comment");
             bean.setQuestion(ConstrainedBeanImpl.Question.a2);

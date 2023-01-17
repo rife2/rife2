@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 /**
- * Contains a collection of <code>Datasource</code> instances.
+ * Contains a collection of {@code Datasource} instances.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see rife.database.Datasource
@@ -21,7 +21,7 @@ public class Datasources {
     private HashMap<String, Datasource> map_ = new HashMap<>();
 
     /**
-     * Creates a new empty <code>Datasources</code> instance.
+     * Creates a new empty {@code Datasources} instance.
      *
      * @since 1.0
      */
@@ -31,9 +31,9 @@ public class Datasources {
 
     /**
      * Returns the shared singleton instance of the
-     * <code>Datasources</code> class.
+     * {@code Datasources} class.
      *
-     * @return the singleton <code>Datasources</code> instance
+     * @return the singleton {@code Datasources} instance
      * @since 1.0
      */
     public static Datasources instance() {
@@ -41,14 +41,14 @@ public class Datasources {
     }
 
     /**
-     * Retrieves the <code>Datasource</code> that corresponds to a provided
+     * Retrieves the {@code Datasource} that corresponds to a provided
      * name.
      *
-     * @param name a <code>String</code> that identifies the
-     *             <code>Datasource</code> that has to be retrieved
-     * @return the requested <code>Datasource</code> instance; or
+     * @param name a {@code String} that identifies the
+     *             {@code Datasource} that has to be retrieved
+     * @return the requested {@code Datasource} instance; or
      * <p>
-     * <code>null</code> if name isn't known
+     * {@code null} if name isn't known
      * @since 1.0
      */
     public Datasource getDatasource(String name) {
@@ -56,17 +56,17 @@ public class Datasources {
     }
 
     /**
-     * Retrieves the <code>Datasource</code> that corresponds an automatically
+     * Retrieves the {@code Datasource} that corresponds an automatically
      * selected name, or a fallback datasource of none could be found that matches
      * the selected name.
      *
-     * @param selector     a <code>NameSelector</code> that will automatically select
+     * @param selector     a {@code NameSelector} that will automatically select
      *                     a name based on the current environment
-     * @param fallbackName a <code>String</code> that identifies the
-     *                     fallback <code>Datasource</code> that has to be used
-     * @return the requested <code>Datasource</code> instance; or
+     * @param fallbackName a {@code String} that identifies the
+     *                     fallback {@code Datasource} that has to be used
+     * @return the requested {@code Datasource} instance; or
      * <p>
-     * <code>null</code> if no <code>Datasource</code> could be found
+     * {@code null} if no {@code Datasource} could be found
      * @since 1.0
      */
     public Datasource getDatasourceForSelector(NameSelector selector, String fallbackName) {
@@ -79,12 +79,12 @@ public class Datasources {
     }
 
     /**
-     * Stores a <code>Datasource</code> with a provided name to be able to
+     * Stores a {@code Datasource} with a provided name to be able to
      * reference it later.
      *
-     * @param name       a <code>String</code> that identifies the
-     *                   <code>Datasource</code>
-     * @param datasource the <code>Datasource</code> instance that has to be
+     * @param name       a {@code String} that identifies the
+     *                   {@code Datasource}
+     * @param datasource the {@code Datasource} instance that has to be
      *                   stored
      * @since 1.0
      */
@@ -97,10 +97,10 @@ public class Datasources {
     }
 
     /**
-     * Retrieves a collection of all the <code>Datasource</code> names that are
-     * known by this <code>Datasources</code> instance.
+     * Retrieves a collection of all the {@code Datasource} names that are
+     * known by this {@code Datasources} instance.
      *
-     * @return the requested <code>Collection</code>
+     * @return the requested {@code Collection}
      * @since 1.0
      */
     public Collection<String> getDatasourceNames() {

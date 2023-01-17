@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
@@ -19,7 +19,7 @@ package rife.engine;
 @FunctionalInterface
 public interface Element {
     /**
-     * Process the provided <code>Context</code> with this element.
+     * Process the provided {@code Context} with this element.
      *
      * @param c the provided request/response context
      * @throws Exception when an error occurs

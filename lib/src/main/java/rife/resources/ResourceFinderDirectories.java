@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.resources;
@@ -15,12 +15,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 
 /**
- * This class offers <code>ResourceFinder</code> capabilities for resources that
+ * This class offers {@code ResourceFinder} capabilities for resources that
  * are available through a collection of directories.
  * <p>
  * The resources are looked up in the same order as the order in which the
@@ -33,7 +31,7 @@ import java.util.ArrayList;
  * @since 1.0
  */
 public class ResourceFinderDirectories extends AbstractResourceFinder {
-    private ArrayList<File> mDirectories = null;
+    private ArrayList<File> directories_ = null;
 
     /**
      * Creates a new instance for the provided array of directories.
@@ -43,14 +41,14 @@ public class ResourceFinderDirectories extends AbstractResourceFinder {
      * @since 1.0
      */
     public ResourceFinderDirectories(File[] directories) {
-        mDirectories = new ArrayList<File>();
+        directories_ = new ArrayList<File>();
 
         if (directories != null) {
             for (var directory : directories) {
                 if (directory != null &&
                     directory.canRead() &&
                     directory.isDirectory()) {
-                    mDirectories.add(directory);
+                    directories_.add(directory);
                 }
             }
         }
@@ -58,14 +56,14 @@ public class ResourceFinderDirectories extends AbstractResourceFinder {
 
     public URL getResource(String name) {
         File resource = null;
-        for (var directory : mDirectories) {
+        for (var directory : directories_) {
             var local_name = name.replace('/', File.separatorChar);
             resource = new File(directory.getAbsolutePath() + File.separator + local_name);
             if (resource.exists() &&
                 resource.canRead() &&
                 resource.isFile()) {
                 try {
-                    return resource.toURL();
+                    return resource.toURI().toURL();
                 } catch (IOException e) {
                     continue;
                 }

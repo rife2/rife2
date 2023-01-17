@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDbConnection {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testConnection(Datasource datasource) {
+    void testConnection(Datasource datasource) {
         DbConnection connection = null;
         try {
             connection = datasource.getConnection();
@@ -36,7 +36,7 @@ public class TestDbConnection {
     // TODO : test fails
 //    @ParameterizedTest
 //    @ArgumentsSource(TestDatasources.class)
-//    public void testDriverNameMapping(Datasource datasource)
+//    void testDriverNameMapping(Datasource datasource)
 //    throws Exception {
 //        DbConnection connection = datasource.getConnection();
 //        try {
@@ -55,7 +55,7 @@ public class TestDbConnection {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testClose(Datasource datasource) {
+    void testClose(Datasource datasource) {
         DbConnection connection = null;
         try {
             connection = datasource.getConnection();
@@ -73,7 +73,7 @@ public class TestDbConnection {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetMetaData(Datasource datasource) {
+    void testGetMetaData(Datasource datasource) {
         DbConnection connection = null;
         try {
             connection = datasource.getConnection();
@@ -93,7 +93,7 @@ public class TestDbConnection {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetStatement(Datasource datasource) {
+    void testGetStatement(Datasource datasource) {
         DbConnection connection = null;
         try {
             connection = datasource.getConnection();
@@ -117,7 +117,7 @@ public class TestDbConnection {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetPreparedStatement(Datasource datasource) {
+    void testGetPreparedStatement(Datasource datasource) {
         DbConnection connection = null;
         try {
             connection = datasource.getConnection();
@@ -142,7 +142,7 @@ public class TestDbConnection {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetPreparedStatementQueryBuilder(Datasource datasource) {
+    void testGetPreparedStatementQueryBuilder(Datasource datasource) {
         DbConnection connection = null;
         try {
             connection = datasource.getConnection();
@@ -171,7 +171,7 @@ public class TestDbConnection {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testTransactionBeginCommitRollback(Datasource datasource) {
+    void testTransactionBeginCommitRollback(Datasource datasource) {
         DbConnection connection = datasource.getConnection();
 
         DbPreparedStatement prepared_statement_create = null;
@@ -235,7 +235,7 @@ public class TestDbConnection {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testTransactionThreadValidity(Datasource datasource) {
+    void testTransactionThreadValidity(Datasource datasource) {
         DbConnection connection = null;
         try {
             connection = datasource.getConnection();

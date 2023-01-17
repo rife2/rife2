@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.resources;
@@ -29,7 +29,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         ResourceFinder resource_finder1 = new ResourceFinderDirectories(new File[]{new File(testResourcesPath())});
         ResourceFinder resource_finder2 = new ResourceFinderDirectories(new File[]{new File(testResourcesPath())});
         assertNotNull(resource_finder1);
@@ -38,7 +38,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetUnknownResource() {
+    void testGetUnknownResource() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -47,7 +47,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetResourceByName() {
+    void testGetResourceByName() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -56,7 +56,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetUnknownStreamByName() {
+    void testGetUnknownStreamByName() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -76,7 +76,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetUnknownStreamByResource() {
+    void testGetUnknownStreamByResource() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -96,7 +96,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetStreamByName() {
+    void testGetStreamByName() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -130,7 +130,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetStreamByRkesource() {
+    void testGetStreamByRkesource() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -165,7 +165,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetUnknownContentByName() {
+    void testGetUnknownContentByName() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -179,7 +179,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetUnknownContentByResource() {
+    void testGetUnknownContentByResource() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -193,7 +193,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetContentByName() {
+    void testGetContentByName() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -218,7 +218,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetContentByResource() {
+    void testGetContentByResource() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -244,7 +244,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetContentByNameAndEncoding() {
+    void testGetContentByNameAndEncoding() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -270,7 +270,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetContentByResourceAndEncoding() {
+    void testGetContentByResourceAndEncoding() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -297,7 +297,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetUnknownModificationTimeByName() {
+    void testGetUnknownModificationTimeByName() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -311,7 +311,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetUnknownModificationTimeByResource() {
+    void testGetUnknownModificationTimeByResource() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -325,7 +325,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetModificationTimeByName() {
+    void testGetModificationTimeByName() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});
@@ -339,7 +339,7 @@ public class TestResourceFinderDirectories {
     }
 
     @Test
-    public void testGetModificationTimeByResource() {
+    void testGetModificationTimeByResource() {
         var resource_finder = new ResourceFinderDirectories(new File[]{
             new File(mainResourcesPath()),
             new File(testResourcesPath())});

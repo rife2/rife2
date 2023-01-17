@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
@@ -11,24 +11,24 @@ import rife.tools.StringUtils;
 
 import java.lang.reflect.Modifier;
 
-public class RouteInstance implements Route {
+class RouteInstance implements Route {
     private final Router router_;
-    private final RequestMethod method_;
+    private final RequestMethod[] methods_;
     private String path_;
     private final PathInfoHandling pathInfoHandling_;
     private final Element element_;
 
-    public RouteInstance(Router router, Element element) {
+    RouteInstance(Router router, Element element) {
         this(router, null, null, element);
     }
 
-    public RouteInstance(Router router, RequestMethod method, String path, Element element) {
-        this(router, method, path, PathInfoHandling.NONE, element);
+    RouteInstance(Router router, RequestMethod[] methods, String path, Element element) {
+        this(router, methods, path, PathInfoHandling.NONE, element);
     }
 
-    public RouteInstance(Router router, RequestMethod method, String path, PathInfoHandling pathInfoHandling, Element element) {
+    RouteInstance(Router router, RequestMethod[] methods, String path, PathInfoHandling pathInfoHandling, Element element) {
         router_ = router;
-        method_ = method;
+        methods_ = methods;
         path_ = path;
         pathInfoHandling_ = pathInfoHandling;
         element_ = element;
@@ -41,8 +41,8 @@ public class RouteInstance implements Route {
     }
 
     @Override
-    public RequestMethod method() {
-        return method_;
+    public RequestMethod[] methods() {
+        return methods_;
     }
 
     @Override
@@ -60,6 +60,11 @@ public class RouteInstance implements Route {
         return StringUtils.stripFromFront(path_, "/");
     }
 
+    @Override
+    public Class getElementClass() {
+        return element_.getClass();
+    }
+
     private void preventAnnotatedFields() {
         try {
             Class klass = element_.getClass();
@@ -73,12 +78,14 @@ public class RouteInstance implements Route {
                         continue;
                     }
 
-                    if (field.isAnnotationPresent(Parameter.class) ||
-                        field.isAnnotationPresent(Header.class) ||
+                    if (field.isAnnotationPresent(ActiveSite.class) ||
                         field.isAnnotationPresent(Body.class) ||
-                        field.isAnnotationPresent(PathInfo.class) ||
-                        field.isAnnotationPresent(FileUpload.class) ||
                         field.isAnnotationPresent(Cookie.class) ||
+                        field.isAnnotationPresent(FileUpload.class) ||
+                        field.isAnnotationPresent(Header.class) ||
+                        field.isAnnotationPresent(Parameter.class) ||
+                        field.isAnnotationPresent(PathInfo.class) ||
+                        field.isAnnotationPresent(Property.class) ||
                         field.isAnnotationPresent(RequestAttribute.class) ||
                         field.isAnnotationPresent(SessionAttribute.class)) {
                         throw new AnnotatedElementInstanceFieldException(this, element_, field.getName());
@@ -95,6 +102,11 @@ public class RouteInstance implements Route {
     @Override
     public Element obtainElementInstance(Context context) {
         return element_;
+    }
+
+    @Override
+    public void prepareElementInstance(Element element, Context context) {
+        // no-op
     }
 
     @Override

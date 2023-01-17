@@ -1,18 +1,19 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.TableNameRequiredException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDropTablePgsql extends TestDropTable {
-    @Test
-    public void testInstantiationPgsql() {
-        DropTable query = new DropTable(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testInstantiationPgsql() {
+        var query = new DropTable(PGSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -22,9 +23,9 @@ public class TestDropTablePgsql extends TestDropTable {
         }
     }
 
-    @Test
-    public void testIncompleteQueryPgsql() {
-        DropTable query = new DropTable(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testIncompleteQueryPgsql() {
+        var query = new DropTable(PGSQL);
         try {
             query.getSql();
             fail();
@@ -35,9 +36,9 @@ public class TestDropTablePgsql extends TestDropTable {
         assertNotNull(query.getSql());
     }
 
-    @Test
-    public void testClearPgsql() {
-        DropTable query = new DropTable(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testClearPgsql() {
+        var query = new DropTable(PGSQL);
         query.table("tablename");
         assertNotNull(query.getSql());
         query.clear();
@@ -49,17 +50,17 @@ public class TestDropTablePgsql extends TestDropTable {
         }
     }
 
-    @Test
-    public void testOneTablePgsql() {
-        DropTable query = new DropTable(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testOneTablePgsql() {
+        var query = new DropTable(PGSQL);
         query.table("tabletodrop");
         assertEquals(query.getSql(), "DROP TABLE tabletodrop");
         execute(query);
     }
 
-    @Test
-    public void testMultipleTablesPgsql() {
-        DropTable query = new DropTable(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testMultipleTablesPgsql() {
+        var query = new DropTable(PGSQL);
         query.table("tabletodrop1")
             .table("tabletodrop2")
             .table("tabletodrop3");
@@ -67,13 +68,13 @@ public class TestDropTablePgsql extends TestDropTable {
         execute(query);
     }
 
-    @Test
-    public void testClonePgsql() {
-        DropTable query = new DropTable(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testClonePgsql() {
+        var query = new DropTable(PGSQL);
         query.table("tabletodrop1")
             .table("tabletodrop2")
             .table("tabletodrop3");
-        DropTable query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertTrue(query != query_clone);
         execute(query_clone);

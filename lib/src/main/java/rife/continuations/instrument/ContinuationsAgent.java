@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.continuations.instrument;
@@ -29,6 +29,8 @@ import java.lang.instrument.Instrumentation;
  * @since 1.0
  */
 public class ContinuationsAgent {
+    public static final String AGENT_ACTIVE_PROPERTY = "rife.agent.continuations";
+
     public static void premain(String agentArguments, Instrumentation instrumentation) {
         if (null == agentArguments) throw new IllegalArgumentException("expecting the fully qualified class name of a ContinuationConfigInstrument class");
         ContinuationConfigInstrument config;
@@ -40,7 +42,7 @@ public class ContinuationsAgent {
         }
 
         instrumentation.addTransformer(new InitialTransformer());
-        instrumentation.addTransformer(new ContinuationsTransformer(config));
+        instrumentation.addTransformer(new ContinuationsTransformer(config, AGENT_ACTIVE_PROPERTY));
         instrumentation.addTransformer(new FinalTransformer());
     }
 }

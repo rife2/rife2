@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -22,18 +22,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Provides a wrapper around the regular JDBC <code>Statement</code> class. It
- * can only be instantiated by calling the <code>createStatement</code> method on
- * an existing <code>DbConnection</code> instance.
+ * Provides a wrapper around the regular JDBC {@code Statement} class. It
+ * can only be instantiated by calling the {@code createStatement} method on
+ * an existing {@code DbConnection} instance.
  * <p>This class hooks into the database connection pool and cleans up as much
- * as possible in case of errors. The thrown <code>DatabaseException</code>
+ * as possible in case of errors. The thrown {@code DatabaseException}
  * exceptions should thus only be used for error reporting and not for
  * releasing resources used by the framework.
- * <p>The <code>execute</code> and <code>executeQuery</code> methods store
- * their result set in the executing <code>DbStatement</code> instance. It's
- * recommended to use the <code>DbQueryManager</code>'s <code>fetch</code>
+ * <p>The {@code execute} and {@code executeQuery} methods store
+ * their result set in the executing {@code DbStatement} instance. It's
+ * recommended to use the {@code DbQueryManager}'s {@code fetch}
  * method to process the result set. If needed, one can also use the
- * <code>getResultSet</code> method to manually process the results through
+ * {@code getResultSet} method to manually process the results through
  * plain JDBC. However, when exceptions are thrown during this procedure, it's
  * also the responsability of the user to correctly clean up all resources.
  * <p>Additional methods have been implemented to facilitate the retrieval of
@@ -60,14 +60,14 @@ public class DbStatement implements Cloneable, AutoCloseable {
     final DbConnection connection_;
 
     /**
-     * Constructs a new <code>DbStatement</code> from an existing
-     * <code>DbConnection</code> and <code>Statement</code>. This constructor
+     * Constructs a new {@code DbStatement} from an existing
+     * {@code DbConnection} and {@code Statement}. This constructor
      * will never be called by a user of the api. The
-     * <code>createStatement</code> of an existing <code>DbConnection</code>
+     * {@code createStatement} of an existing {@code DbConnection}
      * instance should be used instead.
      *
-     * @param connection a <code>DbConnection</code> instance
-     * @param statement  a JDBC <code>Statement</code> instance
+     * @param connection a {@code DbConnection} instance
+     * @param statement  a JDBC {@code Statement} instance
      * @throws DatabaseException if a database access error occurs
      * @since 1.0
      */
@@ -82,14 +82,14 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
     /**
      * Adds the given SQL command to the current list of commmands for this
-     * <code>Statement</code> object. The commands in this list can be
-     * executed as a batch by calling the method <code>executeBatch</code>.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * {@code Statement} object. The commands in this list can be
+     * executed as a batch by calling the method {@code executeBatch}.
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @param sql typically this is a static SQL <code>INSERT</code> or
-     *            <code>UPDATE</code> statement
+     * @param sql typically this is a static SQL {@code INSERT} or
+     *            {@code UPDATE} statement
      * @throws DatabaseException if a database access error occurs, or the
      *                           driver does not support batch updates
      * @see #executeBatch
@@ -107,10 +107,10 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Cancels this <code>DbStatement</code> object if both the DBMS and
+     * Cancels this {@code DbStatement} object if both the DBMS and
      * driver support aborting a SQL statement. This method can be used by one
      * thread to cancel a statement that is being executed by another thread.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
@@ -128,9 +128,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Empties this <code>Statement</code> object's current list of SQL
+     * Empties this {@code Statement} object's current list of SQL
      * commands.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
@@ -150,11 +150,11 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Clears all the warnings reported on this <code>DbStatement</code>
+     * Clears all the warnings reported on this {@code DbStatement}
      * object. After a call to this method, the method
-     * <code>getWarnings</code> will return <code>null</code> until a new
-     * warning is reported for this <code>DbStatement</code> object.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * {@code getWarnings} will return {@code null} until a new
+     * warning is reported for this {@code DbStatement} object.
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
@@ -172,16 +172,16 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Releases this <code>DbStatement</code> object's database and JDBC
+     * Releases this {@code DbStatement} object's database and JDBC
      * resources immediately instead of waiting for this to happen when it is
      * automatically closed. It is generally good practice to release
      * resources as soon as you are finished with them to avoid tying up
      * database resources.
-     * <p>Calling the method <code>close</code> on a <code>DbStatement</code>
+     * <p>Calling the method {@code close} on a {@code DbStatement}
      * object that is already closed has no effect.
-     * <p><b>Note:</b> A <code>DbStatement</code> object is automatically
-     * closed when it is garbage collected. When a <code>DbStatement</code>
-     * object is closed, its current <code>ResultSet</code> object, if one
+     * <p><b>Note:</b> A {@code DbStatement} object is automatically
+     * closed when it is garbage collected. When a {@code DbStatement}
+     * object is closed, its current {@code ResultSet} object, if one
      * exists, is also closed.
      *
      * @throws DatabaseException if a database access error occurs
@@ -240,19 +240,19 @@ public class DbStatement implements Cloneable, AutoCloseable {
      * you are (1) executing a stored procedure that you know may return
      * multiple results or (2) you are dynamically executing an unknown SQL
      * string.
-     * <p>The <code>execute</code> method executes a SQL statement and
+     * <p>The {@code execute} method executes a SQL statement and
      * indicates the form of the first result. You must then use the methods
-     * <code>getResultSet</code> or <code>getUpdateCount</code> to retrieve
-     * the result, and <code>getMoreResults</code> to move to any subsequent
+     * {@code getResultSet} or {@code getUpdateCount} to retrieve
+     * the result, and {@code getMoreResults} to move to any subsequent
      * result(s).
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
      * @param sql any SQL statement
-     * @return <code>true</code> if the first result is a
-     * <code>ResultSet</code> object; or
-     * <p><code>false</code> if it is an update count or there are no results
+     * @return {@code true} if the first result is a
+     * {@code ResultSet} object; or
+     * <p>{@code false} if it is an update count or there are no results
      * @throws DatabaseException if a database access error occurs
      * @see #getResultSet
      * @see #getUpdateCount
@@ -283,30 +283,30 @@ public class DbStatement implements Cloneable, AutoCloseable {
      * Executes the given SQL statement, which may return multiple results,
      * and signals the driver that any auto-generated keys should be made
      * available for retrieval. The driver will ignore this signal if the SQL
-     * statement is not an <code>INSERT</code> statement.
+     * statement is not an {@code INSERT} statement.
      * <p>In some (uncommon) situations, a single SQL statement may return
      * multiple result sets and/or update counts. Normally you can ignore this
      * unless you are (1) executing a stored procedure that you know may
      * return multiple results or (2) you are dynamically executing an unknown
      * SQL string.
-     * <p>The <code>execute</code> method executes a SQL statement and
+     * <p>The {@code execute} method executes a SQL statement and
      * indicates the form of the first result. You must then use the methods
-     * <code>getResultSet</code> or <code>getUpdateCount</code> to retrieve
-     * the result, and <code>getMoreResults</code> to move to any subsequent
+     * {@code getResultSet} or {@code getUpdateCount} to retrieve
+     * the result, and {@code getMoreResults} to move to any subsequent
      * result(s).
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
      * @param sql               any SQL statement
      * @param autoGeneratedKeys a constant indicating whether auto-generated
      *                          keys should be made available for retrieval using the method
-     *                          <code>getGeneratedKeys</code>; one of the following constants:
-     *                          <code>Statement.RETURN_GENERATED_KEYS</code> or
-     *                          <code>Statement.NO_GENERATED_KEYS</code>
-     * @return <code>true</code> if the first result is a
-     * <code>ResultSet</code> object; or
-     * <p><code>false</code> if it is an update count or there are no results
+     *                          {@code getGeneratedKeys}; one of the following constants:
+     *                          {@code Statement.RETURN_GENERATED_KEYS} or
+     *                          {@code Statement.NO_GENERATED_KEYS}
+     * @return {@code true} if the first result is a
+     * {@code ResultSet} object; or
+     * <p>{@code false} if it is an update count or there are no results
      * @throws DatabaseException if a database access error occurs
      * @see Statement
      * @see #getResultSet
@@ -342,28 +342,28 @@ public class DbStatement implements Cloneable, AutoCloseable {
      * the indexes of the columns in the target table that contain the
      * auto-generated keys that should be made available. The driver will
      * ignore the array if the given SQL statement is not an
-     * <code>INSERT</code> statement.
+     * {@code INSERT} statement.
      * <p>Under some (uncommon) situations, a single SQL statement may return
      * multiple result sets and/or update counts. Normally you can ignore this
      * unless you are (1) executing a stored procedure that you know may
      * return multiple results or (2) you are dynamically executing an unknown
      * SQL string.
-     * <p>The <code>execute</code> method executes a SQL statement and
+     * <p>The {@code execute} method executes a SQL statement and
      * indicates the form of the first result. You must then use the methods
-     * <code>getResultSet</code> or <code>getUpdateCount</code> to retrieve
-     * the result, and <code>getMoreResults</code> to move to any subsequent
+     * {@code getResultSet} or {@code getUpdateCount} to retrieve
+     * the result, and {@code getMoreResults} to move to any subsequent
      * result(s).
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
      * @param sql           any SQL statement
      * @param columnIndexes an array of the indexes of the columns in the
      *                      inserted row that should be made available for retrieval by a call to
-     *                      the method <code>getGeneratedKeys</code>
-     * @return <code>true</code> if the first result is a
-     * <code>ResultSet</code> object; or
-     * <p><code>false</code> if it is an update count or there are no results
+     *                      the method {@code getGeneratedKeys}
+     * @return {@code true} if the first result is a
+     * {@code ResultSet} object; or
+     * <p>{@code false} if it is an update count or there are no results
      * @throws DatabaseException if a database access error occurs
      * @see #getResultSet
      * @see #getUpdateCount
@@ -397,28 +397,28 @@ public class DbStatement implements Cloneable, AutoCloseable {
      * the names of the columns in the target table that contain the
      * auto-generated keys that should be made available. The driver will
      * ignore the array if the given SQL statement is not an
-     * <code>INSERT</code> statement.
+     * {@code INSERT} statement.
      * <p>In some (uncommon) situations, a single SQL statement may return
      * multiple result sets and/or update counts. Normally you can ignore this
      * unless you are (1) executing a stored procedure that you know may
      * return multiple results or (2) you are dynamically executing an unknown
      * SQL string.
-     * <p>The <code>execute</code> method executes a SQL statement and
+     * <p>The {@code execute} method executes a SQL statement and
      * indicates the form of the first result. You must then use the methods
-     * <code>getResultSet</code> or <code>getUpdateCount</code> to retrieve
-     * the result, and <code>getMoreResults</code> to move to any subsequent
+     * {@code getResultSet} or {@code getUpdateCount} to retrieve
+     * the result, and {@code getMoreResults} to move to any subsequent
      * result(s).
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
      * @param sql         any SQL statement
      * @param columnNames an array of the names of the columns in the inserted
      *                    row that should be made available for retrieval by a call to the method
-     *                    <code>getGeneratedKeys</code>
-     * @return <code>true</code> if the next result is a
-     * <code>ResultSet</code> object; or
-     * <p><code>false</code> if it is an update count or there are no more
+     *                    {@code getGeneratedKeys}
+     * @return {@code true} if the next result is a
+     * {@code ResultSet} object; or
+     * <p>{@code false} if it is an update count or there are no more
      * results
      * @throws DatabaseException if a database access error occurs
      * @see #getResultSet
@@ -450,36 +450,36 @@ public class DbStatement implements Cloneable, AutoCloseable {
     /**
      * Submits a batch of commands to the database for execution and if all
      * commands execute successfully, returns an array of update counts. The
-     * <code>int</code> elements of the array that is returned are ordered to
+     * {@code int} elements of the array that is returned are ordered to
      * correspond to the commands in the batch, which are ordered according to
      * the order in which they were added to the batch. The elements in the
-     * array returned by the method <code>executeBatch</code> may be one of
+     * array returned by the method {@code executeBatch} may be one of
      * the following:
      * <ol>
      * <li>A number greater than or equal to zero -- indicates that the
      * command was processed successfully and is an update count giving the
      * number of rows in the database that were affected by the command's
      * execution
-     * <li>A value of <code>SUCCESS_NO_INFO</code> -- indicates that the
+     * <li>A value of {@code SUCCESS_NO_INFO} -- indicates that the
      * command was processed successfully but that the number of rows affected
      * is unknown
      * <p>If one of the commands in a batch update fails to execute properly,
-     * this method throws a <code>BatchUpdateException</code>, and a JDBC
+     * this method throws a {@code BatchUpdateException}, and a JDBC
      * driver may or may not continue to process the remaining commands in the
      * batch. However, the driver's behavior must be consistent with a
      * particular DBMS, either always continuing to process commands or never
      * continuing to process commands. If the driver continues processing
      * after a failure, the array returned by the method
-     * <code>BatchUpdateException.getUpdateCounts</code> will contain as many
+     * {@code BatchUpdateException.getUpdateCounts} will contain as many
      * elements as there are commands in the batch, and at least one of the
      * elements will be the following:
      * <p>
-     * <li>A value of <code>EXECUTE_FAILED</code> -- indicates that the
+     * <li>A value of {@code EXECUTE_FAILED} -- indicates that the
      * command failed to execute successfully and occurs only if a driver
      * continues to process commands after a command fails
      * </ol>
      * <p>A driver is not required to implement this method.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
@@ -488,7 +488,7 @@ public class DbStatement implements Cloneable, AutoCloseable {
      * to the order in which commands were added to the batch.
      * @throws DatabaseException if a database access error occurs or the
      *                           driver does not support batch statements. The cause is a {@link
-     *                           java.sql.BatchUpdateException} (a subclass of <code>SQLException</code>)
+     *                           java.sql.BatchUpdateException} (a subclass of {@code SQLException})
      *                           if one of the commands sent to the database fails to execute properly
      *                           or attempts to return a result set.
      * @since 1.0
@@ -506,18 +506,18 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Executes the given SQL statement. The returned <code>ResultSet</code>
+     * Executes the given SQL statement. The returned {@code ResultSet}
      * object is stored and can be retrieved with the
-     * <code>getResultSet</code> method.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * {@code getResultSet} method.
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
      * @param sql a SQL statement to be sent to the database, typically a
-     *            static SQL <code>SELECT</code> statement
+     *            static SQL {@code SELECT} statement
      * @throws DatabaseException if a database access error occurs or the
      *                           given SQL statement produces anything other than a single
-     *                           <code>ResultSet</code> object
+     *                           {@code ResultSet} object
      * @see #getResultSet
      * @since 1.0
      */
@@ -542,18 +542,18 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Executes the given <code>Query</code> builder's SQL statement. The
-     * returned <code>ResultSet</code> object is stored and can be retrieved
-     * with the <code>getResultSet</code> method.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * Executes the given {@code Query} builder's SQL statement. The
+     * returned {@code ResultSet} object is stored and can be retrieved
+     * with the {@code getResultSet} method.
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @param query a <code>Query</code> builder instance which provides a SQL
+     * @param query a {@code Query} builder instance which provides a SQL
      *              statement that queries the database
      * @throws DatabaseException if a database access error occurs or the
      *                           given SQL statement produces anything other than a single
-     *                           <code>ResultSet</code> object
+     *                           {@code ResultSet} object
      * @see #getResultSet
      * @since 1.0
      */
@@ -565,20 +565,20 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Executes the given SQL statement, which may be an <code>INSERT</code>,
-     * <code>UPDATE</code>, or <code>DELETE</code> statement or an SQL
+     * Executes the given SQL statement, which may be an {@code INSERT},
+     * {@code UPDATE}, or {@code DELETE} statement or an SQL
      * statement that returns nothing, such as an SQL DDL statement.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @param sql an SQL <code>INSERT</code>, <code>UPDATE</code> or
-     *            <code>DELETE</code> statement or a SQL statement that returns nothing
-     * @return the row count for <code>INSERT</code>, <code>UPDATE</code> or
-     * <code>DELETE</code> statements; or
-     * <p><code>0</code> for SQL statements that return nothing
+     * @param sql an SQL {@code INSERT}, {@code UPDATE} or
+     *            {@code DELETE} statement or a SQL statement that returns nothing
+     * @return the row count for {@code INSERT}, {@code UPDATE} or
+     * {@code DELETE} statements; or
+     * <p>{@code 0} for SQL statements that return nothing
      * @throws DatabaseException if a database access error occurs or the
-     *                           given SQL statement produces a <code>ResultSet</code> object
+     *                           given SQL statement produces a {@code ResultSet} object
      * @since 1.0
      */
     public int executeUpdate(String sql)
@@ -598,21 +598,21 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Executes the given <code>Query</code> builder's SQL statement, which
-     * may be an <code>INSERT</code>, <code>UPDATE</code>, or
-     * <code>DELETE</code> statement or a SQL statement that returns nothing,
+     * Executes the given {@code Query} builder's SQL statement, which
+     * may be an {@code INSERT}, {@code UPDATE}, or
+     * {@code DELETE} statement or a SQL statement that returns nothing,
      * such as an SQL DDL statement.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @param query a <code>Query</code> builder instance which provides a SQL
+     * @param query a {@code Query} builder instance which provides a SQL
      *              statement that modifies the database
-     * @return the row count for <code>INSERT</code>, <code>UPDATE</code> or
-     * <code>DELETE</code> statements; or
-     * <p><code>0</code> for SQL statements that return nothing
+     * @return the row count for {@code INSERT}, {@code UPDATE} or
+     * {@code DELETE} statements; or
+     * <p>{@code 0} for SQL statements that return nothing
      * @throws DatabaseException if a database access error occurs or the
-     *                           given SQL statement produces a <code>ResultSet</code> object
+     *                           given SQL statement produces a {@code ResultSet} object
      * @since 1.0
      */
     public int executeUpdate(Query query)
@@ -625,16 +625,16 @@ public class DbStatement implements Cloneable, AutoCloseable {
     /**
      * Retrieves the direction for fetching rows from database tables that is
      * the default for result sets generated from this
-     * <code>DbStatement</code> object. If this <code>DbStatement</code>
+     * {@code DbStatement} object. If this {@code DbStatement}
      * object has not set a fetch direction by calling the method
-     * <code>setFetchDirection</code>, the return value is
+     * {@code setFetchDirection}, the return value is
      * implementation-specific.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
      * @return the default fetch direction for result sets generated from this
-     * <code>DbStatement</code> object
+     * {@code DbStatement} object
      * @throws DatabaseException if a database access error occurs
      * @see #setFetchDirection
      * @since 1.0
@@ -651,16 +651,16 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
     /**
      * Retrieves the number of result set rows that is the default fetch size
-     * for <code>ResultSet</code> objects generated from this
-     * <code>DbStatement</code> object. If this <code>DbStatement</code>
+     * for {@code ResultSet} objects generated from this
+     * {@code DbStatement} object. If this {@code DbStatement}
      * object has not set a fetch size by calling the method
-     * <code>setFetchSize</code>, the return value is implementation-specific.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * {@code setFetchSize}, the return value is implementation-specific.
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
      * @return the default fetch size for result sets generated from this
-     * <code>DbStatement</code> object
+     * {@code DbStatement} object
      * @throws DatabaseException if a database access error occurs
      * @see #setFetchSize
      * @since 1.0
@@ -677,15 +677,15 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
     /**
      * Retrieves any auto-generated keys created as a result of executing this
-     * <code>DbStatement</code> object. If this DbStatement object did not
-     * generate any keys, an empty <code>DbResultSet</code> object is
+     * {@code DbStatement} object. If this DbStatement object did not
+     * generate any keys, an empty {@code DbResultSet} object is
      * returned.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return a <code>DbResultSet</code> object containing the auto-generated
-     * key(s) generated by the execution of this <code>DbStatement</code>
+     * @return a {@code DbResultSet} object containing the auto-generated
+     * key(s) generated by the execution of this {@code DbStatement}
      * object
      * @throws DatabaseException if a database access error occurs
      * @since 1.0
@@ -702,10 +702,10 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
     /**
      * Retrieves the first auto-generated key created as a result of executing
-     * this <code>DbStatement</code> object as an integer. If this
-     * <code>DbStatement</code> object did not generate any keys, a exception
+     * this {@code DbStatement} object as an integer. If this
+     * {@code DbStatement} object did not generate any keys, a exception
      * is thrown.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
@@ -727,19 +727,19 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
     /**
      * Retrieves the maximum number of bytes that can be returned for
-     * character and binary column values in a <code>ResultSet</code> object
-     * produced by this <code>Statement</code> object. This limit applies only
-     * to <code>BINARY</code>, <code>VARBINARY</code>,
-     * <code>LONGVARBINARY</code>, <code>CHAR</code>, <code>VARCHAR</code>,
-     * and <code>LONGVARCHAR</code> columns. If the limit is exceeded, the
+     * character and binary column values in a {@code ResultSet} object
+     * produced by this {@code Statement} object. This limit applies only
+     * to {@code BINARY}, {@code VARBINARY},
+     * {@code LONGVARBINARY}, {@code CHAR}, {@code VARCHAR},
+     * and {@code LONGVARCHAR} columns. If the limit is exceeded, the
      * excess data is silently discarded.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
      * @return the current column size limit for columns storing character and
      * binary values; or
-     * <p><code>0</code> if there's no limit
+     * <p>{@code 0} if there's no limit
      * @throws DatabaseException if a database access error occurs
      * @see #setMaxFieldSize
      * @since 1.0
@@ -755,16 +755,16 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Retrieves the maximum number of rows that a <code>ResultSet</code>
-     * object produced by this <code>DbStatement</code> object can contain. If
+     * Retrieves the maximum number of rows that a {@code ResultSet}
+     * object produced by this {@code DbStatement} object can contain. If
      * this limit is exceeded, the excess rows are silently dropped.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the current maximum number of rows for a <code>ResultSet</code>
-     * object produced by this <code>Statement</code> object; or
-     * <p><code>0</code> if there's no limit
+     * @return the current maximum number of rows for a {@code ResultSet}
+     * object produced by this {@code Statement} object; or
+     * <p>{@code 0} if there's no limit
      * @throws DatabaseException if a database access error occurs
      * @see #setMaxRows
      * @since 1.0
@@ -780,21 +780,21 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Moves to this <code>DbStatement</code> object's next result, returns
-     * <code>true</code> if it is a <code>ResultSet</code> object, and
-     * implicitly closes any current <code>ResultSet</code> object(s) obtained
-     * with the method <code>getResultSet</code>.
+     * Moves to this {@code DbStatement} object's next result, returns
+     * {@code true} if it is a {@code ResultSet} object, and
+     * implicitly closes any current {@code ResultSet} object(s) obtained
+     * with the method {@code getResultSet}.
      * <p>There are no more results when the following is true:
      * <pre>
-     * <code>(!getMoreResults() &amp;&amp; (getUpdateCount() == -1)</code>
+     * {@code (!getMoreResults() &amp;&amp; (getUpdateCount() == -1)}
      * </pre>
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return <code>true</code> if the next result is a
-     * <code>ResultSet</code> object; or
-     * <p><code>false</code> if it is an update count or there are no more
+     * @return {@code true} if the next result is a
+     * {@code ResultSet} object; or
+     * <p>{@code false} if it is an update count or there are no more
      * results
      * @throws DatabaseException if a database access error occurs
      * @see #execute
@@ -815,26 +815,26 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Moves to this <code>DbStatement</code> object's next result, deals with
-     * any current <code>ResultSet</code> object(s) according to the
-     * instructions specified by the given flag, and returns <code>true</code>
-     * if the next result is a <code>ResultSet</code> object.
+     * Moves to this {@code DbStatement} object's next result, deals with
+     * any current {@code ResultSet} object(s) according to the
+     * instructions specified by the given flag, and returns {@code true}
+     * if the next result is a {@code ResultSet} object.
      * <p>There are no more results when the following is true:
      * <pre>
-     * 	  <code>(!getMoreResults() &amp;&amp; (getUpdateCount() == -1)</code>
+     * 	  {@code (!getMoreResults() &amp;&amp; (getUpdateCount() == -1)}
      * </pre>
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @param current one of the following <code>Statement</code> constants
-     *                indicating what should happen to current <code>ResultSet</code> objects
-     *                obtained using the method <code>getResultSet</code>:
-     *                <code>CLOSE_CURRENT_RESULT</code>, <code>KEEP_CURRENT_RESULT</code>, or
-     *                <code>CLOSE_ALL_RESULTS</code>
-     * @return <code>true</code> if the next result is a
-     * <code>ResultSet</code> object; or
-     * <p><code>false</code> if it is an update count or there are no more
+     * @param current one of the following {@code Statement} constants
+     *                indicating what should happen to current {@code ResultSet} objects
+     *                obtained using the method {@code getResultSet}:
+     *                {@code CLOSE_CURRENT_RESULT}, {@code KEEP_CURRENT_RESULT}, or
+     *                {@code CLOSE_ALL_RESULTS}
+     * @return {@code true} if the next result is a
+     * {@code ResultSet} object; or
+     * <p>{@code false} if it is an update count or there are no more
      * results
      * @throws DatabaseException if a database access error occurs
      * @see Statement
@@ -857,14 +857,14 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
     /**
      * Retrieves the number of seconds the driver will wait for a
-     * <code>DbStatement</code> object to execute. If the limit is exceeded, a
-     * <code>DatabaseException</code> is thrown.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * {@code DbStatement} object to execute. If the limit is exceeded, a
+     * {@code DatabaseException} is thrown.
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
      * @return the current query timeout limit in seconds; or
-     * <p><code>0</code> if there's no limit
+     * <p>{@code 0} if there's no limit
      * @throws DatabaseException if a database access error occurs
      * @see #setQueryTimeout
      * @since 1.0
@@ -881,16 +881,16 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
     /**
      * Reports whether the last column read had a value of SQL
-     * <code>NULL</code>. Note that you must first call one of the getter
+     * {@code NULL}. Note that you must first call one of the getter
      * methods on a column to try to read its value and then call the method
-     * <code>wasNull</code> to see if the value read was SQL <code>NULL</code>.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * {@code wasNull} to see if the value read was SQL {@code NULL}.
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return <code>true</code> if the last column value read was SQL
-     * <code>NULL</code>; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if the last column value read was SQL
+     * {@code NULL}; or
+     * <p>{@code false} otherwise
      * @throws DatabaseException if a database access error occurs
      * @since 1.0
      */
@@ -909,14 +909,14 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Retrieves the result set concurrency for <code>ResultSet</code> objects
-     * generated by this <code>DbStatement</code> object.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * Retrieves the result set concurrency for {@code ResultSet} objects
+     * generated by this {@code DbStatement} object.
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return either <code>ResultSet.CONCUR_READ_ONLY</code> or
-     * <code>ResultSet.CONCUR_UPDATABLE</code>
+     * @return either {@code ResultSet.CONCUR_READ_ONLY} or
+     * {@code ResultSet.CONCUR_UPDATABLE}
      * @throws DatabaseException if a database access error occurs
      * @see ResultSet
      * @since 1.0
@@ -932,14 +932,14 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Retrieves the result set holdability for <code>ResultSet</code> objects
-     * generated by this <code>DbStatement</code> object.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * Retrieves the result set holdability for {@code ResultSet} objects
+     * generated by this {@code DbStatement} object.
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return either <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
-     * <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
+     * @return either {@code ResultSet.HOLD_CURSORS_OVER_COMMIT} or
+     * {@code ResultSet.CLOSE_CURSORS_AT_COMMIT}
      * @throws DatabaseException if a database access error occurs
      * @see ResultSet
      * @since 1.0
@@ -955,15 +955,15 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Retrieves the result set type for <code>ResultSet</code> objects
-     * generated by this <code>DbStatement</code> object.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * Retrieves the result set type for {@code ResultSet} objects
+     * generated by this {@code DbStatement} object.
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return one of <code>ResultSet.TYPE_FORWARD_ONLY</code>,
-     * <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
-     * <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
+     * @return one of {@code ResultSet.TYPE_FORWARD_ONLY},
+     * {@code ResultSet.TYPE_SCROLL_INSENSITIVE}, or
+     * {@code ResultSet.TYPE_SCROLL_SENSITIVE}
      * @throws DatabaseException if a database access error occurs
      * @see ResultSet
      * @since 1.0
@@ -980,14 +980,14 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
     /**
      * Retrieves the current result as an update count; if the result is a
-     * <code>ResultSet</code> object or there are no more results, -1 is
+     * {@code ResultSet} object or there are no more results, -1 is
      * returned. This method should be called only once per result.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
      * @return the current result as an update count; or
-     * <p><code>-1</code> if the current result is a <code>ResultSet</code>
+     * <p>{@code -1} if the current result is a {@code ResultSet}
      * object or there are no more results
      * @throws DatabaseException if a database access error occurs
      * @see #execute
@@ -1005,22 +1005,22 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
     /**
      * Retrieves the first warning reported by calls on this
-     * <code>Statement</code> object. Subsequent <code>DbStatement</code>
-     * object warnings will be chained to this <code>SQLWarning</code> object.
+     * {@code Statement} object. Subsequent {@code DbStatement}
+     * object warnings will be chained to this {@code SQLWarning} object.
      * <p>The warning chain is automatically cleared each time a statement is
      * (re)executed. This method may not be called on a closed
-     * <code>DbStatement</code> object; doing so will cause an
-     * <code>SQLException</code> to be thrown.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * {@code DbStatement} object; doing so will cause an
+     * {@code SQLException} to be thrown.
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
-     * <p><b>Note:</b> If you are processing a <code>ResultSet</code> object,
-     * any warnings associated with reads on that <code>ResultSet</code>
+     * <p><b>Note:</b> If you are processing a {@code ResultSet} object,
+     * any warnings associated with reads on that {@code ResultSet}
      * object will be chained on it rather than on the
-     * <code>DbStatement</code> object that produced it.
+     * {@code DbStatement} object that produced it.
      *
-     * @return the first <code>SQLWarning</code> object; or
-     * <p><code>null</code> if there are no warnings
+     * @return the first {@code SQLWarning} object; or
+     * <p>{@code null} if there are no warnings
      * @throws DatabaseException if a database access error occurs or this
      *                           method is called on a closed statement
      * @since 1.0
@@ -1036,12 +1036,12 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Retrieves the current result as a <code>ResultSet</code> object. This
+     * Retrieves the current result as a {@code ResultSet} object. This
      * method returns the internally stored result and can be called as many
      * times as wanted, contrary to the regular JDBC counterpart.
      *
-     * @return the current result as a <code>ResultSet</code> object; or
-     * <p><code>NULL</code> if the result is an update count.
+     * @return the current result as a {@code ResultSet} object; or
+     * <p>{@code NULL} if the result is an update count.
      * @see #execute
      * @since 1.0
      */
@@ -1051,21 +1051,21 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
     /**
      * Gives the driver a hint as to the direction in which rows will be
-     * processed in <code>ResultSet</code> objects created using this
-     * <code>DbStatement</code> object. The default value is
-     * <code>ResultSet.FETCH_FORWARD</code>.
+     * processed in {@code ResultSet} objects created using this
+     * {@code DbStatement} object. The default value is
+     * {@code ResultSet.FETCH_FORWARD}.
      * <p>Note that this method sets the default fetch direction for result
-     * sets generated by this <code>DbStatement</code> object. Each result set
+     * sets generated by this {@code DbStatement} object. Each result set
      * has its own methods for getting and setting its own fetch direction.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
      * @param direction the initial direction for processing rows
      * @throws DatabaseException if a database access error occurs or the
-     *                           given direction is not one of <code>ResultSet.FETCH_FORWARD</code>,
-     *                           <code>ResultSet.FETCH_REVERSE</code>, or
-     *                           <code>ResultSet.FETCH_UNKNOWN</code>
+     *                           given direction is not one of {@code ResultSet.FETCH_FORWARD},
+     *                           {@code ResultSet.FETCH_REVERSE}, or
+     *                           {@code ResultSet.FETCH_UNKNOWN}
      * @see #getFetchDirection
      * @see ResultSet
      * @since 1.0
@@ -1086,14 +1086,14 @@ public class DbStatement implements Cloneable, AutoCloseable {
      * specified affects only result sets created using this statement. If the
      * value specified is zero, then the hint is ignored. The default value is
      * zero.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
      * @param rows the number of rows to fetch
      * @throws DatabaseException if a database access error occurs, or the
-     *                           condition 0 &lt;= <code>rows</code> &lt;=
-     *                           <code>this.getMaxRows()</code> is not satisfied.
+     *                           condition 0 &lt;= {@code rows} &lt;=
+     *                           {@code this.getMaxRows()} is not satisfied.
      * @see #getFetchSize
      * @see #getMaxRows
      * @since 1.0
@@ -1110,13 +1110,13 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
     /**
      * Sets the limit for the maximum number of bytes in a
-     * <code>ResultSet</code> column storing character or binary values to the
-     * given number of bytes. This limit applies only to <code>BINARY</code>,
-     * <code>VARBINARY</code>, <code>LONGVARBINARY</code>, <code>CHAR</code>,
-     * <code>VARCHAR</code>, and <code>LONGVARCHAR</code> fields. If the limit
+     * {@code ResultSet} column storing character or binary values to the
+     * given number of bytes. This limit applies only to {@code BINARY},
+     * {@code VARBINARY}, {@code LONGVARBINARY}, {@code CHAR},
+     * {@code VARCHAR}, and {@code LONGVARCHAR} fields. If the limit
      * is exceeded, the excess data is silently discarded. For maximum
      * portability, use values greater than 256.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
@@ -1139,9 +1139,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
     /**
      * Sets the limit for the maximum number of rows that any
-     * <code>ResultSet</code> object can contain to the given number. If the
+     * {@code ResultSet} object can contain to the given number. If the
      * limit is exceeded, the excess rows are silently dropped.
-     * <p>If an exception is thrown, this <code>DbStatement</code> is
+     * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
@@ -1163,8 +1163,8 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
     /**
      * Sets the number of seconds the driver will wait for a
-     * <code>DbStatement</code> object to execute to the given number of
-     * seconds. If the limit is exceeded, an <code>DatabaseException</code> is
+     * {@code DbStatement} object to execute to the given number of
+     * seconds. If the limit is exceeded, an {@code DatabaseException} is
      * thrown.
      *
      * @param max the new query timeout limit in seconds; zero means there is
@@ -1185,10 +1185,10 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Returns the <code>DbConnection</code> object from which this
-     * <code>DbStatement</code> object has been instantiated.
+     * Returns the {@code DbConnection} object from which this
+     * {@code DbStatement} object has been instantiated.
      *
-     * @return the instantiating <code>DbConnection</code> object.
+     * @return the instantiating {@code DbConnection} object.
      * @since 1.0
      */
     public DbConnection getConnection() {
@@ -1196,7 +1196,7 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Waits until the <code>DbConnection</code> method is available for use.
+     * Waits until the {@code DbConnection} method is available for use.
      * This method is used by all the execution methods to effectively
      * integrate with the connection pool.
      *
@@ -1227,11 +1227,11 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Checks if there's a <code>ResultSet</code> object present.
+     * Checks if there's a {@code ResultSet} object present.
      *
-     * @return <code>true</code> if a <code>ResultSet</code> object is
+     * @return {@code true} if a {@code ResultSet} object is
      * available; or
-     * <p><code>false</code> otherwise.
+     * <p>{@code false} otherwise.
      * @since 1.0
      */
     boolean hasResultset() {
@@ -1239,10 +1239,10 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Set the current <code>ResultSet</code> object and cleans up the
-     * previous <code>ResultSet</code> object automatically.
+     * Set the current {@code ResultSet} object and cleans up the
+     * previous {@code ResultSet} object automatically.
      *
-     * @param resultSet the new current <code>ResultSet</code> object
+     * @param resultSet the new current {@code ResultSet} object
      * @throws DatabaseException if a database access error occurred.
      * @since 1.0
      */
@@ -1261,7 +1261,7 @@ public class DbStatement implements Cloneable, AutoCloseable {
     }
 
     /**
-     * Cleans up and closes the current <code>ResultSet</code> object.
+     * Cleans up and closes the current {@code ResultSet} object.
      *
      * @throws DatabaseException if a database access error occurred.
      * @since 1.0

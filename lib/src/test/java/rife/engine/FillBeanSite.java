@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
@@ -8,18 +8,15 @@ import rife.config.RifeConfig;
 import rife.engine.exceptions.EngineException;
 import rife.resources.ResourceFinderClasspath;
 import rife.resources.exceptions.ResourceFinderErrorException;
-import rife.tools.FileUtils;
-import rife.tools.InnerClassException;
-import rife.tools.InputStreamUser;
+import rife.tools.*;
 import rife.tools.exceptions.FileUtilsErrorException;
 import rife.validation.ValidationError;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
-import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Set;
@@ -65,6 +62,10 @@ public class FillBeanSite extends Site {
                     c.print("<input type=\"text\" name=\"" + prefix_ + "dateFormatted\">");
                     c.print("<input type=\"text\" name=\"" + prefix_ + "datesFormatted\">");
                     c.print("<input type=\"text\" name=\"" + prefix_ + "datesFormatted\">");
+                    c.print("<input type=\"text\" name=\"" + prefix_ + "instant\">");
+                    c.print("<input type=\"text\" name=\"" + prefix_ + "instantFormatted\">");
+                    c.print("<input type=\"text\" name=\"" + prefix_ + "instantsFormatted\">");
+                    c.print("<input type=\"text\" name=\"" + prefix_ + "instantsFormatted\">");
                     c.print("<input type=\"text\" name=\"" + prefix_ + "serializableParam\">");
                     c.print("<input type=\"text\" name=\"" + prefix_ + "serializableParams\">");
                     c.print("<input type=\"text\" name=\"" + prefix_ + "serializableParams\">");
@@ -72,7 +73,7 @@ public class FillBeanSite extends Site {
                     c.print("</form");
                 }
                 case POST -> {
-                    BeanImpl bean = new BeanImpl();
+                    var bean = new BeanImpl();
 
                     bean.setEnum(BeanImpl.Day.FRIDAY);
                     bean.setString("string");
@@ -103,8 +104,8 @@ public class FillBeanSite extends Site {
                         c.parametersBean(bean, prefix_);
                     }
 
-                    Set<ValidationError> errors = bean.getValidationErrors();
-                    for (ValidationError error : errors) {
+                    var errors = bean.getValidationErrors();
+                    for (var error : errors) {
                         c.print(error.getIdentifier() + " : " + error.getSubject() + "\n");
                     }
                     c.print(bean.getEnum() + "," + bean.getString() + "," + bean.getStringbuffer() + "," + bean.getInt() + "," + bean.getInteger() + "," + bean.getChar() + "," + bean.getCharacter() + "," + bean.isBoolean() + "," + bean.getBooleanObject() + "," + bean.getByte() + "," + bean.getByteObject() + "," + bean.getDouble() + "," + bean.getDoubleObject() + "," + bean.getFloat() + "," + bean.getFloatObject() + "," + bean.getLong() + "," + bean.getLongObject() + "," + bean.getShort() + "," + bean.getShortObject());
@@ -136,13 +137,14 @@ public class FillBeanSite extends Site {
                         } else {
                             c.print("," + Arrays.equals(image_bytes, FileUtils.readBytes(bean.getStreamFile())));
                         }
-                        SimpleDateFormat sf = new SimpleDateFormat("EEE d MMM yyyy HH:mm:ss");
+
+                        var sf = new SimpleDateFormat("EEE d MMM yyyy HH:mm:ss");
                         sf.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
                         c.print("," + (null == bean.getDate() ? null : sf.format(bean.getDate())));
                         if (null == bean.getDatesFormatted()) {
                             c.print(",null");
                         } else {
-                            for (Date date : bean.getDatesFormatted()) {
+                            for (var date : bean.getDatesFormatted()) {
                                 c.print(",");
                                 if (null == date) {
                                     c.print("null");
@@ -151,6 +153,21 @@ public class FillBeanSite extends Site {
                                 }
                             }
                         }
+                        
+                        c.print("," + (null == bean.getInstant() ? null : sf.format(Convert.toDate(bean.getInstant()))));
+                        if (null == bean.getInstantsFormatted()) {
+                            c.print(",null");
+                        } else {
+                            for (var instant : bean.getInstantsFormatted()) {
+                                c.print(",");
+                                if (null == instant) {
+                                    c.print("null");
+                                } else {
+                                    c.print(sf.format(Convert.toDate(instant)));
+                                }
+                            }
+                        }
+                        
                         c.print("," + bean.getSerializableParam());
                         if (null == bean.getSerializableParams()) {
                             c.print(",null");

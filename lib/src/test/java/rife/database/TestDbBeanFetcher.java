@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -11,12 +11,9 @@ import rife.database.queries.CreateTable;
 import rife.database.queries.DropTable;
 import rife.database.queries.Insert;
 import rife.database.queries.Select;
-import rife.tools.ExceptionUtils;
-import rife.tools.InnerClassException;
+import rife.tools.*;
 
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDbBeanFetcher {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testFetchBean(Datasource datasource)
+    void testFetchBean(Datasource datasource)
     throws Exception {
         final DbQueryManager manager = new DbQueryManager(datasource);
 
@@ -33,7 +30,7 @@ public class TestDbBeanFetcher {
         query_create.table("tmp_beanmanager")
             .columns(BeanImpl.class)
             .precision("propertyString", 255)
-            .precision("propertyStringbuffer", 255)
+            .precision("propertyStringBuffer", 255)
             .precision("propertyChar", 1)
             .precision("propertyDouble", 8, 3)
             .precision("propertyFloat", 10, 5)
@@ -58,12 +55,12 @@ public class TestDbBeanFetcher {
 
                         BeanImpl bean_populated = new BeanImpl();
                         bean_populated.setPropertyString("somestring");
-                        bean_populated.setPropertyStringbuffer(new StringBuffer("somestringbuffer"));
+                        bean_populated.setPropertyStringBuffer(new StringBuffer("somestringbuffer"));
                         bean_populated.setPropertyDate(cal.getTime());
                         bean_populated.setPropertyCalendar(cal);
-                        bean_populated.setPropertySqlDate(new java.sql.Date(cal.getTime().getTime()));
-                        bean_populated.setPropertyTime(new Time(cal.getTime().getTime()));
-                        bean_populated.setPropertyTimestamp(new Timestamp(cal.getTime().getTime()));
+                        bean_populated.setPropertySqlDate(Convert.toSqlDate(cal));
+                        bean_populated.setPropertyTime(Convert.toSqlTime(cal));
+                        bean_populated.setPropertyTimestamp(Convert.toSqlTimestamp(cal));
                         bean_populated.setPropertyChar('v');
                         bean_populated.setPropertyBoolean(true);
                         bean_populated.setPropertyByte((byte) 127);
@@ -100,7 +97,7 @@ public class TestDbBeanFetcher {
                         }
                         assertNotNull(bean);
                         assertEquals(bean.getPropertyString(), bean_populated.getPropertyString());
-                        assertEquals(bean.getPropertyStringbuffer().toString(), bean_populated.getPropertyStringbuffer().toString());
+                        assertEquals(bean.getPropertyStringBuffer().toString(), bean_populated.getPropertyStringBuffer().toString());
                         assertEquals(bean.getPropertyDate().getTime(), bean_populated.getPropertyDate().getTime());
                         assertEquals(bean.getPropertyCalendar(), bean_populated.getPropertyCalendar());
                         assertEquals(bean.getPropertySqlDate().toString(), bean_populated.getPropertySqlDate().toString());
@@ -137,7 +134,7 @@ public class TestDbBeanFetcher {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testFetchNullBean(Datasource datasource)
+    void testFetchNullBean(Datasource datasource)
     throws Exception {
         final DbQueryManager manager = new DbQueryManager(datasource);
 
@@ -146,7 +143,7 @@ public class TestDbBeanFetcher {
         query_create.table("tmp_beanmanager")
             .columns(BeanImpl.class)
             .precision("propertyString", 255)
-            .precision("propertyStringbuffer", 255)
+            .precision("propertyStringBuffer", 255)
             .precision("propertyChar", 1)
             .precision("propertyDouble", 5, 4)
             .precision("propertyFloat", 5, 5)
@@ -190,7 +187,7 @@ public class TestDbBeanFetcher {
                         }
                         assertNotNull(bean);
                         assertEquals(bean.getPropertyString(), bean_null.getPropertyString());
-                        assertEquals(bean.getPropertyStringbuffer(), bean_null.getPropertyStringbuffer());
+                        assertEquals(bean.getPropertyStringBuffer(), bean_null.getPropertyStringBuffer());
                         assertEquals(bean.getPropertyDate(), bean_null.getPropertyDate());
                         assertEquals(bean.getPropertyCalendar(), bean_null.getPropertyCalendar());
                         assertEquals(bean.getPropertySqlDate(), bean_null.getPropertySqlDate());

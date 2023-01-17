@@ -1,19 +1,20 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 import rife.database.exceptions.UnsupportedSqlFeatureException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateSequenceMysql extends TestCreateSequence {
-    @Test
-    public void testInstantiationMysql() {
-        CreateSequence query = new CreateSequence(MYSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
+    void testInstantiationMysql() {
+        var query = new CreateSequence(MYSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -23,9 +24,9 @@ public class TestCreateSequenceMysql extends TestCreateSequence {
         }
     }
 
-    @Test
-    public void testClearMysql() {
-        CreateSequence query = new CreateSequence(MYSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
+    void testClearMysql() {
+        var query = new CreateSequence(MYSQL);
         query.name("sequencename");
         try {
             query.getSql();
@@ -35,9 +36,9 @@ public class TestCreateSequenceMysql extends TestCreateSequence {
         }
     }
 
-    @Test
-    public void testCreateMysql() {
-        CreateSequence query = new CreateSequence(MYSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
+    void testCreateMysql() {
+        var query = new CreateSequence(MYSQL);
         query.name("sequencename");
         try {
             query.getSql();
@@ -47,8 +48,8 @@ public class TestCreateSequenceMysql extends TestCreateSequence {
         }
     }
 
-    @Test
-    public void testCloneMysql() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
+    void testCloneMysql() {
         // sequences are not supported with mysql
     }
 }

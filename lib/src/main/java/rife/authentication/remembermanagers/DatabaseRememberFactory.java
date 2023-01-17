@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.remembermanagers;
@@ -32,7 +32,7 @@ public class DatabaseRememberFactory extends DbQueryManagerFactory {
      * @return the requested {@code DatabaseRemember} instance
      * @since 1.0
      */
-    public static DatabaseRemember getInstance(Datasource datasource) {
-        return (DatabaseRemember) getInstance(MANAGER_PACKAGE_NAME, cache_, datasource);
+    public static DatabaseRemember instance(Datasource datasource) {
+        return (DatabaseRemember) instance(MANAGER_PACKAGE_NAME, cache_, datasource);
     }
 }

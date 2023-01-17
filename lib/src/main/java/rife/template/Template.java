@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.template;
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import rife.forms.FormBuilder;
 import rife.template.exceptions.TemplateException;
 
 /**
@@ -20,8 +21,8 @@ import rife.template.exceptions.TemplateException;
  * <p>Templates can be used for a variety of text types, including XHTML,
  * plain text, XML, SQL and even Java source. Each template type has similar
  * features, the biggest difference is the syntax of the invisible tag which
- * takes the form of a comment in the corresponding language (<code>&lt;!--
- * --&gt; </code>for XHTML and XML, <code>/* -* /</code> for Java and SQL,
+ * takes the form of a comment in the corresponding language ({@code &lt;!--
+ * --&gt; }for XHTML and XML, {@code /* -* /} for Java and SQL,
  * ...).
  *
  * @author Keith Lea (keith[remove] at cs dot oswego dot edu)
@@ -36,8 +37,8 @@ public interface Template extends Cloneable {
      * method is called.
      *
      * @param valueBlockId the ID of the value and the block
-     * @throws TemplateException when the <code>valueId</code> or
-     *                           <code>blockId</code> aren't known
+     * @throws TemplateException when the {@code valueId} or
+     *                           {@code blockId} aren't known
      * @see #setBlock
      * @see #getBlock
      * @see #getContent
@@ -55,8 +56,8 @@ public interface Template extends Cloneable {
      *
      * @param valueId the ID of the value
      * @param blockId the ID of the block
-     * @throws TemplateException when the <code>valueId</code> or
-     *                           <code>blockId</code> aren't known
+     * @throws TemplateException when the {@code valueId} or
+     *                           {@code blockId} aren't known
      * @see #setBlock
      * @see #getBlock
      * @see #getContent
@@ -73,8 +74,8 @@ public interface Template extends Cloneable {
      * specified value text.
      *
      * @param valueBlockId the ID of the value and the block
-     * @throws TemplateException when the <code>valueId</code> or
-     *                           <code>blockId</code> aren't known
+     * @throws TemplateException when the {@code valueId} or
+     *                           {@code blockId} aren't known
      * @see #appendBlock
      * @see #getBlock
      * @see #getContent
@@ -92,8 +93,8 @@ public interface Template extends Cloneable {
      *
      * @param valueId the ID of the value
      * @param blockId the ID of the block
-     * @throws TemplateException when the <code>valueId</code> or
-     *                           <code>blockId</code> aren't known
+     * @throws TemplateException when the {@code valueId} or
+     *                           {@code blockId} aren't known
      * @see #appendBlock
      * @see #getBlock
      * @see #getContent
@@ -142,7 +143,7 @@ public interface Template extends Cloneable {
 
     /**
      * Writes the {@linkplain #getBlock(String) evaluated contents} of the
-     * specified block to the given output stream, using <code>UTF-8</code>
+     * specified block to the given output stream, using {@code UTF-8}
      * encoding.
      *
      * @param id  the ID of the block
@@ -287,7 +288,7 @@ public interface Template extends Cloneable {
      * {@linkplain #createInternalValue() internal value}.
      *
      * @param id            the ID of the value in this template
-     * @param internalValue an internal value, <code>null</code> set the value
+     * @param internalValue an internal value, {@code null} set the value
      *                      content to blank content
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
@@ -307,7 +308,7 @@ public interface Template extends Cloneable {
     /**
      * Sets the specified value in this template to the result of calling
      * {@link String#valueOf(Object) String.valueOf} on the given
-     * <code>value</code>.
+     * {@code value}.
      *
      * @param id    the ID of the value in this template
      * @param value an object
@@ -327,8 +328,8 @@ public interface Template extends Cloneable {
     throws TemplateException;
 
     /**
-     * Sets the specified value in this template to <code>true</code> or
-     * <code>false</code> depending on the given <code>value</code>.
+     * Sets the specified value in this template to {@code true} or
+     * {@code false} depending on the given {@code value}.
      *
      * @param id    the ID of the value in this template
      * @param value a boolean value
@@ -370,7 +371,7 @@ public interface Template extends Cloneable {
 
     /**
      * Sets the specified value in this template to the given characters. The
-     * given value must not be <code>null</code>.
+     * given value must not be {@code null}.
      *
      * @param id    the ID of the value in this template
      * @param value a string of characters
@@ -392,12 +393,12 @@ public interface Template extends Cloneable {
     /**
      * Sets the specified value in this template to the specified range of the
      * given character string. The specified number of bytes from
-     * <code>value</code> will be used, starting at the character specified by
-     * <code>offset</code>.
+     * {@code value} will be used, starting at the character specified by
+     * {@code offset}.
      *
      * @param id     the ID of the value in this template
      * @param value  a character string
-     * @param offset the index in <code>value</code> of the first character to
+     * @param offset the index in {@code value} of the first character to
      *               use
      * @param count  the number of characters to use
      * @throws TemplateException if the specified value ID does not exist
@@ -503,10 +504,10 @@ public interface Template extends Cloneable {
 
     /**
      * Sets the specified value in this template to the given string, or an
-     * empty string if <code>value</code> is <code>null</code>.
+     * empty string if {@code value} is {@code null}.
      *
      * @param id    the ID of the value in this template
-     * @param value a string, or <code>null</code>
+     * @param value a string, or {@code null}
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
      * @see #setValueEncoded
@@ -524,10 +525,10 @@ public interface Template extends Cloneable {
 
     /**
      * Sets the specified value in this template to the given character sequence,
-     * or an empty character sequence if <code>value</code> is <code>null</code>.
+     * or an empty character sequence if {@code value} is {@code null}.
      *
      * @param id    the ID of the value in this template
-     * @param value a character sequence, or <code>null</code>
+     * @param value a character sequence, or {@code null}
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
      * @see #setValueEncoded
@@ -548,7 +549,7 @@ public interface Template extends Cloneable {
      * #getContent() content} of the given template. The given template's
      * value will be evaluated immediately, instead of being stored to be
      * evaluated later.
-     * <p>If the given template is <code>null</code>, the specified value will
+     * <p>If the given template is {@code null}, the specified value will
      * be set to an empty string.
      *
      * @param id       the ID of the value in this template
@@ -572,7 +573,7 @@ public interface Template extends Cloneable {
     /**
      * Sets the specified value in this template to the result of calling
      * {@link String#valueOf(Object) String.valueOf} on the given
-     * <code>value</code> and encodes it with the {@link TemplateEncoder} that's.
+     * {@code value} and encodes it with the {@link TemplateEncoder} that's.
      * registered for this template
      *
      * @param id    the ID of the value in this template
@@ -612,7 +613,7 @@ public interface Template extends Cloneable {
      * Hello &lt;!--v firstName/--&gt; &lt;!--v lastName/--&gt;.
      * </pre>
      * <p>Calling this method with an instance of Person where
-     * <code>first</code> was "Jim" and <code>last</code> was "James", would
+     * {@code first} was "Jim" and {@code last} was "James", would
      * produce:
      * <pre>Hello Jim James.</pre>
      * <p>Calling this method is equivalent to calling {@link
@@ -657,7 +658,7 @@ public interface Template extends Cloneable {
      * Hello &lt;!--v NAME:firstName/--&gt; &lt;!--v NAME:lastName/--&gt;.
      * </pre>
      * <p>Calling this method with an instance of Person where
-     * <code>first</code> was "Jim" and <code>last</code> was "James", and the
+     * {@code first} was "Jim" and {@code last} was "James", and the
      * prefix "NAME:", would produce:
      * <pre>Hello Jim James.</pre>
      * <p>Calling this method is equivalent to calling {@link
@@ -687,7 +688,7 @@ public interface Template extends Cloneable {
     /**
      * Sets all values in this template whose names match names of properties
      * in the given bean, preceded by the given prefix, if present. If the
-     * given prefix is <code>null</code>, it is ignored.
+     * given prefix is {@code null}, it is ignored.
      * <p>For example, given a class:
      * <pre>
      * class Person {
@@ -705,13 +706,13 @@ public interface Template extends Cloneable {
      * Hello &lt;!--v NAME:firstName/--&gt; &lt;!--v NAME:lastName/--&gt;.
      * </pre>
      * <p>Calling this method with an instance of Person where
-     * <code>first</code> was "Jim" and <code>last</code> was "James", and the
+     * {@code first} was "Jim" and {@code last} was "James", and the
      * prefix "NAME:", would produce:
      * <pre>Hello Jim James.</pre>
      * <p>Calling this method is equivalent to calling {@link
      * #setValue(String, String) setValue} individually for each property of
      * the bean prefixed with the given prefix.
-     * <p>If <code>encode</code> is <code>true</code>, this method will use
+     * <p>If {@code encode} is {@code true}, this method will use
      * this template's {@linkplain #getEncoder encoder} to encode the bean
      * properties before setting the values.
      * <p>Only <em>bean properties</em> will be considered for insertion in
@@ -722,9 +723,9 @@ public interface Template extends Cloneable {
      *               the template
      * @param prefix the prefix of values which will be filled with the given
      *               bean's property values
-     * @param encode <code>true</code> if the bean property values have to be
+     * @param encode {@code true} if the bean property values have to be
      *               encoded; or
-     *               <p><code>false</code> otherwise
+     *               <p>{@code false} otherwise
      * @throws TemplateException if this template has no bean handling
      *                           capability; or
      *                           <p>an error occurred during the introspection of the bean
@@ -776,7 +777,7 @@ public interface Template extends Cloneable {
 
     /**
      * Appends the result of calling {@link String#valueOf(Object)
-     * String.valueOf} on the given <code>value</code> to the specified value
+     * String.valueOf} on the given {@code value} to the specified value
      * in this template.
      *
      * @param id    the ID of the value in this template
@@ -797,8 +798,8 @@ public interface Template extends Cloneable {
     throws TemplateException;
 
     /**
-     * Appends <code>"true"</code> or <code>"false"</code> to the specified
-     * value in this template, depending on the given <code>value</code>.
+     * Appends {@code "true"} or {@code "false"} to the specified
+     * value in this template, depending on the given {@code value}.
      *
      * @param id    the ID of the value in this template
      * @param value a boolean value
@@ -839,7 +840,7 @@ public interface Template extends Cloneable {
 
     /**
      * Appends the given characters to the specified value in this template.
-     * The given value must not be <code>null</code>.
+     * The given value must not be {@code null}.
      *
      * @param id    the ID of the value in this template
      * @param value a string of characters
@@ -861,12 +862,12 @@ public interface Template extends Cloneable {
     /**
      * Appends the specified range of the given character string to the
      * specified value in this template. The specified number of bytes from
-     * <code>value</code> will be used, starting at the character specified by
-     * <code>offset</code>.
+     * {@code value} will be used, starting at the character specified by
+     * {@code offset}.
      *
      * @param id     the ID of the value in this template
      * @param value  a character string
-     * @param offset the index in <code>value</code> of the first character to
+     * @param offset the index in {@code value} of the first character to
      *               use
      * @param count  the number of characters to use
      * @throws TemplateException if the specified value ID does not exist
@@ -973,11 +974,11 @@ public interface Template extends Cloneable {
     throws TemplateException;
 
     /**
-     * Appends the given string, or an empty string if <code>value</code> is
-     * <code>null</code>, to the specified value in this template.
+     * Appends the given string, or an empty string if {@code value} is
+     * {@code null}, to the specified value in this template.
      *
      * @param id    the ID of the value in this template
-     * @param value a string, or <code>null</code>
+     * @param value a string, or {@code null}
      * @throws TemplateException if the specified value ID does not exist
      *                           in this template
      * @see #appendValueEncoded
@@ -996,7 +997,7 @@ public interface Template extends Cloneable {
 
     /**
      * Appends the result of calling {@link String#valueOf(Object)
-     * String.valueOf} on the given <code>value</code> to the specified value
+     * String.valueOf} on the given {@code value} to the specified value
      * in this template and encodes it with the {@link TemplateEncoder} that's.
      * registered for this template
      *
@@ -1040,9 +1041,9 @@ public interface Template extends Cloneable {
      * modification that may have been made using {@link #setValue} or similar
      * methods.
      * <p>If no default value was specified for the given value, this method
-     * will return <code>null</code>.
+     * will return {@code null}.
      *
-     * @param id the ID of a value in this template, or <code>null</code>
+     * @param id the ID of a value in this template, or {@code null}
      * @return the original text value of the specified value
      * @see #hasDefaultValue
      * @since 1.0
@@ -1117,7 +1118,7 @@ public interface Template extends Cloneable {
 
     /**
      * Fills all values in this template which match "<code>l10n:<em>key</em></code>",
-     * where "<code>key</code>" is a {@linkplain
+     * where "{@code key}" is a {@linkplain
      * ResourceBundle#getObject(String) key} in a {@linkplain
      * #addResourceBundle(ResourceBundle) resource bundle} registered for this
      * template. Each value will be filled with the value in the resource
@@ -1133,8 +1134,8 @@ public interface Template extends Cloneable {
 
     /**
      * Fills the value "<code>lang:<em>id</em></code>" with the value of the
-     * block "<code>lang:<em>id</em>:<em>langid</em></code>", where "<code>id</code>"
-     * is the given ID, and "<code>langid</code>" is this template's
+     * block "<code>lang:<em>id</em>:<em>langid</em></code>", where "{@code id}"
+     * is the given ID, and "{@code langid}" is this template's
      * {@linkplain #getLanguage() current language ID}.
      * <p>If no matching block for the current language is found, the content
      * of the specified value will not be modified.
@@ -1152,16 +1153,16 @@ public interface Template extends Cloneable {
     /**
      * Evaluates all values in this template with ID's of the form "<code>render:<em>class</em></code>"
      * or "<code>render:<em>class</em>:<em>differentiator</em></code><em>r</em>",
-     * where "<code>class</code>" is the fully-qualified name of a class which
+     * where "{@code class}" is the fully-qualified name of a class which
      * extends {@link ValueRenderer}, the result of calling {@link
      * ValueRenderer#render(Template, String, String) ValueRenderer.render} on
      * a new instance of the class. The class must contain a zero-argument
      * ("no-arg") constructor.
-     * <p>For example, given a class <code>MyRenderer</code> in the package "<code>org.rifers.something</code>",
-     * which extends {@link ValueRenderer}, a value "<code>render:org.rifers.something.MyRenderer:test</code>"
-     * would create a new instance of <code>MyRenderer</code> (using its
-     * no-arg constructor), call <code>render(this,
-     * "render:org.rifers.something.MyRenderer:test", "test")</code>, and set
+     * <p>For example, given a class {@code MyRenderer} in the package "{@code org.rifers.something}",
+     * which extends {@link ValueRenderer}, a value "{@code render:org.rifers.something.MyRenderer:test}"
+     * would create a new instance of {@code MyRenderer} (using its
+     * no-arg constructor), call {@code render(this,
+     * "render:org.rifers.something.MyRenderer:test", "test")}, and set
      * the value in this template to whatever value the call returns.
      * <p>Value renderer tags are evaluated automatically when the output is
      * generated (such as when calling {@link #getContent()}). You can
@@ -1191,9 +1192,32 @@ public interface Template extends Cloneable {
 
     /**
      * Returns whether the specified value has been set. If this method
-     * returns <code>false</code>, the value has its original default value.
+     * returns {@code false}, the value has its original default value.
      * <p>If no such value exists in this template, this method will not throw
-     * an exception, it will return <code>false</code>.
+     * an exception, it will return {@code false}.
+     * <p>If the value was automatically set by RIFE2, this method will not
+     * return {@code true}, but {@link #isValueGenerated} will.
+     *
+     * @param id the ID of a value in this template
+     * @return whether the specified value has been set
+     * @see #appendValue
+     * @see #appendValueEncoded
+     * @see #setValue
+     * @see #setValueEncoded
+     * @see #isValueGenerated
+     * @see #removeValue
+     * @see #removeValues
+     * @see #blankValue
+     * @see #hasValueId
+     * @since 1.0
+     */
+    boolean isValueSet(String id);
+
+    /**
+     * Returns whether the specified value has been generated by RIFE2. This
+     * values will not be return with {@link #isValueSet}.
+     * <p>If no such value exists in this template, this method will not throw
+     * an exception, it will return {@code false}.
      *
      * @param id the ID of a value in this template
      * @return whether the specified value has been set
@@ -1208,7 +1232,16 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    boolean isValueSet(String id);
+    boolean isValueGenerated(String id);
+
+    /**
+     * Registers a collection of value IDs as being generated by RIFE2.
+     *
+     * @param valueIds the value IDs to register as generated values
+     * @see #isValueGenerated
+     * @since 1.0
+     */
+    void addGeneratedValues(Collection<String> valueIds);
 
     /**
      * Returns the number of values in this template which {@linkplain
@@ -1246,7 +1279,15 @@ public interface Template extends Cloneable {
      * @see #hasValueId
      * @since 1.0
      */
-    void removeValues(List<String> ids);
+    void removeValues(Collection<String> ids);
+
+    /**
+     * Reverts the generated values back to their default value.
+     *
+     * @see #addGeneratedValues
+     * @since 1.0
+     */
+    void removeGeneratedValues();
 
     /**
      * Set the content of the specified value to an empty string.
@@ -1282,10 +1323,10 @@ public interface Template extends Cloneable {
     String[] getAvailableValueIds();
 
     /**
-     * Returns a list of the ID's of all values in this template which
+     * Returns a collection of the ID's of all values in this template which
      * {@linkplain #isValueSet(String) have not been set}.
      *
-     * @return a list of ID's of values in this template which have not been
+     * @return a collection of ID's of values in this template which have not been
      * set
      * @since 1.0
      */
@@ -1355,10 +1396,19 @@ public interface Template extends Cloneable {
     BeanHandler getBeanHandler();
 
     /**
+     * Returns this template's {@linkplain FormBuilder form builder}. The form
+     * builder can be used for generating forms and fields.
+     *
+     * @return this template's form builder
+     * @since 1.0
+     */
+    FormBuilder getFormBuilder();
+
+    /**
      * Returns the encoder that this template uses to convert strings to
      * values in the template's generated text output. In an HTML template,
      * for example, this encoder may be used to convert text which may contain
-     * HTML special characters like <code>&lt;&gt;</code> to corresponding
+     * HTML special characters like {@code &lt;&gt;} to corresponding
      * escaped strings.
      *
      * @return this template's encoder
@@ -1369,7 +1419,7 @@ public interface Template extends Cloneable {
     /**
      * Adds a list of resource bundles to this template. Resource bundles are used in
      * many places, including when generating labels for forms, generating
-     * options for <code>&lt;select&gt;</code> tags, and {@linkplain
+     * options for {@code &lt;select&gt;} tags, and {@linkplain
      * #evaluateL10nTags() using localized text}.
      *
      * @param resourceBundles a list of resource bundle
@@ -1378,12 +1428,12 @@ public interface Template extends Cloneable {
      * @see #hasResourceBundles
      * @since 1.0
      */
-    void addResourceBundles(List<ResourceBundle> resourceBundles);
+    void addResourceBundles(Collection<ResourceBundle> resourceBundles);
 
     /**
      * Adds a resource bundle to this template. Resource bundles are used in
      * many places, including when generating labels for forms, generating
-     * options for <code>&lt;select&gt;</code> tags, and {@linkplain
+     * options for {@code &lt;select&gt;} tags, and {@linkplain
      * #evaluateL10nTags() using localized text}.
      *
      * @param resourceBundle a resource bundle
@@ -1435,7 +1485,7 @@ public interface Template extends Cloneable {
      * Returns this template's current 2-letter language code. This code is
      * used when {@link #evaluateL10nTags filling localized text values}. If
      * the language has not been {@linkplain #setLanguage set}, it defaults to
-     * the language set by the RIFE configuration parameter "<code>L10N_DEFAULT_LANGUAGE</code>".
+     * the language set by the RIFE configuration parameter "{@code L10N_DEFAULT_LANGUAGE}".
      *
      * @return the 2-letter language code currently used by this template
      * @see #setLanguage
@@ -1475,10 +1525,10 @@ public interface Template extends Cloneable {
     String getFullName();
 
     /**
-     * Returns this template's default content type, for example <code>text/html</code>.
+     * Returns this template's default content type, for example {@code text/html}.
      *
      * @return this template's default content type; or
-     * <p><code>null</code> if no default content type is known for this template instance
+     * <p>{@code null} if no default content type is known for this template instance
      * @since 1.0
      */
     String getDefaultContentType();

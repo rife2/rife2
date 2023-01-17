@@ -1,12 +1,11 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.test;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.xml.sax.SAXException;
 import rife.engine.*;
 
 import java.io.*;
@@ -106,7 +105,7 @@ public class MockResponse extends AbstractResponse {
      * Retrieves the template instance that was printed to the response.
      *
      * @return the template instance that was printed to the response; or
-     * <p><code>null</code> of no template was printed to the response
+     * <p>{@code null} of no template was printed to the response
      * @see #getBytes
      * @see #getText
      * @see #getParsedHtml
@@ -140,7 +139,7 @@ public class MockResponse extends AbstractResponse {
      * href="http://www.w3.org/TR/xpath">original specification</a> or in this
      * <a href="http://zvon.org/xxl/XMLTutorial/General/book.html">tutorial</a>.
      *
-     * @return the result as a <code>NodeList</code>
+     * @return the result as a {@code NodeList}
      * @throws XPathExpressionException if expression cannot be evaluated.
      * @see #xpathNode(String)
      * @see #xpathString(String)
@@ -157,7 +156,7 @@ public class MockResponse extends AbstractResponse {
      * Evaluate an XPath expression in the context of the response text and
      * return the result as a DOM node.
      *
-     * @return the result as a <code>Node</code>
+     * @return the result as a {@code Node}
      * @throws XPathExpressionException if expression cannot be evaluated.
      * @see #xpathNodeSet(String)
      * @see #xpathString(String)
@@ -174,7 +173,7 @@ public class MockResponse extends AbstractResponse {
      * Evaluate an XPath expression in the context of the response text and
      * return the result as a string.
      *
-     * @return the result as a <code>Node</code>
+     * @return the result as a {@code Node}
      * @throws XPathExpressionException if expression cannot be evaluated.
      * @see #xpathNodeSet(String)
      * @see #xpathNode(String)
@@ -191,7 +190,7 @@ public class MockResponse extends AbstractResponse {
      * Evaluate an XPath expression in the context of the response text and
      * return the result as a boolean.
      *
-     * @return the result as a <code>Node</code>
+     * @return the result as a {@code Node}
      * @throws XPathExpressionException if expression cannot be evaluated.
      * @see #xpathNodeSet(String)
      * @see #xpathNode(String)
@@ -208,7 +207,7 @@ public class MockResponse extends AbstractResponse {
      * Evaluate an XPath expression in the context of the response text and
      * return the result as a number.
      *
-     * @return the result as a <code>Node</code>
+     * @return the result as a {@code Node}
      * @throws XPathExpressionException if expression cannot be evaluated.
      * @see #xpathNodeSet(String)
      * @see #xpathNode(String)
@@ -240,7 +239,7 @@ public class MockResponse extends AbstractResponse {
      * href="http://www.w3.org/TR/xpath">original specification</a> or in this
      * <a href="http://zvon.org/xxl/XMLTutorial/General/book.html">tutorial</a>.
      *
-     * @return the result as a <code>NodeList</code>
+     * @return the result as a {@code NodeList}
      * @throws XPathExpressionException if expression cannot be evaluated.
      * @see #xpathNode(String, Object)
      * @see #xpathString(String, Object)
@@ -257,7 +256,7 @@ public class MockResponse extends AbstractResponse {
      * Evaluate an XPath expression in the provided context object and
      * return the result as a DOM node.
      *
-     * @return the result as a <code>Node</code>
+     * @return the result as a {@code Node}
      * @throws XPathExpressionException if expression cannot be evaluated.
      * @see #xpathNodeSet(String, Object)
      * @see #xpathString(String, Object)
@@ -274,7 +273,7 @@ public class MockResponse extends AbstractResponse {
      * Evaluate an XPath expression in the provided context object and
      * return the result as a string.
      *
-     * @return the result as a <code>Node</code>
+     * @return the result as a {@code Node}
      * @throws XPathExpressionException if expression cannot be evaluated.
      * @see #xpathNodeSet(String, Object)
      * @see #xpathNode(String, Object)
@@ -291,7 +290,7 @@ public class MockResponse extends AbstractResponse {
      * Evaluate an XPath expression in the provided context object and
      * return the result as a boolean.
      *
-     * @return the result as a <code>Node</code>
+     * @return the result as a {@code Node}
      * @throws XPathExpressionException if expression cannot be evaluated.
      * @see #xpathNodeSet(String, Object)
      * @see #xpathNode(String, Object)
@@ -308,7 +307,7 @@ public class MockResponse extends AbstractResponse {
      * Evaluate an XPath expression in the provided context object and
      * return the result as a number.
      *
-     * @return the result as a <code>Node</code>
+     * @return the result as a {@code Node}
      * @throws XPathExpressionException if expression cannot be evaluated.
      * @see #xpathNodeSet(String, Object)
      * @see #xpathNode(String, Object)
@@ -437,14 +436,14 @@ public class MockResponse extends AbstractResponse {
      * <p>The date is returned as the number of milliseconds since January 1,
      * 1970 GMT. The header name is case insensitive.
      * <p>If the response did not have a header of the specified name, this
-     * method returns <code>-1</code>. If the header can't be converted to a
-     * date, the method throws an <code>IllegalArgumentException</code>.
+     * method returns {@code -1}. If the header can't be converted to a
+     * date, the method throws an {@code IllegalArgumentException}.
      *
      * @param name the name of the header
-     * @return a <code>long</code> value representing the date specified in
+     * @return a {@code long} value representing the date specified in
      * the header expressed as the number of milliseconds since January 1,
      * 1970 GMT; or
-     * <p><code>-1</code> if the named header was not included with the
+     * <p>{@code -1} if the named header was not included with the
      * response
      * @throws java.lang.IllegalArgumentException if the header value can't
      *                                            be converted to a date
@@ -456,14 +455,14 @@ public class MockResponse extends AbstractResponse {
 
     /**
      * Returns the value of the specified response header as a
-     * <code>String</code>. If the response did not include a header of the
-     * specified name, this method returns <code>null</code>. The header name
+     * {@code String}. If the response did not include a header of the
+     * specified name, this method returns {@code null}. The header name
      * is case-insensitive. You can use this method with any response header.
      *
      * @param name the name of the header
-     * @return a <code>String</code> containing the value of the response
+     * @return a {@code String} containing the value of the response
      * header; or
-     * <p><code>null</code> if the response does not have a header of that
+     * <p>{@code null} if the response does not have a header of that
      * name
      * @since 1.0
      */
@@ -473,13 +472,13 @@ public class MockResponse extends AbstractResponse {
 
     /**
      * Returns the value of the specified response header as a
-     * <code>String</code>. If the response did not include a header of the
-     * specified name, this method returns <code>null</code>. The header name
+     * {@code String}. If the response did not include a header of the
+     * specified name, this method returns {@code null}. The header name
      * is case insensitive. You can use this method with any response header.
      *
-     * @return a <code>Collection</code> of all the header names sent with
+     * @return a {@code Collection} of all the header names sent with
      * this response; or
-     * <p>if the response has no headers, an empty <code>Collection</code>
+     * <p>if the response has no headers, an empty {@code Collection}
      * @since 1.0
      */
     public Collection getHeaderNames() {
@@ -488,16 +487,16 @@ public class MockResponse extends AbstractResponse {
 
     /**
      * Returns all the values of the specified response header as an
-     * <code>Collection</code> of <code>String</code> objects.
+     * {@code Collection} of {@code String} objects.
      * <p>If the response did not include any headers of the specified name,
-     * this method returns an empty <code>Collection</code>. The header name
+     * this method returns an empty {@code Collection}. The header name
      * is case insensitive. You can use this method with any response header.
      *
      * @param name the name of the header
-     * @return a <code>Collection</code> containing the values of the response
+     * @return a {@code Collection} containing the values of the response
      * header; or
      * <p>if the response does not have any headers of that name return an
-     * empty <code>Collection</code>
+     * empty {@code Collection}
      * @since 1.0
      */
     public Collection getHeaders(String name) {
@@ -506,18 +505,18 @@ public class MockResponse extends AbstractResponse {
 
     /**
      * Returns the value of the specified response header as an
-     * <code>int</code>. If the response does not have a header of the
-     * specified name, this method returns <code>-1</code>. If the header
-     * cannot be converted to an <code>integer</code>, this method throws a
-     * <code>NumberFormatException</code>.
+     * {@code int}. If the response does not have a header of the
+     * specified name, this method returns {@code -1}. If the header
+     * cannot be converted to an {@code integer}, this method throws a
+     * {@code NumberFormatException}.
      * <p>The header name is case-insensitive.
      *
      * @param name the name of the header
-     * @return an <code>integer</code> expressing the value of the response
+     * @return an {@code integer} expressing the value of the response
      * header; or
-     * <p><code>-1</code> if the response doesn't have a header of this name
+     * <p>{@code -1} if the response doesn't have a header of this name
      * @throws java.lang.NumberFormatException if the header value can't be
-     *                                         converted to an <code>int</code>
+     *                                         converted to an {@code int}
      * @since 1.0
      */
     public int getIntHeader(String name) {
@@ -565,7 +564,7 @@ public class MockResponse extends AbstractResponse {
     /**
      * Returns the status code of this response.
      *
-     * @return an <code>integer</code> expressing the status code of this
+     * @return an {@code integer} expressing the status code of this
      * response
      * @since 1.0
      */
@@ -576,7 +575,7 @@ public class MockResponse extends AbstractResponse {
     /**
      * Returns the error reason of this response.
      *
-     * @return an <code>String</code> expressing the reason of this response error
+     * @return an {@code String} expressing the reason of this response error
      * @since 1.0
      */
     public String getReason() {

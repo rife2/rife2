@@ -1,30 +1,23 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
-import rife.database.exceptions.FieldsRequiredException;
-import rife.database.exceptions.TableNameRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.*;
+import rife.database.exceptions.*;
 import rife.database.types.SqlNull;
+import rife.tools.Convert;
 
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInsertOracle extends TestInsert {
-    @Test
-    public void testInstantiationOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testInstantiationOracle() {
+        var query = new Insert(ORACLE);
         assertNotNull(query);
         try {
             query.getSql();
@@ -34,9 +27,9 @@ public class TestInsertOracle extends TestInsert {
         }
     }
 
-    @Test
-    public void testIncompleteQueryOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testIncompleteQueryOracle() {
+        var query = new Insert(ORACLE);
         try {
             query.getSql();
             fail();
@@ -54,9 +47,9 @@ public class TestInsertOracle extends TestInsert {
         assertNotNull(query.getSql());
     }
 
-    @Test
-    public void testClearOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testClearOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename")
             .field("col1", "val1");
         assertNotNull(query.getSql());
@@ -69,9 +62,9 @@ public class TestInsertOracle extends TestInsert {
         }
     }
 
-    @Test
-    public void testHintOracle() {
-        Insert query = new Insert(ORACLE)
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testHintOracle() {
+        var query = new Insert(ORACLE)
             .hint("APPEND")
             .into("tablename")
             .field("propertyDouble", 12.3d);
@@ -79,19 +72,19 @@ public class TestInsertOracle extends TestInsert {
         assertTrue(execute(query));
     }
 
-    @Test
-    public void testParameterOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testParameterOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename")
             .fieldParameter("col1");
         assertEquals(query.getSql(), "INSERT INTO tablename (col1) VALUES (?)");
     }
 
-    @Test
-    public void testFieldOracle() {
-        Calendar cal = Calendar.getInstance();
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldOracle() {
+        var cal = Calendar.getInstance();
         cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
-        Insert query = new Insert(ORACLE);
+        var query = new Insert(ORACLE);
         query.into("tablename")
             .field("nullColumn", SqlNull.NULL)
             .field("propertyBigDecimal", new BigDecimal("98347.876438637"))
@@ -105,29 +98,29 @@ public class TestInsertOracle extends TestInsert {
             .field("propertyInt", 34)
             .field("propertyLong", 45L)
             .field("propertyShort", (short) 12)
-            .field("propertySqlDate", new java.sql.Date(cal.getTime().getTime()))
+            .field("propertySqlDate", Convert.toSqlDate(cal))
             .field("propertyString", "string'value")
-            .field("propertyStringbuffer", new StringBuffer("stringbuffer'value"))
-            .field("propertyTime", new Time(cal.getTime().getTime()))
-            .field("propertyTimestamp", new Timestamp(cal.getTime().getTime()));
-        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (NULL, 98347.876438637, 1, 16, TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), 'M', TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), 12.3, 13.4, 34, 45, 12, TO_DATE('2002/08/19 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), 'string''value', 'stringbuffer''value', TO_DATE('12:17:52', 'HH24:MI:SS'), TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'))");
+            .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
+            .field("propertyTime", Convert.toSqlTime(cal))
+            .field("propertyTimestamp", Convert.toSqlTimestamp(cal));
+        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (NULL, 98347.876438637, 1, 16, TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), 'M', TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), 12.3, 13.4, 34, 45, 12, TO_DATE('2002/08/19 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), 'string''value', 'stringbuffer''value', TO_DATE('12:17:52', 'HH24:MI:SS'), TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'))");
         assertTrue(execute(query));
     }
 
-    @Test
-    public void testFieldCustomOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldCustomOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename")
             .fieldCustom("propertySqlDate", "(SELECT sysdate FROM dual)");
         assertEquals(query.getSql(), "INSERT INTO tablename (propertySqlDate) VALUES ((SELECT sysdate FROM dual))");
         assertTrue(execute(query));
     }
 
-    @Test
-    public void testFieldsOracle() {
-        Calendar cal = Calendar.getInstance();
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldsOracle() {
+        var cal = Calendar.getInstance();
         cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
-        Insert query = new Insert(ORACLE);
+        var query = new Insert(ORACLE);
         query.into("tablename")
             .fields(new Object[]{
                 "nullColumn", SqlNull.NULL,
@@ -142,19 +135,19 @@ public class TestInsertOracle extends TestInsert {
                 "propertyInt", 34,
                 "propertyLong", 45L,
                 "propertyShort", (short) 12,
-                "propertySqlDate", new java.sql.Date(cal.getTime().getTime()),
-                "propertyString", new String("string'value"),
-                "propertyStringbuffer", new StringBuffer("stringbuffer'value"),
-                "propertyTime", new Time(cal.getTime().getTime()),
-                "propertyTimestamp", new Timestamp(cal.getTime().getTime())
+                "propertySqlDate", Convert.toSqlDate(cal),
+                "propertyString", "string'value",
+                "propertyStringBuffer", new StringBuffer("stringbuffer'value"),
+                "propertyTime", Convert.toSqlTime(cal),
+                "propertyTimestamp", Convert.toSqlTimestamp(cal)
             });
-        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (NULL, 98347.876438637, 1, 16, TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), 'M', TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), 12.3, 13.4, 34, 45, 12, TO_DATE('2002/08/19 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), 'string''value', 'stringbuffer''value', TO_DATE('12:17:52', 'HH24:MI:SS'), TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'))");
+        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (NULL, 98347.876438637, 1, 16, TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), 'M', TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), 12.3, 13.4, 34, 45, 12, TO_DATE('2002/08/19 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), 'string''value', 'stringbuffer''value', TO_DATE('12:17:52', 'HH24:MI:SS'), TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'))");
         assertTrue(execute(query));
     }
 
-    @Test
-    public void testFieldParametersOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldParametersOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename");
 
         assertNull(query.getParameters());
@@ -173,7 +166,7 @@ public class TestInsertOracle extends TestInsert {
             .fieldParameter("propertyShort")
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
-            .fieldParameter("propertyStringbuffer")
+            .fieldParameter("propertyStringBuffer")
             .fieldParameter("propertyTime")
             .fieldParameter("propertyTimestamp");
 
@@ -192,7 +185,7 @@ public class TestInsertOracle extends TestInsert {
         assertEquals(query.getParameters().getOrderedNames().get(11), "propertyShort");
         assertEquals(query.getParameters().getOrderedNames().get(12), "propertySqlDate");
         assertEquals(query.getParameters().getOrderedNames().get(13), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyStringbuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyStringBuffer");
         assertEquals(query.getParameters().getOrderedNames().get(15), "propertyTime");
         assertEquals(query.getParameters().getOrderedNames().get(16), "propertyTimestamp");
         assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{
@@ -210,15 +203,15 @@ public class TestInsertOracle extends TestInsert {
             "propertyShort",
             "propertySqlDate",
             "propertyString",
-            "propertyStringbuffer",
+            "propertyStringBuffer",
             "propertyTime",
             "propertyTimestamp"});
 
-        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         assertTrue(execute(query, new DbPreparedStatementHandler<>() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
+                var cal = Calendar.getInstance();
                 cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
                 cal.set(Calendar.MILLISECOND, 462);
                 statement
@@ -226,31 +219,31 @@ public class TestInsertOracle extends TestInsert {
                     .setBigDecimal(2, new BigDecimal("98347.876438637"))
                     .setBoolean(3, true)
                     .setByte(4, (byte) 16)
-                    .setDate(5, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(5, Convert.toSqlDate(cal))
                     .setString(6, "M")
-                    .setDate(7, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(7, Convert.toSqlDate(cal))
                     .setDouble(8, 12.3d)
                     .setFloat(9, 13.4f)
                     .setInt(10, 34)
                     .setLong(11, 45L)
                     .setShort(12, (short) 12)
-                    .setDate(13, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(13, Convert.toSqlDate(cal))
                     .setString(14, "string'value")
                     .setString(15, "string'value2")
-                    .setTime(16, new Time(cal.getTime().getTime()))
-                    .setTimestamp(17, new Timestamp(cal.getTime().getTime()));
+                    .setTime(16, Convert.toSqlTime(cal))
+                    .setTimestamp(17, Convert.toSqlTimestamp(cal));
             }
         }));
     }
 
-    @Test
-    public void testFieldParametersMixedOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldParametersMixedOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename");
 
         assertNull(query.getParameters());
 
-        final Calendar cal = Calendar.getInstance();
+        final var cal = Calendar.getInstance();
         cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
         query.fieldParameter("nullColumn")
@@ -267,8 +260,8 @@ public class TestInsertOracle extends TestInsert {
             .field("propertyShort", (short) 12)
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
-            .field("propertyStringbuffer", new StringBuffer("stringbuffer'value"))
-            .field("propertyTime", new Time(cal.getTime().getTime()))
+            .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
+            .field("propertyTime", Convert.toSqlTime(cal))
             .fieldParameter("propertyTimestamp");
 
         assertEquals(query.getParameters().getOrderedNames().size(), 9);
@@ -292,7 +285,7 @@ public class TestInsertOracle extends TestInsert {
             "propertyString",
             "propertyTimestamp"});
 
-        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (?, 98347.876438637, ?, ?, TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), ?, TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), 12.3, ?, ?, 45, 12, ?, ?, 'stringbuffer''value', TO_DATE('12:17:52', 'HH24:MI:SS'), ?)");
+        assertEquals(query.getSql(), "INSERT INTO tablename (nullColumn, propertyBigDecimal, propertyBoolean, propertyByte, propertyCalendar, propertyChar, propertyDate, propertyDouble, propertyFloat, propertyInt, propertyLong, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (?, 98347.876438637, ?, ?, TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), ?, TO_DATE('2002/08/19 12:17:52', 'YYYY/MM/DD HH24:MI:SS'), 12.3, ?, ?, 45, 12, ?, ?, 'stringbuffer''value', TO_DATE('12:17:52', 'HH24:MI:SS'), ?)");
 
         assertTrue(execute(query, new DbPreparedStatementHandler<>() {
             public void setParameters(DbPreparedStatement statement) {
@@ -303,70 +296,70 @@ public class TestInsertOracle extends TestInsert {
                     .setString(4, "M")
                     .setFloat(5, 13.4f)
                     .setInt(6, 34)
-                    .setDate(7, new java.sql.Date(cal.getTime().getTime()))
+                    .setDate(7, Convert.toSqlDate(cal))
                     .setString(8, "string'value")
-                    .setTimestamp(9, new Timestamp(cal.getTime().getTime()));
+                    .setTimestamp(9, Convert.toSqlTimestamp(cal));
             }
         }));
     }
 
-    @Test
-    public void testFieldsBeanOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldsBeanOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename")
             .fields(BeanImpl.getPopulatedBean());
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (219038743.392874, 1, 0, 89, 34, TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 'v', 'r', TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 53348.34, 143298.692, 'VALUE_THREE', 98634.2, 8734.7, 545, 968, 34563, 66875, 43, 68, TO_DATE('2002/06/18 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), 'someotherstring', 'someotherstringbuff', TO_DATE('15:26:14', 'HH24:MI:SS'), TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'))");
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInstant, propertyInt, propertyIntegerObject, propertyLocalDate, propertyLocalDateTime, propertyLocalTime, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (219038743.392874, 1, 0, 89, 34, TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 'v', 'r', TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 53348.34, 143298.692, 'VALUE_THREE', 98634.2, 8734.7, TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 545, 968, TO_DATE('2002/06/18 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), TO_DATE('15:26:14', 'HH24:MI:SS'), 34563, 66875, 43, 68, TO_DATE('2002/06/18 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), 'someotherstring', 'someotherstringbuff', TO_DATE('15:26:14', 'HH24:MI:SS'), TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'))");
         assertTrue(execute(query));
     }
 
-    @Test
-    public void testFieldsBeanConstrainedOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldsBeanConstrainedOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename")
             .fields(BeanImplConstrained.getPopulatedBean());
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLongObject, propertyShort, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (219038743.392874, 1, 0, 34, TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 'v', 'r', TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 53348.34, 143298.692, 98634.2, 8734.7, 545, 968, 66875, 43, TO_DATE('2002/06/18 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), 'someotherstring', 'someotherstringbuff', TO_DATE('15:26:14', 'HH24:MI:SS'), TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'))");
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInstant, propertyInt, propertyIntegerObject, propertyLocalDate, propertyLocalDateTime, propertyLocalTime, propertyLongObject, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (219038743.392874, 1, 0, 34, TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 'v', 'r', TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 53348.34, 143298.692, 98634.2, 8734.7, TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 545, 968, TO_DATE('2002/06/18 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), TO_DATE('15:26:14', 'HH24:MI:SS'), 66875, 43, TO_DATE('2002/06/18 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), 'someotherstring', 'someotherstringbuff', TO_DATE('15:26:14', 'HH24:MI:SS'), TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'))");
         assertTrue(execute(query));
     }
 
-    @Test
-    public void testFieldsBeanNullValuesOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldsBeanNullValuesOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename")
             .fields(BeanImpl.getNullBean());
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject) VALUES (0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0)");
         assertTrue(execute(query));
     }
 
-    @Test
-    public void testFieldsBeanIncludedOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldsBeanIncludedOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename")
-            .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyByte, propertyDouble, propertyShort, propertyStringbuffer, propertyTime) VALUES (89, 53348.34, 43, 'someotherstringbuff', TO_DATE('15:26:14', 'HH24:MI:SS'))");
+            .fieldsIncluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyByte, propertyDouble, propertyShort, propertyStringBuffer, propertyTime) VALUES (89, 53348.34, 43, 'someotherstringbuff', TO_DATE('15:26:14', 'HH24:MI:SS'))");
         assertTrue(execute(query));
     }
 
-    @Test
-    public void testFieldsBeanExcludedOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldsBeanExcludedOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename")
-            .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShortObject, propertySqlDate, propertyString, propertyTimestamp) VALUES (219038743.392874, 1, 0, 34, TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 'v', 'r', TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 143298.692, 'VALUE_THREE', 98634.2, 8734.7, 545, 968, 34563, 66875, 68, TO_DATE('2002/06/18 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), 'someotherstring', TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'))");
+            .fieldsExcluded(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInstant, propertyInt, propertyIntegerObject, propertyLocalDate, propertyLocalDateTime, propertyLocalTime, propertyLong, propertyLongObject, propertyShortObject, propertySqlDate, propertyString, propertyTimestamp) VALUES (219038743.392874, 1, 0, 34, TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 'v', 'r', TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 143298.692, 'VALUE_THREE', 98634.2, 8734.7, TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), 545, 968, TO_DATE('2002/06/18 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'), TO_DATE('15:26:14', 'HH24:MI:SS'), 34563, 66875, 68, TO_DATE('2002/06/18 00:00:00', 'YYYY/MM/DD HH24:MI:SS'), 'someotherstring', TO_DATE('2002/06/18 15:26:14', 'YYYY/MM/DD HH24:MI:SS'))");
         assertTrue(execute(query));
     }
 
-    @Test
-    public void testFieldsBeanFilteredOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldsBeanFilteredOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename")
-            .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyDouble, propertyStringbuffer) VALUES (53348.34, 'someotherstringbuff')");
+            .fieldsFiltered(BeanImpl.getPopulatedBean(), new String[]{"propertyByte", "propertyDouble", "propertyShort", "propertyStringBuffer", "propertyTime"}, new String[]{"propertyByte", "propertyShort", "propertyTime"});
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyDouble, propertyStringBuffer) VALUES (53348.34, 'someotherstringbuff')");
         assertTrue(execute(query));
     }
 
-    @Test
-    public void testMultipleRowsOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testMultipleRowsOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename")
             .field("propertyChar", 'M')
             .field("propertyDouble", 12.3d)
@@ -384,14 +377,14 @@ public class TestInsertOracle extends TestInsert {
         }
     }
 
-    @Test
-    public void testFieldsParametersBeanOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldsParametersBeanOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename")
             .fieldsParameters(BeanImpl.class);
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByte, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInstant, propertyInt, propertyIntegerObject, propertyLocalDate, propertyLocalDateTime, propertyLocalTime, propertyLong, propertyLongObject, propertyShort, propertyShortObject, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-        assertEquals(query.getParameters().getOrderedNames().size(), 25);
+        assertEquals(query.getParameters().getOrderedNames().size(), 29);
         assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
         assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
         assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
@@ -406,62 +399,70 @@ public class TestInsertOracle extends TestInsert {
         assertEquals(query.getParameters().getOrderedNames().get(11), "propertyEnum");
         assertEquals(query.getParameters().getOrderedNames().get(12), "propertyFloat");
         assertEquals(query.getParameters().getOrderedNames().get(13), "propertyFloatObject");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyInt");
-        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyIntegerObject");
-        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyLong");
-        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyLongObject");
-        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyShort");
-        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyShortObject");
-        assertEquals(query.getParameters().getOrderedNames().get(20), "propertySqlDate");
-        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(22), "propertyStringbuffer");
-        assertEquals(query.getParameters().getOrderedNames().get(23), "propertyTime");
-        assertEquals(query.getParameters().getOrderedNames().get(24), "propertyTimestamp");
-        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLong", "propertyLongObject", "propertyShort", "propertyShortObject", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"});
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyInstant");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyInt");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyLocalDate");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyLocalDateTime");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyLocalTime");
+        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyLong");
+        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(22), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(23), "propertyShortObject");
+        assertEquals(query.getParameters().getOrderedNames().get(24), "propertySqlDate");
+        assertEquals(query.getParameters().getOrderedNames().get(25), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(26), "propertyStringBuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(27), "propertyTime");
+        assertEquals(query.getParameters().getOrderedNames().get(28), "propertyTimestamp");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByte", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyInstant", "propertyInt", "propertyIntegerObject", "propertyLocalDate", "propertyLocalDateTime", "propertyLocalTime", "propertyLong", "propertyLongObject", "propertyShort", "propertyShortObject", "propertySqlDate", "propertyString", "propertyStringBuffer", "propertyTime", "propertyTimestamp"});
 
-        assertTrue(execute(query, new DbPreparedStatementHandler<>() {
+        assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
-                cal.set(Calendar.MILLISECOND, 462);
+                var cal = Calendar.getInstance();
+                cal.set(2002, Calendar.JUNE, 18, 15, 26, 14);
+                cal.set(Calendar.MILLISECOND, 167);
                 statement
-                    .setBigDecimal(1, new BigDecimal("98347.876438637"))
-                    .setBoolean(2, false)
-                    .setBoolean(3, true)
-                    .setByte(4, (byte) 16)
-                    .setByte(5, (byte) 72)
-                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
-                    .setString(7, "M")
-                    .setString(8, "p")
-                    .setTimestamp(9, new java.sql.Timestamp(cal.getTime().getTime()))
-                    .setDouble(10, 12.3d)
-                    .setDouble(11, 68.7d)
+                    .setBigDecimal(1, new BigDecimal("219038743.392874"))
+                    .setBoolean(2, true)
+                    .setBoolean(3, false)
+                    .setByte(4, (byte) 89)
+                    .setByte(5, (byte) 34)
+                    .setTimestamp(6, Convert.toSqlTimestamp(cal))
+                    .setString(7, "v")
+                    .setString(8, "r")
+                    .setTimestamp(9, Convert.toSqlTimestamp(cal))
+                    .setDouble(10, 53348.34d)
+                    .setDouble(11, 143298.692d)
                     .setString(12, "VALUE_THREE")
-                    .setFloat(13, 13.4f)
-                    .setFloat(14, 42.1f)
-                    .setInt(15, 92)
-                    .setInt(16, 34)
-                    .setLong(17, 687L)
-                    .setLong(18, 92)
-                    .setShort(19, (short) 7)
-                    .setShort(20, (short) 12)
-                    .setDate(21, new java.sql.Date(cal.getTime().getTime()))
-                    .setString(22, "string'value")
-                    .setString(23, "string'value2")
-                    .setTime(24, new Time(cal.getTime().getTime()))
-                    .setTimestamp(25, new Timestamp(cal.getTime().getTime()));
+                    .setDouble(13, 98634.2d)
+                    .setDouble(14, 8734.7d)
+                    .setTimestamp(15, Convert.toSqlTimestamp(cal))
+                    .setInt(16, 545)
+                    .setInt(17, 968)
+                    .setDate(18, Convert.toSqlDate(cal))
+                    .setTimestamp(19, Convert.toSqlTimestamp(cal))
+                    .setTime(20, Convert.toSqlTime(cal))
+                    .setLong(21, 34563L)
+                    .setLong(22, 66875L)
+                    .setShort(23, (short) 43)
+                    .setShort(24, (short) 68)
+                    .setDate(25, Convert.toSqlDate(cal))
+                    .setString(26, "someotherstring")
+                    .setString(27, "someotherstringbuff")
+                    .setTime(28, Convert.toSqlTime(cal))
+                    .setTimestamp(29, Convert.toSqlTimestamp(cal));
             }
         }));
     }
 
-    @Test
-    public void testFieldsParametersBeanConstrainedOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldsParametersBeanConstrainedOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename")
             .fieldsParameters(BeanImplConstrained.class);
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInt, propertyIntegerObject, propertyLongObject, propertyShort, propertySqlDate, propertyString, propertyStringbuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBoolean, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyChar, propertyCharacterObject, propertyDate, propertyDouble, propertyDoubleObject, propertyFloat, propertyFloatObject, propertyInstant, propertyInt, propertyIntegerObject, propertyLocalDate, propertyLocalDateTime, propertyLocalTime, propertyLongObject, propertyShort, propertySqlDate, propertyString, propertyStringBuffer, propertyTime, propertyTimestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-        assertEquals(query.getParameters().getOrderedNames().size(), 21);
+        assertEquals(query.getParameters().getOrderedNames().size(), 25);
         assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
         assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBoolean");
         assertEquals(query.getParameters().getOrderedNames().get(2), "propertyBooleanObject");
@@ -474,59 +475,67 @@ public class TestInsertOracle extends TestInsert {
         assertEquals(query.getParameters().getOrderedNames().get(9), "propertyDoubleObject");
         assertEquals(query.getParameters().getOrderedNames().get(10), "propertyFloat");
         assertEquals(query.getParameters().getOrderedNames().get(11), "propertyFloatObject");
-        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyInt");
-        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyIntegerObject");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyLongObject");
-        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyShort");
-        assertEquals(query.getParameters().getOrderedNames().get(16), "propertySqlDate");
-        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyStringbuffer");
-        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyTime");
-        assertEquals(query.getParameters().getOrderedNames().get(20), "propertyTimestamp");
-        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInt", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringbuffer", "propertyTime", "propertyTimestamp"});
+        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyInstant");
+        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyInt");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyLocalDate");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyLocalDateTime");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyLocalTime");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(20), "propertySqlDate");
+        assertEquals(query.getParameters().getOrderedNames().get(21), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(22), "propertyStringBuffer");
+        assertEquals(query.getParameters().getOrderedNames().get(23), "propertyTime");
+        assertEquals(query.getParameters().getOrderedNames().get(24), "propertyTimestamp");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBoolean", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyChar", "propertyCharacterObject", "propertyDate", "propertyDouble", "propertyDoubleObject", "propertyFloat", "propertyFloatObject", "propertyInstant", "propertyInt", "propertyIntegerObject", "propertyLocalDate", "propertyLocalDateTime", "propertyLocalTime", "propertyLongObject", "propertyShort", "propertySqlDate", "propertyString", "propertyStringBuffer", "propertyTime", "propertyTimestamp"});
 
-        assertTrue(execute(query, new DbPreparedStatementHandler<>() {
+        assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
-                cal.set(Calendar.MILLISECOND, 462);
+                var cal = Calendar.getInstance();
+                cal.set(2002, Calendar.JUNE, 18, 15, 26, 14);
+                cal.set(Calendar.MILLISECOND, 167);
                 statement
-                    .setBigDecimal(1, new BigDecimal("98347.876438637"))
-                    .setBoolean(2, false)
-                    .setBoolean(3, true)
-                    .setByte(4, (byte) 72)
-                    .setTimestamp(5, new java.sql.Timestamp(cal.getTime().getTime()))
-                    .setString(6, "M")
-                    .setString(7, "p")
-                    .setTimestamp(8, new java.sql.Timestamp(cal.getTime().getTime()))
-                    .setDouble(9, 12.3d)
-                    .setDouble(10, 68.7d)
-                    .setFloat(11, 13.4f)
-                    .setFloat(12, 42.1f)
-                    .setInt(13, 92)
-                    .setInt(14, 34)
-                    .setLong(15, 92)
-                    .setShort(16, (short) 7)
-                    .setDate(17, new java.sql.Date(cal.getTime().getTime()))
-                    .setString(18, "string'value")
-                    .setString(19, "string'value2")
-                    .setTime(20, new Time(cal.getTime().getTime()))
-                    .setTimestamp(21, new Timestamp(cal.getTime().getTime()));
+                    .setBigDecimal(1, new BigDecimal("219038743.392874"))
+                    .setBoolean(2, true)
+                    .setBoolean(3, false)
+                    .setByte(4, (byte) 34)
+                    .setTimestamp(5, Convert.toSqlTimestamp(cal))
+                    .setString(6, "v")
+                    .setString(7, "r")
+                    .setTimestamp(8, Convert.toSqlTimestamp(cal))
+                    .setDouble(9, 53348.34d)
+                    .setDouble(10, 143298.692d)
+                    .setDouble(11, 98634.2d)
+                    .setDouble(12, 8734.7d)
+                    .setTimestamp(13, Convert.toSqlTimestamp(cal))
+                    .setInt(14, 545)
+                    .setInt(15, 968)
+                    .setDate(16, Convert.toSqlDate(cal))
+                    .setTimestamp(17, Convert.toSqlTimestamp(cal))
+                    .setTime(18, Convert.toSqlTime(cal))
+                    .setLong(19, 66875L)
+                    .setShort(20, (short) 43)
+                    .setDate(21, Convert.toSqlDate(cal))
+                    .setString(22, "someotherstring")
+                    .setString(23, "someotherstringbuff")
+                    .setTime(24, Convert.toSqlTime(cal))
+                    .setTimestamp(25, Convert.toSqlTimestamp(cal));
             }
         }));
     }
 
-    @Test
-    public void testFieldsParametersBeanExcludedOracle() {
-        Insert query = new Insert(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testFieldsParametersBeanExcludedOracle() {
+        var query = new Insert(ORACLE);
         query.into("tablename")
             .fieldsParametersExcluded(BeanImpl.class,
                 new String[]{"propertyBoolean", "propertyByte", "propertyChar",
                     "propertyDouble", "propertyInt", "propertyLong",
-                    "propertySqlDate", "propertyStringbuffer", "propertyTimestamp"});
-        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyCharacterObject, propertyDate, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyIntegerObject, propertyLongObject, propertyShort, propertyShortObject, propertyString, propertyTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    "propertySqlDate", "propertyStringBuffer", "propertyTimestamp"});
+        assertEquals(query.getSql(), "INSERT INTO tablename (propertyBigDecimal, propertyBooleanObject, propertyByteObject, propertyCalendar, propertyCharacterObject, propertyDate, propertyDoubleObject, propertyEnum, propertyFloat, propertyFloatObject, propertyInstant, propertyIntegerObject, propertyLocalDate, propertyLocalDateTime, propertyLocalTime, propertyLongObject, propertyShort, propertyShortObject, propertyString, propertyTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-        assertEquals(query.getParameters().getOrderedNames().size(), 16);
+        assertEquals(query.getParameters().getOrderedNames().size(), 20);
         assertEquals(query.getParameters().getOrderedNames().get(0), "propertyBigDecimal");
         assertEquals(query.getParameters().getOrderedNames().get(1), "propertyBooleanObject");
         assertEquals(query.getParameters().getOrderedNames().get(2), "propertyByteObject");
@@ -537,50 +546,58 @@ public class TestInsertOracle extends TestInsert {
         assertEquals(query.getParameters().getOrderedNames().get(7), "propertyEnum");
         assertEquals(query.getParameters().getOrderedNames().get(8), "propertyFloat");
         assertEquals(query.getParameters().getOrderedNames().get(9), "propertyFloatObject");
-        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyIntegerObject");
-        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyLongObject");
-        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyShort");
-        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyShortObject");
-        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyString");
-        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyTime");
-        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyCharacterObject", "propertyDate", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyIntegerObject", "propertyLongObject", "propertyShort", "propertyShortObject", "propertyString", "propertyTime"});
+        assertEquals(query.getParameters().getOrderedNames().get(10), "propertyInstant");
+        assertEquals(query.getParameters().getOrderedNames().get(11), "propertyIntegerObject");
+        assertEquals(query.getParameters().getOrderedNames().get(12), "propertyLocalDate");
+        assertEquals(query.getParameters().getOrderedNames().get(13), "propertyLocalDateTime");
+        assertEquals(query.getParameters().getOrderedNames().get(14), "propertyLocalTime");
+        assertEquals(query.getParameters().getOrderedNames().get(15), "propertyLongObject");
+        assertEquals(query.getParameters().getOrderedNames().get(16), "propertyShort");
+        assertEquals(query.getParameters().getOrderedNames().get(17), "propertyShortObject");
+        assertEquals(query.getParameters().getOrderedNames().get(18), "propertyString");
+        assertEquals(query.getParameters().getOrderedNames().get(19), "propertyTime");
+        assertArrayEquals(query.getParameters().getOrderedNamesArray(), new String[]{"propertyBigDecimal", "propertyBooleanObject", "propertyByteObject", "propertyCalendar", "propertyCharacterObject", "propertyDate", "propertyDoubleObject", "propertyEnum", "propertyFloat", "propertyFloatObject", "propertyInstant", "propertyIntegerObject", "propertyLocalDate", "propertyLocalDateTime", "propertyLocalTime", "propertyLongObject", "propertyShort", "propertyShortObject", "propertyString", "propertyTime"});
 
-        assertTrue(execute(query, new DbPreparedStatementHandler<>() {
+        assertTrue(execute(query, new DbPreparedStatementHandler() {
             public void setParameters(DbPreparedStatement statement) {
-                Calendar cal = Calendar.getInstance();
+                var cal = Calendar.getInstance();
                 cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
                 cal.set(Calendar.MILLISECOND, 462);
                 statement
                     .setBigDecimal(1, new BigDecimal("98347.876438637"))
                     .setBoolean(2, true)
                     .setByte(3, (byte) 72)
-                    .setTimestamp(4, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(4, Convert.toSqlTimestamp(cal))
                     .setString(5, "o")
-                    .setTimestamp(6, new java.sql.Timestamp(cal.getTime().getTime()))
+                    .setTimestamp(6, Convert.toSqlTimestamp(cal))
                     .setDouble(7, 86.7d)
                     .setString(8, "VALUE_THREE")
                     .setFloat(9, 13.4f)
                     .setFloat(10, 32.8f)
-                    .setInt(11, 358)
-                    .setLong(12, 9680L)
-                    .setShort(13, (short) 12)
-                    .setShort(14, (short) 78)
-                    .setString(15, "string'value")
-                    .setTime(16, new Time(cal.getTime().getTime()));
+                    .setTimestamp(11, Convert.toSqlTimestamp(cal))
+                    .setInt(12, 358)
+                    .setDate(13, Convert.toSqlDate(cal))
+                    .setTimestamp(14, Convert.toSqlTimestamp(cal))
+                    .setTime(15, Convert.toSqlTime(cal))
+                    .setLong(16, 9680L)
+                    .setShort(17, (short) 12)
+                    .setShort(18, (short) 78)
+                    .setString(19, "string'value")
+                    .setTime(20, Convert.toSqlTime(cal));
             }
         }));
     }
 
-    @Test
-    public void testInsertSubselectParamsOracle() {
-        Select fieldquery = new Select(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testInsertSubselectParamsOracle() {
+        var fieldquery = new Select(ORACLE);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
 
         // Manual subselect creation
-        Insert query = new Insert(ORACLE);
+        var query = new Insert(ORACLE);
         // shuffled the structure around a bit to test the correct order usage
         query
             .into("tablename")
@@ -588,7 +605,7 @@ public class TestInsertOracle extends TestInsert {
             .fieldCustom("propertyLong", "(" + fieldquery + ")")
             .fieldSubselect(fieldquery);
         assertEquals(query.getSql(), "INSERT INTO tablename (propertyString, propertyLong) VALUES (?, (SELECT max(propertyLong) FROM table2 WHERE propertyInt > ?))");
-        String[] parameters = query.getParameters().getOrderedNamesArray();
+        var parameters = query.getParameters().getOrderedNamesArray();
         assertEquals(2, parameters.length);
         assertEquals(parameters[0], "propertyString");
         assertEquals(parameters[1], "propertyInt");
@@ -621,18 +638,18 @@ public class TestInsertOracle extends TestInsert {
         }));
     }
 
-    @Test
-    public void testCloneOracle() {
-        Select fieldquery = new Select(ORACLE);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.ORACLE)
+    void testCloneOracle() {
+        var fieldquery = new Select(ORACLE);
         fieldquery
             .from("table2")
             .field("max(propertyLong)")
             .whereParameter("propertyInt", ">");
 
-        final Calendar cal = Calendar.getInstance();
+        final var cal = Calendar.getInstance();
         cal.set(2002, Calendar.AUGUST, 19, 12, 17, 52);
         cal.set(Calendar.MILLISECOND, 462);
-        Insert query = new Insert(ORACLE);
+        var query = new Insert(ORACLE);
         query
             .hint("APPEND")
             .into("tablename")
@@ -649,13 +666,13 @@ public class TestInsertOracle extends TestInsert {
             .field("propertyShort", (short) 12)
             .fieldParameter("propertySqlDate")
             .fieldParameter("propertyString")
-            .field("propertyStringbuffer", new StringBuffer("stringbuffer'value"))
-            .field("propertyTime", new Time(cal.getTime().getTime()))
+            .field("propertyStringBuffer", new StringBuffer("stringbuffer'value"))
+            .field("propertyTime", Convert.toSqlTime(cal))
             .fieldParameter("propertyTimestamp")
             .fieldCustom("propertyLong", "(" + fieldquery + ")")
             .fieldSubselect(fieldquery);
 
-        Insert query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
         assertTrue(execute(query, new DbPreparedStatementHandler<>() {
@@ -667,9 +684,9 @@ public class TestInsertOracle extends TestInsert {
                     .setString("propertyChar", "M")
                     .setFloat("propertyFloat", 13.4f)
                     .setInt("propertyInt", 34)
-                    .setDate("propertySqlDate", new java.sql.Date(cal.getTime().getTime()))
+                    .setDate("propertySqlDate", Convert.toSqlDate(cal))
                     .setString("propertyString", "string'value")
-                    .setTimestamp("propertyTimestamp", new Timestamp(cal.getTime().getTime()));
+                    .setTimestamp("propertyTimestamp", Convert.toSqlTimestamp(cal));
             }
         }));
     }

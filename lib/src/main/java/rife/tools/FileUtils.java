@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
@@ -17,7 +17,11 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public abstract class FileUtils {
+public final class FileUtils {
+    private FileUtils() {
+        // no-op
+    }
+
     public static ArrayList<String> getFileList(File file) {
         return getFileList(file, null, null, true);
     }

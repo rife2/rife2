@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler;
@@ -18,8 +18,8 @@ public class ExecutorThread implements Runnable {
     public void run() {
         assert task_ != null;
 
-        boolean successful_execution = false;
-        TaskManager manager = executor_.getScheduler().getTaskManager();
+        var successful_execution = false;
+        var manager = executor_.getScheduler().getTaskManager();
 
         try {
             manager.activateTask(task_.getId());

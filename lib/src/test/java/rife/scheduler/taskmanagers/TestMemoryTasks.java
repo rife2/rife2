@@ -1,47 +1,41 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler.taskmanagers;
 
 import org.junit.jupiter.api.Test;
-import rife.scheduler.Task;
-import rife.scheduler.TaskManager;
-import rife.scheduler.TestTasktypes;
+import rife.scheduler.*;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.scheduler.exceptions.TaskManagerException;
 import rife.tools.ExceptionUtils;
 
 import java.util.Calendar;
-import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMemoryTasks {
     @Test
-    public void testInstantiateTaskManager() {
+    void testInstantiateTaskManager() {
         TaskManager manager = null;
         manager = new MemoryTasks();
         assertNotNull(manager);
     }
 
     @Test
-    public void testAddTask() {
-        int task_id = -1;
+    void testAddTask() {
+        var task_id = -1;
 
-        String type = TestTasktypes.UPLOAD_GROUPS;
-        Calendar cal = Calendar.getInstance();
+        var type = TestTasktypes.UPLOAD_GROUPS;
+        var cal = Calendar.getInstance();
         cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
-        long planned = cal.getTime().getTime();
-        String frequency = "* * * * *";
-        boolean busy = false;
+        var planned = cal.getTime().getTime();
+        var frequency = Frequency.MINUTELY;
+        var busy = false;
 
-        Task task = new Task();
+        var task = new Task();
         try {
-            task.setType(type);
-            task.setPlanned(planned);
-            task.setFrequency(frequency);
-            task.setBusy(busy);
+            task.type(type).planned(planned).frequency(frequency).busy(busy);
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
@@ -56,18 +50,18 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testGetTask() {
-        int task_id = -1;
+    void testGetTask() {
+        var task_id = -1;
         Task task = null;
         TaskManager manager = new MemoryTasks();
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task = new Task();
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime().getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
             task.setBusy(false);
             task_id = manager.addTask(task);
 
@@ -77,7 +71,7 @@ public class TestMemoryTasks {
             assertEquals(task.getId(), task_id);
             assertEquals(task.getType(), TestTasktypes.UPLOAD_GROUPS);
             assertTrue(task.getPlanned() <= cal.getTime().getTime());
-            assertEquals(task.getFrequency(), "* * * * *");
+            assertEquals(task.getFrequency().toString(), "* * * * *");
             assertFalse(task.isBusy());
             assertSame(task.getTaskManager(), manager);
         } catch (FrequencyException | TaskManagerException e) {
@@ -86,26 +80,26 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testUpdateTask() {
-        int task_id = -1;
+    void testUpdateTask() {
+        var task_id = -1;
         Task task = null;
         TaskManager manager = new MemoryTasks();
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task = new Task();
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime().getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
             task.setBusy(false);
             task_id = manager.addTask(task);
 
             cal.set(2002, Calendar.MARCH, 12, 0, 0, 0);
-            String type = TestTasktypes.SEND_RANKING;
-            long planned = cal.getTime().getTime();
-            String frequency = "20 */3 * * *";
-            boolean busy = true;
+            var type = TestTasktypes.SEND_RANKING;
+            var planned = cal.getTime().getTime();
+            var frequency = new Frequency().atMinute(20).everyHour(3);
+            var busy = true;
 
             task = new Task();
             task.setId(task_id);
@@ -131,18 +125,18 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testRemoveTask() {
-        int task_id = -1;
+    void testRemoveTask() {
+        var task_id = -1;
         Task task = null;
         TaskManager manager = new MemoryTasks();
         try {
-            Calendar cal = Calendar.getInstance();
+            var cal = Calendar.getInstance();
             cal.set(2001, Calendar.NOVEMBER, 24, 0, 0, 0);
 
             task = new Task();
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(cal.getTime().getTime());
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
             task.setBusy(false);
             task_id = manager.addTask(task);
 
@@ -154,9 +148,9 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testGetNonExistingTask() {
+    void testGetNonExistingTask() {
         TaskManager manager = new MemoryTasks();
-        int task_nonexisting_id = 0;
+        var task_nonexisting_id = 0;
         try {
             assertNull(manager.getTask(task_nonexisting_id));
         } catch (TaskManagerException e) {
@@ -165,9 +159,9 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testRemoveNonExistingTask() {
+    void testRemoveNonExistingTask() {
         TaskManager manager = new MemoryTasks();
-        int task_nonexisting_id = 0;
+        var task_nonexisting_id = 0;
         try {
             assertFalse(manager.removeTask(task_nonexisting_id));
         } catch (TaskManagerException e) {
@@ -176,30 +170,30 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testGetTasksToProcess() {
-        int one_hour = 1000 * 60 * 60;
+    void testGetTasksToProcess() {
+        var one_hour = 1000 * 60 * 60;
 
         TaskManager manager = new MemoryTasks();
         try {
-            Task task1 = new Task();
+            var task1 = new Task();
             task1.setType(TestTasktypes.UPLOAD_GROUPS);
             task1.setPlanned(System.currentTimeMillis() - one_hour);
             task1.setFrequency(null);
             task1.setBusy(false);
 
-            Task task2 = new Task();
+            var task2 = new Task();
             task2.setType(TestTasktypes.UPLOAD_GROUPS);
             task2.setPlanned(System.currentTimeMillis() - one_hour);
             task2.setFrequency(null);
             task2.setBusy(false);
 
-            Task task3 = new Task();
+            var task3 = new Task();
             task3.setType(TestTasktypes.UPLOAD_GROUPS);
             task3.setPlanned(System.currentTimeMillis() - one_hour);
             task3.setFrequency(null);
             task3.setBusy(true);
 
-            Task task4 = new Task();
+            var task4 = new Task();
             task4.setType(TestTasktypes.UPLOAD_GROUPS);
             task4.setPlanned(System.currentTimeMillis() + one_hour);
             task4.setFrequency(null);
@@ -210,7 +204,7 @@ public class TestMemoryTasks {
             task3.setId(manager.addTask(task3));
             task4.setId(manager.addTask(task4));
 
-            Collection<Task> tasks_to_process = manager.getTasksToProcess();
+            var tasks_to_process = manager.getTasksToProcess();
 
             manager.removeTask(task1.getId());
             manager.removeTask(task2.getId());
@@ -224,30 +218,30 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testGetScheduledTasks() {
-        int one_hour = 1000 * 60 * 60;
+    void testGetScheduledTasks() {
+        var one_hour = 1000 * 60 * 60;
 
         TaskManager manager = new MemoryTasks();
         try {
-            Task task1 = new Task();
+            var task1 = new Task();
             task1.setType(TestTasktypes.UPLOAD_GROUPS);
             task1.setPlanned(System.currentTimeMillis() - one_hour);
             task1.setFrequency(null);
             task1.setBusy(false);
 
-            Task task2 = new Task();
+            var task2 = new Task();
             task2.setType(TestTasktypes.UPLOAD_GROUPS);
             task2.setPlanned(System.currentTimeMillis() + one_hour);
             task2.setFrequency(null);
             task2.setBusy(true);
 
-            Task task3 = new Task();
+            var task3 = new Task();
             task3.setType(TestTasktypes.UPLOAD_GROUPS);
             task3.setPlanned(System.currentTimeMillis() + one_hour);
             task3.setFrequency(null);
             task3.setBusy(false);
 
-            Task task4 = new Task();
+            var task4 = new Task();
             task4.setType(TestTasktypes.UPLOAD_GROUPS);
             task4.setPlanned(System.currentTimeMillis() + one_hour);
             task4.setFrequency(null);
@@ -258,7 +252,7 @@ public class TestMemoryTasks {
             task3.setId(manager.addTask(task3));
             task4.setId(manager.addTask(task4));
 
-            Collection<Task> scheduled_tasks = manager.getScheduledTasks();
+            var scheduled_tasks = manager.getScheduledTasks();
 
             manager.removeTask(task1.getId());
             manager.removeTask(task2.getId());
@@ -272,24 +266,24 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testTaskConclusion() {
-        int one_hour = 1000 * 60 * 60;
+    void testTaskConclusion() {
+        var one_hour = 1000 * 60 * 60;
 
         TaskManager manager = new MemoryTasks();
         try {
-            Task task1 = new Task();
+            var task1 = new Task();
             task1.setType(TestTasktypes.UPLOAD_GROUPS);
             task1.setPlanned(System.currentTimeMillis() - one_hour);
             task1.setFrequency(null);
             task1.setBusy(false);
 
-            Task task2 = new Task();
+            var task2 = new Task();
             task2.setType(TestTasktypes.UPLOAD_GROUPS);
             task2.setPlanned(System.currentTimeMillis() - one_hour);
-            task2.setFrequency("0 * * * *");
+            task2.setFrequency(Frequency.HOURLY);
             task2.setBusy(false);
 
-            Task task3 = new Task();
+            var task3 = new Task();
             task3.setType(TestTasktypes.UPLOAD_GROUPS);
             task3.setPlanned(System.currentTimeMillis() + one_hour);
             task3.setFrequency(null);
@@ -302,13 +296,13 @@ public class TestMemoryTasks {
             task2 = manager.getTask(task2.getId());
             task3 = manager.getTask(task3.getId());
 
-            boolean was_task1_concluded = manager.concludeTask(task1);
-            boolean was_task2_concluded = manager.concludeTask(task2);
-            boolean was_task3_concluded = manager.concludeTask(task3);
+            var was_task1_concluded = manager.concludeTask(task1);
+            var was_task2_concluded = manager.concludeTask(task2);
+            var was_task3_concluded = manager.concludeTask(task3);
 
-            Task task1_new = manager.getTask(task1.getId());
-            Task task2_new = manager.getTask(task2.getId());
-            Task task3_new = manager.getTask(task3.getId());
+            var task1_new = manager.getTask(task1.getId());
+            var task2_new = manager.getTask(task2.getId());
+            var task3_new = manager.getTask(task3.getId());
 
             manager.removeTask(task2.getId());
             manager.removeTask(task3.getId());
@@ -337,16 +331,16 @@ public class TestMemoryTasks {
     }
 
     @Test
-    public void testTaskActivation() {
+    void testTaskActivation() {
         TaskManager manager = new MemoryTasks();
         try {
-            Task task = new Task();
+            var task = new Task();
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(System.currentTimeMillis());
             task.setFrequency(null);
             task.setBusy(false);
 
-            int taskid = manager.addTask(task);
+            var taskid = manager.addTask(task);
 
             manager.activateTask(taskid);
             task = manager.getTask(taskid);

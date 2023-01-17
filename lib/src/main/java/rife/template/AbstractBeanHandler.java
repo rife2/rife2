@@ -1,23 +1,22 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.template;
 
+import rife.cmf.MimeType;
 import rife.template.exceptions.BeanRemovalErrorException;
 import rife.template.exceptions.BeanSettingErrorException;
 import rife.template.exceptions.TemplateException;
 import rife.tools.ArrayUtils;
 import rife.tools.exceptions.BeanUtilsException;
-import rife.validation.Constrained;
 import rife.validation.ConstrainedProperty;
 import rife.validation.ConstrainedUtils;
 
 import java.util.Map;
 
 public abstract class AbstractBeanHandler implements BeanHandler {
-    // TODO : cmf
-//    protected abstract MimeType getMimeType();
+    protected abstract MimeType getMimeType();
 
     protected abstract Map<String, Object> getPropertyValues(Template template, Object bean, String prefix)
     throws BeanUtilsException;
@@ -64,15 +63,15 @@ public abstract class AbstractBeanHandler implements BeanHandler {
                         property_values_encoded = new String[property_value_strings.length];
                         for (var i = 0; i < property_values_encoded.length; i++) {
                             if (null == encoder ||
-                                !encode) { // TODO : cmf ||
-//                                (constrained_property != null && constrained_property.isDisplayedRaw())) {
+                                !encode ||
+                                (constrained_property != null && constrained_property.isDisplayedRaw())) {
                                 // still encode if the mime type of the constrained property is different
                                 // from the mime type of the bean handler
-                                if (encoder != null // TODO : cmf &&
-//                                    getMimeType() != null &&
-//                                    constrained_property != null &&
-//                                    constrained_property.getMimeType() != null &&
-//                                    constrained_property.getMimeType() != getMimeType()
+                                if (encoder != null &&
+                                    getMimeType() != null &&
+                                    constrained_property != null &&
+                                    constrained_property.getMimeType() != null &&
+                                    constrained_property.getMimeType() != getMimeType()
                                 ) {
                                     property_values_encoded[i] = encoder.encode(property_value_strings[i]);
                                 } else {

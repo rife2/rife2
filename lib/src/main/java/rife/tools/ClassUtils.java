@@ -1,12 +1,16 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
 
 import java.util.Date;
 
-public abstract class ClassUtils {
+public final class ClassUtils {
+    private ClassUtils() {
+        // no-op
+    }
+
     public static boolean isNumeric(Class klass) {
         return Number.class.isAssignableFrom(klass) ||
             byte.class == klass ||
@@ -34,6 +38,14 @@ public abstract class ClassUtils {
             Date.class.isAssignableFrom(klass) ||
             klass.isEnum() ||
             isText(klass);
+    }
+
+    public static boolean isFromJdk(Class klass) {
+        if (null == klass) {
+            return false;
+        }
+
+        return isBasic(klass) || klass.getClassLoader() == Object.class.getClassLoader();
     }
 
     public static String simpleClassName(Class klass) {

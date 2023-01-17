@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com) and
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com) and
  * JR Boyens <gnu-jrb[remove] at gmx dot net>
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
@@ -31,15 +31,15 @@ public class org_apache_derby_jdbc_EmbeddedDriver<BeanType> extends generic<Bean
     protected CreateTable getInternalCreateTableQuery() {
         if (null == createTableDerby_) {
             CreateTable query = new CreateTable(getDatasource())
-                .table(mTableName)
+                .table(tableName_)
                 .columns(baseClass_);
             if (!isIdentifierSparse()) {
                 query
-                    .customAttribute(mPrimaryKey, "GENERATED ALWAYS AS IDENTITY");
+                    .customAttribute(primaryKey_, "GENERATED ALWAYS AS IDENTITY");
             }
-            if (!mHasIdentifier) {
+            if (!hasIdentifier_) {
                 query
-                    .primaryKey(mPrimaryKey);
+                    .primaryKey(primaryKey_);
             }
 
             addCreateTableManyToOneColumns(query);
@@ -53,10 +53,10 @@ public class org_apache_derby_jdbc_EmbeddedDriver<BeanType> extends generic<Bean
     protected Insert getInternalSaveQuery() {
         if (null == saveDerby_) {
             Insert query = new Insert(getDatasource())
-                .into(mTableName);
+                .into(tableName_);
             if (!isIdentifierSparse()) {
                 query
-                    .fieldsParametersExcluded(baseClass_, new String[]{mPrimaryKey});
+                    .fieldsParametersExcluded(baseClass_, new String[]{primaryKey_});
             } else {
                 query
                     .fieldsParameters(baseClass_);

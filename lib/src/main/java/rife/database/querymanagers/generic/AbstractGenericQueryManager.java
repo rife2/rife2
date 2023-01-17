@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com) and
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com) and
  * JR Boyens <gnu-jrb[remove] at gmx dot net>
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
@@ -179,7 +179,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             var obtained_manytomany_declarations = false;
 
             // handle individual properties
-            for (var property : (Collection<ConstrainedProperty>) constrained.getConstrainedProperties()) {
+            for (var property : constrained.getConstrainedProperties()) {
                 // handle the uniqueness of individual properties
                 if (property.isUnique()) {
                     Object property_value = null;
@@ -233,7 +233,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
                 // handle the manyToOneAssociation constraint
                 if (property.hasManyToOneAssociation()) {
-                    // make sure that the many to one association declarations have been obtained
+                    // make sure that the many-to-one association declarations have been obtained
                     if (!obtained_manytoone_association_declarations) {
                         manytoone_association_declarations = obtainManyToOneAssociationDeclarations(this, constrained);
 
@@ -266,7 +266,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                 // handle the manyToMany constraint
                 if (property.hasManyToMany() ||
                     property.hasManyToManyAssociation()) {
-                    // make sure that the many to many declarations have been obtained
+                    // make sure that the many-to-many declarations have been obtained
                     if (!obtained_manytomany_declarations) {
                         manytomany_declarations = obtainManyToManyDeclarations(this, constrained, true);
 
@@ -301,7 +301,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             var constrained_bean = constrained.getConstrainedBean();
             if (constrained_bean != null &&
                 constrained_bean.hasUniques()) {
-                for (var uniques : (List<String[]>) constrained_bean.getUniques()) {
+                for (var uniques : constrained_bean.getUniques()) {
                     var count_query = getCountQuery();
                     if (identifier_exists) {
                         count_query.where(primaryKey_, "!=", identifier_value);
@@ -342,7 +342,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
             var value_collection = (Collection) propertyValue;
 
             // iterate over all the collection elements to obtain the identifier values
-            Set<Integer> identifiers = new HashSet<Integer>();
+            Set<Integer> identifiers = new HashSet<>();
             var element_manager = createNewManager(elementType);
             for (var entity : value_collection) {
                 var identifier_value = element_manager.getIdentifierValue(entity);
@@ -397,20 +397,18 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         assert saveUpdate != null;
 
         final var identifier_value = getIdentifierValue(bean);
-        int result = (Integer) inTransaction(new DbTransactionUser<>() {
+        int result = inTransaction(new DbTransactionUser<>() {
             public Integer useTransaction()
             throws InnerClassException {
                 var result = identifier_value;
 
                 storeManyToOne(bean);
 
-                if (0 == executeUpdate(saveUpdate, new DbPreparedStatementHandler<>() {
-                    public void setParameters(final DbPreparedStatement statement) {
-                        statement
-                            .setBean(bean);
+                if (0 == executeUpdate(saveUpdate, statement -> {
+                    statement
+                        .setBean(bean);
 
-                        setManyToOneJoinParameters(statement, bean);
-                    }
+                    setManyToOneJoinParameters(statement, bean);
                 })) {
                     result = -1;
                 } else {
@@ -466,14 +464,12 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                 }
 
                 final var primary_key_id = result;
-                executeUpdate(save, new DbPreparedStatementHandler<>() {
-                    public void setParameters(final DbPreparedStatement statement) {
-                        statement
-                            .setBean(bean)
-                            .setInt(primaryKey_, primary_key_id);
+                executeUpdate(save, statement -> {
+                    statement
+                        .setBean(bean)
+                        .setInt(primaryKey_, primary_key_id);
 
-                        setManyToOneJoinParameters(statement, bean);
-                    }
+                    setManyToOneJoinParameters(statement, bean);
                 });
 
                 storeManyToOneAssociations(bean, primary_key_id);
@@ -501,26 +497,24 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         final var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
 
         // handle many-to-one join column parameters
-        processManyToOneJoinColumns(this, new ManyToOneJoinColumnProcessor() {
-            public boolean processJoinColumn(String columnName, String propertyName, ManyToOneDeclaration declaration) {
-                try {
-                    var join_column_property = BeanUtils.getPropertyValue(bean, propertyName);
-                    Object identifier_value = null;
-                    if (join_column_property != null) {
-                        identifier_value = BeanUtils.getPropertyValue(join_column_property, declaration.getAssociationColumn());
-                    }
-                    var identifier_type = BeanUtils.getPropertyType(declaration.getAssociationType(), declaration.getAssociationColumn());
-
-                    var indices = statement.getParameterIndices(columnName);
-                    for (var index : indices) {
-                        getDatasource().getSqlConversion().setTypedParameter(statement, index, identifier_type, columnName, identifier_value, constrained);
-                    }
-                } catch (BeanUtilsException e) {
-                    throw new DatabaseException(e);
+        processManyToOneJoinColumns(this, (columnName, propertyName, declaration) -> {
+            try {
+                var join_column_property = BeanUtils.getPropertyValue(bean, propertyName);
+                Object identifier_value = null;
+                if (join_column_property != null) {
+                    identifier_value = BeanUtils.getPropertyValue(join_column_property, declaration.getAssociationColumn());
                 }
+                var identifier_type = BeanUtils.getPropertyType(declaration.getAssociationType(), declaration.getAssociationColumn());
 
-                return true;
+                var indices = statement.getParameterIndices(columnName);
+                for (var index : indices) {
+                    getDatasource().getSqlConversion().setTypedParameter(statement, index, identifier_type, columnName, identifier_value, constrained);
+                }
+            } catch (BeanUtilsException e) {
+                throw new DatabaseException(e);
             }
+
+            return true;
         });
     }
 
@@ -611,7 +605,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                         }
 
                         // store the many-to-one mappings
-                        executeUpdate(update_mapping, new DbPreparedStatementHandler<Integer>(identifier_value) {
+                        executeUpdate(update_mapping, new DbPreparedStatementHandler<>(identifier_value) {
                             public void setParameters(DbPreparedStatement statement) {
                                 statement
                                     .setInt(main_join_column, objectId)
@@ -638,7 +632,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                 throw new DatabaseException(e);
             }
 
-            // iterate over all the many to many relationships
+            // iterate over all the many-to-many relationships
             final var column1_name = generateManyToManyJoinColumnName(AbstractGenericQueryManager.this);
             for (var entry : declarations.entrySet()) {
                 var declaration = entry.getValue();
@@ -674,7 +668,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                             identifier_value = association_manager.insert(many_to_many_entity);
                         }
                         // store the many-to_many mappings
-                        executeUpdate(insert_mapping, new DbPreparedStatementHandler<Integer>(identifier_value) {
+                        executeUpdate(insert_mapping, new DbPreparedStatementHandler<>(identifier_value) {
                             public void setParameters(DbPreparedStatement statement) {
                                 statement
                                     .setInt(column1_name, objectId)
@@ -851,16 +845,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
                 deleteManyToMany(objectId);
 
                 // perform the actual deletion of the object from the database
-                if (0 == executeUpdate(delete, new DbPreparedStatementHandler<>() {
-                    public void setParameters(DbPreparedStatement statement) {
-                        statement
-                            .setInt(primaryKey_, objectId);
-                    }
-                })) {
-                    return false;
-                }
-
-                return true;
+                return 0 != executeUpdate(delete, s -> s.setInt(primaryKey_, objectId));
             }
         });
 
@@ -919,32 +904,30 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         }
     }
 
+    private boolean processFetchedBean(BeanType instance) {
+        // handle listeners
+        if (instance != null) {
+            restoreManyToOne(instance);
+            var identifier_value = getIdentifierValue(instance);
+            restoreManyToOneAssociations(instance, identifier_value);
+            restoreManyToMany(instance, identifier_value);
+
+            fireRestored(instance);
+        }
+
+        // handle after callback
+        var callbacks = getCallbacks(instance);
+        return !(callbacks != null && !callbacks.afterRestore(instance));
+    }
+
     protected BeanType _restore(Select restore, final int objectId)
     throws DatabaseException {
         assert restore != null;
 
         BeanType result = null;
 
-        result = executeFetchFirstBean(restore, baseClass_, new DbPreparedStatementHandler<>() {
-            public void setParameters(DbPreparedStatement statement) {
-                statement
-                    .setInt(primaryKey_, objectId);
-            }
-        });
-
-        // handle listeners
-        if (result != null) {
-            restoreManyToOne(result);
-            restoreManyToOneAssociations(result, objectId);
-            restoreManyToMany(result, objectId);
-
-            fireRestored(result);
-        }
-
-        // handle after callback
-        var callbacks = getCallbacks(result);
-        if (callbacks != null &&
-            !callbacks.afterRestore(result)) {
+        result = executeFetchFirstBean(restore, baseClass_, s -> s.setInt(primaryKey_, objectId));
+        if (!processFetchedBean(result)) {
             return null;
         }
 
@@ -956,21 +939,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         assert restore != null;
 
         var result = executeFetchFirstBean(restore, baseClass_);
-
-        // handle listeners
-        if (result != null) {
-            restoreManyToOne(result);
-            var identifier_value = getIdentifierValue(result);
-            restoreManyToOneAssociations(result, identifier_value);
-            restoreManyToMany(result, identifier_value);
-
-            fireRestored(result);
-        }
-
-        // handle after callback
-        var callbacks = getCallbacks(result);
-        if (callbacks != null &&
-            !callbacks.afterRestore(result)) {
+        if (!processFetchedBean(result)) {
             return null;
         }
 
@@ -983,19 +952,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
 
         var bean_fetcher = new DbBeanFetcher<>(getDatasource(), baseClass_, true) {
             public boolean gotBeanInstance(BeanType instance) {
-                // handle listeners
-                if (instance != null) {
-                    restoreManyToOne(instance);
-                    var identifier_value = getIdentifierValue(instance);
-                    restoreManyToOneAssociations(instance, identifier_value);
-                    restoreManyToMany(instance, identifier_value);
-
-                    fireRestored(instance);
-                }
-
-                // handle after callback
-                var callbacks = getCallbacks(instance);
-                return !(callbacks != null && !callbacks.afterRestore(instance));
+                return processFetchedBean(instance);
             }
         };
 
@@ -1011,12 +968,21 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         return executeFetchAll(restore, rowProcessor);
     }
 
-    protected boolean _restore(Select restore, RowProcessor rowProcessor)
+    protected boolean _restore(Select restore, BeanFetcher<BeanType> beanFetcher)
     throws DatabaseException {
         assert restore != null;
 
-        return executeFetchAll(restore, rowProcessor);
+        var bean_fetcher = new DbBeanFetcher<>(getDatasource(), baseClass_, true) {
+            public boolean gotBeanInstance(BeanType instance) {
+                var result = processFetchedBean(instance);
+                beanFetcher.gotBeanInstance(instance);
+                return result;
+            }
+        };
+
+        return executeFetchAll(restore, bean_fetcher);
     }
+
 
     protected void restoreManyToMany(final BeanType bean, final int objectId) {
         // handle many-to-many associations
@@ -1095,7 +1061,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         final var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
         final var declarations = obtainManyToOneAssociationDeclarations(this, constrained);
         if (declarations != null) {
-            // iterate over all the many to one association relationships
+            // iterate over all the many-to-one association relationships
             for (var entry : declarations.entrySet()) {
                 var declaration = entry.getValue();
 
@@ -1127,16 +1093,13 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         assert createSequence != null;
         assert createTable != null;
 
-        inTransaction(new DbTransactionUserWithoutResult<>() {
-            public void useTransactionWithoutResult()
-            throws InnerClassException {
-                if (!isIdentifierSparse()) {
-                    executeUpdate(createSequence);
-                }
-                executeUpdate(createTable);
-
-                installManyToMany();
+        inTransaction(() -> {
+            if (!isIdentifierSparse()) {
+                executeUpdate(createSequence);
             }
+            executeUpdate(createTable);
+
+            installManyToMany();
         });
         fireInstalled();
     }
@@ -1180,16 +1143,13 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
         assert dropTable != null;
         assert dropSequence != null;
 
-        inTransaction(new DbTransactionUserWithoutResult<>() {
-            public void useTransactionWithoutResult()
-            throws InnerClassException {
-                removeManyToMany();
+        inTransaction(() -> {
+            removeManyToMany();
 
-                // drop the table itself and optionally the sequence
-                executeUpdate(dropTable);
-                if (!isIdentifierSparse()) {
-                    executeUpdate(dropSequence);
-                }
+            // drop the table itself and optionally the sequence
+            executeUpdate(dropTable);
+            if (!isIdentifierSparse()) {
+                executeUpdate(dropSequence);
             }
         });
         fireRemoved();
@@ -1234,7 +1194,7 @@ public abstract class AbstractGenericQueryManager<BeanType> extends DbQueryManag
     }
 
     public <OtherBeanType> GenericQueryManager<OtherBeanType> createNewManager(Class<OtherBeanType> beanClass) {
-        return GenericQueryManagerFactory.getInstance(getDatasource(), beanClass);
+        return GenericQueryManagerFactory.instance(getDatasource(), beanClass);
     }
 
     protected void fireInstalled() {

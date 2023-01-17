@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
@@ -11,7 +11,7 @@ import rife.database.exceptions.DatabaseException;
 public abstract class TestCreateSequence extends TestQuery {
     public void execute(Datasource datasource, CreateSequence query) {
         DbConnection connection = null;
-        DropSequence drop_sequence = new DropSequence(datasource);
+        var drop_sequence = new DropSequence(datasource);
 
         try {
             connection = datasource.getConnection();

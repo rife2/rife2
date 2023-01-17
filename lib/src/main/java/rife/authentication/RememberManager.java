@@ -1,10 +1,11 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication;
 
 import rife.authentication.exceptions.RememberManagerException;
+import rife.config.RifeConfig;
 
 /**
  * This interface defines the methods that classes with
@@ -40,12 +41,71 @@ public interface RememberManager {
     void setRememberDuration(long milliseconds);
 
     /**
+     * Obtains the frequency at which the purging will happen in relationship
+     * to the scale.
+     * <p>
+     * This defaults to {@link RifeConfig.AuthenticationConfig#getRememberPurgeFrequency()}.
+     *
+     * @return the purge frequency
+     * @see #setRememberPurgeFrequency
+     * @see #getRememberPurgeScale
+     * @see #setRememberPurgeScale
+     * @since 1.0
+     */
+    int getRememberPurgeFrequency();
+
+    /**
+     * Set the frequency at which the purging will happen in relationship
+     * to the scale.
+     * <p>
+     * By default, the frequency and scale respectively are 20 and 1000,
+     * which means that the purging will have once every fifty times the
+     * remember sessions are accessed.
+     *
+     * @param frequency the purge frequency
+     * @see #getRememberPurgeFrequency
+     * @see #getRememberPurgeScale
+     * @see #setRememberPurgeScale
+     * @since 1.0
+     */
+    void setRememberPurgeFrequency(int frequency);
+
+    /**
+     * Obtains the scale at which the purging will happen in relationship
+     * to the frequency.
+     * <p>
+     * This defaults to {@link RifeConfig.AuthenticationConfig#getRememberPurgeScale()}.
+     *
+     * @return the purge scale
+     * @see #getRememberPurgeFrequency
+     * @see #setRememberPurgeFrequency
+     * @see #setRememberPurgeScale
+     * @since 1.0
+     */
+    int getRememberPurgeScale();
+
+    /**
+     * Set the scale at which the purging will happen in relationship
+     * to the frequency.
+     * <p>
+     * By default, the frequency and scale respectively are 20 and 1000,
+     * which means that the purging will have once every fifty times the
+     * remember sessions are accessed.
+     *
+     * @param scale the purge scale
+     * @see #getRememberPurgeFrequency
+     * @see #setRememberPurgeFrequency
+     * @see #getRememberPurgeScale
+     * @since 1.0
+     */
+    void setRememberPurgeScale(int scale);
+
+    /**
      * Starts a new session.
      *
-     * @param userId The ID that uniquely identifies the user that has to be
-     *               remembered.
-     * @param hostIp The ip address of the host from which the user accesses
-     *               the application.
+     * @param userId   The ID that uniquely identifies the user that has to be
+     *                 remembered.
+     * @param authData The authentication data that is associated with the session.
      * @return A {@code String} that uniquely identifies the remembered
      * user ID.
      * @throws RememberManagerException An undefined number of exceptional
@@ -55,7 +115,7 @@ public interface RememberManager {
      *                                  of this interface to give more specific meanings to these exceptions.
      * @since 1.0
      */
-    String createRememberId(long userId, String hostIp)
+    String createRememberId(long userId, String authData)
     throws RememberManagerException;
 
     /**

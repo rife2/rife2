@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
@@ -27,7 +27,7 @@ public abstract class QueryHelper {
 
     public static Map<String, String> getBeanPropertyValues(Object bean, String[] includedFields, String[] excludedFields, Datasource datasource)
     throws DbQueryException {
-        Map<String, String> property_values_sql = new LinkedHashMap<String, String>();
+        Map<String, String> property_values_sql = new LinkedHashMap<>();
 
         if (bean != null) {
             Map<String, Object> property_values = null;

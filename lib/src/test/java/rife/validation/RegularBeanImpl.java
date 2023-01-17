@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -13,6 +13,8 @@ public class RegularBeanImpl {
     private String anotherlogin_ = null;
     private String password_ = null;
     private String anotherpassword_ = null;
+    private String email_ = null;
+    private String url_ = null;
     private String comment_ = null;
     private String anothercomment_ = null;
     private String question_ = null;
@@ -75,6 +77,22 @@ public class RegularBeanImpl {
 
     public String getAnotherpassword() {
         return anotherpassword_;
+    }
+
+    public void setEmail(String email) {
+        email_ = email;
+    }
+
+    public String getEmail() {
+        return email_;
+    }
+
+    public void setUrl(String url) {
+        url_ = url;
+    }
+
+    public String getUrl() {
+        return url_;
     }
 
     public void setComment(String comment) {

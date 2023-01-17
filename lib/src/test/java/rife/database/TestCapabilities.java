@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -36,7 +36,7 @@ public class TestCapabilities {
             .precision("propertyFloat", 13, 2)
             .precision("propertyFloatObject", 13, 2)
             .precision("propertyString", 255)
-            .precision("propertyStringbuffer", 100);
+            .precision("propertyStringBuffer", 100);
 
         try {
             // prepare table and data
@@ -89,7 +89,7 @@ public class TestCapabilities {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testLimitOffset(Datasource datasource) {
+    void testLimitOffset(Datasource datasource) {
         setup(datasource);
         try {
             DbQueryManager manager = new DbQueryManager(datasource);
@@ -157,7 +157,7 @@ public class TestCapabilities {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testLimitOffsetParameters(Datasource datasource) {
+    void testLimitOffsetParameters(Datasource datasource) {
         setup(datasource);
 
         try {
@@ -237,7 +237,7 @@ public class TestCapabilities {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testLimitOffsetParametersMissing(Datasource datasource) {
+    void testLimitOffsetParametersMissing(Datasource datasource) {
         setup(datasource);
 
         try {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUniqueIDGenerator {
     @Test
-    public void testGeneration() {
+    void testGeneration() {
         var uid = UniqueIDGenerator.generate();
         assertNotNull(uid);
         assertNotNull(uid.toString());
@@ -20,7 +20,7 @@ public class TestUniqueIDGenerator {
     }
 
     @Test
-    public void testUniqueness() {
+    void testUniqueness() {
         var uid1 = UniqueIDGenerator.generate();
         var uid2 = UniqueIDGenerator.generate();
         var uid3 = UniqueIDGenerator.generate();

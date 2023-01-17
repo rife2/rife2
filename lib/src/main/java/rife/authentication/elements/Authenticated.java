@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.elements;
@@ -17,20 +17,37 @@ import rife.engine.Route;
  * @since 1.0
  */
 public class Authenticated extends Identified implements SessionAttributes {
+    /**
+     * This constructor is meant to be used when extending the {@code Authenticated}
+     * element with your custom authenticated class.
+     * <p>Don't forget to also override the `getAuthConfig()` methodss.
+     * @since 1.0
+     */
+    protected Authenticated() {
+    }
+
+    /**
+     * This constructor is meant to be used when the {@code Authenticated} element
+     * is used directly as a route in your site.
+     * <p>When extending this element, use the default constructor instead
+     * and override the `getAuthConfig()` method.
+     * @param config the auth config to use
+     * @since 1.0
+     */
     public Authenticated(AuthConfig config) {
         super(config);
     }
 
     /**
-     * Hook method that is called at the start of the element's execution.
-     *
+     * Hook method that is called at the start of the element's processing.
+     * @param c the element processing context
      * @since 1.0
      */
-    protected void initializeAuthenticated() {
+    protected void initializeAuthenticated(Context c) {
     }
 
     /**
-     * Hook method that is called when the <code>SessionValidator</code> doesn't
+     * Hook method that is called when the {@code SessionValidator} doesn't
      * accept the authentication ID that a user provides after having been logged
      * in.
      * <p>
@@ -43,7 +60,7 @@ public class Authenticated extends Identified implements SessionAttributes {
      * @param authCookieValue the value of the cookie with the
      *                        authentication ID
      * @param validityId      a number that indicates the validation state of the
-     *                        session, as used by the <code>SessionValidator</code>, more information can
+     *                        session, as used by the {@code SessionValidator}, more information can
      *                        be found here: {@link SessionValidator#validateSession}
      * @since 1.0
      */
@@ -52,20 +69,22 @@ public class Authenticated extends Identified implements SessionAttributes {
 
     public void process(Context c)
     throws Exception {
-        initializeAuthenticated();
+        initializeAuthenticated(c);
 
-        if (c.hasCookie(authConfig_.authCookieName())) {
-            var auth_id = c.cookieValue(authConfig_.authCookieName());
-            var auth_attribute = createAuthAttributeName(authConfig_.loginRoute(), authConfig_.authCookieName(), auth_id);
+        final var auth_config = getAuthConfig();
+        if (c.hasCookie(auth_config.authCookieName())) {
+            var auth_id = c.cookieValue(auth_config.authCookieName());
+            var auth_attribute = createAuthAttributeName(auth_config.loginRoute(), auth_config.authCookieName(), auth_id);
+            var auth_data = auth_config.generateAuthData(c);
 
             if (c.hasAttribute(auth_attribute)) {
                 c.next();
             } else {
-                var session_validator = authConfig_.sessionValidator();
+                var session_validator = auth_config.sessionValidator();
                 assert session_validator != null;
 
                 // validate the session
-                var session_validity_id = session_validator.validateSession(auth_id, c.remoteAddr(), this);
+                var session_validity_id = session_validator.validateSession(auth_id, auth_data, this);
 
                 // check if the validation allows access
                 if (session_validator.isAccessAuthorized(session_validity_id)) {
@@ -74,9 +93,9 @@ public class Authenticated extends Identified implements SessionAttributes {
                     // prohibit access if the authentication session was
                     // started through remembered credentials and that
                     // had been set to not allowed
-                    if (authConfig_.prohibitRemember() &&
+                    if (!auth_config.allowRemember() &&
                         session_manager.wasRemembered(auth_id)) {
-                        sessionNotValid(authConfig_.authCookieName(), auth_id, session_validity_id);
+                        sessionNotValid(auth_config.authCookieName(), auth_id, session_validity_id);
                     }
                     // continue the session
                     else {
@@ -88,23 +107,23 @@ public class Authenticated extends Identified implements SessionAttributes {
                         }
                     }
                 } else {
-                    sessionNotValid(authConfig_.authCookieName(), auth_id, session_validity_id);
+                    sessionNotValid(auth_config.authCookieName(), auth_id, session_validity_id);
                 }
             }
         }
 
-        if (authConfig_.enforceAuthentication()) {
-            c.redirect(c.urlFor(authConfig_.loginRoute()));
+        if (auth_config.enforceAuthentication()) {
+            c.redirect(c.urlFor(auth_config.loginRoute()));
         }
     }
 
     public boolean hasAttribute(String key) {
-        return key.equals("role") && authConfig_.role() != null;
+        return key.equals("role") && getAuthConfig().role() != null;
     }
 
     public String getAttribute(String key) {
         if (key.equals("role")) {
-            return authConfig_.role();
+            return getAuthConfig().role();
         }
 
         return null;

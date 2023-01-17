@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.resources;
@@ -12,14 +12,14 @@ import java.net.URL;
 
 /**
  * This interface defines the methods that classes with
- * <code>ResourceFinder</code> functionalities have to implement.
+ * {@code ResourceFinder} functionalities have to implement.
  * <p>
- * A <code>ResourceFinder</code> provides an abstract way of working
+ * A {@code ResourceFinder} provides an abstract way of working
  * with resources. According to a name, a resource can be searched for and its
- * location is returned as an <code>URL</code> object.
+ * location is returned as an {@code URL} object.
  * <p>
  * It also possible to obtain a stream to read the resource's content,
- * to retrieve all its contents as a <code>String</code> and to obtain the
+ * to retrieve all its contents as a {@code String} and to obtain the
  * modification time of the resource.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -30,14 +30,14 @@ public interface ResourceFinder {
     /**
      * Retrieves the resource that corresponds to the provided name.
      * <p>
-     * This method never throws an exception, but returns <code>null</code> in
+     * This method never throws an exception, but returns {@code null} in
      * case of an exception.
      *
      * @param name the name of the resource to retrieve
-     * @return the <code>URL</code> object that corresponds to the provided
+     * @return the {@code URL} object that corresponds to the provided
      * name; or
      * <p>
-     * <code>null</code> if the resource couldn't be found or if an error
+     * {@code null} if the resource couldn't be found or if an error
      * occurred.
      * @since 1.0
      */
@@ -48,14 +48,14 @@ public interface ResourceFinder {
      * that corresponds to the provided name.
      *
      * @param name the name of the resource to retrieve
-     * @param user an instance of <code>InputStreamUser</code>
+     * @param user an instance of {@code InputStreamUser}
      *             that contains the logic that will be executed with this stream
-     * @return the return value from the <code>useInputStream</code> method of
-     * the provided <code>InputStreamUser</code> instance
+     * @return the return value from the {@code useInputStream} method of
+     * the provided {@code InputStreamUser} instance
      * @throws ResourceFinderErrorException when an error occurred during the
      *                                      creation or opening of the stream.
      * @throws InnerClassException          when errors occurs inside the
-     *                                      <code>InputStreamUser</code>
+     *                                      {@code InputStreamUser}
      * @see InputStreamUser
      * @see #useStream(URL, InputStreamUser)
      * @since 1.0
@@ -68,14 +68,14 @@ public interface ResourceFinder {
      * resource.
      *
      * @param resource the resource to retrieve
-     * @param user     an instance of <code>InputStreamUser</code>
+     * @param user     an instance of {@code InputStreamUser}
      *                 that contains the logic that will be executed with this stream
-     * @return the return value from the <code>useInputStream</code> method of
-     * the provided <code>InputStreamUser</code> instance
+     * @return the return value from the {@code useInputStream} method of
+     * the provided {@code InputStreamUser} instance
      * @throws ResourceFinderErrorException when an error occurred during the
      *                                      creation or opening of the stream.
      * @throws InnerClassException          when errors occurs inside the
-     *                                      <code>InputStreamUser</code>
+     *                                      {@code InputStreamUser}
      * @see InputStreamUser
      * @see #useStream(String, InputStreamUser)
      * @since 1.0
@@ -89,10 +89,10 @@ public interface ResourceFinder {
      * platform's default encoding.
      *
      * @param name the name of the resource to retrieve
-     * @return a <code>String</code> object that contains the complete content
+     * @return a {@code String} object that contains the complete content
      * of the resource with the provided name; or
      * <p>
-     * <code>null</code> if the resource couldn't be found.
+     * {@code null} if the resource couldn't be found.
      * @throws ResourceFinderErrorException when an error occurred during the
      *                                      retrieval of the content.
      * @see #getContent(String, String)
@@ -108,10 +108,10 @@ public interface ResourceFinder {
      *
      * @param name     the name of the resource to retrieve the content from
      * @param encoding the encoding that should be used to read the content
-     * @return a <code>String</code> object that contains the complete content
+     * @return a {@code String} object that contains the complete content
      * of the resource with the provided name; or
      * <p>
-     * <code>null</code> if the resource couldn't be found.
+     * {@code null} if the resource couldn't be found.
      * @throws ResourceFinderErrorException when an error occurred during the
      *                                      retrieval of the content or when the encoding is not supported.
      * @see #getContent(String)
@@ -127,10 +127,10 @@ public interface ResourceFinder {
      * be read into a string by using the platform's default encoding.
      *
      * @param resource the resource to retrieve the content from
-     * @return a <code>String</code> object that contains the complete content
+     * @return a {@code String} object that contains the complete content
      * of the resource with the provided name; or
      * <p>
-     * <code>null</code> if the resource couldn't be found.
+     * {@code null} if the resource couldn't be found.
      * @throws ResourceFinderErrorException when an error occurred during the
      *                                      retrieval of the content or when the encoding is not supported.
      * @see #getContent(String)
@@ -146,10 +146,10 @@ public interface ResourceFinder {
      *
      * @param resource the resource to retrieve the content from
      * @param encoding the encoding that should be used to read the content
-     * @return a <code>String</code> object that contains the complete content
+     * @return a {@code String} object that contains the complete content
      * of the resource with the provided name; or
      * <p>
-     * <code>null</code> if the resource couldn't be found.
+     * {@code null} if the resource couldn't be found.
      * @throws ResourceFinderErrorException when an error occurred during the
      *                                      retrieval of the content or when the encoding is not supported.
      * @see #getContent(String)
@@ -165,10 +165,10 @@ public interface ResourceFinder {
      * provided name.
      *
      * @param name the name of the resource to retrieve
-     * @return a positive <code>long</code> with the modification time in
+     * @return a positive {@code long} with the modification time in
      * milliseconds; or
      * <p>
-     * <code>-1</code> if the resource couldn't be found.
+     * {@code -1} if the resource couldn't be found.
      * @throws ResourceFinderErrorException when an error occurred during the
      *                                      retrieval of the modification time.
      * @see #getModificationTime(URL)
@@ -181,10 +181,10 @@ public interface ResourceFinder {
      * Retrieves the modification time of the provided resource.
      *
      * @param resource the resource to retrieve the modification time from
-     * @return a positive <code>long</code> with the modification time in
+     * @return a positive {@code long} with the modification time in
      * milliseconds; or
      * <p>
-     * <code>-1</code> if the resource couldn't be found.
+     * {@code -1} if the resource couldn't be found.
      * @throws ResourceFinderErrorException when an error occurred during the
      *                                      retrieval of the modification time.
      * @see #getModificationTime(String)

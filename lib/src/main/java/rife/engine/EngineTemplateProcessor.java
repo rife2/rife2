@@ -1,10 +1,9 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
 
-import rife.authentication.elements.AuthConfig;
 import rife.authentication.elements.Identified;
 import rife.engine.exceptions.EngineException;
 import rife.template.Template;
@@ -16,6 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 class EngineTemplateProcessor {
+    public static final String ID_WEBAPP_ROOT_URL = "webapp:rootUrl";
+    public static final String ID_SERVER_ROOT_URL = "server:rootUrl";
+    public static final String ID_CONTEXT_PATH_INFO = "context:pathInfo";
+    public static final String ID_CONTEXT_PARAM_RANDOM = "context:paramRandom";
+    public static final String ID_CONTEXT_PARAM_CONT_ID = "context:paramContId";
+    public static final String ID_CONTEXT_CONT_ID = "context:contId";
+
     private final Context context_;
     private final Template template_;
     private final TemplateEncoder encoder_;
@@ -32,40 +38,60 @@ class EngineTemplateProcessor {
 
         processApplicationTags(set_values);
         processParameters(set_values);
+        processProperties(set_values);
+        processAttributes(set_values);
         processCookies(set_values);
         processRoutes(set_values);
         processAuthentication(set_values);
+
+        template_.addGeneratedValues(set_values);
 
         return set_values;
     }
 
     private void processApplicationTags(final List<String> setValues) {
-        if (template_.hasValueId(Context.ID_WEBAPP_ROOT_URL) &&
-            !template_.isValueSet(Context.ID_WEBAPP_ROOT_URL)) {
-            template_.setValue(Context.ID_WEBAPP_ROOT_URL, context_.webappRootUrl(-1));
-            setValues.add(Context.ID_WEBAPP_ROOT_URL);
+        if (template_.hasValueId(ID_WEBAPP_ROOT_URL) &&
+            !template_.isValueSet(ID_WEBAPP_ROOT_URL)) {
+            template_.setValue(ID_WEBAPP_ROOT_URL, context_.webappRootUrl(-1));
+            setValues.add(ID_WEBAPP_ROOT_URL);
         }
 
-        if (template_.hasValueId(Context.ID_SERVER_ROOT_URL) &&
-            !template_.isValueSet(Context.ID_SERVER_ROOT_URL)) {
-            template_.setValue(Context.ID_SERVER_ROOT_URL, context_.serverRootUrl(-1));
-            setValues.add(Context.ID_SERVER_ROOT_URL);
+        if (template_.hasValueId(ID_SERVER_ROOT_URL) &&
+            !template_.isValueSet(ID_SERVER_ROOT_URL)) {
+            template_.setValue(ID_SERVER_ROOT_URL, context_.serverRootUrl(-1));
+            setValues.add(ID_SERVER_ROOT_URL);
         }
 
-        if (template_.hasValueId(Context.ID_CONTEXT_PATH_INFO) &&
-            !template_.isValueSet(Context.ID_CONTEXT_PATH_INFO)) {
+        if (template_.hasValueId(ID_CONTEXT_PATH_INFO) &&
+            !template_.isValueSet(ID_CONTEXT_PATH_INFO)) {
             var path_info = context_.pathInfo();
             if (!path_info.isEmpty()) {
                 path_info = "/" + path_info;
             }
-            template_.setValue(Context.ID_CONTEXT_PATH_INFO, path_info);
-            setValues.add(Context.ID_CONTEXT_PATH_INFO);
+            template_.setValue(ID_CONTEXT_PATH_INFO, path_info);
+            setValues.add(ID_CONTEXT_PATH_INFO);
         }
 
-        if (template_.hasValueId(Context.ID_CONTEXT_PARAM_RANDOM) &&
-            !template_.isValueSet(Context.ID_CONTEXT_PARAM_RANDOM)) {
-            template_.setValue(Context.ID_CONTEXT_PARAM_RANDOM, "rnd=" + context_.site().RND);
-            setValues.add(Context.ID_CONTEXT_PARAM_RANDOM);
+        if (template_.hasValueId(ID_CONTEXT_PARAM_RANDOM) &&
+            !template_.isValueSet(ID_CONTEXT_PARAM_RANDOM)) {
+            template_.setValue(ID_CONTEXT_PARAM_RANDOM, SpecialParameters.RND + "=" + context_.site().RND);
+            setValues.add(ID_CONTEXT_PARAM_RANDOM);
+        }
+
+        if (template_.hasValueId(ID_CONTEXT_PARAM_CONT_ID) &&
+            !template_.isValueSet(ID_CONTEXT_PARAM_CONT_ID)) {
+            if (context_.continuationId() != null) {
+                template_.setValue(ID_CONTEXT_PARAM_CONT_ID, SpecialParameters.CONT_ID + "=" + context_.continuationId());
+            }
+            setValues.add(ID_CONTEXT_PARAM_CONT_ID);
+        }
+
+        if (template_.hasValueId(ID_CONTEXT_CONT_ID) &&
+            !template_.isValueSet(ID_CONTEXT_CONT_ID)) {
+            if (context_.continuationId() != null) {
+                template_.setValue(ID_CONTEXT_CONT_ID, context_.continuationId());
+            }
+            setValues.add(ID_CONTEXT_CONT_ID);
         }
     }
 
@@ -78,9 +104,45 @@ class EngineTemplateProcessor {
                 if (!template_.isValueSet(param_value_id)) {
                     var param_name = captured_groups[1];
                     if (parameters.containsKey(param_name)) {
-                        String[] param_values = parameters.get(param_name);
+                        var param_values = parameters.get(param_name);
                         template_.setValue(param_value_id, encoder_.encode(param_values[0]));
                         setValues.add(param_value_id);
+                    }
+                }
+            }
+        }
+    }
+
+    private void processProperties(final List<String> setValues) {
+        var properties = context_.properties();
+        final var prop_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_PROPERTY);
+        if (prop_tags != null) {
+            for (var captured_groups : prop_tags) {
+                var prop_value_id = captured_groups[0];
+                if (!template_.isValueSet(prop_value_id)) {
+                    var prop_name = captured_groups[1];
+                    if (properties.contains(prop_name)) {
+                        var prop_value = properties.getValueString(prop_name);
+                        template_.setValue(prop_value_id, encoder_.encode(prop_value));
+                        setValues.add(prop_value_id);
+                    }
+                }
+            }
+        }
+    }
+
+    private void processAttributes(final List<String> setValues) {
+        var attribute_names = context_.attributeNames();
+        final var attr_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_ATTRIBUTE);
+        if (attr_tags != null) {
+            for (var captured_groups : attr_tags) {
+                var attr_value_id = captured_groups[0];
+                if (!template_.isValueSet(attr_value_id)) {
+                    var attr_name = captured_groups[1];
+                    if (attribute_names.contains(attr_name)) {
+                        var attr_value = String.valueOf(context_.attribute(attr_name));
+                        template_.setValue(attr_value_id, encoder_.encode(attr_value));
+                        setValues.add(attr_value_id);
                     }
                 }
             }
@@ -109,14 +171,7 @@ class EngineTemplateProcessor {
             for (var captured_groups : route_tags) {
                 var route_value_id = captured_groups[0];
                 if (!template_.isValueSet(route_value_id)) {
-                    var path = captured_groups[1];
-                    Route route;
-                    if (path.isEmpty()) {
-                        route = context_.route();
-                    } else {
-                        route = context_.route().router().resolveRoute(path);
-                    }
-
+                    var route = resolveRoute(captured_groups[1]);
                     if (route != null) {
                         var route_value = context_.urlFor(route);
                         template_.setValue(route_value_id, route_value);
@@ -125,6 +180,48 @@ class EngineTemplateProcessor {
                 }
             }
         }
+
+        final var route_action_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_ROUTE_ACTION);
+        if (route_action_tags != null) {
+            for (var captured_groups : route_action_tags) {
+                var route_value_id = captured_groups[0];
+                if (!template_.isValueSet(route_value_id)) {
+                    var route = resolveRoute(captured_groups[1]);
+                    if (route != null) {
+                        var segments = context_.urlFor(route).generateSegments();
+                        template_.setValue(route_value_id, segments.path() + segments.fragment());
+                        setValues.add(route_value_id);
+                    }
+                }
+            }
+        }
+
+        final var route_inputs_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_ROUTE_INPUTS);
+        if (route_inputs_tags != null) {
+            for (var captured_groups : route_inputs_tags) {
+                var route_value_id = captured_groups[0];
+                if (!template_.isValueSet(route_value_id)) {
+                    var route = resolveRoute(captured_groups[1]);
+                    if (route != null) {
+                        var segments = context_.urlFor(route).generateSegments();
+                        var builder = new StringBuilder();
+                        segments.appendFormInputParameters(builder);
+                        template_.setValue(route_value_id, builder.toString());
+                        setValues.add(route_value_id);
+                    }
+                }
+            }
+        }
+    }
+
+    private Route resolveRoute(String path) {
+        Route route;
+        if (path.isEmpty()) {
+            route = context_.route();
+        } else {
+            route = context_.route().router().resolveRoute(path);
+        }
+        return route;
     }
 
     private void processAuthentication(final List<String> setValues) {

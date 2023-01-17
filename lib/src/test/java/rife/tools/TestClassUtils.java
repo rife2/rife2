@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestClassUtils {
     @Test
-    public void testIsNumeric() {
+    void testIsNumeric() {
         assertTrue(ClassUtils.isNumeric(Byte.class));
         assertTrue(ClassUtils.isNumeric(Short.class));
         assertTrue(ClassUtils.isNumeric(Integer.class));
@@ -38,7 +38,7 @@ public class TestClassUtils {
     }
 
     @Test
-    public void testIsText() {
+    void testIsText() {
         assertFalse(ClassUtils.isText(Byte.class));
         assertFalse(ClassUtils.isText(Short.class));
         assertFalse(ClassUtils.isText(Integer.class));
@@ -58,6 +58,31 @@ public class TestClassUtils {
         assertTrue(ClassUtils.isText(StringBuffer.class));
         assertTrue(ClassUtils.isText(char.class));
         assertFalse(ClassUtils.isText(Date.class));
+    }
+
+    @Test
+    void testIsFromJdk() {
+        assertTrue(ClassUtils.isFromJdk(Byte.class));
+        assertTrue(ClassUtils.isFromJdk(Short.class));
+        assertTrue(ClassUtils.isFromJdk(Integer.class));
+        assertTrue(ClassUtils.isFromJdk(Long.class));
+        assertTrue(ClassUtils.isFromJdk(Float.class));
+        assertTrue(ClassUtils.isFromJdk(Double.class));
+        assertTrue(ClassUtils.isFromJdk(BigDecimal.class));
+        assertTrue(ClassUtils.isFromJdk(BigInteger.class));
+        assertTrue(ClassUtils.isFromJdk(byte.class));
+        assertTrue(ClassUtils.isFromJdk(short.class));
+        assertTrue(ClassUtils.isFromJdk(int.class));
+        assertTrue(ClassUtils.isFromJdk(long.class));
+        assertTrue(ClassUtils.isFromJdk(float.class));
+        assertTrue(ClassUtils.isFromJdk(double.class));
+        assertTrue(ClassUtils.isFromJdk(Character.class));
+        assertTrue(ClassUtils.isFromJdk(String.class));
+        assertTrue(ClassUtils.isFromJdk(StringBuffer.class));
+        assertTrue(ClassUtils.isFromJdk(char.class));
+        assertTrue(ClassUtils.isFromJdk(Date.class));
+        assertFalse(ClassUtils.isFromJdk(Interface1.class));
+        assertFalse(ClassUtils.isFromJdk(getClass()));
     }
 }
 

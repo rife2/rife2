@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler;
@@ -9,19 +9,17 @@ import rife.scheduler.exceptions.*;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class Scheduler extends Thread {
+public class Scheduler implements Runnable {
+    private Thread thread_ = null;
     private TaskManager taskManager_ = null;
-    private TaskOptionManager taskoptionManager_ = null;
+    private TaskOptionManager taskOptionManager_ = null;
     private int sleepTime_ = 500;
     private final HashMap<Object, Executor> executors_;
 
     public Scheduler(TaskManager taskManager, TaskOptionManager taskoptionManager) {
-        super("SCHEDULER_DAEMON");
-
-        setDaemon(true);
         setTaskManager(taskManager);
         setTaskOptionManager(taskoptionManager);
-        executors_ = new HashMap<Object, Executor>();
+        executors_ = new HashMap<>();
     }
 
     public void setTaskManager(TaskManager taskManager) {
@@ -38,12 +36,20 @@ public class Scheduler extends Thread {
     public void setTaskOptionManager(TaskOptionManager taskoptionManager) {
         if (null == taskoptionManager) throw new IllegalArgumentException("taskoptionManager can't be null.");
 
-        taskoptionManager_ = taskoptionManager;
+        taskOptionManager_ = taskoptionManager;
         taskoptionManager.setScheduler(this);
     }
 
     public TaskOptionManager getTaskOptionManager() {
-        return taskoptionManager_;
+        return taskOptionManager_;
+    }
+
+    public int addTask(Task task) {
+        return taskManager_.addTask(task);
+    }
+
+    public boolean addTaskOption(TaskOption taskOption) {
+        return taskOptionManager_.addTaskOption(taskOption);
     }
 
     public boolean addExecutor(Executor executor)
@@ -51,7 +57,7 @@ public class Scheduler extends Thread {
         if (null == executor) throw new IllegalArgumentException("executor can't be null.");
 
         if (null == executor.getScheduler()) {
-            executors_.put(executor.getHandledTasktype(), executor);
+            executors_.put(executor.getHandledTaskType(), executor);
             executor.setScheduler(this);
         } else if (this == executor.getScheduler()) {
             return false;
@@ -59,8 +65,8 @@ public class Scheduler extends Thread {
             throw new ExecutorAlreadyRegisteredException(executor);
         }
 
-        assert executors_.containsKey(executor.getHandledTasktype());
-        assert executor == executors_.get(executor.getHandledTasktype());
+        assert executors_.containsKey(executor.getHandledTaskType());
+        assert executor == executors_.get(executor.getHandledTaskType());
         assert this == executor.getScheduler();
 
         return true;
@@ -69,13 +75,13 @@ public class Scheduler extends Thread {
     public boolean removeExecutor(Executor executor) {
         if (null == executor) throw new IllegalArgumentException("executor can't be null.");
 
-        if (null == executors_.remove(executor.getHandledTasktype())) {
+        if (null == executors_.remove(executor.getHandledTaskType())) {
             return false;
         }
 
         executor.setScheduler(null);
 
-        assert !executors_.containsKey(executor.getHandledTasktype());
+        assert !executors_.containsKey(executor.getHandledTaskType());
         assert null == executor.getScheduler();
 
         return true;
@@ -97,28 +103,62 @@ public class Scheduler extends Thread {
         sleepTime_ = sleeptime;
     }
 
-    public void run() {
-        while (true) {
-            try {
-                if (!isInterrupted()) {
-                    scheduleStep();
-                    // Ensure that the wakeup is always on an even multiplier of the
-                    // sleep time, this to ensure that no drift occurs.
-                    long now = System.currentTimeMillis();
-                    long projected = ((System.currentTimeMillis() + sleepTime_) / sleepTime_) * sleepTime_;
-                    long difference = projected - now;
+    public void start() {
+        synchronized (this) {
+            if (thread_ != null) {
+                return;
+            }
 
-                    Thread.sleep(difference);
-                } else {
+            thread_ = new Thread(this, "SCHEDULER_DAEMON");
+            thread_.setDaemon(true);
+            thread_.start();
+        }
+    }
+
+    public boolean isRunning() {
+        synchronized (this) {
+            if (thread_ == null) {
+                return false;
+            }
+
+            return thread_.isAlive();
+        }
+    }
+
+    public void run() {
+        try {
+            while (true) {
+                try {
+                    if (!Thread.interrupted()) {
+                        scheduleStep();
+                        // Ensure that the wakeup is always on an even multiplier of the
+                        // sleep time, this to ensure that no drift occurs.
+                        var now = System.currentTimeMillis();
+                        var projected = ((System.currentTimeMillis() + sleepTime_) / sleepTime_) * sleepTime_;
+                        var difference = projected - now;
+
+                        Thread.sleep(difference);
+                    } else {
+                        break;
+                    }
+                } catch (InterruptedException e) {
                     break;
                 }
-            } catch (InterruptedException e) {
-                break;
+            }
+        } finally {
+            synchronized (this) {
+                thread_ = null;
+                notifyAll();
             }
         }
+    }
 
+    public void stop() {
         synchronized (this) {
-            notifyAll();
+            if (thread_ != null) {
+                thread_.interrupt();
+                thread_ = null;
+            }
         }
     }
 
@@ -128,7 +168,7 @@ public class Scheduler extends Thread {
 
         try {
             Executor executor = null;
-            for (Task task : taskManager_.getTasksToProcess()) {
+            for (var task : taskManager_.getTasksToProcess()) {
                 executor = executors_.get(task.getType());
                 if (null != executor) {
                     executor.startTaskExecution(task);

@@ -1,20 +1,19 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.exceptions.SequenceNameRequiredException;
-import rife.database.exceptions.SequenceOperationRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
+import rife.database.exceptions.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValueMysql extends TestSequenceValue {
-    @Test
-    public void testInstantiationMysql() {
-        SequenceValue query = new SequenceValue(MYSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
+    void testInstantiationMysql() {
+        var query = new SequenceValue(MYSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -24,9 +23,9 @@ public class TestSequenceValueMysql extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testInvalidMysql() {
-        SequenceValue query = new SequenceValue(MYSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
+    void testInvalidMysql() {
+        var query = new SequenceValue(MYSQL);
         try {
             query.getSql();
             fail();
@@ -51,9 +50,9 @@ public class TestSequenceValueMysql extends TestSequenceValue {
         query.clear();
     }
 
-    @Test
-    public void testClearMysql() {
-        SequenceValue query = new SequenceValue(MYSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
+    void testClearMysql() {
+        var query = new SequenceValue(MYSQL);
         query
             .name("sequencename")
             .next();
@@ -73,9 +72,9 @@ public class TestSequenceValueMysql extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testNextMysql() {
-        SequenceValue query = new SequenceValue(MYSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
+    void testNextMysql() {
+        var query = new SequenceValue(MYSQL);
         query
             .name("sequencename")
             .next();
@@ -87,9 +86,9 @@ public class TestSequenceValueMysql extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testCurrentMysql() {
-        SequenceValue query = new SequenceValue(MYSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
+    void testCurrentMysql() {
+        var query = new SequenceValue(MYSQL);
         query
             .name("sequencename")
             .current();
@@ -101,13 +100,13 @@ public class TestSequenceValueMysql extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testCloneMysql() {
-        SequenceValue query = new SequenceValue(MYSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.MYSQL)
+    void testCloneMysql() {
+        var query = new SequenceValue(MYSQL);
         query
             .name("sequencename")
             .next();
-        SequenceValue query_clone = query.clone();
+        var query_clone = query.clone();
         try {
             query_clone.getSql();
             fail();

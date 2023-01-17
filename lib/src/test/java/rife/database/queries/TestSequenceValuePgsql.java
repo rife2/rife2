@@ -1,19 +1,20 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 import rife.database.exceptions.SequenceOperationRequiredException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValuePgsql extends TestSequenceValue {
-    @Test
-    public void testInstantiationPgsql() {
-        SequenceValue query = new SequenceValue(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testInstantiationPgsql() {
+        var query = new SequenceValue(PGSQL);
         assertNotNull(query);
         try {
             query.getSql();
@@ -23,9 +24,9 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testInvalidPgsql() {
-        SequenceValue query = new SequenceValue(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testInvalidPgsql() {
+        var query = new SequenceValue(PGSQL);
         try {
             query.getSql();
             fail();
@@ -50,9 +51,9 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
         query.clear();
     }
 
-    @Test
-    public void testClearPgsql() {
-        SequenceValue query = new SequenceValue(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testClearPgsql() {
+        var query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
             .next();
@@ -67,9 +68,9 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testNextPgsql() {
-        SequenceValue query = new SequenceValue(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testNextPgsql() {
+        var query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
             .next();
@@ -77,9 +78,9 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
         assertTrue(execute(PGSQL, query) >= 0);
     }
 
-    @Test
-    public void testCurrentPgsql() {
-        SequenceValue query = new SequenceValue(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testCurrentPgsql() {
+        var query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
             .current();
@@ -87,13 +88,13 @@ public class TestSequenceValuePgsql extends TestSequenceValue {
         assertTrue(execute(PGSQL, query) >= 0);
     }
 
-    @Test
-    public void testClonePgsql() {
-        SequenceValue query = new SequenceValue(PGSQL);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testClonePgsql() {
+        var query = new SequenceValue(PGSQL);
         query
             .name("sequencename")
             .next();
-        SequenceValue query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertTrue(query != query_clone);
         assertTrue(execute(PGSQL, query_clone) >= 0);

@@ -1,10 +1,11 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.config;
 
 import rife.config.exceptions.DateFormatInitializationException;
+import rife.continuations.ContinuationConfigRuntimeDefaults;
 import rife.template.TemplateFactory;
 import rife.tools.Localization;
 import rife.tools.StringUtils;
@@ -14,6 +15,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 public class RifeConfig {
@@ -22,9 +26,9 @@ public class RifeConfig {
 
     /**
      * Returns the shared singleton instance of the
-     * <code>RifeConfig</code> class.
+     * {@code RifeConfig} class.
      *
-     * @return the singleton <code>RifeConfig</code> instance
+     * @return the singleton {@code RifeConfig} instance
      * @since 1.0
      */
     public static RifeConfig instance() {
@@ -41,6 +45,10 @@ public class RifeConfig {
 
     public static DatabaseConfig database() {
         return instance().database;
+    }
+
+    public static CmfConfig cmf() {
+        return instance().cmf;
     }
 
     public static EngineConfig engine() {
@@ -67,15 +75,21 @@ public class RifeConfig {
         return instance().tools;
     }
 
+    public static XmlConfig xml() {
+        return instance().xml;
+    }
+
     public final GlobalConfig global = new GlobalConfig();
     public final AuthenticationConfig authentication = new AuthenticationConfig();
     public final DatabaseConfig database = new DatabaseConfig();
+    public final CmfConfig cmf = new CmfConfig();
     public final EngineConfig engine = new EngineConfig();
     public final ResourcesConfig resources = new ResourcesConfig();
     public final SchedulerConfig scheduler = new SchedulerConfig();
     public final ServerConfig server = new ServerConfig();
     public final TemplateConfig template = new TemplateConfig();
     public final ToolsConfig tools = new ToolsConfig();
+    public final XmlConfig xml = new XmlConfig();
 
     public class GlobalConfig {
         private String tempPath_ = StringUtils.stripFromEnd(System.getProperty("java.io.tmpdir"), File.separator);
@@ -113,7 +127,7 @@ public class RifeConfig {
         private long sessionDuration_ = DEFAULT_SESSION_DURATION;
         private int sessionPurgeFrequency_ = DEFAULT_SESSION_PURGE_FREQUENCY;
         private int sessionPurgeScale_ = DEFAULT_SESSION_PURGE_SCALE;
-        private boolean sessionRestrictHostIp_ = DEFAULT_SESSION_RESTRICT_HOST_IP;
+        private boolean sessionRestrictAuthData_ = DEFAULT_SESSION_RESTRICT_AUTH_DATA;
         private long rememberDuration_ = DEFAULT_REMEMBER_DURATION;
         private int rememberPurgeFrequency_ = DEFAULT_REMEMBER_PURGE_FREQUENCY;
         private int rememberPurgeScale_ = DEFAULT_REMEMBER_PURGE_SCALE;
@@ -132,7 +146,7 @@ public class RifeConfig {
         public static final long DEFAULT_SESSION_DURATION = 1000 * 60 * 20;        // 20 minutes
         public static final int DEFAULT_SESSION_PURGE_FREQUENCY = 20;              // 20 out of 1000 times, means 1/50th of the time
         public static final int DEFAULT_SESSION_PURGE_SCALE = 1000;
-        public static final boolean DEFAULT_SESSION_RESTRICT_HOST_IP = false;
+        public static final boolean DEFAULT_SESSION_RESTRICT_AUTH_DATA = true;
         public static final long DEFAULT_REMEMBER_DURATION = 1000L * 60L * 60L * 24L * 30L * 3L;    // 3 months
         public static final int DEFAULT_REMEMBER_PURGE_FREQUENCY = 20;             // 20 out of 1000 times, means 1/50th of the time
         public static final int DEFAULT_REMEMBER_PURGE_SCALE = 1000;
@@ -215,12 +229,12 @@ public class RifeConfig {
             return this;
         }
 
-        public boolean getSessionRestrictHostIp() {
-            return sessionRestrictHostIp_;
+        public boolean getSessionRestrictAuthData() {
+            return sessionRestrictAuthData_;
         }
 
-        public AuthenticationConfig setSessionRestrictHostIp(boolean restrict) {
-            sessionRestrictHostIp_ = restrict;
+        public AuthenticationConfig setSessionRestrictAuthData(boolean restrict) {
+            sessionRestrictAuthData_ = restrict;
             return this;
         }
 
@@ -306,6 +320,120 @@ public class RifeConfig {
         }
     }
 
+    public class CmfConfig {
+        private String sequenceContentRepository_ = DEFAULT_SEQUENCE_CONTENT_REPOSITORY;
+        private String sequenceContentInfo_ = DEFAULT_SEQUENCE_CONTENT_INFO;
+        private String tableContentRepository_ = DEFAULT_TABLE_CONTENT_REPOSITORY;
+        private String tableContentInfo_ = DEFAULT_TABLE_CONTENT_INFO;
+        private String tableContentAttribute_ = DEFAULT_TABLE_CONTENT_ATTRIBUTE;
+        private String tableContentProperty_ = DEFAULT_TABLE_CONTENT_PROPERTY;
+        private String tableContentStoreImage_ = DEFAULT_TABLE_CONTENT_STORE_IMAGE;
+        private String tableContentStoreText_ = DEFAULT_TABLE_CONTENT_STORE_TEXT;
+        private String tableContentStoreRawInfo_ = DEFAULT_TABLE_CONTENT_STORE_RAW_INFO;
+        private String tableContentStoreRawChunk_ = DEFAULT_TABLE_CONTENT_STORE_RAW_CHUNK;
+
+        private static final String DEFAULT_SEQUENCE_CONTENT_REPOSITORY = "SEQ_CONTENT_REPOSITORY";
+        private static final String DEFAULT_SEQUENCE_CONTENT_INFO = "SEQ_CONTENT_INFO";
+        private static final String DEFAULT_TABLE_CONTENT_REPOSITORY = "ContentRepository";
+        private static final String DEFAULT_TABLE_CONTENT_INFO = "ContentInfo";
+        private static final String DEFAULT_TABLE_CONTENT_ATTRIBUTE = "ContentAttribute";
+        private static final String DEFAULT_TABLE_CONTENT_PROPERTY = "ContentProperty";
+        private static final String DEFAULT_TABLE_CONTENT_STORE_IMAGE = "ContentStoreImage";
+        private static final String DEFAULT_TABLE_CONTENT_STORE_TEXT = "ContentStoreText";
+        private static final String DEFAULT_TABLE_CONTENT_STORE_RAW_INFO = "ContentStoreRawInfo";
+        private static final String DEFAULT_TABLE_CONTENT_STORE_RAW_CHUNK = "ContentStoreRawChunk";
+
+        public String getSequenceContentRepository() {
+            return sequenceContentRepository_;
+        }
+
+        public CmfConfig setSequenceContentRepository(String sequence) {
+            sequenceContentRepository_ = sequence;
+            return this;
+        }
+
+        public String getSequenceContentInfo() {
+            return sequenceContentInfo_;
+        }
+
+        public CmfConfig setSequenceContentInfo(String sequence) {
+            sequenceContentInfo_ = sequence;
+            return this;
+        }
+
+        public String getTableContentRepository() {
+            return tableContentRepository_;
+        }
+
+        public CmfConfig setTableContentRepository(String table) {
+            tableContentRepository_ = table;
+            return this;
+        }
+
+        public String getTableContentInfo() {
+            return tableContentInfo_;
+        }
+
+        public CmfConfig setTableContentInfo(String table) {
+            tableContentInfo_ = table;
+            return this;
+        }
+
+        public String getTableContentAttribute() {
+            return tableContentAttribute_;
+        }
+
+        public CmfConfig setTableContentAttribute(String table) {
+            tableContentAttribute_ = table;
+            return this;
+        }
+
+        public String getTableContentProperty() {
+            return tableContentProperty_;
+        }
+
+        public CmfConfig setTableContentProperty(String table) {
+            tableContentProperty_ = table;
+            return this;
+        }
+
+        public String getTableContentStoreImage() {
+            return tableContentStoreImage_;
+        }
+
+        public CmfConfig setTableContentStoreImage(String table) {
+            tableContentStoreImage_ = table;
+            return this;
+        }
+
+        public String getTableContentStoreText() {
+            return tableContentStoreText_;
+        }
+
+        public CmfConfig setTableContentStoreText(String table) {
+            tableContentStoreText_ = table;
+            return this;
+        }
+
+        public String getTableContentStoreRawInfo() {
+            return tableContentStoreRawInfo_;
+        }
+
+        public CmfConfig setTableContentStoreRawInfo(String table) {
+            tableContentStoreRawInfo_ = table;
+            return this;
+        }
+
+        public String getTableContentStoreRawChunk() {
+            return tableContentStoreRawChunk_;
+        }
+
+        public CmfConfig setTableContentStoreRawChunk(String table) {
+            tableContentStoreRawChunk_ = table;
+            return this;
+        }
+    }
+
     public class DatabaseConfig {
         private int transactionTimeout_ = DEFAULT_TRANSACTION_TIMEOUT;
         private boolean sqlDebugTrace_ = DEFAULT_SQL_DEBUG_TRACE;
@@ -323,7 +451,7 @@ public class RifeConfig {
         }
 
         public boolean getSqlDebugTrace() {
-            return DEFAULT_SQL_DEBUG_TRACE;
+            return sqlDebugTrace_;
         }
 
         public DatabaseConfig setSqlDebugTrace(boolean flag) {
@@ -333,6 +461,10 @@ public class RifeConfig {
     }
 
     public class EngineConfig {
+        private long continuationDuration_ = ContinuationConfigRuntimeDefaults.DEFAULT_CONTINUATION_DURATION;
+        private int continuationPurgeFrequency_ = ContinuationConfigRuntimeDefaults.DEFAULT_CONTINUATION_PURGE_FREQUENCY;
+        private int continuationPurgeScale_ = ContinuationConfigRuntimeDefaults.DEFAULT_CONTINUATION_PURGE_SCALE;
+
         private String defaultContentType_ = DEFAULT_DEFAULT_CONTENT_TYPE;
         private boolean prettyEngineExceptions_ = DEFAULT_PRETTY_ENGINE_EXCEPTIONS;
         private boolean logEngineExceptions_ = DEFAULT_LOG_ENGINE_EXCEPTIONS;
@@ -390,11 +522,15 @@ public class RifeConfig {
             add("z");
             add("wav");
             add("mp3");
+            add("mp4");
+            add("m4a");
             add("wma");
             add("mpg");
             add("avi");
             add("ogg");
             add("txt");
+            add("ttf");
+            add("otf");
         }};
 
         public static final Charset DEFAULT_REQUEST_ENCODING = StandardCharsets.UTF_8;
@@ -467,6 +603,33 @@ public class RifeConfig {
 
         public EngineConfig setFileUploadSizeException(boolean flag) {
             fileUploadSizeException_ = flag;
+            return this;
+        }
+
+        public long getContinuationDuration() {
+            return continuationDuration_;
+        }
+
+        public EngineConfig setContinuationDuration(long duration) {
+            continuationDuration_ = duration;
+            return this;
+        }
+
+        public int getContinuationPurgeFrequency() {
+            return continuationPurgeFrequency_;
+        }
+
+        public EngineConfig setContinuationPurgeFrequency(int frequency) {
+            continuationPurgeFrequency_ = frequency;
+            return this;
+        }
+
+        public int getContinuationPurgeScale() {
+            return continuationPurgeScale_;
+        }
+
+        public EngineConfig setContinuationPurgeScale(int frequency) {
+            continuationPurgeScale_ = frequency;
             return this;
         }
 
@@ -835,7 +998,7 @@ public class RifeConfig {
         }
 
         public String getGenerationPath() {
-            String generation_path = generationPath_;
+            var generation_path = generationPath_;
 
             if (null == generation_path) {
                 return RifeConfig.this.global.getTempPath() + File.separator + DEFAULT_TEMPLATES_RIFE_FOLDER;
@@ -884,7 +1047,7 @@ public class RifeConfig {
         }
 
         public String getDefaultResourceBundle(TemplateFactory factory) {
-            Collection<String> result = getDefaultResourceBundles(factory);
+            var result = getDefaultResourceBundles(factory);
             if (null == result || 0 == result.size()) {
                 return null;
             }
@@ -910,6 +1073,7 @@ public class RifeConfig {
         private TimeZone defaultTimeZone_ = DEFAULT_DEFAULT_TIMEZONE;
         private String defaultShortDateFormat_;
         private String defaultInputDateFormat_ = DEFAULT_INPUT_DATE_FORMAT;
+        private String defaultInputTimeFormat_ = DEFAULT_INPUT_TIME_FORMAT;
         private String defaultLongDateFormat_;
         private int maxVisualUrlLength_ = DEFAULT_MAX_VISUAL_URL_LENGTH;
 
@@ -919,6 +1083,7 @@ public class RifeConfig {
         public static final String DEFAULT_DEFAULT_COUNTRY = null;
         public static final TimeZone DEFAULT_DEFAULT_TIMEZONE = TimeZone.getTimeZone("EST");
         public static final String DEFAULT_INPUT_DATE_FORMAT = "yyyy-MM-dd HH:mm";
+        public static final String DEFAULT_INPUT_TIME_FORMAT = "HH:mm";
         public static final int DEFAULT_MAX_VISUAL_URL_LENGTH = 70;
 
         public boolean getResourceBundleAutoReload() {
@@ -964,7 +1129,12 @@ public class RifeConfig {
         public ToolsConfig setDefaultCountry(String countryCode) {
             if (null != countryCode &&
                 countryCode.isEmpty()) throw new IllegalArgumentException("countryCode can't be empty.");
-            defaultCountry_ = countryCode;
+
+            if (null == countryCode) {
+                defaultCountry_ = DEFAULT_DEFAULT_COUNTRY;
+            } else {
+                defaultCountry_ = countryCode;
+            }
             return this;
         }
 
@@ -978,76 +1148,169 @@ public class RifeConfig {
             return result;
         }
 
+        public ZoneId getDefaultZoneId() {
+            return getDefaultTimeZone().toZoneId();
+        }
+
         public ToolsConfig setDefaultTimeZone(TimeZone timeZone) {
             defaultTimeZone_ = timeZone;
             return this;
         }
 
-        public DateFormat getDefaultShortDateFormat() {
-            if (defaultShortDateFormat_ != null) {
-                SimpleDateFormat sf;
-                try {
-                    sf = new SimpleDateFormat(defaultShortDateFormat_, Localization.getLocale());
-                    sf.setTimeZone(getDefaultTimeZone());
-                } catch (IllegalArgumentException e) {
-                    throw new DateFormatInitializationException(e.getMessage());
-                }
-
+        public DateFormat getSimpleDateFormat(String pattern) {
+            try {
+                var sf = new SimpleDateFormat(pattern, Localization.getLocale());
+                sf.setTimeZone(getDefaultTimeZone());
                 return sf;
-            } else {
-                if (0 != getDefaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
-                    return DateFormat.getDateInstance(DateFormat.SHORT, Localization.getLocale());
-                }
-
-                return DateFormat.getDateInstance(DateFormat.SHORT, Locale.ENGLISH);
+            } catch (IllegalArgumentException e) {
+                throw new DateFormatInitializationException(e.getMessage());
             }
         }
 
-        public ToolsConfig setDefaultShortDateFormat(String format) {
-            if (null != format &&
-                format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
-            defaultShortDateFormat_ = format;
+        public DateTimeFormatter getDateTimeFormatter(String pattern) {
+            try {
+                return DateTimeFormatter.ofPattern(pattern, Localization.getLocale()).withZone(getDefaultZoneId());
+            } catch (IllegalArgumentException e) {
+                throw new DateFormatInitializationException(e.getMessage());
+            }
+        }
+
+        public Calendar getCalendarInstance(int year, int month, int date, int hourOfDay, int minute, int seconds) {
+            return getCalendarInstance(year, month, date, hourOfDay, minute, seconds, 0);
+        }
+
+        public Calendar getCalendarInstance(int year, int month, int date, int hourOfDay, int minute, int seconds, int milliseconds) {
+            var cal = getCalendarInstance();
+            cal.set(year, month, date, hourOfDay, minute, seconds);
+            cal.set(Calendar.MILLISECOND, milliseconds);
+            return cal;
+        }
+
+        public Calendar getCalendarInstance() {
+            return GregorianCalendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+        }
+
+        public Calendar getSystemCalendarInstance(int year, int month, int date, int hourOfDay, int minute, int seconds) {
+            return getSystemCalendarInstance(year, month, date, hourOfDay, minute, seconds, 0);
+        }
+
+        public Calendar getSystemCalendarInstance(int year, int month, int date, int hourOfDay, int minute, int seconds, int milliseconds) {
+            var cal = getSystemCalendarInstance();
+            cal.set(year, month, date, hourOfDay, minute, seconds);
+            cal.set(Calendar.MILLISECOND, milliseconds);
+            return cal;
+        }
+
+        public Calendar getSystemCalendarInstance() {
+            return GregorianCalendar.getInstance(TimeZone.getDefault(), Localization.getLocale());
+        }
+
+        public DateFormat getDefaultShortDateFormat() {
+            if (defaultShortDateFormat_ != null) {
+                return getSimpleDateFormat(defaultShortDateFormat_);
+            } else {
+                if (0 != getDefaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
+                    var sf = DateFormat.getDateInstance(DateFormat.SHORT, Localization.getLocale());
+                    sf.setTimeZone(getDefaultTimeZone());
+                    return sf;
+                }
+
+                var sf = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ENGLISH);
+                sf.setTimeZone(getDefaultTimeZone());
+                return sf;
+            }
+        }
+
+        public DateTimeFormatter getDefaultShortDateTimeFormatter() {
+            if (defaultShortDateFormat_ != null) {
+                return getDateTimeFormatter(defaultShortDateFormat_);
+            } else {
+                return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).localizedBy(Localization.getLocale()).withZone(getDefaultZoneId());
+            }
+        }
+
+        public ToolsConfig setDefaultShortDatePattern(String pattern) {
+            if (null != pattern &&
+                pattern.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
+            defaultShortDateFormat_ = pattern;
             return this;
         }
 
         public DateFormat getDefaultLongDateFormat() {
             if (defaultLongDateFormat_ != null) {
-                SimpleDateFormat sf;
-                try {
-                    sf = new SimpleDateFormat(defaultLongDateFormat_, Localization.getLocale());
-                    sf.setTimeZone(getDefaultTimeZone());
-                } catch (IllegalArgumentException e) {
-                    throw new DateFormatInitializationException(e.getMessage());
-                }
-
-                return sf;
+                return getSimpleDateFormat(defaultLongDateFormat_);
             } else {
                 if (0 != getDefaultLanguage().compareToIgnoreCase(DEFAULT_DEFAULT_LANGUAGE)) {
-                    return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Localization.getLocale());
+                    var sf = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Localization.getLocale());
+                    sf.setTimeZone(getDefaultTimeZone());
+                    return sf;
                 }
 
-                return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.ENGLISH);
+                var sf = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.ENGLISH);
+                sf.setTimeZone(getDefaultTimeZone());
+                return sf;
             }
         }
 
-        public ToolsConfig setDefaultLongDateFormat(String format) {
-            if (null != format &&
-                format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
-            defaultLongDateFormat_ = format;
+        public DateTimeFormatter getDefaultLongDateTimeFormatter() {
+            if (defaultLongDateFormat_ != null) {
+                return getDateTimeFormatter(defaultLongDateFormat_);
+            } else {
+                return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).localizedBy(Localization.getLocale()).withZone(getDefaultZoneId());
+            }
+        }
+
+        public ToolsConfig setDefaultLongDatePattern(String pattern) {
+            if (null != pattern &&
+                pattern.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
+            defaultLongDateFormat_ = pattern;
             return this;
         }
 
         public DateFormat getDefaultInputDateFormat() {
-            SimpleDateFormat sf = new SimpleDateFormat(defaultInputDateFormat_);
-            sf.setTimeZone(getDefaultTimeZone());
-            return sf;
+            return getSimpleDateFormat(defaultInputDateFormat_);
         }
 
-        public ToolsConfig setDefaultInputDateFormat(String format) {
+        public DateTimeFormatter getDefaultInputDateTimeFormatter() {
+            return getDateTimeFormatter(defaultInputDateFormat_);
+        }
+
+        public ToolsConfig setDefaultInputDatePattern(String pattern) {
+            if (null != pattern &&
+                pattern.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
+            defaultInputDateFormat_ = pattern;
+            return this;
+        }
+
+        public DateFormat getDefaultInputTimeFormat() {
+            return getSimpleDateFormat(defaultInputTimeFormat_);
+        }
+
+        public DateTimeFormatter getDefaultInputTimeFormatter() {
+            return getDateTimeFormatter(defaultInputTimeFormat_);
+        }
+
+        public ToolsConfig setDefaultInputTimeFormat(String format) {
             if (null != format &&
                 format.isEmpty()) throw new IllegalArgumentException("format can't be empty.");
-            defaultInputDateFormat_ = format;
+            defaultInputTimeFormat_ = format;
             return this;
+        }
+
+        public DateFormat getConcisePreciseDateFormat() {
+            return getSimpleDateFormat("yyyyMMddHHmmssSSSZ");
+        }
+
+        public DateFormat getConcisePreciseTimeFormat() {
+            return getSimpleDateFormat("HHmmssSSSZ");
+        }
+
+        public DateTimeFormatter getConcisePreciseDateTimeFormatter() {
+            return getDateTimeFormatter("yyyyMMddHHmmssSSSZ");
+        }
+
+        public DateTimeFormatter getConcisePreciseTimeFormatter() {
+            return getDateTimeFormatter("HHmmssSSSZ");
         }
 
         public int getMaxVisualUrlLength() {
@@ -1060,4 +1323,18 @@ public class RifeConfig {
         }
     }
 
+    public class XmlConfig {
+        private boolean xmlValidation_ = DEFAULT_XML_VALIDATION;
+
+        private static final boolean DEFAULT_XML_VALIDATION = true;
+
+        public boolean getXmlValidation() {
+            return xmlValidation_;
+        }
+
+        public XmlConfig setXmlValidation(boolean flag) {
+            xmlValidation_ = flag;
+            return this;
+        }
+    }
 }

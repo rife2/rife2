@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.template;
@@ -41,8 +41,12 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
+                TemplateFactoryFilters.TAG_PROPERTY,
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
-                TemplateFactoryFilters.TAG_ROUTE
+                TemplateFactoryFilters.TAG_ROUTE,
+                TemplateFactoryFilters.TAG_ROUTE_ACTION,
+                TemplateFactoryFilters.TAG_ROUTE_INPUTS
             },
         BeanHandlerHtml.instance(),
         EncoderHtmlSingleton.INSTANCE,
@@ -64,6 +68,8 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
+                TemplateFactoryFilters.TAG_PROPERTY,
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },
@@ -87,6 +93,8 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
+                TemplateFactoryFilters.TAG_PROPERTY,
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },
@@ -110,6 +118,8 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
+                TemplateFactoryFilters.TAG_PROPERTY,
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },
@@ -149,6 +159,8 @@ public class TemplateFactory extends EnumClass<String> {
                 TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
+                TemplateFactoryFilters.TAG_PROPERTY,
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },

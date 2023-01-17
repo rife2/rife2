@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.instrument;
@@ -37,6 +37,7 @@ public abstract class RifeTransformer implements ClassFileTransformer {
               className.startsWith("org/apache/") ||
               className.startsWith("org/apiguardian/") ||
               className.startsWith("org/eclipse/jetty/") ||
+              className.startsWith("org/hamcrest/") ||
               className.startsWith("org/h2/") ||
               className.startsWith("org/hsqldb/") ||
               className.startsWith("org/gradle/") ||
@@ -48,7 +49,10 @@ public abstract class RifeTransformer implements ClassFileTransformer {
               className.startsWith("org/w3c/"))) ||
             className.startsWith("sun/") ||
             className.startsWith("worker/org/gradle/") ||
-            (className.startsWith("rife/") && !className.startsWith("rife/engine/continuations/Test"))) {
+            (className.startsWith("rife/") &&
+             !className.startsWith("rife/Hello") &&
+             !className.startsWith("rife/models/") &&
+             !className.startsWith("rife/engine/continuations/Test"))) {
             return classfileBuffer;
         }
 

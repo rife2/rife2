@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -12,13 +12,13 @@ public class TestAbstractValidationRule {
     private String value_ = null;
 
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         MyRule rule = new MyRule();
         assertNotNull(rule);
     }
 
     @Test
-    public void testGetSubject() {
+    void testGetSubject() {
         MyRule rule = new MyRule();
         String subject = rule.getSubject();
         assertEquals("the value", subject);
@@ -26,21 +26,21 @@ public class TestAbstractValidationRule {
     }
 
     @Test
-    public void testValid() {
+    void testValid() {
         MyRule rule = new MyRule();
         value_ = "ok";
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testInvalid() {
+    void testInvalid() {
         MyRule rule = new MyRule();
         value_ = null;
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testGetError() {
+    void testGetError() {
         MyRule rule = new MyRule();
         ValidationError error = rule.getError();
         assertEquals(ValidationError.IDENTIFIER_MANDATORY, error.getIdentifier());

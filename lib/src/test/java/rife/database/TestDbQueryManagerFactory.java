@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDbQueryManagerFactory {
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetDefault(Datasource datasource) {
+    void testGetDefault(Datasource datasource) {
         TestDbQueryManagerImpl dbquerymanager1 = TestDbQueryManagerFactoryImpl.getInstance(datasource);
         TestDbQueryManagerImpl dbquerymanager2 = TestDbQueryManagerFactoryImpl.getInstance(datasource);
 
@@ -26,7 +26,7 @@ public class TestDbQueryManagerFactory {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetIdentifier(Datasource datasource) {
+    void testGetIdentifier(Datasource datasource) {
         TestDbQueryManagerImpl dbquerymanager1 = TestDbQueryManagerFactoryImpl.getInstance(datasource, "id1");
         TestDbQueryManagerImpl dbquerymanager2 = TestDbQueryManagerFactoryImpl.getInstance(datasource, "id1");
         TestDbQueryManagerImpl dbquerymanager3 = TestDbQueryManagerFactoryImpl.getInstance(datasource, "id2");
@@ -58,7 +58,7 @@ public class TestDbQueryManagerFactory {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testQuery(Datasource datasource) {
+    void testQuery(Datasource datasource) {
         TestDbQueryManagerImpl dbquerymanager = TestDbQueryManagerFactoryImpl.getInstance(datasource);
         try {
             dbquerymanager.install();

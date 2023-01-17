@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.remembermanagers.databasedrivers;
@@ -13,6 +13,8 @@ import rife.database.queries.Delete;
 import rife.database.queries.DropTable;
 import rife.database.queries.Insert;
 import rife.database.queries.Select;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 public class generic extends DatabaseRemember {
     protected CreateTable createRemember_;
@@ -80,9 +82,14 @@ public class generic extends DatabaseRemember {
         return _remove(removeRemember_, removeRememberMomentIndex_);
     }
 
-    public String createRememberId(long userId, String hostIp)
+    public String createRememberId(long userId, String authData)
     throws RememberManagerException {
-        return _createRememberId(createRememberId_, userId, hostIp);
+        int purge_decision = ThreadLocalRandom.current().nextInt(getRememberPurgeScale());
+        if (purge_decision <= getRememberPurgeFrequency()) {
+            purgeRememberIds();
+        }
+
+        return _createRememberId(createRememberId_, userId, authData);
     }
 
     public boolean eraseRememberId(String rememberId)

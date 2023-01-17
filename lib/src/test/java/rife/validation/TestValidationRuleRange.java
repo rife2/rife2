@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -10,49 +10,49 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestValidationRuleRange {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         Bean bean = new Bean(21);
         ValidationRuleRange rule = new ValidationRuleRange("property", 12, 30).setBean(bean);
         assertNotNull(rule);
     }
 
     @Test
-    public void testValid() {
+    void testValid() {
         Bean bean = new Bean(21);
         ValidationRuleRange rule = new ValidationRuleRange("property", 12, 30).setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testValidArray() {
+    void testValidArray() {
         Bean bean = new Bean(new int[]{21, 24, 30});
         ValidationRuleRange rule = new ValidationRuleRange("arrayproperty", 12, 30).setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testInvalid() {
+    void testInvalid() {
         Bean bean = new Bean(21);
         ValidationRuleRange rule = new ValidationRuleRange("property", 12, 20).setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testInvalidArray() {
+    void testInvalidArray() {
         Bean bean = new Bean(new int[]{21, 24, 30});
         ValidationRuleRange rule = new ValidationRuleRange("arrayproperty", 12, 29).setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testUnknownProperty() {
+    void testUnknownProperty() {
         Bean bean = new Bean(21);
         ValidationRuleRange rule = new ValidationRuleRange("unknown_property", 12, 30).setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testGetError() {
+    void testGetError() {
         Bean bean = new Bean(21);
         ValidationRuleRange rule = new ValidationRuleRange("property", 12, 20).setBean(bean);
         ValidationError error = rule.getError();

@@ -1,9 +1,11 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
 
+import java.sql.Time;
+import java.time.*;
 import java.util.*;
 
 import rife.config.RifeConfig;
@@ -11,7 +13,6 @@ import rife.engine.UploadedFile;
 import rife.tools.exceptions.BeanUtilsException;
 import rife.tools.exceptions.ConversionException;
 import rife.tools.exceptions.FileUtilsErrorException;
-import rife.tools.exceptions.SerializationUtilsErrorException;
 import rife.validation.*;
 
 import java.beans.BeanInfo;
@@ -21,29 +22,24 @@ import java.beans.PropertyDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.Format;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import static rife.tools.BeanUtils.Accessors.*;
 
-public abstract class BeanUtils {
+public final class BeanUtils {
     public enum Accessors {
         GETTERS,
         SETTERS,
         GETTERS_SETTERS
     }
 
-    public static DateFormat getConcisePreciseDateFormat() {
-        var sf = new SimpleDateFormat("yyyyMMddHHmmssSSSZ", Localization.getLocale());
-        sf.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
-        return sf;
+    private BeanUtils() {
+        // no-op
     }
 
     public static BeanInfo getBeanInfo(Class beanClass)
@@ -95,13 +91,10 @@ public abstract class BeanUtils {
 
         final var property_names = new LinkedHashSet<String>();
 
-        processProperties(accessors, beanClass, includedProperties, excludedProperties, prefix, new BeanPropertyProcessor() {
-            public boolean gotProperty(String name, PropertyDescriptor descriptor)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                property_names.add(name);
+        processProperties(accessors, beanClass, includedProperties, excludedProperties, prefix, (name, descriptor) -> {
+            property_names.add(name);
 
-                return true;
-            }
+            return true;
         });
 
         return property_names;
@@ -128,11 +121,11 @@ public abstract class BeanUtils {
             Collection<String> excluded_properties = null;
             if (null != includedProperties &&
                 includedProperties.length > 0) {
-                included_properties = new ArrayList<String>(Arrays.asList(includedProperties));
+                included_properties = new ArrayList<>(Arrays.asList(includedProperties));
             }
             if (null != excludedProperties &&
                 excludedProperties.length > 0) {
-                excluded_properties = new ArrayList<String>(Arrays.asList(excludedProperties));
+                excluded_properties = new ArrayList<>(Arrays.asList(excludedProperties));
             }
 
             // iterate over the properties of the bean
@@ -168,18 +161,25 @@ public abstract class BeanUtils {
         if (bean instanceof Class)
             throw new IllegalArgumentException("bean should be a bean instance, not a bean class.");
 
-        processProperties(accessors, bean.getClass(), includedProperties, excludedProperties, prefix, new BeanPropertyProcessor() {
-            public boolean gotProperty(String name, PropertyDescriptor descriptor)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                // obtain the value of the property
-                var property_read_method = descriptor.getReadMethod();
-                if (property_read_method != null) {
-                    // handle the property value
-                    processor.gotProperty(name, descriptor, property_read_method.invoke(bean, (Object[]) null));
+        // check if the bean is constrained
+        final var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+
+        processProperties(accessors, bean.getClass(), includedProperties, excludedProperties, prefix, (name, descriptor) -> {
+            // obtain the value of the property
+            var property_read_method = descriptor.getReadMethod();
+            if (property_read_method != null) {
+                ConstrainedProperty constrained_property = null;
+
+                // get the corresponding constrained property, if it exists
+                if (constrained != null) {
+                    constrained_property = constrained.getConstrainedProperty(descriptor.getName());
                 }
 
-                return true;
+                // handle the property value
+                processor.gotProperty(name, descriptor, property_read_method.invoke(bean, (Object[]) null), constrained_property);
             }
+
+            return true;
         });
     }
 
@@ -194,12 +194,9 @@ public abstract class BeanUtils {
 
         final var result = new int[]{0};
 
-        processProperties(accessors, beanClass, includedProperties, excludedProperties, prefix, new BeanPropertyProcessor() {
-            public boolean gotProperty(String name, PropertyDescriptor descriptor)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                result[0]++;
-                return true;
-            }
+        processProperties(accessors, beanClass, includedProperties, excludedProperties, prefix, (name, descriptor) -> {
+            result[0]++;
+            return true;
         });
 
         return result[0];
@@ -334,12 +331,9 @@ public abstract class BeanUtils {
     throws BeanUtilsException {
         final var property_values = new LinkedHashMap<String, Object>();
 
-        processPropertyValues(accessors, bean, includedProperties, excludedProperties, prefix, new BeanPropertyValueProcessor() {
-            public void gotProperty(String name, PropertyDescriptor descriptor, Object value)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                // store the property value
-                property_values.put(name, value);
-            }
+        processPropertyValues(accessors, bean, includedProperties, excludedProperties, prefix, (name, descriptor, value, constrainedProperty) -> {
+            // store the property value
+            property_values.put(name, value);
         });
 
         return property_values;
@@ -351,18 +345,46 @@ public abstract class BeanUtils {
         }
 
         Format format = null;
+
         if (constrainedProperty != null &&
             constrainedProperty.isFormatted()) {
             format = constrainedProperty.getFormat();
-        } else if (propertyValue instanceof Date) {
-            format = getConcisePreciseDateFormat();
         }
 
-        if (format != null) {
+        if (propertyValue instanceof LocalTime) {
+            if (format == null) {
+                format = RifeConfig.tools().getConcisePreciseTimeFormat();
+            }
+            try {
+                return format.format(Convert.toDate(propertyValue));
+            } catch (ConversionException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (propertyValue instanceof Date ||
+                   propertyValue instanceof Instant ||
+                   propertyValue instanceof LocalDateTime ||
+                   propertyValue instanceof LocalDate) {
+            if (format == null) {
+                format = RifeConfig.tools().getConcisePreciseDateFormat();
+            }
+            try {
+                return format.format(Convert.toDate(propertyValue));
+            } catch (ConversionException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            if (format != null) {
+                return format.format(propertyValue);
+            }
+        }
+
+        if (constrainedProperty != null &&
+            constrainedProperty.isFormatted()) {
+            format = constrainedProperty.getFormat();
             return format.format(propertyValue);
         }
 
-        return String.valueOf(propertyValue);
+        return Convert.toString(propertyValue);
     }
 
     public static Map<String, Class> getPropertyTypes(Class beanClass, String[] includedProperties, String[] excludedProperties, String prefix)
@@ -376,24 +398,21 @@ public abstract class BeanUtils {
 
         final var property_types = new LinkedHashMap<String, Class>();
 
-        processProperties(accessors, beanClass, includedProperties, excludedProperties, prefix, new BeanPropertyProcessor() {
-            public boolean gotProperty(String name, PropertyDescriptor descriptor)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                Class property_class = null;
+        processProperties(accessors, beanClass, includedProperties, excludedProperties, prefix, (name, descriptor) -> {
+            Class property_class = null;
 
-                // obtain and store the property type
-                var property_read_method = descriptor.getReadMethod();
-                if (property_read_method != null) {
-                    property_class = property_read_method.getReturnType();
-                } else {
-                    var property_write_method = descriptor.getWriteMethod();
-                    property_class = property_write_method.getParameterTypes()[0];
-                }
-
-                property_types.put(name, property_class);
-
-                return true;
+            // obtain and store the property type
+            var property_read_method = descriptor.getReadMethod();
+            if (property_read_method != null) {
+                property_class = property_read_method.getReturnType();
+            } else {
+                var property_write_method = descriptor.getWriteMethod();
+                property_class = property_write_method.getParameterTypes()[0];
             }
+
+            property_types.put(name, property_class);
+
+            return true;
         });
 
         return property_types;
@@ -412,7 +431,7 @@ public abstract class BeanUtils {
      * @see #setUppercasedBeanProperty(String, UploadedFile, String, Map, Object)
      * @since 1.0
      */
-    public static HashMap<String, PropertyDescriptor> getUppercasedBeanProperties(Class beanClass)
+    public static Map<String, PropertyDescriptor> getUppercasedBeanProperties(Class beanClass)
     throws BeanUtilsException {
         if (null == beanClass) throw new IllegalArgumentException("beanClass can't be null.");
 
@@ -459,7 +478,7 @@ public abstract class BeanUtils {
         Object result = null;
         if (null == format) {
             try {
-                result = BeanUtils.getConcisePreciseDateFormat().parseObject(date);
+                result = RifeConfig.tools().getConcisePreciseDateFormat().parseObject(date);
             } catch (ParseException e) {
                 try {
                     result = RifeConfig.tools().getDefaultInputDateFormat().parseObject(date);
@@ -478,15 +497,15 @@ public abstract class BeanUtils {
      * Set the value of a bean property from an array of strings.
      *
      * @param propertyName       the name of the property
-     * @param propertyValues     the values that will be set, can be <code>null</code>
+     * @param propertyValues     the values that will be set, can be {@code null}
      * @param propertyNamePrefix the prefix that the propertyName parameter
-     *                           should have, can be <code>null</code>
+     *                           should have, can be {@code null}
      * @param beanProperties     the map of the uppercased bean property names and
      *                           their descriptors
      * @param beanInstance       the bean instance whose property should be updated
      * @param emptyBean          this bean instance will be used to set the value of the
      *                           property in case the propertyValues parameter is empty or null, can be
-     *                           <code>null</code>
+     *                           {@code null}
      * @throws rife.tools.exceptions.BeanUtilsException when an error
      *                                                  occurred while setting the bean property
      * @see #getUppercasedBeanProperties(Class)
@@ -518,7 +537,7 @@ public abstract class BeanUtils {
         if (beanProperties.containsKey(name_upper)) {
             if (null == emptyBean &&
                 (null == propertyValues ||
-                    0 == propertyValues.length)) {
+                 0 == propertyValues.length)) {
                 return;
             }
 
@@ -553,9 +572,9 @@ public abstract class BeanUtils {
                 // in case an empty template bean has been provided
                 if (emptyBean != null &&
                     (null == propertyValues ||
-                        0 == propertyValues.length ||
-                        null == propertyValues[0] ||
-                        0 == propertyValues[0].length())) {
+                     0 == propertyValues.length ||
+                     null == propertyValues[0] ||
+                     0 == propertyValues[0].length())) {
                     var read_method = property.getReadMethod();
                     var empty_value = read_method.invoke(emptyBean, (Object[]) null);
                     write_method.invoke(beanInstance, empty_value);
@@ -732,7 +751,7 @@ public abstract class BeanUtils {
                             }
                             write_method.invoke(beanInstance, new Object[]{parameter_values_typed});
                         } else if (component_type == Short.class) {
-                            Short parameter_values_typed[] = new Short[propertyValues.length];
+                            var parameter_values_typed = new Short[propertyValues.length];
                             for (var i = 0; i < propertyValues.length; i++) {
                                 if (propertyValues[i] != null && propertyValues[i].length() > 0) {
                                     if (constrained_property != null && constrained_property.isFormatted()) {
@@ -748,7 +767,7 @@ public abstract class BeanUtils {
                             for (var i = 0; i < propertyValues.length; i++) {
                                 if (propertyValues[i] != null && propertyValues[i].length() > 0) {
                                     if (constrained_property != null && constrained_property.isFormatted()) {
-                                        parameter_values_typed[i] = new BigDecimal(String.valueOf(constrained_property.getFormat().parseObject(propertyValues[i])));
+                                        parameter_values_typed[i] = new BigDecimal(Convert.toString(constrained_property.getFormat().parseObject(propertyValues[i])));
                                     } else {
                                         parameter_values_typed[i] = new BigDecimal(propertyValues[i]);
                                     }
@@ -771,7 +790,12 @@ public abstract class BeanUtils {
                                 }
                             }
                             write_method.invoke(beanInstance, new Object[]{parameter_values_typed});
-                        } else if (Date.class.isAssignableFrom(component_type)) {
+                        } else if (Date.class.isAssignableFrom(component_type) ||
+                                   Instant.class.isAssignableFrom(component_type) ||
+                                   LocalDateTime.class.isAssignableFrom(component_type) ||
+                                   LocalDate.class.isAssignableFrom(component_type) ||
+                                   Time.class.isAssignableFrom(component_type) ||
+                                   LocalTime.class.isAssignableFrom(component_type)) {
                             Format custom_format = null;
                             if (constrained_property != null &&
                                 constrained_property.isFormatted()) {
@@ -779,7 +803,7 @@ public abstract class BeanUtils {
                             }
 
                             try {
-                                var parameter_values_typed = new Date[propertyValues.length];
+                                var parameter_values_typed = Array.newInstance(component_type, propertyValues.length);
                                 for (var i = 0; i < propertyValues.length; i++) {
                                     if (propertyValues[i] != null && propertyValues[i].length() > 0) {
                                         Format used_format = null;
@@ -787,11 +811,19 @@ public abstract class BeanUtils {
                                         Object parameter_value_typed = null;
                                         if (null == custom_format) {
                                             try {
-                                                used_format = BeanUtils.getConcisePreciseDateFormat();
+                                                if (Time.class.isAssignableFrom(component_type) || LocalTime.class.isAssignableFrom(component_type)) {
+                                                    used_format = RifeConfig.tools().getConcisePreciseTimeFormat();
+                                                } else {
+                                                    used_format = RifeConfig.tools().getConcisePreciseDateFormat();
+                                                }
                                                 parameter_value_typed = used_format.parseObject(propertyValues[i]);
                                             } catch (ParseException e) {
                                                 try {
-                                                    used_format = RifeConfig.tools().getDefaultInputDateFormat();
+                                                    if (Time.class.isAssignableFrom(component_type) || LocalTime.class.isAssignableFrom(component_type)) {
+                                                        used_format = RifeConfig.tools().getDefaultInputTimeFormat();
+                                                    } else {
+                                                        used_format = RifeConfig.tools().getDefaultInputDateFormat();
+                                                    }
                                                     parameter_value_typed = used_format.parseObject(propertyValues[i]);
                                                 } catch (ParseException e2) {
                                                     throw e;
@@ -803,7 +835,19 @@ public abstract class BeanUtils {
                                         }
 
                                         if (propertyValues[i].equals(used_format.format(parameter_value_typed))) {
-                                            parameter_values_typed[i] = (Date) parameter_value_typed;
+                                            if (Date.class.isAssignableFrom(component_type)) {
+                                                Array.set(parameter_values_typed, i, Convert.toDate(parameter_value_typed));
+                                            } else if (Instant.class.isAssignableFrom(component_type)) {
+                                                Array.set(parameter_values_typed, i, Convert.toInstant(parameter_value_typed));
+                                            } else if (LocalDateTime.class.isAssignableFrom(component_type)) {
+                                                Array.set(parameter_values_typed, i, Convert.toLocalDateTime(parameter_value_typed));
+                                            } else if (LocalDate.class.isAssignableFrom(component_type)) {
+                                                Array.set(parameter_values_typed, i, Convert.toLocalDate(parameter_value_typed));
+                                            } else if (Time.class.isAssignableFrom(component_type)) {
+                                                Array.set(parameter_values_typed, i, Convert.toSqlTime(parameter_value_typed));
+                                            } else if (LocalTime.class.isAssignableFrom(component_type)) {
+                                                Array.set(parameter_values_typed, i, Convert.toLocalTime(parameter_value_typed));
+                                            }
                                         } else {
                                             if (validated != null) {
                                                 validated.addValidationError(new ValidationError.INVALID(propertyName).erroneousValue(propertyValues[i]));
@@ -811,7 +855,7 @@ public abstract class BeanUtils {
                                         }
                                     }
                                 }
-                                write_method.invoke(beanInstance, new Object[]{parameter_values_typed});
+                                write_method.invoke(beanInstance, parameter_values_typed);
                             } catch (ParseException e) {
                                 if (validated != null) {
                                     validated.addValidationError(new ValidationError.INVALID(propertyName).erroneousValue(propertyValues[0]));
@@ -834,15 +878,15 @@ public abstract class BeanUtils {
                                 }
                             }
                             write_method.invoke(beanInstance, parameter_values_typed);
-                        } else if (Serializable.class.isAssignableFrom(component_type)) {
+                        } else if (constrained_property != null && constrained_property.isFormatted()) {
                             var parameter_values_typed = Array.newInstance(component_type, propertyValues.length);
                             for (var i = 0; i < propertyValues.length; i++) {
                                 if (propertyValues[i] != null && propertyValues[i].length() > 0) {
                                     try {
-                                        Array.set(parameter_values_typed, i, SerializationUtils.deserializeFromString(propertyValues[i]));
-                                    } catch (SerializationUtilsErrorException e) {
+                                        Array.set(parameter_values_typed, i, constrained_property.getFormat().parseObject(propertyValues[i]));
+                                    } catch (ParseException e) {
                                         if (validated != null) {
-                                            validated.addValidationError(new ValidationError.INVALID(propertyName).erroneousValue(propertyValues[i]));
+                                            validated.addValidationError(new ValidationError.INVALID(propertyName).erroneousValue(propertyValues[0]));
                                         }
                                     }
                                 }
@@ -856,48 +900,48 @@ public abstract class BeanUtils {
                         if (property_type == String.class) {
                             parameter_value_typed = propertyValues[0];
                         } else if (property_type == int.class ||
-                            property_type == Integer.class) {
+                                   property_type == Integer.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toInt(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toInt(propertyValues[0]);
                             }
                         } else if (property_type == char.class ||
-                            property_type == Character.class) {
+                                   property_type == Character.class) {
                             parameter_value_typed = propertyValues[0].charAt(0);
                         } else if (property_type == boolean.class ||
-                            property_type == Boolean.class) {
+                                   property_type == Boolean.class) {
                             parameter_value_typed = Convert.toBoolean(StringUtils.convertToBoolean(propertyValues[0]));
                         } else if (property_type == byte.class ||
-                            property_type == Byte.class) {
+                                   property_type == Byte.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toByte(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toByte(propertyValues[0]);
                             }
                         } else if (property_type == double.class ||
-                            property_type == Double.class) {
+                                   property_type == Double.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toDouble(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toDouble(propertyValues[0]);
                             }
                         } else if (property_type == float.class ||
-                            property_type == Float.class) {
+                                   property_type == Float.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toFloat(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toFloat(propertyValues[0]);
                             }
                         } else if (property_type == long.class ||
-                            property_type == Long.class) {
+                                   property_type == Long.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toLong(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toLong(propertyValues[0]);
                             }
                         } else if (property_type == short.class ||
-                            property_type == Short.class) {
+                                   property_type == Short.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toShort(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
@@ -906,7 +950,7 @@ public abstract class BeanUtils {
                         } else if (property_type == BigDecimal.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 var n = (Number) constrained_property.getFormat().parseObject(propertyValues[0]);
-                                parameter_value_typed = new BigDecimal(String.valueOf(n));
+                                parameter_value_typed = new BigDecimal(Convert.toString(n));
                             } else {
                                 parameter_value_typed = new BigDecimal(propertyValues[0]);
                             }
@@ -914,7 +958,12 @@ public abstract class BeanUtils {
                             parameter_value_typed = new StringBuffer(propertyValues[0]);
                         } else if (property_type == StringBuilder.class) {
                             parameter_value_typed = new StringBuilder(propertyValues[0]);
-                        } else if (Date.class.isAssignableFrom(property_type)) {
+                        } else if (Date.class.isAssignableFrom(property_type) ||
+                                   Instant.class.isAssignableFrom(property_type) ||
+                                   LocalDateTime.class.isAssignableFrom(property_type) ||
+                                   LocalDate.class.isAssignableFrom(property_type) ||
+                                   Time.class.isAssignableFrom(property_type) ||
+                                   LocalTime.class.isAssignableFrom(property_type)) {
                             Format custom_format = null;
                             if (constrained_property != null &&
                                 constrained_property.isFormatted()) {
@@ -926,11 +975,19 @@ public abstract class BeanUtils {
 
                                 if (null == custom_format) {
                                     try {
-                                        used_format = BeanUtils.getConcisePreciseDateFormat();
+                                        if (Time.class.isAssignableFrom(property_type) || LocalTime.class.isAssignableFrom(property_type)) {
+                                            used_format = RifeConfig.tools().getConcisePreciseTimeFormat();
+                                        } else {
+                                            used_format = RifeConfig.tools().getConcisePreciseDateFormat();
+                                        }
                                         parameter_value_typed = used_format.parseObject(propertyValues[0]);
                                     } catch (ParseException e) {
                                         try {
-                                            used_format = RifeConfig.tools().getDefaultInputDateFormat();
+                                            if (Time.class.isAssignableFrom(property_type) || LocalTime.class.isAssignableFrom(property_type)) {
+                                                used_format = RifeConfig.tools().getDefaultInputTimeFormat();
+                                            } else {
+                                                used_format = RifeConfig.tools().getDefaultInputDateFormat();
+                                            }
                                             parameter_value_typed = used_format.parseObject(propertyValues[0]);
                                         } catch (ParseException e2) {
                                             throw e;
@@ -941,7 +998,21 @@ public abstract class BeanUtils {
                                     parameter_value_typed = used_format.parseObject(propertyValues[0]);
                                 }
 
-                                if (!propertyValues[0].equals(used_format.format(parameter_value_typed))) {
+                                if (propertyValues[0].equals(used_format.format(parameter_value_typed))) {
+                                    if (Date.class.isAssignableFrom(property_type)) {
+                                        parameter_value_typed = Convert.toDate(parameter_value_typed);
+                                    } else if (Instant.class.isAssignableFrom(property_type)) {
+                                        parameter_value_typed = Convert.toInstant(parameter_value_typed);
+                                    } else if (LocalDateTime.class.isAssignableFrom(property_type)) {
+                                        parameter_value_typed = Convert.toLocalDateTime(parameter_value_typed);
+                                    } else if (LocalDate.class.isAssignableFrom(property_type)) {
+                                        parameter_value_typed = Convert.toLocalDate(parameter_value_typed);
+                                    } else if (Time.class.isAssignableFrom(property_type)) {
+                                        parameter_value_typed = Convert.toSqlTime(parameter_value_typed);
+                                    } else if (LocalTime.class.isAssignableFrom(property_type)) {
+                                        parameter_value_typed = Convert.toLocalTime(parameter_value_typed);
+                                    }
+                                } else {
                                     parameter_value_typed = null;
 
                                     if (validated != null) {
@@ -963,13 +1034,13 @@ public abstract class BeanUtils {
                                     validated.addValidationError(new ValidationError.INVALID(propertyName).erroneousValue(propertyValues[0]));
                                 }
                             }
-                        } else if (Serializable.class.isAssignableFrom(property_type)) {
+                        } else if (constrained_property != null && constrained_property.isFormatted()) {
                             try {
-                                parameter_value_typed = SerializationUtils.deserializeFromString(propertyValues[0]);
-                            } catch (SerializationUtilsErrorException e) {
+                                parameter_value_typed = constrained_property.getFormat().parseObject(propertyValues[0]);
+                            } catch (ParseException e) {
                                 // don't throw an exception for this since any invalid copy/paste of an URL
                                 // will give a general exception, just set the value to null and it will
-                                // no be set to the property
+                                // not be set to the property
                                 parameter_value_typed = null;
 
                                 if (validated != null) {
@@ -985,13 +1056,13 @@ public abstract class BeanUtils {
                 }
             } catch (ParseException e) {
                 if (validated != null) {
-                    validated.addValidationError(new ValidationError.NOTNUMERIC(propertyName).erroneousValue(propertyValues[0]));
+                    validated.addValidationError(new ValidationError.NOT_NUMERIC(propertyName).erroneousValue(propertyValues[0]));
                 } else {
                     throw new BeanUtilsException("The '" + propertyName + "' property of the bean with class '" + bean_class.getName() + "' couldn't be populated due to a parsing error.", bean_class, e);
                 }
             } catch (ConversionException e) {
                 if (validated != null) {
-                    validated.addValidationError(new ValidationError.NOTNUMERIC(propertyName).erroneousValue(propertyValues[0]));
+                    validated.addValidationError(new ValidationError.NOT_NUMERIC(propertyName).erroneousValue(propertyValues[0]));
                 } else {
                     throw new BeanUtilsException("The '" + propertyName + "' property of the bean with class '" + bean_class.getName() + "' couldn't be populated due to conversion error.", bean_class, e);
                 }
@@ -1009,9 +1080,9 @@ public abstract class BeanUtils {
      * Set the value of a bean property from an uploaded file.
      *
      * @param propertyName       the name of the property
-     * @param propertyFile       the file that will be set, can be <code>null</code>
+     * @param propertyFile       the file that will be set, can be {@code null}
      * @param propertyNamePrefix the prefix that the propertyName parameter
-     *                           should have, can be <code>null</code>
+     *                           should have, can be {@code null}
      * @param beanProperties     the map of the uppercased bean property names and
      *                           their descriptors
      * @param beanInstance       the bean instance whose property should be updated
@@ -1070,7 +1141,7 @@ public abstract class BeanUtils {
             try {
                 if (propertyFile.wasSizeExceeded()) {
                     if (validated != null) {
-                        validated.addValidationError(new ValidationError.WRONGLENGTH(propertyName));
+                        validated.addValidationError(new ValidationError.WRONG_LENGTH(propertyName));
                     }
                 } else {
                     Object parameter_value_typed = null;

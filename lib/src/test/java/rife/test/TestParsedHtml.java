@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.test;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestParsedHtml {
     @Test
-    public void testTitle()
+    void testTitle()
     throws Exception {
         String text = FileUtils.readString(getClass().getClassLoader().getResource("parsed_html.html"), "UTF-8");
         ParsedHtml parsed = ParsedHtml.parse(null, text);
@@ -24,7 +24,7 @@ public class TestParsedHtml {
     }
 
     @Test
-    public void testLinks()
+    void testLinks()
     throws Exception {
         String text = FileUtils.readString(getClass().getClassLoader().getResource("parsed_html.html"), "UTF-8");
         ParsedHtml parsed = ParsedHtml.parse(null, text);
@@ -73,7 +73,7 @@ public class TestParsedHtml {
     }
 
     @Test
-    public void testUnknownLinks()
+    void testUnknownLinks()
     throws Exception {
         String text = FileUtils.readString(getClass().getClassLoader().getResource("parsed_html.html"), "UTF-8");
         ParsedHtml parsed = ParsedHtml.parse(null, text);
@@ -86,7 +86,7 @@ public class TestParsedHtml {
     }
 
     @Test
-    public void testForms()
+    void testForms()
     throws Exception {
         String text = FileUtils.readString(getClass().getClassLoader().getResource("parsed_html.html"), "UTF-8");
         ParsedHtml parsed = ParsedHtml.parse(null, text);
@@ -117,7 +117,7 @@ public class TestParsedHtml {
     }
 
     @Test
-    public void testFormParameters()
+    void testFormParameters()
     throws Exception {
         String text = FileUtils.readString(getClass().getClassLoader().getResource("parsed_html.html"), "UTF-8");
         ParsedHtml parsed = ParsedHtml.parse(null, text);
@@ -147,7 +147,7 @@ public class TestParsedHtml {
     }
 
     @Test
-    public void testFormParameterNames()
+    void testFormParameterNames()
     throws Exception {
         String text = FileUtils.readString(getClass().getClassLoader().getResource("parsed_html.html"), "UTF-8");
         ParsedHtml parsed = ParsedHtml.parse(null, text);
@@ -177,7 +177,7 @@ public class TestParsedHtml {
     }
 
     @Test
-    public void testFormDefaultValues()
+    void testFormDefaultValues()
     throws Exception {
         String text = FileUtils.readString(getClass().getClassLoader().getResource("parsed_html.html"), "UTF-8");
         ParsedHtml parsed = ParsedHtml.parse(null, text);
@@ -207,7 +207,7 @@ public class TestParsedHtml {
     }
 
     @Test
-    public void testFormParameterValue()
+    void testFormParameterValue()
     throws Exception {
         String text = FileUtils.readString(getClass().getClassLoader().getResource("parsed_html.html"), "UTF-8");
         ParsedHtml parsed = ParsedHtml.parse(null, text);
@@ -235,7 +235,7 @@ public class TestParsedHtml {
     }
 
     @Test
-    public void testFormParameterValues()
+    void testFormParameterValues()
     throws Exception {
         String text = FileUtils.readString(getClass().getClassLoader().getResource("parsed_html.html"), "UTF-8");
         ParsedHtml parsed = ParsedHtml.parse(null, text);
@@ -263,7 +263,7 @@ public class TestParsedHtml {
     }
 
     @Test
-    public void testUnknownForms()
+    void testUnknownForms()
     throws Exception {
         String text = FileUtils.readString(getClass().getClassLoader().getResource("parsed_html.html"), "UTF-8");
         ParsedHtml parsed = ParsedHtml.parse(null, text);

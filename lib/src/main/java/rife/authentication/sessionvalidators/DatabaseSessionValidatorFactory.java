@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.sessionvalidators;
@@ -33,21 +33,7 @@ public class DatabaseSessionValidatorFactory extends DbQueryManagerFactory {
      * @return the requested {@code DatabaseSessionValidator} instance
      * @since 1.0
      */
-    public static DatabaseSessionValidator getInstance(Datasource datasource) {
-        return (DatabaseSessionValidator) getInstance(MANAGER_PACKAGE_NAME, cache_, datasource);
-    }
-
-    /**
-     * Return an instance of {@code DatabaseSessionValidator} for the provided
-     * {@code Datasource} and identifier.
-     *
-     * @param datasource the datasource that will be used to create the manager
-     * @param identifier the identifier that will be used to differentiate the
-     *                   manager when different ones are needed for the same datasource
-     * @return the requested {@code DatabaseSessionValidator} instance
-     * @since 1.0
-     */
-    public static DatabaseSessionValidator getInstance(Datasource datasource, String identifier) {
-        return (DatabaseSessionValidator) getInstance(MANAGER_PACKAGE_NAME, cache_, datasource, identifier);
+    public static DatabaseSessionValidator instance(Datasource datasource) {
+        return (DatabaseSessionValidator) instance(MANAGER_PACKAGE_NAME, cache_, datasource);
     }
 }

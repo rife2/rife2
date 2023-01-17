@@ -1,11 +1,11 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
 
 import org.junit.jupiter.api.Test;
-import rife.database.TestDatasources;
+import rife.database.*;
 import rife.database.querymanagers.generic.GenericQueryManager;
 import rife.database.querymanagers.generic.GenericQueryManagerFactory;
 import rife.tools.ObjectUtils;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMetaData {
     @Test
-    public void testConstraintsValidation() {
+    void testConstraintsValidation() {
         Person person = new Person();
 
         Constrained constrained = (Constrained) person;
@@ -63,7 +63,7 @@ public class TestMetaData {
     }
 
     @Test
-    public void testConstraintsValidationAnnotation() {
+    void testConstraintsValidationAnnotation() {
         PersonAnnotation person = new PersonAnnotation();
 
         Constrained constrained = (Constrained) person;
@@ -106,7 +106,7 @@ public class TestMetaData {
     }
 
     @Test
-    public void testCloningNoMethod() {
+    void testCloningNoMethod() {
         Person person = new Person();
 
         person.setFirstname("John");
@@ -129,7 +129,7 @@ public class TestMetaData {
     }
 
     @Test
-    public void testCloningExistingMethod() {
+    void testCloningExistingMethod() {
         PersonCloneable person = new PersonCloneable();
         assertNull(person.getFirstname());
         assertNull(person.getLastname());
@@ -195,14 +195,14 @@ public class TestMetaData {
         assertEquals(1, ((Validated) person).countValidationErrors());
     }
 
-    @Test
-    public void testCallbacks() {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testCallbacks() {
         PersonCallbacks person = new PersonCallbacks();
 
         person.setFirstname("John");
         person.setLastname("Smith");
 
-        GenericQueryManager<PersonCallbacks> manager = GenericQueryManagerFactory.getInstance(TestDatasources.DERBY, PersonCallbacks.class);
+        GenericQueryManager<PersonCallbacks> manager = GenericQueryManagerFactory.instance(TestDatasources.DERBY, PersonCallbacks.class);
         manager.install();
         try {
             int id = manager.save(person);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.sessionmanagers;
@@ -7,14 +7,14 @@ package rife.authentication.sessionmanagers;
 public class MemorySession {
     private String authId_ = null;
     private long userId_ = -1;
-    private String hostIp_ = null;
+    private String authData_ = null;
     private long start_ = -1;
     private boolean remembered_ = false;
 
-    public MemorySession(String authId, long userId, String hostIp, boolean remembered) {
+    public MemorySession(String authId, long userId, String authData, boolean remembered) {
         setAuthId(authId);
         setUserId(userId);
-        setHostIp(hostIp);
+        setAuthData(authData);
         setRemembered(remembered);
         start_ = System.currentTimeMillis();
     }
@@ -40,15 +40,15 @@ public class MemorySession {
         return userId_;
     }
 
-    public void setHostIp(String hostIp) {
-        assert hostIp != null;
-        assert hostIp.length() > 0;
+    public void setAuthData(String authData) {
+        assert authData != null;
+        assert authData.length() > 0;
 
-        hostIp_ = hostIp;
+        authData_ = authData;
     }
 
-    public String getHostIp() {
-        return hostIp_;
+    public String getAuthData() {
+        return authData_;
     }
 
     public void setStart(long start) {

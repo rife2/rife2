@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
@@ -7,7 +7,7 @@ package rife.engine;
 import jakarta.servlet.http.Cookie;
 
 /**
- * Helper class for building a <code>Cookie</code>.
+ * Helper class for building a {@code Cookie}.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see Cookie
@@ -17,19 +17,19 @@ public class CookieBuilder {
     private final Cookie cookie_;
 
     /**
-     * Starts building a new <code>Cookie</code>.
+     * Starts building a new {@code Cookie}.
      *
-     * @param name  the name of the <code>Cookie</code>
-     * @param value the value of the <code>Cookie</code>
+     * @param name  the name of the {@code Cookie}
+     * @param value the value of the {@code Cookie}
      */
     public CookieBuilder(String name, String value) {
         this.cookie_ = new Cookie(name, value);
     }
 
     /**
-     * Returns the <code>Cookie</code>
+     * Returns the {@code Cookie}
      *
-     * @return the <code>Cookie</code> instance that being built
+     * @return the {@code Cookie} instance that being built
      * @since 1.0
      */
     public Cookie cookie() {
@@ -39,7 +39,7 @@ public class CookieBuilder {
     /**
      * See {@link Cookie#setComment}
      *
-     * @return the <code>CookieBuilder</code> instance
+     * @return the {@code CookieBuilder} instance
      * @since 1.0
      */
     public CookieBuilder comment(String purpose) {
@@ -50,7 +50,7 @@ public class CookieBuilder {
     /**
      * See {@link Cookie#setDomain}
      *
-     * @return the <code>CookieBuilder</code> instance
+     * @return the {@code CookieBuilder} instance
      * @since 1.0
      */
     public CookieBuilder domain(String domain) {
@@ -61,7 +61,7 @@ public class CookieBuilder {
     /**
      * See {@link Cookie#setMaxAge}
      *
-     * @return the <code>CookieBuilder</code> instance
+     * @return the {@code CookieBuilder} instance
      * @since 1.0
      */
     public CookieBuilder maxAge(int expiry) {
@@ -72,7 +72,7 @@ public class CookieBuilder {
     /**
      * See {@link Cookie#setPath}
      *
-     * @return the <code>CookieBuilder</code> instance
+     * @return the {@code CookieBuilder} instance
      * @since 1.0
      */
     public CookieBuilder path(String uri) {
@@ -83,7 +83,7 @@ public class CookieBuilder {
     /**
      * See {@link Cookie#setSecure}
      *
-     * @return the <code>CookieBuilder</code> instance
+     * @return the {@code CookieBuilder} instance
      * @since 1.0
      */
     public CookieBuilder secure(boolean flag) {
@@ -94,7 +94,7 @@ public class CookieBuilder {
     /**
      * See {@link Cookie#setValue}
      *
-     * @return the <code>CookieBuilder</code> instance
+     * @return the {@code CookieBuilder} instance
      * @since 1.0
      */
     public CookieBuilder value(String newValue) {
@@ -105,7 +105,7 @@ public class CookieBuilder {
     /**
      * See {@link Cookie#setVersion}
      *
-     * @return the <code>CookieBuilder</code> instance
+     * @return the {@code CookieBuilder} instance
      * @since 1.0
      */
     public CookieBuilder version(int v) {
@@ -116,7 +116,7 @@ public class CookieBuilder {
     /**
      * See {@link Cookie#setHttpOnly}
      *
-     * @return the <code>CookieBuilder</code> instance
+     * @return the {@code CookieBuilder} instance
      * @since 1.0
      */
     public CookieBuilder httpOnly(boolean isHttpOnly) {

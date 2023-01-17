@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.template;
 
+import rife.cmf.MimeType;
 import rife.forms.FormBuilder;
 import rife.tools.BeanUtils;
 import rife.tools.exceptions.BeanUtilsException;
@@ -18,11 +19,10 @@ public class BeanHandlerPlain extends AbstractBeanHandler {
         return BeanHandlerPlainSingleton.INSTANCE;
     }
 
-    // TODO : cmf
-//	public MimeType getMimeType()
-//	{
-//		return MimeType.TEXT_PLAIN;
-//	}
+	public MimeType getMimeType()
+	{
+		return MimeType.TEXT_PLAIN;
+	}
 
     public FormBuilder getFormBuilder() {
         return null;

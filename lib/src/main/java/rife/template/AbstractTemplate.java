@@ -1,10 +1,11 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.template;
 
 import rife.config.RifeConfig;
+import rife.forms.FormBuilder;
 import rife.resources.ResourceFinder;
 import rife.template.exceptions.*;
 import rife.tools.Localization;
@@ -18,6 +19,7 @@ public abstract class AbstractTemplate implements Template {
     protected String factoryIdentifier_ = null;
     protected String encoding_ = null;
     protected TemplateInitializer initializer_ = null;
+    protected Set<String> generatedValues_ = new HashSet<>();
     protected Map<String, InternalString> fixedValues_ = new HashMap<>();
     protected Map<String, InternalValue> constructedValues_ = new HashMap<>();
     protected BeanHandler beanHandler_ = null;
@@ -42,6 +44,8 @@ public abstract class AbstractTemplate implements Template {
             0 == blockId.length()) {
             throw new BlockUnknownException(blockId);
         }
+
+        generatedValues_.remove(valueId);
 
         if (fixedValues_.containsKey(valueId)) {
             var constructed_value = new InternalValue(this);
@@ -81,6 +85,7 @@ public abstract class AbstractTemplate implements Template {
             throw new BlockUnknownException(blockId);
         }
 
+        generatedValues_.remove(valueId);
         fixedValues_.remove(valueId);
 
         var constructed_value = new InternalValue(this);
@@ -212,7 +217,7 @@ public abstract class AbstractTemplate implements Template {
 
     public List<String> evaluateRenderTags()
     throws TemplateException {
-        List<String> set_values = new ArrayList<String>();
+        List<String> set_values = new ArrayList<>();
         _evaluateRenderTags(set_values);
         return set_values;
     }
@@ -249,6 +254,8 @@ public abstract class AbstractTemplate implements Template {
                 }
             }
         }
+
+        generatedValues_.addAll(setValues);
     }
 
     public List<String> evaluateL10nTags() {
@@ -311,6 +318,8 @@ public abstract class AbstractTemplate implements Template {
                 }
             }
         }
+
+        generatedValues_.addAll(setValues);
     }
 
     public List<String> evaluateLangTags(String id) {
@@ -348,6 +357,8 @@ public abstract class AbstractTemplate implements Template {
                 }
             }
         }
+
+        generatedValues_.addAll(setValues);
     }
 
     public final InternalValue createInternalValue() {
@@ -362,6 +373,7 @@ public abstract class AbstractTemplate implements Template {
             throw new ValueUnknownException(id);
         }
 
+        generatedValues_.remove(id);
         fixedValues_.remove(id);
 
         constructedValues_.put(id, new InternalValue(this, deferredContent));
@@ -378,6 +390,7 @@ public abstract class AbstractTemplate implements Template {
             internalValue = createInternalValue();
         }
 
+        generatedValues_.remove(id);
         fixedValues_.remove(id);
 
         constructedValues_.put(id, internalValue);
@@ -453,6 +466,7 @@ public abstract class AbstractTemplate implements Template {
             value = "";
         }
 
+        generatedValues_.remove(id);
         fixedValues_.remove(id);
         constructedValues_.remove(id);
         fixedValues_.put(id, new InternalString(value));
@@ -552,6 +566,8 @@ public abstract class AbstractTemplate implements Template {
             return;
         }
 
+        generatedValues_.remove(id);
+
         if (fixedValues_.containsKey(id)) {
             fixedValues_.get(id).append(value);
         } else if (constructedValues_.containsKey(id)) {
@@ -620,8 +636,20 @@ public abstract class AbstractTemplate implements Template {
             0 == id.length()) {
             return false;
         }
+        return !generatedValues_.contains(id) && (fixedValues_.containsKey(id) || constructedValues_.containsKey(id));
+    }
 
-        return fixedValues_.containsKey(id) || constructedValues_.containsKey(id);
+    public final boolean isValueGenerated(String id) {
+        if (null == id ||
+            0 == id.length()) {
+            return false;
+        }
+
+        return generatedValues_.contains(id);
+    }
+
+    public final void addGeneratedValues(Collection<String> valueIds) {
+        generatedValues_.addAll(valueIds);
     }
 
     public final int countValues() {
@@ -635,11 +663,12 @@ public abstract class AbstractTemplate implements Template {
             throw new ValueUnknownException(id);
         }
 
+        generatedValues_.remove(id);
         fixedValues_.remove(id);
         constructedValues_.remove(id);
     }
 
-    public final void removeValues(List<String> ids) {
+    public final void removeValues(Collection<String> ids) {
         if (null == ids ||
             0 == ids.size()) {
             return;
@@ -650,11 +679,18 @@ public abstract class AbstractTemplate implements Template {
         }
     }
 
+    public final void removeGeneratedValues() {
+        var generated_values = generatedValues_;
+        generatedValues_ = new HashSet<>();
+        removeValues(generated_values);
+    }
+
     public final void blankValue(String id) {
         setValue(id, "");
     }
 
     public final void clear() {
+        generatedValues_ = new HashSet<>();
         fixedValues_ = new HashMap<>();
         constructedValues_ = new HashMap<>();
         resourceBundles_ = null;
@@ -763,6 +799,14 @@ public abstract class AbstractTemplate implements Template {
         beanHandler_ = beanHandler;
     }
 
+    public final FormBuilder getFormBuilder() {
+        var bean_handler = getBeanHandler();
+        if (null == bean_handler) {
+            return null;
+        }
+        return bean_handler.getFormBuilder();
+    }
+
     public final TemplateEncoder getEncoder() {
         return encoder_;
     }
@@ -782,7 +826,7 @@ public abstract class AbstractTemplate implements Template {
         }
     }
 
-    public final void addResourceBundles(List<ResourceBundle> resourceBundles) {
+    public final void addResourceBundles(Collection<ResourceBundle> resourceBundles) {
         if (null == resourceBundles) {
             return;
         }
@@ -832,7 +876,7 @@ public abstract class AbstractTemplate implements Template {
 
     final void initialize()
     throws TemplateException {
-        _evaluateL10nTags(null);
+        evaluateL10nTags();
 
         if (null == initializer_) {
             return;
@@ -900,14 +944,17 @@ public abstract class AbstractTemplate implements Template {
         new_template.language_ = language_;
         new_template.defaultContentType_ = defaultContentType_;
 
-        new_template.fixedValues_ = new HashMap<>();
+        new_template.generatedValues_ = new HashSet<>();
+        for (var value_id : generatedValues_) {
+            new_template.generatedValues_.add(value_id);
+        }
 
+        new_template.fixedValues_ = new HashMap<>();
         for (var value_id : fixedValues_.keySet()) {
             new_template.fixedValues_.put(value_id, fixedValues_.get(value_id));
         }
 
         new_template.constructedValues_ = new HashMap<>();
-
         for (var constructed_value_id : constructedValues_.keySet()) {
             new_template.constructedValues_.put(constructed_value_id, constructedValues_.get(constructed_value_id));
         }

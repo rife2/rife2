@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.credentials;
@@ -13,38 +13,36 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRoleUser {
     @Test
-    public void testInstantiation() {
-        RoleUser user = null;
-
-        user = new RoleUser();
+    void testInstantiation() {
+        var user = new RoleUser();
 
         assertNotNull(user);
     }
 
     @Test
-    public void testInitialEmptyLogin() {
-        RoleUser user = new RoleUser();
+    void testInitialEmptyLogin() {
+        var user = new RoleUser();
 
         assertNull(user.getLogin());
     }
 
     @Test
-    public void testInitialEmptyPassword() {
-        RoleUser user = new RoleUser();
+    void testInitialEmptyPassword() {
+        var user = new RoleUser();
 
         assertNull(user.getPassword());
     }
 
     @Test
-    public void testInitialEmptyRole() {
-        RoleUser user = new RoleUser();
+    void testInitialEmptyRole() {
+        var user = new RoleUser();
 
         assertNull(user.getRole());
     }
 
     @Test
-    public void testPopulation() {
-        RoleUser user = new RoleUser();
+    void testPopulation() {
+        var user = new RoleUser();
 
         user.setLogin("the login");
         user.setPassword("the password");
@@ -56,8 +54,8 @@ public class TestRoleUser {
     }
 
     @Test
-    public void testValidation() {
-        RoleUser user = new RoleUser();
+    void testValidation() {
+        var user = new RoleUser();
 
         Iterator<ValidationError> validationerrors_it = null;
         ValidationError validationerror = null;

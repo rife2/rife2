@@ -1,19 +1,20 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 import rife.database.exceptions.SequenceOperationRequiredException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValueH2 extends TestSequenceValue {
-    @Test
-    public void testInstantiationH2() {
-        SequenceValue query = new SequenceValue(H2);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
+    void testInstantiationH2() {
+        var query = new SequenceValue(H2);
         assertNotNull(query);
         try {
             query.getSql();
@@ -23,9 +24,9 @@ public class TestSequenceValueH2 extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testInvalidH2() {
-        SequenceValue query = new SequenceValue(H2);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
+    void testInvalidH2() {
+        var query = new SequenceValue(H2);
         try {
             query.getSql();
             fail();
@@ -50,9 +51,9 @@ public class TestSequenceValueH2 extends TestSequenceValue {
         query.clear();
     }
 
-    @Test
-    public void testClearH2() {
-        SequenceValue query = new SequenceValue(H2);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
+    void testClearH2() {
+        var query = new SequenceValue(H2);
         query
             .name("sequencename")
             .next();
@@ -67,9 +68,9 @@ public class TestSequenceValueH2 extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testNextH2() {
-        SequenceValue query = new SequenceValue(H2);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
+    void testNextH2() {
+        var query = new SequenceValue(H2);
         query
             .name("sequencename")
             .next();
@@ -77,9 +78,9 @@ public class TestSequenceValueH2 extends TestSequenceValue {
         assertTrue(execute(H2, query) >= 0);
     }
 
-    @Test
-    public void testCurrentH2() {
-        SequenceValue query = new SequenceValue(H2);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
+    void testCurrentH2() {
+        var query = new SequenceValue(H2);
         query
             .name("sequencename")
             .current();
@@ -87,13 +88,13 @@ public class TestSequenceValueH2 extends TestSequenceValue {
         assertTrue(execute(H2, query) >= 0);
     }
 
-    @Test
-    public void testCloneH2() {
-        SequenceValue query = new SequenceValue(H2);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.H2)
+    void testCloneH2() {
+        var query = new SequenceValue(H2);
         query
             .name("sequencename")
             .next();
-        SequenceValue query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
         assertTrue(execute(H2, query_clone) >= 0);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com) and
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com) and
  * JR Boyens <gnu-jrb[remove] at gmx dot net>
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
@@ -30,27 +30,25 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     private Insert save_ = null;
     private Select count_ = null;
 
-    protected String mTableName = null;
-    protected String mPrimaryKey = null;
-    protected boolean mHasIdentifier;
+    protected String tableName_;
+    protected boolean hasIdentifier_;
 
     public generic(Datasource datasource, String tableName, String primaryKey, Class<BeanType> beanClass, boolean hasIdentifier)
     throws DatabaseException {
         super(datasource, beanClass, primaryKey);
 
         baseClass_ = beanClass;
-        mTableName = tableName;
-        mPrimaryKey = primaryKey;
-        mHasIdentifier = hasIdentifier;
+        tableName_ = tableName;
+        hasIdentifier_ = hasIdentifier;
     }
 
     protected CreateTable getInternalCreateTableQuery() {
         if (null == createTable_) {
-            final CreateTable query = new CreateTable(getDatasource())
-                .table(mTableName)
+            final var query = new CreateTable(getDatasource())
+                .table(tableName_)
                 .columns(baseClass_);
-            if (!mHasIdentifier) {
-                query.primaryKey(mPrimaryKey);
+            if (!hasIdentifier_) {
+                query.primaryKey(primaryKey_);
             }
 
             addCreateTableManyToOneColumns(query);
@@ -62,7 +60,7 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     }
 
     protected void addCreateTableManyToOneColumns(final CreateTable query) {
-        final Map<String, CreateTable.Column> columns = query.getColumnMapping();
+        final var columns = query.getColumnMapping();
         GenericQueryManagerRelationalUtils.processManyToOneJoinColumns(this, new ManyToOneJoinColumnProcessor() {
             public boolean processJoinColumn(String columnName, String propertyName, ManyToOneDeclaration declaration) {
                 if (!columns.containsKey(columnName)) {
@@ -77,7 +75,7 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
 
     protected CreateSequence getInternalCreateSequenceQuery() {
         if (null == createSequence_) {
-            CreateSequence query = new CreateSequence(getDatasource())
+            var query = new CreateSequence(getDatasource())
                 .name(getSequenceName());
             createSequence_ = query;
         }
@@ -86,13 +84,13 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     }
 
     protected String getSequenceName() {
-        return "SEQ_" + mTableName;
+        return "SEQ_" + tableName_;
     }
 
     protected DropTable getInternalDropTableQuery() {
         if (null == dropTable_) {
-            DropTable query = new DropTable(getDatasource())
-                .table(mTableName);
+            var query = new DropTable(getDatasource())
+                .table(tableName_);
             dropTable_ = query;
         }
 
@@ -101,7 +99,7 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
 
     protected DropSequence getInternalDropSequenceQuery() {
         if (null == dropSequence_) {
-            DropSequence query = new DropSequence(getDatasource())
+            var query = new DropSequence(getDatasource())
                 .name(getSequenceName());
             dropSequence_ = query;
         }
@@ -111,9 +109,9 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
 
     protected Select getInternalRestoreByIdQuery() {
         if (null == restore_) {
-            Select query = new Select(getDatasource())
-                .from(mTableName)
-                .whereParameter(mPrimaryKey, "=");
+            var query = new Select(getDatasource())
+                .from(tableName_)
+                .whereParameter(primaryKey_, "=");
             restore_ = query;
         }
 
@@ -122,7 +120,7 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
 
     protected SequenceValue getInternalGetNextIdQuery() {
         if (null == getNextId_) {
-            SequenceValue query = new SequenceValue(getDatasource())
+            var query = new SequenceValue(getDatasource())
                 .name(getSequenceName())
                 .next();
             getNextId_ = query;
@@ -133,9 +131,9 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
 
     protected Delete getInternalDeleteQuery() {
         if (null == delete_) {
-            Delete query = new Delete(getDatasource())
-                .from(mTableName)
-                .whereParameter(mPrimaryKey, "=");
+            var query = new Delete(getDatasource())
+                .from(tableName_)
+                .whereParameter(primaryKey_, "=");
             delete_ = query;
         }
 
@@ -144,8 +142,8 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
 
     protected Delete getInternalDeleteNoIdQuery() {
         if (null == deleteNoId_) {
-            Delete query = new Delete(getDatasource())
-                .from(mTableName);
+            var query = new Delete(getDatasource())
+                .from(tableName_);
             deleteNoId_ = query;
         }
 
@@ -154,10 +152,10 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
 
     protected Update getInternalSaveUpdateQuery() {
         if (null == saveUpdate_) {
-            final Update query = new Update(getDatasource())
-                .table(mTableName)
-                .fieldsParametersExcluded(baseClass_, new String[]{mPrimaryKey})
-                .whereParameter(mPrimaryKey, "=");
+            final var query = new Update(getDatasource())
+                .table(tableName_)
+                .fieldsParametersExcluded(baseClass_, new String[]{primaryKey_})
+                .whereParameter(primaryKey_, "=");
 
             addSaveUpdateManyToOneFields(query);
 
@@ -168,7 +166,7 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     }
 
     protected void addSaveUpdateManyToOneFields(final Update query) {
-        final Set<String> columns = query.getFields().keySet();
+        final var columns = query.getFields().keySet();
         GenericQueryManagerRelationalUtils.processManyToOneJoinColumns(this, new ManyToOneJoinColumnProcessor() {
             public boolean processJoinColumn(String columnName, String propertyName, ManyToOneDeclaration declaration) {
                 if (!columns.contains(columnName)) {
@@ -182,8 +180,8 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
 
     protected Select getInternalRestoreListQuery() {
         if (null == restoreQuery_) {
-            Select query = new Select(getDatasource(), getBaseClass())
-                .from(mTableName);
+            var query = new Select(getDatasource(), getBaseClass())
+                .from(tableName_);
             restoreQuery_ = query;
         }
 
@@ -192,11 +190,11 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
 
     protected Insert getInternalSaveQuery() {
         if (null == save_) {
-            final Insert query = new Insert(getDatasource())
-                .into(mTableName)
+            final var query = new Insert(getDatasource())
+                .into(tableName_)
                 .fieldsParameters(getBaseClass());
-            if (!query.getFields().containsKey(mPrimaryKey)) {
-                query.fieldParameter(mPrimaryKey);
+            if (!query.getFields().containsKey(primaryKey_)) {
+                query.fieldParameter(primaryKey_);
             }
 
             addSaveManyToOneFields(query);
@@ -208,7 +206,7 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     }
 
     protected void addSaveManyToOneFields(final Insert query) {
-        final Set<String> columns = query.getFields().keySet();
+        final var columns = query.getFields().keySet();
         GenericQueryManagerRelationalUtils.processManyToOneJoinColumns(this, new ManyToOneJoinColumnProcessor() {
             public boolean processJoinColumn(String columnName, String propertyName, ManyToOneDeclaration declaration) {
                 if (!columns.contains(columnName)) {
@@ -222,8 +220,8 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
 
     protected Select getInternalCountQuery() {
         if (null == count_) {
-            Select query = new Select(getDatasource())
-                .from(mTableName)
+            var query = new Select(getDatasource())
+                .from(tableName_)
                 .field("count(*)");
             count_ = query;
         }
@@ -291,9 +289,9 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
         return _restore(getInternalRestoreListQuery(), rowProcessor);
     }
 
-    public boolean restore(RowProcessor rowProcessor)
+    public boolean restore(BeanFetcher<BeanType> beanFetcher)
     throws DatabaseException {
-        return _restore(getInternalRestoreListQuery(), rowProcessor);
+        return _restore(getInternalRestoreListQuery(), beanFetcher);
     }
 
     public List<BeanType> restore(RestoreQuery query)
@@ -306,9 +304,9 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
         return _restore(query.getDelegate(), rowProcessor);
     }
 
-    public boolean restore(RestoreQuery query, RowProcessor rowProcessor)
+    public boolean restore(RestoreQuery query, BeanFetcher<BeanType> beanFetcher)
     throws DatabaseException {
-        return _restore(query.getDelegate(), rowProcessor);
+        return _restore(query.getDelegate(), beanFetcher);
     }
 
     public BeanType restoreFirst(RestoreQuery query)
@@ -330,7 +328,7 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     }
 
     public RestoreQuery getRestoreQuery(int objectId) {
-        return new RestoreQuery(getInternalRestoreListQuery()).where(mPrimaryKey, "=", objectId);
+        return new RestoreQuery(getInternalRestoreListQuery()).where(primaryKey_, "=", objectId);
     }
 
     public CountQuery getCountQuery() {
@@ -342,10 +340,10 @@ public class generic<BeanType> extends AbstractGenericQueryManager<BeanType> imp
     }
 
     public DeleteQuery getDeleteQuery(int objectId) {
-        return new DeleteQuery(getInternalDeleteNoIdQuery()).where(mPrimaryKey, "=", objectId);
+        return new DeleteQuery(getInternalDeleteNoIdQuery()).where(primaryKey_, "=", objectId);
     }
 
     public String getTable() {
-        return mTableName;
+        return tableName_;
     }
 }

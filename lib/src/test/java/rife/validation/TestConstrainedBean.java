@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestConstrainedBean {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         ConstrainedBean bean = new ConstrainedBean();
         assertNull(bean.getAssociations());
         assertFalse(bean.hasAssociations());
@@ -26,7 +26,7 @@ public class TestConstrainedBean {
     }
 
     @Test
-    public void testAssociations() {
+    void testAssociations() {
         Class[] associations = new Class[]{RegularBeanImpl.class, InitializedBeanImpl.class};
 
         ConstrainedBean bean = new ConstrainedBean();
@@ -45,7 +45,7 @@ public class TestConstrainedBean {
     }
 
     @Test
-    public void testUniques() {
+    void testUniques() {
         ConstrainedBean bean = new ConstrainedBean();
         assertSame(bean, bean.unique());
         assertTrue(bean.hasUniques());
@@ -97,7 +97,7 @@ public class TestConstrainedBean {
     }
 
     @Test
-    public void testTextualIdentifier() {
+    void testTextualIdentifier() {
         TextualIdentifierGenerator<InitializedBeanImpl> identifier = new TextualIdentifierGenerator<InitializedBeanImpl>() {
             public void setBean(InitializedBeanImpl bean) {
             }
@@ -118,7 +118,7 @@ public class TestConstrainedBean {
     }
 
     @Test
-    public void testDefaultOrdering() {
+    void testDefaultOrdering() {
         ConstrainedBean bean = new ConstrainedBean();
         assertSame(bean, bean.defaultOrder("col1"));
         assertTrue(bean.hasDefaultOrdering());

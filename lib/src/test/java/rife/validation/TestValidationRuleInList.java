@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -10,49 +10,49 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestValidationRuleInList {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         Bean bean = new Bean("entry");
         ValidationRuleInList rule = new ValidationRuleInList("property", new String[]{"one", "two", "entry", "three"}).setBean(bean);
         assertNotNull(rule);
     }
 
     @Test
-    public void testValid() {
+    void testValid() {
         Bean bean = new Bean("entry");
         ValidationRuleInList rule = new ValidationRuleInList("property", new String[]{"one", "two", "entry", "three"}).setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testValidArray() {
+    void testValidArray() {
         Bean bean = new Bean(new String[]{"entry", "two"});
         ValidationRuleInList rule = new ValidationRuleInList("arrayProperty", new String[]{"one", "two", "entry", "three"}).setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testInvalid() {
+    void testInvalid() {
         Bean bean = new Bean("entrykolo");
         ValidationRuleInList rule = new ValidationRuleInList("property", new String[]{"one", "two", "entry", "three"}).setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testInvalidArray() {
+    void testInvalidArray() {
         Bean bean = new Bean(new String[]{"two", "one", "entrykolo"});
         ValidationRuleInList rule = new ValidationRuleInList("arrayProperty", new String[]{"one", "two", "entry", "three"}).setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testUnknownProperty() {
+    void testUnknownProperty() {
         Bean bean = new Bean("entry");
         ValidationRuleInList rule = new ValidationRuleInList("unknown_property", new String[]{"one", "two", "entry", "three"}).setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testGetError() {
+    void testGetError() {
         Bean bean = new Bean("entry");
         ValidationRuleInList rule = new ValidationRuleInList("property", new String[]{"one", "two", "entry", "three"}).setBean(bean);
         ValidationError error = rule.getError();

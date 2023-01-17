@@ -54,8 +54,8 @@ public class SignatureReader {
    * Makes the given visitor visit the signature of this {@link SignatureReader}. This signature is
    * the one specified in the constructor (see {@link #SignatureReader}). This method is intended to
    * be called on a {@link SignatureReader} that was created using a <i>ClassSignature</i> (such as
-   * the <code>signature</code> parameter of the {@link rife.asm.ClassVisitor#visit}
-   * method) or a <i>MethodSignature</i> (such as the <code>signature</code> parameter of the {@link
+   * the {@code signature} parameter of the {@link rife.asm.ClassVisitor#visit}
+   * method) or a <i>MethodSignature</i> (such as the {@code signature} parameter of the {@link
    * rife.asm.ClassVisitor#visitMethod} method).
    *
    * @param signatureVistor the visitor that must visit this signature.
@@ -130,7 +130,7 @@ public class SignatureReader {
    * Makes the given visitor visit the signature of this {@link SignatureReader}. This signature is
    * the one specified in the constructor (see {@link #SignatureReader}). This method is intended to
    * be called on a {@link SignatureReader} that was created using a <i>JavaTypeSignature</i>, such
-   * as the <code>signature</code> parameter of the {@link
+   * as the {@code signature} parameter of the {@link
    * rife.asm.ClassVisitor#visitField} or {@link
    * rife.asm.MethodVisitor#visitLocalVariable} methods.
    *

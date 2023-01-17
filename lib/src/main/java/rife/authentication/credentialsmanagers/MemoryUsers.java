@@ -16,12 +16,17 @@ import rife.tools.StringEncryptor;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.concurrent.locks.*;
 
 public class MemoryUsers implements CredentialsManager, RoleUsersManager, PasswordEncrypting {
     private final Map<Long, String> userIdMapping_ = new HashMap<>();
-    private Map<String, RoleUserAttributes> users_ = new TreeMap<>();
-    private Map<String, ArrayList<String>> roles_ = new TreeMap<>();
+    private final Map<String, RoleUserAttributes> users_ = new TreeMap<>();
+    private final Map<String, ArrayList<String>> roles_ = new TreeMap<>();
     private long userIdSequence_ = 0;
+
+    private final ReadWriteLock lock_ = new ReentrantReadWriteLock();
+    private final Lock readLock_ = lock_.readLock();
+    private final Lock writeLock_ = lock_.writeLock();
 
     protected StringEncryptor passwordEncryptor_ = null;
 
@@ -45,7 +50,8 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             throw new UnsupportedCredentialsTypeException(credentials);
         }
 
-        synchronized (this) {
+        readLock_.lock();
+        try {
             if (null == role_user.getLogin()) {
                 return -1;
             }
@@ -79,6 +85,8 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
                     return users_.get(role_user.getLogin()).getUserId();
                 }
             }
+        } finally {
+            readLock_.unlock();
         }
 
         return -1;
@@ -91,17 +99,27 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             throw new AddRoleErrorException(role);
         }
 
-        if (roles_.containsKey(role)) {
-            throw new DuplicateRoleException(role);
-        }
+        readLock_.lock();
+        try {
+            if (roles_.containsKey(role)) {
+                throw new DuplicateRoleException(role);
+            }
 
-        roles_.put(role, new ArrayList<String>());
+            roles_.put(role, new ArrayList<>());
+        } finally {
+            readLock_.unlock();
+        }
 
         return this;
     }
 
     public long countRoles() {
-        return roles_.size();
+        readLock_.lock();
+        try {
+            return roles_.size();
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     public boolean containsRole(String role) {
@@ -110,7 +128,12 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             return false;
         }
 
-        return roles_.containsKey(role);
+        readLock_.lock();
+        try {
+            return roles_.containsKey(role);
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     public MemoryUsers addUser(String login, RoleUserAttributes attributes)
@@ -121,7 +144,8 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             throw new AddUserErrorException(login, attributes);
         }
 
-        synchronized (this) {
+        writeLock_.lock();
+        try {
             // throw an exception if the user already exists
             if (users_.containsKey(login)) {
                 throw new DuplicateLoginException(login);
@@ -130,8 +154,10 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             // correctly handle implicit and specific user ids
             if (-1 == attributes.getUserId()) {
                 while (userIdMapping_.containsKey(userIdSequence_)) {
-                    // FIXME: check for long overflow
-                    userIdSequence_++;
+                    // check for overflow and reset to 0
+                    if (++userIdSequence_ < 0) {
+                        userIdSequence_ = 0;
+                    }
                 }
 
                 attributes.setUserId(userIdSequence_);
@@ -160,6 +186,8 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
             // create reverse links from the roles to the logins
             createRoleLinks(login, attributes_clone);
+        } finally {
+            writeLock_.unlock();
         }
 
         return this;
@@ -173,16 +201,21 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         if (attributes.getRoles() != null &&
             attributes.getRoles().size() > 0) {
             ArrayList<String> logins = null;
-            for (var role : attributes.getRoles()) {
-                if (!roles_.containsKey(role)) {
-                    throw new UnknownRoleErrorException(role, login, attributes);
-                } else {
-                    logins = roles_.get(role);
+            readLock_.lock();
+            try {
+                for (var role : attributes.getRoles()) {
+                    if (!roles_.containsKey(role)) {
+                        throw new UnknownRoleErrorException(role, login, attributes);
+                    } else {
+                        logins = roles_.get(role);
 
-                    if (!logins.contains(login)) {
-                        logins.add(login);
+                        if (!logins.contains(login)) {
+                            logins.add(login);
+                        }
                     }
                 }
+            } finally {
+                readLock_.unlock();
             }
         }
     }
@@ -193,11 +226,21 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             return null;
         }
 
-        return users_.get(login);
+        readLock_.lock();
+        try {
+            return users_.get(login);
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     public long countUsers() {
-        return users_.size();
+        readLock_.lock();
+        try {
+            return users_.size();
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     public boolean listRoles(ListRoles processor) {
@@ -205,21 +248,26 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             return false;
         }
 
-        if (0 == roles_.size()) {
-            return true;
-        }
-
-        var result = false;
-
-        for (var role : roles_.keySet()) {
-            result = true;
-
-            if (!processor.foundRole(role)) {
-                break;
+        readLock_.lock();
+        try {
+            if (0 == roles_.size()) {
+                return true;
             }
-        }
 
-        return result;
+            var result = false;
+
+            for (var role : roles_.keySet()) {
+                result = true;
+
+                if (!processor.foundRole(role)) {
+                    break;
+                }
+            }
+
+            return result;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     public boolean listUsers(ListUsers processor) {
@@ -227,58 +275,68 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             return false;
         }
 
-        if (0 == users_.size()) {
-            return false;
-        }
-
-        var result = false;
-
-        RoleUserAttributes attributes = null;
-        for (var login : users_.keySet()) {
-            result = true;
-
-            attributes = users_.get(login);
-
-            if (!processor.foundUser(attributes.getUserId(), login, attributes.getPassword())) {
-                break;
+        readLock_.lock();
+        try {
+            if (0 == users_.size()) {
+                return false;
             }
-        }
 
-        return result;
+            var result = false;
+
+            RoleUserAttributes attributes = null;
+            for (var login : users_.keySet()) {
+                result = true;
+
+                attributes = users_.get(login);
+
+                if (!processor.foundUser(attributes.getUserId(), login, attributes.getPassword())) {
+                    break;
+                }
+            }
+
+            return result;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     public boolean listUsers(ListUsers processor, int limit, int offset) {
-        if (null == processor ||
-            limit <= 0 ||
-            0 == users_.size()) {
-            return false;
-        }
+        readLock_.lock();
+        try {
+            if (null == processor ||
+                limit <= 0 ||
+                0 == users_.size()) {
+                return false;
+            }
 
-        var result = false;
+            var result = false;
 
-        RoleUserAttributes attributes = null;
-        var count = 0;
-        for (var login : users_.keySet()) {
-            if (count < offset) {
+            RoleUserAttributes attributes = null;
+            var count = 0;
+            for (var login : users_.keySet()) {
+                if (count < offset) {
+                    count++;
+                    continue;
+                }
+
+                if (count - offset >= limit) {
+                    break;
+                }
+
                 count++;
-                continue;
+                result = true;
+
+                attributes = users_.get(login);
+
+                if (!processor.foundUser(attributes.getUserId(), login, attributes.getPassword())) {
+                    break;
+                }
             }
 
-            if (count - offset >= limit) {
-                break;
-            }
-
-            count++;
-            result = true;
-
-            attributes = users_.get(login);
-
-            if (!processor.foundUser(attributes.getUserId(), login, attributes.getPassword())) {
-                break;
-            }
+            return result;
+        } finally {
+            readLock_.unlock();
         }
-
-        return result;
     }
 
     public boolean containsUser(String login) {
@@ -287,8 +345,11 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             return false;
         }
 
-        synchronized (this) {
+        readLock_.lock();
+        try {
             return users_.containsKey(login);
+        } finally {
+            readLock_.unlock();
         }
     }
 
@@ -309,18 +370,23 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
         var result = false;
 
-        RoleUserAttributes attributes = null;
-        for (var login : users_.keySet()) {
-            attributes = users_.get(login);
-            if (null == attributes.getRoles() ||
-                !attributes.getRoles().contains(role)) {
-                continue;
-            }
+        readLock_.lock();
+        try {
+            RoleUserAttributes attributes = null;
+            for (var login : users_.keySet()) {
+                attributes = users_.get(login);
+                if (null == attributes.getRoles() ||
+                    !attributes.getRoles().contains(role)) {
+                    continue;
+                }
 
-            result = true;
-            if (!processor.foundUser(attributes.getUserId(), login, attributes.getPassword())) {
-                break;
+                result = true;
+                if (!processor.foundUser(attributes.getUserId(), login, attributes.getPassword())) {
+                    break;
+                }
             }
+        } finally {
+            readLock_.unlock();
         }
 
         return result;
@@ -333,7 +399,8 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             return false;
         }
 
-        synchronized (this) {
+        readLock_.lock();
+        try {
             var login = userIdMapping_.get(userId);
 
             if (null == login) {
@@ -347,6 +414,8 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             }
 
             return user_attributes.isInRole(role);
+        } finally {
+            readLock_.unlock();
         }
     }
 
@@ -357,10 +426,13 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
         String login = null;
 
-        synchronized (this) {
-            login = userIdMapping_.get(userId);
-        }
 
+        readLock_.lock();
+        try {
+            login = userIdMapping_.get(userId);
+        } finally {
+            readLock_.unlock();
+        }
         return login;
     }
 
@@ -372,11 +444,14 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
         long userid = -1;
 
-        synchronized (this) {
+        readLock_.lock();
+        try {
             var attributes = users_.get(login);
             if (attributes != null) {
                 userid = attributes.getUserId();
             }
+        } finally {
+            readLock_.unlock();
         }
 
         return userid;
@@ -390,7 +465,8 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             throw new UpdateUserErrorException(login, attributes);
         }
 
-        synchronized (this) {
+        writeLock_.lock();
+        try {
             if (!users_.containsKey(login)) {
                 return false;
             }
@@ -425,6 +501,8 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
             // create reverse links from the roles to the logins
             createRoleLinks(login, attributes_clone);
+        } finally {
+            writeLock_.unlock();
         }
 
         return true;
@@ -436,13 +514,15 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             return false;
         }
 
-        synchronized (this) {
+        writeLock_.lock();
+        try {
             // update the reverse link from the roles collection
             removeRoleLinks(login);
 
             // remove the user
             return null != users_.remove(login);
-
+        } finally {
+            writeLock_.unlock();
         }
     }
 
@@ -453,7 +533,8 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
         String login = null;
 
-        synchronized (this) {
+        writeLock_.lock();
+        try {
             if (null == userIdMapping_.get(userId)) {
                 return false;
             } else {
@@ -466,6 +547,8 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
                 return null != users_.remove(login);
 
             }
+        } finally {
+            writeLock_.unlock();
         }
     }
 
@@ -475,7 +558,8 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             return false;
         }
 
-        synchronized (this) {
+        writeLock_.lock();
+        try {
             if (roles_.remove(name) == null) {
                 return false;
             }
@@ -487,6 +571,8 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
                     roles.remove(name);
                 }
             }
+        } finally {
+            writeLock_.unlock();
         }
         return true;
     }
@@ -507,7 +593,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
                 logins.remove(login);
                 if (0 == logins.size()) {
                     if (null == roles_to_delete) {
-                        roles_to_delete = new ArrayList<String>();
+                        roles_to_delete = new ArrayList<>();
                     }
 
                     roles_to_delete.add(role);
@@ -524,45 +610,51 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
     }
 
     public void clearUsers() {
-        synchronized (this) {
-            users_ = new TreeMap<String, RoleUserAttributes>();
-            roles_ = new TreeMap<String, ArrayList<String>>();
+        writeLock_.lock();
+        try {
+            userIdSequence_ = 0;
+            userIdMapping_.clear();
+            users_.clear();
+            roles_.clear();
+        } finally {
+            writeLock_.unlock();
         }
     }
 
     public boolean listUserRoles(String login, ListRoles processor)
     throws CredentialsManagerException {
-        if (null == users_.get(login)) {
-            return false;
-        }
-
-        if (null == processor) {
-            return false;
-        }
-
-        if (0 == roles_.size()) {
-            return true;
-        }
-
-        var result = false;
-
-        for (var role : roles_.keySet()) {
-            RoleUserAttributes attributes = null;
-
-            synchronized (this) {
-                attributes = users_.get(login);
+        readLock_.lock();
+        try {
+            if (null == users_.get(login)) {
+                return false;
             }
 
-            if (attributes.isInRole(role)) {
-                result = true;
+            if (null == processor) {
+                return false;
+            }
 
-                if (!processor.foundRole(role)) {
-                    break;
+            if (0 == roles_.size()) {
+                return true;
+            }
+
+            var result = false;
+
+            for (var role : roles_.keySet()) {
+                var attributes = users_.get(login);
+
+                if (attributes.isInRole(role)) {
+                    result = true;
+
+                    if (!processor.foundRole(role)) {
+                        break;
+                    }
                 }
             }
-        }
 
-        return result;
+            return result;
+        } finally {
+            readLock_.unlock();
+        }
     }
 }
 

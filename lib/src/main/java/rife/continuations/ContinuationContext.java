@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.continuations;
@@ -57,7 +57,10 @@ public class ContinuationContext implements Cloneable {
      */
     public static ContinuationContext createOrResetContext(Object executingInstance) {
         var context = getActiveContext();
-        if (null == context) {
+        if (null == context ||
+            context.getContinuable() == null ||
+            executingInstance.getClass() != context.getContinuable().getClass()) {
+
             var config = ContinuationConfigRuntime.getActiveConfigRuntime();
             context = new ContinuationContext(config.getContinuationManager(executingInstance), executingInstance);
 

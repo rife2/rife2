@@ -1,18 +1,19 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
 import rife.database.exceptions.SequenceNameRequiredException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateSequenceHsqldb extends TestCreateSequence {
-    @Test
-    public void testInstantiationHsqldb() {
-        CreateSequence query = new CreateSequence(HSQLDB);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
+    void testInstantiationHsqldb() {
+        var query = new CreateSequence(HSQLDB);
         assertNotNull(query);
         try {
             query.getSql();
@@ -22,9 +23,9 @@ public class TestCreateSequenceHsqldb extends TestCreateSequence {
         }
     }
 
-    @Test
-    public void testClearHsqldb() {
-        CreateSequence query = new CreateSequence(HSQLDB);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
+    void testClearHsqldb() {
+        var query = new CreateSequence(HSQLDB);
         query.name("sequencename");
         assertNotNull(query.getSql());
         query.clear();
@@ -36,19 +37,19 @@ public class TestCreateSequenceHsqldb extends TestCreateSequence {
         }
     }
 
-    @Test
-    public void testCreateHsqldb() {
-        CreateSequence query = new CreateSequence(HSQLDB);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
+    void testCreateHsqldb() {
+        var query = new CreateSequence(HSQLDB);
         query.name("sequencename");
         assertEquals(query.getSql(), "CREATE SEQUENCE sequencename");
         execute(HSQLDB, query);
     }
 
-    @Test
-    public void testCloneHsqldb() {
-        CreateSequence query = new CreateSequence(HSQLDB);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.HSQLDB)
+    void testCloneHsqldb() {
+        var query = new CreateSequence(HSQLDB);
         query.name("sequencename");
-        CreateSequence query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
         execute(HSQLDB, query_clone);

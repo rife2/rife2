@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.credentialsmanagers;
@@ -19,24 +19,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMemoryUsers {
     @Test
-    public void testInstantiation() {
-        MemoryUsers users = null;
-
-        users = new MemoryUsers();
+    void testInstantiation() {
+        var users = new MemoryUsers();
 
         assertNotNull(users);
     }
 
     @Test
-    public void testNoInitialUsers() {
-        MemoryUsers users = new MemoryUsers();
+    void testNoInitialUsers() {
+        var users = new MemoryUsers();
 
         assertEquals(0, users.countUsers());
     }
 
     @Test
-    public void testAddRoles() {
-        MemoryUsers users = new MemoryUsers();
+    void testAddRoles() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -62,8 +60,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testAddUsers() {
-        MemoryUsers users = new MemoryUsers();
+    void testAddUsers() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -71,20 +69,20 @@ public class TestMemoryUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
+            var user1_attributes = new RoleUserAttributes("thepassword");
             users.addUser("login1", user1_attributes);
             assertEquals(0, user1_attributes.getUserId());
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
             users.addUser("login2", user2_attributes);
             assertEquals(1, user2_attributes.getUserId());
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
             users.addUser("login3", user3_attributes);
             assertEquals(174, user3_attributes.getUserId());
-            RoleUserAttributes user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
+            var user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
             users.addUser("login4", user4_attributes);
             assertEquals(2, user4_attributes.getUserId());
             try {
-                RoleUserAttributes user5_attributes = new RoleUserAttributes("thepassword5", new String[]{"role1"});
+                var user5_attributes = new RoleUserAttributes("thepassword5", new String[]{"role1"});
                 users.addUser("login1", user5_attributes);
                 fail();
             } catch (DuplicateLoginException e) {
@@ -121,8 +119,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testUpdateUsers() {
-        MemoryUsers users = new MemoryUsers();
+    void testUpdateUsers() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -130,20 +128,20 @@ public class TestMemoryUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
-            RoleUserAttributes user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
+            var user1_attributes = new RoleUserAttributes("thepassword");
+            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
             users
                 .addUser("login1", user1_attributes)
                 .addUser("login2", user2_attributes)
                 .addUser("login3", user3_attributes)
                 .addUser("login4", user4_attributes);
 
-            RoleUserAttributes user1_attributes_new = new RoleUserAttributes(4, "thepassword_new", new String[]{"role1", "role2"});
-            RoleUserAttributes user2_attributes_new = new RoleUserAttributes(3, new String[]{"role2"});
-            RoleUserAttributes user3_attributes_new = new RoleUserAttributes(2, new String[]{"role1"});
-            RoleUserAttributes user4_attributes_new = new RoleUserAttributes(1, "thepassword_new4");
+            var user1_attributes_new = new RoleUserAttributes(4, "thepassword_new", new String[]{"role1", "role2"});
+            var user2_attributes_new = new RoleUserAttributes(3, new String[]{"role2"});
+            var user3_attributes_new = new RoleUserAttributes(2, new String[]{"role1"});
+            var user4_attributes_new = new RoleUserAttributes(1, "thepassword_new4");
             assertTrue(users.updateUser("login1", user1_attributes_new));
             assertTrue(users.updateUser("login2", user2_attributes_new));
             assertTrue(users.updateUser("login3", user3_attributes_new));
@@ -185,8 +183,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testListRoles() {
-        MemoryUsers users = new MemoryUsers();
+    void testListRoles() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -194,10 +192,10 @@ public class TestMemoryUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
-            RoleUserAttributes user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
+            var user1_attributes = new RoleUserAttributes("thepassword");
+            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
             users
                 .addUser("login1", user1_attributes)
                 .addUser("login2", user2_attributes)
@@ -235,8 +233,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testListUsers() {
-        MemoryUsers users = new MemoryUsers();
+    void testListUsers() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -244,17 +242,17 @@ public class TestMemoryUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
-            RoleUserAttributes user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
+            var user1_attributes = new RoleUserAttributes("thepassword");
+            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
             users
                 .addUser("login1", user1_attributes)
                 .addUser("login2", user2_attributes)
                 .addUser("login3", user3_attributes)
                 .addUser("login4", user4_attributes);
 
-            ListMemoryUsers listusers = new ListMemoryUsers();
+            var listusers = new ListMemoryUsers();
             assertTrue(users.listUsers(listusers));
             assertEquals(4, listusers.getUsers().size());
             assertTrue(listusers.getUsers().contains("0,login1,thepassword"));
@@ -267,8 +265,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testListUsersRanged() {
-        MemoryUsers users = new MemoryUsers();
+    void testListUsersRanged() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -276,10 +274,10 @@ public class TestMemoryUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
-            RoleUserAttributes user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
+            var user1_attributes = new RoleUserAttributes("thepassword");
+            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
             users
                 .addUser("login1", user1_attributes)
                 .addUser("login2", user2_attributes)
@@ -343,8 +341,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testGetUserAttributes() {
-        MemoryUsers users = new MemoryUsers();
+    void testGetUserAttributes() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -352,20 +350,20 @@ public class TestMemoryUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
-            RoleUserAttributes user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
+            var user1_attributes = new RoleUserAttributes("thepassword");
+            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
             users
                 .addUser("login1", user1_attributes)
                 .addUser("login2", user2_attributes)
                 .addUser("login3", user3_attributes)
                 .addUser("login4", user4_attributes);
 
-            RoleUserAttributes attributes1 = users.getAttributes("login1");
-            RoleUserAttributes attributes2 = users.getAttributes("login2");
-            RoleUserAttributes attributes3 = users.getAttributes("login3");
-            RoleUserAttributes attributes4 = users.getAttributes("login4");
+            var attributes1 = users.getAttributes("login1");
+            var attributes2 = users.getAttributes("login2");
+            var attributes3 = users.getAttributes("login3");
+            var attributes4 = users.getAttributes("login4");
             assertEquals(attributes1.getUserId(), 0);
             assertEquals(0, attributes1.getRoles().size());
             assertEquals(attributes1.getPassword(), "thepassword");
@@ -394,8 +392,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testUserIdSpecification() {
-        MemoryUsers users = new MemoryUsers();
+    void testUserIdSpecification() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -430,8 +428,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testValidUsers() {
-        MemoryUsers users = new MemoryUsers();
+    void testValidUsers() {
+        var users = new MemoryUsers();
         users.setPasswordEncryptor(StringEncryptor.SHA);
 
         try {
@@ -440,13 +438,13 @@ public class TestMemoryUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
+            var user1_attributes = new RoleUserAttributes("thepassword");
             users.addUser("login1", user1_attributes);
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("SHA:iTeooS7tJ7m1mdRrbUacq/pr1uM=", new String[]{"role1", "role2"});
+            var user2_attributes = new RoleUserAttributes("SHA:iTeooS7tJ7m1mdRrbUacq/pr1uM=", new String[]{"role1", "role2"});
             users.addUser("login2", user2_attributes);
-            RoleUserAttributes user3_attributes = new RoleUserAttributes("thepassword3", new String[]{"role1", "role2", "role3"});
+            var user3_attributes = new RoleUserAttributes("thepassword3", new String[]{"role1", "role2", "role3"});
             users.addUser("login3", user3_attributes);
-            RoleUserAttributes user4_attributes = new RoleUserAttributes(174, "thepassword4", new String[]{"role2", "role3"});
+            var user4_attributes = new RoleUserAttributes(174, "thepassword4", new String[]{"role2", "role3"});
             users.addUser("login4", user4_attributes);
 
             assertEquals(-1, users.verifyCredentials(new RoleUser("login", "thepassword")));
@@ -479,8 +477,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testUsersInRole() {
-        MemoryUsers users = new MemoryUsers();
+    void testUsersInRole() {
+        var users = new MemoryUsers();
         users.setPasswordEncryptor(StringEncryptor.MD5);
 
         try {
@@ -489,13 +487,13 @@ public class TestMemoryUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
+            var user1_attributes = new RoleUserAttributes("thepassword");
             users.addUser("login1", user1_attributes);
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
             users.addUser("login2", user2_attributes);
-            RoleUserAttributes user3_attributes = new RoleUserAttributes("thepassword3", new String[]{"role1", "role2", "role3"});
+            var user3_attributes = new RoleUserAttributes("thepassword3", new String[]{"role1", "role2", "role3"});
             users.addUser("login3", user3_attributes);
-            RoleUserAttributes user4_attributes = new RoleUserAttributes(174, "thepassword4", new String[]{"role2", "role3"});
+            var user4_attributes = new RoleUserAttributes(174, "thepassword4", new String[]{"role2", "role3"});
             users.addUser("login4", user4_attributes);
 
             assertFalse(users.isUserInRole(user1_attributes.getUserId(), "role1"));
@@ -518,8 +516,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testListUsersInRole() {
-        MemoryUsers users = new MemoryUsers();
+    void testListUsersInRole() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -527,12 +525,12 @@ public class TestMemoryUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            ListMemoryUsers listusers = new ListMemoryUsers();
+            var listusers = new ListMemoryUsers();
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
-            RoleUserAttributes user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
+            var user1_attributes = new RoleUserAttributes("thepassword");
+            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user3_attributes = new RoleUserAttributes(174, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user4_attributes = new RoleUserAttributes("thepassword4", new String[]{"role2", "role3"});
             users
                 .addUser("login1", user1_attributes)
                 .addUser("login2", user2_attributes)
@@ -579,8 +577,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testRemoveUsersByLogin() {
-        MemoryUsers users = new MemoryUsers();
+    void testRemoveUsersByLogin() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -609,8 +607,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testRemoveUsersByUserId() {
-        MemoryUsers users = new MemoryUsers();
+    void testRemoveUsersByUserId() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -639,8 +637,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testRemoveRole() {
-        MemoryUsers users = new MemoryUsers();
+    void testRemoveRole() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -658,7 +656,7 @@ public class TestMemoryUsers {
             assertTrue(users.removeRole("role3"));
             assertEquals(2, users.countRoles());
 
-            RoleUserAttributes attributes = users.getAttributes("login3");
+            var attributes = users.getAttributes("login3");
             assertTrue(attributes.getRoles().contains("role1"));
             assertTrue(attributes.getRoles().contains("role2"));
             assertFalse(attributes.getRoles().contains("role3"));
@@ -675,8 +673,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testClearUsers() {
-        MemoryUsers users = new MemoryUsers();
+    void testClearUsers() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -697,8 +695,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testVerifyCredentials() {
-        MemoryUsers users = new MemoryUsers();
+    void testVerifyCredentials() {
+        var users = new MemoryUsers();
         users.setPasswordEncryptor(StringEncryptor.OBF);
 
         try {
@@ -707,14 +705,14 @@ public class TestMemoryUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes("thepassword");
+            var user1_attributes = new RoleUserAttributes("thepassword");
             users.addUser("login1", user1_attributes);
-            RoleUserAttributes user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
             users.addUser("login2", user2_attributes);
-            RoleUserAttributes user3_attributes = new RoleUserAttributes("thepassword3", new String[]{"role1", "role2", "role3"});
+            var user3_attributes = new RoleUserAttributes("thepassword3", new String[]{"role1", "role2", "role3"});
             users.addUser("login3", user3_attributes);
 
-            RoleUser user = new RoleUser();
+            var user = new RoleUser();
             user.setLogin("login2");
             user.setPassword("thepassword2");
             user.setRole("role2");
@@ -734,8 +732,8 @@ public class TestMemoryUsers {
     }
 
     @Test
-    public void testListUserRoles() {
-        MemoryUsers users = new MemoryUsers();
+    void testListUserRoles() {
+        var users = new MemoryUsers();
 
         try {
             users
@@ -743,14 +741,14 @@ public class TestMemoryUsers {
                 .addRole("role2")
                 .addRole("role3");
 
-            RoleUserAttributes user1_attributes = new RoleUserAttributes(49, "thepassword");
+            var user1_attributes = new RoleUserAttributes(49, "thepassword");
             users.addUser("login1", user1_attributes);
-            RoleUserAttributes user2_attributes = new RoleUserAttributes(322, "thepassword2", new String[]{"role1", "role2"});
+            var user2_attributes = new RoleUserAttributes(322, "thepassword2", new String[]{"role1", "role2"});
             users.addUser("login2", user2_attributes);
-            RoleUserAttributes user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
+            var user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
             users.addUser("login3", user3_attributes);
 
-            ListMemoryRoles listroles = new ListMemoryRoles();
+            var listroles = new ListMemoryRoles();
 
             assertFalse(users.listUserRoles("login1", listroles));
 

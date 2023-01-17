@@ -1,20 +1,18 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
 
 import rife.Version;
 import rife.config.RifeConfig;
-import rife.continuations.*;
-import rife.continuations.exceptions.PauseException;
 import rife.engine.exceptions.DeferException;
 import rife.engine.exceptions.RedirectException;
+import rife.ioc.HierarchicalProperties;
 import rife.template.TemplateFactory;
 import rife.tools.ExceptionFormattingUtils;
 import rife.tools.ExceptionUtils;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
@@ -25,28 +23,26 @@ import java.util.logging.Logger;
  * @since 1.0
  */
 public class Gate {
-    final String CONTINUATION_COOKIE_ID = "continuationId";
-
-
     private Site site_ = null;
     private Throwable initException_ = null;
 
-    final ContinuationManager continuationManager_ = new ContinuationManager(new EngineContinuationConfigRuntime(this));
-
     /**
-     * Set up the gate with the provided <code>Site</code>.
+     * Set up the gate with the provided {@code Site}.
      *
      * @param site the site that will handle the requests
      * @since 1.0
      */
-    public void setup(Site site) {
+    public void setup(HierarchicalProperties properties, Site site) {
+        site.properties_.setParent(properties);
         site_ = site;
 
-        try {
-            site_.setup();
-            site_.deploy();
-        } catch (Throwable e) {
-            handleSiteInitException(e);
+        if (!site.deployed_) {
+            try {
+                site_.setup();
+                site_.deploy();
+            } catch (Throwable e) {
+                handleSiteInitException(e);
+            }
         }
     }
 
@@ -57,8 +53,8 @@ public class Gate {
      * @param elementUrl the part of the URL after the gateUrl that will be resolved to find the execution element
      * @param request    the request instance of this web request
      * @param response   the response instance of this web request
-     * @return <code>true</code> if the request was successfully handled; or
-     * <code>false</code> otherwise
+     * @return {@code true} if the request was successfully handled; or
+     * {@code false} otherwise
      * @since 1.0
      */
     public boolean handleRequest(String gateUrl, String elementUrl, Request request, Response response) {
@@ -97,12 +93,7 @@ public class Gate {
 
         var context = new Context(gateUrl, site_, request, response, match);
         try {
-            setupContinuationContext(context);
-
             context.process();
-            response.close();
-        } catch (PauseException e) {
-            handlePause(e, context);
             response.close();
         } catch (RedirectException e) {
             response.sendRedirect(e.getUrl());
@@ -114,30 +105,6 @@ public class Gate {
         }
 
         return true;
-    }
-
-    private void setupContinuationContext(Context context)
-    throws CloneNotSupportedException {
-        ContinuationContext continuation_context = null;
-        if (context.hasCookie(CONTINUATION_COOKIE_ID)) {
-            continuation_context = continuationManager_.resumeContext(context.cookieValue(CONTINUATION_COOKIE_ID));
-        }
-        if (continuation_context != null) {
-            ContinuationContext.setActiveContext(continuation_context);
-        }
-        ContinuationConfigRuntime.setActiveConfigRuntime(continuationManager_.getConfigRuntime());
-    }
-
-    private void handlePause(PauseException e, Context context) {
-        // register context
-        var continuation_context = e.getContext();
-        continuationManager_.addContext(continuation_context);
-
-        // obtain continuation ID
-        var continuation_id = continuation_context.getId();
-        context.addCookie(new CookieBuilder(CONTINUATION_COOKIE_ID, continuation_id)
-            .path("/")
-            .maxAge((int) continuationManager_.getConfigRuntime().getContinuationDuration() / 1000));
     }
 
     private void handleSiteInitException(Throwable exception) {
@@ -194,6 +161,8 @@ public class Gate {
     }
 
     private void printExceptionDetails(Throwable exception, Response response) {
+        response.clearBuffer();
+
         TemplateFactory template_factory = null;
         if (response.isContentTypeSet()) {
             var content_type = response.getContentType();
@@ -214,11 +183,7 @@ public class Gate {
         template.setValue("exceptions", ExceptionFormattingUtils.formatExceptionStackTrace(exception, template));
         template.setValue("RIFE_VERSION", template.getEncoder().encode(Version.getVersion()));
 
-        try {
-            response.getWriter().print(template.getContent());
-        } catch (IOException e2) {
-            throw new RuntimeException(e2);
-        }
+        response.print(template.getContent());
     }
 }
 

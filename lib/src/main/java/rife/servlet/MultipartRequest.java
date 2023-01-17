@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.servlet;
@@ -10,7 +10,6 @@ import rife.config.RifeConfig;
 import rife.engine.UploadedFile;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -19,7 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import rife.engine.exceptions.*;
 
 class MultipartRequest {
-    private static final String CONTENT_TYPE_HEADER = "Content-Type";
+    private static final String CONTENT_TYPE_HEADER = "content-type";
     private static final String MULTIPART_CONTENT_TYPE = "multipart/form-data";
     private static final String BOUNDARY_PREFIX = "boundary=";
     private static final int BOUNDARY_PREFIX_LENGTH = BOUNDARY_PREFIX.length();
@@ -40,7 +39,7 @@ class MultipartRequest {
     private final byte[] fileBuffer_;
     private String boundary_ = null;
     private ServletInputStream input_ = null;
-    private String rncoding_ = DEFAULT_ENCODING;
+    private String encoding_ = DEFAULT_ENCODING;
 
     private final Map<String, String[]> parameters_;
     private final Map<String, UploadedFile[]> files_;
@@ -49,7 +48,7 @@ class MultipartRequest {
         if (null == request) throw new IllegalArgumentException("request can't be null");
 
         request_ = request;
-        parameters_ = new LinkedHashMap<>();
+        parameters_ = new LinkedHashMap<>(request.getParameterMap());
         files_ = new LinkedHashMap<>();
         parameterBuffer_ = new byte[8 * 1024];
         fileBuffer_ = new byte[100 * 1024];
@@ -76,7 +75,7 @@ class MultipartRequest {
     void setEncoding(String encoding) {
         assert encoding != null;
 
-        rncoding_ = encoding;
+        encoding_ = encoding;
     }
 
     private void checkUploadDirectory() throws MultipartRequestException {
@@ -116,7 +115,7 @@ class MultipartRequest {
             throw new MultipartInvalidContentTypeException(type);
         }
 
-        // extract the boundary seperator that is used by this request
+        // extract the boundary separator that is used by this request
         boundary_ = extractBoundary(type);
         if (null == boundary_) {
             throw new MultipartMissingBoundaryException();
@@ -187,7 +186,7 @@ class MultipartRequest {
 
             if (result != -1) {
                 try {
-                    line_buffer.append(new String(parameterBuffer_, 0, result, rncoding_));
+                    line_buffer.append(new String(parameterBuffer_, 0, result, encoding_));
                 } catch (UnsupportedEncodingException e) {
                     throw new MultipartInputErrorException(e);
                 }
@@ -261,8 +260,8 @@ class MultipartRequest {
             return false;
         }
 
-        String fieldname = null;
-        String filename = null;
+        String field_name = null;
+        String file_name = null;
         var content_type = "text/plain";  // rfc1867 says this is the default
 
         String[] disposition_info = null;
@@ -272,8 +271,8 @@ class MultipartRequest {
                 // Parse the content-disposition line
                 disposition_info = extractDispositionInfo(headerline);
 
-                fieldname = disposition_info[0];
-                filename = disposition_info[1];
+                field_name = disposition_info[0];
+                file_name = disposition_info[1];
             } else if (headerline.toLowerCase().startsWith(CONTENT_TYPE_HEADER)) {
                 // Get the content type, or null if none specified
                 var type = extractContentType(headerline);
@@ -283,10 +282,10 @@ class MultipartRequest {
             }
         }
 
-        if (null == filename) {
+        if (null == file_name) {
             // This is a parameter
             var new_value = readParameter();
-            var values = parameters_.get(fieldname);
+            var values = parameters_.get(field_name);
             String[] new_values = null;
             if (null == values) {
                 new_values = new String[1];
@@ -295,17 +294,17 @@ class MultipartRequest {
                 System.arraycopy(values, 0, new_values, 0, values.length);
             }
             new_values[new_values.length - 1] = new_value;
-            parameters_.put(fieldname, new_values);
+            parameters_.put(field_name, new_values);
         } else {
             // This is a file
-            if (filename.equals("")) {
+            if (file_name.equals("")) {
                 // empty filename, probably an "empty" file param
-                filename = null;
+                file_name = null;
             }
 
-            var new_file = new UploadedFile(filename, content_type);
-            readAndSaveFile(new_file, fieldname);
-            var files = files_.get(fieldname);
+            var new_file = new UploadedFile(file_name, content_type);
+            readAndSaveFile(new_file, field_name);
+            var files = files_.get(field_name);
             UploadedFile[] new_files = null;
             if (null == files) {
                 new_files = new UploadedFile[1];
@@ -314,7 +313,7 @@ class MultipartRequest {
                 System.arraycopy(files, 0, new_files, 0, files.length);
             }
             new_files[new_files.length - 1] = new_file;
-            files_.put(fieldname, new_files);
+            files_.put(field_name, new_files);
         }
 
         return true;
@@ -376,16 +375,16 @@ class MultipartRequest {
 
     private String extractContentType(String contentTypeLine) throws MultipartRequestException {
         String result = null;
-        var lowcase_line = contentTypeLine.toLowerCase();
+        var lower_case_line = contentTypeLine.toLowerCase();
 
         // Get the content type, if any
-        if (lowcase_line.startsWith(CONTENT_TYPE_HEADER)) {
-            var seperator_location = lowcase_line.indexOf(" ");
-            if (-1 == seperator_location) {
+        if (lower_case_line.startsWith(CONTENT_TYPE_HEADER)) {
+            var separator_location = lower_case_line.indexOf(" ");
+            if (-1 == separator_location) {
                 throw new MultipartCorruptContentTypeException(contentTypeLine);
             }
-            result = lowcase_line.substring(seperator_location + 1);
-        } else if (lowcase_line.length() != 0) {
+            result = lower_case_line.substring(separator_location + 1);
+        } else if (lower_case_line.length() != 0) {
             // no content type, so should be empty
             throw new MultipartCorruptContentTypeException(contentTypeLine);
         }
@@ -451,7 +450,7 @@ class MultipartRequest {
                     '-' == fileBuffer_[1]) {
                     // quick pre-check
                     try {
-                        line = new String(fileBuffer_, 0, result, rncoding_);
+                        line = new String(fileBuffer_, 0, result, encoding_);
                     } catch (UnsupportedEncodingException e) {
                         throw new MultipartFileErrorException(name, e);
                     }

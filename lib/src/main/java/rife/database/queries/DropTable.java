@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
@@ -61,7 +61,7 @@ public class DropTable extends AbstractQuery implements Cloneable {
             if (0 == tables_.size()) {
                 throw new TableNameRequiredException("DropTable");
             } else {
-                Template template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".drop_table");
+                var template = TemplateFactory.SQL.get("sql." + StringUtils.encodeClassname(datasource_.getAliasedDriver()) + ".drop_table");
 
                 if (1 == tables_.size()) {
                     template.setValue("EXPRESSION", tables_.get(0));
@@ -70,7 +70,7 @@ public class DropTable extends AbstractQuery implements Cloneable {
                         template.setValue("TABLES", StringUtils.join(tables_, template.getBlock("SEPARATOR")));
                     }
 
-                    String block = template.getBlock("TABLES");
+                    var block = template.getBlock("TABLES");
                     if (0 == block.length()) {
                         throw new UnsupportedSqlFeatureException("MULTIPLE TABLE DROP", datasource_.getAliasedDriver());
                     }
@@ -104,7 +104,7 @@ public class DropTable extends AbstractQuery implements Cloneable {
     }
 
     public DropTable clone() {
-        DropTable new_instance = (DropTable) super.clone();
+        var new_instance = (DropTable) super.clone();
         if (new_instance != null) {
             if (tables_ != null) {
                 new_instance.tables_ = new ArrayList<String>();

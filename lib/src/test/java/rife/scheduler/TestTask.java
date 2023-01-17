@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler;
@@ -10,14 +10,12 @@ import rife.tools.ExceptionUtils;
 import rife.validation.ValidationError;
 
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTask {
     @Test
-    public void testInstantiateTask() {
+    void testInstantiateTask() {
         Task task = null;
 
         assertNull(task);
@@ -26,15 +24,15 @@ public class TestTask {
     }
 
     @Test
-    public void testPopulateTask() {
-        int id = 1;
-        String type = TestTasktypes.UPLOAD_GROUPS;
-        long planned = System.currentTimeMillis();
-        String frequency = "* * * * *";
-        boolean busy = true;
+    void testPopulateTask() {
+        var id = 1;
+        var type = TestTasktypes.UPLOAD_GROUPS;
+        var planned = System.currentTimeMillis();
+        var frequency = Frequency.MINUTELY;
+        var busy = true;
 
         try {
-            Task task = new Task();
+            var task = new Task();
             task.setId(id);
             task.setType(type);
             task.setPlanned(planned);
@@ -43,7 +41,7 @@ public class TestTask {
 
             assertEquals(id, task.getId());
             assertEquals(type, task.getType());
-            Calendar calendar = Calendar.getInstance();
+            var calendar = Calendar.getInstance();
             calendar.setTimeInMillis(planned);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
@@ -56,22 +54,29 @@ public class TestTask {
     }
 
     @Test
-    public void testCloneTask() {
-        int id = 1;
-        String type = TestTasktypes.UPLOAD_GROUPS;
-        long planned = System.currentTimeMillis();
-        String frequency = "* * * * *";
-        boolean busy = true;
+    void testCreateTaskOption() {
+        var id = 4;
+        var task = new Task();
+        task.setId(id);
+        assertEquals(task.getId(), task.createTaskOption().getTaskId());
+    }
+
+    @Test
+    void testCloneTask() {
+        var id = 1;
+        var type = TestTasktypes.UPLOAD_GROUPS;
+        var planned = System.currentTimeMillis();
+        var busy = true;
 
         try {
-            Task task = new Task();
+            var task = new Task();
             task.setId(id);
             task.setType(type);
             task.setPlanned(planned);
-            task.setFrequency(frequency);
+            task.setFrequency(Frequency.MINUTELY);
             task.setBusy(busy);
 
-            Task task_clone = task.clone();
+            var task_clone = task.clone();
             assertNotSame(task, task_clone);
             assertNotNull(task_clone);
             assertEquals(task, task_clone);
@@ -81,13 +86,13 @@ public class TestTask {
     }
 
     @Test
-    public void testTaskValidation() {
+    void testTaskValidation() {
         try {
-            Task task = new Task();
-            assertTrue(false == task.validate());
-            assertTrue(2 == task.countValidationErrors());
+            var task = new Task();
+            assertFalse(task.validate());
+            assertEquals(2, task.countValidationErrors());
             ValidationError error = null;
-            Iterator<ValidationError> it = task.getValidationErrors().iterator();
+            var it = task.getValidationErrors().iterator();
             error = it.next();
             assertEquals(error.getIdentifier(), "mandatory");
             assertEquals(error.getSubject(), "type");
@@ -97,18 +102,18 @@ public class TestTask {
 
             task.setType(TestTasktypes.UPLOAD_GROUPS);
             task.setPlanned(System.currentTimeMillis() + 2000);
-            task.setFrequency("* * * * *");
+            task.setFrequency(Frequency.MINUTELY);
             task.setBusy(false);
             task.resetValidation();
-            assertTrue(true == task.validate());
+            assertTrue(task.validate());
 
-            Calendar cal = Calendar.getInstance();
-            cal.set(1970, 10, 25);
+            var cal = Calendar.getInstance();
+            cal.set(1970, Calendar.NOVEMBER, 25);
             task.setPlanned(cal.getTime());
             task.resetValidation();
-            assertTrue(false == task.validate());
-            assertTrue(1 == task.countValidationErrors());
-            Set<ValidationError> set = task.getValidationErrors();
+            assertFalse(task.validate());
+            assertEquals(1, task.countValidationErrors());
+            var set = task.getValidationErrors();
             error = set.iterator().next();
             assertEquals(error.getIdentifier(), "invalid");
             assertEquals(error.getSubject(), "planned");
@@ -116,8 +121,8 @@ public class TestTask {
 
             task.setFrequency(null);
             task.resetValidation();
-            assertTrue(true == task.validate());
-            task.setFrequency("* * * * *");
+            assertTrue(task.validate());
+            task.setFrequency(Frequency.MINUTELY);
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }

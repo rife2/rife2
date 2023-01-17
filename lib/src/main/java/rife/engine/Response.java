@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
@@ -48,8 +48,8 @@ public interface Response {
      * <p>The buffer is enabled by default and its buffered contents will be
      * flushed when the buffer is disabled.
      *
-     * @param enabled <code>true</code> to enable the text buffer; or
-     *                <p><code>false</code> to disable it
+     * @param enabled {@code true} to enable the text buffer; or
+     *                <p>{@code false} to disable it
      * @since 1.0
      */
     void enableTextBuffer(boolean enabled);
@@ -57,8 +57,8 @@ public interface Response {
     /**
      * Indicates whether the text output buffer is enabled.
      *
-     * @return <code>true</code> when the text buffer is enabled; or
-     * <p><code>false</code> when it is disabled.
+     * @return {@code true} when the text buffer is enabled; or
+     * <p>{@code false} when it is disabled.
      * @since 1.0
      */
     boolean isTextBufferEnabled();
@@ -92,7 +92,7 @@ public interface Response {
     /**
      * Prints the string representation of an object to the request text
      * output. The string representation will be created through a
-     * <code>String.valueOf(value)</code> call.
+     * {@code String.valueOf(value)} call.
      *
      * @param value the object that will be output
      * @throws rife.engine.exceptions.EngineException if an error
@@ -158,8 +158,8 @@ public interface Response {
      * Indicates whether this response's content type has been explicitly
      * set.
      *
-     * @return <code>true</code> if it has been set; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} if it has been set; or
+     * <p>{@code false} otherwise
      * @see #setContentType
      * @since 1.0
      */
@@ -169,7 +169,7 @@ public interface Response {
      * Retrieves the content type that was explicitly set for this response.
      *
      * @return the content type as a String; or
-     * <p><code>null</code> if the content type wasn't set
+     * <p>{@code null} if the content type wasn't set
      * @see #setContentType
      * @since 1.0
      */
@@ -301,9 +301,9 @@ public interface Response {
     /**
      * Retrieves the underlying {@link HttpServletResponse}.
      *
-     * @return the underlying <code>HttpServletResponse</code> instance; or
-     * <p><code>null</code> if this response isn't backed by
-     * <code>HttpServletResponse</code>
+     * @return the underlying {@code HttpServletResponse} instance; or
+     * <p>{@code null} if this response isn't backed by
+     * {@code HttpServletResponse}
      * @since 1.0
      */
     HttpServletResponse getHttpServletResponse();

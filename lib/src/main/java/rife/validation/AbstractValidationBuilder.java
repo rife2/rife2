@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -41,7 +41,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                 template.removeValue(ID_ERRORS);
             }
         } else if (template.hasValueId(ID_ERRORS) &&
-            template.hasBlock(ID_ERRORS_WILDCARD)) {
+                   template.hasBlock(ID_ERRORS_WILDCARD)) {
             if (template.hasValueId(ID_ERRORMESSAGE) &&
                 template.hasBlock(ID_ERRORMESSAGE_WILDCARD)) {
                 template.setValue(ID_ERRORMESSAGE, message);
@@ -59,6 +59,18 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         } else {
             template.setValue(ID_ERRORS_WILDCARD, message);
         }
+    }
+
+    public Collection<String> generateValidationErrors(Template template, Collection<ValidationError> errors) {
+        return generateValidationErrors(template, errors, null, null);
+    }
+
+    public Collection<String> generateValidationErrors(Template template, Collection<ValidationError> errors, Collection<String> onlySubjectsToClear) {
+        return generateValidationErrors(template, errors, onlySubjectsToClear, null);
+    }
+
+    public Collection<String> generateValidationErrors(Template template, Collection<ValidationError> errors, String prefix) {
+        return generateValidationErrors(template, errors, null, prefix);
     }
 
     public Collection<String> generateValidationErrors(Template template, Collection<ValidationError> errors, Collection<String> onlySubjectsToClear, String prefix) {
@@ -101,7 +113,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         var filtered_error_values = template.getFilteredValues(TAG_ERRORS);
         ArrayList<List<String[]>> sorted_error_values = null;
         if (filtered_error_values.size() > 0) {
-            sorted_error_values = new ArrayList<List<String[]>>();
+            sorted_error_values = new ArrayList<>();
 
             List<String[]> error_values;
             for (var filtered_value : filtered_error_values) {
@@ -127,7 +139,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                     }
                 }
                 if (null == error_values) {
-                    error_values = new ArrayList<String[]>();
+                    error_values = new ArrayList<>();
                     sorted_error_values.set(filtered_value.length - 1, error_values);
                 }
                 error_values.add(filtered_value);
@@ -141,7 +153,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         var filtered_error_blocks = template.getFilteredBlocks(TAG_ERRORS);
         ArrayList<List<String[]>> sorted_error_blocks = null;
         if (filtered_error_blocks.size() > 0) {
-            sorted_error_blocks = new ArrayList<List<String[]>>();
+            sorted_error_blocks = new ArrayList<>();
 
             List<String[]> error_blocks;
             for (var filtered_block : filtered_error_blocks) {
@@ -154,7 +166,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                     }
                 }
                 if (null == error_blocks) {
-                    error_blocks = new ArrayList<String[]>();
+                    error_blocks = new ArrayList<>();
                     sorted_error_blocks.set(filtered_block.length - 1, error_blocks);
                 }
                 error_blocks.add(filtered_block);
@@ -173,7 +185,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         // has an error individually.
         LinkedHashMap<String, ArrayList<String>> block_properties_mapping = null;
         if (sorted_error_blocks != null) {
-            block_properties_mapping = new LinkedHashMap<String, ArrayList<String>>();
+            block_properties_mapping = new LinkedHashMap<>();
 
             ArrayList<String> block_properties;
 
@@ -195,7 +207,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
 
         // Go over the error values according to their order of importance.
         // Values with a broader scope (more properties) get precedence of
-        // those with a narrower scope (less properties) and inside the
+        // those with a narrower scope (fewer properties) and inside the
         // same scope level they are handled according to their order
         // of declaration.
         // For each value that is used to report errors in, an internal
@@ -275,11 +287,11 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         }
 
         // Process the sorted error message blocks so that for each
-        // property the first occuring block will be used.
+        // property the first occurring block will be used.
         var filtered_error_messages = template.getFilteredBlocks(TAG_ERRORMESSAGE);
         HashMap<String, String> property_error_messages_mapping = null;
         if (filtered_error_messages.size() > 0) {
-            property_error_messages_mapping = new HashMap<String, String>();
+            property_error_messages_mapping = new HashMap<>();
 
             for (var filtered_errormessage : filtered_error_messages) {
                 for (var i = 1; i < filtered_errormessage.length; i++) {
@@ -364,7 +376,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
     }
 
     private Collection<String> collectSubjects(Collection<ValidationError> errors, String prefix) {
-        // Collect the invalid subjects in a seperate collection which
+        // Collect the invalid subjects in a separate collection which
         // only contains their name.
         var invalid_subjects = new ArrayList<String>();
         String subject;
@@ -497,6 +509,21 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
 
     protected abstract String formatLine(String content);
 
+    public Collection<String> generateErrorMarkings(Template template, Collection<ValidationError> errors)
+    throws ValidationBuilderException {
+        return generateErrorMarkings(template, errors, null, null);
+    }
+
+    public Collection<String> generateErrorMarkings(Template template, Collection<ValidationError> errors, Collection<String> onlySubjectsToClear)
+    throws ValidationBuilderException {
+        return generateErrorMarkings(template, errors, onlySubjectsToClear, null);
+    }
+
+    public Collection<String> generateErrorMarkings(Template template, Collection<ValidationError> errors, String prefix)
+    throws ValidationBuilderException {
+        return generateErrorMarkings(template, errors, null, prefix);
+    }
+
     public Collection<String> generateErrorMarkings(Template template, Collection<ValidationError> errors, Collection<String> onlySubjectsToClear, String prefix)
     throws ValidationBuilderException {
         if (null == template ||
@@ -526,7 +553,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         var filtered_marks = template.getFilteredValues(TAG_MARK);
         HashMap<String, ArrayList<List<String[]>>> sorted_marks_map = null;
         if (filtered_marks.size() > 0) {
-            sorted_marks_map = new HashMap<String, ArrayList<List<String[]>>>();
+            sorted_marks_map = new HashMap<>();
 
             ArrayList<List<String[]>> sorted_marks;
             List<String[]> marks;
@@ -545,14 +572,11 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                 }
 
                 // get the sorted marks for the specific mark extension
-                sorted_marks = sorted_marks_map.get(filtered_mark[1]);
-                // or create a new collection if it doesn't exist yet
-                if (null == sorted_marks) {
-                    sorted_marks = new ArrayList<List<String[]>>();
-                    sorted_marks_map.put(filtered_mark[1], sorted_marks);
-                }
+                sorted_marks = sorted_marks_map.computeIfAbsent(filtered_mark[1], k -> new ArrayList<>());
 
-                // setup the collection of marks with the same number of
+                // or create a new collection if it doesn't exist yet
+
+                // set up the collection of marks with the same number of
                 // properties and create a new one if that's needed
                 var number_of_properties = (filtered_mark.length - 2) / 2;
                 if (number_of_properties < sorted_marks.size()) {
@@ -564,7 +588,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                     }
                 }
                 if (null == marks) {
-                    marks = new ArrayList<String[]>();
+                    marks = new ArrayList<>();
                     sorted_marks.set(number_of_properties, marks);
                 }
 
@@ -578,7 +602,7 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
 
         // Go over the mark extensions according to their order of importance.
         // Marks with a broader scope (more properties) get precedence of
-        // those with a narrower scope (less properties) and inside the
+        // those with a narrower scope (fewer properties) and inside the
         // same scope level they are handled according to their order
         // of declaration.
         if (sorted_marks_map != null) {
@@ -641,6 +665,10 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
         return set_values;
     }
 
+    public void removeValidationErrors(Template template, Collection<String> subjects) {
+        removeValidationErrors(template, subjects, null);
+    }
+
     public void removeValidationErrors(Template template, Collection<String> subjects, String prefix) {
         if (null == template) {
             return;
@@ -674,6 +702,10 @@ public abstract class AbstractValidationBuilder implements ValidationBuilder {
                 }
             }
         }
+    }
+
+    public void removeErrorMarkings(Template template, Collection<String> subjects) {
+        removeErrorMarkings(template, subjects, null);
     }
 
     public void removeErrorMarkings(Template template, Collection<String> subjects, String prefix) {

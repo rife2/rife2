@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestGroups {
     @Test
-    public void testGroup()
+    void testGroup()
     throws Exception {
         try (final var server = new TestServerRunner(new GroupSite())) {
             try (final var webClient = new WebClient()) {
@@ -25,7 +25,7 @@ public class TestGroups {
     }
 
     @Test
-    public void testGroupPrefix()
+    void testGroupPrefix()
     throws Exception {
         try (final var server = new TestServerRunner(new GroupPrefixSite())) {
             try (final var webClient = new WebClient()) {
@@ -38,7 +38,7 @@ public class TestGroups {
     }
 
     @Test
-    public void testGroupsMultiLevel()
+    void testGroupsMultiLevel()
     throws Exception {
         try (final var server = new TestServerRunner(new GroupsMultiLevelSite())) {
             try (final var webClient = new WebClient()) {
@@ -61,7 +61,7 @@ public class TestGroups {
     // TODO : test path info routes in groups
 
     @Test
-    public void testBefore()
+    void testBefore()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeSite())) {
             try (final var webClient = new WebClient()) {
@@ -72,7 +72,7 @@ public class TestGroups {
     }
 
     @Test
-    public void testAfter()
+    void testAfter()
     throws Exception {
         try (final var server = new TestServerRunner(new AfterSite())) {
             try (final var webClient = new WebClient()) {
@@ -83,7 +83,7 @@ public class TestGroups {
     }
 
     @Test
-    public void testBeforeAfter()
+    void testBeforeAfter()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeAfterSite())) {
             try (final var webClient = new WebClient()) {
@@ -94,7 +94,7 @@ public class TestGroups {
     }
 
     @Test
-    public void testBeforeGroup()
+    void testBeforeGroup()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeGroupSite())) {
             try (final var webClient = new WebClient()) {
@@ -107,7 +107,7 @@ public class TestGroups {
     }
 
     @Test
-    public void testAfterGroup()
+    void testAfterGroup()
     throws Exception {
         try (final var server = new TestServerRunner(new AfterGroupSite())) {
             try (final var webClient = new WebClient()) {
@@ -120,7 +120,7 @@ public class TestGroups {
     }
 
     @Test
-    public void testBeforeAfterGroup()
+    void testBeforeAfterGroup()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeAfterGroupSite())) {
             try (final var webClient = new WebClient()) {
@@ -133,7 +133,7 @@ public class TestGroups {
     }
 
     @Test
-    public void testBeforeAfterGroupsMultiLevel()
+    void testBeforeAfterGroupsMultiLevel()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeAfterGroupsMultiLevelSite())) {
             try (final var webClient = new WebClient()) {
@@ -157,7 +157,7 @@ public class TestGroups {
     }
 
     @Test
-    public void testBeforeAfterGroupRespond()
+    void testBeforeAfterGroupRespond()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeAfterGroupRespondSite())) {
             try (final var webClient = new WebClient()) {
@@ -184,7 +184,7 @@ public class TestGroups {
     }
 
     @Test
-    public void testBeforeAfterGroupNext()
+    void testBeforeAfterGroupNext()
     throws Exception {
         try (final var server = new TestServerRunner(new BeforeAfterGroupNextSite())) {
             try (final var webClient = new WebClient()) {
@@ -211,7 +211,7 @@ public class TestGroups {
     }
 
     @Test
-    public void testExceptionElements()
+    void testExceptionElements()
     throws Exception {
         try (final var server = new TestServerRunner(new GroupExceptionSite())) {
             try (final var webClient = new WebClient()) {

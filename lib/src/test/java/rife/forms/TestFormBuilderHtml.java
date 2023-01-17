@@ -1,11 +1,10 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.forms;
 
 import org.junit.jupiter.api.Test;
-import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.tools.ExceptionUtils;
 import rife.tools.StringUtils;
@@ -25,14 +24,14 @@ public class TestFormBuilderHtml {
     public enum CheckboxInListEnum {
         v1(1), v3(3), v2(2);
 
-        private int mNumber;
+        private int number_;
 
         CheckboxInListEnum(int number) {
-            mNumber = number;
+            number_ = number;
         }
 
         public String toString() {
-            return String.valueOf(mNumber);
+            return String.valueOf(number_);
         }
     }
 
@@ -43,45 +42,45 @@ public class TestFormBuilderHtml {
     public enum SelectInListEnum3 {
         v1(1), v3(3), v5(5), v9(9);
 
-        private int mNumber;
+        private int number_;
 
         SelectInListEnum3(int number) {
-            mNumber = number;
+            number_ = number;
         }
 
         public String toString() {
-            return String.valueOf(mNumber);
+            return String.valueOf(number_);
         }
     }
 
     @Test
-    public void testInstantiate() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testInstantiate() {
+        var builder = new FormBuilderHtml();
         assertNotNull(builder);
     }
 
     @Test
-    public void testClone() {
-        FormBuilderHtml builder1 = new FormBuilderHtml();
-        FormBuilderHtml builder2 = (FormBuilderHtml) builder1.clone();
+    void testClone() {
+        var builder1 = new FormBuilderHtml();
+        var builder2 = (FormBuilderHtml) builder1.clone();
         assertNotNull(builder2);
         assertNotSame(builder1, builder2);
     }
 
     @Test
-    public void testGetValidationBuilder() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGetValidationBuilder() {
+        var builder = new FormBuilderHtml();
         assertNotNull(builder.getValidationBuilder());
     }
 
     @Test
-    public void testGenerateFieldInvalidArguments() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldInvalidArguments() {
+        var builder = new FormBuilderHtml();
         assertEquals(0, builder.generateField(null, (ConstrainedProperty) null, null, null).size());
         assertEquals(0, builder.generateField(null, (String) null, null, null).size());
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
-        String raw_content = template.getContent();
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
+        var raw_content = template.getContent();
         assertNotNull(template);
         assertEquals(0, builder.generateField(template, (ConstrainedProperty) null, null, null).size());
         assertEquals(raw_content, template.getContent());
@@ -90,12 +89,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldInvalidArguments() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldInvalidArguments() {
+        var builder = new FormBuilderHtml();
         builder.removeField(null, null, null);
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
-        String raw_content = template.getContent();
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
+        var raw_content = template.getContent();
         assertNotNull(template);
         builder.removeField(template, null, null);
         assertEquals(raw_content, template.getContent());
@@ -104,11 +103,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldHiddenWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldHiddenWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "hidden", null, null);
         assertEquals(1, set_values.size());
@@ -160,11 +159,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldHiddenWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldHiddenWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "anotherhidden", null, null);
         assertEquals(1, set_values.size());
@@ -196,11 +195,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldHiddenPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldHiddenPrefix() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "hidden", null, "another");
         assertEquals(1, set_values.size());
@@ -224,11 +223,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldHiddenTemplateNameWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldHiddenTemplateNameWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
         set_values = builder.replaceField(template, "templatenamehidden", "hidden", null, null);
         assertEquals(1, set_values.size());
@@ -282,12 +281,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldHidden() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldHidden() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("hidden").defaultValue("non&e").maxLength(20), new String[]{"hé", "you"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -296,12 +295,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldHiddenPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldHiddenPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("hidden").defaultValue("non&e").maxLength(20), new String[]{"hé", "you"}, "another");
         assertNotEquals(raw_content, template.getContent());
@@ -310,12 +309,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldHiddenTemplateName() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldHiddenTemplateName() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.replaceField(template, "templatenamehidden", new ConstrainedProperty("hidden").defaultValue("non&e").maxLength(20), new String[]{"hé", "you"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -324,12 +323,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldInputWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldInputWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "login", null, null);
         set_values_it = set_values.iterator();
@@ -414,12 +413,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldInputWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldInputWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "anotherlogin", null, null);
         set_values_it = set_values.iterator();
@@ -473,12 +472,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldInputPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldInputPrefix() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "login", null, "another");
         set_values_it = set_values.iterator();
@@ -515,12 +514,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldInputWithDefaultTemplateName() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldInputWithDefaultTemplateName() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
         set_values = builder.replaceField(template, "templatenamelogin", "login", null, null);
         set_values_it = set_values.iterator();
@@ -610,12 +609,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldInput() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldInput() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("login").defaultValue("non&e").maxLength(20), new String[]{"hé", "you"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -624,12 +623,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldInputPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldInputPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("login").defaultValue("non&e").maxLength(20), new String[]{"hé", "you"}, "another");
         assertNotEquals(raw_content, template.getContent());
@@ -638,12 +637,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldInputTemplateName() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldInputTemplateName() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.replaceField(template, "templatenamelogin", new ConstrainedProperty("login").defaultValue("non&e").maxLength(20), new String[]{"hé", "you"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -652,11 +651,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldSecretWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldSecretWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "password", null, null);
         assertEquals(1, set_values.size());
@@ -708,11 +707,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldSecretWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldSecretWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "anotherpassword", null, null);
         assertEquals(1, set_values.size());
@@ -744,11 +743,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldSecretPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldSecretPrefix() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "password", null, "another");
         assertEquals(1, set_values.size());
@@ -772,11 +771,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldSecretTemplateNameWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldSecretTemplateNameWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
         set_values = builder.replaceField(template, "templatenamepassword", "password", null, null);
         assertEquals(1, set_values.size());
@@ -830,12 +829,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldSecret() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldSecret() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("password").defaultValue("non&e").maxLength(20), new String[]{"hé", "you"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -844,12 +843,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldSecretPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldSecretPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("password").defaultValue("non&e").maxLength(20), new String[]{"hé", "you"}, "another");
         assertNotEquals(raw_content, template.getContent());
@@ -858,12 +857,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldSecretTemplateName() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldSecretTemplateName() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.replaceField(template, "templatenamepassword", new ConstrainedProperty("password").defaultValue("non&e").maxLength(20), new String[]{"hé", "you"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -872,11 +871,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldTextareaWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldTextareaWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "comment", null, null);
         assertEquals(1, set_values.size());
@@ -928,11 +927,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldTextareaWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldTextareaWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "anothercomment", null, null);
         assertEquals(1, set_values.size());
@@ -964,11 +963,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldTextareaPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldTextareaPrefix() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "comment", null, "another");
         assertEquals(1, set_values.size());
@@ -992,11 +991,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldTextareaTemplateNameWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldTextareaTemplateNameWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
         set_values = builder.replaceField(template, "templatenamecomment", "comment", null, null);
         assertEquals(1, set_values.size());
@@ -1050,12 +1049,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldTextarea() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldTextarea() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("comment").defaultValue("non&e").maxLength(20), new String[]{"hé", "you"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -1064,12 +1063,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldTextareaPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldTextareaPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("comment").defaultValue("non&e").maxLength(20), new String[]{"hé", "you"}, "another");
         assertNotEquals(raw_content, template.getContent());
@@ -1078,12 +1077,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldTextareaTemplateName() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldTextareaTemplateName() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.replaceField(template, "templatenamecomment", new ConstrainedProperty("comment").defaultValue("non&e").maxLength(20), new String[]{"hé", "you"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -1092,12 +1091,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldRadioWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldRadioWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "question", null, null);
         set_values_it = set_values.iterator();
@@ -1266,11 +1265,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldRadioWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldRadioWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "anotherquestion", null, null);
         assertEquals(1, set_values.size());
@@ -1316,11 +1315,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldRadioPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldRadioPrefix() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "question", null, "another");
         assertEquals(1, set_values.size());
@@ -1372,12 +1371,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldRadioDynamic() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldRadioDynamic() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         template.addResourceBundle(new ListResourceBundle() {
             public Object[][] getContents() {
@@ -1497,12 +1496,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldRadioTemplateNameWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldRadioTemplateNameWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
         set_values = builder.replaceField(template, "templatenamequestion", "question", null, null);
         set_values_it = set_values.iterator();
@@ -1664,11 +1663,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldRadioCustomWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldRadioCustomWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "customquestion", null, null);
         assertEquals(1, set_values.size());
@@ -1755,11 +1754,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldRadioCustomWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldRadioCustomWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "anothercustomquestion", null, null);
         assertEquals(1, set_values.size());
@@ -1853,11 +1852,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldRadioCustomPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldRadioCustomPrefix() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, new ConstrainedProperty("customquestion").inList(null, "a1", null, "a3", "a2"), null, "another");
         assertEquals(1, set_values.size());
@@ -1881,11 +1880,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldRadioCustomDynamic() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldRadioCustomDynamic() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         template.addResourceBundle(new ListResourceBundle() {
             public Object[][] getContents() {
@@ -1951,11 +1950,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldRadioCustomTemplateNameWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldRadioCustomTemplateNameWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
         set_values = builder.replaceField(template, "templatenameanothercustomquestion", "anothercustomquestion", null, null);
         assertEquals(1, set_values.size());
@@ -2051,11 +2050,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldRadioEmptyCustomWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldRadioEmptyCustomWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_emptycustom");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_emptycustom");
 
         set_values = builder.generateField(template, "emptycustomquestion", null, null);
         assertEquals(1, set_values.size());
@@ -2093,11 +2092,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldRadioEmptyCustomWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldRadioEmptyCustomWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_emptycustom");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_emptycustom");
 
         set_values = builder.generateField(template, "anotheremptycustomquestion", null, null);
         assertEquals(1, set_values.size());
@@ -2135,11 +2134,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldRadioEmptyCustomPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldRadioEmptyCustomPrefix() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_emptycustom");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_emptycustom");
 
         set_values = builder.generateField(template, "emptycustomquestion", null, "another");
         assertEquals(1, set_values.size());
@@ -2170,12 +2169,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldRadio() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldRadio() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("question").inList(null, "a1", null, "a3", "a2"), new String[]{"a4"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -2189,12 +2188,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldRadioTemplateName() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldRadioTemplateName() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.replaceField(template, "templatenamequestion", new ConstrainedProperty("question").inList(null, "a1", null, "a3", "a2"), new String[]{"a4"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -2208,12 +2207,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldRadioPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldRadioPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("question").inList(null, "a1", null, "a3", "a2"), new String[]{"a4"}, "another");
         assertNotEquals(raw_content, template.getContent());
@@ -2227,11 +2226,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "options", null, null);
         assertEquals(1, set_values.size());
@@ -2332,12 +2331,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "otheroptions", null, null);
         set_values_it = set_values.iterator();
@@ -2413,12 +2412,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxPrefix() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "options", null, "other");
         set_values_it = set_values.iterator();
@@ -2504,15 +2503,15 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxTemplateNameWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxTemplateNameWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
         set_values = builder.replaceField(template, "templatenameoptions", "options", null, null);
         assertEquals(2, set_values.size());
-        Iterator set_values_it = set_values.iterator();
+        var set_values_it = set_values.iterator();
         assertEquals("form:checkbox:templatenameoptions", set_values_it.next());
         assertEquals("form:display:templatenameoptions", set_values_it.next());
         assertEquals("<input type=\"checkbox\" name=\"options\" alt=\"someblurp\" />", StringUtils.splitToArray(template.getContent(), "\n")[24]);
@@ -2643,11 +2642,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxDynamic() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxDynamic() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         template.addResourceBundle(new ListResourceBundle() {
             public Object[][] getContents() {
@@ -2713,11 +2712,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxCustomWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxCustomWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "customoptions", null, null);
         assertEquals(1, set_values.size());
@@ -2811,11 +2810,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxCustomWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxCustomWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "othercustomoptions", null, null);
         assertEquals(1, set_values.size());
@@ -2909,11 +2908,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxTemplatNameCustomWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxTemplatNameCustomWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
         set_values = builder.replaceField(template, "templatenameothercustomoptions", "othercustomoptions", null, null);
         assertEquals(1, set_values.size());
@@ -3009,11 +3008,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxCustomPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxCustomPrefix() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, new ConstrainedProperty("customoptions").inList(null, "1", null, "3", "2"), null, "other");
         assertEquals(1, set_values.size());
@@ -3037,11 +3036,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxCustomDynamic() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxCustomDynamic() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         template.addResourceBundle(new ListResourceBundle() {
             public Object[][] getContents() {
@@ -3107,11 +3106,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxEmptyCustomWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxEmptyCustomWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_emptycustom");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_emptycustom");
 
         set_values = builder.generateField(template, "emptycustomoptions", null, null);
         assertEquals(1, set_values.size());
@@ -3149,11 +3148,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxEmptyCustomWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxEmptyCustomWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_emptycustom");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_emptycustom");
 
         set_values = builder.generateField(template, "otheremptycustomoptions", null, null);
         assertEquals(1, set_values.size());
@@ -3191,11 +3190,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxEmptyCustomPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxEmptyCustomPrefix() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_emptycustom");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_emptycustom");
 
         set_values = builder.generateField(template, "emptycustomoptions", null, "other");
         assertEquals(1, set_values.size());
@@ -3226,11 +3225,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxBooleanWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxBooleanWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "invoice", null, null);
         assertEquals(1, set_values.size());
@@ -3282,11 +3281,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxBooleanWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxBooleanWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "onemoreinvoice", null, null);
         assertEquals(1, set_values.size());
@@ -3317,11 +3316,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxTemplateNameBooleanWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxTemplateNameBooleanWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
         set_values = builder.replaceField(template, "templatenameinvoice", "invoice", null, null);
         assertEquals(1, set_values.size());
@@ -3375,11 +3374,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldCheckboxBooleanPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldCheckboxBooleanPrefix() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "invoice", null, "onemore");
         assertEquals(1, set_values.size());
@@ -3410,12 +3409,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldCheckbox() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldCheckbox() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("options").inList(null, "1", null, "3", "2"), new String[]{"a4"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -3429,12 +3428,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldCheckboxTemplateName() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldCheckboxTemplateName() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.replaceField(template, "templatenameoptions", new ConstrainedProperty("options").inList(null, "1", null, "3", "2"), new String[]{"a4"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -3448,12 +3447,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldCheckboxPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldCheckboxPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("options").inList(null, "1", null, "3", "2"), new String[]{"a4"}, "other");
         assertNotEquals(raw_content, template.getContent());
@@ -3467,12 +3466,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldSelectWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldSelectWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "colors", null, null);
         set_values_it = set_values.iterator();
@@ -3665,11 +3664,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldSelectWithoutDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldSelectWithoutDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "morecolors", null, null);
         assertEquals(1, set_values.size());
@@ -3721,12 +3720,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldSelectTemplateNameWithDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldSelectTemplateNameWithDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
         set_values = builder.replaceField(template, "templatenamecolors", "colors", null, null);
         set_values_it = set_values.iterator();
@@ -3912,12 +3911,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldSelectWithOutOfListDefault() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldSelectWithOutOfListDefault() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, new ConstrainedProperty("colors").inList("black", "red", null, "blue").defaultValue("green"), null, null);
         set_values_it = set_values.iterator();
@@ -4041,11 +4040,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldSelectPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldSelectPrefix() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         set_values = builder.generateField(template, "colors", null, "more");
         assertEquals(1, set_values.size());
@@ -4097,12 +4096,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFieldSelectDynamic() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFieldSelectDynamic() {
+        var builder = new FormBuilderHtml();
         Collection<String> set_values;
         Iterator<String> set_values_it;
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         template.addResourceBundle(new ListResourceBundle() {
             public Object[][] getContents() {
@@ -4200,12 +4199,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldSelect() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldSelect() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("colors").inList("black", "red", null, "green", "blue"), new String[]{"orange"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -4219,12 +4218,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldSelectRTemplateName() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldSelectRTemplateName() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
+        var template = TemplateFactory.HTML.get("formbuilder_fields_templatename");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("templatenamecolors").inList("black", "red", null, "green", "blue"), new String[]{"orange"}, null);
         assertNotEquals(raw_content, template.getContent());
@@ -4238,12 +4237,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFieldSelectPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFieldSelectPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         builder.generateField(template, new ConstrainedProperty("colors").inList("black", "red", null, "green", "blue"), new String[]{"orange"}, "more");
         assertNotEquals(raw_content, template.getContent());
@@ -4257,13 +4256,13 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormClassInvalidArguments() {
+    void testGenerateFormClassInvalidArguments() {
         try {
-            FormBuilderHtml builder = new FormBuilderHtml();
+            var builder = new FormBuilderHtml();
             assertEquals(0, builder.generateForm(null, null, null, null).size());
 
-            Template template = TemplateFactory.HTML.get("formbuilder_fields");
-            String raw_content = template.getContent();
+            var template = TemplateFactory.HTML.get("formbuilder_fields");
+            var raw_content = template.getContent();
             assertNotNull(template);
             assertEquals(0, builder.generateForm(template, null, null, null).size());
             assertEquals(raw_content, template.getContent());
@@ -4273,14 +4272,14 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormBeanInvalidArguments() {
+    void testGenerateFormBeanInvalidArguments() {
         try {
-            FormBuilderHtml builder = new FormBuilderHtml();
+            var builder = new FormBuilderHtml();
             assertEquals(0, builder.generateForm(null, (Object) null, null, null).size());
             assertEquals(0, builder.generateForm(null, new Object(), null, null).size());
 
-            Template template = TemplateFactory.HTML.get("formbuilder_fields");
-            String raw_content = template.getContent();
+            var template = TemplateFactory.HTML.get("formbuilder_fields");
+            var raw_content = template.getContent();
             assertNotNull(template);
             assertEquals(0, builder.generateForm(template, (Object) null, null, null).size());
             assertEquals(0, builder.generateForm(template, null, null, null).size());
@@ -4298,10 +4297,10 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormBeanNotInstantiatable() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormBeanNotInstantiatable() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         try {
             builder.generateForm(template, PrivateBeanImpl.class, null, null);
@@ -4312,13 +4311,13 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFormInvalidArguments() {
+    void testRemoveFormInvalidArguments() {
         try {
-            FormBuilderHtml builder = new FormBuilderHtml();
+            var builder = new FormBuilderHtml();
             builder.removeForm(null, null, null);
 
-            Template template = TemplateFactory.HTML.get("formbuilder_fields");
-            String raw_content = template.getContent();
+            var template = TemplateFactory.HTML.get("formbuilder_fields");
+            var raw_content = template.getContent();
             assertNotNull(template);
             builder.removeForm(template, null, null);
             assertEquals(raw_content, template.getContent());
@@ -4328,12 +4327,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFormBeanNotInstantiatable() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFormBeanNotInstantiatable() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         try {
             builder.generateForm(template, RegularBeanImpl.class, null, null);
@@ -4351,10 +4350,10 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormConstrainedEmpty() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormConstrainedEmpty() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         try {
             builder.generateForm(template, ConstrainedBeanImpl.class, null, null);
@@ -4365,12 +4364,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFormConstrainedEmpty() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFormConstrainedEmpty() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         try {
             builder.generateForm(template, ConstrainedBeanImpl.class, null, null);
@@ -4383,18 +4382,20 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormConstrainedExternalValues() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormConstrainedExternalValues() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        HashMap<String, String[]> values = new HashMap<String, String[]>();
+        var values = new HashMap<String, String[]>();
         values.put("hidden", new String[]{"canyouseeme"});
         values.put("anotherhidden", new String[]{"I can't see you"});
         values.put("login", new String[]{"ikke"});
         values.put("anotherlogin", new String[]{"jullie"});
         values.put("password", new String[]{"secret"});
         values.put("anotherpassword", new String[]{"real secret"});
+        values.put("email", new String[]{"my@email.com"});
+        values.put("url", new String[]{"https://rife2.com"});
         values.put("comment", new String[]{"één comment"});
         values.put("anothercomment", new String[]{"this comment"});
         values.put("question", new String[]{"a2"});
@@ -4419,18 +4420,20 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormConstrainedBeanValues() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormConstrainedBeanValues() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        ConstrainedBeanImpl bean = new ConstrainedBeanImpl();
+        var bean = new ConstrainedBeanImpl();
         bean.setHidden("canyouseeme");
         bean.setAnotherhidden("I can't see you");
         bean.setLogin("ikke");
         bean.setAnotherlogin("jullie");
         bean.setPassword("secret");
         bean.setAnotherpassword("real secret");
+        bean.setEmail("my@email.com");
+        bean.setUrl("https://rife2.com");
         bean.setComment("één comment");
         bean.setAnothercomment("this comment");
         bean.setQuestion(ConstrainedBeanImpl.Question.a2);
@@ -4455,20 +4458,22 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormConstrainedBeanValuesInvalid() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormConstrainedBeanValuesInvalid() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        ConstrainedBeanImpl bean = new ConstrainedBeanImpl();
+        var bean = new ConstrainedBeanImpl();
 
         bean.addValidationError(new ValidationError.INCOMPLETE("that"));
-        Set<ValidationError> errors = bean.getValidationErrors();
+        var errors = bean.getValidationErrors();
 
         bean.setLogin("1234567");
         bean.setAnotherlogin(null);
         bean.setPassword(null);
         bean.setAnotherpassword("123456789abcd");
+        bean.setEmail("noemail");
+        bean.setUrl("nourl");
         bean.setComment(null);
         bean.setAnothercomment(null);
         bean.setQuestion(null);
@@ -4495,10 +4500,10 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormConstrainedEmptyPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormConstrainedEmptyPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_form_prefix");
+        var template = TemplateFactory.HTML.get("formbuilder_form_prefix");
         try {
             builder.generateForm(template, ConstrainedBeanImpl.class, null, "prefix_");
             assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix_out_constrained_empty").getContent(), template.getContent());
@@ -4508,15 +4513,17 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormConstrainedExternalValuesPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormConstrainedExternalValuesPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_form_prefix");
+        var template = TemplateFactory.HTML.get("formbuilder_form_prefix");
 
-        HashMap<String, String[]> values = new HashMap<String, String[]>();
+        var values = new HashMap<String, String[]>();
         values.put("prefix_hidden", new String[]{"canyouseeme"});
         values.put("prefix_login", new String[]{"ikke"});
         values.put("prefix_password", new String[]{"secret"});
+        values.put("prefix_email", new String[]{"my@email.com"});
+        values.put("prefix_url", new String[]{"https://rife2.com"});
         values.put("prefix_comment", new String[]{"één comment"});
         values.put("prefix_question", new String[]{"a2"});
         values.put("prefix_options", new String[]{"2"});
@@ -4532,15 +4539,17 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormConstrainedBeanValuesPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormConstrainedBeanValuesPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_form_prefix");
+        var template = TemplateFactory.HTML.get("formbuilder_form_prefix");
 
-        ConstrainedBeanImpl bean = new ConstrainedBeanImpl();
+        var bean = new ConstrainedBeanImpl();
         bean.setHidden("canyouseeme");
         bean.setLogin("ikke");
         bean.setPassword("secret");
+        bean.setEmail("my@email.com");
+        bean.setUrl("https://rife2.com");
         bean.setComment("één comment");
         bean.setQuestion(ConstrainedBeanImpl.Question.a2);
         bean.setOptions(new int[]{2});
@@ -4556,17 +4565,19 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFormConstrainedBeanValuesPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFormConstrainedBeanValuesPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_form_prefix");
+        var template = TemplateFactory.HTML.get("formbuilder_form_prefix");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
-        ConstrainedBeanImpl bean = new ConstrainedBeanImpl();
+        var bean = new ConstrainedBeanImpl();
         bean.setHidden("canyouseeme");
         bean.setLogin("ikke");
         bean.setPassword("secret");
+        bean.setEmail("my@email.com");
+        bean.setUrl("https://rife2.com");
         bean.setComment("één comment");
         bean.setQuestion(ConstrainedBeanImpl.Question.a2);
         bean.setOptions(new int[]{2});
@@ -4585,20 +4596,22 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFormConstrainedValues() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFormConstrainedValues() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
-        HashMap<String, String[]> values = new HashMap<String, String[]>();
+        var values = new HashMap<String, String[]>();
         values.put("hidden", new String[]{"canyouseeme"});
         values.put("anotherhidden", new String[]{"I can't see you"});
         values.put("login", new String[]{"ikke"});
         values.put("anotherlogin", new String[]{"jullie"});
         values.put("password", new String[]{"secret"});
         values.put("anotherpassword", new String[]{"real secret"});
+        values.put("email", new String[]{"my@email.com"});
+        values.put("url", new String[]{"https://rife2.com"});
         values.put("comment", new String[]{"één comment"});
         values.put("anothercomment", new String[]{"this comment"});
         values.put("question", new String[]{"a2"});
@@ -4624,10 +4637,10 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormRegularEmpty() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormRegularEmpty() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
         try {
             builder.generateForm(template, RegularBeanImpl.class, null, null);
@@ -4638,12 +4651,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFormRegularEmpty() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFormRegularEmpty() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
         try {
             builder.generateForm(template, RegularBeanImpl.class, null, null);
@@ -4656,18 +4669,20 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormRegularExternalValues() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormRegularExternalValues() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        HashMap<String, String[]> values = new HashMap<String, String[]>();
+        var values = new HashMap<String, String[]>();
         values.put("hidden", new String[]{"canyouseeme"});
         values.put("anotherhidden", new String[]{"I can't see you"});
         values.put("login", new String[]{"ikke"});
         values.put("anotherlogin", new String[]{"jullie"});
         values.put("password", new String[]{"secret"});
         values.put("anotherpassword", new String[]{"real secret"});
+        values.put("email", new String[]{"my@email.com"});
+        values.put("url", new String[]{"https://rife2.com"});
         values.put("comment", new String[]{"één comment"});
         values.put("anothercomment", new String[]{"this comment"});
         values.put("question", new String[]{"a2"});
@@ -4692,18 +4707,20 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormRegularBeanValues() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormRegularBeanValues() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        RegularBeanImpl bean = new RegularBeanImpl();
+        var bean = new RegularBeanImpl();
         bean.setHidden("canyouseeme");
         bean.setAnotherhidden("I can't see you");
         bean.setLogin("ikke");
         bean.setAnotherlogin("jullie");
         bean.setPassword("secret");
         bean.setAnotherpassword("real secret");
+        bean.setEmail("my@email.com");
+        bean.setUrl("https://rife2.com");
         bean.setComment("één comment");
         bean.setAnothercomment("this comment");
         bean.setQuestion("a2");
@@ -4728,10 +4745,10 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormRegularEmptyPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormRegularEmptyPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_form_prefix");
+        var template = TemplateFactory.HTML.get("formbuilder_form_prefix");
         try {
             builder.generateForm(template, RegularBeanImpl.class, null, "prefix_");
             assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix_out_regular_empty").getContent(), template.getContent());
@@ -4741,15 +4758,17 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormRegularExternalValuesPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormRegularExternalValuesPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_form_prefix");
+        var template = TemplateFactory.HTML.get("formbuilder_form_prefix");
 
-        HashMap<String, String[]> values = new HashMap<String, String[]>();
+        var values = new HashMap<String, String[]>();
         values.put("prefix_hidden", new String[]{"canyouseeme"});
         values.put("prefix_login", new String[]{"ikke"});
         values.put("prefix_password", new String[]{"secret"});
+        values.put("prefix_email", new String[]{"my@email.com"});
+        values.put("prefix_url", new String[]{"https://rife2.com"});
         values.put("prefix_comment", new String[]{"één comment"});
         values.put("prefix_question", new String[]{"a2"});
         values.put("prefix_options", new String[]{"2"});
@@ -4765,15 +4784,17 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testGenerateFormRegularBeanValuesPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testGenerateFormRegularBeanValuesPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_form_prefix");
+        var template = TemplateFactory.HTML.get("formbuilder_form_prefix");
 
-        RegularBeanImpl bean = new RegularBeanImpl();
+        var bean = new RegularBeanImpl();
         bean.setHidden("canyouseeme");
         bean.setLogin("ikke");
         bean.setPassword("secret");
+        bean.setEmail("my@email.com");
+        bean.setUrl("https://rife2.com");
         bean.setComment("één comment");
         bean.setQuestion("a2");
         bean.setOptions(new int[]{2});
@@ -4789,17 +4810,19 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFormRegularBeanValuesPrefix() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFormRegularBeanValuesPrefix() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_form_prefix");
+        var template = TemplateFactory.HTML.get("formbuilder_form_prefix");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
-        RegularBeanImpl bean = new RegularBeanImpl();
+        var bean = new RegularBeanImpl();
         bean.setHidden("canyouseeme");
         bean.setLogin("ikke");
         bean.setPassword("secret");
+        bean.setEmail("my@email.com");
+        bean.setUrl("https://rife2.com");
         bean.setComment("één comment");
         bean.setQuestion("a2");
         bean.setOptions(new int[]{2});
@@ -4818,20 +4841,22 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testRemoveFormRegularValues() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testRemoveFormRegularValues() {
+        var builder = new FormBuilderHtml();
 
-        Template template = TemplateFactory.HTML.get("formbuilder_fields");
+        var template = TemplateFactory.HTML.get("formbuilder_fields");
 
-        String raw_content = template.getContent();
+        var raw_content = template.getContent();
 
-        HashMap<String, String[]> values = new HashMap<String, String[]>();
+        var values = new HashMap<String, String[]>();
         values.put("hidden", new String[]{"canyouseeme"});
         values.put("anotherhidden", new String[]{"I can't see you"});
         values.put("login", new String[]{"ikke"});
         values.put("anotherlogin", new String[]{"jullie"});
         values.put("password", new String[]{"secret"});
         values.put("anotherpassword", new String[]{"real secret"});
+        values.put("email", new String[]{"my@email.com"});
+        values.put("url", new String[]{"https://rife2.com"});
         values.put("comment", new String[]{"één comment"});
         values.put("anothercomment", new String[]{"this comment"});
         values.put("question", new String[]{"a2"});
@@ -4857,12 +4882,12 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testSelectParameterInvalidArguments() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testSelectParameterInvalidArguments() {
+        var builder = new FormBuilderHtml();
         assertEquals(0, builder.selectParameter(null, null, null).size());
 
-        Template template = TemplateFactory.HTML.get("formbuilder_parameters");
-        String raw_content = template.getContent();
+        var template = TemplateFactory.HTML.get("formbuilder_parameters");
+        var raw_content = template.getContent();
         assertNotNull(template);
         assertEquals(0, builder.selectParameter(template, null, null).size());
         assertEquals(raw_content, template.getContent());
@@ -4875,62 +4900,68 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testSelectParameterChecked() {
-        FormBuilderHtml builder = new FormBuilderHtml();
-        Template template = TemplateFactory.HTML.get("formbuilder_parameters");
+    void testSelectParameterChecked() {
+        var builder = new FormBuilderHtml();
+        var template = TemplateFactory.HTML.get("formbuilder_parameters");
         assertEquals(0, builder.selectParameter(template, "wantsupdates", new String[]{"false", null}).size());
-        Collection<String> set_values = builder.selectParameter(template, "wantsupdates", new String[]{"true"});
+        var set_values = builder.selectParameter(template, "wantsupdates", new String[]{"true"});
         assertEquals(1, set_values.size());
         assertEquals("wantsupdates:checked", set_values.iterator().next());
-        assertEquals("wantsupdates checked=\"checked\"\n" +
-            "orange\n" +
-            "blue\n" +
-            "red\n" +
-            "lastname\n" +
-            "lastname\n", template.getContent());
+        assertEquals("""
+            wantsupdates checked="checked"
+            orange
+            blue
+            red
+            lastname
+            lastname
+            """, template.getContent());
     }
 
     @Test
-    public void testSelectParameterCheckedValues() {
-        FormBuilderHtml builder = new FormBuilderHtml();
-        Template template = TemplateFactory.HTML.get("formbuilder_parameters");
+    void testSelectParameterCheckedValues() {
+        var builder = new FormBuilderHtml();
+        var template = TemplateFactory.HTML.get("formbuilder_parameters");
         assertEquals(0, builder.selectParameter(template, "colors", new String[]{"green"}).size());
-        Collection<String> set_values = builder.selectParameter(template, "colors", new String[]{"orange", "red", null, "black"});
+        var set_values = builder.selectParameter(template, "colors", new String[]{"orange", "red", null, "black"});
         assertEquals(2, set_values.size());
-        Iterator<String> it = set_values.iterator();
+        var it = set_values.iterator();
         assertEquals("colors:orange:checked", it.next());
         assertEquals("colors:red:checked", it.next());
-        assertEquals("wantsupdates\n" +
-            "orange checked=\"checked\"\n" +
-            "blue\n" +
-            "red checked=\"checked\"\n" +
-            "lastname\n" +
-            "lastname\n", template.getContent());
+        assertEquals("""
+            wantsupdates
+            orange checked="checked"
+            blue
+            red checked="checked"
+            lastname
+            lastname
+            """, template.getContent());
     }
 
     @Test
-    public void testSelectParameterSelectedValues() {
-        FormBuilderHtml builder = new FormBuilderHtml();
-        Template template = TemplateFactory.HTML.get("formbuilder_parameters");
+    void testSelectParameterSelectedValues() {
+        var builder = new FormBuilderHtml();
+        var template = TemplateFactory.HTML.get("formbuilder_parameters");
         assertEquals(0, builder.selectParameter(template, "lastname", new String[]{"Smith"}).size());
-        Collection<String> set_values = builder.selectParameter(template, "lastname", new String[]{"Smith", null, "Kramer"});
+        var set_values = builder.selectParameter(template, "lastname", new String[]{"Smith", null, "Kramer"});
         assertEquals(1, set_values.size());
-        Iterator<String> it = set_values.iterator();
+        var it = set_values.iterator();
         assertEquals("lastname:Kramer:selected", it.next());
-        assertEquals("wantsupdates\n" +
-            "orange\n" +
-            "blue\n" +
-            "red\n" +
-            "lastname\n" +
-            "lastname selected=\"selected\"\n", template.getContent());
+        assertEquals("""
+            wantsupdates
+            orange
+            blue
+            red
+            lastname
+            lastname selected="selected"
+            """, template.getContent());
     }
 
     @Test
-    public void testUnselectParameterInvalidArguments() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testUnselectParameterInvalidArguments() {
+        var builder = new FormBuilderHtml();
         builder.unselectParameter(null, null, null);
 
-        Template template = TemplateFactory.HTML.get("formbuilder_parameters");
+        var template = TemplateFactory.HTML.get("formbuilder_parameters");
         template.setValue("wantsupdates:checked", "1");
         template.setValue("colors:orange:checked", "1");
         template.setValue("colors:blue:checked", "1");
@@ -4938,13 +4969,15 @@ public class TestFormBuilderHtml {
         template.setValue("lastname:Bevin:selected", "1");
         template.setValue("lastname:Kramer:selected", "1");
 
-        String raw_content = template.getContent();
-        assertEquals("wantsupdates1\n" +
-            "orange1\n" +
-            "blue1\n" +
-            "red1\n" +
-            "lastname1\n" +
-            "lastname1\n", raw_content);
+        var raw_content = template.getContent();
+        assertEquals("""
+            wantsupdates1
+            orange1
+            blue1
+            red1
+            lastname1
+            lastname1
+            """, raw_content);
 
         assertNotNull(template);
         builder.unselectParameter(template, null, null);
@@ -4958,11 +4991,11 @@ public class TestFormBuilderHtml {
     }
 
     @Test
-    public void testUnselectParameterChecked() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testUnselectParameterChecked() {
+        var builder = new FormBuilderHtml();
         builder.unselectParameter(null, null, null);
 
-        Template template = TemplateFactory.HTML.get("formbuilder_parameters");
+        var template = TemplateFactory.HTML.get("formbuilder_parameters");
         template.setValue("wantsupdates:checked", "1");
         template.setValue("colors:orange:checked", "1");
         template.setValue("colors:blue:checked", "1");
@@ -4970,30 +5003,34 @@ public class TestFormBuilderHtml {
         template.setValue("lastname:Bevin:selected", "1");
         template.setValue("lastname:Kramer:selected", "1");
 
-        String raw_content = template.getContent();
-        assertEquals("wantsupdates1\n" +
-            "orange1\n" +
-            "blue1\n" +
-            "red1\n" +
-            "lastname1\n" +
-            "lastname1\n", raw_content);
+        var raw_content = template.getContent();
+        assertEquals("""
+            wantsupdates1
+            orange1
+            blue1
+            red1
+            lastname1
+            lastname1
+            """, raw_content);
 
         builder.unselectParameter(template, "wantsupdates", new String[]{"false", null});
         builder.unselectParameter(template, "wantsupdates", new String[]{"true"});
-        assertEquals("wantsupdates\n" +
-            "orange1\n" +
-            "blue1\n" +
-            "red1\n" +
-            "lastname1\n" +
-            "lastname1\n", template.getContent());
+        assertEquals("""
+            wantsupdates
+            orange1
+            blue1
+            red1
+            lastname1
+            lastname1
+            """, template.getContent());
     }
 
     @Test
-    public void testUnselectParameterCheckedValues() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testUnselectParameterCheckedValues() {
+        var builder = new FormBuilderHtml();
         builder.unselectParameter(null, null, null);
 
-        Template template = TemplateFactory.HTML.get("formbuilder_parameters");
+        var template = TemplateFactory.HTML.get("formbuilder_parameters");
         template.setValue("wantsupdates:checked", "1");
         template.setValue("colors:orange:checked", "1");
         template.setValue("colors:blue:checked", "1");
@@ -5001,30 +5038,34 @@ public class TestFormBuilderHtml {
         template.setValue("lastname:Bevin:selected", "1");
         template.setValue("lastname:Kramer:selected", "1");
 
-        String raw_content = template.getContent();
-        assertEquals("wantsupdates1\n" +
-            "orange1\n" +
-            "blue1\n" +
-            "red1\n" +
-            "lastname1\n" +
-            "lastname1\n", raw_content);
+        var raw_content = template.getContent();
+        assertEquals("""
+            wantsupdates1
+            orange1
+            blue1
+            red1
+            lastname1
+            lastname1
+            """, raw_content);
 
         builder.unselectParameter(template, "colors", new String[]{"green"});
         builder.unselectParameter(template, "colors", new String[]{"orange", "red", null, "black"});
-        assertEquals("wantsupdates1\n" +
-            "orange\n" +
-            "blue1\n" +
-            "red\n" +
-            "lastname1\n" +
-            "lastname1\n", template.getContent());
+        assertEquals("""
+            wantsupdates1
+            orange
+            blue1
+            red
+            lastname1
+            lastname1
+            """, template.getContent());
     }
 
     @Test
-    public void testUnselectParameterSelectedValues() {
-        FormBuilderHtml builder = new FormBuilderHtml();
+    void testUnselectParameterSelectedValues() {
+        var builder = new FormBuilderHtml();
         builder.unselectParameter(null, null, null);
 
-        Template template = TemplateFactory.HTML.get("formbuilder_parameters");
+        var template = TemplateFactory.HTML.get("formbuilder_parameters");
         template.setValue("wantsupdates:checked", "1");
         template.setValue("colors:orange:checked", "1");
         template.setValue("colors:blue:checked", "1");
@@ -5032,21 +5073,25 @@ public class TestFormBuilderHtml {
         template.setValue("lastname:Bevin:selected", "1");
         template.setValue("lastname:Kramer:selected", "1");
 
-        String raw_content = template.getContent();
-        assertEquals("wantsupdates1\n" +
-            "orange1\n" +
-            "blue1\n" +
-            "red1\n" +
-            "lastname1\n" +
-            "lastname1\n", raw_content);
+        var raw_content = template.getContent();
+        assertEquals("""
+            wantsupdates1
+            orange1
+            blue1
+            red1
+            lastname1
+            lastname1
+            """, raw_content);
 
         builder.unselectParameter(template, "lastname", new String[]{"Smith"});
         builder.unselectParameter(template, "lastname", new String[]{"Smith", null, "Kramer"});
-        assertEquals("wantsupdates1\n" +
-            "orange1\n" +
-            "blue1\n" +
-            "red1\n" +
-            "lastname1\n" +
-            "lastname\n", template.getContent());
+        assertEquals("""
+            wantsupdates1
+            orange1
+            blue1
+            red1
+            lastname1
+            lastname
+            """, template.getContent());
     }
 }

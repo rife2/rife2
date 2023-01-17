@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
@@ -8,17 +8,17 @@ import rife.config.RifeConfig;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
 public class ConciseLogFormatter extends Formatter {
-    private static final SimpleDateFormat DATE_FORMAT;
+    private static final DateFormat DATE_FORMAT;
 
     static {
-        DATE_FORMAT = new SimpleDateFormat("yyyyMMdd HHmm");
-        DATE_FORMAT.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
+        DATE_FORMAT = RifeConfig.tools().getSimpleDateFormat("yyyyMMdd HHmm");
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler;
@@ -9,9 +9,9 @@ import rife.validation.ValidationRuleNotNull;
 import rife.validation.ValidationRuleRange;
 
 public class TaskOption extends Validation implements Cloneable {
-    private int mTaskId = -1;
-    private String mName = null;
-    private String mValue = null;
+    private int taskId_ = -1;
+    private String name_ = null;
+    private String value_ = null;
 
     public TaskOption() {
     }
@@ -22,30 +22,45 @@ public class TaskOption extends Validation implements Cloneable {
         addRule(new ValidationRuleNotNull("value"));
     }
 
-    public void setTaskId(int taskid) {
-        mTaskId = taskid;
+    public void setTaskId(int taskId) {
+        taskId_ = taskId;
+    }
+
+    public TaskOption taskId(int taskId) {
+        setTaskId(taskId);
+        return this;
     }
 
     public int getTaskId() {
-        return mTaskId;
+        return taskId_;
     }
 
     public void setName(String name) {
         if (null == name && 0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
-        mName = name;
+        name_ = name;
+    }
+
+    public TaskOption name(String name) {
+        setName(name);
+        return this;
     }
 
     public String getName() {
-        return mName;
+        return name_;
     }
 
     public void setValue(String value) {
-        mValue = value;
+        value_ = value;
     }
 
     public String getValue() {
-        return mValue;
+        return value_;
+    }
+
+    public TaskOption value(String value) {
+        setValue(value);
+        return this;
     }
 
     public TaskOption clone()

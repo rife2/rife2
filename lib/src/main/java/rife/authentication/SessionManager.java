@@ -1,10 +1,11 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication;
 
 import rife.authentication.exceptions.SessionManagerException;
+import rife.config.RifeConfig;
 
 /**
  * This interface defines the methods that classes with
@@ -17,8 +18,8 @@ import rife.authentication.exceptions.SessionManagerException;
  * It merely provides a unique authentication id which can be used to identify
  * a successfully authenticated user.
  * <p>For safety's sake, sessions time out after a certain period of
- * inactivity and their validity is bound only to a unique user id and a host
- * ip. No assumptions are being made about the actual meaning or structure of
+ * inactivity and their validity is bound only to a unique user id.
+ * No assumptions are being made about the actual meaning or structure of
  * a 'user'. A unique numeric identifier is all that's required.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -46,33 +47,92 @@ public interface SessionManager {
 
     /**
      * Obtains the restriction policy of the authentication ID in regard to the
-     * user's host IP.
+     * user's auth data.
      * <p>The default is {@code false}, or no restriction.
      *
-     * @return {@code true} if the authentication is restricted to one host IP; or
-     * <p>{@code false} if the authentication ID can be used with any host IP
+     * @return {@code true} if the authentication is restricted to one auth data; or
+     * <p>{@code false} if the authentication ID can be used with any auth data
      * @since 1.0
      */
-    boolean getRestrictHostIp();
+    boolean getRestrictAuthData();
 
     /**
      * Sets the restriction policy of the authentication ID in regard to the
-     * user's host IP.
+     * user's auth data.
      * <p>The default is {@code false}, or no restriction.
      *
-     * @param flag {@code true} to activate the host IP restriction; or
+     * @param flag {@code true} to activate the auth data restriction; or
      *             <p>{@code false} otherwise
      * @since 1.0
      */
-    void setRestrictHostIp(boolean flag);
+    void setRestrictAuthData(boolean flag);
+
+    /**
+     * Obtains the frequency at which the purging will happen in relationship
+     * to the scale.
+     * <p>
+     * This defaults to {@link RifeConfig.AuthenticationConfig#getSessionPurgeFrequency()}.
+     *
+     * @return the purge frequency
+     * @see #setSessionPurgeFrequency
+     * @see #getSessionPurgeScale
+     * @see #setSessionPurgeScale
+     * @since 1.0
+     */
+    int getSessionPurgeFrequency();
+
+    /**
+     * Set the frequency at which the purging will happen in relationship
+     * to the scale.
+     * <p>
+     * By default, the frequency and scale respectively are 20 and 1000,
+     * which means that the purging will have once every fifty times the
+     * authentication sessions are accessed.
+     *
+     * @param frequency the purge frequency
+     * @see #getSessionPurgeFrequency
+     * @see #getSessionPurgeScale
+     * @see #setSessionPurgeScale
+     * @since 1.0
+     */
+    void setSessionPurgeFrequency(int frequency);
+
+    /**
+     * Obtains the scale at which the purging will happen in relationship
+     * to the frequency.
+     * <p>
+     * This defaults to {@link RifeConfig.AuthenticationConfig#getSessionPurgeScale()}.
+     *
+     * @return the purge scale
+     * @see #getSessionPurgeFrequency
+     * @see #setSessionPurgeFrequency
+     * @see #setSessionPurgeScale
+     * @since 1.0
+     */
+    int getSessionPurgeScale();
+
+    /**
+     * Set the scale at which the purging will happen in relationship
+     * to the frequency.
+     * <p>
+     * By default, the frequency and scale respectively are 20 and 1000,
+     * which means that the purging will have once every fifty times the
+     * authentication sessions are accessed.
+     *
+     * @param scale the purge scale
+     * @see #getSessionPurgeFrequency
+     * @see #setSessionPurgeFrequency
+     * @see #getSessionPurgeScale
+     * @since 1.0
+     */
+    void setSessionPurgeScale(int scale);
 
     /**
      * Starts a new session.
      *
      * @param userId     The id that uniquely identifies the user that is allowed
      *                   to use this session.
-     * @param hostIp     The ip address of the host from which the user accesses
-     *                   the application.
+     * @param authData   The authentication data that is associated with the session.
      * @param remembered Indicates whether the session is started through
      *                   remember me or from scratch.
      * @return A {@code String} that uniquely identifies the
@@ -84,16 +144,15 @@ public interface SessionManager {
      *                                 this interface to give more specific meanings to these exceptions.
      * @since 1.0
      */
-    String startSession(long userId, String hostIp, boolean remembered)
+    String startSession(long userId, String authData, boolean remembered)
     throws SessionManagerException;
 
     /**
      * Verifies if a session is valid and still active.
      *
-     * @param authId The unique id of the authentication session that needs to
-     *               be verified.
-     * @param hostIp The ip address of the host from which the user accesses
-     *               the application.
+     * @param authId   The unique id of the authentication session that needs to
+     *                 be verified.
+     * @param authData The authentication data that is associated with the session.
      * @return {@code true} if a valid active session was found; or
      * <p>{@code false} if this was not possible.
      * @throws SessionManagerException An undefined number of exceptional
@@ -103,7 +162,7 @@ public interface SessionManager {
      *                                 this interface to give more specific meanings to these exceptions.
      * @since 1.0
      */
-    boolean isSessionValid(String authId, String hostIp)
+    boolean isSessionValid(String authId, String authData)
     throws SessionManagerException;
 
     /**

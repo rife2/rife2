@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.resources;
@@ -13,8 +13,8 @@ public abstract class DatabaseResourcesFactory extends DbQueryManagerFactory {
 
     private static final DbQueryManagerCache cache_ = new DbQueryManagerCache();
 
-    public static DatabaseResources getInstance(Datasource datasource) {
-        return (DatabaseResources) getInstance(MANAGER_PACKAGE_NAME, cache_, datasource);
+    public static DatabaseResources instance(Datasource datasource) {
+        return (DatabaseResources) instance(MANAGER_PACKAGE_NAME, cache_, datasource);
     }
 }
 

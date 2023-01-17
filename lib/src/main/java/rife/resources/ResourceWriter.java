@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.resources;
@@ -8,9 +8,9 @@ import rife.resources.exceptions.ResourceWriterErrorException;
 
 /**
  * This interface defines the methods that classes with
- * <code>ResourceWriter</code> functionalities have to implement.
+ * {@code ResourceWriter} functionalities have to implement.
  * <p>
- * A <code>ResourceWriter</code> provides an abstract way of modifying
+ * A {@code ResourceWriter} provides an abstract way of modifying
  * resources. According to a name, a resource and its content can be added,
  * updated or removed.
  *
@@ -36,6 +36,8 @@ public interface ResourceWriter {
      *
      * @param name    the name of the resource
      * @param content the content of the resource
+     * @return {@code true} when the resource was updated;
+     * {@code false} otherwise
      * @throws ResourceWriterErrorException if an error occurred during the
      *                                      resource update.
      * @since 1.0
@@ -47,6 +49,8 @@ public interface ResourceWriter {
      * Removes the resource with the provided name.
      *
      * @param name the name of the resource
+     * @return {@code true} when the resource was removed;
+     * {@code false} otherwise
      * @throws ResourceWriterErrorException if an error occurred during the
      *                                      resource removal.
      * @since 1.0

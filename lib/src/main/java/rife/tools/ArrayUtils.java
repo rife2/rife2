@@ -1,8 +1,12 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
+
+import rife.validation.ConstrainedProperty;
+
+import java.util.logging.Logger;
 
 /**
  * General purpose class containing common array manipulation methods.
@@ -10,12 +14,7 @@ package rife.tools;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-
-import rife.validation.ConstrainedProperty;
-
-import java.util.logging.Logger;
-
-public class ArrayUtils {
+public final class ArrayUtils {
     public enum ArrayType {
         NO_ARRAY,
         OBJECT_ARRAY,
@@ -29,6 +28,10 @@ public class ArrayUtils {
         DOUBLE_ARRAY
     }
 
+    private ArrayUtils() {
+        // no-op
+    }
+
     public static ArrayType getArrayType(Object object) {
         var classname = object.getClass().getName();
 
@@ -40,27 +43,37 @@ public class ArrayUtils {
                 }
 
                 switch (classname.charAt(position)) {
-                    case 'L':
+                    case 'L' -> {
                         return ArrayType.OBJECT_ARRAY;
-                    case 'Z':
+                    }
+                    case 'Z' -> {
                         return ArrayType.BOOLEAN_ARRAY;
-                    case 'B':
+                    }
+                    case 'B' -> {
                         return ArrayType.BYTE_ARRAY;
-                    case 'C':
+                    }
+                    case 'C' -> {
                         return ArrayType.CHAR_ARRAY;
-                    case 'S':
+                    }
+                    case 'S' -> {
                         return ArrayType.SHORT_ARRAY;
-                    case 'I':
+                    }
+                    case 'I' -> {
                         return ArrayType.INT_ARRAY;
-                    case 'J':
+                    }
+                    case 'J' -> {
                         return ArrayType.LONG_ARRAY;
-                    case 'F':
+                    }
+                    case 'F' -> {
                         return ArrayType.FLOAT_ARRAY;
-                    case 'D':
+                    }
+                    case 'D' -> {
                         return ArrayType.DOUBLE_ARRAY;
-                    default:
+                    }
+                    default -> {
                         Logger.getLogger("rife.tools").severe("Unknown primitive array class: " + classname);
                         return null;
+                    }
                 }
             }
             return null;
@@ -70,16 +83,16 @@ public class ArrayUtils {
     }
 
     /**
-     * Convert an <code>Object</code> to a textual representation in a
-     * <code>String</code> array.
+     * Convert an {@code Object} to a textual representation in a
+     * {@code String} array.
      * <p>
      * Note that array of type byte[] are explicitly not converted since that
      * would result in many binary data to create OutOfMemoryError exceptions.
      *
-     * @param source The <code>Object</code> to convert.
-     * @return The resulting <code>String</code> array; or
+     * @param source The {@code Object} to convert.
+     * @return The resulting {@code String} array; or
      * <p>
-     * <code>null</code> if <code>source</code> is <code>null</code>.
+     * {@code null} if {@code source} is {@code null}.
      * @since 1.0
      */
     public static String[] createStringArray(Object source, ConstrainedProperty constrainedProperty) {
@@ -99,27 +112,31 @@ public class ArrayUtils {
             // would result in an OutOfMemoryError exception easily
             result = null;
         } else if (type == ArrayType.OBJECT_ARRAY) {
-            result = ArrayUtils.createStringArray((Object[]) source);
+            result = ArrayUtils.createStringArray((Object[]) source, constrainedProperty);
         } else if (type == ArrayType.BOOLEAN_ARRAY) {
-            result = ArrayUtils.createStringArray((boolean[]) source);
+            result = ArrayUtils.createStringArray((boolean[]) source, constrainedProperty);
         } else if (type == ArrayType.CHAR_ARRAY) {
-            result = ArrayUtils.createStringArray((char[]) source);
+            result = ArrayUtils.createStringArray((char[]) source, constrainedProperty);
         } else if (type == ArrayType.SHORT_ARRAY) {
-            result = ArrayUtils.createStringArray((short[]) source);
+            result = ArrayUtils.createStringArray((short[]) source, constrainedProperty);
         } else if (type == ArrayType.INT_ARRAY) {
-            result = ArrayUtils.createStringArray((int[]) source);
+            result = ArrayUtils.createStringArray((int[]) source, constrainedProperty);
         } else if (type == ArrayType.LONG_ARRAY) {
-            result = ArrayUtils.createStringArray((long[]) source);
+            result = ArrayUtils.createStringArray((long[]) source, constrainedProperty);
         } else if (type == ArrayType.FLOAT_ARRAY) {
-            result = ArrayUtils.createStringArray((float[]) source);
+            result = ArrayUtils.createStringArray((float[]) source, constrainedProperty);
         } else if (type == ArrayType.DOUBLE_ARRAY) {
-            result = ArrayUtils.createStringArray((double[]) source);
+            result = ArrayUtils.createStringArray((double[]) source, constrainedProperty);
         }
 
         return result;
     }
 
     public static String[] createStringArray(Object[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(Object[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -127,13 +144,17 @@ public class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(boolean[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(boolean[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -141,13 +162,17 @@ public class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(byte[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(byte[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -155,13 +180,17 @@ public class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(char[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(char[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -169,13 +198,17 @@ public class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(short[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(short[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -183,13 +216,17 @@ public class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(int[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(int[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -197,13 +234,17 @@ public class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(long[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(long[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -211,13 +252,17 @@ public class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(float[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(float[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -225,13 +270,17 @@ public class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;
     }
 
     public static String[] createStringArray(double[] array) {
+        return createStringArray(array, null);
+    }
+
+    public static String[] createStringArray(double[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
         }
@@ -239,7 +288,7 @@ public class ArrayUtils {
         var new_array = new String[array.length];
 
         for (var i = 0; i < array.length; i++) {
-            new_array[i] = String.valueOf(array[i]);
+            new_array[i] = BeanUtils.formatPropertyValue(array[i], constrainedProperty);
         }
 
         return new_array;

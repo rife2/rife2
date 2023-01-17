@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.template;
@@ -16,7 +16,7 @@ import java.text.NumberFormat;
 /**
  * An anonymous value inside a template, which is not referenced anywhere in
  * the template, but can be used to produce intermediate strings using the
- * template engine. To obtain an <code>InternalValue</code>, you should use
+ * template engine. To obtain an {@code InternalValue}, you should use
  * {@link Template#createInternalValue()}.
  *
  * @author Keith Lea (keith[remove] at cs dot oswego dot edu)
@@ -65,7 +65,7 @@ public class InternalValue {
 
     /**
      * Appends the result of calling {@link String#valueOf(Object)
-     * String.valueOf} on the given <code>value</code> to this value in this
+     * String.valueOf} on the given {@code value} to this value in this
      * template.
      *
      * @param value an object
@@ -76,8 +76,8 @@ public class InternalValue {
     }
 
     /**
-     * Appends <code>"true"</code> or <code>"false"</code> to this value,
-     * depending on the given <code>value</code>.
+     * Appends {@code "true"} or {@code "false"} to this value,
+     * depending on the given {@code value}.
      *
      * @param value a boolean value
      * @since 1.0
@@ -108,11 +108,11 @@ public class InternalValue {
 
     /**
      * Appends the specified range of the given character string to this
-     * value. The specified number of bytes from <code>value</code> will be
-     * used, starting at the character specified by <code>offset</code>.
+     * value. The specified number of bytes from {@code value} will be
+     * used, starting at the character specified by {@code offset}.
      *
      * @param value  a character string
-     * @param offset the index in <code>value</code> of the first character to
+     * @param offset the index in {@code value} of the first character to
      *               use
      * @param count  the number of characters to use
      * @since 1.0
@@ -276,7 +276,7 @@ public class InternalValue {
 
     /**
      * Returns whether this value contains no cnotent. This method will return
-     * <code>false</code> for newly created values as well as values for whom
+     * {@code false} for newly created values as well as values for whom
      * {@link #clear} has just been called.
      *
      * @return whether this value has no contents

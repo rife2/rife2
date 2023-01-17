@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -316,16 +316,16 @@ public class DbResultSet implements ResultSet, Cloneable {
     }
 
     /**
-     * Determines if there are rows available in the <code>ResultSet</code>
-     * object that was returned by an <code>execute</code> method.
+     * Determines if there are rows available in the {@code ResultSet}
+     * object that was returned by an {@code execute} method.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return <code>true</code> if there are result rows available; or
+     * @return {@code true} if there are result rows available; or
      * <p>
-     * <code>false</code> if no <code>ResultSet</code> object was available or
+     * {@code false} if no {@code ResultSet} object was available or
      * it didn't have any result rows.
      * @throws DatabaseException if a database access error occurs
      * @since 1.0
@@ -358,18 +358,18 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a string. This method works both when
-     * the <code>next</code> method has never been called or once been called.
+     * {@code DbResultSet} object as a string. This method works both when
+     * the {@code next} method has never been called or once been called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>String</code> object in the results.
+     * @return the first {@code String} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -393,18 +393,18 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a boolean. This method works both when
-     * the <code>next</code> method has never been called or once been called.
+     * {@code DbResultSet} object as a boolean. This method works both when
+     * the {@code next} method has never been called or once been called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>boolean</code> object in the results.
+     * @return the first {@code boolean} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -428,18 +428,18 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a byte. This method works both when
-     * the <code>next</code> method has never been called or once been called.
+     * {@code DbResultSet} object as a byte. This method works both when
+     * the {@code next} method has never been called or once been called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>byte</code> object in the results.
+     * @return the first {@code byte} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -463,18 +463,18 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a short. This method works both when
-     * the <code>next</code> method has never been called or once been called.
+     * {@code DbResultSet} object as a short. This method works both when
+     * the {@code next} method has never been called or once been called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>short</code> object in the results.
+     * @return the first {@code short} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -498,18 +498,18 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as an integer. This method works both when
-     * the <code>next</code> method has never been called or once been called.
+     * {@code DbResultSet} object as an integer. This method works both when
+     * the {@code next} method has never been called or once been called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>int</code> object in the results.
+     * @return the first {@code int} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -533,18 +533,18 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a long. This method works both when
-     * the <code>next</code> method has never been called or once been called.
+     * {@code DbResultSet} object as a long. This method works both when
+     * the {@code next} method has never been called or once been called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>long</code> object in the results.
+     * @return the first {@code long} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -568,18 +568,18 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a float. This method works both when
-     * the <code>next</code> method has never been called or once been called.
+     * {@code DbResultSet} object as a float. This method works both when
+     * the {@code next} method has never been called or once been called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>float</code> object in the results.
+     * @return the first {@code float} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -603,18 +603,18 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a double. This method works both when
-     * the <code>next</code> method has never been called or once been called.
+     * {@code DbResultSet} object as a double. This method works both when
+     * the {@code next} method has never been called or once been called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>String</code> object in the results.
+     * @return the first {@code String} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -638,18 +638,18 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a big decimal. This method works both when
-     * the <code>next</code> method has never been called or once been called.
+     * {@code DbResultSet} object as a big decimal. This method works both when
+     * the {@code next} method has never been called or once been called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>BigDecimal</code> object in the results.
+     * @return the first {@code BigDecimal} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -673,19 +673,19 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as an array of bytes. This method works
-     * both when the <code>next</code> method has never been called or once been
+     * {@code DbResultSet} object as an array of bytes. This method works
+     * both when the {@code next} method has never been called or once been
      * called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>byte[]</code> object in the results.
+     * @return the first {@code byte[]} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -709,19 +709,19 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a sql date. This method works both
-     * when the <code>next</code> method has never been called or once been
+     * {@code DbResultSet} object as a sql date. This method works both
+     * when the {@code next} method has never been called or once been
      * called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>java.sql.Date</code> object in the results.
+     * @return the first {@code java.sql.Date} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -745,25 +745,25 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a sql date. This method uses the given
+     * {@code DbResultSet} object as a sql date. This method uses the given
      * calendar to construct an appropriate millisecond value for the date if
      * the underlying database does not store timezone information.
-     * This method works both when the <code>next</code> method has never been
+     * This method works both when the {@code next} method has never been
      * called or once been called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @param cal the <code>java.util.Calendar</code> object
+     * @param cal the {@code java.util.Calendar} object
      *            to use in constructing the date
-     * @return the first <code>java.sql.Date</code> object in the resultsn;
-     * if the value is SQL <code>NULL</code>,
-     * the value returned is <code>null</code> in the Java programming language
+     * @return the first {@code java.sql.Date} object in the resultsn;
+     * if the value is SQL {@code NULL},
+     * the value returned is {@code null} in the Java programming language
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -786,19 +786,19 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a sql time. This method works both
-     * when the <code>next</code> method has never been called or once been
+     * {@code DbResultSet} object as a sql time. This method works both
+     * when the {@code next} method has never been called or once been
      * called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>java.sql.Time</code> object in the results.
+     * @return the first {@code java.sql.Time} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -822,25 +822,25 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a sql time. This method works both
-     * when the <code>next</code> method has never been called or once been
+     * {@code DbResultSet} object as a sql time. This method works both
+     * when the {@code next} method has never been called or once been
      * called. This method uses the given calendar to construct an appropriate
      * millisecond value for the time if the underlying database does not store
      * timezone information.
-     * This method works both when the <code>next</code> method has never been
+     * This method works both when the {@code next} method has never been
      * called or once been called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @param cal the <code>java.util.Calendar</code> object to use in
+     * @param cal the {@code java.util.Calendar} object to use in
      *            constructing the time
-     * @return the first <code>java.sql.Time</code> object in the results.
+     * @return the first {@code java.sql.Time} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -864,19 +864,19 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a sql timestamo. This method works both
-     * when the <code>next</code> method has never been called or once been
+     * {@code DbResultSet} object as a sql timestamo. This method works both
+     * when the {@code next} method has never been called or once been
      * called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>java.sql.Timestamp</code> object in the results.
+     * @return the first {@code java.sql.Timestamp} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -900,23 +900,23 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a sql timestamp. This method uses the
+     * {@code DbResultSet} object as a sql timestamp. This method uses the
      * given calendar to construct an appropriate millisecond value for the
      * timestamp if the underlying database does not store timezone information.
-     * This method works both when the <code>next</code> method has never been
+     * This method works both when the {@code next} method has never been
      * called or once been called.
      * <p>
-     * It is perfectly usable after the <code>hasResultRows</code> method or
-     * alone where catching the <code>MissingResultsException</code> is used to
+     * It is perfectly usable after the {@code hasResultRows} method or
+     * alone where catching the {@code MissingResultsException} is used to
      * indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @param cal the <code>java.util.Calendar</code> object to use in
+     * @param cal the {@code java.util.Calendar} object to use in
      *            constructing the date
-     * @return the first <code>java.sql.Timestamp</code> object in the results.
+     * @return the first {@code java.sql.Timestamp} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -940,19 +940,19 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as an ascii stream. This method works both
-     * when the <code>next</code> method has never been called or once been
+     * {@code DbResultSet} object as an ascii stream. This method works both
+     * when the {@code next} method has never been called or once been
      * called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>java.io.InputStream</code> object in the results.
+     * @return the first {@code java.io.InputStream} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -976,19 +976,19 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a character stream. This method works
-     * both when the <code>next</code> method has never been called or once been
+     * {@code DbResultSet} object as a character stream. This method works
+     * both when the {@code next} method has never been called or once been
      * called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>java.io.Reader</code> object in the results.
+     * @return the first {@code java.io.Reader} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.
@@ -1012,19 +1012,19 @@ public class DbResultSet implements ResultSet, Cloneable {
 
     /**
      * Retrieves the first field of the first row of this
-     * <code>DbResultSet</code> object as a binary stream. This method works hiboth
-     * when the <code>next</code> method has never been called or once been
+     * {@code DbResultSet} object as a binary stream. This method works hiboth
+     * when the {@code next} method has never been called or once been
      * called.
      * <p>
-     * Therefore, it's thus perfectly usable after the <code>hasResultRows</code>
-     * method or alone where catching the <code>MissingResultsException</code>
+     * Therefore, it's thus perfectly usable after the {@code hasResultRows}
+     * method or alone where catching the {@code MissingResultsException}
      * is used to indicate the absence of results.
      * <p>
-     * If an exception is thrown, the related <code>DbStatement</code> is
+     * If an exception is thrown, the related {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically
      * rolled back if it belongs to the executing thread.
      *
-     * @return the first <code>java.io.InputStream</code> object in the results.
+     * @return the first {@code java.io.InputStream} object in the results.
      * @throws DatabaseException if a database access error occurs. If there
      *                           are no results available the thrown exception is
      *                           {@link MissingResultsException}.

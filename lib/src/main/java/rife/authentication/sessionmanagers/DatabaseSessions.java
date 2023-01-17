@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.sessionmanagers;
@@ -16,19 +16,18 @@ import rife.database.DbPreparedStatement;
 import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
 import rife.database.DbRowProcessor;
-import rife.database.DbTransactionUserWithoutResult;
 import rife.database.exceptions.DatabaseException;
-import rife.database.exceptions.ExecutionErrorException;
 import rife.tools.UniqueIDGenerator;
 import rife.tools.ExceptionUtils;
-import rife.tools.InnerClassException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public abstract class DatabaseSessions extends DbQueryManager implements SessionManager {
     private long sessionDuration_ = RifeConfig.authentication().getSessionDuration();
-    private boolean restrictHostIp_ = RifeConfig.authentication().getSessionRestrictHostIp();
+    private boolean restrictAuthData_ = RifeConfig.authentication().getSessionRestrictAuthData();
+    private int sessionPurgeFrequency_ = RifeConfig.authentication().getSessionPurgeFrequency();
+    private int sessionPurgeScale_ = RifeConfig.authentication().getSessionPurgeScale();
 
     protected DatabaseSessions(Datasource datasource) {
         super(datasource);
@@ -42,12 +41,28 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
         sessionDuration_ = milliseconds;
     }
 
-    public boolean getRestrictHostIp() {
-        return restrictHostIp_;
+    public boolean getRestrictAuthData() {
+        return restrictAuthData_;
     }
 
-    public void setRestrictHostIp(boolean flag) {
-        restrictHostIp_ = flag;
+    public void setRestrictAuthData(boolean flag) {
+        restrictAuthData_ = flag;
+    }
+
+    public int getSessionPurgeFrequency() {
+        return sessionPurgeFrequency_;
+    }
+
+    public void setSessionPurgeFrequency(int frequency) {
+        sessionPurgeFrequency_ = frequency;
+    }
+
+    public int getSessionPurgeScale() {
+        return sessionPurgeScale_;
+    }
+
+    public void setSessionPurgeScale(int scale) {
+        sessionPurgeScale_ = scale;
     }
 
     public abstract boolean install()
@@ -88,57 +103,49 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
     protected void _purgeSessions(Delete purgeSession)
     throws SessionManagerException {
         try {
-            executeUpdate(purgeSession, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement.setLong(1, System.currentTimeMillis() - getSessionDuration());
-                }
-            });
+            executeUpdate(purgeSession, s -> s.setLong(1, System.currentTimeMillis() - getSessionDuration()));
         } catch (DatabaseException e) {
             throw new PurgeSessionsErrorException(e);
         }
     }
 
-    protected String _startSession(Insert startSession, final long userId, final String hostIp, final boolean remembered)
+    protected String _startSession(Insert startSession, final long userId, final String authData, final boolean remembered)
     throws SessionManagerException {
         assert startSession != null;
 
         if (userId < 0 ||
-            null == hostIp ||
-            0 == hostIp.length()) {
-            throw new StartSessionErrorException(userId, hostIp);
+            null == authData ||
+            0 == authData.length()) {
+            throw new StartSessionErrorException(userId, authData);
         }
 
         final String auth_id_string = UniqueIDGenerator.generate().toString();
 
         try {
-            if (0 == executeUpdate(startSession, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString("authId", auth_id_string)
-                        .setLong("userId", userId)
-                        .setString("hostIp", hostIp)
-                        .setLong("sessStart", System.currentTimeMillis())
-                        .setBoolean("remembered", remembered);
-                }
-            })) {
-                throw new StartSessionErrorException(userId, hostIp);
+            if (0 == executeUpdate(startSession, s ->
+                s.setString("authId", auth_id_string)
+                    .setLong("userId", userId)
+                    .setString("authData", authData)
+                    .setLong("sessStart", System.currentTimeMillis())
+                    .setBoolean("remembered", remembered))) {
+                throw new StartSessionErrorException(userId, authData);
             }
         } catch (DatabaseException e) {
-            throw new StartSessionErrorException(userId, hostIp, e);
+            throw new StartSessionErrorException(userId, authData, e);
         }
 
         return auth_id_string;
     }
 
-    protected boolean _isSessionValid(Select sessionValidity, Select sessionValidityRestrictHostIp, final String authId, final String hostIp)
+    protected boolean _isSessionValid(Select sessionValidity, Select sessionValidityRestrictAuthData, final String authId, final String authData)
     throws SessionManagerException {
         assert sessionValidity != null;
-        assert sessionValidityRestrictHostIp != null;
+        assert sessionValidityRestrictAuthData != null;
 
         if (null == authId ||
             0 == authId.length() ||
-            null == hostIp ||
-            0 == hostIp.length()) {
+            null == authData ||
+            0 == authData.length()) {
             return false;
         }
 
@@ -146,24 +153,22 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
 
         try {
             Select query;
-            if (restrictHostIp_) {
-                query = sessionValidityRestrictHostIp;
+            if (restrictAuthData_) {
+                query = sessionValidityRestrictAuthData;
             } else {
                 query = sessionValidity;
             }
-            result = executeHasResultRows(query, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString("authId", authId)
+            result = executeHasResultRows(query, s -> {
+                    s.setString("authId", authId)
                         .setLong("sessStart", System.currentTimeMillis() - getSessionDuration());
-                    if (restrictHostIp_) {
-                        statement
-                            .setString("hostIp", hostIp);
+                    if (restrictAuthData_) {
+                        s.setString("authData", authData);
                     }
                 }
-            });
-        } catch (DatabaseException e) {
-            throw new IsSessionValidErrorException(authId, hostIp, e);
+            );
+        } catch (
+            DatabaseException e) {
+            throw new IsSessionValidErrorException(authId, authData, e);
         }
 
         return result;
@@ -180,13 +185,9 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
 
         boolean result = false;
         try {
-            if (0 != executeUpdate(continueSession, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setLong("sessStart", System.currentTimeMillis())
-                        .setString("authId", authId);
-                }
-            })) {
+            if (0 != executeUpdate(continueSession, s ->
+                s.setLong("sessStart", System.currentTimeMillis())
+                    .setString("authId", authId))) {
                 result = true;
             }
         } catch (DatabaseException e) {
@@ -207,12 +208,7 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
 
         boolean result = false;
         try {
-            if (0 != executeUpdate(eraseSession, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString("authId", authId);
-                }
-            })) {
+            if (0 != executeUpdate(eraseSession, s -> s.setString("authId", authId))) {
                 result = true;
             }
         } catch (DatabaseException e) {
@@ -231,15 +227,10 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
             return false;
         }
 
-        boolean result = false;
+        boolean result;
 
         try {
-            result = executeGetFirstBoolean(wasRemembered, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString("authId", authId);
-                }
-            });
+            result = executeGetFirstBoolean(wasRemembered, s -> s.setString("authId", authId));
         } catch (DatabaseException e) {
             throw new SessionRememberedCheckErrorException(authId, e);
         }
@@ -257,12 +248,7 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
 
         boolean result = false;
         try {
-            if (0 != executeUpdate(eraseUserSessions, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setLong("userId", userId);
-                }
-            })) {
+            if (0 != executeUpdate(eraseUserSessions, s -> s.setLong("userId", userId))) {
                 result = true;
             }
         } catch (DatabaseException e) {
@@ -290,13 +276,8 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
         long result = -1;
 
         try {
-            result = executeGetFirstLong(countSessions, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setLong("sessStart", System.currentTimeMillis() - getSessionDuration());
-                }
-            });
-
+            result = executeGetFirstLong(countSessions, s ->
+                s.setLong("sessStart", System.currentTimeMillis() - getSessionDuration()));
         } catch (DatabaseException e) {
             throw new CountSessionsErrorException(e);
         }
@@ -316,12 +297,7 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
         long result = -1;
 
         try {
-            result = executeGetFirstLong(getSessionUserId, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString("authId", authId);
-                }
-            });
+            result = executeGetFirstLong(getSessionUserId, s -> s.setString("authId", authId));
         } catch (DatabaseException e) {
             throw new GetSessionUserIdErrorException(authId, e);
         }
@@ -336,21 +312,12 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
         boolean result = false;
 
         try {
-            result = executeFetchAll(listSessions, new DbRowProcessor() {
-                public boolean processRow(ResultSet resultSet)
-                throws SQLException {
-                    return processor.foundSession(
-                        resultSet.getInt("userId"),
-                        resultSet.getString("hostIp"),
-                        resultSet.getString("authId"));
-                }
-            }, new DbPreparedStatementHandler() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setLong("sessStart", System.currentTimeMillis() - getSessionDuration());
-                }
-            });
-
+            result = executeFetchAll(listSessions, resultSet ->
+                processor.foundSession(
+                    resultSet.getInt("userId"),
+                    resultSet.getString("authData"),
+                    resultSet.getString("authId")), s ->
+                s.setLong("sessStart", System.currentTimeMillis() - getSessionDuration()));
         } catch (DatabaseException e) {
             throw new CountSessionsErrorException(e);
         }

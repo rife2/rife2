@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.continuations;
@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestStepBack {
     @Test
-    public void testStepBackInWhile()
+    void testStepBackInWhile()
     throws Throwable {
         final var test_classes = new String[]{"TestStepBackCounter", "TestStepBackCounterInterface"};
         for (final var test_class : test_classes) {

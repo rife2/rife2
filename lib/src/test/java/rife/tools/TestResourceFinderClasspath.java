@@ -12,13 +12,13 @@ import rife.resources.exceptions.ResourceFinderErrorException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestResourceFinderClasspath {
-    @Test public void testInstantiation() {
+    @Test void testInstantiation() {
         ResourceFinderClasspath rf = ResourceFinderClasspath.instance();
         assertNotNull(rf);
     }
 
     @Test
-    public void testSingleton() {
+    void testSingleton() {
         ResourceFinderClasspath rf1 = ResourceFinderClasspath.instance();
         assertNotNull(rf1);
         ResourceFinderClasspath rf2 = ResourceFinderClasspath.instance();
@@ -26,7 +26,7 @@ public class TestResourceFinderClasspath {
         assertSame(rf1, rf2);
     }
 
-    @Test public void testModificationTime() {
+    @Test void testModificationTime() {
         ResourceFinderClasspath rf = ResourceFinderClasspath.instance();
         try {
             assertTrue(rf.getModificationTime("java/lang/Class.class") > 0);

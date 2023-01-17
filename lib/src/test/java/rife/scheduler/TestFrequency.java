@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler;
@@ -12,6 +12,8 @@ import rife.scheduler.exceptions.FrequencyException;
 import rife.tools.ExceptionUtils;
 import rife.tools.Localization;
 
+import java.time.DayOfWeek;
+import java.time.Month;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -35,13 +37,56 @@ public class TestFrequency {
     }
 
     @Test
-    public void testAllWildcards() {
+    void testDsl() {
+        assertEquals("47 12 * * *", new Frequency().at(12, 47).getSpecification());
+
+        assertEquals("* * * * *", new Frequency().getSpecification());
+
+        assertEquals("59 * * * *", new Frequency().atMinute(59).getSpecification());
+        assertEquals("2 23 * * *", new Frequency().atMinute(2).atHour(23).getSpecification());
+        assertEquals("* 23 * * *", new Frequency().atMinute(2).atHour(23).everyMinute().getSpecification());
+        assertEquals("*/10 * * * *", new Frequency().everyMinute(10).getSpecification());
+        assertEquals("5,18,51 * * * *", new Frequency().atMinutes(5, 18, 51).getSpecification());
+        assertEquals("5-40 * * * *", new Frequency().duringMinutes(5, 40).getSpecification());
+
+        assertEquals("* 12 * * *", new Frequency().atHour(12).getSpecification());
+        assertEquals("39 3 * * *", new Frequency().atMinute(39).atHour(3).getSpecification());
+        assertEquals("39 * * * *", new Frequency().atMinute(39).atHour(3).everyHour().getSpecification());
+        assertEquals("* */3 * * *", new Frequency().everyHour(3).getSpecification());
+        assertEquals("* 1,2,8,10 * * *", new Frequency().atHours(1, 2, 8, 10).getSpecification());
+        assertEquals("* 1-8 * * *", new Frequency().duringHours(1, 8).getSpecification());
+
+        assertEquals("* * 27 2 *", new Frequency().on(Month.FEBRUARY, 27).getSpecification());
+        assertEquals("* * 31 * *", new Frequency().onDate(31).getSpecification());
+        assertEquals("* * 31 4 *", new Frequency().onDate(31).in(Month.APRIL).getSpecification());
+        assertEquals("* * * 4 *", new Frequency().onDate(31).in(Month.APRIL).everyDate().getSpecification());
+        assertEquals("* * */3 * *", new Frequency().everyDate(3).getSpecification());
+        assertEquals("* * 5,8,21,30 * *", new Frequency().onDates(5, 8, 21, 30).getSpecification());
+        assertEquals("* * 6-14 * *", new Frequency().duringDates(6, 14).getSpecification());
+
+        assertEquals("* * * 12 *", new Frequency().in(Month.DECEMBER).getSpecification());
+        assertEquals("* * 17 12 *", new Frequency().in(Month.DECEMBER).onDate(17).getSpecification());
+        assertEquals("* * 17 * *", new Frequency().in(Month.DECEMBER).onDate(17).everyMonth().getSpecification());
+        assertEquals("* * * */4 *", new Frequency().everyMonth(4).getSpecification());
+        assertEquals("* * * 1,8,12 *", new Frequency().in(Month.JANUARY, Month.AUGUST, Month.DECEMBER).getSpecification());
+        assertEquals("* * * 3-11 *", new Frequency().between(Month.MARCH, Month.NOVEMBER).getSpecification());
+
+        assertEquals("* * * * 5", new Frequency().on(DayOfWeek.FRIDAY).getSpecification());
+        assertEquals("* * * 3 5", new Frequency().on(DayOfWeek.FRIDAY).in(Month.MARCH).getSpecification());
+        assertEquals("* * * 3 *", new Frequency().on(DayOfWeek.FRIDAY).in(Month.MARCH).everyWeekday().getSpecification());
+        assertEquals("* * * * */4", new Frequency().everyWeekday(4).getSpecification());
+        assertEquals("* * * * 1,5,7", new Frequency().on(DayOfWeek.MONDAY, DayOfWeek.FRIDAY, DayOfWeek.SUNDAY).getSpecification());
+        assertEquals("* * * * 3-5", new Frequency().between(DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY).getSpecification());
+    }
+
+    @Test
+    void testAllWildcards() {
         try {
-            Frequency frequency = new Frequency("* * * * *");
+            var frequency = new Frequency("* * * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * * *");
+            assertEquals(frequency.getSpecification(), "* * * * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -53,9 +98,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidSpacing() {
+    void testInvalidSpacing() {
         try {
-            Frequency frequency = new Frequency("*  *  * * *");
+            var frequency = new Frequency("*  *  * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -64,9 +109,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testTooManyParts() {
+    void testTooManyParts() {
         try {
-            Frequency frequency = new Frequency("* * * * * *");
+            var frequency = new Frequency("* * * * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -75,9 +120,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testTooLittleParts() {
+    void testTooLittleParts() {
         try {
-            Frequency frequency = new Frequency("* * * *");
+            var frequency = new Frequency("* * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -86,9 +131,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidNumberMinute() {
+    void testInvalidNumberMinute() {
         try {
-            Frequency frequency = new Frequency("d * * * *");
+            var frequency = new Frequency("d * * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -97,9 +142,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidDividerMinute() {
+    void testInvalidDividerMinute() {
         try {
-            Frequency frequency = new Frequency("2/4 * * * *");
+            var frequency = new Frequency("2/4 * * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -108,9 +153,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidEmptyPartMinute() {
+    void testInvalidEmptyPartMinute() {
         try {
-            Frequency frequency = new Frequency("2, * * * *");
+            var frequency = new Frequency("2, * * * *");
             assertNotNull(frequency);
             fail();
         } catch (FrequencyException e) {
@@ -119,13 +164,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testSingleMinute() {
+    void testSingleMinute() {
         try {
-            Frequency frequency = new Frequency("2 * * * *");
+            var frequency = new Frequency("2 * * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "2 * * * *");
+            assertEquals(frequency.getSpecification(), "2 * * * *");
             assertArrayEquals(frequency.getMinutes(), new byte[]{-1, -1, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -139,7 +184,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedMinutes() {
+    void testRangedMinutes() {
         try {
             Frequency frequency = null;
 
@@ -147,7 +192,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "10-22 * * * *");
+            assertEquals(frequency.getSpecification(), "10-22 * * * *");
             assertArrayEquals(frequency.getMinutes(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -160,7 +205,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "56-59 * * * *");
+            assertEquals(frequency.getSpecification(), "56-59 * * * *");
             assertArrayEquals(frequency.getMinutes(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 56, 57, 58, 59});
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -173,7 +218,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "12-12 * * * *");
+            assertEquals(frequency.getSpecification(), "12-12 * * * *");
             assertArrayEquals(frequency.getMinutes(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 12, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -187,7 +232,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedMinutes() {
+    void testReverseRangedMinutes() {
         try {
             Frequency frequency = null;
 
@@ -195,7 +240,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "57-5 * * * *");
+            assertEquals(frequency.getSpecification(), "57-5 * * * *");
             assertArrayEquals(frequency.getMinutes(), new byte[]{0, 1, 2, 3, 4, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 57, 58, 59});
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -208,7 +253,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "58-0 * * * *");
+            assertEquals(frequency.getSpecification(), "58-0 * * * *");
             assertArrayEquals(frequency.getMinutes(), new byte[]{0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 58, 59});
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -222,13 +267,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testDividerMinutes() {
+    void testDividerMinutes() {
         try {
-            Frequency frequency = new Frequency("*/17 * * * *");
+            var frequency = new Frequency("*/17 * * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "*/17 * * * *");
+            assertEquals(frequency.getSpecification(), "*/17 * * * *");
             assertArrayEquals(frequency.getMinutes(), new byte[]{0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 17, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 34, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 51, -1, -1, -1, -1, -1, -1, -1, -1});
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -242,13 +287,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedDividerMinutes() {
+    void testRangedDividerMinutes() {
         try {
-            Frequency frequency = new Frequency("5-40/17 * * * *");
+            var frequency = new Frequency("5-40/17 * * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "5-40/17 * * * *");
+            assertEquals(frequency.getSpecification(), "5-40/17 * * * *");
             assertArrayEquals(frequency.getMinutes(), new byte[]{-1, -1, -1, -1, -1, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 22, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 39, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -262,13 +307,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedDividerMinutes() {
+    void testReverseRangedDividerMinutes() {
         try {
-            Frequency frequency = new Frequency("31-20/13 * * * *");
+            var frequency = new Frequency("31-20/13 * * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "31-20/13 * * * *");
+            assertEquals(frequency.getSpecification(), "31-20/13 * * * *");
             assertArrayEquals(frequency.getMinutes(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 31, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 44, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 57, -1, -1});
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -282,13 +327,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testMixedMinutes() {
+    void testMixedMinutes() {
         try {
-            Frequency frequency = new Frequency("10,12-18/2,30-40,45,48-5/3 * * * *");
+            var frequency = new Frequency("10,12-18/2,30-40,45,48-5/3 * * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "10,12-18/2,30-40,45,48-5/3 * * * *");
+            assertEquals(frequency.getSpecification(), "10,12-18/2,30-40,45,48-5/3 * * * *");
             assertArrayEquals(frequency.getMinutes(), new byte[]{0, -1, -1, 3, -1, -1, -1, -1, -1, -1, 10, -1, 12, -1, 14, -1, 16, -1, 18, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, -1, -1, -1, -1, 45, -1, -1, 48, -1, -1, 51, -1, -1, 54, -1, -1, 57, -1, -1});
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -302,9 +347,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidNumberHour() {
+    void testInvalidNumberHour() {
         try {
-            Frequency frequency = new Frequency("* d * * *");
+            var frequency = new Frequency("* d * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -313,9 +358,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidDividerHour() {
+    void testInvalidDividerHour() {
         try {
-            Frequency frequency = new Frequency("* 2/4 * * *");
+            var frequency = new Frequency("* 2/4 * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -324,9 +369,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidEmptyPartHour() {
+    void testInvalidEmptyPartHour() {
         try {
-            Frequency frequency = new Frequency("* 2, * * *");
+            var frequency = new Frequency("* 2, * * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -335,13 +380,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testSingleHour() {
+    void testSingleHour() {
         try {
-            Frequency frequency = new Frequency("* 12 * * *");
+            var frequency = new Frequency("* 12 * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* 12 * * *");
+            assertEquals(frequency.getSpecification(), "* 12 * * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 12, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -355,7 +400,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedHours() {
+    void testRangedHours() {
         try {
             Frequency frequency = null;
 
@@ -363,7 +408,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* 7-13 * * *");
+            assertEquals(frequency.getSpecification(), "* 7-13 * * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), new byte[]{-1, -1, -1, -1, -1, -1, -1, 7, 8, 9, 10, 11, 12, 13, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -376,7 +421,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* 22-23 * * *");
+            assertEquals(frequency.getSpecification(), "* 22-23 * * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 22, 23});
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -389,7 +434,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* 19-19 * * *");
+            assertEquals(frequency.getSpecification(), "* 19-19 * * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 19, -1, -1, -1, -1});
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -403,7 +448,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedHours() {
+    void testReverseRangedHours() {
         try {
             Frequency frequency = null;
 
@@ -411,7 +456,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* 17-3 * * *");
+            assertEquals(frequency.getSpecification(), "* 17-3 * * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), new byte[]{0, 1, 2, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 17, 18, 19, 20, 21, 22, 23});
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -424,7 +469,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* 21-0 * * *");
+            assertEquals(frequency.getSpecification(), "* 21-0 * * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), new byte[]{0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 21, 22, 23});
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -438,13 +483,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testDividerHours() {
+    void testDividerHours() {
         try {
-            Frequency frequency = new Frequency("* */6 * * *");
+            var frequency = new Frequency("* */6 * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* */6 * * *");
+            assertEquals(frequency.getSpecification(), "* */6 * * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), new byte[]{0, -1, -1, -1, -1, -1, 6, -1, -1, -1, -1, -1, 12, -1, -1, -1, -1, -1, 18, -1, -1, -1, -1, -1});
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -458,13 +503,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedDividerHours() {
+    void testRangedDividerHours() {
         try {
-            Frequency frequency = new Frequency("* 4-17/5 * * *");
+            var frequency = new Frequency("* 4-17/5 * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* 4-17/5 * * *");
+            assertEquals(frequency.getSpecification(), "* 4-17/5 * * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), new byte[]{-1, -1, -1, -1, 4, -1, -1, -1, -1, 9, -1, -1, -1, -1, 14, -1, -1, -1, -1, -1, -1, -1, -1, -1});
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -478,13 +523,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedDividerHours() {
+    void testReverseRangedDividerHours() {
         try {
-            Frequency frequency = new Frequency("* 18-5/4 * * *");
+            var frequency = new Frequency("* 18-5/4 * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* 18-5/4 * * *");
+            assertEquals(frequency.getSpecification(), "* 18-5/4 * * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), new byte[]{-1, -1, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 18, -1, -1, -1, 22, -1});
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -498,13 +543,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testMixedHours() {
+    void testMixedHours() {
         try {
-            Frequency frequency = new Frequency("* 4,8-10/3,12,15-18,20-3/3 * * *");
+            var frequency = new Frequency("* 4,8-10/3,12,15-18,20-3/3 * * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* 4,8-10/3,12,15-18,20-3/3 * * *");
+            assertEquals(frequency.getSpecification(), "* 4,8-10/3,12,15-18,20-3/3 * * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), new byte[]{-1, -1, 2, -1, 4, -1, -1, -1, 8, -1, -1, -1, 12, -1, -1, 15, 16, 17, 18, -1, 20, -1, -1, 23});
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -518,9 +563,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidNumberDate() {
+    void testInvalidNumberDate() {
         try {
-            Frequency frequency = new Frequency("* * d * *");
+            var frequency = new Frequency("* * d * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -529,9 +574,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidDividerDate() {
+    void testInvalidDividerDate() {
         try {
-            Frequency frequency = new Frequency("* * 2/4 * *");
+            var frequency = new Frequency("* * 2/4 * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -540,9 +585,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidEmptyPartDate() {
+    void testInvalidEmptyPartDate() {
         try {
-            Frequency frequency = new Frequency("* * 2, * *");
+            var frequency = new Frequency("* * 2, * *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -551,13 +596,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testSingleDate() {
+    void testSingleDate() {
         try {
-            Frequency frequency = new Frequency("* * 14 * *");
+            var frequency = new Frequency("* * 14 * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 14 * *");
+            assertEquals(frequency.getSpecification(), "* * 14 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 14, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});
@@ -571,7 +616,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedDates() {
+    void testRangedDates() {
         try {
             Frequency frequency = null;
 
@@ -579,7 +624,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 13-17 * *");
+            assertEquals(frequency.getSpecification(), "* * 13-17 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 13, 14, 15, 16, 17, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});
@@ -592,7 +637,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 29-31 * *");
+            assertEquals(frequency.getSpecification(), "* * 29-31 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 29, 30, 31});
@@ -605,7 +650,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 7-7 * *");
+            assertEquals(frequency.getSpecification(), "* * 7-7 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, -1, -1, -1, -1, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});
@@ -619,7 +664,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedDates() {
+    void testReverseRangedDates() {
         try {
             Frequency frequency = null;
 
@@ -627,7 +672,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 26-4 * *");
+            assertEquals(frequency.getSpecification(), "* * 26-4 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 26, 27, 28, 29, 30, 31});
@@ -640,7 +685,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 26-2,30-5 * *");
+            assertEquals(frequency.getSpecification(), "* * 26-2,30-5 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 26, 27, 28, 29, 30, 31});
@@ -653,7 +698,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 26-5,30-2 * *");
+            assertEquals(frequency.getSpecification(), "* * 26-5,30-2 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 26, 27, 28, 29, 30, 31});
@@ -666,7 +711,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 26-2,31-30 * *");
+            assertEquals(frequency.getSpecification(), "* * 26-2,31-30 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 26, 27, 28, 29, 30, 31});
@@ -679,7 +724,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 27-1 * *");
+            assertEquals(frequency.getSpecification(), "* * 27-1 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 27, 28, 29, 30, 31});
@@ -693,13 +738,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testDividerDates() {
+    void testDividerDates() {
         try {
-            Frequency frequency = new Frequency("* * */8 * *");
+            var frequency = new Frequency("* * */8 * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * */8 * *");
+            assertEquals(frequency.getSpecification(), "* * */8 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{1, -1, -1, -1, -1, -1, -1, -1, 9, -1, -1, -1, -1, -1, -1, -1, 17, -1, -1, -1, -1, -1, -1, -1, 25, -1, -1, -1, -1, -1, -1});
@@ -713,13 +758,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedDividerDates() {
+    void testRangedDividerDates() {
         try {
-            Frequency frequency = new Frequency("* * 7-23/9 * *");
+            var frequency = new Frequency("* * 7-23/9 * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 7-23/9 * *");
+            assertEquals(frequency.getSpecification(), "* * 7-23/9 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, -1, -1, -1, -1, 7, -1, -1, -1, -1, -1, -1, -1, -1, 16, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});
@@ -733,13 +778,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedDividerDates() {
+    void testReverseRangedDividerDates() {
         try {
-            Frequency frequency = new Frequency("* * 11-7/13 * *");
+            var frequency = new Frequency("* * 11-7/13 * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 11-7/13 * *");
+            assertEquals(frequency.getSpecification(), "* * 11-7/13 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 24, -1, -1, -1, -1, -1, -1, -1});
@@ -752,7 +797,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 30-29/5,18-17/8 * *");
+            assertEquals(frequency.getSpecification(), "* * 30-29/5,18-17/8 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 18, -1, -1, -1, -1, -1, -1, -1, 26, -1, -1, -1, 30, -1});
@@ -765,7 +810,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 27-26/3 * *");
+            assertEquals(frequency.getSpecification(), "* * 27-26/3 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 27, -1, -1, 30, -1});
@@ -779,13 +824,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testMixedDates() {
+    void testMixedDates() {
         try {
-            Frequency frequency = new Frequency("* * 3,5,8-18/4,19-23,27-2/2 * *");
+            var frequency = new Frequency("* * 3,5,8-18/4,19-23,27-2/2 * *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * 3,5,8-18/4,19-23,27-2/2 * *");
+            assertEquals(frequency.getSpecification(), "* * 3,5,8-18/4,19-23,27-2/2 * *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), new byte[]{-1, -1, 3, -1, 5, -1, -1, 8, -1, -1, -1, 12, -1, -1, -1, 16, -1, -1, 19, 20, 21, 22, 23, -1, -1, -1, 27, -1, 29, -1, 31});
@@ -799,9 +844,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidNumberMonth() {
+    void testInvalidNumberMonth() {
         try {
-            Frequency frequency = new Frequency("* * * d *");
+            var frequency = new Frequency("* * * d *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -810,9 +855,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidDividerMonth() {
+    void testInvalidDividerMonth() {
         try {
-            Frequency frequency = new Frequency("* * * 2/4 *");
+            var frequency = new Frequency("* * * 2/4 *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -821,9 +866,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidEmptyPartMonth() {
+    void testInvalidEmptyPartMonth() {
         try {
-            Frequency frequency = new Frequency("* * * 2, *");
+            var frequency = new Frequency("* * * 2, *");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -832,13 +877,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testSingleMonth() {
+    void testSingleMonth() {
         try {
-            Frequency frequency = new Frequency("* * * 3 *");
+            var frequency = new Frequency("* * * 3 *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * 3 *");
+            assertEquals(frequency.getSpecification(), "* * * 3 *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -852,7 +897,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedMonths() {
+    void testRangedMonths() {
         try {
             Frequency frequency = null;
 
@@ -860,7 +905,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * 7-9 *");
+            assertEquals(frequency.getSpecification(), "* * * 7-9 *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -873,7 +918,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * 10-12 *");
+            assertEquals(frequency.getSpecification(), "* * * 10-12 *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -886,7 +931,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * 5-5 *");
+            assertEquals(frequency.getSpecification(), "* * * 5-5 *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -900,7 +945,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedMonths() {
+    void testReverseRangedMonths() {
         try {
             Frequency frequency = null;
 
@@ -908,7 +953,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * 9-2 *");
+            assertEquals(frequency.getSpecification(), "* * * 9-2 *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -921,7 +966,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * 11-1 *");
+            assertEquals(frequency.getSpecification(), "* * * 11-1 *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -935,13 +980,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testDividerMonths() {
+    void testDividerMonths() {
         try {
-            Frequency frequency = new Frequency("* * * */4 *");
+            var frequency = new Frequency("* * * */4 *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * */4 *");
+            assertEquals(frequency.getSpecification(), "* * * */4 *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -955,13 +1000,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedDividerMonths() {
+    void testRangedDividerMonths() {
         try {
-            Frequency frequency = new Frequency("* * * 3-11/3 *");
+            var frequency = new Frequency("* * * 3-11/3 *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * 3-11/3 *");
+            assertEquals(frequency.getSpecification(), "* * * 3-11/3 *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -975,13 +1020,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedDividerMonths() {
+    void testReverseRangedDividerMonths() {
         try {
-            Frequency frequency = new Frequency("* * * 5-3/2 *");
+            var frequency = new Frequency("* * * 5-3/2 *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * 5-3/2 *");
+            assertEquals(frequency.getSpecification(), "* * * 5-3/2 *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -995,13 +1040,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testMixedMonths() {
+    void testMixedMonths() {
         try {
-            Frequency frequency = new Frequency("* * * 4,5-6,8-11/2,12-3/3 *");
+            var frequency = new Frequency("* * * 4,5-6,8-11/2,12-3/3 *");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * 4,5-6,8-11/2,12-3/3 *");
+            assertEquals(frequency.getSpecification(), "* * * 4,5-6,8-11/2,12-3/3 *");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -1015,9 +1060,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidNumberWeekday() {
+    void testInvalidNumberWeekday() {
         try {
-            Frequency frequency = new Frequency("* * * * d");
+            var frequency = new Frequency("* * * * d");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -1026,9 +1071,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidDividerWeekday() {
+    void testInvalidDividerWeekday() {
         try {
-            Frequency frequency = new Frequency("* * * * 2/4");
+            var frequency = new Frequency("* * * * 2/4");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -1037,9 +1082,9 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidEmptyPartWeekday() {
+    void testInvalidEmptyPartWeekday() {
         try {
-            Frequency frequency = new Frequency("* * * * 2,");
+            var frequency = new Frequency("* * * * 2,");
             fail();
             assertNotNull(frequency);
         } catch (FrequencyException e) {
@@ -1048,13 +1093,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testSingleWeekday() {
+    void testSingleWeekday() {
         try {
-            Frequency frequency = new Frequency("* * * * 7");
+            var frequency = new Frequency("* * * * 7");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * * 7");
+            assertEquals(frequency.getSpecification(), "* * * * 7");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -1068,7 +1113,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedWeekdays() {
+    void testRangedWeekdays() {
         try {
             Frequency frequency = null;
 
@@ -1076,7 +1121,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * * 3-5");
+            assertEquals(frequency.getSpecification(), "* * * * 3-5");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -1089,7 +1134,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * * 6-7");
+            assertEquals(frequency.getSpecification(), "* * * * 6-7");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -1102,7 +1147,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * * 2-2");
+            assertEquals(frequency.getSpecification(), "* * * * 2-2");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -1116,7 +1161,7 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedWeekdays() {
+    void testReverseRangedWeekdays() {
         try {
             Frequency frequency = null;
 
@@ -1124,7 +1169,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * * 5-2");
+            assertEquals(frequency.getSpecification(), "* * * * 5-2");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -1137,7 +1182,7 @@ public class TestFrequency {
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * * 6-1");
+            assertEquals(frequency.getSpecification(), "* * * * 6-1");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -1151,13 +1196,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testDividerWeekdays() {
+    void testDividerWeekdays() {
         try {
-            Frequency frequency = new Frequency("* * * * */3");
+            var frequency = new Frequency("* * * * */3");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * * */3");
+            assertEquals(frequency.getSpecification(), "* * * * */3");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -1171,13 +1216,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testRangedDividerWeekdays() {
+    void testRangedDividerWeekdays() {
         try {
-            Frequency frequency = new Frequency("* * * * 2-6/3");
+            var frequency = new Frequency("* * * * 2-6/3");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * * 2-6/3");
+            assertEquals(frequency.getSpecification(), "* * * * 2-6/3");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -1191,13 +1236,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testReverseRangedDividerWeekdays() {
+    void testReverseRangedDividerWeekdays() {
         try {
-            Frequency frequency = new Frequency("* * * * 4-2/2");
+            var frequency = new Frequency("* * * * 4-2/2");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * * 4-2/2");
+            assertEquals(frequency.getSpecification(), "* * * * 4-2/2");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -1211,13 +1256,13 @@ public class TestFrequency {
     }
 
     @Test
-    public void testMixedWeekdays() {
+    void testMixedWeekdays() {
         try {
-            Frequency frequency = new Frequency("* * * * 2,3-4,4-1/2");
+            var frequency = new Frequency("* * * * 2,3-4,4-1/2");
             assertNotNull(frequency);
 
             assertTrue(frequency.isParsed());
-            assertEquals(frequency.getFrequency(), "* * * * 2,3-4,4-1/2");
+            assertEquals(frequency.getSpecification(), "* * * * 2,3-4,4-1/2");
             assertArrayEquals(frequency.getMinutes(), ALL_MINUTES);
             assertArrayEquals(frequency.getHours(), ALL_HOURS);
             assertArrayEquals(frequency.getDates(), ALL_DATES);
@@ -1231,17 +1276,17 @@ public class TestFrequency {
     }
 
     @Test
-    public void testNextDateMinutes() {
+    void testNextDateMinutes() {
         try {
-            Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
-            long calendar_time = calendar.getTimeInMillis();
+            var calendar_time = calendar.getTimeInMillis();
             long previous = 0;
             long next = 0;
             Frequency frequency = null;
 
-            int minute = 60 * 1000;
-            int hour = 60 * minute;
+            var minute = 60 * 1000;
+            var hour = 60 * minute;
 
             frequency = new Frequency("* * * * *");
             previous = calendar_time;
@@ -1365,18 +1410,18 @@ public class TestFrequency {
     }
 
     @Test
-    public void testNextDateHours() {
+    void testNextDateHours() {
         try {
-            Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
-            long calendar_time = calendar.getTimeInMillis();
+            var calendar_time = calendar.getTimeInMillis();
             long previous = 0;
             long next = 0;
             Frequency frequency = null;
 
-            int minute = 60 * 1000;
-            int hour = 60 * minute;
-            int day = 24 * hour;
+            var minute = 60 * 1000;
+            var hour = 60 * minute;
+            var day = 24 * hour;
 
             frequency = new Frequency("*/30 13 * * *");        // 2002/09/01 10:29
             previous = calendar_time;
@@ -1494,18 +1539,18 @@ public class TestFrequency {
     }
 
     @Test
-    public void testNextDateDates() {
+    void testNextDateDates() {
         try {
-            Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
-            long calendar_time = calendar.getTimeInMillis();
+            var calendar_time = calendar.getTimeInMillis();
             long previous = 0;
             long next = 0;
             Frequency frequency = null;
 
             long minute = 60 * 1000;
-            long hour = 60 * minute;
-            long day = 24 * hour;
+            var hour = 60 * minute;
+            var day = 24 * hour;
 
             frequency = new Frequency("*/30 */12 6 * *");            // 2002/09/01 10:29
             previous = calendar_time;
@@ -1800,18 +1845,18 @@ public class TestFrequency {
     }
 
     @Test
-    public void testNextDateMonths() {
+    void testNextDateMonths() {
         try {
-            Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
-            long calendar_time = calendar.getTimeInMillis();
+            var calendar_time = calendar.getTimeInMillis();
             long previous = 0;
             long next = 0;
             Frequency frequency = null;
 
             long minute = 60 * 1000;
-            long hour = 60 * minute;
-            long day = 24 * hour;
+            var hour = 60 * minute;
+            var day = 24 * hour;
 
             frequency = new Frequency("*/30 */12 */20 10 *");            // 2002/09/01 10:29
             previous = calendar_time;
@@ -1930,18 +1975,18 @@ public class TestFrequency {
     }
 
     @Test
-    public void testNextDateWeekdays() {
+    void testNextDateWeekdays() {
         try {
-            Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 29);
-            long calendar_time = calendar.getTimeInMillis();
+            var calendar_time = calendar.getTimeInMillis();
             long previous = 0;
             long next = 0;
             Frequency frequency = null;
 
             long minute = 60 * 1000;
-            long hour = 60 * minute;
-            long day = 24 * hour;
+            var hour = 60 * minute;
+            var day = 24 * hour;
 
             frequency = new Frequency("30 12 * 10 1");                        // 2002/09/01 10:29
             previous = calendar_time;
@@ -1974,11 +2019,11 @@ public class TestFrequency {
     }
 
     @Test
-    public void testInvalidNextDate() {
+    void testInvalidNextDate() {
         try {
-            Calendar calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
             calendar.set(2002, Calendar.SEPTEMBER, 1, 10, 0);
-            long calendar_time = calendar.getTimeInMillis();
+            var calendar_time = calendar.getTimeInMillis();
             Frequency frequency = null;
 
             frequency = new Frequency("* * 31 2 *");

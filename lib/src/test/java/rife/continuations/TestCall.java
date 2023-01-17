@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.continuations;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCall {
     @Test
-    public void testSimpleCall()
+    void testSimpleCall()
     throws Throwable {
         final var test_classes = new String[]{"TestCallSimpleCallSource", "TestCallSimpleCallInterfaceSource"};
         for (final var test_class : test_classes) {
@@ -27,7 +27,7 @@ public class TestCall {
     }
 
     @Test
-    public void testAnswerInOtherThread()
+    void testAnswerInOtherThread()
     throws Throwable {
         final var test_classes = new String[]{"TestCallAnswerInOtherThreadCallSource", "TestCallAnswerInOtherThreadCallInterfaceSource"};
         for (final var test_class : test_classes) {
@@ -91,7 +91,7 @@ public class TestCall {
     }
 
     @Test
-    public void testMultipleAnswersWithTryCatch()
+    void testMultipleAnswersWithTryCatch()
     throws Throwable {
         final var test_classes = new String[]{"TestCallMultipleAnswersWithTryCatchSource", "TestCallSimpleCallInterfaceSource"};
         for (var i = 0; i < test_classes.length; i++) {

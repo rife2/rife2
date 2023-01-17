@@ -14,17 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPurgingMemorySessions {
     @Test
-    public void testInstantiation() {
-        PurgingSessionManager sessions = null;
-
-        sessions = new PurgingSessionManager(new MemorySessions());
-
-        assertNotNull(sessions);
-    }
-
-    @Test
-    public void testStartSession() {
-        PurgingSessionManager sessions = new PurgingSessionManager(new MemorySessions());
+    void testStartSession() {
+        var sessions = new MemorySessions();
         sessions.setSessionPurgeFrequency(0);
         try {
             sessions.eraseAllSessions();
@@ -32,12 +23,12 @@ public class TestPurgingMemorySessions {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
 
-        int user_id = 143;
-        String host_ip = "189.38.987.43";
+        var user_id = 143;
+        var auth_data = "189.38.987.43";
 
         String auth_id = null;
         try {
-            auth_id = sessions.startSession(user_id, host_ip, false);
+            auth_id = sessions.startSession(user_id, auth_data, false);
 
             assertNotNull(auth_id);
             assertTrue(auth_id.length() > 0);
@@ -49,25 +40,25 @@ public class TestPurgingMemorySessions {
     }
 
     @Test
-    public void testPurgeSessions() {
-        PurgingSessionManager sessions = new PurgingSessionManager(new MemorySessions());
+    void testPurgeSessions() {
+        var sessions = new MemorySessions();
         sessions.setSessionDuration(2000);
         sessions.setSessionPurgeFrequency(1);
         sessions.setSessionPurgeScale(1);
 
-        int user_id = 9478;
-        String host_ip = "98.232.12.456";
+        var user_id = 9478;
+        var auth_data = "98.232.12.456";
 
         try {
             sessions.eraseAllSessions();
             assertEquals(0, sessions.countSessions());
 
-            sessions.startSession(user_id, host_ip, false);
+            sessions.startSession(user_id, auth_data, false);
             assertEquals(1, sessions.countSessions());
 
             Thread.sleep(2010);
 
-            sessions.startSession(user_id, host_ip, false);
+            sessions.startSession(user_id, auth_data, false);
             assertEquals(1, sessions.countSessions());
         } catch (InterruptedException | SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));

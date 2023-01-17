@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -10,49 +10,49 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestValidationRuleNotEqual {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         Bean bean = new Bean("value");
         ValidationRuleNotEqual rule = new ValidationRuleNotEqual("property", "").setBean(bean);
         assertNotNull(rule);
     }
 
     @Test
-    public void testValid() {
+    void testValid() {
         Bean bean = new Bean("value");
         ValidationRuleNotEqual rule = new ValidationRuleNotEqual("property", "other").setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testValidArray() {
+    void testValidArray() {
         Bean bean = new Bean(new String[]{"value", "something"});
         ValidationRuleNotEqual rule = new ValidationRuleNotEqual("arrayProperty", "other").setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testInvalid() {
+    void testInvalid() {
         Bean bean = new Bean("value");
         ValidationRuleNotEqual rule = new ValidationRuleNotEqual("property", "value").setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testInvalidArray() {
+    void testInvalidArray() {
         Bean bean = new Bean(new String[]{"value", "other"});
         ValidationRuleNotEqual rule = new ValidationRuleNotEqual("arrayProperty", "other").setBean(bean);
         assertFalse(rule.validate());
     }
 
     @Test
-    public void testUnknownProperty() {
+    void testUnknownProperty() {
         Bean bean = new Bean("value");
         ValidationRuleNotEqual rule = new ValidationRuleNotEqual("unknown_property", "blurp").setBean(bean);
         assertTrue(rule.validate());
     }
 
     @Test
-    public void testGetError() {
+    void testGetError() {
         Bean bean = new Bean("value");
         ValidationRuleNotEqual rule = new ValidationRuleNotEqual("property", "value").setBean(bean);
         ValidationError error = rule.getError();

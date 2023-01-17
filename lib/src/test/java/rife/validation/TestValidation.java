@@ -1,10 +1,11 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
 
 import org.junit.jupiter.api.Test;
+import rife.config.RifeConfig;
 import rife.tools.ExceptionUtils;
 
 import java.text.SimpleDateFormat;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestValidation {
     @Test
-    public void testInstantiation() {
+    void testInstantiation() {
         Bean bean = new Bean("value");
         assertNotNull(bean);
         assertEquals(0, bean.countValidationErrors());
@@ -32,7 +33,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testValidRule() {
+    void testValidRule() {
         Bean bean = new Bean("value");
         bean.addRule(null);
         ValidationRule rule1 = new ValidationRuleNotEmpty("property").setBean(bean);
@@ -52,7 +53,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testInvalidRule() {
+    void testInvalidRule() {
         Bean bean = new Bean(null);
         bean.addRule(null);
         ValidationRule rule1 = new ValidationRuleNotEmpty("property");
@@ -73,7 +74,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testGetGroupIllegalArgument() {
+    void testGetGroupIllegalArgument() {
         Bean bean = new Bean("value");
         assertNull(bean.getGroup(null));
         assertNull(bean.getGroup(""));
@@ -81,7 +82,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testAddGroup() {
+    void testAddGroup() {
         Bean bean = new Bean("value");
         ValidationGroup group1 = bean.addGroup("group1")
             .addRule(new ValidationRuleNotEmpty("property"))
@@ -95,7 +96,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testAddValidationError() {
+    void testAddValidationError() {
         Bean bean = new Bean(null);
         bean.addValidationError(null);
         assertEquals(0, bean.countValidationErrors());
@@ -106,7 +107,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testReplaceValidationError() {
+    void testReplaceValidationError() {
         Bean bean = new Bean(null);
 
         Set<ValidationError> errors = new LinkedHashSet<ValidationError>();
@@ -115,7 +116,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testValidateWithoutReset() {
+    void testValidateWithoutReset() {
         Bean bean = new Bean("");
         ValidationRule rule = new ValidationRuleNotEmpty("property");
         bean.addRule(rule);
@@ -127,7 +128,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testResetValidation() {
+    void testResetValidation() {
         Bean bean = new Bean("");
         ValidationRule rule = new ValidationRuleNotEmpty("property");
         bean.addRule(rule);
@@ -139,7 +140,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testFocusGroupIllegalArguments() {
+    void testFocusGroupIllegalArguments() {
         Bean bean = new Bean("");
         bean.focusGroup(null);
         assertEquals(0, bean.countValidationErrors());
@@ -154,7 +155,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testFocusGroup() {
+    void testFocusGroup() {
         Bean bean = new Bean("");
         bean.addGroup("group1")
             .addRule(new ValidationRuleLimitedLength("property", 1, -1))
@@ -196,7 +197,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testResetGroupIllegalArguments() {
+    void testResetGroupIllegalArguments() {
         Bean bean = new Bean("");
         bean.resetGroup(null);
         assertEquals(0, bean.countValidationErrors());
@@ -211,7 +212,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testResetGroup() {
+    void testResetGroup() {
         Bean bean = new Bean("");
         bean.addGroup("group1")
             .addRule(new ValidationRuleLimitedLength("property", 1, -1))
@@ -253,7 +254,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testValidateGroupIllegalArguments() {
+    void testValidateGroupIllegalArguments() {
         Bean bean = new Bean("value");
         bean.addGroup("group1")
             .addRule(new ValidationRuleNotEmpty("property"))
@@ -264,7 +265,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testValidateGroup() {
+    void testValidateGroup() {
         Bean bean = new Bean("");
         bean.setProperty("12");
         bean.addGroup("group1")
@@ -321,7 +322,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testUniqueSubjectErrors() {
+    void testUniqueSubjectErrors() {
         Bean bean = new Bean("");
         bean.setProperty("://wrong");
         bean.addRule(new ValidationRuleEmail("property"));
@@ -332,7 +333,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testLimitSubjectErrors() {
+    void testLimitSubjectErrors() {
         Bean bean = new Bean("");
         bean.setProperty("://wrong");
         bean.limitSubjectErrors(null);
@@ -355,7 +356,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testUnlimitSubjectErrors() {
+    void testUnlimitSubjectErrors() {
         Bean bean = new Bean("");
         bean.setProperty("://wrong");
         bean.unlimitSubjectErrors(null);
@@ -376,7 +377,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testMakeSubjectValid() {
+    void testMakeSubjectValid() {
         Bean bean = new Bean("");
         bean.makeSubjectValid(null);
         assertTrue(bean.isSubjectValid(null));
@@ -396,7 +397,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testMakeErrorValid() {
+    void testMakeErrorValid() {
         Bean bean = new Bean("");
         bean.makeErrorValid(null, null);
         assertTrue(bean.isSubjectValid(null));
@@ -436,7 +437,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testGetErrorIndication() {
+    void testGetErrorIndication() {
         Bean bean = new Bean("test");
         ValidationRule rule = new ValidationRuleNotEmpty("property");
         bean.addRule(rule);
@@ -448,7 +449,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstrainedBean() {
+    void testConstrainedBean() {
         Bean bean = null;
 
         ConstrainedBean constraint = new ConstrainedBean().unique("property", "other");
@@ -459,7 +460,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testSeveralConstrainedBean() {
+    void testSeveralConstrainedBean() {
         Bean bean = null;
 
         ConstrainedBean constraint1 = new ConstrainedBean().unique("property", "other");
@@ -481,7 +482,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstraintSubject() {
+    void testConstraintSubject() {
         Bean bean = null;
 
         bean = new Bean("value");
@@ -500,7 +501,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstraintNotNull() {
+    void testConstraintNotNull() {
         Bean bean = new Bean("value");
         bean.addConstraint(new ConstrainedProperty("property").notNull(true));
         Iterator<ConstrainedProperty> it = bean.getConstrainedProperties().iterator();
@@ -515,7 +516,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstraintNotEmpty() {
+    void testConstraintNotEmpty() {
         Bean bean = new Bean("value");
         bean.addConstraint(new ConstrainedProperty("property").notEmpty(true));
         Iterator<ConstrainedProperty> it = bean.getConstrainedProperties().iterator();
@@ -530,7 +531,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstraintNotEqual() {
+    void testConstraintNotEqual() {
         Bean bean = new Bean("other");
         bean.addConstraint(new ConstrainedProperty("property").notEqual("value"));
         Iterator<ConstrainedProperty> it = bean.getConstrainedProperties().iterator();
@@ -545,7 +546,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstraintLimitedLength() {
+    void testConstraintLimitedLength() {
         Bean bean = new Bean("value");
         bean.addConstraint(new ConstrainedProperty("property").minLength(3));
         Iterator<ConstrainedProperty> it = bean.getConstrainedProperties().iterator();
@@ -560,7 +561,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstraintEmail() {
+    void testConstraintEmail() {
         Bean bean = new Bean("test@domain.com");
         bean.addConstraint(new ConstrainedProperty("property").email(true));
         Iterator<ConstrainedProperty> it = bean.getConstrainedProperties().iterator();
@@ -575,7 +576,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstraintUrl() {
+    void testConstraintUrl() {
         Bean bean = new Bean("http://test.some.com");
         bean.addConstraint(new ConstrainedProperty("property").url(true));
         Iterator<ConstrainedProperty> it = bean.getConstrainedProperties().iterator();
@@ -590,7 +591,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstraintRegexp() {
+    void testConstraintRegexp() {
         Bean bean = new Bean("two words");
         bean.addConstraint(new ConstrainedProperty("property").regexp("\\w+ \\w+"));
         Iterator<ConstrainedProperty> it = bean.getConstrainedProperties().iterator();
@@ -605,9 +606,9 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstraintFormat() {
+    void testConstraintFormat() {
         Bean bean = new Bean("12032003");
-        bean.addConstraint(new ConstrainedProperty("property").format(new SimpleDateFormat("ddmmyyyy")));
+        bean.addConstraint(new ConstrainedProperty("property").format(RifeConfig.tools().getSimpleDateFormat("ddMMyyyy")));
         Iterator<ConstrainedProperty> it = bean.getConstrainedProperties().iterator();
         assertTrue(it.hasNext());
         assertTrue(it.next().isFormatted());
@@ -620,7 +621,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstraintLimitedDate() {
+    void testConstraintLimitedDate() {
         Bean bean = new Bean(null);
         bean.setTheDate(new Date(2003, 12, 11));
         bean.addConstraint(new ConstrainedProperty("theDate").maxDate(new Date(2004, 3, 1)));
@@ -636,7 +637,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstraintInList() {
+    void testConstraintInList() {
         Bean bean = new Bean("entry");
         bean.addConstraint(new ConstrainedProperty("property").inList(new String[]{"one", "two", "entry", "three"}));
         Iterator<ConstrainedProperty> it = bean.getConstrainedProperties().iterator();
@@ -651,7 +652,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstraintRange() {
+    void testConstraintRange() {
         Bean bean = new Bean("bbbb");
         bean.addConstraint(new ConstrainedProperty("property").rangeBegin("aaab").rangeEnd("ccca"));
         Iterator<ConstrainedProperty> it = bean.getConstrainedProperties().iterator();
@@ -666,7 +667,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testConstraintSameAs() {
+    void testConstraintSameAs() {
         Bean bean = new Bean("first value");
         bean.setOther("first value");
         bean.addConstraint(new ConstrainedProperty("other").sameAs("property"));
@@ -682,7 +683,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testSeveralConstraints() {
+    void testSeveralConstraints() {
         Bean bean = new Bean("value");
         bean.setTheDate(new Date());
 
@@ -727,7 +728,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testSameConstraintProperties() {
+    void testSameConstraintProperties() {
         Bean bean = new Bean("value");
         bean.setTheDate(new Date());
 
@@ -768,7 +769,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testCloneEmpty() {
+    void testCloneEmpty() {
         Bean bean = new Bean("value");
         Bean other = null;
         try {
@@ -786,7 +787,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testCloneFilled() {
+    void testCloneFilled() {
         Iterator<ValidationGroup> it_groups = null;
         Iterator<String> it_subjects = null;
         Iterator<ConstrainedProperty> it_constraints = null;

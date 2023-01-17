@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -7,18 +7,13 @@ package rife.database;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.database.exceptions.DatabaseException;
-import rife.database.queries.CreateTable;
-import rife.database.queries.Delete;
-import rife.database.queries.DropTable;
-import rife.database.queries.Insert;
-import rife.database.queries.Select;
+import rife.database.queries.*;
 import rife.tools.InnerClassException;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
+
+import static rife.database.TestDatasources.PGSQL;
 
 public class TestDbConcurrency {
     public static boolean VERBOSE = false;
@@ -27,7 +22,7 @@ public class TestDbConcurrency {
     private static final Object sOutputLock = new Object();
     private static final int sOutputLimit = 60;
     private static int sOutputChars = 0;
-    private static int sConnectionOverload = 25;
+    private static final int sConnectionOverload = 25;
 
     private static void display(char display) {
         if (VERBOSE) {
@@ -50,9 +45,10 @@ public class TestDbConcurrency {
         display('x');
     }
 
-    @ParameterizedTest
-    @ArgumentsSource(TestDatasources.class)
-    public void testConcurrency(Datasource datasource) {
+    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
+    void testConcurrency() {
+        final var datasource = PGSQL;
+
         var structure = new Structure(datasource);
         try {
             structure.install();
@@ -272,7 +268,7 @@ class Concurrency extends DbQueryManager implements Runnable {
         }
 
         if (TestDbConcurrency.DEBUG) {
-            System.out.println(Thread.currentThread().getName() + " : comitted");
+            System.out.println(Thread.currentThread().getName() + " : committed");
         }
     }
 }

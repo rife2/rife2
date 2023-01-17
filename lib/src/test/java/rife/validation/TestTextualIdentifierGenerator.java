@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestTextualIdentifierGenerator {
     @Test
-    public void testGenerate() {
+    void testGenerate() {
         TextualIdentifierGenerator<InitializedBeanImpl> identifier = new AbstractTextualIdentifierGenerator<>() {
             public String generateIdentifier() {
                 return bean_.getString() + ":" + bean_.getChar();

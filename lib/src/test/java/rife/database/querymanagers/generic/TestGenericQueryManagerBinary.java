@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.querymanagers.generic;
@@ -13,8 +13,8 @@ import rife.database.querymanagers.generic.beans.BinaryBean;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGenericQueryManagerBinary {
-    protected GenericQueryManager<BinaryBean> setUp(Datasource datasource) {
-        var manager = GenericQueryManagerFactory.getInstance(datasource, BinaryBean.class);
+    protected GenericQueryManager<BinaryBean> setup(Datasource datasource) {
+        var manager = GenericQueryManagerFactory.instance(datasource, BinaryBean.class);
         manager.install();
         return manager;
     }
@@ -25,8 +25,8 @@ public class TestGenericQueryManagerBinary {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetBaseClass(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testGetBaseClass(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             assertSame(BinaryBean.class, manager.getBaseClass());
         } finally {
@@ -36,8 +36,8 @@ public class TestGenericQueryManagerBinary {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallCustomQuery(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testInstallCustomQuery(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             manager.remove();
             manager.install(manager.getInstallTableQuery());
@@ -48,8 +48,8 @@ public class TestGenericQueryManagerBinary {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveRestoreBinary(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testSaveRestoreBinary(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             var bean = new BinaryBean();
             BinaryBean newbean = null;
@@ -87,7 +87,7 @@ public class TestGenericQueryManagerBinary {
             assertNotEquals(999999, manager.save(bean));
             assertEquals(bean.getId(), id + 1);
 
-            var manager_othertable = GenericQueryManagerFactory.getInstance(datasource, BinaryBean.class, "othertable");
+            var manager_othertable = GenericQueryManagerFactory.instance(datasource, BinaryBean.class, "othertable");
             manager_othertable.install();
 
             var bytes4 = new byte[]{79, 15, 88, 42};

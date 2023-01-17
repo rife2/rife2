@@ -1,20 +1,19 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.exceptions.SequenceNameRequiredException;
-import rife.database.exceptions.SequenceOperationRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
+import rife.database.exceptions.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSequenceValueDerby extends TestSequenceValue {
-    @Test
-    public void testInstantiationDerby() {
-        SequenceValue query = new SequenceValue(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testInstantiationDerby() {
+        var query = new SequenceValue(DERBY);
         assertNotNull(query);
         try {
             query.getSql();
@@ -24,9 +23,9 @@ public class TestSequenceValueDerby extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testInvalidDerby() {
-        SequenceValue query = new SequenceValue(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testInvalidDerby() {
+        var query = new SequenceValue(DERBY);
         try {
             query.getSql();
             fail();
@@ -51,9 +50,9 @@ public class TestSequenceValueDerby extends TestSequenceValue {
         query.clear();
     }
 
-    @Test
-    public void testClearDerby() {
-        SequenceValue query = new SequenceValue(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testClearDerby() {
+        var query = new SequenceValue(DERBY);
         query
             .name("sequencename")
             .next();
@@ -73,9 +72,9 @@ public class TestSequenceValueDerby extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testNextDerby() {
-        SequenceValue query = new SequenceValue(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testNextDerby() {
+        var query = new SequenceValue(DERBY);
         query
             .name("sequencename")
             .next();
@@ -87,9 +86,9 @@ public class TestSequenceValueDerby extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testCurrentDerby() {
-        SequenceValue query = new SequenceValue(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testCurrentDerby() {
+        var query = new SequenceValue(DERBY);
         query
             .name("sequencename")
             .current();
@@ -101,13 +100,13 @@ public class TestSequenceValueDerby extends TestSequenceValue {
         }
     }
 
-    @Test
-    public void testCloneDerby() {
-        SequenceValue query = new SequenceValue(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testCloneDerby() {
+        var query = new SequenceValue(DERBY);
         query
             .name("sequencename")
             .next();
-        SequenceValue query_clone = query.clone();
+        var query_clone = query.clone();
         try {
             query_clone.getSql();
             fail();

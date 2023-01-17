@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.querymanagers.generic;
@@ -14,8 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class TestGenericQueryManagerChild {
-    protected GenericQueryManager<ChildBean> setUp(Datasource datasource) {
-        var manager = GenericQueryManagerFactory.getInstance(datasource, ChildBean.class);
+    protected GenericQueryManager<ChildBean> setup(Datasource datasource) {
+        var manager = GenericQueryManagerFactory.instance(datasource, ChildBean.class);
         manager.install();
         return manager;
     }
@@ -26,8 +26,8 @@ public class TestGenericQueryManagerChild {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetBaseClass(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testGetBaseClass(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             assertSame(ChildBean.class, manager.getBaseClass());
         } finally {
@@ -37,8 +37,8 @@ public class TestGenericQueryManagerChild {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallCustomQuery(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testInstallCustomQuery(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             manager.remove();
             manager.install(manager.getInstallTableQuery());
@@ -49,8 +49,8 @@ public class TestGenericQueryManagerChild {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testChildBean(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testChildBean(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             var bean = new ChildBean();
 

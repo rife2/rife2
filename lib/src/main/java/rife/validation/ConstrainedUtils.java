@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.validation;
@@ -46,21 +46,21 @@ public class ConstrainedUtils {
             return null;
         }
 
-        Constrained constrained = ConstrainedUtils.makeConstrainedInstance(bean);
-        ConstrainedProperty contrained_property = null;
+        var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+        ConstrainedProperty constrained_property = null;
         if (constrained != null) {
-            contrained_property = constrained.getConstrainedProperty(name);
+            constrained_property = constrained.getConstrainedProperty(name);
         }
 
-        return contrained_property;
+        return constrained_property;
     }
 
     public static String getIdentityProperty(Class beanClass) {
         String identity_property = null;
 
-        Constrained constrained_bean = getConstrainedInstance(beanClass);
+        var constrained_bean = getConstrainedInstance(beanClass);
         if (constrained_bean != null) {
-            Iterator<ConstrainedProperty> properties_it = constrained_bean.getConstrainedProperties().iterator();
+            var properties_it = constrained_bean.getConstrainedProperties().iterator();
             ConstrainedProperty property;
             while (properties_it.hasNext()) {
                 property = properties_it.next();
@@ -88,7 +88,7 @@ public class ConstrainedUtils {
             propertyName = propertyName.substring(prefix.length());
         }
 
-        ConstrainedProperty constrained_property = bean.getConstrainedProperty(propertyName);
+        var constrained_property = bean.getConstrainedProperty(propertyName);
 
         return !(constrained_property != null &&
             !constrained_property.isEditable());
@@ -104,7 +104,7 @@ public class ConstrainedUtils {
             propertyName = propertyName.substring(prefix.length());
         }
 
-        ConstrainedProperty constrained_property = bean.getConstrainedProperty(propertyName);
+        var constrained_property = bean.getConstrainedProperty(propertyName);
         if (constrained_property != null) {
             if (!constrained_property.isPersistent() ||
                 constrained_property.isSameAs() ||
@@ -114,10 +114,8 @@ public class ConstrainedUtils {
                 return false;
             }
 
-            if (constrained_property.hasManyToOne() &&
-                !isManyToOneJoinProperty(bean.getClass(), propertyName)) {
-                return false;
-            }
+            return !constrained_property.hasManyToOne() ||
+                   isManyToOneJoinProperty(bean.getClass(), propertyName);
         }
 
         return true;
@@ -125,7 +123,7 @@ public class ConstrainedUtils {
 
     private static boolean isManyToOneJoinProperty(Class beanClass, String propertyName) {
         try {
-            Class property_type = BeanUtils.getPropertyType(beanClass, propertyName);
+            var property_type = BeanUtils.getPropertyType(beanClass, propertyName);
             if (ClassUtils.isBasic(property_type)) {
                 return true;
             }
@@ -146,7 +144,7 @@ public class ConstrainedUtils {
             propertyName = propertyName.substring(prefix.length());
         }
 
-        ConstrainedProperty constrained_property = bean.getConstrainedProperty(propertyName);
+        var constrained_property = bean.getConstrainedProperty(propertyName);
         if (constrained_property != null) {
             if (!constrained_property.isPersistent() ||
                 !constrained_property.isSaved() ||
@@ -157,27 +155,10 @@ public class ConstrainedUtils {
                 return false;
             }
 
-            if (constrained_property.hasManyToOne() &&
-                !isManyToOneJoinProperty(bean.getClass(), propertyName)) {
-                return false;
-            }
+            return !constrained_property.hasManyToOne() ||
+                   isManyToOneJoinProperty(bean.getClass(), propertyName);
         }
 
         return true;
-    }
-
-    public static boolean fileConstrainedProperty(Constrained bean, String propertyName, String prefix) {
-        if (null == bean) {
-            return false;
-        }
-
-        if (prefix != null &&
-            propertyName.startsWith(prefix)) {
-            propertyName = propertyName.substring(prefix.length());
-        }
-
-        ConstrainedProperty constrained_property = bean.getConstrainedProperty(propertyName);
-
-        return constrained_property != null && constrained_property.isFile();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.remembermanagers;
@@ -13,9 +13,7 @@ import rife.database.Datasource;
 import rife.database.DbPreparedStatement;
 import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
-import rife.database.DbTransactionUserWithoutResult;
 import rife.database.exceptions.DatabaseException;
-import rife.database.exceptions.ExecutionErrorException;
 import rife.database.queries.CreateTable;
 import rife.database.queries.Delete;
 import rife.database.queries.DropTable;
@@ -23,13 +21,14 @@ import rife.database.queries.Insert;
 import rife.database.queries.Select;
 import rife.tools.StringEncryptor;
 import rife.tools.UniqueIDGenerator;
-import rife.tools.InnerClassException;
 import rife.tools.ExceptionUtils;
 
 import java.security.NoSuchAlgorithmException;
 
 public abstract class DatabaseRemember extends DbQueryManager implements RememberManager {
     private long rememberDuration_ = RifeConfig.authentication().getRememberDuration();
+    private int rememberPurgeFrequency_ = RifeConfig.authentication().getRememberPurgeFrequency();
+    private int rememberPurgeScale_ = RifeConfig.authentication().getRememberPurgeScale();
 
     protected DatabaseRemember(Datasource datasource) {
         super(datasource);
@@ -41,6 +40,22 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
 
     public void setRememberDuration(long milliseconds) {
         rememberDuration_ = milliseconds;
+    }
+
+    public int getRememberPurgeFrequency() {
+        return rememberPurgeFrequency_;
+    }
+
+    public void setRememberPurgeFrequency(int frequency) {
+        rememberPurgeFrequency_ = frequency;
+    }
+
+    public int getRememberPurgeScale() {
+        return rememberPurgeScale_;
+    }
+
+    public void setRememberPurgeScale(int scale) {
+        rememberPurgeScale_ = scale;
     }
 
     public abstract boolean install()
@@ -72,7 +87,7 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
         return true;
     }
 
-    protected String _createRememberId(Insert createRememberId, final long userId, String hostIp)
+    protected String _createRememberId(Insert createRememberId, final long userId, String authData)
     throws RememberManagerException {
         assert createRememberId != null;
 
@@ -83,14 +98,10 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
         final String remember_id_string = UniqueIDGenerator.generate().toString();
 
         try {
-            if (0 == executeUpdate(createRememberId, new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString("rememberId", remember_id_string)
-                        .setLong("userId", userId)
-                        .setLong("moment", System.currentTimeMillis());
-                }
-            })) {
+            if (0 == executeUpdate(createRememberId, s ->
+                s.setString("rememberId", remember_id_string)
+                    .setLong("userId", userId)
+                    .setLong("moment", System.currentTimeMillis()))) {
                 throw new CreateRememberIdErrorException(userId);
             }
         } catch (DatabaseException e) {

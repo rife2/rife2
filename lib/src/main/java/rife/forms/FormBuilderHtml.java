@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.forms;
@@ -8,7 +8,7 @@ import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.validation.ConstrainedProperty;
 import rife.validation.ValidationBuilder;
-import rife.validation.ValidationBuilderXhtml;
+import rife.validation.ValidationBuilderHtml;
 
 import java.util.List;
 
@@ -16,18 +16,20 @@ public class FormBuilderHtml extends AbstractFormBuilder {
     public static final String VALUE_SELECTED = " selected=\"selected\"";
     public static final String VALUE_CHECKED = " checked=\"checked\"";
 
-    private static final String ID_NAME = "NAME";
-    private static final String ID_ATTRIBUTES = "ATTRIBUTES";
-    private static final String ID_VALUE = "VALUE";
-    private static final String ID_MAXLENGTH = "MAXLENGTH";
-    private static final String ID_CHECKED = "CHECKED";
-    private static final String ID_OPTIONS = "OPTIONS";
-    private static final String ID_SELECTED = "SELECTED";
-    private static final String ID_LABEL = "LABEL";
-    private static final String ID_DISABLED = "DISABLED";
-    private static final String ID_FORM_OPTION = "FORM:OPTION:";
+    private static final String ID_NAME = "name";
+    private static final String ID_ATTRIBUTES = "attributes";
+    private static final String ID_VALUE = "value";
+    private static final String ID_MINLENGTH = "minlength";
+    private static final String ID_MAXLENGTH = "maxlength";
+    private static final String ID_REQUIRED = "required";
+    private static final String ID_CHECKED = "checked";
+    private static final String ID_OPTIONS = "options";
+    private static final String ID_SELECTED = "selected";
+    private static final String ID_LABEL = "label";
+    private static final String ID_DISABLED = "disabled";
+    private static final String ID_FORM_OPTION = "form:option:";
 
-    private ValidationBuilder mValidationBuilder = new ValidationBuilderXhtml();
+    private ValidationBuilder mValidationBuilder = new ValidationBuilderHtml();
 
     public ValidationBuilder getValidationBuilder() {
         return mValidationBuilder;
@@ -45,19 +47,19 @@ public class FormBuilderHtml extends AbstractFormBuilder {
     }
 
     protected void generateFieldHidden(Template template, String templateFieldName, String name, ConstrainedProperty property, String[] values, Template builderTemplate, List<String> setValues, boolean replaceExistingValues) {
-        generateFieldText(PREFIX_FORM_HIDDEN, true, true, false, false, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
+        generateFieldText(PREFIX_FORM_HIDDEN, true, true, false, false, false, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
     }
 
     protected void generateFieldInput(Template template, String templateFieldName, String name, ConstrainedProperty property, String[] values, Template builderTemplate, List<String> setValues, boolean replaceExistingValues) {
-        generateFieldText(PREFIX_FORM_INPUT, true, true, true, true, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
+        generateFieldText(PREFIX_FORM_INPUT, true, true, true, true, true, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
     }
 
     protected void generateFieldSecret(Template template, String templateFieldName, String name, ConstrainedProperty property, String[] values, Template builderTemplate, List<String> setValues, boolean replaceExistingValues) {
-        generateFieldText(PREFIX_FORM_SECRET, false, true, true, true, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
+        generateFieldText(PREFIX_FORM_SECRET, false, true, true, true, true, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
     }
 
     protected void generateFieldTextarea(Template template, String templateFieldName, String name, ConstrainedProperty property, String[] values, Template builderTemplate, List<String> setValues, boolean replaceExistingValues) {
-        generateFieldText(PREFIX_FORM_TEXTAREA, true, false, false, true, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
+        generateFieldText(PREFIX_FORM_TEXTAREA, true, false, false, true, true, template, templateFieldName, name, property, values, builderTemplate, setValues, replaceExistingValues);
     }
 
     protected void generateFieldRadio(Template template, String templateFieldName, Class propertyType, String name, ConstrainedProperty property, String[] values, Template builderTemplate, List<String> setValues, boolean replaceExistingValues) {
@@ -80,8 +82,16 @@ public class FormBuilderHtml extends AbstractFormBuilder {
         return ID_VALUE;
     }
 
+    protected String getIdMinlength() {
+        return ID_MINLENGTH;
+    }
+
     protected String getIdMaxlength() {
         return ID_MAXLENGTH;
+    }
+
+    protected String getIdRequired() {
+        return ID_REQUIRED;
     }
 
     protected String getIdChecked() {

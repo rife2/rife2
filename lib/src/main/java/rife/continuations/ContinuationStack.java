@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.continuations;
@@ -127,6 +127,10 @@ public class ContinuationStack {
             return null;
         }
         return referenceStack_[position];
+    }
+
+    public synchronized int getReferenceStackSize() {
+        return referenceStack_.length;
     }
 
     private synchronized void storeIndex(int index, int position, int type) {

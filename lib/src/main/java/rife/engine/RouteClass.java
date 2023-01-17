@@ -1,48 +1,46 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
 
 import rife.engine.annotations.*;
+import rife.engine.annotations.Parameter;
 import rife.engine.exceptions.EngineException;
-import rife.tools.ClassUtils;
-import rife.tools.Convert;
-import rife.tools.StringUtils;
+import rife.tools.*;
 import rife.tools.exceptions.ConversionException;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.*;
 
-public class RouteClass implements Route {
+class RouteClass implements Route {
     private final Router router_;
-    private final RequestMethod method_;
+    private final RequestMethod[] methods_;
     private String path_;
     private final PathInfoHandling pathInfoHandling_;
     private final Class<? extends Element> elementClass_;
     private List<Field> fields_ = null;
 
-    public RouteClass(Router router, Class<? extends Element> elementClass) {
+    RouteClass(Router router, Class<? extends Element> elementClass) {
         this(router, null, null, null, elementClass);
     }
 
-    public RouteClass(Router router, RequestMethod method, Class<? extends Element> elementClass) {
-        this(router, method, null, null, elementClass);
+    RouteClass(Router router, RequestMethod[] methods, Class<? extends Element> elementClass) {
+        this(router, methods, null, null, elementClass);
     }
 
-    public RouteClass(Router router, RequestMethod method, String path, Class<? extends Element> elementClass) {
-        this(router, method, path, null, elementClass);
+    RouteClass(Router router, RequestMethod[] methods, String path, Class<? extends Element> elementClass) {
+        this(router, methods, path, null, elementClass);
     }
 
-    public RouteClass(Router router, RequestMethod method, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
-        this(router, method, null, pathInfoHandling, elementClass);
+    RouteClass(Router router, RequestMethod[] methods, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
+        this(router, methods, null, pathInfoHandling, elementClass);
     }
 
-    public RouteClass(Router router, RequestMethod method, String path, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
+    RouteClass(Router router, RequestMethod[] methods, String path, PathInfoHandling pathInfoHandling, Class<? extends Element> elementClass) {
         router_ = router;
-        method_ = method;
+        methods_ = methods;
         elementClass_ = elementClass;
         if (path == null) {
             path = defaultElementPath();
@@ -60,8 +58,8 @@ public class RouteClass implements Route {
     }
 
     @Override
-    public RequestMethod method() {
-        return method_;
+    public RequestMethod[] methods() {
+        return methods_;
     }
 
     @Override
@@ -100,12 +98,15 @@ public class RouteClass implements Route {
                         continue;
                     }
 
-                    if (field.isAnnotationPresent(Parameter.class) ||
-                        field.isAnnotationPresent(Header.class) ||
+                    if (field.isAnnotationPresent(ActiveSite.class) ||
                         field.isAnnotationPresent(Body.class) ||
-                        field.isAnnotationPresent(PathInfo.class) ||
-                        field.isAnnotationPresent(FileUpload.class) ||
                         field.isAnnotationPresent(Cookie.class) ||
+                        field.isAnnotationPresent(FileUpload.class) ||
+                        field.isAnnotationPresent(Header.class) ||
+                        field.isAnnotationPresent(Parameter.class) ||
+                        field.isAnnotationPresent(ParametersBean.class) ||
+                        field.isAnnotationPresent(PathInfo.class) ||
+                        field.isAnnotationPresent(Property.class) ||
                         field.isAnnotationPresent(RequestAttribute.class) ||
                         field.isAnnotationPresent(SessionAttribute.class)) {
                         fields.add(field);
@@ -122,7 +123,7 @@ public class RouteClass implements Route {
         return fields;
     }
 
-    public static Map<String, String[]> getAnnotatedOutParameters(Context context) {
+    static Map<String, String[]> getAnnotatedOutParameters(Context context) {
         try {
             var parameters = new LinkedHashMap<String, String[]>();
 
@@ -139,14 +140,25 @@ public class RouteClass implements Route {
                     var name = field.getName();
                     var value = field.get(context.processedElement());
 
-                    if (field.isAnnotationPresent(Parameter.class) &&
-                        shouldProcessOutFlow(field.getAnnotation(Parameter.class).flow())) {
-                        var annotation_name = field.getAnnotation(Parameter.class).value();
-                        if (annotation_name != null && !annotation_name.isEmpty()) {
-                            name = annotation_name;
-                        }
+                    if (value != null) {
+                        if (field.isAnnotationPresent(Parameter.class) &&
+                            shouldProcessOutFlow(field.getAnnotation(Parameter.class).flow())) {
+                            var annotation_name = field.getAnnotation(Parameter.class).value();
+                            if (annotation_name != null && !annotation_name.isEmpty()) {
+                                name = annotation_name;
+                            }
 
-                        parameters.put(name, new String[]{Convert.toString(value)});
+                            parameters.put(name, ArrayUtils.createStringArray(value, null));
+                        } else if (field.isAnnotationPresent(ParametersBean.class) &&
+                                   shouldProcessOutFlow(field.getAnnotation(ParametersBean.class).flow())) {
+                            var annotation_prefix = field.getAnnotation(ParametersBean.class).prefix();
+
+                            BeanUtils.processPropertyValues(value, null, null, annotation_prefix, (propertyName, descriptor, propertyValue, constrainedProperty) -> {
+                                if (propertyValue != null) {
+                                    parameters.put(propertyName, ArrayUtils.createStringArray(propertyValue, constrainedProperty));
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -157,7 +169,7 @@ public class RouteClass implements Route {
         }
     }
 
-    public Set<String> getAnnotatedInParameters() {
+    Set<String> getAnnotatedInParameters() {
         try {
             var parameters = new HashSet<String>();
 
@@ -180,6 +192,12 @@ public class RouteClass implements Route {
                     }
 
                     parameters.add(name);
+                } else if (field.isAnnotationPresent(ParametersBean.class) &&
+                           shouldProcessInFlow(field.getAnnotation(ParametersBean.class).flow())) {
+                    var type = field.getType();
+                    var annotation_prefix = field.getAnnotation(ParametersBean.class).prefix();
+
+                    parameters.addAll(BeanUtils.getPropertyNames(type, null, null, annotation_prefix));
                 }
             }
 
@@ -192,14 +210,25 @@ public class RouteClass implements Route {
     @Override
     public Element obtainElementInstance(Context context) {
         try {
-            var element = elementClass_.getDeclaredConstructor().newInstance();
+            return elementClass_.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            throw new EngineException(e);
+        }
+    }
 
+    @Override
+    public void prepareElementInstance(Element element, Context context) {
+        try {
             for (var field : getAnnotatedFields()) {
                 var name = field.getName();
                 var type = field.getType();
 
-                if (field.isAnnotationPresent(Parameter.class) &&
-                    shouldProcessInFlow(field.getAnnotation(Parameter.class).flow())) {
+                if (field.isAnnotationPresent(ActiveSite.class)) {
+                    if (Site.class.isAssignableFrom(field.getType())) {
+                        field.set(element, context.site());
+                    }
+                } else if (field.isAnnotationPresent(Parameter.class) &&
+                           shouldProcessInFlow(field.getAnnotation(Parameter.class).flow())) {
                     var params = context.parameters();
                     var annotation_name = field.getAnnotation(Parameter.class).value();
                     if (annotation_name != null && !annotation_name.isEmpty()) {
@@ -210,6 +239,31 @@ public class RouteClass implements Route {
                         Object value;
                         try {
                             value = Convert.toType(values[0], type);
+                        } catch (ConversionException e) {
+                            value = Convert.getDefaultValue(type);
+                        }
+                        field.set(element, value);
+                    }
+                } else if (field.isAnnotationPresent(ParametersBean.class) &&
+                           shouldProcessInFlow(field.getAnnotation(ParametersBean.class).flow())) {
+                    var annotation_prefix = field.getAnnotation(ParametersBean.class).prefix();
+                    Object bean = field.get(element);
+                    if (bean == null) {
+                        field.set(element, context.parametersBean(type, annotation_prefix));
+                    } else {
+                        context.parametersBean(bean, annotation_prefix);
+                    }
+                } else if (field.isAnnotationPresent(Property.class)) {
+                    var properties = context.properties();
+                    var annotation_name = field.getAnnotation(Property.class).value();
+                    if (annotation_name != null && !annotation_name.isEmpty()) {
+                        name = annotation_name;
+                    }
+                    var values = properties.get(name);
+                    if (values != null) {
+                        Object value;
+                        try {
+                            value = Convert.toType(values, type);
                         } catch (ConversionException e) {
                             value = Convert.getDefaultValue(type);
                         }
@@ -326,9 +380,6 @@ public class RouteClass implements Route {
                     }
                 }
             }
-
-
-            return element;
         } catch (Exception e) {
             throw new EngineException(e);
         }
@@ -392,6 +443,11 @@ public class RouteClass implements Route {
     @Override
     public String defaultElementId() {
         return StringUtils.uncapitalize(ClassUtils.shortenClassName(elementClass_));
+    }
+
+    @Override
+    public Class getElementClass() {
+        return elementClass_;
     }
 
     private String defaultElementPath() {

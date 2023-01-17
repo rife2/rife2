@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com) and
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com) and
  * JR Boyens <gnu-jrb[remove] at gmx dot net>
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
@@ -18,12 +18,12 @@ public class GenericQueryManagerDelegate<T> implements GenericQueryManager<T> {
 
     public GenericQueryManagerDelegate(Datasource datasource, Class<T> klass, String table) {
         datasource_ = datasource;
-        delegate_ = GenericQueryManagerFactory.getInstance(datasource, klass, table);
+        delegate_ = GenericQueryManagerFactory.instance(datasource, klass, table);
     }
 
     public GenericQueryManagerDelegate(Datasource datasource, Class<T> klass) {
         datasource_ = datasource;
-        delegate_ = GenericQueryManagerFactory.getInstance(datasource, klass);
+        delegate_ = GenericQueryManagerFactory.instance(datasource, klass);
     }
 
     public Datasource getDatasource() {
@@ -107,9 +107,9 @@ public class GenericQueryManagerDelegate<T> implements GenericQueryManager<T> {
         return delegate_.restore(rowProcessor);
     }
 
-    public boolean restore(RowProcessor rowProcessor)
+    public boolean restore(BeanFetcher<T> beanFetcher)
     throws DatabaseException {
-        return delegate_.restore(rowProcessor);
+        return delegate_.restore(beanFetcher);
     }
 
     public T restoreFirst(RestoreQuery query)
@@ -122,9 +122,9 @@ public class GenericQueryManagerDelegate<T> implements GenericQueryManager<T> {
         return delegate_.restore(query, rowProcessor);
     }
 
-    public boolean restore(RestoreQuery query, RowProcessor rowProcessor)
+    public boolean restore(RestoreQuery query, BeanFetcher<T> beanFetcher)
     throws DatabaseException {
-        return delegate_.restore(query, rowProcessor);
+        return delegate_.restore(query, beanFetcher);
     }
 
     public CreateTable getInstallTableQuery()

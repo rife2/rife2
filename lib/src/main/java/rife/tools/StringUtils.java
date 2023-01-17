@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
@@ -9,10 +9,6 @@ import rife.datastructures.DocumentPosition;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.BreakIterator;
@@ -21,13 +17,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * General purpose class containing common <code>String</code> manipulation
+ * General purpose class containing common {@code String} manipulation
  * methods.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public abstract class StringUtils {
+public final class StringUtils {
     public static String ENCODING_US_ASCII = StandardCharsets.US_ASCII.name();
     public static String ENCODING_ISO_8859_1 = StandardCharsets.ISO_8859_1.name();
     public static String ENCODING_ISO_8859_2 = "ISO-8859-2";
@@ -38,6 +34,8 @@ public abstract class StringUtils {
     public static String ENCODING_UTF_16 = StandardCharsets.UTF_16.name();
 
     public static Charset CHARSET_US_ASCII = Charset.forName(StringUtils.ENCODING_US_ASCII);
+
+    public static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
 
     enum BbcodeOption {
         SHORTEN_URL, SANITIZE_URL, CONVERT_BARE_URLS, NO_FOLLOW_LINKS
@@ -51,14 +49,14 @@ public abstract class StringUtils {
     public static final Pattern BBCODE_QUOTE_LONG = Pattern.compile("\\[quote=([^\\]]+\\]*)\\]", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
     public static final Pattern BBCODE_BAREURL = Pattern.compile("(?:[^\"'=>\\]]|^)((?:http|ftp)s?://(?:%[\\p{Digit}A-Fa-f][\\p{Digit}A-Fa-f]|[\\-_\\.!~*';\\|/?:@#&=\\+$,\\p{Alnum}])+)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 
-    private static final Map<Character, String> AGGRESSIVE_HTML_ENCODE_MAP = new HashMap<Character, String>();
-    private static final Map<Character, String> DEFENSIVE_HTML_ENCODE_MAP = new HashMap<Character, String>();
-    private static final Map<Character, String> XML_ENCODE_MAP = new HashMap<Character, String>();
-    private static final Map<Character, String> STRING_ENCODE_MAP = new HashMap<Character, String>();
-    private static final Map<Character, String> SQL_ENCODE_MAP = new HashMap<Character, String>();
-    private static final Map<Character, String> LATEX_ENCODE_MAP = new HashMap<Character, String>();
+    private static final Map<Character, String> AGGRESSIVE_HTML_ENCODE_MAP = new HashMap<>();
+    private static final Map<Character, String> DEFENSIVE_HTML_ENCODE_MAP = new HashMap<>();
+    private static final Map<Character, String> XML_ENCODE_MAP = new HashMap<>();
+    private static final Map<Character, String> STRING_ENCODE_MAP = new HashMap<>();
+    private static final Map<Character, String> SQL_ENCODE_MAP = new HashMap<>();
+    private static final Map<Character, String> LATEX_ENCODE_MAP = new HashMap<>();
 
-    private static final Map<String, Character> HTML_DECODE_MAP = new HashMap<String, Character>();
+    private static final Map<String, Character> HTML_DECODE_MAP = new HashMap<>();
 
     private static final HtmlEncoderFallbackHandler HTML_ENCODER_FALLBACK = new HtmlEncoderFallbackHandler();
 
@@ -427,13 +425,17 @@ public abstract class StringUtils {
         LATEX_ENCODE_MAP.put('\u00FF', "\\\"{y}");
     }
 
+    private StringUtils() {
+        // no-op
+    }
+
     /**
-     * Transforms a provided <code>String</code> object into a new string,
+     * Transforms a provided {@code String} object into a new string,
      * containing only valid characters for a java class name.
      *
      * @param name The string that has to be transformed into a valid class
      *             name.
-     * @return The encoded <code>String</code> object.
+     * @return The encoded {@code String} object.
      * @see #encodeUrl(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
@@ -454,43 +456,15 @@ public abstract class StringUtils {
         return matcher.replaceAll("_");
     }
 
-    private static boolean needsUrlEncoding(String source) {
-        if (null == source) {
-            return false;
-        }
-
-        // check if the string needs encoding first since
-        // the URLEncoder always allocates a StringBuffer, even when the
-        // string is returned as-is
-        var encode = false;
-        char ch;
-        for (var i = 0; i < source.length(); i++) {
-            ch = source.charAt(i);
-
-            if (ch >= 'a' && ch <= 'z' ||
-                ch >= 'A' && ch <= 'Z' ||
-                ch >= '0' && ch <= '9' ||
-                ch == '-' || ch == '_' || ch == '.' || ch == '*') {
-                continue;
-            }
-
-            encode = true;
-            break;
-        }
-
-        return encode;
-    }
-
     /**
-     * Transforms a provided <code>String</code> object into a new string,
+     * Transforms a provided {@code String} object into a new string,
      * containing only valid URL characters in the UTF-8 encoding.
      *
      * @param source The string that has to be transformed into a valid URL
      *               string.
-     * @return The encoded <code>String</code> object.
+     * @return The encoded {@code String} object.
      * @see #decodeUrl(String)
      * @see #encodeClassname(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
@@ -500,39 +474,19 @@ public abstract class StringUtils {
      * @since 1.0
      */
     public static String encodeUrl(String source) {
-        if (!needsUrlEncoding(source)) {
-            return source;
-        }
-
-        return URLEncoder.encode(source, StandardCharsets.UTF_8);
+        return encodeUrl(source, (String) null);
     }
 
     /**
-     * Transforms a provided <code>String</code> URL into a new string,
-     * containing decoded URL characters in the UTF-8 encoding.
-     *
-     * @param source The string URL that has to be decoded
-     * @return The decoded <code>String</code> object.
-     * @see #encodeUrl(String)
-     * @since 1.0
-     */
-    public static String decodeUrl(String source) {
-        return URLDecoder.decode(source, StandardCharsets.UTF_8);
-    }
-
-    /**
-     * Transforms a provided <code>String</code> object into a new string,
-     * only pure US Ascii strings are preserved and URL encoded in a regular
-     * way. Strings with characters from other encodings will be encoded in a
-     * RIFE-specific manner to allow international data to be passed along the
-     * query string.
+     * Transforms a provided {@code String} object into a new string,
+     * containing only valid URL characters in the UTF-8 encoding.
      *
      * @param source The string that has to be transformed into a valid URL
-     *               parameter string.
-     * @return The encoded <code>String</code> object.
-     * @see #decodeUrlValue(String)
+     *               string.
+     * @param allow  Additional characters to allow.
+     * @return The encoded {@code String} object.
+     * @see #decodeUrl(String)
      * @see #encodeClassname(String)
-     * @see #encodeUrl(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
@@ -541,85 +495,192 @@ public abstract class StringUtils {
      * @see #encodeJson(String)
      * @since 1.0
      */
-    public static String encodeUrlValue(String source) {
-        if (!needsUrlEncoding(source)) {
+    public static String encodeUrl(String source, char... allow) {
+        return encodeUrl(source, new String(allow));
+    }
+
+
+    /**
+     * Transforms a provided {@code String} object into a new string,
+     * containing only valid URL characters in the UTF-8 encoding.
+     *
+     * @param source The string that has to be transformed into a valid URL
+     *               string.
+     * @return The encoded {@code String} object.
+     * @see #decodeUrl(String)
+     * @see #encodeClassname(String)
+     * @see #encodeHtml(String)
+     * @see #encodeXml(String)
+     * @see #encodeSql(String)
+     * @see #encodeLatex(String)
+     * @see #encodeRegexp(String)
+     * @see #encodeJson(String)
+     * @since 1.0
+     */
+    public static String encodeUrl(String source, String allow) {
+        if (source == null || source.isEmpty()) {
             return source;
         }
 
-        // check if the string is valid US-ASCII encoding
-        var valid = true;
-        var encoder = CHARSET_US_ASCII.newEncoder();
-        try {
-            encoder.encode(CharBuffer.wrap(source));
-        } catch (CharacterCodingException e) {
-            valid = false;
-        }
-
-        try {
-            // if it is valid US-ASCII, use the regular URL encoding method
-            if (valid) {
-                return URLEncoder.encode(source, ENCODING_US_ASCII);
-            }
-            // otherwise, base-64 encode the UTF-8 bytes and mark the string
-            // as being encoded in a special way
-            else {
-                var encoded = new StringBuilder("%02%02");
-                var base64 = Base64.getEncoder().encodeToString(source.getBytes(StandardCharsets.UTF_8));
-                var base64_urlsafe = replace(base64, "=", "%3D");
-                encoded.append(base64_urlsafe);
-
-                return encoded.toString();
-            }
-        } catch (UnsupportedEncodingException e) {
-            // this should never happen, ISO-8859-1 is a standard encoding
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Decodes a <code>String</code> that has been encoded in a RIFE-specific
-     * manner for URL usage. Before calling this method, you should first
-     * verify if the value needs decoding by using the
-     * <code>doesUrlValueNeedDecoding(String)</code> method.
-     *
-     * @param source the value that has been encoded for URL usage in a
-     *               RIFE-specific way
-     * @return The decoded <code>String</code> object.
-     * @see #encodeUrlValue(String)
-     * @see #doesUrlValueNeedDecoding(String)
-     * @since 1.0
-     */
-    public static String decodeUrlValue(String source) {
-        try {
-            var decoded = Base64.getDecoder().decode(source.substring(2));
-            if (null == decoded) {
-                return null;
+        StringBuilder out = null;
+        char ch;
+        var i = 0;
+        while (i < source.length()) {
+            ch = source.charAt(i);
+            if (isUnreservedUriChar(ch) || (allow != null && allow.indexOf(ch) != -1)) {
+                if (out != null) {
+                    out.append(ch);
+                }
+                i += 1;
             } else {
-                return new String(decoded, StringUtils.ENCODING_UTF_8);
+                if (out == null) {
+                    out = new StringBuilder(source.length());
+                    out.append(source, 0, i);
+                }
+
+                var cp = source.codePointAt(i);
+                if (cp < 0x80) {
+                    appendUrlEncodedByte(out, cp);
+                    i += 1;
+                } else if (Character.isBmpCodePoint(cp)) {
+                    for (var b : Character.toString(ch).getBytes(StandardCharsets.UTF_8)) {
+                        appendUrlEncodedByte(out, b);
+                    }
+                    i += 1;
+                } else if (Character.isSupplementaryCodePoint(cp)) {
+                    var high = Character.highSurrogate(cp);
+                    var low = Character.lowSurrogate(cp);
+                    for (var b : new String(new char[]{high, low}).getBytes(StandardCharsets.UTF_8)) {
+                        appendUrlEncodedByte(out, b);
+                    }
+                    i += 2;
+                }
             }
-        } catch (UnsupportedEncodingException e) {
-            // this should never happen, UTF-8 is a standard encoding
-            throw new RuntimeException(e);
         }
+
+        if (out == null) {
+            return source;
+        }
+
+        return out.toString();
+    }
+
+    static final BitSet UNRESERVED_URI_CHARS;
+    static {
+        // see https://www.rfc-editor.org/rfc/rfc3986#page-13
+        // and https://url.spec.whatwg.org/#application-x-www-form-urlencoded-percent-encode-set
+        var unreserved = new BitSet('z' + 1);
+        unreserved.set('-');
+        unreserved.set('.');
+        for (int c = '0'; c <= '9'; ++c) unreserved.set(c);
+        for (int c = 'A'; c <= 'Z'; ++c) unreserved.set(c);
+        unreserved.set('_');
+        for (int c = 'a'; c <= 'z'; ++c) unreserved.set(c);
+        UNRESERVED_URI_CHARS = unreserved;
+    }
+
+    // see https://www.rfc-editor.org/rfc/rfc3986#page-13
+    // and https://url.spec.whatwg.org/#application-x-www-form-urlencoded-percent-encode-set
+    private static boolean isUnreservedUriChar(char ch) {
+        if (ch > 'z') return false;
+        return UNRESERVED_URI_CHARS.get(ch);
     }
 
     /**
-     * Checks if a <code>String</code> is encoded in a RIFE-specific manner
-     * for URL usage.
+     * Appends the hexadecimal digit of the provided number.
      *
-     * @param source the value that might have been encoded for URL usage in a
-     *               RIFE-specific way
-     * @return <code>true</code> if the value is encoded in the RIFE-specific
-     * format; and
-     * <p><code>false</code> otherwise
-     * @see #encodeUrlValue(String)
-     * @see #decodeUrlValue(String)
+     * @param out the string builder to append to
+     * @param number the number who's first digit will be appended in hexadecimal
      * @since 1.0
      */
-    public static boolean doesUrlValueNeedDecoding(String source) {
-        return source != null &&
-            source.length() > 2 &&
-            source.startsWith("\u0002\u0002");
+    public static void appendHexDigit(StringBuilder out, int number) {
+        out.append(HEX_DIGITS[number & 0x0F]);
+    }
+
+    private static void appendUrlEncodedByte(StringBuilder out, int ch) {
+        out.append("%");
+        appendHexDigit(out, ch >> 4);
+        appendHexDigit(out, ch);
+    }
+
+    /**
+     * Transforms a provided {@code String} URL into a new string,
+     * containing decoded URL characters in the UTF-8 encoding.
+     *
+     * @param source The string URL that has to be decoded
+     * @return The decoded {@code String} object.
+     * @see #encodeUrl(String)
+     * @since 1.0
+     */
+    public static String decodeUrl(String source) {
+        if (source == null || source.isEmpty()) {
+            return source;
+        }
+
+        var length = source.length();
+        StringBuilder out = null;
+        char ch;
+        byte[] bytes_buffer = null;
+        int bytes_pos = 0;
+        var i = 0;
+        while(i < length) {
+            ch = source.charAt(i);
+
+            if (ch == '%') {
+                if (out == null) {
+                    out = new StringBuilder(source.length());
+                    out.append(source, 0, i);
+                }
+
+                if (bytes_buffer == null) {
+                    // the remaining characters divided by the length
+                    // of the encoding format %xx, is the maximum number of
+                    // bytes that can be extracted
+                    bytes_buffer = new byte[(length - i) / 3];
+                    bytes_pos = 0;
+                }
+
+                i += 1;
+                if (length < i + 2) {
+                    throw new IllegalArgumentException("StringUtils.decodeUrl: Illegal escape sequence");
+                }
+                try {
+                    int v = Integer.parseInt(source, i, i + 2, 16);
+                    if (v < 0 || v > 0xFF) {
+                        throw new IllegalArgumentException("StringUtils.decodeUrl: Illegal escape value");
+                    }
+
+                    bytes_buffer[bytes_pos++] = (byte)v;
+
+                    i += 2;
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("StringUtils.decodeUrl: Illegal characters in escape sequence" + e.getMessage());
+                }
+            } else {
+                if (bytes_buffer != null) {
+                    out.append(new String(bytes_buffer, 0, bytes_pos, StandardCharsets.UTF_8));
+
+                    bytes_buffer = null;
+                    bytes_pos = 0;
+                }
+
+                if (out != null) {
+                    out.append(ch);
+                }
+
+                i += 1;
+            }
+        }
+
+        if (out == null) {
+            return source;
+        }
+
+        if (bytes_buffer != null) {
+            out.append(new String(bytes_buffer, 0, bytes_pos, StandardCharsets.UTF_8));
+        }
+
+        return out.toString();
     }
 
     private static boolean needsHtmlEncoding(String source, boolean defensive) {
@@ -725,15 +786,14 @@ public abstract class StringUtils {
     }
 
     /**
-     * Transforms a provided <code>String</code> object into a new string,
+     * Transforms a provided {@code String} object into a new string,
      * containing only valid Html characters.
      *
      * @param source The string that has to be transformed into a valid Html
      *               string.
-     * @return The encoded <code>String</code> object.
+     * @return The encoded {@code String} object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
      * @see #encodeString(String)
@@ -750,17 +810,16 @@ public abstract class StringUtils {
     }
 
     /**
-     * Transforms a provided <code>String</code> object into a new string,
+     * Transforms a provided {@code String} object into a new string,
      * containing as much as possible Html characters. It is safe to already
      * feed existing Html to this method since &amp;, &lt; and &gt; will not
      * be encoded.
      *
      * @param source The string that has to be transformed into a valid Html
      *               string.
-     * @return The encoded <code>String</code> object.
+     * @return The encoded {@code String} object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
      * @see #encodeString(String)
@@ -776,15 +835,14 @@ public abstract class StringUtils {
     }
 
     /**
-     * Transforms a provided <code>String</code> object into a new string,
+     * Transforms a provided {@code String} object into a new string,
      * containing only valid XML characters.
      *
      * @param source The string that has to be transformed into a valid XML
      *               string.
-     * @return The encoded <code>String</code> object.
+     * @return The encoded {@code String} object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeSql(String)
      * @see #encodeString(String)
@@ -798,15 +856,14 @@ public abstract class StringUtils {
     }
 
     /**
-     * Transforms a provided <code>String</code> object into a new string,
-     * containing only valid <code>String</code> characters.
+     * Transforms a provided {@code String} object into a new string,
+     * containing only valid {@code String} characters.
      *
      * @param source The string that has to be transformed into a valid
-     *               sequence of <code>String</code> characters.
-     * @return The encoded <code>String</code> object.
+     *               sequence of {@code String} characters.
+     * @return The encoded {@code String} object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
@@ -820,15 +877,14 @@ public abstract class StringUtils {
     }
 
     /**
-     * Transforms a provided <code>String</code> object into a series of
+     * Transforms a provided {@code String} object into a series of
      * unicode escape codes.
      *
      * @param source The string that has to be transformed into a valid
      *               sequence of unicode escape codes
-     * @return The encoded <code>String</code> object.
+     * @return The encoded {@code String} object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
@@ -857,15 +913,14 @@ public abstract class StringUtils {
     }
 
     /**
-     * Transforms a provided <code>String</code> object into a new string,
+     * Transforms a provided {@code String} object into a new string,
      * containing only valid Sql characters.
      *
      * @param source The string that has to be transformed into a valid Sql
      *               string.
-     * @return The encoded <code>String</code> object.
+     * @return The encoded {@code String} object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeString(String)
@@ -879,15 +934,14 @@ public abstract class StringUtils {
     }
 
     /**
-     * Transforms a provided <code>String</code> object into a new string,
+     * Transforms a provided {@code String} object into a new string,
      * containing only valid LaTeX characters.
      *
      * @param source The string that has to be transformed into a valid LaTeX
      *               string.
-     * @return The encoded <code>String</code> object.
+     * @return The encoded {@code String} object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
@@ -908,18 +962,18 @@ public abstract class StringUtils {
     }
 
     /**
-     * Transforms a provided <code>String</code> object into a new string,
+     * Transforms a provided {@code String} object into a new string,
      * using the mapping that are provided through the supplied encoding
      * table.
      *
      * @param source         The string that has to be transformed into a valid
      *                       string, using the mappings that are provided through the supplied
      *                       encoding table.
-     * @param encodingTables A <code>Map</code> object containing the mappings
+     * @param encodingTables A {@code Map} object containing the mappings
      *                       to transform characters into valid entities. The keys of this map
-     *                       should be <code>Character</code> objects and the values
-     *                       <code>String</code> objects.
-     * @return The encoded <code>String</code> object.
+     *                       should be {@code Character} objects and the values
+     *                       {@code String} objects.
+     * @return The encoded {@code String} object.
      * @since 1.0
      */
     private static String encode(String source, EncoderFallbackHandler fallbackHandler, Map<Character, String>... encodingTables) {
@@ -1003,15 +1057,14 @@ public abstract class StringUtils {
     }
 
     /**
-     * Transforms a provided <code>String</code> object into a new string,
+     * Transforms a provided {@code String} object into a new string,
      * containing only valid Json characters.
      *
      * @param source The string that has to be transformed into a valid LaTeX
      *               string.
-     * @return The encoded <code>String</code> object.
+     * @return The encoded {@code String} object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
@@ -1036,33 +1089,22 @@ public abstract class StringUtils {
             b = c;
             c = source.charAt(i);
             switch (c) {
-                case '\\':
-                case '"':
+                case '\\', '"' -> {
                     encoded_string.append('\\');
                     encoded_string.append(c);
-                    break;
-                case '/':
+                }
+                case '/' -> {
                     if (b == '<') {
                         encoded_string.append('\\');
                     }
                     encoded_string.append(c);
-                    break;
-                case '\b':
-                    encoded_string.append("\\b");
-                    break;
-                case '\t':
-                    encoded_string.append("\\t");
-                    break;
-                case '\n':
-                    encoded_string.append("\\n");
-                    break;
-                case '\f':
-                    encoded_string.append("\\f");
-                    break;
-                case '\r':
-                    encoded_string.append("\\r");
-                    break;
-                default:
+                }
+                case '\b' -> encoded_string.append("\\b");
+                case '\t' -> encoded_string.append("\\t");
+                case '\n' -> encoded_string.append("\\n");
+                case '\f' -> encoded_string.append("\\f");
+                case '\r' -> encoded_string.append("\\r");
+                default -> {
                     if (c < ' ' || (c >= '\u0080' && c < '\u00a0')
                         || (c >= '\u2000' && c < '\u2100')) {
                         encoded_string.append("\\u");
@@ -1072,6 +1114,7 @@ public abstract class StringUtils {
                     } else {
                         encoded_string.append(c);
                     }
+                }
             }
         }
 
@@ -1079,15 +1122,14 @@ public abstract class StringUtils {
     }
 
     /**
-     * Transforms a provided <code>String</code> object into a literal that can
+     * Transforms a provided {@code String} object into a literal that can
      * be included into a regular expression {@link Pattern} as-is. None of the
      * regular expression escapes in the string will be functional anymore.
      *
      * @param source The string that has to be escaped as a literal
-     * @return The encoded <code>String</code> object.
+     * @return The encoded {@code String} object.
      * @see #encodeClassname(String)
      * @see #encodeUrl(String)
-     * @see #encodeUrlValue(String)
      * @see #encodeHtml(String)
      * @see #encodeXml(String)
      * @see #encodeSql(String)
@@ -1120,22 +1162,29 @@ public abstract class StringUtils {
         return buffer.toString();
     }
 
-
+    /**
+     * Generates a hexadecimal string for the provided byte array.
+     *
+     * @param bytes the byte array to convert to a hex string
+     * @return the converted hexadecimal string
+     * @since 1.0
+     */
     public static String encodeHex(byte[] bytes) {
-        var sb = new StringBuilder();
-        for (var i = 0; i < bytes.length; ++i) {
-            sb.append(Integer.toHexString((bytes[i] & 0xFF) | 0x100), 1, 3);
+        var out = new StringBuilder();
+        for (byte b : bytes) {
+            appendHexDigit(out, b >> 4);
+            appendHexDigit(out, b);
         }
-        return sb.toString();
+        return out.toString();
     }
 
     /**
      * Counts the number of times a substring occures in a provided string in
      * a case-sensitive manner.
      *
-     * @param source    The <code>String</code> object that will be searched in.
+     * @param source    The {@code String} object that will be searched in.
      * @param substring The string whose occurances will we counted.
-     * @return An <code>int</code> value containing the number of occurances
+     * @return An {@code int} value containing the number of occurances
      * of the substring.
      * @since 1.0
      */
@@ -1146,11 +1195,11 @@ public abstract class StringUtils {
     /**
      * Counts the number of times a substring occures in a provided string.
      *
-     * @param source    The <code>String</code> object that will be searched in.
+     * @param source    The {@code String} object that will be searched in.
      * @param substring The string whose occurances will we counted.
-     * @param matchCase A <code>boolean</code> indicating if the match is
+     * @param matchCase A {@code boolean} indicating if the match is
      *                  going to be performed in a case-sensitive manner or not.
-     * @return An <code>int</code> value containing the number of occurances
+     * @return An {@code int} value containing the number of occurances
      * of the substring.
      * @since 1.0
      */
@@ -1194,8 +1243,8 @@ public abstract class StringUtils {
      * @param source    The string that will be split into parts.
      * @param separator The separator string that will be used to determine
      *                  the parts.
-     * @return An <code>ArrayList</code> containing the parts as
-     * <code>String</code> objects.
+     * @return An {@code ArrayList} containing the parts as
+     * {@code String} objects.
      * @since 1.0
      */
     public static List<String> split(String source, String separator) {
@@ -1210,10 +1259,10 @@ public abstract class StringUtils {
      * @param source    The string that will be split into parts.
      * @param separator The separator string that will be used to determine
      *                  the parts.
-     * @param matchCase A <code>boolean</code> indicating if the match is
+     * @param matchCase A {@code boolean} indicating if the match is
      *                  going to be performed in a case-sensitive manner or not.
-     * @return An <code>ArrayList</code> containing the parts as
-     * <code>String</code> objects.
+     * @return An {@code ArrayList} containing the parts as
+     * {@code String} objects.
      * @since 1.0
      */
     public static List<String> split(String source, String separator, boolean matchCase) {
@@ -1265,7 +1314,7 @@ public abstract class StringUtils {
      * @param source    The string that will be split into parts.
      * @param separator The separator string that will be used to determine
      *                  the parts.
-     * @return A <code>String[]</code> array containing the seperated parts.
+     * @return A {@code String[]} array containing the seperated parts.
      * @since 1.0
      */
     public static String[] splitToArray(String source, String separator) {
@@ -1280,9 +1329,9 @@ public abstract class StringUtils {
      * @param source    The string that will be split into parts.
      * @param separator The separator string that will be used to determine
      *                  the parts.
-     * @param matchCase A <code>boolean</code> indicating if the match is
+     * @param matchCase A {@code boolean} indicating if the match is
      *                  going to be performed in a case-sensitive manner or not.
-     * @return A <code>String[]</code> array containing the seperated parts.
+     * @return A {@code String[]} array containing the seperated parts.
      * @since 1.0
      */
     public static String[] splitToArray(String source, String separator, boolean matchCase) {
@@ -1301,7 +1350,7 @@ public abstract class StringUtils {
      * @param source    The string that will be split into integers.
      * @param separator The separator string that will be used to determine
      *                  the parts.
-     * @return An <code>int[]</code> array containing the seperated parts.
+     * @return An {@code int[]} array containing the seperated parts.
      * @since 1.0
      */
     public static int[] splitToIntArray(String source, String separator) {
@@ -1316,9 +1365,9 @@ public abstract class StringUtils {
      * @param source    The string that will be split into integers.
      * @param separator The separator string that will be used to determine
      *                  the parts.
-     * @param matchCase A <code>boolean</code> indicating if the match is
+     * @param matchCase A {@code boolean} indicating if the match is
      *                  going to be performed in a case-sensitive manner or not.
-     * @return An <code>int[]</code> array containing the seperated parts.
+     * @return An {@code int[]} array containing the seperated parts.
      * @since 1.0
      */
     public static int[] splitToIntArray(String source, String separator, boolean matchCase) {
@@ -1352,13 +1401,13 @@ public abstract class StringUtils {
     /**
      * Splits a string into bytes, using a separator string to detect the
      * seperation boundaries in a case-sensitive manner. If a part couldn't be
-     * converted to a <code>byte</code>, it will be omitted from the resulting
+     * converted to a {@code byte}, it will be omitted from the resulting
      * array.
      *
      * @param source    The string that will be split into bytes.
      * @param separator The separator string that will be used to determine
      *                  the parts.
-     * @return A <code>byte[]</code> array containing the bytes.
+     * @return A {@code byte[]} array containing the bytes.
      * @since 1.0
      */
     public static byte[] splitToByteArray(String source, String separator) {
@@ -1368,14 +1417,14 @@ public abstract class StringUtils {
     /**
      * Splits a string into bytes, using a separator string to detect the
      * seperation boundaries. If a part couldn't be converted to a
-     * <code>byte</code>, it will be omitted from the resulting array.
+     * {@code byte}, it will be omitted from the resulting array.
      *
      * @param source    The string that will be split into bytes.
      * @param separator The separator string that will be used to determine
      *                  the parts.
-     * @param matchCase A <code>boolean</code> indicating if the match is
+     * @param matchCase A {@code boolean} indicating if the match is
      *                  going to be performed in a case-sensitive manner or not.
-     * @return A <code>byte[]</code> array containing the bytes.
+     * @return A {@code byte[]} array containing the bytes.
      * @since 1.0
      */
     public static byte[] splitToByteArray(String source, String separator, boolean matchCase) {
@@ -1410,7 +1459,7 @@ public abstract class StringUtils {
      *
      * @param source        The string in which the matching will be done.
      * @param stringToStrip The string that will be stripped from the front.
-     * @return A new <code>String</code> containing the stripped result.
+     * @return A new {@code String} containing the stripped result.
      * @since 1.0
      */
     public static String stripFromFront(String source, String stringToStrip) {
@@ -1422,9 +1471,9 @@ public abstract class StringUtils {
      *
      * @param source        The string in which the matching will be done.
      * @param stringToStrip The string that will be stripped from the front.
-     * @param matchCase     A <code>boolean</code> indicating if the match is
+     * @param matchCase     A {@code boolean} indicating if the match is
      *                      going to be performed in a case-sensitive manner or not.
-     * @return A new <code>String</code> containing the stripping result.
+     * @return A new {@code String} containing the stripping result.
      * @since 1.0
      */
     public static String stripFromFront(String source, String stringToStrip, boolean matchCase) {
@@ -1454,7 +1503,7 @@ public abstract class StringUtils {
                 new_index = source_lookup_reference.indexOf(stringToStrip, new_index + strip_length);
             }
             while (new_index != -1 &&
-                new_index == last_index + strip_length);
+                   new_index == last_index + strip_length);
 
             return source.substring(last_index + strip_length);
         } else {
@@ -1468,7 +1517,7 @@ public abstract class StringUtils {
      *
      * @param source        The string in which the matching will be done.
      * @param stringToStrip The string that will be stripped from the end.
-     * @return A new <code>String</code> containing the stripped result.
+     * @return A new {@code String} containing the stripped result.
      * @since 1.0
      */
     public static String stripFromEnd(String source, String stringToStrip) {
@@ -1480,9 +1529,9 @@ public abstract class StringUtils {
      *
      * @param source        The string in which the matching will be done.
      * @param stringToStrip The string that will be stripped from the end.
-     * @param matchCase     A <code>boolean</code> indicating if the match is
+     * @param matchCase     A {@code boolean} indicating if the match is
      *                      going to be performed in a case-sensitive manner or not.
-     * @return A new <code>String</code> containing the stripped result.
+     * @return A new {@code String} containing the stripped result.
      * @since 1.0
      */
     public static String stripFromEnd(String source, String stringToStrip, boolean matchCase) {
@@ -1514,7 +1563,7 @@ public abstract class StringUtils {
                 new_index = source_lookup_reference.lastIndexOf(stringToStrip, last_index - 1);
             }
             while (new_index != -1 &&
-                new_index == last_index - strip_length);
+                   new_index == last_index - strip_length);
 
             return source.substring(0, last_index);
         } else {
@@ -1530,7 +1579,7 @@ public abstract class StringUtils {
      * @param stringToReplace   The string that will be searched for.
      * @param replacementString The string that will replace each matching
      *                          part.
-     * @return A new <code>String</code> object containing the replacement
+     * @return A new {@code String} object containing the replacement
      * result.
      * @since 1.0
      */
@@ -1546,9 +1595,9 @@ public abstract class StringUtils {
      * @param stringToReplace   The string that will be searched for.
      * @param replacementString The string that will replace each matching
      *                          part.
-     * @param matchCase         A <code>boolean</code> indicating if the match is
+     * @param matchCase         A {@code boolean} indicating if the match is
      *                          going to be performed in a case-sensitive manner or not.
-     * @return A new <code>String</code> object containing the replacement
+     * @return A new {@code String} object containing the replacement
      * result.
      * @since 1.0
      */
@@ -1585,7 +1634,7 @@ public abstract class StringUtils {
      *
      * @param source The string that will be repeated.
      * @param count  The number of times that the string will be repeated.
-     * @return A new <code>String</code> object containing the repeated
+     * @return A new {@code String} object containing the repeated
      * concatenation result.
      * @since 1.0
      */
@@ -1604,11 +1653,11 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a <code>String</code> for the provided byte array and encoding
+     * Creates a {@code String} for the provided byte array and encoding
      *
      * @param bytes    The byte array to convert.
      * @param encoding The encoding to use for the string conversion.
-     * @return The converted <code>String</code>.
+     * @return The converted {@code String}.
      * @since 1.0
      */
     public static String toString(byte[] bytes, String encoding) {
@@ -1627,12 +1676,12 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new array of <code>String</code> objects, containing the
-     * elements of a supplied <code>Iterator</code>.
+     * Creates a new array of {@code String} objects, containing the
+     * elements of a supplied {@code Iterator}.
      *
      * @param iterator The iterator containing the elements to create the
      *                 array with.
-     * @return The new <code>String</code> array.
+     * @return The new {@code String} array.
      * @since 1.0
      */
     public static String[] toStringArray(Iterator<String> iterator) {
@@ -1653,13 +1702,13 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>ArrayList</code>, containing the elements of a
-     * supplied array of <code>String</code> objects.
+     * Creates a new {@code ArrayList}, containing the elements of a
+     * supplied array of {@code String} objects.
      *
-     * @param stringArray The array of <code>String</code> objects that have
+     * @param stringArray The array of {@code String} objects that have
      *                    to be converted.
-     * @return The new <code>ArrayList</code> with the elements of the
-     * <code>String</code> array.
+     * @return The new {@code ArrayList} with the elements of the
+     * {@code String} array.
      * @since 1.0
      */
     public static List<String> toArrayList(String[] stringArray) {
@@ -1675,17 +1724,17 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>String</code> object, containing the elements of a
-     * supplied <code>Collection</code> of <code>String</code> objects joined
+     * Creates a new {@code String} object, containing the elements of a
+     * supplied {@code Collection} of {@code String} objects joined
      * by a given separator.
      *
-     * @param collection The <code>Collection</code> containing the elements
+     * @param collection The {@code Collection} containing the elements
      *                   to join.
      * @param separator  The separator used to join the string elements.
-     * @return A new <code>String</code> with the join result.
+     * @return A new {@code String} with the join result.
      * @since 1.0
      */
-    public static String join(Collection collection, String separator) {
+    public static String join(Collection<?> collection, String separator) {
         if (null == collection) {
             return null;
         }
@@ -1709,12 +1758,12 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>String</code> object, containing the elements of a
+     * Creates a new {@code String} object, containing the elements of a
      * supplied array, joined by a given separator.
      *
      * @param array     The object array containing the elements to join.
      * @param separator The separator used to join the string elements.
-     * @return A new <code>String</code> with the join result.
+     * @return A new {@code String} with the join result.
      * @since 1.0
      */
     public static String join(Object[] array, String separator) {
@@ -1722,13 +1771,13 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>String</code> object, containing the elements of a
+     * Creates a new {@code String} object, containing the elements of a
      * supplied array, joined by a given separator.
      *
      * @param array     The object array containing the elements to join.
      * @param separator The separator used to join the string elements.
      * @param delimiter The delimiter used to surround the string elements.
-     * @return A new <code>String</code> with the join result.
+     * @return A new {@code String} with the join result.
      * @since 1.0
      */
     public static String join(Object[] array, String separator, String delimiter) {
@@ -1736,7 +1785,7 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>String</code> object, containing the elements of a
+     * Creates a new {@code String} object, containing the elements of a
      * supplied array, joined by a given separator.
      *
      * @param array         The object array containing the elements to join.
@@ -1744,7 +1793,7 @@ public abstract class StringUtils {
      * @param delimiter     The delimiter used to surround the string elements.
      * @param encodeStrings Indicates whether the characters of the string
      *                      representation of the Array values should be encoded.
-     * @return A new <code>String</code> with the join result.
+     * @return A new {@code String} with the join result.
      * @since 1.0
      */
     public static String join(Object[] array, String separator, String delimiter, boolean encodeStrings) {
@@ -1798,12 +1847,12 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>String</code> object, containing the elements of a
+     * Creates a new {@code String} object, containing the elements of a
      * supplied array, joined by a given separator.
      *
      * @param array     The boolean array containing the values to join.
      * @param separator The separator used to join the string elements.
-     * @return A new <code>String</code> with the join result.
+     * @return A new {@code String} with the join result.
      * @since 1.0
      */
     public static String join(boolean[] array, String separator) {
@@ -1831,12 +1880,12 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>String</code> object, containing the elements of a
+     * Creates a new {@code String} object, containing the elements of a
      * supplied array, joined by a given separator.
      *
      * @param array     The byte array containing the values to join.
      * @param separator The separator used to join the string elements.
-     * @return A new <code>String</code> with the join result.
+     * @return A new {@code String} with the join result.
      * @since 1.0
      */
     public static String join(byte[] array, String separator) {
@@ -1864,12 +1913,12 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>String</code> object, containing the elements of a
+     * Creates a new {@code String} object, containing the elements of a
      * supplied array, joined by a given separator.
      *
      * @param array     The double array containing the values to join.
      * @param separator The separator used to join the string elements.
-     * @return A new <code>String</code> with the join result.
+     * @return A new {@code String} with the join result.
      * @since 1.0
      */
     public static String join(double[] array, String separator) {
@@ -1897,12 +1946,12 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>String</code> object, containing the elements of a
+     * Creates a new {@code String} object, containing the elements of a
      * supplied array, joined by a given separator.
      *
      * @param array     The float array containing the values to join.
      * @param separator The separator used to join the string elements.
-     * @return A new <code>String</code> with the join result.
+     * @return A new {@code String} with the join result.
      * @since 1.0
      */
     public static String join(float[] array, String separator) {
@@ -1930,12 +1979,12 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>String</code> object, containing the elements of a
+     * Creates a new {@code String} object, containing the elements of a
      * supplied array, joined by a given separator.
      *
      * @param array     The integer array containing the values to join.
      * @param separator The separator used to join the string elements.
-     * @return A new <code>String</code> with the join result.
+     * @return A new {@code String} with the join result.
      * @since 1.0
      */
     public static String join(int[] array, String separator) {
@@ -1963,12 +2012,12 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>String</code> object, containing the elements of a
+     * Creates a new {@code String} object, containing the elements of a
      * supplied array, joined by a given separator.
      *
      * @param array     The long array containing the values to join.
      * @param separator The separator used to join the string elements.
-     * @return A new <code>String</code> with the join result.
+     * @return A new {@code String} with the join result.
      * @since 1.0
      */
     public static String join(long[] array, String separator) {
@@ -1996,12 +2045,12 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>String</code> object, containing the elements of a
+     * Creates a new {@code String} object, containing the elements of a
      * supplied array, joined by a given separator.
      *
      * @param array     The short array containing the values to join.
      * @param separator The separator used to join the string elements.
-     * @return A new <code>String</code> with the join result.
+     * @return A new {@code String} with the join result.
      * @since 1.0
      */
     public static String join(short[] array, String separator) {
@@ -2029,12 +2078,12 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>String</code> object, containing the elements of a
+     * Creates a new {@code String} object, containing the elements of a
      * supplied array, joined by a given a.
      *
      * @param array The char array containing the values to join.
      * @param a     The a used to join the string elements.
-     * @return A new <code>String</code> with the join result.
+     * @return A new {@code String} with the join result.
      * @since 1.0
      */
     public static String join(char[] array, String a) {
@@ -2042,13 +2091,13 @@ public abstract class StringUtils {
     }
 
     /**
-     * Creates a new <code>String</code> object, containing the elements of a
+     * Creates a new {@code String} object, containing the elements of a
      * supplied array, joined by a given separator.
      *
      * @param array     The char array containing the values to join.
      * @param separator The separator used to join the string elements.
      * @param delimiter The delimiter used to surround the string elements.
-     * @return A new <code>String</code> with the join result.
+     * @return A new {@code String} with the join result.
      * @since 1.0
      */
     public static String join(char[] array, String separator, String delimiter) {
@@ -2089,9 +2138,9 @@ public abstract class StringUtils {
      * string in the correct order. The search will be performed in a
      * case-sensitive manner.
      *
-     * @param source    The <code>String</code> object that will be searched in.
+     * @param source    The {@code String} object that will be searched in.
      * @param substring The string whose occurances will we counted.
-     * @return An <code>int[]</code> array containing the indices of the
+     * @return An {@code int[]} array containing the indices of the
      * substring.
      * @since 1.0
      */
@@ -2103,11 +2152,11 @@ public abstract class StringUtils {
      * Returns an array that contains all the occurances of a substring in a
      * string in the correct order.
      *
-     * @param source    The <code>String</code> object that will be searched in.
+     * @param source    The {@code String} object that will be searched in.
      * @param substring The string whose occurances will we counted.
-     * @param matchCase A <code>boolean</code> indicating if the match is
+     * @param matchCase A {@code boolean} indicating if the match is
      *                  going to be performed in a case-sensitive manner or not.
-     * @return An <code>int[]</code> array containing the indices of the
+     * @return An {@code int[]} array containing the indices of the
      * substring.
      * @since 1.0
      */
@@ -2149,12 +2198,12 @@ public abstract class StringUtils {
     /**
      * Matches a collection of regular expressions against a string.
      *
-     * @param value   The <code>String</code> that will be checked.
+     * @param value   The {@code String} that will be checked.
      * @param regexps The collection of regular expressions against which the
      *                match will be performed.
-     * @return The <code>Matcher</code> instance that corresponds to the
-     * <code>String</code> that returned a successful match; or
-     * <p><code>null</code> if no match could be found.
+     * @return The {@code Matcher} instance that corresponds to the
+     * {@code String} that returned a successful match; or
+     * <p>{@code null} if no match could be found.
      * @since 1.0
      */
     public static Matcher getMatchingRegexp(String value, Collection<Pattern> regexps) {
@@ -2177,13 +2226,13 @@ public abstract class StringUtils {
     /**
      * Matches a collection of strings against a regular expression.
      *
-     * @param values The <code>Collection</code> of <code>String</code>
+     * @param values The {@code Collection} of {@code String}
      *               objects that will be checked.
-     * @param regexp The regular expression <code>Pattern</code> against which
+     * @param regexp The regular expression {@code Pattern} against which
      *               the matches will be performed.
-     * @return The <code>Matcher</code> instance that corresponds to the
-     * <code>String</code> that returned a successful match; or
-     * <p><code>null</code> if no match could be found.
+     * @return The {@code Matcher} instance that corresponds to the
+     * {@code String} that returned a successful match; or
+     * <p>{@code null} if no match could be found.
      * @since 1.0
      */
     public static Matcher getRegexpMatch(Collection<String> values, Pattern regexp) {
@@ -2206,11 +2255,11 @@ public abstract class StringUtils {
      * Checks if the name filters through an including and an excluding
      * regular expression.
      *
-     * @param name     The <code>String</code> that will be filtered.
+     * @param name     The {@code String} that will be filtered.
      * @param included The regular expressions that needs to succeed
      * @param excluded The regular expressions that needs to fail
-     * @return <code>true</code> if the name filtered through correctly; or
-     * <p><code>false</code> otherwise.
+     * @return {@code true} if the name filtered through correctly; or
+     * <p>{@code false} otherwise.
      * @since 1.0
      */
     public static boolean filter(String name, Pattern included, Pattern excluded) {
@@ -2231,11 +2280,11 @@ public abstract class StringUtils {
      * Checks if the name filters through a series of including and excluding
      * regular expressions.
      *
-     * @param name     The <code>String</code> that will be filtered.
+     * @param name     The {@code String} that will be filtered.
      * @param included An array of regular expressions that need to succeed
      * @param excluded An array of regular expressions that need to fail
-     * @return <code>true</code> if the name filtered through correctly; or
-     * <p><code>false</code> otherwise.
+     * @return {@code true} if the name filtered through correctly; or
+     * <p>{@code false} otherwise.
      * @since 1.0
      */
     public static boolean filter(String name, Pattern[] included, Pattern[] excluded) {
@@ -2276,8 +2325,8 @@ public abstract class StringUtils {
     /**
      * Ensure that the first character of the provided string is upper case.
      *
-     * @param source The <code>String</code> to capitalize.
-     * @return The capitalized <code>String</code>.
+     * @param source The {@code String} to capitalize.
+     * @return The capitalized {@code String}.
      * @since 1.0
      */
     public static String capitalize(String source) {
@@ -2298,8 +2347,8 @@ public abstract class StringUtils {
     /**
      * Ensure that the first character of the provided string lower case.
      *
-     * @param source The <code>String</code> to uncapitalize.
-     * @return The uncapitalized <code>String</code>.
+     * @param source The {@code String} to uncapitalize.
+     * @return The uncapitalized {@code String}.
      * @since 1.0
      */
     public static String uncapitalize(String source) {
@@ -2409,7 +2458,7 @@ public abstract class StringUtils {
      * Converts a BBCode marked-up text to regular html.
      *
      * @param source The text with BBCode tags.
-     * @return A <code>String</code> with the corresponding HTML code
+     * @return A {@code String} with the corresponding HTML code
      * @since 1.0
      */
     public static String convertBbcode(String source) {
@@ -2424,7 +2473,7 @@ public abstract class StringUtils {
      * Converts a BBCode marked-up text to regular html.
      *
      * @param source The text with BBCode tags.
-     * @return A <code>String</code> with the corresponding HTML code
+     * @return A {@code String} with the corresponding HTML code
      * @since 1.0
      */
     public static String convertBbcode(final String source, BbcodeOption... options) {
@@ -2470,10 +2519,9 @@ public abstract class StringUtils {
                 /* must end before the next [code]
                  * this will leave a dangling [/code] but the HTML is valid
                  */
-                var sourcecopycopy = source_copy.substring(0, nextCodeIndex) +
-                    "[/code]" +
-                    source_copy.substring(nextCodeIndex);
-                source_copy = sourcecopycopy;
+                source_copy = source_copy.substring(0, nextCodeIndex) +
+                              "[/code]" +
+                              source_copy.substring(nextCodeIndex);
 
                 endIndex = source_copy.indexOf("[/code]") + 7;
             }
@@ -2602,10 +2650,10 @@ public abstract class StringUtils {
     }
 
     /**
-     * Converts a <code>String</code> to a <code>boolean</code> value.
+     * Converts a {@code String} to a {@code boolean} value.
      *
-     * @param value The <code>String</code> to convert.
-     * @return The corresponding <code>boolean</code> value.
+     * @param value The {@code String} to convert.
+     * @return The corresponding {@code boolean} value.
      * @since 1.0
      */
     public static boolean convertToBoolean(String value) {
@@ -2614,11 +2662,11 @@ public abstract class StringUtils {
         }
 
         return value.equals("1") ||
-            value.equalsIgnoreCase("t") ||
-            value.equalsIgnoreCase("true") ||
-            value.equalsIgnoreCase("y") ||
-            value.equalsIgnoreCase("yes") ||
-            value.equalsIgnoreCase("on");
+               value.equalsIgnoreCase("t") ||
+               value.equalsIgnoreCase("true") ||
+               value.equalsIgnoreCase("y") ||
+               value.equalsIgnoreCase("yes") ||
+               value.equalsIgnoreCase("on");
     }
 
     /**
@@ -2627,7 +2675,7 @@ public abstract class StringUtils {
      *
      * @param line     The line whose tabs have to be converted.
      * @param tabWidth The tab width.
-     * @return A new <code>String</code> object containing the line with the
+     * @return A new {@code String} object containing the line with the
      * replaced tabs.
      * @since 1.0
      */
@@ -2657,11 +2705,11 @@ public abstract class StringUtils {
     }
 
     /**
-     * Ensures that all whitespace is removed from a <code>String</code>.
-     * <p>It also works with a <code>null</code> argument.
+     * Ensures that all whitespace is removed from a {@code String}.
+     * <p>It also works with a {@code null} argument.
      *
-     * @param source The <code>String</code> to trim.
-     * @return The trimmed <code>String</code>.
+     * @param source The {@code String} to trim.
+     * @return The trimmed {@code String}.
      * @since 1.0
      */
     public static String trim(String source) {
@@ -2676,12 +2724,12 @@ public abstract class StringUtils {
      * Calculates the {@link DocumentPosition} of a character index in a
      * document.
      *
-     * @param document       a <code>String</code> with the document where the
+     * @param document       a {@code String} with the document where the
      *                       position should be looked up in
      * @param characterIndex the index of the character
-     * @return the resulting <code>DocumentPosition</code> instance; or
-     * <p><code>null</code> if the <code>characterIndex</code> was invalid or
-     * if the <code>document</code> was null
+     * @return the resulting {@code DocumentPosition} instance; or
+     * <p>{@code null} if the {@code characterIndex} was invalid or
+     * if the {@code document} was null
      * @since 1.0
      */
     public static DocumentPosition getDocumentPosition(String document, int characterIndex) {
@@ -2722,7 +2770,7 @@ public abstract class StringUtils {
     }
 
     /**
-     * Reformats a string where lines that are longer than <code>width</code>
+     * Reformats a string where lines that are longer than {@code width}
      * are split apart at the earliest wordbreak or at maxLength, whichever is
      * sooner. If the width specified is less than 5 or greater than the input
      * Strings length the string will be returned as is.

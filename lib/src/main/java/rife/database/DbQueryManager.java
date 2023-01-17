@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -27,13 +27,13 @@ import java.util.logging.Logger;
 /**
  * This is a convenience class to make it easy to control the queries that
  * handle the retrieval, storage, update and removal of data in a database.
- * All queries will be executed in a connection of the <code>Datasource</code>
- * that's provided to the constructor of the <code>DbQueryManager</code>.
+ * All queries will be executed in a connection of the {@code Datasource}
+ * that's provided to the constructor of the {@code DbQueryManager}.
  * <p>A collection of convenience methods have been provided to quickly
  * execute queries in a variety of manners without having to worry about the
  * logic behind it or having to remember to close the queries at the
  * appropriate moment. These methods optionally interact with the
- * <code>DbPreparedStatementHandler</code> and <code>DbResultSetHandler</code>
+ * {@code DbPreparedStatementHandler} and {@code DbResultSetHandler}
  * classes to make it possible to fully customize the executed queries. The
  * following categories of worry-free methods exist:
  * <ul>
@@ -62,8 +62,8 @@ import java.util.logging.Logger;
  * <p>Lower-level methods are also available for the sake of repetitive
  * code-reduction. To obtain execute regular statements directly,
  * use the {@link #executeQuery(ReadQuery) executeQuery} method.
- * <p>Finally, <code>since DbStatement</code> and
- * <code>DbPreparedStatement</code> instances preserve a reference to their
+ * <p>Finally, {@code since DbStatement} and
+ * {@code DbPreparedStatement} instances preserve a reference to their
  * result set, it's easy to iterate over the rows of a result set with the
  * {@link #fetch(ResultSet, RowProcessor) fetch} or {@link
  * #fetchAll(ResultSet, RowProcessor) fetchAll} methods.
@@ -81,7 +81,7 @@ public class DbQueryManager implements Cloneable {
     private final Datasource datasource_;
 
     /**
-     * Instantiates a new <code>DbQueryManager</code> object and ties it to
+     * Instantiates a new {@code DbQueryManager} object and ties it to
      * the provided datasource.
      *
      * @param datasource the datasource that will be used to obtain database
@@ -219,9 +219,9 @@ public class DbQueryManager implements Cloneable {
      * </pre>
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
+     *                {@code null} if you don't want to customize it at all
      * @return the row count for the executed query
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeUpdate()}
@@ -271,8 +271,8 @@ public class DbQueryManager implements Cloneable {
      * </pre>
      *
      * @param query the query builder instance that needs to be executed
-     * @return <code>true</code> when rows were returned by the query; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} when rows were returned by the query; or
+     * <p>{@code false} otherwise
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#hasResultRows()}
@@ -303,10 +303,10 @@ public class DbQueryManager implements Cloneable {
      * </pre>
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution
-     * @return <code>true</code> when rows were returned by the query; or
-     * <p><code>false</code> otherwise
+     * @return {@code true} when rows were returned by the query; or
+     * <p>{@code false} otherwise
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#hasResultRows()}
@@ -346,7 +346,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as a <code>String</code>
+     * Safely and quickly retrieves the first cell as a {@code String}
      * from the results of a select query. It relies on the wrapped {@link
      * DbResultSet#getFirstString()} method, but also automatically closes the
      * statement after its execution.
@@ -358,7 +358,7 @@ public class DbQueryManager implements Cloneable {
      * </pre>
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>String</code> in the query's result set
+     * @return the first {@code String} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstString()}
@@ -374,7 +374,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a <code>String</code> from the
+     * Safely retrieves the first cell as a {@code String} from the
      * results of a customizable select query. It relies on the wrapped {@link
      * DbResultSet#getFirstString()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
@@ -390,10 +390,10 @@ public class DbQueryManager implements Cloneable {
      * </pre>
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>String</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first {@code String} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstString()}
@@ -439,7 +439,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as a <code>boolean</code>
+     * Safely and quickly retrieves the first cell as a {@code boolean}
      * from the results of a select query. It relies on the wrapped {@link
      * DbResultSet#getFirstBoolean()} method, but also automatically closes
      * the statement after its execution.
@@ -447,7 +447,7 @@ public class DbQueryManager implements Cloneable {
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>boolean</code> in the query's result set
+     * @return the first {@code boolean} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstBoolean()}
@@ -463,7 +463,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a <code>boolean</code> from the
+     * Safely retrieves the first cell as a {@code boolean} from the
      * results of a customizable select query. It relies on the wrapped {@link
      * DbResultSet#getFirstBoolean()} method, but also automatically closes
      * the statement after its execution and allows customization of the
@@ -474,10 +474,10 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>boolean</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first {@code boolean} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstBoolean()}
@@ -523,7 +523,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as a <code>byte</code> from
+     * Safely and quickly retrieves the first cell as a {@code byte} from
      * the results of a select query. It relies on the wrapped {@link
      * DbResultSet#getFirstByte()} method, but also automatically closes the
      * statement after its execution.
@@ -531,7 +531,7 @@ public class DbQueryManager implements Cloneable {
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>byte</code> in the query's result set
+     * @return the first {@code byte} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstByte()}
@@ -547,7 +547,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a <code>byte</code> from the results
+     * Safely retrieves the first cell as a {@code byte} from the results
      * of a customizable select query. It relies on the wrapped {@link
      * DbResultSet#getFirstByte()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
@@ -558,10 +558,10 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>byte</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first {@code byte} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstByte()}
@@ -607,7 +607,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as a <code>short</code>
+     * Safely and quickly retrieves the first cell as a {@code short}
      * from the results of a select query. It relies on the wrapped {@link
      * DbResultSet#getFirstShort()} method, but also automatically closes the
      * statement after its execution.
@@ -615,7 +615,7 @@ public class DbQueryManager implements Cloneable {
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>short</code> in the query's result set
+     * @return the first {@code short} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstShort()}
@@ -631,7 +631,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a <code>short</code> from the
+     * Safely retrieves the first cell as a {@code short} from the
      * results of a customizable select query. It relies on the wrapped {@link
      * DbResultSet#getFirstShort()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
@@ -642,10 +642,10 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>short</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first {@code short} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstShort()}
@@ -691,7 +691,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as a <code>int</code> from
+     * Safely and quickly retrieves the first cell as a {@code int} from
      * the results of a select query. It relies on the wrapped {@link
      * DbResultSet#getFirstInt()} method, but also automatically closes the
      * statement after its execution.
@@ -699,7 +699,7 @@ public class DbQueryManager implements Cloneable {
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>int</code> in the query's result set
+     * @return the first {@code int} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link DbResultSet#getFirstInt()}
      * @see DbPreparedStatement#executeQuery()
@@ -714,7 +714,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a <code>int</code> from the results
+     * Safely retrieves the first cell as a {@code int} from the results
      * of a customizable select query. It relies on the wrapped {@link
      * DbResultSet#getFirstInt()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
@@ -725,10 +725,10 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>int</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first {@code int} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link DbResultSet#getFirstInt()}
      * @see DbPreparedStatement#executeQuery()
@@ -773,7 +773,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as a <code>long</code> from
+     * Safely and quickly retrieves the first cell as a {@code long} from
      * the results of a select query. It relies on the wrapped {@link
      * DbResultSet#getFirstLong()} method, but also automatically closes the
      * statement after its execution.
@@ -781,7 +781,7 @@ public class DbQueryManager implements Cloneable {
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>long</code> in the query's result set
+     * @return the first {@code long} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstLong()}
@@ -797,7 +797,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a <code>long</code> from the results
+     * Safely retrieves the first cell as a {@code long} from the results
      * of a customizable select query. It relies on the wrapped {@link
      * DbResultSet#getFirstLong()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
@@ -808,10 +808,10 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>long</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first {@code long} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstLong()}
@@ -857,7 +857,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as a <code>float</code>
+     * Safely and quickly retrieves the first cell as a {@code float}
      * from the results of a select query. It relies on the wrapped {@link
      * DbResultSet#getFirstFloat()} method, but also automatically closes the
      * statement after its execution.
@@ -865,7 +865,7 @@ public class DbQueryManager implements Cloneable {
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>float</code> in the query's result set
+     * @return the first {@code float} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstFloat()}
@@ -881,7 +881,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a <code>float</code> from the
+     * Safely retrieves the first cell as a {@code float} from the
      * results of a customizable select query. It relies on the wrapped {@link
      * DbResultSet#getFirstFloat()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
@@ -892,10 +892,10 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>float</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first {@code float} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstFloat()}
@@ -941,7 +941,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as a <code>double</code>
+     * Safely and quickly retrieves the first cell as a {@code double}
      * from the results of a select query. It relies on the wrapped {@link
      * DbResultSet#getFirstDouble()} method, but also automatically closes the
      * statement after its execution.
@@ -949,7 +949,7 @@ public class DbQueryManager implements Cloneable {
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>double</code> in the query's result set
+     * @return the first {@code double} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstDouble()}
@@ -965,7 +965,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a <code>double</code> from the
+     * Safely retrieves the first cell as a {@code double} from the
      * results of a customizable select query. It relies on the wrapped {@link
      * DbResultSet#getFirstDouble()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
@@ -976,10 +976,10 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>double</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first {@code double} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstDouble()}
@@ -1025,7 +1025,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as a <code>byte</code>
+     * Safely and quickly retrieves the first cell as a {@code byte}
      * array from the results of a select query. It relies on the wrapped
      * {@link DbResultSet#getFirstBytes()} method, but also automatically
      * closes the statement after its execution.
@@ -1033,7 +1033,7 @@ public class DbQueryManager implements Cloneable {
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first <code>byte</code> array in the query's result set
+     * @return the first {@code byte} array in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstBytes()}
@@ -1049,7 +1049,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a <code>byte</code> array from the
+     * Safely retrieves the first cell as a {@code byte} array from the
      * results of a customizable select query. It relies on the wrapped {@link
      * DbResultSet#getFirstBytes()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
@@ -1060,10 +1060,10 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first <code>byte</code> array in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first {@code byte} array in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstBytes()}
@@ -1109,7 +1109,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as a sql <code>Date</code>
+     * Safely and quickly retrieves the first cell as a sql {@code Date}
      * from the results of a select query. It relies on the wrapped {@link
      * DbResultSet#getFirstDate()} method, but also automatically closes the
      * statement after its execution.
@@ -1117,7 +1117,7 @@ public class DbQueryManager implements Cloneable {
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first sql <code>Date</code> in the query's result set
+     * @return the first sql {@code Date} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstDate()}
@@ -1133,7 +1133,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a sql <code>Date</code> from the
+     * Safely retrieves the first cell as a sql {@code Date} from the
      * results of a customizable select query. It relies on the wrapped {@link
      * DbResultSet#getFirstDate()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
@@ -1144,10 +1144,10 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first sql <code>Date</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first sql {@code Date} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstDate()}
@@ -1193,7 +1193,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as a sql <code>Date</code>
+     * Safely and quickly retrieves the first cell as a sql {@code Date}
      * from the results of a select query. It relies on the wrapped {@link
      * DbResultSet#getFirstDate(Calendar)} method, but also automatically
      * closes the statement after its execution.
@@ -1201,9 +1201,9 @@ public class DbQueryManager implements Cloneable {
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @param cal   the <code>Calendar</code> object to use in constructing the
+     * @param cal   the {@code Calendar} object to use in constructing the
      *              date
-     * @return the first sql <code>Date</code> in the query's result set
+     * @return the first sql {@code Date} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstDate(Calendar)}
@@ -1219,7 +1219,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a sql <code>Date</code> from the
+     * Safely retrieves the first cell as a sql {@code Date} from the
      * results of a customizable select query. It relies on the wrapped {@link
      * DbResultSet#getFirstDate(Calendar)} method, but also automatically
      * closes the statement after its execution and allows customization of
@@ -1230,12 +1230,12 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param cal     the <code>Calendar</code> object to use in constructing the
+     * @param cal     the {@code Calendar} object to use in constructing the
      *                date
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first sql <code>Date</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first sql {@code Date} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstDate(Calendar)}
@@ -1281,7 +1281,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as a sql <code>Time</code>
+     * Safely and quickly retrieves the first cell as a sql {@code Time}
      * from the results of a select query. It relies on the wrapped {@link
      * DbResultSet#getFirstTime()} method, but also automatically closes the
      * statement after its execution.
@@ -1289,7 +1289,7 @@ public class DbQueryManager implements Cloneable {
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first sql <code>Time</code> in the query's result set
+     * @return the first sql {@code Time} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTime()}
@@ -1305,7 +1305,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a sql <code>Time</code> from the
+     * Safely retrieves the first cell as a sql {@code Time} from the
      * results of a customizable select query. It relies on the wrapped {@link
      * DbResultSet#getFirstTime()} method, but also automatically closes the
      * statement after its execution and allows customization of the prepared
@@ -1316,10 +1316,10 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first sql <code>Time</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first sql {@code Time} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTime()}
@@ -1365,7 +1365,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as a sql <code>Time</code>
+     * Safely and quickly retrieves the first cell as a sql {@code Time}
      * from the results of a select query. It relies on the wrapped {@link
      * DbResultSet#getFirstTime(Calendar)} method, but also automatically
      * closes the statement after its execution.
@@ -1373,9 +1373,9 @@ public class DbQueryManager implements Cloneable {
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @param cal   the <code>Calendar</code> object to use in constructing the
+     * @param cal   the {@code Calendar} object to use in constructing the
      *              time
-     * @return the first sql <code>Time</code> in the query's result set
+     * @return the first sql {@code Time} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTime(Calendar)}
@@ -1391,7 +1391,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a sql <code>Time</code> from the
+     * Safely retrieves the first cell as a sql {@code Time} from the
      * results of a customizable select query. It relies on the wrapped {@link
      * DbResultSet#getFirstTime(Calendar)} method, but also automatically
      * closes the statement after its execution and allows customization of
@@ -1402,12 +1402,12 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param cal     the <code>Calendar</code> object to use in constructing the
+     * @param cal     the {@code Calendar} object to use in constructing the
      *                time
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first sql <code>Time</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first sql {@code Time} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTime(Calendar)}
@@ -1454,14 +1454,14 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Safely and quickly retrieves the first cell as a sql
-     * <code>Timestamp</code> from the results of a select query. It relies on
+     * {@code Timestamp} from the results of a select query. It relies on
      * the wrapped {@link DbResultSet#getFirstTimestamp()} method, but also
      * automatically closes the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @return the first sql <code>Timestamp</code> in the query's result set
+     * @return the first sql {@code Timestamp} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTimestamp()}
@@ -1477,7 +1477,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a sql <code>Timestamp</code> from
+     * Safely retrieves the first cell as a sql {@code Timestamp} from
      * the results of a customizable select query. It relies on the wrapped
      * {@link DbResultSet#getFirstTimestamp()} method, but also automatically
      * closes the statement after its execution and allows customization of
@@ -1488,10 +1488,10 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first sql <code>Timestamp</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first sql {@code Timestamp} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTimestamp()}
@@ -1538,16 +1538,16 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Safely and quickly retrieves the first cell as a sql
-     * <code>Timestamp</code> from the results of a select query. It relies on
+     * {@code Timestamp} from the results of a select query. It relies on
      * the wrapped {@link DbResultSet#getFirstTimestamp(Calendar)} method, but
      * also automatically closes the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @param cal   the <code>Calendar</code> object to use in constructing the
+     * @param cal   the {@code Calendar} object to use in constructing the
      *              timestamp
-     * @return the first sql <code>Timestamp</code> in the query's result set
+     * @return the first sql {@code Timestamp} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTimestamp(Calendar)}
@@ -1563,7 +1563,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as a sql <code>Timestamp</code> from
+     * Safely retrieves the first cell as a sql {@code Timestamp} from
      * the results of a customizable select query. It relies on the wrapped
      * {@link DbResultSet#getFirstTimestamp(Calendar)} method, but also
      * automatically closes the statement after its execution and allows
@@ -1574,12 +1574,12 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param cal     the <code>Calendar</code> object to use in constructing the
+     * @param cal     the {@code Calendar} object to use in constructing the
      *                timestamp
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the first sql <code>Timestamp</code> in the query's result set
+     *                {@code null} if you don't want to customize it at all
+     * @return the first sql {@code Timestamp} in the query's result set
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           DbResultSet#getFirstTimestamp(Calendar)}
@@ -1626,22 +1626,22 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Safely and quickly retrieves the first cell as an ASCII
-     * <code>InputStream</code> from the results of a select query. It relies
+     * {@code InputStream} from the results of a select query. It relies
      * on the wrapped {@link DbResultSet#getFirstAsciiStream()} method, but
      * also automatically closes the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @param user  an instance of <code>InputStreamUser</code>
+     * @param user  an instance of {@code InputStreamUser}
      *              that contains the logic that will be executed with this stream
-     * @return the return value from the <code>useInputStream</code> method of
-     * the provided <code>InputStreamUser</code> instance
+     * @return the return value from the {@code useInputStream} method of
+     * the provided {@code InputStreamUser} instance
      * @throws DatabaseException   see {@link
      *                             DbPreparedStatement#executeQuery()} and {@link
      *                             DbResultSet#getFirstAsciiStream()}
      * @throws InnerClassException when errors occurs inside the
-     *                             <code>InputStreamUser</code>
+     *                             {@code InputStreamUser}
      * @see InputStreamUser
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstAsciiStream()
@@ -1655,7 +1655,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as an ASCII <code>InputStream</code>
+     * Safely retrieves the first cell as an ASCII {@code InputStream}
      * from the results of a customizable select query. It relies on the
      * wrapped {@link DbResultSet#getFirstAsciiStream()} method, but also
      * automatically closes the statement after its execution and allows
@@ -1666,18 +1666,18 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param user    an instance of <code>InputStreamUser</code>
+     * @param user    an instance of {@code InputStreamUser}
      *                that contains the logic that will be executed with this stream
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the return value from the <code>useInputStream</code> method of
-     * the provided <code>InputStreamUser</code> instance
+     *                {@code null} if you don't want to customize it at all
+     * @return the return value from the {@code useInputStream} method of
+     * the provided {@code InputStreamUser} instance
      * @throws DatabaseException   see {@link
      *                             DbPreparedStatement#executeQuery()} and {@link
      *                             DbResultSet#getFirstAsciiStream()}
      * @throws InnerClassException when errors occurs inside the
-     *                             <code>InputStreamUser</code>
+     *                             {@code InputStreamUser}
      * @see InputStreamUser
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstAsciiStream()
@@ -1723,22 +1723,22 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Safely and quickly retrieves the first cell as an character
-     * <code>Reader</code> from the results of a select query. It relies on
+     * {@code Reader} from the results of a select query. It relies on
      * the wrapped {@link DbResultSet#getFirstCharacterStream()} method, but
      * also automatically closes the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @param user  an instance of <code>ReaderUser</code>
+     * @param user  an instance of {@code ReaderUser}
      *              that contains the logic that will be executed with this reader
-     * @return the return value from the <code>useReader</code> method of
-     * the provided <code>ReaderUser</code> instance
+     * @return the return value from the {@code useReader} method of
+     * the provided {@code ReaderUser} instance
      * @throws DatabaseException   see {@link
      *                             DbPreparedStatement#executeQuery()} and {@link
      *                             DbResultSet#getFirstCharacterStream()}
      * @throws InnerClassException when errors occurs inside the
-     *                             <code>ReaderUser</code>
+     *                             {@code ReaderUser}
      * @see ReaderUser
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstCharacterStream()
@@ -1752,7 +1752,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as an character <code>Reader</code>
+     * Safely retrieves the first cell as an character {@code Reader}
      * from the results of a customizable select query. It relies on the
      * wrapped {@link DbResultSet#getFirstCharacterStream()} method, but also
      * automatically closes the statement after its execution and allows
@@ -1763,18 +1763,18 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param user    an instance of <code>ReaderUser</code>
+     * @param user    an instance of {@code ReaderUser}
      *                that contains the logic that will be executed with this reader
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the return value from the <code>useReader</code> method of
-     * the provided <code>ReaderUser</code> instance
+     *                {@code null} if you don't want to customize it at all
+     * @return the return value from the {@code useReader} method of
+     * the provided {@code ReaderUser} instance
      * @throws DatabaseException   see {@link
      *                             DbPreparedStatement#executeQuery()} and {@link
      *                             DbResultSet#getFirstCharacterStream()}
      * @throws InnerClassException when errors occurs inside the
-     *                             <code>ReaderUser</code>
+     *                             {@code ReaderUser}
      * @see ReaderUser
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstCharacterStream()
@@ -1820,22 +1820,22 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Safely and quickly retrieves the first cell as an binary
-     * <code>InputStream</code> from the results of a select query. It relies
+     * {@code InputStream} from the results of a select query. It relies
      * on the wrapped {@link DbResultSet#getFirstBinaryStream()} method, but
      * also automatically closes the statement after its execution.
      * <p>Refer to {@link #executeGetFirstString(ReadQuery) executeGetFirstString}
      * for an example code snippet, it's 100% analogous.
      *
      * @param query the query builder instance that needs to be executed
-     * @param user  an instance of <code>InputStreamUser</code>
+     * @param user  an instance of {@code InputStreamUser}
      *              that contains the logic that will be executed with this stream
-     * @return the return value from the <code>useInputStream</code> method of
-     * the provided <code>InputStreamUser</code> instance
+     * @return the return value from the {@code useInputStream} method of
+     * the provided {@code InputStreamUser} instance
      * @throws DatabaseException   see {@link
      *                             DbPreparedStatement#executeQuery()} and {@link
      *                             DbResultSet#getFirstBinaryStream()}
      * @throws InnerClassException when errors occurs inside the
-     *                             <code>InputStreamUser</code>
+     *                             {@code InputStreamUser}
      * @see InputStreamUser
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstBinaryStream()
@@ -1849,7 +1849,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely retrieves the first cell as an binary <code>InputStream</code>
+     * Safely retrieves the first cell as an binary {@code InputStream}
      * from the results of a customizable select query. It relies on the
      * wrapped {@link DbResultSet#getFirstBinaryStream()} method, but also
      * automatically closes the statement after its execution and allows
@@ -1860,18 +1860,18 @@ public class DbQueryManager implements Cloneable {
      * executeGetFirstString} for an example code snippet, it's 100% analogous.
      *
      * @param query   the query builder instance that needs to be executed
-     * @param user    an instance of <code>InputStreamUser</code>
+     * @param user    an instance of {@code InputStreamUser}
      *                that contains the logic that will be executed with this stream
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
-     * @return the return value from the <code>useInputStream</code> method of
-     * the provided <code>InputStreamUser</code> instance
+     *                {@code null} if you don't want to customize it at all
+     * @return the return value from the {@code useInputStream} method of
+     * the provided {@code InputStreamUser} instance
      * @throws DatabaseException   see {@link
      *                             DbPreparedStatement#executeQuery()} and {@link
      *                             DbResultSet#getFirstBinaryStream()}
      * @throws InnerClassException when errors occurs inside the
-     *                             <code>InputStreamUser</code>
+     *                             {@code InputStreamUser}
      * @see InputStreamUser
      * @see DbPreparedStatement#executeQuery()
      * @see DbResultSet#getFirstBinaryStream()
@@ -1929,10 +1929,10 @@ public class DbQueryManager implements Cloneable {
      *     resultSet -> resultSet.getString("name"));</pre>
      *
      * @param query        the query builder instance that needs to be executed
-     * @param rowProcessor a <code>DbRowProcessor</code> instance, if it's
-     *                     <code>null</code> no processing will be performed on the fetched row
-     * @return <code>true</code> if a row was retrieved; or
-     * <p><code>false</code> if there are no more rows .
+     * @param rowProcessor a {@code DbRowProcessor} instance, if it's
+     *                     {@code null} no processing will be performed on the fetched row
+     * @return {@code true} if a row was retrieved; or
+     * <p>{@code false} if there are no more rows .
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           #fetch(ResultSet, DbRowProcessor)}
@@ -1947,13 +1947,13 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Convenience alternative to {@link #executeFetchFirst(ReadQuery, DbRowProcessor)} that
-     * uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
+     * uses a simplified {@code RowProcessor} that can be implemented with a lambda.
      *
      * @param query        the query builder instance that needs to be executed
-     * @param rowProcessor a <code>RowProcessor</code> instance, if it's
-     *                     <code>null</code> no processing will be performed on the fetched row
-     * @return <code>true</code> if a row was retrieved; or
-     * <p><code>false</code> if there are no more rows .
+     * @param rowProcessor a {@code RowProcessor} instance, if it's
+     *                     {@code null} no processing will be performed on the fetched row
+     * @return {@code true} if a row was retrieved; or
+     * <p>{@code false} if there are no more rows .
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           #fetchAll(ResultSet, DbRowProcessor)}
@@ -1985,13 +1985,13 @@ public class DbQueryManager implements Cloneable {
      * </pre>
      *
      * @param query        the query builder instance that needs to be executed
-     * @param rowProcessor a <code>DbRowProcessor</code> instance, if it's
-     *                     <code>null</code> no processing will be performed on the fetched row
-     * @param handler      an instance of <code>PreparedStatementHandler</code>
+     * @param rowProcessor a {@code DbRowProcessor} instance, if it's
+     *                     {@code null} no processing will be performed on the fetched row
+     * @param handler      an instance of {@code PreparedStatementHandler}
      *                     that will be used to customize the query execution; or
-     *                     <code>null</code> if you don't want to customize it at all
-     * @return <code>true</code> if a row was retrieved; or
-     * <p><code>false</code> if there are no more rows .
+     *                     {@code null} if you don't want to customize it at all
+     * @return {@code true} if a row was retrieved; or
+     * <p>{@code false} if there are no more rows .
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           #fetch(ResultSet, DbRowProcessor)}
@@ -2034,16 +2034,16 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Convenience alternative to {@link #executeFetchFirst(ReadQuery, DbRowProcessor, PreparedStatementHandler)}
-     * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
+     * that uses a simplified {@code RowProcessor} that can be implemented with a lambda.
      *
      * @param query        the query builder instance that needs to be executed
-     * @param rowProcessor a <code>RowProcessor</code> instance, if it's
-     *                     <code>null</code> no processing will be performed on the fetched row
-     * @param handler      an instance of <code>PreparedStatementHandler</code>
+     * @param rowProcessor a {@code RowProcessor} instance, if it's
+     *                     {@code null} no processing will be performed on the fetched row
+     * @param handler      an instance of {@code PreparedStatementHandler}
      *                     that will be used to customize the query execution; or
-     *                     <code>null</code> if you don't want to customize it at all
-     * @return <code>true</code> if a row was retrieved; or
-     * <p><code>false</code> if there are no more rows .
+     *                     {@code null} if you don't want to customize it at all
+     * @return {@code true} if a row was retrieved; or
+     * <p>{@code false} if there are no more rows .
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           #fetchAll(ResultSet, DbRowProcessor)}
@@ -2079,8 +2079,8 @@ public class DbQueryManager implements Cloneable {
      *
      * @param query     the query builder instance that needs to be executed
      * @param beanClass the class of the bean
-     * @return <code>true</code> if a row was retrieved; or
-     * <p><code>false</code> if there are no more rows .
+     * @return {@code true} if a row was retrieved; or
+     * <p>{@code false} if there are no more rows .
      * @throws DatabaseException see {@link DbBeanFetcher} and {@link
      *                           #executeFetchFirst(ReadQuery, DbRowProcessor)}
      * @see #executeFetchFirst(ReadQuery, DbRowProcessor)
@@ -2110,11 +2110,11 @@ public class DbQueryManager implements Cloneable {
      *
      * @param query     the query builder instance that needs to be executed
      * @param beanClass the class of the bean
-     * @param handler   an instance of <code>PreparedStatementHandler</code>
+     * @param handler   an instance of {@code PreparedStatementHandler}
      *                  that will be used to customize the query execution; or
-     *                  <code>null</code> if you don't want to customize it at all
-     * @return <code>true</code> if a row was retrieved; or
-     * <p><code>false</code> if there are no more rows .
+     *                  {@code null} if you don't want to customize it at all
+     * @return {@code true} if a row was retrieved; or
+     * <p>{@code false} if there are no more rows .
      * @throws DatabaseException see {@link DbBeanFetcher} and {@link
      *                           #executeFetchFirst(ReadQuery, DbRowProcessor)}
      * @see #executeFetchFirst(ReadQuery, DbRowProcessor)
@@ -2147,10 +2147,10 @@ public class DbQueryManager implements Cloneable {
      *     resultSet -> resultSet.getString("name"));</pre>
      *
      * @param query        the query builder instance that needs to be executed
-     * @param rowProcessor a <code>DbRowProcessor</code> instance, if it's
-     *                     <code>null</code> no processing will be performed on the fetched rows
-     * @return <code>true</code> if rows were retrieved; or
-     * <p><code>false</code> if there are no more rows .
+     * @param rowProcessor a {@code DbRowProcessor} instance, if it's
+     *                     {@code null} no processing will be performed on the fetched rows
+     * @return {@code true} if rows were retrieved; or
+     * <p>{@code false} if there are no more rows .
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           #fetchAll(ResultSet, DbRowProcessor)}
@@ -2165,13 +2165,13 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Convenience alternative to {@link #executeFetchAll(ReadQuery, DbRowProcessor)}
-     * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
+     * that uses a simplified {@code RowProcessor} that can be implemented with a lambda.
      *
      * @param query        the query builder instance that needs to be executed
-     * @param rowProcessor a <code>RowProcessor</code> instance, if it's
-     *                     <code>null</code> no processing will be performed on the fetched rows
-     * @return <code>true</code> if a row was retrieved; or
-     * <p><code>false</code> if there are no more rows .
+     * @param rowProcessor a {@code RowProcessor} instance, if it's
+     *                     {@code null} no processing will be performed on the fetched rows
+     * @return {@code true} if a row was retrieved; or
+     * <p>{@code false} if there are no more rows .
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           #fetchAll(ResultSet, DbRowProcessor)}
@@ -2202,13 +2202,13 @@ public class DbQueryManager implements Cloneable {
      * </pre>
      *
      * @param query        the query builder instance that needs to be executed
-     * @param rowProcessor a <code>DbRowProcessor</code> instance, if it's
-     *                     <code>null</code> no processing will be performed on the fetched row
-     * @param handler      an instance of <code>PreparedStatementHandler</code>
+     * @param rowProcessor a {@code DbRowProcessor} instance, if it's
+     *                     {@code null} no processing will be performed on the fetched row
+     * @param handler      an instance of {@code PreparedStatementHandler}
      *                     that will be used to customize the query execution; or
-     *                     <code>null</code> if you don't want to customize it at all
-     * @return <code>true</code> if rows were retrieved; or
-     * <p><code>false</code> if there are no more rows .
+     *                     {@code null} if you don't want to customize it at all
+     * @return {@code true} if rows were retrieved; or
+     * <p>{@code false} if there are no more rows .
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           #fetchAll(ResultSet, DbRowProcessor)}
@@ -2249,16 +2249,16 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Convenience alternative to {@link #executeFetchAll(ReadQuery, DbRowProcessor, PreparedStatementHandler)}
-     * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
+     * that uses a simplified {@code RowProcessor} that can be implemented with a lambda.
      *
      * @param query        the query builder instance that needs to be executed
-     * @param rowProcessor a <code>RowProcessor</code> instance, if it's
-     *                     <code>null</code> no processing will be performed on the fetched rows
-     * @param handler      an instance of <code>PreparedStatementHandler</code>
+     * @param rowProcessor a {@code RowProcessor} instance, if it's
+     *                     {@code null} no processing will be performed on the fetched rows
+     * @param handler      an instance of {@code PreparedStatementHandler}
      *                     that will be used to customize the query execution; or
-     *                     <code>null</code> if you don't want to customize it at all
-     * @return <code>true</code> if a row was retrieved; or
-     * <p><code>false</code> if there are no more rows .
+     *                     {@code null} if you don't want to customize it at all
+     * @return {@code true} if a row was retrieved; or
+     * <p>{@code false} if there are no more rows .
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()} and {@link
      *                           #fetchAll(ResultSet, DbRowProcessor)}
@@ -2295,8 +2295,8 @@ public class DbQueryManager implements Cloneable {
      *
      * @param query     the query builder instance that needs to be executed
      * @param beanClass the class of the bean
-     * @return <code>a List instance with all the beans, the list is empty if
-     * no beans could be returned</code>
+     * @return {@code a List instance with all the beans, the list is empty if
+     * no beans could be returned}
      * @throws DatabaseException see {@link DbBeanFetcher} and {@link
      *                           #executeFetchAll(ReadQuery, DbRowProcessor)}
      * @see #executeFetchAll(ReadQuery, DbRowProcessor)
@@ -2326,11 +2326,11 @@ public class DbQueryManager implements Cloneable {
      *
      * @param query     the query builder instance that needs to be executed
      * @param beanClass the class of the bean
-     * @param handler   an instance of <code>PreparedStatementHandler</code>
+     * @param handler   an instance of {@code PreparedStatementHandler}
      *                  that will be used to customize the query execution; or
-     *                  <code>null</code> if you don't want to customize it at all
-     * @return <code>a List instance with all the beans, the list is empty if
-     * no beans could be returned</code>
+     *                  {@code null} if you don't want to customize it at all
+     * @return {@code a List instance with all the beans, the list is empty if
+     * no beans could be returned}
      * @throws DatabaseException see {@link DbBeanFetcher} and {@link
      *                           #executeFetchAll(ReadQuery, DbRowProcessor)}
      * @see #executeFetchAll(ReadQuery, DbRowProcessor)
@@ -2383,13 +2383,13 @@ public class DbQueryManager implements Cloneable {
      *    });</pre>
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code>PreparedStatementHandler</code>
+     * @param handler an instance of {@code PreparedStatementHandler}
      *                that will be used to customize the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
+     *                {@code null} if you don't want to customize it at all
      * @return the object that was returned by the overridden {@link
      * DbResultSetHandler#concludeResults(DbResultSet) concludeResults}
      * method; or
-     * <p><code>null</code> if this method wasn't overridden
+     * <p>{@code null} if this method wasn't overridden
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()}
      * @see DbPreparedStatement#executeQuery()
@@ -2451,13 +2451,13 @@ public class DbQueryManager implements Cloneable {
      *    });</pre>
      *
      * @param query   the query builder instance that needs to be executed
-     * @param handler an instance of <code><code>DbResultSetHandler</code></code>
+     * @param handler an instance of <code>{@code DbResultSetHandler}</code>
      *                that will be used to handle the results of the query execution; or
-     *                <code>null</code> if you don't want to customize it at all
+     *                {@code null} if you don't want to customize it at all
      * @return the object that was returned by the overridden {@link
      * DbResultSetHandler#concludeResults(DbResultSet) concludeResults}
      * method; or
-     * <p><code>null</code> if this method wasn't overridden
+     * <p>{@code null} if this method wasn't overridden
      * @throws DatabaseException see {@link
      *                           DbPreparedStatement#executeQuery()}
      * @see DbPreparedStatement#executeQuery()
@@ -2511,14 +2511,14 @@ public class DbQueryManager implements Cloneable {
      *        }
      *    })).intValue();</pre>
      *
-     * @param user an instance of <code>DbConnectionUser</code> that contains
+     * @param user an instance of {@code DbConnectionUser} that contains
      *             the logic that will be executed
-     * @return the return value from the <code>useConnection</code> method of
-     * the provided <code>DbConnectionUser</code> instance
+     * @return the return value from the {@code useConnection} method of
+     * the provided {@code DbConnectionUser} instance
      * @throws DatabaseException   when errors occurs during the reservation
      *                             of a connection for this thread
      * @throws InnerClassException when errors occurs inside the
-     *                             <code>DbConnectionUser</code>
+     *                             {@code DbConnectionUser}
      * @see DbConnectionUser#useConnection(DbConnection)
      * @since 1.0
      */
@@ -2552,12 +2552,12 @@ public class DbQueryManager implements Cloneable {
      * been started beforehand, it will be automatically rolled back.
      * <p>If you need to explicitly roll back an active transaction, use the
      * {@link DbTransactionUser#rollback() rollback} method of the
-     * <code>DbTransactionUser</code> class. If you use a regular rollback
+     * {@code DbTransactionUser} class. If you use a regular rollback
      * method, it's possible that you're inside a nested transaction executed
      * and that after the rollback, other logic continues to be executed
      * outside the transaction. Using the correct {@link
      * DbTransactionUser#rollback() rollback} method, stops the execution of
-     * the active <code>DbTransactionUser</code> and breaks out of any number
+     * the active {@code DbTransactionUser} and breaks out of any number
      * of them nesting.
      * <p>It's recommended to always use transactions through this method
      * since it ensures that transactional code can be re-used and enclosed in
@@ -2573,14 +2573,14 @@ public class DbQueryManager implements Cloneable {
      *    });
      * </pre>
      *
-     * @param user an instance of <code>TransactionUser</code> that contains
+     * @param user an instance of {@code TransactionUser} that contains
      *             the logic that will be executed
-     * @return the return value from the <code>useTransaction</code> method of
-     * the provided <code>DbTransactionUser</code> instance
+     * @return the return value from the {@code useTransaction} method of
+     * the provided {@code DbTransactionUser} instance
      * @throws DatabaseException   when errors occurs during the handling of
      *                             the transaction
      * @throws InnerClassException when errors occurs inside the
-     *                             <code>DbTransactionUser</code>
+     *                             {@code DbTransactionUser}
      * @see DbTransactionUser#useTransaction()
      * @see DbTransactionUserWithoutResult#useTransactionWithoutResult()
      * @since 1.0
@@ -2680,12 +2680,12 @@ public class DbQueryManager implements Cloneable {
      * of requiring a result to be returned, it's assumed that none will,
      * making your code cleaner.
      *
-     * @param user an instance of <code>TransactionUserWithoutResult</code>
+     * @param user an instance of {@code TransactionUserWithoutResult}
      *             that contains the logic that will be executed
      * @throws DatabaseException   when errors occurs during the handling of
      *                             the transaction
      * @throws InnerClassException when errors occurs inside the
-     *                             <code>DbTransactionUser</code>
+     *                             {@code DbTransactionUser}
      * @see TransactionUserWithoutResult#useTransaction()
      * @see #inTransaction(TransactionUser)
      * @since 1.0
@@ -2703,7 +2703,7 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Executes a query statement in a connection of this
-     * <code>DbQueryManager</code>'s <code>Datasource</code>. Functions
+     * {@code DbQueryManager}'s {@code Datasource}. Functions
      * exactly as the wrapped {@link DbStatement#executeQuery(ReadQuery)} method.
      * <p>Note that the statement will not be automatically closed since using
      * this method implies that you still have to work with the result set.
@@ -2726,9 +2726,9 @@ public class DbQueryManager implements Cloneable {
     /**
      * Fetches the next row of a result set without processing it in any way.
      *
-     * @param resultSet a valid <code>ResultSet</code> instance
-     * @return <code>true</code> if a new row was retrieved; or
-     * <p><code>false</code> if there are no more rows .
+     * @param resultSet a valid {@code ResultSet} instance
+     * @return {@code true} if a new row was retrieved; or
+     * <p>{@code false} if there are no more rows .
      * @throws DatabaseException when an error occurred during the fetch of
      *                           the next row in the result set
      * @see #fetch(ResultSet, DbRowProcessor)
@@ -2741,13 +2741,13 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Fetches the next row of a result set and processes it through a
-     * <code>DbRowProcessor</code>.
+     * {@code DbRowProcessor}.
      *
-     * @param resultSet    a valid <code>ResultSet</code> instance
-     * @param rowProcessor a <code>DbRowProcessor</code> instance, if it's
-     *                     <code>null</code> no processing will be performed on the fetched row
-     * @return <code>true</code> if a new row was retrieved; or
-     * <p><code>false</code> if there are no more rows .
+     * @param resultSet    a valid {@code ResultSet} instance
+     * @param rowProcessor a {@code DbRowProcessor} instance, if it's
+     *                     {@code null} no processing will be performed on the fetched row
+     * @return {@code true} if a new row was retrieved; or
+     * <p>{@code false} if there are no more rows .
      * @throws DatabaseException when an error occurred during the fetch of
      *                           the next row in the result set
      * @see #fetch(ResultSet)
@@ -2774,13 +2774,13 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Convenience alternative to {@link #fetch(ResultSet, DbRowProcessor)}
-     * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
+     * that uses a simplified {@code RowProcessor} that can be implemented with a lambda.
      *
-     * @param resultSet    a valid <code>ResultSet</code> instance
-     * @param rowProcessor a <code>RowProcessor</code> instance, if it's
-     *                     <code>null</code> no processing will be performed on the fetched row
-     * @return <code>true</code> if a new row was retrieved; or
-     * <p><code>false</code> if there are no more rows .
+     * @param resultSet    a valid {@code ResultSet} instance
+     * @param rowProcessor a {@code RowProcessor} instance, if it's
+     *                     {@code null} no processing will be performed on the fetched row
+     * @return {@code true} if a new row was retrieved; or
+     * <p>{@code false} if there are no more rows .
      * @throws DatabaseException when an error occurred during the fetch of
      *                           the next row in the result set
      * @see #fetch(ResultSet, DbRowProcessor)
@@ -2804,13 +2804,13 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Fetches all the next rows of a result set and processes it through a
-     * <code>DbRowProcessor</code>.
+     * {@code DbRowProcessor}.
      *
-     * @param resultSet    a valid <code>ResultSet</code> instance
-     * @param rowProcessor a <code>DbRowProcessor</code> instance, if it's
-     *                     <code>null</code> no processing will be performed on the fetched rows
-     * @return <code>true</code> if rows were fetched; or
-     * <p><code>false</code> if the result set contained no rows.
+     * @param resultSet    a valid {@code ResultSet} instance
+     * @param rowProcessor a {@code DbRowProcessor} instance, if it's
+     *                     {@code null} no processing will be performed on the fetched rows
+     * @return {@code true} if rows were fetched; or
+     * <p>{@code false} if the result set contained no rows.
      * @throws DatabaseException when an error occurred during the fetch of
      *                           the next rows in the result set
      * @see DbRowProcessor
@@ -2836,13 +2836,13 @@ public class DbQueryManager implements Cloneable {
 
     /**
      * Convenience alternative to {@link #fetchAll(ResultSet, DbRowProcessor)}
-     * that uses a simplified <code>RowProcessor</code> that can be implemented with a lambda.
+     * that uses a simplified {@code RowProcessor} that can be implemented with a lambda.
      *
-     * @param resultSet    a valid <code>ResultSet</code> instance
-     * @param rowProcessor a <code>RowProcessor</code> instance, if it's
-     *                     <code>null</code> no processing will be performed on the fetched rows
-     * @return <code>true</code> if rows were fetched; or
-     * <p><code>false</code> if the result set contained no rows.
+     * @param resultSet    a valid {@code ResultSet} instance
+     * @param rowProcessor a {@code RowProcessor} instance, if it's
+     *                     {@code null} no processing will be performed on the fetched rows
+     * @return {@code true} if rows were fetched; or
+     * <p>{@code false} if the result set contained no rows.
      * @throws DatabaseException when an error occurred during the fetch of
      *                           the next rows in the result set
      * @see #fetchAll(ResultSet, DbRowProcessor)
@@ -2865,11 +2865,11 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Obtains a <code>DbConnection</code> of this <code>DbQueryManager</code>'s
-     * <code>Datasource</code>. Functions exactly as the wrapped {@link
+     * Obtains a {@code DbConnection} of this {@code DbQueryManager}'s
+     * {@code Datasource}. Functions exactly as the wrapped {@link
      * Datasource#getConnection()} method.
      *
-     * @return the requested <code>DbConnection</code>
+     * @return the requested {@code DbConnection}
      * @throws DatabaseException see {@link Datasource#getConnection()}
      * @see Datasource#getConnection()
      * @since 1.0
@@ -2880,10 +2880,10 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Retrieves the <code>Datasource</code> of this
-     * <code>DbQueryManager</code>.
+     * Retrieves the {@code Datasource} of this
+     * {@code DbQueryManager}.
      *
-     * @return the requested <code>Datasource</code>
+     * @return the requested {@code Datasource}
      * @since 1.0
      */
     public Datasource getDatasource() {

@@ -1037,6 +1037,11 @@ public class ClassWriter extends ClassVisitor {
    *     Type#getInternalName()}).
    */
   protected String getCommonSuperClass(final String type1, final String type2) {
+    // TODO : extend ClassWriter and use bytecode analysis for finding the common superclass instead of class loading
+    if (type1.equals("java/lang/Object") || type2.equals("java/lang/Object")) {
+      return "java/lang/Object";
+    }
+
     ClassLoader classLoader = getClassLoader();
     Class<?> class1;
     try {

@@ -1,15 +1,11 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.queries;
 
-import org.junit.jupiter.api.Test;
-import rife.database.BeanImpl;
-import rife.database.BeanImplConstrained;
-import rife.database.exceptions.ColumnsRequiredException;
-import rife.database.exceptions.TableNameRequiredException;
-import rife.database.exceptions.UnsupportedSqlFeatureException;
+import rife.database.*;
+import rife.database.exceptions.*;
 
 import java.math.BigDecimal;
 import java.sql.Blob;
@@ -17,9 +13,9 @@ import java.sql.Blob;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCreateTableDerby extends TestCreateTable {
-    @Test
-    public void testInstantiationDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testInstantiationDerby() {
+        var query = new CreateTable(DERBY);
         assertNotNull(query);
         try {
             query.getSql();
@@ -29,9 +25,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         }
     }
 
-    @Test
-    public void testIncompleteQueryDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testIncompleteQueryDerby() {
+        var query = new CreateTable(DERBY);
         try {
             query.getSql();
             fail();
@@ -50,9 +46,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         assertNotNull(query.getSql());
     }
 
-    @Test
-    public void testClearDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testClearDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("string", String.class);
         assertNotNull(query.getSql());
@@ -65,9 +61,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         }
     }
 
-    @Test
-    public void testColumnDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testColumnDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename1")
             .column("string", String.class)
             .column("stringbuffer", StringBuffer.class)
@@ -93,9 +89,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testColumnPrecisionDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testColumnPrecisionDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -121,45 +117,45 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testColumnsBeanDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testColumnsBeanDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .columns(BeanImpl.class);
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyBoolean NUMERIC(1), propertyBooleanObject NUMERIC(1), propertyByte SMALLINT, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString VARCHAR(32672), propertyStringbuffer VARCHAR(32672), propertyTime TIME, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyBoolean NUMERIC(1), propertyBooleanObject NUMERIC(1), propertyByte SMALLINT, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInstant TIMESTAMP, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLocalDate DATE, propertyLocalDateTime TIMESTAMP, propertyLocalTime TIME, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString VARCHAR(32672), propertyStringBuffer VARCHAR(32672), propertyTime TIME, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
         execute(query);
     }
 
-    @Test
-    public void testColumnsBeanIncludedDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testColumnsBeanIncludedDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
-            .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyByte SMALLINT, propertyFloat FLOAT, propertyStringbuffer VARCHAR(32672), propertyTime TIME)");
+            .columnsIncluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyByte SMALLINT, propertyFloat FLOAT, propertyStringBuffer VARCHAR(32672), propertyTime TIME)");
         execute(query);
     }
 
-    @Test
-    public void testColumnsBeanExcludedDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testColumnsBeanExcludedDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
-            .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"});
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBoolean NUMERIC(1), propertyBooleanObject NUMERIC(1), propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloatObject FLOAT, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString VARCHAR(32672), propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
+            .columnsExcluded(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringBuffer", "propertyTime"});
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBoolean NUMERIC(1), propertyBooleanObject NUMERIC(1), propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloatObject FLOAT, propertyInstant TIMESTAMP, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLocalDate DATE, propertyLocalDateTime TIMESTAMP, propertyLocalTime TIME, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString VARCHAR(32672), propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
         execute(query);
     }
 
-    @Test
-    public void testColumnsBeanFilteredDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testColumnsBeanFilteredDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
-            .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringbuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringbuffer"});
+            .columnsFiltered(BeanImpl.class, new String[]{"propertyBigDecimal", "propertyByte", "propertyFloat", "propertyStringBuffer", "propertyTime"}, new String[]{"propertyByte", "propertyStringBuffer"});
         assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC, propertyFloat FLOAT, propertyTime TIME)");
         execute(query);
     }
 
-    @Test
-    public void testColumnsBeanPrecisionDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testColumnsBeanPrecisionDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)
@@ -175,34 +171,38 @@ public class TestCreateTableDerby extends TestCreateTable {
             .precision("propertyDoubleObject", 14, 4)
             .precision("propertyFloat", 13, 2)
             .precision("propertyFloatObject", 12, 1)
+            .precision("propertyInstant", 7)
             .precision("propertyInt", 10)
             .precision("propertyIntegerObject", 8)
+            .precision("propertyLocalDateTime", 5)
+            .precision("propertyLocalDate", 32)
+            .precision("propertyLocalTime", 10)
             .precision("propertyLong", 12)
             .precision("propertyLongObject", 11)
             .precision("propertyShort", 9)
             .precision("propertyShortObject", 6)
             .precision("propertySqlDate", 8)
             .precision("propertyString", 255)
-            .precision("propertyStringbuffer", 100)
+            .precision("propertyStringBuffer", 100)
             .precision("propertyTime", 9)
             .precision("propertyTimestamp", 30, 2)
             .precision("propertyEnum", 12);
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(19,9), propertyBoolean NUMERIC(1), propertyBooleanObject NUMERIC(1), propertyByte SMALLINT, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR(10), propertyCharacterObject CHAR(12), propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString VARCHAR(255), propertyStringbuffer VARCHAR(100), propertyTime TIME, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(19,9), propertyBoolean NUMERIC(1), propertyBooleanObject NUMERIC(1), propertyByte SMALLINT, propertyByteObject SMALLINT, propertyCalendar TIMESTAMP, propertyChar CHAR(10), propertyCharacterObject CHAR(12), propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyEnum VARCHAR(255), propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInstant TIMESTAMP, propertyInt INTEGER, propertyIntegerObject INTEGER, propertyLocalDate DATE, propertyLocalDateTime TIMESTAMP, propertyLocalTime TIME, propertyLong BIGINT, propertyLongObject BIGINT, propertyShort SMALLINT, propertyShortObject SMALLINT, propertySqlDate DATE, propertyString VARCHAR(255), propertyStringBuffer VARCHAR(100), propertyTime TIME, propertyTimestamp TIMESTAMP, CHECK (propertyEnum IS NULL OR propertyEnum IN ('VALUE_ONE','VALUE_TWO','VALUE_THREE')))");
         execute(query);
     }
 
-    @Test
-    public void testColumnsBeanConstrainedDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testColumnsBeanConstrainedDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .columns(BeanImplConstrained.class);
-        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(17,6), propertyBoolean NUMERIC(1), propertyBooleanObject NUMERIC(1), propertyByte SMALLINT, propertyByteObject SMALLINT NOT NULL, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInt INTEGER DEFAULT 23, propertyIntegerObject INTEGER, propertyLongObject BIGINT, propertyShort SMALLINT, propertySqlDate DATE, propertyString VARCHAR(30) DEFAULT 'one' NOT NULL, propertyStringbuffer VARCHAR(20) NOT NULL, propertyTime TIME, propertyTimestamp TIMESTAMP, PRIMARY KEY (propertyString), UNIQUE (propertyStringbuffer, propertyByteObject), UNIQUE (propertyStringbuffer), CHECK (propertyByteObject != -1), CHECK (propertyInt != 0), CHECK (propertyLongObject IS NULL OR propertyLongObject IN (89,1221,66875,878)), CHECK (propertyString IS NULL OR propertyString IN ('one','tw''''o','someotherstring')), CHECK (propertyStringbuffer != ''), CHECK (propertyStringbuffer != 'some''blurp'))");
+        assertEquals(query.getSql(), "CREATE TABLE tablename (propertyBigDecimal NUMERIC(17,6), propertyBoolean NUMERIC(1), propertyBooleanObject NUMERIC(1), propertyByte SMALLINT, propertyByteObject SMALLINT NOT NULL, propertyCalendar TIMESTAMP, propertyChar CHAR, propertyCharacterObject CHAR, propertyDate TIMESTAMP, propertyDouble FLOAT, propertyDoubleObject FLOAT, propertyFloat FLOAT, propertyFloatObject FLOAT, propertyInstant TIMESTAMP, propertyInt INTEGER DEFAULT 23, propertyIntegerObject INTEGER, propertyLocalDate DATE, propertyLocalDateTime TIMESTAMP, propertyLocalTime TIME, propertyLongObject BIGINT, propertyShort SMALLINT, propertySqlDate DATE, propertyString VARCHAR(30) DEFAULT 'one' NOT NULL, propertyStringBuffer VARCHAR(20) NOT NULL, propertyTime TIME, propertyTimestamp TIMESTAMP, PRIMARY KEY (propertyString), UNIQUE (propertyStringBuffer, propertyByteObject), UNIQUE (propertyStringBuffer), CHECK (propertyByteObject != -1), CHECK (propertyInt != 0), CHECK (propertyLongObject IS NULL OR propertyLongObject IN (89,1221,66875,878)), CHECK (propertyString IS NULL OR propertyString IN ('one','tw''''o','someotherstring')), CHECK (propertyStringBuffer != ''), CHECK (propertyStringBuffer != 'some''blurp'))");
         execute(query);
     }
 
-    @Test
-    public void testNullableDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testNullableDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn1", int.class, CreateTable.NULL)
             .column("stringColumn", String.class, 12, CreateTable.NOTNULL)
@@ -216,9 +216,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testDefaultDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testDefaultDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename1")
             .column("string", String.class, 255)
             .column("stringbuffer", StringBuffer.class, 100)
@@ -262,9 +262,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testDefaultFunctionDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testDefaultFunctionDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename1")
             .column("dateobject", java.sql.Date.class)
             .defaultFunction("dateobject", "CURRENT_DATE");
@@ -272,9 +272,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testCustomAttributeDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testCustomAttributeDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename1")
             .column("intColumn", Integer.class)
             .customAttribute("intColumn", "CHECK (intColumn > 0)");
@@ -282,9 +282,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testTemporaryDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testTemporaryDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .temporary(true)
             .column("boolColumn", boolean.class);
@@ -296,9 +296,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         }
     }
 
-    @Test
-    public void testPrimaryKeySimpleDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testPrimaryKeySimpleDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("intColumn");
@@ -306,9 +306,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testPrimaryKeyMultipleDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testPrimaryKeyMultipleDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -317,9 +317,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testPrimaryKeyNamedDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testPrimaryKeyNamedDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .primaryKey("constraint_name", "intColumn");
@@ -327,9 +327,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testPrimaryKeyMultipleNamedDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testPrimaryKeyMultipleNamedDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -338,9 +338,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testUniqueSimpleDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testUniqueSimpleDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class, CreateTable.NOTNULL)
             .unique("intColumn");
@@ -348,9 +348,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testUniqueMultipleDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testUniqueMultipleDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class, CreateTable.NOTNULL)
             .column("stringColumn", String.class, 50, CreateTable.NOTNULL)
@@ -359,9 +359,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testUniqueNamedDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testUniqueNamedDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class, CreateTable.NOTNULL)
             .unique("constraint_name", "intColumn");
@@ -369,9 +369,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testUniqueMultipleNamedDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testUniqueMultipleNamedDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class, CreateTable.NOTNULL)
             .column("stringColumn", String.class, 50, CreateTable.NOTNULL)
@@ -380,9 +380,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testForeignKeySimpleDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testForeignKeySimpleDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn");
@@ -390,9 +390,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testForeignKeyMultipleDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testForeignKeyMultipleDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -401,9 +401,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testForeignKeySimpleNamedDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testForeignKeySimpleNamedDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("constraint_name", "foreigntable", "intColumn", "foreignIntColumn");
@@ -411,9 +411,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testForeignKeyMultipleNamedDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testForeignKeyMultipleNamedDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -422,9 +422,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testForeignKeyViolationsSingleDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testForeignKeyViolationsSingleDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.CASCADE, null);
@@ -512,9 +512,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         query.clear();
     }
 
-    @Test
-    public void testForeignKeyViolationsDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testForeignKeyViolationsDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .foreignKey("foreigntable", "intColumn", "foreignIntColumn", CreateTable.RESTRICT, CreateTable.NOACTION);
@@ -522,9 +522,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testForeignKeyMultipleViolationsDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testForeignKeyMultipleViolationsDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .column("stringColumn", String.class, 50)
@@ -533,9 +533,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testCheckSimpleDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testCheckSimpleDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("intColumn > 0");
@@ -543,9 +543,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testCheckNamedDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testCheckNamedDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .column("intColumn", int.class)
             .check("NAME_CK", "intColumn > 0");
@@ -553,9 +553,9 @@ public class TestCreateTableDerby extends TestCreateTable {
         execute(query);
     }
 
-    @Test
-    public void testCloneDerby() {
-        CreateTable query = new CreateTable(DERBY);
+    @DatasourceEnabledIf(TestDatasourceIdentifier.DERBY)
+    void testCloneDerby() {
+        var query = new CreateTable(DERBY);
         query.table("tablename")
             .columns(BeanImpl.class)
             .precision("propertyBigDecimal", 19, 9)
@@ -571,7 +571,7 @@ public class TestCreateTableDerby extends TestCreateTable {
             .precision("propertyShort", 9)
             .precision("propertySqlDate", 8)
             .precision("propertyString", 255)
-            .precision("propertyStringbuffer", 100)
+            .precision("propertyStringBuffer", 100)
             .precision("propertyTime", 9)
             .precision("propertyTimestamp", 30, 2)
             .nullable("propertyString", CreateTable.NULL)
@@ -584,7 +584,7 @@ public class TestCreateTableDerby extends TestCreateTable {
             .unique("constraint_name2", new String[]{"propertyLong", "propertyString"})
             .foreignKey("foreigntable", new String[]{"propertyInt", "foreignIntColumn"}, CreateTable.RESTRICT, CreateTable.CASCADE)
             .check("NAME_CK", "propertyInt > 0");
-        CreateTable query_clone = query.clone();
+        var query_clone = query.clone();
         assertEquals(query.getSql(), query_clone.getSql());
         assertNotSame(query, query_clone);
         execute(query_clone);

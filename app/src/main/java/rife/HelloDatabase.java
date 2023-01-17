@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife;
@@ -34,7 +34,7 @@ public class HelloDatabase extends Site {
     });
     Route addForm = get("/add", c -> c.print("""
         <form method='post'>
-        <input name='name'/><input type='submit'/>
+        <input name='name' /><input type='submit' />
         </form>""")
     );
     Route list = get("/list", c -> {
@@ -54,7 +54,7 @@ public class HelloDatabase extends Site {
                     c.print("Maximum number of names reached<br><br>");
                     rollback();
                 }
-                c.print("Added " + name + " (#" + count+ ")<br><br>");
+                c.print("Added " + name + " (#" + count + ")<br><br>");
             }
         });
         c.print("<a href='" + c.urlFor(addForm) + "'>Add more</a><br>");

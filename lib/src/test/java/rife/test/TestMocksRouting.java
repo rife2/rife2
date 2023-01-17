@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.test;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class TestMocksRouting {
     @Test
-    public void testRoutingGet() {
+    void testRoutingGet() {
         var conversation = new MockConversation(new RoutingGetSite());
         
         assertEquals("class GetElement",                        conversation.doRequest("/routingGetSite_GetElement", new MockRequest().method(RequestMethod.GET)).getText());
@@ -78,7 +78,7 @@ public class TestMocksRouting {
 
 
     @Test
-    public void testRoutingPost() {
+    void testRoutingPost() {
         var conversation = new MockConversation(new RoutingPostSite());
 
         assertNotEquals(200, conversation.doRequest("/routingPostSite_PostElement", new MockRequest().method(RequestMethod.GET)).getStatus());
@@ -139,7 +139,7 @@ public class TestMocksRouting {
     }
 
     @Test
-    public void testRoutingPut() {
+    void testRoutingPut() {
         var conversation = new MockConversation(new RoutingPutSite());
 
         assertNotEquals(200, conversation.doRequest("/routingPutSite_PutElement", new MockRequest().method(RequestMethod.GET)).getStatus());
@@ -200,7 +200,7 @@ public class TestMocksRouting {
     }
 
     @Test
-    public void testRoutingDelete() {
+    void testRoutingDelete() {
         var conversation = new MockConversation(new RoutingDeleteSite());
 
         assertNotEquals(200, conversation.doRequest("/routingDeleteSite_DeleteElement", new MockRequest().method(RequestMethod.GET)).getStatus());
@@ -261,7 +261,7 @@ public class TestMocksRouting {
     }
 
     @Test
-    public void testRoutingPatch() {
+    void testRoutingPatch() {
         var conversation = new MockConversation(new RoutingPatchSite());
 
         assertNotEquals(200, conversation.doRequest("/routingPatchSite_PatchElement", new MockRequest().method(RequestMethod.GET)).getStatus());
@@ -322,7 +322,7 @@ public class TestMocksRouting {
     }
 
     @Test
-    public void testRoutingRoute() {
+    void testRoutingRoute() {
         var conversation = new MockConversation(new RoutingRouteSite());
 
         assertEquals("class RouteElement",                        conversation.doRequest("/routingRouteSite_RouteElement", new MockRequest().method(RequestMethod.GET)).getText());
@@ -383,7 +383,7 @@ public class TestMocksRouting {
     }
 
     @Test
-    public void testRoutingCombo() {
+    void testRoutingCombo() {
         var conversation = new MockConversation(new RoutingComboSite());
 
         assertEquals("class GetElement",                        conversation.doRequest("/combo1", new MockRequest().method(RequestMethod.GET)).getText());

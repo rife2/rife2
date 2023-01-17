@@ -1,13 +1,10 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.sessionvalidators;
 
-import rife.authentication.CredentialsManager;
-import rife.authentication.RememberManager;
 import rife.authentication.SessionAttributes;
-import rife.authentication.SessionManager;
 import rife.authentication.SessionValidator;
 import rife.authentication.credentialsmanagers.DatabaseUsers;
 import rife.authentication.credentialsmanagers.DatabaseUsersFactory;
@@ -35,9 +32,9 @@ public abstract class DatabaseSessionValidator extends DbQueryManager implements
     protected DatabaseSessionValidator(Datasource datasource) {
         super(datasource);
 
-        credentialsManager_ = DatabaseUsersFactory.getInstance(datasource);
-        sessionManager_ = DatabaseSessionsFactory.getInstance(datasource);
-        rememberManager_ = DatabaseRememberFactory.getInstance(datasource);
+        credentialsManager_ = DatabaseUsersFactory.instance(datasource);
+        sessionManager_ = DatabaseSessionsFactory.instance(datasource);
+        rememberManager_ = DatabaseRememberFactory.instance(datasource);
     }
 
     public void setCredentialsManager(DatabaseUsers credentialsManager) {
@@ -74,12 +71,12 @@ public abstract class DatabaseSessionValidator extends DbQueryManager implements
         return SESSION_VALID == id;
     }
 
-    protected int _validateSession(Select sessionValidityNoRole, Select sessionValidityNoRoleRestrictHostIp, Select sessionValidityRole, Select sessionValidityRoleRestrictHostIp, ProcessSessionValidity processSessionValidity, final String authId, final String hostIp, final SessionAttributes attributes)
+    protected int _validateSession(Select sessionValidityNoRole, Select sessionValidityNoRoleRestrictAuthData, Select sessionValidityRole, Select sessionValidityRoleRestrictAuthData, ProcessSessionValidity processSessionValidity, final String authId, final String authData, final SessionAttributes attributes)
     throws SessionValidatorException {
         if (null == authId ||
             0 == authId.length() ||
-            null == hostIp ||
-            0 == hostIp.length() ||
+            null == authData ||
+            0 == authData.length() ||
             null == attributes) {
             return SESSION_INVALID;
         }
@@ -90,14 +87,14 @@ public abstract class DatabaseSessionValidator extends DbQueryManager implements
 
         // select which query to use according to the role attribute
         if (attributes.hasAttribute("role")) {
-            if (sessionManager_.getRestrictHostIp()) {
-                query = sessionValidityRoleRestrictHostIp;
+            if (sessionManager_.getRestrictAuthData()) {
+                query = sessionValidityRoleRestrictAuthData;
             } else {
                 query = sessionValidityRole;
             }
         } else {
-            if (sessionManager_.getRestrictHostIp()) {
-                query = sessionValidityNoRoleRestrictHostIp;
+            if (sessionManager_.getRestrictAuthData()) {
+                query = sessionValidityNoRoleRestrictAuthData;
             } else {
                 query = sessionValidityNoRole;
             }
@@ -105,25 +102,23 @@ public abstract class DatabaseSessionValidator extends DbQueryManager implements
 
         // role has been specified, use optimized validity check to limit the amount of db queries
         try {
-            executeFetchFirst(query, processSessionValidity, new DbPreparedStatementHandler<>() {
-                public void setParameters(DbPreparedStatement statement) {
-                    statement
-                        .setString("authId", authId)
-                        .setLong("sessStart", System.currentTimeMillis() - sessionManager_.getSessionDuration());
+            executeFetchFirst(query, processSessionValidity, statement -> {
+                statement
+                    .setString("authId", authId)
+                    .setLong("sessStart", System.currentTimeMillis() - sessionManager_.getSessionDuration());
 
-                    if (attributes.hasAttribute("role")) {
-                        statement
-                            .setString("role", attributes.getAttribute("role"));
-                    }
-                    if (sessionManager_.getRestrictHostIp()) {
-                        statement
-                            .setString("hostIp", hostIp);
-                    }
+                if (attributes.hasAttribute("role")) {
+                    statement
+                        .setString("role", attributes.getAttribute("role"));
+                }
+                if (sessionManager_.getRestrictAuthData()) {
+                    statement
+                        .setString("authData", authData);
                 }
             });
             result = processSessionValidity.getValidity();
         } catch (DatabaseException e) {
-            throw new SessionValidityCheckErrorException(authId, hostIp, e);
+            throw new SessionValidityCheckErrorException(authId, authData, e);
         }
 
         return result;

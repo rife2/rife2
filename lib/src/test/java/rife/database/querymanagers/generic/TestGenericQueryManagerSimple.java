@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.querymanagers.generic;
@@ -18,8 +18,8 @@ import rife.database.querymanagers.generic.exceptions.MissingDefaultConstructorE
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGenericQueryManagerSimple {
-    protected GenericQueryManager<SimpleBean> setUp(Datasource datasource) {
-        var manager = GenericQueryManagerFactory.getInstance(datasource, SimpleBean.class);
+    protected GenericQueryManager<SimpleBean> setup(Datasource datasource) {
+        var manager = GenericQueryManagerFactory.instance(datasource, SimpleBean.class);
         manager.install();
         return manager;
     }
@@ -30,10 +30,10 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testNoDefaultConstructor(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testNoDefaultConstructor(Datasource datasource) {
+        var manager = setup(datasource);
         try {
-            GenericQueryManagerFactory.getInstance(datasource, NoDefaultConstructorBean.class);
+            GenericQueryManagerFactory.instance(datasource, NoDefaultConstructorBean.class);
             fail("MissingDefaultConstructorException exception wasn't thrown");
         } catch (MissingDefaultConstructorException e) {
             assertSame(e.getBeanClass(), NoDefaultConstructorBean.class);
@@ -44,8 +44,8 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetBaseClass(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testGetBaseClass(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             assertSame(SimpleBean.class, manager.getBaseClass());
         } finally {
@@ -55,8 +55,8 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallCustomQuery(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testInstallCustomQuery(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             manager.remove();
             manager.install(manager.getInstallTableQuery());
@@ -67,8 +67,8 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveRestore(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testSaveRestore(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             var bean = new SimpleBean();
             SimpleBean newbean = null;
@@ -113,7 +113,7 @@ public class TestGenericQueryManagerSimple {
             assertNotEquals(999999, manager.save(bean));
             assertEquals(bean.getId(), id + 1);
 
-            var manager_othertable = GenericQueryManagerFactory.getInstance(datasource, SimpleBean.class, "othertable");
+            var manager_othertable = GenericQueryManagerFactory.instance(datasource, SimpleBean.class, "othertable");
             manager_othertable.install();
 
             var bean2 = new SimpleBean();
@@ -133,10 +133,10 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSparseIdentifier(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testSparseIdentifier(Datasource datasource) {
+        var manager = setup(datasource);
         try {
-            var manager_sparsebean = GenericQueryManagerFactory.getInstance(datasource, SparseBean.class);
+            var manager_sparsebean = GenericQueryManagerFactory.instance(datasource, SparseBean.class);
             var sparse_bean = new SparseBean();
 
             manager_sparsebean.install();
@@ -168,8 +168,8 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDelete(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testDelete(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             var bean = new SimpleBean();
 
@@ -191,8 +191,8 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestore(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testRestore(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -243,8 +243,8 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreRowProcessor(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testRestoreRowProcessor(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -298,8 +298,8 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreQueryRowProcessor(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testRestoreQueryRowProcessor(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();
@@ -344,8 +344,93 @@ public class TestGenericQueryManagerSimple {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testCount(Datasource datasource) {
-        var manager = setUp(datasource);
+    void testRestoreBeanFetcher(Datasource datasource) {
+        var manager = setup(datasource);
+        try {
+            var bean1 = new SimpleBean();
+            var bean2 = new SimpleBean();
+            var bean3 = new SimpleBean();
+
+            final var uuid1 = UUID.randomUUID();
+            final var uuid2 = UUID.randomUUID();
+            final var uuid3 = UUID.randomUUID();
+
+            bean1.setTestString("This is bean1");
+            bean1.setUuid(uuid1);
+            bean1.setEnum(SomeEnum.VALUE_ONE);
+            bean2.setTestString("This is bean2");
+            bean2.setUuid(uuid2);
+            bean2.setEnum(SomeEnum.VALUE_TWO);
+            bean3.setTestString("This is bean3");
+            bean3.setUuid(uuid3);
+            bean3.setEnum(SomeEnum.VALUE_THREE);
+
+            manager.save(bean1);
+            manager.save(bean2);
+            manager.save(bean3);
+
+            final var count = new int[]{0};
+            manager.restore(bean -> {
+                count[0]++;
+
+                assertTrue(
+                    bean.getTestString().equals("This is bean1") ||
+                    bean.getTestString().equals("This is bean2") ||
+                    bean.getTestString().equals("This is bean3"));
+
+                assertTrue(
+                    bean.getUuid().equals(uuid1) ||
+                    bean.getUuid().equals(uuid2) ||
+                    bean.getUuid().equals(uuid3));
+            });
+
+            assertEquals(count[0], 3);
+        } finally {
+            tearDown(manager);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    void testRestoreQueryBeanFetcher(Datasource datasource) {
+        var manager = setup(datasource);
+        try {
+            var bean1 = new SimpleBean();
+            var bean2 = new SimpleBean();
+            var bean3 = new SimpleBean();
+
+            final var uuid1 = UUID.randomUUID();
+            final var uuid2 = UUID.randomUUID();
+            final var uuid3 = UUID.randomUUID();
+
+            bean1.setTestString("This is bean1");
+            bean1.setUuid(uuid1);
+            bean2.setTestString("This is bean2");
+            bean2.setUuid(uuid2);
+            bean3.setTestString("This is bean3");
+            bean3.setUuid(uuid3);
+
+            manager.save(bean1);
+            manager.save(bean2);
+            manager.save(bean3);
+
+            final var count = new int[]{0};
+            manager.restore(manager.getRestoreQuery().where("testString", "LIKE", "%bean2"), bean -> {
+                count[0]++;
+                assertEquals("This is bean2", bean.getTestString());
+                assertEquals(uuid2, bean.getUuid());
+            });
+
+            assertEquals(count[0], 1);
+        } finally {
+            tearDown(manager);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    void testCount(Datasource datasource) {
+        var manager = setup(datasource);
         try {
             var bean1 = new SimpleBean();
             var bean2 = new SimpleBean();

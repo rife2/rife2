@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.querymanagers.generic;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGenericQueryManagerCallbacks {
     protected GenericQueryManager<CallbacksBean> setUpCallbacksBeanManager(Datasource datasource) {
-        var manager = GenericQueryManagerFactory.getInstance(datasource, CallbacksBean.class);
+        var manager = GenericQueryManagerFactory.instance(datasource, CallbacksBean.class);
         try {
             var listener = new AggregatingCallbacksBeanListener();
             manager.addListener(listener);
@@ -44,7 +44,7 @@ public class TestGenericQueryManagerCallbacks {
     }
 
     protected GenericQueryManager<CallbacksSparseBean> setUpCallbacksSparseBeanManager(Datasource datasource) {
-        var manager = GenericQueryManagerFactory.getInstance(datasource, CallbacksSparseBean.class);
+        var manager = GenericQueryManagerFactory.instance(datasource, CallbacksSparseBean.class);
         manager.install();
         return manager;
     }
@@ -54,7 +54,7 @@ public class TestGenericQueryManagerCallbacks {
     }
 
     protected GenericQueryManager<CallbacksProviderBean> setUpCallbacksProviderBeanManager(Datasource datasource) {
-        var manager = GenericQueryManagerFactory.getInstance(datasource, CallbacksProviderBean.class);
+        var manager = GenericQueryManagerFactory.instance(datasource, CallbacksProviderBean.class);
         manager.install();
         return manager;
     }
@@ -65,7 +65,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetBaseClass(Datasource datasource) {
+    void testGetBaseClass(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             assertSame(CallbacksBean.class, manager.getBaseClass());
@@ -76,7 +76,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetBaseClassSparse(Datasource datasource) {
+    void testGetBaseClassSparse(Datasource datasource) {
         var manager = setUpCallbacksSparseBeanManager(datasource);
         try {
             assertSame(CallbacksSparseBean.class, manager.getBaseClass());
@@ -87,7 +87,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testGetBaseClassProvider(Datasource datasource) {
+    void testGetBaseClassProvider(Datasource datasource) {
         var manager = setUpCallbacksProviderBeanManager(datasource);
         try {
             assertSame(CallbacksProviderBean.class, manager.getBaseClass());
@@ -98,7 +98,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallCustomQuery(Datasource datasource) {
+    void testInstallCustomQuery(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             manager.remove();
@@ -110,7 +110,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallCustomQuerySparse(Datasource datasource) {
+    void testInstallCustomQuerySparse(Datasource datasource) {
         var manager = setUpCallbacksSparseBeanManager(datasource);
         try {
             manager.remove();
@@ -122,7 +122,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInstallCustomQueryProvider(Datasource datasource) {
+    void testInstallCustomQueryProvider(Datasource datasource) {
         var manager = setUpCallbacksProviderBeanManager(datasource);
         try {
             manager.remove();
@@ -134,7 +134,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testValidateCallbacks(Datasource datasource) {
+    void testValidateCallbacks(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -174,7 +174,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testValidateCallbacksReturns(Datasource datasource) {
+    void testValidateCallbacksReturns(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -204,7 +204,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveCallbacks(Datasource datasource) {
+    void testSaveCallbacks(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -250,7 +250,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveCallbacksReturns(Datasource datasource) {
+    void testSaveCallbacksReturns(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -348,7 +348,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveCallbacksSparse(Datasource datasource) {
+    void testSaveCallbacksSparse(Datasource datasource) {
         var manager = setUpCallbacksSparseBeanManager(datasource);
         try {
             var bean = new CallbacksSparseBean();
@@ -381,7 +381,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveCallbacksSparseReturns(Datasource datasource) {
+    void testSaveCallbacksSparseReturns(Datasource datasource) {
         var manager = setUpCallbacksSparseBeanManager(datasource);
         try {
             var bean = new CallbacksSparseBean();
@@ -455,7 +455,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testSaveListeners(Datasource datasource) {
+    void testSaveListeners(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -522,7 +522,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInsertCallbacks(Datasource datasource) {
+    void testInsertCallbacks(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -541,7 +541,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testInsertCallbacksReturns(Datasource datasource) {
+    void testInsertCallbacksReturns(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -562,7 +562,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUpdateCallbacks(Datasource datasource) {
+    void testUpdateCallbacks(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -591,7 +591,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testUpdateCallbacksReturns(Datasource datasource) {
+    void testUpdateCallbacksReturns(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -617,7 +617,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteCallbacks(Datasource datasource) {
+    void testDeleteCallbacks(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -641,7 +641,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteCallbacksReturns(Datasource datasource) {
+    void testDeleteCallbacksReturns(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -669,7 +669,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testDeleteListeners(Datasource datasource) {
+    void testDeleteListeners(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -704,7 +704,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreCallbacks(Datasource datasource) {
+    void testRestoreCallbacks(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -755,7 +755,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreCallbacksReturns(Datasource datasource) {
+    void testRestoreCallbacksReturns(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -787,7 +787,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testRestoreListeners(Datasource datasource) {
+    void testRestoreListeners(Datasource datasource) {
         var manager = setUpCallbacksBeanManager(datasource);
         try {
             CallbacksBean.clearExecuteCallbacks();
@@ -876,7 +876,7 @@ public class TestGenericQueryManagerCallbacks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    public void testCallbacksProvider(Datasource datasource) {
+    void testCallbacksProvider(Datasource datasource) {
         var manager = setUpCallbacksProviderBeanManager(datasource);
         try {
             CallbacksProviderBean.clearExecuteCallbacks();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.test;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestMocksGroups {
     @Test
-    public void testGroup() {
+    void testGroup() {
         var conversation = new MockConversation(new GroupSite());
         assertEquals("/one", conversation.doRequest("/one").getText());
         assertEquals("/two", conversation.doRequest("/two").getText());
@@ -20,7 +20,7 @@ public class TestMocksGroups {
     }
 
     @Test
-    public void testGroupPrefix() {
+    void testGroupPrefix() {
         var conversation = new MockConversation(new GroupPrefixSite());
         assertEquals("/one", conversation.doRequest("/one").getText());
         assertEquals("/two", conversation.doRequest("/two").getText());
@@ -30,7 +30,7 @@ public class TestMocksGroups {
     }
 
     @Test
-    public void testGroupsMultiLevel() {
+    void testGroupsMultiLevel() {
         var conversation = new MockConversation(new GroupsMultiLevelSite());
         assertEquals("/one", conversation.doRequest("/one").getText());
         assertEquals("/two", conversation.doRequest("/two").getText());
@@ -50,28 +50,28 @@ public class TestMocksGroups {
     // TODO : test path info routes in groups
 
     @Test
-    public void testBefore() {
+    void testBefore() {
         var conversation = new MockConversation(new BeforeSite());
         assertEquals("before1before2/one", conversation.doRequest("/one").getText());
         assertEquals("before1before2/two", conversation.doRequest("/two").getText());
     }
 
     @Test
-    public void testAfter() {
+    void testAfter() {
         var conversation = new MockConversation(new AfterSite());
         assertEquals("/oneafter1after2", conversation.doRequest("/one").getText());
         assertEquals("/twoafter1after2", conversation.doRequest("/two").getText());
     }
 
     @Test
-    public void testBeforeAfter() {
+    void testBeforeAfter() {
         var conversation = new MockConversation(new BeforeAfterSite());
         assertEquals("before1before2/oneafter1after2", conversation.doRequest("/one").getText());
         assertEquals("before1before2/twoafter1after2", conversation.doRequest("/two").getText());
     }
 
     @Test
-    public void testBeforeGroup() {
+    void testBeforeGroup() {
         var conversation = new MockConversation(new BeforeGroupSite());
         assertEquals("/one", conversation.doRequest("/one").getText());
         assertEquals("/two", conversation.doRequest("/two").getText());
@@ -80,7 +80,7 @@ public class TestMocksGroups {
     }
 
     @Test
-    public void testAfterGroup() {
+    void testAfterGroup() {
         var conversation = new MockConversation(new AfterGroupSite());
         assertEquals("/one", conversation.doRequest("/one").getText());
         assertEquals("/two", conversation.doRequest("/two").getText());
@@ -89,7 +89,7 @@ public class TestMocksGroups {
     }
 
     @Test
-    public void testBeforeAfterGroup() {
+    void testBeforeAfterGroup() {
         var conversation = new MockConversation(new BeforeAfterGroupSite());
         assertEquals("/one", conversation.doRequest("/one").getText());
         assertEquals("/two", conversation.doRequest("/two").getText());
@@ -98,7 +98,7 @@ public class TestMocksGroups {
     }
 
     @Test
-    public void testBeforeAfterGroupsMultiLevel() {
+    void testBeforeAfterGroupsMultiLevel() {
         var conversation = new MockConversation(new BeforeAfterGroupsMultiLevelSite());
         assertEquals("/one", conversation.doRequest("/one").getText());
         assertEquals("/two", conversation.doRequest("/two").getText());
@@ -118,7 +118,7 @@ public class TestMocksGroups {
     }
 
     @Test
-    public void testBeforeAfterGroupRespond() {
+    void testBeforeAfterGroupRespond() {
         var conversation = new MockConversation(new BeforeAfterGroupRespondSite());
         assertEquals("/one", conversation.doRequest("/one").getText());
         assertEquals("/two", conversation.doRequest("/two").getText());
@@ -141,7 +141,7 @@ public class TestMocksGroups {
     }
 
     @Test
-    public void testBeforeAfterGroupNext() {
+    void testBeforeAfterGroupNext() {
         var conversation = new MockConversation(new BeforeAfterGroupNextSite());
         assertEquals("/one", conversation.doRequest("/one").getText());
         assertEquals("/two", conversation.doRequest("/two").getText());

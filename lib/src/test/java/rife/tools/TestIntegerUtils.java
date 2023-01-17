@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.tools;
@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestIntegerUtils {
     @Test
-    public void testIntToBytes() {
+    void testIntToBytes() {
         assertEquals(265325803, IntegerUtils.bytesToInt(IntegerUtils.intToBytes(265325803)));
     }
 

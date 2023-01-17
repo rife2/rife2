@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.servlet;
@@ -55,16 +55,7 @@ public class HttpRequest implements Request {
             String[] parameter_values = null;
             while (parameter_names.hasMoreElements()) {
                 parameter_name = parameter_names.nextElement();
-                if (StringUtils.doesUrlValueNeedDecoding(parameter_name)) {
-                    parameter_name = StringUtils.decodeUrlValue(parameter_name);
-                }
-
                 parameter_values = request_.getParameterValues(parameter_name);
-                for (var i = 0; i < parameter_values.length; i++) {
-                    if (StringUtils.doesUrlValueNeedDecoding(parameter_values[i])) {
-                        parameter_values[i] = StringUtils.decodeUrlValue(parameter_values[i]);
-                    }
-                }
 
                 parameters_.put(parameter_name, parameter_values);
             }

@@ -1,13 +1,9 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.test;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import rife.engine.*;
 import rife.template.TemplateFactory;
@@ -21,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMocksEngine {
     @Test
-    public void testSimplePlain() {
+    void testSimplePlain() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/simple/plain", c -> {
@@ -38,7 +34,7 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testSimpleHtml() {
+    void testSimpleHtml() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/simple/html", c -> c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo()));
@@ -52,7 +48,7 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testSimplePathInfo() {
+    void testSimplePathInfo() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/simple/pathinfo", PathInfoHandling.CAPTURE, c -> c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo()));
@@ -86,7 +82,7 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testPathInfoMapping() {
+    void testPathInfoMapping() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/pathinfo/map", PathInfoHandling.MAP(m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")), c -> {
@@ -109,7 +105,7 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testPathInfoMappingMultiple() {
+    void testPathInfoMappingMultiple() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/pathinfo/map",
@@ -141,7 +137,7 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testPathInfoMappingUrlGeneration() {
+    void testPathInfoMappingUrlGeneration() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 var path_info = get("/pathinfo/map", PathInfoHandling.MAP(m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")), c -> {
@@ -162,21 +158,21 @@ public class TestMocksEngine {
         assertEquals("text/html; charset=UTF-8", response.getContentType());
         assertEquals("http://localhost/pathinfo/map/text/v1/x412", response.getText());
 
-        response = conversation.doRequest( response.getText());
+        response = conversation.doRequest(response.getText());
         assertEquals(200, response.getStatus());
         assertEquals("text/html; charset=UTF-8", response.getContentType());
         assertEquals("Just some text 127.0.0.1:text/v1/x412:v1:412", response.getText());
     }
 
     @Test
-    public void testHeaders() {
+    void testHeaders() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/headers", c -> {
                     c.addHeader("Content-Disposition", "attachment; filename=thefile.zip");
                     var cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
                     cal.set(2002, Calendar.OCTOBER, 25, 19, 20, 58);
-                    c.addHeader("DateHeader", cal.getTimeInMillis());
+                    c.addDateHeader("DateHeader", cal.getTimeInMillis());
                     c.addHeader("IntHeader", 1212);
 
                     c.print("headers");
@@ -194,7 +190,7 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testWrongServerRootUrl() {
+    void testWrongServerRootUrl() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/simple/html", c -> c.print("Just some text " + c.remoteAddr() + ":" + c.remoteHost() + ":" + c.pathInfo()));
@@ -205,7 +201,7 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testCookies() {
+    void testCookies() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/cookies1", c -> {
@@ -240,7 +236,7 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testContentlength() {
+    void testContentlength() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/contentlength", c -> {
@@ -258,7 +254,7 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testDynamicContenttype() {
+    void testDynamicContenttype() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/dynamiccontenttype", c -> {
@@ -275,7 +271,7 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testBinary() {
+    void testBinary() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/binary", c -> c.outputStream().write(IntegerUtils.intToBytes(87634675)));
@@ -288,7 +284,7 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testPrintAndWriteBuffer() {
+    void testPrintAndWriteBuffer() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/printandwrite_buffer", c -> {
@@ -306,7 +302,7 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testPrintAndWriteNoBuffer() {
+    void testPrintAndWriteNoBuffer() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
                 get("/printandwrite_nobuffer", c -> {
@@ -324,28 +320,28 @@ public class TestMocksEngine {
     }
 
     @Test
-    public void testGenerateForm() {
+    void testGenerateForm() {
         var conversation = new MockConversation(new GenerateFormSite());
         assertEquals(TemplateFactory.HTML.get("formbuilder_fields_out_constrained_values").getContent(), conversation.doRequest("/form").getText());
         assertEquals(TemplateFactory.HTML.get("formbuilder_fields").getContent(), conversation.doRequest("/form?remove=1").getText());
     }
 
     @Test
-    public void testGenerateFormPrefix() {
+    void testGenerateFormPrefix() {
         var conversation = new MockConversation(new GenerateFormSite());
         assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix_out_constrained_values").getContent(), conversation.doRequest("/form?prefix=1").getText());
         assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix").getContent(), conversation.doRequest("/form?prefix=1&remove=1").getText());
     }
 
     @Test
-    public void testGenerateEmptyForm() {
+    void testGenerateEmptyForm() {
         var conversation = new MockConversation(new GenerateEmptyFormSite());
         assertEquals(TemplateFactory.HTML.get("formbuilder_fields_out_constrained_empty").getContent(), conversation.doRequest("/form_empty").getText());
         assertEquals(TemplateFactory.HTML.get("formbuilder_fields").getContent(), conversation.doRequest("/form_empty?remove=1").getText());
     }
 
     @Test
-    public void testGenerateEmptyFormPrefix() {
+    void testGenerateEmptyFormPrefix() {
         var conversation = new MockConversation(new GenerateEmptyFormSite());
         assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix_out_constrained_empty").getContent(), conversation.doRequest("/form_empty?prefix=1").getText());
         assertEquals(TemplateFactory.HTML.get("formbuilder_form_prefix").getContent(), conversation.doRequest("/form_empty?prefix=1&remove=1").getText());
@@ -353,7 +349,7 @@ public class TestMocksEngine {
 
 
     @Test
-    public void testFallbacks() {
+    void testFallbacks() {
         var conversation = new MockConversation(new FallbacksSite());
 
         assertEquals("/one", conversation.doRequest("/one").getText());

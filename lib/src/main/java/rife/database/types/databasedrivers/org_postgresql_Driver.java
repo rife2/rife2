@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database.types.databasedrivers;
@@ -9,11 +9,10 @@ import java.sql.*;
 import rife.database.types.SqlArrays;
 import rife.database.types.SqlConversion;
 import rife.database.types.SqlNull;
-import rife.database.types.databasedrivers.Common;
-import rife.tools.ClassUtils;
-import rife.tools.StringUtils;
+import rife.tools.*;
 
 import java.math.BigDecimal;
+import java.time.*;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -49,10 +48,18 @@ public class org_postgresql_Driver extends Common implements SqlConversion {
             return "'" + StringUtils.encodeSql(value.toString()) + "'";
         } else if (value instanceof java.sql.Date) {
             return "'" + StringUtils.encodeSql(value.toString()) + "'";
-        } else if (value instanceof Date) {
-            return "'" + StringUtils.encodeSql(new Timestamp(((Date) value).getTime()).toString()) + "'";
-        } else if (value instanceof Calendar) {
-            return "'" + StringUtils.encodeSql(new Timestamp(((Calendar) value).getTime().getTime()).toString()) + "'";
+        } else if (value instanceof Date date) {
+            return "'" + StringUtils.encodeSql(Convert.toSqlTimestamp(date).toString()) + "'";
+        } else if (value instanceof Calendar cal) {
+            return "'" + StringUtils.encodeSql(Convert.toSqlTimestamp(cal).toString()) + "'";
+        } else if (value instanceof Instant instant) {
+            return "'" + StringUtils.encodeSql(Convert.toSqlTimestamp(instant).toString()) + "'";
+        } else if (value instanceof LocalDateTime local) {
+            return "'" + StringUtils.encodeSql(Convert.toSqlTimestamp(local).toString()) + "'";
+        } else if (value instanceof LocalDate local) {
+            return "'" + StringUtils.encodeSql(Convert.toSqlDate(local).toString()) + "'";
+        } else if (value instanceof LocalTime local) {
+            return "'" + StringUtils.encodeSql(Convert.toSqlTime(local).toString()) + "'";
         }
         // make sure that the Boolean type is correctly caught
         else if (value instanceof Boolean) {
@@ -80,22 +87,22 @@ public class org_postgresql_Driver extends Common implements SqlConversion {
         Object result = null;
 
         if (type == Types.BIT || type == Types.BOOLEAN) {
-            boolean value = resultSet.getBoolean(columnNumber);
+            var value = resultSet.getBoolean(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
         } else if (type == Types.TINYINT) {
-            byte value = resultSet.getByte(columnNumber);
+            var value = resultSet.getByte(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
         } else if (type == Types.SMALLINT || type == Types.INTEGER) {
-            int value = resultSet.getInt(columnNumber);
+            var value = resultSet.getInt(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
         } else if (type == Types.BIGINT) {
-            long value = resultSet.getLong(columnNumber);
+            var value = resultSet.getLong(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
@@ -110,7 +117,7 @@ public class org_postgresql_Driver extends Common implements SqlConversion {
         } else if (type == Types.NUMERIC || type == Types.DECIMAL) {
             result = resultSet.getBigDecimal(columnNumber);
         } else if (type == Types.DOUBLE || type == Types.FLOAT || type == Types.REAL) {
-            double value = resultSet.getDouble(columnNumber);
+            var value = resultSet.getDouble(columnNumber);
             if (!resultSet.wasNull()) {
                 result = value;
             }
@@ -142,7 +149,7 @@ public class org_postgresql_Driver extends Common implements SqlConversion {
                 return "VARCHAR(" + precision + ")";
             }
         } else if (type == Character.class ||
-            type == char.class) {
+                   type == char.class) {
             if (precision < 0) {
                 return "CHAR";
             } else {
@@ -150,38 +157,42 @@ public class org_postgresql_Driver extends Common implements SqlConversion {
             }
         }
         // handle the time / date types
-        else if (type == Time.class) {
+        else if (type == Time.class ||
+                 type == LocalTime.class) {
             return "TIME";
-        } else if (type == java.sql.Date.class) {
+        } else if (type == java.sql.Date.class ||
+                   type == LocalDate.class) {
             return "DATE";
         } else if (type == Timestamp.class ||
-            type == Date.class ||
-            type == Calendar.class) {
+                   type == Date.class ||
+                   type == Calendar.class ||
+                   type == Instant.class ||
+                   type == LocalDateTime.class) {
             return "TIMESTAMP";
         }
         // make sure that the Boolean type is correctly caught
         else if (type == Boolean.class ||
-            type == boolean.class) {
+                 type == boolean.class) {
             return "BOOLEAN";
         }
         // make sure that the Integer types are correctly caught
         else if (type == Byte.class ||
-            type == byte.class ||
-            type == Short.class ||
-            type == short.class) {
+                 type == byte.class ||
+                 type == Short.class ||
+                 type == short.class) {
             return "SMALLINT";
         } else if (type == Integer.class ||
-            type == int.class) {
+                   type == int.class) {
             return "INTEGER";
         } else if (type == Long.class ||
-            type == long.class) {
+                   type == long.class) {
             return "BIGINT";
         }
         // make sure that the Float types are correctly caught
         else if (type == Double.class ||
-            type == double.class ||
-            type == Float.class ||
-            type == float.class) {
+                 type == double.class ||
+                 type == Float.class ||
+                 type == float.class) {
             return "FLOAT";
         }
         // make sure that the BigDecimal type is correctly caught
@@ -196,14 +207,14 @@ public class org_postgresql_Driver extends Common implements SqlConversion {
         }
         // make sure that the Blob type is correctly caught
         else if (type == Blob.class ||
-            type == byte[].class) {
+                 type == byte[].class) {
             return "BYTEA";
         }
         // make sure that the Clob type is correctly caught
         else if (type == Clob.class) {
             return "TEXT";
         } else {
-            String result = handleCommonSqlType(type, precision, scale);
+            var result = handleCommonSqlType(type, precision, scale);
             if (result != null) {
                 return result;
             }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.database;
@@ -20,7 +20,7 @@ package rife.database;
  * <p>This class has both a default constructor and one that can take a data
  * object. This can be handy when using it as an extending anonymous inner
  * class when you need to use variables inside the inner class that are
- * cumbersome to change to <code>final</code> in the enclosing class.
+ * cumbersome to change to {@code final} in the enclosing class.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see DbPreparedStatement

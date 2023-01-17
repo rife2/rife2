@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.authentication.sessionmanagers;
@@ -16,24 +16,24 @@ import rife.database.DbQueryManagerFactory;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public class DatabaseSessionsFactory extends DbQueryManagerFactory
-{
-	/** The package name of the datasource-specific implementations */
-	public static final String	MANAGER_PACKAGE_NAME = DatabaseSessionsFactory.class.getPackage().getName()+".databasedrivers.";
-	
-	private static final DbQueryManagerCache cache_ = new DbQueryManagerCache();
-	
-	/**
-	 * Return an instance of {@code DatabaseSessions} for the provided
-	 * {@code Datasource}.
-	 *
-	 * @param datasource the datasource that will be used to create the manager
-	 * @return the requested {@code DatabaseSessions} instance
-	 * @since 1.0
-	 */
-	public static DatabaseSessions getInstance(Datasource datasource)
-	{
-		return (DatabaseSessions)getInstance(MANAGER_PACKAGE_NAME, cache_, datasource);
-	}
+public class DatabaseSessionsFactory extends DbQueryManagerFactory {
+    /**
+     * The package name of the datasource-specific implementations
+     */
+    public static final String MANAGER_PACKAGE_NAME = DatabaseSessionsFactory.class.getPackage().getName() + ".databasedrivers.";
+
+    private static final DbQueryManagerCache cache_ = new DbQueryManagerCache();
+
+    /**
+     * Return an instance of {@code DatabaseSessions} for the provided
+     * {@code Datasource}.
+     *
+     * @param datasource the datasource that will be used to create the manager
+     * @return the requested {@code DatabaseSessions} instance
+     * @since 1.0
+     */
+    public static DatabaseSessions instance(Datasource datasource) {
+        return (DatabaseSessions) instance(MANAGER_PACKAGE_NAME, cache_, datasource);
+    }
 
 }

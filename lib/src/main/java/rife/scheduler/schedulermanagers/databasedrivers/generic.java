@@ -1,14 +1,14 @@
 /*
- * Copyright 2001-2022 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.scheduler.schedulermanagers.databasedrivers;
 
 import rife.database.Datasource;
 import rife.scheduler.exceptions.SchedulerManagerException;
-import rife.scheduler.schedulermanagers.DatabaseScheduler;
+import rife.scheduler.schedulermanagers.DatabaseScheduling;
 
-public class generic extends DatabaseScheduler {
+public class generic extends DatabaseScheduling {
     public generic(Datasource datasource) {
         super(datasource);
     }
