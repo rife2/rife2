@@ -35,6 +35,8 @@ public final class StringUtils {
 
     public static Charset CHARSET_US_ASCII = Charset.forName(StringUtils.ENCODING_US_ASCII);
 
+    public static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
+
     enum BbcodeOption {
         SHORTEN_URL, SANITIZE_URL, CONVERT_BARE_URLS, NO_FOLLOW_LINKS
     }
@@ -583,7 +585,6 @@ public final class StringUtils {
         if (ch > 'z') return false;
         return UNRESERVED_URI_CHARS.get(ch);
     }
-    private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
 
     private static void appendUrlEncodedDigit(StringBuilder out, int digit) {
         out.append(HEX_DIGITS[digit & 0x0F]);
