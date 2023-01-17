@@ -190,10 +190,12 @@ tasks {
     }
 
     javadoc {
-        title = "RIFE2 ${rifeVersion}"
+        title = "<a href=\"https://rife2.com\">RIFE2</a> ${rifeVersion}"
         options {
             this as StandardJavadocDocletOptions
-            addBooleanOption("html5", true)
+            keyWords(true)
+            splitIndex(true)
+            overview = "src/main/java/overview.html"
             addBooleanOption("Xdoclint:-missing", true)
         }
         exclude("rife/antlr/**")
