@@ -35,8 +35,6 @@ public final class StringUtils {
 
     public static Charset CHARSET_US_ASCII = Charset.forName(StringUtils.ENCODING_US_ASCII);
 
-    public static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
-
     enum BbcodeOption {
         SHORTEN_URL, SANITIZE_URL, CONVERT_BARE_URLS, NO_FOLLOW_LINKS
     }
@@ -585,22 +583,30 @@ public final class StringUtils {
         if (ch > 'z') return false;
         return UNRESERVED_URI_CHARS.get(ch);
     }
+    private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
 
-    /**
-     * Appends the hexadecimal digit of the provided number.
-     *
-     * @param out the string builder to append to
-     * @param number the number who's first digit will be appended in hexadecimal
-     * @since 1.0
-     */
-    public static void appendHexDigit(StringBuilder out, int number) {
-        out.append(HEX_DIGITS[number & 0x0F]);
+    private static final char[] BASE32_DIGITS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567".toCharArray();
+    private static final int[] BASE32_LOOKUP =
+            { 0xFF,0xFF,0x1A,0x1B,0x1C,0x1D,0x1E,0x1F, // '0', '1', '2', '3', '4', '5', '6', '7'
+                    0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF, // '8', '9', ':', ';', '<', '=', '>', '?'
+                    0xFF,0x00,0x01,0x02,0x03,0x04,0x05,0x06, // '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G'
+                    0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E, // 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'
+                    0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16, // 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W'
+                    0x17,0x18,0x19,0xFF,0xFF,0xFF,0xFF,0xFF, // 'X', 'Y', 'Z', '[', '\', ']', '^', '_'
+                    0xFF,0x00,0x01,0x02,0x03,0x04,0x05,0x06, // '`', 'a', 'b', 'c', 'd', 'e', 'f', 'g'
+                    0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E, // 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o'
+                    0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16, // 'p', 'q', 'r', 's', 't', 'u', 'v', 'w'
+                    0x17,0x18,0x19,0xFF,0xFF,0xFF,0xFF,0xFF  // 'x', 'y', 'z', '{', '|', '}', '~', 'DEL'
+            };
+
+    private static void appendUrlEncodedDigit(StringBuilder out, int digit) {
+        out.append(HEX_DIGITS[digit & 0x0F]);
     }
 
     private static void appendUrlEncodedByte(StringBuilder out, int ch) {
         out.append("%");
-        appendHexDigit(out, ch >> 4);
-        appendHexDigit(out, ch);
+        appendUrlEncodedDigit(out, ch >> 4);
+        appendUrlEncodedDigit(out, ch);
     }
 
     /**
@@ -1162,20 +1168,102 @@ public final class StringUtils {
         return buffer.toString();
     }
 
-    /**
-     * Generates a hexadecimal string for the provided byte array.
-     *
-     * @param bytes the byte array to convert to a hex string
-     * @return the converted hexadecimal string
-     * @since 1.0
-     */
+
     public static String encodeHex(byte[] bytes) {
-        var out = new StringBuilder();
+        var sb = new StringBuilder();
         for (byte b : bytes) {
-            appendHexDigit(out, b >> 4);
-            appendHexDigit(out, b);
+            sb.append(Integer.toHexString((b & 0xFF) | 0x100), 1, 3);
         }
-        return out.toString();
+        return sb.toString();
+    }
+
+    /**
+     * Encodes byte array to Base32 String.
+     *
+     * @param bytes Bytes to encode.
+     * @return Encoded byte array <code>bytes</code> as a String.
+     */
+    public static String encodeBase32(byte[] bytes) {
+        int i = 0, index = 0, digit = 0;
+        int currByte, nextByte;
+        StringBuilder base32 = new StringBuilder((bytes.length + 7) * 8 / 5);
+
+        while (i < bytes.length) {
+            currByte = (bytes[i] >= 0) ? bytes[i] : (bytes[i] + 256); // unsign
+
+            /* Is the current digit going to span a byte boundary? */
+            if (index > 3) {
+                if ((i + 1) < bytes.length) {
+                    nextByte =
+                            (bytes[i + 1] >= 0) ? bytes[i + 1] : (bytes[i + 1] + 256);
+                } else {
+                    nextByte = 0;
+                }
+
+                digit = currByte & (0xFF >> index);
+                index = (index + 5) % 8;
+                digit <<= index;
+                digit |= nextByte >> (8 - index);
+                i++;
+            } else {
+                digit = (currByte >> (8 - (index + 5))) & 0x1F;
+                index = (index + 5) % 8;
+                if (index == 0)
+                    i++;
+            }
+            base32.append(BASE32_DIGITS[digit]);
+        }
+
+        return base32.toString();
+    }
+
+    /**
+     * Decodes the given Base32 String to a raw byte array.
+     *
+     * @param base32 A string encoded as base32.
+     * @return Decoded <code>base32</code> String as a raw byte array.
+     */
+    public static byte[] decodeBase32String(final String base32) {
+        int i, index, lookup, offset, digit;
+        byte[] bytes = new byte[base32.length() * 5 / 8];
+
+        for (i = 0, index = 0, offset = 0; i < base32.length(); i++) {
+            lookup = base32.charAt(i) - '0';
+
+            /* Skip chars outside the lookup table */
+            if (lookup < 0 || lookup >= BASE32_LOOKUP.length) {
+                continue;
+            }
+
+            digit = BASE32_LOOKUP[lookup];
+
+            /* If this digit is not in the table, ignore it */
+            if (digit == 0xFF) {
+                continue;
+            }
+
+            if (index <= 3) {
+                index = (index + 5) % 8;
+                if (index == 0) {
+                    bytes[offset] |= digit;
+                    offset++;
+                    if (offset >= bytes.length)
+                        break;
+                } else {
+                    bytes[offset] |= digit << (8 - index);
+                }
+            } else {
+                index = (index + 5) % 8;
+                bytes[offset] |= (digit >>> index);
+                offset++;
+
+                if (offset >= bytes.length) {
+                    break;
+                }
+                bytes[offset] |= digit << (8 - index);
+            }
+        }
+        return bytes;
     }
 
     /**
