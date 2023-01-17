@@ -22,7 +22,7 @@ no-YAML, leaving only type-safe expressive code.
 
 RIFE2 preserves most of the original features and adds new ones, for a fraction
 of the footprint and with even greater developer productivity than before.
-RIFE2 was created by Geert Bevin, one of the first Java Champions and speaker at
+RIFE2 is created by Geert Bevin, one of the first Java Champions and speaker at
 many Java conferences.
 
 **This is a quick tutorial, the [full documentation](https://github.com/gbevin/rife2/wiki)
