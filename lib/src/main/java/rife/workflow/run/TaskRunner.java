@@ -15,8 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 import rife.continuations.*;
-import rife.continuations.basic.BasicContinuableRunner;
-import rife.continuations.basic.CallTargetRetriever;
+import rife.continuations.basic.*;
 import rife.workflow.Event;
 import rife.workflow.EventType;
 import rife.workflow.config.InstrumentWorkflowConfig;
@@ -48,7 +47,8 @@ public class TaskRunner {
      * @since 1.0
      */
     public TaskRunner() {
-        runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT) {
+        var classloader = new BasicContinuableClassLoader(CONFIG_INSTRUMENT);
+        runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT, classloader) {
             public void executeContinuable(Object object)
             throws Throwable {
                 var method = object.getClass().getMethod(

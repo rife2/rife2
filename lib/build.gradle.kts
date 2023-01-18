@@ -20,6 +20,11 @@ val rifeAgentContinuationsJar by rootProject.extra { "$rifeAgentContinuationsNam
 group = "com.uwyn.rife2"
 version = rifeVersion
 
+base {
+    archivesName.set("rife2")
+    version = "$rifeVersion"
+}
+
 java {
     withJavadocJar()
     withSourcesJar()
@@ -203,10 +208,7 @@ tasks {
         dependsOn("precompileTemplates")
         dependsOn("agentJar")
         dependsOn("agentContinuationsJar")
-        jvmArgs = listOf(
-            "-javaagent:${buildDir}/libs/$rifeAgentJar",
-            "-javaagent:${buildDir}/libs/$rifeAgentContinuationsJar=rife.workflow.config.InstrumentWorkflowConfig"
-        )
+        jvmArgs = listOf("-javaagent:${buildDir}/libs/$rifeAgentJar")
         if (System.getProperty("test.postgres") != null) systemProperty("test.postgres", System.getProperty("test.postgres"))
         if (System.getProperty("test.mysql") != null) systemProperty("test.mysql", System.getProperty("test.mysql"))
         if (System.getProperty("test.oracle") != null) systemProperty("test.oracle", System.getProperty("test.oracle"))
