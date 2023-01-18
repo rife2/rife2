@@ -9,6 +9,7 @@ import rife.authentication.elements.*;
 import rife.authentication.sessionvalidators.MemorySessionValidator;
 import rife.engine.*;
 import rife.template.TemplateFactory;
+import rife.tools.StringEncryptor;
 
 public class HelloAuthentication extends Site {
     final MemorySessionValidator validator = new MemorySessionValidator();
@@ -34,10 +35,19 @@ public class HelloAuthentication extends Site {
         });
 
         config
+            .role("admin")
             .loginRoute(login)
             .landingRoute(landing);
+
         validator.getCredentialsManager()
-            .addUser("testUser", new RoleUserAttributes().password("testPassword"));
+            .addRole("admin")
+            .addRole("editor")
+            .addUser("testUser1", new RoleUserAttributes()
+                .password("SHA:HN1CttNGdVN90QMCSJLYWCgNfCM=")) // testPassword1
+            .addUser("testUser2", new RoleUserAttributes()
+                .password("SHA:urlTD8iRgLJuY6il1vRTXDdhSIo=")  // testPassword2
+                .roles("admin", "editor"))
+            .setPasswordEncryptor(StringEncryptor.SHA);
     }
 
     public static void main(String[] args) {

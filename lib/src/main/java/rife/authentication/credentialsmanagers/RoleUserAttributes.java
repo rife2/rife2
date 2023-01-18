@@ -10,7 +10,6 @@ import java.util.HashSet;
 
 public class RoleUserAttributes implements Cloneable {
     private long userId_ = -1;
-    private boolean automaticUserId_ = false;
     private String password_ = null;
     private HashSet<String> roles_ = null;
 
@@ -22,7 +21,7 @@ public class RoleUserAttributes implements Cloneable {
         setPassword(password);
     }
 
-    public RoleUserAttributes(long userId, String password, String[] roles) {
+    public RoleUserAttributes(long userId, String password, String... roles) {
         setUserId(userId);
         setPassword(password);
         setRoles(roles);
@@ -38,7 +37,7 @@ public class RoleUserAttributes implements Cloneable {
         setPassword(password);
     }
 
-    public RoleUserAttributes(String password, String[] roles) {
+    public RoleUserAttributes(String password, String... roles) {
         setPassword(password);
         setRoles(roles);
     }
@@ -52,7 +51,7 @@ public class RoleUserAttributes implements Cloneable {
         setUserId(userId);
     }
 
-    public RoleUserAttributes(long userId, String[] roles) {
+    public RoleUserAttributes(long userId, String... roles) {
         setUserId(userId);
         setRoles(roles);
     }
@@ -62,7 +61,7 @@ public class RoleUserAttributes implements Cloneable {
         setRoles(roles);
     }
 
-    public RoleUserAttributes(String[] roles) {
+    public RoleUserAttributes(String... roles) {
         setRoles(roles);
     }
 
@@ -83,14 +82,6 @@ public class RoleUserAttributes implements Cloneable {
 
     public long getUserId() {
         return userId_;
-    }
-
-    void setAutomaticUserId(boolean automatic) {
-        automaticUserId_ = automatic;
-    }
-
-    boolean isAutomaticUserId() {
-        return automaticUserId_;
     }
 
     public void setPassword(String password) {
@@ -117,14 +108,14 @@ public class RoleUserAttributes implements Cloneable {
         roles_ = new HashSet<>(roles);
     }
 
-    public void setRoles(String[] roles) {
+    public void setRoles(String... roles) {
         if (roles != null &&
             roles.length > 0) {
             setRoles(new HashSet<>(Arrays.asList(roles)));
         }
     }
 
-    public RoleUserAttributes roles(String[] roles) {
+    public RoleUserAttributes roles(String... roles) {
         setRoles(roles);
         return this;
     }
