@@ -15,8 +15,15 @@ plugins {
 val rifeVersion by rootProject.extra { "0.9.9-SNAPSHOT" }
 var rifeAgentName: String = "rife2-$rifeVersion-agent"
 val rifeAgentJar by rootProject.extra { "$rifeAgentName.jar" }
+var rifeAgentContinuationsName: String = "rife2-$rifeVersion-agent-continuations"
+val rifeAgentContinuationsJar by rootProject.extra { "$rifeAgentContinuationsName.jar" }
 group = "com.uwyn.rife2"
 version = rifeVersion
+
+base {
+    archivesName.set("rife2")
+    version = "$rifeVersion"
+}
 
 java {
     withJavadocJar()
@@ -162,6 +169,27 @@ tasks {
         }
     }
 
+    register<Jar>("agentContinuationsJar") {
+        dependsOn("jar")
+
+        archiveFileName.set("$rifeAgentContinuationsJar")
+        from(sourceSets.main.get().output)
+        include(
+            "rife/asm/**",
+            "rife/instrument/**",
+            "rife/continuations/ContinuationConfigInstrument**",
+            "rife/continuations/instrument/**",
+            "rife/tools/ClassBytesLoader*",
+            "rife/tools/FileUtils*",
+            "rife/tools/InstrumentationUtils*",
+            "rife/tools/RawFormatter*",
+            "rife/tools/exceptions/FileUtils*"
+        )
+        manifest {
+            attributes["Premain-Class"] = "rife.continuations.instrument.ContinuationsAgent"
+        }
+    }
+
     test {
         useJUnitPlatform()
         testLogging {
@@ -179,6 +207,7 @@ tasks {
         environment("project.dir", project.projectDir.toString())
         dependsOn("precompileTemplates")
         dependsOn("agentJar")
+        dependsOn("agentContinuationsJar")
         jvmArgs = listOf("-javaagent:${buildDir}/libs/$rifeAgentJar")
         if (System.getProperty("test.postgres") != null) systemProperty("test.postgres", System.getProperty("test.postgres"))
         if (System.getProperty("test.mysql") != null) systemProperty("test.mysql", System.getProperty("test.mysql"))
@@ -220,11 +249,19 @@ val agentArtifact = artifacts.add("archives", agentFile.get().asFile) {
     builtBy("agentJar")
 }
 
+val agentContinuationsFile = layout.buildDirectory.file("libs/$rifeAgentContinuationsJar")
+val agentContinuationsArtifact = artifacts.add("archives", agentContinuationsFile.get().asFile) {
+    type = "jar"
+    classifier = "agent-continuations"
+    builtBy("agentContinuationsJar")
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             artifactId = "rife2"
             artifact(agentArtifact)
+            artifact(agentContinuationsArtifact)
             from(components["java"])
             pom {
                 name.set("RIFE2")

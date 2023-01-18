@@ -61,8 +61,8 @@ public class BasicContinuableClassLoader extends ClassLoader implements ClassByt
     public Class loadClass(String name)
     throws ClassNotFoundException {
         // disable this classloader and delegate to the parent if the continuations
-        // agent is active
-        if (Boolean.getBoolean(ContinuationsAgent.AGENT_ACTIVE_PROPERTY)) {
+        // agent is active or a RIFE2 workflow framework class
+        if (Boolean.getBoolean(ContinuationsAgent.AGENT_ACTIVE_PROPERTY) || name.startsWith("rife.workflow.")) {
             return getParent().loadClass(name);
         }
 
