@@ -190,7 +190,7 @@ tasks {
         }
     }
 
-    test {
+    withType<Test> {
         useJUnitPlatform()
         testLogging {
             exceptionFormat = TestExceptionFormat.FULL
@@ -205,10 +205,13 @@ tasks {
             }
         })
         environment("project.dir", project.projectDir.toString())
+    }
+
+    test {
         dependsOn("precompileTemplates")
         dependsOn("agentJar")
-        dependsOn("agentContinuationsJar")
         jvmArgs = listOf("-javaagent:${buildDir}/libs/$rifeAgentJar")
+        exclude("**/workflow/**")
         if (System.getProperty("test.postgres") != null) systemProperty("test.postgres", System.getProperty("test.postgres"))
         if (System.getProperty("test.mysql") != null) systemProperty("test.mysql", System.getProperty("test.mysql"))
         if (System.getProperty("test.oracle") != null) systemProperty("test.oracle", System.getProperty("test.oracle"))
@@ -217,7 +220,20 @@ tasks {
         if (System.getProperty("test.h2") != null) systemProperty("test.h2", System.getProperty("test.h2"))
     }
 
+    register<Test>("testWorkflow") {
+        environment("project.dir", project.projectDir.toString())
+        dependsOn("agentContinuationsJar")
+        include("**/workflow/**")
+        jvmArgs = listOf("-javaagent:${buildDir}/libs/$rifeAgentContinuationsJar=rife.workflow.config.InstrumentWorkflowConfig")
+    }
+
+    check {
+        dependsOn("testWorkflow")
+        dependsOn("test")
+    }
+
     clean {
+        delete("${projectDir}/embedded_dbs")
         delete("${projectDir}/src/generated")
         delete("${projectDir}/src/processed")
     }
@@ -306,6 +322,10 @@ signing {
     sign(publishing.publications["mavenJava"])
 }
 
+var passed = 0L
+var failed = 0L
+var skipped = 0L
+
 fun printResults(desc: TestDescriptor, result: TestResult) {
     if (desc.parent != null) {
         val output = result.run {
@@ -326,9 +346,9 @@ fun printResults(desc: TestDescriptor, result: TestResult) {
     }
 
     if (desc.parent == null) {
-        val passed = result.successfulTestCount
-        val failed = result.failedTestCount
-        val skipped = result.skippedTestCount
+        passed += result.successfulTestCount
+        failed += result.failedTestCount
+        skipped += result.skippedTestCount
 
         if (project.properties["testsBadgeApiKey"] != null) {
             val apiKey = project.properties["testsBadgeApiKey"]

@@ -47,8 +47,7 @@ public class TaskRunner {
      * @since 1.0
      */
     public TaskRunner() {
-        var classloader = new BasicContinuableClassLoader(CONFIG_INSTRUMENT);
-        runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT, classloader) {
+        runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT) {
             public void executeContinuable(Object object)
             throws Throwable {
                 var method = object.getClass().getMethod(
@@ -69,14 +68,14 @@ public class TaskRunner {
     /**
      * Starts the execution of a new task instance.
      *
-     * @param className the class name of the task instance that should be
-     *                  executed, the class should extend {@link rife.workflow.Task}
+     * @param klass the task class whose instance that should be
+     *              executed, the class should extend {@link rife.workflow.Task}
      * @since 1.0
      */
-    public void start(final String className) {
+    public void start(final Class klass) {
         new Thread(taskThreads_, () -> {
             try {
-                runner_.start(className);
+                runner_.start(klass);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }

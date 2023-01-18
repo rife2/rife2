@@ -30,15 +30,15 @@ public class TaskTest {
         var runner = new TaskRunner();
         runner.addListener(listener);
 
-        runner.start("rifeworkflowtasks.TaskType1");
-        runner.start("rifeworkflowtasks.TaskType2");
+        runner.start(rifeworkflowtasks.TaskType1.class);
+        runner.start(rifeworkflowtasks.TaskType2.class);
         while (endings[0] < 1) {
             synchronized (sum) {
                 sum.wait();
             }
         }
 
-        runner.start("rifeworkflowtasks.TaskType2");
+        runner.start(rifeworkflowtasks.TaskType2.class);
         while (endings[0] < 3) {
             synchronized (sum) {
                 sum.wait();
