@@ -7,6 +7,7 @@ package rife.continuations;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.*;
 import java.util.logging.Logger;
 
 import rife.continuations.exceptions.ContinuableLocalVariableUncloneableException;
@@ -44,6 +45,10 @@ public class ContinuationContext implements Cloneable {
 
     private ContinuationStack localVars_ = null;
     private ContinuationStack localStack_ = null;
+
+    private final ReadWriteLock lock_ = new ReentrantReadWriteLock();
+    private final Lock readLock_ = lock_.readLock();
+    private final Lock writeLock_ = lock_.writeLock();
 
     /**
      * [PRIVATE AND UNSUPPORTED] Creates a new continuation context or resets
@@ -187,9 +192,7 @@ public class ContinuationContext implements Cloneable {
      * @since 1.0
      */
     public void registerContext() {
-        synchronized (manager_) {
-            manager_.addContext(this);
-        }
+        manager_.addContext(this);
     }
 
     /**
@@ -210,9 +213,14 @@ public class ContinuationContext implements Cloneable {
      *
      * @since 1.0
      */
-    public synchronized void remove() {
-        manager_.removeContext(id_);
-        deactivate();
+    public void remove() {
+        writeLock_.lock();
+        try {
+            manager_.removeContext(id_);
+            deactivate();
+        } finally {
+            writeLock_.unlock();
+        }
     }
 
     /**
@@ -223,7 +231,8 @@ public class ContinuationContext implements Cloneable {
      * @since 1.0
      */
     public void removeContextTree() {
-        synchronized (manager_) {
+        manager_.writeLock_.lock();
+        try {
             manager_.removeContext(id_);
 
             if (relatedIds_ != null) {
@@ -243,6 +252,8 @@ public class ContinuationContext implements Cloneable {
             }
 
             deactivate();
+        } finally {
+            manager_.writeLock_.unlock();
         }
     }
 
@@ -257,7 +268,12 @@ public class ContinuationContext implements Cloneable {
      * @since 1.0
      */
     public String getParentContextId() {
-        return parentId_;
+        readLock_.lock();
+        try {
+            return parentId_;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -283,7 +299,12 @@ public class ContinuationContext implements Cloneable {
      * @since 1.0
      */
     public Object getCallAnswer() {
-        return callAnswer_;
+        readLock_.lock();
+        try {
+            return callAnswer_;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -296,8 +317,13 @@ public class ContinuationContext implements Cloneable {
      * @see #isPaused()
      * @since 1.0
      */
-    public synchronized void setPaused(boolean paused) {
-        paused_ = paused;
+    public void setPaused(boolean paused) {
+        writeLock_.lock();
+        try {
+            paused_ = paused;
+        } finally {
+            writeLock_.unlock();
+        }
     }
 
     /**
@@ -308,7 +334,12 @@ public class ContinuationContext implements Cloneable {
      * @since 1.0
      */
     public boolean isPaused() {
-        return paused_;
+        readLock_.lock();
+        try {
+            return paused_;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -320,8 +351,13 @@ public class ContinuationContext implements Cloneable {
      * @param label the number of the resumed bytecode label
      * @since 1.0
      */
-    public synchronized void setLabel(int label) {
-        label_ = label;
+    public void setLabel(int label) {
+        writeLock_.lock();
+        try {
+            label_ = label;
+        } finally {
+            writeLock_.unlock();
+        }
     }
 
     /**
@@ -347,7 +383,12 @@ public class ContinuationContext implements Cloneable {
      * @since 1.0
      */
     public int getLabel() {
-        return label_;
+        readLock_.lock();
+        try {
+            return label_;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -360,7 +401,12 @@ public class ContinuationContext implements Cloneable {
      * @since 1.0
      */
     public ContinuationStack getLocalVars() {
-        return localVars_;
+        readLock_.lock();
+        try {
+            return localVars_;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -373,15 +419,30 @@ public class ContinuationContext implements Cloneable {
      * @since 1.0
      */
     public ContinuationStack getLocalStack() {
-        return localStack_;
+        readLock_.lock();
+        try {
+            return localStack_;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
-    private synchronized void resetStart() {
-        start_ = System.currentTimeMillis();
+    private void resetStart() {
+        writeLock_.lock();
+        try {
+            start_ = System.currentTimeMillis();
+        } finally {
+            writeLock_.unlock();
+        }
     }
 
-    synchronized void resetId() {
-        id_ = UniqueIDGenerator.generate().toString();
+    void resetId() {
+        writeLock_.lock();
+        try {
+            id_ = UniqueIDGenerator.generate().toString();
+        } finally {
+            writeLock_.unlock();
+        }
     }
 
     /**
@@ -394,7 +455,30 @@ public class ContinuationContext implements Cloneable {
      * @since 1.0
      */
     public String getId() {
-        return id_;
+        readLock_.lock();
+        try {
+            return id_;
+        } finally {
+            readLock_.unlock();
+        }
+    }
+
+    /**
+     * [PRIVATE AND UNSUPPORTED] Set the ID of this continuation's parent.
+     * <p>This method is used by the instrumented bytecode that provides
+     * continuations support, it's not intended for general use.
+     *
+     * @param id the ID of this continuation's parent
+     * @see #getParentId()
+     * @since 1.0
+     */
+    public void setParentId(String id) {
+        writeLock_.lock();
+        try {
+            parentId_ = id;
+        } finally {
+            writeLock_.unlock();
+        }
     }
 
     /**
@@ -405,7 +489,12 @@ public class ContinuationContext implements Cloneable {
      * @since 1.0
      */
     public String getParentId() {
-        return parentId_;
+        readLock_.lock();
+        try {
+            return parentId_;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -418,24 +507,16 @@ public class ContinuationContext implements Cloneable {
      *           continuation
      * @since 1.0
      */
-    public synchronized void addRelatedId(String id) {
-        if (null == relatedIds_) {
-            relatedIds_ = new ArrayList<String>();
+    public void addRelatedId(String id) {
+        writeLock_.lock();
+        try {
+            if (null == relatedIds_) {
+                relatedIds_ = new ArrayList<String>();
+            }
+            relatedIds_.add(id);
+        } finally {
+            writeLock_.unlock();
         }
-        relatedIds_.add(id);
-    }
-
-    /**
-     * [PRIVATE AND UNSUPPORTED] Set the ID of this continuation's parent.
-     * <p>This method is used by the instrumented bytecode that provides
-     * continuations support, it's not intended for general use.
-     *
-     * @param id the ID of this continuation's parent
-     * @see #getParentId()
-     * @since 1.0
-     */
-    public synchronized void setParentId(String id) {
-        parentId_ = id;
     }
 
     /**
@@ -458,8 +539,13 @@ public class ContinuationContext implements Cloneable {
      * @see #getCreatedCallState()
      * @since 1.0
      */
-    public synchronized void setCreatedCallState(CallState createdCallState) {
-        createdCallState_ = createdCallState;
+    public void setCreatedCallState(CallState createdCallState) {
+        writeLock_.lock();
+        try {
+            createdCallState_ = createdCallState;
+        } finally {
+            writeLock_.unlock();
+        }
     }
 
     /**
@@ -472,7 +558,12 @@ public class ContinuationContext implements Cloneable {
      * @since 1.0
      */
     public CallState getCreatedCallState() {
-        return createdCallState_;
+        readLock_.lock();
+        try {
+            return createdCallState_;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -485,8 +576,13 @@ public class ContinuationContext implements Cloneable {
      * @see #setCreatedCallState(CallState)
      * @since 1.0
      */
-    public synchronized void setActiveCallState(CallState callState) {
-        activeCallState_ = callState;
+    public void setActiveCallState(CallState callState) {
+        writeLock_.lock();
+        try {
+            activeCallState_ = callState;
+        } finally {
+            writeLock_.unlock();
+        }
     }
 
     /**
@@ -496,11 +592,21 @@ public class ContinuationContext implements Cloneable {
      * <p>{@code null} if no call state was active for this continuation
      */
     public CallState getActiveCallState() {
-        return activeCallState_;
+        readLock_.lock();
+        try {
+            return activeCallState_;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     long getStart() {
-        return start_;
+        readLock_.lock();
+        try {
+            return start_;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -510,8 +616,13 @@ public class ContinuationContext implements Cloneable {
      *               {@code null} if there was no answer
      * @since 1.0
      */
-    public synchronized void setCallAnswer(Object answer) {
-        callAnswer_ = answer;
+    public void setCallAnswer(Object answer) {
+        writeLock_.lock();
+        try {
+            callAnswer_ = answer;
+        } finally {
+            writeLock_.unlock();
+        }
     }
 
     /**
@@ -534,23 +645,32 @@ public class ContinuationContext implements Cloneable {
             Logger.getLogger("rife.continuations").severe(ExceptionUtils.getExceptionStackTrace(e));
         }
 
-        if (continuable_ instanceof CloneableContinuable continuable) {
-            new_continuationcontext.continuable_ = continuable.clone();
-        } else {
-            throw new CloneNotSupportedException(continuable_.getClass().getName() + " can't be cloned.");
-        }
-        new_continuationcontext.callAnswer_ = null;
-
-        new_continuationcontext.id_ = UniqueIDGenerator.generate().toString();
-        new_continuationcontext.parentId_ = id_;
-        new_continuationcontext.paused_ = false;
-        addRelatedId(new_continuationcontext.id_);
-
+        readLock_.lock();
         try {
-            new_continuationcontext.localVars_ = localVars_.clone(new_continuationcontext.continuable_);
-            new_continuationcontext.localStack_ = localStack_.clone(new_continuationcontext.continuable_);
-        } catch (CloneNotSupportedException e) {
-            throw new ContinuableLocalVariableUncloneableException(continuable_.getClass(), e.getMessage(), e);
+
+            if (continuable_ instanceof CloneableContinuable continuable) {
+                new_continuationcontext.continuable_ = continuable.clone();
+            } else {
+                throw new CloneNotSupportedException(continuable_.getClass().getName() + " can't be cloned.");
+            }
+            new_continuationcontext.callAnswer_ = null;
+
+            new_continuationcontext.id_ = UniqueIDGenerator.generate().toString();
+            new_continuationcontext.parentId_ = id_;
+            new_continuationcontext.paused_ = false;
+
+            try {
+                new_continuationcontext.localVars_ = localVars_.clone(new_continuationcontext.continuable_);
+                new_continuationcontext.localStack_ = localStack_.clone(new_continuationcontext.continuable_);
+            } catch (CloneNotSupportedException e) {
+                throw new ContinuableLocalVariableUncloneableException(continuable_.getClass(), e.getMessage(), e);
+            }
+        } finally {
+            readLock_.unlock();
+        }
+
+        if (new_continuationcontext != null) {
+            addRelatedId(new_continuationcontext.id_);
         }
 
         return new_continuationcontext;

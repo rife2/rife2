@@ -9,6 +9,8 @@ import rife.selector.NameSelector;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Contains a collection of {@code Datasource} instances.
@@ -18,7 +20,7 @@ import java.util.HashMap;
  * @since 1.0
  */
 public class Datasources {
-    private HashMap<String, Datasource> map_ = new HashMap<>();
+    private final ConcurrentMap<String, Datasource> map_ = new ConcurrentHashMap<>();
 
     /**
      * Creates a new empty {@code Datasources} instance.
@@ -70,7 +72,7 @@ public class Datasources {
      * @since 1.0
      */
     public Datasource getDatasourceForSelector(NameSelector selector, String fallbackName) {
-        Datasource datasource = Datasources.instance().getDatasource(selector.getActiveName());
+        var datasource = Datasources.instance().getDatasource(selector.getActiveName());
         if (datasource == null) {
             datasource = Datasources.instance().getDatasource(fallbackName);
         }
@@ -115,17 +117,7 @@ public class Datasources {
      */
     public void cleanup()
     throws DatabaseException {
-        synchronized (this) {
-            if (null == map_) {
-                return;
-            }
-
-            HashMap<String, Datasource> data_sources = map_;
-            map_ = null;
-
-            for (Datasource datasource : data_sources.values()) {
-                datasource.cleanup();
-            }
-        }
+        map_.forEach((s, datasource) -> datasource.cleanup());
+        map_.clear();
     }
 }

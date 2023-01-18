@@ -16,7 +16,7 @@ public class RawFormatter extends Formatter {
      * @param record the log record to be formatted.
      * @return a formatted log record
      */
-    public synchronized String format(LogRecord record) {
+    public String format(LogRecord record) {
         var sb = new StringBuilder();
         var message = formatMessage(record);
         sb.append(message);

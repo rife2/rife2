@@ -169,7 +169,7 @@ public class RoleUserAttributes implements Cloneable {
         return isValid(password) && isInRole(role);
     }
 
-    public synchronized RoleUserAttributes clone() {
+    public RoleUserAttributes clone() {
         RoleUserAttributes new_attributes = null;
         try {
             new_attributes = (RoleUserAttributes) super.clone();

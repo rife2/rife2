@@ -10,10 +10,10 @@ import rife.config.RifeConfig;
 /**
  * This interface defines the methods that classes with
  * {@code SessionManager} functionalities have to implement.
- * <p>A {@code SessionManager} is reponsible for handling all tasks
+ * <p>A {@code SessionManager} is responsible for handling all tasks
  * related to the lifetime of a session in which a user is successfully
  * authenticated.
- * <p>This kind of session doesn't provide any state persistance across
+ * <p>This kind of session doesn't provide any state persistence across
  * requests and doesn't store any additional business data on the server-side.
  * It merely provides a unique authentication id which can be used to identify
  * a successfully authenticated user.
