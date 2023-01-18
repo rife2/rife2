@@ -21,7 +21,7 @@ import rife.scheduler.taskoptionmanagers.exceptions.UpdateTaskOptionErrorExcepti
 
 public class MemoryTaskOptions implements TaskOptionManager {
     private Scheduler scheduler_ = null;
-    private Map<Integer, ArrayList<TaskOption>> taskOptionsMapping_ = null;
+    private final Map<Integer, ArrayList<TaskOption>> taskOptionsMapping_;
 
     public MemoryTaskOptions() {
         taskOptionsMapping_ = new HashMap<>();
@@ -157,7 +157,9 @@ public class MemoryTaskOptions implements TaskOptionManager {
     throws TaskOptionManagerException {
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
 
-        return taskOptionsMapping_.get(taskId);
+        synchronized (this) {
+            return taskOptionsMapping_.get(taskId);
+        }
     }
 
     public boolean removeTaskOption(TaskOption taskoption)

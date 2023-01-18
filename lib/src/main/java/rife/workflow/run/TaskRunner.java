@@ -50,7 +50,7 @@ public class TaskRunner {
      * @since 1.0
      */
     public TaskRunner() {
-        ClassLoader classloader = new BasicContinuableClassLoader(CONFIG_INSTRUMENT);
+        var classloader = new BasicContinuableClassLoader(CONFIG_INSTRUMENT);
         runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT, classloader) {
             public void executeContinuable(Object object)
             throws Throwable {

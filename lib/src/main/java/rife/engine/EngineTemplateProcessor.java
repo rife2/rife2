@@ -32,7 +32,7 @@ class EngineTemplateProcessor {
         encoder_ = template.getEncoder();
     }
 
-    synchronized List<String> processTemplate()
+    List<String> processTemplate()
     throws TemplateException, EngineException {
         final var set_values = new ArrayList<String>();
 

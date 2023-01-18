@@ -74,7 +74,9 @@ public class MemoryTasks implements TaskManager {
     throws TaskManagerException {
         if (id < 0) throw new IllegalArgumentException("the task id can't be negative.");
 
-        return taskMapping_.get(id);
+        synchronized (this) {
+            return taskMapping_.get(id);
+        }
     }
 
     public Collection<Task> getAllTasks()

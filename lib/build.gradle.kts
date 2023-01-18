@@ -71,6 +71,10 @@ idea {
 }
 
 tasks {
+    withType<JavaCompile> {
+        options.encoding = "UTF-8"
+    }
+
     register<JavaExec>("precompileHtmlTemplates") {
         classpath = sourceSets["main"].runtimeClasspath
         mainClass.set("rife.template.TemplateDeployer")
