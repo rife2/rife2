@@ -15,12 +15,10 @@ import java.util.Map;
 import java.util.Set;
 
 import rife.continuations.*;
-import rife.continuations.basic.BasicContinuableClassLoader;
 import rife.continuations.basic.BasicContinuableRunner;
 import rife.continuations.basic.CallTargetRetriever;
 import rife.workflow.Event;
 import rife.workflow.EventType;
-import rife.workflow.Task;
 import rife.workflow.config.InstrumentWorkflowConfig;
 
 /**
@@ -50,8 +48,7 @@ public class TaskRunner {
      * @since 1.0
      */
     public TaskRunner() {
-        var classloader = new BasicContinuableClassLoader(CONFIG_INSTRUMENT);
-        runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT, classloader) {
+        runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT) {
             public void executeContinuable(Object object)
             throws Throwable {
                 var method = object.getClass().getMethod(
@@ -106,7 +103,8 @@ public class TaskRunner {
         synchronized (eventsMapping_) {
             final Collection<String> ids = eventsMapping_.getOrDefault(event.getType(), Collections.emptySet());
             ids_to_resume.addAll(ids);
-            ids.clear();;
+            ids.clear();
+            ;
         }
 
         if (ids_to_resume.isEmpty()) {
