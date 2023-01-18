@@ -21,57 +21,27 @@ import java.lang.reflect.Method;
 public class LightweightError extends Error {
     @Serial private static final long serialVersionUID = -6077740593752636392L;
 
-    private static boolean sUseFastExceptions = true;
-
-    private Boolean useFastExceptions_;
-
-    public static synchronized void setUseFastExceptions(boolean flag) {
-        sUseFastExceptions = flag;
-    }
-
-    public static boolean getUseFastExceptions() {
-        return sUseFastExceptions;
-    }
-
-    private void init() {
-        useFastExceptions_ = sUseFastExceptions;
-    }
-
     public LightweightError() {
         super();
-        init();
     }
 
     public LightweightError(String message) {
         super(message);
-        init();
     }
 
     public LightweightError(String message, Throwable cause) {
         super(message, cause);
-        init();
     }
 
     public LightweightError(Throwable cause) {
         super(cause);
-        init();
     }
 
     public Throwable fillInStackTrace() {
-        init();
-        if (useFastExceptions_) {
-            return null;
-        } else {
-            return super.fillInStackTrace();
-        }
+        return null;
     }
 
     public StackTraceElement[] getStackTrace() {
-        init();
-        if (useFastExceptions_) {
-            return new StackTraceElement[0];
-        } else {
-            return super.getStackTrace();
-        }
+        return new StackTraceElement[0];
     }
 }

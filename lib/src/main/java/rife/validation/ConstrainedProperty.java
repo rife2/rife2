@@ -117,7 +117,6 @@ public class ConstrainedProperty implements Cloneable {
     public static final String TRANSFORMER = "TRANSFORMER";
     public static final String CACHED_LOADED_DATA = "CACHED_LOADED_DATA";
 
-
     // required member variables
     private String propertyName_ = null;
     private String subjectName_ = null;
@@ -179,7 +178,7 @@ public class ConstrainedProperty implements Cloneable {
         }
 
         synchronized (this) {
-            for (ConstrainedPropertyListener listener : listeners_) {
+            for (var listener : listeners_) {
                 listener.constraintSet(this, name, constraintData);
             }
         }
@@ -764,7 +763,7 @@ public class ConstrainedProperty implements Cloneable {
         String[] list = null;
         if (inList != null) {
             list = new String[inList.length];
-            for (int i = 0; i < inList.length; i++) {
+            for (var i = 0; i < inList.length; i++) {
                 list[i] = String.valueOf(inList[i]);
             }
         }
@@ -782,7 +781,7 @@ public class ConstrainedProperty implements Cloneable {
         String[] list = null;
         if (inList != null) {
             list = new String[inList.length];
-            for (int i = 0; i < inList.length; i++) {
+            for (var i = 0; i < inList.length; i++) {
                 list[i] = String.valueOf(inList[i]);
             }
         }
@@ -800,7 +799,7 @@ public class ConstrainedProperty implements Cloneable {
         String[] list = null;
         if (inList != null) {
             list = new String[inList.length];
-            for (int i = 0; i < inList.length; i++) {
+            for (var i = 0; i < inList.length; i++) {
                 list[i] = String.valueOf(inList[i]);
             }
         }
@@ -818,7 +817,7 @@ public class ConstrainedProperty implements Cloneable {
         String[] list = null;
         if (inList != null) {
             list = new String[inList.length];
-            for (int i = 0; i < inList.length; i++) {
+            for (var i = 0; i < inList.length; i++) {
                 list[i] = String.valueOf(inList[i]);
             }
         }
@@ -836,7 +835,7 @@ public class ConstrainedProperty implements Cloneable {
         String[] list = null;
         if (inList != null) {
             list = new String[inList.length];
-            for (int i = 0; i < inList.length; i++) {
+            for (var i = 0; i < inList.length; i++) {
                 list[i] = String.valueOf(inList[i]);
             }
         }
@@ -854,7 +853,7 @@ public class ConstrainedProperty implements Cloneable {
         String[] list = null;
         if (inList != null) {
             list = new String[inList.length];
-            for (int i = 0; i < inList.length; i++) {
+            for (var i = 0; i < inList.length; i++) {
                 list[i] = String.valueOf(inList[i]);
             }
         }
@@ -872,7 +871,7 @@ public class ConstrainedProperty implements Cloneable {
         String[] list = null;
         if (inList != null) {
             list = new String[inList.length];
-            for (int i = 0; i < inList.length; i++) {
+            for (var i = 0; i < inList.length; i++) {
                 list[i] = String.valueOf(inList[i]);
             }
         }
@@ -890,8 +889,8 @@ public class ConstrainedProperty implements Cloneable {
         String[] list = null;
         if (inList != null) {
             list = new String[inList.size()];
-            int i = 0;
-            for (Object entry : inList) {
+            var i = 0;
+            for (var entry : inList) {
                 list[i++] = String.valueOf(entry);
             }
         }
@@ -1995,7 +1994,7 @@ public class ConstrainedProperty implements Cloneable {
      */
     @SuppressWarnings("unchecked")
     public ConstrainedProperty contentAttribute(String name, String value) {
-        HashMap<String, String> content_attributes = (HashMap<String, String>) constraints_.get(CONTENT_ATTRIBUTES);
+        var content_attributes = (HashMap<String, String>) constraints_.get(CONTENT_ATTRIBUTES);
         if (null == content_attributes) {
             content_attributes = new HashMap<>();
             setConstraint(CONTENT_ATTRIBUTES, content_attributes);
@@ -2097,9 +2096,7 @@ public class ConstrainedProperty implements Cloneable {
      */
     public void setCachedLoadedData(Object data) {
         if (null == data) {
-            synchronized (constraints_) {
-                constraints_.remove(CACHED_LOADED_DATA);
-            }
+            constraints_.remove(CACHED_LOADED_DATA);
         } else {
             setConstraint(CACHED_LOADED_DATA, data);
         }
@@ -2130,9 +2127,7 @@ public class ConstrainedProperty implements Cloneable {
      * @since 1.0
      */
     public void setConstraint(String name, Object constraintData) {
-        synchronized (constraints_) {
-            constraints_.put(name, constraintData);
-        }
+        constraints_.put(name, constraintData);
         fireConstraintSet(name, constraintData);
     }
 

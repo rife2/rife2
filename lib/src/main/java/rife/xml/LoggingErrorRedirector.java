@@ -4,37 +4,27 @@
  */
 package rife.xml;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 import org.xml.sax.SAXParseException;
 
 public class LoggingErrorRedirector extends XmlErrorRedirector {
-    private ArrayList<SAXParseException> warnings_ = new ArrayList<>();
-    private ArrayList<SAXParseException> errors_ = new ArrayList<>();
-    private ArrayList<SAXParseException> fatalErrors_ = new ArrayList<>();
+    private final List<SAXParseException> warnings_ = new ArrayList<>();
+    private final List<SAXParseException> errors_ = new ArrayList<>();
+    private final List<SAXParseException> fatalErrors_ = new ArrayList<>();
 
     public LoggingErrorRedirector() {
     }
 
-    public synchronized void warning(SAXParseException e) {
-        if (null == warnings_) {
-            warnings_ = new ArrayList<>();
-        }
+    public void warning(SAXParseException e) {
         warnings_.add(e);
     }
 
-    public synchronized void error(SAXParseException e) {
-        if (null == errors_) {
-            errors_ = new ArrayList<>();
-        }
+    public void error(SAXParseException e) {
         errors_.add(e);
     }
 
-    public synchronized void fatalError(SAXParseException e) {
-        if (null == fatalErrors_) {
-            fatalErrors_ = new ArrayList<>();
-        }
+    public void fatalError(SAXParseException e) {
         fatalErrors_.add(e);
     }
 

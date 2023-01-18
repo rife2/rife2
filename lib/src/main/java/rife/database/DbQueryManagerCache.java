@@ -6,6 +6,8 @@ package rife.database;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * This class is a simple cache for {@link DbQueryManager} objects. {@link
@@ -17,7 +19,7 @@ import java.util.Map;
  * @since 1.0
  */
 public class DbQueryManagerCache {
-    private final Map<Datasource, HashMap<String, DbQueryManager>> cache_ = new HashMap<>();
+    private final ConcurrentMap<Datasource, ConcurrentHashMap<String, DbQueryManager>> cache_ = new ConcurrentHashMap<>();
 
     /**
      * Default constructor
@@ -41,17 +43,12 @@ public class DbQueryManagerCache {
         if (null == datasource) throw new IllegalArgumentException("datasource can't be null.");
         if (null == identifier) throw new IllegalArgumentException("identifier can't be null.");
 
-        HashMap<String, DbQueryManager> dbquery_managers = null;
-        synchronized (cache_) {
-            dbquery_managers = cache_.get(datasource);
-            if (null == dbquery_managers) {
-                return null;
-            }
+        var managers = cache_.get(datasource);
+        if (null == managers) {
+            return null;
         }
 
-        synchronized (dbquery_managers) {
-            return dbquery_managers.get(identifier);
-        }
+        return managers.get(identifier);
     }
 
     /**
@@ -70,20 +67,8 @@ public class DbQueryManagerCache {
         if (null == identifier) throw new IllegalArgumentException("identifier can't be null.");
         if (null == dbQueryManager) throw new IllegalArgumentException("dbQueryManager can't be null.");
 
-        HashMap<String, DbQueryManager> dbquery_managers;
-
-        synchronized (cache_) {
-            dbquery_managers = cache_.get(datasource);
-
-            if (null == dbquery_managers) {
-                dbquery_managers = new HashMap<>();
-                cache_.put(datasource, dbquery_managers);
-            }
-        }
-
-        synchronized (dbquery_managers) {
-            dbquery_managers.put(identifier, dbQueryManager);
-        }
+        var managers = cache_.computeIfAbsent(datasource, k -> new ConcurrentHashMap<>());
+        managers.put(identifier, dbQueryManager);
 
         assert cache_.containsKey(datasource);
         assert cache_.get(datasource).containsKey(identifier);

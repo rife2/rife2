@@ -256,9 +256,7 @@ public class Validation implements Validated, Cloneable, Constrained, Constraine
         if (null == activePropertyConstraints_) {
             activePropertyConstraints_ = new HashSet<>();
         }
-        synchronized (activePropertyConstraints_) {
-            activePropertyConstraints_.addAll(constrainedProperty.getConstraints().keySet());
-        }
+        activePropertyConstraints_.addAll(constrainedProperty.getConstraints().keySet());
 
         // register this validation object as the listener of future constraint additions to the property
         constrainedProperty.addListener(this);

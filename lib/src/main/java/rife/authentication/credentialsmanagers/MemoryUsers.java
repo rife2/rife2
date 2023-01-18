@@ -161,7 +161,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
                 }
 
                 attributes.setUserId(userIdSequence_);
-                attributes.setAutomaticUserId(true);
                 userIdMapping_.put(userIdSequence_, login);
             } else {
                 if (userIdMapping_.containsKey(attributes.getUserId())) {

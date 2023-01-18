@@ -5,6 +5,8 @@
 package rife.continuations;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.locks.*;
 
 /**
  * Manages a collection of {@code ContinuationContext} instances.
@@ -20,8 +22,11 @@ import java.util.*;
  */
 public class ContinuationManager {
     private final Map<String, ContinuationContext> contexts_;
-    private final Random random_ = new Random();
     private final ContinuationConfigRuntime config_;
+
+    private final ReadWriteLock lock_ = new ReentrantReadWriteLock();
+    final Lock readLock_ = lock_.readLock();
+    final Lock writeLock_ = lock_.writeLock();
 
     /**
      * Instantiates a new continuation manager and uses the default values for
@@ -70,8 +75,11 @@ public class ContinuationManager {
             return;
         }
 
-        synchronized (contexts_) {
+        writeLock_.lock();
+        try {
             contexts_.put(context.getId(), context);
+        } finally {
+            writeLock_.unlock();
         }
     }
 
@@ -89,8 +97,11 @@ public class ContinuationManager {
             return;
         }
 
-        synchronized (contexts_) {
+        writeLock_.lock();
+        try {
             contexts_.remove(id);
+        } finally {
+            writeLock_.unlock();
         }
     }
 
@@ -98,7 +109,7 @@ public class ContinuationManager {
      * Creates a new {@code ContinuationContext} from an existing one so that
      * the execution can be resumed.
      * <p>If the existing continuation context couldn't be found, no new one
-     * can be created. However, if it could be found, the result of
+     * is created. However, if it could be found, the result of
      * {@link ContinuationConfigRuntime#cloneContinuations} will determine
      * whether the existing continuation context will be cloned to create
      * the new one, or if its state will be reused.
@@ -112,11 +123,12 @@ public class ContinuationManager {
      */
     public ContinuationContext resumeContext(String id)
     throws CloneNotSupportedException {
-        synchronized (contexts_) {
-            ContinuationContext result = null;
+        ContinuationContext result = null;
 
-            purgeContinuations();
+        purgeContinuations();
 
+        writeLock_.lock();
+        try {
             var context = getContext(id);
             if (context != null &&
                 context.isPaused()) {
@@ -128,9 +140,11 @@ public class ContinuationManager {
                     result = reuseContext(context);
                 }
             }
-
-            return result;
+        } finally {
+            writeLock_.unlock();
         }
+
+        return result;
     }
 
     /**
@@ -147,7 +161,14 @@ public class ContinuationManager {
      * @since 1.0
      */
     public ContinuationContext getContext(String id) {
-        var context = contexts_.get(id);
+        ContinuationContext context;
+        readLock_.lock();
+        try {
+            context = contexts_.get(id);
+        } finally {
+            readLock_.unlock();
+        }
+
         if (context != null) {
             if (isExpired(context)) {
                 context = null;
@@ -175,7 +196,7 @@ public class ContinuationManager {
     }
 
     private void purgeContinuations() {
-        var purge_decision = random_.nextInt(config_.getContinuationPurgeScale());
+        var purge_decision = ThreadLocalRandom.current().nextInt(config_.getContinuationPurgeScale());
         if (purge_decision <= config_.getContinuationPurgeFrequency()) {
             new PurgeContinuations().start();
         }
@@ -187,18 +208,26 @@ public class ContinuationManager {
         }
 
         private void purge() {
-            var stale_continuations = new ArrayList<String>();
             try {
-                ContinuationContext context = null;
-                for (var reference : contexts_.values()) {
-                    if (reference != null) {
-                        context = reference;
-                        if (context != null &&
-                            isExpired(context)) {
-                            stale_continuations.add(context.getId());
-                        }
+                var stale_continuations = new ArrayList<String>();
+                for (var context : contexts_.values()) {
+                    if (context != null &&
+                        isExpired(context)) {
+                        stale_continuations.add(context.getId());
                     }
                 }
+
+                if (!stale_continuations.isEmpty()) {
+                    writeLock_.lock();
+                    try {
+                        for (var id : stale_continuations) {
+                            contexts_.remove(id);
+                        }
+                    } finally {
+                        writeLock_.unlock();
+                    }
+                }
+
             } catch (ConcurrentModificationException e) {
                 // Oops, something changed while we were looking.
                 // Lock the context and try again.
@@ -206,20 +235,14 @@ public class ContinuationManager {
                 var old_priority = Thread.currentThread().getPriority();
                 Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
                 try {
-                    synchronized (contexts_) {
-                        stale_continuations = null;
-                        purge();
+                    writeLock_.lock();
+                    try {
+                        contexts_.values().removeIf(context -> context != null && isExpired(context));
+                    } finally {
+                        writeLock_.unlock();
                     }
                 } finally {
                     Thread.currentThread().setPriority(old_priority);
-                }
-            }
-
-            if (stale_continuations != null) {
-                synchronized (contexts_) {
-                    for (var id : stale_continuations) {
-                        contexts_.remove(id);
-                    }
                 }
             }
         }

@@ -14,7 +14,8 @@ import rife.tools.UniqueIDGenerator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.*;
 
 public class MemorySessions implements SessionManager {
     private long sessionDuration_ = RifeConfig.authentication().getSessionDuration();
@@ -22,7 +23,7 @@ public class MemorySessions implements SessionManager {
     private int sessionPurgeFrequency_ = RifeConfig.authentication().getSessionPurgeFrequency();
     private int sessionPurgeScale_ = RifeConfig.authentication().getSessionPurgeScale();
 
-    private final Map<String, MemorySession> sessions_ = new HashMap<>();
+    private final ConcurrentHashMap<String, MemorySession> sessions_ = new ConcurrentHashMap<>();
 
     public MemorySessions() {
     }
@@ -65,21 +66,8 @@ public class MemorySessions implements SessionManager {
 
     private class PurgeSessions extends Thread {
         public void run() {
-            synchronized (sessions_) {
-                var stale_sessions = new ArrayList<String>();
-                var expiration = System.currentTimeMillis() - getSessionDuration();
-                for (var session : sessions_.values()) {
-                    if (session.getStart() <= expiration) {
-                        stale_sessions.add(session.getAuthId());
-                    }
-                }
-
-                if (stale_sessions != null) {
-                    for (var authid : stale_sessions) {
-                        sessions_.remove(authid);
-                    }
-                }
-            }
+            var expiration = System.currentTimeMillis() - getSessionDuration();
+            sessions_.values().removeIf(session -> session.getStart() <= expiration);
         }
     }
 
@@ -99,10 +87,7 @@ public class MemorySessions implements SessionManager {
         var auth_id_string = UniqueIDGenerator.generate().toString();
 
         var session = new MemorySession(auth_id_string, userId, authData, remembered);
-
-        synchronized (sessions_) {
-            sessions_.put(auth_id_string, session);
-        }
+        sessions_.put(auth_id_string, session);
 
         return auth_id_string;
     }
@@ -144,17 +129,10 @@ public class MemorySessions implements SessionManager {
             return false;
         }
 
-        synchronized (sessions_) {
-            if (sessions_.containsKey(authId)) {
-                var session = sessions_.get(authId);
-                session.setStart(System.currentTimeMillis());
-                sessions_.put(authId, session);
-
-                return true;
-            }
-        }
-
-        return false;
+        return null != sessions_.computeIfPresent(authId, (s, session) -> {
+            session.setStart(System.currentTimeMillis());
+            return session;
+        });
     }
 
     public boolean eraseSession(String authId)
@@ -164,15 +142,7 @@ public class MemorySessions implements SessionManager {
             return false;
         }
 
-        synchronized (sessions_) {
-            if (sessions_.containsKey(authId)) {
-                sessions_.remove(authId);
-
-                return true;
-            }
-        }
-
-        return false;
+        return sessions_.remove(authId) != null;
     }
 
     public boolean wasRemembered(String authId)
@@ -182,14 +152,12 @@ public class MemorySessions implements SessionManager {
             return false;
         }
 
-        synchronized (sessions_) {
-            var session = sessions_.get(authId);
-            if (null == session) {
-                return false;
-            }
-
-            return session.getRemembered();
+        var session = sessions_.get(authId);
+        if (null == session) {
+            return false;
         }
+
+        return session.getRemembered();
     }
 
     public boolean eraseUserSessions(long userId)
@@ -198,29 +166,7 @@ public class MemorySessions implements SessionManager {
             return false;
         }
 
-        var result = false;
-
-        synchronized (sessions_) {
-            var sessions_to_erase = new ArrayList<String>();
-
-            // collect the sessions that have to be erased
-            for (var sessions_entry : sessions_.entrySet()) {
-                if (userId == sessions_entry.getValue().getUserId()) {
-                    sessions_to_erase.add(sessions_entry.getKey());
-                }
-            }
-
-            // erased the collected sessions
-            for (var authid : sessions_to_erase) {
-                sessions_.remove(authid);
-            }
-
-            if (sessions_to_erase.size() > 0) {
-                result = true;
-            }
-        }
-
-        return result;
+        return sessions_.values().removeIf(session -> userId == session.getUserId());
     }
 
     public void eraseAllSessions()
@@ -233,16 +179,10 @@ public class MemorySessions implements SessionManager {
     }
 
     public long countSessions() {
-        long valid_session_count = 0;
-        synchronized (sessions_) {
-            var expiration = System.currentTimeMillis() - getSessionDuration();
-            for (var session : sessions_.values()) {
-                if (session.getStart() > expiration) {
-                    valid_session_count++;
-                }
-            }
-        }
-        return valid_session_count;
+        var expiration = System.currentTimeMillis() - getSessionDuration();
+        return sessions_.reduceToLong(1,
+            (s, session) -> (session.getStart() > expiration ? 1L : 0L),
+            0, Long::sum);
     }
 
     public boolean listSessions(ListSessions processor) {
@@ -250,14 +190,12 @@ public class MemorySessions implements SessionManager {
 
         var result = false;
 
-        synchronized (sessions_) {
-            var expiration = System.currentTimeMillis() - getSessionDuration();
-            for (var session : sessions_.values()) {
-                if (session.getStart() > expiration) {
-                    result = true;
-                    if (!processor.foundSession(session.getUserId(), session.getAuthData(), session.getAuthId())) {
-                        break;
-                    }
+        var expiration = System.currentTimeMillis() - getSessionDuration();
+        for (var session : sessions_.values()) {
+            if (session.getStart() > expiration) {
+                result = true;
+                if (!processor.foundSession(session.getUserId(), session.getAuthData(), session.getAuthId())) {
+                    break;
                 }
             }
         }
