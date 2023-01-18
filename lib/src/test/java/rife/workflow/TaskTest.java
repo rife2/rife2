@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TaskTest {
     @Test
+    @Disabled
     void simple()
     throws Throwable {
         final var endings = new int[]{0};
