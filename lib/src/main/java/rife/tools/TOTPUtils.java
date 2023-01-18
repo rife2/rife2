@@ -25,7 +25,6 @@ public final class TOTPUtils
         var random = new SecureRandom();
         var bytes = new byte[20];
         random.nextBytes(bytes);
-
         return new String(bytes, StandardCharsets.UTF_8);
     }
 
@@ -51,8 +50,10 @@ public final class TOTPUtils
 
     public static String getUrl(final String secret, final String issuer, final String user) {
         var encoded = StringUtils.encodeBase32(secret.getBytes(StandardCharsets.UTF_8));
-        var rawURL = String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s", issuer, user, encoded, issuer);
-        return StringUtils.encodeUrl(rawURL);
+        var encoded_issuer = StringUtils.encodeUrl(issuer);
+        var encoded_user = StringUtils.encodeUrl(user);
+        var rawURL = String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s", encoded_issuer, encoded_user, encoded, encoded_issuer);
+        return rawURL;
     }
 
     private static String getOTP(final String key) {
