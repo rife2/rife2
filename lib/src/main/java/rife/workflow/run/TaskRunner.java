@@ -11,6 +11,7 @@ import java.util.concurrent.*;
 
 import rife.continuations.*;
 import rife.continuations.basic.*;
+import rife.ioc.HierarchicalProperties;
 import rife.workflow.Event;
 import rife.workflow.Task;
 import rife.workflow.config.InstrumentWorkflowConfig;
@@ -30,6 +31,7 @@ import rife.workflow.config.InstrumentWorkflowConfig;
 public class TaskRunner {
     private static final ContinuationConfigInstrument CONFIG_INSTRUMENT = new InstrumentWorkflowConfig();
 
+    private final HierarchicalProperties properties_;
     private final ExecutorService taskExecutor_;
     private final BasicContinuableRunner runner_;
     private final ConcurrentHashMap<Object, Collection<String>> eventsMapping_;
@@ -52,6 +54,9 @@ public class TaskRunner {
      * @since 1.0
      */
     public TaskRunner(ExecutorService executor) {
+        var system_properties = new HierarchicalProperties().putAll(System.getProperties());
+        properties_ = new HierarchicalProperties().parent(system_properties);
+
         runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT) {
             public void executeContinuable(Object object)
             throws Throwable {
@@ -68,6 +73,16 @@ public class TaskRunner {
         pendingEvents_ = new ConcurrentHashMap<>();
         taskExecutor_ = executor;
         listeners_ = new CopyOnWriteArraySet<>();
+    }
+
+    /**
+     * Retrieves the hierarchical properties for this task runner instance.
+     *
+     * @return this task runner's collection of hierarchical properties
+     * @since 1.0
+     */
+    public HierarchicalProperties properties() {
+        return properties_;
     }
 
     /**
@@ -106,8 +121,10 @@ public class TaskRunner {
         final Set<String> ids_to_resume = new HashSet<>();
         eventsMapping_.compute(event.getType(), (eventType, ids) -> {
             if (ids != null) {
-                ids_to_resume.addAll(ids);
-                ids.clear();
+                synchronized (ids) {
+                    ids_to_resume.addAll(ids);
+                    ids.clear();
+                }
             }
             return ids;
         });
@@ -176,7 +193,9 @@ public class TaskRunner {
             // keeps track of the continuation ID for this event type
             eventsMapping_.compute(type, (eventType, ids) -> {
                 if (ids == null) ids = new HashSet<>();
-                ids.add(state.getContinuationId());
+                synchronized (ids) {
+                    ids.add(state.getContinuationId());
+                }
                 return ids;
             });
 
