@@ -24,9 +24,10 @@ public class TaskTest {
         var runner = new TaskRunner();
         runner.addListener(event -> {
             if (TestEventTypes.END == event.getType()) {
+                sum.add((Integer) event.getData());
+
                 one_ended.countDown();
                 all_ended.countDown();
-                sum.add((Integer) event.getData());
             }
         });
 
