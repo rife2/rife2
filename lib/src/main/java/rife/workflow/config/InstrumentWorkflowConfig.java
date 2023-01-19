@@ -7,7 +7,6 @@ package rife.workflow.config;
 import rife.continuations.CloneableContinuable;
 import rife.continuations.ContinuationConfigInstrument;
 import rife.workflow.Event;
-import rife.workflow.EventType;
 import rife.workflow.run.TaskRunner;
 
 /**
@@ -43,6 +42,6 @@ public class InstrumentWorkflowConfig implements ContinuationConfigInstrument {
     }
 
     public Class[] getCallMethodArgumentTypes() {
-        return new Class[]{EventType.class};
+        return new Class[]{Object.class};
     }
 }

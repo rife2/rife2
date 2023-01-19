@@ -37,11 +37,11 @@ public abstract class Task implements CloneableContinuable {
      *
      * @param runner the task runner where the even should be triggered
      * @param type   the type of the event
-     * @see #trigger(rife.workflow.run.TaskRunner, EventType, Object)
+     * @see #trigger(rife.workflow.run.TaskRunner, Object, Object)
      * @see TaskRunner#trigger
      * @since 1.0
      */
-    protected void trigger(TaskRunner runner, EventType type) {
+    protected void trigger(TaskRunner runner, Object type) {
         trigger(runner, type, null);
     }
 
@@ -52,11 +52,11 @@ public abstract class Task implements CloneableContinuable {
      * @param runner the task runner where the even should be triggered
      * @param type   the type of the event
      * @param data   the data that will be sent with the event
-     * @see #trigger(rife.workflow.run.TaskRunner, EventType)
+     * @see #trigger(rife.workflow.run.TaskRunner, Object)
      * @see TaskRunner#trigger
      * @since 1.0
      */
-    protected void trigger(TaskRunner runner, EventType type, Object data) {
+    protected void trigger(TaskRunner runner, Object type, Object data) {
         runner.trigger(new Event(this, type, data));
     }
 
@@ -69,7 +69,7 @@ public abstract class Task implements CloneableContinuable {
      * @return the event that woke up the task
      * @since 1.0
      */
-    public final Event waitForEvent(EventType type) {
+    public final Event waitForEvent(Object type) {
         // this should not be triggered, since bytecode rewriting will replace this
         // method call with the appropriate logic
         throw new UnsupportedOperationException();

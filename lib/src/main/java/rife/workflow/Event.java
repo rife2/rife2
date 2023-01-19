@@ -20,7 +20,7 @@ import java.util.Date;
 public class Event {
     private final Date moment_ = new Date();
     private final Task source_;
-    private final EventType type_;
+    private final Object type_;
     private final Object data_;
 
     /**
@@ -31,7 +31,7 @@ public class Event {
      * @param data   the data that has to be sent along with the event
      * @since 1.0
      */
-    public Event(final Task source, final EventType type, final Object data) {
+    public Event(final Task source, final Object type, final Object data) {
         source_ = source;
         type_ = type;
         data_ = data;
@@ -63,7 +63,7 @@ public class Event {
      * @return this event's type
      * @since 1.0
      */
-    public EventType getType() {
+    public Object getType() {
         return type_;
     }
 

@@ -4,30 +4,6 @@
  */
 package rifeworkflowtasks;
 
-import rife.workflow.EventType;
-
-public abstract class TestEventTypes {
-    public static final EventType TYPE1 = new EventType() {
-        public String getType() {
-            return "TYPE1";
-        }
-    };
-
-    public static final EventType TYPE2 = new EventType() {
-        public String getType() {
-            return "TYPE2";
-        }
-    };
-
-    public static final EventType BEGIN = new EventType() {
-        public String getType() {
-            return "BEGIN";
-        }
-    };
-
-    public static final EventType END = new EventType() {
-        public String getType() {
-            return "END";
-        }
-    };
+public enum TestEventTypes {
+    TYPE1, TYPE2, BEGIN, END
 }

@@ -14,7 +14,6 @@ import java.util.concurrent.*;
 import rife.continuations.*;
 import rife.continuations.basic.*;
 import rife.workflow.Event;
-import rife.workflow.EventType;
 import rife.workflow.config.InstrumentWorkflowConfig;
 
 /**
@@ -34,7 +33,7 @@ public class TaskRunner {
 
     private final ExecutorService taskExecutor_;
     private final BasicContinuableRunner runner_;
-    private final ConcurrentHashMap<EventType, Collection<String>> eventsMapping_;
+    private final ConcurrentHashMap<Object, Collection<String>> eventsMapping_;
     private final List<Event> pendingEvents_;
     private final CopyOnWriteArraySet<EventListener> listeners_;
 
@@ -173,7 +172,7 @@ public class TaskRunner {
 
     private class EventTypeCallTargetRetriever implements CallTargetRetriever {
         public CloneableContinuable getCallTarget(Object target, CallState state) {
-            var type = (EventType) target;
+            var type = target;
 
             eventsMapping_.compute(type, (eventType, ids) -> {
                 if (ids == null) ids = new HashSet<>();
