@@ -4,7 +4,6 @@
  */
 package rifeworkflowtasks;
 
-import rife.workflow.Event;
 import rife.workflow.Task;
 import rife.workflow.run.TaskRunner;
 
