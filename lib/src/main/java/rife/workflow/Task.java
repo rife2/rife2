@@ -52,7 +52,7 @@ public abstract class Task implements CloneableContinuable {
      * @param runner the task runner where the even should be triggered
      * @param type   the type of the event
      * @param data   the data that will be sent with the event
-     * @see #trigger(rife.workflow.run.TaskRunner, Object)
+     * @see #trigger(TaskRunner, Object)
      * @see TaskRunner#trigger
      * @since 1.0
      */
