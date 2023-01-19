@@ -4,16 +4,15 @@
  */
 package rife.workflow.run;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.*;
 
 import rife.continuations.*;
 import rife.continuations.basic.*;
 import rife.workflow.Event;
+import rife.workflow.Task;
 import rife.workflow.config.InstrumentWorkflowConfig;
 
 /**
@@ -34,7 +33,7 @@ public class TaskRunner {
     private final ExecutorService taskExecutor_;
     private final BasicContinuableRunner runner_;
     private final ConcurrentHashMap<Object, Collection<String>> eventsMapping_;
-    private final List<Event> pendingEvents_;
+    private final ConcurrentHashMap<Object, ConcurrentLinkedQueue<Event>> pendingEvents_;
     private final CopyOnWriteArraySet<EventListener> listeners_;
 
     /**
@@ -66,7 +65,7 @@ public class TaskRunner {
         runner_.setCallTargetRetriever(new EventTypeCallTargetRetriever());
 
         eventsMapping_ = new ConcurrentHashMap<>();
-        pendingEvents_ = new ArrayList<>();
+        pendingEvents_ = new ConcurrentHashMap<>();
         taskExecutor_ = executor;
         listeners_ = new CopyOnWriteArraySet<>();
     }
@@ -78,7 +77,7 @@ public class TaskRunner {
      *              executed, the class should extend {@link rife.workflow.Task}
      * @since 1.0
      */
-    public void start(final Class klass) {
+    public void start(final Class<? extends Task> klass) {
         taskExecutor_.submit(() -> {
             try {
                 runner_.start(klass);
@@ -115,9 +114,11 @@ public class TaskRunner {
 
         if (ids_to_resume.isEmpty()) {
             // couldn't find any continuations to resume, add the event as pending
-            synchronized (pendingEvents_) {
-                pendingEvents_.add(event);
-            }
+            pendingEvents_.compute(event.getType(), (eventType, events) -> {
+                if (events == null) events = new ConcurrentLinkedQueue<>();
+                events.add(event);
+                return events;
+            });
         } else {
             // resume all the continuations that are waiting for the event type
             for (var id : ids_to_resume) {
@@ -171,29 +172,22 @@ public class TaskRunner {
     }
 
     private class EventTypeCallTargetRetriever implements CallTargetRetriever {
-        public CloneableContinuable getCallTarget(Object target, CallState state) {
-            var type = target;
-
+        public CloneableContinuable getCallTarget(Object type, CallState state) {
+            // keeps track of the continuation ID for this event type
             eventsMapping_.compute(type, (eventType, ids) -> {
                 if (ids == null) ids = new HashSet<>();
                 ids.add(state.getContinuationId());
                 return ids;
             });
 
-            Event pending_event = null;
-            synchronized (pendingEvents_) {
-                var it = pendingEvents_.iterator();
-                while (it.hasNext()) {
-                    var candidate = it.next();
-                    if (type.equals(candidate.getType())) {
-                        pending_event = candidate;
-                        it.remove();
-                        break;
-                    }
-                }
-            }
-            if (pending_event != null) {
-                trigger(pending_event);
+            // get the next pending event of this call type and trigger it
+            final var pending_event = new Event[1];
+            pendingEvents_.computeIfPresent(type, (evenType, events) -> {
+                pending_event[0] = events.poll();
+                return events;
+            });
+            if (pending_event[0] != null) {
+                trigger(pending_event[0]);
             }
 
             return null;
