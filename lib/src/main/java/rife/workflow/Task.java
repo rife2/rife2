@@ -9,15 +9,14 @@ import rife.workflow.run.TaskRunner;
 
 /**
  * Tasks can be executed in a {@link TaskRunner}.
- * <p>Their execution will be done in a dedicated thread by invoking the
+ * <p>Their execution will be done in a thread by invoking the
  * {@link #execute} method on a new instance of the task class.
  * <p>Afterwards, tasks can suspend their execution by waiting for particular
- * event types. The thread will stop executing and no system resources will be
- * used except for the memory required to maintain the state of the suspended
- * task instance.
- * <p>When a suitable event is triggered in the {@code TaskRunner}, a new
- * thread will be created and the execution of the suspended task will be
- * resumed in it where it left off.
+ * event types. The thread will stop executing this task and no system resources
+ * will be used except for the memory required to maintain the state of the
+ * suspended task instance.
+ * <p>When a suitable event is triggered in the {@code TaskRunner}, a thread
+ * will resume the execution of the suspended task where it left off.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see TaskRunner
@@ -37,11 +36,11 @@ public abstract class Task implements CloneableContinuable {
      *
      * @param runner the task runner where the even should be triggered
      * @param type   the type of the event
-     * @see #trigger(rife.workflow.run.TaskRunner, EventType, Object)
+     * @see #trigger(rife.workflow.run.TaskRunner, Object, Object)
      * @see TaskRunner#trigger
      * @since 1.0
      */
-    protected void trigger(TaskRunner runner, EventType type) {
+    protected void trigger(TaskRunner runner, Object type) {
         trigger(runner, type, null);
     }
 
@@ -52,11 +51,11 @@ public abstract class Task implements CloneableContinuable {
      * @param runner the task runner where the even should be triggered
      * @param type   the type of the event
      * @param data   the data that will be sent with the event
-     * @see #trigger(rife.workflow.run.TaskRunner, EventType)
+     * @see #trigger(TaskRunner, Object)
      * @see TaskRunner#trigger
      * @since 1.0
      */
-    protected void trigger(TaskRunner runner, EventType type, Object data) {
+    protected void trigger(TaskRunner runner, Object type, Object data) {
         runner.trigger(new Event(this, type, data));
     }
 
@@ -69,7 +68,7 @@ public abstract class Task implements CloneableContinuable {
      * @return the event that woke up the task
      * @since 1.0
      */
-    public final Event waitForEvent(EventType type) {
+    public final Event waitForEvent(Object type) {
         // this should not be triggered, since bytecode rewriting will replace this
         // method call with the appropriate logic
         throw new UnsupportedOperationException();

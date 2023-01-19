@@ -4,20 +4,14 @@
  */
 package rife.workflow.run;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.*;
 
 import rife.continuations.*;
 import rife.continuations.basic.*;
+import rife.ioc.HierarchicalProperties;
 import rife.workflow.Event;
-import rife.workflow.EventType;
+import rife.workflow.Task;
 import rife.workflow.config.InstrumentWorkflowConfig;
 
 /**
@@ -35,20 +29,33 @@ import rife.workflow.config.InstrumentWorkflowConfig;
 public class TaskRunner {
     private static final ContinuationConfigInstrument CONFIG_INSTRUMENT = new InstrumentWorkflowConfig();
 
+    private final HierarchicalProperties properties_;
+    private final ExecutorService taskExecutor_;
     private final BasicContinuableRunner runner_;
-    private final Map<EventType, Collection<String>> eventsMapping_;
-    private final ThreadGroup taskThreads_;
-    private final List<Event> pendingEvents_;
-    private final Collection<EventListener> listeners_;
+    private final ConcurrentMap<Object, Set<String>> eventsMapping_;
+    private final ConcurrentMap<Object, Queue<Event>> pendingEvents_;
+    private final Set<EventListener> listeners_;
 
     /**
-     * Creates a new task runner instance.
+     * Creates a new task runner instance with a cached thread pool.
      *
      * @since 1.0
      */
     public TaskRunner() {
-        var classloader = new BasicContinuableClassLoader(CONFIG_INSTRUMENT);
-        runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT, classloader) {
+        this(Executors.newCachedThreadPool());
+    }
+
+    /**
+     * Creates a new task runner instance with a provided executor.
+     *
+     * @param executor the executor to use for running the tasks
+     * @since 1.0
+     */
+    public TaskRunner(ExecutorService executor) {
+        var system_properties = new HierarchicalProperties().putAll(System.getProperties());
+        properties_ = new HierarchicalProperties().parent(system_properties);
+
+        runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT) {
             public void executeContinuable(Object object)
             throws Throwable {
                 var method = object.getClass().getMethod(
@@ -60,27 +67,37 @@ public class TaskRunner {
         runner_.setCloneContinuations(false);
         runner_.setCallTargetRetriever(new EventTypeCallTargetRetriever());
 
-        eventsMapping_ = new HashMap<>();
-        taskThreads_ = new ThreadGroup("taskthreads");
-        pendingEvents_ = new ArrayList<>();
-        listeners_ = new LinkedHashSet<>();
+        eventsMapping_ = new ConcurrentHashMap<>();
+        pendingEvents_ = new ConcurrentHashMap<>();
+        taskExecutor_ = executor;
+        listeners_ = new CopyOnWriteArraySet<>();
+    }
+
+    /**
+     * Retrieves the hierarchical properties for this task runner instance.
+     *
+     * @return this task runner's collection of hierarchical properties
+     * @since 1.0
+     */
+    public HierarchicalProperties properties() {
+        return properties_;
     }
 
     /**
      * Starts the execution of a new task instance.
      *
-     * @param className the class name of the task instance that should be
-     *                  executed, the class should extend {@link rife.workflow.Task}
+     * @param klass the task class whose instance that should be
+     *              executed, the class should extend {@link rife.workflow.Task}
      * @since 1.0
      */
-    public void start(final String className) {
-        new Thread(taskThreads_, () -> {
+    public void start(final Class<? extends Task> klass) {
+        taskExecutor_.submit(() -> {
             try {
-                runner_.start(className);
+                runner_.start(klass);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
-        }).start();
+        });
     }
 
     /**
@@ -99,38 +116,33 @@ public class TaskRunner {
         // the type of the event
 
         // first obtain the collection for this event's type
-        Set<String> ids_to_resume = new HashSet<>();
-        synchronized (eventsMapping_) {
-            final Collection<String> ids = eventsMapping_.getOrDefault(event.getType(), Collections.emptySet());
-            ids_to_resume.addAll(ids);
-            ids.clear();
-            ;
-        }
+        final Set<String> ids_to_resume = new HashSet<>();
+        eventsMapping_.compute(event.getType(), (eventType, ids) -> {
+            if (ids != null) {
+                synchronized (ids) {
+                    ids_to_resume.addAll(ids);
+                    ids.clear();
+                }
+            }
+            return ids;
+        });
 
         if (ids_to_resume.isEmpty()) {
-            synchronized (pendingEvents_) {
-                pendingEvents_.add(event);
+            // couldn't find any continuations to resume, add the event as pending
+            pendingEvents_.compute(event.getType(), (eventType, events) -> {
+                if (events == null) events = new ConcurrentLinkedQueue<>();
+                events.add(event);
+                return events;
+            });
+        } else {
+            // resume all the continuations that are waiting for the event type
+            for (var id : ids_to_resume) {
+                answer(id, event);
             }
-        }
-
-        // resume all the continuations that are waiting for the event type
-        for (var id : ids_to_resume) {
-            answer(id, event);
         }
 
         // notify all the event listeners that a new event has been triggered
-        Collection<EventListener> listeners = null;
-        synchronized (listeners_) {
-            if (!listeners_.isEmpty()) {
-                listeners = new LinkedHashSet<>(listeners_);
-            }
-        }
-
-        if (listeners != null) {
-            for (var listener : listeners) {
-                listener.eventTriggered(event);
-            }
-        }
+        listeners_.forEach(listener -> listener.eventTriggered(event));
     }
 
     /**
@@ -144,9 +156,7 @@ public class TaskRunner {
         if (null == listener) {
             return;
         }
-        synchronized (listeners_) {
-            listeners_.add(listener);
-        }
+        listeners_.add(listener);
     }
 
     /**
@@ -161,53 +171,40 @@ public class TaskRunner {
             return;
         }
 
-        synchronized (listeners_) {
-            listeners_.remove(listener);
-        }
+        listeners_.remove(listener);
     }
 
     private void answer(final String id, final Object callAnswer) {
         if (null == id) return;
 
-        new Thread(taskThreads_, () -> {
+        taskExecutor_.submit(() -> {
             try {
                 runner_.answer(id, callAnswer);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
-        }).start();
+        });
     }
 
     private class EventTypeCallTargetRetriever implements CallTargetRetriever {
-        public CloneableContinuable getCallTarget(Object target, CallState state) {
-            var type = (EventType) target;
-
-            final Collection<String> ids;
-
-            synchronized (eventsMapping_) {
-                if (eventsMapping_.containsKey(type)) {
-                    ids = eventsMapping_.get(type);
-                } else {
-                    ids = new HashSet<>();
-                    eventsMapping_.put(type, ids);
+        public CloneableContinuable getCallTarget(Object type, CallState state) {
+            // keeps track of the continuation ID for this event type
+            eventsMapping_.compute(type, (eventType, ids) -> {
+                if (ids == null) ids = new HashSet<>();
+                synchronized (ids) {
+                    ids.add(state.getContinuationId());
                 }
-                ids.add(state.getContinuationId());
-            }
+                return ids;
+            });
 
-            Event pending_event = null;
-            synchronized (pendingEvents_) {
-                var it = pendingEvents_.iterator();
-                while (it.hasNext()) {
-                    var candidate = it.next();
-                    if (type.equals(candidate.getType())) {
-                        pending_event = candidate;
-                        it.remove();
-                        break;
-                    }
-                }
-            }
-            if (pending_event != null) {
-                trigger(pending_event);
+            // get the next pending event of this call type and trigger it
+            final var pending_event = new Event[1];
+            pendingEvents_.computeIfPresent(type, (evenType, events) -> {
+                pending_event[0] = events.poll();
+                return events;
+            });
+            if (pending_event[0] != null) {
+                trigger(pending_event[0]);
             }
 
             return null;

@@ -77,6 +77,20 @@ public class BasicContinuableRunner {
     }
 
     /**
+     * Starts the execution of a new instance of the provided class.
+     *
+     * @param klass the class that will be executed
+     * @return the ID of the resulting paused continuation; or
+     * <p>{@code null} if no continuation was paused
+     * @throws Throwable when an error occurs
+     * @since 1.0
+     */
+    public String start(Class klass)
+    throws Throwable {
+        return run(klass, null, null, null);
+    }
+
+    /**
      * Resumes the execution of a paused continuation.
      *
      * @param continuationId the ID of the continuation that will be resumed
@@ -88,7 +102,7 @@ public class BasicContinuableRunner {
      */
     public String resume(String continuationId)
     throws Throwable {
-        return run(null, continuationId, null, null);
+        return run((String)null, continuationId, null, null);
     }
 
     /**
@@ -104,7 +118,7 @@ public class BasicContinuableRunner {
      */
     public String answer(String continuationId, Object callAnswer)
     throws Throwable {
-        return run(null, continuationId, null, callAnswer);
+        return run((String)null, continuationId, null, callAnswer);
     }
 
     /**
@@ -121,7 +135,7 @@ public class BasicContinuableRunner {
      */
     public String run(String continuationId)
     throws Throwable {
-        return run(null, null, continuationId, null);
+        return run((String)null, null, continuationId, null);
     }
 
     private String run(String className, String resumeId, String runId, Object callAnswer)
@@ -129,131 +143,138 @@ public class BasicContinuableRunner {
         // retrieve the current context classloader
         var previous_context_classloader = Thread.currentThread().getContextClassLoader();
 
-        String result = null;
         try {
-            // set the continuations classloader as the context classloader
-            Thread.currentThread().setContextClassLoader(classLoader_);
-
-            Object object = null;
-            var step_back = false;
-            var call = false;
-            var answer = false;
-            do {
-                try {
-                    try {
-                        try {
-                            // create or retrieve a continuable object
-                            if (null == object) {
-                                // no active continuation, start a new one
-                                if (null == resumeId &&
-                                    null == runId) {
-                                    // load the continuable class through the provided classloader
-                                    var continuableClass = classLoader_.loadClass(className);
-                                    object = continuableClass.getDeclaredConstructor().newInstance();
-                                    ContinuationContext.clearActiveContext();
-                                } else {
-                                    ContinuationContext context = null;
-
-                                    // resume an existing continuation
-                                    if (resumeId != null) {
-                                        context = manager_.resumeContext(resumeId);
-                                    }
-                                    // run an existing continuation
-                                    else if (runId != null) {
-                                        context = manager_.getContext(runId);
-                                    }
-
-                                    // set up the context
-                                    if (context != null) {
-                                        if (callAnswer != null) {
-                                            context.setCallAnswer(callAnswer);
-                                        }
-                                        ContinuationContext.setActiveContext(context);
-                                        object = context.getContinuable();
-                                    }
-                                }
-                            }
-
-                            // reset state variables
-                            resumeId = null;
-                            runId = null;
-                            callAnswer = null;
-                            step_back = false;
-                            call = false;
-                            answer = false;
-
-                            // execute the continuable object
-                            result = null;
-
-                            // set up the required thread local vars
-                            currentContinuable_.set(object);
-                            ContinuationConfigRuntime.setActiveConfigRuntime(manager_.getConfigRuntime());
-
-                            executeContinuable(object);
-
-                            // clear out the continuable object
-                            object = null;
-                        } finally {
-                            ContinuationContext.clearActiveContext();
-                        }
-                    } catch (InvocationTargetException invocation_target_exception) {
-                        throw invocation_target_exception.getTargetException();
-                    }
-                } catch (PauseException e) {
-                    // register context
-                    var context = e.getContext();
-                    manager_.addContext(context);
-
-                    // obtain continuation ID
-                    result = context.getId();
-                } catch (StepBackException e) {
-                    step_back = true;
-
-                    // register context
-                    var context = e.getContext();
-                    manager_.addContext(context);
-
-                    resumeId = e.lookupStepBackId();
-                    if (resumeId != null) {
-                        // clear the continuable object so that it's looked up from the
-                        // grandparent continuation
-                        object = null;
-                    }
-                } catch (CallException e) {
-                    call = true;
-
-                    // register context
-                    var context = e.getContext();
-                    manager_.addContext(context);
-
-                    // create a new call state
-                    var call_state = new CallState(context.getId(), null);
-                    context.setCreatedCallState(call_state);
-
-                    // create the new target object
-                    object = callTargetRetriever_.getCallTarget(e.getTarget(), call_state);
-                } catch (AnswerException e) {
-                    // obtain the context and the answer of the answering element
-                    var context = e.getContext();
-
-                    // handle the call state of the last processed element context
-                    if (context != null &&
-                        context.getActiveCallState() != null) {
-                        answer = true;
-
-                        var call_state = context.getActiveCallState();
-                        callAnswer = e.getAnswer();
-                        runId = call_state.getContinuationId();
-                    }
-
-                    object = null;
-                }
+            // load the continuable class through the provided classloader
+            Class klass = null;
+            if (className != null) {
+                klass = classLoader_.loadClass(className);
             }
-            while (step_back || (call && object != null) || answer);
+            return run(klass, resumeId, runId, callAnswer);
         } finally {
             // restore the previous context classloader
             Thread.currentThread().setContextClassLoader(previous_context_classloader);
         }
+    }
+
+    private String run(Class klass, String resumeId, String runId, Object callAnswer)
+    throws Throwable {
+
+        String result = null;
+
+        Object object = null;
+        var step_back = false;
+        var call = false;
+        var answer = false;
+        do {
+            try {
+                try {
+                    try {
+                        // create or retrieve a continuable object
+                        if (null == object) {
+                            // no active continuation, start a new one
+                            if (null == resumeId &&
+                                null == runId) {
+                                object = klass.getDeclaredConstructor().newInstance();
+                                ContinuationContext.clearActiveContext();
+                            } else {
+                                ContinuationContext context = null;
+
+                                // resume an existing continuation
+                                if (resumeId != null) {
+                                    context = manager_.resumeContext(resumeId);
+                                }
+                                // run an existing continuation
+                                else if (runId != null) {
+                                    context = manager_.getContext(runId);
+                                }
+
+                                // set up the context
+                                if (context != null) {
+                                    if (callAnswer != null) {
+                                        context.setCallAnswer(callAnswer);
+                                    }
+                                    ContinuationContext.setActiveContext(context);
+                                    object = context.getContinuable();
+                                }
+                            }
+                        }
+
+                        // reset state variables
+                        resumeId = null;
+                        runId = null;
+                        callAnswer = null;
+                        step_back = false;
+                        call = false;
+                        answer = false;
+
+                        // execute the continuable object
+                        result = null;
+
+                        // set up the required thread local vars
+                        currentContinuable_.set(object);
+                        ContinuationConfigRuntime.setActiveConfigRuntime(manager_.getConfigRuntime());
+
+                        executeContinuable(object);
+
+                        // clear out the continuable object
+                        object = null;
+                    } finally {
+                        ContinuationContext.clearActiveContext();
+                    }
+                } catch (InvocationTargetException invocation_target_exception) {
+                    throw invocation_target_exception.getTargetException();
+                }
+            } catch (PauseException e) {
+                // register context
+                var context = e.getContext();
+                manager_.addContext(context);
+
+                // obtain continuation ID
+                result = context.getId();
+            } catch (StepBackException e) {
+                step_back = true;
+
+                // register context
+                var context = e.getContext();
+                manager_.addContext(context);
+
+                resumeId = e.lookupStepBackId();
+                if (resumeId != null) {
+                    // clear the continuable object so that it's looked up from the
+                    // grandparent continuation
+                    object = null;
+                }
+            } catch (CallException e) {
+                call = true;
+
+                // register context
+                var context = e.getContext();
+                manager_.addContext(context);
+
+                // create a new call state
+                var call_state = new CallState(context.getId(), null);
+                context.setCreatedCallState(call_state);
+
+                // create the new target object
+                object = callTargetRetriever_.getCallTarget(e.getTarget(), call_state);
+            } catch (AnswerException e) {
+                // obtain the context and the answer of the answering element
+                var context = e.getContext();
+
+                // handle the call state of the last processed element context
+                if (context != null &&
+                    context.getActiveCallState() != null) {
+                    answer = true;
+
+                    var call_state = context.getActiveCallState();
+                    callAnswer = e.getAnswer();
+                    runId = call_state.getContinuationId();
+                }
+
+                object = null;
+            }
+        }
+        while (step_back || (call && object != null) || answer);
 
         return result;
     }

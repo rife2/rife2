@@ -4,7 +4,6 @@
  */
 package rifeworkflowtasks;
 
-import rife.workflow.Event;
 import rife.workflow.Task;
 import rife.workflow.run.TaskRunner;
 
@@ -13,11 +12,11 @@ public class TaskType2 extends Task {
         trigger(runner, TestEventTypes.BEGIN);
 
         int count;
-        int sum = 0;
-        for (count = 0; count < 10; count++) {
+        var sum = 0;
+        for (count = 0; count < 10; ++count) {
             trigger(runner, TestEventTypes.TYPE1, count);
 
-            Event event = waitForEvent(TestEventTypes.TYPE2);
+            var event = waitForEvent(TestEventTypes.TYPE2);
 
             sum += (Integer) event.getData();
         }

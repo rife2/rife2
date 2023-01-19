@@ -4,11 +4,6 @@
  */
 package rife.workflow;
 
-import rife.config.RifeConfig;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * Events cause tasks to be resumed when they are waiting for the event type.
  * <p>You shouldn't instantiate events yourself, but rather rely on the
@@ -18,9 +13,8 @@ import java.util.Date;
  * @since 1.0
  */
 public class Event {
-    private final Date moment_ = new Date();
     private final Task source_;
-    private final EventType type_;
+    private final Object type_;
     private final Object data_;
 
     /**
@@ -31,20 +25,10 @@ public class Event {
      * @param data   the data that has to be sent along with the event
      * @since 1.0
      */
-    public Event(final Task source, final EventType type, final Object data) {
+    public Event(final Task source, final Object type, final Object data) {
         source_ = source;
         type_ = type;
         data_ = data;
-    }
-
-    /**
-     * Returns the creation moment of this event.
-     *
-     * @return this event's creation moment
-     * @since 1.0
-     */
-    public Date getMoment() {
-        return moment_;
     }
 
     /**
@@ -63,7 +47,7 @@ public class Event {
      * @return this event's type
      * @since 1.0
      */
-    public EventType getType() {
+    public Object getType() {
         return type_;
     }
 
@@ -75,9 +59,5 @@ public class Event {
      */
     public Object getData() {
         return data_;
-    }
-
-    public String toString() {
-        return RifeConfig.tools().getSimpleDateFormat("yyyyMMddHHmmss").format(moment_) + "; " + source_ + "; " + type_ + "; " + data_;
     }
 }
