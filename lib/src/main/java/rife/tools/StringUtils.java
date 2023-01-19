@@ -623,7 +623,7 @@ public final class StringUtils {
         StringBuilder out = null;
         char ch;
         byte[] bytes_buffer = null;
-        int bytes_pos = 0;
+        var bytes_pos = 0;
         var i = 0;
         while(i < length) {
             ch = source.charAt(i);
@@ -647,7 +647,7 @@ public final class StringUtils {
                     throw new IllegalArgumentException("StringUtils.decodeUrl: Illegal escape sequence");
                 }
                 try {
-                    int v = Integer.parseInt(source, i, i + 2, 16);
+                    var v = Integer.parseInt(source, i, i + 2, 16);
                     if (v < 0 || v > 0xFF) {
                         throw new IllegalArgumentException("StringUtils.decodeUrl: Illegal escape value");
                     }
@@ -1173,7 +1173,7 @@ public final class StringUtils {
      */
     public static String encodeHex(byte[] bytes) {
         var out = new StringBuilder();
-        for (byte b : bytes) {
+        for (var b : bytes) {
             appendHexDigit(out, b >> 4);
             appendHexDigit(out, b);
         }
@@ -1192,28 +1192,28 @@ public final class StringUtils {
         }
 
         int i = 0, index = 0, digit = 0;
-        int currByte, nextByte;
-        StringBuilder base32 = new StringBuilder((bytes.length + 7) * 8 / 5);
+        int curr_byte, next_byte;
+        var base32 = new StringBuilder((bytes.length + 7) * 8 / 5);
 
         while (i < bytes.length) {
-            currByte = (bytes[i] >= 0) ? bytes[i] : (bytes[i] + 256); // unsign
+            curr_byte = (bytes[i] >= 0) ? bytes[i] : (bytes[i] + 256); // un-sign
 
             /* Is the current digit going to span a byte boundary? */
             if (index > 3) {
                 if ((i + 1) < bytes.length) {
-                    nextByte =
+                    next_byte =
                             (bytes[i + 1] >= 0) ? bytes[i + 1] : (bytes[i + 1] + 256);
                 } else {
-                    nextByte = 0;
+                    next_byte = 0;
                 }
 
-                digit = currByte & (0xFF >> index);
+                digit = curr_byte & (0xFF >> index);
                 index = (index + 5) % 8;
                 digit <<= index;
-                digit |= nextByte >> (8 - index);
+                digit |= next_byte >> (8 - index);
                 i++;
             } else {
-                digit = (currByte >> (8 - (index + 5))) & 0x1F;
+                digit = (curr_byte >> (8 - (index + 5))) & 0x1F;
                 index = (index + 5) % 8;
                 if (index == 0)
                     i++;
