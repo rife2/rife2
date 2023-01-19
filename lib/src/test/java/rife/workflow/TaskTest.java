@@ -5,9 +5,11 @@
 package rife.workflow;
 
 import org.junit.jupiter.api.Test;
-import rife.workflow.run.EventListener;
 import rife.workflow.run.TaskRunner;
 import rifeworkflowtasks.TestEventTypes;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.LongAdder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,36 +17,26 @@ public class TaskTest {
     @Test
     void simple()
     throws Throwable {
-        final var endings = new int[]{0};
-        final var sum = new int[]{0};
-        final EventListener listener = event -> {
-            if (TestEventTypes.END == event.getType()) {
-                synchronized (sum) {
-                    endings[0]++;
+        final var one_ended = new CountDownLatch(1);
+        final var all_ended = new CountDownLatch(3);
+        final var sum = new LongAdder();
 
-                    sum[0] += (Integer) event.getData();
-                    sum.notifyAll();
-                }
-            }
-        };
         var runner = new TaskRunner();
-        runner.addListener(listener);
+        runner.addListener(event -> {
+            if (TestEventTypes.END == event.getType()) {
+                one_ended.countDown();
+                all_ended.countDown();
+                sum.add((Integer) event.getData());
+            }
+        });
 
         runner.start(rifeworkflowtasks.TaskType1.class);
         runner.start(rifeworkflowtasks.TaskType2.class);
-        while (endings[0] < 1) {
-            synchronized (sum) {
-                sum.wait();
-            }
-        }
+        one_ended.await();
 
         runner.start(rifeworkflowtasks.TaskType2.class);
-        while (endings[0] < 3) {
-            synchronized (sum) {
-                sum.wait();
-            }
-        }
+        all_ended.await();
 
-        assertEquals(45 + 90 + 145, sum[0]);
+        assertEquals(45 + 90 + 145, sum.sum());
     }
 }

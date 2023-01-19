@@ -9,8 +9,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.*;
 
 import rife.continuations.*;
 import rife.continuations.basic.*;
@@ -33,18 +32,28 @@ import rife.workflow.config.InstrumentWorkflowConfig;
 public class TaskRunner {
     private static final ContinuationConfigInstrument CONFIG_INSTRUMENT = new InstrumentWorkflowConfig();
 
+    private final ExecutorService taskExecutor_;
     private final BasicContinuableRunner runner_;
     private final ConcurrentHashMap<EventType, Collection<String>> eventsMapping_;
-    private final ThreadGroup taskThreads_;
     private final List<Event> pendingEvents_;
     private final CopyOnWriteArraySet<EventListener> listeners_;
 
     /**
-     * Creates a new task runner instance.
+     * Creates a new task runner instance with a cached thread pool.
      *
      * @since 1.0
      */
     public TaskRunner() {
+        this(Executors.newCachedThreadPool());
+    }
+
+    /**
+     * Creates a new task runner instance with a provided executor.
+     *
+     * @param executor the executor to use for running the tasks
+     * @since 1.0
+     */
+    public TaskRunner(ExecutorService executor) {
         runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT) {
             public void executeContinuable(Object object)
             throws Throwable {
@@ -58,8 +67,8 @@ public class TaskRunner {
         runner_.setCallTargetRetriever(new EventTypeCallTargetRetriever());
 
         eventsMapping_ = new ConcurrentHashMap<>();
-        taskThreads_ = new ThreadGroup("taskthreads");
         pendingEvents_ = new ArrayList<>();
+        taskExecutor_ = executor;
         listeners_ = new CopyOnWriteArraySet<>();
     }
 
@@ -71,13 +80,13 @@ public class TaskRunner {
      * @since 1.0
      */
     public void start(final Class klass) {
-        new Thread(taskThreads_, () -> {
+        taskExecutor_.submit(() -> {
             try {
                 runner_.start(klass);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
-        }).start();
+        });
     }
 
     /**
@@ -153,13 +162,13 @@ public class TaskRunner {
     private void answer(final String id, final Object callAnswer) {
         if (null == id) return;
 
-        new Thread(taskThreads_, () -> {
+        taskExecutor_.submit(() -> {
             try {
                 runner_.answer(id, callAnswer);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
-        }).start();
+        });
     }
 
     private class EventTypeCallTargetRetriever implements CallTargetRetriever {
