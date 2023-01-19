@@ -9,15 +9,14 @@ import rife.workflow.run.TaskRunner;
 
 /**
  * Tasks can be executed in a {@link TaskRunner}.
- * <p>Their execution will be done in a dedicated thread by invoking the
+ * <p>Their execution will be done in a thread by invoking the
  * {@link #execute} method on a new instance of the task class.
  * <p>Afterwards, tasks can suspend their execution by waiting for particular
- * event types. The thread will stop executing and no system resources will be
- * used except for the memory required to maintain the state of the suspended
- * task instance.
- * <p>When a suitable event is triggered in the {@code TaskRunner}, a new
- * thread will be created and the execution of the suspended task will be
- * resumed in it where it left off.
+ * event types. The thread will stop executing this task and no system resources
+ * will be used except for the memory required to maintain the state of the
+ * suspended task instance.
+ * <p>When a suitable event is triggered in the {@code TaskRunner}, a thread
+ * will resume the execution of the suspended task where it left off.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see TaskRunner
