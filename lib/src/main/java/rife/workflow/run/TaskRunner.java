@@ -6,13 +6,11 @@ package rife.workflow.run;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import rife.continuations.*;
 import rife.continuations.basic.*;
@@ -36,10 +34,10 @@ public class TaskRunner {
     private static final ContinuationConfigInstrument CONFIG_INSTRUMENT = new InstrumentWorkflowConfig();
 
     private final BasicContinuableRunner runner_;
-    private final Map<EventType, Collection<String>> eventsMapping_;
+    private final ConcurrentHashMap<EventType, Collection<String>> eventsMapping_;
     private final ThreadGroup taskThreads_;
     private final List<Event> pendingEvents_;
-    private final Collection<EventListener> listeners_;
+    private final CopyOnWriteArraySet<EventListener> listeners_;
 
     /**
      * Creates a new task runner instance.
@@ -59,10 +57,10 @@ public class TaskRunner {
         runner_.setCloneContinuations(false);
         runner_.setCallTargetRetriever(new EventTypeCallTargetRetriever());
 
-        eventsMapping_ = new HashMap<>();
+        eventsMapping_ = new ConcurrentHashMap<>();
         taskThreads_ = new ThreadGroup("taskthreads");
         pendingEvents_ = new ArrayList<>();
-        listeners_ = new LinkedHashSet<>();
+        listeners_ = new CopyOnWriteArraySet<>();
     }
 
     /**
@@ -98,38 +96,29 @@ public class TaskRunner {
         // the type of the event
 
         // first obtain the collection for this event's type
-        Set<String> ids_to_resume = new HashSet<>();
-        synchronized (eventsMapping_) {
-            final Collection<String> ids = eventsMapping_.getOrDefault(event.getType(), Collections.emptySet());
-            ids_to_resume.addAll(ids);
-            ids.clear();
-            ;
-        }
+        final Set<String> ids_to_resume = new HashSet<>();
+        eventsMapping_.compute(event.getType(), (eventType, ids) -> {
+            if (ids != null) {
+                ids_to_resume.addAll(ids);
+                ids.clear();
+            }
+            return ids;
+        });
 
         if (ids_to_resume.isEmpty()) {
+            // couldn't find any continuations to resume, add the event as pending
             synchronized (pendingEvents_) {
                 pendingEvents_.add(event);
             }
-        }
-
-        // resume all the continuations that are waiting for the event type
-        for (var id : ids_to_resume) {
-            answer(id, event);
+        } else {
+            // resume all the continuations that are waiting for the event type
+            for (var id : ids_to_resume) {
+                answer(id, event);
+            }
         }
 
         // notify all the event listeners that a new event has been triggered
-        Collection<EventListener> listeners = null;
-        synchronized (listeners_) {
-            if (!listeners_.isEmpty()) {
-                listeners = new LinkedHashSet<>(listeners_);
-            }
-        }
-
-        if (listeners != null) {
-            for (var listener : listeners) {
-                listener.eventTriggered(event);
-            }
-        }
+        listeners_.forEach(listener -> listener.eventTriggered(event));
     }
 
     /**
@@ -143,9 +132,7 @@ public class TaskRunner {
         if (null == listener) {
             return;
         }
-        synchronized (listeners_) {
-            listeners_.add(listener);
-        }
+        listeners_.add(listener);
     }
 
     /**
@@ -160,9 +147,7 @@ public class TaskRunner {
             return;
         }
 
-        synchronized (listeners_) {
-            listeners_.remove(listener);
-        }
+        listeners_.remove(listener);
     }
 
     private void answer(final String id, final Object callAnswer) {
@@ -181,17 +166,11 @@ public class TaskRunner {
         public CloneableContinuable getCallTarget(Object target, CallState state) {
             var type = (EventType) target;
 
-            final Collection<String> ids;
-
-            synchronized (eventsMapping_) {
-                if (eventsMapping_.containsKey(type)) {
-                    ids = eventsMapping_.get(type);
-                } else {
-                    ids = new HashSet<>();
-                    eventsMapping_.put(type, ids);
-                }
+            eventsMapping_.compute(type, (eventType, ids) -> {
+                if (ids == null) ids = new HashSet<>();
                 ids.add(state.getContinuationId());
-            }
+                return ids;
+            });
 
             Event pending_event = null;
             synchronized (pendingEvents_) {

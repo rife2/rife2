@@ -13,11 +13,11 @@ public class TaskType1 extends Task {
         trigger(runner, TestEventTypes.BEGIN);
 
         int count;
-        int sum = 0;
-        for (count = 0; count < 20; count++) {
+        var sum = 0;
+        for (count = 0; count < 20; ++count) {
             trigger(runner, TestEventTypes.TYPE2, count);
 
-            Event event = waitForEvent(TestEventTypes.TYPE1);
+            var event = waitForEvent(TestEventTypes.TYPE1);
 
             sum += (Integer) event.getData();
         }
