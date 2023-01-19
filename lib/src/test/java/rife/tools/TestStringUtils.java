@@ -148,6 +148,17 @@ public class TestStringUtils {
     }
 
     @Test
+    void testEncodeBase32() {
+        assertNull(StringUtils.encodeBase32(null));
+        assertEquals("", StringUtils.encodeBase32("".getBytes()));
+        var characterStr = "2b49ec9c-969f-11ed-a1eb-0242ac120002?!@#$^^&*/\2345";
+        var encoded = StringUtils.encodeBase32(characterStr.getBytes());
+        for (var character : encoded.toCharArray()) {
+            assertTrue("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567".indexOf(character) > -1);
+        }
+    }
+
+    @Test
     void testCountCase() {
         assertEquals(StringUtils.count("ONEtwooNethreefourone", "onE", false), 3);
     }
