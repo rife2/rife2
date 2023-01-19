@@ -4,9 +4,7 @@
  */
 package rife.workflow.run;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.*;
 
 import rife.continuations.*;
@@ -34,9 +32,9 @@ public class TaskRunner {
     private final HierarchicalProperties properties_;
     private final ExecutorService taskExecutor_;
     private final BasicContinuableRunner runner_;
-    private final ConcurrentHashMap<Object, Collection<String>> eventsMapping_;
-    private final ConcurrentHashMap<Object, ConcurrentLinkedQueue<Event>> pendingEvents_;
-    private final CopyOnWriteArraySet<EventListener> listeners_;
+    private final ConcurrentMap<Object, Set<String>> eventsMapping_;
+    private final ConcurrentMap<Object, Queue<Event>> pendingEvents_;
+    private final Set<EventListener> listeners_;
 
     /**
      * Creates a new task runner instance with a cached thread pool.
