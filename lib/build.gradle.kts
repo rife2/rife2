@@ -15,8 +15,15 @@ plugins {
 val rifeVersion by rootProject.extra { "0.9.9-SNAPSHOT" }
 var rifeAgentName: String = "rife2-$rifeVersion-agent"
 val rifeAgentJar by rootProject.extra { "$rifeAgentName.jar" }
+var rifeAgentContinuationsName: String = "rife2-$rifeVersion-agent-continuations"
+val rifeAgentContinuationsJar by rootProject.extra { "$rifeAgentContinuationsName.jar" }
 group = "com.uwyn.rife2"
 version = rifeVersion
+
+base {
+    archivesName.set("rife2")
+    version = "$rifeVersion"
+}
 
 java {
     withJavadocJar()
@@ -162,7 +169,28 @@ tasks {
         }
     }
 
-    test {
+    register<Jar>("agentContinuationsJar") {
+        dependsOn("jar")
+
+        archiveFileName.set("$rifeAgentContinuationsJar")
+        from(sourceSets.main.get().output)
+        include(
+            "rife/asm/**",
+            "rife/instrument/**",
+            "rife/continuations/ContinuationConfigInstrument**",
+            "rife/continuations/instrument/**",
+            "rife/tools/ClassBytesLoader*",
+            "rife/tools/FileUtils*",
+            "rife/tools/InstrumentationUtils*",
+            "rife/tools/RawFormatter*",
+            "rife/tools/exceptions/FileUtils*"
+        )
+        manifest {
+            attributes["Premain-Class"] = "rife.continuations.instrument.ContinuationsAgent"
+        }
+    }
+
+    withType<Test> {
         useJUnitPlatform()
         testLogging {
             exceptionFormat = TestExceptionFormat.FULL
@@ -177,9 +205,13 @@ tasks {
             }
         })
         environment("project.dir", project.projectDir.toString())
+    }
+
+    test {
         dependsOn("precompileTemplates")
         dependsOn("agentJar")
         jvmArgs = listOf("-javaagent:${buildDir}/libs/$rifeAgentJar")
+        exclude("**/workflow/**")
         if (System.getProperty("test.postgres") != null) systemProperty("test.postgres", System.getProperty("test.postgres"))
         if (System.getProperty("test.mysql") != null) systemProperty("test.mysql", System.getProperty("test.mysql"))
         if (System.getProperty("test.oracle") != null) systemProperty("test.oracle", System.getProperty("test.oracle"))
@@ -188,7 +220,20 @@ tasks {
         if (System.getProperty("test.h2") != null) systemProperty("test.h2", System.getProperty("test.h2"))
     }
 
+    register<Test>("testWorkflow") {
+        environment("project.dir", project.projectDir.toString())
+        dependsOn("agentContinuationsJar")
+        include("**/workflow/**")
+        jvmArgs = listOf("-javaagent:${buildDir}/libs/$rifeAgentContinuationsJar=rife.workflow.config.InstrumentWorkflowConfig")
+    }
+
+    check {
+        dependsOn("testWorkflow")
+        dependsOn("test")
+    }
+
     clean {
+        delete("${projectDir}/embedded_dbs")
         delete("${projectDir}/src/generated")
         delete("${projectDir}/src/processed")
     }
@@ -220,11 +265,19 @@ val agentArtifact = artifacts.add("archives", agentFile.get().asFile) {
     builtBy("agentJar")
 }
 
+val agentContinuationsFile = layout.buildDirectory.file("libs/$rifeAgentContinuationsJar")
+val agentContinuationsArtifact = artifacts.add("archives", agentContinuationsFile.get().asFile) {
+    type = "jar"
+    classifier = "agent-continuations"
+    builtBy("agentContinuationsJar")
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             artifactId = "rife2"
             artifact(agentArtifact)
+            artifact(agentContinuationsArtifact)
             from(components["java"])
             pom {
                 name.set("RIFE2")
@@ -269,6 +322,10 @@ signing {
     sign(publishing.publications["mavenJava"])
 }
 
+var passed = 0L
+var failed = 0L
+var skipped = 0L
+
 fun printResults(desc: TestDescriptor, result: TestResult) {
     if (desc.parent != null) {
         val output = result.run {
@@ -289,9 +346,9 @@ fun printResults(desc: TestDescriptor, result: TestResult) {
     }
 
     if (desc.parent == null) {
-        val passed = result.successfulTestCount
-        val failed = result.failedTestCount
-        val skipped = result.skippedTestCount
+        passed += result.successfulTestCount
+        failed += result.failedTestCount
+        skipped += result.skippedTestCount
 
         if (project.properties["testsBadgeApiKey"] != null) {
             val apiKey = project.properties["testsBadgeApiKey"]
