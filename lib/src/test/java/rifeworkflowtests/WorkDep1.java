@@ -7,20 +7,20 @@ package rifeworkflowtests;
 import rife.workflow.Work;
 import rife.workflow.Workflow;
 
-public class Work2 implements Work {
+public class WorkDep1 implements Work {
     public void execute(Workflow workflow) {
-        workflow.trigger(TestEventTypes.BEGIN);
+        workflow.inform(TestEventTypes.BEGIN);
 
         int count;
         var sum = 0;
-        for (count = 0; count < 10; ++count) {
-            workflow.trigger(TestEventTypes.TYPE1, count);
+        for (count = 0; count < 20; ++count) {
+            workflow.trigger(TestEventTypes.TYPE2, count);
 
-            var event = waitForEvent(TestEventTypes.TYPE2);
+            var event = pauseForEvent(TestEventTypes.TYPE1);
 
             sum += (Integer) event.getData();
         }
 
-        workflow.trigger(TestEventTypes.END, sum);
+        workflow.inform(TestEventTypes.END, sum);
     }
 }

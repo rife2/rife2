@@ -10,7 +10,7 @@ import rife.continuations.exceptions.ContinuationsNotActiveException;
  * Work can be executed in a {@link Workflow}.
  * <p>Their execution will be done in a thread by invoking the
  * {@link #execute} method on a new instance of the work class.
- * <p>Afterwards, work can suspend its execution by waiting for particular
+ * <p>Afterwards, work can suspend its execution by pausing for particular
  * event types. The thread will stop executing this work and no system resources
  * will be used except for the memory required to maintain the state of the
  * suspended work instance.
@@ -31,7 +31,7 @@ public interface Work {
     void execute(Workflow workflow);
 
     /**
-     * Wait for a particular event type to be triggered in the workflow.
+     * Pause until a particular event type is triggered in the workflow.
      * <p>When an event is triggered with a suitable type, is will be returned
      * through this method call.
      *
@@ -39,7 +39,7 @@ public interface Work {
      * @return the event that woke up the work
      * @since 1.0
      */
-    default Event waitForEvent(Object type) {
+    default Event pauseForEvent(Object type) {
         // this should not be triggered, since bytecode rewriting will replace this
         // method call with the appropriate logic
         throw new ContinuationsNotActiveException();

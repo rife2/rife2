@@ -34,7 +34,7 @@ public class ContinuationInstrument implements ContinuationConfigInstrument {
     }
 
     public String getCallMethodName() {
-        return "waitForEvent";
+        return "pauseForEvent";
     }
 
     public Class getCallMethodReturnType() {

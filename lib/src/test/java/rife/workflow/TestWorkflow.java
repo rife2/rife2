@@ -12,9 +12,9 @@ import java.util.concurrent.atomic.LongAdder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class WorkTest {
+public class TestWorkflow {
     @Test
-    void simple()
+    void testCodependency()
     throws Throwable {
         final var one_ended = new CountDownLatch(1);
         final var all_ended = new CountDownLatch(3);
@@ -30,13 +30,28 @@ public class WorkTest {
             }
         });
 
-        workflow.start(new Work1());
-        workflow.start(Work2.class);
+        workflow.start(new WorkDep1());
+        workflow.start(WorkDep2.class);
         one_ended.await();
 
-        workflow.start(new Work2());
+        workflow.start(new WorkDep2());
         all_ended.await();
 
         assertEquals(45 + 90 + 145, sum.sum());
+    }
+
+    @Test
+    void testInform()
+    throws Throwable {
+        var wf = new Workflow();
+        wf.inform(TestEventTypes.TYPE1, 1);
+        var work = new WorkWaitType1();
+        wf.start(work);
+        wf.waitForPausedWork();
+
+        wf.inform(TestEventTypes.TYPE1, 2);
+        wf.waitForNoWork();
+
+        assertEquals(2, work.getEvent().getData());
     }
 }

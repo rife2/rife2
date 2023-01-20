@@ -6,6 +6,8 @@ package rife.workflow;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.LongAdder;
+import java.util.concurrent.locks.*;
 
 import rife.continuations.*;
 import rife.continuations.basic.*;
@@ -13,7 +15,7 @@ import rife.ioc.HierarchicalProperties;
 import rife.workflow.config.ContinuationInstrument;
 
 /**
- * Runs work and dispatches events to work that is waiting for it.
+ * Runs work and dispatches events to work that is paused.
  * <p>Note that this workflow executes the work, but doesn't create a new
  * thread for itself. When a workflow is used, you should take the
  * necessary steps to keep the application running for as long as you need the
@@ -31,6 +33,10 @@ public class Workflow {
     private final ConcurrentMap<Object, Set<String>> eventsMapping_;
     private final ConcurrentMap<Object, Queue<Event>> pendingEvents_;
     private final Set<EventListener> listeners_;
+    private final Lock workLock_ = new ReentrantLock();
+    private final Condition workFinished_ = workLock_.newCondition();
+    private final Condition workPaused_ = workLock_.newCondition();
+    private final LongAdder activeWorkCount_ = new LongAdder();
 
     /**
      * Creates a new workflow instance with a cached thread pool.
@@ -99,7 +105,11 @@ public class Workflow {
     public void start(final Class<? extends Work> klass) {
         workExecutor_.submit(() -> {
             try {
+                activeWorkCount_.increment();
                 runner_.start(klass);
+                activeWorkCount_.decrement();
+
+                signalWhenAllWorkFinished();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
@@ -115,11 +125,78 @@ public class Workflow {
     public void start(Work work) {
         workExecutor_.submit(() -> {
             try {
+                activeWorkCount_.increment();
                 runner_.start(work);
+                activeWorkCount_.decrement();
+
+                signalWhenAllWorkFinished();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    private void signalWhenAllWorkFinished() {
+        if (activeWorkCount_.sum() == 0) {
+            workLock_.lock();
+            try {
+                workFinished_.signalAll();
+            } finally {
+                workLock_.unlock();
+            }
+        }
+    }
+
+    private void signalWhenWorkIsPaused() {
+        if (!eventsMapping_.isEmpty()) {
+            workLock_.lock();
+            try {
+                workPaused_.signalAll();
+            } finally {
+                workLock_.unlock();
+            }
+        }
+    }
+
+    /**
+     * Convenience method that informs about an event in a workflow.
+     *
+     * @param type the type of the event
+     * @see #inform(Object, Object)
+     * @see #inform(Event)
+     * @since 1.0
+     */
+    public void inform(Object type) {
+        inform(new Event(type, null));
+    }
+
+    /**
+     * Convenience method that informs about an event in a workflow with
+     * associated data.
+     *
+     * @param type the type of the event
+     * @param data the data that will be sent with the event
+     * @see #inform(Object)
+     * @see #inform(Event)
+     * @since 1.0
+     */
+    public void inform(Object type, Object data) {
+        inform(new Event(type, data));
+    }
+
+    /**
+     * Informs about an event that wakes up work if it is paused for
+     * the event type.
+     * <p>If events are informed about and no work is ready to consume them,
+     * they will be lost. This is different from events being triggered.
+     *
+     * @param event the event
+     * @see #trigger(Object)
+     * @see #trigger(Object, Object)
+     * @since 1.0
+     */
+    public void inform(final Event event) {
+        handleEvent(event, false);
     }
 
     /**
@@ -149,10 +226,10 @@ public class Workflow {
     }
 
     /**
-     * Triggers an event that wakes up work that is waiting for the event
+     * Triggers an event that wakes up work that is paused for the event
      * type.
-     * <p>If events are triggered, and no work is ready to consume them, they
-     * will be queued up until the first available work arrives.
+     * <p>If events are triggered, and no work is ready to consume them,
+     * they will be queued up until the first available work arrives.
      *
      * @param event the event
      * @see #trigger(Object)
@@ -160,9 +237,13 @@ public class Workflow {
      * @since 1.0
      */
     public void trigger(final Event event) {
+        handleEvent(event, true);
+    }
+
+    private void handleEvent(final Event event, boolean schedulePending) {
         if (null == event) return;
 
-        // retrieve the continuation IDs of the work that is waiting for
+        // retrieve the continuation IDs of the work that is paused for
         // the type of the event
 
         // first obtain the collection for this event's type
@@ -171,21 +252,23 @@ public class Workflow {
             if (ids != null) {
                 synchronized (ids) {
                     ids_to_resume.addAll(ids);
-                    ids.clear();
+                    return null;
                 }
             }
             return ids;
         });
 
         if (ids_to_resume.isEmpty()) {
-            // couldn't find any continuations to resume, add the event as pending
-            pendingEvents_.compute(event.getType(), (eventType, events) -> {
-                if (events == null) events = new ConcurrentLinkedQueue<>();
-                events.add(event);
-                return events;
-            });
+            if (schedulePending) {
+                // couldn't find any continuations to resume, add the event as pending
+                pendingEvents_.compute(event.getType(), (eventType, events) -> {
+                    if (events == null) events = new ConcurrentLinkedQueue<>();
+                    events.add(event);
+                    return events;
+                });
+            }
         } else {
-            // resume all the continuations that are waiting for the event type
+            // resume all the continuations that are paused for the event type
             for (var id : ids_to_resume) {
                 answer(id, event);
             }
@@ -193,6 +276,46 @@ public class Workflow {
 
         // notify all the event listeners that a new event has been triggered
         listeners_.forEach(listener -> listener.eventTriggered(event));
+    }
+
+    /**
+     * Causes the calling thread to wait until work is paused for events.
+     *
+     * @throws InterruptedException when the current thread is interrupted
+     * @since 1.0
+     */
+    public void waitForPausedWork()
+    throws InterruptedException {
+        workLock_.lock();
+        try {
+            if (!eventsMapping_.isEmpty()) {
+                return;
+            }
+
+            workPaused_.await();
+        } finally {
+            workLock_.unlock();
+        }
+    }
+
+    /**
+     * Causes the calling thread to wait until no more work is running.
+     *
+     * @throws InterruptedException when the current thread is interrupted
+     * @since 1.0
+     */
+    public void waitForNoWork()
+    throws InterruptedException {
+        workLock_.lock();
+        try {
+            if (activeWorkCount_.sum() == 0) {
+                return;
+            }
+
+            workFinished_.await();
+        } finally {
+            workLock_.unlock();
+        }
     }
 
     /**
@@ -256,6 +379,8 @@ public class Workflow {
             if (pending_event[0] != null) {
                 trigger(pending_event[0]);
             }
+
+            signalWhenWorkIsPaused();
 
             return null;
         }
