@@ -211,25 +211,12 @@ tasks {
         dependsOn("precompileTemplates")
         dependsOn("agentJar")
         jvmArgs = listOf("-javaagent:${buildDir}/libs/$rifeAgentJar")
-        exclude("**/workflow/**")
         if (System.getProperty("test.postgres") != null) systemProperty("test.postgres", System.getProperty("test.postgres"))
         if (System.getProperty("test.mysql") != null) systemProperty("test.mysql", System.getProperty("test.mysql"))
         if (System.getProperty("test.oracle") != null) systemProperty("test.oracle", System.getProperty("test.oracle"))
         if (System.getProperty("test.derby") != null) systemProperty("test.derby", System.getProperty("test.derby"))
         if (System.getProperty("test.hsqldb") != null) systemProperty("test.hsqldb", System.getProperty("test.hsqldb"))
         if (System.getProperty("test.h2") != null) systemProperty("test.h2", System.getProperty("test.h2"))
-    }
-
-    register<Test>("testWorkflow") {
-        environment("project.dir", project.projectDir.toString())
-        dependsOn("agentContinuationsJar")
-        include("**/workflow/**")
-        jvmArgs = listOf("-javaagent:${buildDir}/libs/$rifeAgentContinuationsJar=rife.workflow.config.InstrumentWorkflowConfig")
-    }
-
-    check {
-        dependsOn("testWorkflow")
-        dependsOn("test")
     }
 
     clean {
@@ -322,10 +309,6 @@ signing {
     sign(publishing.publications["mavenJava"])
 }
 
-var passed = 0L
-var failed = 0L
-var skipped = 0L
-
 fun printResults(desc: TestDescriptor, result: TestResult) {
     if (desc.parent != null) {
         val output = result.run {
@@ -346,9 +329,9 @@ fun printResults(desc: TestDescriptor, result: TestResult) {
     }
 
     if (desc.parent == null) {
-        passed += result.successfulTestCount
-        failed += result.failedTestCount
-        skipped += result.skippedTestCount
+        val passed = result.successfulTestCount
+        val failed = result.failedTestCount
+        val skipped = result.skippedTestCount
 
         if (project.properties["testsBadgeApiKey"] != null) {
             val apiKey = project.properties["testsBadgeApiKey"]

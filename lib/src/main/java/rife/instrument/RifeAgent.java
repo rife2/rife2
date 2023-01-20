@@ -27,6 +27,7 @@ public class RifeAgent {
 
         instrumentation.addTransformer(new InitialTransformer());
         instrumentation.addTransformer(new EngineContinuationsTransformer());
+        instrumentation.addTransformer(new WorkflowContinuationsTransformer());
         instrumentation.addTransformer(new MetaDataTransformer());
         instrumentation.addTransformer(new LazyLoadTransformer());
         instrumentation.addTransformer(new FinalTransformer());

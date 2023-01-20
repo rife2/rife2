@@ -16,7 +16,7 @@ import rife.workflow.run.TaskRunner;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public class InstrumentWorkflowConfig implements ContinuationConfigInstrument {
+public class ContinuationInstrument implements ContinuationConfigInstrument {
     public String getContinuableMarkerInterfaceName() {
         return CloneableContinuable.class.getName();
     }

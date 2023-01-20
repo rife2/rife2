@@ -16,7 +16,7 @@ import java.lang.instrument.Instrumentation;
  * continuations capabilities that are otherwise provided by a class-loader.
  * <p>To activate the agent you need to execute the Java application with the
  * proper argument, for example:
- * <pre>java -javaagent:/path/to/rife2-continuations-agent-[version].jar=com.your.ContinuationConfigInstrumentClass com.your.mainClass</pre>
+ * <pre>java -javaagent:/path/to/rife2-[version]-agent-continuations.jar=com.your.ContinuationConfigInstrumentClass com.your.mainClass</pre>
  * <p>When the agent is active the {@link rife.continuations.basic.BasicContinuableClassLoader} will
  * automatically be disabled to ensure that they are not conflicting with each
  * other. The agent is packaged in its own jar file which should correspond

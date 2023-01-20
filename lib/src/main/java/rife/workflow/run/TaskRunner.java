@@ -12,7 +12,7 @@ import rife.continuations.basic.*;
 import rife.ioc.HierarchicalProperties;
 import rife.workflow.Event;
 import rife.workflow.Task;
-import rife.workflow.config.InstrumentWorkflowConfig;
+import rife.workflow.config.ContinuationInstrument;
 
 /**
  * Runs tasks and dispatches events to tasks that are waiting for it.
@@ -27,7 +27,7 @@ import rife.workflow.config.InstrumentWorkflowConfig;
  * @since 1.0
  */
 public class TaskRunner {
-    private static final ContinuationConfigInstrument CONFIG_INSTRUMENT = new InstrumentWorkflowConfig();
+    private static final ContinuationConfigInstrument CONFIG_INSTRUMENT = new ContinuationInstrument();
 
     private final HierarchicalProperties properties_;
     private final ExecutorService taskExecutor_;
