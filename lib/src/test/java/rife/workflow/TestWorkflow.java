@@ -41,11 +41,23 @@ public class TestWorkflow {
     }
 
     @Test
+    void testTrigger()
+    throws Throwable {
+        var wf = new Workflow();
+        wf.trigger(TestEventTypes.TYPE1, 1);
+        var work = new WorkPauseType1();
+        wf.start(work);
+        wf.waitForNoWork();
+
+        assertEquals(1, work.getEvent().getData());
+    }
+
+    @Test
     void testInform()
     throws Throwable {
         var wf = new Workflow();
         wf.inform(TestEventTypes.TYPE1, 1);
-        var work = new WorkWaitType1();
+        var work = new WorkPauseType1();
         wf.start(work);
         wf.waitForPausedWork();
 
