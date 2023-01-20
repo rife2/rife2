@@ -58,7 +58,17 @@ public class Workflow {
     }
 
     /**
-     * Creates a new workflow instance with a provided executor.
+     * Creates a new workflow instance with a provided parent properties.
+     *
+     * @param properties the parent hierarchical properties
+     * @since 1.0
+     */
+    public Workflow(HierarchicalProperties properties) {
+        this(Executors.newCachedThreadPool(), properties);
+    }
+
+    /**
+     * Creates a new workflow instance.
      *
      * @param executor   the executor to use for running the work
      * @param properties the parent hierarchical properties
@@ -103,12 +113,12 @@ public class Workflow {
      * @since 1.0
      */
     public void start(final Class<? extends Work> klass) {
+        activeWorkCount_.increment();
         workExecutor_.submit(() -> {
             try {
-                activeWorkCount_.increment();
                 runner_.start(klass);
-                activeWorkCount_.decrement();
 
+                activeWorkCount_.decrement();
                 signalWhenAllWorkFinished();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
@@ -123,12 +133,12 @@ public class Workflow {
      * @since 1.0
      */
     public void start(Work work) {
+        activeWorkCount_.increment();
         workExecutor_.submit(() -> {
             try {
-                activeWorkCount_.increment();
                 runner_.start(work);
-                activeWorkCount_.decrement();
 
+                activeWorkCount_.decrement();
                 signalWhenAllWorkFinished();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
@@ -286,12 +296,12 @@ public class Workflow {
      */
     public void waitForPausedWork()
     throws InterruptedException {
+        if (!eventsMapping_.isEmpty()) {
+            return;
+        }
+
         workLock_.lock();
         try {
-            if (!eventsMapping_.isEmpty()) {
-                return;
-            }
-
             workPaused_.await();
         } finally {
             workLock_.unlock();
@@ -306,12 +316,12 @@ public class Workflow {
      */
     public void waitForNoWork()
     throws InterruptedException {
+        if (activeWorkCount_.sum() == 0) {
+            return;
+        }
+
         workLock_.lock();
         try {
-            if (activeWorkCount_.sum() == 0) {
-                return;
-            }
-
             workFinished_.await();
         } finally {
             workLock_.unlock();
