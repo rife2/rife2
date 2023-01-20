@@ -29,6 +29,7 @@ public class Gate {
     /**
      * Set up the gate with the provided {@code Site}.
      *
+     * @param properties the parent hierarchical properties
      * @param site the site that will handle the requests
      * @since 1.0
      */

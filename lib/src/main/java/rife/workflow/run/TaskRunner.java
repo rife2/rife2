@@ -52,8 +52,18 @@ public class TaskRunner {
      * @since 1.0
      */
     public TaskRunner(ExecutorService executor) {
-        var system_properties = new HierarchicalProperties().putAll(System.getProperties());
-        properties_ = new HierarchicalProperties().parent(system_properties);
+        this(executor, new HierarchicalProperties().putAll(System.getProperties()));
+    }
+
+    /**
+     * Creates a new task runner instance with a provided executor.
+     *
+     * @param executor the executor to use for running the tasks
+     * @param properties the parent hierarchical properties
+     * @since 1.0
+     */
+    public TaskRunner(ExecutorService executor, HierarchicalProperties properties) {
+        properties_ = new HierarchicalProperties().parent(properties);
 
         runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT) {
             public void executeContinuable(Object object)

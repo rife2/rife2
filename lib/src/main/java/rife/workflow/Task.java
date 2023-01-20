@@ -22,7 +22,6 @@ import rife.workflow.run.TaskRunner;
  * @see TaskRunner
  * @since 1.0
  */
-@FunctionalInterface
 public interface Task {
     /**
      * The entry method of this task's execution.
