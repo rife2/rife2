@@ -101,12 +101,40 @@ public class TaskRunner {
     }
 
     /**
+     * Convenience method that triggers an event in a task runner.
+     *
+     * @param type   the type of the event
+     * @see #trigger(Object, Object)
+     * @see #trigger(Event)
+     * @since 1.0
+     */
+    public void trigger(Object type) {
+        trigger(new Event(type, null));
+    }
+
+    /**
+     * Convenience method that triggers an event in a task runner with
+     * associated data.
+     *
+     * @param type   the type of the event
+     * @param data   the data that will be sent with the event
+     * @see #trigger(Object)
+     * @see #trigger(Event)
+     * @since 1.0
+     */
+    public void trigger(Object type, Object data) {
+        trigger(new Event(type, data));
+    }
+
+    /**
      * Triggers an event that wakes up tasks that are waiting for the event
      * type.
      * <p>If events are triggered, and no tasks are ready to consume them, they
      * will be queued up until the first available task arrives.
      *
      * @param event the event
+     * @see #trigger(Object)
+     * @see #trigger(Object, Object)
      * @since 1.0
      */
     public void trigger(final Event event) {

@@ -32,34 +32,6 @@ public abstract class Task implements CloneableContinuable {
     public abstract void execute(TaskRunner runner);
 
     /**
-     * Convenience method that triggers an event in a task runner.
-     *
-     * @param runner the task runner where the even should be triggered
-     * @param type   the type of the event
-     * @see #trigger(rife.workflow.run.TaskRunner, Object, Object)
-     * @see TaskRunner#trigger
-     * @since 1.0
-     */
-    protected void trigger(TaskRunner runner, Object type) {
-        trigger(runner, type, null);
-    }
-
-    /**
-     * Convenience method that triggers an event in a task runner with
-     * associated data.
-     *
-     * @param runner the task runner where the even should be triggered
-     * @param type   the type of the event
-     * @param data   the data that will be sent with the event
-     * @see #trigger(TaskRunner, Object)
-     * @see TaskRunner#trigger
-     * @since 1.0
-     */
-    protected void trigger(TaskRunner runner, Object type, Object data) {
-        runner.trigger(new Event(this, type, data));
-    }
-
-    /**
      * Wait for a particular event type to be triggered in the task runner.
      * <p>When an event is triggered with a suitable type, is will be returned
      * through this method call.

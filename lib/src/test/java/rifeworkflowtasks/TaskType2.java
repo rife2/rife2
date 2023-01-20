@@ -9,18 +9,18 @@ import rife.workflow.run.TaskRunner;
 
 public class TaskType2 extends Task {
     public void execute(TaskRunner runner) {
-        trigger(runner, TestEventTypes.BEGIN);
+        runner.trigger(TestEventTypes.BEGIN);
 
         int count;
         var sum = 0;
         for (count = 0; count < 10; ++count) {
-            trigger(runner, TestEventTypes.TYPE1, count);
+            runner.trigger(TestEventTypes.TYPE1, count);
 
             var event = waitForEvent(TestEventTypes.TYPE2);
 
             sum += (Integer) event.getData();
         }
 
-        trigger(runner, TestEventTypes.END, sum);
+        runner.trigger(TestEventTypes.END, sum);
     }
 }
