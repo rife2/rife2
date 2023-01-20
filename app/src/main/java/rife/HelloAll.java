@@ -34,6 +34,7 @@ public class HelloAll extends Site {
         group(new HelloSvg());
         group(new HelloTemplate());
         group("/validation", new HelloValidation());
+        group(new HelloWorkflow());
         group(new HelloWorld());
 
         get("/", c -> c.print(c.template("HelloAll")));

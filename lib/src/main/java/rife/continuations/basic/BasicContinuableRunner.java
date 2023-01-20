@@ -313,6 +313,7 @@ public class BasicContinuableRunner {
         // lookup the method that will be used to execute the entrance of the continuable object
         beforeExecuteEntryMethodHook(object);
         var method = object.getClass().getMethod(configInstrument_.getEntryMethodName(), configInstrument_.getEntryMethodArgumentTypes());
+        method.setAccessible(true);
         method.invoke(object, (Object[]) null);
     }
 

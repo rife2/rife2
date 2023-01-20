@@ -107,6 +107,11 @@ tasks {
         project.logger.lifecycle("   Then add names by going to http://localhost:8080/validation/add")
         project.logger.lifecycle("   Delete the database through http://localhost:8080/validation/remove")
         project.logger.lifecycle("")
+        project.logger.lifecycle(" HelloWorkflow:")
+        project.logger.lifecycle("   Visit http://localhost:8080/email?account=test")
+        project.logger.lifecycle("   also initiate a payment http://localhost:8080/payment?account=test")
+        project.logger.lifecycle("   and confirm it http://localhost:8080/confirm?account=test")
+        project.logger.lifecycle("")
         project.logger.lifecycle(" HelloWorld:")
         project.logger.lifecycle("   Open your browser at http://localhost:8080/hello")
         project.logger.lifecycle("================================================================================")
@@ -316,6 +321,20 @@ tasks {
         project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/install")
         project.logger.lifecycle(" Then add names by going to http://localhost:8080/add")
         project.logger.lifecycle(" When you're done, delete the database through http://localhost:8080/remove")
+        project.logger.lifecycle("================================================================================")
+        project.logger.lifecycle("")
+    }
+
+    register<JavaExec>("runHelloWorkflow") {
+        dependsOn(":lib:agentJar")
+        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set("rife.HelloWorkflow")
+        jvmArgs = listOf("-javaagent:${project(":lib").buildDir}/libs/$rifeAgentJar")
+        project.logger.lifecycle("")
+        project.logger.lifecycle("================================================================================")
+        project.logger.lifecycle(" To try this example, visit http://localhost:8080/email?account=test")
+        project.logger.lifecycle(" also initiate a payment http://localhost:8080/payment?account=test")
+        project.logger.lifecycle(" and confirm it http://localhost:8080/confirm?account=test")
         project.logger.lifecycle("================================================================================")
         project.logger.lifecycle("")
     }

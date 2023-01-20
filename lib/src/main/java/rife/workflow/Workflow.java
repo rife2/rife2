@@ -83,6 +83,7 @@ public class Workflow {
                 var method = object.getClass().getMethod(
                     getConfigInstrumentation().getEntryMethodName(),
                     getConfigInstrumentation().getEntryMethodArgumentTypes());
+                method.setAccessible(true);
                 method.invoke(object, Workflow.this);
             }
         };
@@ -112,7 +113,7 @@ public class Workflow {
      *              executed, the class should extend {@link Work}
      * @since 1.0
      */
-    public void start(final Class<? extends Work> klass) {
+    public Workflow start(final Class<? extends Work> klass) {
         activeWorkCount_.increment();
         workExecutor_.submit(() -> {
             try {
@@ -124,15 +125,18 @@ public class Workflow {
                 throw new RuntimeException(e);
             }
         });
+
+        return this;
     }
 
     /**
      * Starts the execution of a new work instance.
      *
      * @param work the work that should be executed
+     * @return this workflow instance
      * @since 1.0
      */
-    public void start(Work work) {
+    public Workflow start(Work work) {
         activeWorkCount_.increment();
         workExecutor_.submit(() -> {
             try {
@@ -144,28 +148,8 @@ public class Workflow {
                 throw new RuntimeException(e);
             }
         });
-    }
 
-    private void signalWhenAllWorkFinished() {
-        if (activeWorkCount_.sum() == 0) {
-            workLock_.lock();
-            try {
-                workFinished_.signalAll();
-            } finally {
-                workLock_.unlock();
-            }
-        }
-    }
-
-    private void signalWhenWorkIsPaused() {
-        if (!eventsMapping_.isEmpty()) {
-            workLock_.lock();
-            try {
-                workPaused_.signalAll();
-            } finally {
-                workLock_.unlock();
-            }
-        }
+        return this;
     }
 
     /**
@@ -316,7 +300,7 @@ public class Workflow {
      */
     public void waitForNoWork()
     throws InterruptedException {
-        if (activeWorkCount_.sum() == 0) {
+        if (activeWorkCount_.sum() == 0 && eventsMapping_.isEmpty()) {
             return;
         }
 
@@ -355,6 +339,28 @@ public class Workflow {
         }
 
         listeners_.remove(listener);
+    }
+
+    private void signalWhenAllWorkFinished() {
+        if (activeWorkCount_.sum() == 0 && eventsMapping_.isEmpty()) {
+            workLock_.lock();
+            try {
+                workFinished_.signalAll();
+            } finally {
+                workLock_.unlock();
+            }
+        }
+    }
+
+    private void signalWhenWorkIsPaused() {
+        if (!eventsMapping_.isEmpty()) {
+            workLock_.lock();
+            try {
+                workPaused_.signalAll();
+            } finally {
+                workLock_.unlock();
+            }
+        }
     }
 
     private void answer(final String id, final Object callAnswer) {

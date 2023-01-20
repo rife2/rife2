@@ -7,8 +7,10 @@ package rife.engine;
 import rife.continuations.ContinuationManager;
 import rife.engine.exceptions.EngineException;
 import rife.tools.StringUtils;
+import rife.workflow.Workflow;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 /**
  * The main site of your web application, which is also the
@@ -206,5 +208,30 @@ public class Site extends Router {
         }
 
         return new RouteMatch(route, element_path_info);
+    }
+
+    /**
+     * Creates a new workflow instance with a default executor.
+     * <p>Note that the site doesn't keep a reference to it, so make sure it's
+     * not garbage collected unexpectedly.
+     *
+     * @return the new workflow instance
+     * @since 1.0
+     */
+    public Workflow createWorkflow() {
+        return new Workflow(properties_);
+    }
+
+    /**
+     * Creates a new workflow instance with a provided executor.
+     * <p>Note that the site doesn't keep a reference to it, so make sure it's
+     * not garbage collected unexpectedly.
+     *
+     * @param executor the executor to use for running the work
+     * @return the new workflow instance
+     * @since 1.0
+     */
+    public Workflow createWorkflow(ExecutorService executor) {
+        return new Workflow(executor, properties_);
     }
 }
