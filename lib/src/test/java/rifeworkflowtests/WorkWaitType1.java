@@ -6,15 +6,15 @@ package rifeworkflowtests;
 
 import rife.workflow.*;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class WorkWaitType1 implements Work {
-    private Event event_;
+    private AtomicReference<Event> event_ = new AtomicReference<>();
     public void execute(Workflow workflow) {
-        event_ = pauseForEvent(TestEventTypes.TYPE1);
-        System.out.println(this + " " + event_);
+        event_.set(pauseForEvent(TestEventTypes.TYPE1));
     }
 
     public Event getEvent() {
-        System.out.println(this + " " + event_);
-        return event_;
+        return event_.get();
     }
 }

@@ -6,7 +6,7 @@ package rife.workflow;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.LongAdder;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.*;
 
 import rife.continuations.*;
@@ -36,7 +36,8 @@ public class Workflow {
     private final Lock workLock_ = new ReentrantLock();
     private final Condition workFinished_ = workLock_.newCondition();
     private final Condition workPaused_ = workLock_.newCondition();
-    private final LongAdder activeWorkCount_ = new LongAdder();
+    private final AtomicLong activeWorkAndPauseCount_ = new AtomicLong();
+    private final AtomicLong activePauseCount_ = new AtomicLong();
 
     /**
      * Creates a new workflow instance with a cached thread pool.
@@ -114,12 +115,12 @@ public class Workflow {
      * @since 1.0
      */
     public Workflow start(final Class<? extends Work> klass) {
-        activeWorkCount_.increment();
+        activeWorkAndPauseCount_.incrementAndGet();
         workExecutor_.submit(() -> {
             try {
                 runner_.start(klass);
 
-                activeWorkCount_.decrement();
+                activeWorkAndPauseCount_.decrementAndGet();
                 signalWhenAllWorkFinished();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
@@ -137,12 +138,12 @@ public class Workflow {
      * @since 1.0
      */
     public Workflow start(Work work) {
-        activeWorkCount_.increment();
+        activeWorkAndPauseCount_.incrementAndGet();
         workExecutor_.submit(() -> {
             try {
                 runner_.start(work);
 
-                activeWorkCount_.decrement();
+                activeWorkAndPauseCount_.decrementAndGet();
                 signalWhenAllWorkFinished();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
@@ -246,7 +247,10 @@ public class Workflow {
             if (ids != null) {
                 synchronized (ids) {
                     ids_to_resume.addAll(ids);
-                    return null;
+                    int delta = -ids.size();
+                    activeWorkAndPauseCount_.addAndGet(delta);
+                    activePauseCount_.addAndGet(delta);
+                    ids.clear();
                 }
             }
             return ids;
@@ -270,6 +274,8 @@ public class Workflow {
 
         // notify all the event listeners that a new event has been triggered
         listeners_.forEach(listener -> listener.eventTriggered(event));
+
+        signalWhenAllWorkFinished();
     }
 
     /**
@@ -282,7 +288,7 @@ public class Workflow {
     throws InterruptedException {
         workLock_.lock();
         try {
-            if (!eventsMapping_.isEmpty()) {
+            if (activePauseCount_.get() > 0) {
                 return;
             }
 
@@ -302,7 +308,7 @@ public class Workflow {
     throws InterruptedException {
         workLock_.lock();
         try {
-            if (activeWorkCount_.sum() == 0 && eventsMapping_.isEmpty()) {
+            if (activeWorkAndPauseCount_.get() == 0) {
                 return;
             }
 
@@ -344,7 +350,7 @@ public class Workflow {
     private void signalWhenAllWorkFinished() {
         workLock_.lock();
         try {
-            if (activeWorkCount_.sum() == 0 && eventsMapping_.isEmpty()) {
+            if (activeWorkAndPauseCount_.get() == 0) {
                 workFinished_.signalAll();
             }
         } finally {
@@ -363,10 +369,13 @@ public class Workflow {
 
     private void answer(final String id, final Object callAnswer) {
         if (null == id) return;
-
+        activeWorkAndPauseCount_.incrementAndGet();
         workExecutor_.submit(() -> {
             try {
                 runner_.answer(id, callAnswer);
+
+                activeWorkAndPauseCount_.decrementAndGet();
+                signalWhenAllWorkFinished();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
@@ -380,6 +389,8 @@ public class Workflow {
                 if (ids == null) ids = new HashSet<>();
                 synchronized (ids) {
                     ids.add(state.getContinuationId());
+                    activeWorkAndPauseCount_.incrementAndGet();
+                    activePauseCount_.incrementAndGet();
                 }
                 return ids;
             });
