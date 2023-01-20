@@ -21,6 +21,7 @@ public class HelloWorkflow extends Site {
         public void execute(Workflow workflow) {
             while (true) {
                 var event = pauseForEvent(WorkType.EMAIL);
+
                 System.out.println("Sending email " + event.getData());
             }
         }
@@ -30,6 +31,7 @@ public class HelloWorkflow extends Site {
         public void execute(Workflow workflow) {
             while (true) {
                 var event = pauseForEvent(WorkType.PAYMENT);
+
                 System.out.println("Waiting for confirmation " + event.getData());
                 workflow.start(new ConfirmationWork((String)event.getData()));
                 workflow.trigger(WorkType.EMAIL, event.getData());
