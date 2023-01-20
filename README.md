@@ -28,7 +28,8 @@ many Java conferences.
 **This is a quick tutorial, the [full documentation](https://github.com/gbevin/rife2/wiki)
 contains a lot more information.**
 
-**The [RIFE2 Javadocs](https://gbevin.github.io/rife2/) complement the documentation with many more details.**
+**The [RIFE2 Javadocs](https://gbevin.github.io/rife2/) complement the
+documentation with many more details.**
 
 ## Why RIFE2?
 
@@ -47,7 +48,7 @@ RIFE2 has features that after 20 years still can't be found elsewhere:
 web continuations, bidirectional template engine, bean-centric metadata system,
 full-stack without dependencies, metadata-driven SQL builders, content
 management framework, full localization support, resource abstraction, persisted
-cron-like scheduler.
+cron-like scheduler, continuations-based workflow engine.
 
 Most of these features have stood the test of time and after 20 years still
 prove to be great choices for web application development. RIFE2 has learned
@@ -85,10 +86,13 @@ public class HelloWorld extends Site {
 }
 ```
 
-The `main` method spins up the integrated embedded Jetty server, so that you can immediately start coding. The same `HelloWorld` class can be added as a
-parameter value to your `web.xml`, requiring absolute no changes to your code between development and production.
+The `main` method spins up the integrated embedded Jetty server, so that you can
+immediately start coding. The same `HelloWorld` class can be added as a
+parameter value to your `web.xml`, requiring absolute no changes to your code
+between development and production.
 
-Out-of-container testing is a first-class citizen in RIFE2, directly interacting with your `Site` class to simulate full request-response interactions,
+Out-of-container testing is a first-class citizen in RIFE2, directly interacting
+with your `Site` class to simulate full request-response interactions,
 without having to spin up a servlet container.
 
 Let's test the example above with JUnit 5:
@@ -102,8 +106,8 @@ class HelloTest {
 }
 ```
 
-Here's an example snippet that should help you compile and run this example with Gradle.
-Please make sure to adapt the artifact versions to the latest ones.
+Here's an example snippet that should help you compile and run this example with
+Gradle. Please make sure to adapt the artifact versions to the latest ones.
 
 ```kotlin
 application {
@@ -119,31 +123,40 @@ dependencies {
 }
 ```
 
-RIFE2 doesn't publish dependencies for _jsoup_ nor _Jetty_ because neither of them should be packaged with a production deployment.
+RIFE2 doesn't publish dependencies for _jsoup_ nor _Jetty_ because neither of
+them should be packaged with a production deployment.
 
 You will want to:
-* depend on `org.jsoup:jsoup` if you want to parse HTML pages in RIFE2's web testing API
-* depend on `org.eclipse.jetty` if you're launching the embedded server like in these examples
+* depend on `org.jsoup:jsoup` if you want to parse HTML pages in RIFE2's web
+  testing API
+* depend on `org.eclipse.jetty` if you're launching the embedded server like in
+  these examples
 
-RIFE2 also ships with example Gradle projects that should help you get set up quickly.
+RIFE2 also ships with example Gradle projects that should help you get set up
+quickly.
 
 Please take a look here:
-* Hello World app : https://github.com/gbevin/rife2/tree/main/app
-* Run Hello World standalone : https://github.com/gbevin/rife2/tree/main/standalone
-* Package Hello World war : https://github.com/gbevin/rife2/tree/main/war
+* Example apps: https://github.com/gbevin/rife2/tree/main/app
+* Run examples standalone: https://github.com/gbevin/rife2/tree/main/standalone
+* Package the examples war: https://github.com/gbevin/rife2/tree/main/war
 
-Once you've got everything set up, give it a try and visit [http://localhost:8080/hello](http://localhost:8080/hello)
+Once you've got everything set up, give it a try and visit
+[http://localhost:8080/hello](http://localhost:8080/hello)
 
 ## Type-safe Links and URLs
 
-One of the most brittle aspects of web application development is typing links and URLs as text literals, without anything guaranteeing they remain correct
-when your routes change or when you deploy your application in different web application contexts. RIFE2's routing API allows all your application links to be
-generated correctly without any effort on your behalf.
+One of the most brittle aspects of web application development is typing links
+and URLs as text literals, without anything guaranteeing they remain correct
+when your routes change or when you deploy your application in different web
+application contexts. RIFE2's routing API allows all your application links to
+be generated correctly without any effort on your behalf.
 
-Let's add a new route that contains an HTML link towards the previous Hello World route.
+Let's add a new route that contains an HTML link towards the previous Hello
+World route.
 
-You can see that routes don't have to be created inside the `setup()` method, but can also be created as part of your `Site`'s construction,
-allowing the routes to be stored in fields.
+You can see that routes don't have to be created inside the `setup()` method,
+but can also be created as part of your `Site`'s construction, allowing the
+routes to be stored in fields.
 
 ```java
 public class HelloLink extends Site {
@@ -171,18 +184,20 @@ class HelloTest {
 
 ## Bidirectional Logic-Less Templates
 
-The main impetus that had me resume work on RIFE2, was the unique template engine.
+The main impetus that had me create RIFE2, was RIFE's unique template engine.
 
 RIFE2's templates contain two main concepts:
 * *values* - that can be filled in with content and data
 * *blocks* - that will be stripped away and that provide content snippets
 
-Your Java code will compose the final layout by assigning and appending blocks, and by putting data into values.
-Let's rewrite the `HelloLink` example above with a template.
+Your Java code will compose the final layout by assigning and appending blocks,
+and by putting data into values. Let's rewrite the `HelloLink` example above with a template.
 
 In this example, no template manipulation is done in Java yet.
 
-Instead, it introduces the `{{v route:hello/}}` value tag, which will automatically be replaced with the URL of the route that is available with that field name in your active `Site`.
+Instead, it introduces the `{{v route:hello/}}` value tag, which will
+automatically be replaced with the URL of the route that is available with that
+field name in your active `Site`.
 
 ```java
 public class HelloTemplate extends Site {
@@ -205,13 +220,16 @@ With `HelloTemplate.html` being:
 </html>
 ```
 
-Note that RIFE2 internally transforms your templates into Java classes by generating heavily optimized bytecode.
+Note that RIFE2 internally transforms your templates into Java classes by
+generating optimized bytecode.
 
-This happens on-the-fly during development. For production, templates can be pre-compiled, making them incredibly fast. 
+This happens on-the-fly during development. For production, templates can be
+pre-compiled, making them incredibly fast. 
 
 ## Template Manipulation
 
-Let's change the example some more and create a single route that can respond to both `get` and `post` requests.
+Let's change the example some more and create a single route that can respond to
+both `get` and `post` requests.
 
 * the `get` request will display a form with a single button to click.
 * the `post` request will receive the form's submission and display `Hello World`.
@@ -256,10 +274,12 @@ You can see that the template contains all the pieces to create both pages:
 * the block named `form`
 * the block named `text`
 
-In Java, we simply assign either block to the value, depending on what we want to display.
+In Java, we simply assign either block to the value, depending on what we want
+to display.
 
-Another benefit is that RIFE2's template tags can be HTML comments, making them completely invisible.
-This allows you to work on your HTML design as usual and preview the template file with a regular browser.
+Another benefit is that RIFE2's template tags can be HTML comments, making them
+completely invisible. This allows you to work on your HTML design as usual and
+preview the template file with a regular browser.
 
 Finally, let's include a test for this functionality:
 
@@ -276,5 +296,18 @@ class HelloTest {
 }
 ```
 
+## Just the top of the rabbit hole
 
-**Read more in the [full documentation](https://github.com/gbevin/rife2/wiki) and  [RIFE2 Javadocs](https://gbevin.github.io/rife2/).**
+Thanks for reading until the end!
+
+This was merely a quick introduction to whet your appetite, RIFE2 comes with a
+comprehensive and easy to read manual with many examples and pragmatic
+explanations.
+
+If you have any questions, suggestions, ideas or just want to chat, feel free
+to post on the [forums](https://github.com/gbevin/rife2/discussions), to join
+me on [Discord](https://discord.gg/DZRYPtkb6J) or to connect with me on
+[Mastodon](https://uwyn.net/@gbevin).
+
+**Read more in the [full documentation](https://github.com/gbevin/rife2/wiki)
+and  [RIFE2 Javadocs](https://gbevin.github.io/rife2/).**
