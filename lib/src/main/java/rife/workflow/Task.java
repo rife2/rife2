@@ -4,7 +4,6 @@
  */
 package rife.workflow;
 
-import rife.continuations.CloneableContinuable;
 import rife.workflow.run.TaskRunner;
 
 /**
@@ -22,14 +21,14 @@ import rife.workflow.run.TaskRunner;
  * @see TaskRunner
  * @since 1.0
  */
-public abstract class Task implements CloneableContinuable {
+public interface Task {
     /**
      * The entry method of this task's execution.
      *
      * @param runner the task runner that is executing the task
      * @since 1.0
      */
-    public abstract void execute(TaskRunner runner);
+    void execute(TaskRunner runner);
 
     /**
      * Wait for a particular event type to be triggered in the task runner.
@@ -40,14 +39,9 @@ public abstract class Task implements CloneableContinuable {
      * @return the event that woke up the task
      * @since 1.0
      */
-    public final Event waitForEvent(Object type) {
+    default Event waitForEvent(Object type) {
         // this should not be triggered, since bytecode rewriting will replace this
         // method call with the appropriate logic
         throw new UnsupportedOperationException();
-    }
-
-    public Object clone()
-    throws CloneNotSupportedException {
-        return super.clone();
     }
 }

@@ -7,7 +7,7 @@ package rifeworkflowtasks;
 import rife.workflow.Task;
 import rife.workflow.run.TaskRunner;
 
-public class TaskType1 extends Task {
+public class TaskType1 implements Task {
     public void execute(TaskRunner runner) {
         runner.trigger(TestEventTypes.BEGIN);
 
