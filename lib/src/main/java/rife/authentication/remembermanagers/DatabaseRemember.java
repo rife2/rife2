@@ -87,7 +87,7 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
         return true;
     }
 
-    protected String _createRememberId(Insert createRememberId, final long userId, String authData)
+    protected String _createRememberId(Insert createRememberId, final long userId)
     throws RememberManagerException {
         assert createRememberId != null;
 

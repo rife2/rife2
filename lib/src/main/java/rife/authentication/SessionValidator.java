@@ -89,7 +89,7 @@ public interface SessionValidator<C extends CredentialsManager, S extends Sessio
      * authorized.
      * <p>
      * Normally, specific business logic is only required for the situations in
-     * which access has prohibited. This method is used to make it possible to
+     * which access was prohibited. This method is used to make it possible to
      * provide automatic access to the secured resource.
      *
      * @param id The numeric identifier that is returned by the

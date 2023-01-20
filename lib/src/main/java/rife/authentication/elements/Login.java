@@ -236,7 +236,7 @@ public class Login extends Identified implements SessionAttributes {
                 throw new UndefinedAuthenticationRememberManagerException();
             }
 
-            var remember_id = remember_manager.createRememberId(userid, authData);
+            var remember_id = remember_manager.createRememberId(userid);
 
             if (remember_id != null) {
                 c.addCookie(new CookieBuilder(auth_config.rememberCookieName(), remember_id)

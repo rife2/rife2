@@ -82,14 +82,14 @@ public class generic extends DatabaseRemember {
         return _remove(removeRemember_, removeRememberMomentIndex_);
     }
 
-    public String createRememberId(long userId, String authData)
+    public String createRememberId(long userId)
     throws RememberManagerException {
         int purge_decision = ThreadLocalRandom.current().nextInt(getRememberPurgeScale());
         if (purge_decision <= getRememberPurgeFrequency()) {
             purgeRememberIds();
         }
 
-        return _createRememberId(createRememberId_, userId, authData);
+        return _createRememberId(createRememberId_, userId);
     }
 
     public boolean eraseRememberId(String rememberId)

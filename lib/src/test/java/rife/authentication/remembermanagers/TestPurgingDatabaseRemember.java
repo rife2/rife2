@@ -33,7 +33,7 @@ public class TestPurgingDatabaseRemember {
         try {
             remember.install();
 
-            remember_id = remember.createRememberId(user_id, "123.98.23.3");
+            remember_id = remember.createRememberId(user_id);
 
             assertNotNull(remember_id);
             assertTrue(remember_id.length() > 0);
@@ -64,14 +64,14 @@ public class TestPurgingDatabaseRemember {
             remember.eraseAllRememberIds();
 
             var user_id1 = 143;
-            var remember_id1 = remember.createRememberId(user_id1, "123.98.23.3");
+            var remember_id1 = remember.createRememberId(user_id1);
 
             assertEquals(user_id1, remember.getRememberedUserId(remember_id1));
 
             Thread.sleep(2000);
 
             var user_id2 = 143;
-            var remember_id2 = remember.createRememberId(user_id2, "123.98.23.39");
+            var remember_id2 = remember.createRememberId(user_id2);
 
             assertEquals(user_id2, remember.getRememberedUserId(remember_id2));
             assertEquals(-1, remember.getRememberedUserId(remember_id1));

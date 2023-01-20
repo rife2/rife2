@@ -10,7 +10,7 @@ import rife.config.RifeConfig;
 /**
  * This interface defines the methods that classes with
  * {@code RememberManager} functionalities have to implement.
- * <p>A {@code RememberManager} is reponsible for coupling a user ID to
+ * <p>A {@code RememberManager} is responsible for coupling a user ID to
  * an expiring remember ID. The remember ID is typically stored in a cookie in
  * the browser and expires after a certain duration. An authentication element
  * that uses a {@code RememberManager}, should erase the remember ID
@@ -101,11 +101,10 @@ public interface RememberManager {
     void setRememberPurgeScale(int scale);
 
     /**
-     * Starts a new session.
+     * Create a new remember ID.
      *
-     * @param userId   The ID that uniquely identifies the user that has to be
-     *                 remembered.
-     * @param authData The authentication data that is associated with the session.
+     * @param userId The ID that uniquely identifies the user that has to be
+     *               remembered.
      * @return A {@code String} that uniquely identifies the remembered
      * user ID.
      * @throws RememberManagerException An undefined number of exceptional
@@ -115,7 +114,7 @@ public interface RememberManager {
      *                                  of this interface to give more specific meanings to these exceptions.
      * @since 1.0
      */
-    String createRememberId(long userId, String authData)
+    String createRememberId(long userId)
     throws RememberManagerException;
 
     /**
@@ -153,7 +152,7 @@ public interface RememberManager {
     throws RememberManagerException;
 
     /**
-     * Removes all available remember ID. This makes all existing remember IDs
+     * Removes all available remember IDs. This makes all existing remember IDs
      * instantly invalid and unusable for all users.
      *
      * @throws RememberManagerException An undefined number of exceptional

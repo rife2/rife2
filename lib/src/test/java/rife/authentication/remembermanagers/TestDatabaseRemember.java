@@ -58,7 +58,7 @@ public class TestDatabaseRemember {
         try {
             remember.install();
 
-            remember_id = remember.createRememberId(user_id, "123.98.23.3");
+            remember_id = remember.createRememberId(user_id);
 
             assertNotNull(remember_id);
             assertTrue(remember_id.length() > 0);
@@ -86,13 +86,13 @@ public class TestDatabaseRemember {
             var remember_ids1 = new ArrayList<String>();
             var remember_ids2 = new ArrayList<String>();
             var remember_ids3 = new ArrayList<String>();
-            remember_ids1.add(remember.createRememberId(232, "123.98.23.3"));
-            remember_ids1.add(remember.createRememberId(232, "123.98.23.32"));
-            remember_ids2.add(remember.createRememberId(23, "123.98.23.3"));
-            remember_ids3.add(remember.createRememberId(53, "123.98.23.3"));
-            remember_ids3.add(remember.createRememberId(53, "123.98.23.3"));
-            remember_ids1.add(remember.createRememberId(232, "123.98.23.34"));
-            remember_ids2.add(remember.createRememberId(23, "123.98.23.3"));
+            remember_ids1.add(remember.createRememberId(232));
+            remember_ids1.add(remember.createRememberId(232));
+            remember_ids2.add(remember.createRememberId(23));
+            remember_ids3.add(remember.createRememberId(53));
+            remember_ids3.add(remember.createRememberId(53));
+            remember_ids1.add(remember.createRememberId(232));
+            remember_ids2.add(remember.createRememberId(23));
 
             for (var remember_id : remember_ids1) {
                 assertEquals(232, remember.getRememberedUserId(remember_id));
@@ -127,7 +127,7 @@ public class TestDatabaseRemember {
             remember.install();
 
             String remember_id = null;
-            remember_id = remember.createRememberId(user_id, "123.98.23.3");
+            remember_id = remember.createRememberId(user_id);
             assertEquals(user_id, remember.getRememberedUserId(remember_id));
             assertTrue(remember.eraseRememberId(remember_id));
             assertEquals(-1, remember.getRememberedUserId(remember_id));
@@ -172,13 +172,13 @@ public class TestDatabaseRemember {
             remember.install();
 
             var remember_ids = new ArrayList<String>();
-            remember_ids.add(remember.createRememberId(232, "123.98.23.3"));
-            remember_ids.add(remember.createRememberId(232, "123.98.23.34"));
-            remember_ids.add(remember.createRememberId(23, "123.98.23.3"));
-            remember_ids.add(remember.createRememberId(53, "123.98.23.3"));
-            remember_ids.add(remember.createRememberId(53, "123.98.23.3"));
-            remember_ids.add(remember.createRememberId(232, "123.98.23.31"));
-            remember_ids.add(remember.createRememberId(23, "123.98.23.3"));
+            remember_ids.add(remember.createRememberId(232));
+            remember_ids.add(remember.createRememberId(232));
+            remember_ids.add(remember.createRememberId(23));
+            remember_ids.add(remember.createRememberId(53));
+            remember_ids.add(remember.createRememberId(53));
+            remember_ids.add(remember.createRememberId(232 ));
+            remember_ids.add(remember.createRememberId(23));
 
             for (var remember_id : remember_ids) {
                 assertTrue(remember.getRememberedUserId(remember_id) != -1);
@@ -209,10 +209,10 @@ public class TestDatabaseRemember {
             remember.install();
 
             var remember_ids = new ArrayList<String>();
-            remember_ids.add(remember.createRememberId(8433, "123.98.23.3"));
-            remember_ids.add(remember.createRememberId(8433, "123.98.23.33"));
-            remember_ids.add(remember.createRememberId(8432, "123.98.23.31"));
-            remember_ids.add(remember.createRememberId(8431, "123.98.23.3"));
+            remember_ids.add(remember.createRememberId(8433));
+            remember_ids.add(remember.createRememberId(8433));
+            remember_ids.add(remember.createRememberId(8432));
+            remember_ids.add(remember.createRememberId(8431));
 
             for (var remember_id : remember_ids) {
                 assertTrue(remember.getRememberedUserId(remember_id) != -1);
@@ -244,8 +244,8 @@ public class TestDatabaseRemember {
             remember.install();
 
             var remember_ids = new ArrayList<String>();
-            remember_ids.add(remember.createRememberId(8432, "123.98.23.3"));
-            remember_ids.add(remember.createRememberId(8431, "123.98.23.3"));
+            remember_ids.add(remember.createRememberId(8432));
+            remember_ids.add(remember.createRememberId(8431));
 
             for (var remember_id : remember_ids) {
                 assertTrue(remember.getRememberedUserId(remember_id) != -1);
@@ -280,7 +280,7 @@ public class TestDatabaseRemember {
 
             remember.eraseAllRememberIds();
 
-            var remember_id = remember.createRememberId(user_id, "123.98.23.3");
+            var remember_id = remember.createRememberId(user_id);
 
             remember.purgeRememberIds();
 
