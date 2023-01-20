@@ -5,15 +5,14 @@
 package rife.workflow;
 
 import org.junit.jupiter.api.Test;
-import rife.workflow.run.TaskRunner;
-import rifeworkflowtasks.*;
+import rifeworkflowtests.*;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.LongAdder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TaskTest {
+public class WorkTest {
     @Test
     void simple()
     throws Throwable {
@@ -21,8 +20,8 @@ public class TaskTest {
         final var all_ended = new CountDownLatch(3);
         final var sum = new LongAdder();
 
-        var runner = new TaskRunner();
-        runner.addListener(event -> {
+        var workflow = new Workflow();
+        workflow.addListener(event -> {
             if (TestEventTypes.END == event.getType()) {
                 sum.add((Integer) event.getData());
 
@@ -31,11 +30,11 @@ public class TaskTest {
             }
         });
 
-        runner.start(new Task1());
-        runner.start(rifeworkflowtasks.Task2.class);
+        workflow.start(new Work1());
+        workflow.start(Work2.class);
         one_ended.await();
 
-        runner.start(new Task2());
+        workflow.start(new Work2());
         all_ended.await();
 
         assertEquals(45 + 90 + 145, sum.sum());

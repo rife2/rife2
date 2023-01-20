@@ -5,39 +5,38 @@
 package rife.workflow;
 
 import rife.continuations.exceptions.ContinuationsNotActiveException;
-import rife.workflow.run.TaskRunner;
 
 /**
- * Tasks can be executed in a {@link TaskRunner}.
+ * Work can be executed in a {@link Workflow}.
  * <p>Their execution will be done in a thread by invoking the
- * {@link #execute} method on a new instance of the task class.
- * <p>Afterwards, tasks can suspend their execution by waiting for particular
- * event types. The thread will stop executing this task and no system resources
+ * {@link #execute} method on a new instance of the work class.
+ * <p>Afterwards, work can suspend its execution by waiting for particular
+ * event types. The thread will stop executing this work and no system resources
  * will be used except for the memory required to maintain the state of the
- * suspended task instance.
- * <p>When a suitable event is triggered in the {@code TaskRunner}, a thread
- * will resume the execution of the suspended task where it left off.
+ * suspended work instance.
+ * <p>When a suitable event is triggered in the {@code Workflow}, a thread
+ * will resume the execution of the suspended work where it left off.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @see TaskRunner
+ * @see Workflow
  * @since 1.0
  */
-public interface Task {
+public interface Work {
     /**
-     * The entry method of this task's execution.
+     * The entry method of this work's execution.
      *
-     * @param runner the task runner that is executing the task
+     * @param workflow the workflow that is executing the work
      * @since 1.0
      */
-    void execute(TaskRunner runner);
+    void execute(Workflow workflow);
 
     /**
-     * Wait for a particular event type to be triggered in the task runner.
+     * Wait for a particular event type to be triggered in the workflow.
      * <p>When an event is triggered with a suitable type, is will be returned
      * through this method call.
      *
      * @param type the event type to wait for.
-     * @return the event that woke up the task
+     * @return the event that woke up the work
      * @since 1.0
      */
     default Event waitForEvent(Object type) {

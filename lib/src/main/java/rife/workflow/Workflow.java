@@ -2,7 +2,7 @@
  * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
-package rife.workflow.run;
+package rife.workflow;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -10,59 +10,55 @@ import java.util.concurrent.*;
 import rife.continuations.*;
 import rife.continuations.basic.*;
 import rife.ioc.HierarchicalProperties;
-import rife.workflow.Event;
-import rife.workflow.Task;
 import rife.workflow.config.ContinuationInstrument;
 
 /**
- * Runs tasks and dispatches events to tasks that are waiting for it.
- * <p>If events are triggered, and no tasks are ready to consume them, they
- * will be queued up until the first available task arrives.
- * <p>Note that this task runner executes the tasks, but doesn't create a new
- * thread for itself. When a task runner is used, you should take the
+ * Runs work and dispatches events to work that is waiting for it.
+ * <p>Note that this workflow executes the work, but doesn't create a new
+ * thread for itself. When a workflow is used, you should take the
  * necessary steps to keep the application running for as long as you need the
- * tasks to be available.
+ * work to be available.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public class TaskRunner {
+public class Workflow {
     private static final ContinuationConfigInstrument CONFIG_INSTRUMENT = new ContinuationInstrument();
 
     private final HierarchicalProperties properties_;
-    private final ExecutorService taskExecutor_;
+    private final ExecutorService workExecutor_;
     private final BasicContinuableRunner runner_;
     private final ConcurrentMap<Object, Set<String>> eventsMapping_;
     private final ConcurrentMap<Object, Queue<Event>> pendingEvents_;
     private final Set<EventListener> listeners_;
 
     /**
-     * Creates a new task runner instance with a cached thread pool.
+     * Creates a new workflow instance with a cached thread pool.
      *
      * @since 1.0
      */
-    public TaskRunner() {
+    public Workflow() {
         this(Executors.newCachedThreadPool());
     }
 
     /**
-     * Creates a new task runner instance with a provided executor.
+     * Creates a new workflow instance with a provided executor.
      *
-     * @param executor the executor to use for running the tasks
+     * @param executor the executor to use for running the work
      * @since 1.0
      */
-    public TaskRunner(ExecutorService executor) {
+    public Workflow(ExecutorService executor) {
         this(executor, new HierarchicalProperties().putAll(System.getProperties()));
     }
 
     /**
-     * Creates a new task runner instance with a provided executor.
+     * Creates a new workflow instance with a provided executor.
      *
-     * @param executor the executor to use for running the tasks
+     * @param executor   the executor to use for running the work
      * @param properties the parent hierarchical properties
      * @since 1.0
      */
-    public TaskRunner(ExecutorService executor, HierarchicalProperties properties) {
+    public Workflow(ExecutorService executor, HierarchicalProperties properties) {
         properties_ = new HierarchicalProperties().parent(properties);
 
         runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT) {
@@ -71,7 +67,7 @@ public class TaskRunner {
                 var method = object.getClass().getMethod(
                     getConfigInstrumentation().getEntryMethodName(),
                     getConfigInstrumentation().getEntryMethodArgumentTypes());
-                method.invoke(object, TaskRunner.this);
+                method.invoke(object, Workflow.this);
             }
         };
         runner_.setCloneContinuations(false);
@@ -79,14 +75,14 @@ public class TaskRunner {
 
         eventsMapping_ = new ConcurrentHashMap<>();
         pendingEvents_ = new ConcurrentHashMap<>();
-        taskExecutor_ = executor;
+        workExecutor_ = executor;
         listeners_ = new CopyOnWriteArraySet<>();
     }
 
     /**
-     * Retrieves the hierarchical properties for this task runner instance.
+     * Retrieves the hierarchical properties for this workflow instance.
      *
-     * @return this task runner's collection of hierarchical properties
+     * @return this workflow's collection of hierarchical properties
      * @since 1.0
      */
     public HierarchicalProperties properties() {
@@ -94,14 +90,14 @@ public class TaskRunner {
     }
 
     /**
-     * Starts the execution of a new task instance.
+     * Starts the execution of a new work instance.
      *
-     * @param klass the task class whose instance that should be
-     *              executed, the class should extend {@link rife.workflow.Task}
+     * @param klass the work class whose instance that should be
+     *              executed, the class should extend {@link Work}
      * @since 1.0
      */
-    public void start(final Class<? extends Task> klass) {
-        taskExecutor_.submit(() -> {
+    public void start(final Class<? extends Work> klass) {
+        workExecutor_.submit(() -> {
             try {
                 runner_.start(klass);
             } catch (Throwable e) {
@@ -111,15 +107,15 @@ public class TaskRunner {
     }
 
     /**
-     * Starts the execution of a new task instance.
+     * Starts the execution of a new work instance.
      *
-     * @param task the task that should be executed
+     * @param work the work that should be executed
      * @since 1.0
      */
-    public void start(Task task) {
-        taskExecutor_.submit(() -> {
+    public void start(Work work) {
+        workExecutor_.submit(() -> {
             try {
-                runner_.start(task);
+                runner_.start(work);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
@@ -127,9 +123,9 @@ public class TaskRunner {
     }
 
     /**
-     * Convenience method that triggers an event in a task runner.
+     * Convenience method that triggers an event in a workflow.
      *
-     * @param type   the type of the event
+     * @param type the type of the event
      * @see #trigger(Object, Object)
      * @see #trigger(Event)
      * @since 1.0
@@ -139,11 +135,11 @@ public class TaskRunner {
     }
 
     /**
-     * Convenience method that triggers an event in a task runner with
+     * Convenience method that triggers an event in a workflow with
      * associated data.
      *
-     * @param type   the type of the event
-     * @param data   the data that will be sent with the event
+     * @param type the type of the event
+     * @param data the data that will be sent with the event
      * @see #trigger(Object)
      * @see #trigger(Event)
      * @since 1.0
@@ -153,10 +149,10 @@ public class TaskRunner {
     }
 
     /**
-     * Triggers an event that wakes up tasks that are waiting for the event
+     * Triggers an event that wakes up work that is waiting for the event
      * type.
-     * <p>If events are triggered, and no tasks are ready to consume them, they
-     * will be queued up until the first available task arrives.
+     * <p>If events are triggered, and no work is ready to consume them, they
+     * will be queued up until the first available work arrives.
      *
      * @param event the event
      * @see #trigger(Object)
@@ -166,7 +162,7 @@ public class TaskRunner {
     public void trigger(final Event event) {
         if (null == event) return;
 
-        // retrieve the continuation IDs of the tasks that are waiting for
+        // retrieve the continuation IDs of the work that is waiting for
         // the type of the event
 
         // first obtain the collection for this event's type
@@ -231,7 +227,7 @@ public class TaskRunner {
     private void answer(final String id, final Object callAnswer) {
         if (null == id) return;
 
-        taskExecutor_.submit(() -> {
+        workExecutor_.submit(() -> {
             try {
                 runner_.answer(id, callAnswer);
             } catch (Throwable e) {

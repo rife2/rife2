@@ -2,25 +2,25 @@
  * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
-package rifeworkflowtasks;
+package rifeworkflowtests;
 
-import rife.workflow.Task;
-import rife.workflow.run.TaskRunner;
+import rife.workflow.Work;
+import rife.workflow.Workflow;
 
-public class Task2 implements Task {
-    public void execute(TaskRunner runner) {
-        runner.trigger(TestEventTypes.BEGIN);
+public class Work2 implements Work {
+    public void execute(Workflow workflow) {
+        workflow.trigger(TestEventTypes.BEGIN);
 
         int count;
         var sum = 0;
         for (count = 0; count < 10; ++count) {
-            runner.trigger(TestEventTypes.TYPE1, count);
+            workflow.trigger(TestEventTypes.TYPE1, count);
 
             var event = waitForEvent(TestEventTypes.TYPE2);
 
             sum += (Integer) event.getData();
         }
 
-        runner.trigger(TestEventTypes.END, sum);
+        workflow.trigger(TestEventTypes.END, sum);
     }
 }

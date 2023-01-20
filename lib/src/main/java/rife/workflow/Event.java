@@ -5,7 +5,7 @@
 package rife.workflow;
 
 /**
- * Events cause tasks to be resumed when they are waiting for the event type.
+ * Events cause work to be resumed when they are waiting for the event type.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
@@ -17,8 +17,8 @@ public class Event {
     /**
      * Creates a new event.
      *
-     * @param type   the type of the event
-     * @param data   the data that has to be sent along with the event
+     * @param type the type of the event
+     * @param data the data that has to be sent along with the event
      * @since 1.0
      */
     public Event(final Object type, final Object data) {

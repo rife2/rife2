@@ -7,7 +7,7 @@ package rife.workflow.config;
 import rife.continuations.CloneableContinuable;
 import rife.continuations.ContinuationConfigInstrument;
 import rife.workflow.Event;
-import rife.workflow.run.TaskRunner;
+import rife.workflow.Workflow;
 
 /**
  * Byte-code instrumentation configuration that is needed for continuations to
@@ -30,7 +30,7 @@ public class ContinuationInstrument implements ContinuationConfigInstrument {
     }
 
     public Class[] getEntryMethodArgumentTypes() {
-        return new Class[]{TaskRunner.class};
+        return new Class[]{Workflow.class};
     }
 
     public String getCallMethodName() {
