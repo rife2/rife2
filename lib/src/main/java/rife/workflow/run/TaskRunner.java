@@ -101,6 +101,22 @@ public class TaskRunner {
     }
 
     /**
+     * Starts the execution of a new task instance.
+     *
+     * @param task the task that should be executed
+     * @since 1.0
+     */
+    public void start(Task task) {
+        taskExecutor_.submit(() -> {
+            try {
+                runner_.start(task);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    /**
      * Convenience method that triggers an event in a task runner.
      *
      * @param type   the type of the event

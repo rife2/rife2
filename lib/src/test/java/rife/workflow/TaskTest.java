@@ -6,7 +6,7 @@ package rife.workflow;
 
 import org.junit.jupiter.api.Test;
 import rife.workflow.run.TaskRunner;
-import rifeworkflowtasks.TestEventTypes;
+import rifeworkflowtasks.*;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.LongAdder;
@@ -31,11 +31,11 @@ public class TaskTest {
             }
         });
 
-        runner.start(rifeworkflowtasks.TaskType1.class);
-        runner.start(rifeworkflowtasks.TaskType2.class);
+        runner.start(new Task1());
+        runner.start(rifeworkflowtasks.Task2.class);
         one_ended.await();
 
-        runner.start(rifeworkflowtasks.TaskType2.class);
+        runner.start(new Task2());
         all_ended.await();
 
         assertEquals(45 + 90 + 145, sum.sum());

@@ -7,16 +7,16 @@ package rifeworkflowtasks;
 import rife.workflow.Task;
 import rife.workflow.run.TaskRunner;
 
-public class TaskType2 implements Task {
+public class Task1 implements Task {
     public void execute(TaskRunner runner) {
         runner.trigger(TestEventTypes.BEGIN);
 
         int count;
         var sum = 0;
-        for (count = 0; count < 10; ++count) {
-            runner.trigger(TestEventTypes.TYPE1, count);
+        for (count = 0; count < 20; ++count) {
+            runner.trigger(TestEventTypes.TYPE2, count);
 
-            var event = waitForEvent(TestEventTypes.TYPE2);
+            var event = waitForEvent(TestEventTypes.TYPE1);
 
             sum += (Integer) event.getData();
         }

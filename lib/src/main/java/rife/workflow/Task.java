@@ -4,6 +4,7 @@
  */
 package rife.workflow;
 
+import rife.continuations.exceptions.ContinuationsNotActiveException;
 import rife.workflow.run.TaskRunner;
 
 /**
@@ -21,6 +22,7 @@ import rife.workflow.run.TaskRunner;
  * @see TaskRunner
  * @since 1.0
  */
+@FunctionalInterface
 public interface Task {
     /**
      * The entry method of this task's execution.
@@ -42,6 +44,6 @@ public interface Task {
     default Event waitForEvent(Object type) {
         // this should not be triggered, since bytecode rewriting will replace this
         // method call with the appropriate logic
-        throw new UnsupportedOperationException();
+        throw new ContinuationsNotActiveException();
     }
 }

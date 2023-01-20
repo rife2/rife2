@@ -7,10 +7,7 @@ package rife.continuations.basic;
 import java.lang.reflect.InvocationTargetException;
 
 import rife.continuations.*;
-import rife.continuations.exceptions.AnswerException;
-import rife.continuations.exceptions.CallException;
-import rife.continuations.exceptions.PauseException;
-import rife.continuations.exceptions.StepBackException;
+import rife.continuations.exceptions.*;
 
 /**
  * Basic implementation of a 'continuable runner' that will execute the
@@ -73,7 +70,7 @@ public class BasicContinuableRunner {
      */
     public String start(String className)
     throws Throwable {
-        return run(className, null, null, null);
+        return evaluate(className);
     }
 
     /**
@@ -87,7 +84,21 @@ public class BasicContinuableRunner {
      */
     public String start(Class klass)
     throws Throwable {
-        return run(klass, null, null, null);
+        return evaluate(klass, null, null, null, null);
+    }
+
+    /**
+     * Starts the execution of a new instance of a continuable.
+     *
+     * @param continuable the instance that will be executed
+     * @return the ID of the resulting paused continuation; or
+     * <p>{@code null} if no continuation was paused
+     * @throws Throwable when an error occurs
+     * @since 1.0
+     */
+    public String start(Object continuable)
+    throws Throwable {
+        return evaluate(null, continuable, null, null, null);
     }
 
     /**
@@ -102,7 +113,7 @@ public class BasicContinuableRunner {
      */
     public String resume(String continuationId)
     throws Throwable {
-        return run((String)null, continuationId, null, null);
+        return evaluate(null, null, continuationId, null, null);
     }
 
     /**
@@ -118,7 +129,7 @@ public class BasicContinuableRunner {
      */
     public String answer(String continuationId, Object callAnswer)
     throws Throwable {
-        return run((String)null, continuationId, null, callAnswer);
+        return evaluate(null, null, continuationId, null, callAnswer);
     }
 
     /**
@@ -135,10 +146,10 @@ public class BasicContinuableRunner {
      */
     public String run(String continuationId)
     throws Throwable {
-        return run((String)null, null, continuationId, null);
+        return evaluate(null, null, null, continuationId, null);
     }
 
-    private String run(String className, String resumeId, String runId, Object callAnswer)
+    private String evaluate(String className)
     throws Throwable {
         // retrieve the current context classloader
         var previous_context_classloader = Thread.currentThread().getContextClassLoader();
@@ -149,14 +160,14 @@ public class BasicContinuableRunner {
             if (className != null) {
                 klass = classLoader_.loadClass(className);
             }
-            return run(klass, resumeId, runId, callAnswer);
+            return evaluate(klass, null, null, null, null);
         } finally {
             // restore the previous context classloader
             Thread.currentThread().setContextClassLoader(previous_context_classloader);
         }
     }
 
-    private String run(Class klass, String resumeId, String runId, Object callAnswer)
+    private String evaluate(Class klass, Object continuable, String resumeId, String runId, Object callAnswer)
     throws Throwable {
 
         String result = null;
@@ -174,7 +185,15 @@ public class BasicContinuableRunner {
                             // no active continuation, start a new one
                             if (null == resumeId &&
                                 null == runId) {
-                                object = klass.getDeclaredConstructor().newInstance();
+                                if (continuable != null) {
+                                    object = continuable;
+                                }
+                                else if (klass != null) {
+                                    object = klass.getDeclaredConstructor().newInstance();
+                                }
+                                else {
+                                    throw new NoContinuableInstanceAvailableException();
+                                }
                                 ContinuationContext.clearActiveContext();
                             } else {
                                 ContinuationContext context = null;
