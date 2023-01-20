@@ -33,15 +33,15 @@ public class HelloWorkflow extends Site {
                 var event = pauseForEvent(PAYMENT);
 
                 System.out.println("Waiting for confirmation " + event.getData());
-                workflow.start(new ConfirmationWork((String)event.getData()));
+                workflow.start(new ConfirmationWork(event.getData()));
                 workflow.trigger(EMAIL, event.getData());
             }
         }
     }
 
     public class ConfirmationWork implements Work {
-        private final String expectedAccount_;
-        public ConfirmationWork(String account) {
+        private final Object expectedAccount_;
+        public ConfirmationWork(Object account) {
             expectedAccount_ = account;
         }
         public void execute(Workflow workflow) {

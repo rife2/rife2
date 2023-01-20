@@ -280,12 +280,12 @@ public class Workflow {
      */
     public void waitForPausedWork()
     throws InterruptedException {
-        if (!eventsMapping_.isEmpty()) {
-            return;
-        }
-
         workLock_.lock();
         try {
+            if (!eventsMapping_.isEmpty()) {
+                return;
+            }
+
             workPaused_.await();
         } finally {
             workLock_.unlock();
@@ -300,12 +300,12 @@ public class Workflow {
      */
     public void waitForNoWork()
     throws InterruptedException {
-        if (activeWorkCount_.sum() == 0 && eventsMapping_.isEmpty()) {
-            return;
-        }
-
         workLock_.lock();
         try {
+            if (activeWorkCount_.sum() == 0 && eventsMapping_.isEmpty()) {
+                return;
+            }
+
             workFinished_.await();
         } finally {
             workLock_.unlock();
@@ -342,24 +342,22 @@ public class Workflow {
     }
 
     private void signalWhenAllWorkFinished() {
-        if (activeWorkCount_.sum() == 0 && eventsMapping_.isEmpty()) {
-            workLock_.lock();
-            try {
+        workLock_.lock();
+        try {
+            if (activeWorkCount_.sum() == 0 && eventsMapping_.isEmpty()) {
                 workFinished_.signalAll();
-            } finally {
-                workLock_.unlock();
             }
+        } finally {
+            workLock_.unlock();
         }
     }
 
-    private void signalWhenWorkIsPaused() {
-        if (!eventsMapping_.isEmpty()) {
-            workLock_.lock();
-            try {
-                workPaused_.signalAll();
-            } finally {
-                workLock_.unlock();
-            }
+    private void signalThatWorkIsPaused() {
+        workLock_.lock();
+        try {
+            workPaused_.signalAll();
+        } finally {
+            workLock_.unlock();
         }
     }
 
@@ -386,6 +384,8 @@ public class Workflow {
                 return ids;
             });
 
+            signalThatWorkIsPaused();
+
             // get the next pending event of this call type and trigger it
             final var pending_event = new Event[1];
             pendingEvents_.computeIfPresent(type, (evenType, events) -> {
@@ -395,8 +395,6 @@ public class Workflow {
             if (pending_event[0] != null) {
                 trigger(pending_event[0]);
             }
-
-            signalWhenWorkIsPaused();
 
             return null;
         }
