@@ -12,17 +12,17 @@ import static rife.HelloWorkflow.WorkType.*;
 
 public class HelloWorkflow extends Site {
     enum WorkType {
-        EMAIL, PAYMENT, CONFIRMATION
+        NOTIFICATION, PAYMENT, CONFIRMATION
     }
 
     final Workflow workflow = createWorkflow();
 
-    public class EmailWork implements Work {
+    public class NotificationWork implements Work {
         public void execute(Workflow workflow) {
             while (true) {
-                var event = pauseForEvent(EMAIL);
+                var event = pauseForEvent(NOTIFICATION);
 
-                System.out.println("Sending email " + event.getData());
+                System.out.println("Sending notification email " + event.getData());
             }
         }
     }
@@ -34,7 +34,7 @@ public class HelloWorkflow extends Site {
 
                 System.out.println("Waiting for confirmation " + event.getData());
                 workflow.start(new ConfirmationWork(event.getData()));
-                workflow.trigger(EMAIL, event.getData());
+                workflow.trigger(NOTIFICATION, event.getData());
             }
         }
     }
@@ -56,9 +56,9 @@ public class HelloWorkflow extends Site {
     }
 
     public void setup() {
-        workflow.start(new EmailWork()).start(new PaymentWork());
+        workflow.start(new NotificationWork()).start(new PaymentWork());
 
-        get("/email", c -> workflow.trigger(EMAIL, c.parameter("account")));
+        get("/notification", c -> workflow.trigger(NOTIFICATION, c.parameter("account")));
         get("/payment", c -> workflow.trigger(PAYMENT, c.parameter("account")));
         get("/confirm", c -> workflow.inform(CONFIRMATION, c.parameter("account")));
     }
