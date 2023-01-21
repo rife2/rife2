@@ -259,7 +259,8 @@ With `HelloForm.html` being:
 <body>
 <!--v content/-->
 <!--b form-->
-<form action="{{v route:hello/}}" method="post" name="hello">
+<form action="{{v route:action:hello/}}" method="post" name="hello">
+  <!--v route:inputs:hello/-->
   <input type="submit" name="Submit">
 </form>
 <!--/b-->
@@ -267,6 +268,10 @@ With `HelloForm.html` being:
 </body>
 </html>
 ```
+
+> **NOTE:** that the `route:` value tag from the above has been split into
+> `route:action:` and `route:inputs:`, generating hidden HTML form inputs for
+> parameters instead of query string parameters.
 
 You can see that the template contains all the pieces to create both pages:
 
