@@ -4,10 +4,7 @@
  */
 package rife.scheduler.taskoptionmanagers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import rife.scheduler.Scheduler;
 import rife.scheduler.TaskOption;
@@ -35,15 +32,15 @@ public class MemoryTaskOptions implements TaskOptionManager {
         return scheduler_;
     }
 
-    public boolean addTaskOption(TaskOption taskoption)
+    public boolean addTaskOption(TaskOption taskOption)
     throws TaskOptionManagerException {
-        if (null == taskoption) throw new IllegalArgumentException("taskoption can't be null.");
-        if (taskoption.getTaskId() < 0) throw new IllegalArgumentException("the task id is required.");
+        if (null == taskOption) throw new IllegalArgumentException("taskOption can't be null.");
+        if (taskOption.getTaskId() < 0) throw new IllegalArgumentException("the task id is required.");
 
         synchronized (this) {
             TaskOption cloned_taskoption = null;
             try {
-                cloned_taskoption = taskoption.clone();
+                cloned_taskoption = taskOption.clone();
             } catch (CloneNotSupportedException e) {
                 throw new AddTaskOptionErrorException(cloned_taskoption, e);
             }
@@ -80,15 +77,15 @@ public class MemoryTaskOptions implements TaskOptionManager {
         }
     }
 
-    public boolean updateTaskOption(TaskOption taskoption)
+    public boolean updateTaskOption(TaskOption taskOption)
     throws TaskOptionManagerException {
-        if (null == taskoption) throw new IllegalArgumentException("taskoption can't be null.");
-        if (taskoption.getTaskId() < 0) throw new IllegalArgumentException("the task id is required.");
+        if (null == taskOption) throw new IllegalArgumentException("taskOption can't be null.");
+        if (taskOption.getTaskId() < 0) throw new IllegalArgumentException("the task id is required.");
 
         synchronized (this) {
             TaskOption cloned_taskoption = null;
             try {
-                cloned_taskoption = taskoption.clone();
+                cloned_taskoption = taskOption.clone();
             } catch (CloneNotSupportedException e) {
                 throw new AddTaskOptionErrorException(cloned_taskoption, e);
             }
@@ -104,15 +101,15 @@ public class MemoryTaskOptions implements TaskOptionManager {
 
             // get the task options for the same task id
             var task_id = cloned_taskoption.getTaskId();
-            var taskoptions = taskOptionsMapping_.get(task_id);
-            if (null == taskoptions) {
+            var task_options = taskOptionsMapping_.get(task_id);
+            if (null == task_options) {
                 return false;
             }
             // obtain the task option with same name
             TaskOption task_option_to_remove = null;
-            for (var taskoption_to_check : taskoptions) {
-                if (taskoption_to_check.getName().equals(cloned_taskoption.getName())) {
-                    task_option_to_remove = taskoption_to_check;
+            for (var task_option_to_check : task_options) {
+                if (task_option_to_check.getName().equals(cloned_taskoption.getName())) {
+                    task_option_to_remove = task_option_to_check;
                     break;
                 }
             }
@@ -122,9 +119,9 @@ public class MemoryTaskOptions implements TaskOptionManager {
                 return false;
             }
 
-            // remove the old taskoption and store the new one
-            taskoptions.remove(task_option_to_remove);
-            taskoptions.add(cloned_taskoption);
+            // remove the old task option and store the new one
+            task_options.remove(task_option_to_remove);
+            task_options.add(cloned_taskoption);
 
             return true;
         }
@@ -158,15 +155,15 @@ public class MemoryTaskOptions implements TaskOptionManager {
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
 
         synchronized (this) {
-            return taskOptionsMapping_.get(taskId);
+            return Collections.unmodifiableCollection(taskOptionsMapping_.get(taskId));
         }
     }
 
-    public boolean removeTaskOption(TaskOption taskoption)
+    public boolean removeTaskOption(TaskOption taskOption)
     throws TaskOptionManagerException {
-        if (null == taskoption) throw new IllegalArgumentException("taskoption can't be null.");
+        if (null == taskOption) throw new IllegalArgumentException("taskOption can't be null.");
 
-        return removeTaskOption(taskoption.getTaskId(), taskoption.getName());
+        return removeTaskOption(taskOption.getTaskId(), taskOption.getName());
     }
 
     public boolean removeTaskOption(int taskId, String name)

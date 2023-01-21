@@ -162,9 +162,9 @@ public class generic extends DatabaseTasks {
         return removeTask_(removeTask_, id);
     }
 
-    public boolean rescheduleTask(Task task, long interval, Frequency frequency)
+    public boolean rescheduleTask(Task task, long planned, Frequency frequency)
     throws TaskManagerException {
-        return rescheduleTask_(task, interval, frequency);
+        return rescheduleTask_(task, planned, frequency);
     }
 
     public boolean concludeTask(Task task)

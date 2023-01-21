@@ -36,38 +36,38 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             .whereParameter("id", "=");
     }
 
-    public boolean addTaskOption(final TaskOption taskoption)
+    public boolean addTaskOption(final TaskOption taskOption)
     throws TaskOptionManagerException {
-        if (null == taskoption) throw new IllegalArgumentException("taskoption can't be null.");
+        if (null == taskOption) throw new IllegalArgumentException("taskoption can't be null.");
 
         // simulate TaskID foreign key
         try {
             if (!executeHasResultRows(taskIdExists_, new DbPreparedStatementHandler() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
-                        .setInt("id", taskoption.getTaskId());
+                        .setInt("id", taskOption.getTaskId());
                 }
             })) {
-                throw new InexistentTaskIdException(taskoption.getTaskId());
+                throw new InexistentTaskIdException(taskOption.getTaskId());
             }
         } catch (DatabaseException e) {
-            throw new AddTaskOptionErrorException(taskoption, e);
+            throw new AddTaskOptionErrorException(taskOption, e);
         }
 
         try {
             return _addTaskOption(addTaskOption_, new DbPreparedStatementHandler() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
-                        .setInt("task_id", taskoption.getTaskId())
-                        .setString("name", taskoption.getName())
-                        .setString("val", taskoption.getValue());
+                        .setInt("task_id", taskOption.getTaskId())
+                        .setString("name", taskOption.getName())
+                        .setString("val", taskOption.getValue());
                 }
-            }, taskoption);
+            }, taskOption);
         } catch (TaskOptionManagerException e) {
             if (null != e.getCause() &&
                 null != e.getCause().getCause()) {
                 if (-1 != e.getCause().getCause().getMessage().toLowerCase().indexOf("duplicate")) {
-                    throw new DuplicateTaskOptionException(taskoption.getTaskId(), taskoption.getName());
+                    throw new DuplicateTaskOptionException(taskOption.getTaskId(), taskOption.getName());
                 }
             }
 
@@ -75,38 +75,38 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         }
     }
 
-    public boolean updateTaskOption(final TaskOption taskoption)
+    public boolean updateTaskOption(final TaskOption taskOption)
     throws TaskOptionManagerException {
-        if (null == taskoption) throw new IllegalArgumentException("taskoption can't be null.");
+        if (null == taskOption) throw new IllegalArgumentException("taskoption can't be null.");
 
         // simulate TaskID foreign key
         try {
             if (!executeHasResultRows(taskIdExists_, new DbPreparedStatementHandler() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
-                        .setInt("id", taskoption.getTaskId());
+                        .setInt("id", taskOption.getTaskId());
                 }
             })) {
-                throw new InexistentTaskIdException(taskoption.getTaskId());
+                throw new InexistentTaskIdException(taskOption.getTaskId());
             }
         } catch (DatabaseException e) {
-            throw new UpdateTaskOptionErrorException(taskoption, e);
+            throw new UpdateTaskOptionErrorException(taskOption, e);
         }
 
         try {
             return _updateTaskOption(updateTaskOption_, new DbPreparedStatementHandler() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
-                        .setInt("task_id", taskoption.getTaskId())
-                        .setString("name", taskoption.getName())
-                        .setString("val", taskoption.getValue());
+                        .setInt("task_id", taskOption.getTaskId())
+                        .setString("name", taskOption.getName())
+                        .setString("val", taskOption.getValue());
                 }
-            }, taskoption);
+            }, taskOption);
         } catch (TaskOptionManagerException e) {
             if (null != e.getCause() &&
                 null != e.getCause().getCause()) {
                 if (e.getCause().getCause().getMessage().toLowerCase().contains("duplicate")) {
-                    throw new DuplicateTaskOptionException(taskoption.getTaskId(), taskoption.getName());
+                    throw new DuplicateTaskOptionException(taskOption.getTaskId(), taskOption.getName());
                 }
             }
 

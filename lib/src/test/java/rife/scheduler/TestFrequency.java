@@ -1290,119 +1290,119 @@ public class TestFrequency {
 
             frequency = new Frequency("* * * * *");
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(minute, next - previous);
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(minute, next - previous);
 
             frequency = new Frequency("28 * * * *");        // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(59 * minute, next - previous);            // 2002/09/01 11:28
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(hour, next - previous);            // 2002/09/01 12:28
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(hour, next - previous);            // 2002/09/01 13:28
 
             frequency = new Frequency("*/3 * * * *");        // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(minute, next - previous);            // 2002/09/01 10:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * minute, next - previous);            // 2002/09/01 10:33
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * minute, next - previous);            // 2002/09/01 10:36
 
             frequency = new Frequency("28-56/7 * * * *");    // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(6 * minute, next - previous);            // 2002/09/01 10:35
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(7 * minute, next - previous);            // 2002/09/01 10:42
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(7 * minute, next - previous);            // 2002/09/01 10:49
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(7 * minute, next - previous);            // 2002/09/01 10:56
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(32 * minute, next - previous);            // 2002/09/01 11:28
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(7 * minute, next - previous);            // 2002/09/01 11:35
 
             frequency = new Frequency("56-40/13 * * * *");    // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(6 * minute, next - previous);            // 2002/09/01 10:35
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(21 * minute, next - previous);            // 2002/09/01 10:56
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(13 * minute, next - previous);            // 2002/09/01 11:09
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(13 * minute, next - previous);            // 2002/09/01 11:22
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(13 * minute, next - previous);            // 2002/09/01 11:35
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(21 * minute, next - previous);            // 2002/09/01 11:56
 
             frequency = new Frequency("31,37-57/4,59-4,7 * * * *");    // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(2 * minute, next - previous);                    // 2002/09/01 10:31
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(6 * minute, next - previous);                    // 2002/09/01 10:37
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * minute, next - previous);                    // 2002/09/01 10:41
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * minute, next - previous);                    // 2002/09/01 10:45
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * minute, next - previous);                    // 2002/09/01 10:49
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * minute, next - previous);                    // 2002/09/01 10:53
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * minute, next - previous);                    // 2002/09/01 10:57
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(2 * minute, next - previous);                    // 2002/09/01 10:59
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(minute, next - previous);                    // 2002/09/01 11:00
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(minute, next - previous);                    // 2002/09/01 11:01
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(minute, next - previous);                    // 2002/09/01 11:02
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(minute, next - previous);                    // 2002/09/01 11:03
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(minute, next - previous);                    // 2002/09/01 11:04
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * minute, next - previous);                    // 2002/09/01 11:07
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(24 * minute, next - previous);                    // 2002/09/01 11:31
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -1425,113 +1425,113 @@ public class TestFrequency {
 
             frequency = new Frequency("*/30 13 * * *");        // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(2 * hour + 31 * minute, next - previous);    // 2002/09/01 13:00
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute, next - previous);            // 2002/09/01 13:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(day - (30 * minute), next - previous);    // 2002/09/02 13:00
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute, next - previous);            // 2002/09/02 13:30
 
             frequency = new Frequency("10 13 * * *");        // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(2 * hour + 41 * minute, next - previous);    // 2002/09/01 13:10
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(day, next - previous);                // 2002/09/02 13:10
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(day, next - previous);                // 2002/09/03 13:10
 
             frequency = new Frequency("34 */5 * * *");        // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(5 * minute, next - previous);            // 2002/09/01 10:34
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(5 * hour, next - previous);            // 2002/09/02 15:34
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(5 * hour, next - previous);            // 2002/09/02 20:34
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * hour, next - previous);            // 2002/09/03 00:34
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(5 * hour, next - previous);            // 2002/09/03 05:34
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(5 * hour, next - previous);            // 2002/09/03 10:34
 
             frequency = new Frequency("13 7-23/7 * * *");                // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(31 * minute + 3 * hour + 13 * minute, next - previous);    // 2002/09/01 14:13
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(7 * hour, next - previous);                        // 2002/09/02 21:13
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(10 * hour, next - previous);                        // 2002/09/03 07:13
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(7 * hour, next - previous);                        // 2002/09/03 14:13
 
             frequency = new Frequency("48 18-7/3 * * *");                // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(31 * minute + 7 * hour + 48 * minute, next - previous);    // 2002/09/01 18:48
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * hour, next - previous);                        // 2002/09/01 21:48
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * hour, next - previous);                        // 2002/09/02 00:48
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * hour, next - previous);                        // 2002/09/02 03:48
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * hour, next - previous);                        // 2002/09/02 06:48
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(12 * hour, next - previous);                        // 2002/09/02 18:48
 
             frequency = new Frequency("14 2,4-7,10-18/3,21-0/3 * * *");    // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(31 * minute + 2 * hour + 14 * minute, next - previous);    // 2002/09/01 13:14
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * hour, next - previous);                        // 2002/09/01 16:14
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(5 * hour, next - previous);                        // 2002/09/01 21:14
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * hour, next - previous);                        // 2002/09/02 00:14
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(2 * hour, next - previous);                        // 2002/09/02 02:14
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(2 * hour, next - previous);                        // 2002/09/02 04:14
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(hour, next - previous);                        // 2002/09/02 05:14
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(hour, next - previous);                        // 2002/09/02 06:14
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(hour, next - previous);                        // 2002/09/02 07:14
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * hour, next - previous);                        // 2002/09/02 10:14
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -1554,109 +1554,109 @@ public class TestFrequency {
 
             frequency = new Frequency("*/30 */12 6 * *");            // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(31 * minute + 13 * hour + 4 * day, next - previous);    // 2002/09/06 00:00
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute, next - previous);                    // 2002/09/06 00:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute + 11 * hour, next - previous);            // 2002/09/06 12:00
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute, next - previous);                    // 2002/09/06 12:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute + 11 * hour + 29 * day, next - previous);    // 2002/10/06 00:00
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute, next - previous);                    // 2002/10/06 00:30
 
             frequency = new Frequency("19 10 */11 * *");            // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(11 * day - 10 * minute, next - previous);            // 2002/09/12 10:19
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(11 * day, next - previous);                    // 2002/09/23 10:19
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(8 * day, next - previous);                        // 2002/10/01 10:19
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(11 * day, next - previous);                    // 2002/10/12 10:19
 
             frequency = new Frequency("57 10 6-18/5 * *");            // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(28 * minute + 5 * day, next - previous);            // 2002/09/06 10:57
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(5 * day, next - previous);                        // 2002/09/11 10:57
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(5 * day, next - previous);                        // 2002/09/16 10:57
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(20 * day, next - previous);                    // 2002/10/06 10:57
 
             frequency = new Frequency("24 19 27-9/4 * *");            // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(9 * hour - 5 * minute + 3 * day, next - previous);        // 2002/09/04 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                        // 2002/09/08 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(19 * day, next - previous);                    // 2002/09/27 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                        // 2002/10/01 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                        // 2002/10/05 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                        // 2002/10/09 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(18 * day + hour, next - previous);                // 2002/10/27 19:24 (daylight savings)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                        // 2002/10/31 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                        // 2002/11/04 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                        // 2002/11/08 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(19 * day, next - previous);                    // 2002/11/27 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                        // 2002/12/01 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                        // 2002/12/05 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                        // 2002/12/09 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(18 * day, next - previous);                    // 2002/12/27 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                        // 2002/12/31 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                        // 2003/01/04 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                        // 2003/01/08 19:24
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(19 * day, next - previous);                    // 2003/01/27 19:24
 
             calendar.set(2002, Calendar.APRIL, 28, 8, 15);
@@ -1664,19 +1664,19 @@ public class TestFrequency {
 
             frequency = new Frequency("30 9 29-4/3 * *");            // 2002/04/28 08:15
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(15 * minute + hour + day, next - previous);    // 2002/04/29 09:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * day, next - previous);                        // 2002/04/02 09:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(27 * day, next - previous);                    // 2002/04/29 09:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * day, next - previous);                        // 2002/05/01 09:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * day, next - previous);                        // 2002/05/04 09:30
 
             calendar.set(2002, Calendar.FEBRUARY, 1, 8, 15);
@@ -1684,28 +1684,28 @@ public class TestFrequency {
 
             frequency = new Frequency("30 8 18-10/9 * *");            // 2002/02/01 08:15
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(15 * minute + 4 * day, next - previous);            // 2002/02/05 08:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(13 * day, next - previous);                    // 2002/02/18 08:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(9 * day, next - previous);                        // 2002/02/27 08:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(9 * day, next - previous);                        // 2002/03/08 08:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(10 * day, next - previous);                    // 2002/03/18 08:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(9 * day, next - previous);                        // 2002/03/27 08:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(9 * day - hour, next - previous);                // 2002/04/05 08:30 (daylight savings)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(13 * day, next - previous);                    // 2002/04/18 08:30
 
             calendar.set(2004, Calendar.FEBRUARY, 1, 8, 15);
@@ -1713,105 +1713,105 @@ public class TestFrequency {
 
             frequency = new Frequency("30 8 18-10/9 * *");            // 2004/02/01 08:15
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(15 * minute + 4 * day, next - previous);            // 2004/02/05 08:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(13 * day, next - previous);                    // 2004/02/18 08:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(9 * day, next - previous);                        // 2004/02/27 08:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(9 * day, next - previous);                        // 2004/03/07 08:30 (leap year)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(11 * day, next - previous);                    // 2004/03/18 08:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(9 * day, next - previous);                        // 2004/03/27 08:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(9 * day - hour, next - previous);                // 2004/04/05 08:30 (daylight savings)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(13 * day, next - previous);                    // 2004/04/18 08:30
 
             frequency = new Frequency("15 7 6,9-12,15-27/4,26-4/3 * *");    // 2004/02/01 08:15
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * day - hour, next - previous);                        // 2004/02/04 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(2 * day, next - previous);                                // 2004/02/06 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * day, next - previous);                                // 2004/02/09 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(day, next - previous);                                // 2004/02/10 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(day, next - previous);                                // 2004/02/11 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(day, next - previous);                                // 2004/02/12 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * day, next - previous);                                // 2004/02/15 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                                // 2004/02/19 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                                // 2004/02/23 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * day, next - previous);                                // 2004/02/26 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(day, next - previous);                                // 2004/02/27 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(2 * day, next - previous);                                // 2004/02/29 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * day, next - previous);                                // 2004/03/03 07:15 (leap year)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * day, next - previous);                                // 2004/03/06 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * day, next - previous);                                // 2004/03/09 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(day, next - previous);                                // 2004/03/10 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(day, next - previous);                                // 2004/03/11 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(day, next - previous);                                // 2004/03/12 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * day, next - previous);                                // 2004/03/15 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                                // 2004/03/19 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(4 * day, next - previous);                                // 2004/03/23 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * day, next - previous);                                // 2004/03/26 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(day, next - previous);                                // 2004/03/27 07:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(2 * day - hour, next - previous);                        // 2004/03/29 07:15 (daylight savings)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(3 * day, next - previous);                                // 2004/04/01 07:15
 
             calendar.set(2003, Calendar.DECEMBER, 20, 17, 10);
@@ -1819,25 +1819,25 @@ public class TestFrequency {
 
             frequency = new Frequency("20 19 20-10/5 * *");            // 2003/12/20 17:10
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(10 * minute + 2 * hour, next - previous);            // 2003/12/20 19:20
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(5 * day, next - previous);                        // 2003/12/25 19:20
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(5 * day, next - previous);                        // 2003/12/30 19:20
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(5 * day, next - previous);                        // 2004/01/04 19:20
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(5 * day, next - previous);                        // 2004/01/09 19:20
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(11 * day, next - previous);                    // 2004/01/20 19:20
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(5 * day, next - previous);                        // 2004/01/25 19:20
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -1860,114 +1860,114 @@ public class TestFrequency {
 
             frequency = new Frequency("*/30 */12 */20 10 *");            // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(31 * minute + 13 * hour + 29 * day, next - previous);        // 2002/10/01 00:00
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute, next - previous);                        // 2002/10/01 00:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute + 11 * hour, next - previous);                // 2002/10/01 12:00
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute, next - previous);                        // 2002/10/01 12:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute + 11 * hour + 19 * day, next - previous);        // 2002/10/21 00:00
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute, next - previous);                        // 2002/10/21 00:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute + 11 * hour, next - previous);                // 2002/10/21 12:00
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute, next - previous);                        // 2002/10/21 12:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(30 * minute + 11 * hour + 344 * day, next - previous);        // 2003/10/01 00:00
 
             frequency = new Frequency("10 19 7 */4 *");                        // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(31 * minute + 8 * hour + 6 * day + 10 * minute, next - previous);    // 2002/09/07 19:10
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((30 + 31 + 30 + 31) * day + hour, next - previous);            // 2003/01/07 19:10 (daylight savings)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((31 + 28 + 31 + 30) * day - hour, next - previous);            // 2003/05/07 19:10 (daylight savings)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((31 + 30 + 31 + 31) * day, next - previous);                    // 2003/09/07 19:10
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((30 + 31 + 30 + 31) * day + hour, next - previous);            // 2004/01/07 19:10 (daylight savings)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((31 + 29 + 31 + 30) * day - hour, next - previous);            // 2004/05/07 19:10 (daylight savings)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((31 + 30 + 31 + 31) * day, next - previous);                    // 2003/09/07 19:10
 
             frequency = new Frequency("50 06 18 4-11/3 *");                                    // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(31 * minute + 13 * hour + (29 + 17) * day + 6 * hour + 50 * minute, next - previous);    // 2002/10/18 06:50
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((31 + 30 + 31 + 31 + 28 + 31) * day, next - previous);                            // 2003/04/18 06:50
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((30 + 31 + 30) * day, next - previous);                                    // 2003/07/18 06:50
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((31 + 31 + 30) * day, next - previous);                                    // 2003/10/18 06:50
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((31 + 30 + 31 + 31 + 29 + 31) * day, next - previous);                            // 2004/04/18 06:50
 
             frequency = new Frequency("15 12 06 8-4/3 *");                                        // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(31 * minute + (5 + 30 + 31) * day + hour + 15 * minute + hour, next - previous);        // 2002/11/06 12:15 (daylight savings)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((30 + 31 + 31) * day, next - previous);                                        // 2003/02/06 12:15
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((28 + 31 + 30 + 31 + 30 + 31) * day - hour, next - previous);                        // 2003/08/06 12:15 (daylight savings)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((31 + 30 + 31) * day + hour, next - previous);                                    // 2003/11/06 12:15 (daylight savings)
 
             frequency = new Frequency("40 11 27 2,5-6,11-4/2 *");                        // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(11 * minute + hour + (26 + 30 + 31) * day + hour, next - previous);        // 2002/11/27 11:40
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((30 + 31) * day, next - previous);                                    // 2003/01/27 11:40
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(31 * day, next - previous);                                        // 2003/02/27 11:40
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(28 * day, next - previous);                                        // 2003/03/27 11:40
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((31 + 30) * day - hour, next - previous);                            // 2003/05/27 11:40 (daylight savings)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(31 * day, next - previous);                                        // 2003/06/27 11:40
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((30 + 31 + 31 + 30 + 31) * day + hour, next - previous);                    // 2003/11/27 11:40
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals((30 + 31) * day, next - previous);                                    // 2004/01/27 11:40
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(31 * day, next - previous);                                        // 2004/02/27 11:40
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -1990,28 +1990,28 @@ public class TestFrequency {
 
             frequency = new Frequency("30 12 * 10 1");                        // 2002/09/01 10:29
             previous = calendar_time;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(minute + 30 * day + 6 * day + 2 * hour, next - previous);        // 2002/10/07 12:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(7 * day, next - previous);                                // 2002/10/14 12:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(7 * day, next - previous);                                // 2002/10/21 12:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(7 * day + hour, next - previous);                        // 2002/10/28 12:30 (daylight savings)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(365 * day - 22 * day - hour, next - previous);                // 2003/10/06 12:30 (daylight savings)
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(7 * day, next - previous);                                // 2003/10/13 12:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(7 * day, next - previous);                                // 2003/10/20 12:30
             previous = next;
-            next = frequency.getNextDate(previous);
+            next = frequency.getNextTimestamp(previous);
             assertEquals(7 * day + hour, next - previous);                        // 2003/10/27 12:30 (daylight savings)
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
@@ -2028,7 +2028,7 @@ public class TestFrequency {
 
             frequency = new Frequency("* * 31 2 *");
             try {
-                frequency.getNextDate(calendar_time);
+                frequency.getNextTimestamp(calendar_time);
                 fail();
             } catch (FrequencyException e) {
                 assertTrue(true);

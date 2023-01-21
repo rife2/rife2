@@ -78,25 +78,25 @@ public class generic extends DatabaseTaskOptions {
         return remove_(dropTableTaskOption_);
     }
 
-    public boolean addTaskOption(final TaskOption taskoption)
+    public boolean addTaskOption(final TaskOption taskOption)
     throws TaskOptionManagerException {
         try {
             return _addTaskOption(addTaskOption_, new DbPreparedStatementHandler() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
-                        .setInt("task_id", taskoption.getTaskId())
-                        .setString("name", taskoption.getName())
-                        .setString("val", taskoption.getValue());
+                        .setInt("task_id", taskOption.getTaskId())
+                        .setString("name", taskOption.getName())
+                        .setString("val", taskOption.getValue());
                 }
-            }, taskoption);
+            }, taskOption);
         } catch (TaskOptionManagerException e) {
             if (null != e.getCause() &&
                 null != e.getCause().getCause()) {
                 String message = e.getCause().getCause().getMessage().toUpperCase();
                 if (message.contains(createTableTaskOption_.getForeignKeys().get(0).getName())) {
-                    throw new InexistentTaskIdException(taskoption.getTaskId());
+                    throw new InexistentTaskIdException(taskOption.getTaskId());
                 } else if (message.contains(createTableTaskOption_.getPrimaryKeys().get(0).getName())) {
-                    throw new DuplicateTaskOptionException(taskoption.getTaskId(), taskoption.getName());
+                    throw new DuplicateTaskOptionException(taskOption.getTaskId(), taskOption.getName());
                 }
             }
 
@@ -104,25 +104,25 @@ public class generic extends DatabaseTaskOptions {
         }
     }
 
-    public boolean updateTaskOption(final TaskOption taskoption)
+    public boolean updateTaskOption(final TaskOption taskOption)
     throws TaskOptionManagerException {
         try {
             return _updateTaskOption(updateTaskOption_, new DbPreparedStatementHandler() {
                 public void setParameters(DbPreparedStatement statement) {
                     statement
-                        .setInt("task_id", taskoption.getTaskId())
-                        .setString("name", taskoption.getName())
-                        .setString("val", taskoption.getValue());
+                        .setInt("task_id", taskOption.getTaskId())
+                        .setString("name", taskOption.getName())
+                        .setString("val", taskOption.getValue());
                 }
-            }, taskoption);
+            }, taskOption);
         } catch (TaskOptionManagerException e) {
             if (null != e.getCause() &&
                 null != e.getCause().getCause()) {
                 String message = e.getCause().getCause().getMessage().toUpperCase();
                 if (message.contains(createTableTaskOption_.getForeignKeys().get(0).getName())) {
-                    throw new InexistentTaskIdException(taskoption.getTaskId());
+                    throw new InexistentTaskIdException(taskOption.getTaskId());
                 } else if (message.contains(createTableTaskOption_.getPrimaryKeys().get(0).getName())) {
-                    throw new DuplicateTaskOptionException(taskoption.getTaskId(), taskoption.getName());
+                    throw new DuplicateTaskOptionException(taskOption.getTaskId(), taskOption.getName());
                 }
             }
 
@@ -140,9 +140,9 @@ public class generic extends DatabaseTaskOptions {
         return _getTaskOptions(getTaskOptions_, new ProcessTaskOption(), taskId);
     }
 
-    public boolean removeTaskOption(TaskOption taskoption)
+    public boolean removeTaskOption(TaskOption taskOption)
     throws TaskOptionManagerException {
-        return _removeTaskOption(removeTaskOption_, taskoption);
+        return _removeTaskOption(removeTaskOption_, taskOption);
     }
 
     public boolean removeTaskOption(int taskId, String name)

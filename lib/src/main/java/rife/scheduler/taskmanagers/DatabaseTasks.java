@@ -14,8 +14,7 @@ import rife.scheduler.taskmanagers.exceptions.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 public abstract class DatabaseTasks extends DbQueryManager implements TaskManager {
     private Scheduler scheduler_ = null;
@@ -159,7 +158,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
 
         assert tasks != null;
 
-        return tasks;
+        return Collections.unmodifiableCollection(tasks);
     }
 
     protected Collection<Task> getTasksToProcess_(Select getTasksToProcess, ProcessTask processTask)
@@ -177,7 +176,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
 
         assert tasks_to_process != null;
 
-        return tasks_to_process;
+        return Collections.unmodifiableCollection(tasks_to_process);
     }
 
     protected Collection<Task> getScheduledTasks_(Select getScheduledTasks, ProcessTask processTask)
@@ -193,7 +192,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
 
         assert scheduled_tasks != null;
 
-        return scheduled_tasks;
+        return Collections.unmodifiableCollection(scheduled_tasks);
     }
 
     protected boolean removeTask_(Delete removeTask, final int id)
@@ -251,7 +250,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
             }
 
             try {
-                var next_date = task.getNextDate();
+                var next_date = task.getNextTimestamp();
                 if (next_date >= 0 &&
                     rescheduleTask(task, next_date, task.getFrequency()) &&
                     deactivateTask(task.getId())) {

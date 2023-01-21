@@ -19,8 +19,7 @@ import rife.scheduler.exceptions.TaskOptionManagerException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 public abstract class DatabaseTaskOptions extends DbQueryManager implements TaskOptionManager {
     private Scheduler scheduler_ = null;
@@ -73,7 +72,7 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
     throws TaskOptionManagerException {
         assert addTaskOption != null;
 
-        if (null == taskoption) throw new IllegalArgumentException("taskoption can't be null.");
+        if (null == taskoption) throw new IllegalArgumentException("taskOption can't be null.");
 
         var result = false;
 
@@ -93,7 +92,7 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
     throws TaskOptionManagerException {
         assert updateTaskOption != null;
 
-        if (null == taskoption) throw new IllegalArgumentException("taskoption can't be null.");
+        if (null == taskoption) throw new IllegalArgumentException("taskOption can't be null.");
 
         var result = false;
         try {
@@ -112,7 +111,7 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
     throws TaskOptionManagerException {
         assert getTaskOption != null;
 
-        if (taskId < 0) throw new IllegalArgumentException("taskid can't be negative.");
+        if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
@@ -134,7 +133,7 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
     throws TaskOptionManagerException {
         assert getTaskOptions != null;
 
-        if (taskId < 0) throw new IllegalArgumentException("taskid can't be negative.");
+        if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
 
         var task_options = new ArrayList<TaskOption>();
         processTaskOption.setCollection(task_options);
@@ -147,12 +146,12 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
 
         assert task_options != null;
 
-        return task_options;
+        return Collections.unmodifiableCollection(task_options);
     }
 
     protected boolean _removeTaskOption(Delete removeTaskOption, TaskOption taskoption)
     throws TaskOptionManagerException {
-        if (null == taskoption) throw new IllegalArgumentException("taskoption can't be null.");
+        if (null == taskoption) throw new IllegalArgumentException("taskOption can't be null.");
 
         return _removeTaskOption(removeTaskOption, taskoption.getTaskId(), taskoption.getName());
     }
@@ -161,7 +160,7 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
     throws TaskOptionManagerException {
         assert removeTaskOption != null;
 
-        if (taskId < 0) throw new IllegalArgumentException("taskid can't be negative.");
+        if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 

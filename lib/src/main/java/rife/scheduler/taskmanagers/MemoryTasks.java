@@ -4,10 +4,7 @@
  */
 package rife.scheduler.taskmanagers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import rife.scheduler.*;
 import rife.scheduler.exceptions.FrequencyException;
@@ -82,7 +79,7 @@ public class MemoryTasks implements TaskManager {
     public Collection<Task> getAllTasks()
     throws TaskManagerException {
         synchronized (this) {
-            return new ArrayList<>(taskMapping_.values());
+            return Collections.unmodifiableCollection(taskMapping_.values());
         }
     }
 
@@ -99,7 +96,7 @@ public class MemoryTasks implements TaskManager {
             }
         }
 
-        return tasks_to_process;
+        return Collections.unmodifiableCollection(tasks_to_process);
     }
 
     public Collection<Task> getScheduledTasks()
@@ -115,7 +112,7 @@ public class MemoryTasks implements TaskManager {
             }
         }
 
-        return scheduled_tasks;
+        return Collections.unmodifiableCollection(scheduled_tasks);
     }
 
     public boolean removeTask(int id)
@@ -127,23 +124,23 @@ public class MemoryTasks implements TaskManager {
         }
     }
 
-    public boolean rescheduleTask(Task task, long newPlanned, Frequency frequency)
+    public boolean rescheduleTask(Task task, long planned, Frequency frequency)
     throws TaskManagerException {
         if (null == task) throw new IllegalArgumentException("task can't be null.");
-        if (newPlanned <= 0) throw new IllegalArgumentException("newPlanned has to be bigger than 0.");
+        if (planned <= 0) throw new IllegalArgumentException("newPlanned has to be bigger than 0.");
 
         var result = false;
 
         Task task_tmp;
         try {
             task_tmp = task.clone();
-            task_tmp.setPlanned(newPlanned);
+            task_tmp.setPlanned(planned);
             task_tmp.setFrequency(frequency);
         } catch (Throwable e) {
             if (null == frequency) {
-                throw new RescheduleTaskErrorException(task.getId(), newPlanned, e);
+                throw new RescheduleTaskErrorException(task.getId(), planned, e);
             } else {
-                throw new RescheduleTaskErrorException(task.getId(), newPlanned, frequency, e);
+                throw new RescheduleTaskErrorException(task.getId(), planned, frequency, e);
             }
         }
         result = updateTask(task_tmp);
@@ -163,7 +160,7 @@ public class MemoryTasks implements TaskManager {
             }
 
             try {
-                var next_date = task.getNextDate();
+                var next_date = task.getNextTimestamp();
                 if (next_date >= 0 &&
                     rescheduleTask(task, next_date, task.getFrequency()) &&
                     deactivateTask(task.getId())) {

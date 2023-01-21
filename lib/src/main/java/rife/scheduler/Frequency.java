@@ -6,7 +6,6 @@ package rife.scheduler;
 
 import rife.config.RifeConfig;
 import rife.scheduler.exceptions.FrequencyException;
-import rife.tools.Localization;
 import rife.tools.StringUtils;
 
 import java.time.DayOfWeek;
@@ -522,7 +521,7 @@ public class Frequency {
         weekdays_ = Arrays.copyOf(ALL_WEEKDAYS, ALL_WEEKDAYS.length);
     }
 
-    long getNextDate(long start)
+    long getNextTimestamp(long start)
     throws FrequencyException {
         if (start < 0) throw new IllegalArgumentException("start should be positive");
 
