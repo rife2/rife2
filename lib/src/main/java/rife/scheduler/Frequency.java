@@ -14,6 +14,18 @@ import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Defines the frequency at which a task should execute.
+ * <p>
+ * This is inspired by the standard unix crontab frequency specification.
+ * <p>
+ * A number of frequently used frequencies are available as static constants,
+ * a DSL is provided to build the most features of frequency specification,
+ * or a textual specification can be provided that will be parsed.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.0
+ */
 public class Frequency {
     private static final int MAX_YEAR = 2050;
 
@@ -24,17 +36,95 @@ public class Frequency {
     private static final byte[] ALL_WEEKDAYS = new byte[]{1, 2, 3, 4, 5, 6, 7};
     private static final byte[] EMPTY_DATE_OVERFLOW = new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 
+    /**
+     * Schedule every minute.
+     *
+     * @since 1.0
+     */
     public static final Frequency MINUTELY = new Frequency("* * * * *");
+
+    /**
+     * Schedule every hour on the hour.
+     *
+     * @since 1.0
+     */
     public static final Frequency HOURLY = new Frequency("0 * * * *");
+
+    /**
+     * Schedule every day at midnight.
+     *
+     * @since 1.0
+     */
     public static final Frequency DAILY = new Frequency("0 0 * * *");
+
+    /**
+     * Schedule every monday at midnight.
+     *
+     * @since 1.0
+     */
     public static final Frequency MONDAYS = new Frequency("0 0 * * 1");
+
+    /**
+     * Schedule every tuesday at midnight.
+     *
+     * @since 1.0
+     */
     public static final Frequency TUESDAYS = new Frequency("0 0 * * 2");
+
+    /**
+     * Schedule every wednesday at midnight.
+     *
+     * @since 1.0
+     */
     public static final Frequency WEDNESDAYS = new Frequency("0 0 * * 3");
+
+    /**
+     * Schedule every thursday at midnight.
+     *
+     * @since 1.0
+     */
     public static final Frequency THURSDAYS = new Frequency("0 0 * * 4");
+
+    /**
+     * Schedule every friday at midnight.
+     *
+     * @since 1.0
+     */
     public static final Frequency FRIDAYS = new Frequency("0 0 * * 5");
+
+    /**
+     * Schedule every saturday at midnight.
+     *
+     * @since 1.0
+     */
     public static final Frequency SATURDAYS = new Frequency("0 0 * * 6");
+
+    /**
+     * Schedule every sunday at midnight.
+     *
+     * @since 1.0
+     */
     public static final Frequency SUNDAYS = new Frequency("0 0 * * 7");
+
+    /**
+     * Schedule every month on the first day at midnight.
+     *
+     * @since 1.0
+     */
     public static final Frequency MONTHLY = new Frequency("0 0 1 * *");
+
+    /**
+     * Schedule every quarter on the first day at midnight.
+     *
+     * @since 1.0
+     */
+    public static final Frequency QUARTERLY = new Frequency("0 0 1 */3 *");
+
+    /**
+     * Schedule every year on the first day at midnight.
+     *
+     * @since 1.0
+     */
     public static final Frequency YEARLY = new Frequency("0 0 1 1 *");
 
     private final String[] parts_ = new String[]{"*", "*", "*", "*", "*"};
@@ -49,147 +139,360 @@ public class Frequency {
 
     private boolean parsed_ = false;
 
+    /**
+     * Creates a new frequency instance that will schedule every minute.
+     *
+     * @since 1.0
+     */
     public Frequency() {
         reset();
     }
 
+    /**
+     * Creates a new frequency instance from the provided crontab specification.
+     *
+     * @param specification the specification string that will be parsed
+     * @throws FrequencyException when an error occurs during the parsing
+     * @since 1.0
+     */
     public Frequency(String specification)
     throws FrequencyException {
         parse(specification);
     }
 
+    /**
+     * Schedule at a specific time.
+     *
+     * @param hour the hour to schedule, 24-hours, 0-based
+     * @param minute the time to schedule
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency at(int hour, int minute) {
         processHours(String.valueOf(hour));
         processMinutes(String.valueOf(minute));
         return this;
     }
 
+    /**
+     * Schedule on a specific day.
+     *
+     * @param month the month to schedule
+     * @param date the day of the month to schedule, 1-based
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency on(Month month, int date) {
         processMonths(String.valueOf(month.getValue()));
         processDates(String.valueOf(date));
         return this;
     }
 
+    /**
+     * Schedule every minute of the hour.
+     *
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency everyMinute() {
         processMinutes("*");
         return this;
     }
 
+    /**
+     * Schedule every n-th minute of the hour
+     * <p>
+     * For instance a step of 10 will schedule on minutes 0, 10, 20, 30, 40, and 50.
+     *
+     * @param step the step to use to skip over the minutes
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency everyMinute(int step) {
         processMinutes("*/" + step);
         return this;
     }
 
+    /**
+     * Schedule at a specific minute of the hour.
+     *
+     * @param minute to minute in the hour to schedule
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency atMinute(int minute) {
         processMinutes(String.valueOf(minute));
         return this;
     }
 
-    public Frequency atMinutes(int... minute) {
-        processMinutes(StringUtils.join(minute, ","));
+    /**
+     * Schedule at specific minutes of the hour.
+     *
+     * @param minutes the minutes in the hour to schedule
+     * @return this frequency instance
+     * @since 1.0
+     */
+    public Frequency atMinutes(int... minutes) {
+        processMinutes(StringUtils.join(minutes, ","));
         return this;
     }
 
+    /**
+     * Schedule every minute of the hour in a range.
+     *
+     * @param first the first minute in the range
+     * @param last the last minute in the range, included
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency duringMinutes(int first, int last) {
         processMinutes(first + "-" + last);
         return this;
     }
 
+    /**
+     * Schedule every hour of the day.
+     *
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency everyHour() {
         processHours("*");
         return this;
     }
 
+    /**
+     * Schedule every n-th hour of the day
+     * <p>
+     * For instance a step of 6 will schedule on hours 0, 6, 12, 18, and 24.
+     *
+     * @param step the step to use to skip over the hours
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency everyHour(int step) {
         processHours("*/" + step);
         return this;
     }
 
+    /**
+     * Schedule at a specific hour of the day.
+     *
+     * @param hour to hour in the day to schedule
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency atHour(int hour) {
         processHours(String.valueOf(hour));
         return this;
     }
 
-    public Frequency atHours(int... hour) {
-        processHours(StringUtils.join(hour, ","));
+    /**
+     * Schedule at specific hours of the day.
+     *
+     * @param hours the hours in the day to schedule
+     * @return this frequency instance
+     * @since 1.0
+     */
+    public Frequency atHours(int... hours) {
+        processHours(StringUtils.join(hours, ","));
         return this;
     }
 
+    /**
+     * Schedule every hour of the day in a range.
+     *
+     * @param first the first hour in the range
+     * @param last the last hour in the range, included
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency duringHours(int first, int last) {
         processHours(first + "-" + last);
         return this;
     }
 
+    /**
+     * Schedule every day of the month.
+     *
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency everyDate() {
         processDates("*");
         return this;
     }
 
+    /**
+     * Schedule every n-th day of the month
+     * <p>
+     * For instance a step of 12 will schedule on day 1, 13, and 25.
+     *
+     * @param step the step to use to skip over the days
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency everyDate(int step) {
         processDates("*/" + step);
         return this;
     }
 
+    /**
+     * Schedule on a specific day of the month, 1-based.
+     *
+     * @param date to day in the month to schedule
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency onDate(int date) {
         processDates(String.valueOf(date));
         return this;
     }
 
-    public Frequency onDates(int... date) {
-        processDates(StringUtils.join(date, ","));
+    /**
+     * Schedule on specific days of the month, 1-based.
+     *
+     * @param dates the days in the month to schedule
+     * @return this frequency instance
+     * @since 1.0
+     */
+    public Frequency onDates(int... dates) {
+        processDates(StringUtils.join(dates, ","));
         return this;
     }
 
+    /**
+     * Schedule every day of the month in a range, 1-based.
+     *
+     * @param first the first day in the range
+     * @param last the last day in the range, included
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency duringDates(int first, int last) {
         processDates(first + "-" + last);
         return this;
     }
 
+    /**
+     * Schedule every month of the year.
+     *
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency everyMonth() {
         processMonths("*");
         return this;
     }
 
+    /**
+     * Schedule every n-th month of the year
+     * <p>
+     * For instance a step of 3 will schedule on months 1, 4, 7, and 10.
+     *
+     * @param step the step to use to skip over the months
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency everyMonth(int step) {
         processMonths("*/" + step);
         return this;
     }
 
+    /**
+     * Schedule in a specific month of the year.
+     *
+     * @param month to month of the year to schedule
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency in(Month month) {
         processMonths(String.valueOf(month.getValue()));
         return this;
     }
 
+    /**
+     * Schedule in specific months of the year.
+     *
+     * @param months to months of the year to schedule
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency in(Month... months) {
         processMonths(Arrays.stream(months).map(d -> String.valueOf(d.getValue())).collect(Collectors.joining(",")));
         return this;
     }
 
+    /**
+     * Schedule every month of the year.
+     *
+     * @param first the first month in the range
+     * @param last the last month in the range, included
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency between(Month first, Month last) {
         processMonths(first.getValue() + "-" + last.getValue());
         return this;
     }
 
+    /**
+     * Schedule every day of the week.
+     *
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency everyWeekday() {
         processWeekdays("*");
         return this;
     }
 
+    /**
+     * Schedule every n-th day of the week
+     * <p>
+     * For instance a step of 2 will schedule on day 1, 3, 5 and 7.
+     *
+     * @param step the step to use to skip over the days
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency everyWeekday(int step) {
         processWeekdays("*/" + step);
         return this;
     }
 
+    /**
+     * Schedule on a specific day of the week.
+     *
+     * @param weekday to day of the week to schedule
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency on(DayOfWeek weekday) {
         processWeekdays(String.valueOf(weekday.getValue()));
         return this;
     }
 
+    /**
+     * Schedule on a specific days of the week.
+     *
+     * @param weekdays to days of the week to schedule
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency on(DayOfWeek... weekdays) {
         processWeekdays(Arrays.stream(weekdays).map(d -> String.valueOf(d.getValue())).collect(Collectors.joining(",")));
         return this;
     }
 
+    /**
+     * Schedule every day of the week in a range.
+     *
+     * @param first the first day in the range
+     * @param last the last day in the range, included
+     * @return this frequency instance
+     * @since 1.0
+     */
     public Frequency between(DayOfWeek first, DayOfWeek last) {
         processWeekdays(first.getValue() + "-" + last.getValue());
         return this;
@@ -199,6 +502,11 @@ public class Frequency {
         return getSpecification();
     }
 
+    /**
+     * Reset the frequency to be scheduler every minute.
+     *
+     * @since 1.0
+     */
     public void reset() {
         parts_[0] = "*";
         parts_[1] = "*";

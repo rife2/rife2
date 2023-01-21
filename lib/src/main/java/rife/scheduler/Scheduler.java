@@ -5,23 +5,49 @@
 package rife.scheduler;
 
 import rife.scheduler.exceptions.*;
+import rife.scheduler.schedulermanagers.*;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 
+/**
+ * The {@code Scheduler} class performs the actual task scheduling and dispatch to
+ * the appropriate executors.
+ * <p>
+ * You would typically not create an instance of {@code Scheduler} yourself, but
+ * instead obtain the one that is provided by {@link MemoryScheduling}
+ * or {@link DatabaseScheduling}
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.0
+ */
 public class Scheduler implements Runnable {
+    public static final int DEFAULT_SLEEP_TIME = 500;
+
     private Thread thread_ = null;
     private TaskManager taskManager_ = null;
     private TaskOptionManager taskOptionManager_ = null;
-    private int sleepTime_ = 500;
+    private int sleepTime_ = DEFAULT_SLEEP_TIME;
     private final HashMap<Object, Executor> executors_;
 
-    public Scheduler(TaskManager taskManager, TaskOptionManager taskoptionManager) {
+    /**
+     * Creates a new scheduler instance for the provided task manager and task option manager.
+     *
+     * @param taskManager the task manager to use for this scheduler
+     * @param taskOptionManager the task option manager to use for this scheduler
+     * @since 1.0
+     */
+    public Scheduler(TaskManager taskManager, TaskOptionManager taskOptionManager) {
         setTaskManager(taskManager);
-        setTaskOptionManager(taskoptionManager);
+        setTaskOptionManager(taskOptionManager);
         executors_ = new HashMap<>();
     }
 
+    /**
+     * Sets the task manager of this scheduler.
+     *
+     * @param taskManager the task manager to use
+     * @since 1.0
+     */
     public void setTaskManager(TaskManager taskManager) {
         if (null == taskManager) throw new IllegalArgumentException("taskManager can't be null.");
 
@@ -29,49 +55,101 @@ public class Scheduler implements Runnable {
         taskManager.setScheduler(this);
     }
 
+    /**
+     * Retrieves this scheduler's task manager.
+     *
+     * @return this scheduler's task manager; or
+     * {@code null} if no task manager has been assigned yet
+     * @since 1.0
+     */
     public TaskManager getTaskManager() {
         return taskManager_;
     }
 
-    public void setTaskOptionManager(TaskOptionManager taskoptionManager) {
-        if (null == taskoptionManager) throw new IllegalArgumentException("taskoptionManager can't be null.");
+    /**
+     * Sets the task option manager of this scheduler.
+     *
+     * @param taskOptionManager the task option manager to use
+     * @since 1.0
+     */
+    public void setTaskOptionManager(TaskOptionManager taskOptionManager) {
+        if (null == taskOptionManager) throw new IllegalArgumentException("taskOptionManager can't be null.");
 
-        taskOptionManager_ = taskoptionManager;
-        taskoptionManager.setScheduler(this);
+        taskOptionManager_ = taskOptionManager;
+        taskOptionManager.setScheduler(this);
     }
 
+    /**
+     * Retrieves this scheduler's task option manager.
+     *
+     * @return this scheduler's task option manager; or
+     * {@code null} if no task option manager has been assigned yet
+     * @since 1.0
+     */
     public TaskOptionManager getTaskOptionManager() {
         return taskOptionManager_;
     }
 
+    /**
+     * Convenience method to add a task to the task manager that's
+     * registered with this scheduler.
+     *
+     * @param task the task instance to add
+     * @return the unique ID of the task
+     * @since 1.0
+     */
     public int addTask(Task task) {
         return taskManager_.addTask(task);
     }
 
+    /**
+     * Convenience method to add a task option to the task option manager that's
+     * registered with this scheduler.
+     *
+     * @param taskOption the task option instance to add
+     * @return {@code true} if the task option was added successfully; or
+     * {@code false} otherwise
+     * @since 1.0
+     */
     public boolean addTaskOption(TaskOption taskOption) {
         return taskOptionManager_.addTaskOption(taskOption);
     }
 
-    public boolean addExecutor(Executor executor)
+    /**
+     * Adds an executor to this scheduler.
+     *
+     * @param executor the executor to add to this scheduler
+     * @throws SchedulerException when this executor is already registered with another
+     * scheduler; or when another executor is already registered for this task type
+     * @since 1.0
+     */
+    public void addExecutor(Executor executor)
     throws SchedulerException {
         if (null == executor) throw new IllegalArgumentException("executor can't be null.");
 
         if (null == executor.getScheduler()) {
+            if (executors_.containsKey(executor.getHandledTaskType())) {
+                throw new TaskTypeAlreadyRegisteredException(executor.getHandledTaskType());
+            }
             executors_.put(executor.getHandledTaskType(), executor);
             executor.setScheduler(this);
-        } else if (this == executor.getScheduler()) {
-            return false;
-        } else {
+        } else if (this != executor.getScheduler()) {
             throw new ExecutorAlreadyRegisteredException(executor);
         }
 
         assert executors_.containsKey(executor.getHandledTaskType());
         assert executor == executors_.get(executor.getHandledTaskType());
         assert this == executor.getScheduler();
-
-        return true;
     }
 
+    /**
+     * Removes an executor from this scheduler.
+     *
+     * @param executor the executor to remove
+     * @return {@code true} if the scheduler was successfully remove; or
+     * {@code false} otherwise
+     * @since 1.0
+     */
     public boolean removeExecutor(Executor executor) {
         if (null == executor) throw new IllegalArgumentException("executor can't be null.");
 
@@ -87,22 +165,50 @@ public class Scheduler implements Runnable {
         return true;
     }
 
-    public Executor getExecutor(String tasktype) {
-        if (null == tasktype) throw new IllegalArgumentException("tasktype can't be null.");
+    /**
+     * Retrieves the executor that was registered for a particular task type.
+     *
+     * @param taskType the task type to find the executor for
+     * @return the executor handling the provided task type; or
+     * {@code null} if no executor is registered for that task type
+     * @since 1.0
+     */
+    public Executor getExecutor(String taskType) {
+        if (null == taskType) throw new IllegalArgumentException("task type can't be null.");
 
-        return executors_.get(tasktype);
+        return executors_.get(taskType);
     }
 
+    /**
+     * Retrieves the executors that have been registered with this scheduler.
+     *
+     * @return the collection of this scheduler's executors
+     * @since 1.0
+     */
     public Collection<Executor> getExecutors() {
-        return executors_.values();
+        return Collections.unmodifiableCollection(executors_.values());
     }
 
-    public void setSleepTime(int sleeptime) {
-        if (sleeptime <= 0) throw new IllegalArgumentException("sleeptime has to be bigger than 0.");
+    /**
+     * Set the time the schedule should sleep in between evaluating which tasks
+     * to execute.
+     * <p>
+     * This defaults to {@code 500} milliseconds.
+     *
+     * @param sleepTime the time to sleep between task evaluations in milliseconds
+     * @since 1.0
+     */
+    public void setSleepTime(int sleepTime) {
+        if (sleepTime <= 0) throw new IllegalArgumentException("sleep time has to be bigger than 0.");
 
-        sleepTime_ = sleeptime;
+        sleepTime_ = sleepTime;
     }
 
+    /**
+     * Starts this scheduler.
+     *
+     * @since 1.0
+     */
     public void start() {
         synchronized (this) {
             if (thread_ != null) {
@@ -115,6 +221,13 @@ public class Scheduler implements Runnable {
         }
     }
 
+    /**
+     * Indicates whether this scheduler is running or not.
+     *
+     * @return {@code true} if this scheduler is running; ro
+     * {@code false} otherwise
+     * @since 1.0
+     */
     public boolean isRunning() {
         synchronized (this) {
             if (thread_ == null) {
@@ -122,6 +235,20 @@ public class Scheduler implements Runnable {
             }
 
             return thread_.isAlive();
+        }
+    }
+
+    /**
+     * Stops this scheduler.
+     *
+     * @since 1.0
+     */
+    public void stop() {
+        synchronized (this) {
+            if (thread_ != null) {
+                thread_.interrupt();
+                thread_ = null;
+            }
         }
     }
 
@@ -149,15 +276,6 @@ public class Scheduler implements Runnable {
             synchronized (this) {
                 thread_ = null;
                 notifyAll();
-            }
-        }
-    }
-
-    public void stop() {
-        synchronized (this) {
-            if (thread_ != null) {
-                thread_.interrupt();
-                thread_ = null;
             }
         }
     }

@@ -7,6 +7,12 @@ package rife;
 import rife.resources.ResourceFinderClasspath;
 import rife.resources.exceptions.ResourceFinderErrorException;
 
+/**
+ * Singleton class that provides access to the current RIFE2 version as a string.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.0
+ */
 public class Version {
     private String version_;
 

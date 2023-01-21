@@ -6,7 +6,7 @@ package rife.scheduler;
 
 import rife.scheduler.exceptions.*;
 
-public class ExecutorThread implements Runnable {
+class ExecutorThread implements Runnable {
     private final Executor executor_;
     private final Task task_;
 
