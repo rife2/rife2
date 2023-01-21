@@ -231,6 +231,7 @@ tasks {
             this as StandardJavadocDocletOptions
             keyWords(true)
             splitIndex(true)
+            tags("apiNote:a:API Note:")
             overview = "src/main/java/overview.html"
             addBooleanOption("Xdoclint:-missing", true)
         }

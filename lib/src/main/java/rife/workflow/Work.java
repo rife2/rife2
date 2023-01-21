@@ -17,10 +17,10 @@ import rife.continuations.exceptions.ContinuationsNotActiveException;
  * <p>When a suitable event is triggered in the {@code Workflow}, a thread
  * will resume the execution of the suspended work where it left off.
  *
+ * @apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see Workflow
  * @since 1.0
- * @apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
  */
 public interface Work {
     /**

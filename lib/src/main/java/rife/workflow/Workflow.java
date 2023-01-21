@@ -21,9 +21,9 @@ import rife.workflow.config.ContinuationInstrument;
  * necessary steps to keep the application running for as long as you need the
  * work to be available.
  *
+ * @apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
- * @apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
  */
 public class Workflow {
     private static final ContinuationConfigInstrument CONFIG_INSTRUMENT = new ContinuationInstrument();
