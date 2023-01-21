@@ -20,6 +20,7 @@ import rife.continuations.exceptions.ContinuationsNotActiveException;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see Workflow
  * @since 1.0
+ * @apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
  */
 public interface Work {
     /**

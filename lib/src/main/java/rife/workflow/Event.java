@@ -9,6 +9,7 @@ package rife.workflow;
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
+ * @apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
  */
 public class Event {
     private final Object type_;
