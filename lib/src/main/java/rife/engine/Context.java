@@ -9,6 +9,7 @@ import rife.continuations.ContinuationConfigRuntime;
 import rife.continuations.ContinuationContext;
 import rife.continuations.exceptions.*;
 import rife.engine.exceptions.*;
+import rife.forms.FormBuilder;
 import rife.ioc.HierarchicalProperties;
 import rife.template.Template;
 import rife.template.TemplateFactory;
@@ -811,6 +812,9 @@ public class Context {
     /**
      * Sets a select box option, a radio button or a checkbox to selected or
      * checked.
+     * <p>This method delegates all logic to the {@link
+     * rife.forms.FormBuilder#selectParameter(Template, String, String[])}
+     * method of the provided template instance.
      *
      * @param template the template instance where the selection should happen
      * @param name     the name of the parameter
@@ -818,6 +822,8 @@ public class Context {
      * @return a list with the identifiers of the template values that have
      * been set, this is never {@code null}, when no values are set an
      * empty list is returned
+     * @see FormBuilder
+     * @see FormBuilder#selectParameter 
      * @since 1.0
      */
     public Collection<String> selectParameter(Template template, String name, String[] values) {
@@ -840,7 +846,7 @@ public class Context {
      *                     happen
      * @param beanInstance the instance of the bean that should be used to
      *                     generate the form
-     * @see rife.forms.FormBuilder
+     * @see FormBuilder
      * @see #generateForm(Template, Object, String)
      * @see #generateEmptyForm(Template, Class, String)
      * @see #removeForm(Template, Class)
@@ -862,7 +868,7 @@ public class Context {
      *                     generate the form
      * @param prefix       the prefix that will be prepended to all bean property
      *                     names
-     * @see rife.forms.FormBuilder
+     * @see FormBuilder
      * @see #generateEmptyForm(Template, Class, String)
      * @see #removeForm(Template, Class)
      * @since 1.0
@@ -890,7 +896,7 @@ public class Context {
      *                  happen
      * @param beanClass the class of the bean that should be used to generate
      *                  the form
-     * @see rife.forms.FormBuilder
+     * @see FormBuilder
      * @see #generateForm(Template, Object, String)
      * @see #generateEmptyForm(Template, Class, String)
      * @see #removeForm(Template, Class)
@@ -915,7 +921,7 @@ public class Context {
      *                  the form
      * @param prefix    the prefix that will be prepended to all bean property
      *                  names
-     * @see rife.forms.FormBuilder
+     * @see FormBuilder
      * @see #generateForm(Template, Object, String)
      * @see #removeForm(Template, Class)
      * @since 1.0
@@ -944,7 +950,7 @@ public class Context {
      *                  from
      * @param beanClass the class of the bean that should be used to remove
      *                  the form
-     * @see rife.forms.FormBuilder
+     * @see FormBuilder
      * @see #generateForm(Template, Object, String)
      * @see #generateEmptyForm(Template, Class, String)
      * @see #removeForm(Template, Class)
@@ -958,7 +964,7 @@ public class Context {
      * Removes a generated form, leaving the builder value tags empty again as
      * if this form had never been generated.
      * <p>This method delegates all logic to the {@link
-     * rife.forms.FormBuilder#removeForm(Template, Class, String)}
+     * FormBuilder#removeForm(Template, Class, String)}
      * method of the provided template instance.
      *
      * @param template  the template instance where the form should be removed
@@ -967,7 +973,7 @@ public class Context {
      *                  the form
      * @param prefix    the prefix that will be prepended to all bean property
      *                  names
-     * @see rife.forms.FormBuilder
+     * @see FormBuilder
      * @see #generateForm(Template, Object, String)
      * @see #generateEmptyForm(Template, Class, String)
      * @since 1.0
