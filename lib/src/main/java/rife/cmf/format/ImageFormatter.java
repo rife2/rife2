@@ -13,6 +13,8 @@ import rife.cmf.format.exceptions.UnreadableDataFormatException;
 import rife.cmf.format.exceptions.UnsupportedTargetMimeTypeException;
 import rife.cmf.loader.ImageContentLoader;
 import rife.cmf.transform.ContentTransformer;
+import rife.tools.Convert;
+import rife.tools.exceptions.ConversionException;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -54,10 +56,12 @@ import javax.imageio.*;
 public class ImageFormatter implements Formatter<byte[], Image> {
     public static final String CONTENT_ATTRIBUTE_WIDTH = "width";
     public static final String CONTENT_ATTRIBUTE_HEIGHT = "height";
+    public static final String CONTENT_ATTRIBUTE_HIDPI = "hidpi";
     public static final String CONTENT_ATTRIBUTE_LONGEST_EDGE_LENGTH = "longestEdgeLength";
 
     public static final String CMF_PROPERTY_WIDTH = "cmf:width";
     public static final String CMF_PROPERTY_HEIGHT = "cmf:height";
+    public static final String CMF_PROPERTY_HIDPI = "cmf:hidpi";
 
     public byte[] format(Content content, ContentTransformer<Image> transformer)
     throws FormatException {
@@ -88,7 +92,16 @@ public class ImageFormatter implements Formatter<byte[], Image> {
         }
 
         // perform additional conversions according to the provided attributes
+        boolean hidpi = true;
         if (content.hasAttributes()) {
+            if (content.hasAttribute(CONTENT_ATTRIBUTE_HIDPI)) {
+                try {
+                    hidpi = Convert.toBoolean(content.getAttribute(CONTENT_ATTRIBUTE_HIDPI));
+                } catch (ConversionException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
             var width = -1;
             var height = -1;
             if (content.hasAttribute(CONTENT_ATTRIBUTE_WIDTH) ||
@@ -186,7 +199,8 @@ public class ImageFormatter implements Formatter<byte[], Image> {
         // set the content data properties
         content
             .property(CMF_PROPERTY_WIDTH, String.valueOf(buffer.getWidth()))
-            .property(CMF_PROPERTY_HEIGHT, String.valueOf(buffer.getHeight()));
+            .property(CMF_PROPERTY_HEIGHT, String.valueOf(buffer.getHeight()))
+            .property(CMF_PROPERTY_HIDPI, hidpi);
 
         // write it out as the correct mimetype
         var bytes_out = new ByteArrayOutputStream();

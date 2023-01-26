@@ -32,6 +32,7 @@ import rife.engine.Context;
 import rife.engine.Route;
 import rife.tools.Convert;
 import rife.tools.StringUtils;
+import rife.tools.exceptions.ConversionException;
 
 public abstract class DatabaseImageStore extends DatabaseContentStore {
     public DatabaseImageStore(Datasource datasource) {
@@ -79,16 +80,33 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
         var properties = info.getProperties();
         if (properties != null) {
             var width = properties.get(ImageFormatter.CMF_PROPERTY_WIDTH);
-            if (width != null) {
-                result.append(" width=\"");
-                result.append(width);
-                result.append("\"");
-            }
             var height = properties.get(ImageFormatter.CMF_PROPERTY_HEIGHT);
+            var hidpi = Convert.toBoolean(properties.get(ImageFormatter.CMF_PROPERTY_HIDPI), true);
+            if (width != null) {
+                try {
+                    var width_attribute = Convert.toInt(width);
+                    if (hidpi) {
+                        width_attribute = width_attribute / 2;
+                    }
+                    result.append(" width=\"");
+                    result.append(width_attribute);
+                    result.append("\"");
+                } catch (ConversionException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             if (height != null) {
-                result.append(" height=\"");
-                result.append(height);
-                result.append("\"");
+                try {
+                    var height_attribute = Convert.toInt(height);
+                    if (hidpi) {
+                        height_attribute = height_attribute / 2;
+                    }
+                    result.append(" height=\"");
+                    result.append(height_attribute);
+                    result.append("\"");
+                } catch (ConversionException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         result.append(" alt=\"\" />");

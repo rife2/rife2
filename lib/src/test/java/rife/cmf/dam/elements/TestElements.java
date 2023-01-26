@@ -15,6 +15,7 @@ import rife.cmf.dam.ContentImage;
 import rife.cmf.dam.ContentQueryManager;
 import rife.cmf.dam.contentmanagers.DatabaseContentFactory;
 import rife.cmf.elements.ServeContent;
+import rife.cmf.format.ImageFormatter;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.database.TestDatasources;
@@ -265,6 +266,7 @@ public class TestElements {
             var content = new ContentImage()
                 .name("the content name")
                 .image(data_image_gif);
+            content.getConstrainedProperty("image").contentAttribute(ImageFormatter.CONTENT_ATTRIBUTE_HIDPI, false);
 
             var id = manager.save(content);
 
@@ -287,6 +289,49 @@ public class TestElements {
                     HtmlPage page = webClient.getPage("http://localhost:8181/contentforhtml?id=" + id);
                     assertEquals("<img src=\"http://localhost:8181/serve/contentimage/" + id + "/image\" width=\"1280\" height=\"406\" alt=\"\" />" +
                                  "<img src=\"http://localhost:8181/serve/contentimage/" + id + "/image\" width=\"1280\" height=\"406\" alt=\"\" />", page.getWebResponse().getContentAsString());
+                }
+            }
+        } finally {
+            manager.remove();
+            tearDown(datasource);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    void testContentQueryManagerContentForHtmlHiDpi(Datasource datasource)
+    throws Exception {
+        setup(datasource);
+        var manager = new ContentQueryManager<>(datasource, ContentImage.class);
+        manager.install();
+        try {
+            var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
+            var data_image_gif = FileUtils.readBytes(image_resource_gif);
+            var content = new ContentImage()
+                .name("the content name")
+                .image(data_image_gif);
+
+            var id = manager.save(content);
+
+            try (final var server = new TestServerRunner(new Site() {
+                public void setup() {
+                    var serve = get("/serve", PathInfoHandling.CAPTURE, new ServeContent(datasource));
+                    get("/contentforhtml", c -> {
+                        var id = c.parameterInt("id");
+
+                        var manager = new ContentQueryManager<>(datasource, ContentImage.class);
+                        var content = manager.restore(id);
+                        c.print(manager.getContentForHtml(id, "image", c, serve));
+                        c.print(manager.getContentForHtml(content, "image", c, serve));
+                    });
+                }
+            })) {
+                try (final var webClient = new WebClient()) {
+                    webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+
+                    HtmlPage page = webClient.getPage("http://localhost:8181/contentforhtml?id=" + id);
+                    assertEquals("<img src=\"http://localhost:8181/serve/contentimage/" + id + "/image\" width=\"640\" height=\"203\" alt=\"\" />" +
+                                 "<img src=\"http://localhost:8181/serve/contentimage/" + id + "/image\" width=\"640\" height=\"203\" alt=\"\" />", page.getWebResponse().getContentAsString());
                 }
             }
         } finally {
