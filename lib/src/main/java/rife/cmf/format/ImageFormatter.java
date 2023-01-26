@@ -54,14 +54,18 @@ import javax.imageio.*;
  * @since 1.0
  */
 public class ImageFormatter implements Formatter<byte[], Image> {
-    public static final String CONTENT_ATTRIBUTE_WIDTH = "width";
-    public static final String CONTENT_ATTRIBUTE_HEIGHT = "height";
-    public static final String CONTENT_ATTRIBUTE_HIDPI = "hidpi";
-    public static final String CONTENT_ATTRIBUTE_LONGEST_EDGE_LENGTH = "longestEdgeLength";
+    public static final class ContentAttribute {
+        public static final String WIDTH = "width";
+        public static final String HEIGHT = "height";
+        public static final String LONGEST_EDGE_LENGTH = "longestEdgeLength";
+        public static final String HIDPI = "hidpi";
+    }
 
-    public static final String CMF_PROPERTY_WIDTH = "cmf:width";
-    public static final String CMF_PROPERTY_HEIGHT = "cmf:height";
-    public static final String CMF_PROPERTY_HIDPI = "cmf:hidpi";
+    public static final class CmfProperty {
+        public static final String WIDTH = "cmf:width";
+        public static final String HEIGHT = "cmf:height";
+        public static final String HIDPI = "cmf:hidpi";
+    }
 
     public byte[] format(Content content, ContentTransformer<Image> transformer)
     throws FormatException {
@@ -94,9 +98,9 @@ public class ImageFormatter implements Formatter<byte[], Image> {
         // perform additional conversions according to the provided attributes
         boolean hidpi = true;
         if (content.hasAttributes()) {
-            if (content.hasAttribute(CONTENT_ATTRIBUTE_HIDPI)) {
+            if (content.hasAttribute(ContentAttribute.HIDPI)) {
                 try {
-                    hidpi = Convert.toBoolean(content.getAttribute(CONTENT_ATTRIBUTE_HIDPI));
+                    hidpi = Convert.toBoolean(content.getAttribute(ContentAttribute.HIDPI));
                 } catch (ConversionException e) {
                     throw new RuntimeException(e);
                 }
@@ -104,10 +108,10 @@ public class ImageFormatter implements Formatter<byte[], Image> {
 
             var width = -1;
             var height = -1;
-            if (content.hasAttribute(CONTENT_ATTRIBUTE_WIDTH) ||
-                content.hasAttribute(CONTENT_ATTRIBUTE_HEIGHT)) {
-                var width_value = content.getAttribute(CONTENT_ATTRIBUTE_WIDTH);
-                var height_value = content.getAttribute(CONTENT_ATTRIBUTE_HEIGHT);
+            if (content.hasAttribute(ContentAttribute.WIDTH) ||
+                content.hasAttribute(ContentAttribute.HEIGHT)) {
+                var width_value = content.getAttribute(ContentAttribute.WIDTH);
+                var height_value = content.getAttribute(ContentAttribute.HEIGHT);
                 // retrieve the width and the height values
                 if (width_value != null) {
                     try {
@@ -123,9 +127,9 @@ public class ImageFormatter implements Formatter<byte[], Image> {
                         throw new FormatException(e);
                     }
                 }
-            } else if (content.hasAttribute(CONTENT_ATTRIBUTE_LONGEST_EDGE_LENGTH)) {
+            } else if (content.hasAttribute(ContentAttribute.LONGEST_EDGE_LENGTH)) {
                 // retrieve the attributes
-                var lel_value = content.getAttribute(CONTENT_ATTRIBUTE_LONGEST_EDGE_LENGTH);
+                var lel_value = content.getAttribute(ContentAttribute.LONGEST_EDGE_LENGTH);
                 var lel = -1;
                 if (lel_value != null) {
                     try {
@@ -167,10 +171,10 @@ public class ImageFormatter implements Formatter<byte[], Image> {
                     }
                 }
                 if (height == -1) {
-                    height = (int) (((double)(orig_height * width) / orig_width) + 0.5);
+                    height = (int) (((double) (orig_height * width) / orig_width) + 0.5);
                 }
                 if (width == -1) {
-                    width = (int) ((((double)orig_width * height) / orig_height) + 0.5);
+                    width = (int) ((((double) orig_width * height) / orig_height) + 0.5);
                 }
 
                 // only rescale when the dimensions are actually different
@@ -198,9 +202,9 @@ public class ImageFormatter implements Formatter<byte[], Image> {
 
         // set the content data properties
         content
-            .property(CMF_PROPERTY_WIDTH, String.valueOf(buffer.getWidth()))
-            .property(CMF_PROPERTY_HEIGHT, String.valueOf(buffer.getHeight()))
-            .property(CMF_PROPERTY_HIDPI, hidpi);
+            .property(CmfProperty.WIDTH, String.valueOf(buffer.getWidth()))
+            .property(CmfProperty.HEIGHT, String.valueOf(buffer.getHeight()))
+            .property(CmfProperty.HIDPI, hidpi);
 
         // write it out as the correct mimetype
         var bytes_out = new ByteArrayOutputStream();

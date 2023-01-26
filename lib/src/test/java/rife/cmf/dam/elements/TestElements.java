@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static rife.cmf.format.ImageFormatter.ContentAttribute.HIDPI;
 
 public class TestElements {
     public void setup(Datasource datasource) {
@@ -266,7 +267,7 @@ public class TestElements {
             var content = new ContentImage()
                 .name("the content name")
                 .image(data_image_gif);
-            content.getConstrainedProperty("image").contentAttribute(ImageFormatter.CONTENT_ATTRIBUTE_HIDPI, false);
+            content.getConstrainedProperty("image").contentAttribute(HIDPI, false);
 
             var id = manager.save(content);
 

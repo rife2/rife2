@@ -79,9 +79,9 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
         result.append("\"");
         var properties = info.getProperties();
         if (properties != null) {
-            var width = properties.get(ImageFormatter.CMF_PROPERTY_WIDTH);
-            var height = properties.get(ImageFormatter.CMF_PROPERTY_HEIGHT);
-            var hidpi = Convert.toBoolean(properties.get(ImageFormatter.CMF_PROPERTY_HIDPI), true);
+            var width = properties.get(ImageFormatter.CmfProperty.WIDTH);
+            var height = properties.get(ImageFormatter.CmfProperty.HEIGHT);
+            var hidpi = Convert.toBoolean(properties.get(ImageFormatter.CmfProperty.HIDPI), true);
             if (width != null) {
                 try {
                     var width_attribute = Convert.toInt(width);
