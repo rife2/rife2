@@ -191,6 +191,7 @@ tasks {
     }
 
     withType<Test> {
+        val apiKey = project.properties["testsBadgeApiKey"]
         useJUnitPlatform()
         testLogging {
             exceptionFormat = TestExceptionFormat.FULL
@@ -201,7 +202,49 @@ tasks {
             override fun beforeSuite(p0: TestDescriptor?) = Unit
             override fun afterTest(desc: TestDescriptor, result: TestResult) = Unit
             override fun afterSuite(desc: TestDescriptor, result: TestResult) {
-                printResults(desc, result)
+                if (desc.parent != null) {
+                    val output = result.run {
+                        "Results: $resultType (" +
+                                "$testCount tests, " +
+                                "$successfulTestCount successes, " +
+                                "$failedTestCount failures, " +
+                                "$skippedTestCount skipped" +
+                                ")"
+                    }
+                    val testResultLine = "|  $output  |"
+                    val repeatLength = testResultLine.length
+                    val separationLine = "-".repeat(repeatLength)
+                    println()
+                    println(separationLine)
+                    println(testResultLine)
+                    println(separationLine)
+                }
+
+                if (desc.parent == null) {
+                    val passed = result.successfulTestCount
+                    val failed = result.failedTestCount
+                    val skipped = result.skippedTestCount
+
+                    if (apiKey != null) {
+                        val response: HttpResponse<String> = HttpClient.newHttpClient()
+                            .send(
+                                HttpRequest.newBuilder()
+                                    .uri(
+                                        URI(
+                                            "https://rife2.com/tests-badge/update/com.uwyn.rife2/rife2?" +
+                                                    "apiKey=$apiKey&" +
+                                                    "passed=$passed&" +
+                                                    "failed=$failed&" +
+                                                    "skipped=$skipped"
+                                        )
+                                    )
+                                    .POST(HttpRequest.BodyPublishers.noBody())
+                                    .build(), HttpResponse.BodyHandlers.ofString()
+                            )
+                        println("RESPONSE: " + response.statusCode())
+                        println(response.body())
+                    }
+                }
             }
         })
         environment("project.dir", project.projectDir.toString())
@@ -308,51 +351,4 @@ publishing {
 
 signing {
     sign(publishing.publications["mavenJava"])
-}
-
-fun printResults(desc: TestDescriptor, result: TestResult) {
-    if (desc.parent != null) {
-        val output = result.run {
-            "Results: $resultType (" +
-                    "$testCount tests, " +
-                    "$successfulTestCount successes, " +
-                    "$failedTestCount failures, " +
-                    "$skippedTestCount skipped" +
-                    ")"
-        }
-        val testResultLine = "|  $output  |"
-        val repeatLength = testResultLine.length
-        val separationLine = "-".repeat(repeatLength)
-        println()
-        println(separationLine)
-        println(testResultLine)
-        println(separationLine)
-    }
-
-    if (desc.parent == null) {
-        val passed = result.successfulTestCount
-        val failed = result.failedTestCount
-        val skipped = result.skippedTestCount
-
-        if (project.properties["testsBadgeApiKey"] != null) {
-            val apiKey = project.properties["testsBadgeApiKey"]
-            val response: HttpResponse<String> = HttpClient.newHttpClient()
-                .send(
-                    HttpRequest.newBuilder()
-                        .uri(
-                            URI(
-                                "https://rife2.com/tests-badge/update/com.uwyn.rife2/rife2?" +
-                                        "apiKey=$apiKey&" +
-                                        "passed=$passed&" +
-                                        "failed=$failed&" +
-                                        "skipped=$skipped"
-                            )
-                        )
-                        .POST(HttpRequest.BodyPublishers.noBody())
-                        .build(), HttpResponse.BodyHandlers.ofString()
-                )
-            println("RESPONSE: " + response.statusCode())
-            println(response.body())
-        }
-    }
 }
