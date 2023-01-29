@@ -25,6 +25,10 @@ of the footprint and with even greater developer productivity than before.
 RIFE2 is created by Geert Bevin, one of the first Java Champions and speaker at
 many Java conferences.
 
+> **TIP:** If you use IntelliJ IDEA as your IDE, consider installing the
+> [RIFE2 IDEA Plug-in](https://github.com/gbevin/rife2-idea).  
+> It will greatly enhance your coding experience.
+
 **This is a quick tutorial, the [full documentation](https://github.com/gbevin/rife2/wiki)
 contains a lot more information.**
 
