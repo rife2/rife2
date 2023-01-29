@@ -116,6 +116,7 @@ application {
 
 dependencies {
     implementation("com.uwyn.rife2:rife2:1.0.0")
+    implementation("org.slf4j:slf4j-simple:2.0.6")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
     testImplementation("org.jsoup:jsoup:1.15.3")
     runtimeOnly("org.eclipse.jetty:jetty-server:11.0.13")
