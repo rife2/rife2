@@ -89,6 +89,10 @@ public class Context {
             return;
         }
 
+        if (RifeConfig.engine().getGlobalNoCacheHeaders()) {
+            preventCaching();
+        }
+
         var route = routeMatch_.route();
 
         try {

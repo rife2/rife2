@@ -472,6 +472,7 @@ public class RifeConfig {
         private long fileUploadSizeLimit_ = DEFAULT_FILE_UPLOAD_SIZE_LIMIT;
         private boolean fileUploadSizeCheck_ = DEFAULT_FILE_UPLOAD_SIZE_CHECK;
         private boolean fileUploadSizeException_ = DEFAULT_FILE_UPLOAD_SIZE_EXCEPTION;
+        private boolean globalNoCacheHeaders_ = DEFAULT_GLOBAL_NO_CACHE_HEADERS;
         private boolean gzipCompression_ = DEFAULT_GZIP_COMPRESSION;
         private Collection<String> gzipCompressionTypes_ = DEFAULT_GZIP_COMPRESSION_TYPES;
         private String proxyRootUrl_ = DEFAULT_PROXY_ROOT_URL;
@@ -488,6 +489,7 @@ public class RifeConfig {
         public static final long DEFAULT_FILE_UPLOAD_SIZE_LIMIT = 1024 * 1024 * 2;    // 2MB
         public static final boolean DEFAULT_FILE_UPLOAD_SIZE_CHECK = true;
         public static final boolean DEFAULT_FILE_UPLOAD_SIZE_EXCEPTION = false;
+        public static final boolean DEFAULT_GLOBAL_NO_CACHE_HEADERS = false;
         public static final boolean DEFAULT_GZIP_COMPRESSION = true;
         public static final Collection<String> DEFAULT_GZIP_COMPRESSION_TYPES = List.of(
             "text/html",
@@ -630,6 +632,15 @@ public class RifeConfig {
 
         public EngineConfig setContinuationPurgeScale(int frequency) {
             continuationPurgeScale_ = frequency;
+            return this;
+        }
+
+        public boolean getGlobalNoCacheHeaders() {
+            return globalNoCacheHeaders_;
+        }
+
+        public EngineConfig setGlobalNoCacheHeaders(boolean flag) {
+            globalNoCacheHeaders_ = flag;
             return this;
         }
 

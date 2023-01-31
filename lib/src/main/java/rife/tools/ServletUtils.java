@@ -17,7 +17,7 @@ public final class ServletUtils {
         response.addHeader("Cache-Control", "no-store");            // HTTP/1.1
         response.addHeader("Cache-Control", "must-revalidate");     // HTTP/1.1
         response.addHeader("Pragma", "no-cache");                   // HTTP 1.0
-        response.addHeader("Expires", "1");
+        response.setDateHeader("Expires", 0);
     }
 }
 
