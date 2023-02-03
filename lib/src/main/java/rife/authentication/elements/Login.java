@@ -241,7 +241,8 @@ public class Login extends Identified implements SessionAttributes {
             if (remember_id != null) {
                 c.addCookie(new CookieBuilder(auth_config.rememberCookieName(), remember_id)
                     .path("/")
-                    .maxAge(auth_config.rememberMaxAge()));
+                    .maxAge(auth_config.rememberMaxAge())
+                    .secure(true));
             }
         }
 
@@ -252,7 +253,8 @@ public class Login extends Identified implements SessionAttributes {
 
             // set cookie
             c.addCookie(new CookieBuilder(auth_config.authCookieName(), authid)
-                .path("/"));
+                .path("/")
+                .secure(true));
 
             var session_validator = auth_config.sessionValidator();
             assert session_validator != null;

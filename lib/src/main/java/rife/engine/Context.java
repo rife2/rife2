@@ -2692,7 +2692,7 @@ public class Context {
      * @since 1.0
      */
     public void removeCookie(String path, String name) {
-        addCookie(new CookieBuilder(name, "").path(path).maxAge(0));
+        addCookie(new CookieBuilder(name, "").path(path).maxAge(-1));
     }
 
     /**

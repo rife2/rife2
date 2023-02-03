@@ -127,12 +127,12 @@ public class Logout implements Element {
                 var remember_cookie_name = getAuthConfig().rememberCookieName();
                 getAuthConfig().sessionValidator().getRememberManager().eraseRememberId(c.cookieValue(remember_cookie_name));
 
-                c.addCookie(new CookieBuilder(remember_cookie_name, "").path("/").maxAge(-1));
+                c.removeCookie("/", remember_cookie_name);
             }
 
             // clear the authentication cookie
             if (c.hasCookie(auth_cookie_name)) {
-                c.addCookie(new CookieBuilder(auth_cookie_name, "").path("/").maxAge(-1));
+                c.removeCookie("/", auth_cookie_name);
             }
         }
 
