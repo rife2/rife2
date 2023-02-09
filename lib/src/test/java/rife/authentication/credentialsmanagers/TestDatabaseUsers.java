@@ -551,6 +551,65 @@ public class TestDatabaseUsers {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
+    void testValidUsersDrupal(Datasource datasource) {
+        var users = DatabaseUsersFactory.instance(datasource);
+        users.setPasswordEncryptor(StringEncryptor.DRUPAL);
+
+        try {
+            users.install();
+
+            users
+                .addRole("role1")
+                .addRole("role2")
+                .addRole("role3");
+
+            var user1_attributes = new RoleUserAttributes(0, "thepassword");
+            users.addUser("login1", user1_attributes);
+            var user2_attributes = new RoleUserAttributes(1, "$S$D4PAggxs.rhAU1xLj2vt6swy4fGrY0qNHinb0Om0N9U7OdZAnKqP", new String[]{"role1", "role2"});
+            users.addUser("login2", user2_attributes);
+            var user3_attributes = new RoleUserAttributes(2, "thepassword3", new String[]{"role1", "role2", "role3"});
+            users.addUser("login3", user3_attributes);
+            var user4_attributes = new RoleUserAttributes(174, "thepassword4", new String[]{"role2", "role3"});
+            users.addUser("login4", user4_attributes);
+
+            assertEquals(-1, users.verifyCredentials(new RoleUser("login", "thepassword")));
+
+            assertEquals(0, users.verifyCredentials(new RoleUser("login1", "thepassword")));
+            assertEquals(-1, users.verifyCredentials(new RoleUser("login1", "thepassword2")));
+            assertEquals(-1, users.verifyCredentials(new RoleUser("login1", "thepassword", "role1")));
+
+            assertEquals(1, users.verifyCredentials(new RoleUser("login2", "thepassword2")));
+            assertEquals(-1, users.verifyCredentials(new RoleUser("login2", "thepassword3")));
+            assertEquals(1, users.verifyCredentials(new RoleUser("login2", "thepassword2", "role1")));
+            assertEquals(1, users.verifyCredentials(new RoleUser("login2", "thepassword2", "role2")));
+            assertEquals(-1, users.verifyCredentials(new RoleUser("login2", "thepassword2", "role3")));
+
+            assertEquals(2, users.verifyCredentials(new RoleUser("login3", "thepassword3")));
+            assertEquals(-1, users.verifyCredentials(new RoleUser("login3", "thepassword4")));
+            assertEquals(2, users.verifyCredentials(new RoleUser("login3", "thepassword3", "role1")));
+            assertEquals(2, users.verifyCredentials(new RoleUser("login3", "thepassword3", "role2")));
+            assertEquals(2, users.verifyCredentials(new RoleUser("login3", "thepassword3", "role3")));
+            assertEquals(-1, users.verifyCredentials(new RoleUser("login3", "thepassword3", "role4")));
+
+            assertEquals(174, users.verifyCredentials(new RoleUser("login4", "thepassword4")));
+            assertEquals(-1, users.verifyCredentials(new RoleUser("login4", "thepassword")));
+            assertEquals(-1, users.verifyCredentials(new RoleUser("login4", "thepassword4", "role1")));
+            assertEquals(174, users.verifyCredentials(new RoleUser("login4", "thepassword4", "role2")));
+            assertEquals(174, users.verifyCredentials(new RoleUser("login4", "thepassword4", "role3")));
+        } catch (CredentialsManagerException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        } finally {
+            try {
+                users.remove();
+            } catch (CredentialsManagerException e) {
+                fail(ExceptionUtils.getExceptionStackTrace(e));
+            }
+            users.setPasswordEncryptor(null);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
     void testUsersInRole(Datasource datasource) {
         var users = DatabaseUsersFactory.instance(datasource);
         users.setPasswordEncryptor(StringEncryptor.MD5);

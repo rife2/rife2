@@ -116,7 +116,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
                     statement.setString("login", data_.getLogin());
 
                     // handle automatic password encoding
-                    if (null == passwordEncryptor_) {
+                    if (null == passwordEncryptor_ || passwordEncryptor_.requiresAdaptiveVerification()) {
                         // correctly handle encoded passwords
                         String password = data_.getPassword();
 
@@ -271,7 +271,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
                         // ensure that the password is encoded if an encoder has been set
                         String password = null;
                         if (null == passwordEncryptor_ ||
-                            attributes.getPassword().startsWith(passwordEncryptor_.toString())) {
+                            attributes.getPassword().startsWith(passwordEncryptor_.prefix())) {
                             password = attributes.getPassword();
                         } else {
                             try {

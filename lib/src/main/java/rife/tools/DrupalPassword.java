@@ -26,7 +26,7 @@ public class DrupalPassword {
      * increase by 1 every Drupal version in order to counteract increases in the
      * speed and power of computers available to crack the hashes.
      */
-    public static final int DRUPAL_HASH_COUNT = 15;
+    public static final int DRUPAL_HASH_COUNT = 16;
 
     /**
      * The minimum allowed log2 number of iterations for password stretching.
@@ -67,7 +67,24 @@ public class DrupalPassword {
      */
     public String hashPassword(String password)
     throws NoSuchAlgorithmException {
-        return passwordCrypt(password, passwordGenerateSalt(passwordCountLog2_));
+        return hashPassword(password, null);
+    }
+
+    /**
+     * Hash a password using a secure hash.
+     *
+     * @param password A plain-text password.
+     * @param setting  An existing hash or the output of _password_generate_salt().  Must be
+     *                 at least 12 characters (the settings and salt).
+     * @return A string containing the hashed password (and a salt), or {@code null} on failure.
+     * @since 1.0.1
+     */
+    public String hashPassword(String password, String setting)
+    throws NoSuchAlgorithmException {
+        if (!validateSetting(setting)) {
+            setting = passwordGenerateSalt(passwordCountLog2_);
+        }
+        return passwordCrypt(password, setting);
     }
 
     public static String md5php(String password)
@@ -90,12 +107,6 @@ public class DrupalPassword {
     throws NoSuchAlgorithmException {
         if (candidate == null || saltedEncrypted == null) {
             return false;
-        }
-        if (saltedEncrypted.startsWith("U$")) {
-            // This may be an updated password from user_update_7000(). Such hashes
-            // have 'U' added as the first character and need an extra md5().
-            saltedEncrypted = saltedEncrypted.substring(1);
-            candidate = md5php(candidate);
         }
 
         var hash = passwordCrypt(candidate, saltedEncrypted);
@@ -237,6 +248,11 @@ public class DrupalPassword {
         return countLog2;
     }
 
+    private static boolean validateSetting(String setting) {
+        return setting != null && setting.length() >= 12 &&
+               setting.charAt(0) == '$' && setting.charAt(2) == '$';
+    }
+
     /**
      * Hash a password using a secure stretched hash with sha512 algo.
      * <p>
@@ -257,10 +273,18 @@ public class DrupalPassword {
         if (password.getBytes(StandardCharsets.UTF_8).length > 512) {
             return null;
         }
+
+        if (setting != null && setting.startsWith("U$")) {
+            // This may be an updated password from user_update_7000(). Such hashes
+            // have 'U' added as the first character and need an extra md5().
+            setting = setting.substring(1);
+            password = md5php(password);
+        }
+
         // The first 12 characters of an existing hash are its setting string.
         setting = setting.substring(0, 12);
 
-        if (setting.charAt(0) != '$' || setting.charAt(2) != '$') {
+        if (!validateSetting(setting)) {
             return null;
         }
 

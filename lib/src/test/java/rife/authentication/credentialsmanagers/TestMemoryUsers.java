@@ -707,7 +707,44 @@ public class TestMemoryUsers {
 
             var user1_attributes = new RoleUserAttributes("thepassword");
             users.addUser("login1", user1_attributes);
-            var user2_attributes = new RoleUserAttributes("thepassword2", new String[]{"role1", "role2"});
+            var user2_attributes = new RoleUserAttributes("OBF:1m0x1thf1vn61x8g1vu11ym71ym71vv91x8e1vnw1th71lx9", new String[]{"role1", "role2"});
+            users.addUser("login2", user2_attributes);
+            var user3_attributes = new RoleUserAttributes("thepassword3", new String[]{"role1", "role2", "role3"});
+            users.addUser("login3", user3_attributes);
+
+            var user = new RoleUser();
+            user.setLogin("login2");
+            user.setPassword("thepassword2");
+            user.setRole("role2");
+
+            assertEquals(user2_attributes.getUserId(), users.verifyCredentials(user));
+
+            user.setRole(null);
+
+            assertEquals(user2_attributes.getUserId(), users.verifyCredentials(user));
+
+            user.setRole("role3");
+
+            assertEquals(-1, users.verifyCredentials(user));
+        } catch (CredentialsManagerException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
+    void testVerifyCredentialsDrupal() {
+        var users = new MemoryUsers();
+        users.setPasswordEncryptor(StringEncryptor.DRUPAL);
+
+        try {
+            users
+                .addRole("role1")
+                .addRole("role2")
+                .addRole("role3");
+
+            var user1_attributes = new RoleUserAttributes("thepassword");
+            users.addUser("login1", user1_attributes);
+            var user2_attributes = new RoleUserAttributes("$S$D4PAggxs.rhAU1xLj2vt6swy4fGrY0qNHinb0Om0N9U7OdZAnKqP", new String[]{"role1", "role2"});
             users.addUser("login2", user2_attributes);
             var user3_attributes = new RoleUserAttributes("thepassword3", new String[]{"role1", "role2", "role3"});
             users.addUser("login3", user3_attributes);

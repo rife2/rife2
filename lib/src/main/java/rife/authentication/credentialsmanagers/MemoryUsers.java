@@ -65,7 +65,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             // handle automatic password encoding
             String password = null;
             try {
-                if (null == passwordEncryptor_) {
+                if (null == passwordEncryptor_ || passwordEncryptor_.requiresAdaptiveVerification()) {
                     // correctly handle encoded passwords
                     password = StringEncryptor.adaptiveEncrypt(role_user.getPassword(), user_attributes.getPassword());
                 } else {
@@ -173,7 +173,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
             // correctly handle password encoding
             var attributes_clone = attributes.clone();
             if (passwordEncryptor_ != null &&
-                !attributes_clone.getPassword().startsWith(passwordEncryptor_.toString())) {
+                !attributes_clone.getPassword().startsWith(passwordEncryptor_.prefix())) {
                 try {
                     attributes_clone.setPassword(passwordEncryptor_.encrypt(attributes_clone.getPassword()));
                 } catch (NoSuchAlgorithmException e) {

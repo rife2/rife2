@@ -19,9 +19,23 @@ public enum StringEncryptor {
     SHAHEX,
     WRP,
     WRPHEX,
-    DRUPAL;
+    DRUPAL(true);
 
     private static final String PREFIX_SEPARATOR_SUFFIX = ":";
+
+    private final boolean requiresAdaptiveVerification_;
+
+    StringEncryptor() {
+        requiresAdaptiveVerification_ = false;
+    }
+
+    StringEncryptor(boolean requiresAdaptiveVerification) {
+        requiresAdaptiveVerification_ = requiresAdaptiveVerification;
+    }
+
+    public boolean requiresAdaptiveVerification() {
+        return requiresAdaptiveVerification_;
+    }
 
     public String prefix() {
         if (this == DRUPAL) {
@@ -133,7 +147,7 @@ public enum StringEncryptor {
         if (encryptedValue.startsWith(OBF.prefix())) {
             clearValue = OBF.prefix() + clearValue;
         } else if (encryptedValue.startsWith(DRUPAL.prefix())) {
-            return new DrupalPassword().hashPassword(clearValue);
+            return new DrupalPassword().hashPassword(clearValue, encryptedValue);
         } else if (encryptedValue.startsWith(WRP.prefix())) {
             clearValue = WRP.prefix() + clearValue;
         } else if (encryptedValue.startsWith(WRPHEX.prefix())) {
