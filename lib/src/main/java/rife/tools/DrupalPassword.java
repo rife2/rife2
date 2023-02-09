@@ -6,7 +6,8 @@ package rife.tools;
 
 import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.util.Base64;
+
+import static rife.tools.StringUtils.encodeHex;
 
 /**
  * Java implementation of the Drupal 7 password hashing algorithm.
@@ -69,11 +70,11 @@ public class DrupalPassword {
         return passwordCrypt(password, passwordGenerateSalt(passwordCountLog2_));
     }
 
-    public static String md5(String password)
+    public static String md5php(String password)
     throws NoSuchAlgorithmException {
         var md5 = MessageDigest.getInstance("MD5");
         md5.update(password.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(md5.digest());
+        return encodeHex(md5.digest()).toLowerCase();
     }
 
     /**
@@ -94,7 +95,7 @@ public class DrupalPassword {
             // This may be an updated password from user_update_7000(). Such hashes
             // have 'U' added as the first character and need an extra md5().
             saltedEncrypted = saltedEncrypted.substring(1);
-            candidate = md5(candidate);
+            candidate = md5php(candidate);
         }
 
         var hash = passwordCrypt(candidate, saltedEncrypted);
@@ -133,7 +134,7 @@ public class DrupalPassword {
         if (!password.startsWith(PREFIX) || password.length() != DRUPAL_HASH_LENGTH) {
             return true;
         }
-        // Ensure that $count_log2 is within set bounds.
+        // Ensure that count_log2 is within set bounds.
         var count_log2 = passwordEnforceLog2Boundaries(passwordCountLog2_);
         // Check whether the iteration count used differs from the standard number.
         return passwordGetCountLog2(password) != count_log2;

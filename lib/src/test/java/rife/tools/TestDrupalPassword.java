@@ -27,7 +27,7 @@ public class TestDrupalPassword {
         // that it is corrected to be within bounds.
         var hash = new DrupalPassword(1);
         // Set up a md5 password 'baz'
-        final var password = DrupalPassword.md5("baz");
+        final var password = DrupalPassword.md5php("baz");
         // The md5 password should be flagged as needing an update.
         assertTrue(hash.passwordNeedsNewHash(password));
         // Re-hash the password.
