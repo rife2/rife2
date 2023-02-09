@@ -31,6 +31,7 @@ public class TestStringEncryptor {
             assertEquals(encrypted_value_obf, StringEncryptor.adaptiveEncrypt(value, "OBF:123"));
             assertEquals(encrypted_value_wrp, StringEncryptor.adaptiveEncrypt(value, "WRP:123"));
             assertEquals(encrypted_value_wrphex, StringEncryptor.adaptiveEncrypt(value, "WRPHEX:123"));
+            assertTrue(StringEncryptor.matches(value, StringEncryptor.adaptiveEncrypt(value, "$S$:123")));
             assertEquals(encrypted_value_none, StringEncryptor.adaptiveEncrypt(value, "123"));
         } catch (NoSuchAlgorithmException e) {
             fail();
@@ -56,6 +57,7 @@ public class TestStringEncryptor {
             assertEquals(encrypted_value_obf, StringEncryptor.OBF.encrypt(value));
             assertEquals(encrypted_value_wrp, StringEncryptor.WRP.encrypt(value));
             assertEquals(encrypted_value_wrphex, StringEncryptor.WRPHEX.encrypt(value));
+            assertTrue(StringEncryptor.matches(value, StringEncryptor.DRUPAL.encrypt(value)));
             assertNull(StringEncryptor.getEncryptor("BLAH"));
         } catch (NoSuchAlgorithmException e) {
             fail();
@@ -81,6 +83,7 @@ public class TestStringEncryptor {
             assertEquals(encrypted_value_obf, StringEncryptor.getEncryptor(StringEncryptor.OBF.name()).encrypt(value));
             assertEquals(encrypted_value_wrp, StringEncryptor.getEncryptor(StringEncryptor.WRP.name()).encrypt(value));
             assertEquals(encrypted_value_wrphex, StringEncryptor.getEncryptor(StringEncryptor.WRPHEX.name()).encrypt(value));
+            assertTrue(StringEncryptor.matches(value, StringEncryptor.getEncryptor(StringEncryptor.DRUPAL.name()).encrypt(value)));
             assertNull(StringEncryptor.getEncryptor("BLAH"));
         } catch (NoSuchAlgorithmException e) {
             fail();
@@ -210,6 +213,23 @@ public class TestStringEncryptor {
         var value2 = "somevalue";
         var value3 = "somevalue2";
         var value4 = "MD5HEX:somevalue";
+
+        try {
+            var encrypted = StringEncryptor.autoEncrypt(value);
+            assertTrue(StringEncryptor.matches(value2, encrypted));
+            assertFalse(StringEncryptor.matches(value3, encrypted));
+            assertFalse(StringEncryptor.matches(value4, encrypted));
+        } catch (NoSuchAlgorithmException e) {
+            fail();
+        }
+    }
+
+    @Test
+    void testEncryptDRUPAL() {
+        var value = "$S$somevalue";
+        var value2 = "somevalue";
+        var value3 = "somevalue2";
+        var value4 = "$S$somevalue";
 
         try {
             var encrypted = StringEncryptor.autoEncrypt(value);

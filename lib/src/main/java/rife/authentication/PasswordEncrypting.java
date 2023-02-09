@@ -20,7 +20,7 @@ public interface PasswordEncrypting {
      * Sets the password encryptor to use to encrypt this credentials
      * manager's passwords.
      *
-     * @param passwordEncryptor the password ecryptor that will be used
+     * @param passwordEncryptor the password encryptor that will be used
      * @since 1.0
      */
     void setPasswordEncryptor(StringEncryptor passwordEncryptor);

@@ -8,6 +8,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+import static rife.tools.StringUtils.encodeClassname;
 import static rife.tools.StringUtils.encodeHex;
 
 public enum StringEncryptor {
@@ -17,11 +18,15 @@ public enum StringEncryptor {
     SHA,
     SHAHEX,
     WRP,
-    WRPHEX;
+    WRPHEX,
+    DRUPAL;
 
     private static final String PREFIX_SEPARATOR_SUFFIX = ":";
 
     public String prefix() {
+        if (this == DRUPAL) {
+            return DrupalPassword.PREFIX;
+        }
         return name() + PREFIX_SEPARATOR_SUFFIX;
     }
 
@@ -50,6 +55,8 @@ public enum StringEncryptor {
 
         if (value.startsWith(OBF.prefix())) {
             return OBF.prefix() + obfuscate(value.substring(OBF.prefix().length()));
+        } else if (value.startsWith(DRUPAL.prefix())) {
+            return new DrupalPassword().hashPassword(value.substring(DRUPAL.prefix().length()));
         } else {
             var encode_base64 = false;
             String prefix = null;
@@ -111,6 +118,10 @@ public enum StringEncryptor {
         if (null == checkedValue) throw new IllegalArgumentException("checkedValue can't be null");
         if (null == encryptedValue) throw new IllegalArgumentException("encryptedValue can't be null");
 
+        if (encryptedValue.startsWith(DRUPAL.prefix())) {
+            return DrupalPassword.checkPassword(checkedValue, encryptedValue);
+        }
+
         return encryptedValue.equals(adaptiveEncrypt(checkedValue, encryptedValue));
     }
 
@@ -121,6 +132,8 @@ public enum StringEncryptor {
 
         if (encryptedValue.startsWith(OBF.prefix())) {
             clearValue = OBF.prefix() + clearValue;
+        } else if (encryptedValue.startsWith(DRUPAL.prefix())) {
+            return new DrupalPassword().hashPassword(clearValue);
         } else if (encryptedValue.startsWith(WRP.prefix())) {
             clearValue = WRP.prefix() + clearValue;
         } else if (encryptedValue.startsWith(WRPHEX.prefix())) {
