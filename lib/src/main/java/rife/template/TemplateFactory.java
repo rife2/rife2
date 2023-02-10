@@ -180,7 +180,7 @@ public class TemplateFactory extends EnumClass<String> {
 
     private TemplateClassLoader lastClassloader_ = null;
 
-    TemplateFactory(TemplateConfig config, ResourceFinder resourceFinder, String identifier,
+    public TemplateFactory(TemplateConfig config, ResourceFinder resourceFinder, String identifier,
                     String defaultContentType,
                     String extension, String[] blockFilters, String[] valueFilters,
                     BeanHandler beanHandler,
