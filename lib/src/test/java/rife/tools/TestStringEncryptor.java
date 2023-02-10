@@ -31,7 +31,9 @@ public class TestStringEncryptor {
             assertEquals(encrypted_value_obf, StringEncryptor.adaptiveEncrypt(value, "OBF:123"));
             assertEquals(encrypted_value_wrp, StringEncryptor.adaptiveEncrypt(value, "WRP:123"));
             assertEquals(encrypted_value_wrphex, StringEncryptor.adaptiveEncrypt(value, "WRPHEX:123"));
-            assertTrue(StringEncryptor.matches(value, StringEncryptor.adaptiveEncrypt(value, "$S$:123")));
+            var encrypted_drupal = StringEncryptor.adaptiveEncrypt(value, "$S$");
+            assertNotEquals(encrypted_drupal, value);
+            assertTrue(StringEncryptor.matches(value, encrypted_drupal));
             assertEquals(encrypted_value_none, StringEncryptor.adaptiveEncrypt(value, "123"));
         } catch (NoSuchAlgorithmException e) {
             fail();
@@ -55,9 +57,11 @@ public class TestStringEncryptor {
             assertEquals(encrypted_value_md5, StringEncryptor.MD5.encrypt(value));
             assertEquals(encrypted_value_md5hex, StringEncryptor.MD5HEX.encrypt(value));
             assertEquals(encrypted_value_obf, StringEncryptor.OBF.encrypt(value));
-            assertEquals(encrypted_value_wrp, StringEncryptor.WRP.encrypt(value));
-            assertEquals(encrypted_value_wrphex, StringEncryptor.WRPHEX.encrypt(value));
-            assertTrue(StringEncryptor.matches(value, StringEncryptor.DRUPAL.encrypt(value)));
+            assertEquals(encrypted_value_wrp, StringEncryptor.WHIRLPOOL.encrypt(value));
+            assertEquals(encrypted_value_wrphex, StringEncryptor.WHIRLPOOLHEX.encrypt(value));
+            var encrypted_drupal = StringEncryptor.DRUPAL.encrypt(value);
+            assertNotEquals(encrypted_drupal, value);
+            assertTrue(StringEncryptor.matches(value, encrypted_drupal));
             assertNull(StringEncryptor.getEncryptor("BLAH"));
         } catch (NoSuchAlgorithmException e) {
             fail();
@@ -76,14 +80,16 @@ public class TestStringEncryptor {
         var value = "thevalue";
 
         try {
-            assertEquals(encrypted_value_sha, StringEncryptor.getEncryptor(StringEncryptor.SHA.name()).encrypt(value));
-            assertEquals(encrypted_value_shahex, StringEncryptor.getEncryptor(StringEncryptor.SHAHEX.name()).encrypt(value));
-            assertEquals(encrypted_value_md5, StringEncryptor.getEncryptor(StringEncryptor.MD5.name()).encrypt(value));
-            assertEquals(encrypted_value_md5hex, StringEncryptor.getEncryptor(StringEncryptor.MD5HEX.name()).encrypt(value));
-            assertEquals(encrypted_value_obf, StringEncryptor.getEncryptor(StringEncryptor.OBF.name()).encrypt(value));
-            assertEquals(encrypted_value_wrp, StringEncryptor.getEncryptor(StringEncryptor.WRP.name()).encrypt(value));
-            assertEquals(encrypted_value_wrphex, StringEncryptor.getEncryptor(StringEncryptor.WRPHEX.name()).encrypt(value));
-            assertTrue(StringEncryptor.matches(value, StringEncryptor.getEncryptor(StringEncryptor.DRUPAL.name()).encrypt(value)));
+            assertEquals(encrypted_value_sha, StringEncryptor.getEncryptor(StringEncryptor.SHA.getIdentifier()).encrypt(value));
+            assertEquals(encrypted_value_shahex, StringEncryptor.getEncryptor(StringEncryptor.SHAHEX.getIdentifier()).encrypt(value));
+            assertEquals(encrypted_value_md5, StringEncryptor.getEncryptor(StringEncryptor.MD5.getIdentifier()).encrypt(value));
+            assertEquals(encrypted_value_md5hex, StringEncryptor.getEncryptor(StringEncryptor.MD5HEX.getIdentifier()).encrypt(value));
+            assertEquals(encrypted_value_obf, StringEncryptor.getEncryptor(StringEncryptor.OBF.getIdentifier()).encrypt(value));
+            assertEquals(encrypted_value_wrp, StringEncryptor.getEncryptor(StringEncryptor.WHIRLPOOL.getIdentifier()).encrypt(value));
+            assertEquals(encrypted_value_wrphex, StringEncryptor.getEncryptor(StringEncryptor.WHIRLPOOLHEX.getIdentifier()).encrypt(value));
+            var encrypted_drupal = StringEncryptor.getEncryptor(StringEncryptor.DRUPAL.getIdentifier()).encrypt(value);
+            assertNotEquals(encrypted_drupal, value);
+            assertTrue(StringEncryptor.matches(value, encrypted_drupal));
             assertNull(StringEncryptor.getEncryptor("BLAH"));
         } catch (NoSuchAlgorithmException e) {
             fail();

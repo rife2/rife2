@@ -4,33 +4,112 @@
  */
 package rife.tools;
 
+import rife.datastructures.EnumClass;
+
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 
-import static rife.tools.StringUtils.encodeClassname;
+import static rife.tools.StringUtils.encodeBase64;
 import static rife.tools.StringUtils.encodeHex;
 
-public enum StringEncryptor {
-    OBF,
-    MD5,
-    MD5HEX,
-    SHA,
-    SHAHEX,
-    WRP,
-    WRPHEX,
-    DRUPAL(true);
+public abstract class StringEncryptor extends EnumClass<String> {
+    private static final String IDENTIFIER_HEX_SUFFIX = "HEX";
+
+    private static final String IDENTIFIER_OBF = "OBF";
+    private static final String IDENTIFIER_MD5 = "MD5";
+    private static final String IDENTIFIER_MD5HEX = IDENTIFIER_MD5 + IDENTIFIER_HEX_SUFFIX;
+    private static final String IDENTIFIER_SHA = "SHA";
+    private static final String IDENTIFIER_SHAHEX = IDENTIFIER_SHA + IDENTIFIER_HEX_SUFFIX;
+    private static final String IDENTIFIER_WHIRLPOOL = "WRP";
+    private static final String IDENTIFIER_WHIRLPOOLHEX = IDENTIFIER_WHIRLPOOL + IDENTIFIER_HEX_SUFFIX;
+    private static final String IDENTIFIER_DRUPAL = "$S$";
 
     private static final String PREFIX_SEPARATOR_SUFFIX = ":";
 
+    public static final StringEncryptor DRUPAL = new StringEncryptor(IDENTIFIER_DRUPAL, "", true) {
+        public String performEncryption(String value, String encryptedValue)
+        throws NoSuchAlgorithmException {
+            var hashed = new DrupalPassword().hashPassword(value, encryptedValue);
+            if (hashed == null) {
+                return null;
+            }
+            return hashed.substring(prefix().length());
+        }
+    };
+    public static final StringEncryptor SHA = new StringEncryptor(IDENTIFIER_SHA, PREFIX_SEPARATOR_SUFFIX) {
+        public String performEncryption(String value, String encryptedValue)
+        throws NoSuchAlgorithmException {
+            var digest = MessageDigest.getInstance("SHA");
+            digest.update(value.getBytes(StandardCharsets.UTF_8));
+            return encodeBase64(digest.digest());
+        }
+    };
+    public static final StringEncryptor SHAHEX = new StringEncryptor(IDENTIFIER_SHAHEX, PREFIX_SEPARATOR_SUFFIX) {
+        public String performEncryption(String value, String encryptedValue)
+        throws NoSuchAlgorithmException {
+            var digest = MessageDigest.getInstance("SHA");
+            digest.update(value.getBytes(StandardCharsets.UTF_8));
+            return encodeHex(digest.digest());
+        }
+    };
+    public static final StringEncryptor WHIRLPOOL = new StringEncryptor(IDENTIFIER_WHIRLPOOL, PREFIX_SEPARATOR_SUFFIX) {
+        public String performEncryption(String value, String encryptedValue) {
+            var whirlpool = new Whirlpool();
+            whirlpool.NESSIEinit();
+            whirlpool.NESSIEadd(value);
+            var digest = new byte[Whirlpool.DIGESTBYTES];
+            whirlpool.NESSIEfinalize(digest);
+            return encodeBase64(digest);
+        }
+    };
+    public static final StringEncryptor WHIRLPOOLHEX = new StringEncryptor(IDENTIFIER_WHIRLPOOLHEX, PREFIX_SEPARATOR_SUFFIX) {
+        public String performEncryption(String value, String encryptedValue) {
+            var whirlpool = new Whirlpool();
+            whirlpool.NESSIEinit();
+            whirlpool.NESSIEadd(value);
+            var digest = new byte[Whirlpool.DIGESTBYTES];
+            whirlpool.NESSIEfinalize(digest);
+            return encodeHex(digest);
+        }
+    };
+    public static final StringEncryptor MD5 = new StringEncryptor(IDENTIFIER_MD5, PREFIX_SEPARATOR_SUFFIX) {
+        public String performEncryption(String value, String encryptedValue)
+        throws NoSuchAlgorithmException {
+            var digest = MessageDigest.getInstance("MD5");
+            digest.update(value.getBytes(StandardCharsets.UTF_8));
+            return encodeBase64(digest.digest());
+        }
+    };
+    public static final StringEncryptor MD5HEX = new StringEncryptor(IDENTIFIER_MD5HEX, PREFIX_SEPARATOR_SUFFIX) {
+        public String performEncryption(String value, String encryptedValue)
+        throws NoSuchAlgorithmException {
+            var digest = MessageDigest.getInstance("MD5");
+            digest.update(value.getBytes(StandardCharsets.UTF_8));
+            return encodeHex(digest.digest());
+        }
+    };
+    public static final StringEncryptor OBF = new StringEncryptor(IDENTIFIER_OBF, PREFIX_SEPARATOR_SUFFIX) {
+        public String performEncryption(String value, String encryptedValue) {
+            return obfuscate(value);
+        }
+    };
+
+    private final String prefix_;
     private final boolean requiresAdaptiveVerification_;
 
-    StringEncryptor() {
-        requiresAdaptiveVerification_ = false;
+    public StringEncryptor(String identifier, String prefixSeparator) {
+        this(identifier, prefixSeparator, false);
     }
 
-    StringEncryptor(boolean requiresAdaptiveVerification) {
+    public StringEncryptor(String identifier, String prefixSeparator, boolean requiresAdaptiveVerification) {
+        super(StringEncryptor.class, identifier);
+        prefix_ = identifier + prefixSeparator;
         requiresAdaptiveVerification_ = requiresAdaptiveVerification;
+    }
+
+    public static StringEncryptor getEncryptor(String identifier) {
+        return getMember(StringEncryptor.class, identifier);
     }
 
     public boolean requiresAdaptiveVerification() {
@@ -38,103 +117,52 @@ public enum StringEncryptor {
     }
 
     public String prefix() {
-        if (this == DRUPAL) {
-            return DrupalPassword.PREFIX;
-        }
-        return name() + PREFIX_SEPARATOR_SUFFIX;
-    }
-
-    public static StringEncryptor getEncryptor(String identifier) {
-        try {
-            return StringEncryptor.valueOf(identifier);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
+        return prefix_;
     }
 
     public String encrypt(String value)
     throws NoSuchAlgorithmException {
         if (null == value) throw new IllegalArgumentException("value can't be null");
 
-        return autoEncrypt(prefix() + value);
+        var encrypted = performEncryption(value, null);
+        if (encrypted != null) {
+            encrypted = prefix_ + encrypted;
+        }
+        return encrypted;
     }
 
-    private static String encodeBase64(byte[] bytes) {
-        return Base64.getEncoder().encodeToString(bytes);
-    }
-
-    public static String autoEncrypt(String value)
+    public String encrypt(String value, String encryptedValue)
     throws NoSuchAlgorithmException {
         if (null == value) throw new IllegalArgumentException("value can't be null");
 
-        if (value.startsWith(OBF.prefix())) {
-            return OBF.prefix() + obfuscate(value.substring(OBF.prefix().length()));
-        } else if (value.startsWith(DRUPAL.prefix())) {
-            return new DrupalPassword().hashPassword(value.substring(DRUPAL.prefix().length()));
-        } else {
-            var encode_base64 = false;
-            String prefix = null;
-            byte[] bytes = null;
-            if (value.startsWith(SHA.prefix()) || value.startsWith(SHAHEX.prefix())) {
-                if (value.startsWith(SHA.prefix())) {
-                    prefix = SHA.prefix();
-                    encode_base64 = true;
-                } else {
-                    prefix = SHAHEX.prefix();
-                    encode_base64 = false;
-                }
-                var digest = MessageDigest.getInstance("SHA");
-                digest.update(value.substring(prefix.length()).getBytes());
-                bytes = digest.digest();
-            } else if (value.startsWith(WRP.prefix()) || value.startsWith(WRPHEX.prefix())) {
-                if (value.startsWith(WRP.prefix())) {
-                    prefix = WRP.prefix();
-                    encode_base64 = true;
-                } else {
-                    prefix = WRPHEX.prefix();
-                    encode_base64 = false;
-                }
-                var whirlpool = new Whirlpool();
-                whirlpool.NESSIEinit();
-                whirlpool.NESSIEadd(value.substring(prefix.length()));
-                var digest = new byte[Whirlpool.DIGESTBYTES];
-                whirlpool.NESSIEfinalize(digest);
-                bytes = digest;
-            } else if (value.startsWith(MD5.prefix()) || value.startsWith(MD5HEX.prefix())) {
-                if (value.startsWith(MD5.prefix())) {
-                    prefix = MD5.prefix();
-                    encode_base64 = true;
-                } else {
-                    prefix = MD5HEX.prefix();
-                    encode_base64 = false;
-                }
-                var digest = MessageDigest.getInstance("MD5");
-                digest.update(value.substring(prefix.length()).getBytes());
-                bytes = digest.digest();
-            } else {
-                return value;
-            }
+        var encrypted = performEncryption(value, encryptedValue);
+        if (encrypted != null) {
+            encrypted = prefix_ + encrypted;
+        }
+        return encrypted;
+    }
 
-            if (encode_base64) {
-                value = prefix + encodeBase64(bytes);
-            } else {
-                value = prefix + encodeHex(bytes);
+    public abstract String performEncryption(String value, String encryptedValue)
+    throws NoSuchAlgorithmException;
+
+    public static String autoEncrypt(String prefixedValue)
+    throws NoSuchAlgorithmException {
+        if (null == prefixedValue) throw new IllegalArgumentException("prefixedValue can't be null");
+
+        for (var member : getMembers(StringEncryptor.class)) {
+            var encryptor = (StringEncryptor) member;
+            if (prefixedValue.startsWith(encryptor.prefix())) {
+                return encryptor.encrypt(prefixedValue.substring(encryptor.prefix().length()));
             }
         }
 
-        assert value != null;
-
-        return value;
+        return prefixedValue;
     }
 
     public static boolean matches(String checkedValue, String encryptedValue)
     throws NoSuchAlgorithmException {
         if (null == checkedValue) throw new IllegalArgumentException("checkedValue can't be null");
         if (null == encryptedValue) throw new IllegalArgumentException("encryptedValue can't be null");
-
-        if (encryptedValue.startsWith(DRUPAL.prefix())) {
-            return DrupalPassword.checkPassword(checkedValue, encryptedValue);
-        }
 
         return encryptedValue.equals(adaptiveEncrypt(checkedValue, encryptedValue));
     }
@@ -144,25 +172,14 @@ public enum StringEncryptor {
         if (null == clearValue) throw new IllegalArgumentException("clearValue can't be null");
         if (null == encryptedValue) throw new IllegalArgumentException("encryptedValue can't be null");
 
-        if (encryptedValue.startsWith(OBF.prefix())) {
-            clearValue = OBF.prefix() + clearValue;
-        } else if (encryptedValue.startsWith(DRUPAL.prefix())) {
-            return new DrupalPassword().hashPassword(clearValue, encryptedValue);
-        } else if (encryptedValue.startsWith(WRP.prefix())) {
-            clearValue = WRP.prefix() + clearValue;
-        } else if (encryptedValue.startsWith(WRPHEX.prefix())) {
-            clearValue = WRPHEX.prefix() + clearValue;
-        } else if (encryptedValue.startsWith(MD5.prefix())) {
-            clearValue = MD5.prefix() + clearValue;
-        } else if (encryptedValue.startsWith(MD5HEX.prefix())) {
-            clearValue = MD5HEX.prefix() + clearValue;
-        } else if (encryptedValue.startsWith(SHA.prefix())) {
-            clearValue = SHA.prefix() + clearValue;
-        } else if (encryptedValue.startsWith(SHAHEX.prefix())) {
-            clearValue = SHAHEX.prefix() + clearValue;
+        for (var member : getMembers(StringEncryptor.class)) {
+            var encryptor = (StringEncryptor) member;
+            if (encryptedValue.startsWith(encryptor.prefix())) {
+                return encryptor.encrypt(clearValue, encryptedValue);
+            }
         }
 
-        return autoEncrypt(clearValue);
+        return clearValue;
     }
 
     public static String obfuscate(String value) {
@@ -229,7 +246,7 @@ public enum StringEncryptor {
                 !arguments[0].equals("-c")) {
                 valid_arguments = false;
             } else if (!arguments[0].equals("-c") &&
-                3 == arguments.length) {
+                       3 == arguments.length) {
                 valid_arguments = false;
             }
         }
