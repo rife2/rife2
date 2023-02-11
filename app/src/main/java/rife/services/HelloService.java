@@ -1,8 +1,8 @@
 package rife.services;
 
-import rife.apis.ServiceProvider;
+import rife.apis.MyService;
 
-public class HelloService implements ServiceProvider {
+public class HelloService implements MyService {
     @Override
     public String serviceApi() {
         return "Hello World";

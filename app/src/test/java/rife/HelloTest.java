@@ -5,7 +5,7 @@
 package rife;
 
 import org.junit.jupiter.api.Test;
-import rife.apis.ServiceProvider;
+import rife.apis.MyService;
 import rife.services.HelloService;
 import rife.test.MockConversation;
 
@@ -71,7 +71,7 @@ class HelloTest {
         assertEquals("Hello World", m.doRequest("/service1").getText());
         assertEquals("Hello World", m.doRequest("/service2").getText());
 
-        m = new MockConversation(new HelloDependencyInjection(new ServiceProvider() {
+        m = new MockConversation(new HelloDependencyInjection(new MyService() {
             public String serviceApi() {
                 return "Test Service";
             }

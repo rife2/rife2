@@ -4,16 +4,24 @@
  */
 package rife;
 
+import rife.apis.MyService;
+import rife.apis.ServiceProvider;
 import rife.engine.*;
+import rife.services.HelloService;
 
-public class HelloAll extends Site {
+public class HelloAll extends Site implements ServiceProvider {
     Router authentication;
     Router cmf;
+    HelloDependencyInjection dependencyInjection;
     Router generation;
     Router continuations;
     Router gqm;
     Router group;
     Router resources;
+
+    public MyService getMyService() {
+        return dependencyInjection.getMyService();
+    }
 
     public void setup() {
         group(authentication = new HelloAuthentication());
@@ -21,6 +29,7 @@ public class HelloAll extends Site {
         group(new HelloContinuations());
         group(new HelloCounterContinuations());
         group(new HelloDatabase());
+        group(dependencyInjection = new HelloDependencyInjection(new HelloService()));
         group(new HelloErrors());
         group(new HelloForm());
         group("/generation", generation = new HelloFormGeneration());

@@ -54,6 +54,10 @@ tasks {
         project.logger.lifecycle("   Then add names by going to http://localhost:8080/add")
         project.logger.lifecycle("   When you're done, delete the database through http://localhost:8080/remove")
         project.logger.lifecycle("")
+        project.logger.lifecycle(" HelloDependencyInjection:")
+        project.logger.lifecycle("   Open your browser at http://localhost:8080/service1")
+        project.logger.lifecycle("   Or http://localhost:8080/service2")
+        project.logger.lifecycle("")
         project.logger.lifecycle(" HelloErrors:")
         project.logger.lifecycle("   Trigger and exception at http://localhost:8080/error")
         project.logger.lifecycle("   Try any other URL that doesn't exit, ie. http://localhost:8080/treasure")
@@ -175,6 +179,17 @@ tasks {
         project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/install")
         project.logger.lifecycle(" Then add names by going to http://localhost:8080/add")
         project.logger.lifecycle(" When you're done, delete the database through http://localhost:8080/remove")
+        project.logger.lifecycle("================================================================================")
+        project.logger.lifecycle("")
+    }
+
+    register<JavaExec>("runHelloDependencyInjection") {
+        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set("rife.HelloDependencyInjection")
+        project.logger.lifecycle("")
+        project.logger.lifecycle("================================================================================")
+        project.logger.lifecycle(" To try this example, open your browser at http://localhost:8080/service1")
+        project.logger.lifecycle(" Or http://localhost:8080/service2")
         project.logger.lifecycle("================================================================================")
         project.logger.lifecycle("")
     }

@@ -4,16 +4,17 @@
  */
 package rife;
 
+import rife.apis.MyService;
 import rife.apis.ServiceProvider;
 import rife.engine.*;
 import rife.engine.annotations.ActiveSite;
 import rife.services.HelloService;
 
-public class HelloDependencyInjection extends Site {
+public class HelloDependencyInjection extends Site implements ServiceProvider {
     public static class ServiceUser implements Element {
-        final ServiceProvider service_;
+        final MyService service_;
 
-        public ServiceUser(ServiceProvider service) {
+        public ServiceUser(MyService service) {
             service_ = service;
         }
 
@@ -22,17 +23,21 @@ public class HelloDependencyInjection extends Site {
         }
     }
 
+    public MyService getMyService() {
+        return service_;
+    }
+
     public static class ServiceUser2 implements Element {
-        @ActiveSite HelloDependencyInjection site_;
+        @ActiveSite ServiceProvider provider_;
 
         public void process(Context c) {
-            c.print(site_.service_.serviceApi());
+            c.print(provider_.getMyService().serviceApi());
         }
     }
 
-    final ServiceProvider service_;
+    final MyService service_;
 
-    public HelloDependencyInjection(ServiceProvider service) {
+    public HelloDependencyInjection(MyService service) {
         this.service_ = service;
     }
 
