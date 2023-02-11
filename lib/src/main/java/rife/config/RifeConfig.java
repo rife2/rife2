@@ -63,10 +63,6 @@ public class RifeConfig {
         return instance().scheduler;
     }
 
-    public static ServerConfig server() {
-        return instance().server;
-    }
-
     public static TemplateConfig template() {
         return instance().template;
     }
@@ -86,7 +82,6 @@ public class RifeConfig {
     public final EngineConfig engine = new EngineConfig();
     public final ResourcesConfig resources = new ResourcesConfig();
     public final SchedulerConfig scheduler = new SchedulerConfig();
-    public final ServerConfig server = new ServerConfig();
     public final TemplateConfig template = new TemplateConfig();
     public final ToolsConfig tools = new ToolsConfig();
     public final XmlConfig xml = new XmlConfig();
@@ -958,32 +953,6 @@ public class RifeConfig {
 
         public SchedulerConfig setTableTaskOption(String name) {
             tableTaskOption_ = name;
-            return this;
-        }
-    }
-
-    public class ServerConfig {
-        private int port_ = DEFAULT_PORT;
-        private String staticResourceBase_ = DEFAULT_STATIC_RESOURCE_BASE;
-
-        public static final int DEFAULT_PORT = 8080;
-        public static final String DEFAULT_STATIC_RESOURCE_BASE = null;
-
-        public int getPort() {
-            return port_;
-        }
-
-        public ServerConfig setPort(int port) {
-            port_ = port;
-            return this;
-        }
-
-        public String getStaticResourceBase() {
-            return staticResourceBase_;
-        }
-
-        public ServerConfig setStaticResourceBase(String base) {
-            staticResourceBase_ = base;
             return this;
         }
     }

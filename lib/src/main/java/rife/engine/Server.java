@@ -8,6 +8,7 @@ import jakarta.servlet.DispatcherType;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.session.*;
 import org.eclipse.jetty.servlet.*;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import rife.config.RifeConfig;
 import rife.ioc.HierarchicalProperties;
 import rife.servlet.RifeFilter;
@@ -21,13 +22,26 @@ import java.util.EnumSet;
  * @since 1.0
  */
 public class Server {
+    public static final int DEFAULT_PORT = 8080;
+    public static final String DEFAULT_HOST = null;
+    public static final String DEFAULT_STATIC_RESOURCE_BASE = null;
+    public static final int DEFAULT_MIN_THREADS = 8;
+    public static final int DEFAULT_MAX_THREADS = 200;
+    public static final int DEFAULT_IDLE_TIMEOUT_MS = 60000;
+
+    private int port_ = DEFAULT_PORT;
+    private String host_ = DEFAULT_HOST;
+    private String staticResourceBase_ = DEFAULT_STATIC_RESOURCE_BASE;
+    private int minThreads_ = DEFAULT_MIN_THREADS;
+    private int maxThreads_ = DEFAULT_MAX_THREADS;
+    private int idleTimeout_ = DEFAULT_IDLE_TIMEOUT_MS;
+
     private final HierarchicalProperties properties_;
-    private final org.eclipse.jetty.server.Server server_ = new org.eclipse.jetty.server.Server();
-    private final SessionIdManager sessions_ = new DefaultSessionIdManager(server_);
-    private final ServletContextHandler handler_ = new ServletContextHandler();
+    private org.eclipse.jetty.server.Server server_;
 
     /**
      * Instantiates a new embedded Jetty server.
+     *
      * @since 1.0
      */
     public Server() {
@@ -43,7 +57,19 @@ public class Server {
      * @since 1.0
      */
     public Server port(int port) {
-        RifeConfig.server().setPort(port);
+        port_ = port;
+        return this;
+    }
+
+    /**
+     * Configures the host the server will be listening on.
+     *
+     * @param host the hostname to listen on
+     * @return the instance of the server that's being configured
+     * @since 1.1
+     */
+    public Server host(String host) {
+        host_ = host;
         return this;
     }
 
@@ -55,7 +81,49 @@ public class Server {
      * @since 1.0
      */
     public Server staticResourceBase(String base) {
-        RifeConfig.server().setStaticResourceBase(base);
+        staticResourceBase_ = base;
+        return this;
+    }
+
+    /**
+     * Configures the minimum number of threads to use.
+     * <p>
+     * Defaults to {@code 8}.
+     *
+     * @param minThreads the minimum number of threads to use
+     * @return the instance of the server that's being configured
+     * @since 1.1
+     */
+    public Server minThreads(int minThreads) {
+        minThreads_ = minThreads;
+        return this;
+    }
+
+    /**
+     * Configures the maximum number of threads to use.
+     * <p>
+     * Defaults to {@code 200}.
+     *
+     * @param maxThreads the maximum number of threads to use
+     * @return the instance of the server that's being configured
+     * @since 1.1
+     */
+    public Server maxThreads(int maxThreads) {
+        maxThreads_ = maxThreads;
+        return this;
+    }
+
+    /**
+     * Configures the maximum thread idle time in ms.
+     * <p>
+     * Defaults to {@code 60000}.
+     *
+     * @param idleTimeout the maximum thread idle time in ms
+     * @return the instance of the server that's being configured
+     * @since 1.1
+     */
+    public Server idleTimeout(int idleTimeout) {
+        idleTimeout_ = idleTimeout;
         return this;
     }
 
@@ -78,8 +146,16 @@ public class Server {
      * @since 1.0
      */
     public Server start(Site site) {
+        var thread_pool = new QueuedThreadPool(maxThreads_, minThreads_, idleTimeout_);
+        server_ = new org.eclipse.jetty.server.Server(thread_pool);
+        SessionIdManager sessions_ = new DefaultSessionIdManager(server_);
+        ServletContextHandler handler_ = new ServletContextHandler();
+
         try (var connector = new ServerConnector(server_)) {
-            connector.setPort(RifeConfig.server().getPort());
+            connector.setPort(port_);
+            if (host_ != null) {
+                connector.setHost(host_);
+            }
             server_.setConnectors(new Connector[]{connector});
         }
 
@@ -99,8 +175,8 @@ public class Server {
 
         var default_servlet = new DefaultServlet();
         var servlet_holder = new ServletHolder(default_servlet);
-        if (RifeConfig.server().getStaticResourceBase() != null) {
-            handler_.setResourceBase(RifeConfig.server().getStaticResourceBase());
+        if (staticResourceBase_ != null) {
+            handler_.setResourceBase(staticResourceBase_);
         }
 
         handler_.addFilter(filter_holder, "/*", EnumSet.of(DispatcherType.REQUEST));
