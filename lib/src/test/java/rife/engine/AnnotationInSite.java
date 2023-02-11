@@ -13,7 +13,7 @@ public class AnnotationInSite extends Site {
     public static class ParentElement implements Element {
         @ActiveSite AnnotationInSite site;
         @ActiveSite Site baseSite;
-        @ActiveSite Object notSite;
+        @ActiveSite Number notSite;
         @Body int intBody = -1;
         @Cookie("cookie2") String stringCookie2 = "defaultCookie2";
         @FileUpload String fileString;

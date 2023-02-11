@@ -224,7 +224,7 @@ class RouteClass implements Route {
                 var type = field.getType();
 
                 if (field.isAnnotationPresent(ActiveSite.class)) {
-                    if (Site.class.isAssignableFrom(field.getType())) {
+                    if (type.isAssignableFrom(context.site().getClass())) {
                         field.set(element, context.site());
                     }
                 } else if (field.isAnnotationPresent(Parameter.class) &&
