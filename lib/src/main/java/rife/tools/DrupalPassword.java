@@ -13,7 +13,7 @@ import static rife.tools.StringUtils.encodeHex;
  * Java implementation of the Drupal 7 password hashing algorithm.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.0.1
+ * @since 1.1
  */
 public class DrupalPassword {
     /**
@@ -63,7 +63,7 @@ public class DrupalPassword {
      *
      * @param password A plain-text password.
      * @return A string containing the hashed password (and a salt), or {@code null} on failure.
-     * @since 1.0.1
+     * @since 1.1
      */
     public String hashPassword(String password)
     throws NoSuchAlgorithmException {
@@ -77,7 +77,7 @@ public class DrupalPassword {
      * @param setting  An existing hash or the output of _password_generate_salt().  Must be
      *                 at least 12 characters (the settings and salt).
      * @return A string containing the hashed password (and a salt), or {@code null} on failure.
-     * @since 1.0.1
+     * @since 1.1
      */
     public String hashPassword(String password, String setting)
     throws NoSuchAlgorithmException {
@@ -101,7 +101,7 @@ public class DrupalPassword {
      * @param saltedEncrypted the salted encrypted Drupal 7 password string to check
      * @return {@code true} if the candidate matches; or {@code false} otherwise.
      * @throws java.security.NoSuchAlgorithmException when the hashing algorithm couldn't be found
-     * @since 1.0.1
+     * @since 1.1
      */
     public static boolean checkPassword(String candidate, String saltedEncrypted)
     throws NoSuchAlgorithmException {
@@ -117,7 +117,7 @@ public class DrupalPassword {
      * Parse the log2 iteration count from a stored hash or setting string.
      *
      * @param setting the Drupal 7 hash or setting string
-     * @since 1.0.1
+     * @since 1.1
      */
     public static int passwordGetCountLog2(String setting) {
         return ITOA_64.indexOf(setting.charAt(3));
@@ -138,7 +138,7 @@ public class DrupalPassword {
      * @param password the password ot check
      * @return {@code true} when the password needs to be re-hashed; or
      * {code false} otherwise
-     * @since 1.0.1
+     * @since 1.1
      */
     public boolean passwordNeedsNewHash(String password) {
         // Check whether this was an updated password.

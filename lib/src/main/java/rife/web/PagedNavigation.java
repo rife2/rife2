@@ -144,7 +144,7 @@ import rife.template.Template;
  * <u>3</u> <u>4</u> <u>5</u> <u>6</u> <u>7</u> <u>8</u> <u>9</u> )</code>
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.0.1
+ * @since 1.1
  */
 public class PagedNavigation {
     public static String PREFIX_NAV = "nav:";
@@ -187,7 +187,7 @@ public class PagedNavigation {
      *                 visible.
      * @param span     The maximum number of ranges that will be shown as
      *                 immediately accessible absolute ranges.
-     * @since 1.0.1
+     * @since 1.1
      */
     public static void generate(Context context, Template template, long count, int limit, long offset, int span) {
         generate(context, template, count, limit, offset, span, DEFAULT_PARAMETER);
@@ -211,7 +211,7 @@ public class PagedNavigation {
      *                  immediately accessible absolute ranges.
      * @param parameter The name of the parameter that will contain the value of the
      *                  new range offset when the url if followed.
-     * @since 1.0.1
+     * @since 1.1
      */
     public static void generate(Context context, Template template, long count, int limit, long offset, int span, String parameter) {
         var range_count = (long) Math.ceil(((double) count) / limit);

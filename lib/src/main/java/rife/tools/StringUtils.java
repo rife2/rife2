@@ -1185,7 +1185,7 @@ public final class StringUtils {
      *
      * @param bytes Bytes to encode.
      * @return Encoded byte array <code>bytes</code> as a String.
-     * @since 1.0.1
+     * @since 1.1
      */
     public static String encodeBase64(byte[] bytes) {
         return Base64.getEncoder().encodeToString(bytes);
