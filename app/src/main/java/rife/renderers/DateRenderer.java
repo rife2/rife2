@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
 
 public class DateRenderer implements ValueRenderer {
     public String render(Template template, String valueId, String differentiator) {
-        return RifeConfig.tools().getDefaultShortDateFormat().format(LocalDateTime.now());
+        return RifeConfig.tools().getDefaultShortDateTimeFormatter().format(LocalDateTime.now());
     }
 }
