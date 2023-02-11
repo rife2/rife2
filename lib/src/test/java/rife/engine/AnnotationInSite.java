@@ -163,9 +163,9 @@ public class AnnotationInSite extends Site {
            }
         });
         get("/get", AnnotatedElement.class);
-        get("/get/info", PathInfoHandling.CAPTURE, AnnotatedElement.class);
+        get("/get/info", PathInfoHandling.CAPTURE, AnnotatedElement::new);
         post("/post", AnnotatedElement.class);
-        post("/form", AnnotatedElement.class);
+        post("/form", AnnotatedElement::new);
         get("/form", c -> c.print("""
 <form action="/form" method="post" enctype="multipart/form-data">
     <input type="file" name="uploadedFile">

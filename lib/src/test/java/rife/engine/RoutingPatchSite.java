@@ -24,5 +24,14 @@ public class RoutingPatchSite extends Site {
         patch("/patch4", PathInfoHandling.CAPTURE, PatchPathInfoElement.class);
         patch("/patch5", c -> c.print("patch element"));
         patch("/patch6", PathInfoHandling.CAPTURE, c -> c.print("patch element path info:" + c.pathInfo()));
+        group("/supplier", new Router() {
+                public void setup() {
+                    patch(PatchElement::new);
+                    patch(PathInfoHandling.CAPTURE, PatchPathInfoElement::new);
+                    patch("/patch3", PatchElement::new);
+                    patch("/patch4", PathInfoHandling.CAPTURE, PatchPathInfoElement::new);
+                }
+            }
+        );
     }
 }

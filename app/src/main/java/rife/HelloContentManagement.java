@@ -69,7 +69,7 @@ public class HelloContentManagement extends Site {
         t.appendBlock("content", "add");
         c.print(t);
     });
-    Route add = getPost("/add", AddNews.class);
+    Route add = getPost("/add", AddNews::new);
 
     public static void main(String[] args) {
         new Server().start(new HelloContentManagement());

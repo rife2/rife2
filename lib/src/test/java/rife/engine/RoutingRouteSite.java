@@ -24,5 +24,14 @@ public class RoutingRouteSite extends Site {
         route("/route4", PathInfoHandling.CAPTURE, RoutePathInfoElement.class);
         route("/route5", c -> c.print("route element"));
         route("/route6", PathInfoHandling.CAPTURE, c -> c.print("route element path info:" + c.pathInfo()));
+        group("/supplier", new Router() {
+                public void setup() {
+                    route(RouteElement::new);
+                    route(PathInfoHandling.CAPTURE, RoutePathInfoElement::new);
+                    route("/route3", RouteElement::new);
+                    route("/route4", PathInfoHandling.CAPTURE, RoutePathInfoElement::new);
+                }
+            }
+        );
     }
 }

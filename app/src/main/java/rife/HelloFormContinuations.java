@@ -22,7 +22,7 @@ public class HelloFormContinuations extends Site {
             c.print(t);
         }
     }
-    Route form = getPost("/form", Form.class);
+    Route form = getPost("/form", Form::new);
 
     public static void main(String[] args) {
         new Server().start(new HelloFormContinuations());

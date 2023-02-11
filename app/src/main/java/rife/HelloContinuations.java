@@ -40,7 +40,7 @@ public class HelloContinuations extends Site {
     }
 
     public void setup() {
-        getPost("/guess", HelloNumberGuess.class);
+        getPost("/guess", HelloNumberGuess::new);
     }
 
     public static void main(String[] args) {

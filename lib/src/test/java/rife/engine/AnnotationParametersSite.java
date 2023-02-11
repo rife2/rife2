@@ -120,6 +120,6 @@ public class AnnotationParametersSite extends Site {
     public void setup() {
         routeOut = get("/out", AnnotatedOutElement.class);
         routeIn = get("/in", AnnotatedInElement.class);
-        routePathInfo = get("/pathinfo", PathInfoHandling.MAP(m -> m.t("some").s().p("intParam", "\\d+").s().p("param3").s().p("theBean_string")), AnnotatedInElement.class);
+        routePathInfo = get("/pathinfo", PathInfoHandling.MAP(m -> m.t("some").s().p("intParam", "\\d+").s().p("param3").s().p("theBean_string")), AnnotatedInElement::new);
     }
 }

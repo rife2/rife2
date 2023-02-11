@@ -24,5 +24,14 @@ public class RoutingPutSite extends Site {
         put("/put4", PathInfoHandling.CAPTURE, PutPathInfoElement.class);
         put("/put5", c -> c.print("put element"));
         put("/put6", PathInfoHandling.CAPTURE, c -> c.print("put element path info:" + c.pathInfo()));
+        group("/supplier", new Router() {
+                public void setup() {
+                    put(PutElement::new);
+                    put(PathInfoHandling.CAPTURE, PutPathInfoElement::new);
+                    put("/put3", PutElement::new);
+                    put("/put4", PathInfoHandling.CAPTURE, PutPathInfoElement::new);
+                }
+            }
+        );
     }
 }

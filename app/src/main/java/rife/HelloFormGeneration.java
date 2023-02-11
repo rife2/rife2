@@ -34,7 +34,7 @@ public class HelloFormGeneration extends Site {
             c.print(t);
         }
     }
-    Route form = getPost("/form", MyForm.class);
+    Route form = getPost("/form", MyForm::new);
 
     public static void main(String[] args) {
         new Server().start(new HelloFormGeneration());

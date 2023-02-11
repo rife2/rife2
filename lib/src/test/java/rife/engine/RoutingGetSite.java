@@ -24,5 +24,14 @@ public class RoutingGetSite extends Site {
         get("/get4", PathInfoHandling.CAPTURE, GetPathInfoElement.class);
         get("/get5", c -> c.print("get element"));
         get("/get6", PathInfoHandling.CAPTURE, c -> c.print("get element path info:" + c.pathInfo()));
+        group("/supplier", new Router() {
+                public void setup() {
+                    get(GetElement::new);
+                    get(PathInfoHandling.CAPTURE, GetPathInfoElement::new);
+                    get("/get3", GetElement::new);
+                    get("/get4", PathInfoHandling.CAPTURE, GetPathInfoElement::new);
+                }
+            }
+        );
     }
 }

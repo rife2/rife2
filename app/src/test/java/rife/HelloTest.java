@@ -5,6 +5,8 @@
 package rife;
 
 import org.junit.jupiter.api.Test;
+import rife.apis.ServiceProvider;
+import rife.services.HelloService;
 import rife.test.MockConversation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -62,6 +64,22 @@ class HelloTest {
         assertEquals("Jimmy", m.doRequest("/mapping/Jimmy").getText());
         assertEquals("Jimmy Joe", m.doRequest("/mapping/Jimmy/Joe").getText());
     }
+
+    @Test
+    void verifyHelloDependencyInjection() {
+        var m = new MockConversation(new HelloDependencyInjection(new HelloService()));
+        assertEquals("Hello World", m.doRequest("/service1").getText());
+        assertEquals("Hello World", m.doRequest("/service2").getText());
+
+        m = new MockConversation(new HelloDependencyInjection(new ServiceProvider() {
+            public String serviceApi() {
+                return "Test Service";
+            }
+        }));
+        assertEquals("Test Service", m.doRequest("/service1").getText());
+        assertEquals("Test Service", m.doRequest("/service2").getText());
+    }
+
 
     @Test
     void verifyHelloFormGeneration() {

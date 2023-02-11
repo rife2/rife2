@@ -27,7 +27,7 @@ public class HelloForm extends Site {
         }
     }
 
-    Route form = getPost("/form", MyForm.class);
+    Route form = getPost("/form", MyForm::new);
 
     public static void main(String[] args) {
         new Server().start(new HelloForm());

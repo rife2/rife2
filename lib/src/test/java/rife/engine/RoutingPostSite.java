@@ -24,5 +24,14 @@ public class RoutingPostSite extends Site {
         post("/post4", PathInfoHandling.CAPTURE, PostPathInfoElement.class);
         post("/post5", c -> c.print("post element"));
         post("/post6", PathInfoHandling.CAPTURE, c -> c.print("post element path info:" + c.pathInfo()));
+        group("/supplier", new Router() {
+                public void setup() {
+                    post(PostElement::new);
+                    post(PathInfoHandling.CAPTURE, PostPathInfoElement::new);
+                    post("/post3", PostElement::new);
+                    post("/post4", PathInfoHandling.CAPTURE, PostPathInfoElement::new);
+                }
+            }
+        );
     }
 }

@@ -24,5 +24,14 @@ public class RoutingDeleteSite extends Site {
         delete("/delete4", PathInfoHandling.CAPTURE, DeletePathInfoElement.class);
         delete("/delete5", c -> c.print("delete element"));
         delete("/delete6", PathInfoHandling.CAPTURE, c -> c.print("delete element path info:" + c.pathInfo()));
+        group("/supplier", new Router() {
+                public void setup() {
+                    delete(DeleteElement::new);
+                    delete(PathInfoHandling.CAPTURE, DeletePathInfoElement::new);
+                    delete("/delete3", DeleteElement::new);
+                    delete("/delete4", PathInfoHandling.CAPTURE, DeletePathInfoElement::new);
+                }
+            }
+        );
     }
 }

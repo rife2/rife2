@@ -15,7 +15,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                get("/nopause", TestNoPause.class);
+                get("/nopause", TestNoPause::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -32,7 +32,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                get("/simple", TestSimplePause.class);
+                get("/simple", TestSimplePause::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -54,7 +54,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                get("/null", TestNull.class);
+                get("/null", TestNull::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -76,7 +76,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                get("/null_reference", TestNullReference.class);
+                get("/null_reference", TestNullReference::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -95,7 +95,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                get("/null_conditional", TestNullConditional.class);
+                get("/null_conditional", TestNullConditional::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -115,7 +115,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                route("/conditional", TestConditional.class);
+                route("/conditional", TestConditional::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -161,7 +161,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                get("/member_method", TestMemberMethod.class);
+                get("/member_method", TestMemberMethod::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -183,7 +183,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                get("/private_method", TestPrivateMethod.class);
+                get("/private_method", TestPrivateMethod::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -199,7 +199,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                get("/synchronization", TestSynchronization.class);
+                get("/synchronization", TestSynchronization::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -236,7 +236,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                route("/throw", TestThrow.class);
+                route("/throw", TestThrow::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -282,7 +282,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                route("/try_catch", TestTryCatch.class);
+                route("/try_catch", TestTryCatch::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -345,7 +345,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                route("/finally", TestFinally.class);
+                route("/finally", TestFinally::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -385,7 +385,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                route("/instanceof", TestInstanceOf.class);
+                route("/instanceof", TestInstanceOf::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -407,7 +407,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                route("/innerclass", TestInnerClass.class);
+                route("/innerclass", TestInnerClass::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -429,7 +429,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                route("/alltypes", TestAllTypes.class);
+                route("/alltypes", TestAllTypes::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -505,7 +505,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                route("/form_submission", TestFormSubmission.class);
+                route("/form_submission", TestFormSubmission::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -539,7 +539,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                route("/unique", TestFormSubmission.class);
+                route("/unique", TestFormSubmission::new);
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -605,7 +605,7 @@ public class TestContinuations {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                route("/numberguess", TestNumberGuess.class);
+                route("/numberguess", TestNumberGuess::new);
             }
         })) {
             try (final var webClient = new WebClient()) {

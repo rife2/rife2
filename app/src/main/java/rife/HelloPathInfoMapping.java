@@ -11,7 +11,7 @@ public class HelloPathInfoMapping extends Site {
     public void setup() {
         get("/mapping", PathInfoHandling.MAP(
             m -> m.p("first"),
-            m -> m.p("first").s().p("last")), HelloPerson.class);
+            m -> m.p("first").s().p("last")), HelloPerson::new);
     }
 
     public static void main(String[] args) {
