@@ -15,18 +15,48 @@ import rife.tools.FileUtils;
 
 import java.io.IOException;
 
+/**
+ * Servlet filter implementation that initializes a RIFE2 site and handles
+ * servlet requests and responses.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.0
+ */
 public class RifeFilter implements Filter {
     public static String RIFE_SITE_CLASS_NAME = "rifeSiteClass";
 
     private final Gate gate_ = new Gate();
     private String gateUrl_ = null;
 
-    public void site(HierarchicalProperties properties, Site site) {
+    /**
+     * This method can be overridden to set up hierarchical properties
+     * for your RIFE2 filter implementation without being limited by
+     * the servlet API filter parameters only being strings.
+     * <p>
+     * By default, this method does nothing.
+     *
+     * @param properties the properties to set up
+     * @since 1.1.0
+     */
+    public void setupProperties(HierarchicalProperties properties) {
+        // no-op
+    }
+
+    /**
+     * Initialize the filter without a {@code web.xml} filter config, for example
+     * for RIFE2's embedded web server
+     *
+     * @param properties the properties to use for the site
+     * @param site the site to use for the requests
+     * @since 1.1.0
+     */
+    public final void init(HierarchicalProperties properties, Site site) {
+        setupProperties(properties);
         gate_.setup(properties, site);
     }
 
     @Override
-    public void init(FilterConfig config)
+    public final void init(FilterConfig config)
     throws ServletException {
         var classloader = getClass().getClassLoader();
 
@@ -53,6 +83,7 @@ public class RifeFilter implements Filter {
         if (site_classname != null) {
             try {
                 var site_class = classloader.loadClass(site_classname);
+                setupProperties(properties);
                 gate_.setup(properties, (Site) site_class.getDeclaredConstructor().newInstance());
             } catch (Throwable e) {
                 throw new ServletException(e);
@@ -61,7 +92,7 @@ public class RifeFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+    public final void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
     throws IOException, ServletException {
         if (request instanceof HttpServletRequest http_servlet_request &&
             response instanceof HttpServletResponse http_servlet_response) {
@@ -106,7 +137,7 @@ public class RifeFilter implements Filter {
     }
 
     @Override
-    public void destroy() {
+    public final void destroy() {
         Filter.super.destroy();
     }
 }

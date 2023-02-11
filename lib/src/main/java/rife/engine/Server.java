@@ -91,7 +91,7 @@ public class Server {
         handler_.setSessionHandler(session_handler);
 
         var rife_filter = new RifeFilter();
-        rife_filter.site(properties_, site);
+        rife_filter.init(properties_, site);
         var filter_holder = new FilterHolder(rife_filter);
 
         var ctx = new ServletContextHandler();
@@ -116,7 +116,7 @@ public class Server {
     }
 
     /**
-     * Stop running the embeded server.
+     * Stop running the embedded server.
      *
      * @since 1.0
      */
