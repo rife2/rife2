@@ -277,6 +277,7 @@ tasks {
             tags("apiNote:a:API Note:")
             overview = "src/main/java/overview.html"
             addBooleanOption("Xdoclint:-missing", true)
+            links("https://jakarta.ee/specifications/servlet/5.0/apidocs/", "https://jsoup.org/apidocs/")
         }
         exclude("rife/antlr/**")
         exclude("rife/asm/**")
