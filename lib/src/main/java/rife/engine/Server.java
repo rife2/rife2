@@ -10,8 +10,8 @@ import org.eclipse.jetty.server.session.*;
 import org.eclipse.jetty.servlet.*;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import rife.config.RifeConfig;
 import rife.ioc.HierarchicalProperties;
+import rife.resources.ResourceFinderClasspath;
 import rife.servlet.RifeFilter;
 
 import java.util.EnumSet;
@@ -83,14 +83,33 @@ public class Server {
     }
 
     /**
-     * Configures the base directory where static resources will be looked up.
+     * Configures the base path where static resources will be looked up.
      *
-     * @param base a port number (defaults to 8080)
+     * @param base the base path for static resources
      * @return the instance of the server that's being configured
      * @since 1.0
      */
     public Server staticResourceBase(String base) {
         staticResourceBase_ = base;
+        return this;
+    }
+
+    /**
+     * Configures the base directory where static resources will be looked up from.
+     * <p>
+     * This will be relative to the classpath root of an Uber Jar that contains your
+     * web application as well as the RIFE2 framework classes and everything else
+     * required to run your web application.
+     *
+     * @param base the base directory for static resources
+     * @return the instance of the server that's being configured
+     * @since 1.1
+     */
+    public Server staticUberJarResourceBase(String base) {
+        var version = "RIFE_VERSION";
+        var resource = ResourceFinderClasspath.instance().getResource(version);
+        var path = resource.toString();
+        staticResourceBase_ = path.substring(0, path.length() - version.length()) + base;
         return this;
     }
 
