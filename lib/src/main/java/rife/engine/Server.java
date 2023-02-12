@@ -8,6 +8,7 @@ import jakarta.servlet.DispatcherType;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.session.*;
 import org.eclipse.jetty.servlet.*;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import rife.config.RifeConfig;
 import rife.ioc.HierarchicalProperties;
@@ -35,6 +36,14 @@ public class Server {
     private int minThreads_ = DEFAULT_MIN_THREADS;
     private int maxThreads_ = DEFAULT_MAX_THREADS;
     private int idleTimeout_ = DEFAULT_IDLE_TIMEOUT_MS;
+
+    protected String sslKeyStorePath_ = null;
+    protected String sslKeyStorePassword_ = null;
+    protected String sslCertAlias_ = null;
+    protected String sslTrustStorePath_ = null;
+    protected String sslTrustStorePassword_ = null;
+    protected boolean sslNeedClientAuth_ = false;
+    protected boolean sslWantClientAuth_ = false;
 
     private final HierarchicalProperties properties_;
     private org.eclipse.jetty.server.Server server_;
@@ -128,6 +137,96 @@ public class Server {
     }
 
     /**
+     * Sets the file system path to the SSL key store.
+     * <p>
+     * When this is provided, the embedded server will switch from http to
+     * https. Other SSL parameters have no effect unless the key store path
+     * is configured.
+     *
+     * @param path the SSL key store path
+     * @return the instance of the server that's being configured
+     * @since 1.1
+     */
+    public Server sslKeyStorePath(String path) {
+        sslKeyStorePath_ = path;
+        return this;
+    }
+
+    /**
+     * Sets the password for the SSL key store.
+     *
+     * @param password the SSL key store password
+     * @return the instance of the server that's being configured
+     * @since 1.1
+     */
+    public Server sslKeyStorePassword(String password) {
+        sslKeyStorePassword_ = password;
+        return this;
+    }
+
+    /**
+     * Sets the SSL certificate alias.
+     *
+     * @param alias the SSL certificate alias
+     * @return the instance of the server that's being configured
+     * @since 1.1
+     */
+    public Server sslCertAlias(String alias) {
+        sslCertAlias_ = alias;
+        return this;
+    }
+
+    /**
+     * Sets the path to the SSL trust store.
+     *
+     * @param path the SSL trust store path
+     * @return the instance of the server that's being configured
+     * @since 1.1
+     */
+    public Server sslTrustStorePath(String path) {
+        sslTrustStorePath_ = path;
+        return this;
+    }
+
+    /**
+     * Sets the password for the SSL trust store.
+     *
+     * @param password the SSL trust store password
+     * @return the instance of the server that's being configured
+     * @since 1.1
+     */
+    public Server sslTrustStorePassword(String password) {
+        sslTrustStorePassword_ = password;
+        return this;
+    }
+
+    /**
+     * Sets whether the SSL client certificate needs to be authenticated.
+     *
+     * @param auth {@code true} if the client certificate needs to be authenticated; or
+     *             {@code false} otherwise
+     * @return the instance of the server that's being configured
+     * @since 1.1
+     */
+    public Server sslNeedClientAuth(boolean auth) {
+        sslNeedClientAuth_ = auth;
+        return this;
+    }
+
+    /**
+     * Sets whether the server wants SSL client certificate to be authenticated.
+     *
+     * @param auth {@code true} of server wants the client certificate to be authenticated; or
+     *             {@code false} otherwise
+     * @return the instance of the server that's being configured
+     * @since 1.1
+     */
+    public Server sslWantClientAuth(boolean auth) {
+        sslWantClientAuth_ = auth;
+        return this;
+    }
+
+    /**
      * Retrieves the hierarchical properties for this server instance.
      *
      * @return this server's collection of hierarchical properties
@@ -151,7 +250,32 @@ public class Server {
         SessionIdManager sessions_ = new DefaultSessionIdManager(server_);
         ServletContextHandler handler_ = new ServletContextHandler();
 
-        try (var connector = new ServerConnector(server_)) {
+        SslContextFactory.Server sslContextFactory = null;
+        if (sslKeyStorePath_ != null) {
+            sslContextFactory = new SslContextFactory.Server();
+            sslContextFactory.setKeyStorePath(sslKeyStorePath_);
+
+            if (sslKeyStorePassword_ != null) {
+                sslContextFactory.setKeyStorePassword(sslKeyStorePassword_);
+            }
+            if (sslCertAlias_ != null) {
+                sslContextFactory.setCertAlias(sslCertAlias_);
+            }
+            if (sslTrustStorePath_ != null) {
+                sslContextFactory.setTrustStorePath(sslTrustStorePath_);
+            }
+            if (sslTrustStorePassword_ != null) {
+                sslContextFactory.setTrustStorePassword(sslTrustStorePassword_);
+            }
+            if (sslNeedClientAuth_) {
+                sslContextFactory.setNeedClientAuth(true);
+            }
+            if (sslWantClientAuth_) {
+                sslContextFactory.setWantClientAuth(true);
+            }
+        }
+
+        try (var connector = new ServerConnector(server_, sslContextFactory)) {
             connector.setPort(port_);
             if (host_ != null) {
                 connector.setHost(host_);
