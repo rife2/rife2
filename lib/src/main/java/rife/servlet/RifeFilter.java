@@ -36,7 +36,7 @@ public class RifeFilter implements Filter {
      * By default, this method does nothing.
      *
      * @param properties the properties to set up
-     * @since 1.1.0
+     * @since 1.1
      */
     public void setupProperties(HierarchicalProperties properties) {
         // no-op
@@ -48,7 +48,7 @@ public class RifeFilter implements Filter {
      *
      * @param properties the properties to use for the site
      * @param site the site to use for the requests
-     * @since 1.1.0
+     * @since 1.1
      */
     public final void init(HierarchicalProperties properties, Site site) {
         setupProperties(properties);
