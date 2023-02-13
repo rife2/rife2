@@ -57,7 +57,7 @@ public interface PropertyValue {
     boolean isNegligible();
 
     /**
-     * Indicates whether the value is statically fixed an not dynamically
+     * Indicates whether the value is statically fixed and not dynamically
      * retrieved at runtime.
      *
      * @return {@code true} if the value is static; or

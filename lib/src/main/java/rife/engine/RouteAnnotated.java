@@ -234,11 +234,11 @@ abstract class RouteAnnotated implements Route {
                     if (annotation_name != null && !annotation_name.isEmpty()) {
                         name = annotation_name;
                     }
-                    var values = properties.get(name);
-                    if (values != null) {
+                    var prop_value = properties.getValue(name);
+                    if (prop_value != null) {
                         Object value;
                         try {
-                            value = Convert.toType(values, type);
+                            value = Convert.toType(prop_value, type);
                         } catch (ConversionException e) {
                             value = Convert.getDefaultValue(type);
                         }
