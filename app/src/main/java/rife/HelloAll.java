@@ -6,6 +6,7 @@ package rife;
 
 import rife.apis.MyService;
 import rife.apis.ServiceProvider;
+import rife.database.Datasource;
 import rife.engine.*;
 import rife.services.HelloService;
 
@@ -50,6 +51,9 @@ public class HelloAll extends Site implements ServiceProvider {
     }
 
     public static void main(String[] args) {
-        new Server().start(new HelloAll());
+        new Server().start(new HelloAll())
+            .properties().put("datasource",
+                new Datasource("org.apache.derby.jdbc.EmbeddedDriver",
+                    "jdbc:derby:./embedded_dbs/hello;create=true", "", "", 5));
     }
 }
