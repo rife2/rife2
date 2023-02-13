@@ -375,7 +375,7 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
                     methodVisitor_.visitVarInsn(ALOAD, contextIndex_);
                     // get the call answer
                     methodVisitor_.visitMethodInsn(INVOKEVIRTUAL, "rife/continuations/ContinuationContext", "getCallAnswer", "()Ljava/lang/Object;", false);
-                    methodVisitor_.visitTypeInsn(CHECKCAST, Type.getInternalName(config_.getCallMethodReturnType()));
+                    methodVisitor_.visitTypeInsn(CHECKCAST, config_.getCallMethodReturnTypeName());
 
                     labelIndex_++;
 

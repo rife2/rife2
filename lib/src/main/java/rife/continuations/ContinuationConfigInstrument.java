@@ -4,13 +4,11 @@
  */
 package rife.continuations;
 
-import rife.asm.Type;
-
-import java.util.*;
-
 /**
  * This interface needs to be implemented to configure the bytecode
  * instrumentation that enables the continuations functionalities.
+ * <p>
+ * IMPORTANT: Do not load any classes here, only return string literals.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
@@ -46,20 +44,6 @@ public interface ContinuationConfigInstrument {
         return null;
     }
 
-    default String getMethodDescriptor(Class returnType, Class[] argumentTypes) {
-        var types_array = new Type[0];
-        if (argumentTypes != null && argumentTypes.length > 0) {
-            List<Type> types_list = new ArrayList<>();
-            for (var t : argumentTypes) {
-                types_list.add(Type.getType(t));
-            }
-
-            types_array = new Type[types_list.size()];
-            types_list.toArray(types_array);
-        }
-        return Type.getMethodDescriptor(Type.getType(returnType), types_array);
-    }
-
     /**
      * The name of the entry method that will be invoked when a new instance
      * of a continuable class is created and its execution is started, for
@@ -71,31 +55,14 @@ public interface ContinuationConfigInstrument {
     String getEntryMethodName();
 
     /**
-     * The return type of the entry method, for instance
-     * {@code void.class}.
-     * <p>This will solely be used to detect and lookup the method before
-     * instrumenting or calling it.
+     * The ASM method descriptor of the entry method, this includes the arguments
+     * and the return types. If there's no arguments nor return types,
+     * this is {@code "()V"}.
      *
-     * @return the class of the entry method's return value
-     * @since 1.0
+     * @return the ASM method descriptor for the entry method
+     * @since 1.2
      */
-    Class getEntryMethodReturnType();
-
-    /**
-     * The array argument types that the entry method takes, for instance
-     * {@code null} if it takes none.
-     * <p>This will solely be used to detect and lookup the method before
-     * instrumenting or calling it.
-     *
-     * @return the array of argument types of the entry method; or
-     * {@code null} if there are none
-     * @since 1.0
-     */
-    Class[] getEntryMethodArgumentTypes();
-
-    default String getEntryMethodDescriptor() {
-        return getMethodDescriptor(getEntryMethodReturnType(), getEntryMethodArgumentTypes());
-    }
+    String getEntryMethodDescriptor();
 
     /**
      * The name of the method that will trigger a pause continuation, for
@@ -110,6 +77,7 @@ public interface ContinuationConfigInstrument {
     default String getPauseMethodName() {
         return null;
     }
+
     /**
      * The name of the method that will trigger a step-back continuation, for
      * instance {@code "stepBack"}.
@@ -137,24 +105,28 @@ public interface ContinuationConfigInstrument {
     }
 
     /**
-     * The return type of the call method, for instance {@code Object.class}.
+     * The ASM return type name of the call method, for instance
+     * {@code "java/lang/Object"}.
      * <p>This needs to be an object, not a primitive, and you have to be
      * certain that it's compatible with the values that are sent through the
      * answer to the call continuation. It's just recommended to keep this as
-     * generic as possible (hence {@code Object.class}).
+     * generic as possible (hence {@code "java/lang/Object"}).
      *
-     * @return the type of the call method's return value; or
-     * {@code null} if you don't use call/answer continuations
-     * @since 1.0
+     * @return the ASM return type name of the call method
+     * @since 1.2
      */
-    default Class getCallMethodReturnType() {
+    default String getCallMethodReturnTypeName() {
         return null;
     }
 
     /**
-     * The array argument types that the call method takes, for instance
-     * {@code new Class[] {String.class}}.
-     * <p>This needs to be a single object argument, not more or less than one,
+     * The ASM method descriptor of the call method, this includes the arguments
+     * and the return types. For instance {@code ""(Ljava/lang/Object;)Ljava/lang/Object;""}
+     * <p>
+     * This includes the return type name that's also provided by {@link #getCallMethodReturnTypeName()}.
+     * <p>
+     * The array argument types that the call method takes, needs to be a single
+     * object argument, not more or less than one,
      * and not a primitive. You will use this yourself in the implementation
      * of the runner that executes the continuations. If the
      * {@link rife.continuations.basic.BasicContinuableRunner} is
@@ -162,16 +134,11 @@ public interface ContinuationConfigInstrument {
      * be used to resolve the target of the call continuation by using the
      * what's provided as the argument of the method call.
      *
-     * @return the array of argument types of the call method; or
-     * {@code null} if you don't use call/answer continuations
-     * @since 1.0
+     * @return the ASM method descriptor of the call method
+     * @since 1.2
      */
-    default Class[] getCallMethodArgumentTypes() {
-        return null;
-    }
-
     default String getCallMethodDescriptor() {
-        return getMethodDescriptor(getCallMethodReturnType(), getCallMethodArgumentTypes());
+        return null;
     }
 
     /**

@@ -4,8 +4,7 @@
  */
 package rife.continuations.basic;
 
-import rife.continuations.CallState;
-import rife.continuations.CloneableContinuable;
+import rife.continuations.*;
 
 /**
  * Retrieves the target continuable for a call continuation.
@@ -23,7 +22,7 @@ public interface CallTargetRetriever {
      * state.
      *
      * @param target the call continuation target that was provided as an
-     *               argument to the method call (see {@link rife.continuations.ContinuationConfigInstrument#getCallMethodArgumentTypes()})
+     *               argument to the method call (see {@link ContinuationConfigInstrument#getCallMethodDescriptor()})
      * @param state  the state of the call continuation
      * @return the continuable that corresponds to the provided call target
      * and state

@@ -23,6 +23,7 @@ import rife.continuations.exceptions.*;
 public class BasicContinuableRunner {
     private final ClassLoader classLoader_;
     private final ContinuationConfigInstrument configInstrument_;
+    private final Class[] entryMethodArgumentTypes_;
     private final ContinuationManager manager_;
     private final ThreadLocal<Object> currentContinuable_ = new ThreadLocal<>();
 
@@ -32,27 +33,32 @@ public class BasicContinuableRunner {
     /**
      * Create a new runner instance.
      *
-     * @param configInstrument the instance of the instrumentation
-     *                         configuration that will be used for the transformation
+     * @param configInstrument         the instance of the instrumentation
+     *                                 configuration that will be used for the transformation
+     * @param entryMethodArgumentTypes the array argument types that the entry method takes,
+     *                                 for instance {@code null} if it takes none.
      * @since 1.0
      */
-    public BasicContinuableRunner(ContinuationConfigInstrument configInstrument) {
-        this(configInstrument, null);
+    public BasicContinuableRunner(ContinuationConfigInstrument configInstrument, Class[] entryMethodArgumentTypes) {
+        this(configInstrument, entryMethodArgumentTypes, null);
     }
 
     /**
      * Create a new runner instance with a custom classloader.
      *
-     * @param configInstrument the instance of the instrumentation
-     *                         configuration that will be used for the transformation
-     * @param classloader      the classloader that will be used to load the
-     *                         continuable classes, this is for example an instance of
-     *                         {@link BasicContinuableClassLoader}
+     * @param configInstrument         the instance of the instrumentation
+     *                                 configuration that will be used for the transformation
+     * @param entryMethodArgumentTypes the array argument types that the entry method takes,
+     *                                 for instance {@code null} if it takes none.
+     * @param classloader              the classloader that will be used to load the
+     *                                 continuable classes, this is for example an instance of
+     *                                 {@link BasicContinuableClassLoader}
      * @since 1.0
      */
-    public BasicContinuableRunner(ContinuationConfigInstrument configInstrument, ClassLoader classloader) {
+    public BasicContinuableRunner(ContinuationConfigInstrument configInstrument, Class[] entryMethodArgumentTypes, ClassLoader classloader) {
         manager_ = new ContinuationManager(new BasicConfigRuntime());
         configInstrument_ = configInstrument;
+        entryMethodArgumentTypes_ = entryMethodArgumentTypes;
         if (null == classloader) {
             classloader = getClass().getClassLoader();
         }
@@ -187,11 +193,9 @@ public class BasicContinuableRunner {
                                 null == runId) {
                                 if (continuable != null) {
                                     object = continuable;
-                                }
-                                else if (klass != null) {
+                                } else if (klass != null) {
                                     object = klass.getDeclaredConstructor().newInstance();
-                                }
-                                else {
+                                } else {
                                     throw new NoContinuableInstanceAvailableException();
                                 }
                                 ContinuationContext.clearActiveContext();
@@ -312,7 +316,7 @@ public class BasicContinuableRunner {
     throws Throwable {
         // lookup the method that will be used to execute the entrance of the continuable object
         beforeExecuteEntryMethodHook(object);
-        var method = object.getClass().getMethod(configInstrument_.getEntryMethodName(), configInstrument_.getEntryMethodArgumentTypes());
+        var method = object.getClass().getMethod(configInstrument_.getEntryMethodName(), entryMethodArgumentTypes_);
         method.setAccessible(true);
         method.invoke(object, (Object[]) null);
     }
@@ -340,6 +344,16 @@ public class BasicContinuableRunner {
      */
     public ContinuationConfigInstrument getConfigInstrumentation() {
         return configInstrument_;
+    }
+
+    /**
+     * Retrieves the entry method argument types.
+     *
+     * @return the argument types that are used by the continuations entry method
+     * @since 1.2
+     */
+    public Class[] getEntryMethodArgumentTypes() {
+        return entryMethodArgumentTypes_;
     }
 
     /**

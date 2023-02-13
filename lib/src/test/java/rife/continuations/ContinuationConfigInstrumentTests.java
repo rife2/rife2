@@ -6,23 +6,19 @@ package rife.continuations;
 
 public class ContinuationConfigInstrumentTests implements ContinuationConfigInstrument {
     public String getContinuableMarkerInterfaceName() {
-        return CloneableContinuable.class.getName();
+        return "rife.continuations.CloneableContinuable";
     }
 
     public String getContinuableSupportClassName() {
-        return ContinuableSupport.class.getName();
+        return "rife.continuations.ContinuableSupport";
     }
 
     public String getEntryMethodName() {
         return "execute";
     }
 
-    public Class getEntryMethodReturnType() {
-        return void.class;
-    }
-
-    public Class[] getEntryMethodArgumentTypes() {
-        return null;
+    public String getEntryMethodDescriptor() {
+        return "()V";
     }
 
     public String getPauseMethodName() {
@@ -37,12 +33,12 @@ public class ContinuationConfigInstrumentTests implements ContinuationConfigInst
         return "call";
     }
 
-    public Class getCallMethodReturnType() {
-        return Object.class;
+    public String getCallMethodReturnTypeName() {
+        return "java/lang/Object";
     }
 
-    public Class[] getCallMethodArgumentTypes() {
-        return new Class[]{Class.class};
+    public String getCallMethodDescriptor() {
+        return "(Ljava/lang/Class;)Ljava/lang/Object;";
     }
 
     public String getAnswerMethodName() {

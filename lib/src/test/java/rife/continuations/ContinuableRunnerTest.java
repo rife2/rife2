@@ -13,7 +13,7 @@ public class ContinuableRunnerTest extends BasicContinuableRunner {
 
     public ContinuableRunnerTest()
     throws ClassNotFoundException {
-        super(CONFIG_INSTRUMENT, new BasicContinuableClassLoader(CONFIG_INSTRUMENT));
+        super(CONFIG_INSTRUMENT, null, new BasicContinuableClassLoader(CONFIG_INSTRUMENT));
         Class.forName(ContinuableSupport.class.getName());
     }
 

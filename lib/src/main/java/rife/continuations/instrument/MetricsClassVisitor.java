@@ -22,7 +22,7 @@ class MetricsClassVisitor extends ClassVisitor {
     private int maxLocals_ = -1;
     private int pauseCount_ = -1;
     private int answerCount_ = -1;
-    private List<String> mExceptionTypes = null;
+    private List<String> exceptionTypes_ = null;
 
     MetricsClassVisitor(ContinuationConfigInstrument config, String className) {
         super(ASM9);
@@ -59,11 +59,11 @@ class MetricsClassVisitor extends ClassVisitor {
     }
 
     void setExceptionTypes(ArrayList<String> exceptionTypes) {
-        mExceptionTypes = exceptionTypes;
+        exceptionTypes_ = exceptionTypes;
     }
 
     String nextExceptionType() {
-        return mExceptionTypes.remove(0);
+        return exceptionTypes_.remove(0);
     }
 
     int getPauseCount() {

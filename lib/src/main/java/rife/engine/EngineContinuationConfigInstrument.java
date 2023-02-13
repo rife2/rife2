@@ -14,23 +14,19 @@ import rife.continuations.ContinuationConfigInstrument;
  */
 public class EngineContinuationConfigInstrument implements ContinuationConfigInstrument {
     public String getContinuableMarkerInterfaceName() {
-        return Element.class.getName();
+        return "rife.engine.Element";
     }
 
     public String getContinuableSupportClassName() {
-        return Context.class.getName();
+        return "rife.engine.Context";
     }
 
     public String getEntryMethodName() {
         return "process";
     }
 
-    public Class getEntryMethodReturnType() {
-        return void.class;
-    }
-
-    public Class[] getEntryMethodArgumentTypes() {
-        return new Class[]{Context.class};
+    public String getEntryMethodDescriptor() {
+        return "(Lrife/engine/Context;)V";
     }
 
     public String getPauseMethodName() {

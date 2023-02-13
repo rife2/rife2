@@ -4,10 +4,7 @@
  */
 package rife.workflow.config;
 
-import rife.continuations.CloneableContinuable;
 import rife.continuations.ContinuationConfigInstrument;
-import rife.workflow.Event;
-import rife.workflow.Workflow;
 
 /**
  * Byte-code instrumentation configuration that is needed for continuations to
@@ -18,30 +15,26 @@ import rife.workflow.Workflow;
  */
 public class ContinuationInstrument implements ContinuationConfigInstrument {
     public String getContinuableMarkerInterfaceName() {
-        return CloneableContinuable.class.getName();
+        return "rife.continuations.CloneableContinuable";
     }
 
     public String getEntryMethodName() {
         return "execute";
     }
 
-    public Class getEntryMethodReturnType() {
-        return void.class;
-    }
-
-    public Class[] getEntryMethodArgumentTypes() {
-        return new Class[]{Workflow.class};
+    public String getEntryMethodDescriptor() {
+        return "(Lrife/workflow/Workflow;)V";
     }
 
     public String getCallMethodName() {
         return "pauseForEvent";
     }
 
-    public Class getCallMethodReturnType() {
-        return Event.class;
+    public String getCallMethodDescriptor() {
+        return "(Ljava/lang/Object;)Lrife/workflow/Event;";
     }
 
-    public Class[] getCallMethodArgumentTypes() {
-        return new Class[]{Object.class};
+    public String getCallMethodReturnTypeName() {
+        return "rife/workflow/Event";
     }
 }

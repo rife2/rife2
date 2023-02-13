@@ -79,12 +79,12 @@ public class Workflow {
     public Workflow(ExecutorService executor, HierarchicalProperties properties) {
         properties_ = new HierarchicalProperties().parent(properties);
 
-        runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT) {
+        runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT, new Class[]{Workflow.class}) {
             public void executeContinuable(Object object)
             throws Throwable {
                 var method = object.getClass().getMethod(
                     getConfigInstrumentation().getEntryMethodName(),
-                    getConfigInstrumentation().getEntryMethodArgumentTypes());
+                    getEntryMethodArgumentTypes());
                 method.setAccessible(true);
                 method.invoke(object, Workflow.this);
             }
