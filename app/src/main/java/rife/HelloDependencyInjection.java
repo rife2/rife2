@@ -5,14 +5,14 @@
 package rife;
 
 import rife.apis.MyService;
-import rife.apis.ServiceProvider;
+import rife.apis.MyServiceProvider;
 import rife.database.Datasource;
 import rife.engine.*;
 import rife.engine.annotations.ActiveSite;
 import rife.engine.annotations.Property;
 import rife.services.HelloService;
 
-public class HelloDependencyInjection extends Site implements ServiceProvider {
+public class HelloDependencyInjection extends Site implements MyServiceProvider {
     final MyService service;
 
     public HelloDependencyInjection(MyService service) {
@@ -41,7 +41,7 @@ public class HelloDependencyInjection extends Site implements ServiceProvider {
     }
 
     public static class ServiceUser2 implements Element {
-        @ActiveSite ServiceProvider provider;
+        @ActiveSite MyServiceProvider provider;
         @Property Datasource datasource;
 
         public void process(Context c) {

@@ -1,5 +1,5 @@
 package rife.apis;
 
-public interface ServiceProvider {
+public interface MyServiceProvider {
     MyService getMyService();
 }

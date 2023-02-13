@@ -5,12 +5,12 @@
 package rife;
 
 import rife.apis.MyService;
-import rife.apis.ServiceProvider;
+import rife.apis.MyServiceProvider;
 import rife.database.Datasource;
 import rife.engine.*;
 import rife.services.HelloService;
 
-public class HelloAll extends Site implements ServiceProvider {
+public class HelloAll extends Site implements MyServiceProvider {
     Router authentication;
     Router cmf;
     HelloDependencyInjection dependencyInjection;
