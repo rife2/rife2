@@ -6,6 +6,7 @@ package rife;
 
 import org.junit.jupiter.api.Test;
 import rife.apis.MyService;
+import rife.database.Datasource;
 import rife.services.HelloService;
 import rife.test.MockConversation;
 
@@ -68,16 +69,21 @@ class HelloTest {
     @Test
     void verifyHelloDependencyInjection() {
         var m = new MockConversation(new HelloDependencyInjection(new HelloService()));
-        assertEquals("Hello World", m.doRequest("/service1").getText());
-        assertEquals("Hello World", m.doRequest("/service2").getText());
+        m.properties().put("datasource", new Datasource("org.h2.Driver",
+            "jdbc:h2:./embedded_dbs/h2/hello", "sa", "", 5));
+
+        assertEquals("Hello World<br>org.h2.Driver", m.doRequest("/service1").getText());
+        assertEquals("Hello World<br>org.hsqldb.jdbcDriver", m.doRequest("/service2").getText());
 
         m = new MockConversation(new HelloDependencyInjection(new MyService() {
             public String serviceApi() {
                 return "Test Service";
             }
         }));
-        assertEquals("Test Service", m.doRequest("/service1").getText());
-        assertEquals("Test Service", m.doRequest("/service2").getText());
+        m.properties().put("datasource", new Datasource("org.h2.Driver",
+            "jdbc:h2:./embedded_dbs/h2/hello", "sa", "", 5));
+        assertEquals("Test Service<br>org.h2.Driver", m.doRequest("/service1").getText());
+        assertEquals("Test Service<br>org.hsqldb.jdbcDriver", m.doRequest("/service2").getText());
     }
 
 
