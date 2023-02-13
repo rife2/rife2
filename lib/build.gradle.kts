@@ -162,7 +162,8 @@ tasks {
             "rife/tools/exceptions/FileUtils*",
             "rife/validation/instrument/**",
             "rife/validation/MetaDataMerged**",
-            "rife/validation/MetaDataBeanAware**"
+            "rife/validation/MetaDataBeanAware**",
+            "rife/workflow/config/ContinuationInstrument**"
         )
         manifest {
             attributes["Premain-Class"] = "rife.instrument.RifeAgent"
