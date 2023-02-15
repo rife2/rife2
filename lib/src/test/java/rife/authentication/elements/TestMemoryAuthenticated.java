@@ -655,7 +655,7 @@ public class TestMemoryAuthenticated {
         response = conversation.doRequest("http://localhost/logout");
         assertEquals(response.getStatus(), 200);
         assertTrue(response.getText().contains("Logged out"));
-        assertEquals(conversation.getCookieValue("authId"), "");
+        assertEquals(conversation.getCookieValue("authId"), null);
 
         // verify user is logged out
         response = conversation.doRequest("http://localhost/landing");
@@ -689,7 +689,7 @@ public class TestMemoryAuthenticated {
         response = conversation.doRequest("http://localhost/beforelogout");
         assertEquals(response.getStatus(), 200);
         assertEquals(response.getText(), "logged out");
-        assertEquals(conversation.getCookieValue("authId"), "");
+        assertEquals(conversation.getCookieValue("authId"), null);
 
         // verify user is logged out
         response = conversation.doRequest("http://localhost/landing");
