@@ -137,13 +137,10 @@ You will want to:
 * depend on `org.eclipse.jetty` if you're launching the embedded server like in
   these examples
 
-RIFE2 also ships with example Gradle projects that should help you get set up
-quickly.
+RIFE2 also provides a GitHub template repository to help you get started, you
+can find it here: https://github.com/gbevin/rife2-hello
 
-Please take a look here:
-* Example apps: https://github.com/gbevin/rife2/tree/main/app
-* Run examples standalone: https://github.com/gbevin/rife2/tree/main/standalone
-* Package the examples war: https://github.com/gbevin/rife2/tree/main/war
+Simply click `Use this template` and you're ready to go!
 
 Once you've got everything set up, give it a try and visit
 [http://localhost:8080/hello](http://localhost:8080/hello)
