@@ -27,6 +27,7 @@ public class MockCookie extends Cookie {
      */
     public MockCookie(String name, String value) {
         super(name, value);
+        setPath("/");
         creationTime_ = Instant.now();
     }
 

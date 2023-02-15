@@ -18,12 +18,19 @@ public class CookieBuilder {
 
     /**
      * Starts building a new {@code Cookie}.
+     * <p>
+     * The path will automatically be set to {@code "/"} since that is
+     * the most common cookie usage.
+     * If the blank or empty path is needed, it can explicitly be set
+     * to {@code null} with {@link #path(String)}
      *
      * @param name  the name of the {@code Cookie}
      * @param value the value of the {@code Cookie}
+     * @since 1.0
      */
     public CookieBuilder(String name, String value) {
-        this.cookie_ = new Cookie(name, value);
+        cookie_ = new Cookie(name, value);
+        cookie_.setPath("/");
     }
 
     /**
