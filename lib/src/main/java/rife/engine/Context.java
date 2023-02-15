@@ -1803,6 +1803,7 @@ public class Context {
      * <p>{@code false} otherwise
      * @see #cookieValue(String)
      * @see #cookieValues()
+     * @see #cookiePath(String)
      * @since 1.0
      */
     public boolean hasCookie(String name) {
@@ -1813,10 +1814,11 @@ public class Context {
      * Retrieves the names of the cookies.
      *
      * @return a list of strings with the cookie names
-     * @see #cookieValue(String)
      * @see #hasCookie(String)
+     * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
+     * @see #cookiePath(String)
      * @since 1.0
      */
     public List<String> cookieNames() {
@@ -1837,6 +1839,7 @@ public class Context {
      * @see #hasCookie(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
+     * @see #cookiePath(String)
      * @since 1.0
      */
     public String cookieValue(String name) {
@@ -1847,6 +1850,25 @@ public class Context {
     }
 
     /**
+     * Retrieves the path of a cookie.
+     *
+     * @param name the name of the cookie
+     * @return the path of the cookie; or
+     * <p>{@code null} if no such cookie is present or if the path wasn't set
+     * @see #cookieNames()
+     * @see #hasCookie(String)
+     * @see #cookieValue(String, String)
+     * @see #cookieValues()
+     * @since 1.2.1
+     */
+    public String cookiePath(String name) {
+        if (!request_.hasCookie(name)) {
+            return null;
+        }
+        return request_.getCookie(name).getPath();
+    }
+
+    /**
      * Retrieves all current cookies names with their values.
      *
      * @return a new map of all the current cookies names with their values
@@ -1854,6 +1876,7 @@ public class Context {
      * @see #hasCookie(String)
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
+     * @see #cookiePath(String)
      * @since 1.0
      */
     public Map<String, String> cookieValues() {
@@ -1880,6 +1903,7 @@ public class Context {
      * @see #cookieValue(String)
      * @see #cookieValue(String, String)
      * @see #cookieValues()
+     * @see #cookiePath(String)
      * @since 1.0
      */
     public String cookieValue(String name, String defaultValue) {
@@ -2692,7 +2716,7 @@ public class Context {
      * @since 1.0
      */
     public void removeCookie(String path, String name) {
-        addCookie(new CookieBuilder(name, "").path(path).maxAge(-1));
+        addCookie(new CookieBuilder(name, "").path(path).maxAge(0));
     }
 
     /**
