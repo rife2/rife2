@@ -105,7 +105,7 @@ class HelloTest {
                 </label><br>""", r.getTemplate().getValue("form-fields").trim());
         var form = r.getParsedHtml().getFormWithName("hello");
         form.setParameter("title", "some title");
-        form.setParameter("email", "some@email");
+        form.setParameter("email", "someone@domain..com");
         form.setParameter("body", "some body");
         r = form.submit();
         assertEquals("invalid:email<br>", r.getTemplate().getValue("errors:*"));
@@ -114,7 +114,7 @@ class HelloTest {
                   <input type="text" name="title" size="50" value="some title" minlength="1" maxlength="120" required="required" />
                 </label><br>
                 <label>Email<br>
-                  <input type="email" name="email" size="50" value="some@email" minlength="1" maxlength="100" required="required" />
+                  <input type="email" name="email" size="50" value="someone@domain..com" minlength="1" maxlength="100" required="required" />
                 </label><br>
                 <label>Body<br>
                   <textarea name="body" cols="50" required="required">some body</textarea>
