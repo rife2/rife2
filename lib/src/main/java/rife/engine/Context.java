@@ -2675,7 +2675,7 @@ public class Context {
     }
 
     /**
-     * Removes a cookie.
+     * Removes a cookie with path {@code "/"}.
      *
      * @param name name of the cookie
      * @since 1.0
