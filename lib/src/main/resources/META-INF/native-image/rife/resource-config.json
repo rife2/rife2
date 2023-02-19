@@ -1,0 +1,46 @@
+{
+  "resources":{
+  "includes":[
+    {
+      "pattern":"\\QMETA-INF/services/org.eclipse.jetty.http.HttpFieldPreEncoder\\E"
+    },
+    {
+      "pattern":"\\QMETA-INF/services/org.slf4j.spi.SLF4JServiceProvider\\E"
+    },
+    {
+      "pattern":"\\QRIFE_VERSION\\E"
+    },
+    {
+      "pattern":"\\Qjetty-dir.css\\E"
+    },
+    {
+      "pattern":"\\Qorg/eclipse/jetty/http/encoding.properties\\E"
+    },
+    {
+      "pattern":"\\Qorg/eclipse/jetty/http/mime.properties\\E"
+    },
+    {
+      "pattern":"\\Qorg/eclipse/jetty/version/build.properties\\E"
+    }
+  ]},
+  "bundles":[
+    {
+      "name": "jakarta.servlet.LocalStrings",
+      "locales": [
+        "und"
+      ],
+      "condition": {
+        "typeReachable": "jakarta.servlet.GenericServlet"
+      }
+    },
+    {
+      "name": "jakarta.servlet.http.LocalStrings",
+      "locales": [
+        "und"
+      ],
+      "condition": {
+        "typeReachable": "jakarta.servlet.http.HttpServlet"
+      }
+    }
+  ]
+}

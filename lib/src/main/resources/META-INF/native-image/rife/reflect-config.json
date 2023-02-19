@@ -1,0 +1,1128 @@
+[
+{
+  "name":"com.sun.crypto.provider.AESCipher$General",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.ARCFOURCipher",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.ChaCha20Cipher$ChaCha20Poly1305",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.DESCipher",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.DESedeCipher",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.GaloisCounterMode$AESGCM",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.HmacSHA1",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"java.beans.PropertyVetoException"
+},
+{
+  "name":"java.io.ObjectInputStream"
+},
+{
+  "name":"java.io.ObjectOutputStream"
+},
+{
+  "name":"java.io.Serializable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.AutoCloseable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.Boolean",
+  "fields":[{"name":"TYPE"}],
+  "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.Byte",
+  "fields":[{"name":"TYPE"}],
+  "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.Character",
+  "fields":[{"name":"TYPE"}]
+},
+{
+  "name":"java.lang.Class"
+},
+{
+  "name":"java.lang.Cloneable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.Comparable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.Deprecated",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.Double",
+  "fields":[{"name":"TYPE"}],
+  "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.Enum",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.Exception",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.Float",
+  "fields":[{"name":"TYPE"}],
+  "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.Integer",
+  "fields":[{"name":"TYPE"}],
+  "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.Long",
+  "fields":[{"name":"TYPE"}],
+  "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.Number"
+},
+{
+  "name":"java.lang.Object",
+  "allDeclaredFields":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.Runnable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.RuntimeException",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.Short",
+  "fields":[{"name":"TYPE"}],
+  "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.StackTraceElement",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.String"
+},
+{
+  "name":"java.lang.Thread",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.Throwable",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.Void",
+  "fields":[{"name":"TYPE"}]
+},
+{
+  "name":"java.lang.constant.Constable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.invoke.MethodHandle"
+},
+{
+  "name":"java.math.BigDecimal"
+},
+{
+  "name":"java.math.BigInteger"
+},
+{
+  "name":"java.nio.Buffer"
+},
+{
+  "name":"java.security.AlgorithmParametersSpi"
+},
+{
+  "name":"java.security.KeyStoreSpi"
+},
+{
+  "name":"java.security.SecureRandomParameters"
+},
+{
+  "name":"java.sql.Driver"
+},
+{
+  "name":"java.util.ArrayList",
+  "methods":[{"name":"clone","parameterTypes":[] }]
+},
+{
+  "name":"java.util.Date",
+  "methods":[{"name":"clone","parameterTypes":[] }]
+},
+{
+  "name":"java.util.HashMap",
+  "methods":[{"name":"clone","parameterTypes":[] }]
+},
+{
+  "name":"java.util.HashSet"
+},
+{
+  "name":"java.util.LinkedHashMap"
+},
+{
+  "name":"java.util.LinkedHashSet"
+},
+{
+  "name":"java.util.ListResourceBundle",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.util.PropertyPermission",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
+},
+{
+  "name":"java.util.ResourceBundle",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"getBundle","parameterTypes":["java.lang.String","java.util.Locale","java.lang.ClassLoader"] }]
+},
+{
+  "name":"java.util.concurrent.ArrayBlockingQueue"
+},
+{
+  "name":"java.util.concurrent.locks.AbstractOwnableSynchronizer"
+},
+{
+  "name":"java.util.concurrent.locks.AbstractQueuedSynchronizer"
+},
+{
+  "name":"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject"
+},
+{
+  "name":"java.util.concurrent.locks.ReentrantLock"
+},
+{
+  "name":"java.util.concurrent.locks.ReentrantLock$NonfairSync"
+},
+{
+  "name":"java.util.concurrent.locks.ReentrantLock$Sync"
+},
+{
+  "name":"java.util.logging.LogManager",
+  "methods":[{"name":"getLoggingMXBean","parameterTypes":[] }]
+},
+{
+  "name":"java.util.logging.LoggingMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"javax.crypto.SecretKey"
+},
+{
+  "name":"javax.imageio.spi.ImageReaderSpi"
+},
+{
+  "name":"javax.imageio.spi.ImageReaderWriterSpi",
+  "methods":[
+    {"name":"getFileSuffixes","parameterTypes":[] },
+    {"name":"getFormatNames","parameterTypes":[] },
+    {"name":"getMIMETypes","parameterTypes":[] }
+  ]
+},
+{
+  "name":"javax.imageio.spi.ImageWriterSpi"
+},
+{
+  "name":"javax.security.auth.x500.X500Principal",
+  "fields":[{"name":"thisX500Name"}],
+  "methods":[{"name":"<init>","parameterTypes":["sun.security.x509.X500Name"] }]
+},
+{
+  "name":"javax.sql.ConnectionPoolDataSource"
+},
+{
+  "name":"javax.sql.DataSource"
+},
+{
+  "name":"javax.sql.PooledConnection"
+},
+{
+  "name":"javax.sql.XAConnection"
+},
+{
+  "name":"javax.sql.XADataSource"
+},
+{
+  "name":"javax.transaction.xa.XAException"
+},
+{
+  "name":"javax.transaction.xa.XAResource"
+},
+{
+  "name":"javax.transaction.xa.Xid"
+},
+{
+  "name":"rife.authentication.CredentialsManager",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.authentication.SessionAttributes",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.authentication.credentials.RoleUser",
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"getLogin","parameterTypes":[] }, 
+    {"name":"getPassword","parameterTypes":[] }, 
+    {"name":"getRemember","parameterTypes":[] }, 
+    {"name":"getRole","parameterTypes":[] }, 
+    {"name":"setLogin","parameterTypes":["java.lang.String"] }, 
+    {"name":"setPassword","parameterTypes":["java.lang.String"] }, 
+    {"name":"setRemember","parameterTypes":["boolean"] }
+  ]
+},
+{
+  "name":"rife.authentication.credentialsmanagers.ListRoles",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.authentication.credentialsmanagers.ListUsers",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.authentication.credentialsmanagers.RoleUserAttributes",
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"setPassword","parameterTypes":["java.lang.String"] }, 
+    {"name":"setUserId","parameterTypes":["long"] }
+  ]
+},
+{
+  "name":"rife.authentication.credentialsmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.authentication.credentialsmanagers.databasedrivers.org_h2_Driver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.authentication.credentialsmanagers.databasedrivers.org_hsqldb_jdbcDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.authentication.elements.Authenticated",
+  "allDeclaredFields":true
+},
+{
+  "name":"rife.authentication.elements.Identified",
+  "allDeclaredFields":true
+},
+{
+  "name":"rife.authentication.elements.Login",
+  "allDeclaredFields":true
+},
+{
+  "name":"rife.authentication.elements.Logout",
+  "allDeclaredFields":true
+},
+{
+  "name":"rife.authentication.remembermanagers.databasedrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.authentication.remembermanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.authentication.sessionmanagers.databasedrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.authentication.sessionvalidators.databasedrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.ContentInfo",
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"getCreated","parameterTypes":[] }, 
+    {"name":"getMimeType","parameterTypes":[] }, 
+    {"name":"getName","parameterTypes":[] }, 
+    {"name":"getPath","parameterTypes":[] }, 
+    {"name":"getVersion","parameterTypes":[] }, 
+    {"name":"isFragment","parameterTypes":[] }, 
+    {"name":"setCreated","parameterTypes":["java.sql.Timestamp"] }, 
+    {"name":"setFragment","parameterTypes":["boolean"] }, 
+    {"name":"setMimeType","parameterTypes":["java.lang.String"] }, 
+    {"name":"setName","parameterTypes":["java.lang.String"] }, 
+    {"name":"setPath","parameterTypes":["java.lang.String"] }, 
+    {"name":"setVersion","parameterTypes":["int"] }
+  ]
+},
+{
+  "name":"rife.cmf.ContentRepository",
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"getName","parameterTypes":[] }
+  ]
+},
+{
+  "name":"rife.cmf.dam.contentmanagers.DatabaseContentInfo",
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"getContentId","parameterTypes":[] }, 
+    {"name":"setContentId","parameterTypes":["int"] }
+  ]
+},
+{
+  "name":"rife.cmf.dam.contentmanagers.databasedrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.dam.contentmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.dam.contentmanagers.databasedrivers.org_hsqldb_jdbcDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.dam.contentstores.imagestoredrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.dam.contentstores.imagestoredrivers.org_apache_derby_jdbc_EmbeddedDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.dam.contentstores.rawstoredrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.dam.contentstores.rawstoredrivers.org_apache_derby_jdbc_EmbeddedDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.dam.contentstores.rawstoredrivers.org_hsqldb_jdbcDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.dam.contentstores.textstoredrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.dam.contentstores.textstoredrivers.org_apache_derby_jdbc_EmbeddedDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.elements.ServeContent",
+  "allDeclaredFields":true
+},
+{
+  "name":"rife.cmf.transform.ContentTransformer",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.cmf.transform.ImageContentTransformer",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.cmf.transform.RawContentTransformer",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.cmf.transform.TextContentTransformer",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.continuations.CloneableContinuable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.continuations.ContinuationConfigInstrument",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.continuations.basic.BasicContinuableRunner",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.database.DbQueryManager",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.database.DbRowProcessor",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.database.capabilities.org_apache_derby_jdbc_EmbeddedDriver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"rife.database.capabilities.org_h2_Driver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"rife.database.capabilities.org_hsqldb_jdbcDriver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"rife.database.querymanagers.generic.Callbacks",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.database.querymanagers.generic.CallbacksProvider",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.database.querymanagers.generic.GenericQueryManager",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.database.querymanagers.generic.GenericQueryManagerDelegate",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.database.querymanagers.generic.GenericQueryManagerListener",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.database.querymanagers.generic.GenericTypeDetector",
+  "methods":[{"name":"detectAssociatedClass","parameterTypes":["java.lang.reflect.Method"] }]
+},
+{
+  "name":"rife.database.querymanagers.generic.databasedrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource","java.lang.String","java.lang.String","java.lang.Class","boolean"] }]
+},
+{
+  "name":"rife.database.querymanagers.generic.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource","java.lang.String","java.lang.String","java.lang.Class","boolean"] }]
+},
+{
+  "name":"rife.database.types.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"rife.database.types.databasedrivers.org_h2_Driver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"rife.database.types.databasedrivers.org_hsqldb_jdbcDriver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"rife.engine.Element",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.engine.Router",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.engine.Site",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.resources.databasedrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.scheduler.Executor",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.scheduler.Task",
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"getFrequencySpecification","parameterTypes":[] }, 
+    {"name":"getId","parameterTypes":[] }, 
+    {"name":"getPlanned","parameterTypes":[] }, 
+    {"name":"getType","parameterTypes":[] }, 
+    {"name":"isBusy","parameterTypes":[] }
+  ]
+},
+{
+  "name":"rife.scheduler.TaskOption",
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"getName","parameterTypes":[] }, 
+    {"name":"getTaskId","parameterTypes":[] }, 
+    {"name":"getValue","parameterTypes":[] }
+  ]
+},
+{
+  "name":"rife.scheduler.schedulermanagers.databasedrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.scheduler.taskmanagers.databasedrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.scheduler.taskmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.scheduler.taskoptionmanagers.databasedrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.scheduler.taskoptionmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.template.ValueRenderer",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.template.html.cmf.container.template",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.html.errors.rife.engine_error",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.html.formbuilder.html.fields",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.com_mysql_cj_jdbc_Driver.create_sequence",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.com_mysql_cj_jdbc_Driver.create_table",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.com_mysql_cj_jdbc_Driver.delete",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.com_mysql_cj_jdbc_Driver.drop_sequence",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.com_mysql_cj_jdbc_Driver.drop_table",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.com_mysql_cj_jdbc_Driver.insert",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.com_mysql_cj_jdbc_Driver.select",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.com_mysql_cj_jdbc_Driver.sequence_value",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.com_mysql_cj_jdbc_Driver.update",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.oracle_jdbc_driver_OracleDriver.create_sequence",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.oracle_jdbc_driver_OracleDriver.create_table",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.oracle_jdbc_driver_OracleDriver.delete",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.oracle_jdbc_driver_OracleDriver.drop_sequence",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.oracle_jdbc_driver_OracleDriver.drop_table",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.oracle_jdbc_driver_OracleDriver.insert",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.oracle_jdbc_driver_OracleDriver.select",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.oracle_jdbc_driver_OracleDriver.sequence_value",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.oracle_jdbc_driver_OracleDriver.update",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_apache_derby_jdbc_EmbeddedDriver.create_sequence",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_apache_derby_jdbc_EmbeddedDriver.create_table",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_apache_derby_jdbc_EmbeddedDriver.delete",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_apache_derby_jdbc_EmbeddedDriver.drop_sequence",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_apache_derby_jdbc_EmbeddedDriver.drop_table",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_apache_derby_jdbc_EmbeddedDriver.insert",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_apache_derby_jdbc_EmbeddedDriver.select",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_apache_derby_jdbc_EmbeddedDriver.sequence_value",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_apache_derby_jdbc_EmbeddedDriver.update",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_h2_Driver.create_sequence",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_h2_Driver.create_table",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_h2_Driver.delete",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_h2_Driver.drop_sequence",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_h2_Driver.drop_table",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_h2_Driver.insert",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_h2_Driver.select",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_h2_Driver.sequence_value",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_h2_Driver.update",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_hsqldb_jdbcDriver.create_sequence",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_hsqldb_jdbcDriver.create_table",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_hsqldb_jdbcDriver.delete",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_hsqldb_jdbcDriver.drop_sequence",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_hsqldb_jdbcDriver.drop_table",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_hsqldb_jdbcDriver.insert",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_hsqldb_jdbcDriver.select",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_hsqldb_jdbcDriver.sequence_value",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_hsqldb_jdbcDriver.update",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_postgresql_Driver.create_sequence",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_postgresql_Driver.create_table",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_postgresql_Driver.delete",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_postgresql_Driver.drop_sequence",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_postgresql_Driver.drop_table",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_postgresql_Driver.insert",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_postgresql_Driver.select",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_postgresql_Driver.sequence_value",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.sql.sql.org_postgresql_Driver.update",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.xml.errors.rife.engine_error",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.template.xml.formbuilder.xml.fields",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isModified","parameterTypes":["rife.resources.ResourceFinder","java.lang.String"] }]
+},
+{
+  "name":"rife.tools.exceptions.ControlFlowRuntimeException",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.validation.AbstractValidationRule",
+  "methods":[{"name":"clone","parameterTypes":[] }]
+},
+{
+  "name":"rife.validation.Constrained",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.validation.ConstrainedPropertyListener",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.validation.MetaData",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.validation.MetaDataBeanAware",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.validation.MetaDataMerged",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.validation.Validated",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.validation.Validation",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"getConstrainedBean","parameterTypes":[] }, 
+    {"name":"getConstrainedProperties","parameterTypes":[] }, 
+    {"name":"getGroups","parameterTypes":[] }, 
+    {"name":"getRules","parameterTypes":[] }, 
+    {"name":"getValidatedSubjects","parameterTypes":[] }, 
+    {"name":"getValidationErrors","parameterTypes":[] }
+  ]
+},
+{
+  "name":"rife.validation.ValidationContext",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"rife.validation.ValidationRuleEmail"
+},
+{
+  "name":"rife.validation.ValidationRuleFormat"
+},
+{
+  "name":"rife.validation.ValidationRuleInList"
+},
+{
+  "name":"rife.validation.ValidationRuleLimitedDate"
+},
+{
+  "name":"rife.validation.ValidationRuleLimitedLength"
+},
+{
+  "name":"rife.validation.ValidationRuleNotEmpty"
+},
+{
+  "name":"rife.validation.ValidationRuleNotEqual"
+},
+{
+  "name":"rife.validation.ValidationRuleNotNull"
+},
+{
+  "name":"rife.validation.ValidationRuleRange"
+},
+{
+  "name":"rife.validation.ValidationRuleRegexp"
+},
+{
+  "name":"rife.validation.ValidationRuleSameAs"
+},
+{
+  "name":"rife.validation.ValidationRuleUrl"
+},
+{
+  "name":"sun.java2d.loops.OpaqueCopyAnyToArgb",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.java2d.loops.OpaqueCopyArgbToAny",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.java2d.loops.SetDrawLineANY",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.java2d.loops.SetDrawPathANY",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.java2d.loops.SetDrawPolygonsANY",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.java2d.loops.SetDrawRectANY",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.java2d.loops.SetFillPathANY",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.java2d.loops.SetFillRectANY",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.java2d.loops.SetFillSpansANY",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.java2d.marlin.DMarlinRenderingEngine",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.pkcs12.PKCS12KeyStore",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.pkcs12.PKCS12KeyStore$DualFormatPKCS12",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.JavaKeyStore$JKS",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.MD5",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.NativePRNG",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.SHA",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.SHA2$SHA256",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.SHA5$SHA512",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.X509Factory",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.rsa.RSAKeyFactory$Legacy",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.ssl.KeyManagerFactoryImpl$SunX509",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.ssl.SSLContextImpl$TLSContext",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.ssl.TrustManagerFactoryImpl$PKIXFactory",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.x509.AuthorityInfoAccessExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.AuthorityKeyIdentifierExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.BasicConstraintsExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.CRLDistributionPointsExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.CertificatePoliciesExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.ExtendedKeyUsageExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.IssuerAlternativeNameExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.KeyUsageExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.NetscapeCertTypeExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.PrivateKeyUsageExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.SubjectAlternativeNameExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.SubjectKeyIdentifierExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+}
+]
