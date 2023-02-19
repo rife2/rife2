@@ -350,6 +350,18 @@
   ]
 },
 {
+  "name":"rife.authentication.credentialsmanagers.databasedrivers.com_mysql_cj_jdbc_Driver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.authentication.credentialsmanagers.databasedrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.authentication.credentialsmanagers.databasedrivers.oracle_jdbc_driver_OracleDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
   "name":"rife.authentication.credentialsmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver",
   "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
 },
@@ -378,11 +390,19 @@
   "allDeclaredFields":true
 },
 {
+  "name":"rife.authentication.remembermanagers.databasedrivers.com_mysql_cj_jdbc_Driver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
   "name":"rife.authentication.remembermanagers.databasedrivers.generic",
   "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
 },
 {
   "name":"rife.authentication.remembermanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.authentication.sessionmanagers.databasedrivers.com_mysql_cj_jdbc_Driver",
   "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
 },
 {
@@ -429,7 +449,15 @@
   ]
 },
 {
+  "name":"rife.cmf.dam.contentmanagers.databasedrivers.com_mysql_cj_jdbc_Driver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
   "name":"rife.cmf.dam.contentmanagers.databasedrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.dam.contentmanagers.databasedrivers.oracle_jdbc_driver_OracleDriver",
   "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
 },
 {
@@ -449,7 +477,19 @@
   "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
 },
 {
+  "name":"rife.cmf.dam.contentstores.imagestoredrivers.org_postgresql_Driver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.dam.contentstores.rawstoredrivers.com_mysql_cj_jdbc_Driver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
   "name":"rife.cmf.dam.contentstores.rawstoredrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.dam.contentstores.rawstoredrivers.oracle_jdbc_driver_OracleDriver",
   "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
 },
 {
@@ -461,7 +501,15 @@
   "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
 },
 {
+  "name":"rife.cmf.dam.contentstores.rawstoredrivers.org_postgresql_Driver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
   "name":"rife.cmf.dam.contentstores.textstoredrivers.generic",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.cmf.dam.contentstores.textstoredrivers.oracle_jdbc_driver_OracleDriver",
   "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
 },
 {
@@ -521,6 +569,14 @@
   "queryAllPublicMethods":true
 },
 {
+  "name":"rife.database.capabilities.com_mysql_cj_jdbc_Driver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"rife.database.capabilities.oracle_jdbc_driver_OracleDriver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"rife.database.capabilities.org_apache_derby_jdbc_EmbeddedDriver",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -530,6 +586,10 @@
 },
 {
   "name":"rife.database.capabilities.org_hsqldb_jdbcDriver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"rife.database.capabilities.org_postgresql_Driver",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -563,12 +623,24 @@
   "methods":[{"name":"detectAssociatedClass","parameterTypes":["java.lang.reflect.Method"] }]
 },
 {
+  "name":"rife.database.querymanagers.generic.databasedrivers.com_mysql_cj_jdbc_Driver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource","java.lang.String","java.lang.String","java.lang.Class","boolean"] }]
+},
+{
   "name":"rife.database.querymanagers.generic.databasedrivers.generic",
   "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource","java.lang.String","java.lang.String","java.lang.Class","boolean"] }]
 },
 {
   "name":"rife.database.querymanagers.generic.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver",
   "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource","java.lang.String","java.lang.String","java.lang.Class","boolean"] }]
+},
+{
+  "name":"rife.database.types.databasedrivers.com_mysql_cj_jdbc_Driver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"rife.database.types.databasedrivers.oracle_jdbc_driver_OracleDriver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"rife.database.types.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver",
@@ -580,6 +652,10 @@
 },
 {
   "name":"rife.database.types.databasedrivers.org_hsqldb_jdbcDriver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"rife.database.types.databasedrivers.org_postgresql_Driver",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -634,11 +710,19 @@
   "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
 },
 {
+  "name":"rife.scheduler.taskmanagers.databasedrivers.com_mysql_cj_jdbc_Driver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
   "name":"rife.scheduler.taskmanagers.databasedrivers.generic",
   "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
 },
 {
   "name":"rife.scheduler.taskmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver",
+  "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
+},
+{
+  "name":"rife.scheduler.taskoptionmanagers.databasedrivers.com_mysql_cj_jdbc_Driver",
   "methods":[{"name":"<init>","parameterTypes":["rife.database.Datasource"] }]
 },
 {
