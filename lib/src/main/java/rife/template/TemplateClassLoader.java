@@ -196,7 +196,7 @@ class TemplateClassLoader extends ClassLoader {
     private boolean isTemplateModified(Class c) {
         assert c != null;
 
-        var is_modified = true;
+        var is_modified = false;
         Method is_modified_method = null;
         String modification_state = null;
         try {
@@ -204,7 +204,7 @@ class TemplateClassLoader extends ClassLoader {
             is_modified = (Boolean) is_modified_method.invoke(null, new Object[]{templateFactory_.getResourceFinder(), modification_state});
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException |
                  InvocationTargetException e) {
-            // do nothing, template will be considered as outdated
+            // do nothing, template will be considered as not modified
         }
 
         return is_modified;
