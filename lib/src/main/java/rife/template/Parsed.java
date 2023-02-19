@@ -66,13 +66,13 @@ final class Parsed implements Opcodes {
 	}
 
 	byte[] getByteCode() {
-		var class_writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		var class_writer = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 		MethodVisitor method = null;
 
 		var full_classname = (getPackage() + "." + getClassName()).replace('.', '/');
 
 		// define the template class
-class_writer.visit(V1_4, ACC_PUBLIC|ACC_SYNCHRONIZED, full_classname, null, "rife/template/AbstractTemplate", null);
+class_writer.visit(V17, ACC_PUBLIC|ACC_SYNCHRONIZED, full_classname, null, "rife/template/AbstractTemplate", null);
 
 		// generate the template constructor
 method = class_writer.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
