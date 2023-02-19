@@ -35,6 +35,10 @@ contains a lot more information.**
 **The [RIFE2 Javadocs](https://gbevin.github.io/rife2/) complement the
 documentation with many more details.**
 
+<a href="https://www.youtube.com/watch?feature=player_embedded&v=AZWzYwAHDIE" target="_blank">
+ <img src="https://img.youtube.com/vi/AZWzYwAHDIE/maxresdefault.jpg" alt="Watch the video" width="640" height="360" border="0" />
+</a>
+
 ## Why RIFE2?
 
 A frequently asked question is: "Why choose RIFE2 over other popular frameworks"?
