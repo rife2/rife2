@@ -28,7 +28,7 @@ public class GenericQueryManagerFactory {
 
     public static <BeanType> GenericQueryManager<BeanType> instance(Datasource datasource, Class<BeanType> beanClass)
     throws DatabaseException {
-        String short_name = ClassUtils.shortenClassName(beanClass);
+        var short_name = ClassUtils.shortenClassName(beanClass);
 
         return instance(datasource, beanClass, short_name);
     }
@@ -37,7 +37,7 @@ public class GenericQueryManagerFactory {
     throws DatabaseException {
         AbstractGenericQueryManager<BeanType> query_manager = null;
 
-        String driver = datasource.getAliasedDriver();
+        var driver = datasource.getAliasedDriver();
 
         try {
             beanClass.getConstructor();
@@ -48,10 +48,10 @@ public class GenericQueryManagerFactory {
         // get the identifier column
         String primary_key = null;
 
-        boolean has_identifier = false;
-        Constrained constrained_bean = ConstrainedUtils.getConstrainedInstance(beanClass);
+        var has_identifier = false;
+        var constrained_bean = ConstrainedUtils.getConstrainedInstance(beanClass);
         if (constrained_bean != null) {
-            for (ConstrainedProperty property : (Collection<ConstrainedProperty>) constrained_bean.getConstrainedProperties()) {
+            for (var property : constrained_bean.getConstrainedProperties()) {
                 if (property.isIdentifier()) {
                     primary_key = property.getPropertyName();
                     has_identifier = true;
@@ -65,7 +65,7 @@ public class GenericQueryManagerFactory {
         }
 
         // check if the query manager wasn't cached before
-        String cache_name = "GENERIC." + beanClass.getName() + "." + primary_key;
+        var cache_name = "GENERIC." + beanClass.getName() + "." + primary_key;
 
         query_manager = (AbstractGenericQueryManager<BeanType>) cache_.get(datasource, cache_name);
 
@@ -74,24 +74,24 @@ public class GenericQueryManagerFactory {
         }
 
         // construct the specialized driver class name
-        StringBuilder specialized_name = new StringBuilder(packageName_);
+        var specialized_name = new StringBuilder(packageName_);
         specialized_name.append(StringUtils.encodeClassname(driver));
 
         try {
             try {
-                Class<AbstractGenericQueryManager<BeanType>> specialized_class = (Class<AbstractGenericQueryManager<BeanType>>) Class.forName(specialized_name.toString());
-                Constructor<AbstractGenericQueryManager<BeanType>> specialized_constructor = specialized_class.getConstructor(new Class[]{Datasource.class, String.class, String.class, Class.class, boolean.class});
+                var specialized_class = (Class<AbstractGenericQueryManager<BeanType>>) Class.forName(specialized_name.toString());
+                var specialized_constructor = specialized_class.getConstructor(new Class[]{Datasource.class, String.class, String.class, Class.class, boolean.class});
 
                 query_manager = specialized_constructor.newInstance(datasource, tableName, primary_key, beanClass, has_identifier);
             } catch (ClassNotFoundException e) {
                 // could not find a specialized class, try to get a generic driver
                 try {
                     // construct the generic driver class name
-                    StringBuilder generic_name = new StringBuilder(packageName_);
+                    var generic_name = new StringBuilder(packageName_);
                     generic_name.append(GENERIC_DRIVER);
 
-                    Class<AbstractGenericQueryManager<BeanType>> generic_class = (Class<AbstractGenericQueryManager<BeanType>>) Class.forName(generic_name.toString());
-                    Constructor<AbstractGenericQueryManager<BeanType>> generic_constructor = generic_class.getConstructor(new Class[]{Datasource.class, String.class, String.class, Class.class, boolean.class});
+                    var generic_class = (Class<AbstractGenericQueryManager<BeanType>>) Class.forName(generic_name.toString());
+                    var generic_constructor = generic_class.getConstructor(new Class[]{Datasource.class, String.class, String.class, Class.class, boolean.class});
 
                     query_manager = generic_constructor.newInstance(datasource, tableName, primary_key, beanClass, has_identifier);
                 } catch (ClassNotFoundException e2) {
