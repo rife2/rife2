@@ -250,8 +250,7 @@ public class Server {
     /**
      * By default, Rife will attempt to use virtual threads if available. This method explicitly disables virtual threads to use a standard QueuedThreadPool.
      *
-     * @param auth {@code true} of server wants the client certificate to be authenticated; or
-     *             {@code false} otherwise
+     * @param loom {@code true} if server wants to disable loom on a JDK 19+ application
      * @return the instance of the server that's being configured
      */
     public Server disableLoom(boolean loom) {
