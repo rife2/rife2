@@ -11,3 +11,12 @@ lib/embedded_dbs
 derby.log
 embedded_dbs
 lib/src/processed
+
+*.iml
+.gradle
+*.prefs
+*.class*
+*.factorypath
+*.project
+*.processors
+*/bin/

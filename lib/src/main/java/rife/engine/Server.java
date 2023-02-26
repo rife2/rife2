@@ -4,17 +4,25 @@
  */
 package rife.engine;
 
-import jakarta.servlet.DispatcherType;
-import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.server.session.*;
-import org.eclipse.jetty.servlet.*;
+import java.util.EnumSet;
+
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SessionIdManager;
+import org.eclipse.jetty.server.session.DefaultSessionIdManager;
+import org.eclipse.jetty.server.session.SessionHandler;
+import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.FilterHolder;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.util.thread.ThreadPool;
+
+import jakarta.servlet.DispatcherType;
 import rife.ioc.HierarchicalProperties;
 import rife.resources.ResourceFinderClasspath;
 import rife.servlet.RifeFilter;
-
-import java.util.EnumSet;
 
 /**
  * Embedded Jetty server that can directly start from a RIFE2 site.
@@ -44,6 +52,7 @@ public class Server {
     protected String sslTrustStorePassword_ = null;
     protected boolean sslNeedClientAuth_ = false;
     protected boolean sslWantClientAuth_ = false;
+    protected boolean useLoom = true;
 
     private final HierarchicalProperties properties_;
     private org.eclipse.jetty.server.Server server_;
@@ -246,6 +255,18 @@ public class Server {
     }
 
     /**
+     * By default, Rife will attempt to use virtual threads if available. This method explicitly disables virtual threads to use a standard QueuedThreadPool.
+     *
+     * @param auth {@code true} of server wants the client certificate to be authenticated; or
+     *             {@code false} otherwise
+     * @return the instance of the server that's being configured
+     */
+    public Server disableLoom(boolean loom) {
+        this.useLoom = !loom;
+        return this;
+    }
+
+    /**
      * Retrieves the hierarchical properties for this server instance.
      *
      * @return this server's collection of hierarchical properties
@@ -264,7 +285,19 @@ public class Server {
      * @since 1.0
      */
     public Server start(Site site) {
-        var thread_pool = new QueuedThreadPool(maxThreads_, minThreads_, idleTimeout_);
+        ThreadPool thread_pool;
+
+        if (useLoom) {
+        	try {
+        		thread_pool = new LoomThreadPool();
+        	} catch (IllegalStateException e) {
+        		thread_pool  = new QueuedThreadPool(maxThreads_, minThreads_, idleTimeout_);
+        	}
+        }
+
+        else {
+        	thread_pool  = new QueuedThreadPool(maxThreads_, minThreads_, idleTimeout_);
+        }
         server_ = new org.eclipse.jetty.server.Server(thread_pool);
         SessionIdManager sessions_ = new DefaultSessionIdManager(server_);
         ServletContextHandler handler_ = new ServletContextHandler();
