@@ -52,7 +52,7 @@ public class Server {
     protected String sslTrustStorePassword_ = null;
     protected boolean sslNeedClientAuth_ = false;
     protected boolean sslWantClientAuth_ = false;
-    protected boolean useLoom = true;
+    protected boolean useLoom = Float.parseFloat(System.getProperty("java.specification.version")) >= 19;
 
     private final HierarchicalProperties properties_;
     private org.eclipse.jetty.server.Server server_;
