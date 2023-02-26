@@ -10,6 +10,8 @@ import org.eclipse.jetty.server.session.*;
 import org.eclipse.jetty.servlet.*;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.util.thread.ThreadPool;
+
 import rife.ioc.HierarchicalProperties;
 import rife.resources.ResourceFinderClasspath;
 import rife.servlet.RifeFilter;
