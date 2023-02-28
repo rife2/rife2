@@ -40,9 +40,9 @@ public interface ContentLoaderBackend<InternalType> {
      * @param fragment {@code true} if the raw data is a fragment; or
      *                 <p>{@code false} if the raw data is a complete document or file
      * @param errors   a set to which possible error messages will be added
-     * @return an instance of the {@code InternalType}; or
+     * @return an instance of the {@code LoadedContent} with the {@code InternalType}; or
      * <p>{@code null} if the raw data couldn't be loaded
-     * @since 1.0
+     * @since 1.4
      */
-    InternalType load(Object data, boolean fragment, Set<String> errors);
+    LoadedContent<InternalType> load(Object data, boolean fragment, Set<String> errors);
 }

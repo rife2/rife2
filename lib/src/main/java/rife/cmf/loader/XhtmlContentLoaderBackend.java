@@ -26,16 +26,18 @@ public abstract class XhtmlContentLoaderBackend implements ContentLoaderBackend<
      * @param fragment {@code true} if the raw data is a fragment; or
      *                 <p>{@code false} if the raw data is a complete document or file
      * @param errors   a set to which possible error messages will be added
-     * @return an instance of the xhtml as a {@code String}; or
+     * @return an instance of the {@code LoadedContent} as XHTML as a {@code String}; or
      * <p>{@code null} if the raw data couldn't be loaded
+     *
+     * @since 1.4
      */
-    protected abstract String loadFromString(String data, boolean fragment, Set<String> errors)
+    protected abstract LoadedContent<String> loadFromString(String data, boolean fragment, Set<String> errors)
     throws ContentManagerException;
 
-    public String load(Object data, boolean fragment, Set<String> errors)
+    public LoadedContent<String> load(Object data, boolean fragment, Set<String> errors)
     throws ContentManagerException {
-        if (data instanceof String) {
-            return loadFromString((String) data, fragment, errors);
+        if (data instanceof String str) {
+            return loadFromString(str, fragment, errors);
         }
 
         return null;

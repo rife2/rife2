@@ -12,6 +12,7 @@ import rife.cmf.format.exceptions.UnexpectedConversionErrorException;
 import rife.cmf.format.exceptions.UnreadableDataFormatException;
 import rife.cmf.format.exceptions.UnsupportedTargetMimeTypeException;
 import rife.cmf.loader.ImageContentLoader;
+import rife.cmf.loader.LoadedContent;
 import rife.cmf.transform.ContentTransformer;
 import rife.tools.Convert;
 import rife.tools.exceptions.ConversionException;
@@ -69,25 +70,39 @@ public class ImageFormatter implements Formatter<byte[], Image> {
 
     public byte[] format(Content content, ContentTransformer<Image> transformer)
     throws FormatException {
-        if (!(content.getData() instanceof byte[])) {
+        byte[] content_bytes;
+        // we only support byte arrays as input
+        if (!(content.getData() instanceof byte[] bytes)) {
             throw new InvalidContentDataTypeException(this, content.getMimeType(), byte[].class, content.getData().getClass());
         }
+        content_bytes = bytes;
 
         Image data = null;
 
         // check if the content contains a cached value of the loaded data
         if (content.hasCachedLoadedData()) {
-            data = (Image) content.getCachedLoadedData();
+            var cached = content.getCachedLoadedData();
+            if (cached instanceof LoadedContent<?> loaded) {
+                data = (Image)loaded.data();
+            } else {
+                data = (Image)cached;
+            }
         }
+
+        LoadedContent<Image> loaded = null;
 
         if (null == data) {
             // get an image
             Set<String> errors = new HashSet<>();
-            data = new ImageContentLoader().load(content.getData(), false, errors);
-            if (null == data) {
+            loaded = new ImageContentLoader().load(content_bytes, false, errors);
+            if (null == loaded) {
                 throw new UnreadableDataFormatException(content.getMimeType(), errors);
             }
+
+            data = loaded.data();
         }
+
+        boolean was_transformed = false;
 
         // determine image type
         var image_type = BufferedImage.TYPE_INT_ARGB;
@@ -181,6 +196,7 @@ public class ImageFormatter implements Formatter<byte[], Image> {
                 if ((width >= 0 && width != orig_width) ||
                     (height >= 0 && height != orig_height)) {
                     data = progressiveScaling(data, Math.max(width, height), image_type);
+                    was_transformed = true;
                 }
             }
         }
@@ -188,6 +204,13 @@ public class ImageFormatter implements Formatter<byte[], Image> {
         // transform the content, if needed
         if (transformer != null) {
             data = transformer.transform(data, content.getAttributes());
+            was_transformed = true;
+        }
+
+        // if no transformation was applied to the data and the provided data already
+        // has the requested mime-type, simply pass the data on
+        if (!was_transformed && loaded != null && loaded.originalMimeType() == content.getMimeType()) {
+            return content_bytes;
         }
 
         // draw it on a new buffer
@@ -211,7 +234,6 @@ public class ImageFormatter implements Formatter<byte[], Image> {
         var buffered_out = new BufferedOutputStream(bytes_out);
 
         try {
-
             // retrieve a supported writer
             var writers = ImageIO.getImageWritersByMIMEType(content.getMimeType().toString());
             ImageWriter writer = null;
@@ -228,6 +250,7 @@ public class ImageFormatter implements Formatter<byte[], Image> {
                 write_param = writer.getDefaultWriteParam();
                 write_param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
                 write_param.setCompressionQuality(0.85f);
+                write_param.setProgressiveMode(ImageWriteParam.MODE_DEFAULT);
             }
             writer.write(null, new IIOImage(buffer, null, null), write_param);
             writer.dispose();

@@ -32,19 +32,19 @@ public abstract class ContentLoader<InternalType> {
      * @param fragment {@code true} if the raw data is a fragment; or
      *                 <p>{@code false} if the raw data is a complete document or file
      * @param errors   a set to which possible error messages will be added
-     * @return an instance of the internal type that is common for all loaders
-     * for the handled content type, for instance {@code java.awt.Image}
+     * @return an instance of the {@code LoadedContent} with the internal type as data
+     * that is common for all loaders for the handled content type, for instance {@code java.awt.Image}
      * for loaders that handle images; or
      * <p>{@code null} if the raw data couldn't be loaded
-     * @since 1.0
+     * @since 1.4
      */
-    public InternalType load(Object data, boolean fragment, Set<String> errors)
+    public LoadedContent<InternalType> load(Object data, boolean fragment, Set<String> errors)
     throws ContentManagerException {
         if (null == data) {
             return null;
         }
 
-        InternalType result = null;
+        LoadedContent<InternalType> result = null;
         for (ContentLoaderBackend<InternalType> loader : getBackends()) {
             if (loader.isBackendPresent()) {
                 result = loader.load(data, fragment, errors);

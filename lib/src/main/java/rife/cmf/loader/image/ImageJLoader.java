@@ -6,6 +6,7 @@ package rife.cmf.loader.image;
 
 import rife.cmf.dam.exceptions.ContentManagerException;
 import rife.cmf.loader.ImageContentLoaderBackend;
+import rife.cmf.loader.LoadedContent;
 import rife.tools.ExceptionUtils;
 import ij.io.Opener;
 
@@ -23,7 +24,7 @@ import java.util.Set;
  * @since 1.0
  */
 public class ImageJLoader extends ImageContentLoaderBackend {
-    public Image loadFromBytes(byte[] data, Set<String> errors)
+    public LoadedContent<Image> loadFromBytes(byte[] data, Set<String> errors)
     throws ContentManagerException {
         return new LoaderDelegate().load(data, errors);
     }
@@ -37,25 +38,22 @@ public class ImageJLoader extends ImageContentLoaderBackend {
     }
 
     private static class LoaderDelegate {
-        public Image load(byte[] data, Set<String> errors)
+        public LoadedContent<Image> load(byte[] data, Set<String> errors)
         throws ContentManagerException {
             var in = new ByteArrayInputStream(data);
-            Image image = null;
 
             try {
                 var imagej = new Opener().openTiff(in, "cmfdata");
                 if (imagej != null) {
-                    image = imagej.getImage();
+                    return new LoadedContent<>(null, imagej.getImage());
                 }
             } catch (Throwable e) {
                 if (errors != null) {
                     errors.add(ExceptionUtils.getExceptionStackTrace(e));
                 }
-
-                image = null;
             }
 
-            return image;
+            return null;
         }
     }
 }

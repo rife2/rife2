@@ -5,6 +5,7 @@
 package rife.cmf.loader.xhtml;
 
 import org.junit.jupiter.api.Test;
+import rife.cmf.MimeType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -48,6 +49,7 @@ public class TestSAXLoader {
         var xhtml = loader.loadFromString("<p>some <b>html</b> here</p>", true, errors);
 
         assertNotNull(xhtml);
+        assertEquals(xhtml.originalMimeType(), MimeType.APPLICATION_XHTML);
         assertEquals(0, errors.size());
     }
 
@@ -64,6 +66,7 @@ public class TestSAXLoader {
             </body></html>""", false, errors);
 
         assertNotNull(xhtml);
+        assertEquals(xhtml.originalMimeType(), MimeType.APPLICATION_XHTML);
         assertEquals(0, errors.size());
     }
 

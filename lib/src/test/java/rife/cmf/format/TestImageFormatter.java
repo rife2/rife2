@@ -270,6 +270,24 @@ public class TestImageFormatter {
     }
 
     @Test
+    void testFormatPassThrough()
+    throws Exception {
+        var image_resource = ResourceFinderClasspath.instance().getResource("uwyn_resized-width_300-height_70.jpg");
+        var data_image = FileUtils.readBytes(image_resource);
+
+        var content = new Content(MimeType.IMAGE_JPEG, data_image);
+        var formatter = new ImageFormatter();
+        var result = formatter.format(content, null);
+
+        assertNotNull(result);
+
+        var image_resource_jpg = ResourceFinderClasspath.instance().getResource("uwyn_resized-width_300-height_70.jpg");
+        var data_image_jpg = FileUtils.readBytes(image_resource_jpg);
+
+        assertArrayEquals(data_image_jpg, result);
+    }
+
+    @Test
     void testFormatAttributeWidthHeight()
     throws Exception {
         var image_resource_gif = ResourceFinderClasspath.instance().getResource("uwyn.gif");
@@ -284,10 +302,10 @@ public class TestImageFormatter {
 
         assertNotNull(result);
 
-        var image_resource_png = ResourceFinderClasspath.instance().getResource("uwyn_resized-width_30-height_70.jpg");
-        var data_image_png = FileUtils.readBytes(image_resource_png);
+        var image_resource_jpg = ResourceFinderClasspath.instance().getResource("uwyn_resized-width_30-height_70.jpg");
+        var data_image_jpg = FileUtils.readBytes(image_resource_jpg);
 
-        assertArrayEquals(data_image_png, result);
+        assertArrayEquals(data_image_jpg, result);
     }
 
     @Test
@@ -305,10 +323,10 @@ public class TestImageFormatter {
 
         assertNotNull(result);
 
-        var image_resource_png = ResourceFinderClasspath.instance().getResource("uwyn_resized-width_300-height_70.jpg");
-        var data_image_png = FileUtils.readBytes(image_resource_png);
+        var image_resource_jpg = ResourceFinderClasspath.instance().getResource("uwyn_resized-width_300-height_70.jpg");
+        var data_image_jpg = FileUtils.readBytes(image_resource_jpg);
 
-        assertArrayEquals(data_image_png, result);
+        assertArrayEquals(data_image_jpg, result);
     }
 
     @Test

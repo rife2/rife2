@@ -5,6 +5,7 @@
 package rife.cmf.loader.image;
 
 import org.junit.jupiter.api.Test;
+import rife.cmf.MimeType;
 import rife.resources.ResourceFinderClasspath;
 import rife.tools.FileUtils;
 
@@ -31,6 +32,7 @@ public class TestImageJLoader {
         var image = loader.load(image_bytes, false, errors);
 
         assertNotNull(image);
+        assertNull(image.originalMimeType());
         assertEquals(0, errors.size());
     }
 
@@ -56,6 +58,7 @@ public class TestImageJLoader {
         var image = loader.loadFromBytes(image_bytes, errors);
 
         assertNotNull(image);
+        assertNull(image.originalMimeType());
         assertEquals(0, errors.size());
     }
 

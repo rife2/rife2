@@ -8,6 +8,7 @@ import rife.cmf.Content;
 import rife.cmf.format.exceptions.FormatException;
 import rife.cmf.format.exceptions.InvalidContentDataTypeException;
 import rife.cmf.format.exceptions.UnreadableDataFormatException;
+import rife.cmf.loader.LoadedContent;
 import rife.cmf.loader.XhtmlContentLoader;
 import rife.cmf.transform.ContentTransformer;
 import rife.tools.StringUtils;
@@ -34,16 +35,23 @@ public class XhtmlFormatter implements Formatter<String, String> {
 
         // check if the content contains a cached value of the loaded data
         if (content.hasCachedLoadedData()) {
-            data = (String) content.getCachedLoadedData();
+            var cached = content.getCachedLoadedData();
+            if (cached instanceof LoadedContent<?> loaded) {
+                data = (String)loaded.data();
+            } else {
+                data = (String)cached;
+            }
         }
 
         if (null == data) {
             // get an image
             Set<String> errors = new HashSet<>();
-            data = new XhtmlContentLoader().load(content.getData(), content.isFragment(), errors);
-            if (null == data) {
+            var loaded = new XhtmlContentLoader().load(content.getData(), content.isFragment(), errors);
+            if (null == loaded) {
                 throw new UnreadableDataFormatException(content.getMimeType(), errors);
             }
+
+            data = loaded.data();
         }
 
         // ensure that as much as possible entities are encoded

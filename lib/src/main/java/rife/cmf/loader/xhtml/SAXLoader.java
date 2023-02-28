@@ -4,10 +4,11 @@
  */
 package rife.cmf.loader.xhtml;
 
+import rife.cmf.MimeType;
 import rife.cmf.dam.exceptions.ContentManagerException;
+import rife.cmf.loader.LoadedContent;
 import rife.cmf.loader.XhtmlContentLoaderBackend;
 import rife.resources.ResourceFinderClasspath;
-import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.xml.LoggingErrorRedirector;
 import rife.xml.XmlEntityResolver;
@@ -29,7 +30,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.*;
 
 public class SAXLoader extends XhtmlContentLoaderBackend {
-    public String loadFromString(String data, boolean fragment, Set<String> errors)
+    public LoadedContent<String> loadFromString(String data, boolean fragment, Set<String> errors)
     throws ContentManagerException {
         return new LoaderDelegate().load(data, fragment, errors);
     }
@@ -68,7 +69,7 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
             errorRedirector_.error(e);
         }
 
-        public String load(String data, boolean fragment, Set<String> errors)
+        public LoadedContent<String> load(String data, boolean fragment, Set<String> errors)
         throws ContentManagerException {
             var complete_page = data;
 
@@ -140,7 +141,7 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
                 return null;
             }
 
-            return data;
+            return new LoadedContent<>(MimeType.APPLICATION_XHTML, data);
         }
 
         private Collection<String> formatExceptions(boolean fragment, Collection<SAXParseException> exceptions) {

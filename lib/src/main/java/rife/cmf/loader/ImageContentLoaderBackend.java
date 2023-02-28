@@ -4,6 +4,7 @@
  */
 package rife.cmf.loader;
 
+import rife.cmf.MimeType;
 import rife.cmf.dam.exceptions.ContentManagerException;
 
 import java.awt.Image;
@@ -25,22 +26,18 @@ public abstract class ImageContentLoaderBackend implements ContentLoaderBackend<
      *
      * @param data   the raw data that has to be loaded
      * @param errors a set to which possible error messages will be added
-     * @return an instance of the {@code Image}; or
+     * @return an instance of the {@code LoadedContent} with {@code Image} data; or
      * <p>{@code null} if the raw data couldn't be loaded
      */
-    protected abstract Image loadFromBytes(byte[] data, Set<String> errors)
+    protected abstract LoadedContent<Image> loadFromBytes(byte[] data, Set<String> errors)
     throws ContentManagerException;
 
-    public Image load(Object data, boolean fragment, Set<String> errors)
+    public LoadedContent<Image> load(Object data, boolean fragment, Set<String> errors)
     throws ContentManagerException {
-        Image image = null;
-
-        if (data instanceof byte[]) {
-            image = loadFromBytes((byte[]) data, errors);
-        } else {
-            return null;
+        if (data instanceof byte[] bytes) {
+            return loadFromBytes(bytes, errors);
         }
 
-        return image;
+        return null;
     }
 }
