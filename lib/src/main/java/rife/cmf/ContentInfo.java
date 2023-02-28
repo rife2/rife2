@@ -30,7 +30,7 @@ public class ContentInfo extends Validation {
     private String name_ = null;
     private Map<String, String> attributes_ = null;
     private int size_ = -1;
-    private Map<String, String> mProperties = null;
+    private Map<String, String> properties_ = null;
 
     /**
      * Instantiates a new {@code ContentInfo} instance.
@@ -383,7 +383,7 @@ public class ContentInfo extends Validation {
      * @since 1.0
      */
     public void setProperties(Map<String, String> properties) {
-        mProperties = properties;
+        properties_ = properties;
     }
 
     /**
@@ -397,7 +397,7 @@ public class ContentInfo extends Validation {
      * @since 1.0
      */
     public boolean hasProperties() {
-        return mProperties != null && mProperties.size() > 0;
+        return properties_ != null && properties_.size() > 0;
     }
 
     /**
@@ -410,11 +410,11 @@ public class ContentInfo extends Validation {
      * @since 1.0
      */
     public boolean hasProperty(String name) {
-        if (null == mProperties) {
+        if (null == properties_) {
             return false;
         }
 
-        return mProperties.containsKey(name);
+        return properties_.containsKey(name);
     }
 
     /**
@@ -427,11 +427,11 @@ public class ContentInfo extends Validation {
      * @since 1.0
      */
     public String getProperty(String name) {
-        if (null == mProperties) {
+        if (null == properties_) {
             return null;
         }
 
-        return mProperties.get(name);
+        return properties_.get(name);
     }
 
     /**
@@ -445,6 +445,6 @@ public class ContentInfo extends Validation {
      * @since 1.0
      */
     public Map<String, String> getProperties() {
-        return mProperties;
+        return properties_;
     }
 }
