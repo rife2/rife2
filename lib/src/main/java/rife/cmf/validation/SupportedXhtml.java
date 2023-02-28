@@ -49,15 +49,15 @@ public class SupportedXhtml extends CmfPropertyValidationRule {
         // try to load the data in the property and if that's not possible, the data
         // is considered invalid
         Set<String> errors = new HashSet<>();
-        var data = new XhtmlContentLoader().load(value, getFragment(), errors);
+        var loaded = new XhtmlContentLoader().load(value, getFragment(), errors);
         if (errors.size() > 0) {
             setLoadingErrors(errors);
         }
-        if (null == data) {
+        if (null == loaded) {
             return false;
         }
 
-        setCachedLoadedData(data);
+        setCachedLoadedData(loaded);
 
         return true;
     }

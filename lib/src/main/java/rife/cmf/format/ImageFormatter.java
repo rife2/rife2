@@ -77,19 +77,19 @@ public class ImageFormatter implements Formatter<byte[], Image> {
         }
         content_bytes = bytes;
 
+        LoadedContent<Image> loaded = null;
         Image data = null;
 
         // check if the content contains a cached value of the loaded data
         if (content.hasCachedLoadedData()) {
             var cached = content.getCachedLoadedData();
-            if (cached instanceof LoadedContent<?> loaded) {
-                data = (Image)loaded.data();
+            if (cached instanceof LoadedContent<?> cached_loaded) {
+                loaded = (LoadedContent<Image>) cached_loaded;
+                data = loaded.data();
             } else {
                 data = (Image)cached;
             }
         }
-
-        LoadedContent<Image> loaded = null;
 
         if (null == data) {
             // get an image

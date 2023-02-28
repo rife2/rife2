@@ -13,6 +13,7 @@ import rife.cmf.loader.XhtmlContentLoader;
 import rife.cmf.transform.ContentTransformer;
 import rife.tools.StringUtils;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,22 +32,24 @@ public class XhtmlFormatter implements Formatter<String, String> {
             throw new InvalidContentDataTypeException(this, content.getMimeType(), String.class, content.getData().getClass());
         }
 
+        LoadedContent<String> loaded = null;
         String data = null;
 
         // check if the content contains a cached value of the loaded data
         if (content.hasCachedLoadedData()) {
             var cached = content.getCachedLoadedData();
-            if (cached instanceof LoadedContent<?> loaded) {
-                data = (String)loaded.data();
+            if (cached instanceof LoadedContent<?> cached_loaded) {
+                loaded = (LoadedContent<String>) cached_loaded;
+                data = loaded.data();
             } else {
-                data = (String)cached;
+                data = (String) cached;
             }
         }
 
         if (null == data) {
             // get an image
             Set<String> errors = new HashSet<>();
-            var loaded = new XhtmlContentLoader().load(content.getData(), content.isFragment(), errors);
+            loaded = new XhtmlContentLoader().load(content.getData(), content.isFragment(), errors);
             if (null == loaded) {
                 throw new UnreadableDataFormatException(content.getMimeType(), errors);
             }
