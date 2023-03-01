@@ -235,6 +235,61 @@ public class TestEngine {
     }
 
     @Test
+    void testUrlGeneration()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            Route target;
+            Router group = group("/group", new Router() {
+                Route target2 = get("/target2/map", PathInfoHandling.MAP(m -> m.t("other").s().t("y").s().p("param1")), c -> {
+                    c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo());
+                    c.print(":" + c.parameter("param1"));
+                    c.print(":" + c.parameter("param2"));
+                });
+                Route source2 = get("", c -> {
+                    c.setParameter("param1", "v2");
+                    c.setParameter("param2", "523");
+                    c.print(c.template("url_generation2"));
+                });
+
+            });
+            public void setup() {
+                target = get("/target/map", PathInfoHandling.MAP(m -> m.t("text").s().t("x").p("param2", "\\d+")), c -> {
+                    c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo());
+                    c.print(":" + c.parameter("param1"));
+                    c.print(":" + c.parameter("param2"));
+                });
+                get("/", c -> {
+                    c.setParameter("param1", "v1");
+                    c.setParameter("param2", "412");
+                    c.print(c.template("url_generation"));
+                });
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page;
+
+                page = webClient.getPage("http://localhost:8181/");
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("""
+                    <a href="http://localhost:8181/target/map/text/x412?param1=v1">link</a>""", page.getWebResponse().getContentAsString());
+
+                page = page.getElementsByTagName("a").get(0).click();
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("Just some text 127.0.0.1:8181:text/x412:v1:412", page.asNormalizedText());
+
+                page = webClient.getPage("http://localhost:8181/group");
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("""
+                    <a href="http://localhost:8181/group/target2/map/other/y/v2?param2=523">link</a>""", page.getWebResponse().getContentAsString());
+
+                page = page.getElementsByTagName("a").get(0).click();
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("Just some text 127.0.0.1:8181:other/y/v2:v2:523", page.asNormalizedText());
+            }
+        }
+    }
+
+    @Test
     void testHeaders()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {

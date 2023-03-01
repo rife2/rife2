@@ -49,12 +49,12 @@ fragment DIGIT  :   [0-9] ;
 fragment
 NameChar    :   NameStartChar
             |   NameEndChar
-            |   '-' | '/'
+            |   '-' | '/' | '^'
             ;
 
 fragment
 NameEndChar :   NameStartChar
-            |   '[' | ']' | ',' | '*'
+            |   '[' | ']' | ',' | '*' | '^'
             |   '\u00B7'
             |   '\u0300'..'\u036F'
             |   '\u203F'..'\u2040'
@@ -63,7 +63,7 @@ NameEndChar :   NameStartChar
 fragment
 NameStartChar
             :   [:a-zA-Z]
-            |   DIGIT | '_' | '.'
+            |   DIGIT | '_' | '.' | '^'
             |   '\u2070'..'\u218F'
             |   '\u2C00'..'\u2FEF'
             |   '\u3001'..'\uD7FF'
