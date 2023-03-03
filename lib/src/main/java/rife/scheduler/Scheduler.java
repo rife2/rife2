@@ -21,7 +21,7 @@ import java.util.*;
  * @since 1.0
  */
 public class Scheduler implements Runnable {
-    public static final int DEFAULT_SLEEP_TIME = 500;
+    public static final int DEFAULT_SLEEP_TIME = 30000; // 30 seconds
 
     private Thread thread_ = null;
     private TaskManager taskManager_ = null;
