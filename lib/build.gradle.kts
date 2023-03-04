@@ -12,17 +12,20 @@ plugins {
     signing
 }
 
-val rifeVersion by rootProject.extra { "1.4.0" }
-var rifeAgentName: String = "rife2-$rifeVersion-agent"
+val rifeVersion by rootProject.extra { "1.4.1-SNAPSHOT" }
+var rifeAgentName = "rife2-$rifeVersion-agent"
 val rifeAgentJar by rootProject.extra { "$rifeAgentName.jar" }
-var rifeAgentContinuationsName: String = "rife2-$rifeVersion-agent-continuations"
+var rifeAgentContinuationsName = "rife2-$rifeVersion-agent-continuations"
 val rifeAgentContinuationsJar by rootProject.extra { "$rifeAgentContinuationsName.jar" }
+var rifeSumoName = "rife2-$rifeVersion-sumo"
+val rifeSumoJar = "$rifeSumoName.jar"
+
 group = "com.uwyn.rife2"
 version = rifeVersion
 
 base {
     archivesName.set("rife2")
-    version = "$rifeVersion"
+    version = rifeVersion
 }
 
 java {
@@ -48,6 +51,7 @@ dependencies {
     testImplementation("org.jsoup:jsoup:1.15.3")
     testImplementation("org.eclipse.jetty:jetty-server:11.0.13")
     testImplementation("org.eclipse.jetty:jetty-servlet:11.0.13")
+    testImplementation("org.slf4j:slf4j-simple:2.0.5")
     testImplementation("net.sourceforge.htmlunit:htmlunit:2.69.0")
     testImplementation("jakarta.servlet:jakarta.servlet-api:5.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
@@ -118,6 +122,10 @@ tasks {
         dependsOn("precompileSqlTemplates")
     }
 
+    named("sourcesJar") {
+        dependsOn("processGeneratedParserCode")
+    }
+
     jar {
         dependsOn("precompileTemplates")
 
@@ -146,7 +154,7 @@ tasks {
     register<Jar>("agentJar") {
         dependsOn("jar")
 
-        archiveFileName.set("$rifeAgentJar")
+        archiveFileName.set(rifeAgentJar)
         from(sourceSets.main.get().output)
         include(
             "rife/asm/**",
@@ -173,7 +181,7 @@ tasks {
     register<Jar>("agentContinuationsJar") {
         dependsOn("jar")
 
-        archiveFileName.set("$rifeAgentContinuationsJar")
+        archiveFileName.set(rifeAgentContinuationsJar)
         from(sourceSets.main.get().output)
         include(
             "rife/asm/**",
@@ -189,6 +197,22 @@ tasks {
         manifest {
             attributes["Premain-Class"] = "rife.continuations.instrument.ContinuationsAgent"
         }
+    }
+
+    val sumoDependencies = configurations
+        .testCompileClasspath.get().files;
+    register<Jar>("sumoJar") {
+        dependsOn("jar")
+
+        archiveFileName.set(rifeSumoJar)
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        from(sumoDependencies
+            .map {
+                zipTree(it).matching { exclude (
+                    "about.html", "about.jpg", "INFO_BIN", "INFO_SRC", "LICENSE", "microscope.gif", "README", "module-info.class",
+                    "META-INF/CHANGES*", "META-INF/DEPENDENCIES*", "META-INF/INDEX*", "META-INF/license*", "META-INF/LICENSE*", "META-INF/NOTICE*", "META-INF/README*") }
+            })
+        with(jar.get())
     }
 
     withType<Test> {
@@ -305,12 +329,20 @@ val agentContinuationsArtifact = artifacts.add("archives", agentContinuationsFil
     builtBy("agentContinuationsJar")
 }
 
+val sumoFile = layout.buildDirectory.file("libs/$rifeSumoJar")
+val sumoArtifact = artifacts.add("archives", sumoFile.get().asFile) {
+    type = "jar"
+    classifier = "sumo"
+    builtBy("sumoJar")
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             artifactId = "rife2"
             artifact(agentArtifact)
             artifact(agentContinuationsArtifact)
+            artifact(sumoArtifact)
             from(components["java"])
             pom {
                 name.set("RIFE2")
