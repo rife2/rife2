@@ -17,8 +17,8 @@ var rifeAgentName = "rife2-$rifeVersion-agent"
 val rifeAgentJar by rootProject.extra { "$rifeAgentName.jar" }
 var rifeAgentContinuationsName = "rife2-$rifeVersion-agent-continuations"
 val rifeAgentContinuationsJar by rootProject.extra { "$rifeAgentContinuationsName.jar" }
-var rifeSumoName = "rife2-$rifeVersion-sumo"
-val rifeSumoJar = "$rifeSumoName.jar"
+var rifeStandaloneName = "rife2-$rifeVersion-standalone"
+val rifeStandaloneJar = "$rifeStandaloneName.jar"
 
 group = "com.uwyn.rife2"
 version = rifeVersion
@@ -49,20 +49,20 @@ dependencies {
     compileOnly("jakarta.servlet:jakarta.servlet-api:5.0.0")
     compileOnly("net.imagej:ij:1.54b")
     testImplementation("org.jsoup:jsoup:1.15.3")
+    testImplementation("jakarta.servlet:jakarta.servlet-api:5.0.0")
     testImplementation("org.eclipse.jetty:jetty-server:11.0.13")
     testImplementation("org.eclipse.jetty:jetty-servlet:11.0.13")
     testImplementation("org.slf4j:slf4j-simple:2.0.5")
-    testImplementation("net.sourceforge.htmlunit:htmlunit:2.69.0")
-    testImplementation("jakarta.servlet:jakarta.servlet-api:5.0.0")
+    testImplementation("net.imagej:ij:1.54b")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testImplementation("com.h2database:h2:2.1.214")
+    testImplementation("net.sourceforge.htmlunit:htmlunit:2.69.0")
     testImplementation("org.postgresql:postgresql:42.5.1")
     testImplementation("mysql:mysql-connector-java:8.0.31")
     testImplementation("org.hsqldb:hsqldb:2.7.1")
-    testImplementation("com.h2database:h2:2.1.214")
     testImplementation("org.apache.derby:derby:10.16.1.1")
     testImplementation("org.apache.derby:derbytools:10.16.1.1")
     testImplementation("com.oracle.database.jdbc:ojdbc11:21.8.0.0")
-    testImplementation("net.imagej:ij:1.54b")
 }
 
 configurations[JavaPlugin.API_CONFIGURATION_NAME].let { apiConfiguration ->
@@ -199,19 +199,23 @@ tasks {
         }
     }
 
-    val sumoDependencies = configurations
+    val standaloneDependencies = configurations
         .testCompileClasspath.get().files;
-    register<Jar>("sumoJar") {
+    register<Jar>("standaloneJar") {
         dependsOn("jar")
 
-        archiveFileName.set(rifeSumoJar)
+        archiveFileName.set(rifeStandaloneJar)
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        from(sumoDependencies
+        from(standaloneDependencies
+            .filter { it.toString().matches(".*((jetty[^/]+/11.*)|jakarta|slf4j|jsoup|junit|imagej|opentest4j|apiguardian|h2).*\\.jar".toRegex()) }
             .map {
                 zipTree(it).matching { exclude (
-                    "about.html", "about.jpg", "INFO_BIN", "INFO_SRC", "LICENSE", "microscope.gif", "README", "module-info.class",
-                    "META-INF/CHANGES*", "META-INF/DEPENDENCIES*", "META-INF/INDEX*", "META-INF/license*", "META-INF/LICENSE*", "META-INF/NOTICE*", "META-INF/README*") }
+                    "IJ_Props.txt", "about.html", "about.jpg", "microscope.gif", "module-info.class",
+                    "META-INF/CHANGES*", "META-INF/LICENSE*", "META-INF/NOTICE*", "META-INF/README*") }
             })
+        manifest {
+            attributes["Main-Class"] = "rife.cli.Main"
+        }
         with(jar.get())
     }
 
@@ -329,11 +333,11 @@ val agentContinuationsArtifact = artifacts.add("archives", agentContinuationsFil
     builtBy("agentContinuationsJar")
 }
 
-val sumoFile = layout.buildDirectory.file("libs/$rifeSumoJar")
-val sumoArtifact = artifacts.add("archives", sumoFile.get().asFile) {
+val standaloneFile = layout.buildDirectory.file("libs/$rifeStandaloneJar")
+val standaloneArtifact = artifacts.add("archives", standaloneFile.get().asFile) {
     type = "jar"
-    classifier = "sumo"
-    builtBy("sumoJar")
+    classifier = "standalone"
+    builtBy("standaloneJar")
 }
 
 publishing {
@@ -342,7 +346,7 @@ publishing {
             artifactId = "rife2"
             artifact(agentArtifact)
             artifact(agentContinuationsArtifact)
-            artifact(sumoArtifact)
+            artifact(standaloneArtifact)
             from(components["java"])
             pom {
                 name.set("RIFE2")

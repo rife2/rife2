@@ -100,6 +100,25 @@ public class TemplateDeployer {
         }
     }
 
+    public static String getHelp() {
+        return """
+            Compiles RIFE2 templates to class files.
+            
+            All the files of the active template type that are found in the provided
+            directories will be parsed and compiled to java bytecode into the
+            destination directory.
+            
+            Usage : <options> <directories>
+              -t <type>             Specify which template type to use (default html)
+              -l                    List the known template types
+              -verbose              Output messages about what the parser is doing
+              -d <directory>        Specify where to place generated class files
+              -encoding <encoding>  Specify character encoding used by template files
+              -preload <classes>    Colon seperated list of classes to preload
+              -i <regexp>           Regexp to include certain files
+              -e <regexp>           Regexp to exclude certain files""";
+    }
+
     public static void main(String[] arguments) {
         var valid_arguments = true;
         var verbose = false;
@@ -186,20 +205,7 @@ public class TemplateDeployer {
         }
 
         if (!valid_arguments) {
-            System.err.println("Usage : java " + TemplateDeployer.class.getName() + " <options> <directories>");
-            System.err.println("Compiles RIFE templates to class files.");
-            System.err.println("All the files of the active template type that are found in the provided");
-            System.err.println("directories will be parsed and compiled to java bytecode into the");
-            System.err.println("destination directory.");
-            System.err.println("  -t <type>             Specify which template type to use (default html)");
-            System.err.println("  -l                    List the known template types");
-            System.err.println("  -verbose              Output messages about what the parser is doing");
-            System.err.println("  -d <directory>        Specify where to place generated class files");
-            System.err.println("  -encoding <encoding>  Specify character encoding used by template files");
-            System.err.println("  -preload <classes>    Colon seperated list of classes to preload");
-            System.err.println("  -i <regexp>           Regexp to include certain files");
-            System.err.println("  -e <regexp>           Regexp to exclude certain files");
-            System.err.println("  -help                 Print a synopsis of standard options");
+            System.err.println(getHelp());
             System.exit(1);
         }
 

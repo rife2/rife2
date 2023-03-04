@@ -231,6 +231,16 @@ public abstract class StringEncryptor extends EnumClass<String> {
         return new String(bytes, 0, l);
     }
 
+    public static String getHelp() {
+        return """
+            Encrypts strings for usage with RIFE2.
+
+            Usage : [-edc] string {encrypted}
+              -e  encrypt a string (default)
+              -d  decrypt a string if the algorithm support it
+              -c  check the validity of the string against an encrypted version""";
+    }
+
     public static void main(String[] arguments) {
         var valid_arguments = true;
         if (arguments.length < 1 ||
@@ -252,11 +262,7 @@ public abstract class StringEncryptor extends EnumClass<String> {
         }
 
         if (!valid_arguments) {
-            System.err.println("Usage : java " + StringEncryptor.class.getName() + " [-edc] string {encrypted}");
-            System.err.println("Encrypts strings for usage with RIFE2.");
-            System.err.println("  -e  encrypt a string (default)");
-            System.err.println("  -d  decrypt a string if the algorithm support it");
-            System.err.println("  -c  check the validity of the string against an encrypted version");
+            System.err.println(getHelp());
             System.exit(1);
         }
         try {
