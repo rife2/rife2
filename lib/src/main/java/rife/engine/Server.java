@@ -12,10 +12,14 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.util.thread.ThreadPool;
 
+import rife.engine.exceptions.VirtualThreadsNotAvailableException;
 import rife.ioc.HierarchicalProperties;
 import rife.resources.ResourceFinderClasspath;
 import rife.servlet.RifeFilter;
+import rife.tools.ExceptionUtils;
+
 import java.util.EnumSet;
+import java.util.logging.Logger;
 
 /**
  * Embedded Jetty server that can directly start from a RIFE2 site.
@@ -45,7 +49,7 @@ public class Server {
     protected String sslTrustStorePassword_ = null;
     protected boolean sslNeedClientAuth_ = false;
     protected boolean sslWantClientAuth_ = false;
-    protected boolean useLoom = Float.parseFloat(System.getProperty("java.specification.version")) >= 19;
+    protected boolean enableVirtualThreads_ = false;
 
     private final HierarchicalProperties properties_;
     private org.eclipse.jetty.server.Server server_;
@@ -58,6 +62,7 @@ public class Server {
     public Server() {
         var system_properties = new HierarchicalProperties().putAll(System.getProperties());
         properties_ = new HierarchicalProperties().parent(system_properties);
+        enableVirtualThreads_ = VirtualThreadPool.areVirtualThreadsAvailable();
     }
 
     /**
@@ -248,13 +253,17 @@ public class Server {
     }
 
     /**
-     * By default, Rife will attempt to use virtual threads if available. This method explicitly disables virtual threads to use a standard QueuedThreadPool.
+     * Sets whether virtual threads are used.
+     * <p>
+     * When virtual threads are available, RIFE2's embedded server will automatically switch
+     * to using them. Use this method to explicitly disable virtual threads.
      *
-     * @param loom {@code true} if server wants to disable loom on a JDK 19+ application
+     * @param enable {@code true} if virtual threads should be used when a suitable JDK is present; or
+     *               {@code false} if virtual threads should never be used
      * @return the instance of the server that's being configured
      */
-    public Server disableLoom(boolean loom) {
-        this.useLoom = !loom;
+    public Server enabledVirtualThreads(boolean enable) {
+        this.enableVirtualThreads_ = enable;
         return this;
     }
 
@@ -277,19 +286,20 @@ public class Server {
      * @since 1.0
      */
     public Server start(Site site) {
-        ThreadPool thread_pool;
-
-        if (useLoom) {
-        	try {
-        		thread_pool = new LoomThreadPool();
-        	} catch (IllegalStateException e) {
-        		thread_pool  = new QueuedThreadPool(maxThreads_, minThreads_, idleTimeout_);
-        	}
+        ThreadPool thread_pool = null;
+        if (enableVirtualThreads_) {
+            try {
+                thread_pool = new VirtualThreadPool();
+            } catch (VirtualThreadsNotAvailableException e) {
+                Logger.getLogger("rife.engine").severe(ExceptionUtils.getExceptionStackTrace(e));
+                thread_pool = null;
+            }
         }
 
-        else {
-        	thread_pool  = new QueuedThreadPool(maxThreads_, minThreads_, idleTimeout_);
+        if (thread_pool == null) {
+            thread_pool = new QueuedThreadPool(maxThreads_, minThreads_, idleTimeout_);
         }
+
         server_ = new org.eclipse.jetty.server.Server(thread_pool);
         SessionIdManager sessions_ = new DefaultSessionIdManager(server_);
         ServletContextHandler handler_ = new ServletContextHandler();
