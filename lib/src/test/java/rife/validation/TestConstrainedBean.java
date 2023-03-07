@@ -5,6 +5,8 @@
 package rife.validation;
 
 import org.junit.jupiter.api.Test;
+import rifetestmodels.InitializedBeanImpl;
+import rifetestmodels.RegularBeanImpl;
 
 import java.util.ArrayList;
 import java.util.List;

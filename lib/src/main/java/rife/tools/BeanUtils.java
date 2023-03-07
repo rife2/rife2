@@ -51,13 +51,17 @@ public final class BeanUtils {
         }
     }
 
+    private static boolean notValidationMethod(Method method) {
+        return !method.getDeclaringClass().getPackageName().equals(MetaData.class.getPackageName());
+    }
+
     private static String validateProperty(Accessors accessor, PropertyDescriptor property, Collection<String> includedProperties, Collection<String> excludedProperties, String prefix) {
         String name = null;
 
         // only take properties into account that have both read and write accessors
-        if ((GETTERS == accessor && property.getReadMethod() != null) ||
-            (SETTERS == accessor && property.getWriteMethod() != null) ||
-            (GETTERS_SETTERS == accessor && property.getReadMethod() != null && property.getWriteMethod() != null)) {
+        if ((GETTERS == accessor && property.getReadMethod() != null && notValidationMethod(property.getReadMethod())) ||
+            (SETTERS == accessor && property.getWriteMethod() != null && notValidationMethod(property.getWriteMethod())) ||
+            (GETTERS_SETTERS == accessor && property.getReadMethod() != null && notValidationMethod(property.getReadMethod()) && property.getWriteMethod() != null && notValidationMethod(property.getWriteMethod()))) {
             name = property.getName();
 
             // don't take the class and the metaClass property into account

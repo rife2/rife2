@@ -5,7 +5,7 @@
 package rife.engine;
 
 import rife.template.Template;
-import rife.validation.ConstrainedBeanImpl;
+import rifetestmodels.ConstrainedBeanImpl;
 
 public class GenerateEmptyFormSite extends Site {
     public void setup() {

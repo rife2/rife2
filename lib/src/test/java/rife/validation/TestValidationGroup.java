@@ -6,6 +6,7 @@ package rife.validation;
 
 import org.junit.jupiter.api.Test;
 import rife.validation.exceptions.ValidationException;
+import rifetestmodels.InitializedBeanImpl;
 
 import java.util.List;
 

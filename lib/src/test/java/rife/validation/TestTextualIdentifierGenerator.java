@@ -5,6 +5,7 @@
 package rife.validation;
 
 import org.junit.jupiter.api.Test;
+import rifetestmodels.InitializedBeanImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

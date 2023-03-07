@@ -997,7 +997,15 @@
   "name":"rife.validation.MetaData",
   "allDeclaredClasses":true,
   "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"getConstrainedBean","parameterTypes":[] },
+    {"name":"getConstrainedProperties","parameterTypes":[] },
+    {"name":"getGroups","parameterTypes":[] },
+    {"name":"getRules","parameterTypes":[] },
+    {"name":"getValidatedSubjects","parameterTypes":[] },
+    {"name":"getValidationErrors","parameterTypes":[] }
+  ]
 },
 {
   "name":"rife.validation.MetaDataBeanAware",

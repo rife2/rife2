@@ -9,9 +9,9 @@ import rife.template.TemplateFactory;
 import rife.tools.ExceptionUtils;
 import rife.tools.StringUtils;
 import rife.tools.exceptions.BeanUtilsException;
-import rife.validation.ConstrainedBeanImpl;
+import rifetestmodels.ConstrainedBeanImpl;
 import rife.validation.ConstrainedProperty;
-import rife.validation.RegularBeanImpl;
+import rifetestmodels.RegularBeanImpl;
 import rife.validation.ValidationError;
 
 import java.util.*;

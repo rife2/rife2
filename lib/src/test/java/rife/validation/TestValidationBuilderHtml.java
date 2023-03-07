@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import rife.validation.exceptions.MissingMarkingBlockException;
 import rife.template.Template;
 import rife.template.TemplateFactory;
+import rifetestmodels.ConstrainedBeanImpl;
 
 import java.util.ArrayList;
 import java.util.List;
