@@ -60,8 +60,7 @@ public class Server {
      * @since 1.0
      */
     public Server() {
-        var system_properties = new HierarchicalProperties().putAll(System.getProperties());
-        properties_ = new HierarchicalProperties().parent(system_properties);
+        properties_ = new HierarchicalProperties().parent(HierarchicalProperties.createSystemInstance());
         enableVirtualThreads_ = areVirtualThreadsAvailable();
     }
 

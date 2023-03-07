@@ -49,8 +49,7 @@ public class MockConversation {
      */
     public MockConversation(Site site)
     throws EngineException {
-        var system_properties = new HierarchicalProperties().putAll(System.getProperties());
-        properties_ = new HierarchicalProperties().parent(system_properties);
+        properties_ = new HierarchicalProperties().parent(HierarchicalProperties.createSystemInstance());
 
         gate_ = new Gate();
         gate_.setup(properties_, site);

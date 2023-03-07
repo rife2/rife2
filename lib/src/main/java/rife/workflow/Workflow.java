@@ -56,7 +56,7 @@ public class Workflow {
      * @since 1.0
      */
     public Workflow(ExecutorService executor) {
-        this(executor, new HierarchicalProperties().putAll(System.getProperties()));
+        this(executor, HierarchicalProperties.createSystemInstance());
     }
 
     /**

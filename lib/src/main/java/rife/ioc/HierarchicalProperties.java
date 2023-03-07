@@ -38,6 +38,20 @@ public class HierarchicalProperties {
     public HierarchicalProperties() {
     }
 
+    /**
+     * Creates a new instance that's populated with the system environment
+     * variables and JVM properties.
+     *
+     * @return a pre-populated new instance with system data
+     * @since 1.4.1
+     */
+    public static HierarchicalProperties createSystemInstance() {
+        var system_properties = new HierarchicalProperties();
+        system_properties.putAll(System.getenv());
+        system_properties.putAll(System.getProperties());
+        return system_properties;
+    }
+
     private HierarchicalProperties(HierarchicalProperties shadow) {
         properties_ = shadow.properties_;
     }

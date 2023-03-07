@@ -31,6 +31,18 @@ public class TestHierarchicalProperties {
     }
 
     @Test
+    void testSystemInstantiation() {
+        var properties = HierarchicalProperties.createSystemInstance();
+        assertNotNull(properties);
+        for (var env : System.getenv().entrySet()) {
+            assertEquals(properties.get(env.getKey()).getValue(), env.getValue());
+        }
+        for (var prop : System.getProperties().entrySet()) {
+            assertEquals(properties.get(prop.getKey().toString()).getValue(), prop.getValue());
+        }
+    }
+
+    @Test
     void testSingleInstance() {
         Iterator<String> names_it;
 
