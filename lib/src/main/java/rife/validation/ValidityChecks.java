@@ -9,8 +9,7 @@ import rife.tools.StringUtils;
 import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.Format;
-import java.text.ParseException;
+import java.text.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -508,5 +507,51 @@ public abstract class ValidityChecks {
         } catch (ParseException e) {
             return false;
         }
+    }
+
+    public static boolean checkJavaPackage(Object value) {
+        if (null == value) {
+            return false;
+        }
+
+        if (!(value instanceof String name)) {
+            return false;
+        }
+
+        if (name.startsWith(".") || name.endsWith(".")) {
+            return false;
+        }
+
+        var identifier = true;
+        var it = new StringCharacterIterator(name);
+        for (var c = it.first(); c != CharacterIterator.DONE; c = it.next()) {
+            if (!Character.isJavaIdentifierPart(c) && c != '.') {
+                identifier = false;
+                break;
+            }
+        }
+
+        return identifier;
+    }
+
+    public static boolean checkJavaIdentifier(Object value) {
+        if (null == value) {
+            return false;
+        }
+
+        if (!(value instanceof String name)) {
+            return false;
+        }
+
+        var identifier = true;
+        var it = new StringCharacterIterator(name);
+        for (var c = it.first(); c != CharacterIterator.DONE; c = it.next()) {
+            if (!Character.isJavaIdentifierPart(c)) {
+                identifier = false;
+                break;
+            }
+        }
+
+        return identifier;
     }
 }

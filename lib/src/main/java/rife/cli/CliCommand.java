@@ -4,8 +4,11 @@
  */
 package rife.cli;
 
+import rife.tools.exceptions.FileUtilsErrorException;
+
 public interface CliCommand {
-    void execute();
+    boolean execute()
+    throws Exception;
 
     default String getHelp() {
         return "";

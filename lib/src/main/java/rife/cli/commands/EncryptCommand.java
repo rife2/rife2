@@ -18,11 +18,12 @@ public class EncryptCommand implements CliCommand {
         arguments_ = arguments;
     }
 
-    public void execute() {
+    public boolean execute() {
         var array = new String[arguments_.size()];
         arguments_.toArray(array);
 
         StringEncryptor.main(array);
+        return true;
     }
 
     public String getHelp() {

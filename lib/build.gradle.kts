@@ -116,10 +116,21 @@ tasks {
         )
     }
 
+    register<JavaExec>("precompileTxtTemplates") {
+        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set("rife.template.TemplateDeployer")
+        args = listOf(
+            "-t", "txt",
+            "-d", "${projectDir}/build/classes/java/main",
+            "-encoding", "UTF-8", "${projectDir}/src/main/resources/templates"
+        )
+    }
+
     register("precompileTemplates") {
         dependsOn("precompileHtmlTemplates")
         dependsOn("precompileXmlTemplates")
         dependsOn("precompileSqlTemplates")
+        dependsOn("precompileTxtTemplates")
     }
 
     named("sourcesJar") {

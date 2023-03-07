@@ -8,6 +8,7 @@ import java.util.*;
 
 import rife.ioc.exceptions.IncompatiblePropertyValueTypeException;
 import rife.ioc.exceptions.PropertyValueException;
+import rife.validation.ValidityChecks;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
@@ -642,15 +643,7 @@ public class HierarchicalProperties {
 
         var names = getNames();
         for (var name : names) {
-            var injectable = true;
-            CharacterIterator it = new StringCharacterIterator(name);
-            for (var c = it.first(); c != CharacterIterator.DONE; c = it.next()) {
-                if (!Character.isJavaIdentifierPart(c)) {
-                    injectable = false;
-                    break;
-                }
-            }
-
+            var injectable = ValidityChecks.checkJavaIdentifier(name);
             if (injectable) {
                 injectable_names.add(name);
             }

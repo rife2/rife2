@@ -19,7 +19,7 @@ public class HelpCommand implements CliCommand {
         arguments_ = arguments;
     }
 
-    public void execute() {
+    public boolean execute() {
         var topic = "";
         if (!arguments_.isEmpty()) {
             topic = arguments_.remove(0);
@@ -34,6 +34,8 @@ public class HelpCommand implements CliCommand {
             case PrecompileCommand.NAME -> System.err.println(new PrecompileCommand(arguments_).getHelp());
             default -> System.err.println(getHelp());
         }
+
+        return true;
     }
 
     public String getHelp() {

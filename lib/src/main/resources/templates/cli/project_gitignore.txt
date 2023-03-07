@@ -1,0 +1,16 @@
+.gradle
+build
+lib
+.idea
+.vscode
+.DS_Store
+embedded_dbs
+derby.log
+*.iml
+*.jar
+*.war
+*.prefs
+*.class*
+*.project
+*.processors
+*/bin/

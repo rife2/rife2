@@ -5,11 +5,13 @@
 package rife.cli;
 
 import rife.cli.commands.*;
+import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.util.*;
 
 public class Main {
-    public static void main(String[] arguments) {
+    public static void main(String[] arguments)
+    throws Exception {
         var args = new ArrayList<>(Arrays.asList(arguments));
 
         var command = HelpCommand.NAME;
@@ -17,11 +19,16 @@ public class Main {
             command = args.remove(0);
         }
 
+        boolean success;
         switch (command) {
-            case NewCommand.NAME -> new NewCommand(args).execute();
-            case EncryptCommand.NAME -> new EncryptCommand(args).execute();
-            case PrecompileCommand.NAME -> new PrecompileCommand(args).execute();
-            default -> new HelpCommand(args).execute();
+            case NewCommand.NAME -> success = new NewCommand(args).execute();
+            case EncryptCommand.NAME -> success = new EncryptCommand(args).execute();
+            case PrecompileCommand.NAME -> success = new PrecompileCommand(args).execute();
+            default -> success = new HelpCommand(args).execute();
+        }
+
+        if (!success) {
+            new HelpCommand(args).execute();
         }
     }
 }
