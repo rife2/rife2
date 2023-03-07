@@ -10,15 +10,15 @@ import org.eclipse.jetty.server.session.*;
 import org.eclipse.jetty.servlet.*;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import org.eclipse.jetty.util.thread.ThreadPool;
 
-import rife.engine.exceptions.VirtualThreadsNotAvailableException;
 import rife.ioc.HierarchicalProperties;
 import rife.resources.ResourceFinderClasspath;
 import rife.servlet.RifeFilter;
 import rife.tools.ExceptionUtils;
 
 import java.util.EnumSet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 /**
@@ -62,7 +62,28 @@ public class Server {
     public Server() {
         var system_properties = new HierarchicalProperties().putAll(System.getProperties());
         properties_ = new HierarchicalProperties().parent(system_properties);
-        enableVirtualThreads_ = VirtualThreadPool.areVirtualThreadsAvailable();
+        enableVirtualThreads_ = areVirtualThreadsAvailable();
+    }
+
+    private static boolean areVirtualThreadsAvailable() {
+        if (Float.parseFloat(System.getProperty("java.specification.version")) < 19) {
+            return false;
+        }
+
+        try {
+            var klass = Thread.class;
+            var method = klass.getDeclaredMethod("ofVirtual");
+            if (method != null) {
+                try {
+                    return method.invoke(klass) != null;
+                } catch (Throwable e) {
+                    return false;
+                }
+            }
+        } catch (Throwable e) {
+            return false;
+        }
+        return false;
     }
 
     /**
@@ -286,18 +307,16 @@ public class Server {
      * @since 1.0
      */
     public Server start(Site site) {
-        ThreadPool thread_pool = null;
+        var thread_pool = new QueuedThreadPool(maxThreads_, minThreads_, idleTimeout_);
         if (enableVirtualThreads_) {
             try {
-                thread_pool = new VirtualThreadPool();
-            } catch (VirtualThreadsNotAvailableException e) {
+                var klass = Executors.class;
+                var method = klass.getDeclaredMethod("newVirtualThreadPerTaskExecutor");
+                var executor = (ExecutorService) method.invoke(klass);
+                thread_pool.setVirtualThreadsExecutor(executor);
+            } catch (Throwable e) {
                 Logger.getLogger("rife.engine").severe(ExceptionUtils.getExceptionStackTrace(e));
-                thread_pool = null;
             }
-        }
-
-        if (thread_pool == null) {
-            thread_pool = new QueuedThreadPool(maxThreads_, minThreads_, idleTimeout_);
         }
 
         server_ = new org.eclipse.jetty.server.Server(thread_pool);
