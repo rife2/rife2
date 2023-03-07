@@ -231,14 +231,22 @@ public abstract class StringEncryptor extends EnumClass<String> {
         return new String(bytes, 0, l);
     }
 
-    public static String getHelp() {
-        return """
+    public static String getHelp(String commandName) {
+        if (commandName == null) {
+            commandName = "";
+        }
+        commandName = commandName.trim();
+        if (!commandName.isEmpty()) {
+            commandName = commandName + " ";
+        }
+
+        return StringUtils.replace("""
             Encrypts strings for usage with RIFE2.
 
-            Usage : [-edc] string {encrypted}
+            Usage : ${commandName}[-edc] string {encrypted}
               -e  encrypt a string (default)
               -d  decrypt a string if the algorithm support it
-              -c  check the validity of the string against an encrypted version""";
+              -c  check the validity of the string against an encrypted version""", "${commandName}", commandName);
     }
 
     public static void main(String[] arguments) {
@@ -262,7 +270,7 @@ public abstract class StringEncryptor extends EnumClass<String> {
         }
 
         if (!valid_arguments) {
-            System.err.println(getHelp());
+            System.err.println(getHelp("java " + StringEncryptor.class.getName()));
             System.exit(1);
         }
         try {

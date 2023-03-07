@@ -4,56 +4,24 @@
  */
 package rife.cli;
 
-import rife.Version;
-import rife.template.TemplateDeployer;
-import rife.tools.StringEncryptor;
+import rife.cli.commands.*;
 
 import java.util.*;
 
 public class Main {
     public static void main(String[] arguments) {
         var args = new ArrayList<>(Arrays.asList(arguments));
-        var command = "help";
+
+        var command = HelpCommand.NAME;
         if (arguments.length > 0) {
             command = args.remove(0);
         }
+
         switch (command) {
-            default -> showHelp(args);
-            case "encrypt" -> {
-                var array = new String[args.size()];
-                args.toArray(array);
-                StringEncryptor.main(array);
-            }
-            case "precompile" -> {
-                var array = new String[args.size()];
-                args.toArray(array);
-                TemplateDeployer.main(array);
-            }
+            case NewCommand.NAME -> new NewCommand(args).execute();
+            case EncryptCommand.NAME -> new EncryptCommand(args).execute();
+            case PrecompileCommand.NAME -> new PrecompileCommand(args).execute();
+            default -> new HelpCommand(args).execute();
         }
-    }
-
-    public static String getHelp() {
-        return """
-            The following commands are supported:
-              help        Provides help about any of the other commands
-              encrypt     Encrypts strings for usage with RIFE2
-              precompile  Compiles RIFE2 templates to class files""";
-    }
-
-    public static void showHelp(List<String> args) {
-        String topic = "";
-        if (!args.isEmpty()) {
-            topic = args.remove(0);
-        }
-
-        System.err.println("Welcome to the RIFE2 v" + Version.getVersion() + " CLI.");
-        System.err.println();
-
-        switch (topic) {
-            case "encrypt" -> System.err.println(StringEncryptor.getHelp());
-            case "precompile" -> System.err.println(TemplateDeployer.getHelp());
-            default -> System.err.println(getHelp());
-        }
-
     }
 }

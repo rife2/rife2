@@ -351,7 +351,7 @@ publishing {
             pom {
                 name.set("RIFE2")
                 description.set("Full-stack, no-declaration, framework to quickly and effortlessly create web applications with modern Java.")
-                url.set("https://github.com/gbevin/rife2")
+                url.set("https://github.com/rife2/rife2")
                 licenses {
                     license {
                         name.set("The Apache License, Version 2.0")
@@ -367,9 +367,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:https://github.com/gbevin/rife2.git")
-                    developerConnection.set("scm:git:git@github.com:gbevin/rife2.git")
-                    url.set("https://github.com/gbevin/rife2")
+                    connection.set("scm:git:https://github.com/rife2/rife2.git")
+                    developerConnection.set("scm:git:git@github.com:rife2/rife2.git")
+                    url.set("https://github.com/rife2/rife2")
                 }
             }
             repositories {

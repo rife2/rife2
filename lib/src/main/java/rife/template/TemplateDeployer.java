@@ -15,7 +15,6 @@ import rife.tools.StringUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.regex.Pattern;
 
 public class TemplateDeployer {
@@ -100,15 +99,23 @@ public class TemplateDeployer {
         }
     }
 
-    public static String getHelp() {
-        return """
+    public static String getHelp(String commandName) {
+        if (commandName == null) {
+            commandName = "";
+        }
+        commandName = commandName.trim();
+        if (!commandName.isEmpty()) {
+            commandName = commandName + " ";
+        }
+
+        return StringUtils.replace("""
             Compiles RIFE2 templates to class files.
             
             All the files of the active template type that are found in the provided
             directories will be parsed and compiled to java bytecode into the
             destination directory.
             
-            Usage : <options> <directories>
+            Usage : ${commandName}[options] [directories]
               -t <type>             Specify which template type to use (default html)
               -l                    List the known template types
               -verbose              Output messages about what the parser is doing
@@ -116,7 +123,7 @@ public class TemplateDeployer {
               -encoding <encoding>  Specify character encoding used by template files
               -preload <classes>    Colon seperated list of classes to preload
               -i <regexp>           Regexp to include certain files
-              -e <regexp>           Regexp to exclude certain files""";
+              -e <regexp>           Regexp to exclude certain files""", "${commandName}", commandName);
     }
 
     public static void main(String[] arguments) {
@@ -205,7 +212,7 @@ public class TemplateDeployer {
         }
 
         if (!valid_arguments) {
-            System.err.println(getHelp());
+            System.err.println(getHelp("java " +TemplateDeployer.class.getName()));
             System.exit(1);
         }
 
