@@ -168,7 +168,7 @@ public class Context {
 
             if (continuation_context.getContinuable() != null &&
                 route.getElementClass() == continuation_context.getContinuable().getClass()) {
-                removeGeneratedTemplateValues(continuation_context);
+                updatedTemplatesInContinuation(continuation_context);
 
                 element = (Element) continuation_context.getContinuable();
             }
@@ -179,13 +179,14 @@ public class Context {
         return element;
     }
 
-    private void removeGeneratedTemplateValues(ContinuationContext continuationContext)
+    private void updatedTemplatesInContinuation(ContinuationContext continuationContext)
     throws Exception {
         var local_stack = continuationContext.getLocalStack();
         for (int i = 0; i < local_stack.getReferenceStackSize(); ++i) {
             var reference = local_stack.getReference(i);
             if (reference instanceof Template t) {
                 t.removeGeneratedValues();
+                t.setAttribute(Context.class.getName(), this);
             }
         }
         var local_vars = continuationContext.getLocalVars();
@@ -193,6 +194,7 @@ public class Context {
             var reference = local_vars.getReference(i);
             if (reference instanceof Template t) {
                 t.removeGeneratedValues();
+                t.setAttribute(Context.class.getName(), this);
             }
         }
 
@@ -211,6 +213,7 @@ public class Context {
                 if (Template.class.isAssignableFrom(field.getType())) {
                     var t = (Template) field.get(continuable);
                     t.removeGeneratedValues();
+                    t.setAttribute(Context.class.getName(), this);
                 }
             }
 
