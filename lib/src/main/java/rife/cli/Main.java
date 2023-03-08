@@ -22,6 +22,7 @@ public class Main {
         boolean success;
         switch (command) {
             case NewCommand.NAME -> success = new NewCommand(args).execute();
+            case BuildCommand.NAME -> success = new BuildCommand(args).execute();
             case EncryptCommand.NAME -> success = new EncryptCommand(args).execute();
             case PrecompileCommand.NAME -> success = new PrecompileCommand(args).execute();
             default -> success = new HelpCommand(args).execute();

@@ -141,6 +141,9 @@ tasks {
         dependsOn("precompileTemplates")
 
         archiveBaseName.set("rife2")
+        manifest {
+            attributes["Main-Class"] = "rife.cli.Main"
+        }
     }
 
     generateGrammarSource {

@@ -7,11 +7,10 @@ package rife.cli.commands;
 import rife.cli.CliCommand;
 import rife.template.TemplateFactory;
 import rife.tools.*;
-import rife.tools.exceptions.FileUtilsErrorException;
 import rife.validation.ValidityChecks;
 
 import java.io.File;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.*;
 
 public class NewCommand implements CliCommand {
@@ -58,21 +57,21 @@ public class NewCommand implements CliCommand {
 
         // create the main project directories
         var project_dir =
-            Paths.get(project_name).toFile();
+            Path.of(project_name).toFile();
         var src_main_java_dir =
-            Paths.get(project_name, "src", "main", "java").toFile();
+            Path.of(project_name, "src", "main", "java").toFile();
         var src_main_resources_templates_dir =
-            Paths.get(project_name, "src", "main", "resources", "templates").toFile();
+            Path.of(project_name, "src", "main", "resources", "templates").toFile();
         var src_main_webapp_css_dir =
-            Paths.get(project_name, "src", "main", "webapp", "css").toFile();
+            Path.of(project_name, "src", "main", "webapp", "css").toFile();
         var src_test_java_dir =
-            Paths.get(project_name, "src", "test", "java").toFile();
+            Path.of(project_name, "src", "test", "java").toFile();
         var lib_dir =
-            Paths.get(project_name, "lib").toFile();
+            Path.of(project_name, "lib").toFile();
         var idea_dir =
-            Paths.get(project_name, ".idea").toFile();
+            Path.of(project_name, ".idea").toFile();
         var idea_libraries_dir =
-            Paths.get(project_name, ".idea", "libraries").toFile();
+            Path.of(project_name, ".idea", "libraries").toFile();
 
         project_dir.mkdirs();
         src_main_java_dir.mkdirs();
@@ -147,7 +146,7 @@ public class NewCommand implements CliCommand {
     public String getHelp() {
         return """
             Creates a new RIFE2 project.
-            
+                        
             Usage : [package] [name]
               name  The name of the project to create""";
     }

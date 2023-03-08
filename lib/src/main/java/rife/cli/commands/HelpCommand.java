@@ -30,6 +30,7 @@ public class HelpCommand implements CliCommand {
 
         switch (topic) {
             case NewCommand.NAME -> System.err.println(new NewCommand(arguments_).getHelp());
+            case BuildCommand.NAME -> System.err.println(new BuildCommand(arguments_).getHelp());
             case EncryptCommand.NAME -> System.err.println(new EncryptCommand(arguments_).getHelp());
             case PrecompileCommand.NAME -> System.err.println(new PrecompileCommand(arguments_).getHelp());
             default -> System.err.println(getHelp());
@@ -55,9 +56,8 @@ public class HelpCommand implements CliCommand {
               run         Compiles and runs a RIFE2 application
               jar         Creates an uberJar archive for a RIFE2 application
               war         Creates a war archive for a RIFE2 application
-              native      Creates a native executable for a RIFE2 application
                         
-            Advanced:
+            Tools:
               encrypt     Encrypts strings for usage with RIFE2
               precompile  Compiles RIFE2 templates to class files""", "${commandName}", NAME);
     }
