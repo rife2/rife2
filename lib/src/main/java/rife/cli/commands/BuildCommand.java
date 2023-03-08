@@ -107,6 +107,7 @@ public class BuildCommand implements CliCommand {
 
             if (!message_lines.isEmpty()) {
                 main_message = message_lines.remove(0);
+                main_message = StringUtils.replace(main_message, "\r", "");
                 remaining_message = StringUtils.join(message_lines, "\n");
             }
             System.out.format("%s:%d: %s: %s%n",
@@ -117,6 +118,7 @@ public class BuildCommand implements CliCommand {
 
             if (line_number >= 0 && line_number < lines.size()) {
                 var line = lines.get(line_number);
+                line = StringUtils.replace(line, "\r", "");
                 System.out.println(line);
                 if (column_number >= 0 && column_number < line.length()) {
                     System.out.println(StringUtils.repeat(" ", column_number) + "^");
