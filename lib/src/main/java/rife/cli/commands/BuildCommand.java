@@ -98,7 +98,7 @@ public class BuildCommand implements CliCommand {
         for (var diagnostic : diagnostics.getDiagnostics()) {
             var source = diagnostic.getSource().getCharContent(true).toString();
             var lines = StringUtils.split(source, "\n");
-            var message = diagnostic.getMessage(Locale.ENGLISH);
+            var message = diagnostic.getMessage(Locale.getDefault());
             var message_lines = StringUtils.split(message, "\n");
             var main_message = "";
             var remaining_message = "";
