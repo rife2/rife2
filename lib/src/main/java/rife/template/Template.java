@@ -1494,6 +1494,92 @@ public interface Template extends Cloneable {
     String getLanguage();
 
     /**
+     * Sets an attribute that will be associated with this template instance.
+     * <p>
+     * For general purpose attributes of object instances, it's recommended to
+     * use the fully qualified classname of the object as the attribute name.
+     *
+     * @param name  the name of the attribute
+     * @param value the value of the attribute
+     * @see #setAttributes
+     * @see #removeAttribute
+     * @see #hasAttribute
+     * @see #getAttribute
+     * @see #getAttributes
+     * @since 1.5
+     */
+    void setAttribute(String name, Object value);
+
+    /**
+     * Sets the given attributes to the corresponding values.
+     * Calling this method is equivalent to calling {@link #setAttribute
+     * setAttribute} for each entry in the given map.
+     *
+     * @param map a map of attribute name and values
+     * @see #setAttribute
+     * @see #removeAttribute
+     * @see #hasAttribute
+     * @see #getAttribute
+     * @see #getAttributes
+     * @since 1.5
+     */
+    void setAttributes(Map<String, Object> map);
+
+    /**
+     * Removes an attribute from this template instance.
+     *
+     * @param name  the name of the attribute
+     * @see #setAttribute
+     * @see #setAttributes
+     * @see #hasAttribute
+     * @see #getAttribute
+     * @see #getAttributes
+     * @since 1.5
+     */
+    void removeAttribute(String name);
+
+    /**
+     * Checks whether an attribute exists in this template instance.
+     *
+     * @return {@code true} if the attribute exists; {@code false} otherwise
+     * @see #setAttribute
+     * @see #removeAttribute
+     * @see #setAttributes
+     * @see #getAttribute
+     * @see #getAttributes
+     * @since 1.5
+     */
+    boolean hasAttribute(String name);
+
+    /**
+     * Returns the value of an attribute that was {@linkplain #setAttribute set}
+     * in this template instance.
+     *
+     * @return the attributes value; or {@code null} of no such attribute could be found
+     * @see #setAttribute
+     * @see #removeAttribute
+     * @see #setAttributes
+     * @see #hasAttribute
+     * @see #getAttributes
+     * @since 1.5
+     */
+    Object getAttribute(String name);
+
+    /**
+     * Returns the name and value of all attributes that
+     * have been {@linkplain #setAttribute set} in this template instance.
+     *
+     * @return the attributes currently set in this template
+     * @see #setAttribute
+     * @see #removeAttribute
+     * @see #setAttributes
+     * @see #hasAttribute
+     * @see #getAttribute
+     * @since 1.5
+     */
+    Map<String, Object> getAttributes();
+
+    /**
      * Returns a list of URL's that this template depends on, and their last
      * modification dates (in milliseconds since the Unix epoch). This method
      * should return templates which are included by this template, and any

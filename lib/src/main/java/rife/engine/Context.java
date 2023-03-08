@@ -511,7 +511,9 @@ public class Context {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
-        return TemplateFactory.HTML.get(name, encoding);
+        var template = TemplateFactory.HTML.get(name, encoding);
+        template.setAttribute(Context.class.getName(), this);
+        return template;
     }
 
     /**
@@ -563,7 +565,9 @@ public class Context {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
-        return TemplateFactory.TXT.get(name, encoding);
+        var template = TemplateFactory.TXT.get(name, encoding);
+        template.setAttribute(Context.class.getName(), this);
+        return template;
     }
 
     /**
@@ -615,7 +619,9 @@ public class Context {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
-        return TemplateFactory.XML.get(name, encoding);
+        var template = TemplateFactory.XML.get(name, encoding);
+        template.setAttribute(Context.class.getName(), this);
+        return template;
     }
 
     /**
@@ -667,7 +673,9 @@ public class Context {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
-        return TemplateFactory.JSON.get(name, encoding);
+        var template = TemplateFactory.JSON.get(name, encoding);
+        template.setAttribute(Context.class.getName(), this);
+        return template;
     }
 
     /**
@@ -719,7 +727,9 @@ public class Context {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
 
-        return TemplateFactory.SVG.get(name, encoding);
+        var template = TemplateFactory.SVG.get(name, encoding);
+        template.setAttribute(Context.class.getName(), this);
+        return template;
     }
 
     /**

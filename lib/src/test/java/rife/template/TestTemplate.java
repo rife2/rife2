@@ -13,9 +13,7 @@ import rife.tools.ExceptionUtils;
 import rife.tools.StringUtils;
 import rife.validation.ConstrainedProperty;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -1079,5 +1077,59 @@ public class TestTemplate {
         } catch (TemplateException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
+    }
+
+    @Test
+    void testAttributes() {
+        var template = TemplateFactory.HTML.get("empty");
+        assertNotNull(template.getAttributes());
+        assertEquals(0, template.getAttributes().size());
+
+        assertNull(template.getAttribute("date"));
+        assertNull(template.getAttribute("template"));
+        assertFalse(template.hasAttribute("date"));
+        assertFalse(template.hasAttribute("template"));
+        var date = new Date();
+        template.setAttribute("date", date);
+        template.setAttribute("template", template);
+
+        assertSame(date, template.getAttribute("date"));
+        assertSame(template, template.getAttribute("template"));
+        assertTrue(template.hasAttribute("date"));
+        assertTrue(template.hasAttribute("template"));
+
+        assertEquals(2, template.getAttributes().size());
+        assertSame(date, template.getAttributes().get("date"));
+        assertSame(template, template.getAttributes().get("template"));
+
+        template.removeAttribute("date");
+        assertNull(template.getAttribute("date"));
+        assertSame(template, template.getAttribute("template"));
+
+        assertFalse(template.hasAttribute("date"));
+        assertTrue(template.hasAttribute("template"));
+
+        assertEquals(1, template.getAttributes().size());
+        assertNull(template.getAttributes().get("date"));
+        assertSame(template, template.getAttributes().get("template"));
+
+        var map = new HashMap<String, Object>();
+        var date2 = new Date();
+        var cal = Calendar.getInstance();
+        map.put("date", date2);
+        map.put("cal", cal);
+
+        assertFalse(template.hasAttribute("date"));
+        assertTrue(template.hasAttribute("template"));
+        assertFalse(template.hasAttribute("cal"));
+
+        template.setAttributes(map);
+        assertEquals(3, template.getAttributes().size());
+        assertTrue(template.hasAttribute("date"));
+        assertTrue(template.hasAttribute("template"));
+        assertTrue(template.hasAttribute("cal"));
+        assertSame(date2, template.getAttributes().get("date"));
+        assertSame(template, template.getAttributes().get("template"));
+        assertSame(cal, template.getAttributes().get("cal"));
     }
 }

@@ -26,6 +26,7 @@ public abstract class AbstractTemplate implements Template {
     protected TemplateEncoder encoder_ = EncoderDummy.instance();
     protected List<ResourceBundle> defaultResourceBundles_ = null;
     protected List<ResourceBundle> resourceBundles_ = null;
+    protected Map<String, Object> attributes_ = null;
     protected String language_ = null;
     protected String defaultContentType_ = null;
 
@@ -874,6 +875,52 @@ public abstract class AbstractTemplate implements Template {
         return language_;
     }
 
+    public void setAttribute(String name, Object value) {
+        if (null == attributes_) {
+            attributes_ = new HashMap<>();
+        }
+
+        attributes_.put(name, value);
+    }
+
+    public void setAttributes(Map<String, Object> map) {
+        if (null == attributes_) {
+            attributes_ = new HashMap<>();
+        }
+
+        attributes_.putAll(map);
+    }
+
+    public void removeAttribute(String name) {
+        if (null == attributes_) {
+            return;
+        }
+
+        attributes_.remove(name);
+    }
+
+    public boolean hasAttribute(String name) {
+        if (null == attributes_) {
+            return false;
+        }
+        return attributes_.containsKey(name);
+    }
+
+    public Object getAttribute(String name) {
+        if (null == attributes_) {
+            return null;
+        }
+        return attributes_.get(name);
+    }
+
+    public Map<String, Object> getAttributes() {
+        if (attributes_ == null) {
+            return Collections.emptyMap();
+        }
+
+        return Collections.unmodifiableMap(attributes_);
+    }
+
     final void initialize()
     throws TemplateException {
         evaluateL10nTags();
@@ -957,6 +1004,10 @@ public abstract class AbstractTemplate implements Template {
         new_template.constructedValues_ = new HashMap<>();
         for (var constructed_value_id : constructedValues_.keySet()) {
             new_template.constructedValues_.put(constructed_value_id, constructedValues_.get(constructed_value_id));
+        }
+
+        if (attributes_ != null) {
+            new_template.attributes_ = new HashMap<>(attributes_);
         }
 
         return new_template;
