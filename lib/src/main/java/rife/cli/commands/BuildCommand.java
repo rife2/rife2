@@ -32,13 +32,15 @@ public class BuildCommand implements CliCommand {
             return false;
         }
 
-        // create the project directories
+        // get the project directories
         var src_main_java_dir =
             Path.of("src", "main", "java").toFile();
         var src_test_java_dir =
             Path.of("src", "test", "java").toFile();
         var lib_dir =
             Path.of("lib").toFile();
+
+        // create the output directories
         var build_main_dir =
             Path.of("build", "main").toFile();
         var build_test_dir =
