@@ -69,7 +69,7 @@ tasks {
         project.logger.lifecycle("   Open your browser at http://localhost:8080/generation/form")
         project.logger.lifecycle("")
         project.logger.lifecycle(" HelloFormContinuations:")
-        project.logger.lifecycle("   Open your browser at http://localhost:8080/continuation/form")
+        project.logger.lifecycle("   Open your browser at http://localhost:8080/continuations/form")
         project.logger.lifecycle("")
         project.logger.lifecycle(" HelloGenericQueryManager:")
         project.logger.lifecycle("   Install the database at http://localhost:8080/generic/install")
