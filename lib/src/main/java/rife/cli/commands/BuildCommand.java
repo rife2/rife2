@@ -112,7 +112,7 @@ public class BuildCommand implements CliCommand {
                 main_message = StringUtils.replace(main_message, "\r", "");
                 remaining_message = StringUtils.join(message_lines, "\n");
             }
-            System.out.format("%s:%d: %s: %s%n",
+            System.err.format("%s:%d: %s: %s%n",
                 diagnostic.getSource().toUri().getPath(),
                 diagnostic.getLineNumber(),
                 diagnostic.getKind().name().toLowerCase(),
@@ -121,13 +121,13 @@ public class BuildCommand implements CliCommand {
             if (line_number >= 0 && line_number < lines.size()) {
                 var line = lines.get(line_number);
                 line = StringUtils.replace(line, "\r", "");
-                System.out.println(line);
+                System.err.println(line);
                 if (column_number >= 0 && column_number < line.length()) {
-                    System.out.println(StringUtils.repeat(" ", column_number) + "^");
+                    System.err.println(StringUtils.repeat(" ", column_number) + "^");
                 }
             }
             if (!remaining_message.isEmpty()) {
-                System.out.println(remaining_message);
+                System.err.println(remaining_message);
             }
         }
     }
