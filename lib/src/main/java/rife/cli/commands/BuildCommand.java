@@ -37,8 +37,14 @@ public class BuildCommand implements CliCommand {
             Path.of("src", "main", "java").toFile();
         var src_test_java_dir =
             Path.of("src", "test", "java").toFile();
-        var lib_dir =
-            Path.of("lib").toFile();
+        var lib_compile_dir =
+            Path.of("lib", "compile").toFile();
+        var lib_standalone_dir =
+            Path.of("lib", "standalone").toFile();
+        var lib_runtime_dir =
+            Path.of("lib", "runtime").toFile();
+        var lib_test_dir =
+            Path.of("lib", "test").toFile();
 
         // create the output directories
         var build_main_dir =
@@ -49,9 +55,13 @@ public class BuildCommand implements CliCommand {
         build_main_dir.mkdirs();
         build_test_dir.mkdirs();
 
-        // detect the jar files in the lib directory
-        var lib_dir_abs = lib_dir.getAbsoluteFile();
-        var lib_jar_files = FileUtils.getFileList(lib_dir_abs, Pattern.compile("^.*\\.jar$"), null);
+        // detect the jar files in the compile lib directory
+        var lib_compile_dir_abs = lib_compile_dir.getAbsoluteFile();
+        var lib_compile_jar_files = FileUtils.getFileList(lib_compile_dir_abs, Pattern.compile("^.*\\.jar$"), null);
+
+        // detect the jar files in the test lib directory
+        var lib_test_dir_abs = lib_test_dir.getAbsoluteFile();
+        var lib_test_jar_files = FileUtils.getFileList(lib_test_dir_abs, Pattern.compile("^.*\\.jar$"), null);
 
         // get all the main java sources
         var src_main_java_dir_abs = src_main_java_dir.getAbsoluteFile();
@@ -69,16 +79,21 @@ public class BuildCommand implements CliCommand {
         // get the test output path
         var build_test_path = build_test_dir.getAbsolutePath();
 
-        // build the classpath
-        var classpath_paths = new ArrayList<>(lib_jar_files.stream().map(file -> new File(lib_dir_abs, file).getAbsolutePath()).toList());
-        classpath_paths.add(0, main_build_path);
-        var classpath = StringUtils.join(classpath_paths, File.pathSeparator);
+        // build the compilation classpath
+        var compile_classpath_paths = new ArrayList<>(lib_compile_jar_files.stream().map(file -> new File(lib_compile_dir_abs, file).getAbsolutePath()).toList());
+        compile_classpath_paths.add(0, main_build_path);
+        var compile_classpath = StringUtils.join(compile_classpath_paths, File.pathSeparator);
+
+        // build the test classpath
+        var test_classpath_paths = new ArrayList<>(lib_test_jar_files.stream().map(file -> new File(lib_test_dir_abs, file).getAbsolutePath()).toList());
+        test_classpath_paths.addAll(0, compile_classpath_paths);
+        var test_classpath = StringUtils.join(test_classpath_paths, File.pathSeparator);
 
         // compile both the main and the test java sources
         var compiler = ToolProvider.getSystemJavaCompiler();
         try (var file_manager = compiler.getStandardFileManager(null, null, null)) {
-            buildProjectSources(compiler, file_manager, classpath, main_java_files, main_build_path);
-            buildProjectSources(compiler, file_manager, classpath, test_java_files, build_test_path);
+            buildProjectSources(compiler, file_manager, compile_classpath, main_java_files, main_build_path);
+            buildProjectSources(compiler, file_manager, test_classpath, test_java_files, build_test_path);
         }
 
         return true;

@@ -68,10 +68,20 @@ public class NewCommand implements CliCommand {
             Path.of(project_name, "src", "test", "java").toFile();
         var lib_dir =
             Path.of(project_name, "lib").toFile();
+        var lib_compile_dir =
+            Path.of(project_name, "lib", "compile").toFile();
+        var lib_standalone_dir =
+            Path.of(project_name, "lib", "standalone").toFile();
+        var lib_runtime_dir =
+            Path.of(project_name, "lib", "runtime").toFile();
+        var lib_test_dir =
+            Path.of(project_name, "lib", "test").toFile();
         var idea_dir =
             Path.of(project_name, ".idea").toFile();
         var idea_libraries_dir =
             Path.of(project_name, ".idea", "libraries").toFile();
+        var idea_run_configurations_dir =
+            Path.of(project_name, ".idea", "runConfigurations").toFile();
 
         project_dir.mkdirs();
         src_main_java_dir.mkdirs();
@@ -79,8 +89,13 @@ public class NewCommand implements CliCommand {
         src_main_webapp_css_dir.mkdirs();
         src_test_java_dir.mkdirs();
         lib_dir.mkdirs();
+        lib_compile_dir.mkdirs();
+        lib_standalone_dir.mkdirs();
+        lib_runtime_dir.mkdirs();
+        lib_test_dir.mkdirs();
         idea_dir.mkdirs();
         idea_libraries_dir.mkdirs();
+        idea_run_configurations_dir.mkdirs();
 
         // create directories for the java package
         var package_dir = package_name.replace('.', File.separatorChar);
@@ -137,8 +152,31 @@ public class NewCommand implements CliCommand {
             TemplateFactory.TXT.get("cli.idea.modules_xml").getContent(),
             new File(idea_dir, "modules.xml"));
         FileUtils.writeString(
-            TemplateFactory.TXT.get("cli.idea.libraries.lib_xml").getContent(),
-            new File(idea_libraries_dir, "lib.xml"));
+            TemplateFactory.TXT.get("cli.idea.libraries.compile_xml").getContent(),
+            new File(idea_libraries_dir, "compile.xml"));
+        FileUtils.writeString(
+            TemplateFactory.TXT.get("cli.idea.libraries.runtime_xml").getContent(),
+            new File(idea_libraries_dir, "runtime.xml"));
+        FileUtils.writeString(
+            TemplateFactory.TXT.get("cli.idea.libraries.standalone_xml").getContent(),
+            new File(idea_libraries_dir, "standalone.xml"));
+        FileUtils.writeString(
+            TemplateFactory.TXT.get("cli.idea.libraries.test_xml").getContent(),
+            new File(idea_libraries_dir, "test.xml"));
+
+        // IDEA run site
+        var run_site_template = TemplateFactory.TXT.get("cli.idea.runConfigurations.Run_Site_xml");
+        run_site_template.setValue("package", package_name);
+        run_site_template.setValue("projectSite", project_site_name);
+        var run_site_file = new File(idea_run_configurations_dir, "Run Site.xml");
+        FileUtils.writeString(run_site_template.getContent(), run_site_file);
+
+        // IDEA run tests
+        var run_tests_template = TemplateFactory.TXT.get("cli.idea.runConfigurations.Run_Tests_xml");
+        run_tests_template.setValue("package", package_name);
+        run_tests_template.setValue("projectTest", project_test_name);
+        var run_tests_file = new File(idea_run_configurations_dir, "Run Tests.xml");
+        FileUtils.writeString(run_tests_template.getContent(), run_tests_file);
 
         return true;
     }
