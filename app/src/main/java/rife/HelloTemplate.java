@@ -8,7 +8,11 @@ import rife.engine.*;
 
 public class HelloTemplate extends Site {
     Route templateHello = get("/templateHello", c -> c.print("Hello World Template"));
-    Route template = get("/template", c-> c.print(c.template("HelloTemplate")));
+    Route template = get("/template", c-> {
+        var t = c.template("HelloTemplate");
+        t.setValueEncoded("message", "Bonjour");
+        c.print(t);
+    });
 
     public static void main(String[] args) {
         new Server().start(new HelloTemplate());
