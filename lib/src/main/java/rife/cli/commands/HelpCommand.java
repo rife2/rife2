@@ -52,7 +52,9 @@ public class HelpCommand implements CliCommand {
             Common:
               help        Provides help about any of the other commands
               new         Creates a new RIFE2 application
+              download    Downloads the application dependencies
               build       Compiles a RIFE2 application
+              clean       Cleans the RIFE2 build files
               run         Compiles and runs a RIFE2 application
               jar         Creates an uberJar archive for a RIFE2 application
               war         Creates a war archive for a RIFE2 application

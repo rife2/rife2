@@ -13,14 +13,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestXml2Data {
     @Test
-    public void testInstantiation()
+    void testInstantiation()
     throws ResourceFinderErrorException {
         var xml = new Xml2DataTest();
         assertNotNull(xml);
     }
 
     @Test
-    public void testProcess()
+    void testProcess()
     throws ResourceFinderErrorException {
         var xml = new Xml2DataTest();
         var content = ResourceFinderClasspath.instance().getContent("xml/jetty-server-11.0.14.pom.xml");
@@ -88,7 +88,7 @@ public class TestXml2Data {
 
 
     @Test
-    public void testProcessValidated()
+    void testProcessValidated()
     throws ResourceFinderErrorException {
         var xml = new Xml2DataTest();
         xml.enableValidation(true);

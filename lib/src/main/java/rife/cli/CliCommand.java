@@ -4,8 +4,6 @@
  */
 package rife.cli;
 
-import rife.tools.exceptions.FileUtilsErrorException;
-
 public interface CliCommand {
     boolean execute()
     throws Exception;
