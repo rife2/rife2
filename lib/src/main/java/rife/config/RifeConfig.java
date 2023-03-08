@@ -1306,7 +1306,7 @@ public class RifeConfig {
     public class XmlConfig {
         private boolean xmlValidation_ = DEFAULT_XML_VALIDATION;
 
-        private static final boolean DEFAULT_XML_VALIDATION = true;
+        private static final boolean DEFAULT_XML_VALIDATION = false;
 
         public boolean getXmlValidation() {
             return xmlValidation_;

@@ -73,14 +73,13 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
         throws ContentManagerException {
             var complete_page = data;
 
-            Reader reader = null;
             if (fragment) {
                 var t = TemplateFactory.HTML.get("cmf.container.template");
                 t.setValue("fragment", data);
                 complete_page = t.getContent();
             }
 
-            reader = new StringReader(complete_page);
+            Reader reader = new StringReader(complete_page);
 
             var sax_parse_exception = false;
             try {
