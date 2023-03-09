@@ -142,7 +142,7 @@ tasks {
 
         archiveBaseName.set("rife2")
         manifest {
-            attributes["Main-Class"] = "rife.cli.Main"
+            attributes["Main-Class"] = "rife.bld.Cli"
         }
     }
 
@@ -228,7 +228,7 @@ tasks {
                     "META-INF/CHANGES*", "META-INF/LICENSE*", "META-INF/NOTICE*", "META-INF/README*") }
             })
         manifest {
-            attributes["Main-Class"] = "rife.cli.Main"
+            attributes["Main-Class"] = "rife.bld.Cli"
         }
         with(jar.get())
     }

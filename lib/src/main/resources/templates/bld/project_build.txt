@@ -1,0 +1,13 @@
+import rife.bld.Project;
+
+public class Build extends Project {
+    public void setup() {
+        pkg = "{{v package/}}";
+        name = "{{v project/}}";
+        version = "0.1.0";
+    }
+
+    public static void main(String[] args) {
+        new Build().start(args);
+    }
+}
