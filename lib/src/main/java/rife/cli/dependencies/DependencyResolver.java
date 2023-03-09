@@ -28,6 +28,14 @@ public class DependencyResolver {
         artifactUrl_ = repository_ + groupPath_ + "/" + dependency_.artifactId() + "/";
     }
 
+    public List<Dependency> getDependencies(String scope) {
+        var version = dependency_.version();
+        if (version.equals(VersionNumber.UNKNOWN)) {
+            version = latestVersion();
+        }
+        return getMavenPom(version).getDependencies(scope);
+    }
+
     public boolean exists() {
         try {
             if (getMavenMetadata() == null) {
@@ -54,10 +62,14 @@ public class DependencyResolver {
         return getMavenMetadata().getRelease();
     }
 
+    private String getMetadataUrl() {
+        return artifactUrl_ + MAVEN_METADATA_XML;
+    }
+
     private Xml2MavenMetadata getMavenMetadata() {
         if (metadata_ == null) {
             String metadata;
-            var uri = artifactUrl_ + MAVEN_METADATA_XML;
+            var uri = getMetadataUrl();
             try {
                 var response_get = repositoryRequest(uri);
                 if (response_get.statusCode() != 200) {
@@ -69,7 +81,7 @@ public class DependencyResolver {
                 throw new ArtifactRetrievalErrorException(dependency_, uri, e);
             }
 
-            var xml = new Xml2MavenMetadata(dependency_);
+            var xml = new Xml2MavenMetadata();
             if (!xml.processXml(metadata)) {
                 throw new DependencyXmlParsingErrorException(dependency_, uri, xml.getErrors());
             }
@@ -78,6 +90,32 @@ public class DependencyResolver {
         }
 
         return metadata_;
+    }
+
+    private String getPomUrl(VersionNumber version) {
+        return artifactUrl_ + version + "/" + dependency_.artifactId() + "-" + version + ".pom";
+    }
+
+    private Xml2MavenPom getMavenPom(VersionNumber version) {
+        String pom;
+        var uri = getPomUrl(version);
+        try {
+            var response_get = repositoryRequest(uri);
+            if (response_get.statusCode() != 200) {
+                throw new ArtifactNotFoundException(dependency_, uri, response_get.statusCode());
+            }
+
+            pom = response_get.body();
+        } catch (IOException | InterruptedException e) {
+            throw new ArtifactRetrievalErrorException(dependency_, uri, e);
+        }
+
+        var xml = new Xml2MavenPom();
+        if (!xml.processXml(pom)) {
+            throw new DependencyXmlParsingErrorException(dependency_, uri, xml.getErrors());
+        }
+
+        return xml;
     }
 
     private HttpResponse<String> repositoryRequest(String uri)

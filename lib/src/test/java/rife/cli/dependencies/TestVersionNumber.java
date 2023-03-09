@@ -77,9 +77,11 @@ public class TestVersionNumber {
     void testStringRepresentation() {
         assertEquals(VersionNumber.parse("1.0").toString(), "1.0.0");
         assertEquals(VersionNumber.parse("1.2.3").toString(), "1.2.3");
-        assertEquals(VersionNumber.parse("1.2.3.4").toString(), "1.2.3-4");
+        assertEquals(VersionNumber.parse("1.2.3-4").toString(), "1.2.3-4");
+        assertEquals(VersionNumber.parse("1.2.3.4").toString(), "1.2.3.4");
         assertEquals(VersionNumber.parse("1-rc-1").toString(), "1.0.0-rc-1");
         assertEquals(VersionNumber.parse("1.2.3-rc-1").toString(), "1.2.3-rc-1");
+        assertEquals(VersionNumber.parse("1.2.3.rc-1").toString(), "1.2.3.rc-1");
     }
 
     @Test

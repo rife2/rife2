@@ -11,16 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Xml2MavenMetadata extends Xml2Data {
-    private final Dependency dependency_;
-
     private VersionNumber latest_ = VersionNumber.UNKNOWN;
     private VersionNumber release_ = VersionNumber.UNKNOWN;
     private List<VersionNumber> versions_;
 
     private StringBuilder characterData_ = null;
 
-    public Xml2MavenMetadata(Dependency dependency) {
-        dependency_ = dependency;
+    public Xml2MavenMetadata() {
         versions_ = new ArrayList<>();
     }
 

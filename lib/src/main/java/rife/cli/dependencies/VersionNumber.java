@@ -7,10 +7,10 @@ package rife.cli.dependencies;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public record VersionNumber(int major, int minor, int revision, String qualifier) {
+public record VersionNumber(int major, int minor, int revision, String qualifier, String separator) {
     public static final VersionNumber UNKNOWN = new VersionNumber(0, 0, 0, "");
 
-    private static final Pattern VERSION_PATTERN = Pattern.compile("^(?<major>\\d+)(?:\\.(?<minor>\\d+)(?:\\.(?<revision>\\d+))?)?+(?:[.\\-](?<qualifier>.*[^.\\-]))??$");
+    private static final Pattern VERSION_PATTERN = Pattern.compile("^(?<major>\\d+)(?:\\.(?<minor>\\d+)(?:\\.(?<revision>\\d+))?)?+(?:(?<separator>[.\\-])(?<qualifier>.*[^.\\-]))??$");
 
     public static VersionNumber parse(String version) {
         if (version == null || version.isEmpty()) {
@@ -26,8 +26,9 @@ public record VersionNumber(int major, int minor, int revision, String qualifier
         var minor = Integer.parseInt(Objects.requireNonNullElse(matcher.group("minor"), "0"));
         var revision = Integer.parseInt(Objects.requireNonNullElse(matcher.group("revision"), "0"));
         var qualifier = matcher.group("qualifier");
+        var separator = matcher.group("separator");
 
-        return new VersionNumber(major, minor, revision, qualifier);
+        return new VersionNumber(major, minor, revision, qualifier, separator);
     }
 
     public VersionNumber(int major) {
@@ -43,10 +44,15 @@ public record VersionNumber(int major, int minor, int revision, String qualifier
     }
 
     public VersionNumber(int major, int minor, int revision, String qualifier) {
+        this(major, minor, revision, qualifier, "-");
+    }
+
+    public VersionNumber(int major, int minor, int revision, String qualifier, String separator) {
         this.major = major;
         this.minor = minor;
         this.revision = revision;
         this.qualifier = (qualifier == null ? "" : qualifier);
+        this.separator = separator;
     }
 
     public VersionNumber getBaseVersion() {
@@ -84,7 +90,7 @@ public record VersionNumber(int major, int minor, int revision, String qualifier
         version.append(".");
         version.append(revision);
         if (qualifier != null && !qualifier.isEmpty()) {
-            version.append("-");
+            version.append(separator);
             version.append(qualifier);
         }
         return version.toString();

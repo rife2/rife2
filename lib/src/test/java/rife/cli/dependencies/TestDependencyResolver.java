@@ -6,6 +6,7 @@ package rife.cli.dependencies;
 
 import org.junit.jupiter.api.Test;
 import rife.cli.dependencies.exceptions.ArtifactNotFoundException;
+import rife.tools.StringUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -73,5 +74,24 @@ public class TestDependencyResolver {
         var version = resolver.releaseVersion();
         assertNotNull(version);
         assertTrue(version.compareTo(new VersionNumber(1, 4)) >= 0);
+    }
+
+    @Test
+    void testGetCompileDependencies() {
+        var resolver1 = new DependencyResolver(new Dependency("com.uwyn.rife2", "rife2"));
+        var dependencies1 = resolver1.getDependencies("compile");
+        assertNotNull(dependencies1);
+        assertEquals(0, dependencies1.size());
+
+        var resolver2 = new DependencyResolver(new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
+        var dependencies2 = resolver2.getDependencies("compile");
+        assertNotNull(dependencies2);
+        assertEquals(5, dependencies2.size());
+        assertEquals("""
+            org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api
+            org.eclipse.jetty:jetty-http
+            org.eclipse.jetty:jetty-io
+            org.eclipse.jetty:jetty-jmx
+            org.slf4j:slf4j-api""", StringUtils.join(dependencies2, "\n"));
     }
 }
