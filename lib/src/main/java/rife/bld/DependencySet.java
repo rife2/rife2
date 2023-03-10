@@ -8,8 +8,8 @@ import rife.bld.dependencies.Dependency;
 
 import java.util.*;
 
-public class ScopeDependencySet extends HashSet<Dependency> {
-    public ScopeDependencySet include(Dependency dependency) {
+public class DependencySet extends HashSet<Dependency> {
+    public DependencySet include(Dependency dependency) {
         add(dependency);
         return this;
     }

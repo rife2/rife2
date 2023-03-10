@@ -19,6 +19,25 @@ public class Build extends Project {
             .include(dependency("org.slf4j", "slf4j-simple", version(2,0,5)));
     }
 
+    public boolean clean()
+    throws Exception {
+        // clean non-standard things
+        return super.clean();
+    }
+
+    public boolean compile()
+    throws Exception {
+        // always clean before compiling
+        clean();
+        return super.compile();
+    }
+
+    public boolean run()
+    throws Exception {
+        // do something before running
+        return super.run();
+    }
+
     public static void main(String[] args) {
         new Build().start(args);
     }

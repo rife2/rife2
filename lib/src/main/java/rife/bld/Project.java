@@ -6,14 +6,12 @@ package rife.bld;
 
 import rife.bld.dependencies.*;
 
-import java.util.*;
-
 public abstract class Project extends Cli {
     public String name = null;
     public String pkg = null;
     public VersionNumber version = null;
 
-    private final Map<Scope, ScopeDependencySet> dependencies_ = new HashMap<>();
+    public final ScopeDependencyMap dependencies_ = new ScopeDependencyMap();
 
     public abstract void setup();
 
@@ -37,8 +35,8 @@ public abstract class Project extends Cli {
         return VersionNumber.parse(version);
     }
 
-    public ScopeDependencySet scope(Scope scope) {
-        return dependencies_.computeIfAbsent(scope, k -> new ScopeDependencySet());
+    public DependencySet scope(Scope scope) {
+        return dependencies_.computeIfAbsent(scope, k -> new DependencySet());
     }
 
     public static Dependency dependency(String groupId, String artifactId) {

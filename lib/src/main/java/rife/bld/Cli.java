@@ -48,9 +48,34 @@ class Cli implements CliCommands {
         return CreateCommand.from(arguments_).execute();
     }
 
+    public boolean download()
+    throws Exception {
+        return false;
+    }
+
     public boolean compile()
     throws Exception {
         return CompileCommand.from(arguments_).execute();
+    }
+
+    public boolean clean()
+    throws Exception {
+        return false;
+    }
+
+    public boolean run()
+    throws Exception {
+        return false;
+    }
+
+    public boolean jar()
+    throws Exception {
+        return false;
+    }
+
+    public boolean war()
+    throws Exception {
+        return false;
     }
 
     public boolean encrypt()
