@@ -5,5 +5,5 @@
 package rife.bld.dependencies;
 
 public enum Scope {
-    compile, runtime, test, provided
+    compile, runtime, test, standalone, provided
 }

@@ -4,6 +4,7 @@
  */
 package rife;
 
+import rife.bld.dependencies.VersionNumber;
 import rife.resources.ResourceFinderClasspath;
 import rife.resources.exceptions.ResourceFinderErrorException;
 
@@ -38,6 +39,10 @@ public class Version {
 
     public static String getVersion() {
         return VersionSingleton.INSTANCE.getVersionString();
+    }
+
+    public static VersionNumber getVersionNumber() {
+        return VersionNumber.parse(getVersion());
     }
 }
 

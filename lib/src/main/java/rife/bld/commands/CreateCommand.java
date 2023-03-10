@@ -4,6 +4,7 @@
  */
 package rife.bld.commands;
 
+import rife.Version;
 import rife.bld.CliCommand;
 import rife.bld.commands.exceptions.CommandCreationException;
 import rife.template.TemplateFactory;
@@ -153,6 +154,12 @@ public class CreateCommand implements CliCommand {
         var build_template = TemplateFactory.TXT.get("bld.project_build");
         build_template.setValue("package", packageName_);
         build_template.setValue("project", project_class_name);
+        var rife_version = Version.getVersionNumber();
+        var rife_version_string = rife_version.major() + "," + rife_version.minor() + "," + rife_version.revision();
+        if (!rife_version.qualifier().isEmpty()) {
+            rife_version_string += ",\"" + rife_version.qualifier() + "\"";
+        }
+        build_template.setValue("rifeVersion", rife_version_string);
         var project_build_file = new File(project_project_dir, "Build.java");
         FileUtils.writeString(build_template.getContent(), project_build_file);
 
