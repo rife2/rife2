@@ -4,21 +4,38 @@
  */
 package rife.bld.dependencies;
 
-public record Dependency(String groupId, String artifactId, VersionNumber version) {
+public record Dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type) {
     public Dependency(String groupId, String artifactId) {
-        this(groupId, artifactId, null);
+        this(groupId, artifactId, null, null, null);
     }
 
     public Dependency(String groupId, String artifactId, VersionNumber version) {
+        this(groupId, artifactId, version, null, null);
+    }
+
+    public Dependency(String groupId, String artifactId, VersionNumber version, String classifier) {
+        this(groupId, artifactId, version, classifier, null);
+    }
+
+    public Dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type) {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = (version == null ? VersionNumber.UNKNOWN : version);
+        this.classifier = (classifier == null ? "" : classifier);
+        this.type = (type == null ? "jar" : type);
     }
 
     public String toString() {
-        if (version.equals(VersionNumber.UNKNOWN)) {
-            return groupId + ":" + artifactId;
+        var result = new StringBuilder(groupId).append(":").append(artifactId);
+        if (!version.equals(VersionNumber.UNKNOWN)) {
+            result.append(":").append(version);
         }
-        return groupId + ":" + artifactId + ":" + version;
+        if (!classifier.isEmpty()) {
+            result.append(":").append(classifier);
+        }
+        if (!type.isEmpty() && !type.equals("jar")) {
+            result.append("@").append(type);
+        }
+        return result.toString();
     }
 }

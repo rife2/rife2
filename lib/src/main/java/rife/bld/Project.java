@@ -47,6 +47,14 @@ public abstract class Project extends Cli {
         return new Dependency(groupId, artifactId, version);
     }
 
+    public static Dependency dependency(String groupId, String artifactId, VersionNumber version, String classifier) {
+        return new Dependency(groupId, artifactId, version, classifier);
+    }
+
+    public static Dependency dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type) {
+        return new Dependency(groupId, artifactId, version, classifier, type);
+    }
+
     public void start(String[] args) {
         setup();
         new Cli().processArguments(this, args);
