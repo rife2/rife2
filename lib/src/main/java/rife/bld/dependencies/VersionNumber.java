@@ -72,8 +72,7 @@ public record VersionNumber(int major, int minor, int revision, String qualifier
 
         if (qualifier.equals(other.qualifier)) {
             return 0;
-        }
-        else if (qualifier.isEmpty()) {
+        } else if (qualifier.isEmpty()) {
             return 1;
         } else if (other.qualifier.isEmpty()) {
             return -1;
