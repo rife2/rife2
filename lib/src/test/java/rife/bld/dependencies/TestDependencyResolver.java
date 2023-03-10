@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import rife.tools.StringUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static rife.bld.dependencies.Scope.compile;
 
 public class TestDependencyResolver {
     @Test
@@ -78,12 +79,12 @@ public class TestDependencyResolver {
     @Test
     void testGetCompileDependencies() {
         var resolver1 = new DependencyResolver(new Dependency("com.uwyn.rife2", "rife2"));
-        var dependencies1 = resolver1.getDependencies("compile");
+        var dependencies1 = resolver1.getDependencies(compile);
         assertNotNull(dependencies1);
         assertEquals(0, dependencies1.size());
 
         var resolver2 = new DependencyResolver(new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
-        var dependencies2 = resolver2.getDependencies("compile");
+        var dependencies2 = resolver2.getDependencies(compile);
         assertNotNull(dependencies2);
         assertEquals(5, dependencies2.size());
         assertEquals("""

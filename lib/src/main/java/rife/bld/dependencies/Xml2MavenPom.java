@@ -10,7 +10,7 @@ import rife.xml.Xml2Data;
 import java.util.*;
 
 public class Xml2MavenPom extends Xml2Data {
-    private final Map<String, List<Dependency>> dependencies_;
+    private final Map<Scope, List<Dependency>> dependencies_;
 
     private StringBuilder characterData_ = null;
     private String lastGroupId_ = null;
@@ -23,7 +23,7 @@ public class Xml2MavenPom extends Xml2Data {
         dependencies_ = new HashMap<>();
     }
 
-    public List<Dependency> getDependencies(String scope) {
+    public List<Dependency> getDependencies(Scope scope) {
         var result = dependencies_.get(scope);
         if (result == null) {
             return Collections.emptyList();
@@ -45,8 +45,11 @@ public class Xml2MavenPom extends Xml2Data {
                     lastScope_ = "compile";
                 }
                 if (lastType_ == null || lastType_.equalsIgnoreCase("jar")) {
-                    var dependency_list = dependencies_.computeIfAbsent(lastScope_, k -> new ArrayList<>());
-                    dependency_list.add(new Dependency(lastGroupId_, lastArtifactId_, lastVersion_));
+                    var scope = Scope.valueOf(lastScope_);
+                    if (scope != null) {
+                        var dependency_list = dependencies_.computeIfAbsent(scope, k -> new ArrayList<>());
+                        dependency_list.add(new Dependency(lastGroupId_, lastArtifactId_, lastVersion_));
+                    }
                 }
                 resetState();
             }

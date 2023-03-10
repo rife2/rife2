@@ -28,7 +28,7 @@ public class DependencyResolver {
         artifactUrl_ = repository_ + groupPath_ + "/" + dependency_.artifactId() + "/";
     }
 
-    public List<Dependency> getDependencies(String scope) {
+    public List<Dependency> getDependencies(Scope scope) {
         var version = dependency_.version();
         if (version.equals(VersionNumber.UNKNOWN)) {
             version = latestVersion();
