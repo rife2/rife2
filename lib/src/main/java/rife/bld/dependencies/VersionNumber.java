@@ -7,7 +7,7 @@ package rife.bld.dependencies;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public record VersionNumber(int major, int minor, int revision, String qualifier, String separator) {
+public record VersionNumber(Integer major, Integer minor, Integer revision, String qualifier, String separator) {
     public static final VersionNumber UNKNOWN = new VersionNumber(0, 0, 0, "");
 
     private static final Pattern VERSION_PATTERN = Pattern.compile("^(?<major>\\d+)(?:\\.(?<minor>\\d+)(?:\\.(?<revision>\\d+))?)?+(?:(?<separator>[.\\-])(?<qualifier>.*[^.\\-]))??$");
@@ -22,32 +22,37 @@ public record VersionNumber(int major, int minor, int revision, String qualifier
             return UNKNOWN;
         }
 
-        var major = Integer.parseInt(matcher.group("major"));
-        var minor = Integer.parseInt(Objects.requireNonNullElse(matcher.group("minor"), "0"));
-        var revision = Integer.parseInt(Objects.requireNonNullElse(matcher.group("revision"), "0"));
+        var major = matcher.group("major");
+        var minor = matcher.group("minor");
+        var revision = matcher.group("revision");
+
+        var major_integer = (major != null ? Integer.parseInt(major) : null);
+        var minor_integer = (minor != null ? Integer.parseInt(minor) : null);
+        var revision_integer = (revision != null ? Integer.parseInt(revision) : null);
+
         var qualifier = matcher.group("qualifier");
         var separator = matcher.group("separator");
 
-        return new VersionNumber(major, minor, revision, qualifier, separator);
+        return new VersionNumber(major_integer, minor_integer, revision_integer, qualifier, separator);
     }
 
-    public VersionNumber(int major) {
-        this(major, 0, 0, "");
+    public VersionNumber(Integer major) {
+        this(major, null, null, "");
     }
 
-    public VersionNumber(int major, int minor) {
-        this(major, minor, 0, "");
+    public VersionNumber(Integer major, Integer minor) {
+        this(major, minor, null, "");
     }
 
-    public VersionNumber(int major, int minor, int revision) {
+    public VersionNumber(Integer major, Integer minor, Integer revision) {
         this(major, minor, revision, "");
     }
 
-    public VersionNumber(int major, int minor, int revision, String qualifier) {
+    public VersionNumber(Integer major, Integer minor, Integer revision, String qualifier) {
         this(major, minor, revision, qualifier, "-");
     }
 
-    public VersionNumber(int major, int minor, int revision, String qualifier, String separator) {
+    public VersionNumber(Integer major, Integer minor, Integer revision, String qualifier, String separator) {
         this.major = major;
         this.minor = minor;
         this.revision = revision;
@@ -55,19 +60,31 @@ public record VersionNumber(int major, int minor, int revision, String qualifier
         this.separator = separator;
     }
 
+    private int majorInt() {
+        return major == null ? 0 : major;
+    }
+
+    private int minorInt() {
+        return minor == null ? 0 : minor;
+    }
+
+    private int revisionInt() {
+        return revision == null ? 0 : revision;
+    }
+
     public VersionNumber getBaseVersion() {
         return new VersionNumber(major, minor, revision, null);
     }
 
     public int compareTo(VersionNumber other) {
-        if (major != other.major) {
-            return major - other.major;
+        if (majorInt() != other.majorInt()) {
+            return majorInt() - other.majorInt();
         }
-        if (minor != other.minor) {
-            return minor - other.minor;
+        if (minorInt() != other.minorInt()) {
+            return minorInt() - other.minorInt();
         }
-        if (revision != other.revision) {
-            return revision - other.revision;
+        if (revisionInt() != other.revisionInt()) {
+            return revisionInt() - other.revisionInt();
         }
 
         if (qualifier.equals(other.qualifier)) {
@@ -83,11 +100,15 @@ public record VersionNumber(int major, int minor, int revision, String qualifier
 
     public String toString() {
         var version = new StringBuilder();
-        version.append(major);
-        version.append(".");
-        version.append(minor);
-        version.append(".");
-        version.append(revision);
+        version.append(majorInt());
+        if (minor != null || revision != null) {
+            version.append(".");
+            version.append(minorInt());
+        }
+        if (revision != null) {
+            version.append(".");
+            version.append(revisionInt());
+        }
         if (qualifier != null && !qualifier.isEmpty()) {
             version.append(separator);
             version.append(qualifier);
@@ -102,9 +123,9 @@ public record VersionNumber(int major, int minor, int revision, String qualifier
 
     @Override
     public int hashCode() {
-        int result = major;
-        result = 31 * result + minor;
-        result = 31 * result + minor;
+        int result = majorInt();
+        result = 31 * result + minorInt();
+        result = 31 * result + minorInt();
         result = 31 * result + Objects.hashCode(qualifier);
         return result;
     }

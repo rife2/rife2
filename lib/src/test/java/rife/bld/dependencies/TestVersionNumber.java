@@ -15,8 +15,8 @@ public class TestVersionNumber {
         var version10 = new VersionNumber(1, 0);
         var version100 = new VersionNumber(1, 0, 0);
         var version100s = new VersionNumber(1, 0, 0, "SNAPSHOT");
-        assertEquals("1.0.0", version1.toString());
-        assertEquals("1.0.0", version10.toString());
+        assertEquals("1", version1.toString());
+        assertEquals("1.0", version10.toString());
         assertEquals("1.0.0", version100.toString());
         assertEquals("1.0.0-SNAPSHOT", version100s.toString());
     }
@@ -75,11 +75,11 @@ public class TestVersionNumber {
 
     @Test
     void testStringRepresentation() {
-        assertEquals(VersionNumber.parse("1.0").toString(), "1.0.0");
+        assertEquals(VersionNumber.parse("1.0").toString(), "1.0");
         assertEquals(VersionNumber.parse("1.2.3").toString(), "1.2.3");
         assertEquals(VersionNumber.parse("1.2.3-4").toString(), "1.2.3-4");
         assertEquals(VersionNumber.parse("1.2.3.4").toString(), "1.2.3.4");
-        assertEquals(VersionNumber.parse("1-rc-1").toString(), "1.0.0-rc-1");
+        assertEquals(VersionNumber.parse("1-rc-1").toString(), "1-rc-1");
         assertEquals(VersionNumber.parse("1.2.3-rc-1").toString(), "1.2.3-rc-1");
         assertEquals(VersionNumber.parse("1.2.3.rc-1").toString(), "1.2.3.rc-1");
     }

@@ -4,6 +4,7 @@
  */
 package rife.bld.dependencies;
 
+import rife.bld.DependencySet;
 import rife.bld.dependencies.exceptions.*;
 
 import java.io.IOException;
@@ -15,7 +16,6 @@ public class DependencyResolver {
     public static final String MAVEN_METADATA_XML = "maven-metadata.xml";
 
     private final String repository_ = "https://repo1.maven.org/maven2/";
-    private final String groupPath_;
     private final String artifactUrl_;
 
     private Xml2MavenMetadata metadata_ = null;
@@ -24,16 +24,36 @@ public class DependencyResolver {
 
     public DependencyResolver(Dependency dependency) {
         dependency_ = dependency;
-        groupPath_ = dependency_.groupId().replace(".", "/");
+
+        var groupPath_ = dependency_.groupId().replace(".", "/");
         artifactUrl_ = repository_ + groupPath_ + "/" + dependency_.artifactId() + "/";
     }
 
-    public List<Dependency> getDependencies(Scope scope) {
+    public DependencySet getDependencies(Scope scope) {
         var version = dependency_.version();
         if (version.equals(VersionNumber.UNKNOWN)) {
             version = latestVersion();
         }
         return getMavenPom(version).getDependencies(scope);
+    }
+
+    public DependencySet getTransitiveDependencies(Scope scope) {
+        var result = new DependencySet();
+
+        var dependencies = getDependencies(scope);
+        while (!dependencies.isEmpty()) {
+            var it = dependencies.iterator();
+            var dependency = it.next();
+            it.remove();
+
+            if (!result.contains(dependency)) {
+                result.add(dependency);
+
+                dependencies.addAll(new DependencyResolver(dependency).getDependencies(scope));
+            }
+        }
+
+        return result;
     }
 
     public boolean exists() {

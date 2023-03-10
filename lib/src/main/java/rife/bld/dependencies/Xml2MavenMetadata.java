@@ -13,7 +13,7 @@ import java.util.List;
 public class Xml2MavenMetadata extends Xml2Data {
     private VersionNumber latest_ = VersionNumber.UNKNOWN;
     private VersionNumber release_ = VersionNumber.UNKNOWN;
-    private List<VersionNumber> versions_;
+    private final List<VersionNumber> versions_;
 
     private StringBuilder characterData_ = null;
 

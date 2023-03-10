@@ -4,6 +4,8 @@
  */
 package rife.bld.dependencies;
 
+import java.util.Objects;
+
 public record Dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type) {
     public Dependency(String groupId, String artifactId) {
         this(groupId, artifactId, null, null, null);
@@ -37,5 +39,20 @@ public record Dependency(String groupId, String artifactId, VersionNumber versio
             result.append("@").append(type);
         }
         return result.toString();
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        var that = (Dependency) o;
+        return groupId.equals(that.groupId) &&
+               artifactId.equals(that.artifactId) &&
+               version.equals(that.version) &&
+               classifier.equals(that.classifier) &&
+               type.equals(that.type);
+    }
+
+    public int hashCode() {
+        return Objects.hash(groupId, artifactId, version, classifier, type);
     }
 }
