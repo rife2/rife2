@@ -13,14 +13,12 @@ public class ArtifactNotFoundException extends DependencyException {
 
     private final Dependency dependency_;
     private final String uri_;
-    private final int statusCode_;
 
-    public ArtifactNotFoundException(Dependency dependency, String uri, int statusCode) {
-        super("Couldn't find artifact for dependency '" + dependency + "' at '" + uri + "' (status code: " + statusCode + ")");
+    public ArtifactNotFoundException(Dependency dependency, String uri) {
+        super("Couldn't find artifact for dependency '" + dependency + "' at '" + uri);
 
         dependency_ = dependency;
         uri_ = uri;
-        statusCode_ = statusCode;
     }
 
     public Dependency getDependency() {
@@ -29,9 +27,5 @@ public class ArtifactNotFoundException extends DependencyException {
 
     public String getUrl() {
         return uri_;
-    }
-
-    public int getStatusCode() {
-        return statusCode_;
     }
 }

@@ -6,27 +6,26 @@ package rife.bld.dependencies;
 
 import rife.bld.DependencySet;
 import rife.bld.dependencies.exceptions.*;
+import rife.tools.FileUtils;
+import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.*;
+import java.net.*;
 import java.util.List;
 
 public class DependencyResolver {
     public static final String MAVEN_METADATA_XML = "maven-metadata.xml";
 
-    private final String repository_ = "https://repo1.maven.org/maven2/";
+    private final Repository repository_;
+    private final Dependency dependency_;
     private final String artifactUrl_;
 
     private Xml2MavenMetadata metadata_ = null;
 
-    private final Dependency dependency_;
-
-    public DependencyResolver(Dependency dependency) {
+    public DependencyResolver(Repository repository, Dependency dependency) {
+        repository_ = repository;
         dependency_ = dependency;
-
-        var groupPath_ = dependency_.groupId().replace(".", "/");
-        artifactUrl_ = repository_ + groupPath_ + "/" + dependency_.artifactId() + "/";
+        artifactUrl_ = repository_.getArtifactUrl(dependency);
     }
 
     public DependencySet getDependencies(Scope scope) {
@@ -49,7 +48,7 @@ public class DependencyResolver {
             if (!result.contains(dependency)) {
                 result.add(dependency);
 
-                dependencies.addAll(new DependencyResolver(dependency).getDependencies(scope));
+                dependencies.addAll(new DependencyResolver(repository_, dependency).getDependencies(scope));
             }
         }
 
@@ -65,7 +64,7 @@ public class DependencyResolver {
                 return getMavenMetadata().getVersions().contains(dependency_.version());
             }
             return true;
-        } catch (ArtifactNotFoundException e) {
+        } catch (ArtifactNotFoundException | ArtifactRetrievalErrorException e) {
             return false;
         }
     }
@@ -89,21 +88,21 @@ public class DependencyResolver {
     private Xml2MavenMetadata getMavenMetadata() {
         if (metadata_ == null) {
             String metadata;
-            var uri = getMetadataUrl();
+            var url = getMetadataUrl();
             try {
-                var response_get = repositoryRequest(uri);
-                if (response_get.statusCode() != 200) {
-                    throw new ArtifactNotFoundException(dependency_, uri, response_get.statusCode());
+                var content = FileUtils.readString(new URL(url));
+                if (content == null) {
+                    throw new ArtifactNotFoundException(dependency_, url);
                 }
 
-                metadata = response_get.body();
-            } catch (IOException | InterruptedException e) {
-                throw new ArtifactRetrievalErrorException(dependency_, uri, e);
+                metadata = content;
+            } catch (IOException | FileUtilsErrorException e) {
+                throw new ArtifactRetrievalErrorException(dependency_, url, e);
             }
 
             var xml = new Xml2MavenMetadata();
             if (!xml.processXml(metadata)) {
-                throw new DependencyXmlParsingErrorException(dependency_, uri, xml.getErrors());
+                throw new DependencyXmlParsingErrorException(dependency_, url, xml.getErrors());
             }
 
             metadata_ = xml;
@@ -118,32 +117,23 @@ public class DependencyResolver {
 
     private Xml2MavenPom getMavenPom(VersionNumber version) {
         String pom;
-        var uri = getPomUrl(version);
+        var url = getPomUrl(version);
         try {
-            var response_get = repositoryRequest(uri);
-            if (response_get.statusCode() != 200) {
-                throw new ArtifactNotFoundException(dependency_, uri, response_get.statusCode());
+            var content = FileUtils.readString(new URL(url));
+            if (content == null) {
+                throw new ArtifactNotFoundException(dependency_, url);
             }
 
-            pom = response_get.body();
-        } catch (IOException | InterruptedException e) {
-            throw new ArtifactRetrievalErrorException(dependency_, uri, e);
+            pom = content;
+        } catch (IOException | FileUtilsErrorException e) {
+            throw new ArtifactRetrievalErrorException(dependency_, url, e);
         }
 
         var xml = new Xml2MavenPom();
         if (!xml.processXml(pom)) {
-            throw new DependencyXmlParsingErrorException(dependency_, uri, xml.getErrors());
+            throw new DependencyXmlParsingErrorException(dependency_, url, xml.getErrors());
         }
 
         return xml;
-    }
-
-    private HttpResponse<String> repositoryRequest(String uri)
-    throws IOException, InterruptedException {
-        return HttpClient.newHttpClient()
-            .send(HttpRequest.newBuilder()
-                .uri(URI.create(uri))
-                .GET()
-                .build(), HttpResponse.BodyHandlers.ofString());
     }
 }

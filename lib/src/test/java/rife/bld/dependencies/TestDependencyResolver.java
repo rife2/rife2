@@ -8,42 +8,43 @@ import org.junit.jupiter.api.Test;
 import rife.tools.StringUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static rife.bld.dependencies.Repository.MAVEN_CENTRAL;
 import static rife.bld.dependencies.Scope.compile;
 
 public class TestDependencyResolver {
     @Test
     void testInstantiation() {
-        var resolver = new DependencyResolver(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)));
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)));
         assertNotNull(resolver);
     }
 
     @Test
     void testNotFound() {
-        var resolver = new DependencyResolver(new Dependency("com.org.unknown", "voidthing"));
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.org.unknown", "voidthing"));
         assertFalse(resolver.exists());
     }
 
     @Test
     void testCheckExistence() {
-        var resolver = new DependencyResolver(new Dependency("com.uwyn.rife2", "rife2"));
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2"));
         assertTrue(resolver.exists());
     }
 
     @Test
     void testCheckExistenceVersion() {
-        var resolver = new DependencyResolver(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)));
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)));
         assertTrue(resolver.exists());
     }
 
     @Test
     void testCheckExistenceMissingVersion() {
-        var resolver = new DependencyResolver(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 3, 9)));
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 3, 9)));
         assertFalse(resolver.exists());
     }
 
     @Test
     void testListVersions() {
-        var resolver1 = new DependencyResolver(new Dependency("com.uwyn.rife2", "rife2"));
+        var resolver1 = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2"));
         var versions1 = resolver1.listVersions();
         assertNotNull(versions1);
         assertFalse(versions1.isEmpty());
@@ -51,7 +52,7 @@ public class TestDependencyResolver {
         assertTrue(versions1.contains(new VersionNumber(1, 0, 0)));
         assertTrue(versions1.contains(new VersionNumber(1, 2, 1)));
 
-        var resolver2 = new DependencyResolver(new Dependency("org.eclipse.jetty", "jetty-server"));
+        var resolver2 = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.eclipse.jetty", "jetty-server"));
         var versions2 = resolver2.listVersions();
         assertNotNull(versions2);
         assertFalse(versions2.isEmpty());
@@ -62,7 +63,7 @@ public class TestDependencyResolver {
 
     @Test
     void testGetLatestVersion() {
-        var resolver = new DependencyResolver(new Dependency("com.uwyn.rife2", "rife2"));
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2"));
         var version = resolver.latestVersion();
         assertNotNull(version);
         assertTrue(version.compareTo(new VersionNumber(1, 4)) >= 0);
@@ -70,7 +71,7 @@ public class TestDependencyResolver {
 
     @Test
     void testGetReleaseVersion() {
-        var resolver = new DependencyResolver(new Dependency("com.uwyn.rife2", "rife2"));
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2"));
         var version = resolver.releaseVersion();
         assertNotNull(version);
         assertTrue(version.compareTo(new VersionNumber(1, 4)) >= 0);
@@ -78,12 +79,12 @@ public class TestDependencyResolver {
 
     @Test
     void testGetCompileDependencies() {
-        var resolver1 = new DependencyResolver(new Dependency("com.uwyn.rife2", "rife2"));
+        var resolver1 = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2"));
         var dependencies1 = resolver1.getDependencies(compile);
         assertNotNull(dependencies1);
         assertEquals(0, dependencies1.size());
 
-        var resolver2 = new DependencyResolver(new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
+        var resolver2 = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
         var dependencies2 = resolver2.getDependencies(compile);
         assertNotNull(dependencies2);
         assertEquals(5, dependencies2.size());
@@ -97,12 +98,12 @@ public class TestDependencyResolver {
 
     @Test
     void testGetCompileTransitiveDependencies() {
-        var resolver1 = new DependencyResolver(new Dependency("com.uwyn.rife2", "rife2"));
+        var resolver1 = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2"));
         var dependencies1 = resolver1.getTransitiveDependencies(compile);
         assertNotNull(dependencies1);
         assertEquals(0, dependencies1.size());
 
-        var resolver2 = new DependencyResolver(new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
+        var resolver2 = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
         var dependencies2 = resolver2.getTransitiveDependencies(compile);
         assertNotNull(dependencies2);
         assertEquals(6, dependencies2.size());
@@ -114,7 +115,7 @@ public class TestDependencyResolver {
             org.slf4j:slf4j-api
             org.eclipse.jetty:jetty-util""", StringUtils.join(dependencies2, "\n"));
 
-        var resolver3 = new DependencyResolver(new Dependency("org.springframework.boot", "spring-boot-starter", new VersionNumber(3, 0, 4)));
+        var resolver3 = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.springframework.boot", "spring-boot-starter", new VersionNumber(3, 0, 4)));
         var dependencies3 = resolver3.getTransitiveDependencies(compile);
         assertNotNull(dependencies3);
         assertEquals(24, dependencies3.size());
