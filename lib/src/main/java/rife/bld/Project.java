@@ -6,12 +6,15 @@ package rife.bld;
 
 import rife.bld.dependencies.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class Project extends Cli {
     public String name = null;
     public String pkg = null;
     public VersionNumber version = null;
 
-    public final ScopeDependencyMap dependencies_ = new ScopeDependencyMap();
+    public final Map<Scope, DependencySet> dependencies_ = new HashMap<>();
 
     public abstract void setup();
 
