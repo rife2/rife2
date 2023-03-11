@@ -20,7 +20,7 @@ public class CompileCommand implements CliCommand {
     public static final String NAME = "compile";
 
     public static CompileCommand from(List<String> arguments) {
-        if (arguments.size() != 0) {
+        if (arguments != null && arguments.size() != 0) {
             throw new CommandCreationException(NAME, "ERROR: No arguments are expected for the compile command.");
         }
         return new CompileCommand();
@@ -50,12 +50,9 @@ public class CompileCommand implements CliCommand {
             Path.of("build", "main").toFile();
         var build_test_dir =
             Path.of("build", "test").toFile();
-        var build_project_dir =
-            Path.of("build", "project").toFile();
 
         build_main_dir.mkdirs();
         build_test_dir.mkdirs();
-        build_project_dir.mkdirs();
 
         // detect the jar files in the compile lib directory
         var lib_compile_dir_abs = lib_compile_dir.getAbsoluteFile();
