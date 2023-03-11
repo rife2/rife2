@@ -100,7 +100,7 @@ public class DependencyResolver {
                 }
             }
         }
-        pomDependencies.addAll(0, next_dependencies);
+        pomDependencies.addAll(next_dependencies);
 
         while (!pomDependencies.isEmpty()) {
             var it = pomDependencies.iterator();
