@@ -118,6 +118,75 @@ public class DependencyResolver {
         }
     }
 
+    public List<VersionNumber> listVersions() {
+        return getMavenMetadata().getVersions();
+    }
+
+    public VersionNumber latestVersion() {
+        return getMavenMetadata().getLatest();
+    }
+
+    public VersionNumber releaseVersion() {
+        return getMavenMetadata().getRelease();
+    }
+
+    public String getMetadataUrl() {
+        return artifactUrl_ + MAVEN_METADATA_XML;
+    }
+
+    Xml2MavenMetadata getMavenMetadata() {
+        if (metadata_ == null) {
+            String metadata;
+            var url = getMetadataUrl();
+            try {
+                var content = FileUtils.readString(new URL(url));
+                if (content == null) {
+                    throw new ArtifactNotFoundException(dependency_, url);
+                }
+
+                metadata = content;
+            } catch (IOException | FileUtilsErrorException e) {
+                throw new ArtifactRetrievalErrorException(dependency_, url, e);
+            }
+
+            var xml = new Xml2MavenMetadata();
+            if (!xml.processXml(metadata)) {
+                throw new DependencyXmlParsingErrorException(dependency_, url, xml.getErrors());
+            }
+
+            metadata_ = xml;
+        }
+
+        return metadata_;
+    }
+
+    public String getPomUrl() {
+        var version = resolveVersion();
+        return artifactUrl_ + version + "/" + dependency_.artifactId() + "-" + version + ".pom";
+    }
+
+    Xml2MavenPom getMavenPom() {
+        String pom;
+        var url = getPomUrl();
+        try {
+            var content = FileUtils.readString(new URL(url));
+            if (content == null) {
+                throw new ArtifactNotFoundException(dependency_, url);
+            }
+
+            pom = content;
+        } catch (IOException | FileUtilsErrorException e) {
+            throw new ArtifactRetrievalErrorException(dependency_, url, e);
+        }
+
+        var xml = new Xml2MavenPom(repository_);
+        if (!xml.processXml(pom)) {
+            throw new DependencyXmlParsingErrorException(dependency_, url, xml.getErrors());
+        }
+
+        return xml;
+    }
+
     public String getDownloadUrl(VersionNumber version) {
         var result = new StringBuilder(artifactUrl_);
         result.append(version).append("/").append(dependency_.artifactId()).append("-").append(version);
@@ -153,74 +222,5 @@ public class DependencyResolver {
         } catch (IOException e) {
             throw new DependencyDownloadException(dependency_, download_url, download_file, e);
         }
-    }
-
-    public List<VersionNumber> listVersions() {
-        return getMavenMetadata().getVersions();
-    }
-
-    public VersionNumber latestVersion() {
-        return getMavenMetadata().getLatest();
-    }
-
-    public VersionNumber releaseVersion() {
-        return getMavenMetadata().getRelease();
-    }
-
-    public String getMetadataUrl() {
-        return artifactUrl_ + MAVEN_METADATA_XML;
-    }
-
-    public Xml2MavenMetadata getMavenMetadata() {
-        if (metadata_ == null) {
-            String metadata;
-            var url = getMetadataUrl();
-            try {
-                var content = FileUtils.readString(new URL(url));
-                if (content == null) {
-                    throw new ArtifactNotFoundException(dependency_, url);
-                }
-
-                metadata = content;
-            } catch (IOException | FileUtilsErrorException e) {
-                throw new ArtifactRetrievalErrorException(dependency_, url, e);
-            }
-
-            var xml = new Xml2MavenMetadata();
-            if (!xml.processXml(metadata)) {
-                throw new DependencyXmlParsingErrorException(dependency_, url, xml.getErrors());
-            }
-
-            metadata_ = xml;
-        }
-
-        return metadata_;
-    }
-
-    public String getPomUrl() {
-        var version = resolveVersion();
-        return artifactUrl_ + version + "/" + dependency_.artifactId() + "-" + version + ".pom";
-    }
-
-    public Xml2MavenPom getMavenPom() {
-        String pom;
-        var url = getPomUrl();
-        try {
-            var content = FileUtils.readString(new URL(url));
-            if (content == null) {
-                throw new ArtifactNotFoundException(dependency_, url);
-            }
-
-            pom = content;
-        } catch (IOException | FileUtilsErrorException e) {
-            throw new ArtifactRetrievalErrorException(dependency_, url, e);
-        }
-
-        var xml = new Xml2MavenPom(repository_);
-        if (!xml.processXml(pom)) {
-            throw new DependencyXmlParsingErrorException(dependency_, url, xml.getErrors());
-        }
-
-        return xml;
     }
 }
