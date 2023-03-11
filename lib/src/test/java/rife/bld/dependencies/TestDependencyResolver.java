@@ -15,6 +15,7 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.*;
 import static rife.bld.dependencies.Repository.MAVEN_CENTRAL;
 import static rife.bld.dependencies.Scope.compile;
+import static rife.bld.dependencies.Scope.runtime;
 
 public class TestDependencyResolver {
     @Test
@@ -101,6 +102,18 @@ public class TestDependencyResolver {
             org.eclipse.jetty:jetty-http:11.0.14
             org.eclipse.jetty:jetty-io:11.0.14
             org.slf4j:slf4j-api:2.0.5""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
+    void testGetCompileRuntimeDependenciesJunit() {
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.junit.jupiter", "junit-jupiter", new VersionNumber(5, 9, 2)));
+        var dependencies_compile = resolver.getDependencies(compile, runtime);
+        assertNotNull(dependencies_compile);
+        assertEquals(3, dependencies_compile.size());
+        assertEquals("""
+            org.junit.jupiter:junit-jupiter-api:5.9.2
+            org.junit.jupiter:junit-jupiter-params:5.9.2
+            org.junit.jupiter:junit-jupiter-engine:5.9.2""", StringUtils.join(dependencies_compile, "\n"));
     }
 
     @Test
@@ -225,6 +238,27 @@ public class TestDependencyResolver {
             org.eclipse.jetty:jetty-io:11.0.14
             org.slf4j:slf4j-api:2.0.5
             org.eclipse.jetty:jetty-util:11.0.14""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
+    void testGetCompileRuntimeTransitiveDependenciesJunit() {
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.junit.jupiter", "junit-jupiter", new VersionNumber(5, 9, 2)));
+        var dependencies_compile = resolver.getTransitiveDependencies(compile, runtime);
+        assertNotNull(dependencies_compile);
+        assertEquals(7, dependencies_compile.size());
+        assertEquals("""
+            org.junit.jupiter:junit-jupiter-api:5.9.2
+            org.junit.jupiter:junit-jupiter-params:5.9.2
+            org.junit.jupiter:junit-jupiter-engine:5.9.2
+            org.opentest4j:opentest4j:1.2.0
+            org.junit.platform:junit-platform-commons:1.9.2
+            org.apiguardian:apiguardian-api:1.1.2
+            org.junit.platform:junit-platform-engine:1.9.2""", StringUtils.join(dependencies_compile, "\n"));
+        var dependencies_runtime = resolver.getTransitiveDependencies(runtime);
+        assertNotNull(dependencies_runtime);
+        assertEquals(1, dependencies_runtime.size());
+        assertEquals("""
+            org.junit.jupiter:junit-jupiter-engine:5.9.2""", StringUtils.join(dependencies_runtime, "\n"));
     }
 
     @Test
@@ -466,18 +500,47 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
+            resolver.downloadIntoFolder(tmp);
             for (var dep : resolver.getTransitiveDependencies(compile)) {
                 new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
             }
             var files = FileUtils.getFileList(tmp);
-            assertEquals(5, files.size());
+            assertEquals(6, files.size());
             Collections.sort(files);
             assertEquals("""
                 jetty-http-11.0.14.jar
                 jetty-io-11.0.14.jar
                 jetty-jakarta-servlet-api-5.0.2.jar
+                jetty-server-11.0.14.jar
                 jetty-util-11.0.14.jar
                 slf4j-api-2.0.5.jar""", StringUtils.join(files, "\n"));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
+    @Test
+    void testDownloadDependenciesJunit()
+    throws Exception {
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.junit.jupiter", "junit-jupiter", new VersionNumber(5, 9, 2)));
+        var tmp = Files.createTempDirectory("downloads").toFile();
+        try {
+            resolver.downloadIntoFolder(tmp);
+            for (var dep : resolver.getTransitiveDependencies(compile, runtime)) {
+                new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
+            }
+            var files = FileUtils.getFileList(tmp);
+            assertEquals(8, files.size());
+            Collections.sort(files);
+            assertEquals("""
+                apiguardian-api-1.1.2.jar
+                junit-jupiter-5.9.2.jar
+                junit-jupiter-api-5.9.2.jar
+                junit-jupiter-engine-5.9.2.jar
+                junit-jupiter-params-5.9.2.jar
+                junit-platform-commons-1.9.2.jar
+                junit-platform-engine-1.9.2.jar
+                opentest4j-1.2.0.jar""", StringUtils.join(files, "\n"));
         } finally {
             FileUtils.deleteDirectory(tmp);
         }
@@ -489,11 +552,12 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.springframework.boot", "spring-boot-starter", new VersionNumber(3, 0, 4)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
+            resolver.downloadIntoFolder(tmp);
             for (var dep : resolver.getTransitiveDependencies(compile)) {
                 new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
             }
             var files = FileUtils.getFileList(tmp);
-            assertEquals(17, files.size());
+            assertEquals(18, files.size());
             Collections.sort(files);
             assertEquals("""
                 jakarta.annotation-api-2.1.1.jar
@@ -508,6 +572,7 @@ public class TestDependencyResolver {
                 spring-beans-6.0.6.jar
                 spring-boot-3.0.4.jar
                 spring-boot-autoconfigure-3.0.4.jar
+                spring-boot-starter-3.0.4.jar
                 spring-boot-starter-logging-3.0.4.jar
                 spring-context-6.0.6.jar
                 spring-core-6.0.6.jar
@@ -524,11 +589,12 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.apache.maven", "maven-core", new VersionNumber(3, 9, 0)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
+            resolver.downloadIntoFolder(tmp);
             for (var dep : resolver.getTransitiveDependencies(compile)) {
                 new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
             }
             var files = FileUtils.getFileList(tmp);
-            assertEquals(31, files.size());
+            assertEquals(32, files.size());
             Collections.sort(files);
             assertEquals("""
                 aopalliance-1.0.jar
@@ -540,6 +606,7 @@ public class TestDependencyResolver {
                 javax.inject-1.jar
                 maven-artifact-3.9.0.jar
                 maven-builder-support-3.9.0.jar
+                maven-core-3.9.0.jar
                 maven-model-3.9.0.jar
                 maven-model-builder-3.9.0.jar
                 maven-plugin-api-3.9.0.jar
@@ -573,11 +640,12 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.typesafe.play", "play_2.13", new VersionNumber(2, 8, 19)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
+            resolver.downloadIntoFolder(tmp);
             for (var dep : resolver.getTransitiveDependencies(compile)) {
                 new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
             }
             var files = FileUtils.getFileList(tmp);
-            assertEquals(47, files.size());
+            assertEquals(48, files.size());
             Collections.sort(files);
             assertEquals("""
                 akka-actor-typed_2.13-2.6.20.jar
@@ -618,6 +686,7 @@ public class TestDependencyResolver {
                 play-functional_2.13-2.8.2.jar
                 play-json_2.13-2.8.2.jar
                 play-streams_2.13-2.8.19.jar
+                play_2.13-2.8.19.jar
                 reactive-streams-1.0.3.jar
                 scala-java8-compat_2.13-1.0.2.jar
                 scala-library-2.13.10.jar
@@ -638,11 +707,12 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.vaadin", "vaadin", new VersionNumber(23, 3, 7)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
+            resolver.downloadIntoFolder(tmp);
             for (var dep : resolver.getTransitiveDependencies(compile)) {
                 new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
             }
             var files = FileUtils.getFileList(tmp);
-            assertEquals(87, files.size());
+            assertEquals(88, files.size());
             Collections.sort(files);
             assertEquals("""
                 atmosphere-runtime-2.7.3.slf4jvaadin4.jar
@@ -684,6 +754,7 @@ public class TestDependencyResolver {
                 ph-css-6.5.0.jar
                 slf4j-api-1.7.36.jar
                 throw-if-servlet5-1.0.2.jar
+                vaadin-23.3.7.jar
                 vaadin-accordion-flow-23.3.7.jar
                 vaadin-app-layout-flow-23.3.7.jar
                 vaadin-avatar-flow-23.3.7.jar

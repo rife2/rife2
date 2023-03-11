@@ -39,15 +39,14 @@ class Xml2MavenPom extends Xml2Data {
         repository_ = repository;
     }
 
-    Set<PomDependency> getDependencies(Scope scope) {
-        if (scope == null) {
+    Set<PomDependency> getDependencies(Scope... scopes) {
+        if (scopes == null || scopes.length == 0) {
             return Collections.emptySet();
         }
 
         if (resolvedDependencies_ == null) {
             var resolved_dependencies = new HashMap<Scope, Set<PomDependency>>();
 
-            var resolved_dependency_set = resolved_dependencies.computeIfAbsent(scope, k -> new LinkedHashSet<>());
             if (!dependencies_.isEmpty()) {
                 for (var dependency : dependencies_) {
                     var managed_dependency = dependencyManagement_.get(dependency);
@@ -77,19 +76,18 @@ class Xml2MavenPom extends Xml2Data {
                         continue;
                     }
 
-                    if (dep_scope.equals(scope.name())) {
-                        var resolved_dependency = new PomDependency(
-                            resolveProperties(dependency.groupId()),
-                            resolveProperties(dependency.artifactId()),
-                            resolveProperties(version),
-                            resolveProperties(dependency.classifier()),
-                            resolveProperties(dependency.type()),
-                            dep_scope,
-                            "false",
-                            exclusions);
-                        if (resolved_dependency.type() == null || resolved_dependency.type().equals("jar")) {
-                            resolved_dependency_set.add(resolved_dependency);
-                        }
+                    var resolved_dependency = new PomDependency(
+                        resolveProperties(dependency.groupId()),
+                        resolveProperties(dependency.artifactId()),
+                        resolveProperties(version),
+                        resolveProperties(dependency.classifier()),
+                        resolveProperties(dependency.type()),
+                        dep_scope,
+                        "false",
+                        exclusions);
+                    if (resolved_dependency.type() == null || resolved_dependency.type().equals("jar")) {
+                        var resolved_dependency_set = resolved_dependencies.computeIfAbsent(Scope.valueOf(resolved_dependency.scope()), k -> new LinkedHashSet<>());
+                        resolved_dependency_set.add(resolved_dependency);
                     }
                 }
             }
@@ -97,9 +95,12 @@ class Xml2MavenPom extends Xml2Data {
             resolvedDependencies_ = resolved_dependencies;
         }
 
-        var result = resolvedDependencies_.get(scope);
-        if (result == null) {
-            return Collections.emptySet();
+        var result = new LinkedHashSet<PomDependency>();
+        for (var scope : scopes) {
+            var deps = resolvedDependencies_.get(scope);
+            if (deps != null) {
+                result.addAll(deps);
+            }
         }
 
         return result;

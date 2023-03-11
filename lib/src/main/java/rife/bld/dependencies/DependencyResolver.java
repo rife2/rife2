@@ -51,8 +51,8 @@ public class DependencyResolver {
         return version;
     }
 
-    public DependencySet getDependencies(Scope scope) {
-        var pom_dependencies = getMavenPom().getDependencies(scope);
+    public DependencySet getDependencies(Scope... scopes) {
+        var pom_dependencies = getMavenPom().getDependencies(scopes);
         var result = new DependencySet();
         for (var dependency : pom_dependencies) {
             result.add(convertPomDependency(dependency));
@@ -69,16 +69,16 @@ public class DependencyResolver {
             pomDependency.type());
     }
 
-    public DependencySet getTransitiveDependencies(Scope scope) {
+    public DependencySet getTransitiveDependencies(Scope... scopes) {
         var result = new DependencySet();
-        var pom_dependencies = new ArrayList<>(getMavenPom().getDependencies(scope));
+        var pom_dependencies = new ArrayList<>(getMavenPom().getDependencies(scopes));
         var exclusions = new Stack<Set<PomExclusion>>();
-        getTransitiveDependencies(scope, result, pom_dependencies, exclusions);
+        getTransitiveDependencies(result, pom_dependencies, exclusions, scopes);
         return result;
     }
 
-    private void getTransitiveDependencies(Scope scope, DependencySet result, ArrayList<PomDependency> pomDependencies, Stack<Set<PomExclusion>> exclusions) {
-        var next_dependencies = getMavenPom().getDependencies(scope);
+    private void getTransitiveDependencies(DependencySet result, ArrayList<PomDependency> pomDependencies, Stack<Set<PomExclusion>> exclusions, Scope... scopes) {
+        var next_dependencies = getMavenPom().getDependencies(scopes);
 
         pomDependencies.forEach(next_dependencies::remove);
 
@@ -112,7 +112,7 @@ public class DependencyResolver {
                 result.add(dependency);
 
                 exclusions.push(pom_dependency.exclusions());
-                new DependencyResolver(repository_, dependency).getTransitiveDependencies(scope, result, pomDependencies, exclusions);
+                new DependencyResolver(repository_, dependency).getTransitiveDependencies(result, pomDependencies, exclusions, scopes);
                 exclusions.pop();
             }
         }
