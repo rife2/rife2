@@ -6,7 +6,11 @@ package rife.bld;
 
 import rife.bld.dependencies.*;
 
+import java.util.Collections;
+import java.util.List;
+
 public abstract class Project extends Cli {
+    public List<Repository> repositories = Collections.emptyList();
     public String name = null;
     public String pkg = null;
     public VersionNumber version = null;

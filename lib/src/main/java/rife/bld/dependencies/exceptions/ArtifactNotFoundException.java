@@ -15,7 +15,7 @@ public class ArtifactNotFoundException extends DependencyException {
     private final String url_;
 
     public ArtifactNotFoundException(Dependency dependency, String url) {
-        super("Couldn't find artifact for dependency '" + dependency + "' at '" + url);
+        super("Couldn't find artifact for dependency '" + dependency + "' at " + url);
 
         dependency_ = dependency;
         url_ = url;

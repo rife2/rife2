@@ -14,8 +14,12 @@ class Xml2MavenMetadata extends Xml2Data {
     private VersionNumber latest_ = VersionNumber.UNKNOWN;
     private VersionNumber release_ = VersionNumber.UNKNOWN;
     private final List<VersionNumber> versions_;
+    private VersionNumber snapshot_ = VersionNumber.UNKNOWN;
 
     private StringBuilder characterData_ = null;
+
+    private String lastTimestamp_ = null;
+    private String lastBuildNumber_ = null;
 
     Xml2MavenMetadata() {
         versions_ = new ArrayList<>();
@@ -27,6 +31,10 @@ class Xml2MavenMetadata extends Xml2Data {
 
     public VersionNumber getRelease() {
         return release_;
+    }
+
+    public VersionNumber getSnapshot() {
+        return snapshot_;
     }
 
     public List<VersionNumber> getVersions() {
@@ -42,6 +50,14 @@ class Xml2MavenMetadata extends Xml2Data {
             case "latest" -> latest_ = VersionNumber.parse(characterData_.toString());
             case "release" -> release_ = VersionNumber.parse(characterData_.toString());
             case "version" -> versions_.add(VersionNumber.parse(characterData_.toString()));
+            case "timestamp" -> lastTimestamp_ = characterData_.toString();
+            case "buildNumber" -> lastBuildNumber_ = characterData_.toString();
+            case "snapshot" -> {
+                var version = versions_.get(0);
+                snapshot_ = new VersionNumber(version.major(), version.minor(), version.revision(), lastTimestamp_ + "-" + lastBuildNumber_);
+                lastTimestamp_ = null;
+                lastBuildNumber_ = null;
+            }
         }
 
         characterData_ = null;

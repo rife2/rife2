@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 class Xml2MavenPom extends Xml2Data {
-    private final Repository repository_;
+    private final List<Repository> repositories_;
     private Map<Scope, Set<PomDependency>> resolvedDependencies_ = null;
 
     private final Map<PomDependency, PomDependency> dependencyManagement_ = new LinkedHashMap<>();
@@ -24,7 +24,9 @@ class Xml2MavenPom extends Xml2Data {
     private boolean collectDependencyManagement_ = false;
     private boolean collectDependencies_ = false;
     private boolean collectExclusions_ = false;
+
     private StringBuilder characterData_ = null;
+
     private String lastGroupId_ = null;
     private String lastArtifactId_ = null;
     private String lastVersion_ = null;
@@ -35,8 +37,8 @@ class Xml2MavenPom extends Xml2Data {
     private String lastExclusionGroupId_ = null;
     private String lastExclusionArtifactId_ = null;
 
-    Xml2MavenPom(Repository repository) {
-        repository_ = repository;
+    Xml2MavenPom(List<Repository> repositories) {
+        repositories_ = repositories;
     }
 
     Set<PomDependency> getDependencies(Scope... scopes) {
@@ -148,7 +150,7 @@ class Xml2MavenPom extends Xml2Data {
             case "parent" -> {
                 if (isChildOfProject()) {
                     var parent_dependency = new Dependency(lastGroupId_, lastArtifactId_, VersionNumber.parse(lastVersion_));
-                    var parent = new DependencyResolver(repository_, parent_dependency).getMavenPom();
+                    var parent = new DependencyResolver(repositories_, parent_dependency).getMavenPom();
 
                     parent.properties_.keySet().removeAll(properties_.keySet());
                     properties_.putAll(parent.properties_);

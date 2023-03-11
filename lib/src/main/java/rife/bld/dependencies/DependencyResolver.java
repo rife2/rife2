@@ -7,6 +7,7 @@ package rife.bld.dependencies;
 import rife.bld.DependencySet;
 import rife.bld.dependencies.exceptions.*;
 import rife.tools.FileUtils;
+import rife.tools.StringUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.*;
@@ -14,22 +15,21 @@ import java.net.*;
 import java.nio.channels.Channels;
 import java.util.*;
 
-import static rife.bld.dependencies.Repository.MAVEN_CENTRAL;
-import static rife.bld.dependencies.Scope.compile;
-
 public class DependencyResolver {
     public static final String MAVEN_METADATA_XML = "maven-metadata.xml";
 
-    private final Repository repository_;
+    private final List<Repository> repositories_;
     private final Dependency dependency_;
-    private final String artifactUrl_;
 
     private Xml2MavenMetadata metadata_ = null;
+    private Xml2MavenMetadata snapshotMetadata_ = null;
 
-    public DependencyResolver(Repository repository, Dependency dependency) {
-        repository_ = repository;
+    public DependencyResolver(List<Repository> repositories, Dependency dependency) {
+        if (repositories == null) {
+            repositories = Collections.emptyList();
+        }
+        repositories_ = repositories;
         dependency_ = dependency;
-        artifactUrl_ = repository_.getArtifactUrl(dependency);
     }
 
     public boolean exists() {
@@ -63,7 +63,7 @@ public class DependencyResolver {
         return result;
     }
 
-    private Dependency convertPomDependency(PomDependency pomDependency) {
+    Dependency convertPomDependency(PomDependency pomDependency) {
         return new Dependency(
             pomDependency.groupId(),
             pomDependency.artifactId(),
@@ -80,7 +80,7 @@ public class DependencyResolver {
         return result;
     }
 
-    private void getTransitiveDependencies(DependencySet result, ArrayList<PomDependency> pomDependencies, Stack<Set<PomExclusion>> exclusions, Scope... scopes) {
+    void getTransitiveDependencies(DependencySet result, ArrayList<PomDependency> pomDependencies, Stack<Set<PomExclusion>> exclusions, Scope... scopes) {
         var next_dependencies = getMavenPom().getDependencies(scopes);
 
         pomDependencies.forEach(next_dependencies::remove);
@@ -115,7 +115,7 @@ public class DependencyResolver {
                 result.add(dependency);
 
                 exclusions.push(pom_dependency.exclusions());
-                new DependencyResolver(repository_, dependency).getTransitiveDependencies(result, pomDependencies, exclusions, scopes);
+                new DependencyResolver(repositories_, dependency).getTransitiveDependencies(result, pomDependencies, exclusions, scopes);
                 exclusions.pop();
             }
         }
@@ -133,75 +133,146 @@ public class DependencyResolver {
         return getMavenMetadata().getRelease();
     }
 
-    public String getMetadataUrl() {
-        return artifactUrl_ + MAVEN_METADATA_XML;
+    List<String> getArtifactUrls() {
+        return repositories_.stream().map(repository -> repository.getArtifactUrl(dependency_)).toList();
+    }
+
+    List<String> getMetadataUrls() {
+        return getArtifactUrls().stream().map(s -> s + MAVEN_METADATA_XML).toList();
     }
 
     Xml2MavenMetadata getMavenMetadata() {
         if (metadata_ == null) {
-            String metadata;
-            var url = getMetadataUrl();
+            var urls = getMetadataUrls();
+            metadata_ = parseMavenMetadata(urls);
+        }
+
+        return metadata_;
+    }
+
+    List<String> getSnapshotMetadataUrls() {
+        var version = resolveVersion();
+        return getArtifactUrls().stream().map(s -> s + version + "/" + MAVEN_METADATA_XML).toList();
+    }
+
+    Xml2MavenMetadata getSnapshotMavenMetadata() {
+        if (snapshotMetadata_ == null) {
+            var urls = getSnapshotMetadataUrls();
+            snapshotMetadata_ = parseMavenMetadata(urls);
+        }
+
+        return snapshotMetadata_;
+    }
+
+    Xml2MavenMetadata parseMavenMetadata(List<String> urls) {
+        String retrieved_url = null;
+        String metadata = null;
+        for (var url : urls) {
             try {
                 var content = FileUtils.readString(new URL(url));
                 if (content == null) {
                     throw new ArtifactNotFoundException(dependency_, url);
                 }
 
+                retrieved_url = url;
                 metadata = content;
-            } catch (IOException | FileUtilsErrorException e) {
+
+                break;
+            } catch (IOException e) {
+                throw new ArtifactRetrievalErrorException(dependency_, url, e);
+            } catch (FileUtilsErrorException e) {
+                if (e.getCause() instanceof FileNotFoundException) {
+                    continue;
+                }
                 throw new ArtifactRetrievalErrorException(dependency_, url, e);
             }
-
-            var xml = new Xml2MavenMetadata();
-            if (!xml.processXml(metadata)) {
-                throw new DependencyXmlParsingErrorException(dependency_, url, xml.getErrors());
-            }
-
-            metadata_ = xml;
         }
 
-        return metadata_;
-    }
-
-    public String getPomUrl() {
-        var version = resolveVersion();
-        return artifactUrl_ + version + "/" + dependency_.artifactId() + "-" + version + ".pom";
-    }
-
-    Xml2MavenPom getMavenPom() {
-        String pom;
-        var url = getPomUrl();
-        try {
-            var content = FileUtils.readString(new URL(url));
-            if (content == null) {
-                throw new ArtifactNotFoundException(dependency_, url);
-            }
-
-            pom = content;
-        } catch (IOException | FileUtilsErrorException e) {
-            throw new ArtifactRetrievalErrorException(dependency_, url, e);
+        if (metadata == null) {
+            throw new ArtifactNotFoundException(dependency_, StringUtils.join(urls, ", "));
         }
 
-        var xml = new Xml2MavenPom(repository_);
-        if (!xml.processXml(pom)) {
-            throw new DependencyXmlParsingErrorException(dependency_, url, xml.getErrors());
+        var xml = new Xml2MavenMetadata();
+        if (!xml.processXml(metadata)) {
+            throw new DependencyXmlParsingErrorException(dependency_, retrieved_url, xml.getErrors());
         }
 
         return xml;
     }
 
-    public String getDownloadUrl(VersionNumber version) {
-        var result = new StringBuilder(artifactUrl_);
-        result.append(version).append("/").append(dependency_.artifactId()).append("-").append(version);
-        if (!dependency_.classifier().isEmpty()) {
-            result.append("-").append(dependency_.classifier());
+    List<String> getPomUrls() {
+        final var version = resolveVersion();
+        final VersionNumber pom_version;
+        if (version.qualifier().equals("SNAPSHOT")) {
+            var metadata = getSnapshotMavenMetadata();
+            pom_version = metadata.getSnapshot();
+        } else {
+            pom_version = version;
         }
-        var type = dependency_.type();
-        if (type == null) {
-            type = "jar";
+
+        return getArtifactUrls().stream().map(s -> s + version + "/" + dependency_.artifactId() + "-" + pom_version + ".pom").toList();
+    }
+
+    Xml2MavenPom getMavenPom() {
+        String retrieved_url = null;
+        String pom = null;
+        var urls = getPomUrls();
+        for (var url : urls) {
+            try {
+                var content = FileUtils.readString(new URL(url));
+                if (content == null) {
+                    throw new ArtifactNotFoundException(dependency_, url);
+                }
+
+                retrieved_url = url;
+                pom = content;
+
+                break;
+            } catch (IOException e) {
+                throw new ArtifactRetrievalErrorException(dependency_, url, e);
+            } catch (FileUtilsErrorException e) {
+                if (e.getCause() instanceof FileNotFoundException) {
+                    continue;
+                }
+                throw new ArtifactRetrievalErrorException(dependency_, url, e);
+            }
         }
-        result.append(".").append(type);
-        return result.toString();
+
+        if (pom == null) {
+            throw new ArtifactNotFoundException(dependency_, StringUtils.join(urls, ", "));
+        }
+
+        var xml = new Xml2MavenPom(repositories_);
+        if (!xml.processXml(pom)) {
+            throw new DependencyXmlParsingErrorException(dependency_, retrieved_url, xml.getErrors());
+        }
+
+        return xml;
+    }
+
+    List<String> getDownloadUrls() {
+        final var version = resolveVersion();
+        final VersionNumber pom_version;
+        if (version.qualifier().equals("SNAPSHOT")) {
+            var metadata = getSnapshotMavenMetadata();
+            pom_version = metadata.getSnapshot();
+        } else {
+            pom_version = version;
+        }
+
+        return getArtifactUrls().stream().map(s -> {
+            var result = new StringBuilder(s);
+            result.append(version).append("/").append(dependency_.artifactId()).append("-").append(pom_version);
+            if (!dependency_.classifier().isEmpty()) {
+                result.append("-").append(dependency_.classifier());
+            }
+            var type = dependency_.type();
+            if (type == null) {
+                type = "jar";
+            }
+            result.append(".").append(type);
+            return result.toString();
+        }).toList();
     }
 
     public void downloadIntoFolder(File file)
@@ -211,26 +282,43 @@ public class DependencyResolver {
         if (!file.canWrite()) throw new IllegalArgumentException("file '" + file + "' can't be written to");
         if (!file.isDirectory()) throw new IllegalArgumentException("file '" + file + "' is not a directory");
 
-        var download_url = getDownloadUrl(resolveVersion());
-        var download_filename = download_url.substring(download_url.lastIndexOf("/") + 1);
-        var download_file = new File(file, download_filename);
-        try {
-            System.out.println("Downloading: " + download_url);
-            var url = new URL(download_url);
-            var readableByteChannel = Channels.newChannel(url.openStream());
-            try (var fileOutputStream = new FileOutputStream(download_file)) {
-                var fileChannel = fileOutputStream.getChannel();
-                fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+        String retrieved_url = null;
+        var urls = getDownloadUrls();
+        for (var download_url : urls) {
+            var download_filename = download_url.substring(download_url.lastIndexOf("/") + 1);
+            var download_file = new File(file, download_filename);
+            try {
+                System.out.print("Downloading : " + download_url + " ... ");
+                System.out.flush();
+                var url = new URL(download_url);
+                var readableByteChannel = Channels.newChannel(url.openStream());
+                try (var fileOutputStream = new FileOutputStream(download_file)) {
+                    var fileChannel = fileOutputStream.getChannel();
+                    fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+
+                    retrieved_url = download_url;
+                    System.out.print("done");
+                    break;
+                }
+            } catch (FileNotFoundException e) {
+                System.out.print("not found");
+                continue;
+            } catch (IOException e) {
+                throw new DependencyDownloadException(dependency_, download_url, download_file, e);
+            } finally {
+                System.out.println();
             }
-        } catch (IOException e) {
-            throw new DependencyDownloadException(dependency_, download_url, download_file, e);
+        }
+
+        if (retrieved_url == null) {
+            throw new ArtifactNotFoundException(dependency_, StringUtils.join(urls, ","));
         }
     }
 
     public void downloadTransitivelyIntoFolder(File file, Scope... scopes) {
         downloadIntoFolder(file);
         for (var dep : getTransitiveDependencies(scopes)) {
-            new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(file);
+            new DependencyResolver(repositories_, dep).downloadIntoFolder(file);
         }
     }
 }

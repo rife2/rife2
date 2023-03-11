@@ -7,11 +7,15 @@ package rife.bld.dependencies;
 import rife.Version;
 import rife.bld.DependencyScopes;
 
+import java.util.List;
+
 import static rife.bld.Project.*;
+import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.*;
 
 public final class NewProjectInfo {
     public static final DependencyScopes DEPENDENCIES = new DependencyScopes();
+    public static final List<Repository> REPOSITORIES = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
 
     static {
         DEPENDENCIES.scope(compile)

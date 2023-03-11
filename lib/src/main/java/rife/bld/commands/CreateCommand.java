@@ -258,15 +258,15 @@ public class CreateCommand implements CliCommand {
 
     private void downloadDependencies() {
         for (var dependency : NewProjectInfo.DEPENDENCIES.get(Scope.compile)) {
-            new DependencyResolver(Repository.MAVEN_CENTRAL, dependency)
+            new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
                 .downloadTransitivelyIntoFolder(libCompileDir_, Scope.compile);
         }
         for (var dependency : NewProjectInfo.DEPENDENCIES.get(Scope.test)) {
-            new DependencyResolver(Repository.MAVEN_CENTRAL, dependency)
+            new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
                 .downloadTransitivelyIntoFolder(libTestDir_, Scope.compile, Scope.runtime);
         }
         for (var dependency : NewProjectInfo.DEPENDENCIES.get(Scope.standalone)) {
-            new DependencyResolver(Repository.MAVEN_CENTRAL, dependency)
+            new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
                 .downloadTransitivelyIntoFolder(libStandaloneDir_, Scope.compile, Scope.runtime);
         }
     }

@@ -1,9 +1,11 @@
 import rife.bld.Project;
 
+import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.*;
 
 public class Build extends Project {
     public void setup() {
+        repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
         pkg = "{{v package/}}";
         name = "{{v project/}}";
         version = version(0,1,0);

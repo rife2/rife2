@@ -2,6 +2,7 @@ package rife.bld.dependencies;
 
 public record Repository(String url) {
     public static final Repository MAVEN_CENTRAL = new Repository("https://repo1.maven.org/maven2/");
+    public static final Repository SONATYPE_SNAPSHOTS = new Repository("https://s01.oss.sonatype.org/content/repositories/snapshots/");
 
     public String getArtifactUrl(Dependency dependency) {
         var group_path = dependency.groupId().replace(".", "/");
