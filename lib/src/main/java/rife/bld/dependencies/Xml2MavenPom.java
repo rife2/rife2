@@ -110,8 +110,16 @@ class Xml2MavenPom extends Xml2Data {
 
         switch (qName) {
             case "parent" -> resetState();
-            case "properties" -> collectProperties_ = true;
-            case "dependencyManagement" -> collectDependencyManagement_ = true;
+            case "properties" -> {
+                if (isChildOfProject()) {
+                    collectProperties_ = true;
+                }
+            }
+            case "dependencyManagement" -> {
+                if (isChildOfProject()) {
+                    collectDependencyManagement_ = true;
+                }
+            }
             case "dependencies" -> {
                 if (isChildOfProject()) {
                     resetState();
@@ -137,26 +145,26 @@ class Xml2MavenPom extends Xml2Data {
 
         switch (qName) {
             case "parent" -> {
-                var parent_dependency = new Dependency(lastGroupId_, lastArtifactId_, VersionNumber.parse(lastVersion_));
-                var parent = new DependencyResolver(repository_, parent_dependency).getMavenPom();
+                if (isChildOfProject()) {
+                    var parent_dependency = new Dependency(lastGroupId_, lastArtifactId_, VersionNumber.parse(lastVersion_));
+                    var parent = new DependencyResolver(repository_, parent_dependency).getMavenPom();
 
-                parent.properties_.keySet().removeAll(properties_.keySet());
-                properties_.putAll(parent.properties_);
+                    parent.properties_.keySet().removeAll(properties_.keySet());
+                    properties_.putAll(parent.properties_);
 
-                parent.dependencyManagement_.keySet().removeAll(dependencyManagement_.keySet());
-                dependencyManagement_.putAll(parent.dependencyManagement_);
+                    parent.dependencyManagement_.keySet().removeAll(dependencyManagement_.keySet());
+                    dependencyManagement_.putAll(parent.dependencyManagement_);
 
-                parent.dependencies_.removeAll(dependencies_);
-                dependencies_.addAll(parent.dependencies_);
+                    parent.dependencies_.removeAll(dependencies_);
+                    dependencies_.addAll(parent.dependencies_);
 
-                resetState();
+                    resetState();
+                }
             }
             case "properties" -> collectProperties_ = false;
             case "dependencyManagement" -> collectDependencyManagement_ = false;
             case "dependencies" -> collectDependencies_ = false;
-            case "exclusions" -> {
-                collectExclusions_ = false;
-            }
+            case "exclusions" -> collectExclusions_ = false;
             case "exclusion" -> {
                 if (collectExclusions_) {
                     exclusions_.add(new PomExclusion(lastExclusionGroupId_, lastExclusionArtifactId_));
@@ -252,6 +260,10 @@ class Xml2MavenPom extends Xml2Data {
     }
 
     private String getCharacterData() {
+        if (characterData_ == null) {
+            return null;
+        }
+
         var result = characterData_.toString().trim();
         if (result.isEmpty()) {
             return null;
