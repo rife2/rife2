@@ -14,6 +14,9 @@ import java.net.*;
 import java.nio.channels.Channels;
 import java.util.*;
 
+import static rife.bld.dependencies.Repository.MAVEN_CENTRAL;
+import static rife.bld.dependencies.Scope.compile;
+
 public class DependencyResolver {
     public static final String MAVEN_METADATA_XML = "maven-metadata.xml";
 
@@ -221,6 +224,13 @@ public class DependencyResolver {
             }
         } catch (IOException e) {
             throw new DependencyDownloadException(dependency_, download_url, download_file, e);
+        }
+    }
+
+    public void downloadTransitivelyIntoFolder(File file, Scope... scopes) {
+        downloadIntoFolder(file);
+        for (var dep : getTransitiveDependencies(scopes)) {
+            new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(file);
         }
     }
 }

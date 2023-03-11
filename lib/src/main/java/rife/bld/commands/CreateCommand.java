@@ -6,9 +6,10 @@ package rife.bld.commands;
 
 import rife.bld.CliCommand;
 import rife.bld.commands.exceptions.CommandCreationException;
-import rife.bld.dependencies.NewProjectInfo;
+import rife.bld.dependencies.*;
 import rife.template.TemplateFactory;
 import rife.tools.*;
+import rife.tools.exceptions.FileUtilsErrorException;
 import rife.validation.ValidityChecks;
 
 import java.io.File;
@@ -20,6 +21,28 @@ public class CreateCommand implements CliCommand {
 
     private final String packageName_;
     private final String projectName_;
+
+    private String projectClassName_;
+    private String projectSiteName_;
+    private String projectTestName_;
+
+    private File projectDir_;
+    private File srcMainJavaDir_;
+    private File srcMainResourcesTemplatesDir_;
+    private File srcMainWebappCssDir_;
+    private File srcTestJavaDir_;
+    private File libDir_;
+    private File libCompileDir_;
+    private File libStandaloneDir_;
+    private File libRuntimeDir_;
+    private File libTestDir_;
+    private File libProjectDir_;
+    private File projectProjectDir_;
+    private File ideaDir_;
+    private File ideaLibrariesDir_;
+    private File ideaRunConfigurationsDir_;
+    private File javaPackageDir_;
+    private File testPackageDir_;
 
     public static CreateCommand from(List<String> arguments) {
         if (arguments.size() != 2) {
@@ -50,6 +73,47 @@ public class CreateCommand implements CliCommand {
         if (!ValidityChecks.checkJavaIdentifier(projectName_)) {
             throw new CommandCreationException(NAME, "ERROR: The project name is invalid.");
         }
+
+        // standard names
+        projectClassName_ = StringUtils.capitalize(projectName_);
+        projectSiteName_ = projectClassName_ + "Site";
+        projectTestName_ = projectClassName_ + "Test";
+
+        // create the main project structure
+        projectDir_ =
+            Path.of(projectName_).toFile();
+        srcMainJavaDir_ =
+            Path.of(projectName_, "src", "main", "java").toFile();
+        srcMainResourcesTemplatesDir_ =
+            Path.of(projectName_, "src", "main", "resources", "templates").toFile();
+        srcMainWebappCssDir_ =
+            Path.of(projectName_, "src", "main", "webapp", "css").toFile();
+        srcTestJavaDir_ =
+            Path.of(projectName_, "src", "test", "java").toFile();
+        libDir_ =
+            Path.of(projectName_, "lib").toFile();
+        libCompileDir_ =
+            Path.of(projectName_, "lib", "compile").toFile();
+        libStandaloneDir_ =
+            Path.of(projectName_, "lib", "standalone").toFile();
+        libRuntimeDir_ =
+            Path.of(projectName_, "lib", "runtime").toFile();
+        libTestDir_ =
+            Path.of(projectName_, "lib", "test").toFile();
+        libProjectDir_ =
+            Path.of(projectName_, "lib", "project").toFile();
+        projectProjectDir_ =
+            Path.of(projectName_, "project").toFile();
+        ideaDir_ =
+            Path.of(projectName_, ".idea").toFile();
+        ideaLibrariesDir_ =
+            Path.of(projectName_, ".idea", "libraries").toFile();
+        ideaRunConfigurationsDir_ =
+            Path.of(projectName_, ".idea", "runConfigurations").toFile();
+
+        var package_dir = packageName_.replace('.', File.separatorChar);
+        javaPackageDir_ = new File(srcMainJavaDir_, package_dir);
+        testPackageDir_ = new File(srcTestJavaDir_, package_dir);
     }
 
     public boolean execute()
@@ -58,102 +122,73 @@ public class CreateCommand implements CliCommand {
             return false;
         }
 
-        // create the main project directories
-        var project_dir =
-            Path.of(projectName_).toFile();
-        var src_main_java_dir =
-            Path.of(projectName_, "src", "main", "java").toFile();
-        var src_main_resources_templates_dir =
-            Path.of(projectName_, "src", "main", "resources", "templates").toFile();
-        var src_main_webapp_css_dir =
-            Path.of(projectName_, "src", "main", "webapp", "css").toFile();
-        var src_test_java_dir =
-            Path.of(projectName_, "src", "test", "java").toFile();
-        var lib_dir =
-            Path.of(projectName_, "lib").toFile();
-        var lib_compile_dir =
-            Path.of(projectName_, "lib", "compile").toFile();
-        var lib_standalone_dir =
-            Path.of(projectName_, "lib", "standalone").toFile();
-        var lib_runtime_dir =
-            Path.of(projectName_, "lib", "runtime").toFile();
-        var lib_test_dir =
-            Path.of(projectName_, "lib", "test").toFile();
-        var lib_project_dir =
-            Path.of(projectName_, "lib", "project").toFile();
-        var project_project_dir =
-            Path.of(projectName_, "project").toFile();
-        var idea_dir =
-            Path.of(projectName_, ".idea").toFile();
-        var idea_libraries_dir =
-            Path.of(projectName_, ".idea", "libraries").toFile();
-        var idea_run_configurations_dir =
-            Path.of(projectName_, ".idea", "runConfigurations").toFile();
+        createProjectStructure();
+        populateProjectStructure();
+        populateIdeaProject();
+        downloadDependencies();
 
-        project_dir.mkdirs();
-        src_main_java_dir.mkdirs();
-        src_main_resources_templates_dir.mkdirs();
-        src_main_webapp_css_dir.mkdirs();
-        src_test_java_dir.mkdirs();
-        lib_dir.mkdirs();
-        lib_compile_dir.mkdirs();
-        lib_standalone_dir.mkdirs();
-        lib_runtime_dir.mkdirs();
-        lib_test_dir.mkdirs();
-        lib_project_dir.mkdirs();
-        project_project_dir.mkdirs();
-        idea_dir.mkdirs();
-        idea_libraries_dir.mkdirs();
-        idea_run_configurations_dir.mkdirs();
+        return true;
+    }
 
-        // create directories for the java package
-        var package_dir = packageName_.replace('.', File.separatorChar);
-        var java_package_dir = new File(src_main_java_dir, package_dir);
-        var test_package_dir = new File(src_test_java_dir, package_dir);
-        java_package_dir.mkdirs();
-        test_package_dir.mkdirs();
+    private void createProjectStructure()
+    throws FileUtilsErrorException {
+        projectDir_.mkdirs();
+        srcMainJavaDir_.mkdirs();
+        srcMainResourcesTemplatesDir_.mkdirs();
+        srcMainWebappCssDir_.mkdirs();
+        srcTestJavaDir_.mkdirs();
+        libDir_.mkdirs();
+        libCompileDir_.mkdirs();
+        libStandaloneDir_.mkdirs();
+        libRuntimeDir_.mkdirs();
+        libTestDir_.mkdirs();
+        libProjectDir_.mkdirs();
+        projectProjectDir_.mkdirs();
+        ideaDir_.mkdirs();
+        ideaLibrariesDir_.mkdirs();
+        ideaRunConfigurationsDir_.mkdirs();
+        javaPackageDir_.mkdirs();
+        testPackageDir_.mkdirs();
+    }
 
+    private void populateProjectStructure()
+    throws FileUtilsErrorException {
         // project gitignore
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.project_gitignore").getContent(),
-            new File(project_dir, ".gitignore"));
-
-        // create files in directories
-        var project_class_name = StringUtils.capitalize(projectName_);
+            new File(projectDir_, ".gitignore"));
 
         // project site
         var site_template = TemplateFactory.TXT.get("bld.project_site");
-        var project_site_name = project_class_name + "Site";
         site_template.setValue("package", packageName_);
-        site_template.setValue("projectSite", project_site_name);
-        var project_site_file = new File(java_package_dir, project_site_name + ".java");
+        site_template.setValue("projectSite", projectSiteName_);
+        var project_site_file = new File(javaPackageDir_, projectSiteName_ + ".java");
         FileUtils.writeString(site_template.getContent(), project_site_file);
 
         // project template
         var template_template = TemplateFactory.HTML.get("bld.project_template");
-        template_template.setValue("project", project_class_name);
-        var project_template_file = new File(src_main_resources_templates_dir, "hello.html");
+        template_template.setValue("project", projectClassName_);
+        var project_template_file = new File(srcMainResourcesTemplatesDir_, "hello.html");
         FileUtils.writeString(template_template.getContent(), project_template_file);
 
         // project css
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.project_style").getContent(),
-            new File(src_main_webapp_css_dir, "style.css"));
+            new File(srcMainWebappCssDir_, "style.css"));
 
         // project test
         var test_template = TemplateFactory.TXT.get("bld.project_test");
-        var project_test_name = project_class_name + "Test";
         test_template.setValue("package", packageName_);
-        test_template.setValue("projectTest", project_test_name);
-        test_template.setValue("projectSite", project_site_name);
-        test_template.setValue("project", project_class_name);
-        var project_test_file = new File(test_package_dir, project_test_name + ".java");
+        test_template.setValue("projectTest", projectTestName_);
+        test_template.setValue("projectSite", projectSiteName_);
+        test_template.setValue("project", projectClassName_);
+        var project_test_file = new File(testPackageDir_, projectTestName_ + ".java");
         FileUtils.writeString(test_template.getContent(), project_test_file);
 
         // project build
         var build_template = TemplateFactory.TXT.get("bld.project_build");
         build_template.setValue("package", packageName_);
-        build_template.setValue("project", project_class_name);
+        build_template.setValue("project", projectClassName_);
         for (var entry : NewProjectInfo.DEPENDENCIES.entrySet()) {
             build_template.blankValue("dependencies");
 
@@ -171,53 +206,69 @@ public class CreateCommand implements CliCommand {
             build_template.setValue("name", entry.getKey().name());
             build_template.appendBlock("scopes", "scope");
         }
-        var project_build_file = new File(project_project_dir, "Build.java");
+        var project_build_file = new File(projectProjectDir_, "Build.java");
         FileUtils.writeString(build_template.getContent(), project_build_file);
+    }
 
+    private void populateIdeaProject()
+    throws FileUtilsErrorException {
         // IDEA project files
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.idea.app_iml").getContent(),
-            new File(idea_dir, "app.iml"));
+            new File(ideaDir_, "app.iml"));
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.idea.misc_xml").getContent(),
-            new File(idea_dir, "misc.xml"));
+            new File(ideaDir_, "misc.xml"));
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.idea.modules_xml").getContent(),
-            new File(idea_dir, "modules.xml"));
+            new File(ideaDir_, "modules.xml"));
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.idea.project_iml").getContent(),
-            new File(idea_dir, "project.iml"));
+            new File(ideaDir_, "project.iml"));
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.idea.libraries.compile_xml").getContent(),
-            new File(idea_libraries_dir, "compile.xml"));
+            new File(ideaLibrariesDir_, "compile.xml"));
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.idea.libraries.project_xml").getContent(),
-            new File(idea_libraries_dir, "project.xml"));
+            new File(ideaLibrariesDir_, "project.xml"));
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.idea.libraries.runtime_xml").getContent(),
-            new File(idea_libraries_dir, "runtime.xml"));
+            new File(ideaLibrariesDir_, "runtime.xml"));
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.idea.libraries.standalone_xml").getContent(),
-            new File(idea_libraries_dir, "standalone.xml"));
+            new File(ideaLibrariesDir_, "standalone.xml"));
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.idea.libraries.test_xml").getContent(),
-            new File(idea_libraries_dir, "test.xml"));
+            new File(ideaLibrariesDir_, "test.xml"));
 
         // IDEA run site
         var run_site_template = TemplateFactory.TXT.get("bld.idea.runConfigurations.Run_Site_xml");
         run_site_template.setValue("package", packageName_);
-        run_site_template.setValue("projectSite", project_site_name);
-        var run_site_file = new File(idea_run_configurations_dir, "Run Site.xml");
+        run_site_template.setValue("projectSite", projectSiteName_);
+        var run_site_file = new File(ideaRunConfigurationsDir_, "Run Site.xml");
         FileUtils.writeString(run_site_template.getContent(), run_site_file);
 
         // IDEA run tests
         var run_tests_template = TemplateFactory.TXT.get("bld.idea.runConfigurations.Run_Tests_xml");
         run_tests_template.setValue("package", packageName_);
-        run_tests_template.setValue("projectTest", project_test_name);
-        var run_tests_file = new File(idea_run_configurations_dir, "Run Tests.xml");
+        run_tests_template.setValue("projectTest", projectTestName_);
+        var run_tests_file = new File(ideaRunConfigurationsDir_, "Run Tests.xml");
         FileUtils.writeString(run_tests_template.getContent(), run_tests_file);
+    }
 
-        return true;
+    private void downloadDependencies() {
+        for (var dependency : NewProjectInfo.DEPENDENCIES.get(Scope.compile)) {
+            new DependencyResolver(Repository.MAVEN_CENTRAL, dependency)
+                .downloadTransitivelyIntoFolder(libCompileDir_, Scope.compile);
+        }
+        for (var dependency : NewProjectInfo.DEPENDENCIES.get(Scope.test)) {
+            new DependencyResolver(Repository.MAVEN_CENTRAL, dependency)
+                .downloadTransitivelyIntoFolder(libTestDir_, Scope.compile, Scope.runtime);
+        }
+        for (var dependency : NewProjectInfo.DEPENDENCIES.get(Scope.standalone)) {
+            new DependencyResolver(Repository.MAVEN_CENTRAL, dependency)
+                .downloadTransitivelyIntoFolder(libStandaloneDir_, Scope.compile, Scope.runtime);
+        }
     }
 
     public String getHelp() {

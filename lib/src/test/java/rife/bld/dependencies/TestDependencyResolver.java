@@ -485,7 +485,8 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2"));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadIntoFolder(tmp);
+            resolver.downloadTransitivelyIntoFolder(tmp, compile);
+
             var files = FileUtils.getFileList(tmp);
             assertEquals(1, files.size());
             assertTrue(files.contains("rife2-1.4.0.jar"));
@@ -500,10 +501,7 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadIntoFolder(tmp);
-            for (var dep : resolver.getTransitiveDependencies(compile)) {
-                new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
-            }
+            resolver.downloadTransitivelyIntoFolder(tmp, compile);
             var files = FileUtils.getFileList(tmp);
             assertEquals(6, files.size());
             Collections.sort(files);
@@ -525,10 +523,8 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.junit.jupiter", "junit-jupiter", new VersionNumber(5, 9, 2)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadIntoFolder(tmp);
-            for (var dep : resolver.getTransitiveDependencies(compile, runtime)) {
-                new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
-            }
+            resolver.downloadTransitivelyIntoFolder(tmp, compile, runtime);
+
             var files = FileUtils.getFileList(tmp);
             assertEquals(8, files.size());
             Collections.sort(files);
@@ -552,10 +548,8 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.springframework.boot", "spring-boot-starter", new VersionNumber(3, 0, 4)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadIntoFolder(tmp);
-            for (var dep : resolver.getTransitiveDependencies(compile)) {
-                new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
-            }
+            resolver.downloadTransitivelyIntoFolder(tmp, compile);
+
             var files = FileUtils.getFileList(tmp);
             assertEquals(18, files.size());
             Collections.sort(files);
@@ -589,10 +583,8 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.apache.maven", "maven-core", new VersionNumber(3, 9, 0)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadIntoFolder(tmp);
-            for (var dep : resolver.getTransitiveDependencies(compile)) {
-                new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
-            }
+            resolver.downloadTransitivelyIntoFolder(tmp, compile);
+
             var files = FileUtils.getFileList(tmp);
             assertEquals(32, files.size());
             Collections.sort(files);
@@ -640,10 +632,8 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.typesafe.play", "play_2.13", new VersionNumber(2, 8, 19)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadIntoFolder(tmp);
-            for (var dep : resolver.getTransitiveDependencies(compile)) {
-                new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
-            }
+            resolver.downloadTransitivelyIntoFolder(tmp, compile);
+
             var files = FileUtils.getFileList(tmp);
             assertEquals(48, files.size());
             Collections.sort(files);
@@ -707,10 +697,8 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.vaadin", "vaadin", new VersionNumber(23, 3, 7)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadIntoFolder(tmp);
-            for (var dep : resolver.getTransitiveDependencies(compile)) {
-                new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
-            }
+            resolver.downloadTransitivelyIntoFolder(tmp, compile);
+
             var files = FileUtils.getFileList(tmp);
             assertEquals(88, files.size());
             Collections.sort(files);

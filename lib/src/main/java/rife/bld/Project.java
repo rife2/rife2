@@ -6,8 +6,6 @@ package rife.bld;
 
 import rife.bld.dependencies.*;
 
-import java.util.HashMap;
-
 public abstract class Project extends Cli {
     public String name = null;
     public String pkg = null;
