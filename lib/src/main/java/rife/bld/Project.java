@@ -7,14 +7,13 @@ package rife.bld;
 import rife.bld.dependencies.*;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public abstract class Project extends Cli {
     public String name = null;
     public String pkg = null;
     public VersionNumber version = null;
 
-    public final Map<Scope, DependencySet> dependencies_ = new HashMap<>();
+    public final DependencyScopes dependencies_ = new DependencyScopes();
 
     public abstract void setup();
 
@@ -39,7 +38,7 @@ public abstract class Project extends Cli {
     }
 
     public DependencySet scope(Scope scope) {
-        return dependencies_.computeIfAbsent(scope, k -> new DependencySet());
+        return dependencies_.scope(scope);
     }
 
     public static Dependency dependency(String groupId, String artifactId) {

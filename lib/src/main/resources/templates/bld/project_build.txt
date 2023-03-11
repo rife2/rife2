@@ -8,16 +8,9 @@ public class Build extends Project {
         name = "{{v project/}}";
         version = version(0,1,0);
 
-        scope(compile)
-            .include(dependency("com.uwyn.rife2", "rife2", version({{v rifeVersion/}})));
-        scope(test)
-            .include(dependency("org.jsoup", "jsoup", version(1,15,4)))
-            .include(dependency("org.junit.jupiter", "junit-jupiter", version(5,9,2)));
-        scope(standalone)
-            .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,14)))
-            .include(dependency("org.eclipse.jetty", "jetty-servlet", version(11,0,14)))
-            .include(dependency("org.slf4j", "slf4j-simple", version(2,0,6)));
-    }
+{{v scopes}}{{/v}}{{b scope}}        scope({{v name/}}){{v dependencies}}{{/v}};
+{{b dependency}}
+            .include(dependency("{{v groupId/}}", "{{v artifactId/}}", version({{v version/}}))){{/b}}{{/b}}    }
 
     public static void main(String[] args) {
         new Build().start(args);

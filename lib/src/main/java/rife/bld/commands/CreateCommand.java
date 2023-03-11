@@ -4,9 +4,9 @@
  */
 package rife.bld.commands;
 
-import rife.Version;
 import rife.bld.CliCommand;
 import rife.bld.commands.exceptions.CommandCreationException;
+import rife.bld.dependencies.NewProjectInfo;
 import rife.template.TemplateFactory;
 import rife.tools.*;
 import rife.validation.ValidityChecks;
@@ -17,10 +17,10 @@ import java.util.*;
 
 public class CreateCommand implements CliCommand {
     public static final String NAME = "create";
-    
+
     private final String packageName_;
     private final String projectName_;
-    
+
     public static CreateCommand from(List<String> arguments) {
         if (arguments.size() != 2) {
             throw new CommandCreationException(NAME, "ERROR: Expecting the package and project names as the arguments.");
@@ -154,12 +154,23 @@ public class CreateCommand implements CliCommand {
         var build_template = TemplateFactory.TXT.get("bld.project_build");
         build_template.setValue("package", packageName_);
         build_template.setValue("project", project_class_name);
-        var rife_version = Version.getVersionNumber();
-        var rife_version_string = rife_version.major() + "," + rife_version.minor() + "," + rife_version.revision();
-        if (!rife_version.qualifier().isEmpty()) {
-            rife_version_string += ",\"" + rife_version.qualifier() + "\"";
+        for (var entry : NewProjectInfo.DEPENDENCIES.entrySet()) {
+            build_template.blankValue("dependencies");
+
+            for (var dependency : entry.getValue()) {
+                build_template.setValue("groupId", dependency.groupId());
+                build_template.setValue("artifactId", dependency.artifactId());
+                var version = dependency.version();
+                var version_string = version.major() + "," + version.minor() + "," + version.revision();
+                if (!version.qualifier().isEmpty()) {
+                    version_string += ",\"" + version.qualifier() + "\"";
+                }
+                build_template.setValue("version", version_string);
+                build_template.appendBlock("dependencies", "dependency");
+            }
+            build_template.setValue("name", entry.getKey().name());
+            build_template.appendBlock("scopes", "scope");
         }
-        build_template.setValue("rifeVersion", rife_version_string);
         var project_build_file = new File(project_project_dir, "Build.java");
         FileUtils.writeString(build_template.getContent(), project_build_file);
 
