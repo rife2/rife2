@@ -12,8 +12,7 @@ import rife.tools.exceptions.FileUtilsErrorException;
 import java.io.*;
 import java.net.*;
 import java.nio.channels.Channels;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class DependencyResolver {
     public static final String MAVEN_METADATA_XML = "maven-metadata.xml";
@@ -53,29 +52,70 @@ public class DependencyResolver {
     }
 
     public DependencySet getDependencies(Scope scope) {
-        return getMavenPom().getDependencies(scope);
+        var pom_dependencies = getMavenPom().getDependencies(scope);
+        var result = new DependencySet();
+        for (var dependency : pom_dependencies) {
+            result.add(convertPomDependency(dependency));
+        }
+        return result;
+    }
+
+    private Dependency convertPomDependency(PomDependency pomDependency) {
+        return new Dependency(
+            pomDependency.groupId(),
+            pomDependency.artifactId(),
+            VersionNumber.parse(pomDependency.version()),
+            pomDependency.classifier(),
+            pomDependency.type());
     }
 
     public DependencySet getTransitiveDependencies(Scope scope) {
         var result = new DependencySet();
+        var pom_dependencies = new ArrayList<>(getMavenPom().getDependencies(scope));
+        var exclusions = new Stack<Set<PomExclusion>>();
+        getTransitiveDependencies(scope, result, pom_dependencies, exclusions);
+        return result;
+    }
 
-        var dependencies = new ArrayList<>(getDependencies(scope));
-        while (!dependencies.isEmpty()) {
-            var it = dependencies.iterator();
-            var dependency = it.next();
+    private void getTransitiveDependencies(Scope scope, DependencySet result, ArrayList<PomDependency> pomDependencies, Stack<Set<PomExclusion>> exclusions) {
+        var next_dependencies = getMavenPom().getDependencies(scope);
+
+        pomDependencies.forEach(next_dependencies::remove);
+
+        var next_it = next_dependencies.iterator();
+        NextIterator:
+        while (next_it.hasNext()) {
+            var next_dependency = next_it.next();
+            for (var exclusionset : exclusions) {
+                if (exclusionset != null) {
+                    for (var exclusion : exclusionset) {
+                        if ((exclusion.groupId().equals("*") && exclusion.artifactId().equals("*")) ||
+                            (exclusion.groupId().equals("*") && exclusion.artifactId().equals(next_dependency.artifactId())) ||
+                            (exclusion.groupId().equals(next_dependency.groupId()) && exclusion.artifactId().equals("*")) ||
+                            (exclusion.groupId().equals(next_dependency.groupId()) && exclusion.artifactId().equals(next_dependency.artifactId()))) {
+                            next_it.remove();
+                            continue NextIterator;
+                        }
+                    }
+                }
+            }
+        }
+        pomDependencies.addAll(0, next_dependencies);
+
+        while (!pomDependencies.isEmpty()) {
+            var it = pomDependencies.iterator();
+            var pom_dependency = it.next();
             it.remove();
 
-            // TODO : support exclusions
+            var dependency = convertPomDependency(pom_dependency);
             if (!result.contains(dependency)) {
                 result.add(dependency);
 
-                var next_dependencies = new DependencyResolver(repository_, dependency).getDependencies(scope);
-                dependencies.forEach(next_dependencies::remove);
-                dependencies.addAll(0, next_dependencies);
+                exclusions.push(pom_dependency.exclusions());
+                new DependencyResolver(repository_, dependency).getTransitiveDependencies(scope, result, pomDependencies, exclusions);
+                exclusions.pop();
             }
         }
-
-        return result;
     }
 
     public String getDownloadUrl(VersionNumber version) {
@@ -84,7 +124,11 @@ public class DependencyResolver {
         if (!dependency_.classifier().isEmpty()) {
             result.append("-").append(dependency_.classifier());
         }
-        result.append(".").append(dependency_.type());
+        var type = dependency_.type();
+        if (type == null) {
+            type = "jar";
+        }
+        result.append(".").append(type);
         return result.toString();
     }
 
@@ -99,6 +143,7 @@ public class DependencyResolver {
         var download_filename = download_url.substring(download_url.lastIndexOf("/") + 1);
         var download_file = new File(file, download_filename);
         try {
+            System.out.println("Downloading: " + download_url);
             var url = new URL(download_url);
             var readableByteChannel = Channels.newChannel(url.openStream());
             try (var fileOutputStream = new FileOutputStream(download_file)) {

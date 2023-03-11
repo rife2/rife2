@@ -5,47 +5,25 @@
 package rife.bld.dependencies;
 
 import org.xml.sax.Attributes;
-import rife.bld.DependencySet;
 import rife.xml.Xml2Data;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class Xml2MavenPom extends Xml2Data {
-    record PomDependency(String groupId, String artifactId, String version, String type, String classifier, String scope, String optional) {
-        PomDependency(String groupId, String artifactId, String version, String type, String classifier, String scope, String optional) {
-            this.groupId = groupId;
-            this.artifactId = artifactId;
-            this.version = version;
-            this.type = (type == null || type.isEmpty() ? "jar" : type);
-            this.classifier = (classifier == null ? "" : classifier);
-            this.scope = (scope == null || scope.isEmpty() ? "compile" : scope);
-            this.optional = (optional == null ? "" : optional);
-        }
-
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            PomDependency that = (PomDependency) o;
-            return groupId.equals(that.groupId) && artifactId.equals(that.artifactId) && classifier.equals(that.classifier) && type.equals(that.type);
-        }
-
-        public int hashCode() {
-            return Objects.hash(groupId, artifactId, classifier, type);
-        }
-    }
-
+class Xml2MavenPom extends Xml2Data {
     private final Repository repository_;
-    private Map<Scope, DependencySet> resolvedDependencies_ = null;
+    private Map<Scope, Set<PomDependency>> resolvedDependencies_ = null;
 
     private final Map<PomDependency, PomDependency> dependencyManagement_ = new LinkedHashMap<>();
-    private final Map<Scope, Set<PomDependency>> dependencies_ = new HashMap<>();
+    private final Set<PomDependency> dependencies_ = new LinkedHashSet<>();
     private final Map<String, String> properties_ = new HashMap<>();
     private final Stack<String> elementStack_ = new Stack<>();
+    private Set<PomExclusion> exclusions_ = null;
 
     private boolean collectProperties_ = false;
     private boolean collectDependencyManagement_ = false;
     private boolean collectDependencies_ = false;
+    private boolean collectExclusions_ = false;
     private StringBuilder characterData_ = null;
     private String lastGroupId_ = null;
     private String lastArtifactId_ = null;
@@ -54,47 +32,65 @@ public class Xml2MavenPom extends Xml2Data {
     private String lastClassifier_ = null;
     private String lastScope_ = null;
     private String lastOptional_ = null;
+    private String lastExclusionGroupId_ = null;
+    private String lastExclusionArtifactId_ = null;
 
-    public Xml2MavenPom(Repository repository) {
+    Xml2MavenPom(Repository repository) {
         repository_ = repository;
     }
 
-    public DependencySet getDependencies(Scope scope) {
+    Set<PomDependency> getDependencies(Scope scope) {
         if (scope == null) {
-            return new DependencySet();
+            return Collections.emptySet();
         }
 
         if (resolvedDependencies_ == null) {
-            var resolved_dependencies = new HashMap<Scope, DependencySet>();
+            var resolved_dependencies = new HashMap<Scope, Set<PomDependency>>();
 
-            var resolved_dependency_set = resolved_dependencies.computeIfAbsent(scope, k -> new DependencySet());
-            var dependencies = dependencies_.get(scope);
-            if (dependencies != null && !dependencies.isEmpty()) {
-                for (var dependency : dependencies) {
-
+            var resolved_dependency_set = resolved_dependencies.computeIfAbsent(scope, k -> new LinkedHashSet<>());
+            if (!dependencies_.isEmpty()) {
+                for (var dependency : dependencies_) {
                     var managed_dependency = dependencyManagement_.get(dependency);
-                    var version = dependency.version;
-                    var optional = dependency.optional;
+                    var version = dependency.version();
+                    var dep_scope = dependency.scope();
+                    var optional = dependency.optional();
+                    var exclusions = dependency.exclusions();
                     if (managed_dependency != null) {
-                        if (version == null || version.isEmpty()) {
-                            version = managed_dependency.version;
+                        if (version == null) {
+                            version = managed_dependency.version();
                         }
-                        if (optional == null || optional.isEmpty()) {
-                            optional = managed_dependency.optional;
+                        if (dep_scope == null) {
+                            dep_scope = managed_dependency.scope();
+                        }
+                        if (optional == null) {
+                            optional = managed_dependency.optional();
+                        }
+                        if (exclusions == null) {
+                            exclusions = managed_dependency.exclusions();
                         }
                     }
+                    if (dep_scope == null) {
+                        dep_scope = "compile";
+                    }
                     optional = resolveProperties(optional);
-                    if (optional.equals("true")) {
+                    if ("true".equals(optional)) {
                         continue;
                     }
 
-                    var resolved_dependency = new Dependency(
-                        resolveProperties(dependency.groupId),
-                        resolveProperties(dependency.artifactId),
-                        VersionNumber.parse(resolveProperties(version)),
-                        resolveProperties(dependency.classifier),
-                        resolveProperties(dependency.type));
-                    resolved_dependency_set.add(resolved_dependency);
+                    if (dep_scope.equals(scope.name())) {
+                        var resolved_dependency = new PomDependency(
+                            resolveProperties(dependency.groupId()),
+                            resolveProperties(dependency.artifactId()),
+                            resolveProperties(version),
+                            resolveProperties(dependency.classifier()),
+                            resolveProperties(dependency.type()),
+                            dep_scope,
+                            "false",
+                            exclusions);
+                        if (resolved_dependency.type() == null || resolved_dependency.type().equals("jar")) {
+                            resolved_dependency_set.add(resolved_dependency);
+                        }
+                    }
                 }
             }
 
@@ -103,7 +99,7 @@ public class Xml2MavenPom extends Xml2Data {
 
         var result = resolvedDependencies_.get(scope);
         if (result == null) {
-            return new DependencySet();
+            return Collections.emptySet();
         }
 
         return result;
@@ -120,6 +116,12 @@ public class Xml2MavenPom extends Xml2Data {
                 if (isChildOfProject()) {
                     resetState();
                     collectDependencies_ = true;
+                }
+            }
+            case "exclusions" -> {
+                if (collectDependencyManagement_ || collectDependencies_) {
+                    collectExclusions_ = true;
+                    exclusions_ = new LinkedHashSet<>();
                 }
             }
             case "dependency" -> {
@@ -144,46 +146,47 @@ public class Xml2MavenPom extends Xml2Data {
                 parent.dependencyManagement_.keySet().removeAll(dependencyManagement_.keySet());
                 dependencyManagement_.putAll(parent.dependencyManagement_);
 
-                for (var parent_entry : parent.dependencies_.entrySet()) {
-                    var dependency_set = dependencies_.computeIfAbsent(parent_entry.getKey(), k -> new LinkedHashSet<>());
-                    parent_entry.getValue().removeAll(dependency_set);
-                    dependency_set.addAll(parent_entry.getValue());
-                }
+                parent.dependencies_.removeAll(dependencies_);
+                dependencies_.addAll(parent.dependencies_);
+
                 resetState();
             }
             case "properties" -> collectProperties_ = false;
             case "dependencyManagement" -> collectDependencyManagement_ = false;
             case "dependencies" -> collectDependencies_ = false;
-            case "dependency" -> {
-                if (lastScope_ == null || lastScope_.isEmpty()) {
-                    lastScope_ = "compile";
+            case "exclusions" -> {
+                collectExclusions_ = false;
+            }
+            case "exclusion" -> {
+                if (collectExclusions_) {
+                    exclusions_.add(new PomExclusion(lastExclusionGroupId_, lastExclusionArtifactId_));
                 }
-                if (lastType_ == null || lastType_.equalsIgnoreCase("jar")) {
-                    var dependency = new PomDependency(lastGroupId_, lastArtifactId_, lastVersion_, lastType_, lastClassifier_, lastScope_, lastOptional_);
-                    if (collectDependencyManagement_) {
-                        dependencyManagement_.put(dependency, dependency);
-                    } else if (collectDependencies_) {
-                        var scope = Scope.valueOf(lastScope_);
-                        if (scope != null) {
-                            var dependency_set = dependencies_.computeIfAbsent(scope, k -> new LinkedHashSet<>());
-                            dependency_set.add(dependency);
-                        }
-                    }
+            }
+            case "dependency" -> {
+                var dependency = new PomDependency(lastGroupId_, lastArtifactId_, lastVersion_, lastClassifier_, lastType_, lastScope_, lastOptional_, exclusions_);
+                if (collectDependencyManagement_) {
+                    dependencyManagement_.put(dependency, dependency);
+                } else if (collectDependencies_) {
+                    dependencies_.add(dependency);
                 }
                 resetState();
             }
             case "groupId" -> {
                 if (isChildOfProject()) {
                     addProjectProperty(qName);
-                } else if(isChildOfParent() || isChildOfDependency()) {
+                } else if (isChildOfParent() || isChildOfDependency()) {
                     lastGroupId_ = getCharacterData();
+                } else if (collectExclusions_ && isChildOfExclusion()) {
+                    lastExclusionGroupId_ = getCharacterData();
                 }
             }
             case "artifactId" -> {
                 if (isChildOfProject()) {
                     addProjectProperty(qName);
-                } else if(isChildOfParent() || isChildOfDependency()) {
+                } else if (isChildOfParent() || isChildOfDependency()) {
                     lastArtifactId_ = getCharacterData();
+                } else if (collectExclusions_ && isChildOfExclusion()) {
+                    lastExclusionArtifactId_ = getCharacterData();
                 }
             }
             case "version" -> {
@@ -240,12 +243,20 @@ public class Xml2MavenPom extends Xml2Data {
         return elementStack_.peek().equals("dependency");
     }
 
+    private boolean isChildOfExclusion() {
+        return elementStack_.peek().equals("exclusion");
+    }
+
     private void addProjectProperty(String name) {
         properties_.put("project." + name, getCharacterData());
     }
 
     private String getCharacterData() {
-        return characterData_.toString();
+        var result = characterData_.toString().trim();
+        if (result.isEmpty()) {
+            return null;
+        }
+        return result;
     }
 
     private static final Pattern MAVEN_PROPERTY = Pattern.compile("\\$\\{([^<>{}]+)}");
@@ -283,6 +294,9 @@ public class Xml2MavenPom extends Xml2Data {
         lastClassifier_ = null;
         lastScope_ = null;
         lastOptional_ = null;
+        lastExclusionArtifactId_ = null;
+        lastExclusionGroupId_ = null;
+        exclusions_ = null;
     }
 
     public void characters(char[] ch, int start, int length) {

@@ -10,14 +10,14 @@ import rife.xml.Xml2Data;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Xml2MavenMetadata extends Xml2Data {
+class Xml2MavenMetadata extends Xml2Data {
     private VersionNumber latest_ = VersionNumber.UNKNOWN;
     private VersionNumber release_ = VersionNumber.UNKNOWN;
     private final List<VersionNumber> versions_;
 
     private StringBuilder characterData_ = null;
 
-    public Xml2MavenMetadata() {
+    Xml2MavenMetadata() {
         versions_ = new ArrayList<>();
     }
 

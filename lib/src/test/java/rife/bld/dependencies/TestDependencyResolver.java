@@ -4,6 +4,7 @@
  */
 package rife.bld.dependencies;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
@@ -129,7 +130,7 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.springframework.boot", "spring-boot-starter", new VersionNumber(3, 0, 4)));
         var dependencies = resolver.getTransitiveDependencies(compile);
         assertNotNull(dependencies);
-        assertEquals(18, dependencies.size());
+        assertEquals(17, dependencies.size());
         assertEquals("""
             org.springframework.boot:spring-boot:3.0.4
             org.springframework:spring-context:6.0.6
@@ -143,7 +144,6 @@ public class TestDependencyResolver {
             org.slf4j:slf4j-api:2.0.4
             org.apache.logging.log4j:log4j-to-slf4j:2.19.0
             org.apache.logging.log4j:log4j-api:2.19.0
-            org.osgi:org.osgi.core:6.0.0
             org.slf4j:jul-to-slf4j:2.0.6
             jakarta.annotation:jakarta.annotation-api:2.1.1
             org.springframework:spring-core:6.0.6
@@ -151,15 +151,45 @@ public class TestDependencyResolver {
             org.yaml:snakeyaml:1.33""", StringUtils.join(dependencies, "\n"));
     }
 
-//    @Test
-//    void testGetCompileTransitiveDependenciesMaven() {
-//        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.apache.maven", "maven-core", new VersionNumber(3, 9, 0)));
-//        var dependencies = resolver.getTransitiveDependencies(compile);
-//        assertNotNull(dependencies);
-//        assertEquals(0, dependencies.size());
-//        assertEquals("""
-//            """, StringUtils.join(dependencies, "\n"));
-//    }
+    @Test
+    void testGetCompileTransitiveDependenciesMaven() {
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.apache.maven", "maven-core", new VersionNumber(3, 9, 0)));
+        var dependencies = resolver.getTransitiveDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(31, dependencies.size());
+        assertEquals("""
+            org.apache.maven:maven-model:3.9.0
+            org.apache.maven:maven-settings:3.9.0
+            org.apache.maven:maven-settings-builder:3.9.0
+            org.codehaus.plexus:plexus-sec-dispatcher:2.0
+            org.codehaus.plexus:plexus-cipher:2.0
+            org.apache.maven:maven-builder-support:3.9.0
+            org.apache.maven:maven-repository-metadata:3.9.0
+            org.apache.maven:maven-artifact:3.9.0
+            org.apache.maven:maven-plugin-api:3.9.0
+            org.apache.maven:maven-model-builder:3.9.0
+            org.apache.maven:maven-resolver-provider:3.9.0
+            org.apache.maven.resolver:maven-resolver-impl:1.9.4
+            org.apache.maven.resolver:maven-resolver-named-locks:1.9.4
+            org.apache.maven.resolver:maven-resolver-api:1.9.4
+            org.apache.maven.resolver:maven-resolver-spi:1.9.4
+            org.apache.maven.resolver:maven-resolver-util:1.9.4
+            org.apache.maven.shared:maven-shared-utils:3.3.4
+            org.eclipse.sisu:org.eclipse.sisu.plexus:0.3.5
+            javax.annotation:javax.annotation-api:1.2
+            org.eclipse.sisu:org.eclipse.sisu.inject:0.3.5
+            com.google.inject:guice:5.1.0
+            aopalliance:aopalliance:1.0
+            com.google.guava:guava:30.1-jre
+            com.google.guava:failureaccess:1.0.1
+            javax.inject:javax.inject:1
+            org.codehaus.plexus:plexus-utils:3.4.2
+            org.codehaus.plexus:plexus-classworlds:2.6.0
+            org.codehaus.plexus:plexus-interpolation:1.26
+            org.codehaus.plexus:plexus-component-annotations:2.1.0
+            org.apache.commons:commons-lang3:3.8.1
+            org.slf4j:slf4j-api:1.7.36""", StringUtils.join(dependencies, "\n"));
+    }
 
     @Test
     void testDownloadDependency()
@@ -209,7 +239,7 @@ public class TestDependencyResolver {
                 new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
             }
             var files = FileUtils.getFileList(tmp);
-            assertEquals(18, files.size());
+            assertEquals(17, files.size());
             Collections.sort(files);
             assertEquals("""
                 jakarta.annotation-api-2.1.1.jar
@@ -218,7 +248,6 @@ public class TestDependencyResolver {
                 log4j-to-slf4j-2.19.0.jar
                 logback-classic-1.4.5.jar
                 logback-core-1.4.5.jar
-                org.osgi.core-6.0.0.jar
                 slf4j-api-2.0.4.jar
                 snakeyaml-1.33.jar
                 spring-aop-6.0.6.jar
@@ -233,6 +262,54 @@ public class TestDependencyResolver {
         } finally {
             FileUtils.deleteDirectory(tmp);
         }
+    }
 
+    @Test
+    void testDownloadDependencyMaven()
+    throws Exception {
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.apache.maven", "maven-core", new VersionNumber(3, 9, 0)));
+        var tmp = Files.createTempDirectory("downloads").toFile();
+        try {
+            for (var dep : resolver.getTransitiveDependencies(compile)) {
+                new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
+            }
+            var files = FileUtils.getFileList(tmp);
+            assertEquals(31, files.size());
+            Collections.sort(files);
+            assertEquals("""
+                aopalliance-1.0.jar
+                commons-lang3-3.8.1.jar
+                failureaccess-1.0.1.jar
+                guava-30.1-jre.jar
+                guice-5.1.0.jar
+                javax.annotation-api-1.2.jar
+                javax.inject-1.jar
+                maven-artifact-3.9.0.jar
+                maven-builder-support-3.9.0.jar
+                maven-model-3.9.0.jar
+                maven-model-builder-3.9.0.jar
+                maven-plugin-api-3.9.0.jar
+                maven-repository-metadata-3.9.0.jar
+                maven-resolver-api-1.9.4.jar
+                maven-resolver-impl-1.9.4.jar
+                maven-resolver-named-locks-1.9.4.jar
+                maven-resolver-provider-3.9.0.jar
+                maven-resolver-spi-1.9.4.jar
+                maven-resolver-util-1.9.4.jar
+                maven-settings-3.9.0.jar
+                maven-settings-builder-3.9.0.jar
+                maven-shared-utils-3.3.4.jar
+                org.eclipse.sisu.inject-0.3.5.jar
+                org.eclipse.sisu.plexus-0.3.5.jar
+                plexus-cipher-2.0.jar
+                plexus-classworlds-2.6.0.jar
+                plexus-component-annotations-2.1.0.jar
+                plexus-interpolation-1.26.jar
+                plexus-sec-dispatcher-2.0.jar
+                plexus-utils-3.4.2.jar
+                slf4j-api-1.7.36.jar""", StringUtils.join(files, "\n"));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
     }
 }
