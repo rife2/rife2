@@ -11,9 +11,10 @@ import java.util.List;
 
 public abstract class Project extends Cli {
     public List<Repository> repositories = Collections.emptyList();
-    public String name = null;
     public String pkg = null;
+    public String name = null;
     public VersionNumber version = null;
+    public String mainClass = null;
 
     public final DependencyScopes dependencies_ = new DependencyScopes();
 
@@ -61,6 +62,6 @@ public abstract class Project extends Cli {
 
     public void start(String[] args) {
         setup();
-        new Cli().processArguments(this, args);
+        processArguments(this, args);
     }
 }

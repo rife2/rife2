@@ -4,9 +4,8 @@
     <output url="file://$MODULE_DIR$/build/project" />
     <output-test url="file://$MODULE_DIR$/build/project" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/project">
-      <sourceFolder url="file://$MODULE_DIR$/project" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/project/src" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/src/project">
+      <sourceFolder url="file://$MODULE_DIR$/src/project/java" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -23,6 +23,7 @@ public class CreateCommand implements CliCommand {
     private final String projectName_;
 
     private String projectClassName_;
+    private String projectBuildName_;
     private String projectSiteName_;
     private String projectTestName_;
 
@@ -30,6 +31,7 @@ public class CreateCommand implements CliCommand {
     private File srcMainJavaDir_;
     private File srcMainResourcesTemplatesDir_;
     private File srcMainWebappCssDir_;
+    private File srcProjectJavaDir_;
     private File srcTestJavaDir_;
     private File libDir_;
     private File libCompileDir_;
@@ -37,11 +39,11 @@ public class CreateCommand implements CliCommand {
     private File libRuntimeDir_;
     private File libTestDir_;
     private File libProjectDir_;
-    private File projectProjectDir_;
     private File ideaDir_;
     private File ideaLibrariesDir_;
     private File ideaRunConfigurationsDir_;
     private File javaPackageDir_;
+    private File projectPackageDir_;
     private File testPackageDir_;
 
     public static CreateCommand from(List<String> arguments) {
@@ -76,6 +78,7 @@ public class CreateCommand implements CliCommand {
 
         // standard names
         projectClassName_ = StringUtils.capitalize(projectName_);
+        projectBuildName_ = projectClassName_ + "Build";
         projectSiteName_ = projectClassName_ + "Site";
         projectTestName_ = projectClassName_ + "Test";
 
@@ -88,6 +91,8 @@ public class CreateCommand implements CliCommand {
             Path.of(projectName_, "src", "main", "resources", "templates").toFile();
         srcMainWebappCssDir_ =
             Path.of(projectName_, "src", "main", "webapp", "css").toFile();
+        srcProjectJavaDir_ =
+            Path.of(projectName_, "src", "project", "java").toFile();
         srcTestJavaDir_ =
             Path.of(projectName_, "src", "test", "java").toFile();
         libDir_ =
@@ -102,8 +107,6 @@ public class CreateCommand implements CliCommand {
             Path.of(projectName_, "lib", "test").toFile();
         libProjectDir_ =
             Path.of(projectName_, "lib", "project").toFile();
-        projectProjectDir_ =
-            Path.of(projectName_, "project").toFile();
         ideaDir_ =
             Path.of(projectName_, ".idea").toFile();
         ideaLibrariesDir_ =
@@ -113,6 +116,7 @@ public class CreateCommand implements CliCommand {
 
         var package_dir = packageName_.replace('.', File.separatorChar);
         javaPackageDir_ = new File(srcMainJavaDir_, package_dir);
+        projectPackageDir_ = new File(srcProjectJavaDir_, package_dir);
         testPackageDir_ = new File(srcTestJavaDir_, package_dir);
     }
 
@@ -130,12 +134,12 @@ public class CreateCommand implements CliCommand {
         return true;
     }
 
-    private void createProjectStructure()
-    throws FileUtilsErrorException {
+    private void createProjectStructure() {
         projectDir_.mkdirs();
         srcMainJavaDir_.mkdirs();
         srcMainResourcesTemplatesDir_.mkdirs();
         srcMainWebappCssDir_.mkdirs();
+        srcProjectJavaDir_.mkdirs();
         srcTestJavaDir_.mkdirs();
         libDir_.mkdirs();
         libCompileDir_.mkdirs();
@@ -143,11 +147,11 @@ public class CreateCommand implements CliCommand {
         libRuntimeDir_.mkdirs();
         libTestDir_.mkdirs();
         libProjectDir_.mkdirs();
-        projectProjectDir_.mkdirs();
         ideaDir_.mkdirs();
         ideaLibrariesDir_.mkdirs();
         ideaRunConfigurationsDir_.mkdirs();
         javaPackageDir_.mkdirs();
+        projectPackageDir_.mkdirs();
         testPackageDir_.mkdirs();
     }
 
@@ -187,8 +191,10 @@ public class CreateCommand implements CliCommand {
 
         // project build
         var build_template = TemplateFactory.TXT.get("bld.project_build");
+        build_template.setValue("projectBuild", projectBuildName_);
         build_template.setValue("package", packageName_);
         build_template.setValue("project", projectClassName_);
+        build_template.setValue("projectSite", projectSiteName_);
         for (var entry : NewProjectInfo.DEPENDENCIES.entrySet()) {
             build_template.blankValue("dependencies");
 
@@ -206,8 +212,15 @@ public class CreateCommand implements CliCommand {
             build_template.setValue("name", entry.getKey().name());
             build_template.appendBlock("scopes", "scope");
         }
-        var project_build_file = new File(projectProjectDir_, "Build.java");
+        var project_build_file = new File(projectPackageDir_, projectBuildName_ + ".java");
         FileUtils.writeString(build_template.getContent(), project_build_file);
+
+        // build shell scripts
+        var build_sh_template = TemplateFactory.TXT.get("bld.build_sh");
+        build_sh_template.setValue("projectBuildPath", project_build_file.getPath().substring(projectDir_.getPath().length() + 1));
+        var build_sh_file = new File(projectDir_, "build.sh");
+        FileUtils.writeString(build_sh_template.getContent(), build_sh_file);
+        build_sh_file.setExecutable(true);
     }
 
     private void populateIdeaProject()

@@ -48,10 +48,13 @@ public class CompileCommand implements CliCommand {
         // create the output directories
         var build_main_dir =
             Path.of("build", "main").toFile();
+        var build_project_dir =
+            Path.of("build", "project").toFile();
         var build_test_dir =
             Path.of("build", "test").toFile();
 
         build_main_dir.mkdirs();
+        build_project_dir.mkdirs();
         build_test_dir.mkdirs();
 
         // detect the jar files in the compile lib directory

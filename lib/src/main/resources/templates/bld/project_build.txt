@@ -1,15 +1,19 @@
+package {{v package/}};
+
 import rife.bld.Project;
+
+import java.util.List;
 
 import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.*;
 
-import java.util.List;
-
-public class Build extends Project {
+public class {{v projectBuild/}} extends Project {
     public void setup() {
         repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
         pkg = "{{v package/}}";
         name = "{{v project/}}";
+        mainClass = "{{v package/}}.{{v projectSite/}}";
+
         version = version(0,1,0);
 
 {{v scopes}}{{/v}}{{b scope}}        scope({{v name/}}){{v dependencies}}{{/v}};
@@ -17,6 +21,6 @@ public class Build extends Project {
             .include(dependency("{{v groupId/}}", "{{v artifactId/}}", version({{v version/}}))){{/b}}{{/b}}    }
 
     public static void main(String[] args) {
-        new Build().start(args);
+        new {{v projectBuild/}}().start(args);
     }
 }
