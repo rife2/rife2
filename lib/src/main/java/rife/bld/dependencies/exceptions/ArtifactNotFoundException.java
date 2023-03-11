@@ -12,13 +12,13 @@ public class ArtifactNotFoundException extends DependencyException {
     @Serial private static final long serialVersionUID = -4463592998915863162L;
 
     private final Dependency dependency_;
-    private final String uri_;
+    private final String url_;
 
-    public ArtifactNotFoundException(Dependency dependency, String uri) {
-        super("Couldn't find artifact for dependency '" + dependency + "' at '" + uri);
+    public ArtifactNotFoundException(Dependency dependency, String url) {
+        super("Couldn't find artifact for dependency '" + dependency + "' at '" + url);
 
         dependency_ = dependency;
-        uri_ = uri;
+        url_ = url;
     }
 
     public Dependency getDependency() {
@@ -26,6 +26,6 @@ public class ArtifactNotFoundException extends DependencyException {
     }
 
     public String getUrl() {
-        return uri_;
+        return url_;
     }
 }

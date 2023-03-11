@@ -5,7 +5,11 @@
 package rife.bld.dependencies;
 
 import org.junit.jupiter.api.Test;
+import rife.tools.FileUtils;
 import rife.tools.StringUtils;
+
+import java.nio.file.Files;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static rife.bld.dependencies.Repository.MAVEN_CENTRAL;
@@ -78,71 +82,157 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testGetCompileDependencies() {
-        var resolver1 = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2"));
-        var dependencies1 = resolver1.getDependencies(compile);
-        assertNotNull(dependencies1);
-        assertEquals(0, dependencies1.size());
-
-        var resolver2 = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
-        var dependencies2 = resolver2.getDependencies(compile);
-        assertNotNull(dependencies2);
-        assertEquals(5, dependencies2.size());
-        assertEquals("""
-            org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api
-            org.eclipse.jetty:jetty-http
-            org.eclipse.jetty:jetty-io
-            org.eclipse.jetty:jetty-jmx
-            org.slf4j:slf4j-api""", StringUtils.join(dependencies2, "\n"));
+    void testGetCompileDependenciesRIFE2() {
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2"));
+        var dependencies = resolver.getDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(0, dependencies.size());
     }
 
     @Test
-    void testGetCompileTransitiveDependencies() {
-        var resolver1 = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2"));
-        var dependencies1 = resolver1.getTransitiveDependencies(compile);
-        assertNotNull(dependencies1);
-        assertEquals(0, dependencies1.size());
-
-        var resolver2 = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
-        var dependencies2 = resolver2.getTransitiveDependencies(compile);
-        assertNotNull(dependencies2);
-        assertEquals(6, dependencies2.size());
+    void testGetCompileDependenciesJetty() {
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
+        var dependencies = resolver.getDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(4, dependencies.size());
         assertEquals("""
-            org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api
-            org.eclipse.jetty:jetty-http
-            org.eclipse.jetty:jetty-io
-            org.eclipse.jetty:jetty-jmx
-            org.slf4j:slf4j-api
-            org.eclipse.jetty:jetty-util""", StringUtils.join(dependencies2, "\n"));
+            org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api:5.0.2
+            org.eclipse.jetty:jetty-http:11.0.14
+            org.eclipse.jetty:jetty-io:11.0.14
+            org.slf4j:slf4j-api:2.0.5""", StringUtils.join(dependencies, "\n"));
+    }
 
-        var resolver3 = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.springframework.boot", "spring-boot-starter", new VersionNumber(3, 0, 4)));
-        var dependencies3 = resolver3.getTransitiveDependencies(compile);
-        assertNotNull(dependencies3);
-        assertEquals(24, dependencies3.size());
+    @Test
+    void testGetCompileTransitiveDependenciesRIFE2() {
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2"));
+        var dependencies = resolver.getTransitiveDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(0, dependencies.size());
+    }
+
+    @Test
+    void testGetCompileTransitiveDependenciesJetty() {
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
+        var dependencies = resolver.getTransitiveDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(5, dependencies.size());
+        assertEquals("""
+            org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api:5.0.2
+            org.eclipse.jetty:jetty-http:11.0.14
+            org.eclipse.jetty:jetty-util:11.0.14
+            org.eclipse.jetty:jetty-io:11.0.14
+            org.slf4j:slf4j-api:2.0.5""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
+    void testGetCompileTransitiveDependenciesSpringBoot() {
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.springframework.boot", "spring-boot-starter", new VersionNumber(3, 0, 4)));
+        var dependencies = resolver.getTransitiveDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(18, dependencies.size());
         assertEquals("""
             org.springframework.boot:spring-boot:3.0.4
-            org.springframework.boot:spring-boot-autoconfigure:3.0.4
-            org.springframework.boot:spring-boot-starter-logging:3.0.4
-            jakarta.annotation:jakarta.annotation-api:2.1.1
-            org.springframework:spring-core:6.0.6
-            org.yaml:snakeyaml:1.33
             org.springframework:spring-context:6.0.6
-            ch.qos.logback:logback-classic:1.4.5
-            org.apache.logging.log4j:log4j-to-slf4j:2.19.0
-            org.slf4j:jul-to-slf4j:2.0.6
-            org.springframework:spring-jcl:6.0.6
             org.springframework:spring-aop:6.0.6
             org.springframework:spring-beans:6.0.6
             org.springframework:spring-expression:6.0.6
-            ch.qos.logback:logback-core
-            org.slf4j:slf4j-api
-            jakarta.mail:jakarta.mail-api
-            jakarta.activation:jakarta.activation-api
-            org.codehaus.janino:janino
-            org.apache.logging.log4j:log4j-api
-            org.osgi:org.osgi.core
-            org.codehaus.janino:commons-compiler
-            org.fusesource.jansi:jansi
-            jakarta.servlet:jakarta.servlet-api""", StringUtils.join(dependencies3, "\n"));
+            org.springframework.boot:spring-boot-autoconfigure:3.0.4
+            org.springframework.boot:spring-boot-starter-logging:3.0.4
+            ch.qos.logback:logback-classic:1.4.5
+            ch.qos.logback:logback-core:1.4.5
+            org.slf4j:slf4j-api:2.0.4
+            org.apache.logging.log4j:log4j-to-slf4j:2.19.0
+            org.apache.logging.log4j:log4j-api:2.19.0
+            org.osgi:org.osgi.core:6.0.0
+            org.slf4j:jul-to-slf4j:2.0.6
+            jakarta.annotation:jakarta.annotation-api:2.1.1
+            org.springframework:spring-core:6.0.6
+            org.springframework:spring-jcl:6.0.6
+            org.yaml:snakeyaml:1.33""", StringUtils.join(dependencies, "\n"));
+    }
+
+//    @Test
+//    void testGetCompileTransitiveDependenciesMaven() {
+//        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.apache.maven", "maven-core", new VersionNumber(3, 9, 0)));
+//        var dependencies = resolver.getTransitiveDependencies(compile);
+//        assertNotNull(dependencies);
+//        assertEquals(0, dependencies.size());
+//        assertEquals("""
+//            """, StringUtils.join(dependencies, "\n"));
+//    }
+
+    @Test
+    void testDownloadDependency()
+    throws Exception {
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("com.uwyn.rife2", "rife2"));
+        var tmp = Files.createTempDirectory("downloads").toFile();
+        try {
+            resolver.downloadIntoFolder(tmp);
+            var files = FileUtils.getFileList(tmp);
+            assertEquals(1, files.size());
+            assertTrue(files.contains("rife2-1.4.0.jar"));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
+    @Test
+    void testDownloadDependencyJetty()
+    throws Exception {
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
+        var tmp = Files.createTempDirectory("downloads").toFile();
+        try {
+            for (var dep : resolver.getTransitiveDependencies(compile)) {
+                new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
+            }
+            var files = FileUtils.getFileList(tmp);
+            assertEquals(5, files.size());
+            Collections.sort(files);
+            assertEquals("""
+                jetty-http-11.0.14.jar
+                jetty-io-11.0.14.jar
+                jetty-jakarta-servlet-api-5.0.2.jar
+                jetty-util-11.0.14.jar
+                slf4j-api-2.0.5.jar""", StringUtils.join(files, "\n"));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
+    @Test
+    void testDownloadDependencySpringBoot()
+    throws Exception {
+        var resolver = new DependencyResolver(MAVEN_CENTRAL, new Dependency("org.springframework.boot", "spring-boot-starter", new VersionNumber(3, 0, 4)));
+        var tmp = Files.createTempDirectory("downloads").toFile();
+        try {
+            for (var dep : resolver.getTransitiveDependencies(compile)) {
+                new DependencyResolver(MAVEN_CENTRAL, dep).downloadIntoFolder(tmp);
+            }
+            var files = FileUtils.getFileList(tmp);
+            assertEquals(18, files.size());
+            Collections.sort(files);
+            assertEquals("""
+                jakarta.annotation-api-2.1.1.jar
+                jul-to-slf4j-2.0.6.jar
+                log4j-api-2.19.0.jar
+                log4j-to-slf4j-2.19.0.jar
+                logback-classic-1.4.5.jar
+                logback-core-1.4.5.jar
+                org.osgi.core-6.0.0.jar
+                slf4j-api-2.0.4.jar
+                snakeyaml-1.33.jar
+                spring-aop-6.0.6.jar
+                spring-beans-6.0.6.jar
+                spring-boot-3.0.4.jar
+                spring-boot-autoconfigure-3.0.4.jar
+                spring-boot-starter-logging-3.0.4.jar
+                spring-context-6.0.6.jar
+                spring-core-6.0.6.jar
+                spring-expression-6.0.6.jar
+                spring-jcl-6.0.6.jar""", StringUtils.join(files, "\n"));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+
     }
 }

@@ -12,13 +12,13 @@ public class ArtifactRetrievalErrorException extends DependencyException {
     @Serial private static final long serialVersionUID = 339863133681418524L;
 
     private final Dependency dependency_;
-    private final String uri_;
+    private final String url_;
 
-    public ArtifactRetrievalErrorException(Dependency dependency, String uri, Throwable e) {
-        super("Unexpected error while retrieving artifact for dependency '" + dependency + "' from '" + uri + "'", e);
+    public ArtifactRetrievalErrorException(Dependency dependency, String url, Throwable e) {
+        super("Unexpected error while retrieving artifact for dependency '" + dependency + "' from '" + url + "'", e);
 
         dependency_ = dependency;
-        uri_ = uri;
+        url_ = url;
     }
 
     public Dependency getDependency() {
@@ -26,6 +26,6 @@ public class ArtifactRetrievalErrorException extends DependencyException {
     }
 
     public String getUrl() {
-        return uri_;
+        return url_;
     }
 }

@@ -47,12 +47,11 @@ public record Dependency(String groupId, String artifactId, VersionNumber versio
         var that = (Dependency) o;
         return groupId.equals(that.groupId) &&
                artifactId.equals(that.artifactId) &&
-               version.equals(that.version) &&
                classifier.equals(that.classifier) &&
                type.equals(that.type);
     }
 
     public int hashCode() {
-        return Objects.hash(groupId, artifactId, version, classifier, type);
+        return Objects.hash(groupId, artifactId, classifier, type);
     }
 }
