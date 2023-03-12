@@ -4,6 +4,7 @@ import rife.bld.Project;
 
 import java.util.List;
 
+import static rife.bld.commands.TemplateType.*;
 import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.*;
 
@@ -13,8 +14,9 @@ public class {{v projectBuild/}} extends Project {
         pkg = "{{v package/}}";
         name = "{{v project/}}";
         mainClass = "{{v package/}}.{{v projectSite/}}";
-
         version = version(0,1,0);
+
+        precompiledTemplateTypes = List.of(HTML);
 
 {{v scopes}}{{/v}}{{b scope}}        scope({{v name/}}){{v dependencies}}{{/v}};
 {{b dependency}}

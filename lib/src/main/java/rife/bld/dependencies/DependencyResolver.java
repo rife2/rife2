@@ -288,7 +288,7 @@ public class DependencyResolver {
             var download_filename = download_url.substring(download_url.lastIndexOf("/") + 1);
             var download_file = new File(file, download_filename);
             try {
-                System.out.print("Downloading : " + download_url + " ... ");
+                System.out.print("Downloading: " + download_url + " ... ");
                 System.out.flush();
                 var url = new URL(download_url);
                 var readableByteChannel = Channels.newChannel(url.openStream());

@@ -18,11 +18,6 @@ public class Cli extends BuildExecutor {
         new EncryptCommand(arguments()).execute();
     }
 
-    @BuildCommand(help = PrecompileCommand.Help.class)
-    public void precompile() {
-        new PrecompileCommand(arguments()).execute();
-    }
-
     public static void main(String[] arguments)
     throws Exception {
         new Cli().processArguments(arguments);

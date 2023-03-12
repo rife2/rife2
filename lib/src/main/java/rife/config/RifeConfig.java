@@ -980,7 +980,7 @@ public class RifeConfig {
         public String getGenerationPath() {
             var generation_path = generationPath_;
 
-            if (null == generation_path) {
+            if (null == generation_path || generation_path.isEmpty()) {
                 return RifeConfig.this.global.getTempPath() + File.separator + DEFAULT_TEMPLATES_RIFE_FOLDER;
             }
 
@@ -990,8 +990,6 @@ public class RifeConfig {
         }
 
         public TemplateConfig setGenerationPath(String path) {
-            if (null == path) throw new IllegalArgumentException("path can't be null.");
-            if (path.isEmpty()) throw new IllegalArgumentException("path can't be empty.");
             generationPath_ = path;
             return this;
         }
@@ -1010,8 +1008,6 @@ public class RifeConfig {
         }
 
         public TemplateConfig setDefaultEncoding(String encoding) {
-            if (null == encoding) throw new IllegalArgumentException("encoding can't be null.");
-            if (encoding.isEmpty()) throw new IllegalArgumentException("encoding can't be empty.");
             defaultEncoding_ = encoding;
             return this;
         }

@@ -14,13 +14,15 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public abstract class Project extends BuildExecutor {
-    public List<Repository> repositories = Collections.emptyList();
+    public List<Repository> repositories = new ArrayList<>();
     public String pkg = null;
     public String name = null;
     public VersionNumber version = null;
     public String mainClass = null;
 
     public DependencyScopes dependencies = new DependencyScopes();
+
+    public List<TemplateType> precompiledTemplateTypes = new ArrayList<>();
 
     public abstract void setup();
 
@@ -45,14 +47,9 @@ public abstract class Project extends BuildExecutor {
         new DownloadCommand(this).execute();
     }
 
-    @BuildCommand(help = EncryptCommand.Help.class)
-    public void encrypt() {
-        new EncryptCommand(arguments()).execute();
-    }
-
     @BuildCommand(help = PrecompileCommand.Help.class)
     public void precompile() {
-        new PrecompileCommand(arguments()).execute();
+        new PrecompileCommand(this).execute();
     }
 
     @BuildCommand(help = RunCommand.Help.class)
