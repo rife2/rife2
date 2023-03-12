@@ -319,14 +319,14 @@ public abstract class Project extends BuildExecutor {
 
     public List<String> runClasspath() {
         var paths = Project.combinePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars());
-        paths.add(srcMainResourcesTemplatesDirectory().getAbsolutePath());
+        paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
         return paths;
     }
 
     public List<String> testClasspath() {
         var paths = Project.combinePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars(), testClasspathJars());
-        paths.add(srcMainResourcesTemplatesDirectory().getAbsolutePath());
+        paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
         paths.add(buildTestDirectory().getAbsolutePath());
         return paths;
