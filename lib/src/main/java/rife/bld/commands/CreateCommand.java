@@ -222,9 +222,9 @@ public class CreateCommand {
         FileUtils.writeString(build_template.getContent(), project_build_file);
 
         // build shell scripts
-        var build_sh_template = TemplateFactory.TXT.get("bld.build_sh");
+        var build_sh_template = TemplateFactory.TXT.get("bld.bld_sh");
         build_sh_template.setValue("projectBuildPath", project_build_file.getPath().substring(projectDir_.getPath().length() + 1));
-        var build_sh_file = new File(projectDir_, "build.sh");
+        var build_sh_file = new File(projectDir_, "bld.sh");
         FileUtils.writeString(build_sh_template.getContent(), build_sh_file);
         build_sh_file.setExecutable(true);
     }
