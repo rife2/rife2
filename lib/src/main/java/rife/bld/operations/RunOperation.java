@@ -25,10 +25,12 @@ public class RunOperation {
         }
     }
 
-    public final Project project;
+    private String javaTool_;
+    private List<String> runJavaOptions_;
+    private List<String> runClasspath_;
+    private String mainClass_;
 
-    public RunOperation(Project project) {
-        this.project = project;
+    public RunOperation() {
     }
 
     public void execute()
@@ -38,11 +40,11 @@ public class RunOperation {
 
     public List<String> processCommandList() {
         var args = new ArrayList<String>();
-        args.add(project.javaTool());
-        args.addAll(project.runJavaOptions());
+        args.add(javaTool());
+        args.addAll(runJavaOptions());
         args.add("-cp");
-        args.add(Project.joinPaths(project.runClasspath()));
-        args.add(project.mainClass);
+        args.add(Project.joinPaths(runClasspath()));
+        args.add(mainClass());
         return args;
     }
 
@@ -52,5 +54,48 @@ public class RunOperation {
         builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
         builder.redirectError(ProcessBuilder.Redirect.INHERIT);
         return builder.start();
+    }
+
+    public RunOperation fromProject(Project project) {
+        return javaTool(project.javaTool())
+            .runJavaOptions(project.runJavaOptions())
+            .runClasspath(project.runClasspath())
+            .mainClass(project.mainClass);
+    }
+
+    public RunOperation javaTool(String tool) {
+        javaTool_ = tool;
+        return this;
+    }
+
+    public RunOperation runJavaOptions(List<String> options) {
+        runJavaOptions_ = new ArrayList<>(options);
+        return this;
+    }
+
+    public RunOperation runClasspath(List<String> classpath) {
+        runClasspath_ = new ArrayList<>(classpath);
+        return this;
+    }
+
+    public RunOperation mainClass(String klass) {
+        mainClass_ = klass;
+        return this;
+    }
+
+    public String javaTool() {
+        return javaTool_;
+    }
+
+    public List<String> runJavaOptions() {
+        return runJavaOptions_;
+    }
+
+    public List<String> runClasspath() {
+        return runClasspath_;
+    }
+
+    public String mainClass() {
+        return mainClass_;
     }
 }

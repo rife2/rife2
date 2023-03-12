@@ -27,17 +27,23 @@ public class CompileOperation {
         }
     }
 
-    public final Project project;
+    private File buildMainDirectory_;
+    private File buildProjectDirectory_;
+    private File buildTestDirectory_;
+    private List<String> compileMainClasspath_;
+    private List<String> compileTestClasspath_;
+    private List<File> mainSourceFiles_;
+    private List<File> testSourceFiles_;
+    private List<String> compileOptions_;
 
-    public CompileOperation(Project project) {
-        this.project = project;
+    public CompileOperation() {
     }
 
     public void execute()
     throws Exception {
-        project.buildMainDirectory().mkdirs();
-        project.buildProjectDirectory().mkdirs();
-        project.buildTestDirectory().mkdirs();
+        buildMainDirectory().mkdirs();
+        buildProjectDirectory().mkdirs();
+        buildTestDirectory().mkdirs();
 
         buildMainSources();
         buildTestSources();
@@ -46,21 +52,17 @@ public class CompileOperation {
     public void buildMainSources()
     throws IOException {
         buildSources(
-            Project.joinPaths(project.compileMainClasspath()),
-            project.mainSourceFiles(),
-            project.buildMainDirectory().getAbsolutePath());
+            Project.joinPaths(compileMainClasspath()),
+            mainSourceFiles(),
+            buildMainDirectory().getAbsolutePath());
     }
 
     public void buildTestSources()
     throws IOException {
         buildSources(
-            Project.joinPaths(project.compileTestClasspath()),
-            project.testSourceFiles(),
-            project.buildTestDirectory().getAbsolutePath());
-    }
-
-    public List<String> compileOptions() {
-        return project.compileJavacOptions();
+            Project.joinPaths(compileTestClasspath()),
+            testSourceFiles(),
+            buildTestDirectory().getAbsolutePath());
     }
 
     public void buildSources(String classpath, List<File> sources, String destination)
@@ -121,5 +123,88 @@ public class CompileOperation {
             formatted.append(remaining_message).append(System.lineSeparator());
         }
         return formatted.toString();
+    }
+
+    public CompileOperation fromProject(Project project) {
+        return buildMainDirectory(project.buildMainDirectory())
+            .buildProjectDirectory(project.buildProjectDirectory())
+            .buildTestDirectory(project.buildTestDirectory())
+            .compileMainClasspath(project.compileMainClasspath())
+            .compileTestClasspath(project.compileTestClasspath())
+            .mainSourceFiles(project.mainSourceFiles())
+            .testSourceFiles(project.testSourceFiles())
+            .compileOptions(project.compileJavacOptions());
+    }
+
+    public CompileOperation buildMainDirectory(File directory) {
+        buildMainDirectory_ = directory;
+        return this;
+    }
+
+    public CompileOperation buildProjectDirectory(File directory) {
+        buildProjectDirectory_ = directory;
+        return this;
+    }
+
+    public CompileOperation buildTestDirectory(File directory) {
+        buildTestDirectory_ = directory;
+        return this;
+    }
+
+    public CompileOperation compileMainClasspath(List<String> classpath) {
+        compileMainClasspath_ = new ArrayList<>(classpath);
+        return this;
+    }
+
+    public CompileOperation compileTestClasspath(List<String> classpath) {
+        compileTestClasspath_ = new ArrayList<>(classpath);
+        return this;
+    }
+
+    public CompileOperation mainSourceFiles(List<File> files) {
+        mainSourceFiles_ = new ArrayList<>(files);
+        return this;
+    }
+
+    public CompileOperation testSourceFiles(List<File> files) {
+        testSourceFiles_ = new ArrayList<>(files);
+        return this;
+    }
+
+    public CompileOperation compileOptions(List<String> options) {
+        compileOptions_ = new ArrayList<>(options);
+        return this;
+    }
+
+    public File buildMainDirectory() {
+        return buildMainDirectory_;
+    }
+
+    public File buildProjectDirectory() {
+        return buildProjectDirectory_;
+    }
+
+    public File buildTestDirectory() {
+        return buildTestDirectory_;
+    }
+
+    public List<String> compileMainClasspath() {
+        return compileMainClasspath_;
+    }
+
+    public List<String> compileTestClasspath() {
+        return compileTestClasspath_;
+    }
+
+    public List<File> mainSourceFiles() {
+        return mainSourceFiles_;
+    }
+
+    public List<File> testSourceFiles() {
+        return testSourceFiles_;
+    }
+
+    public List<String> compileOptions() {
+        return compileOptions_;
     }
 }

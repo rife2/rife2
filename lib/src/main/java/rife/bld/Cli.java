@@ -10,7 +10,7 @@ public class Cli extends BuildExecutor {
     @BuildCommand(help = CreateOperation.Help.class)
     public void create()
     throws Exception {
-        new CreateOperation(arguments()).execute();
+        new CreateOperation().fromArguments(arguments()).execute();
     }
 
     public static void main(String[] arguments)

@@ -25,10 +25,13 @@ public class TestOperation {
         }
     }
 
-    public final Project project;
+    private String javaTool_;
+    private List<String> testJavaOptions_;
+    private List<String> testClasspath_;
+    private String testToolMainClass_;
+    private List<String> testToolOptions_;
 
-    public TestOperation(Project project) {
-        this.project = project;
+    public TestOperation() {
     }
 
     public void execute()
@@ -38,12 +41,12 @@ public class TestOperation {
 
     public List<String> processCommandList() {
         var args = new ArrayList<String>();
-        args.add(project.javaTool());
-        args.addAll(project.testJavaOptions());
+        args.add(javaTool());
+        args.addAll(testJavaOptions());
         args.add("-cp");
-        args.add(Project.joinPaths(project.testClasspath()));
-        args.add(project.testToolMainClass());
-        args.addAll(project.testToolOptions());
+        args.add(Project.joinPaths(testClasspath()));
+        args.add(testToolMainClass());
+        args.addAll(testToolOptions());
         return args;
     }
 
@@ -53,5 +56,58 @@ public class TestOperation {
         builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
         builder.redirectError(ProcessBuilder.Redirect.INHERIT);
         return builder.start();
+    }
+
+    public TestOperation fromProject(Project project) {
+        return javaTool(project.javaTool())
+            .testJavaOptions(project.testJavaOptions())
+            .testClasspath(project.testClasspath())
+            .testToolMainClass(project.testToolMainClass())
+            .testToolOptions(project.testToolOptions());
+    }
+
+    public TestOperation javaTool(String tool) {
+        javaTool_ = tool;
+        return this;
+    }
+
+    public TestOperation testJavaOptions(List<String> options) {
+        testJavaOptions_ = new ArrayList<>(options);
+        return this;
+    }
+
+    public TestOperation testClasspath(List<String> classpath) {
+        testClasspath_ = new ArrayList<>(classpath);
+        return this;
+    }
+
+    public TestOperation testToolMainClass(String klass) {
+        testToolMainClass_ = klass;
+        return this;
+    }
+
+    public TestOperation testToolOptions(List<String> options) {
+        testToolOptions_ = new ArrayList<>(options);
+        return this;
+    }
+
+    public String javaTool() {
+        return javaTool_;
+    }
+
+    public List<String> testJavaOptions() {
+        return testJavaOptions_;
+    }
+
+    public List<String> testClasspath() {
+        return testClasspath_;
+    }
+
+    public String testToolMainClass() {
+        return testToolMainClass_;
+    }
+
+    public List<String> testToolOptions() {
+        return testToolOptions_;
     }
 }

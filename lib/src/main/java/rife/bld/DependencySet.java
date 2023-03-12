@@ -9,6 +9,13 @@ import rife.bld.dependencies.Dependency;
 import java.util.*;
 
 public class DependencySet extends LinkedHashSet<Dependency> {
+    public DependencySet() {
+    }
+
+    public DependencySet(DependencySet other) {
+        addAll(other);
+    }
+
     public DependencySet include(Dependency dependency) {
         add(dependency);
         return this;

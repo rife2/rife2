@@ -33,35 +33,35 @@ public abstract class Project extends BuildExecutor {
     @BuildCommand(help = CleanOperation.Help.class)
     public void clean()
     throws Exception {
-        new CleanOperation(this).execute();
+        new CleanOperation().fromProject(this).execute();
     }
 
     @BuildCommand(help = CompileOperation.Help.class)
     public void compile()
     throws Exception {
-        new CompileOperation(this).execute();
+        new CompileOperation().fromProject(this).execute();
     }
 
     @BuildCommand(help = DownloadOperation.Help.class)
     public void download() {
-        new DownloadOperation(this).execute();
+        new DownloadOperation().fromProject(this).execute();
     }
 
     @BuildCommand(help = PrecompileOperation.Help.class)
     public void precompile() {
-        new PrecompileOperation(this).execute();
+        new PrecompileOperation().fromProject(this).execute();
     }
 
     @BuildCommand(help = RunOperation.Help.class)
     public void run()
     throws Exception {
-        new RunOperation(this).execute();
+        new RunOperation().fromProject(this).execute();
     }
 
     @BuildCommand(help = TestOperation.Help.class)
     public void test()
     throws Exception {
-        new TestOperation(this).execute();
+        new TestOperation().fromProject(this).execute();
     }
 
     /*

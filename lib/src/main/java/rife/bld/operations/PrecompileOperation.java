@@ -10,6 +10,7 @@ import rife.template.TemplateDeployer;
 import rife.template.TemplateFactory;
 import rife.tools.StringUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +28,11 @@ public class PrecompileOperation {
         }
     }
 
-    public final Project project;
+    private List<TemplateType> precompiledTemplateTypes_;
+    private File srcMainResourcesTemplatesDirectory_;
+    private File buildTemplatesDirectory_;
 
-    public PrecompileOperation(Project project) {
-        this.project = project;
+    public PrecompileOperation() {
     }
 
     public void execute() {
@@ -39,10 +41,10 @@ public class PrecompileOperation {
 
     public List<TemplateFactory> getTemplateFactories() {
         var template_factories = new ArrayList<TemplateFactory>();
-        for (var type : project.precompiledTemplateTypes) {
+        for (var type : precompiledTemplateTypes()) {
             var factory = TemplateFactory.getFactory(type.identifier());
             if (factory == null) {
-                System.err.println("ERROR: unknown template type '" + type.identifier() + "'");
+                System.err.println("ERROR: unknown template type '" + type.identifier() + "'/");
             } else {
                 template_factories.add(factory);
             }
@@ -54,8 +56,41 @@ public class PrecompileOperation {
     public TemplateDeployer createTemplateDeployer() {
         return new TemplateDeployer()
             .verbose(true)
-            .directoryPaths(List.of(project.srcMainResourcesTemplatesDirectory().getAbsolutePath()))
-            .generationPath(project.buildTemplatesDirectory().getAbsolutePath())
+            .directoryPaths(List.of(srcMainResourcesTemplatesDirectory().getAbsolutePath()))
+            .generationPath(buildTemplatesDirectory().getAbsolutePath())
             .templateFactories(getTemplateFactories());
+    }
+
+    public PrecompileOperation fromProject(Project project) {
+        return precompiledTemplateTypes(project.precompiledTemplateTypes)
+            .srcMainResourcesTemplatesDirectory(project.srcMainResourcesTemplatesDirectory())
+            .buildTemplatesDirectory(project.buildTemplatesDirectory());
+    }
+
+    public PrecompileOperation precompiledTemplateTypes(List<TemplateType> types) {
+        precompiledTemplateTypes_ = new ArrayList<>(types);
+        return this;
+    }
+
+    public PrecompileOperation srcMainResourcesTemplatesDirectory(File directory) {
+        srcMainResourcesTemplatesDirectory_ = directory;
+        return this;
+    }
+
+    public PrecompileOperation buildTemplatesDirectory(File directory) {
+        buildTemplatesDirectory_ = directory;
+        return this;
+    }
+
+    public List<TemplateType> precompiledTemplateTypes() {
+        return precompiledTemplateTypes_;
+    }
+
+    public File srcMainResourcesTemplatesDirectory() {
+        return srcMainResourcesTemplatesDirectory_;
+    }
+
+    public File buildTemplatesDirectory() {
+        return buildTemplatesDirectory_;
     }
 }

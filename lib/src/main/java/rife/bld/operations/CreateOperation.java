@@ -31,108 +31,86 @@ public class CreateOperation {
                   name     The name of the project to create""", "${topic}", topic);
         }
     }
+    
+    private String packageName_;
+    private String projectName_;
 
-    private final String packageName_;
-    private final String projectName_;
+    private String projectClassName_;
+    private String projectBuildName_;
+    private String projectSiteName_;
+    private String projectTestName_;
 
-    private final String projectClassName_;
-    private final String projectBuildName_;
-    private final String projectSiteName_;
-    private final String projectTestName_;
+    private File projectDir_;
+    private File srcMainJavaDir_;
+    private File srcMainResourcesTemplatesDir_;
+    private File srcMainWebappCssDir_;
+    private File srcProjectJavaDir_;
+    private File srcTestJavaDir_;
+    private File libDir_;
+    private File libCompileDir_;
+    private File libProjectDir_;
+    private File libRuntimeDir_;
+    private File libStandaloneDir_;
+    private File libTestDir_;
+    private File ideaDir_;
+    private File ideaLibrariesDir_;
+    private File ideaRunConfigurationsDir_;
+    private File javaPackageDir_;
+    private File projectPackageDir_;
+    private File testPackageDir_;
 
-    private final File projectDir_;
-    private final File srcMainJavaDir_;
-    private final File srcMainResourcesTemplatesDir_;
-    private final File srcMainWebappCssDir_;
-    private final File srcProjectJavaDir_;
-    private final File srcTestJavaDir_;
-    private final File libDir_;
-    private final File libCompileDir_;
-    private final File libProjectDir_;
-    private final File libRuntimeDir_;
-    private final File libStandaloneDir_;
-    private final File libTestDir_;
-    private final File ideaDir_;
-    private final File ideaLibrariesDir_;
-    private final File ideaRunConfigurationsDir_;
-    private final File javaPackageDir_;
-    private final File projectPackageDir_;
-    private final File testPackageDir_;
+    public CreateOperation() {
+    }
 
-    public CreateOperation(List<String> arguments) {
-        if (arguments.size() < 2) {
-            throw new CommandCreationException("ERROR: Expecting the package and project names as the arguments.");
-        }
-
-        var packageName = arguments.remove(0);
-        var projectName = arguments.remove(0);
-
-        packageName_ = StringUtils.trim(packageName);
-        if (packageName_.isEmpty()) {
-            throw new CommandCreationException("ERROR: The package name should not be blank.");
-        }
-
-        projectName_ = StringUtils.trim(projectName);
-        if (projectName_.isEmpty()) {
-            throw new CommandCreationException("ERROR: The project name should not be blank.");
-        }
-
-        if (!ValidityChecks.checkJavaPackage(packageName_)) {
-            throw new CommandCreationException("ERROR: The package name is invalid.");
-        }
-        if (!ValidityChecks.checkJavaIdentifier(projectName_)) {
-            throw new CommandCreationException("ERROR: The project name is invalid.");
+    public void execute()
+    throws Exception {
+        if (packageName() == null || projectName() == null) {
+            System.err.println("ERROR: Missing package or project name.");
+            return;
         }
 
         // standard names
-        projectClassName_ = StringUtils.capitalize(projectName_);
+        projectClassName_ = StringUtils.capitalize(projectName());
         projectBuildName_ = projectClassName_ + "Build";
         projectSiteName_ = projectClassName_ + "Site";
         projectTestName_ = projectClassName_ + "Test";
 
         // create the main project structure
         projectDir_ =
-            Path.of(projectName_).toFile();
+            Path.of(projectName()).toFile();
         srcMainJavaDir_ =
-            Path.of(projectName_, "src", "main", "java").toFile();
+            Path.of(projectName(), "src", "main", "java").toFile();
         srcMainResourcesTemplatesDir_ =
-            Path.of(projectName_, "src", "main", "resources", "templates").toFile();
+            Path.of(projectName(), "src", "main", "resources", "templates").toFile();
         srcMainWebappCssDir_ =
-            Path.of(projectName_, "src", "main", "webapp", "css").toFile();
+            Path.of(projectName(), "src", "main", "webapp", "css").toFile();
         srcProjectJavaDir_ =
-            Path.of(projectName_, "src", "project", "java").toFile();
+            Path.of(projectName(), "src", "project", "java").toFile();
         srcTestJavaDir_ =
-            Path.of(projectName_, "src", "test", "java").toFile();
+            Path.of(projectName(), "src", "test", "java").toFile();
         libDir_ =
-            Path.of(projectName_, "lib").toFile();
+            Path.of(projectName(), "lib").toFile();
         libCompileDir_ =
-            Path.of(projectName_, "lib", "compile").toFile();
+            Path.of(projectName(), "lib", "compile").toFile();
         libProjectDir_ =
-            Path.of(projectName_, "lib", "project").toFile();
+            Path.of(projectName(), "lib", "project").toFile();
         libRuntimeDir_ =
-            Path.of(projectName_, "lib", "runtime").toFile();
+            Path.of(projectName(), "lib", "runtime").toFile();
         libStandaloneDir_ =
-            Path.of(projectName_, "lib", "standalone").toFile();
+            Path.of(projectName(), "lib", "standalone").toFile();
         libTestDir_ =
-            Path.of(projectName_, "lib", "test").toFile();
+            Path.of(projectName(), "lib", "test").toFile();
         ideaDir_ =
-            Path.of(projectName_, ".idea").toFile();
+            Path.of(projectName(), ".idea").toFile();
         ideaLibrariesDir_ =
-            Path.of(projectName_, ".idea", "libraries").toFile();
+            Path.of(projectName(), ".idea", "libraries").toFile();
         ideaRunConfigurationsDir_ =
-            Path.of(projectName_, ".idea", "runConfigurations").toFile();
+            Path.of(projectName(), ".idea", "runConfigurations").toFile();
 
-        var package_dir = packageName_.replace('.', File.separatorChar);
+        var package_dir = packageName().replace('.', File.separatorChar);
         javaPackageDir_ = new File(srcMainJavaDir_, package_dir);
         projectPackageDir_ = new File(srcProjectJavaDir_, package_dir);
         testPackageDir_ = new File(srcTestJavaDir_, package_dir);
-    }
-
-    public void execute()
-    throws Exception {
-        if (packageName_ == null || projectName_ == null) {
-            return;
-        }
 
         createProjectStructure();
         populateProjectStructure();
@@ -170,7 +148,7 @@ public class CreateOperation {
 
         // project site
         var site_template = TemplateFactory.TXT.get("bld.project_site");
-        site_template.setValue("package", packageName_);
+        site_template.setValue("package", packageName());
         site_template.setValue("projectSite", projectSiteName_);
         var project_site_file = new File(javaPackageDir_, projectSiteName_ + ".java");
         FileUtils.writeString(site_template.getContent(), project_site_file);
@@ -188,7 +166,7 @@ public class CreateOperation {
 
         // project test
         var test_template = TemplateFactory.TXT.get("bld.project_test");
-        test_template.setValue("package", packageName_);
+        test_template.setValue("package", packageName());
         test_template.setValue("projectTest", projectTestName_);
         test_template.setValue("projectSite", projectSiteName_);
         test_template.setValue("project", projectClassName_);
@@ -198,7 +176,7 @@ public class CreateOperation {
         // project build
         var build_template = TemplateFactory.TXT.get("bld.project_build");
         build_template.setValue("projectBuild", projectBuildName_);
-        build_template.setValue("package", packageName_);
+        build_template.setValue("package", packageName());
         build_template.setValue("project", projectClassName_);
         build_template.setValue("projectSite", projectSiteName_);
         for (var entry : NewProjectInfo.DEPENDENCIES.entrySet()) {
@@ -262,14 +240,14 @@ public class CreateOperation {
 
         // IDEA run site
         var run_site_template = TemplateFactory.TXT.get("bld.idea.runConfigurations.Run_Site_xml");
-        run_site_template.setValue("package", packageName_);
+        run_site_template.setValue("package", packageName());
         run_site_template.setValue("projectSite", projectSiteName_);
         var run_site_file = new File(ideaRunConfigurationsDir_, "Run Site.xml");
         FileUtils.writeString(run_site_template.getContent(), run_site_file);
 
         // IDEA run tests
         var run_tests_template = TemplateFactory.TXT.get("bld.idea.runConfigurations.Run_Tests_xml");
-        run_tests_template.setValue("package", packageName_);
+        run_tests_template.setValue("package", packageName());
         run_tests_template.setValue("projectTest", projectTestName_);
         var run_tests_file = new File(ideaRunConfigurationsDir_, "Run Tests.xml");
         FileUtils.writeString(run_tests_template.getContent(), run_tests_file);
@@ -288,5 +266,48 @@ public class CreateOperation {
             new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
                 .downloadTransitivelyIntoFolder(libStandaloneDir_, Scope.compile, Scope.runtime);
         }
+    }
+
+    public CreateOperation fromArguments(List<String> arguments) {
+        if (arguments.size() < 2) {
+            throw new CommandCreationException("ERROR: Expecting the package and project names as the arguments.");
+        }
+
+        return packageName(arguments.remove(0)).projectName(arguments.remove(0));
+    }
+
+    public CreateOperation packageName(String name) {
+        packageName_ = StringUtils.trim(name);
+        if (packageName_.isEmpty()) {
+            throw new CommandCreationException("ERROR: The package name should not be blank.");
+        }
+
+        if (!ValidityChecks.checkJavaPackage(packageName_)) {
+            throw new CommandCreationException("ERROR: The package name is invalid.");
+        }
+
+        packageName_ = name;
+        return this;
+    }
+
+    public CreateOperation projectName(String name) {
+        projectName_ = StringUtils.trim(name);
+        if (projectName_.isEmpty()) {
+            throw new CommandCreationException("ERROR: The project name should not be blank.");
+        }
+
+        if (!ValidityChecks.checkJavaIdentifier(projectName_)) {
+            throw new CommandCreationException("ERROR: The project name is invalid.");
+        }
+        projectName_ = name;
+        return this;
+    }
+
+    public String packageName() {
+        return packageName_;
+    }
+
+    public String projectName() {
+        return projectName_;
     }
 }
