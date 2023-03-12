@@ -62,7 +62,7 @@ public class CreateCommand {
     private final File testPackageDir_;
 
     public CreateCommand(List<String> arguments) {
-        if (arguments.size() != 2) {
+        if (arguments.size() < 2) {
             throw new CommandCreationException("ERROR: Expecting the package and project names as the arguments.");
         }
 

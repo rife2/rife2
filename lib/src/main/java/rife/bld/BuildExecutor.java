@@ -48,23 +48,25 @@ public class BuildExecutor {
         arguments_ = new ArrayList<>(Arrays.asList(arguments));
         var commands = getBuildCommands();
 
-        var command = "help";
-        if (!arguments_.isEmpty()) {
-            command = arguments_.remove(0);
-        }
+        var show_help = arguments_.isEmpty();
 
+        while (!arguments_.isEmpty()) {
+            var command = arguments_.remove(0);
 
-        var show_help = false;
-        try {
-            var method = commands.get(command);
-            if (method != null) {
-                method.invoke(this);
-            } else {
+            try {
+                var method = commands.get(command);
+                if (method != null) {
+                    method.invoke(this);
+                } else {
+                    System.err.println("ERROR: unknown command '" + command + "'");
+                    System.out.println();
+                    new HelpCommand(this, arguments_).printFullHelp();
+                    break;
+                }
+            } catch (Exception e) {
                 show_help = true;
+                System.err.println(ExceptionUtils.getExceptionStackTrace(e));
             }
-        } catch (Exception e) {
-            show_help = true;
-            System.err.println(ExceptionUtils.getExceptionStackTrace(e));
         }
 
         if (show_help) {

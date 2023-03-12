@@ -6,7 +6,6 @@ package rife.bld.commands;
 
 import rife.bld.BuildHelp;
 import rife.bld.Project;
-import rife.bld.commands.exceptions.CommandCreationException;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
@@ -33,14 +32,6 @@ public class CompileCommand {
     private final Project project_;
 
     public CompileCommand(Project project) {
-        this(project, null);
-    }
-
-    public CompileCommand(Project project, List<String> arguments) {
-        if (arguments != null && arguments.size() != 0) {
-            throw new CommandCreationException("ERROR: No arguments are expected for compilation.");
-        }
-
         project_ = project;
     }
 

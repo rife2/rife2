@@ -2,11 +2,8 @@ package rife.bld.commands;
 
 import rife.bld.BuildHelp;
 import rife.bld.Project;
-import rife.bld.commands.exceptions.CommandCreationException;
 import rife.bld.dependencies.*;
 import rife.tools.StringUtils;
-
-import java.util.List;
 
 public class DownloadCommand {
     public static class Help implements BuildHelp {
@@ -25,14 +22,6 @@ public class DownloadCommand {
     private final Project project_;
 
     public DownloadCommand(Project project) {
-        this(project, null);
-    }
-
-    public DownloadCommand(Project project, List<String> arguments) {
-        if (arguments != null && arguments.size() != 0) {
-            throw new CommandCreationException("ERROR: No arguments are expected for downloading.");
-        }
-
         project_ = project;
     }
 

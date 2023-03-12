@@ -64,21 +64,20 @@ public class HelpCommand {
         }
     }
 
-    private void printFullHelp()
+    public void printFullHelp()
     throws Exception {
         var commands = executor_.getBuildCommands();
 
         System.err.println("""
             The RIFE2 CLI provides its features through a series of commands that
-            perform specific tasks.
-                        
-            The help command provides more information about the other commands.
+            perform specific tasks. The help command provides more information about
+            the other commands.
+            
             Usage : help [command]
 
             The following commands are supported.
             """);
 
-//        run         Compiles and runs a RIFE2 application
 //        jar         Creates an uberJar archive for a RIFE2 application
 //        war         Creates a war archive for a RIFE2 application
 

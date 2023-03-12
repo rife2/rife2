@@ -26,18 +26,18 @@ public abstract class Project extends BuildExecutor {
     @BuildCommand(help = CleanCommand.Help.class)
     public void clean()
     throws Exception {
-        new CleanCommand(this, arguments_).execute();
+        new CleanCommand(this).execute();
     }
 
     @BuildCommand(help = CompileCommand.Help.class)
     public void compile()
     throws Exception {
-        new CompileCommand(this, arguments_).execute();
+        new CompileCommand(this).execute();
     }
 
     @BuildCommand(help = DownloadCommand.Help.class)
     public void download() {
-        new DownloadCommand(this, arguments_).execute();
+        new DownloadCommand(this).execute();
     }
 
     @BuildCommand(help = EncryptCommand.Help.class)
@@ -48,6 +48,11 @@ public abstract class Project extends BuildExecutor {
     @BuildCommand(help = PrecompileCommand.Help.class)
     public void precompile() {
         new PrecompileCommand(arguments_).execute();
+    }
+
+    @BuildCommand(help = RunCommand.Help.class)
+    public void run() {
+        new RunCommand(this).execute();
     }
 
     public static VersionNumber version(int major) {
@@ -124,6 +129,10 @@ public abstract class Project extends BuildExecutor {
 
     public File libTestDirectory() {
         return Path.of("lib", "test").toFile();
+    }
+
+    public File buildDistDirectory() {
+        return Path.of("build", "dist").toFile();
     }
 
     public File buildMainDirectory() {
