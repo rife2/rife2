@@ -193,7 +193,7 @@ public class Datasource implements Cloneable {
 
             if (null == driver_) {
                 try {
-                    String driver_name = connection.getMetaData().getDriverName();
+                    var driver_name = connection.getMetaData().getDriverName();
                     driver_ = sDriverNames.get(driver_name);
                     if (null == driver_) {
                         throw new UnsupportedDriverNameException(driver_name);
@@ -286,12 +286,12 @@ public class Datasource implements Cloneable {
      * @since 1.0
      */
     public String getAliasedDriver() {
-        String driver = getDriver();
+        var driver = getDriver();
         if (null == driver) {
             return null;
         }
 
-        String alias = sDriverAliases.get(driver);
+        var alias = sDriverAliases.get(driver);
 
         if (null == alias) {
             return driver;
@@ -496,7 +496,7 @@ public class Datasource implements Cloneable {
      */
     public SqlConversion getSqlConversion()
     throws UnsupportedJdbcDriverException {
-        String driver = getDriver();
+        var driver = getDriver();
         if (null == sqlConversion_ &&
             null != driver) {
             try {
@@ -520,7 +520,7 @@ public class Datasource implements Cloneable {
      */
     public CapabilitiesCompensator getCapabilitiesCompensator()
     throws UnsupportedJdbcDriverException {
-        String driver = getDriver();
+        var driver = getDriver();
         if (null == capabilitiesCompensator_ &&
             null != driver) {
             try {
@@ -544,11 +544,11 @@ public class Datasource implements Cloneable {
      * @since 1.0
      */
     public int hashCode() {
-        int dataSourceHash = dataSource_ == null ? 1 : dataSource_.hashCode();
-        int driverHash = driver_ == null ? 1 : driver_.hashCode();
-        int urlHash = url_ == null ? 1 : url_.hashCode();
-        int userHash = user_ == null ? 1 : user_.hashCode();
-        int passwordHash = password_ == null ? 1 : password_.hashCode();
+        var dataSourceHash = dataSource_ == null ? 1 : dataSource_.hashCode();
+        var driverHash = driver_ == null ? 1 : driver_.hashCode();
+        var urlHash = url_ == null ? 1 : url_.hashCode();
+        var userHash = user_ == null ? 1 : user_.hashCode();
+        var passwordHash = password_ == null ? 1 : password_.hashCode();
         return dataSourceHash * driverHash * urlHash * userHash * passwordHash;
     }
 
