@@ -39,65 +39,87 @@ public class CompileCommand {
         project.buildProjectDirectory().mkdirs();
         project.buildTestDirectory().mkdirs();
 
-        // compile both the main and the test java sources
-        var compiler = ToolProvider.getSystemJavaCompiler();
-        try (var file_manager = compiler.getStandardFileManager(null, null, null)) {
-            buildProjectSources(compiler, file_manager,
-                Project.joinPaths(project.compileClasspath()),
-                project.mainSourceFiles(),
-                project.buildMainDirectory().getAbsolutePath());
-            buildProjectSources(compiler, file_manager,
-                Project.joinPaths(project.testClasspath()),
-                project.testSourceFiles(),
-                project.buildTestDirectory().getAbsolutePath());
-        }
+        buildMainSources();
+        buildTestSources();
     }
 
-    public void buildProjectSources(JavaCompiler compiler, StandardJavaFileManager fileManager, String classpath, List<File> sources, String destination)
+    public void buildMainSources()
     throws IOException {
-        var compilation_units = fileManager.getJavaFileObjectsFromFiles(sources);
-        var diagnostics = new DiagnosticCollector<JavaFileObject>();
-        var options = List.of("-d", destination, "-cp", classpath);
-        var compilation_task = compiler.getTask(null, fileManager, diagnostics, options, null, compilation_units);
-        if (!compilation_task.call()) {
-            outputDiagnostics(diagnostics);
+        buildSources(
+            Project.joinPaths(project.compileMainClasspath()),
+            project.mainSourceFiles(),
+            project.buildMainDirectory().getAbsolutePath());
+    }
+
+    public void buildTestSources()
+    throws IOException {
+        buildSources(
+            Project.joinPaths(project.compileTestClasspath()),
+            project.testSourceFiles(),
+            project.buildTestDirectory().getAbsolutePath());
+    }
+
+    public List<String> compileOptions() {
+        return project.compileJavacOptions();
+    }
+
+    public void buildSources(String classpath, List<File> sources, String destination)
+    throws IOException {
+        var compiler = ToolProvider.getSystemJavaCompiler();
+        try (var file_manager = compiler.getStandardFileManager(null, null, null)) {
+            var compilation_units = file_manager.getJavaFileObjectsFromFiles(sources);
+            var diagnostics = new DiagnosticCollector<JavaFileObject>();
+            var options = new ArrayList<>(List.of("-d", destination, "-cp", classpath));
+            options.addAll(compileOptions());
+            var compilation_task = compiler.getTask(null, file_manager, diagnostics, options, null, compilation_units);
+            if (!compilation_task.call()) {
+                outputDiagnostics(diagnostics);
+            }
         }
     }
 
     public void outputDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics)
     throws IOException {
         for (var diagnostic : diagnostics.getDiagnostics()) {
-            var source = diagnostic.getSource().getCharContent(true).toString();
-            var lines = StringUtils.split(source, "\n");
-            var message = diagnostic.getMessage(Locale.getDefault());
-            var message_lines = StringUtils.split(message, "\n");
-            var main_message = "";
-            var remaining_message = "";
-            int line_number = (int) diagnostic.getLineNumber() - 1;
-            int column_number = (int) diagnostic.getColumnNumber() - 1;
+            System.err.print(formatDiagnostic(diagnostic));
+        }
+    }
 
-            if (!message_lines.isEmpty()) {
-                main_message = message_lines.remove(0);
-                main_message = StringUtils.replace(main_message, "\r", "");
-                remaining_message = StringUtils.join(message_lines, "\n");
-            }
-            System.err.format("%s:%d: %s: %s%n",
-                diagnostic.getSource().toUri().getPath(),
-                diagnostic.getLineNumber(),
-                diagnostic.getKind().name().toLowerCase(),
-                main_message);
+    public String formatDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic)
+    throws IOException {
+        var formatted = new StringBuilder();
+        var source = diagnostic.getSource().getCharContent(true).toString();
+        var lines = StringUtils.split(source, "\n");
+        var message = diagnostic.getMessage(Locale.getDefault());
+        var message_lines = StringUtils.split(message, "\n");
+        var main_message = "";
+        var remaining_message = "";
+        int line_number = (int) diagnostic.getLineNumber() - 1;
+        int column_number = (int) diagnostic.getColumnNumber() - 1;
 
-            if (line_number >= 0 && line_number < lines.size()) {
-                var line = lines.get(line_number);
-                line = StringUtils.replace(line, "\r", "");
-                System.err.println(line);
-                if (column_number >= 0 && column_number < line.length()) {
-                    System.err.println(StringUtils.repeat(" ", column_number) + "^");
-                }
-            }
-            if (!remaining_message.isEmpty()) {
-                System.err.println(remaining_message);
+        if (!message_lines.isEmpty()) {
+            main_message = message_lines.remove(0);
+            main_message = StringUtils.replace(main_message, "\r", "");
+            remaining_message = StringUtils.join(message_lines, "\n");
+        }
+
+        formatted.append(String.format("%s:%d: %s: %s%n",
+            diagnostic.getSource().toUri().getPath(),
+            diagnostic.getLineNumber(),
+            diagnostic.getKind().name().toLowerCase(),
+            main_message));
+
+        if (line_number >= 0 && line_number < lines.size()) {
+            var line = lines.get(line_number);
+            line = StringUtils.replace(line, "\r", "");
+            formatted.append(line).append(System.lineSeparator());
+            if (column_number >= 0 && column_number < line.length()) {
+                formatted.append(StringUtils.repeat(" ", column_number)).append("^").append(System.lineSeparator());
             }
         }
+        if (!remaining_message.isEmpty()) {
+            formatted.append(remaining_message).append(System.lineSeparator());
+        }
+        return formatted.toString();
     }
 }

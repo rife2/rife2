@@ -57,7 +57,7 @@ public class BuildExecutor {
             var command = arguments_.remove(0);
 
             try {
-                if (runCommand(command)) {
+                if (executeCommand(command)) {
                     break;
                 }
             } catch (Exception e) {
@@ -71,7 +71,7 @@ public class BuildExecutor {
         }
     }
 
-    public boolean runCommand(String command)
+    public boolean executeCommand(String command)
     throws Exception {
         var method = buildCommands().get(command);
         if (method != null) {

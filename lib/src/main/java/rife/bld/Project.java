@@ -56,8 +56,15 @@ public abstract class Project extends BuildExecutor {
     }
 
     @BuildCommand(help = RunCommand.Help.class)
-    public void run() {
+    public void run()
+    throws Exception {
         new RunCommand(this).execute();
+    }
+
+    @BuildCommand(help = TestCommand.Help.class)
+    public void test()
+    throws Exception {
+        new TestCommand(this).execute();
     }
 
     /*
@@ -106,6 +113,15 @@ public abstract class Project extends BuildExecutor {
 
     public static String joinPaths(List<String> paths) {
         return StringUtils.join(paths, File.pathSeparator);
+    }
+
+    @SafeVarargs
+    public static List<String> combinePaths(List<String>... paths) {
+        var result = new ArrayList<String>();
+        for (var p : paths) {
+            result.addAll(p);
+        }
+        return result;
     }
 
     /*
@@ -197,20 +213,54 @@ public abstract class Project extends BuildExecutor {
     }
 
     /*
+     * Process options
+     */
+
+    public List<String> compileJavacOptions() {
+        return Collections.emptyList();
+    }
+
+    public String javaTool() {
+        return "java";
+    }
+
+    public List<String> runJavaOptions() {
+        return Collections.emptyList();
+    }
+
+    public List<String> testJavaOptions() {
+        return Collections.emptyList();
+    }
+
+    public String testToolMainClass() {
+        return "org.junit.platform.console.ConsoleLauncher";
+    }
+
+    public List<String> testToolOptions() {
+        var result = new ArrayList<String>();
+        result.add("--scan-classpath");
+        result.add("--exclude-engine=junit-platform-suite");
+        result.add("--exclude-engine=junit-vintage");
+        return result;
+    }
+
+    /*
      * File collections
      */
+
+    private static final Pattern JAVA_FILE_PATTERN = Pattern.compile("^.*\\.java$");
 
     public List<File> mainSourceFiles() {
         // get all the main java sources
         var src_main_java_dir_abs = srcMainJavaDirectory().getAbsoluteFile();
-        return FileUtils.getFileList(src_main_java_dir_abs, Pattern.compile("^.*\\.java$"), null)
+        return FileUtils.getFileList(src_main_java_dir_abs, JAVA_FILE_PATTERN, null)
             .stream().map(file -> new File(src_main_java_dir_abs, file)).toList();
     }
 
     public List<File> testSourceFiles() {
         // get all the test java sources
         var src_test_java_dir_abs = srcTestJavaDirectory().getAbsoluteFile();
-        return FileUtils.getFileList(src_test_java_dir_abs, Pattern.compile("^.*\\.java$"), null)
+        return FileUtils.getFileList(src_test_java_dir_abs, JAVA_FILE_PATTERN, null)
             .stream().map(file -> new File(src_test_java_dir_abs, file)).toList();
     }
 
@@ -218,28 +268,67 @@ public abstract class Project extends BuildExecutor {
      * Project classpaths
      */
 
-    public List<String> compileClasspath() {
+    private static final Pattern JAR_FILE_PATTERN = Pattern.compile("^.*\\.jar$");
+
+    public List<String> compileClasspathJars() {
         // detect the jar files in the compile lib directory
-        var lib_compile_dir_abs = libCompileDirectory().getAbsoluteFile();
-        var lib_compile_jar_files = FileUtils.getFileList(lib_compile_dir_abs, Pattern.compile("^.*\\.jar$"), null);
+        var dir_abs = libCompileDirectory().getAbsoluteFile();
+        var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
 
         // build the compilation classpath
-        var compile_classpath_paths = new ArrayList<>(lib_compile_jar_files.stream().map(file -> new File(lib_compile_dir_abs, file).getAbsolutePath()).toList());
-        compile_classpath_paths.add(0, buildMainDirectory().getAbsolutePath());
+        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file).getAbsolutePath()).toList());
+    }
 
-        return compile_classpath_paths;
+    public List<String> runtimeClasspathJars() {
+        // detect the jar files in the runtime lib directory
+        var dir_abs = libRuntimeDirectory().getAbsoluteFile();
+        var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
+
+        // build the runtime classpath
+        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file).getAbsolutePath()).toList());
+    }
+
+    public List<String> standaloneClasspathJars() {
+        // detect the jar files in the standalone lib directory
+        var dir_abs = libStandaloneDirectory().getAbsoluteFile();
+        var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
+
+        // build the standalone classpath
+        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file).getAbsolutePath()).toList());
+    }
+
+    public List<String> testClasspathJars() {
+        // detect the jar files in the test lib directory
+        var dir_abs = libTestDirectory().getAbsoluteFile();
+        var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
+
+        // build the test classpath
+        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file).getAbsolutePath()).toList());
+    }
+
+    public List<String> compileMainClasspath() {
+        return compileClasspathJars();
+    }
+
+    public List<String> compileTestClasspath() {
+        var paths = Project.combinePaths(compileClasspathJars(), testClasspathJars());
+        paths.add(buildMainDirectory().getAbsolutePath());
+        return paths;
+    }
+
+    public List<String> runClasspath() {
+        var paths = Project.combinePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars());
+        paths.add(srcMainResourcesTemplatesDirectory().getAbsolutePath());
+        paths.add(buildMainDirectory().getAbsolutePath());
+        return paths;
     }
 
     public List<String> testClasspath() {
-        // detect the jar files in the test lib directory
-        var lib_test_dir_abs = libTestDirectory().getAbsoluteFile();
-        var lib_test_jar_files = FileUtils.getFileList(lib_test_dir_abs, Pattern.compile("^.*\\.jar$"), null);
-
-        // build the test classpath
-        var test_classpath_paths = new ArrayList<>(lib_test_jar_files.stream().map(file -> new File(lib_test_dir_abs, file).getAbsolutePath()).toList());
-        test_classpath_paths.addAll(0, compileClasspath());
-
-        return test_classpath_paths;
+        var paths = Project.combinePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars(), testClasspathJars());
+        paths.add(srcMainResourcesTemplatesDirectory().getAbsolutePath());
+        paths.add(buildMainDirectory().getAbsolutePath());
+        paths.add(buildTestDirectory().getAbsolutePath());
+        return paths;
     }
 
     public void start(String[] args) {

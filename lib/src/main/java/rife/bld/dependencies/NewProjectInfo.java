@@ -22,7 +22,8 @@ public final class NewProjectInfo {
             .include(dependency("com.uwyn.rife2", "rife2", Version.getVersionNumber()));
         DEPENDENCIES.scope(test)
             .include(dependency("org.jsoup", "jsoup", version(1,15,4)))
-            .include(dependency("org.junit.jupiter", "junit-jupiter", version(5,9,2)));
+            .include(dependency("org.junit.jupiter", "junit-jupiter", version(5,9,2)))
+            .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1,9,2)));
         DEPENDENCIES.scope(standalone)
             .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,14)))
             .include(dependency("org.eclipse.jetty", "jetty-servlet", version(11,0,14)))

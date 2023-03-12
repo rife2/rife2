@@ -26,6 +26,13 @@ public class DownloadCommand {
     }
 
     public void execute() {
+        downloadCompileDependencies();
+        downloadRuntimeDependencies();
+        downloadStandaloneDependencies();
+        downloadTestDependencies();
+    }
+
+    public void downloadCompileDependencies() {
         var compile_deps = project.dependencies.get(Scope.compile);
         if (compile_deps != null) {
             for (var dependency : compile_deps) {
@@ -33,7 +40,9 @@ public class DownloadCommand {
                     .downloadTransitivelyIntoFolder(project.libCompileDirectory(), Scope.compile);
             }
         }
+    }
 
+    public void downloadRuntimeDependencies() {
         var runtime_deps = project.dependencies.get(Scope.runtime);
         if (runtime_deps != null) {
             for (var dependency : runtime_deps) {
@@ -41,7 +50,9 @@ public class DownloadCommand {
                     .downloadTransitivelyIntoFolder(project.libRuntimeDirectory(), Scope.runtime);
             }
         }
+    }
 
+    public void downloadStandaloneDependencies() {
         var standalone_deps = project.dependencies.get(Scope.standalone);
         if (standalone_deps != null) {
             for (var dependency : standalone_deps) {
@@ -49,7 +60,9 @@ public class DownloadCommand {
                     .downloadTransitivelyIntoFolder(project.libStandaloneDirectory(), Scope.compile, Scope.runtime);
             }
         }
+    }
 
+    public void downloadTestDependencies() {
         var test_deps = project.dependencies.get(Scope.test);
         if (test_deps != null) {
             for (var dependency : test_deps) {

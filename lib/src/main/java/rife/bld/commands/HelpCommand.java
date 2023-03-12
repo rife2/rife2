@@ -77,7 +77,6 @@ public class HelpCommand {
             The following commands are supported.
             """);
 
-//        test
 //        jar         Creates an uberJar archive for a RIFE2 application
 //        war         Creates a war archive for a RIFE2 application
 

@@ -27,24 +27,37 @@ public class CleanCommand {
     }
 
     public void execute() {
+        cleanDistDirectory();
+        cleanMainDirectory();
+        cleanProjectDirectory();
+        cleanTestDirectory();
+    }
+
+    public void cleanDistDirectory() {
         try {
             FileUtils.deleteDirectory(project.buildDistDirectory());
         } catch (FileUtilsErrorException e) {
             // no-op
         }
+    }
 
+    public void cleanMainDirectory() {
         try {
             FileUtils.deleteDirectory(project.buildMainDirectory());
         } catch (FileUtilsErrorException e) {
             // no-op
         }
+    }
 
+    public void cleanProjectDirectory() {
         try {
             FileUtils.deleteDirectory(project.buildProjectDirectory());
         } catch (FileUtilsErrorException e) {
             // no-op
         }
+    }
 
+    public void cleanTestDirectory() {
         try {
             FileUtils.deleteDirectory(project.buildTestDirectory());
         } catch (FileUtilsErrorException e) {

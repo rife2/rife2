@@ -11,15 +11,15 @@ import rife.tools.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RunCommand {
+public class TestCommand {
     public static class Help implements BuildHelp {
         public String getDescription() {
-            return "Runs a RIFE2 application";
+            return "Tests a RIFE2 application";
         }
 
         public String getHelp(String topic) {
             return StringUtils.replace("""
-                Runs a RIFE2 application.
+                Tests a RIFE2 application.
                             
                 Usage : ${topic}""", "${topic}", topic);
         }
@@ -27,7 +27,7 @@ public class RunCommand {
 
     public final Project project;
 
-    public RunCommand(Project project) {
+    public TestCommand(Project project) {
         this.project = project;
     }
 
@@ -39,10 +39,11 @@ public class RunCommand {
     public List<String> processCommandList() {
         var args = new ArrayList<String>();
         args.add(project.javaTool());
-        args.addAll(project.runJavaOptions());
+        args.addAll(project.testJavaOptions());
         args.add("-cp");
-        args.add(Project.joinPaths(project.runClasspath()));
-        args.add(project.mainClass);
+        args.add(Project.joinPaths(project.testClasspath()));
+        args.add(project.testToolMainClass());
+        args.addAll(project.testToolOptions());
         return args;
     }
 
