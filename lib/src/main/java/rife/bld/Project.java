@@ -205,6 +205,10 @@ public abstract class Project extends BuildExecutor {
         return new File(buildDirectory(), "project");
     }
 
+    public File buildTemplatesDirectory() {
+        return buildMainDirectory();
+    }
+
     public File buildTestDirectory() {
         return new File(buildDirectory(), "test");
     }

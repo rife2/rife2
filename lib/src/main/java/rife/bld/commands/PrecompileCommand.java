@@ -55,7 +55,7 @@ public class PrecompileCommand implements BuildHelp {
         return new TemplateDeployer()
             .verbose(true)
             .directoryPaths(List.of(project.srcMainResourcesTemplatesDirectory().getAbsolutePath()))
-            .generationPath(project.buildMainDirectory().getAbsolutePath())
+            .generationPath(project.buildTemplatesDirectory().getAbsolutePath())
             .templateFactories(getTemplateFactories());
     }
 }
