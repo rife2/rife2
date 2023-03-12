@@ -1,0 +1,79 @@
+/*
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ */
+package rife.bld;
+
+import rife.bld.commands.*;
+import rife.tools.ExceptionUtils;
+
+import java.lang.reflect.Method;
+import java.util.*;
+
+public class BuildExecutor {
+    protected List<String> arguments_;
+    protected Map<String, Method> buildCommands_ = null;
+
+    public Map<String, Method> getBuildCommands() {
+        if (buildCommands_ == null) {
+            var build_commands = new TreeMap<String, Method>();
+
+            Class<?> klass = getClass();
+            while (klass != null) {
+                for (var method : klass.getDeclaredMethods()) {
+                    if (method.getParameters().length == 0 && method.isAnnotationPresent(BuildCommand.class)) {
+                        method.setAccessible(true);
+
+                        var name = method.getName();
+
+                        var annotation_name = method.getAnnotation(BuildCommand.class).value();
+                        if (annotation_name != null && !annotation_name.isEmpty()) {
+                            name = annotation_name;
+                        }
+
+                        build_commands.put(name, method);
+                    }
+                }
+
+                klass = klass.getSuperclass();
+            }
+
+            buildCommands_ = build_commands;
+        }
+
+        return buildCommands_;
+    }
+
+    public void processArguments(String[] arguments) {
+        arguments_ = new ArrayList<>(Arrays.asList(arguments));
+        var commands = getBuildCommands();
+
+        var command = "help";
+        if (!arguments_.isEmpty()) {
+            command = arguments_.remove(0);
+        }
+
+
+        var show_help = false;
+        try {
+            var method = commands.get(command);
+            if (method != null) {
+                method.invoke(this);
+            } else {
+                show_help = true;
+            }
+        } catch (Exception e) {
+            show_help = true;
+            System.err.println(ExceptionUtils.getExceptionStackTrace(e));
+        }
+
+        if (show_help) {
+            help();
+        }
+    }
+
+    @BuildCommand(help = HelpCommand.Help.class)
+    public void help() {
+        new HelpCommand(this, arguments_).execute();
+    }
+}

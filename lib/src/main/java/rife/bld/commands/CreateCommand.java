@@ -4,7 +4,7 @@
  */
 package rife.bld.commands;
 
-import rife.bld.CliCommand;
+import rife.bld.BuildHelp;
 import rife.bld.commands.exceptions.CommandCreationException;
 import rife.bld.dependencies.*;
 import rife.template.TemplateFactory;
@@ -16,64 +16,74 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.*;
 
-public class CreateCommand implements CliCommand {
+public class CreateCommand {
+    public static class Help implements BuildHelp {
+        public String getDescription() {
+            return "Creates a new RIFE2 application";
+        }
+
+        public String getHelp(String topic) {
+            return StringUtils.replace("""
+                Creates a new RIFE2 application.
+                            
+                Usage : ${topic} [package] [name]
+                  package  The package of the project to create
+                  name     The name of the project to create""", "${topic}", topic);
+        }
+    }
+
     public static final String NAME = "create";
 
     private final String packageName_;
     private final String projectName_;
 
-    private String projectClassName_;
-    private String projectBuildName_;
-    private String projectSiteName_;
-    private String projectTestName_;
+    private final String projectClassName_;
+    private final String projectBuildName_;
+    private final String projectSiteName_;
+    private final String projectTestName_;
 
-    private File projectDir_;
-    private File srcMainJavaDir_;
-    private File srcMainResourcesTemplatesDir_;
-    private File srcMainWebappCssDir_;
-    private File srcProjectJavaDir_;
-    private File srcTestJavaDir_;
-    private File libDir_;
-    private File libCompileDir_;
-    private File libStandaloneDir_;
-    private File libRuntimeDir_;
-    private File libTestDir_;
-    private File libProjectDir_;
-    private File ideaDir_;
-    private File ideaLibrariesDir_;
-    private File ideaRunConfigurationsDir_;
-    private File javaPackageDir_;
-    private File projectPackageDir_;
-    private File testPackageDir_;
+    private final File projectDir_;
+    private final File srcMainJavaDir_;
+    private final File srcMainResourcesTemplatesDir_;
+    private final File srcMainWebappCssDir_;
+    private final File srcProjectJavaDir_;
+    private final File srcTestJavaDir_;
+    private final File libDir_;
+    private final File libCompileDir_;
+    private final File libProjectDir_;
+    private final File libRuntimeDir_;
+    private final File libStandaloneDir_;
+    private final File libTestDir_;
+    private final File ideaDir_;
+    private final File ideaLibrariesDir_;
+    private final File ideaRunConfigurationsDir_;
+    private final File javaPackageDir_;
+    private final File projectPackageDir_;
+    private final File testPackageDir_;
 
-    public static CreateCommand from(List<String> arguments) {
+    public CreateCommand(List<String> arguments) {
         if (arguments.size() != 2) {
-            throw new CommandCreationException(NAME, "ERROR: Expecting the package and project names as the arguments.");
+            throw new CommandCreationException("ERROR: Expecting the package and project names as the arguments.");
         }
-        return new CreateCommand(arguments.remove(0), arguments.remove(0));
-    }
 
-    public CreateCommand() {
-        packageName_ = null;
-        projectName_ = null;
-    }
+        var packageName = arguments.remove(0);
+        var projectName = arguments.remove(0);
 
-    public CreateCommand(String packageName, String projectName) {
         packageName_ = StringUtils.trim(packageName);
         if (packageName_.isEmpty()) {
-            throw new CommandCreationException(NAME, "ERROR: The package name should not be blank.");
+            throw new CommandCreationException("ERROR: The package name should not be blank.");
         }
 
         projectName_ = StringUtils.trim(projectName);
         if (projectName_.isEmpty()) {
-            throw new CommandCreationException(NAME, "ERROR: The project name should not be blank.");
+            throw new CommandCreationException("ERROR: The project name should not be blank.");
         }
 
         if (!ValidityChecks.checkJavaPackage(packageName_)) {
-            throw new CommandCreationException(NAME, "ERROR: The package name is invalid.");
+            throw new CommandCreationException("ERROR: The package name is invalid.");
         }
         if (!ValidityChecks.checkJavaIdentifier(projectName_)) {
-            throw new CommandCreationException(NAME, "ERROR: The project name is invalid.");
+            throw new CommandCreationException("ERROR: The project name is invalid.");
         }
 
         // standard names
@@ -99,14 +109,14 @@ public class CreateCommand implements CliCommand {
             Path.of(projectName_, "lib").toFile();
         libCompileDir_ =
             Path.of(projectName_, "lib", "compile").toFile();
-        libStandaloneDir_ =
-            Path.of(projectName_, "lib", "standalone").toFile();
-        libRuntimeDir_ =
-            Path.of(projectName_, "lib", "runtime").toFile();
-        libTestDir_ =
-            Path.of(projectName_, "lib", "test").toFile();
         libProjectDir_ =
             Path.of(projectName_, "lib", "project").toFile();
+        libRuntimeDir_ =
+            Path.of(projectName_, "lib", "runtime").toFile();
+        libStandaloneDir_ =
+            Path.of(projectName_, "lib", "standalone").toFile();
+        libTestDir_ =
+            Path.of(projectName_, "lib", "test").toFile();
         ideaDir_ =
             Path.of(projectName_, ".idea").toFile();
         ideaLibrariesDir_ =
@@ -120,18 +130,16 @@ public class CreateCommand implements CliCommand {
         testPackageDir_ = new File(srcTestJavaDir_, package_dir);
     }
 
-    public boolean execute()
+    public void execute()
     throws Exception {
         if (packageName_ == null || projectName_ == null) {
-            return false;
+            return;
         }
 
         createProjectStructure();
         populateProjectStructure();
         populateIdeaProject();
         downloadDependencies();
-
-        return true;
     }
 
     private void createProjectStructure() {
@@ -143,10 +151,10 @@ public class CreateCommand implements CliCommand {
         srcTestJavaDir_.mkdirs();
         libDir_.mkdirs();
         libCompileDir_.mkdirs();
-        libStandaloneDir_.mkdirs();
-        libRuntimeDir_.mkdirs();
-        libTestDir_.mkdirs();
         libProjectDir_.mkdirs();
+        libRuntimeDir_.mkdirs();
+        libStandaloneDir_.mkdirs();
+        libTestDir_.mkdirs();
         ideaDir_.mkdirs();
         ideaLibrariesDir_.mkdirs();
         ideaRunConfigurationsDir_.mkdirs();
@@ -282,13 +290,5 @@ public class CreateCommand implements CliCommand {
             new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
                 .downloadTransitivelyIntoFolder(libStandaloneDir_, Scope.compile, Scope.runtime);
         }
-    }
-
-    public String getHelp() {
-        return """
-            Creates a new RIFE2 project.
-                        
-            Usage : [package] [name]
-              name  The name of the project to create""";
     }
 }

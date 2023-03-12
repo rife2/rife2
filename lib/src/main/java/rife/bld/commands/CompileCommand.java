@@ -4,7 +4,8 @@
  */
 package rife.bld.commands;
 
-import rife.bld.CliCommand;
+import rife.bld.BuildHelp;
+import rife.bld.Project;
 import rife.bld.commands.exceptions.CommandCreationException;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
@@ -12,74 +13,66 @@ import rife.tools.StringUtils;
 import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class CompileCommand implements CliCommand {
-    public static final String NAME = "compile";
-
-    public static CompileCommand from(List<String> arguments) {
-        if (arguments != null && arguments.size() != 0) {
-            throw new CommandCreationException(NAME, "ERROR: No arguments are expected for the compile command.");
+public class CompileCommand {
+    public static class Help implements BuildHelp {
+        public String getDescription() {
+            return "Compiles a RIFE2 application";
         }
-        return new CompileCommand();
+
+        public String getHelp(String topic) {
+            return StringUtils.replace("""
+                Compiles a RIFE2 application.
+                            
+                Usage : ${topic}""", "${topic}", topic);
+        }
     }
 
-    public CompileCommand() {
+    private final Project project_;
+
+    public CompileCommand(Project project) {
+        this(project, null);
     }
 
-    public boolean execute()
+    public CompileCommand(Project project, List<String> arguments) {
+        if (arguments != null && arguments.size() != 0) {
+            throw new CommandCreationException("ERROR: No arguments are expected for compilation.");
+        }
+
+        project_ = project;
+    }
+
+    public void execute()
     throws Exception {
-        // get the project directories
-        var src_main_java_dir =
-            Path.of("src", "main", "java").toFile();
-        var src_test_java_dir =
-            Path.of("src", "test", "java").toFile();
-        var lib_compile_dir =
-            Path.of("lib", "compile").toFile();
-        var lib_standalone_dir =
-            Path.of("lib", "standalone").toFile();
-        var lib_runtime_dir =
-            Path.of("lib", "runtime").toFile();
-        var lib_test_dir =
-            Path.of("lib", "test").toFile();
-
-        // create the output directories
-        var build_main_dir =
-            Path.of("build", "main").toFile();
-        var build_project_dir =
-            Path.of("build", "project").toFile();
-        var build_test_dir =
-            Path.of("build", "test").toFile();
-
-        build_main_dir.mkdirs();
-        build_project_dir.mkdirs();
-        build_test_dir.mkdirs();
+        project_.buildMainDirectory().mkdirs();
+        project_.buildProjectDirectory().mkdirs();
+        project_.buildTestDirectory().mkdirs();
 
         // detect the jar files in the compile lib directory
-        var lib_compile_dir_abs = lib_compile_dir.getAbsoluteFile();
+        var lib_compile_dir_abs = project_.libCompileDirectory().getAbsoluteFile();
         var lib_compile_jar_files = FileUtils.getFileList(lib_compile_dir_abs, Pattern.compile("^.*\\.jar$"), null);
 
         // detect the jar files in the test lib directory
-        var lib_test_dir_abs = lib_test_dir.getAbsoluteFile();
+        var lib_test_dir_abs = project_.libTestDirectory().getAbsoluteFile();
         var lib_test_jar_files = FileUtils.getFileList(lib_test_dir_abs, Pattern.compile("^.*\\.jar$"), null);
 
         // get all the main java sources
-        var src_main_java_dir_abs = src_main_java_dir.getAbsoluteFile();
+        var src_main_java_dir_abs = project_.srcMainJavaDirectory().getAbsoluteFile();
         var main_java_files = FileUtils.getFileList(src_main_java_dir_abs, Pattern.compile("^.*\\.java$"), null)
             .stream().map(file -> new File(src_main_java_dir_abs, file)).toList();
 
         // get the main output path
-        var main_build_path = build_main_dir.getAbsolutePath();
+        var main_build_path = project_.buildMainDirectory().getAbsolutePath();
 
         // get all the test java sources
-        var src_test_java_dir_abs = src_test_java_dir.getAbsoluteFile();
+        var src_test_java_dir_abs = project_.srcTestJavaDirectory().getAbsoluteFile();
         var test_java_files = FileUtils.getFileList(src_test_java_dir_abs, Pattern.compile("^.*\\.java$"), null)
             .stream().map(file -> new File(src_test_java_dir_abs, file)).toList();
 
         // get the test output path
-        var build_test_path = build_test_dir.getAbsolutePath();
+        var build_test_path = project_.buildTestDirectory().getAbsolutePath();
 
         // build the compilation classpath
         var compile_classpath_paths = new ArrayList<>(lib_compile_jar_files.stream().map(file -> new File(lib_compile_dir_abs, file).getAbsolutePath()).toList());
@@ -97,8 +90,6 @@ public class CompileCommand implements CliCommand {
             buildProjectSources(compiler, file_manager, compile_classpath, main_java_files, main_build_path);
             buildProjectSources(compiler, file_manager, test_classpath, test_java_files, build_test_path);
         }
-
-        return true;
     }
 
     private static void buildProjectSources(JavaCompiler compiler, StandardJavaFileManager fileManager, String classpath, List<File> sources, String destination)
@@ -147,10 +138,5 @@ public class CompileCommand implements CliCommand {
                 System.err.println(remaining_message);
             }
         }
-    }
-
-    public String getHelp() {
-        return """
-            Builds a new RIFE2 project.""";
     }
 }

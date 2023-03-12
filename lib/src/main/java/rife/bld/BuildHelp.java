@@ -4,11 +4,12 @@
  */
 package rife.bld;
 
-public interface CliCommand {
-    boolean execute()
-    throws Exception;
+public interface BuildHelp {
+    default String getDescription() {
+        return "";
+    }
 
-    default String getHelp() {
+    default String getHelp(String topic) {
         return "";
     }
 }
