@@ -13,11 +13,6 @@ public class Cli extends BuildExecutor {
         new CreateCommand(arguments()).execute();
     }
 
-    @BuildCommand(help = EncryptCommand.Help.class)
-    public void encrypt() {
-        new EncryptCommand(arguments()).execute();
-    }
-
     public static void main(String[] arguments)
     throws Exception {
         new Cli().processArguments(arguments);
