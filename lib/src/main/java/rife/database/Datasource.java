@@ -43,12 +43,13 @@ import javax.sql.DataSource;
  * @since 1.0
  */
 public class Datasource implements Cloneable {
-    static HashMap<String, String> sDriverAliases = new HashMap<>();
-    static HashMap<String, String> sDriverNames = new HashMap<>();
+    public static HashMap<String, String> sDriverAliases = new HashMap<>();
+    public static HashMap<String, String> sDriverNames = new HashMap<>();
 
     static {
         sDriverAliases.put("org.gjt.mm.mysql.Driver", "com.mysql.cj.jdbc.Driver");
         sDriverAliases.put("com.mysql.jdbc.Driver", "com.mysql.cj.jdbc.Driver");
+        sDriverAliases.put("org.mariadb.jdbc.Driver", "com.mysql.cj.jdbc.Driver");
         sDriverAliases.put("oracle.jdbc.OracleDriver", "oracle.jdbc.driver.OracleDriver");
         sDriverAliases.put("org.apache.derby.jdbc.ClientDriver", "org.apache.derby.jdbc.EmbeddedDriver");
 
