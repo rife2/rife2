@@ -5,7 +5,7 @@
 package rife.bld.operations;
 
 import rife.bld.BuildHelp;
-import rife.bld.operations.exceptions.CommandCreationException;
+import rife.bld.operations.exceptions.OperationOptionException;
 import rife.bld.dependencies.*;
 import rife.template.TemplateFactory;
 import rife.tools.*;
@@ -270,7 +270,7 @@ public class CreateOperation {
 
     public CreateOperation fromArguments(List<String> arguments) {
         if (arguments.size() < 2) {
-            throw new CommandCreationException("ERROR: Expecting the package and project names as the arguments.");
+            throw new OperationOptionException("ERROR: Expecting the package and project names as the arguments.");
         }
 
         return packageName(arguments.remove(0)).projectName(arguments.remove(0));
@@ -279,11 +279,11 @@ public class CreateOperation {
     public CreateOperation packageName(String name) {
         packageName_ = StringUtils.trim(name);
         if (packageName_.isEmpty()) {
-            throw new CommandCreationException("ERROR: The package name should not be blank.");
+            throw new OperationOptionException("ERROR: The package name should not be blank.");
         }
 
         if (!ValidityChecks.checkJavaPackage(packageName_)) {
-            throw new CommandCreationException("ERROR: The package name is invalid.");
+            throw new OperationOptionException("ERROR: The package name is invalid.");
         }
 
         packageName_ = name;
@@ -293,11 +293,11 @@ public class CreateOperation {
     public CreateOperation projectName(String name) {
         projectName_ = StringUtils.trim(name);
         if (projectName_.isEmpty()) {
-            throw new CommandCreationException("ERROR: The project name should not be blank.");
+            throw new OperationOptionException("ERROR: The project name should not be blank.");
         }
 
         if (!ValidityChecks.checkJavaIdentifier(projectName_)) {
-            throw new CommandCreationException("ERROR: The project name is invalid.");
+            throw new OperationOptionException("ERROR: The project name is invalid.");
         }
         projectName_ = name;
         return this;
