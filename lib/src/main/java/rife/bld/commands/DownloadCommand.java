@@ -19,42 +19,42 @@ public class DownloadCommand {
         }
     }
 
-    private final Project project_;
+    public final Project project;
 
     public DownloadCommand(Project project) {
-        project_ = project;
+        this.project = project;
     }
 
     public void execute() {
-        var compile_deps = NewProjectInfo.DEPENDENCIES.get(Scope.compile);
+        var compile_deps = project.dependencies.get(Scope.compile);
         if (compile_deps != null) {
             for (var dependency : compile_deps) {
-                new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
-                    .downloadTransitivelyIntoFolder(project_.libCompileDirectory(), Scope.compile);
+                new DependencyResolver(project.repositories, dependency)
+                    .downloadTransitivelyIntoFolder(project.libCompileDirectory(), Scope.compile);
             }
         }
 
-        var runtime_deps = NewProjectInfo.DEPENDENCIES.get(Scope.runtime);
+        var runtime_deps = project.dependencies.get(Scope.runtime);
         if (runtime_deps != null) {
             for (var dependency : runtime_deps) {
-                new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
-                    .downloadTransitivelyIntoFolder(project_.libRuntimeDirectory(), Scope.runtime);
+                new DependencyResolver(project.repositories, dependency)
+                    .downloadTransitivelyIntoFolder(project.libRuntimeDirectory(), Scope.runtime);
             }
         }
 
-        var standalone_deps = NewProjectInfo.DEPENDENCIES.get(Scope.standalone);
+        var standalone_deps = project.dependencies.get(Scope.standalone);
         if (standalone_deps != null) {
             for (var dependency : standalone_deps) {
-                new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
-                    .downloadTransitivelyIntoFolder(project_.libStandaloneDirectory(), Scope.compile, Scope.runtime);
+                new DependencyResolver(project.repositories, dependency)
+                    .downloadTransitivelyIntoFolder(project.libStandaloneDirectory(), Scope.compile, Scope.runtime);
             }
         }
 
-        var test_deps = NewProjectInfo.DEPENDENCIES.get(Scope.test);
+        var test_deps = project.dependencies.get(Scope.test);
         if (test_deps != null) {
             for (var dependency : test_deps) {
-                new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
-                    .downloadTransitivelyIntoFolder(project_.libTestDirectory(), Scope.compile, Scope.runtime);
+                new DependencyResolver(project.repositories, dependency)
+                    .downloadTransitivelyIntoFolder(project.libTestDirectory(), Scope.compile, Scope.runtime);
             }
         }
     }

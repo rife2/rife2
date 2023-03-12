@@ -20,33 +20,33 @@ public class CleanCommand {
         }
     }
 
-    private final Project project_;
+    public final Project project;
 
     public CleanCommand(Project project) {
-        project_ = project;
+        this.project = project;
     }
 
     public void execute() {
         try {
-            FileUtils.deleteDirectory(project_.buildDistDirectory());
+            FileUtils.deleteDirectory(project.buildDistDirectory());
         } catch (FileUtilsErrorException e) {
             // no-op
         }
 
         try {
-            FileUtils.deleteDirectory(project_.buildMainDirectory());
+            FileUtils.deleteDirectory(project.buildMainDirectory());
         } catch (FileUtilsErrorException e) {
             // no-op
         }
 
         try {
-            FileUtils.deleteDirectory(project_.buildProjectDirectory());
+            FileUtils.deleteDirectory(project.buildProjectDirectory());
         } catch (FileUtilsErrorException e) {
             // no-op
         }
 
         try {
-            FileUtils.deleteDirectory(project_.buildTestDirectory());
+            FileUtils.deleteDirectory(project.buildTestDirectory());
         } catch (FileUtilsErrorException e) {
             // no-op
         }

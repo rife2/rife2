@@ -18,7 +18,7 @@ public class BuildExecutor {
         return arguments_;
     }
 
-    public Map<String, Method> getBuildCommands() {
+    public Map<String, Method> buildCommands() {
         if (buildCommands_ == null) {
             var build_commands = new TreeMap<String, Method>();
 
@@ -50,7 +50,6 @@ public class BuildExecutor {
 
     public void processArguments(String[] arguments) {
         arguments_ = new ArrayList<>(Arrays.asList(arguments));
-        var commands = getBuildCommands();
 
         var show_help = arguments_.isEmpty();
 
@@ -58,13 +57,7 @@ public class BuildExecutor {
             var command = arguments_.remove(0);
 
             try {
-                var method = commands.get(command);
-                if (method != null) {
-                    method.invoke(this);
-                } else {
-                    System.err.println("ERROR: unknown command '" + command + "'");
-                    System.out.println();
-                    new HelpCommand(this, arguments_).printFullHelp();
+                if (runCommand(command)) {
                     break;
                 }
             } catch (Exception e) {
@@ -76,6 +69,20 @@ public class BuildExecutor {
         if (show_help) {
             help();
         }
+    }
+
+    public boolean runCommand(String command)
+    throws Exception {
+        var method = buildCommands().get(command);
+        if (method != null) {
+            method.invoke(this);
+        } else {
+            System.err.println("ERROR: unknown command '" + command + "'");
+            System.out.println();
+            new HelpCommand(this, arguments_).printFullHelp();
+            return true;
+        }
+        return false;
     }
 
     @BuildCommand(help = HelpCommand.Help.class)

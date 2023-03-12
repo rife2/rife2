@@ -32,8 +32,6 @@ public class CreateCommand {
         }
     }
 
-    public static final String NAME = "create";
-
     private final String packageName_;
     private final String projectName_;
 
@@ -142,7 +140,7 @@ public class CreateCommand {
         downloadDependencies();
     }
 
-    private void createProjectStructure() {
+    public void createProjectStructure() {
         projectDir_.mkdirs();
         srcMainJavaDir_.mkdirs();
         srcMainResourcesTemplatesDir_.mkdirs();
@@ -163,7 +161,7 @@ public class CreateCommand {
         testPackageDir_.mkdirs();
     }
 
-    private void populateProjectStructure()
+    public void populateProjectStructure()
     throws FileUtilsErrorException {
         // project gitignore
         FileUtils.writeString(
@@ -231,7 +229,7 @@ public class CreateCommand {
         build_sh_file.setExecutable(true);
     }
 
-    private void populateIdeaProject()
+    public void populateIdeaProject()
     throws FileUtilsErrorException {
         // IDEA project files
         FileUtils.writeString(
@@ -277,7 +275,7 @@ public class CreateCommand {
         FileUtils.writeString(run_tests_template.getContent(), run_tests_file);
     }
 
-    private void downloadDependencies() {
+    public void downloadDependencies() {
         for (var dependency : NewProjectInfo.DEPENDENCIES.get(Scope.compile)) {
             new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
                 .downloadTransitivelyIntoFolder(libCompileDir_, Scope.compile);

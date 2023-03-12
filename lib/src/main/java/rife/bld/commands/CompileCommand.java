@@ -6,14 +6,12 @@ package rife.bld.commands;
 
 import rife.bld.BuildHelp;
 import rife.bld.Project;
-import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
 import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class CompileCommand {
     public static class Help implements BuildHelp {
@@ -29,61 +27,33 @@ public class CompileCommand {
         }
     }
 
-    private final Project project_;
+    public final Project project;
 
     public CompileCommand(Project project) {
-        project_ = project;
+        this.project = project;
     }
 
     public void execute()
     throws Exception {
-        project_.buildMainDirectory().mkdirs();
-        project_.buildProjectDirectory().mkdirs();
-        project_.buildTestDirectory().mkdirs();
-
-        // detect the jar files in the compile lib directory
-        var lib_compile_dir_abs = project_.libCompileDirectory().getAbsoluteFile();
-        var lib_compile_jar_files = FileUtils.getFileList(lib_compile_dir_abs, Pattern.compile("^.*\\.jar$"), null);
-
-        // detect the jar files in the test lib directory
-        var lib_test_dir_abs = project_.libTestDirectory().getAbsoluteFile();
-        var lib_test_jar_files = FileUtils.getFileList(lib_test_dir_abs, Pattern.compile("^.*\\.jar$"), null);
-
-        // get all the main java sources
-        var src_main_java_dir_abs = project_.srcMainJavaDirectory().getAbsoluteFile();
-        var main_java_files = FileUtils.getFileList(src_main_java_dir_abs, Pattern.compile("^.*\\.java$"), null)
-            .stream().map(file -> new File(src_main_java_dir_abs, file)).toList();
-
-        // get the main output path
-        var main_build_path = project_.buildMainDirectory().getAbsolutePath();
-
-        // get all the test java sources
-        var src_test_java_dir_abs = project_.srcTestJavaDirectory().getAbsoluteFile();
-        var test_java_files = FileUtils.getFileList(src_test_java_dir_abs, Pattern.compile("^.*\\.java$"), null)
-            .stream().map(file -> new File(src_test_java_dir_abs, file)).toList();
-
-        // get the test output path
-        var build_test_path = project_.buildTestDirectory().getAbsolutePath();
-
-        // build the compilation classpath
-        var compile_classpath_paths = new ArrayList<>(lib_compile_jar_files.stream().map(file -> new File(lib_compile_dir_abs, file).getAbsolutePath()).toList());
-        compile_classpath_paths.add(0, main_build_path);
-        var compile_classpath = StringUtils.join(compile_classpath_paths, File.pathSeparator);
-
-        // build the test classpath
-        var test_classpath_paths = new ArrayList<>(lib_test_jar_files.stream().map(file -> new File(lib_test_dir_abs, file).getAbsolutePath()).toList());
-        test_classpath_paths.addAll(0, compile_classpath_paths);
-        var test_classpath = StringUtils.join(test_classpath_paths, File.pathSeparator);
+        project.buildMainDirectory().mkdirs();
+        project.buildProjectDirectory().mkdirs();
+        project.buildTestDirectory().mkdirs();
 
         // compile both the main and the test java sources
         var compiler = ToolProvider.getSystemJavaCompiler();
         try (var file_manager = compiler.getStandardFileManager(null, null, null)) {
-            buildProjectSources(compiler, file_manager, compile_classpath, main_java_files, main_build_path);
-            buildProjectSources(compiler, file_manager, test_classpath, test_java_files, build_test_path);
+            buildProjectSources(compiler, file_manager,
+                Project.joinPaths(project.compileClasspath()),
+                project.mainSourceFiles(),
+                project.buildMainDirectory().getAbsolutePath());
+            buildProjectSources(compiler, file_manager,
+                Project.joinPaths(project.testClasspath()),
+                project.testSourceFiles(),
+                project.buildTestDirectory().getAbsolutePath());
         }
     }
 
-    private static void buildProjectSources(JavaCompiler compiler, StandardJavaFileManager fileManager, String classpath, List<File> sources, String destination)
+    public void buildProjectSources(JavaCompiler compiler, StandardJavaFileManager fileManager, String classpath, List<File> sources, String destination)
     throws IOException {
         var compilation_units = fileManager.getJavaFileObjectsFromFiles(sources);
         var diagnostics = new DiagnosticCollector<JavaFileObject>();
@@ -94,7 +64,7 @@ public class CompileCommand {
         }
     }
 
-    private static void outputDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics)
+    public void outputDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics)
     throws IOException {
         for (var diagnostic : diagnostics.getDiagnostics()) {
             var source = diagnostic.getSource().getCharContent(true).toString();

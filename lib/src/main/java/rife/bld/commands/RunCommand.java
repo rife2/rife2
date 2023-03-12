@@ -22,12 +22,13 @@ public class RunCommand {
         }
     }
 
-    private final Project project_;
+    public final Project project;
 
     public RunCommand(Project project) {
-        project_ = project;
+        this.project = project;
     }
 
     public void execute() {
+
     }
 }

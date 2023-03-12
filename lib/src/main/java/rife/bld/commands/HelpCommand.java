@@ -7,7 +7,6 @@ package rife.bld.commands;
 import rife.Version;
 import rife.bld.*;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import static java.util.Comparator.comparingInt;
@@ -38,7 +37,7 @@ public class HelpCommand {
 
         boolean print_full_help = true;
         try {
-            var commands = executor_.getBuildCommands();
+            var commands = executor_.buildCommands();
             if (commands.containsKey(topic)) {
                 var method = commands.get(topic);
                 var annotation = method.getAnnotation(BuildCommand.class);
@@ -66,7 +65,7 @@ public class HelpCommand {
 
     public void printFullHelp()
     throws Exception {
-        var commands = executor_.getBuildCommands();
+        var commands = executor_.buildCommands();
 
         System.err.println("""
             The RIFE2 CLI provides its features through a series of commands that
@@ -78,6 +77,7 @@ public class HelpCommand {
             The following commands are supported.
             """);
 
+//        test
 //        jar         Creates an uberJar archive for a RIFE2 application
 //        war         Creates a war archive for a RIFE2 application
 
