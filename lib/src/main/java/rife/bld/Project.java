@@ -4,7 +4,7 @@
  */
 package rife.bld;
 
-import rife.bld.commands.*;
+import rife.bld.operations.*;
 import rife.bld.dependencies.*;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
@@ -30,38 +30,38 @@ public abstract class Project extends BuildExecutor {
      * Standard build commands
      */
 
-    @BuildCommand(help = CleanCommand.Help.class)
+    @BuildCommand(help = CleanOperation.Help.class)
     public void clean()
     throws Exception {
-        new CleanCommand(this).execute();
+        new CleanOperation(this).execute();
     }
 
-    @BuildCommand(help = CompileCommand.Help.class)
+    @BuildCommand(help = CompileOperation.Help.class)
     public void compile()
     throws Exception {
-        new CompileCommand(this).execute();
+        new CompileOperation(this).execute();
     }
 
-    @BuildCommand(help = DownloadCommand.Help.class)
+    @BuildCommand(help = DownloadOperation.Help.class)
     public void download() {
-        new DownloadCommand(this).execute();
+        new DownloadOperation(this).execute();
     }
 
-    @BuildCommand(help = PrecompileCommand.Help.class)
+    @BuildCommand(help = PrecompileOperation.Help.class)
     public void precompile() {
-        new PrecompileCommand(this).execute();
+        new PrecompileOperation(this).execute();
     }
 
-    @BuildCommand(help = RunCommand.Help.class)
+    @BuildCommand(help = RunOperation.Help.class)
     public void run()
     throws Exception {
-        new RunCommand(this).execute();
+        new RunOperation(this).execute();
     }
 
-    @BuildCommand(help = TestCommand.Help.class)
+    @BuildCommand(help = TestOperation.Help.class)
     public void test()
     throws Exception {
-        new TestCommand(this).execute();
+        new TestOperation(this).execute();
     }
 
     /*

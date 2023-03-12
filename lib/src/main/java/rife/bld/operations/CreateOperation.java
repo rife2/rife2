@@ -2,10 +2,10 @@
  * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
-package rife.bld.commands;
+package rife.bld.operations;
 
 import rife.bld.BuildHelp;
-import rife.bld.commands.exceptions.CommandCreationException;
+import rife.bld.operations.exceptions.CommandCreationException;
 import rife.bld.dependencies.*;
 import rife.template.TemplateFactory;
 import rife.tools.*;
@@ -16,7 +16,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.*;
 
-public class CreateCommand {
+public class CreateOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
             return "Creates a new RIFE2 application";
@@ -59,7 +59,7 @@ public class CreateCommand {
     private final File projectPackageDir_;
     private final File testPackageDir_;
 
-    public CreateCommand(List<String> arguments) {
+    public CreateOperation(List<String> arguments) {
         if (arguments.size() < 2) {
             throw new CommandCreationException("ERROR: Expecting the package and project names as the arguments.");
         }

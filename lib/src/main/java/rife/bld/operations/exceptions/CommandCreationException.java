@@ -1,4 +1,4 @@
-package rife.bld.commands.exceptions;
+package rife.bld.operations.exceptions;
 
 import java.io.Serial;
 

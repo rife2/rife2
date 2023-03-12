@@ -2,7 +2,7 @@
  * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
-package rife.bld.commands;
+package rife.bld.operations;
 
 import rife.Version;
 import rife.bld.*;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import static java.util.Comparator.comparingInt;
 
-public class HelpCommand {
+public class HelpOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
             return "Provides help about any of the other commands";
@@ -21,7 +21,7 @@ public class HelpCommand {
     private final BuildExecutor executor_;
     private final List<String> arguments_;
 
-    public HelpCommand(BuildExecutor executor, List<String> arguments) {
+    public HelpOperation(BuildExecutor executor, List<String> arguments) {
         executor_ = executor;
         arguments_ = arguments;
     }

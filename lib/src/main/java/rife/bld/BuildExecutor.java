@@ -4,7 +4,7 @@
  */
 package rife.bld;
 
-import rife.bld.commands.*;
+import rife.bld.operations.*;
 import rife.tools.ExceptionUtils;
 
 import java.lang.reflect.Method;
@@ -79,14 +79,14 @@ public class BuildExecutor {
         } else {
             System.err.println("ERROR: unknown command '" + command + "'");
             System.out.println();
-            new HelpCommand(this, arguments_).printFullHelp();
+            new HelpOperation(this, arguments_).printFullHelp();
             return true;
         }
         return false;
     }
 
-    @BuildCommand(help = HelpCommand.Help.class)
+    @BuildCommand(help = HelpOperation.Help.class)
     public void help() {
-        new HelpCommand(this, arguments_).execute();
+        new HelpOperation(this, arguments_).execute();
     }
 }

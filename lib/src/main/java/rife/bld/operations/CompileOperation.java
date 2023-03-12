@@ -2,7 +2,7 @@
  * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
-package rife.bld.commands;
+package rife.bld.operations;
 
 import rife.bld.BuildHelp;
 import rife.bld.Project;
@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class CompileCommand {
+public class CompileOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
             return "Compiles a RIFE2 application";
@@ -29,7 +29,7 @@ public class CompileCommand {
 
     public final Project project;
 
-    public CompileCommand(Project project) {
+    public CompileOperation(Project project) {
         this.project = project;
     }
 

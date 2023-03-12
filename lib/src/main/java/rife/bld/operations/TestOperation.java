@@ -2,7 +2,7 @@
  * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
-package rife.bld.commands;
+package rife.bld.operations;
 
 import rife.bld.BuildHelp;
 import rife.bld.Project;
@@ -11,7 +11,7 @@ import rife.tools.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestCommand {
+public class TestOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
             return "Tests a RIFE2 application";
@@ -27,7 +27,7 @@ public class TestCommand {
 
     public final Project project;
 
-    public TestCommand(Project project) {
+    public TestOperation(Project project) {
         this.project = project;
     }
 

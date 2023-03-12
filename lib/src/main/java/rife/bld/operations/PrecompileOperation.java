@@ -2,7 +2,7 @@
  * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
-package rife.bld.commands;
+package rife.bld.operations;
 
 import rife.bld.BuildHelp;
 import rife.bld.Project;
@@ -13,7 +13,7 @@ import rife.tools.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PrecompileCommand implements BuildHelp {
+public class PrecompileOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
             return "Compiles RIFE2 templates to class files";
@@ -29,7 +29,7 @@ public class PrecompileCommand implements BuildHelp {
 
     public final Project project;
 
-    public PrecompileCommand(Project project) {
+    public PrecompileOperation(Project project) {
         this.project = project;
     }
 

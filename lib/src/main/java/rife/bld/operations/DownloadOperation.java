@@ -1,11 +1,15 @@
-package rife.bld.commands;
+/*
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ */
+package rife.bld.operations;
 
 import rife.bld.BuildHelp;
 import rife.bld.Project;
 import rife.bld.dependencies.*;
 import rife.tools.StringUtils;
 
-public class DownloadCommand {
+public class DownloadOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
             return "Downloads all dependencies of a RIFE2 application";
@@ -21,7 +25,7 @@ public class DownloadCommand {
 
     public final Project project;
 
-    public DownloadCommand(Project project) {
+    public DownloadOperation(Project project) {
         this.project = project;
     }
 

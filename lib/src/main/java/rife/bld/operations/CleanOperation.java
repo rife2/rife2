@@ -1,4 +1,4 @@
-package rife.bld.commands;
+package rife.bld.operations;
 
 import rife.bld.BuildHelp;
 import rife.bld.Project;
@@ -6,7 +6,7 @@ import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
-public class CleanCommand {
+public class CleanOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
             return "Cleans the RIFE2 build files";
@@ -22,7 +22,7 @@ public class CleanCommand {
 
     public final Project project;
 
-    public CleanCommand(Project project) {
+    public CleanOperation(Project project) {
         this.project = project;
     }
 

@@ -4,13 +4,13 @@
  */
 package rife.bld;
 
-import rife.bld.commands.*;
+import rife.bld.operations.*;
 
 public class Cli extends BuildExecutor {
-    @BuildCommand(help = CreateCommand.Help.class)
+    @BuildCommand(help = CreateOperation.Help.class)
     public void create()
     throws Exception {
-        new CreateCommand(arguments()).execute();
+        new CreateOperation(arguments()).execute();
     }
 
     public static void main(String[] arguments)
