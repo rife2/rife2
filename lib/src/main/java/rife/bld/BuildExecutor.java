@@ -11,8 +11,12 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class BuildExecutor {
-    protected List<String> arguments_;
-    protected Map<String, Method> buildCommands_ = null;
+    private List<String> arguments_ = Collections.emptyList();
+    private Map<String, Method> buildCommands_ = null;
+
+    public List<String> arguments() {
+        return arguments_;
+    }
 
     public Map<String, Method> getBuildCommands() {
         if (buildCommands_ == null) {

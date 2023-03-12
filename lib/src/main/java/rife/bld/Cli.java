@@ -10,17 +10,17 @@ public class Cli extends BuildExecutor {
     @BuildCommand(help = CreateCommand.Help.class)
     public void create()
     throws Exception {
-        new CreateCommand(arguments_).execute();
+        new CreateCommand(arguments()).execute();
     }
 
     @BuildCommand(help = EncryptCommand.Help.class)
     public void encrypt() {
-        new EncryptCommand(arguments_).execute();
+        new EncryptCommand(arguments()).execute();
     }
 
     @BuildCommand(help = PrecompileCommand.Help.class)
     public void precompile() {
-        new PrecompileCommand(arguments_).execute();
+        new PrecompileCommand(arguments()).execute();
     }
 
     public static void main(String[] arguments)

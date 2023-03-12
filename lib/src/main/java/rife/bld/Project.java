@@ -42,12 +42,12 @@ public abstract class Project extends BuildExecutor {
 
     @BuildCommand(help = EncryptCommand.Help.class)
     public void encrypt() {
-        new EncryptCommand(arguments_).execute();
+        new EncryptCommand(arguments()).execute();
     }
 
     @BuildCommand(help = PrecompileCommand.Help.class)
     public void precompile() {
-        new PrecompileCommand(arguments_).execute();
+        new PrecompileCommand(arguments()).execute();
     }
 
     @BuildCommand(help = RunCommand.Help.class)
