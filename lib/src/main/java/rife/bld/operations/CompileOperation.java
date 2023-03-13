@@ -41,12 +41,15 @@ public class CompileOperation {
 
     public void execute()
     throws Exception {
+        createBuildDirectories();
+        buildMainSources();
+        buildTestSources();
+    }
+
+    public void createBuildDirectories() {
         buildMainDirectory().mkdirs();
         buildProjectDirectory().mkdirs();
         buildTestDirectory().mkdirs();
-
-        buildMainSources();
-        buildTestSources();
     }
 
     public void buildMainSources()

@@ -40,8 +40,16 @@ public class JarOperation {
 
     public void execute()
     throws Exception {
-        destinationDirectory().mkdirs();
+        createDestinationDirectory();
+        createJarFile();
+    }
 
+    public void createDestinationDirectory() {
+        destinationDirectory().mkdirs();
+    }
+
+    public void createJarFile()
+    throws IOException {
         var out_file = new File(destinationDirectory(), jarFileName());
         try (var jar = new JarOutputStream(new FileOutputStream(out_file), createManifest())) {
             for (var source_dir : sourceDirectories()) {
