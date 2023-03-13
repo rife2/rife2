@@ -230,8 +230,8 @@ public class TestTemplateFactory {
         RendererImpl.sCount = 0;
         var t = TemplateFactory.HTML.get("filtered_tags_render");
         assertEquals("This is the render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:1'.\n" +
-                     "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:1'.\n" +
-                     "This is the render value with a differentiator 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:DIFFERENT:different:2'.\n", t.getContent());
+                     "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:2'.\n" +
+                     "This is the render value with a differentiator 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:DIFFERENT:different:3'.\n", t.getContent());
     }
 
     @Test
@@ -239,8 +239,42 @@ public class TestTemplateFactory {
         RendererImpl.sCount = 0;
         var t = TemplateFactory.TXT.get("filtered_tags_render");
         assertEquals("This is the render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:1'.\n" +
-                     "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:1'.\n" +
-                     "This is the render value with a differentiator 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:DIFFERENT:different:2'.\n", t.getContent());
+                     "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:2'.\n" +
+                     "This is the render value with a differentiator 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:DIFFERENT:different:3'.\n", t.getContent());
+    }
+
+    @Test
+    void testFilteredTagsRender2Html() {
+        var t = TemplateFactory.HTML.get("filtered_tags_render2");
+        var links = List.of("https://www.uwyn.com", "https://rife2.com", "https://github.com/rife2/rife2");
+        for (var link : links) {
+            t.setValueEncoded("link", link);
+            t.appendBlock("links", "link");
+        }
+
+        assertEquals("""
+            https://www.uwyn.com : https://www.u...<br>
+            https://rife2.com : https://rife2...<br>
+            https://github.com/rife2/rife2 : https://githu...<br>
+                        
+            """, t.getContent());
+    }
+
+    @Test
+    void testFilteredTagsRender2Txt() {
+        var t = TemplateFactory.TXT.get("filtered_tags_render2");
+        var links = List.of("https://www.uwyn.com", "https://rife2.com", "https://github.com/rife2/rife2");
+        for (var link : links) {
+            t.setValueEncoded("link", link);
+            t.appendBlock("links", "link");
+        }
+
+        assertEquals("""
+            https://www.uwyn.com : https://www.u...
+            https://rife2.com : https://rife2...
+            https://github.com/rife2/rife2 : https://githu...
+                        
+            """, t.getContent());
     }
 
     @Test

@@ -209,9 +209,7 @@ public abstract class AbstractTemplate implements Template {
         var set_values = new ArrayList<String>();
 
         _evaluateL10nTags(set_values);
-        _evaluateRenderTags(set_values);
         _evaluateLangTags(set_values, null);
-//        _evaluateJaninoTags(set_values, null);
 
         return set_values;
     }
@@ -228,35 +226,37 @@ public abstract class AbstractTemplate implements Template {
         if (hasFilteredValues(TemplateFactoryFilters.TAG_RENDER)) {
             var render_tags = getFilteredValues(TemplateFactoryFilters.TAG_RENDER);
             for (var captured_groups : render_tags) {
-                // only execute the renderer if the value hasn't been set in the
-                // template yet
-                if (!isValueSet(captured_groups[0])) {
-                    var classname = captured_groups[1];
-                    try {
-                        Class klass = Class.forName(classname);
-                        if (!ValueRenderer.class.isAssignableFrom(klass)) {
-                            throw new RendererWrongTypeException(this, classname);
-                        }
+                var tag = captured_groups[0];
 
-                        ValueRenderer renderer = null;
-                        try {
-                            renderer = (ValueRenderer) klass.getDeclaredConstructor().newInstance();
-                        } catch (Exception e) {
-                            throw new RendererInstantiationException(this, classname, e);
-                        }
-
-                        setValue(captured_groups[0], renderer.render(this, captured_groups[0], captured_groups[2]));
-                        if (setValues != null) {
-                            setValues.add(captured_groups[0]);
-                        }
-                    } catch (ClassNotFoundException e) {
-                        throw new RendererNotFoundException(this, classname, e);
-                    }
+                var result = evaluateRenderTag(tag, captured_groups[1], captured_groups[2]);
+                setValue(tag, result);
+                if (setValues != null) {
+                    setValues.add(tag);
                 }
             }
         }
 
         generatedValues_.addAll(setValues);
+    }
+
+    private String evaluateRenderTag(String name, String classname, String differentiator) {
+        try {
+            Class klass = Class.forName(classname);
+            if (!ValueRenderer.class.isAssignableFrom(klass)) {
+                throw new RendererWrongTypeException(this, classname);
+            }
+
+            ValueRenderer renderer;
+            try {
+                renderer = (ValueRenderer) klass.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                throw new RendererInstantiationException(this, classname, e);
+            }
+
+            return renderer.render(this, name, differentiator);
+        } catch (ClassNotFoundException e) {
+            throw new RendererNotFoundException(this, classname, e);
+        }
     }
 
     public List<String> evaluateL10nTags() {
@@ -649,6 +649,10 @@ public abstract class AbstractTemplate implements Template {
         return generatedValues_.contains(id);
     }
 
+    public final void addGeneratedValue(String valueId) {
+        generatedValues_.add(valueId);
+    }
+
     public final void addGeneratedValues(Collection<String> valueIds) {
         generatedValues_.addAll(valueIds);
     }
@@ -729,11 +733,28 @@ public abstract class AbstractTemplate implements Template {
 
     protected abstract boolean appendBlockInternalForm(String id, InternalValue result);
 
+    protected final String potentiallyRenderFilteredValueTag(String id) {
+        if (hasFilteredValues(TemplateFactoryFilters.TAG_RENDER)) {
+            var render_tags = getFilteredValues(TemplateFactoryFilters.TAG_RENDER);
+            for (var captured_groups : render_tags) {
+                var tag = captured_groups[0];
+                if (tag.equals(id)) {
+                    return evaluateRenderTag(tag, captured_groups[1], captured_groups[2]);
+                }
+            }
+        }
+        return null;
+    }
+
     protected final void appendValueExternalForm(String id, String tag, ExternalValue result) {
         assert id != null;
         assert id.length() != 0;
 
-        CharSequence fixed_value = fixedValues_.get(id);
+        CharSequence fixed_value = potentiallyRenderFilteredValueTag(id);
+        if (fixed_value == null) {
+            fixed_value = fixedValues_.get(id);
+        }
+
         if (fixed_value != null) {
             result.add(fixed_value);
             return;
@@ -753,7 +774,11 @@ public abstract class AbstractTemplate implements Template {
     protected abstract boolean appendDefaultValueExternalForm(String id, ExternalValue result);
 
     protected final void appendValueInternalForm(String id, String tag, InternalValue result) {
-        CharSequence fixed_value = fixedValues_.get(id);
+        CharSequence fixed_value = potentiallyRenderFilteredValueTag(id);
+        if (fixed_value == null) {
+            fixed_value = fixedValues_.get(id);
+        }
+
         if (fixed_value != null) {
             result.appendText(fixed_value);
             return;
