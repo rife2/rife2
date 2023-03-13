@@ -23,6 +23,8 @@ public class JarOperation {
         public String getHelp(String topic) {
             return StringUtils.replace("""
                 Creates a jar archive for a RIFE2 application.
+                The standard jar command will automatically also execute
+                the clean, compile and precompile commands beforehand.
                             
                 Usage : ${topic}""", "${topic}", topic);
         }
