@@ -211,7 +211,6 @@ public abstract class AbstractTemplate implements Template {
         _evaluateL10nTags(set_values);
         _evaluateRenderTags(set_values);
         _evaluateLangTags(set_values, null);
-//        _evaluateJaninoTags(set_values, null);
 
         return set_values;
     }
