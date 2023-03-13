@@ -12,7 +12,7 @@ import rife.engine.RequestMethod;
 import rife.tools.ArrayUtils;
 
 /**
- * Corresponds to a form in a HTML document after it has been parsed with
+ * Corresponds to a form in an HTML document after it has been parsed with
  * {@link ParsedHtml#parse}.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)

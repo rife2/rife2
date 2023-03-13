@@ -708,7 +708,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
         currentNode_.addInstruction(new TypesInstruction(TypesOpcode.LABEL, ++labelCount_));
 
         // if the label starts with an exception type, change the sort of
-        // the created node and add the exception type as the the first type
+        // the created node and add the exception type as the first type
         // on the stack
         var exception_type = classVisitor_.getMetrics().nextExceptionType();
         if (exception_type != null) {

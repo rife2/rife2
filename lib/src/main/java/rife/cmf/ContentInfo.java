@@ -161,7 +161,7 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Sets wether the stored {@code Content} instance is a fragment or
+     * Sets whether the stored {@code Content} instance is a fragment or
      * not.
      *
      * @param fragment {@code true} if it's a fragment; or
@@ -174,7 +174,7 @@ public class ContentInfo extends Validation {
     }
 
     /**
-     * Retrieves wether the stored {@code Content} instance is a fragment
+     * Retrieves whether the stored {@code Content} instance is a fragment
      * or not.
      *
      * @return {@code true} if it's a fragment; or
@@ -321,7 +321,7 @@ public class ContentInfo extends Validation {
     /**
      * Sets the size of the stored {@code Content} instance.
      *
-     * @param size the size of the cotent data
+     * @param size the size of the content data
      * @see #getSize()
      * @since 1.0
      */

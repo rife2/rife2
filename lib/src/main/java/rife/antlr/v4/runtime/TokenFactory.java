@@ -14,7 +14,7 @@ import rife.antlr.v4.runtime.misc.Pair;
  */
 public interface TokenFactory<Symbol extends Token> {
 	/** This is the method used to create tokens in the lexer and in the
-	 *  error handling strategy. If text!=null, than the start and stop positions
+	 *  error handling strategy. If text!=null, then the start and stop positions
 	 *  are wiped to -1 in the text override is set in the CommonToken.
 	 */
 	Symbol create(Pair<TokenSource, CharStream> source, int type, String text,

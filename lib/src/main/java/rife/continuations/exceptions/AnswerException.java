@@ -51,7 +51,7 @@ public class AnswerException extends LightweightError implements ControlFlowRunt
     /**
      * Retrieves the answered value.
      *
-     * @return this answer continuation's anwered value; or
+     * @return this answer continuation's answered value; or
      * <p>{@code null} if no answer was provided
      * @since 1.0
      */

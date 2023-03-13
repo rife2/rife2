@@ -337,7 +337,7 @@ public class DbConnection implements AutoCloseable {
 
     /**
      * Creates a new {@code DbStatement} instance for this connection with
-     * the given type, concurrency, and holdability.. It
+     * the given type, concurrency, and holdability. It
      * will be registered and automatically closed when this
      * {@code DbConnection} cleans up. It is recommended though to
      * manually close the statement when it's not needed anymore for sensible
@@ -954,7 +954,7 @@ public class DbConnection implements AutoCloseable {
     }
 
     /**
-     * Indicates whether this connections has an active transaction thread.
+     * Indicates whether this connection has an active transaction thread.
      *
      * @return {@code true} is an active transaction thread is present;
      * or

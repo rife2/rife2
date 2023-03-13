@@ -1325,7 +1325,7 @@ public class ParserATNSimulator extends ATNSimulator {
 
 	/** Walk the list of configurations and split them according to
 	 *  those that have preds evaluating to true/false.  If no pred, assume
-	 *  true pred and include in succeeded set.  Returns Pair of sets.
+	 *  true pred and include in succeeded set. Returns a Pair of sets.
 	 *
 	 *  Create a new set so as not to alter the incoming parameter.
 	 *
@@ -1634,7 +1634,7 @@ public class ParserATNSimulator extends ATNSimulator {
 	 * StarLoopEntryState any lookahead operation will have consumed a
 	 * token as there are no epsilon-paths that lead to
 	 * StarLoopEntryState. We do not have to evaluate predicates
-	 * therefore if we are in the generated StarLoopEntryState of a LR
+	 * therefore if we are in the generated StarLoopEntryState of an LR
 	 * rule. Note that when making a prediction starting at that
 	 * decision point, decision d=2, compute-start-state performs
 	 * closure starting at edges[0], edges[1] emanating from
@@ -2144,7 +2144,7 @@ public class ParserATNSimulator extends ATNSimulator {
         if ( parser!=null ) parser.getErrorListenerDispatch().reportContextSensitivity(parser, dfa, startIndex, stopIndex, prediction, configs);
     }
 
-    /** If context sensitive parsing, we know it's ambiguity not conflict */
+    /** If context-sensitive parsing, we know it's ambiguity not conflict */
     protected void reportAmbiguity(DFA dfa,
 								   DFAState D, // the DFA state from execATN() that had SLL conflicts
 								   int startIndex, int stopIndex,

@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Corresponds to a link in a HTML document after it has been parsed with
+ * Corresponds to a link in an HTML document after it has been parsed with
  * {@link ParsedHtml#parse}.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)

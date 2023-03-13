@@ -9,7 +9,7 @@ package rife.antlr.v4.runtime.atn;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Used to cache {@link PredictionContext} objects. Its used for the shared
+/** Used to cache {@link PredictionContext} objects. It is used for the shared
  *  context cash associated with contexts in DFA states. This cache
  *  can be used for both lexers and parsers.
  */

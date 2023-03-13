@@ -38,7 +38,7 @@ public class Content implements Cloneable {
      * arguments.
      *
      * @param mimeType the mime type as which the content will be stored in
-     *                 the back-end, note that this doesn't necessarily has to correspond to
+     *                 the back-end, note that this doesn't necessarily have to correspond to
      *                 the mime type of the provided data. Image formats can for example be
      *                 automatically detected and converted to the target mime type by image
      *                 loading and conversion libraries.
@@ -85,7 +85,7 @@ public class Content implements Cloneable {
     /**
      * Sets whether the content data is a fragment. A fragment means that it's
      * not a complete document or a file, but rather a small part that is
-     * intended to be used within a larger document. For example a HTML
+     * intended to be used within a larger document. For example an HTML
      * snippet. This information is for example important when validating the
      * data.
      *

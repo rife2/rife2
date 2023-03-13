@@ -131,7 +131,7 @@ public abstract class RecordComponentVisitor {
   }
 
   /**
-   * Visits a non standard attribute of the record component.
+   * Visits a non-standard attribute of the record component.
    *
    * @param attribute an attribute.
    */

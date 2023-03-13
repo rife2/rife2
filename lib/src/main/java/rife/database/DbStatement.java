@@ -703,7 +703,7 @@ public class DbStatement implements Cloneable, AutoCloseable {
     /**
      * Retrieves the first auto-generated key created as a result of executing
      * this {@code DbStatement} object as an integer. If this
-     * {@code DbStatement} object did not generate any keys, a exception
+     * {@code DbStatement} object did not generate any keys, an exception
      * is thrown.
      * <p>If an exception is thrown, this {@code DbStatement} is
      * automatically closed and an ongoing transaction will be automatically

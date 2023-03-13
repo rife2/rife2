@@ -1981,7 +1981,7 @@ public class ConstrainedProperty implements Cloneable {
      * Sets a named content attribute for this property.
      * <p>This is only useful when the property also has a mime type
      * constraint.
-     * <p>A content attribute provides additional meta data about how you want
+     * <p>A content attribute provides additional metadata about how you want
      * to store the content data after loading, this can for example be image
      * dimensions.
      *

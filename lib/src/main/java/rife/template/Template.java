@@ -573,7 +573,7 @@ public interface Template extends Cloneable {
     /**
      * Sets the specified value in this template to the result of calling
      * {@link String#valueOf(Object) String.valueOf} on the given
-     * {@code value} and encodes it with the {@link TemplateEncoder} that's.
+     * {@code value} and encodes it with the {@link TemplateEncoder} that's
      * registered for this template
      *
      * @param id    the ID of the value in this template
@@ -998,7 +998,7 @@ public interface Template extends Cloneable {
     /**
      * Appends the result of calling {@link String#valueOf(Object)
      * String.valueOf} on the given {@code value} to the specified value
-     * in this template and encodes it with the {@link TemplateEncoder} that's.
+     * in this template and encodes it with the {@link TemplateEncoder} that's
      * registered for this template
      *
      * @param id    the ID of the value in this template

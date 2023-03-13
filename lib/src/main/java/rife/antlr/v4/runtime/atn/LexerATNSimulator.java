@@ -189,7 +189,7 @@ public class LexerATNSimulator extends ATNSimulator {
 			// it means that semantic predicates didn't prevent us from
 			// creating a DFA state. Once we know s!=null, we check to see if
 			// the DFA state has an edge already for t. If so, we can just reuse
-			// it's configuration set; there's no point in re-computing it.
+			// its configuration set; there's no point in re-computing it.
 			// This is kind of like doing DFA simulation within the ATN
 			// simulation because DFA simulation is really just a way to avoid
 			// computing reach/closure sets. Technically, once we know that

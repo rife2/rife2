@@ -18,7 +18,7 @@ import java.net.URL;
  * with resources. According to a name, a resource can be searched for and its
  * location is returned as an {@code URL} object.
  * <p>
- * It also possible to obtain a stream to read the resource's content,
+ * It is also possible to obtain a stream to read the resource's content,
  * to retrieve all its contents as a {@code String} and to obtain the
  * modification time of the resource.
  *

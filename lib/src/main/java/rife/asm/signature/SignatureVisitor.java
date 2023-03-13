@@ -94,7 +94,7 @@ public abstract class SignatureVisitor {
   /**
    * Visits the class bound of the last visited formal type parameter.
    *
-   * @return a non null visitor to visit the signature of the class bound.
+   * @return a non-null visitor to visit the signature of the class bound.
    */
   public SignatureVisitor visitClassBound() {
     return this;
@@ -103,7 +103,7 @@ public abstract class SignatureVisitor {
   /**
    * Visits an interface bound of the last visited formal type parameter.
    *
-   * @return a non null visitor to visit the signature of the interface bound.
+   * @return a non-null visitor to visit the signature of the interface bound.
    */
   public SignatureVisitor visitInterfaceBound() {
     return this;
@@ -112,7 +112,7 @@ public abstract class SignatureVisitor {
   /**
    * Visits the type of the super class.
    *
-   * @return a non null visitor to visit the signature of the super class type.
+   * @return a non-null visitor to visit the signature of the super class type.
    */
   public SignatureVisitor visitSuperclass() {
     return this;
@@ -121,7 +121,7 @@ public abstract class SignatureVisitor {
   /**
    * Visits the type of an interface implemented by the class.
    *
-   * @return a non null visitor to visit the signature of the interface type.
+   * @return a non-null visitor to visit the signature of the interface type.
    */
   public SignatureVisitor visitInterface() {
     return this;
@@ -130,7 +130,7 @@ public abstract class SignatureVisitor {
   /**
    * Visits the type of a method parameter.
    *
-   * @return a non null visitor to visit the signature of the parameter type.
+   * @return a non-null visitor to visit the signature of the parameter type.
    */
   public SignatureVisitor visitParameterType() {
     return this;
@@ -139,7 +139,7 @@ public abstract class SignatureVisitor {
   /**
    * Visits the return type of the method.
    *
-   * @return a non null visitor to visit the signature of the return type.
+   * @return a non-null visitor to visit the signature of the return type.
    */
   public SignatureVisitor visitReturnType() {
     return this;
@@ -148,7 +148,7 @@ public abstract class SignatureVisitor {
   /**
    * Visits the type of a method exception.
    *
-   * @return a non null visitor to visit the signature of the exception type.
+   * @return a non-null visitor to visit the signature of the exception type.
    */
   public SignatureVisitor visitExceptionType() {
     return this;
@@ -171,7 +171,7 @@ public abstract class SignatureVisitor {
   /**
    * Visits a signature corresponding to an array type.
    *
-   * @return a non null visitor to visit the signature of the array element type.
+   * @return a non-null visitor to visit the signature of the array element type.
    */
   public SignatureVisitor visitArrayType() {
     return this;
@@ -199,7 +199,7 @@ public abstract class SignatureVisitor {
    * Visits a type argument of the last visited class or inner class type.
    *
    * @param wildcard '+', '-' or '='.
-   * @return a non null visitor to visit the signature of the type argument.
+   * @return a non-null visitor to visit the signature of the type argument.
    */
   public SignatureVisitor visitTypeArgument(final char wildcard) {
     return this;

@@ -73,7 +73,7 @@ public class ConnectionPool implements AutoCloseable {
      *
      * @param datasource the {@link Datasource} to fill the pool with
      *                   connections from
-     * @throws DatabaseException when an error occured during the
+     * @throws DatabaseException when an error occurred during the
      *                           preparation of the pool
      * @since 1.0
      */
@@ -96,7 +96,7 @@ public class ConnectionPool implements AutoCloseable {
      * Cleans up all connections that have been reserved by this
      * datasource.
      *
-     * @throws DatabaseException when an error occured during the
+     * @throws DatabaseException when an error occurred during the
      *                           clearing of the pool
      * @since 1.0
      */

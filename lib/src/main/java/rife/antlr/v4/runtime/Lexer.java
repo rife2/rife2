@@ -396,7 +396,7 @@ public abstract class Lexer extends Recognizer<Integer, LexerATNSimulator>
 		return "'"+s+"'";
 	}
 
-	/** Lexers can normally match any char in it's vocabulary after matching
+	/** Lexers can normally match any char in its vocabulary after matching
 	 *  a token, so do the easy thing and just kill a character and hope
 	 *  it all works out.  You can instead use the rule invocation stack
 	 *  to do sophisticated error recovery if you are in a fragment rule.
