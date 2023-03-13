@@ -28,7 +28,7 @@ public class PrecompileOperation {
         }
     }
 
-    private List<TemplateType> precompiledTemplateTypes_;
+    private List<TemplateType> precompiledTemplateTypes_ = new ArrayList<>();
     private File srcMainResourcesTemplatesDirectory_;
     private File buildTemplatesDirectory_;
 

@@ -26,8 +26,8 @@ public class DownloadOperation {
         }
     }
 
-    private DependencyScopes dependencies_;
-    private List<Repository> repositories_;
+    private DependencyScopes dependencies_ = new DependencyScopes();
+    private List<Repository> repositories_ = new ArrayList<>();;
     private File libCompileDirectory_;
     private File libRuntimeDirectory_;
     private File libStandaloneDirectory_;

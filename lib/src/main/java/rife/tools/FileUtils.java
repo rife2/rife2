@@ -30,8 +30,12 @@ public final class FileUtils {
         return getFileList(file, new Pattern[]{included}, new Pattern[]{excluded}, true);
     }
 
-    public static ArrayList<String> getFileList(File file, Pattern[] included, Pattern[] excluded) {
-        return getFileList(file, included, excluded, true);
+    public static ArrayList<String> getFileList(File file, List<Pattern> included, List<Pattern> excluded) {
+        var included_array = new Pattern[included.size()];
+        var excluded_array = new Pattern[excluded.size()];
+        included.toArray(included_array);
+        excluded.toArray(excluded_array);
+        return getFileList(file, included_array, excluded_array, true);
     }
 
     private static ArrayList<String> getFileList(File file, Pattern[] included, Pattern[] excluded, boolean root) {

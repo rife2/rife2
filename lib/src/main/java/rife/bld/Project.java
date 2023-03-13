@@ -52,6 +52,12 @@ public abstract class Project extends BuildExecutor {
         new PrecompileOperation().fromProject(this).execute();
     }
 
+    @BuildCommand(help = JarOperation.Help.class)
+    public void jar()
+    throws Exception {
+        new JarOperation().fromProject(this).execute();
+    }
+
     @BuildCommand(help = RunOperation.Help.class)
     public void run()
     throws Exception {
@@ -243,6 +249,10 @@ public abstract class Project extends BuildExecutor {
         result.add("--exclude-engine=junit-platform-suite");
         result.add("--exclude-engine=junit-vintage");
         return result;
+    }
+
+    public String jarFileName() {
+        return name + "-" + version + ".jar";
     }
 
     /*

@@ -30,11 +30,11 @@ public class CompileOperation {
     private File buildMainDirectory_;
     private File buildProjectDirectory_;
     private File buildTestDirectory_;
-    private List<String> compileMainClasspath_;
-    private List<String> compileTestClasspath_;
-    private List<File> mainSourceFiles_;
-    private List<File> testSourceFiles_;
-    private List<String> compileOptions_;
+    private List<String> compileMainClasspath_ = new ArrayList<>();;
+    private List<String> compileTestClasspath_ = new ArrayList<>();;
+    private List<File> mainSourceFiles_ = new ArrayList<>();
+    private List<File> testSourceFiles_ = new ArrayList<>();;
+    private List<String> compileOptions_ = new ArrayList<>();;
 
     public CompileOperation() {
     }

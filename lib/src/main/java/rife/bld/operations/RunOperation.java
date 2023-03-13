@@ -26,8 +26,8 @@ public class RunOperation {
     }
 
     private String javaTool_;
-    private List<String> runJavaOptions_;
-    private List<String> runClasspath_;
+    private List<String> runJavaOptions_ = new ArrayList<>();
+    private List<String> runClasspath_ = new ArrayList<>();
     private String mainClass_;
 
     public RunOperation() {

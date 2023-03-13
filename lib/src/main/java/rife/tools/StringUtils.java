@@ -2339,6 +2339,25 @@ public final class StringUtils {
      * regular expressions.
      *
      * @param name     The {@code String} that will be filtered.
+     * @param included A list of regular expressions that need to succeed
+     * @param excluded A list of regular expressions that need to fail
+     * @return {@code true} if the name filtered through correctly; or
+     * <p>{@code false} otherwise.
+     * @since 1.5
+     */
+    public static boolean filter(String name, List<Pattern> included, List<Pattern> excluded) {
+        var included_array = new Pattern[included.size()];
+        var excluded_array = new Pattern[excluded.size()];
+        included.toArray(included_array);
+        excluded.toArray(excluded_array);
+        return filter(name, included_array, excluded_array);
+    }
+
+    /**
+     * Checks if the name filters through a series of including and excluding
+     * regular expressions.
+     *
+     * @param name     The {@code String} that will be filtered.
      * @param included An array of regular expressions that need to succeed
      * @param excluded An array of regular expressions that need to fail
      * @return {@code true} if the name filtered through correctly; or
@@ -2353,7 +2372,7 @@ public final class StringUtils {
         var accepted = false;
 
         // retain only the includes
-        if (null == included) {
+        if (null == included || included.length == 0) {
             accepted = true;
         } else {
             for (var pattern : included) {

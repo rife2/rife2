@@ -77,7 +77,6 @@ public class HelpOperation {
             The following commands are supported.
             """);
 
-//        jar         Creates an uberJar archive for a RIFE2 application
 //        war         Creates a war archive for a RIFE2 application
 
         var command_length = commands.keySet().stream().max(comparingInt(String::length)).get().length() + 2;

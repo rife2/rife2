@@ -26,10 +26,10 @@ public class TestOperation {
     }
 
     private String javaTool_;
-    private List<String> testJavaOptions_;
-    private List<String> testClasspath_;
+    private List<String> testJavaOptions_ = new ArrayList<>();
+    private List<String> testClasspath_ = new ArrayList<>();
     private String testToolMainClass_;
-    private List<String> testToolOptions_;
+    private List<String> testToolOptions_ = new ArrayList<>();
 
     public TestOperation() {
     }
