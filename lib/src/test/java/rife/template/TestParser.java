@@ -736,17 +736,21 @@ public class TestParser {
             var filter1_got_block1 = false;
             var filter1_got_block2 = false;
             var filter1_got_block3 = false;
-            for (var block_groups : filtered_blocks) {
+            for (var entry : filtered_blocks.entrySet()) {
+                var block_groups = entry.getValue();
                 assertEquals(3, block_groups.length);
-                if (block_groups[0].equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
+                if (entry.getKey().equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
+                    block_groups[0].equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
                     block_groups[1].equals("BLOCK1a") &&
                     block_groups[2].equals("BLOCK1b")) {
                     filter1_got_block1 = true;
-                } else if (block_groups[0].equals("FILTER1:BLOCK2a:CONST:BLOCK2b") &&
+                } else if (entry.getKey().equals("FILTER1:BLOCK2a:CONST:BLOCK2b") &&
+                    block_groups[0].equals("FILTER1:BLOCK2a:CONST:BLOCK2b") &&
                     block_groups[1].equals("BLOCK2a") &&
                     block_groups[2].equals("BLOCK2b")) {
                     filter1_got_block2 = true;
-                } else if (block_groups[0].equals("FILTER1:BLOCK3a:CONST:BLOCK3b") &&
+                } else if (entry.getKey().equals("FILTER1:BLOCK3a:CONST:BLOCK3b") &&
+                    block_groups[0].equals("FILTER1:BLOCK3a:CONST:BLOCK3b") &&
                     block_groups[1].equals("BLOCK3a") &&
                     block_groups[2].equals("BLOCK3b")) {
                     filter1_got_block3 = true;
@@ -759,12 +763,15 @@ public class TestParser {
 
             var filter2_got_block1 = false;
             var filter2_got_block2 = false;
-            for (var block_groups : filtered_blocks) {
+            for (var entry : filtered_blocks.entrySet()) {
+                var block_groups = entry.getValue();
                 assertEquals(2, block_groups.length);
-                if (block_groups[0].equals("FILTER2:BLOCK1") &&
+                if (entry.getKey().equals("FILTER2:BLOCK1") &&
+                    block_groups[0].equals("FILTER2:BLOCK1") &&
                     block_groups[1].equals("BLOCK1")) {
                     filter2_got_block1 = true;
-                } else if (block_groups[0].equals("FILTER2:BLOCK2") &&
+                } else if (entry.getKey().equals("FILTER2:BLOCK2") &&
+                    block_groups[0].equals("FILTER2:BLOCK2") &&
                     block_groups[1].equals("BLOCK2")) {
                     filter2_got_block2 = true;
                 }
@@ -776,12 +783,15 @@ public class TestParser {
 
             var filter3_got_block1 = false;
             var filter3_got_block2 = false;
-            for (var block_groups : filtered_blocks) {
+            for (var entry : filtered_blocks.entrySet()) {
+                var block_groups = entry.getValue();
                 assertEquals(2, block_groups.length);
-                if (block_groups[0].equals("CONST-FILTER3:BLOCK1") &&
+                if (entry.getKey().equals("CONST-FILTER3:BLOCK1") &&
+                    block_groups[0].equals("CONST-FILTER3:BLOCK1") &&
                     block_groups[1].equals("BLOCK1")) {
                     filter3_got_block1 = true;
-                } else if (block_groups[0].equals("CONST-FILTER3:BLOCK2") &&
+                } else if (entry.getKey().equals("CONST-FILTER3:BLOCK2") &&
+                    block_groups[0].equals("CONST-FILTER3:BLOCK2") &&
                     block_groups[1].equals("BLOCK2")) {
                     filter3_got_block2 = true;
                 }
@@ -808,8 +818,10 @@ public class TestParser {
             var filter4_got_block5 = false;
             var filter4_got_block6 = false;
             var filter4_got_block7 = false;
-            for (var block_groups : filtered_blocks) {
-                if (block_groups[0].equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
+            for (var entry : filtered_blocks.entrySet()) {
+                var block_groups = entry.getValue();
+                if (entry.getKey().equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
+                    block_groups[0].equals("FILTER1:BLOCK1a:CONST:BLOCK1b") &&
                     block_groups[1].equals("FILTER1") &&
                     block_groups[2].equals("BLOCK1a") &&
                     block_groups[3].equals("CONST") &&
@@ -818,7 +830,8 @@ public class TestParser {
                     filter4_got_block1 = true;
                     continue;
                 }
-                if (block_groups[0].equals("FILTER1:BLOCK2a:CONST:BLOCK2b") &&
+                if (entry.getKey().equals("FILTER1:BLOCK2a:CONST:BLOCK2b") &&
+                    block_groups[0].equals("FILTER1:BLOCK2a:CONST:BLOCK2b") &&
                     block_groups[1].equals("FILTER1") &&
                     block_groups[2].equals("BLOCK2a") &&
                     block_groups[3].equals("CONST") &&
@@ -827,7 +840,8 @@ public class TestParser {
                     filter4_got_block2 = true;
                     continue;
                 }
-                if (block_groups[0].equals("FILTER1:BLOCK3a:CONST:BLOCK3b") &&
+                if (entry.getKey().equals("FILTER1:BLOCK3a:CONST:BLOCK3b") &&
+                    block_groups[0].equals("FILTER1:BLOCK3a:CONST:BLOCK3b") &&
                     block_groups[1].equals("FILTER1") &&
                     block_groups[2].equals("BLOCK3a") &&
                     block_groups[3].equals("CONST") &&
@@ -836,21 +850,24 @@ public class TestParser {
                     filter4_got_block3 = true;
                     continue;
                 }
-                if (block_groups[0].equals("FILTER2:BLOCK1") &&
+                if (entry.getKey().equals("FILTER2:BLOCK1") &&
+                    block_groups[0].equals("FILTER2:BLOCK1") &&
                     block_groups[1].equals("FILTER2") &&
                     block_groups[2].equals("BLOCK1")) {
                     assertEquals(3, block_groups.length);
                     filter4_got_block4 = true;
                     continue;
                 }
-                if (block_groups[0].equals("FILTER2:BLOCK2") &&
+                if (entry.getKey().equals("FILTER2:BLOCK2") &&
+                    block_groups[0].equals("FILTER2:BLOCK2") &&
                     block_groups[1].equals("FILTER2") &&
                     block_groups[2].equals("BLOCK2")) {
                     assertEquals(3, block_groups.length);
                     filter4_got_block5 = true;
                     continue;
                 }
-                if (block_groups[0].equals("CONST-FILTER3:BLOCK1") &&
+                if (entry.getKey().equals("CONST-FILTER3:BLOCK1") &&
+                    block_groups[0].equals("CONST-FILTER3:BLOCK1") &&
                     block_groups[1].equals("CONST") &&
                     block_groups[2].equals("FILTER3") &&
                     block_groups[3].equals("BLOCK1")) {
@@ -858,7 +875,8 @@ public class TestParser {
                     filter4_got_block6 = true;
                     continue;
                 }
-                if (block_groups[0].equals("CONST-FILTER3:BLOCK2") &&
+                if (entry.getKey().equals("CONST-FILTER3:BLOCK2") &&
+                    block_groups[0].equals("CONST-FILTER3:BLOCK2") &&
                     block_groups[1].equals("CONST") &&
                     block_groups[2].equals("FILTER3") &&
                     block_groups[3].equals("BLOCK2")) {
@@ -909,17 +927,21 @@ public class TestParser {
             var filter1_got_value1 = false;
             var filter1_got_value2 = false;
             var filter1_got_value3 = false;
-            for (var value_groups : filtered_values) {
+            for (var entry : filtered_values.entrySet()) {
+                var value_groups = entry.getValue();
                 assertEquals(3, value_groups.length);
-                if (value_groups[0].equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
+                if (entry.getKey().equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
+                    value_groups[0].equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
                     value_groups[1].equals("VALUE1a") &&
                     value_groups[2].equals("VALUE1b")) {
                     filter1_got_value1 = true;
-                } else if (value_groups[0].equals("FILTER1:VALUE2a:CONST:VALUE2b") &&
+                } else if (entry.getKey().equals("FILTER1:VALUE2a:CONST:VALUE2b") &&
+                    value_groups[0].equals("FILTER1:VALUE2a:CONST:VALUE2b") &&
                     value_groups[1].equals("VALUE2a") &&
                     value_groups[2].equals("VALUE2b")) {
                     filter1_got_value2 = true;
-                } else if (value_groups[0].equals("FILTER1:VALUE3a:CONST:VALUE3b") &&
+                } else if (entry.getKey().equals("FILTER1:VALUE3a:CONST:VALUE3b") &&
+                    value_groups[0].equals("FILTER1:VALUE3a:CONST:VALUE3b") &&
                     value_groups[1].equals("VALUE3a") &&
                     value_groups[2].equals("VALUE3b")) {
                     filter1_got_value3 = true;
@@ -932,12 +954,15 @@ public class TestParser {
 
             var filter2_got_value1 = false;
             var filter2_got_value2 = false;
-            for (var value_groups : filtered_values) {
+            for (var entry : filtered_values.entrySet()) {
+                var value_groups = entry.getValue();
                 assertEquals(2, value_groups.length);
-                if (value_groups[0].equals("FILTER2:VALUE1") &&
+                if (entry.getKey().equals("FILTER2:VALUE1") &&
+                    value_groups[0].equals("FILTER2:VALUE1") &&
                     value_groups[1].equals("VALUE1")) {
                     filter2_got_value1 = true;
-                } else if (value_groups[0].equals("FILTER2:VALUE2") &&
+                } else if (entry.getKey().equals("FILTER2:VALUE2") &&
+                    value_groups[0].equals("FILTER2:VALUE2") &&
                     value_groups[1].equals("VALUE2")) {
                     filter2_got_value2 = true;
                 }
@@ -949,12 +974,15 @@ public class TestParser {
 
             var filter3_got_value1 = false;
             var filter3_got_value2 = false;
-            for (var value_groups : filtered_values) {
+            for (var entry : filtered_values.entrySet()) {
+                var value_groups = entry.getValue();
                 assertEquals(2, value_groups.length);
-                if (value_groups[0].equals("CONST-FILTER3:VALUE1") &&
+                if (entry.getKey().equals("CONST-FILTER3:VALUE1") &&
+                    value_groups[0].equals("CONST-FILTER3:VALUE1") &&
                     value_groups[1].equals("VALUE1")) {
                     filter3_got_value1 = true;
-                } else if (value_groups[0].equals("CONST-FILTER3:VALUE2") &&
+                } else if (entry.getKey().equals("CONST-FILTER3:VALUE2") &&
+                    value_groups[0].equals("CONST-FILTER3:VALUE2") &&
                     value_groups[1].equals("VALUE2")) {
                     filter3_got_value2 = true;
                 }
@@ -981,8 +1009,10 @@ public class TestParser {
             var filter4_got_value5 = false;
             var filter4_got_value6 = false;
             var filter4_got_value7 = false;
-            for (var value_groups : filtered_values) {
-                if (value_groups[0].equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
+            for (var entry : filtered_values.entrySet()) {
+                var value_groups = entry.getValue();
+                if (entry.getKey().equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
+                    value_groups[0].equals("FILTER1:VALUE1a:CONST:VALUE1b") &&
                     value_groups[1].equals("FILTER1") &&
                     value_groups[2].equals("VALUE1a") &&
                     value_groups[3].equals("CONST") &&
@@ -991,7 +1021,8 @@ public class TestParser {
                     filter4_got_value1 = true;
                     continue;
                 }
-                if (value_groups[0].equals("FILTER1:VALUE2a:CONST:VALUE2b") &&
+                if (entry.getKey().equals("FILTER1:VALUE2a:CONST:VALUE2b") &&
+                    value_groups[0].equals("FILTER1:VALUE2a:CONST:VALUE2b") &&
                     value_groups[1].equals("FILTER1") &&
                     value_groups[2].equals("VALUE2a") &&
                     value_groups[3].equals("CONST") &&
@@ -1000,7 +1031,8 @@ public class TestParser {
                     filter4_got_value2 = true;
                     continue;
                 }
-                if (value_groups[0].equals("FILTER1:VALUE3a:CONST:VALUE3b") &&
+                if (entry.getKey().equals("FILTER1:VALUE3a:CONST:VALUE3b") &&
+                    value_groups[0].equals("FILTER1:VALUE3a:CONST:VALUE3b") &&
                     value_groups[1].equals("FILTER1") &&
                     value_groups[2].equals("VALUE3a") &&
                     value_groups[3].equals("CONST") &&
@@ -1009,21 +1041,24 @@ public class TestParser {
                     filter4_got_value3 = true;
                     continue;
                 }
-                if (value_groups[0].equals("FILTER2:VALUE1") &&
+                if (entry.getKey().equals("FILTER2:VALUE1") &&
+                    value_groups[0].equals("FILTER2:VALUE1") &&
                     value_groups[1].equals("FILTER2") &&
                     value_groups[2].equals("VALUE1")) {
                     assertEquals(3, value_groups.length);
                     filter4_got_value4 = true;
                     continue;
                 }
-                if (value_groups[0].equals("FILTER2:VALUE2") &&
+                if (entry.getKey().equals("FILTER2:VALUE2") &&
+                    value_groups[0].equals("FILTER2:VALUE2") &&
                     value_groups[1].equals("FILTER2") &&
                     value_groups[2].equals("VALUE2")) {
                     assertEquals(3, value_groups.length);
                     filter4_got_value5 = true;
                     continue;
                 }
-                if (value_groups[0].equals("CONST-FILTER3:VALUE1") &&
+                if (entry.getKey().equals("CONST-FILTER3:VALUE1") &&
+                    value_groups[0].equals("CONST-FILTER3:VALUE1") &&
                     value_groups[1].equals("CONST") &&
                     value_groups[2].equals("FILTER3") &&
                     value_groups[3].equals("VALUE1")) {
@@ -1031,7 +1066,8 @@ public class TestParser {
                     filter4_got_value6 = true;
                     continue;
                 }
-                if (value_groups[0].equals("CONST-FILTER3:VALUE2") &&
+                if (entry.getKey().equals("CONST-FILTER3:VALUE2") &&
+                    value_groups[0].equals("CONST-FILTER3:VALUE2") &&
                     value_groups[1].equals("CONST") &&
                     value_groups[2].equals("FILTER3") &&
                     value_groups[3].equals("VALUE2")) {

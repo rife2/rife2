@@ -1063,7 +1063,7 @@ public interface Template extends Cloneable {
 
     /**
      * Each template type supports a set of special block tags that are used
-     * for adding automated features like localization, block value scripting,
+     * for adding automated features like localization,
      * config value setting, ... Instead of having to parse all template block
      * identifiers each time these features are used, RIFE filters them out at
      * template compilation and keeps them available in a separate collection.
@@ -1073,9 +1073,10 @@ public interface Template extends Cloneable {
      * @param filter a template factory regular expression
      * @return a list of captured groups for matching block ID's
      * @see #hasFilteredBlocks
+     * @see #getFilteredBlock
      * @since 1.0
      */
-    List<String[]> getFilteredBlocks(String filter);
+    Collection<String[]> getFilteredBlocks(String filter);
 
     /**
      * Returns whether any block matched a particular filter at template
@@ -1084,14 +1085,29 @@ public interface Template extends Cloneable {
      * @param filter a template factory regular expression
      * @return whether any matching blocks exist in this template
      * @see #getFilteredBlocks
+     * @see #getFilteredBlock
      * @since 1.0
      */
     boolean hasFilteredBlocks(String filter);
 
     /**
+     * Returns the matched data of a block that matched a particular filter at
+     * template compilation.
+     *
+     * @param filter a template factory regular expression
+     * @param id the ID of matched block
+     * @return the matched data; or {@code null} of no such filtered block
+     * was matched at template compilation time
+     * @see #getFilteredBlocks
+     * @see #hasFilteredBlocks
+     * @since 1.5
+     */
+    String[] getFilteredBlock(String filter, String id);
+
+    /**
      * Each template type supports a set of special value tags that are used
-     * for adding automated features like embedded elements, localization,
-     * block value scripting, config value setting, ... Instead of having to
+     * for adding automated features like authentication, localization,
+     * value rendering, config value setting, ... Instead of having to
      * parse all template value identifiers each time these features are used,
      * RIFE filters them out at template compilation and keeps them available
      * in a separate collection.
@@ -1101,9 +1117,10 @@ public interface Template extends Cloneable {
      * @param filter a template factory regular expression
      * @return a list of captured groups for matching value ID's
      * @see #hasFilteredValues
+     * @see #getFilteredValue
      * @since 1.0
      */
-    List<String[]> getFilteredValues(String filter);
+    Collection<String[]> getFilteredValues(String filter);
 
     /**
      * Returns whether any value matched a particular filter at template
@@ -1112,9 +1129,24 @@ public interface Template extends Cloneable {
      * @param filter a template factory regular expression
      * @return whether any matching values exist in this template
      * @see #getFilteredValues
+     * @see #getFilteredValue
      * @since 1.0
      */
     boolean hasFilteredValues(String filter);
+
+    /**
+     * Returns the matched data of a value that matched a particular filter at
+     * template compilation.
+     *
+     * @param filter a template factory regular expression
+     * @param id the ID of matched value
+     * @return the matched data; or {@code null} of no such filtered value
+     * was matched at template compilation time
+     * @see #getFilteredValues
+     * @see #hasFilteredValues
+     * @since 1.5
+     */
+    String[] getFilteredValue(String filter, String id);
 
     /**
      * Fills all values in this template which match "<code>l10n:<em>key</em></code>",

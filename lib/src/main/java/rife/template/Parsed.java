@@ -536,7 +536,7 @@ method.visitInsn               (ARETURN);
 method.visitMaxs               (0, 0);
 
 			// generate the method that returns the list of blocks according to a filter
-method = class_writer.visitMethod(ACC_PUBLIC, "getFilteredBlocks", "(Ljava/lang/String;)Ljava/util/List;", null, null);
+method = class_writer.visitMethod(ACC_PUBLIC, "getFilteredBlocks", "(Ljava/lang/String;)Ljava/util/Collection;", null, null);
 			{
 				var after_null_check = new Label();
 method.visitInsn               (ACONST_NULL);
@@ -565,21 +565,26 @@ method.visitLabel              (after_empty_check);
 method.visitFieldInsn          (GETSTATIC, full_classname, "sFilteredBlocksMap", "Ljava/util/HashMap;");
 method.visitVarInsn            (ALOAD, 1);
 method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/HashMap", "get", "(Ljava/lang/Object;)Ljava/lang/Object;", false);
-method.visitTypeInsn           (CHECKCAST, "java/util/List");
+method.visitTypeInsn           (CHECKCAST, "java/util/Map");
 method.visitVarInsn            (ASTORE, 2);
 method.visitInsn               (ACONST_NULL);
 method.visitVarInsn            (ALOAD, 2);
-                    var list_null_check = new Label();
-method.visitJumpInsn           (IF_ACMPNE, list_null_check);
+                    var map_null_check = new Label();
+					var load_return_value = new Label();
+method.visitJumpInsn           (IF_ACMPNE, map_null_check);
 method.visitFieldInsn          (GETSTATIC, "java/util/Collections", "EMPTY_LIST", "Ljava/util/List;");
 method.visitVarInsn            (ASTORE, 2);
-method.visitLabel              (list_null_check);
+method.visitJumpInsn		   (GOTO, load_return_value);
+method.visitLabel              (map_null_check);
 method.visitVarInsn            (ALOAD, 2);
-method.visitInsn               (ARETURN);
+method.visitMethodInsn         (INVOKEINTERFACE, "java/util/Map", "values", "()Ljava/util/Collection;", true);
+method.visitVarInsn            (ASTORE, 2);
+method.visitLabel              (load_return_value);
+method.visitVarInsn            (ALOAD, 2);
 				} else {
 method.visitFieldInsn          (GETSTATIC, "java/util/Collections", "EMPTY_LIST", "Ljava/util/List;");
-method.visitInsn               (ARETURN);
 				}
+method.visitInsn               (ARETURN);
 method.visitMaxs               (0, 0);
 			}
 
@@ -621,8 +626,40 @@ method.visitInsn               (IRETURN);
 method.visitMaxs               (0, 0);
 			}
 
+		// generate the method that verifies if blocks are present that match a certain filter
+method = class_writer.visitMethod(ACC_PUBLIC, "getFilteredBlock", "(Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;", null, null);
+		{
+			if (filteredBlocksMap_ != null) {
+method.visitFieldInsn          (GETSTATIC, full_classname, "sFilteredBlocksMap", "Ljava/util/HashMap;");
+method.visitVarInsn            (ALOAD, 1);
+method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/HashMap", "get", "(Ljava/lang/Object;)Ljava/lang/Object;", false);
+method.visitTypeInsn           (CHECKCAST, "java/util/Map");
+method.visitVarInsn            (ASTORE, 1);
+method.visitInsn               (ACONST_NULL);
+method.visitVarInsn            (ALOAD, 1);
+				var map_null_check = new Label();
+				var load_return_value = new Label();
+method.visitJumpInsn           (IF_ACMPNE, map_null_check);
+method.visitInsn               (ACONST_NULL);
+method.visitVarInsn            (ASTORE, 2);
+method.visitJumpInsn		   (GOTO, load_return_value);
+method.visitLabel              (map_null_check);
+method.visitVarInsn            (ALOAD, 1);
+method.visitVarInsn            (ALOAD, 2);
+method.visitMethodInsn         (INVOKEINTERFACE, "java/util/Map", "get", "(Ljava/lang/Object;)Ljava/lang/Object;", true);
+method.visitTypeInsn           (CHECKCAST, "[Ljava/lang/String;");
+method.visitVarInsn            (ASTORE, 2);
+method.visitLabel              (load_return_value);
+method.visitVarInsn            (ALOAD, 2);
+			} else {
+method.visitInsn               (ACONST_NULL);
+			}
+method.visitInsn               (ARETURN);
+method.visitMaxs               (0, 0);
+		}
+
 			// generate the method that returns the list of values according to a filter
-method = class_writer.visitMethod(ACC_PUBLIC, "getFilteredValues", "(Ljava/lang/String;)Ljava/util/List;", null, null);
+method = class_writer.visitMethod(ACC_PUBLIC, "getFilteredValues", "(Ljava/lang/String;)Ljava/util/Collection;", null, null);
 			{
 				var after_null_check = new Label();
 method.visitInsn               (ACONST_NULL);
@@ -651,15 +688,21 @@ method.visitLabel              (after_empty_check);
 method.visitFieldInsn          (GETSTATIC, full_classname, "sFilteredValuesMap", "Ljava/util/HashMap;");
 method.visitVarInsn            (ALOAD, 1);
 method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/HashMap", "get", "(Ljava/lang/Object;)Ljava/lang/Object;", false);
-method.visitTypeInsn           (CHECKCAST, "java/util/List");
+method.visitTypeInsn           (CHECKCAST, "java/util/Map");
 method.visitVarInsn            (ASTORE, 2);
 method.visitInsn               (ACONST_NULL);
 method.visitVarInsn            (ALOAD, 2);
-					var list_null_check = new Label();
-method.visitJumpInsn           (IF_ACMPNE, list_null_check);
+					var map_null_check = new Label();
+					var load_return_value = new Label();
+method.visitJumpInsn           (IF_ACMPNE, map_null_check);
 method.visitFieldInsn          (GETSTATIC, "java/util/Collections", "EMPTY_LIST", "Ljava/util/List;");
 method.visitVarInsn            (ASTORE, 2);
-method.visitLabel              (list_null_check);
+method.visitJumpInsn		   (GOTO, load_return_value);
+method.visitLabel              (map_null_check);
+method.visitVarInsn            (ALOAD, 2);
+method.visitMethodInsn         (INVOKEINTERFACE, "java/util/Map", "values", "()Ljava/util/Collection;", true);
+method.visitVarInsn            (ASTORE, 2);
+method.visitLabel              (load_return_value);
 method.visitVarInsn            (ALOAD, 2);
 				} else {
 method.visitFieldInsn          (GETSTATIC, "java/util/Collections", "EMPTY_LIST", "Ljava/util/List;");
@@ -706,8 +749,40 @@ method.visitInsn               (IRETURN);
 method.visitMaxs               (0, 0);
 			}
 
+// generate the method that verifies if values are present that match a certain filter
+method = class_writer.visitMethod(ACC_PUBLIC, "getFilteredValue", "(Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;", null, null);
+			{
+				if (filteredValuesMap_ != null) {
+method.visitFieldInsn          (GETSTATIC, full_classname, "sFilteredValuesMap", "Ljava/util/HashMap;");
+method.visitVarInsn            (ALOAD, 1);
+method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/HashMap", "get", "(Ljava/lang/Object;)Ljava/lang/Object;", false);
+method.visitTypeInsn           (CHECKCAST, "java/util/Map");
+method.visitVarInsn            (ASTORE, 1);
+method.visitInsn               (ACONST_NULL);
+method.visitVarInsn            (ALOAD, 1);
+					var map_null_check = new Label();
+					var load_return_value = new Label();
+method.visitJumpInsn           (IF_ACMPNE, map_null_check);
+method.visitInsn               (ACONST_NULL);
+method.visitVarInsn            (ASTORE, 2);
+method.visitJumpInsn		   (GOTO, load_return_value);
+method.visitLabel              (map_null_check);
+method.visitVarInsn            (ALOAD, 1);
+method.visitVarInsn            (ALOAD, 2);
+method.visitMethodInsn         (INVOKEINTERFACE, "java/util/Map", "get", "(Ljava/lang/Object;)Ljava/lang/Object;", true);
+method.visitTypeInsn           (CHECKCAST, "[Ljava/lang/String;");
+method.visitVarInsn            (ASTORE, 2);
+method.visitLabel              (load_return_value);
+method.visitVarInsn            (ALOAD, 2);
+				} else {
+method.visitInsn               (ACONST_NULL);
+				}
+method.visitInsn               (ARETURN);
+method.visitMaxs               (0, 0);
+			}
+
 			// generate the method that returns the dependencies
-method = class_writer.visitMethod(1, "getDependencies", "()Ljava/util/Map;", null, null);
+method = class_writer.visitMethod(ACC_PUBLIC, "getDependencies", "()Ljava/util/Map;", null, null);
 method.visitFieldInsn          (GETSTATIC, full_classname, "sDependencies", "Ljava/util/HashMap;");
 method.visitInsn               (ARETURN);
 method.visitMaxs               (0, 0);
@@ -865,28 +940,32 @@ method.visitVarInsn            (ASTORE, 0);
 
 				for (var key : filteredBlocksMap_.keySet()) {
 					filtered_blocks = filteredBlocksMap_.getFilteredTag(key);
-method.visitTypeInsn           (NEW, "java/util/ArrayList");
+method.visitTypeInsn           (NEW, "java/util/LinkedHashMap");
 method.visitInsn               (DUP);
-method.visitMethodInsn         (INVOKESPECIAL, "java/util/ArrayList", "<init>", "()V", false);
+method.visitMethodInsn         (INVOKESPECIAL, "java/util/LinkedHashMap", "<init>", "()V", false);
 method.visitVarInsn            (ASTORE, 1);
 
-					for (var captured_groups : filtered_blocks) {
+					for (var entry : filtered_blocks.entrySet()) {
 method.visitVarInsn            (ALOAD, 1);
-addIntegerConst(method, captured_groups.length);
+method.visitLdcInsn            (entry.getKey());
+addIntegerConst(method, entry.getValue().length);
 method.visitTypeInsn           (ANEWARRAY, "java/lang/String");
-						for (var i = 0; i < captured_groups.length; i++) {
+						for (var i = 0; i < entry.getValue().length; i++) {
 method.visitInsn               (DUP);
 addIntegerConst(method, i);
-method.visitLdcInsn            (captured_groups[i]);
+if (null == entry.getValue()[i]) {
+	method.visitInsn               (ACONST_NULL);
+} else {
+	method.visitLdcInsn            (entry.getValue()[i]);
+}
 method.visitInsn               (AASTORE);
 						}
-method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/ArrayList", "add", "(Ljava/lang/Object;)Z", false);
-method.visitInsn               (POP);
+method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/LinkedHashMap", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", false);
 					}
 method.visitFieldInsn          (GETSTATIC, full_classname, "sFilteredBlocksMap", "Ljava/util/HashMap;");
 method.visitLdcInsn            (key);
 method.visitVarInsn            (ALOAD, 1);
-method.visitMethodInsn		   (INVOKESTATIC, "java/util/Collections", "unmodifiableList", "(Ljava/util/List;)Ljava/util/List;", false);
+method.visitMethodInsn		   (INVOKESTATIC, "java/util/Collections", "unmodifiableMap", "(Ljava/util/Map;)Ljava/util/Map;", false);
 method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/HashMap", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", false);
 method.visitInsn               (POP);
 				}
@@ -905,32 +984,32 @@ method.visitVarInsn            (ASTORE, 1);
 
 				for (var key : filteredValuesMap_.keySet()) {
 					filtered_values = filteredValuesMap_.getFilteredTag(key);
-method.visitTypeInsn           (NEW, "java/util/ArrayList");
+method.visitTypeInsn           (NEW, "java/util/LinkedHashMap");
 method.visitInsn               (DUP);
-method.visitMethodInsn         (INVOKESPECIAL, "java/util/ArrayList", "<init>", "()V", false);
+method.visitMethodInsn         (INVOKESPECIAL, "java/util/LinkedHashMap", "<init>", "()V", false);
 method.visitVarInsn            (ASTORE, 1);
 
-					for (var captured_groups : filtered_values) {
+					for (var entry : filtered_values.entrySet()) {
 method.visitVarInsn            (ALOAD, 1);
-addIntegerConst(method, captured_groups.length);
+method.visitLdcInsn            (entry.getKey());
+addIntegerConst(method, entry.getValue().length);
 method.visitTypeInsn           (ANEWARRAY, "java/lang/String");
-						for (var i = 0; i < captured_groups.length; i++) {
+						for (var i = 0; i < entry.getValue().length; i++) {
 method.visitInsn               (DUP);
 addIntegerConst(method, i);
-							if (null == captured_groups[i]) {
+							if (null == entry.getValue()[i]) {
 method.visitInsn               (ACONST_NULL);
 							} else {
-method.visitLdcInsn            (captured_groups[i]);
+method.visitLdcInsn            (entry.getValue()[i]);
 							}
 method.visitInsn               (AASTORE);
 						}
-method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/ArrayList", "add", "(Ljava/lang/Object;)Z", false);
-method.visitInsn               (POP);
+method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/LinkedHashMap", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", false);
 					}
 method.visitFieldInsn          (GETSTATIC, full_classname, "sFilteredValuesMap", "Ljava/util/HashMap;");
 method.visitLdcInsn            (key);
 method.visitVarInsn            (ALOAD, 1);
-method.visitMethodInsn		   (INVOKESTATIC, "java/util/Collections", "unmodifiableList", "(Ljava/util/List;)Ljava/util/List;", false);
+method.visitMethodInsn		   (INVOKESTATIC, "java/util/Collections", "unmodifiableMap", "(Ljava/util/Map;)Ljava/util/Map;", false);
 method.visitMethodInsn         (INVOKEVIRTUAL, "java/util/HashMap", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", false);
 method.visitInsn               (POP);
 				}

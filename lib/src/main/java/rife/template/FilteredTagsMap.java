@@ -39,6 +39,6 @@ public class FilteredTagsMap extends HashMap<String, FilteredTags> {
             put(filter, filtered_values);
         }
 
-        filtered_values.add(capturedGroups);
+        filtered_values.put(capturedGroups[0], capturedGroups);
     }
 }

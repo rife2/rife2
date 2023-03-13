@@ -5,9 +5,9 @@
 package rife.template;
 
 import java.io.Serial;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
-public class FilteredTags extends ArrayList<String[]> {
+public class FilteredTags extends LinkedHashMap<String, String[]> {
     @Serial private static final long serialVersionUID = 2354478090801500985L;
 
     public FilteredTags() {

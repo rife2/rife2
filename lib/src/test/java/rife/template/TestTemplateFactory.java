@@ -753,10 +753,34 @@ public class TestTemplateFactory {
             assertTrue(template.hasFilteredBlocks(filter3));
             assertFalse(template.hasFilteredBlocks(filter4));
 
-            List<String[]> filtered_blocks = null;
+            Collection<String[]> filtered_blocks = null;
 
             filtered_blocks = template.getFilteredBlocks(filter1);
             assertEquals(3, filtered_blocks.size());
+
+            var match1x = template.getFilteredBlock(filter1, "FILTER1:BLOCK1a:CONST:BLOCK1x");
+            assertNull(match1x);
+            
+            var match1b = template.getFilteredBlock(filter1, "FILTER1:BLOCK1a:CONST:BLOCK1b");
+            assertNotNull(match1b);
+            assertEquals(3, match1b.length);
+            assertEquals(match1b[0], "FILTER1:BLOCK1a:CONST:BLOCK1b");
+            assertEquals(match1b[1], "BLOCK1a");
+            assertEquals(match1b[2], "BLOCK1b");
+            
+            var match2b = template.getFilteredBlock(filter1, "FILTER1:BLOCK2a:CONST:BLOCK2b");
+            assertNotNull(match2b);
+            assertEquals(3, match2b.length);
+            assertEquals(match2b[0], "FILTER1:BLOCK2a:CONST:BLOCK2b");
+            assertEquals(match2b[1], "BLOCK2a");
+            assertEquals(match2b[2], "BLOCK2b");
+
+            var match3b = template.getFilteredBlock(filter1, "FILTER1:BLOCK3a:CONST:BLOCK3b");
+            assertNotNull(match3b);
+            assertEquals(3, match3b.length);
+            assertEquals(match3b[0], "FILTER1:BLOCK3a:CONST:BLOCK3b");
+            assertEquals(match3b[1], "BLOCK3a");
+            assertEquals(match3b[2], "BLOCK3b");
 
             var filter1_got_block1 = false;
             var filter1_got_block2 = false;
@@ -919,10 +943,34 @@ public class TestTemplateFactory {
             assertTrue(template.hasFilteredValues(filter3));
             assertFalse(template.hasFilteredValues(filter4));
 
-            List<String[]> filtered_values = null;
+            Collection<String[]> filtered_values = null;
 
             filtered_values = template.getFilteredValues(filter1);
             assertEquals(3, filtered_values.size());
+
+            var match1x = template.getFilteredValue(filter1, "FILTER1:VALUE1a:CONST:VALUE1x");
+            assertNull(match1x);
+
+            var match1b = template.getFilteredValue(filter1, "FILTER1:VALUE1a:CONST:VALUE1b");
+            assertNotNull(match1b);
+            assertEquals(3, match1b.length);
+            assertEquals(match1b[0], "FILTER1:VALUE1a:CONST:VALUE1b");
+            assertEquals(match1b[1], "VALUE1a");
+            assertEquals(match1b[2], "VALUE1b");
+
+            var match2b = template.getFilteredValue(filter1, "FILTER1:VALUE2a:CONST:VALUE2b");
+            assertNotNull(match2b);
+            assertEquals(3, match2b.length);
+            assertEquals(match2b[0], "FILTER1:VALUE2a:CONST:VALUE2b");
+            assertEquals(match2b[1], "VALUE2a");
+            assertEquals(match2b[2], "VALUE2b");
+
+            var match3b = template.getFilteredValue(filter1, "FILTER1:VALUE3a:CONST:VALUE3b");
+            assertNotNull(match3b);
+            assertEquals(3, match3b.length);
+            assertEquals(match3b[0], "FILTER1:VALUE3a:CONST:VALUE3b");
+            assertEquals(match3b[1], "VALUE3a");
+            assertEquals(match3b[2], "VALUE3b");
 
             var filter1_got_value1 = false;
             var filter1_got_value2 = false;

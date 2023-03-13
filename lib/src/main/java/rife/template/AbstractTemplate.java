@@ -613,13 +613,17 @@ public abstract class AbstractTemplate implements Template {
         return true;
     }
 
-    public abstract List<String[]> getFilteredBlocks(String filter);
+    public abstract Collection<String[]> getFilteredBlocks(String filter);
 
     public abstract boolean hasFilteredBlocks(String filter);
 
-    public abstract List<String[]> getFilteredValues(String filter);
+    public abstract String[] getFilteredBlock(String filter, String id);
+
+    public abstract Collection<String[]> getFilteredValues(String filter);
 
     public abstract boolean hasFilteredValues(String filter);
+
+    public abstract String[] getFilteredValue(String filter, String id);
 
     public final boolean hasBlock(String id) {
         if (null == id ||
@@ -733,15 +737,10 @@ public abstract class AbstractTemplate implements Template {
 
     protected abstract boolean appendBlockInternalForm(String id, InternalValue result);
 
-    protected final String potentiallyRenderFilteredValueTag(String id) {
-        if (hasFilteredValues(TemplateFactoryFilters.TAG_RENDER)) {
-            var render_tags = getFilteredValues(TemplateFactoryFilters.TAG_RENDER);
-            for (var captured_groups : render_tags) {
-                var tag = captured_groups[0];
-                if (tag.equals(id)) {
-                    return evaluateRenderTag(tag, captured_groups[1], captured_groups[2]);
-                }
-            }
+    protected final String potentiallyEvaluateRenderTag(String id) {
+        var captured_groups = getFilteredValue(TemplateFactoryFilters.TAG_RENDER, id);
+        if (captured_groups != null) {
+            return evaluateRenderTag(id, captured_groups[1], captured_groups[2]);
         }
         return null;
     }
@@ -750,7 +749,7 @@ public abstract class AbstractTemplate implements Template {
         assert id != null;
         assert id.length() != 0;
 
-        CharSequence fixed_value = potentiallyRenderFilteredValueTag(id);
+        CharSequence fixed_value = potentiallyEvaluateRenderTag(id);
         if (fixed_value == null) {
             fixed_value = fixedValues_.get(id);
         }
@@ -774,7 +773,7 @@ public abstract class AbstractTemplate implements Template {
     protected abstract boolean appendDefaultValueExternalForm(String id, ExternalValue result);
 
     protected final void appendValueInternalForm(String id, String tag, InternalValue result) {
-        CharSequence fixed_value = potentiallyRenderFilteredValueTag(id);
+        CharSequence fixed_value = potentiallyEvaluateRenderTag(id);
         if (fixed_value == null) {
             fixed_value = fixedValues_.get(id);
         }
