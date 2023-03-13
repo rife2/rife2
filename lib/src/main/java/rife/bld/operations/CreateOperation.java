@@ -147,36 +147,36 @@ public class CreateOperation {
     throws FileUtilsErrorException {
         // project gitignore
         FileUtils.writeString(
-            TemplateFactory.TXT.get("bld.project_gitignore").getContent(),
+            TemplateFactory.TXT.get("bld.rife2_hello.project_gitignore").getContent(),
             new File(projectDir_, ".gitignore"));
 
         // project site
-        var site_template = TemplateFactory.TXT.get("bld.project_site");
+        var site_template = TemplateFactory.TXT.get("bld.rife2_hello.project_site");
         site_template.setValue("package", packageName());
         site_template.setValue("projectSite", projectSiteName_);
         var project_site_file = new File(javaPackageDir_, projectSiteName_ + ".java");
         FileUtils.writeString(site_template.getContent(), project_site_file);
 
         // project template
-        var template_template = TemplateFactory.HTML.get("bld.project_template");
+        var template_template = TemplateFactory.HTML.get("bld.rife2_hello.project_template");
         template_template.setValue("project", projectClassName_);
         var project_template_file = new File(srcMainResourcesTemplatesDir_, "hello.html");
         FileUtils.writeString(template_template.getContent(), project_template_file);
 
         // project css
         FileUtils.writeString(
-            TemplateFactory.TXT.get("bld.project_style").getContent(),
+            TemplateFactory.TXT.get("bld.rife2_hello.project_style").getContent(),
             new File(srcMainWebappCssDir_, "style.css"));
 
         // project web.xml
-        var web_xml_template = TemplateFactory.TXT.get("bld.project_web_xml");
+        var web_xml_template = TemplateFactory.TXT.get("bld.rife2_hello.project_web_xml");
         web_xml_template.setValue("package", packageName());
         web_xml_template.setValue("projectSite", projectSiteName_);
         var project_web_xml_file = new File(srcMainWebappWebInfDir_, "web.xml");
         FileUtils.writeString(web_xml_template.getContent(), project_web_xml_file);
 
         // project test
-        var test_template = TemplateFactory.TXT.get("bld.project_test");
+        var test_template = TemplateFactory.TXT.get("bld.rife2_hello.project_test");
         test_template.setValue("package", packageName());
         test_template.setValue("projectTest", projectTestName_);
         test_template.setValue("projectSite", projectSiteName_);
@@ -185,7 +185,7 @@ public class CreateOperation {
         FileUtils.writeString(test_template.getContent(), project_test_file);
 
         // project build
-        var build_template = TemplateFactory.TXT.get("bld.project_build");
+        var build_template = TemplateFactory.TXT.get("bld.rife2_hello.project_build");
         build_template.setValue("projectBuild", projectBuildName_);
         build_template.setValue("package", packageName());
         build_template.setValue("project", projectClassName_);
@@ -222,42 +222,42 @@ public class CreateOperation {
     throws FileUtilsErrorException {
         // IDEA project files
         FileUtils.writeString(
-            TemplateFactory.TXT.get("bld.idea.app_iml").getContent(),
+            TemplateFactory.TXT.get("bld.rife2_hello.idea.app_iml").getContent(),
             new File(ideaDir_, "app.iml"));
         FileUtils.writeString(
-            TemplateFactory.TXT.get("bld.idea.misc_xml").getContent(),
+            TemplateFactory.TXT.get("bld.rife2_hello.idea.misc_xml").getContent(),
             new File(ideaDir_, "misc.xml"));
         FileUtils.writeString(
-            TemplateFactory.TXT.get("bld.idea.modules_xml").getContent(),
+            TemplateFactory.TXT.get("bld.rife2_hello.idea.modules_xml").getContent(),
             new File(ideaDir_, "modules.xml"));
         FileUtils.writeString(
-            TemplateFactory.TXT.get("bld.idea.project_iml").getContent(),
+            TemplateFactory.TXT.get("bld.rife2_hello.idea.project_iml").getContent(),
             new File(ideaDir_, "project.iml"));
         FileUtils.writeString(
-            TemplateFactory.TXT.get("bld.idea.libraries.compile_xml").getContent(),
+            TemplateFactory.TXT.get("bld.rife2_hello.idea.libraries.compile_xml").getContent(),
             new File(ideaLibrariesDir_, "compile.xml"));
         FileUtils.writeString(
-            TemplateFactory.TXT.get("bld.idea.libraries.project_xml").getContent(),
+            TemplateFactory.TXT.get("bld.rife2_hello.idea.libraries.project_xml").getContent(),
             new File(ideaLibrariesDir_, "project.xml"));
         FileUtils.writeString(
-            TemplateFactory.TXT.get("bld.idea.libraries.runtime_xml").getContent(),
+            TemplateFactory.TXT.get("bld.rife2_hello.idea.libraries.runtime_xml").getContent(),
             new File(ideaLibrariesDir_, "runtime.xml"));
         FileUtils.writeString(
-            TemplateFactory.TXT.get("bld.idea.libraries.standalone_xml").getContent(),
+            TemplateFactory.TXT.get("bld.rife2_hello.idea.libraries.standalone_xml").getContent(),
             new File(ideaLibrariesDir_, "standalone.xml"));
         FileUtils.writeString(
-            TemplateFactory.TXT.get("bld.idea.libraries.test_xml").getContent(),
+            TemplateFactory.TXT.get("bld.rife2_hello.idea.libraries.test_xml").getContent(),
             new File(ideaLibrariesDir_, "test.xml"));
 
         // IDEA run site
-        var run_site_template = TemplateFactory.TXT.get("bld.idea.runConfigurations.Run_Site_xml");
+        var run_site_template = TemplateFactory.TXT.get("bld.rife2_hello.idea.runConfigurations.Run_Site_xml");
         run_site_template.setValue("package", packageName());
         run_site_template.setValue("projectSite", projectSiteName_);
         var run_site_file = new File(ideaRunConfigurationsDir_, "Run Site.xml");
         FileUtils.writeString(run_site_template.getContent(), run_site_file);
 
         // IDEA run tests
-        var run_tests_template = TemplateFactory.TXT.get("bld.idea.runConfigurations.Run_Tests_xml");
+        var run_tests_template = TemplateFactory.TXT.get("bld.rife2_hello.idea.runConfigurations.Run_Tests_xml");
         run_tests_template.setValue("package", packageName());
         run_tests_template.setValue("projectTest", projectTestName_);
         var run_tests_file = new File(ideaRunConfigurationsDir_, "Run Tests.xml");
