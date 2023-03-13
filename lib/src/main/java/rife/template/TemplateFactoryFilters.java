@@ -23,7 +23,7 @@ public class TemplateFactoryFilters {
     public static final String TAG_PARAM = "^" + PREFIX_PARAM + "\\s*([^:]*?)\\s*$";
     public static final String TAG_PROPERTY = "^" + PREFIX_PROPERTY + "\\s*([^:]*?)\\s*$";
     public static final String TAG_ATTRIBUTE = "^" + PREFIX_ATTRIBUTE + "\\s*([^:]*?)\\s*$";
-    public static final String TAG_RENDER = "^" + PREFIX_RENDER + "\\s*([^:]*?)\\s*(:[^:]*)?$";
+    public static final String TAG_RENDER = "^" + PREFIX_RENDER + "\\s*([^:]*?)\\s*(?::([^:]*))?$";
     public static final String TAG_ROUTE = "^" + PREFIX_ROUTE + "\\s*([^:]*?)\\s*$";
     public static final String TAG_ROUTE_ACTION = "^" + PREFIX_ROUTE_ACTION + "\\s*([^:]*?)\\s*$";
     public static final String TAG_ROUTE_INPUTS = "^" + PREFIX_ROUTE_INPUTS + "\\s*([^:]*?)\\s*$";

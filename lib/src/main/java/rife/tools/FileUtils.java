@@ -501,42 +501,55 @@ public final class FileUtils {
 
             output_filename = destination.getAbsolutePath() + File.separator + entry.getName().replace('/', File.separatorChar);
             output_file = new File(output_filename);
-            output_file_directory_name = new StringBuilder(output_file.getPath());
-            output_file_directory_name.setLength(output_file_directory_name.length() - output_file.getName().length() - File.separator.length());
-            output_file_directory = new File(output_file_directory_name.toString());
-            if (!output_file_directory.exists()) {
-                if (!output_file_directory.mkdirs()) {
-                    throw new FileUtilsErrorException("Couldn't create directory '" + output_file_directory.getAbsolutePath() + "' and its parents.");
+            if (entry.isDirectory()) {
+                output_file_directory = new File(output_filename);
+                if (!output_file_directory.exists()) {
+                    if (!output_file_directory.mkdirs()) {
+                        throw new FileUtilsErrorException("Couldn't create directory '" + output_file_directory.getAbsolutePath() + "' and its parents.");
+                    }
+                } else {
+                    if (!output_file_directory.isDirectory()) {
+                        throw new FileUtilsErrorException("Destination '" + output_file_directory.getAbsolutePath() + "' exists and is not a directory.");
+                    }
                 }
             } else {
-                if (!output_file_directory.isDirectory()) {
-                    throw new FileUtilsErrorException("Destination '" + output_file_directory.getAbsolutePath() + "' exists and is not a directory.");
+                output_file_directory_name = new StringBuilder(output_file.getPath());
+                output_file_directory_name.setLength(output_file_directory_name.length() - output_file.getName().length() - File.separator.length());
+                output_file_directory = new File(output_file_directory_name.toString());
+                if (!output_file_directory.exists()) {
+                    if (!output_file_directory.mkdirs()) {
+                        throw new FileUtilsErrorException("Couldn't create directory '" + output_file_directory.getAbsolutePath() + "' and its parents.");
+                    }
+                } else {
+                    if (!output_file_directory.isDirectory()) {
+                        throw new FileUtilsErrorException("Destination '" + output_file_directory.getAbsolutePath() + "' exists and is not a directory.");
+                    }
                 }
-            }
 
-            try {
-                file_output_stream = new FileOutputStream(output_filename);
-            } catch (IOException e) {
-                throw new FileUtilsErrorException("Error while creating the output stream for file '" + output_filename + "'.", e);
-            }
-
-            try {
-                while ((count = input_stream.read(buffer)) != -1) {
-                    file_output_stream.write(buffer, 0, count);
+                try {
+                    file_output_stream = new FileOutputStream(output_filename);
+                } catch (IOException e) {
+                    throw new FileUtilsErrorException("Error while creating the output stream for file '" + output_filename + "'.", e);
                 }
-            } catch (IOException e) {
-                throw new FileUtilsErrorException("Error while uncompressing entry '" + output_filename + "'.", e);
-            }
 
-            try {
-                file_output_stream.close();
-            } catch (IOException e) {
-                throw new FileUtilsErrorException("Error while closing the output stream for file '" + output_filename + "'.", e);
-            }
-            try {
-                input_stream.close();
-            } catch (IOException e) {
-                throw new FileUtilsErrorException("Error while closing the input stream for entry '" + entry.getName() + "'.", e);
+                try {
+                    while ((count = input_stream.read(buffer)) != -1) {
+                        file_output_stream.write(buffer, 0, count);
+                    }
+                } catch (IOException e) {
+                    throw new FileUtilsErrorException("Error while uncompressing entry '" + output_filename + "'.", e);
+                }
+
+                try {
+                    file_output_stream.close();
+                } catch (IOException e) {
+                    throw new FileUtilsErrorException("Error while closing the output stream for file '" + output_filename + "'.", e);
+                }
+                try {
+                    input_stream.close();
+                } catch (IOException e) {
+                    throw new FileUtilsErrorException("Error while closing the input stream for entry '" + entry.getName() + "'.", e);
+                }
             }
         }
 

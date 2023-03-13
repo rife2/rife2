@@ -29,7 +29,7 @@ public class JarOperation {
         }
     }
 
-    private Attributes manifestAttributes_ = new Attributes();
+    private Map<Attributes.Name, Object> manifestAttributes_ = new HashMap();
     private List<File> sourceDirectories_ = new ArrayList<>();
     private List<NamedFile> sourceFiles_ = new ArrayList<>();
     private File destinationDirectory_;
@@ -73,7 +73,13 @@ public class JarOperation {
 
     public Manifest createManifest() {
         var manifest = new Manifest();
-        manifest.getMainAttributes().putAll(manifestAttributes());
+        var attributes = manifest.getMainAttributes();
+        // don't use putAll since Attributes does an instanceof check
+        // on the map being passed in, causing it to fail if it's not
+        // and instance of Attributes
+        for (var entry : manifestAttributes().entrySet()) {
+            attributes.put(entry.getKey(), entry.getValue());
+        }
         return manifest;
     }
 
@@ -93,19 +99,19 @@ public class JarOperation {
     }
 
     public JarOperation fromProject(Project project) {
-        manifestAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
-        return sourceDirectories(List.of(project.buildMainDirectory(), project.srcMainResourcesDirectory()))
+        return manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
+            .sourceDirectories(List.of(project.buildMainDirectory(), project.srcMainResourcesDirectory()))
             .destinationDirectory(project.buildDistDirectory())
             .destinationFileName(project.jarFileName())
             .excluded(List.of(Pattern.compile("^\\Q" + project.srcMainResourcesTemplatesDirectory().getAbsolutePath() + "\\E.*")));
     }
 
-    public JarOperation manifestAttributes(Attributes attributes) {
-        manifestAttributes_ = attributes;
+    public JarOperation manifestAttributes(Map<Attributes.Name, Object> attributes) {
+        manifestAttributes_ = new HashMap<>(attributes);
         return this;
     }
 
-    public Attributes manifestAttributes() {
+    public Map<Attributes.Name, Object> manifestAttributes() {
         return manifestAttributes_;
     }
 

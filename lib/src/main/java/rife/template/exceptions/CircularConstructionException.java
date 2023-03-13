@@ -6,10 +6,10 @@ package rife.template.exceptions;
 
 import java.io.Serial;
 
-public class CircularContructionException extends ProcessingException {
+public class CircularConstructionException extends ProcessingException {
     @Serial private static final long serialVersionUID = 5707444018880036132L;
 
-    public CircularContructionException() {
+    public CircularConstructionException() {
         super("The value constructions reference themselves in a circular way. This is not allowed since it would cause a stack overflow.");
     }
 }

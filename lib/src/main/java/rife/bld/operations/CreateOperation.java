@@ -38,6 +38,7 @@ public class CreateOperation {
     private String projectClassName_;
     private String projectBuildName_;
     private String projectSiteName_;
+    private String projectSiteUberName_;
     private String projectTestName_;
 
     private File projectDir_;
@@ -74,6 +75,7 @@ public class CreateOperation {
         projectClassName_ = StringUtils.capitalize(projectName());
         projectBuildName_ = projectClassName_ + "Build";
         projectSiteName_ = projectClassName_ + "Site";
+        projectSiteUberName_ = projectSiteName_ + "Uber";
         projectTestName_ = projectClassName_ + "Test";
 
         // create the main project structure
@@ -156,6 +158,14 @@ public class CreateOperation {
         site_template.setValue("projectSite", projectSiteName_);
         var project_site_file = new File(javaPackageDir_, projectSiteName_ + ".java");
         FileUtils.writeString(site_template.getContent(), project_site_file);
+
+        // project site uber
+        var site_uber_template = TemplateFactory.TXT.get("bld.rife2_hello.project_site_uber");
+        site_uber_template.setValue("package", packageName());
+        site_uber_template.setValue("projectSite", projectSiteName_);
+        site_uber_template.setValue("projectSiteUber", projectSiteUberName_);
+        var project_site_uber_file = new File(javaPackageDir_, projectSiteUberName_ + ".java");
+        FileUtils.writeString(site_uber_template.getContent(), project_site_uber_file);
 
         // project template
         var template_template = TemplateFactory.HTML.get("bld.rife2_hello.project_template");

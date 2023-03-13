@@ -31,6 +31,8 @@ public abstract class Project extends BuildExecutor {
     protected List<String> testToolOptions = new ArrayList<>();
     protected String archiveBaseName = null;
     protected String jarFileName = null;
+    protected String uberJarFileName = null;
+    protected String uberJarMainClass = null;
     protected String warFileName = null;
 
     protected File srcDirectory = null;
@@ -91,6 +93,13 @@ public abstract class Project extends BuildExecutor {
         compile();
         precompile();
         new JarOperation().fromProject(this).execute();
+    }
+
+    @BuildCommand(help = UberJarOperation.Help.class)
+    public void uberjar()
+    throws Exception {
+        jar();
+        new UberJarOperation().fromProject(this).execute();
     }
 
     @BuildCommand(help = WarOperation.Help.class)
@@ -161,10 +170,12 @@ public abstract class Project extends BuildExecutor {
     }
 
     @SafeVarargs
-    public static List<String> combinePaths(List<String>... paths) {
+    public static List<String> combineToAbsolutePaths(List<File>... files) {
         var result = new ArrayList<String>();
-        for (var p : paths) {
-            result.addAll(p);
+        for (var list : files) {
+            for (var file : list) {
+                result.add(file.getAbsolutePath());
+            }
         }
         return result;
     }
@@ -270,18 +281,30 @@ public abstract class Project extends BuildExecutor {
     }
 
     public String pkg() {
+        if (pkg == null) {
+            throw new IllegalStateException("The pkg variable has to be set.");
+        }
         return pkg;
     }
 
     public String name() {
+        if (name == null) {
+            throw new IllegalStateException("The name variable has to be set.");
+        }
         return name;
     }
 
     public VersionNumber version() {
+        if (version == null) {
+            throw new IllegalStateException("The version variable has to be set.");
+        }
         return version;
     }
 
     public String mainClass() {
+        if (mainClass == null) {
+            throw new IllegalStateException("The mainClass variable has to be set.");
+        }
         return mainClass;
     }
 
@@ -327,11 +350,19 @@ public abstract class Project extends BuildExecutor {
     }
 
     public String archiveBaseName() {
-        return Objects.requireNonNullElseGet(archiveBaseName, () -> name.toLowerCase());
+        return Objects.requireNonNullElseGet(archiveBaseName, () -> name.toLowerCase(Locale.ENGLISH));
     }
 
     public String jarFileName() {
         return Objects.requireNonNullElseGet(jarFileName, () -> archiveBaseName() + "-" + version + ".jar");
+    }
+
+    public String uberJarMainClass() {
+        return Objects.requireNonNullElseGet(uberJarMainClass, () -> mainClass() + "Uber");
+    }
+
+    public String uberJarFileName() {
+        return Objects.requireNonNullElseGet(uberJarFileName, () -> archiveBaseName() + "-" + version + "-uber.jar");
     }
 
     public String warFileName() {
@@ -364,61 +395,61 @@ public abstract class Project extends BuildExecutor {
 
     private static final Pattern JAR_FILE_PATTERN = Pattern.compile("^.*\\.jar$");
 
-    public List<String> compileClasspathJars() {
+    public List<File> compileClasspathJars() {
         // detect the jar files in the compile lib directory
         var dir_abs = libCompileDirectory().getAbsoluteFile();
         var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
 
         // build the compilation classpath
-        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file).getAbsolutePath()).toList());
+        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
     }
 
-    public List<String> runtimeClasspathJars() {
+    public List<File> runtimeClasspathJars() {
         // detect the jar files in the runtime lib directory
         var dir_abs = libRuntimeDirectory().getAbsoluteFile();
         var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
 
         // build the runtime classpath
-        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file).getAbsolutePath()).toList());
+        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
     }
 
-    public List<String> standaloneClasspathJars() {
+    public List<File> standaloneClasspathJars() {
         // detect the jar files in the standalone lib directory
         var dir_abs = libStandaloneDirectory().getAbsoluteFile();
         var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
 
         // build the standalone classpath
-        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file).getAbsolutePath()).toList());
+        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
     }
 
-    public List<String> testClasspathJars() {
+    public List<File> testClasspathJars() {
         // detect the jar files in the test lib directory
         var dir_abs = libTestDirectory().getAbsoluteFile();
         var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
 
         // build the test classpath
-        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file).getAbsolutePath()).toList());
+        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
     }
 
     public List<String> compileMainClasspath() {
-        return compileClasspathJars();
+        return Project.combineToAbsolutePaths(compileClasspathJars());
     }
 
     public List<String> compileTestClasspath() {
-        var paths = Project.combinePaths(compileClasspathJars(), testClasspathJars());
+        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), testClasspathJars());
         paths.add(buildMainDirectory().getAbsolutePath());
         return paths;
     }
 
     public List<String> runClasspath() {
-        var paths = Project.combinePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars());
+        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars());
         paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
         return paths;
     }
 
     public List<String> testClasspath() {
-        var paths = Project.combinePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars(), testClasspathJars());
+        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars(), testClasspathJars());
         paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
         paths.add(buildTestDirectory().getAbsolutePath());

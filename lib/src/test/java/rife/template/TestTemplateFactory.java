@@ -229,8 +229,8 @@ public class TestTemplateFactory {
     void testFilteredTagsRenderHtml() {
         RendererImpl.sCount = 0;
         var t = TemplateFactory.HTML.get("filtered_tags_render");
-        assertEquals("This is the render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
-                     "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
+        assertEquals("This is the render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:1'.\n" +
+                     "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:1'.\n" +
                      "This is the render value with a differentiator 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:DIFFERENT:different:2'.\n", t.getContent());
     }
 
@@ -238,8 +238,8 @@ public class TestTemplateFactory {
     void testFilteredTagsRenderTxt() {
         RendererImpl.sCount = 0;
         var t = TemplateFactory.TXT.get("filtered_tags_render");
-        assertEquals("This is the render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
-                     "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPLnull:1'.\n" +
+        assertEquals("This is the render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:1'.\n" +
+                     "This is another render value 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:1'.\n" +
                      "This is the render value with a differentiator 'RENDER:RIFE.TEMPLATE.RENDERERIMPL:DIFFERENT:different:2'.\n", t.getContent());
     }
 
