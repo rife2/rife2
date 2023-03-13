@@ -44,6 +44,7 @@ public class CreateOperation {
     private File srcMainJavaDir_;
     private File srcMainResourcesTemplatesDir_;
     private File srcMainWebappCssDir_;
+    private File srcMainWebappWebInfDir_;
     private File srcProjectJavaDir_;
     private File srcTestJavaDir_;
     private File libDir_;
@@ -84,6 +85,8 @@ public class CreateOperation {
             Path.of(projectName(), "src", "main", "resources", "templates").toFile();
         srcMainWebappCssDir_ =
             Path.of(projectName(), "src", "main", "webapp", "css").toFile();
+        srcMainWebappWebInfDir_ =
+            Path.of(projectName(), "src", "main", "webapp", "WEB-INF").toFile();
         srcProjectJavaDir_ =
             Path.of(projectName(), "src", "project", "java").toFile();
         srcTestJavaDir_ =
@@ -123,6 +126,7 @@ public class CreateOperation {
         srcMainJavaDir_.mkdirs();
         srcMainResourcesTemplatesDir_.mkdirs();
         srcMainWebappCssDir_.mkdirs();
+        srcMainWebappWebInfDir_.mkdirs();
         srcProjectJavaDir_.mkdirs();
         srcTestJavaDir_.mkdirs();
         libDir_.mkdirs();
@@ -163,6 +167,13 @@ public class CreateOperation {
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.project_style").getContent(),
             new File(srcMainWebappCssDir_, "style.css"));
+
+        // project web.xml
+        var web_xml_template = TemplateFactory.TXT.get("bld.project_web_xml");
+        web_xml_template.setValue("package", packageName());
+        web_xml_template.setValue("projectSite", projectSiteName_);
+        var project_web_xml_file = new File(srcMainWebappWebInfDir_, "web.xml");
+        FileUtils.writeString(web_xml_template.getContent(), project_web_xml_file);
 
         // project test
         var test_template = TemplateFactory.TXT.get("bld.project_test");
