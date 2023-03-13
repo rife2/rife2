@@ -7,7 +7,7 @@ package rife.antlr.v4.runtime;
 
 /**
  * A source of tokens must provide a sequence of tokens via {@link #nextToken()}
- * and also must reveal it's source of characters; {@link CommonToken}'s text is
+ * and also must reveal its source of characters; {@link CommonToken}'s text is
  * computed from a {@link CharStream}; it only store indices into the char
  * stream.
  *

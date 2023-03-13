@@ -89,8 +89,8 @@ public class DecisionInfo {
 	 * Gets the minimum lookahead required for any single LL prediction to
 	 * complete for this decision. An LL prediction completes when the algorithm
 	 * reaches a unique prediction, a conflict state (for
-	 * {@link PredictionMode#LL}, an ambiguity state (for
-	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION}, or a syntax error.
+	 * {@link PredictionMode#LL}), an ambiguity state (for
+	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION}), or a syntax error.
 	 */
 	public long LL_MinLook;
 
@@ -98,8 +98,8 @@ public class DecisionInfo {
 	 * Gets the maximum lookahead required for any single LL prediction to
 	 * complete for this decision. An LL prediction completes when the algorithm
 	 * reaches a unique prediction, a conflict state (for
-	 * {@link PredictionMode#LL}, an ambiguity state (for
-	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION}, or a syntax error.
+	 * {@link PredictionMode#LL}), an ambiguity state (for
+	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION}), or a syntax error.
 	 */
 	public long LL_MaxLook;
 

@@ -1722,7 +1722,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as an character
+     * Safely and quickly retrieves the first cell as a character
      * {@code Reader} from the results of a select query. It relies on
      * the wrapped {@link DbResultSet#getFirstCharacterStream()} method, but
      * also automatically closes the statement after its execution.
@@ -1819,7 +1819,7 @@ public class DbQueryManager implements Cloneable {
     }
 
     /**
-     * Safely and quickly retrieves the first cell as an binary
+     * Safely and quickly retrieves the first cell as a binary
      * {@code InputStream} from the results of a select query. It relies
      * on the wrapped {@link DbResultSet#getFirstBinaryStream()} method, but
      * also automatically closes the statement after its execution.
@@ -2547,7 +2547,7 @@ public class DbQueryManager implements Cloneable {
      * always be created. If a transaction is already active, it will simply
      * be re-used. The commit will also only be take place if a new
      * transaction has actually been started, otherwise it's the
-     * responsibility of the enclosing code to execute the commit. If an
+     * responsibility of the enclosing code to execute the commit. If a
      * runtime exception occurs during the execution and a new transaction has
      * been started beforehand, it will be automatically rolled back.
      * <p>If you need to explicitly roll back an active transaction, use the

@@ -494,7 +494,7 @@ public class ClassReader {
     int permittedSubclassesOffset = 0;
     // - The offset of the Record attribute, or 0.
     int recordOffset = 0;
-    // - The non standard attributes (linked with their {@link Attribute#nextAttribute} field).
+    // - The non-standard attributes (linked with their {@link Attribute#nextAttribute} field).
     //   This list in the <i>reverse order</i> or their order in the ClassFile structure.
     Attribute attributes = null;
 
@@ -679,7 +679,7 @@ public class ClassReader {
       }
     }
 
-    // Visit the non standard attributes.
+    // Visit the non-standard attributes.
     while (attributes != null) {
       // Copy and reset the nextAttribute field so that it can also be used in ClassWriter.
       Attribute nextAttribute = attributes.nextAttribute;
@@ -910,7 +910,7 @@ public class ClassReader {
     int runtimeVisibleTypeAnnotationsOffset = 0;
     // - The offset of the RuntimeInvisibleTypeAnnotations attribute, or 0.
     int runtimeInvisibleTypeAnnotationsOffset = 0;
-    // - The non standard attributes (linked with their {@link Attribute#nextAttribute} field).
+    // - The non-standard attributes (linked with their {@link Attribute#nextAttribute} field).
     //   This list in the <i>reverse order</i> or their order in the ClassFile structure.
     Attribute attributes = null;
 
@@ -1039,7 +1039,7 @@ public class ClassReader {
       }
     }
 
-    // Visit the non standard attributes.
+    // Visit the non-standard attributes.
     while (attributes != null) {
       // Copy and reset the nextAttribute field so that it can also be used in FieldWriter.
       Attribute nextAttribute = attributes.nextAttribute;
@@ -1086,7 +1086,7 @@ public class ClassReader {
     int runtimeVisibleTypeAnnotationsOffset = 0;
     // - The offset of the RuntimeInvisibleTypeAnnotations attribute, or 0.
     int runtimeInvisibleTypeAnnotationsOffset = 0;
-    // - The non standard attributes (linked with their {@link Attribute#nextAttribute} field).
+    // - The non-standard attributes (linked with their {@link Attribute#nextAttribute} field).
     //   This list in the <i>reverse order</i> or their order in the ClassFile structure.
     Attribute attributes = null;
 
@@ -1223,7 +1223,7 @@ public class ClassReader {
       }
     }
 
-    // Visit the non standard attributes.
+    // Visit the non-standard attributes.
     while (attributes != null) {
       // Copy and reset the nextAttribute field so that it can also be used in FieldWriter.
       Attribute nextAttribute = attributes.nextAttribute;
@@ -1284,7 +1284,7 @@ public class ClassReader {
     int annotationDefaultOffset = 0;
     // - The offset of the MethodParameters attribute, or 0.
     int methodParametersOffset = 0;
-    // - The non standard attributes (linked with their {@link Attribute#nextAttribute} field).
+    // - The non-standard attributes (linked with their {@link Attribute#nextAttribute} field).
     //   This list in the <i>reverse order</i> or their order in the ClassFile structure.
     Attribute attributes = null;
 
@@ -1499,7 +1499,7 @@ public class ClassReader {
           /* visible = */ false);
     }
 
-    // Visit the non standard attributes.
+    // Visit the non-standard attributes.
     while (attributes != null) {
       // Copy and reset the nextAttribute field so that it can also be used in MethodWriter.
       Attribute nextAttribute = attributes.nextAttribute;
@@ -1878,7 +1878,7 @@ public class ClassReader {
     // - The offset of each 'type_annotation' entry in the RuntimeInvisibleTypeAnnotations
     // attribute, or null.
     int[] invisibleTypeAnnotationOffsets = null;
-    // - The non standard attributes (linked with their {@link Attribute#nextAttribute} field).
+    // - The non-standard attributes (linked with their {@link Attribute#nextAttribute} field).
     //   This list in the <i>reverse order</i> or their order in the ClassFile structure.
     Attribute attributes = null;
 
@@ -1948,7 +1948,7 @@ public class ClassReader {
         // labels it contains are also extracted one frame at a time. Thanks to the ordering of
         // frames, having only a "one frame lookahead" is not a problem, i.e. it is not possible to
         // see an offset smaller than the offset of the current instruction and for which no Label
-        // exist. Except for UNINITIALIZED type offsets. We solve this by parsing the stack map
+        // exists. Except for UNINITIALIZED type offsets. We solve this by parsing the stack map
         // table without a full decoding (see below).
       } else if ("StackMap".equals(attributeName)) {
         if ((context.parsingOptions & SKIP_FRAMES) == 0) {
@@ -2653,7 +2653,7 @@ public class ClassReader {
       }
     }
 
-    // Visit the non standard attributes.
+    // Visit the non-standard attributes.
     while (attributes != null) {
       // Copy and reset the nextAttribute field so that it can also be used in MethodWriter.
       Attribute nextAttribute = attributes.nextAttribute;
@@ -2688,7 +2688,7 @@ public class ClassReader {
    * @param labels the already created labels, indexed by their offset. If a label already exists
    *     for bytecodeOffset this method must not create a new one. Otherwise it must store the new
    *     label in this array.
-   * @return a non null Label, which must be equal to labels[bytecodeOffset].
+   * @return a non-null Label, which must be equal to labels[bytecodeOffset].
    */
   protected Label readLabel(final int bytecodeOffset, final Label[] labels) {
     if (labels[bytecodeOffset] == null) {
@@ -3514,7 +3514,7 @@ public class ClassReader {
   }
 
   /**
-   * Reads a non standard JVMS 'attribute' structure in {@link #classFileBuffer}.
+   * Reads a non-standard JVMS 'attribute' structure in {@link #classFileBuffer}.
    *
    * @param attributePrototypes prototypes of the attributes that must be parsed during the visit of
    *     the class. Any attribute whose type is not equal to the type of one the prototypes will not

@@ -241,7 +241,7 @@ public abstract class ClassVisitor {
   }
 
   /**
-   * Visits a non standard attribute of the class.
+   * Visits a non-standard attribute of the class.
    *
    * @param attribute an attribute.
    */
@@ -341,7 +341,7 @@ public abstract class ClassVisitor {
    *     field does not have an initial value, must be an {@link Integer}, a {@link Float}, a {@link
    *     Long}, a {@link Double} or a {@link String} (for {@code int}, {@code float}, {@code long}
    *     or {@code String} fields respectively). <i>This parameter is only used for static
-   *     fields</i>. Its value is ignored for non static fields, which must be initialized through
+   *     fields</i>. Its value is ignored for non-static fields, which must be initialized through
    *     bytecode instructions in constructors or methods.
    * @return a visitor to visit field annotations and attributes, or {@literal null} if this class
    *     visitor is not interested in visiting these annotations and attributes.

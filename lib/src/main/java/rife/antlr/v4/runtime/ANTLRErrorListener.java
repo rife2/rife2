@@ -86,7 +86,7 @@ public interface ANTLRErrorListener {
 	 * @param recognizer the parser instance
 	 * @param dfa the DFA for the current decision
 	 * @param startIndex the input index where the decision started
-	 * @param stopIndex the input input where the ambiguity was identified
+	 * @param stopIndex the input index where the ambiguity was identified
 	 * @param exact {@code true} if the ambiguity is exactly known, otherwise
 	 * {@code false}. This is always {@code true} when
 	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION} is used.

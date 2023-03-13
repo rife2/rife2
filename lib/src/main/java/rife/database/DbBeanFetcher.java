@@ -56,7 +56,7 @@ public class DbBeanFetcher<BeanType> extends DbRowProcessor {
      * @param datasource       the datasource to be used
      * @param beanClass        the type of bean that will be handled
      * @param collectInstances {@code true} if the fetcher should
-     *                         collected the bean instances; {@code false} if otherwise
+     *                         collect the bean instances; {@code false} if otherwise
      * @throws BeanException thrown if there is an error getting
      *                       information about the bean via the beanClass
      * @since 1.0

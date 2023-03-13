@@ -27,7 +27,7 @@ public class ListTokenSource implements TokenSource {
 	/**
 	 * The name of the input source. If this value is {@code null}, a call to
 	 * {@link #getSourceName} should return the source name used to create the
-	 * the next token in {@link #tokens} (or the previous token if the end of
+	 * next token in {@link #tokens} (or the previous token if the end of
 	 * the input has been reached).
 	 */
 	private final String sourceName;

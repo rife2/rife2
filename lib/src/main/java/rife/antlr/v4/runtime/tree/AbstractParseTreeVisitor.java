@@ -101,7 +101,7 @@ public abstract class AbstractParseTreeVisitor<T> implements ParseTreeVisitor<T>
 	 * implementation, the aggregate value is initialized to
 	 * {@link #defaultResult}, which is passed as the {@code aggregate} argument
 	 * to this method after the first child node is visited.
-	 * @param nextResult The result of the immediately preceeding call to visit
+	 * @param nextResult The result of the immediately preceding call to visit
 	 * a child node.
 	 *
 	 * @return The updated aggregate result.
@@ -114,7 +114,7 @@ public abstract class AbstractParseTreeVisitor<T> implements ParseTreeVisitor<T>
 	 * This method is called after visiting each child in
 	 * {@link #visitChildren}. This method is first called before the first
 	 * child is visited; at that point {@code currentResult} will be the initial
-	 * value (in the default implementation, the initial value is returned by a
+	 * value. In the default implementation, the initial value is returned by a
 	 * call to {@link #defaultResult}. This method is not called after the last
 	 * child is visited.
 	 *
@@ -130,7 +130,7 @@ public abstract class AbstractParseTreeVisitor<T> implements ParseTreeVisitor<T>
 	 * @param currentResult The current aggregate result of the children visited
 	 * to the current point.
 	 *
-	 * @return {@code true} to continue visiting children. Otherwise return
+	 * @return {@code true} to continue visiting children. Otherwise, return
 	 * {@code false} to stop visiting children and immediately return the
 	 * current aggregate result from {@link #visitChildren}.
 	 */

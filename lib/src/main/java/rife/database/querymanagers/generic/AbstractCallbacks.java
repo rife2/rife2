@@ -5,7 +5,7 @@
 package rife.database.querymanagers.generic;
 
 /**
- * Abstract convenience class that provides a postive no-op implementation of
+ * Abstract convenience class that provides a positive no-op implementation of
  * all the methods of the {@link Callbacks} interface.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)

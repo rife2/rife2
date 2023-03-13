@@ -144,7 +144,7 @@ public class SignatureReader {
    * Parses a JavaTypeSignature and makes the given visitor visit it.
    *
    * @param signature a string containing the signature that must be parsed.
-   * @param startOffset index of the first character of the signature to parsed.
+   * @param startOffset index of the first character of the signature to be parsed.
    * @param signatureVisitor the visitor that must visit this signature.
    * @return the index of the first character after the parsed signature.
    */
@@ -190,7 +190,7 @@ public class SignatureReader {
           currentChar = signature.charAt(offset++);
           if (currentChar == '.' || currentChar == ';') {
             // If a '.' or ';' is encountered, this means we have fully parsed the main class name
-            // or an inner class name. This name may already have been visited it is was followed by
+            // or an inner class name. This name may already have been visited if it is followed by
             // type arguments between '<' and '>'. If not, we need to visit it here.
             if (!visited) {
               String name = signature.substring(start, offset - 1);

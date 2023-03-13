@@ -204,7 +204,7 @@ public class ClassWriter extends ClassVisitor {
   private RecordComponentWriter lastRecordComponent;
 
   /**
-   * The first non standard attribute of this class. The next ones can be accessed with the {@link
+   * The first non-standard attribute of this class. The next ones can be accessed with the {@link
    * Attribute#nextAttribute} field. May be {@literal null}.
    *
    * <p><b>WARNING</b>: this list stores the attributes in the <i>reverse</i> order of their visit.

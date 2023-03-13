@@ -169,7 +169,7 @@ public class Trees {
 		}
 	}
 
-	/** Get all descendents; includes t itself.
+	/** Get all descendants; includes t itself.
 	 *
 	 * @since 4.5.1
  	 */

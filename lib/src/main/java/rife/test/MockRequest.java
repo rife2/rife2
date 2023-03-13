@@ -1216,7 +1216,7 @@ public class MockRequest implements Request {
             }
         }
 
-        // check if there is a url encoded session param.
+        // check if there is an url encoded session param.
         if (pathParams != null && pathParams.startsWith(MockConversation.SESSION_ID_URL)) {
             var id = pathParams.substring(MockConversation.SESSION_ID_URL.length() + 1);
 

@@ -19,7 +19,7 @@ import java.util.Arrays;
 /** Do not buffer up the entire char stream. It does keep a small buffer
  *  for efficiency and also buffers while a mark exists (set by the
  *  lookahead prediction in parser). "Unbuffered" here refers to fact
- *  that it doesn't buffer all data, not that's it's on demand loading of char.
+ *  that it doesn't buffer all data, not that it is on demand loading of char.
  *
  *  Before 4.7, this class used the default environment encoding to convert
  *  bytes to UTF-16, and held the UTF-16 bytes in the buffer as chars.

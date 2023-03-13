@@ -9,7 +9,7 @@ package rife.template;
  * renderer in a template, the template should contain a value with an ID like
  * {@code "render:org.rifers.something.MyRenderer"}, where
  * {@code MyRenderer} is your {@code ValueRenderer} class.
- * <p>Value renderer implementations must provide a public zero-argumnet
+ * <p>Value renderer implementations must provide a public zero-argument
  * no-arg constructor.
  *
  * @author Keith Lea (keith[remove] at cs dot oswego dot edu)

@@ -28,7 +28,7 @@
 package rife.asm;
 
 /**
- * A non standard class, field, method or Code attribute, as defined in the Java Virtual Machine
+ * A non-standard class, field, method or Code attribute, as defined in the Java Virtual Machine
  * Specification (JVMS).
  *
  * @see <a href= "https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7">JVMS

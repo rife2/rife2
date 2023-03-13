@@ -434,7 +434,7 @@ public class MockResponse extends AbstractResponse {
      * represents a Date object. Use this method with headers that contain
      * dates.
      * <p>The date is returned as the number of milliseconds since January 1,
-     * 1970 GMT. The header name is case insensitive.
+     * 1970 GMT. The header name is case-insensitive.
      * <p>If the response did not have a header of the specified name, this
      * method returns {@code -1}. If the header can't be converted to a
      * date, the method throws an {@code IllegalArgumentException}.
@@ -474,7 +474,7 @@ public class MockResponse extends AbstractResponse {
      * Returns the value of the specified response header as a
      * {@code String}. If the response did not include a header of the
      * specified name, this method returns {@code null}. The header name
-     * is case insensitive. You can use this method with any response header.
+     * is case-insensitive. You can use this method with any response header.
      *
      * @return a {@code Collection} of all the header names sent with
      * this response; or
@@ -490,7 +490,7 @@ public class MockResponse extends AbstractResponse {
      * {@code Collection} of {@code String} objects.
      * <p>If the response did not include any headers of the specified name,
      * this method returns an empty {@code Collection}. The header name
-     * is case insensitive. You can use this method with any response header.
+     * is case-insensitive. You can use this method with any response header.
      *
      * @param name the name of the header
      * @return a {@code Collection} containing the values of the response

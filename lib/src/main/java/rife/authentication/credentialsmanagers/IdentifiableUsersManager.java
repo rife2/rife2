@@ -23,7 +23,7 @@ public interface IdentifiableUsersManager {
      * @param login the login of the user whose attributes need to be retrieved
      * @return the requested user attributes; or
      * <p>{@code null} if the user couldn't be found
-     * @throws CredentialsManagerException when a unexpected error occurred during the retrieval of the user attributes
+     * @throws CredentialsManagerException when na unexpected error occurred during the retrieval of the user attributes
      * @since 1.0
      */
     RoleUserAttributes getAttributes(String login)
@@ -35,7 +35,7 @@ public interface IdentifiableUsersManager {
      * @param userId the ID of the user whose login will be retrieved
      * @return the requested user login; or
      * <p>{@code null} if the user couldn't be found
-     * @throws CredentialsManagerException when a unexpected error occurred during the retrieval of the user login
+     * @throws CredentialsManagerException when an unexpected error occurred during the retrieval of the user login
      * @since 1.0
      */
     String getLogin(long userId)

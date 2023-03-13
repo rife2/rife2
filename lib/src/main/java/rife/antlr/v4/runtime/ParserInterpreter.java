@@ -353,7 +353,7 @@ public class ParserInterpreter extends Parser {
 	 *
 	 *  As an implementation limitation right now, you can only specify one
 	 *  override. This is sufficient to allow construction of different
-	 *  parse trees for ambiguous input. It means re-parsing the entire input
+	 *  parse trees for ambiguous input. It means reparsing the entire input
 	 *  in general because you're never sure where an ambiguous sequence would
 	 *  live in the various parse trees. For example, in one interpretation,
 	 *  an ambiguous input sequence would be matched completely in expression
@@ -371,13 +371,13 @@ public class ParserInterpreter extends Parser {
 	 *
 	 *  Rather than trying to optimize this and make
 	 *  some intelligent decisions for optimization purposes, I settled on
-	 *  just re-parsing the whole input and then using
+	 *  just reparsing the whole input and then using
 	 *  {link Trees#getRootOfSubtreeEnclosingRegion} to find the minimal
 	 *  subtree that contains the ambiguous sequence. I originally tried to
 	 *  record the call stack at the point the parser detected and ambiguity but
 	 *  left recursive rules create a parse tree stack that does not reflect
 	 *  the actual call stack. That impedance mismatch was enough to make
-	 *  it it challenging to restart the parser at a deeply nested rule
+	 *  it challenging to restart the parser at a deeply nested rule
 	 *  invocation.
 	 *
 	 *  Only parser interpreters can override decisions so as to avoid inserting

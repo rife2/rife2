@@ -657,7 +657,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     /**
      * Builds the path that is used by the {@code ServeContent} element
      * for a certain bean and property.
-     * <p>Any declaration of the repository name will be ignore, since the
+     * <p>Any declaration of the repository name will be ignored, since the
      * {@code ServeContent} element doesn't allow you to provide this
      * through the URL for safety reasons.
      *
@@ -676,7 +676,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     /**
      * Builds the path that is used by the {@code ServeContent} element
      * for a certain bean ID and property.
-     * <p>Any declaration of the repository name will be ignore, since the
+     * <p>Any declaration of the repository name will be ignored, since the
      * {@code ServeContent} element doesn't allow you to provide this
      * through the URL for safety reasons.
      *
