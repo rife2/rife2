@@ -11,8 +11,7 @@ import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.*;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class WarOperation {
     public static class Help implements BuildHelp {

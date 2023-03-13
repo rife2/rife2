@@ -11,8 +11,7 @@ import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.jar.Attributes;
 
 public class UberJarOperation {
@@ -73,11 +72,10 @@ public class UberJarOperation {
         var existing_manifest = new File(new File(stagingDirectory, "META-INF"), "MANIFEST.MF");
         existing_manifest.delete();
 
-        var attributes = new Attributes();
-        attributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
-        attributes.put(Attributes.Name.MAIN_CLASS, mainClass());
         new JarOperation()
-            .manifestAttributes(attributes)
+            .manifestAttributes(Map.of(
+                Attributes.Name.MANIFEST_VERSION, "1.0",
+                Attributes.Name.MAIN_CLASS, mainClass()))
             .sourceDirectories(List.of(stagingDirectory))
             .destinationDirectory(destinationDirectory())
             .destinationFileName(destinationFileName())
