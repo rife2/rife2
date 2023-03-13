@@ -66,6 +66,7 @@ public class JarOperation {
 
     public Manifest createManifest() {
         var manifest = new Manifest();
+        manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
         manifest.getMainAttributes().putAll(manifestAttributes());
         return manifest;
     }
