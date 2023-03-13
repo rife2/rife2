@@ -8,6 +8,6 @@ public class RendererImpl implements ValueRenderer {
     public static int sCount = 0;
 
     public String render(Template template, String valueName, String differentiator) {
-        return valueName.toUpperCase() + differentiator + ":" + (++sCount);
+        return valueName.toUpperCase() + (differentiator != null ? ":" + differentiator : "") + ":" + (++sCount);
     }
 }
