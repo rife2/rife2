@@ -12,9 +12,7 @@ import rife.database.exceptions.UnsupportedJdbcDriverException;
 import rife.database.querymanagers.generic.exceptions.MissingDefaultConstructorException;
 import rife.tools.ClassUtils;
 import rife.tools.StringUtils;
-import rife.validation.Constrained;
-import rife.validation.ConstrainedProperty;
-import rife.validation.ConstrainedUtils;
+import rife.validation.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -35,6 +33,10 @@ public class GenericQueryManagerFactory {
 
     public static <BeanType> GenericQueryManager<BeanType> instance(Datasource datasource, Class<BeanType> beanClass, String tableName)
     throws DatabaseException {
+        if (tableName == null) throw new IllegalArgumentException("tableName can't be null");
+        if (tableName.isEmpty()) throw new IllegalArgumentException("tableName can't be empty");
+        if (!ValidityChecks.checkJavaIdentifier(tableName)) throw new IllegalArgumentException("tableName is not a valid identifier");
+
         AbstractGenericQueryManager<BeanType> query_manager = null;
 
         var driver = datasource.getAliasedDriver();
