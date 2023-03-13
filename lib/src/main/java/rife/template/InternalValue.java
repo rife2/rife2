@@ -5,7 +5,7 @@
 package rife.template;
 
 import rife.template.exceptions.BlockUnknownException;
-import rife.template.exceptions.CircularContructionException;
+import rife.template.exceptions.CircularConstructionException;
 import rife.template.exceptions.TemplateException;
 
 import java.util.ArrayList;
@@ -263,7 +263,7 @@ public class InternalValue {
         // prevent concurrent modification errors
         if (this == constructedValue ||
             valueIds_ == constructedValue.valueIds_) {
-            throw new CircularContructionException();
+            throw new CircularConstructionException();
         }
 
         increasePartsCapacity(constructedValue.partsSize());
