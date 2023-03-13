@@ -77,8 +77,6 @@ public class HelpOperation {
             The following commands are supported.
             """);
 
-//        war         Creates a war archive for a RIFE2 application
-
         var command_length = commands.keySet().stream().max(comparingInt(String::length)).get().length() + 2;
         for (var command : commands.entrySet()) {
             System.err.print("  ");

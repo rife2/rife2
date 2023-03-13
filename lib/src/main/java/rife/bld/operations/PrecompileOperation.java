@@ -62,7 +62,7 @@ public class PrecompileOperation {
     }
 
     public PrecompileOperation fromProject(Project project) {
-        return precompiledTemplateTypes(project.precompiledTemplateTypes)
+        return precompiledTemplateTypes(project.precompiledTemplateTypes())
             .srcMainResourcesTemplatesDirectory(project.srcMainResourcesTemplatesDirectory())
             .buildTemplatesDirectory(project.buildTemplatesDirectory());
     }

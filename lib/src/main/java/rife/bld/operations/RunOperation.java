@@ -60,7 +60,7 @@ public class RunOperation {
         return javaTool(project.javaTool())
             .runJavaOptions(project.runJavaOptions())
             .runClasspath(project.runClasspath())
-            .mainClass(project.mainClass);
+            .mainClass(project.mainClass());
     }
 
     public RunOperation javaTool(String tool) {

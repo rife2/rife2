@@ -10,6 +10,10 @@ public class InnerClassException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = -2692374153192760509L;
 
+    public InnerClassException(String message, Exception cause) {
+        super(message, cause);
+    }
+
     public InnerClassException(Exception cause) {
         super(cause);
     }

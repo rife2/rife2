@@ -4,8 +4,7 @@
  */
 package rife.bld.operations;
 
-import rife.bld.BuildHelp;
-import rife.bld.Project;
+import rife.bld.*;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
@@ -32,10 +31,13 @@ public class JarOperation {
 
     private Attributes manifestAttributes_ = new Attributes();
     private List<File> sourceDirectories_ = new ArrayList<>();
+    private List<NamedFile> sourceFiles_ = new ArrayList<>();
     private File destinationDirectory_;
     private String jarFileName_;
     private List<Pattern> included_ = new ArrayList<>();
     private List<Pattern> excluded_ = new ArrayList<>();
+
+    private final byte[] buffer_ = new byte[1024];
 
     public JarOperation() {
     }
@@ -58,9 +60,12 @@ public class JarOperation {
                 for (var file_name : FileUtils.getFileList(source_dir)) {
                     var file = new File(source_dir, file_name);
                     if (StringUtils.filter(file.getAbsolutePath(), included(), excluded())) {
-                        addFileToJar(jar, file_name, file);
+                        addFileToJar(jar, new NamedFile(file_name, file));
                     }
                 }
+            }
+            for (var source_file : sourceFiles()) {
+                addFileToJar(jar, source_file);
             }
             jar.flush();
         }
@@ -68,32 +73,27 @@ public class JarOperation {
 
     public Manifest createManifest() {
         var manifest = new Manifest();
-        manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
         manifest.getMainAttributes().putAll(manifestAttributes());
         return manifest;
     }
 
-    public void addFileToJar(JarOutputStream jar, String fileName, File file)
+    private void addFileToJar(JarOutputStream jar, NamedFile file)
     throws IOException {
-        var entry = new JarEntry(fileName);
-        entry.setTime(file.lastModified());
+        var entry = new JarEntry(file.name());
+        entry.setTime(file.file().lastModified());
         jar.putNextEntry(entry);
 
-        var in = new BufferedInputStream(new FileInputStream(file));
-        var buffer = new byte[1024];
-        while (true) {
-            var count = in.read(buffer);
-            if (count == -1) {
-                break;
+        try (var in = new BufferedInputStream(new FileInputStream(file.file()))) {
+            int count;
+            while ((count = in.read(buffer_)) != -1) {
+                jar.write(buffer_, 0, count);
             }
-            jar.write(buffer, 0, count);
+            jar.closeEntry();
         }
-        jar.closeEntry();
-        in.close();
     }
 
     public JarOperation fromProject(Project project) {
-        manifestAttributes().put(Attributes.Name.MAIN_CLASS, project.mainClass);
+        manifestAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
         return sourceDirectories(List.of(project.buildMainDirectory(), project.srcMainResourcesDirectory()))
             .destinationDirectory(project.buildDistDirectory())
             .jarFileName(project.jarFileName())
@@ -116,6 +116,15 @@ public class JarOperation {
 
     public List<File> sourceDirectories() {
         return sourceDirectories_;
+    }
+
+    public JarOperation sourceFiles(List<NamedFile> sources) {
+        sourceFiles_ = new ArrayList<>(sources);
+        return this;
+    }
+
+    public List<NamedFile> sourceFiles() {
+        return sourceFiles_;
     }
 
     public JarOperation destinationDirectory(File directory) {

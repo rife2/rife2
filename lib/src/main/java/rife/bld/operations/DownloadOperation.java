@@ -84,8 +84,8 @@ public class DownloadOperation {
     }
 
     public DownloadOperation fromProject(Project project) {
-        return dependencies(project.dependencies)
-            .repositories(project.repositories)
+        return dependencies(project.dependencies())
+            .repositories(project.repositories())
             .libCompileDirectory(project.libCompileDirectory())
             .libRuntimeDirectory(project.libRuntimeDirectory())
             .libStandaloneDirectory(project.libStandaloneDirectory())

@@ -9,6 +9,7 @@ import rife.tools.exceptions.FileUtilsErrorException;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -16,6 +17,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public final class FileUtils {
     private FileUtils() {
@@ -235,6 +239,33 @@ public final class FileUtils {
         }
     }
 
+    public static void copyDirectory(File sourceDir, File targetDir)
+    throws FileUtilsErrorException {
+        if (null == sourceDir) throw new IllegalArgumentException("sourceDir can't be null.");
+        if (null == targetDir) throw new IllegalArgumentException("targetDir can't be null.");
+
+        try {
+            var source_path = sourceDir.getAbsolutePath();
+            Files.walk(Paths.get(source_path))
+                .forEach(source -> {
+                    var destination_name = source.toString().substring(source_path.length());
+                    if (!destination_name.isEmpty()) {
+                        Path destination = Paths.get(targetDir.getAbsolutePath(), destination_name);
+                        try {
+                            Files.copy(source, destination, REPLACE_EXISTING, COPY_ATTRIBUTES);
+                        } catch (IOException e) {
+                            throw new InnerClassException("Error while copying file '" + source.toFile().getAbsolutePath() + "' to file '" + destination.toFile().getAbsolutePath() + "'.", e);
+                        }
+                    }
+                });
+        } catch (IOException e) {
+            throw new FileUtilsErrorException("Error while copying directory '" + sourceDir.getAbsolutePath() + "' to directory '" + targetDir.getAbsolutePath() + "'.", e);
+        } catch (InnerClassException e) {
+            throw new FileUtilsErrorException(e.getMessage(), e.getCause());
+
+        }
+    }
+
     public static ByteArrayOutputStream readStream(InputStream inputStream)
     throws FileUtilsErrorException {
         if (null == inputStream) throw new IllegalArgumentException("inputStream can't be null.");
@@ -450,16 +481,16 @@ public final class FileUtils {
         }
         entries = zip_file.entries();
 
+        var buffer = new byte[1024];
         while (entries.hasMoreElements()) {
             ZipEntry entry = null;
             InputStream input_stream = null;
             String output_filename = null;
             File output_file = null;
-            StringBuilder output_file_directoryname = null;
+            StringBuilder output_file_directory_name = null;
             File output_file_directory = null;
             FileOutputStream file_output_stream = null;
-            var buffer = new byte[1024];
-            var return_value = -1;
+            var count = -1;
 
             entry = (ZipEntry) entries.nextElement();
             try {
@@ -470,9 +501,9 @@ public final class FileUtils {
 
             output_filename = destination.getAbsolutePath() + File.separator + entry.getName().replace('/', File.separatorChar);
             output_file = new File(output_filename);
-            output_file_directoryname = new StringBuilder(output_file.getPath());
-            output_file_directoryname.setLength(output_file_directoryname.length() - output_file.getName().length() - File.separator.length());
-            output_file_directory = new File(output_file_directoryname.toString());
+            output_file_directory_name = new StringBuilder(output_file.getPath());
+            output_file_directory_name.setLength(output_file_directory_name.length() - output_file.getName().length() - File.separator.length());
+            output_file_directory = new File(output_file_directory_name.toString());
             if (!output_file_directory.exists()) {
                 if (!output_file_directory.mkdirs()) {
                     throw new FileUtilsErrorException("Couldn't create directory '" + output_file_directory.getAbsolutePath() + "' and its parents.");
@@ -490,11 +521,8 @@ public final class FileUtils {
             }
 
             try {
-                return_value = input_stream.read(buffer);
-
-                while (-1 != return_value) {
-                    file_output_stream.write(buffer, 0, return_value);
-                    return_value = input_stream.read(buffer);
+                while ((count = input_stream.read(buffer)) != -1) {
+                    file_output_stream.write(buffer, 0, count);
                 }
             } catch (IOException e) {
                 throw new FileUtilsErrorException("Error while uncompressing entry '" + output_filename + "'.", e);

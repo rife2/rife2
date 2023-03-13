@@ -14,15 +14,47 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public abstract class Project extends BuildExecutor {
-    public List<Repository> repositories = new ArrayList<>();
-    public String pkg = null;
-    public String name = null;
-    public VersionNumber version = null;
-    public String mainClass = null;
+    protected List<Repository> repositories = new ArrayList<>();
+    protected String pkg = null;
+    protected String name = null;
+    protected VersionNumber version = null;
+    protected String mainClass = null;
 
-    public DependencyScopes dependencies = new DependencyScopes();
+    protected DependencyScopes dependencies = new DependencyScopes();
 
-    public List<TemplateType> precompiledTemplateTypes = new ArrayList<>();
+    protected List<TemplateType> precompiledTemplateTypes = new ArrayList<>();
+    protected List<String> compileJavacOptions = new ArrayList<>();
+    protected String javaTool = null;
+    protected List<String> runJavaOptions = new ArrayList<>();
+    protected List<String> testJavaOptions = new ArrayList<>();
+    protected String testToolMainClass;
+    protected List<String> testToolOptions = new ArrayList<>();
+    protected String archiveBaseName = null;
+    protected String jarFileName = null;
+    protected String warFileName = null;
+
+    protected File srcDirectory = null;
+    protected File srcMainDirectory = null;
+    protected File srcMainJavaDirectory = null;
+    protected File srcMainResourcesDirectory = null;
+    protected File srcMainResourcesTemplatesDirectory = null;
+    protected File srcMainWebappDirectory = null;
+    protected File srcProjectDirectory = null;
+    protected File srcProjectJavaDirectory = null;
+    protected File srcTestJDirectory = null;
+    protected File srcTestJavaDirectory = null;
+    protected File libDirectory = null;
+    protected File libCompileDirectory = null;
+    protected File libProjectDirectory = null;
+    protected File libRuntimeDirectory = null;
+    protected File libStandaloneDirectory = null;
+    protected File libTestDirectory = null;
+    protected File buildDirectory = null;
+    protected File buildDistDirectory = null;
+    protected File buildMainDirectory = null;
+    protected File buildProjectDirectory = null;
+    protected File buildTemplatesDirectory = null;
+    protected File buildTestDirectory = null;
 
     public abstract void setup();
 
@@ -59,6 +91,13 @@ public abstract class Project extends BuildExecutor {
         compile();
         precompile();
         new JarOperation().fromProject(this).execute();
+    }
+
+    @BuildCommand(help = WarOperation.Help.class)
+    public void war()
+    throws Exception {
+        jar();
+        new WarOperation().fromProject(this).execute();
     }
 
     @BuildCommand(help = RunOperation.Help.class)
@@ -135,127 +174,168 @@ public abstract class Project extends BuildExecutor {
      */
 
     public File srcDirectory() {
-        return new File("src");
+        return Objects.requireNonNullElseGet(srcDirectory, () -> new File("src"));
     }
 
     public File srcMainDirectory() {
-        return new File(srcDirectory(), "main");
+        return Objects.requireNonNullElseGet(srcMainDirectory, () -> new File(srcDirectory(), "main"));
     }
 
     public File srcMainJavaDirectory() {
-        return new File(srcMainDirectory(), "java");
+        return Objects.requireNonNullElseGet(srcMainJavaDirectory, () -> new File(srcMainDirectory(), "java"));
     }
 
     public File srcMainResourcesDirectory() {
-        return new File(srcMainDirectory(), "resources");
+        return Objects.requireNonNullElseGet(srcMainResourcesDirectory, () -> new File(srcMainDirectory(), "resources"));
     }
 
     public File srcMainResourcesTemplatesDirectory() {
-        return new File(srcMainResourcesDirectory(), "templates");
+        return Objects.requireNonNullElseGet(srcMainResourcesTemplatesDirectory, () -> new File(srcMainResourcesDirectory(), "templates"));
     }
 
     public File srcMainWebappDirectory() {
-        return new File(srcMainDirectory(), "webapp");
+        return Objects.requireNonNullElseGet(srcMainWebappDirectory, () -> new File(srcMainDirectory(), "webapp"));
     }
 
     public File srcProjectDirectory() {
-        return new File(srcDirectory(), "project");
+        return Objects.requireNonNullElseGet(srcProjectDirectory, () -> new File(srcDirectory(), "project"));
     }
 
     public File srcProjectJavaDirectory() {
-        return new File(srcProjectDirectory(), "java");
+        return Objects.requireNonNullElseGet(srcProjectJavaDirectory, () -> new File(srcProjectDirectory(), "java"));
     }
 
     public File srcTestJDirectory() {
-        return new File(srcDirectory(), "test");
+        return Objects.requireNonNullElseGet(srcTestJDirectory, () -> new File(srcDirectory(), "test"));
     }
 
     public File srcTestJavaDirectory() {
-        return new File(srcTestJDirectory(), "java");
+        return Objects.requireNonNullElseGet(srcTestJavaDirectory, () -> new File(srcTestJDirectory(), "java"));
     }
 
     public File libDirectory() {
-        return new File("lib");
+        return Objects.requireNonNullElseGet(libDirectory, () -> new File("lib"));
     }
 
     public File libCompileDirectory() {
-        return new File(libDirectory(), "compile");
+        return Objects.requireNonNullElseGet(libCompileDirectory, () -> new File(libDirectory(), "compile"));
     }
 
     public File libProjectDirectory() {
-        return new File(libDirectory(), "project");
+        return Objects.requireNonNullElseGet(libProjectDirectory, () -> new File(libDirectory(), "project"));
     }
 
     public File libRuntimeDirectory() {
-        return new File(libDirectory(), "runtime");
+        return Objects.requireNonNullElseGet(libRuntimeDirectory, () -> new File(libDirectory(), "runtime"));
     }
 
     public File libStandaloneDirectory() {
-        return new File(libDirectory(), "standalone");
+        return Objects.requireNonNullElseGet(libStandaloneDirectory, () -> new File(libDirectory(), "standalone"));
     }
 
     public File libTestDirectory() {
-        return new File(libDirectory(), "test");
+        return Objects.requireNonNullElseGet(libTestDirectory, () -> new File(libDirectory(), "test"));
     }
 
     public File buildDirectory() {
-        return new File("build");
+        return Objects.requireNonNullElseGet(buildDirectory, () -> new File("build"));
     }
 
     public File buildDistDirectory() {
-        return new File(buildDirectory(), "dist");
+        return Objects.requireNonNullElseGet(buildDistDirectory, () -> new File(buildDirectory(), "dist"));
     }
 
     public File buildMainDirectory() {
-        return new File(buildDirectory(), "main");
+        return Objects.requireNonNullElseGet(buildMainDirectory, () -> new File(buildDirectory(), "main"));
     }
 
     public File buildProjectDirectory() {
-        return new File(buildDirectory(), "project");
+        return Objects.requireNonNullElseGet(buildProjectDirectory, () -> new File(buildDirectory(), "project"));
     }
 
     public File buildTemplatesDirectory() {
-        return buildMainDirectory();
+        return Objects.requireNonNullElseGet(buildTemplatesDirectory, this::buildMainDirectory);
     }
 
     public File buildTestDirectory() {
-        return new File(buildDirectory(), "test");
+        return Objects.requireNonNullElseGet(buildTestDirectory, () -> new File(buildDirectory(), "test"));
     }
 
     /*
-     * Process options
+     * Project options
      */
 
+    public List<Repository> repositories() {
+        return Objects.requireNonNullElse(repositories, Collections.emptyList());
+    }
+
+    public String pkg() {
+        return pkg;
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public VersionNumber version() {
+        return version;
+    }
+
+    public String mainClass() {
+        return mainClass;
+    }
+
+    public DependencyScopes dependencies() {
+        return Objects.requireNonNullElseGet(dependencies, DependencyScopes::new);
+    }
+
+    public List<TemplateType> precompiledTemplateTypes() {
+        return Objects.requireNonNullElse(precompiledTemplateTypes, Collections.emptyList());
+    }
+
     public List<String> compileJavacOptions() {
-        return Collections.emptyList();
+        return Objects.requireNonNullElse(compileJavacOptions, Collections.emptyList());
     }
 
     public String javaTool() {
-        return "java";
+        return Objects.requireNonNullElse(javaTool, "java");
     }
 
     public List<String> runJavaOptions() {
-        return Collections.emptyList();
+        return Objects.requireNonNullElse(runJavaOptions, Collections.emptyList());
     }
 
     public List<String> testJavaOptions() {
-        return Collections.emptyList();
+        return Objects.requireNonNullElse(testJavaOptions, Collections.emptyList());
     }
 
     public String testToolMainClass() {
-        return "org.junit.platform.console.ConsoleLauncher";
+        return Objects.requireNonNullElse(testToolMainClass, "org.junit.platform.console.ConsoleLauncher");
+
     }
 
     public List<String> testToolOptions() {
-        var result = new ArrayList<String>();
-        result.add("--scan-classpath");
-        result.add("--exclude-engine=junit-platform-suite");
-        result.add("--exclude-engine=junit-vintage");
-        return result;
+        if (testToolOptions == null || testToolOptions.isEmpty()) {
+            var result = new ArrayList<String>();
+            result.add("--scan-classpath");
+            result.add("--exclude-engine=junit-platform-suite");
+            result.add("--exclude-engine=junit-vintage");
+            return result;
+        }
+
+        return testToolOptions;
+    }
+
+    public String archiveBaseName() {
+        return Objects.requireNonNullElseGet(archiveBaseName, () -> name.toLowerCase());
     }
 
     public String jarFileName() {
-        return name + "-" + version + ".jar";
+        return Objects.requireNonNullElseGet(jarFileName, () -> archiveBaseName() + "-" + version + ".jar");
+    }
+
+    public String warFileName() {
+        return Objects.requireNonNullElseGet(warFileName, () -> archiveBaseName() + "-" + version + ".war");
     }
 
     /*
