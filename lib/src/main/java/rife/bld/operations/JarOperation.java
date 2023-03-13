@@ -33,7 +33,7 @@ public class JarOperation {
     private List<File> sourceDirectories_ = new ArrayList<>();
     private List<NamedFile> sourceFiles_ = new ArrayList<>();
     private File destinationDirectory_;
-    private String jarFileName_;
+    private String destinationFileName_;
     private List<Pattern> included_ = new ArrayList<>();
     private List<Pattern> excluded_ = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public class JarOperation {
 
     public void createJarFile()
     throws IOException {
-        var out_file = new File(destinationDirectory(), jarFileName());
+        var out_file = new File(destinationDirectory(), destinationFileName());
         try (var jar = new JarOutputStream(new FileOutputStream(out_file), createManifest())) {
             for (var source_dir : sourceDirectories()) {
                 for (var file_name : FileUtils.getFileList(source_dir)) {
@@ -96,7 +96,7 @@ public class JarOperation {
         manifestAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
         return sourceDirectories(List.of(project.buildMainDirectory(), project.srcMainResourcesDirectory()))
             .destinationDirectory(project.buildDistDirectory())
-            .jarFileName(project.jarFileName())
+            .destinationFileName(project.jarFileName())
             .excluded(List.of(Pattern.compile("^\\Q" + project.srcMainResourcesTemplatesDirectory().getAbsolutePath() + "\\E.*")));
     }
 
@@ -136,13 +136,13 @@ public class JarOperation {
         return destinationDirectory_;
     }
 
-    public JarOperation jarFileName(String name) {
-        jarFileName_ = name;
+    public JarOperation destinationFileName(String name) {
+        destinationFileName_ = name;
         return this;
     }
 
-    public String jarFileName() {
-        return jarFileName_;
+    public String destinationFileName() {
+        return destinationFileName_;
     }
 
     public JarOperation included(List<Pattern> included) {

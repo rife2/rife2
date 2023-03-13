@@ -7,6 +7,7 @@ package rife.bld.operations;
 import rife.bld.*;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
+import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.*;
 import java.nio.file.*;
@@ -35,7 +36,7 @@ public class WarOperation {
     private File webappDirectory_;
     private File webXmlFile_;
     private File destinationDirectory_;
-    private String warFileName_;
+    private String destinationFileName_;
 
     public WarOperation() {
     }
@@ -43,14 +44,34 @@ public class WarOperation {
     public void execute()
     throws Exception {
         var tmp_dir = Files.createTempDirectory("war").toFile();
-        System.out.println(tmp_dir.getAbsolutePath());
 
-        FileUtils.copyDirectory(webappDirectory(), tmp_dir);
+        try {
+            var web_inf_dir = createWebInfDirectory(tmp_dir);
+            copyWebappDirectory(tmp_dir);
+            copyWebInfLibJars(web_inf_dir);
+            copyWebInfClassesFiles(web_inf_dir);
+            copyWebXmlFile(web_inf_dir);
 
-        var web_inf_dir = new File(tmp_dir, "WEB-INF");
+            createWarArchive(tmp_dir);
+        } finally {
+            FileUtils.deleteDirectory(tmp_dir);
+        }
+    }
+
+    public File createWebInfDirectory(File destination) {
+        var web_inf_dir = new File(destination, "WEB-INF");
         web_inf_dir.mkdirs();
+        return web_inf_dir;
+    }
 
-        var web_inf_lib_dir = new File(web_inf_dir, "lib");
+    public void copyWebappDirectory(File destination)
+    throws FileUtilsErrorException {
+        FileUtils.copyDirectory(webappDirectory(), destination);
+    }
+
+    public void copyWebInfLibJars(File webInfDirectory)
+    throws FileUtilsErrorException {
+        var web_inf_lib_dir = new File(webInfDirectory, "lib");
         if (!libSourceDirectories().isEmpty()) {
             web_inf_lib_dir.mkdirs();
             for (var dir : libSourceDirectories()) {
@@ -64,19 +85,34 @@ public class WarOperation {
                 FileUtils.copy(file.file(), new File(web_inf_lib_dir, file.name()));
             }
         }
+    }
 
-        var web_inf_classes_dir = new File(web_inf_dir, "classes");
+    public void copyWebInfClassesFiles(File webInfDirectory)
+    throws FileUtilsErrorException {
+        var web_inf_classes_dir = new File(webInfDirectory, "classes");
         if (!classesSourceDirectories().isEmpty()) {
             web_inf_classes_dir.mkdirs();
             for (var dir : classesSourceDirectories()) {
                 FileUtils.copyDirectory(dir, web_inf_classes_dir);
             }
         }
+    }
 
+    public void copyWebXmlFile(File webInfDirectory)
+    throws FileUtilsErrorException {
         var web_xml_file = webXmlFile();
         if (web_xml_file != null) {
-            FileUtils.copy(web_xml_file, new File(web_inf_dir, "web.xml"));
+            FileUtils.copy(web_xml_file, new File(webInfDirectory, "web.xml"));
         }
+    }
+
+    public void createWarArchive(File stagingDirectory)
+    throws Exception {
+        new JarOperation()
+            .sourceDirectories(List.of(stagingDirectory))
+            .destinationDirectory(destinationDirectory())
+            .destinationFileName(destinationFileName())
+            .execute();
     }
 
     public WarOperation fromProject(Project project) {
@@ -84,7 +120,7 @@ public class WarOperation {
             .jarSourceFiles(List.of(new NamedFile(project.jarFileName(), new File(project.buildDistDirectory(), project.jarFileName()))))
             .webappDirectory(project.srcMainWebappDirectory())
             .destinationDirectory(project.buildDistDirectory())
-            .warFileName(project.warFileName());
+            .destinationFileName(project.warFileName());
     }
 
     public WarOperation libSourceDirectories(List<File> sources) {
@@ -141,12 +177,12 @@ public class WarOperation {
         return destinationDirectory_;
     }
 
-    public WarOperation warFileName(String name) {
-        warFileName_ = name;
+    public WarOperation destinationFileName(String name) {
+        destinationFileName_ = name;
         return this;
     }
 
-    public String warFileName() {
-        return warFileName_;
+    public String destinationFileName() {
+        return destinationFileName_;
     }
 }
