@@ -55,6 +55,9 @@ public abstract class Project extends BuildExecutor {
     @BuildCommand(help = JarOperation.Help.class)
     public void jar()
     throws Exception {
+        clean();
+        compile();
+        precompile();
         new JarOperation().fromProject(this).execute();
     }
 
