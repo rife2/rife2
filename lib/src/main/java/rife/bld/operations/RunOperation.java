@@ -30,9 +30,6 @@ public class RunOperation {
     private List<String> runClasspath_ = new ArrayList<>();
     private String mainClass_;
 
-    public RunOperation() {
-    }
-
     public void execute()
     throws Exception {
         executeStartProcess().waitFor();

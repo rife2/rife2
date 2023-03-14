@@ -32,9 +32,6 @@ public class PrecompileOperation {
     private File srcMainResourcesTemplatesDirectory_;
     private File buildTemplatesDirectory_;
 
-    public PrecompileOperation() {
-    }
-
     public void execute() {
         executeCreateTemplateDeployer().execute();
     }

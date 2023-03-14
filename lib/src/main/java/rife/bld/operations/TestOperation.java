@@ -35,9 +35,6 @@ public class TestOperation {
     private Consumer<String> testOutputConsumer_;
     private Consumer<String> testErrorConsumer_;
 
-    public TestOperation() {
-    }
-
     public void execute()
     throws Exception {
         var process = executeStartProcess();

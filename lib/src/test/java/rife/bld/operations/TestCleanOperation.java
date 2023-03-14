@@ -6,7 +6,6 @@ package rife.bld.operations;
 
 import org.junit.jupiter.api.Test;
 import rife.bld.Project;
-import rife.bld.dependencies.VersionNumber;
 import rife.tools.FileUtils;
 
 import java.io.File;

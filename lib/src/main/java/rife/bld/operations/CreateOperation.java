@@ -54,9 +54,6 @@ public class CreateOperation {
     private File projectPackageDirectory_;
     private File testPackageDirectory_;
 
-    public CreateOperation() {
-    }
-
     public void execute()
     throws Exception {
         if (packageName() == null || projectName() == null) {

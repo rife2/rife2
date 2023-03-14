@@ -37,9 +37,6 @@ public class WarOperation {
     private File destinationDirectory_;
     private String destinationFileName_;
 
-    public WarOperation() {
-    }
-
     public void execute()
     throws Exception {
         var tmp_dir = Files.createTempDirectory("war").toFile();

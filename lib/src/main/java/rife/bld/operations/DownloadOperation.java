@@ -33,9 +33,6 @@ public class DownloadOperation {
     private File libStandaloneDirectory_;
     private File libTestDirectory_;
 
-    public DownloadOperation() {
-    }
-
     public void execute() {
         executeDownloadCompileDependencies();
         executeDownloadRuntimeDependencies();

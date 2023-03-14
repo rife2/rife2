@@ -37,9 +37,6 @@ public class CompileOperation {
     private List<File> testSourceFiles_ = new ArrayList<>();
     private List<String> compileOptions_ = new ArrayList<>();
 
-    public CompileOperation() {
-    }
-
     public void execute()
     throws Exception {
         executeCreateBuildDirectories();

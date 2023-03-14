@@ -39,9 +39,6 @@ public class JarOperation {
 
     private final byte[] buffer_ = new byte[1024];
 
-    public JarOperation() {
-    }
-
     public void execute()
     throws Exception {
         executeCreateDestinationDirectory();

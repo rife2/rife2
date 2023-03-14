@@ -36,9 +36,6 @@ public class UberJarOperation {
     private String destinationFileName_;
     private String mainClass_;
 
-    public UberJarOperation() {
-    }
-
     public void execute()
     throws Exception {
         var tmp_dir = Files.createTempDirectory("uberjar").toFile();
