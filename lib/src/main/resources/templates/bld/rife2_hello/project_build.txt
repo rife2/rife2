@@ -9,8 +9,7 @@ import static rife.bld.dependencies.Scope.*;
 import static rife.bld.operations.TemplateType.*;
 
 public class {{v projectBuild/}} extends Project {
-    public void setup() {
-        repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
+    public {{v projectBuild/}}() {
         pkg = "{{v package/}}";
         name = "{{v project/}}";
         mainClass = "{{v package/}}.{{v projectSite/}}";
@@ -18,6 +17,7 @@ public class {{v projectBuild/}} extends Project {
 
         precompiledTemplateTypes = List.of(HTML);
 
+        repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
 {{v scopes}}{{/v}}{{b scope}}        scope({{v name/}}){{v dependencies}}{{/v}};
 {{b dependency}}
             .include(dependency("{{v groupId/}}", "{{v artifactId/}}", version({{v version/}}))){{/b}}{{/b}}    }

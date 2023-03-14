@@ -31,7 +31,7 @@ public class BuildExecutor {
      * @param arguments the arguments to execute the build with
      * @since 1.5
      */
-    public void processArguments(String[] arguments) {
+    protected void processArguments(String[] arguments) {
         arguments_ = new ArrayList<>(Arrays.asList(arguments));
 
         var show_help = arguments_.isEmpty();

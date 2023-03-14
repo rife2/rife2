@@ -5,6 +5,7 @@
 package rife.bld.operations;
 
 import rife.bld.BuildHelp;
+import rife.bld.Project;
 import rife.bld.operations.exceptions.OperationOptionException;
 import rife.bld.dependencies.*;
 import rife.template.TemplateFactory;
@@ -13,7 +14,6 @@ import rife.tools.exceptions.FileUtilsErrorException;
 import rife.validation.ValidityChecks;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.*;
 
 public class CreateOperation {
@@ -31,9 +31,13 @@ public class CreateOperation {
                   name     The name of the project to create""", "${topic}", topic);
         }
     }
-    
+
+    private File workDirectory_;
     private String packageName_;
     private String projectName_;
+    private boolean downloadDependencies_;
+
+    private Project project_;
 
     private String projectClassName_;
     private String projectBuildName_;
@@ -41,25 +45,14 @@ public class CreateOperation {
     private String projectSiteUberName_;
     private String projectTestName_;
 
-    private File projectDir_;
-    private File srcMainJavaDir_;
-    private File srcMainResourcesTemplatesDir_;
-    private File srcMainWebappCssDir_;
-    private File srcMainWebappWebInfDir_;
-    private File srcProjectJavaDir_;
-    private File srcTestJavaDir_;
-    private File libDir_;
-    private File libCompileDir_;
-    private File libProjectDir_;
-    private File libRuntimeDir_;
-    private File libStandaloneDir_;
-    private File libTestDir_;
-    private File ideaDir_;
-    private File ideaLibrariesDir_;
-    private File ideaRunConfigurationsDir_;
-    private File javaPackageDir_;
-    private File projectPackageDir_;
-    private File testPackageDir_;
+    private File srcMainWebappCssDirectory_;
+    private File srcMainWebappWebInfDirectory_;
+    private File ideaDirectory_;
+    private File ideaLibrariesDirectory_;
+    private File ideaRunConfigurationsDirectory_;
+    private File javaPackageDirectory_;
+    private File projectPackageDirectory_;
+    private File testPackageDirectory_;
 
     public CreateOperation() {
     }
@@ -79,70 +72,37 @@ public class CreateOperation {
         projectTestName_ = projectClassName_ + "Test";
 
         // create the main project structure
-        projectDir_ =
-            Path.of(projectName()).toFile();
-        srcMainJavaDir_ =
-            Path.of(projectName(), "src", "main", "java").toFile();
-        srcMainResourcesTemplatesDir_ =
-            Path.of(projectName(), "src", "main", "resources", "templates").toFile();
-        srcMainWebappCssDir_ =
-            Path.of(projectName(), "src", "main", "webapp", "css").toFile();
-        srcMainWebappWebInfDir_ =
-            Path.of(projectName(), "src", "main", "webapp", "WEB-INF").toFile();
-        srcProjectJavaDir_ =
-            Path.of(projectName(), "src", "project", "java").toFile();
-        srcTestJavaDir_ =
-            Path.of(projectName(), "src", "test", "java").toFile();
-        libDir_ =
-            Path.of(projectName(), "lib").toFile();
-        libCompileDir_ =
-            Path.of(projectName(), "lib", "compile").toFile();
-        libProjectDir_ =
-            Path.of(projectName(), "lib", "project").toFile();
-        libRuntimeDir_ =
-            Path.of(projectName(), "lib", "runtime").toFile();
-        libStandaloneDir_ =
-            Path.of(projectName(), "lib", "standalone").toFile();
-        libTestDir_ =
-            Path.of(projectName(), "lib", "test").toFile();
-        ideaDir_ =
-            Path.of(projectName(), ".idea").toFile();
-        ideaLibrariesDir_ =
-            Path.of(projectName(), ".idea", "libraries").toFile();
-        ideaRunConfigurationsDir_ =
-            Path.of(projectName(), ".idea", "runConfigurations").toFile();
+        project_ = new NewProjectTemplate(new File(workDirectory(), projectName()), packageName(), projectName());
+        srcMainWebappCssDirectory_ = new File(project_.srcMainWebappDirectory(), "css");
+        srcMainWebappWebInfDirectory_ = new File(project_.srcMainWebappDirectory(), "WEB-INF");
+        ideaDirectory_ = new File(project_.workDirectory(), ".idea");
+        ideaLibrariesDirectory_ = new File(ideaDirectory_, "libraries");
+        ideaRunConfigurationsDirectory_ = new File(ideaDirectory_, "runConfigurations");
 
         var package_dir = packageName().replace('.', File.separatorChar);
-        javaPackageDir_ = new File(srcMainJavaDir_, package_dir);
-        projectPackageDir_ = new File(srcProjectJavaDir_, package_dir);
-        testPackageDir_ = new File(srcTestJavaDir_, package_dir);
+        javaPackageDirectory_ = new File(project_.srcMainJavaDirectory(), package_dir);
+        projectPackageDirectory_ = new File(project_.srcProjectJavaDirectory(), package_dir);
+        testPackageDirectory_ = new File(project_.srcTestJavaDirectory(), package_dir);
 
         executeCreateProjectStructure();
         executePopulateProjectStructure();
         executePopulateIdeaProject();
-        executeDownloadDependencies();
+        if (downloadDependencies()) {
+            executeDownloadDependencies();
+        }
     }
 
     public void executeCreateProjectStructure() {
-        projectDir_.mkdirs();
-        srcMainJavaDir_.mkdirs();
-        srcMainResourcesTemplatesDir_.mkdirs();
-        srcMainWebappCssDir_.mkdirs();
-        srcMainWebappWebInfDir_.mkdirs();
-        srcProjectJavaDir_.mkdirs();
-        srcTestJavaDir_.mkdirs();
-        libDir_.mkdirs();
-        libCompileDir_.mkdirs();
-        libProjectDir_.mkdirs();
-        libRuntimeDir_.mkdirs();
-        libStandaloneDir_.mkdirs();
-        libTestDir_.mkdirs();
-        ideaDir_.mkdirs();
-        ideaLibrariesDir_.mkdirs();
-        ideaRunConfigurationsDir_.mkdirs();
-        javaPackageDir_.mkdirs();
-        projectPackageDir_.mkdirs();
-        testPackageDir_.mkdirs();
+        project_.createProjectStructure();
+
+        srcMainWebappCssDirectory_.mkdirs();
+        srcMainWebappWebInfDirectory_.mkdirs();
+        ideaDirectory_.mkdirs();
+        ideaLibrariesDirectory_.mkdirs();
+        ideaRunConfigurationsDirectory_.mkdirs();
+        javaPackageDirectory_.mkdirs();
+        projectPackageDirectory_.mkdirs();
+        testPackageDirectory_.mkdirs();
     }
 
     public void executePopulateProjectStructure()
@@ -150,13 +110,13 @@ public class CreateOperation {
         // project gitignore
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.rife2_hello.project_gitignore").getContent(),
-            new File(projectDir_, ".gitignore"));
+            new File(project_.workDirectory(), ".gitignore"));
 
         // project site
         var site_template = TemplateFactory.TXT.get("bld.rife2_hello.project_site");
         site_template.setValue("package", packageName());
         site_template.setValue("projectSite", projectSiteName_);
-        var project_site_file = new File(javaPackageDir_, projectSiteName_ + ".java");
+        var project_site_file = new File(javaPackageDirectory_, projectSiteName_ + ".java");
         FileUtils.writeString(site_template.getContent(), project_site_file);
 
         // project site uber
@@ -164,25 +124,25 @@ public class CreateOperation {
         site_uber_template.setValue("package", packageName());
         site_uber_template.setValue("projectSite", projectSiteName_);
         site_uber_template.setValue("projectSiteUber", projectSiteUberName_);
-        var project_site_uber_file = new File(javaPackageDir_, projectSiteUberName_ + ".java");
+        var project_site_uber_file = new File(javaPackageDirectory_, projectSiteUberName_ + ".java");
         FileUtils.writeString(site_uber_template.getContent(), project_site_uber_file);
 
         // project template
         var template_template = TemplateFactory.HTML.get("bld.rife2_hello.project_template");
         template_template.setValue("project", projectClassName_);
-        var project_template_file = new File(srcMainResourcesTemplatesDir_, "hello.html");
+        var project_template_file = new File(project_.srcMainResourcesTemplatesDirectory(), "hello.html");
         FileUtils.writeString(template_template.getContent(), project_template_file);
 
         // project css
         FileUtils.writeString(
             TemplateFactory.TXT.get("bld.rife2_hello.project_style").getContent(),
-            new File(srcMainWebappCssDir_, "style.css"));
+            new File(srcMainWebappCssDirectory_, "style.css"));
 
         // project web.xml
         var web_xml_template = TemplateFactory.XML.get("bld.rife2_hello.project_web");
         web_xml_template.setValue("package", packageName());
         web_xml_template.setValue("projectSite", projectSiteName_);
-        var project_web_xml_file = new File(srcMainWebappWebInfDir_, "web.xml");
+        var project_web_xml_file = new File(srcMainWebappWebInfDirectory_, "web.xml");
         FileUtils.writeString(web_xml_template.getContent(), project_web_xml_file);
 
         // project test
@@ -191,7 +151,7 @@ public class CreateOperation {
         test_template.setValue("projectTest", projectTestName_);
         test_template.setValue("projectSite", projectSiteName_);
         test_template.setValue("project", projectClassName_);
-        var project_test_file = new File(testPackageDir_, projectTestName_ + ".java");
+        var project_test_file = new File(testPackageDirectory_, projectTestName_ + ".java");
         FileUtils.writeString(test_template.getContent(), project_test_file);
 
         // project build
@@ -200,7 +160,7 @@ public class CreateOperation {
         build_template.setValue("package", packageName());
         build_template.setValue("project", projectClassName_);
         build_template.setValue("projectSite", projectSiteName_);
-        for (var entry : NewProjectInfo.DEPENDENCIES.entrySet()) {
+        for (var entry : project_.dependencies().entrySet()) {
             build_template.blankValue("dependencies");
 
             for (var dependency : entry.getValue()) {
@@ -217,13 +177,13 @@ public class CreateOperation {
             build_template.setValue("name", entry.getKey().name());
             build_template.appendBlock("scopes", "scope");
         }
-        var project_build_file = new File(projectPackageDir_, projectBuildName_ + ".java");
+        var project_build_file = new File(projectPackageDirectory_, projectBuildName_ + ".java");
         FileUtils.writeString(build_template.getContent(), project_build_file);
 
         // build shell scripts
         var build_sh_template = TemplateFactory.TXT.get("bld.bld_sh");
-        build_sh_template.setValue("projectBuildPath", project_build_file.getPath().substring(projectDir_.getPath().length() + 1));
-        var build_sh_file = new File(projectDir_, "bld.sh");
+        build_sh_template.setValue("projectBuildPath", project_build_file.getPath().substring(project_.workDirectory().getPath().length() + 1));
+        var build_sh_file = new File(project_.workDirectory(), "bld.sh");
         FileUtils.writeString(build_sh_template.getContent(), build_sh_file);
         build_sh_file.setExecutable(true);
     }
@@ -233,59 +193,59 @@ public class CreateOperation {
         // IDEA project files
         FileUtils.writeString(
             TemplateFactory.XML.get("bld.rife2_hello.idea.app_iml").getContent(),
-            new File(ideaDir_, "app.iml"));
+            new File(ideaDirectory_, "app.iml"));
         FileUtils.writeString(
             TemplateFactory.XML.get("bld.rife2_hello.idea.misc").getContent(),
-            new File(ideaDir_, "misc.xml"));
+            new File(ideaDirectory_, "misc.xml"));
         FileUtils.writeString(
             TemplateFactory.XML.get("bld.rife2_hello.idea.modules").getContent(),
-            new File(ideaDir_, "modules.xml"));
+            new File(ideaDirectory_, "modules.xml"));
         FileUtils.writeString(
             TemplateFactory.XML.get("bld.rife2_hello.idea.project_iml").getContent(),
-            new File(ideaDir_, "project.iml"));
+            new File(ideaDirectory_, "project.iml"));
         FileUtils.writeString(
             TemplateFactory.XML.get("bld.rife2_hello.idea.libraries.compile").getContent(),
-            new File(ideaLibrariesDir_, "compile.xml"));
+            new File(ideaLibrariesDirectory_, "compile.xml"));
         FileUtils.writeString(
             TemplateFactory.XML.get("bld.rife2_hello.idea.libraries.project").getContent(),
-            new File(ideaLibrariesDir_, "project.xml"));
+            new File(ideaLibrariesDirectory_, "project.xml"));
         FileUtils.writeString(
             TemplateFactory.XML.get("bld.rife2_hello.idea.libraries.runtime").getContent(),
-            new File(ideaLibrariesDir_, "runtime.xml"));
+            new File(ideaLibrariesDirectory_, "runtime.xml"));
         FileUtils.writeString(
             TemplateFactory.XML.get("bld.rife2_hello.idea.libraries.standalone").getContent(),
-            new File(ideaLibrariesDir_, "standalone.xml"));
+            new File(ideaLibrariesDirectory_, "standalone.xml"));
         FileUtils.writeString(
             TemplateFactory.XML.get("bld.rife2_hello.idea.libraries.test").getContent(),
-            new File(ideaLibrariesDir_, "test.xml"));
+            new File(ideaLibrariesDirectory_, "test.xml"));
 
         // IDEA run site
         var run_site_template = TemplateFactory.XML.get("bld.rife2_hello.idea.runConfigurations.Run_Site");
         run_site_template.setValue("package", packageName());
         run_site_template.setValue("projectSite", projectSiteName_);
-        var run_site_file = new File(ideaRunConfigurationsDir_, "Run Site.xml");
+        var run_site_file = new File(ideaRunConfigurationsDirectory_, "Run Site.xml");
         FileUtils.writeString(run_site_template.getContent(), run_site_file);
 
         // IDEA run tests
         var run_tests_template = TemplateFactory.XML.get("bld.rife2_hello.idea.runConfigurations.Run_Tests");
         run_tests_template.setValue("package", packageName());
         run_tests_template.setValue("projectTest", projectTestName_);
-        var run_tests_file = new File(ideaRunConfigurationsDir_, "Run Tests.xml");
+        var run_tests_file = new File(ideaRunConfigurationsDirectory_, "Run Tests.xml");
         FileUtils.writeString(run_tests_template.getContent(), run_tests_file);
     }
 
     public void executeDownloadDependencies() {
-        for (var dependency : NewProjectInfo.DEPENDENCIES.get(Scope.compile)) {
-            new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
-                .downloadTransitivelyIntoDirectory(libCompileDir_, Scope.compile);
+        for (var dependency : project_.dependencies().get(Scope.compile)) {
+            new DependencyResolver(project_.repositories(), dependency)
+                .downloadTransitivelyIntoDirectory(project_.libCompileDirectory(), Scope.compile);
         }
-        for (var dependency : NewProjectInfo.DEPENDENCIES.get(Scope.test)) {
-            new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
-                .downloadTransitivelyIntoDirectory(libTestDir_, Scope.compile, Scope.runtime);
+        for (var dependency : project_.dependencies().get(Scope.test)) {
+            new DependencyResolver(project_.repositories(), dependency)
+                .downloadTransitivelyIntoDirectory(project_.libTestDirectory(), Scope.compile, Scope.runtime);
         }
-        for (var dependency : NewProjectInfo.DEPENDENCIES.get(Scope.standalone)) {
-            new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
-                .downloadTransitivelyIntoDirectory(libStandaloneDir_, Scope.compile, Scope.runtime);
+        for (var dependency : project_.dependencies().get(Scope.standalone)) {
+            new DependencyResolver(project_.repositories(), dependency)
+                .downloadTransitivelyIntoDirectory(project_.libStandaloneDirectory(), Scope.compile, Scope.runtime);
         }
     }
 
@@ -294,7 +254,25 @@ public class CreateOperation {
             throw new OperationOptionException("ERROR: Expecting the package and project names as the arguments.");
         }
 
-        return packageName(arguments.remove(0)).projectName(arguments.remove(0));
+        return workDirectory(new File(System.getProperty("user.dir")))
+            .packageName(arguments.remove(0))
+            .projectName(arguments.remove(0))
+            .downloadDependencies(true);
+    }
+
+    public CreateOperation workDirectory(File directory) {
+        if (!directory.exists()) {
+            throw new OperationOptionException("ERROR: The work directory '" + directory + "' doesn't exist.");
+        }
+        if (!directory.isDirectory()) {
+            throw new OperationOptionException("ERROR: '" + directory + "' is not a directory.");
+        }
+        if (!directory.canWrite()) {
+            throw new OperationOptionException("ERROR: The work directory '" + directory + "' is not writable.");
+        }
+
+        workDirectory_ = directory;
+        return this;
     }
 
     public CreateOperation packageName(String name) {
@@ -324,11 +302,24 @@ public class CreateOperation {
         return this;
     }
 
+    public CreateOperation downloadDependencies(boolean flag) {
+        downloadDependencies_ = flag;
+        return this;
+    }
+
+    public File workDirectory() {
+        return workDirectory_;
+    }
+
     public String packageName() {
         return packageName_;
     }
 
     public String projectName() {
         return projectName_;
+    }
+
+    public boolean downloadDependencies() {
+        return downloadDependencies_;
     }
 }

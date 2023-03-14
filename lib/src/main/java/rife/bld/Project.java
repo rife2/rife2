@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public abstract class Project extends BuildExecutor {
+public class Project extends BuildExecutor {
     protected List<Repository> repositories = new ArrayList<>();
     protected String pkg = null;
     protected String name = null;
@@ -35,6 +35,7 @@ public abstract class Project extends BuildExecutor {
     protected String uberJarMainClass = null;
     protected String warFileName = null;
 
+    protected File workDirectory = null;
     protected File srcDirectory = null;
     protected File srcMainDirectory = null;
     protected File srcMainJavaDirectory = null;
@@ -57,8 +58,6 @@ public abstract class Project extends BuildExecutor {
     protected File buildProjectDirectory = null;
     protected File buildTemplatesDirectory = null;
     protected File buildTestDirectory = null;
-
-    public abstract void setup();
 
     /*
      * Standard build commands
@@ -146,7 +145,7 @@ public abstract class Project extends BuildExecutor {
     }
 
     public DependencySet scope(Scope scope) {
-        return dependencies.scope(scope);
+        return dependencies().scope(scope);
     }
 
     public static Dependency dependency(String groupId, String artifactId) {
@@ -184,8 +183,12 @@ public abstract class Project extends BuildExecutor {
      * Project directories
      */
 
+    public File workDirectory() {
+        return Objects.requireNonNullElseGet(workDirectory, () -> new File(System.getProperty("user.dir")));
+    }
+
     public File srcDirectory() {
-        return Objects.requireNonNullElseGet(srcDirectory, () -> new File("src"));
+        return Objects.requireNonNullElseGet(srcDirectory, () -> new File(workDirectory(), "src"));
     }
 
     public File srcMainDirectory() {
@@ -225,7 +228,7 @@ public abstract class Project extends BuildExecutor {
     }
 
     public File libDirectory() {
-        return Objects.requireNonNullElseGet(libDirectory, () -> new File("lib"));
+        return Objects.requireNonNullElseGet(libDirectory, () -> new File(workDirectory(), "lib"));
     }
 
     public File libCompileDirectory() {
@@ -249,7 +252,7 @@ public abstract class Project extends BuildExecutor {
     }
 
     public File buildDirectory() {
-        return Objects.requireNonNullElseGet(buildDirectory, () -> new File("build"));
+        return Objects.requireNonNullElseGet(buildDirectory, () -> new File(workDirectory(), "build"));
     }
 
     public File buildDistDirectory() {
@@ -270,6 +273,25 @@ public abstract class Project extends BuildExecutor {
 
     public File buildTestDirectory() {
         return Objects.requireNonNullElseGet(buildTestDirectory, () -> new File(buildDirectory(), "test"));
+    }
+
+    public void createProjectStructure() {
+        srcMainJavaDirectory().mkdirs();
+        srcMainResourcesTemplatesDirectory().mkdirs();
+        srcProjectJavaDirectory().mkdirs();
+        srcTestJavaDirectory().mkdirs();
+        libCompileDirectory().mkdirs();
+        libProjectDirectory().mkdirs();
+        libRuntimeDirectory().mkdirs();
+        libStandaloneDirectory().mkdirs();
+        libTestDirectory().mkdirs();
+    }
+
+    public void createBuildStructure() {
+        buildDistDirectory().mkdirs();
+        buildMainDirectory().mkdirs();
+        buildProjectDirectory().mkdirs();
+        buildTestDirectory().mkdirs();
     }
 
     /*
@@ -352,11 +374,11 @@ public abstract class Project extends BuildExecutor {
     }
 
     public String archiveBaseName() {
-        return Objects.requireNonNullElseGet(archiveBaseName, () -> name.toLowerCase(Locale.ENGLISH));
+        return Objects.requireNonNullElseGet(archiveBaseName, () -> name().toLowerCase(Locale.ENGLISH));
     }
 
     public String jarFileName() {
-        return Objects.requireNonNullElseGet(jarFileName, () -> archiveBaseName() + "-" + version + ".jar");
+        return Objects.requireNonNullElseGet(jarFileName, () -> archiveBaseName() + "-" + version() + ".jar");
     }
 
     public String uberJarMainClass() {
@@ -364,11 +386,11 @@ public abstract class Project extends BuildExecutor {
     }
 
     public String uberJarFileName() {
-        return Objects.requireNonNullElseGet(uberJarFileName, () -> archiveBaseName() + "-" + version + "-uber.jar");
+        return Objects.requireNonNullElseGet(uberJarFileName, () -> archiveBaseName() + "-" + version() + "-uber.jar");
     }
 
     public String warFileName() {
-        return Objects.requireNonNullElseGet(warFileName, () -> archiveBaseName() + "-" + version + ".war");
+        return Objects.requireNonNullElseGet(warFileName, () -> archiveBaseName() + "-" + version() + ".war");
     }
 
     /*
@@ -459,7 +481,6 @@ public abstract class Project extends BuildExecutor {
     }
 
     public void start(String[] args) {
-        setup();
         processArguments(args);
     }
 }

@@ -5,11 +5,11 @@
 package rife.bld.dependencies;
 
 import rife.Version;
-import rife.bld.DependencyScopes;
+import rife.bld.Project;
 
+import java.io.File;
 import java.util.List;
 
-import static rife.bld.Project.*;
 import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.*;
 
@@ -19,24 +19,24 @@ import static rife.bld.dependencies.Scope.*;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public final class NewProjectInfo {
-    public static final DependencyScopes DEPENDENCIES = new DependencyScopes();
-    public static final List<Repository> REPOSITORIES = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
+public class NewProjectTemplate extends Project {
+    public NewProjectTemplate(File work, String packageName, String projectName) {
+        workDirectory = work;
 
-    static {
-        DEPENDENCIES.scope(compile)
+        pkg = packageName;
+        name = projectName;
+        version = new VersionNumber(0,0,1);
+
+        repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
+        scope(compile)
             .include(dependency("com.uwyn.rife2", "rife2", Version.getVersionNumber()));
-        DEPENDENCIES.scope(test)
+        scope(test)
             .include(dependency("org.jsoup", "jsoup", version(1,15,4)))
             .include(dependency("org.junit.jupiter", "junit-jupiter", version(5,9,2)))
             .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1,9,2)));
-        DEPENDENCIES.scope(standalone)
+        scope(standalone)
             .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,14)))
             .include(dependency("org.eclipse.jetty", "jetty-servlet", version(11,0,14)))
             .include(dependency("org.slf4j", "slf4j-simple", version(2,0,5)));
-    }
-
-    private NewProjectInfo() {
-        // no-op
     }
 }
