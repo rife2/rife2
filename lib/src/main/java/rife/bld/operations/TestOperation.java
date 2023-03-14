@@ -6,10 +6,12 @@ package rife.bld.operations;
 
 import rife.bld.BuildHelp;
 import rife.bld.Project;
+import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TestOperation {
     public static class Help implements BuildHelp {
@@ -30,13 +32,19 @@ public class TestOperation {
     private List<String> testClasspath_ = new ArrayList<>();
     private String testToolMainClass_;
     private List<String> testToolOptions_ = new ArrayList<>();
+    private Consumer<String> testOutputConsumer_;
+    private Consumer<String> testErrorConsumer_;
 
     public TestOperation() {
     }
 
     public void execute()
     throws Exception {
-        startProcess().waitFor();
+        var process = startProcess();
+        process.waitFor();
+        handleProcessOutput(
+            FileUtils.readString(process.getInputStream()),
+            FileUtils.readString(process.getErrorStream()));
     }
 
     public List<String> processCommandList() {
@@ -53,9 +61,18 @@ public class TestOperation {
     public Process startProcess()
     throws Exception {
         var builder = new ProcessBuilder(processCommandList());
-        builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-        builder.redirectError(ProcessBuilder.Redirect.INHERIT);
+        builder.redirectOutput(ProcessBuilder.Redirect.PIPE);
+        builder.redirectError(ProcessBuilder.Redirect.PIPE);
         return builder.start();
+    }
+
+    public void handleProcessOutput(String output, String error) {
+        if (testOutputConsumer() != null) {
+            testOutputConsumer().accept(output);
+        }
+        if (testErrorConsumer() != null) {
+            testErrorConsumer().accept(error);
+        }
     }
 
     public TestOperation fromProject(Project project) {
@@ -63,7 +80,9 @@ public class TestOperation {
             .testJavaOptions(project.testJavaOptions())
             .testClasspath(project.testClasspath())
             .testToolMainClass(project.testToolMainClass())
-            .testToolOptions(project.testToolOptions());
+            .testToolOptions(project.testToolOptions())
+            .testOutputConsumer(System.out::print)
+            .testErrorConsumer(System.err::print);
     }
 
     public TestOperation javaTool(String tool) {
@@ -91,6 +110,16 @@ public class TestOperation {
         return this;
     }
 
+    public TestOperation testOutputConsumer(Consumer<String> consumer) {
+        testOutputConsumer_ = consumer;
+        return this;
+    }
+
+    public TestOperation testErrorConsumer(Consumer<String> consumer) {
+        testErrorConsumer_ = consumer;
+        return this;
+    }
+
     public String javaTool() {
         return javaTool_;
     }
@@ -109,5 +138,13 @@ public class TestOperation {
 
     public List<String> testToolOptions() {
         return testToolOptions_;
+    }
+
+    public Consumer<String> testOutputConsumer() {
+        return testOutputConsumer_;
+    }
+
+    public Consumer<String> testErrorConsumer() {
+        return testErrorConsumer_;
     }
 }

@@ -341,6 +341,8 @@ public abstract class Project extends BuildExecutor {
         if (testToolOptions == null || testToolOptions.isEmpty()) {
             var result = new ArrayList<String>();
             result.add("--scan-classpath");
+            result.add("--disable-banner");
+            result.add("--disable-ansi-colors");
             result.add("--exclude-engine=junit-platform-suite");
             result.add("--exclude-engine=junit-vintage");
             return result;
