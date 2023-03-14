@@ -4,11 +4,29 @@
  */
 package rife.bld;
 
+/**
+ * Interface that provides help texts to display about {@link BuildExecutor} commands.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
 public interface BuildHelp {
+    /**
+     * Returns a short description about the command.
+     *
+     * @return the short description, defaults to {@code ""}
+     * @since 1.5
+     */
     default String getDescription() {
         return "";
     }
 
+    /**
+     * Returns the full help text of a command.
+     *
+     * @return the full help text, defaults to {@code ""}
+     * @since 1.5
+     */
     default String getHelp(String topic) {
         return "";
     }

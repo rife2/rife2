@@ -7,11 +7,40 @@ package rife.bld.dependencies;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public record VersionNumber(Integer major, Integer minor, Integer revision, String qualifier, String separator) {
+/**
+ * Contains the information required to describe a dependency version number.
+ * <p>
+ * This operates according to the versioning scheme specified by Maven.
+ * <p>
+ * When the version number is undefined, {@link VersionNumber#UNKNOWN} should be used.
+ *
+ * @param major the major version component
+ * @param minor the minor version component
+ * @param revision the revision of the version
+ * @param qualifier a string qualifier for the version
+ * @param separator the separator used to separate the qualifier from the version number
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
+public record VersionNumber(Integer major, Integer minor, Integer revision, String qualifier, String separator) implements Comparable<VersionNumber> {
+    /**
+     * Singleton to use when the version is not specified.
+     * @since 1.5
+     */
     public static final VersionNumber UNKNOWN = new VersionNumber(0, 0, 0, "");
 
     private static final Pattern VERSION_PATTERN = Pattern.compile("^(?<major>\\d+)(?:\\.(?<minor>\\d+)(?:\\.(?<revision>\\d+))?)?+(?:(?<separator>[.\\-])(?<qualifier>.*[^.\\-]))??$");
 
+    /**
+     * Parses a version number from a string representation.
+     * <p>
+     * If the string can't be successfully parsed, {@link VersionNumber#UNKNOWN} will be returned.
+     *
+     * @param version the version string to parse
+     * @return a parsed instance of {@code VersionNumber}; or
+     * {@link VersionNumber#UNKNOWN} when the string couldn't be parsed
+     * @since 1.5
+     */
     public static VersionNumber parse(String version) {
         if (version == null || version.isEmpty()) {
             return UNKNOWN;
@@ -36,22 +65,62 @@ public record VersionNumber(Integer major, Integer minor, Integer revision, Stri
         return new VersionNumber(major_integer, minor_integer, revision_integer, qualifier, separator);
     }
 
+    /**
+     * Constructs a version number with only a major component.
+     *
+     * @param major the major version component
+     * @since 1.5
+     */
     public VersionNumber(Integer major) {
         this(major, null, null, "");
     }
 
+    /**
+     * Constructs a version number with a major and minor component.
+     *
+     * @param major the major version component
+     * @param minor the minor version component
+     * @since 1.5
+     */
     public VersionNumber(Integer major, Integer minor) {
         this(major, minor, null, "");
     }
 
+    /**
+     * Constructs a version number with major, minor and revision components.
+     *
+     * @param major the major version component
+     * @param minor the minor version component
+     * @param revision the version revision component
+     * @since 1.5
+     */
     public VersionNumber(Integer major, Integer minor, Integer revision) {
         this(major, minor, revision, "");
     }
 
+    /**
+     * Constructs a complete version number with qualifier, the separator will default to "{@code -}".
+     *
+     * @param major the major version component
+     * @param minor the minor version component
+     * @param revision the version revision component
+     * @param qualifier the version qualifier
+     * @since 1.5
+     */
     public VersionNumber(Integer major, Integer minor, Integer revision, String qualifier) {
         this(major, minor, revision, qualifier, "-");
     }
 
+    /**
+     * Constructs a complete version number with qualifier.
+     *
+     * @param major the major version component
+     * @param minor the minor version component
+     * @param revision the version revision component
+     * @param qualifier the version qualifier
+     * @param separator the separator for the version qualifier
+     * @since 1.5
+     */
     public VersionNumber(Integer major, Integer minor, Integer revision, String qualifier, String separator) {
         this.major = major;
         this.minor = minor;
@@ -60,20 +129,44 @@ public record VersionNumber(Integer major, Integer minor, Integer revision, Stri
         this.separator = separator;
     }
 
-    private int majorInt() {
+    /**
+     * Retrieves the base version number without the qualifier.
+     *
+     * @return the base version number instance
+     * @since 1.5
+     */
+    public VersionNumber getBaseVersion() {
+        return new VersionNumber(major, minor, revision, null);
+    }
+
+    /**
+     * Returns a primitive integer for the major version component.
+     *
+     * @return the major version component as an {@code int}
+     * @since 1.5
+     */
+    public int majorInt() {
         return major == null ? 0 : major;
     }
 
-    private int minorInt() {
+    /**
+     * Returns a primitive integer for the minor version component.
+     *
+     * @return the minor version component as an {@code int}
+     * @since 1.5
+     */
+    public int minorInt() {
         return minor == null ? 0 : minor;
     }
 
-    private int revisionInt() {
+    /**
+     * Returns a primitive integer for the version revision component.
+     *
+     * @return the version revision component as an {@code int}
+     * @since 1.5
+     */
+    public int revisionInt() {
         return revision == null ? 0 : revision;
-    }
-
-    public VersionNumber getBaseVersion() {
-        return new VersionNumber(major, minor, revision, null);
     }
 
     public int compareTo(VersionNumber other) {

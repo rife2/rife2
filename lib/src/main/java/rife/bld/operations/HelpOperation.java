@@ -6,7 +6,9 @@ package rife.bld.operations;
 
 import rife.Version;
 import rife.bld.*;
+import rife.tools.ObjectUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import static java.util.Comparator.comparingInt;
@@ -32,7 +34,7 @@ public class HelpOperation {
             topic = arguments_.remove(0);
         }
 
-        System.err.println("Welcome to the RIFE2 v" + Version.getVersion() + " CLI.");
+        System.err.println("Welcome to RIFE2 v" + Version.getVersion());
         System.err.println();
 
         boolean print_full_help = true;
@@ -55,23 +57,18 @@ public class HelpOperation {
         }
 
         if (print_full_help) {
-            try {
-                printFullHelp();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            printFullHelp();
         }
     }
 
-    public void printFullHelp()
-    throws Exception {
+    public void printFullHelp() {
         var commands = executor_.buildCommands();
 
         System.err.println("""
             The RIFE2 CLI provides its features through a series of commands that
             perform specific tasks. The help command provides more information about
             the other commands.
-            
+                        
             Usage : help [command]
 
             The following commands are supported.
@@ -85,7 +82,11 @@ public class HelpOperation {
             var annotation = method.getAnnotation(BuildCommand.class);
             var build_help = annotation.help();
             if (build_help != BuildHelp.class) {
-                System.err.print(build_help.getDeclaredConstructor().newInstance().getDescription());
+                try {
+                    System.err.print(build_help.getDeclaredConstructor().newInstance().getDescription());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
             System.err.println();
         }
