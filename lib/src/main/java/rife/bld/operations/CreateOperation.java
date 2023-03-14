@@ -23,6 +23,10 @@ import java.util.*;
  * @since 1.5
  */
 public class CreateOperation {
+    /**
+     * Provides help for the create operation.
+     * @since 1.5
+     */
     public static class Help implements BuildHelp {
         public String getDescription() {
             return "Creates a new RIFE2 project";

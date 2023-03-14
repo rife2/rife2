@@ -20,6 +20,10 @@ import java.util.*;
  * @since 1.5
  */
 public class CleanOperation {
+    /**
+     * Provides help for the clean operation.
+     * @since 1.5
+     */
     public static class Help implements BuildHelp {
         public String getDescription() {
             return "Cleans the build files";
