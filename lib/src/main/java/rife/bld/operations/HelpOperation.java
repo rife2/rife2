@@ -6,9 +6,7 @@ package rife.bld.operations;
 
 import rife.Version;
 import rife.bld.*;
-import rife.tools.ObjectUtils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import static java.util.Comparator.comparingInt;
@@ -57,11 +55,11 @@ public class HelpOperation {
         }
 
         if (print_full_help) {
-            printFullHelp();
+            executePrintFullHelp();
         }
     }
 
-    public void printFullHelp() {
+    public void executePrintFullHelp() {
         var commands = executor_.buildCommands();
 
         System.err.println("""

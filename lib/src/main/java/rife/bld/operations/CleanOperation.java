@@ -11,6 +11,7 @@ import rife.tools.StringUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
+import java.util.*;
 
 public class CleanOperation {
     public static class Help implements BuildHelp {
@@ -26,94 +27,39 @@ public class CleanOperation {
         }
     }
 
-    private File buildDistDirectory_;
-    private File buildMainDirectory_;
-    private File buildProjectDirectory_;
-    private File buildTestDirectory_;
+    private List<File> directories_ = new ArrayList<>();
 
     public CleanOperation() {
     }
 
     public void execute() {
-        cleanDistDirectory();
-        cleanMainDirectory();
-        cleanProjectDirectory();
-        cleanTestDirectory();
-    }
-
-    public void cleanDistDirectory() {
-        try {
-            FileUtils.deleteDirectory(buildDistDirectory());
-        } catch (FileUtilsErrorException e) {
-            // no-op
+        for (var directory : directories()) {
+            executeCleanDirectory(directory);
         }
     }
 
-    public void cleanMainDirectory() {
+    public void executeCleanDirectory(File directory) {
         try {
-            FileUtils.deleteDirectory(buildMainDirectory());
-        } catch (FileUtilsErrorException e) {
-            // no-op
-        }
-    }
-
-    public void cleanProjectDirectory() {
-        try {
-            FileUtils.deleteDirectory(buildProjectDirectory());
-        } catch (FileUtilsErrorException e) {
-            // no-op
-        }
-    }
-
-    public void cleanTestDirectory() {
-        try {
-            FileUtils.deleteDirectory(buildTestDirectory());
+            FileUtils.deleteDirectory(directory);
         } catch (FileUtilsErrorException e) {
             // no-op
         }
     }
 
     public CleanOperation fromProject(Project project) {
-        return buildDistDirectory(project.buildDistDirectory())
-            .buildMainDirectory(project.buildMainDirectory())
-            .buildProjectDirectory(project.buildProjectDirectory())
-            .buildTestDirectory(project.buildTestDirectory());
+        return directories(List.of(
+            project.buildDistDirectory(),
+            project.buildMainDirectory(),
+            project.buildProjectDirectory(),
+            project.buildTestDirectory()));
     }
 
-    public CleanOperation buildDistDirectory(File directory) {
-        buildDistDirectory_ = directory;
+    public CleanOperation directories(List<File> directories) {
+        directories_ = new ArrayList<>(directories);
         return this;
     }
 
-    public CleanOperation buildMainDirectory(File directory) {
-        buildMainDirectory_ = directory;
-        return this;
+    public List<File> directories() {
+        return directories_;
     }
-
-    public CleanOperation buildProjectDirectory(File directory) {
-        buildProjectDirectory_ = directory;
-        return this;
-    }
-
-    public CleanOperation buildTestDirectory(File directory) {
-        buildTestDirectory_ = directory;
-        return this;
-    }
-
-    public File buildDistDirectory() {
-        return buildDistDirectory_;
-    }
-
-    public File buildMainDirectory() {
-        return buildMainDirectory_;
-    }
-
-    public File buildProjectDirectory() {
-        return buildProjectDirectory_;
-    }
-
-    public File buildTestDirectory() {
-        return buildTestDirectory_;
-    }
-
 }

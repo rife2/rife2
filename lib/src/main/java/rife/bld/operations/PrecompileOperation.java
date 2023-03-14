@@ -36,10 +36,10 @@ public class PrecompileOperation {
     }
 
     public void execute() {
-        createTemplateDeployer().execute();
+        executeCreateTemplateDeployer().execute();
     }
 
-    public List<TemplateFactory> getTemplateFactories() {
+    public List<TemplateFactory> executeGetTemplateFactories() {
         var template_factories = new ArrayList<TemplateFactory>();
         for (var type : precompiledTemplateTypes()) {
             var factory = TemplateFactory.getFactory(type.identifier());
@@ -53,12 +53,12 @@ public class PrecompileOperation {
         return template_factories;
     }
 
-    public TemplateDeployer createTemplateDeployer() {
+    public TemplateDeployer executeCreateTemplateDeployer() {
         return new TemplateDeployer()
             .verbose(true)
             .directoryPaths(List.of(srcMainResourcesTemplatesDirectory().getAbsolutePath()))
             .generationPath(buildTemplatesDirectory().getAbsolutePath())
-            .templateFactories(getTemplateFactories());
+            .templateFactories(executeGetTemplateFactories());
     }
 
     public PrecompileOperation fromProject(Project project) {

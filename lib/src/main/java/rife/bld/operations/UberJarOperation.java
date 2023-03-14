@@ -43,22 +43,22 @@ public class UberJarOperation {
     throws Exception {
         var tmp_dir = Files.createTempDirectory("uberjar").toFile();
         try {
-            collectSourceJarContents(tmp_dir);
-            collectSourceResources(tmp_dir);
-            createUberJarArchive(tmp_dir);
+            executeCollectSourceJarContents(tmp_dir);
+            executeCollectSourceResources(tmp_dir);
+            executeCreateUberJarArchive(tmp_dir);
         } finally {
             FileUtils.deleteDirectory(tmp_dir);
         }
     }
 
-    public void collectSourceJarContents(File tmp_dir)
+    public void executeCollectSourceJarContents(File tmp_dir)
     throws FileUtilsErrorException {
         for (var jar : jarSourceFiles()) {
             FileUtils.unzipFile(jar, tmp_dir);
         }
     }
 
-    public void collectSourceResources(File tmp_dir)
+    public void executeCollectSourceResources(File tmp_dir)
     throws FileUtilsErrorException {
         for (var named_file : resourceSourceDirectories()) {
             var destination = new File(tmp_dir, named_file.name());
@@ -67,7 +67,7 @@ public class UberJarOperation {
         }
     }
 
-    public void createUberJarArchive(File stagingDirectory)
+    public void executeCreateUberJarArchive(File stagingDirectory)
     throws Exception {
         var existing_manifest = new File(new File(stagingDirectory, "META-INF"), "MANIFEST.MF");
         existing_manifest.delete();

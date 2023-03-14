@@ -28,47 +28,47 @@ public class CompileOperation {
     }
 
     private File buildMainDirectory_;
-    private File buildProjectDirectory_;
     private File buildTestDirectory_;
-    private List<String> compileMainClasspath_ = new ArrayList<>();;
-    private List<String> compileTestClasspath_ = new ArrayList<>();;
+    private List<String> compileMainClasspath_ = new ArrayList<>();
+    ;
+    private List<String> compileTestClasspath_ = new ArrayList<>();
+    ;
     private List<File> mainSourceFiles_ = new ArrayList<>();
-    private List<File> testSourceFiles_ = new ArrayList<>();;
-    private List<String> compileOptions_ = new ArrayList<>();;
+    private List<File> testSourceFiles_ = new ArrayList<>();
+    private List<String> compileOptions_ = new ArrayList<>();
 
     public CompileOperation() {
     }
 
     public void execute()
     throws Exception {
-        createBuildDirectories();
-        buildMainSources();
-        buildTestSources();
+        executeCreateBuildDirectories();
+        executeBuildMainSources();
+        executeBuildTestSources();
     }
 
-    public void createBuildDirectories() {
+    public void executeCreateBuildDirectories() {
         buildMainDirectory().mkdirs();
-        buildProjectDirectory().mkdirs();
         buildTestDirectory().mkdirs();
     }
 
-    public void buildMainSources()
+    public void executeBuildMainSources()
     throws IOException {
-        buildSources(
+        executeBuildSources(
             Project.joinPaths(compileMainClasspath()),
             mainSourceFiles(),
             buildMainDirectory().getAbsolutePath());
     }
 
-    public void buildTestSources()
+    public void executeBuildTestSources()
     throws IOException {
-        buildSources(
+        executeBuildSources(
             Project.joinPaths(compileTestClasspath()),
             testSourceFiles(),
             buildTestDirectory().getAbsolutePath());
     }
 
-    public void buildSources(String classpath, List<File> sources, String destination)
+    public void executeBuildSources(String classpath, List<File> sources, String destination)
     throws IOException {
         var compiler = ToolProvider.getSystemJavaCompiler();
         try (var file_manager = compiler.getStandardFileManager(null, null, null)) {
@@ -78,19 +78,19 @@ public class CompileOperation {
             options.addAll(compileOptions());
             var compilation_task = compiler.getTask(null, file_manager, diagnostics, options, null, compilation_units);
             if (!compilation_task.call()) {
-                outputDiagnostics(diagnostics);
+                executeOutputDiagnostics(diagnostics);
             }
         }
     }
 
-    public void outputDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics)
+    public void executeOutputDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics)
     throws IOException {
         for (var diagnostic : diagnostics.getDiagnostics()) {
-            System.err.print(formatDiagnostic(diagnostic));
+            System.err.print(executeFormatDiagnostic(diagnostic));
         }
     }
 
-    public String formatDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic)
+    public String executeFormatDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic)
     throws IOException {
         var formatted = new StringBuilder();
         var source = diagnostic.getSource().getCharContent(true).toString();
@@ -130,7 +130,6 @@ public class CompileOperation {
 
     public CompileOperation fromProject(Project project) {
         return buildMainDirectory(project.buildMainDirectory())
-            .buildProjectDirectory(project.buildProjectDirectory())
             .buildTestDirectory(project.buildTestDirectory())
             .compileMainClasspath(project.compileMainClasspath())
             .compileTestClasspath(project.compileTestClasspath())
@@ -141,11 +140,6 @@ public class CompileOperation {
 
     public CompileOperation buildMainDirectory(File directory) {
         buildMainDirectory_ = directory;
-        return this;
-    }
-
-    public CompileOperation buildProjectDirectory(File directory) {
-        buildProjectDirectory_ = directory;
         return this;
     }
 
@@ -181,10 +175,6 @@ public class CompileOperation {
 
     public File buildMainDirectory() {
         return buildMainDirectory_;
-    }
-
-    public File buildProjectDirectory() {
-        return buildProjectDirectory_;
     }
 
     public File buildTestDirectory() {

@@ -117,13 +117,13 @@ public class CreateOperation {
         projectPackageDir_ = new File(srcProjectJavaDir_, package_dir);
         testPackageDir_ = new File(srcTestJavaDir_, package_dir);
 
-        createProjectStructure();
-        populateProjectStructure();
-        populateIdeaProject();
-        downloadDependencies();
+        executeCreateProjectStructure();
+        executePopulateProjectStructure();
+        executePopulateIdeaProject();
+        executeDownloadDependencies();
     }
 
-    public void createProjectStructure() {
+    public void executeCreateProjectStructure() {
         projectDir_.mkdirs();
         srcMainJavaDir_.mkdirs();
         srcMainResourcesTemplatesDir_.mkdirs();
@@ -145,7 +145,7 @@ public class CreateOperation {
         testPackageDir_.mkdirs();
     }
 
-    public void populateProjectStructure()
+    public void executePopulateProjectStructure()
     throws FileUtilsErrorException {
         // project gitignore
         FileUtils.writeString(
@@ -228,7 +228,7 @@ public class CreateOperation {
         build_sh_file.setExecutable(true);
     }
 
-    public void populateIdeaProject()
+    public void executePopulateIdeaProject()
     throws FileUtilsErrorException {
         // IDEA project files
         FileUtils.writeString(
@@ -274,7 +274,7 @@ public class CreateOperation {
         FileUtils.writeString(run_tests_template.getContent(), run_tests_file);
     }
 
-    public void downloadDependencies() {
+    public void executeDownloadDependencies() {
         for (var dependency : NewProjectInfo.DEPENDENCIES.get(Scope.compile)) {
             new DependencyResolver(NewProjectInfo.REPOSITORIES, dependency)
                 .downloadTransitivelyIntoDirectory(libCompileDir_, Scope.compile);

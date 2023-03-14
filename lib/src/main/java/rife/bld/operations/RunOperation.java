@@ -35,10 +35,10 @@ public class RunOperation {
 
     public void execute()
     throws Exception {
-        startProcess().waitFor();
+        executeStartProcess().waitFor();
     }
 
-    public List<String> processCommandList() {
+    public List<String> executeConstructProcessCommandList() {
         var args = new ArrayList<String>();
         args.add(javaTool());
         args.addAll(runJavaOptions());
@@ -48,9 +48,9 @@ public class RunOperation {
         return args;
     }
 
-    public Process startProcess()
+    public Process executeStartProcess()
     throws Exception {
-        var builder = new ProcessBuilder(processCommandList());
+        var builder = new ProcessBuilder(executeConstructProcessCommandList());
         builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
         builder.redirectError(ProcessBuilder.Redirect.INHERIT);
         return builder.start();

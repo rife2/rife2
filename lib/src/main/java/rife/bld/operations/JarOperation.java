@@ -29,7 +29,7 @@ public class JarOperation {
         }
     }
 
-    private Map<Attributes.Name, Object> manifestAttributes_ = new HashMap();
+    private Map<Attributes.Name, Object> manifestAttributes_ = new HashMap<>();
     private List<File> sourceDirectories_ = new ArrayList<>();
     private List<NamedFile> sourceFiles_ = new ArrayList<>();
     private File destinationDirectory_;
@@ -44,34 +44,34 @@ public class JarOperation {
 
     public void execute()
     throws Exception {
-        createDestinationDirectory();
-        createJarFile();
+        executeCreateDestinationDirectory();
+        executeCreateJarFile();
     }
 
-    public void createDestinationDirectory() {
+    public void executeCreateDestinationDirectory() {
         destinationDirectory().mkdirs();
     }
 
-    public void createJarFile()
+    public void executeCreateJarFile()
     throws IOException {
         var out_file = new File(destinationDirectory(), destinationFileName());
-        try (var jar = new JarOutputStream(new FileOutputStream(out_file), createManifest())) {
+        try (var jar = new JarOutputStream(new FileOutputStream(out_file), executeCreateManifest())) {
             for (var source_dir : sourceDirectories()) {
                 for (var file_name : FileUtils.getFileList(source_dir)) {
                     var file = new File(source_dir, file_name);
                     if (StringUtils.filter(file.getAbsolutePath(), included(), excluded())) {
-                        addFileToJar(jar, new NamedFile(file_name, file));
+                        executeAddFileToJar(jar, new NamedFile(file_name, file));
                     }
                 }
             }
             for (var source_file : sourceFiles()) {
-                addFileToJar(jar, source_file);
+                executeAddFileToJar(jar, source_file);
             }
             jar.flush();
         }
     }
 
-    public Manifest createManifest() {
+    public Manifest executeCreateManifest() {
         var manifest = new Manifest();
         var attributes = manifest.getMainAttributes();
         // don't use putAll since Attributes does an instanceof check
@@ -83,7 +83,7 @@ public class JarOperation {
         return manifest;
     }
 
-    private void addFileToJar(JarOutputStream jar, NamedFile file)
+    private void executeAddFileToJar(JarOutputStream jar, NamedFile file)
     throws IOException {
         var entry = new JarEntry(file.name());
         entry.setTime(file.file().lastModified());

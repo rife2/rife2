@@ -40,14 +40,14 @@ public class TestOperation {
 
     public void execute()
     throws Exception {
-        var process = startProcess();
+        var process = executeStartProcess();
         process.waitFor();
-        handleProcessOutput(
+        executeHandleProcessOutput(
             FileUtils.readString(process.getInputStream()),
             FileUtils.readString(process.getErrorStream()));
     }
 
-    public List<String> processCommandList() {
+    public List<String> executeConstructProcessCommandList() {
         var args = new ArrayList<String>();
         args.add(javaTool());
         args.addAll(testJavaOptions());
@@ -58,15 +58,15 @@ public class TestOperation {
         return args;
     }
 
-    public Process startProcess()
+    public Process executeStartProcess()
     throws Exception {
-        var builder = new ProcessBuilder(processCommandList());
+        var builder = new ProcessBuilder(executeConstructProcessCommandList());
         builder.redirectOutput(ProcessBuilder.Redirect.PIPE);
         builder.redirectError(ProcessBuilder.Redirect.PIPE);
         return builder.start();
     }
 
-    public void handleProcessOutput(String output, String error) {
+    public void executeHandleProcessOutput(String output, String error) {
         if (testOutputConsumer() != null) {
             testOutputConsumer().accept(output);
         }

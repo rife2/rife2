@@ -45,30 +45,30 @@ public class WarOperation {
         var tmp_dir = Files.createTempDirectory("war").toFile();
 
         try {
-            var web_inf_dir = createWebInfDirectory(tmp_dir);
-            copyWebappDirectory(tmp_dir);
-            copyWebInfLibJars(web_inf_dir);
-            copyWebInfClassesFiles(web_inf_dir);
-            copyWebXmlFile(web_inf_dir);
+            var web_inf_dir = executeCreateWebInfDirectory(tmp_dir);
+            executeCopyWebappDirectory(tmp_dir);
+            executeCopyWebInfLibJars(web_inf_dir);
+            executeCopyWebInfClassesFiles(web_inf_dir);
+            executeCopyWebXmlFile(web_inf_dir);
 
-            createWarArchive(tmp_dir);
+            executeCreateWarArchive(tmp_dir);
         } finally {
             FileUtils.deleteDirectory(tmp_dir);
         }
     }
 
-    public File createWebInfDirectory(File destination) {
+    public File executeCreateWebInfDirectory(File destination) {
         var web_inf_dir = new File(destination, "WEB-INF");
         web_inf_dir.mkdirs();
         return web_inf_dir;
     }
 
-    public void copyWebappDirectory(File destination)
+    public void executeCopyWebappDirectory(File destination)
     throws FileUtilsErrorException {
         FileUtils.copyDirectory(webappDirectory(), destination);
     }
 
-    public void copyWebInfLibJars(File webInfDirectory)
+    public void executeCopyWebInfLibJars(File webInfDirectory)
     throws FileUtilsErrorException {
         var web_inf_lib_dir = new File(webInfDirectory, "lib");
         if (!libSourceDirectories().isEmpty()) {
@@ -86,7 +86,7 @@ public class WarOperation {
         }
     }
 
-    public void copyWebInfClassesFiles(File webInfDirectory)
+    public void executeCopyWebInfClassesFiles(File webInfDirectory)
     throws FileUtilsErrorException {
         var web_inf_classes_dir = new File(webInfDirectory, "classes");
         if (!classesSourceDirectories().isEmpty()) {
@@ -97,7 +97,7 @@ public class WarOperation {
         }
     }
 
-    public void copyWebXmlFile(File webInfDirectory)
+    public void executeCopyWebXmlFile(File webInfDirectory)
     throws FileUtilsErrorException {
         var web_xml_file = webXmlFile();
         if (web_xml_file != null) {
@@ -105,7 +105,7 @@ public class WarOperation {
         }
     }
 
-    public void createWarArchive(File stagingDirectory)
+    public void executeCreateWarArchive(File stagingDirectory)
     throws Exception {
         new JarOperation()
             .sourceDirectories(List.of(stagingDirectory))

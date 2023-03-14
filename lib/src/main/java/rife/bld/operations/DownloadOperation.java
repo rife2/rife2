@@ -37,13 +37,13 @@ public class DownloadOperation {
     }
 
     public void execute() {
-        downloadCompileDependencies();
-        downloadRuntimeDependencies();
-        downloadStandaloneDependencies();
-        downloadTestDependencies();
+        executeDownloadCompileDependencies();
+        executeDownloadRuntimeDependencies();
+        executeDownloadStandaloneDependencies();
+        executeDownloadTestDependencies();
     }
 
-    public void downloadCompileDependencies() {
+    public void executeDownloadCompileDependencies() {
         var compile_deps = dependencies().get(Scope.compile);
         if (compile_deps != null) {
             for (var dependency : compile_deps) {
@@ -53,7 +53,7 @@ public class DownloadOperation {
         }
     }
 
-    public void downloadRuntimeDependencies() {
+    public void executeDownloadRuntimeDependencies() {
         var runtime_deps = dependencies().get(Scope.runtime);
         if (runtime_deps != null) {
             for (var dependency : runtime_deps) {
@@ -63,7 +63,7 @@ public class DownloadOperation {
         }
     }
 
-    public void downloadStandaloneDependencies() {
+    public void executeDownloadStandaloneDependencies() {
         var standalone_deps = dependencies().get(Scope.standalone);
         if (standalone_deps != null) {
             for (var dependency : standalone_deps) {
@@ -73,7 +73,7 @@ public class DownloadOperation {
         }
     }
 
-    public void downloadTestDependencies() {
+    public void executeDownloadTestDependencies() {
         var test_deps = dependencies().get(Scope.test);
         if (test_deps != null) {
             for (var dependency : test_deps) {

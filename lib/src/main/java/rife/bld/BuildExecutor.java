@@ -44,7 +44,7 @@ public class BuildExecutor {
                     break;
                 }
             } catch (Throwable e) {
-                new HelpOperation(this, arguments()).printFullHelp();
+                new HelpOperation(this, arguments()).executePrintFullHelp();
                 System.err.println();
                 System.err.println(ExceptionUtils.getExceptionStackTrace(e));
             }
@@ -127,7 +127,7 @@ public class BuildExecutor {
         } else {
             System.err.println("ERROR: unknown command '" + command + "'");
             System.err.println();
-            new HelpOperation(this, arguments()).printFullHelp();
+            new HelpOperation(this, arguments()).executePrintFullHelp();
             return false;
         }
         return true;
