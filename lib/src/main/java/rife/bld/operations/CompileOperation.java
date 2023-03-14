@@ -16,12 +16,12 @@ import java.util.*;
 public class CompileOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
-            return "Compiles a RIFE2 application";
+            return "Compiles the project";
         }
 
         public String getHelp(String topic) {
             return StringUtils.replace("""
-                Compiles a RIFE2 application.
+                Compiles the project.
                             
                 Usage : ${topic}""", "${topic}", topic);
         }

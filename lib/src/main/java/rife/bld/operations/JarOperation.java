@@ -16,12 +16,12 @@ import java.util.regex.Pattern;
 public class JarOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
-            return "Creates a jar archive for a RIFE2 application";
+            return "Creates a jar archive for the project";
         }
 
         public String getHelp(String topic) {
             return StringUtils.replace("""
-                Creates a jar archive for a RIFE2 application.
+                Creates a jar archive for the project.
                 The standard jar command will automatically also execute
                 the clean, compile and precompile commands beforehand.
                             

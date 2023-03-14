@@ -19,12 +19,12 @@ import java.util.*;
 public class CreateOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
-            return "Creates a new RIFE2 application";
+            return "Creates a new RIFE2 project";
         }
 
         public String getHelp(String topic) {
             return StringUtils.replace("""
-                Creates a new RIFE2 application.
+                Creates a new RIFE2 project.
                             
                 Usage : ${topic} [package] [name]
                   package  The package of the project to create

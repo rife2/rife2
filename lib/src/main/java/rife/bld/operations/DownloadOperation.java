@@ -15,12 +15,12 @@ import java.util.List;
 public class DownloadOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
-            return "Downloads all dependencies of a RIFE2 application";
+            return "Downloads all dependencies of the project";
         }
 
         public String getHelp(String topic) {
             return StringUtils.replace("""
-                Downloads all dependencies of a RIFE2 application
+                Downloads all dependencies of the project
                             
                 Usage : ${topic}""", "${topic}", topic);
         }

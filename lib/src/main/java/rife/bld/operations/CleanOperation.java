@@ -22,12 +22,12 @@ import java.util.*;
 public class CleanOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
-            return "Cleans the RIFE2 build files";
+            return "Cleans the build files";
         }
 
         public String getHelp(String topic) {
             return StringUtils.replace("""
-                Cleans the RIFE2 build files.
+                Cleans the build files.
                             
                 Usage : ${topic}""", "${topic}", topic);
         }

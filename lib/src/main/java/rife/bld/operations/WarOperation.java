@@ -16,12 +16,12 @@ import java.util.*;
 public class WarOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
-            return "Creates a war archive for a RIFE2 application";
+            return "Creates a war archive for the project";
         }
 
         public String getHelp(String topic) {
             return StringUtils.replace("""
-                Creates a war archive for a RIFE2 application.
+                Creates a war archive for the project.
                 The standard war command will automatically also execute
                 the jar command beforehand.
                             

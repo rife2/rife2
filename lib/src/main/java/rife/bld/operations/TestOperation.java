@@ -16,12 +16,12 @@ import java.util.function.Consumer;
 public class TestOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
-            return "Tests a RIFE2 application";
+            return "Tests the project";
         }
 
         public String getHelp(String topic) {
             return StringUtils.replace("""
-                Tests a RIFE2 application.
+                Tests the project.
                             
                 Usage : ${topic}""", "${topic}", topic);
         }

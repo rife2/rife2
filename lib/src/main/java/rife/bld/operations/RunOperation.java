@@ -14,12 +14,12 @@ import java.util.List;
 public class RunOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
-            return "Runs a RIFE2 application";
+            return "Runs the project";
         }
 
         public String getHelp(String topic) {
             return StringUtils.replace("""
-                Runs a RIFE2 application.
+                Runs the project.
                             
                 Usage : ${topic}""", "${topic}", topic);
         }

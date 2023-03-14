@@ -17,12 +17,12 @@ import java.util.jar.Attributes;
 public class UberJarOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
-            return "Creates an UberJar archive for a RIFE2 application";
+            return "Creates an UberJar archive for the project";
         }
 
         public String getHelp(String topic) {
             return StringUtils.replace("""
-                Creates an UberJar archive for a RIFE2 application.
+                Creates an UberJar archive for the project.
                 The standard uberjar command will automatically also execute
                 the jar command beforehand.
                             
