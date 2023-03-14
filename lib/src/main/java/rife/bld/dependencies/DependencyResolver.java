@@ -15,6 +15,12 @@ import java.net.*;
 import java.nio.channels.Channels;
 import java.util.*;
 
+/**
+ * Resolves a dependency within a list of Maven-compatible repositories.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
 public class DependencyResolver {
     public static final String MAVEN_METADATA_XML = "maven-metadata.xml";
 
@@ -24,6 +30,15 @@ public class DependencyResolver {
     private Xml2MavenMetadata metadata_ = null;
     private Xml2MavenMetadata snapshotMetadata_ = null;
 
+    /**
+     * Creates a new resolver for a particular dependency.
+     * <p>
+     * The repositories will be checked in the order they're listed.
+     *
+     * @param repositories the repositories to use for the resolution
+     * @param dependency the dependency to resolve
+     * @since 1.5
+     */
     public DependencyResolver(List<Repository> repositories, Dependency dependency) {
         if (repositories == null) {
             repositories = Collections.emptyList();
@@ -32,6 +47,12 @@ public class DependencyResolver {
         dependency_ = dependency;
     }
 
+    /**
+     * Checks whether the dependency exists in any of the provided repositories.
+     *
+     * @return {@code true} if the dependency exists; {@code false} otherwise
+     * @since 1.5
+     */
     public boolean exists() {
         try {
             if (getMavenMetadata() == null) {
@@ -46,6 +67,18 @@ public class DependencyResolver {
         }
     }
 
+
+    /**
+     * Resolves the dependency version in the provided repositories.
+     * <p>
+     * When the dependency was defined without a specific version number,
+     * the latest version number will be returned if the dependency exists.
+     * If the dependency couldn't be found and no specific version number
+     * was provided, {@linkplain VersionNumber#UNKNOWN} will be returned.
+     *
+     * @return the resolved version
+     * @since 1.5
+     */
     public VersionNumber resolveVersion() {
         var version = dependency_.version();
         if (version.equals(VersionNumber.UNKNOWN)) {
@@ -54,13 +87,146 @@ public class DependencyResolver {
         return version;
     }
 
-    public DependencySet getDependencies(Scope... scopes) {
+    /**
+     * Retrieves the direct dependencies of the resolved dependency for the
+     * provided scopes.
+     *
+     * @param scopes the scopes to return the direct dependencies for
+     * @return the requested direct dependencies; or an empty {@linkplain DependencySet}
+     * if no direct dependencies could be found or the dependency doesn't exist in
+     * the provided repositories
+     * @since 1.5
+     */
+    public DependencySet getDirectDependencies(Scope... scopes) {
         var pom_dependencies = getMavenPom().getDependencies(scopes);
         var result = new DependencySet();
         for (var dependency : pom_dependencies) {
             result.add(convertPomDependency(dependency));
         }
         return result;
+    }
+
+    /**
+     * Retrieves all the transitive dependencies of the resolved dependency for the
+     * provided scopes.
+     * <p>
+     * This can be a slow and expensive operation since querying continues through
+     * the complete POM hierarchy until all transitive dependencies have been found.
+     *
+     * @param scopes the scopes to return the transitive dependencies for
+     * @return the requested transitive dependencies; or an empty {@linkplain DependencySet}
+     * if no transitive dependencies could be found or the dependency doesn't exist in
+     * the provided repositories
+     * @since 1.5
+     */
+    public DependencySet getTransitiveDependencies(Scope... scopes) {
+        var result = new DependencySet();
+        var pom_dependencies = new ArrayList<>(getMavenPom().getDependencies(scopes));
+        var exclusions = new Stack<Set<PomExclusion>>();
+        getTransitiveDependencies(result, pom_dependencies, exclusions, scopes);
+        return result;
+    }
+
+    /**
+     * Retrieves all the versions of the resolved dependency.
+     *
+     * @return this dependency's version list; or an empty list if the dependency
+     * couldn't be found in the provided repositories
+     * @since 1.5
+     */
+    public List<VersionNumber> listVersions() {
+        return getMavenMetadata().getVersions();
+    }
+
+    /**
+     * Retrieves the latest version of the resolved dependency.
+     *
+     * @return this dependency's latest version; or {@link VersionNumber#UNKNOWN}
+     * if the dependency couldn't be found in the provided repositories
+     * @since 1.5
+     */
+    public VersionNumber latestVersion() {
+        return getMavenMetadata().getLatest();
+    }
+
+    /**
+     * Retrieves the release version of the resolved dependency.
+     *
+     * @return this dependency's release version; or {@link VersionNumber#UNKNOWN}
+     * if the dependency couldn't be found in the provided repositories
+     * @since 1.5
+     */
+    public VersionNumber releaseVersion() {
+        return getMavenMetadata().getRelease();
+    }
+
+    /**
+     * Downloads the artifact for the resolved dependency into the provided directory.
+     * <p>
+     * The destination directory must exist and be writable.
+     *
+     * @param directory the directory to download the dependency artifact into
+     * @throws DependencyDownloadException when an error occurred during the download
+     * @since 1.5
+     */
+    public void downloadIntoDirectory(File directory)
+    throws DependencyDownloadException {
+        if (directory == null) throw new IllegalArgumentException("directory can't be null");
+        if (!directory.exists()) throw new IllegalArgumentException("directory '" + directory + "' doesn't exit");
+        if (!directory.canWrite()) throw new IllegalArgumentException("directory '" + directory + "' can't be written to");
+        if (!directory.isDirectory()) throw new IllegalArgumentException("directory '" + directory + "' is not a directory");
+
+        String retrieved_url = null;
+        var urls = getDownloadUrls();
+        for (var download_url : urls) {
+            var download_filename = download_url.substring(download_url.lastIndexOf("/") + 1);
+            var download_file = new File(directory, download_filename);
+            try {
+                System.out.print("Downloading: " + download_url + " ... ");
+                System.out.flush();
+                var url = new URL(download_url);
+                var readableByteChannel = Channels.newChannel(url.openStream());
+                try (var fileOutputStream = new FileOutputStream(download_file)) {
+                    var fileChannel = fileOutputStream.getChannel();
+                    fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+
+                    retrieved_url = download_url;
+                    System.out.print("done");
+                    break;
+                }
+            } catch (FileNotFoundException e) {
+                System.out.print("not found");
+                continue;
+            } catch (IOException e) {
+                throw new DependencyDownloadException(dependency_, download_url, download_file, e);
+            } finally {
+                System.out.println();
+            }
+        }
+
+        if (retrieved_url == null) {
+            throw new ArtifactNotFoundException(dependency_, StringUtils.join(urls, ","));
+        }
+    }
+
+    /**
+     * Downloads the artifact for the resolved dependency and its transitive dependencies
+     * into the provided directory.
+     * <p>
+     * The destination directory must exist and be writable.
+     * <p>
+     * This can be a slow and expensive operation since querying continues through
+     * the complete POM hierarchy until all transitive dependencies have been downloaded.
+     *
+     * @param directory the directory to download the artifacts into
+     * @throws DependencyDownloadException when an error occurred during the download
+     * @since 1.5
+     */
+    public void downloadTransitivelyIntoDirectory(File directory, Scope... scopes) {
+        downloadIntoDirectory(directory);
+        for (var dep : getTransitiveDependencies(scopes)) {
+            new DependencyResolver(repositories_, dep).downloadIntoDirectory(directory);
+        }
     }
 
     Dependency convertPomDependency(PomDependency pomDependency) {
@@ -70,14 +236,6 @@ public class DependencyResolver {
             VersionNumber.parse(pomDependency.version()),
             pomDependency.classifier(),
             pomDependency.type());
-    }
-
-    public DependencySet getTransitiveDependencies(Scope... scopes) {
-        var result = new DependencySet();
-        var pom_dependencies = new ArrayList<>(getMavenPom().getDependencies(scopes));
-        var exclusions = new Stack<Set<PomExclusion>>();
-        getTransitiveDependencies(result, pom_dependencies, exclusions, scopes);
-        return result;
     }
 
     void getTransitiveDependencies(DependencySet result, ArrayList<PomDependency> pomDependencies, Stack<Set<PomExclusion>> exclusions, Scope... scopes) {
@@ -119,18 +277,6 @@ public class DependencyResolver {
                 exclusions.pop();
             }
         }
-    }
-
-    public List<VersionNumber> listVersions() {
-        return getMavenMetadata().getVersions();
-    }
-
-    public VersionNumber latestVersion() {
-        return getMavenMetadata().getLatest();
-    }
-
-    public VersionNumber releaseVersion() {
-        return getMavenMetadata().getRelease();
     }
 
     List<String> getArtifactUrls() {
@@ -273,52 +419,5 @@ public class DependencyResolver {
             result.append(".").append(type);
             return result.toString();
         }).toList();
-    }
-
-    public void downloadIntoFolder(File file)
-    throws DependencyDownloadException {
-        if (file == null) throw new IllegalArgumentException("file can't be null");
-        if (!file.exists()) throw new IllegalArgumentException("file '" + file + "' doesn't exit");
-        if (!file.canWrite()) throw new IllegalArgumentException("file '" + file + "' can't be written to");
-        if (!file.isDirectory()) throw new IllegalArgumentException("file '" + file + "' is not a directory");
-
-        String retrieved_url = null;
-        var urls = getDownloadUrls();
-        for (var download_url : urls) {
-            var download_filename = download_url.substring(download_url.lastIndexOf("/") + 1);
-            var download_file = new File(file, download_filename);
-            try {
-                System.out.print("Downloading: " + download_url + " ... ");
-                System.out.flush();
-                var url = new URL(download_url);
-                var readableByteChannel = Channels.newChannel(url.openStream());
-                try (var fileOutputStream = new FileOutputStream(download_file)) {
-                    var fileChannel = fileOutputStream.getChannel();
-                    fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-
-                    retrieved_url = download_url;
-                    System.out.print("done");
-                    break;
-                }
-            } catch (FileNotFoundException e) {
-                System.out.print("not found");
-                continue;
-            } catch (IOException e) {
-                throw new DependencyDownloadException(dependency_, download_url, download_file, e);
-            } finally {
-                System.out.println();
-            }
-        }
-
-        if (retrieved_url == null) {
-            throw new ArtifactNotFoundException(dependency_, StringUtils.join(urls, ","));
-        }
-    }
-
-    public void downloadTransitivelyIntoFolder(File file, Scope... scopes) {
-        downloadIntoFolder(file);
-        for (var dep : getTransitiveDependencies(scopes)) {
-            new DependencyResolver(repositories_, dep).downloadIntoFolder(file);
-        }
     }
 }

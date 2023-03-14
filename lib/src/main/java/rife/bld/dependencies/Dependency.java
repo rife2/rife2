@@ -6,6 +6,17 @@ package rife.bld.dependencies;
 
 import java.util.Objects;
 
+/**
+ * Contains the information required to describe an artifact dependency in the build system.
+ *
+ * @param groupId the dependency group identifier
+ * @param artifactId the dependency artifact identifier
+ * @param version the dependency version
+ * @param classifier the dependency classier
+ * @param type the dependency type
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
 public record Dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type) {
     public Dependency(String groupId, String artifactId) {
         this(groupId, artifactId, null, null, null);

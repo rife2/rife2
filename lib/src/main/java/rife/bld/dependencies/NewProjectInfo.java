@@ -13,6 +13,12 @@ import static rife.bld.Project.*;
 import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.*;
 
+/**
+ * Provides the dependency information required to create a new RIFE2 project.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
 public final class NewProjectInfo {
     public static final DependencyScopes DEPENDENCIES = new DependencyScopes();
     public static final List<Repository> REPOSITORIES = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);

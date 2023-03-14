@@ -48,7 +48,7 @@ public class DownloadOperation {
         if (compile_deps != null) {
             for (var dependency : compile_deps) {
                 new DependencyResolver(repositories(), dependency)
-                    .downloadTransitivelyIntoFolder(libCompileDirectory(), Scope.compile);
+                    .downloadTransitivelyIntoDirectory(libCompileDirectory(), Scope.compile);
             }
         }
     }
@@ -58,7 +58,7 @@ public class DownloadOperation {
         if (runtime_deps != null) {
             for (var dependency : runtime_deps) {
                 new DependencyResolver(repositories(), dependency)
-                    .downloadTransitivelyIntoFolder(libRuntimeDirectory(), Scope.runtime);
+                    .downloadTransitivelyIntoDirectory(libRuntimeDirectory(), Scope.runtime);
             }
         }
     }
@@ -68,7 +68,7 @@ public class DownloadOperation {
         if (standalone_deps != null) {
             for (var dependency : standalone_deps) {
                 new DependencyResolver(repositories(), dependency)
-                    .downloadTransitivelyIntoFolder(libStandaloneDirectory(), Scope.compile, Scope.runtime);
+                    .downloadTransitivelyIntoDirectory(libStandaloneDirectory(), Scope.compile, Scope.runtime);
             }
         }
     }
@@ -78,7 +78,7 @@ public class DownloadOperation {
         if (test_deps != null) {
             for (var dependency : test_deps) {
                 new DependencyResolver(repositories(), dependency)
-                    .downloadTransitivelyIntoFolder(libTestDirectory(), Scope.compile, Scope.runtime);
+                    .downloadTransitivelyIntoDirectory(libTestDirectory(), Scope.compile, Scope.runtime);
             }
         }
     }

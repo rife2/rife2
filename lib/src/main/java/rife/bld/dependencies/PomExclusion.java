@@ -6,6 +6,12 @@ package rife.bld.dependencies;
 
 import java.util.Objects;
 
+/**
+ * Contains the information to describe an exclusion within a Maven POM descriptor.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
 record PomExclusion(String groupId, String artifactId) {
     public boolean equals(Object o) {
         if (this == o) return true;
