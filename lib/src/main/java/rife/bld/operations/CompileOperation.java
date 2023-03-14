@@ -80,49 +80,14 @@ public class CompileOperation {
         }
     }
 
-    public void executeOutputDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics)
-    throws IOException {
+    public void executeOutputDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics) {
         for (var diagnostic : diagnostics.getDiagnostics()) {
             System.err.print(executeFormatDiagnostic(diagnostic));
         }
     }
 
-    public String executeFormatDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic)
-    throws IOException {
-        var formatted = new StringBuilder();
-        var source = diagnostic.getSource().getCharContent(true).toString();
-        var lines = StringUtils.split(source, "\n");
-        var message = diagnostic.getMessage(Locale.getDefault());
-        var message_lines = StringUtils.split(message, "\n");
-        var main_message = "";
-        var remaining_message = "";
-        int line_number = (int) diagnostic.getLineNumber() - 1;
-        int column_number = (int) diagnostic.getColumnNumber() - 1;
-
-        if (!message_lines.isEmpty()) {
-            main_message = message_lines.remove(0);
-            main_message = StringUtils.replace(main_message, "\r", "");
-            remaining_message = StringUtils.join(message_lines, "\n");
-        }
-
-        formatted.append(String.format("%s:%d: %s: %s%n",
-            diagnostic.getSource().toUri().getPath(),
-            diagnostic.getLineNumber(),
-            diagnostic.getKind().name().toLowerCase(),
-            main_message));
-
-        if (line_number >= 0 && line_number < lines.size()) {
-            var line = lines.get(line_number);
-            line = StringUtils.replace(line, "\r", "");
-            formatted.append(line).append(System.lineSeparator());
-            if (column_number >= 0 && column_number < line.length()) {
-                formatted.append(StringUtils.repeat(" ", column_number)).append("^").append(System.lineSeparator());
-            }
-        }
-        if (!remaining_message.isEmpty()) {
-            formatted.append(remaining_message).append(System.lineSeparator());
-        }
-        return formatted.toString();
+    public String executeFormatDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic) {
+        return diagnostic.toString() + System.lineSeparator();
     }
 
     public CompileOperation fromProject(Project project) {

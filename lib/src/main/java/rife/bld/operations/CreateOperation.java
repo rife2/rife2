@@ -302,7 +302,7 @@ public class CreateOperation {
      * <p>
      * If no work directory is provided, the JVM working directory will be used.
      *
-     * @param directory the directory use as a work directory
+     * @param directory the directory to use as a work directory
      * @return this {@code CreateOperation} instance
      * @since 1.5
      */
