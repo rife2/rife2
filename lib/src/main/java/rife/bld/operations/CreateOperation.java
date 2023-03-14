@@ -64,22 +64,23 @@ public class CreateOperation {
             return;
         }
 
+        project_ = new NewProjectTemplate(new File(workDirectory(), projectName()), packageName(), projectName());
+
         // standard names
-        projectClassName_ = StringUtils.capitalize(projectName());
+        projectClassName_ = StringUtils.capitalize(project_.name());
         projectBuildName_ = projectClassName_ + "Build";
         projectSiteName_ = projectClassName_ + "Site";
         projectSiteUberName_ = projectSiteName_ + "Uber";
         projectTestName_ = projectClassName_ + "Test";
 
         // create the main project structure
-        project_ = new NewProjectTemplate(new File(workDirectory(), projectName()), packageName(), projectName());
         srcMainWebappCssDirectory_ = new File(project_.srcMainWebappDirectory(), "css");
         srcMainWebappWebInfDirectory_ = new File(project_.srcMainWebappDirectory(), "WEB-INF");
         ideaDirectory_ = new File(project_.workDirectory(), ".idea");
         ideaLibrariesDirectory_ = new File(ideaDirectory_, "libraries");
         ideaRunConfigurationsDirectory_ = new File(ideaDirectory_, "runConfigurations");
 
-        var package_dir = packageName().replace('.', File.separatorChar);
+        var package_dir = project_.pkg().replace('.', File.separatorChar);
         javaPackageDirectory_ = new File(project_.srcMainJavaDirectory(), package_dir);
         projectPackageDirectory_ = new File(project_.srcProjectJavaDirectory(), package_dir);
         testPackageDirectory_ = new File(project_.srcTestJavaDirectory(), package_dir);
@@ -114,14 +115,14 @@ public class CreateOperation {
 
         // project site
         var site_template = TemplateFactory.TXT.get("bld.rife2_hello.project_site");
-        site_template.setValue("package", packageName());
+        site_template.setValue("package", project_.pkg());
         site_template.setValue("projectSite", projectSiteName_);
         var project_site_file = new File(javaPackageDirectory_, projectSiteName_ + ".java");
         FileUtils.writeString(site_template.getContent(), project_site_file);
 
         // project site uber
         var site_uber_template = TemplateFactory.TXT.get("bld.rife2_hello.project_site_uber");
-        site_uber_template.setValue("package", packageName());
+        site_uber_template.setValue("package", project_.pkg());
         site_uber_template.setValue("projectSite", projectSiteName_);
         site_uber_template.setValue("projectSiteUber", projectSiteUberName_);
         var project_site_uber_file = new File(javaPackageDirectory_, projectSiteUberName_ + ".java");
@@ -140,14 +141,14 @@ public class CreateOperation {
 
         // project web.xml
         var web_xml_template = TemplateFactory.XML.get("bld.rife2_hello.project_web");
-        web_xml_template.setValue("package", packageName());
+        web_xml_template.setValue("package", project_.pkg());
         web_xml_template.setValue("projectSite", projectSiteName_);
         var project_web_xml_file = new File(srcMainWebappWebInfDirectory_, "web.xml");
         FileUtils.writeString(web_xml_template.getContent(), project_web_xml_file);
 
         // project test
         var test_template = TemplateFactory.TXT.get("bld.rife2_hello.project_test");
-        test_template.setValue("package", packageName());
+        test_template.setValue("package", project_.pkg());
         test_template.setValue("projectTest", projectTestName_);
         test_template.setValue("projectSite", projectSiteName_);
         test_template.setValue("project", projectClassName_);
@@ -157,7 +158,7 @@ public class CreateOperation {
         // project build
         var build_template = TemplateFactory.TXT.get("bld.rife2_hello.project_build");
         build_template.setValue("projectBuild", projectBuildName_);
-        build_template.setValue("package", packageName());
+        build_template.setValue("package", project_.pkg());
         build_template.setValue("project", projectClassName_);
         build_template.setValue("projectSite", projectSiteName_);
         for (var entry : project_.dependencies().entrySet()) {
@@ -221,14 +222,14 @@ public class CreateOperation {
 
         // IDEA run site
         var run_site_template = TemplateFactory.XML.get("bld.rife2_hello.idea.runConfigurations.Run_Site");
-        run_site_template.setValue("package", packageName());
+        run_site_template.setValue("package", project_.pkg());
         run_site_template.setValue("projectSite", projectSiteName_);
         var run_site_file = new File(ideaRunConfigurationsDirectory_, "Run Site.xml");
         FileUtils.writeString(run_site_template.getContent(), run_site_file);
 
         // IDEA run tests
         var run_tests_template = TemplateFactory.XML.get("bld.rife2_hello.idea.runConfigurations.Run_Tests");
-        run_tests_template.setValue("package", packageName());
+        run_tests_template.setValue("package", project_.pkg());
         run_tests_template.setValue("projectTest", projectTestName_);
         var run_tests_file = new File(ideaRunConfigurationsDirectory_, "Run Tests.xml");
         FileUtils.writeString(run_tests_template.getContent(), run_tests_file);

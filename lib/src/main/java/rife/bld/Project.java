@@ -14,12 +14,13 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class Project extends BuildExecutor {
-    protected List<Repository> repositories = new ArrayList<>();
-    protected String pkg = null;
-    protected String name = null;
-    protected VersionNumber version = null;
-    protected String mainClass = null;
+    public File workDirectory = new File(System.getProperty("user.dir"));
+    public String pkg = null;
+    public String name = null;
+    public VersionNumber version = null;
+    public String mainClass = null;
 
+    protected List<Repository> repositories = new ArrayList<>();
     protected DependencyScopes dependencies = new DependencyScopes();
 
     protected List<TemplateType> precompiledTemplateTypes = new ArrayList<>();
@@ -35,7 +36,6 @@ public class Project extends BuildExecutor {
     protected String uberJarMainClass = null;
     protected String warFileName = null;
 
-    protected File workDirectory = null;
     protected File srcDirectory = null;
     protected File srcMainDirectory = null;
     protected File srcMainJavaDirectory = null;

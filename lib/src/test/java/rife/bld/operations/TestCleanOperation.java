@@ -67,10 +67,10 @@ public class TestCleanOperation {
     throws Exception {
         var tmp = Files.createTempDirectory("test").toFile();
         try {
-            var project = new Project() {
-                public File workDirectory() { return tmp; }
-                public String pkg() { return "test.pkg"; }
-            };
+            var project = new Project();
+            project.workDirectory = tmp;
+            project.pkg = "test.pkg";
+
             project.createProjectStructure();
             project.createBuildStructure();
             assertEquals(21, Files.walk(Path.of(tmp.getAbsolutePath())).count());
