@@ -12,6 +12,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,10 +73,56 @@ public class TestCleanOperation {
 
             project.createProjectStructure();
             project.createBuildStructure();
-            assertEquals(21, Files.walk(Path.of(tmp.getAbsolutePath())).count());
+            assertEquals("""
+                    /build
+                    /build/dist
+                    /build/main
+                    /build/project
+                    /build/test
+                    /lib
+                    /lib/compile
+                    /lib/project
+                    /lib/runtime
+                    /lib/standalone
+                    /lib/test
+                    /src
+                    /src/main
+                    /src/main/java
+                    /src/main/resources
+                    /src/main/resources/templates
+                    /src/project
+                    /src/project/java
+                    /src/test
+                    /src/test/java""",
+                Files.walk(Path.of(tmp.getAbsolutePath()))
+                    .map(path -> path.toAbsolutePath().toString().substring(tmp.getAbsolutePath().length()))
+                    .filter(s -> !s.isEmpty())
+                    .sorted()
+                    .collect(Collectors.joining("\n")));
 
             new CleanOperation().fromProject(project).execute();
-            assertEquals(17, Files.walk(Path.of(tmp.getAbsolutePath())).count());
+            assertEquals("""
+                    /build
+                    /lib
+                    /lib/compile
+                    /lib/project
+                    /lib/runtime
+                    /lib/standalone
+                    /lib/test
+                    /src
+                    /src/main
+                    /src/main/java
+                    /src/main/resources
+                    /src/main/resources/templates
+                    /src/project
+                    /src/project/java
+                    /src/test
+                    /src/test/java""",
+                Files.walk(Path.of(tmp.getAbsolutePath()))
+                    .map(path -> path.toAbsolutePath().toString().substring(tmp.getAbsolutePath().length()))
+                    .filter(s -> !s.isEmpty())
+                    .sorted()
+                    .collect(Collectors.joining("\n")));
         } finally {
             FileUtils.deleteDirectory(tmp);
         }

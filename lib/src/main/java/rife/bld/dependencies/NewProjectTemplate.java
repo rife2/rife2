@@ -6,6 +6,7 @@ package rife.bld.dependencies;
 
 import rife.Version;
 import rife.bld.Project;
+import rife.tools.StringUtils;
 
 import java.io.File;
 import java.util.List;
@@ -25,6 +26,7 @@ public class NewProjectTemplate extends Project {
 
         pkg = packageName;
         name = projectName;
+        mainClass = packageName + "." + StringUtils.capitalize(projectName) + "Site";
         version = new VersionNumber(0,0,1);
 
         repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);

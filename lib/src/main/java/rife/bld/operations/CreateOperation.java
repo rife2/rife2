@@ -16,6 +16,12 @@ import rife.validation.ValidityChecks;
 import java.io.File;
 import java.util.*;
 
+/**
+ * Creates a new project structure.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
 public class CreateOperation {
     public static class Help implements BuildHelp {
         public String getDescription() {
@@ -32,7 +38,7 @@ public class CreateOperation {
         }
     }
 
-    private File workDirectory_;
+    private File workDirectory_ = new File(System.getProperty("user.dir"));
     private String packageName_;
     private String projectName_;
     private boolean downloadDependencies_;
@@ -54,6 +60,12 @@ public class CreateOperation {
     private File projectPackageDirectory_;
     private File testPackageDirectory_;
 
+    /**
+     * Performs the creation operation.
+     *
+     * @throws Exception when an error occurred during the creation operation
+     * @since 1.5
+     */
     public void execute()
     throws Exception {
         if (packageName() == null || projectName() == null) {
@@ -90,6 +102,11 @@ public class CreateOperation {
         }
     }
 
+    /**
+     * Part of the {@link #execute} operation, creates the project structure.
+     *
+     * @since 1.5
+     */
     public void executeCreateProjectStructure() {
         project_.createProjectStructure();
 
@@ -103,6 +120,11 @@ public class CreateOperation {
         testPackageDirectory_.mkdirs();
     }
 
+    /**
+     * Part of the {@link #execute} operation, populates the project structure.
+     *
+     * @since 1.5
+     */
     public void executePopulateProjectStructure()
     throws FileUtilsErrorException {
         // project gitignore
@@ -186,6 +208,11 @@ public class CreateOperation {
         build_sh_file.setExecutable(true);
     }
 
+    /**
+     * Part of the {@link #execute} operation, populates the IDEA project structure.
+     *
+     * @since 1.5
+     */
     public void executePopulateIdeaProject()
     throws FileUtilsErrorException {
         // IDEA project files
@@ -232,6 +259,11 @@ public class CreateOperation {
         FileUtils.writeString(run_tests_template.getContent(), run_tests_file);
     }
 
+    /**
+     * Part of the {@link #execute} operation, downloads the dependencies, when enabled.
+     *
+     * @since 1.5
+     */
     public void executeDownloadDependencies() {
         for (var dependency : project_.dependencies().get(Scope.compile)) {
             new DependencyResolver(project_.repositories(), dependency)
@@ -247,6 +279,13 @@ public class CreateOperation {
         }
     }
 
+    /**
+     * Configures a creation operation from command-line arguments.
+     *
+     * @param arguments the arguments that will be considered
+     * @return this {@code CreateOperation} instance
+     * @since 1.5
+     */
     public CreateOperation fromArguments(List<String> arguments) {
         if (arguments.size() < 2) {
             throw new OperationOptionException("ERROR: Expecting the package and project names as the arguments.");
@@ -258,6 +297,15 @@ public class CreateOperation {
             .downloadDependencies(true);
     }
 
+    /**
+     * Provides the work directory in which the project will be created.
+     * <p>
+     * If no work directory is provided, the JVM working directory will be used.
+     *
+     * @param directory the directory use as a work directory
+     * @return this {@code CreateOperation} instance
+     * @since 1.5
+     */
     public CreateOperation workDirectory(File directory) {
         if (!directory.exists()) {
             throw new OperationOptionException("ERROR: The work directory '" + directory + "' doesn't exist.");
@@ -273,6 +321,13 @@ public class CreateOperation {
         return this;
     }
 
+    /**
+     * Provides the package of the project that will be created.
+     *
+     * @param name the package name
+     * @return this {@code CreateOperation} instance
+     * @since 1.5
+     */
     public CreateOperation packageName(String name) {
         packageName_ = StringUtils.trim(name);
         if (packageName_.isEmpty()) {
@@ -287,6 +342,13 @@ public class CreateOperation {
         return this;
     }
 
+    /**
+     * Provides the name of the project that will be created.
+     *
+     * @param name the project name
+     * @return this {@code CreateOperation} instance
+     * @since 1.5
+     */
     public CreateOperation projectName(String name) {
         projectName_ = StringUtils.trim(name);
         if (projectName_.isEmpty()) {
@@ -300,24 +362,69 @@ public class CreateOperation {
         return this;
     }
 
+    /**
+     * Indicates whether the dependencies for the project should be downloaded
+     * upon creation, by default this is {@code false}.
+     *
+     * @param flag {@code true} if the dependencies should be downloaded; or
+     *             {@code false} otherwise
+     * @return this {@code CreateOperation} instance
+     * @since 1.5
+     */
     public CreateOperation downloadDependencies(boolean flag) {
         downloadDependencies_ = flag;
         return this;
     }
 
+    /**
+     * Retrieves the work directory that is used for the project creation.
+     *
+     * @return the work directory
+     * @since 1.5
+     */
     public File workDirectory() {
         return workDirectory_;
     }
 
+    /**
+     * Retrieves the package that is used for the project creation.
+     *
+     * @return the package name
+     * @since 1.5
+     */
     public String packageName() {
         return packageName_;
     }
 
+    /**
+     * Retrieves the name that is used for the project creation.
+     *
+     * @return the project name
+     * @since 1.5
+     */
     public String projectName() {
         return projectName_;
     }
 
+    /**
+     * Retrieves whether dependencies will be downloaded at project creation.
+     *
+     * @return {@code true} if dependencies will be downloaded; or
+     * {@code false} otherwise
+     * @since 1.5
+     */
     public boolean downloadDependencies() {
         return downloadDependencies_;
+    }
+
+    /**
+     * Retrieves the project instance that was used as a blueprint for the
+     * project creation.
+     *
+     * @return the project creation blueprint instance
+     * @since 1.5
+     */
+    public Project project() {
+        return project_;
     }
 }

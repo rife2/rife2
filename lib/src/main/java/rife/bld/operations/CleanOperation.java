@@ -36,7 +36,7 @@ public class CleanOperation {
     private List<File> directories_ = new ArrayList<>();
 
     /**
-     * Perform the clean operation.
+     * Performs the clean operation.
      *
      * @since 1.5
      */

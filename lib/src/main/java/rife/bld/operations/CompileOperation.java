@@ -30,12 +30,11 @@ public class CompileOperation {
     private File buildMainDirectory_;
     private File buildTestDirectory_;
     private List<String> compileMainClasspath_ = new ArrayList<>();
-    ;
     private List<String> compileTestClasspath_ = new ArrayList<>();
-    ;
     private List<File> mainSourceFiles_ = new ArrayList<>();
     private List<File> testSourceFiles_ = new ArrayList<>();
     private List<String> compileOptions_ = new ArrayList<>();
+    private List<Diagnostic<? extends JavaFileObject>> diagnostics_ = Collections.emptyList();
 
     public void execute()
     throws Exception {
@@ -75,6 +74,7 @@ public class CompileOperation {
             options.addAll(compileOptions());
             var compilation_task = compiler.getTask(null, file_manager, diagnostics, options, null, compilation_units);
             if (!compilation_task.call()) {
+                diagnostics_ = diagnostics.getDiagnostics();
                 executeOutputDiagnostics(diagnostics);
             }
         }
@@ -196,5 +196,9 @@ public class CompileOperation {
 
     public List<String> compileOptions() {
         return compileOptions_;
+    }
+
+    public List<Diagnostic<? extends JavaFileObject>> diagnostics() {
+        return diagnostics_;
     }
 }

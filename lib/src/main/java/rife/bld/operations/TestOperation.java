@@ -34,14 +34,15 @@ public class TestOperation {
     private List<String> testToolOptions_ = new ArrayList<>();
     private Consumer<String> testOutputConsumer_;
     private Consumer<String> testErrorConsumer_;
+    private Process process_;
 
     public void execute()
     throws Exception {
-        var process = executeStartProcess();
-        process.waitFor();
+        var process_ = executeStartProcess();
+        process_.waitFor();
         executeHandleProcessOutput(
-            FileUtils.readString(process.getInputStream()),
-            FileUtils.readString(process.getErrorStream()));
+            FileUtils.readString(process_.getInputStream()),
+            FileUtils.readString(process_.getErrorStream()));
     }
 
     public List<String> executeConstructProcessCommandList() {
@@ -58,8 +59,16 @@ public class TestOperation {
     public Process executeStartProcess()
     throws Exception {
         var builder = new ProcessBuilder(executeConstructProcessCommandList());
-        builder.redirectOutput(ProcessBuilder.Redirect.PIPE);
-        builder.redirectError(ProcessBuilder.Redirect.PIPE);
+        if (testOutputConsumer() == null) {
+            builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+        } else {
+            builder.redirectOutput(ProcessBuilder.Redirect.PIPE);
+        }
+        if (testErrorConsumer() == null) {
+            builder.redirectError(ProcessBuilder.Redirect.INHERIT);
+        } else {
+            builder.redirectError(ProcessBuilder.Redirect.PIPE);
+        }
         return builder.start();
     }
 
@@ -135,6 +144,10 @@ public class TestOperation {
 
     public List<String> testToolOptions() {
         return testToolOptions_;
+    }
+
+    public Process process() {
+        return process_;
     }
 
     public Consumer<String> testOutputConsumer() {
