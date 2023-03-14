@@ -6,26 +6,12 @@ package rife.bld.operations;
 
 import rife.bld.*;
 import rife.bld.dependencies.*;
-import rife.tools.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DownloadOperation {
-    public static class Help implements BuildHelp {
-        public String getDescription() {
-            return "Downloads all dependencies of the project";
-        }
-
-        public String getHelp(String topic) {
-            return StringUtils.replace("""
-                Downloads all dependencies of the project
-                            
-                Usage : ${topic}""", "${topic}", topic);
-        }
-    }
-
     private DependencyScopes dependencies_ = new DependencyScopes();
     private List<Repository> repositories_ = new ArrayList<>();;
     private File libCompileDirectory_;

@@ -4,6 +4,7 @@
  */
 package rife.bld;
 
+import rife.bld.help.CreateHelp;
 import rife.bld.operations.*;
 
 /**
@@ -20,7 +21,7 @@ public class Cli extends BuildExecutor {
      * @throws Exception when an error occurred during the creation process
      * @since 1.5
      */
-    @BuildCommand(help = CreateOperation.Help.class)
+    @BuildCommand(help = CreateHelp.class)
     public void create()
     throws Exception {
         new CreateOperation().fromArguments(arguments()).execute();

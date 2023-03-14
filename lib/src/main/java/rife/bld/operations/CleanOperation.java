@@ -4,10 +4,8 @@
  */
 package rife.bld.operations;
 
-import rife.bld.BuildHelp;
 import rife.bld.Project;
 import rife.tools.FileUtils;
-import rife.tools.StringUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
@@ -20,23 +18,6 @@ import java.util.*;
  * @since 1.5
  */
 public class CleanOperation {
-    /**
-     * Provides help for the clean operation.
-     * @since 1.5
-     */
-    public static class Help implements BuildHelp {
-        public String getDescription() {
-            return "Cleans the build files";
-        }
-
-        public String getHelp(String topic) {
-            return StringUtils.replace("""
-                Cleans the build files.
-                            
-                Usage : ${topic}""", "${topic}", topic);
-        }
-    }
-
     private List<File> directories_ = new ArrayList<>();
 
     /**

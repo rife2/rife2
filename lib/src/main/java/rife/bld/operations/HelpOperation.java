@@ -12,7 +12,7 @@ import java.util.List;
 import static java.util.Comparator.comparingInt;
 
 public class HelpOperation {
-    public static class Help implements BuildHelp {
+    public static class Help implements CommandHelp {
         public String getDescription() {
             return "Provides help about any of the other commands";
         }
@@ -42,7 +42,7 @@ public class HelpOperation {
                 var method = commands.get(topic);
                 var annotation = method.getAnnotation(BuildCommand.class);
                 var build_help = annotation.help();
-                if (build_help != BuildHelp.class) {
+                if (build_help != CommandHelp.class) {
                     var help = build_help.getDeclaredConstructor().newInstance().getHelp(topic);
                     if (!help.isEmpty()) {
                         System.err.println(help);
@@ -79,7 +79,7 @@ public class HelpOperation {
             var method = command.getValue();
             var annotation = method.getAnnotation(BuildCommand.class);
             var build_help = annotation.help();
-            if (build_help != BuildHelp.class) {
+            if (build_help != CommandHelp.class) {
                 try {
                     System.err.print(build_help.getDeclaredConstructor().newInstance().getDescription());
                 } catch (Exception e) {

@@ -14,21 +14,6 @@ import java.util.jar.*;
 import java.util.regex.Pattern;
 
 public class JarOperation {
-    public static class Help implements BuildHelp {
-        public String getDescription() {
-            return "Creates a jar archive for the project";
-        }
-
-        public String getHelp(String topic) {
-            return StringUtils.replace("""
-                Creates a jar archive for the project.
-                The standard jar command will automatically also execute
-                the clean, compile and precompile commands beforehand.
-                            
-                Usage : ${topic}""", "${topic}", topic);
-        }
-    }
-
     private Map<Attributes.Name, Object> manifestAttributes_ = new HashMap<>();
     private List<File> sourceDirectories_ = new ArrayList<>();
     private List<NamedFile> sourceFiles_ = new ArrayList<>();

@@ -4,7 +4,6 @@
  */
 package rife.bld.operations;
 
-import rife.bld.BuildHelp;
 import rife.bld.Project;
 import rife.bld.operations.exceptions.OperationOptionException;
 import rife.bld.dependencies.*;
@@ -23,25 +22,6 @@ import java.util.*;
  * @since 1.5
  */
 public class CreateOperation {
-    /**
-     * Provides help for the create operation.
-     * @since 1.5
-     */
-    public static class Help implements BuildHelp {
-        public String getDescription() {
-            return "Creates a new RIFE2 project";
-        }
-
-        public String getHelp(String topic) {
-            return StringUtils.replace("""
-                Creates a new RIFE2 project.
-                            
-                Usage : ${topic} [package] [name]
-                  package  The package of the project to create
-                  name     The name of the project to create""", "${topic}", topic);
-        }
-    }
-
     private File workDirectory_ = new File(System.getProperty("user.dir"));
     private String packageName_;
     private String projectName_;

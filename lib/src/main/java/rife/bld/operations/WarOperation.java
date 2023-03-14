@@ -6,7 +6,6 @@ package rife.bld.operations;
 
 import rife.bld.*;
 import rife.tools.FileUtils;
-import rife.tools.StringUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.*;
@@ -14,21 +13,6 @@ import java.nio.file.*;
 import java.util.*;
 
 public class WarOperation {
-    public static class Help implements BuildHelp {
-        public String getDescription() {
-            return "Creates a war archive for the project";
-        }
-
-        public String getHelp(String topic) {
-            return StringUtils.replace("""
-                Creates a war archive for the project.
-                The standard war command will automatically also execute
-                the jar command beforehand.
-                            
-                Usage : ${topic}""", "${topic}", topic);
-        }
-    }
-
     private List<File> libSourceDirectories_ = new ArrayList<>();
     private List<File> classesSourceDirectories_ = new ArrayList<>();
     private List<NamedFile> jarSourceFiles_ = new ArrayList<>();

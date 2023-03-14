@@ -4,9 +4,7 @@
  */
 package rife.bld.operations;
 
-import rife.bld.BuildHelp;
 import rife.bld.Project;
-import rife.tools.StringUtils;
 
 import javax.tools.*;
 import java.io.File;
@@ -14,19 +12,6 @@ import java.io.IOException;
 import java.util.*;
 
 public class CompileOperation {
-    public static class Help implements BuildHelp {
-        public String getDescription() {
-            return "Compiles the project";
-        }
-
-        public String getHelp(String topic) {
-            return StringUtils.replace("""
-                Compiles the project.
-                            
-                Usage : ${topic}""", "${topic}", topic);
-        }
-    }
-
     private File buildMainDirectory_;
     private File buildTestDirectory_;
     private List<String> compileMainClasspath_ = new ArrayList<>();

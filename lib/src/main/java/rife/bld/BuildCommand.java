@@ -32,5 +32,5 @@ public @interface BuildCommand {
      * @return a class providing help information
      * @since 1.5
      */
-    Class<? extends BuildHelp> help() default BuildHelp.class;
+    Class<? extends CommandHelp> help() default CommandHelp.class;
 }

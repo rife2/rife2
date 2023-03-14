@@ -4,29 +4,14 @@
  */
 package rife.bld.operations;
 
-import rife.bld.BuildHelp;
 import rife.bld.Project;
 import rife.tools.FileUtils;
-import rife.tools.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class TestOperation {
-    public static class Help implements BuildHelp {
-        public String getDescription() {
-            return "Tests the project";
-        }
-
-        public String getHelp(String topic) {
-            return StringUtils.replace("""
-                Tests the project.
-                            
-                Usage : ${topic}""", "${topic}", topic);
-        }
-    }
-
     private String javaTool_;
     private List<String> testJavaOptions_ = new ArrayList<>();
     private List<String> testClasspath_ = new ArrayList<>();
@@ -38,7 +23,7 @@ public class TestOperation {
 
     public void execute()
     throws Exception {
-        var process_ = executeStartProcess();
+        process_ = executeStartProcess();
         process_.waitFor();
         executeHandleProcessOutput(
             FileUtils.readString(process_.getInputStream()),

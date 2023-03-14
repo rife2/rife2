@@ -4,11 +4,9 @@
  */
 package rife.bld.operations;
 
-import rife.bld.BuildHelp;
 import rife.bld.Project;
 import rife.bld.operations.exceptions.OperationOptionException;
 import rife.tools.FileUtils;
-import rife.tools.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,19 +14,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class RunOperation {
-    public static class Help implements BuildHelp {
-        public String getDescription() {
-            return "Runs the project";
-        }
-
-        public String getHelp(String topic) {
-            return StringUtils.replace("""
-                Runs the project.
-                            
-                Usage : ${topic}""", "${topic}", topic);
-        }
-    }
-
     private File workDirectory_ = new File(System.getProperty("user.dir"));
     private String javaTool_;
     private List<String> runJavaOptions_ = new ArrayList<>();

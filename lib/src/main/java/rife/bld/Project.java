@@ -4,6 +4,7 @@
  */
 package rife.bld;
 
+import rife.bld.help.*;
 import rife.bld.operations.*;
 import rife.bld.dependencies.*;
 import rife.tools.FileUtils;
@@ -63,29 +64,29 @@ public class Project extends BuildExecutor {
      * Standard build commands
      */
 
-    @BuildCommand(help = CleanOperation.Help.class)
+    @BuildCommand(help = CleanHelp.class)
     public void clean()
     throws Exception {
         new CleanOperation().fromProject(this).execute();
     }
 
-    @BuildCommand(help = CompileOperation.Help.class)
+    @BuildCommand(help = CompileHelp.class)
     public void compile()
     throws Exception {
         new CompileOperation().fromProject(this).execute();
     }
 
-    @BuildCommand(help = DownloadOperation.Help.class)
+    @BuildCommand(help = DownloadHelp.class)
     public void download() {
         new DownloadOperation().fromProject(this).execute();
     }
 
-    @BuildCommand(help = PrecompileOperation.Help.class)
+    @BuildCommand(help = PrecompileHelp.class)
     public void precompile() {
         new PrecompileOperation().fromProject(this).execute();
     }
 
-    @BuildCommand(help = JarOperation.Help.class)
+    @BuildCommand(help = JarHelp.class)
     public void jar()
     throws Exception {
         clean();
@@ -94,27 +95,27 @@ public class Project extends BuildExecutor {
         new JarOperation().fromProject(this).execute();
     }
 
-    @BuildCommand(help = UberJarOperation.Help.class)
+    @BuildCommand(help = UberJarHelp.class)
     public void uberjar()
     throws Exception {
         jar();
         new UberJarOperation().fromProject(this).execute();
     }
 
-    @BuildCommand(help = WarOperation.Help.class)
+    @BuildCommand(help = WarHelp.class)
     public void war()
     throws Exception {
         jar();
         new WarOperation().fromProject(this).execute();
     }
 
-    @BuildCommand(help = RunOperation.Help.class)
+    @BuildCommand(help = RunHelp.class)
     public void run()
     throws Exception {
         new RunOperation().fromProject(this).execute();
     }
 
-    @BuildCommand(help = TestOperation.Help.class)
+    @BuildCommand(help = TestHelp.class)
     public void test()
     throws Exception {
         new TestOperation().fromProject(this).execute();

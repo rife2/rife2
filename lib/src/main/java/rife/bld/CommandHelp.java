@@ -10,7 +10,7 @@ package rife.bld;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public interface BuildHelp {
+public interface CommandHelp {
     /**
      * Returns a short description about the command.
      *

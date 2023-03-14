@@ -4,30 +4,15 @@
  */
 package rife.bld.operations;
 
-import rife.bld.BuildHelp;
 import rife.bld.Project;
 import rife.template.TemplateDeployer;
 import rife.template.TemplateFactory;
-import rife.tools.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PrecompileOperation {
-    public static class Help implements BuildHelp {
-        public String getDescription() {
-            return "Compiles RIFE2 templates to class files";
-        }
-
-        public String getHelp(String topic) {
-            return StringUtils.replace("""
-                Compiles RIFE2 templates to class files
-                            
-                Usage : ${topic}""", "${topic}", topic);
-        }
-    }
-
     private List<TemplateType> precompiledTemplateTypes_ = new ArrayList<>();
     private File srcMainResourcesTemplatesDirectory_;
     private File buildTemplatesDirectory_;
