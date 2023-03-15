@@ -5,7 +5,7 @@
 package rife.bld.operations;
 
 import org.junit.jupiter.api.Test;
-import rife.bld.Project;
+import rife.bld.WebProject;
 import rife.tools.FileUtils;
 
 import java.io.File;
@@ -67,7 +67,7 @@ public class TestCleanOperation {
     throws Exception {
         var tmp = Files.createTempDirectory("test").toFile();
         try {
-            var project = new Project();
+            var project = new WebProject();
             project.workDirectory = tmp;
             project.pkg = "test.pkg";
 

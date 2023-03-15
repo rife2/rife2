@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DownloadOperation {
     private DependencyScopes dependencies_ = new DependencyScopes();
-    private List<Repository> repositories_ = new ArrayList<>();;
+    private List<Repository> repositories_ = new ArrayList<>();
     private File libCompileDirectory_;
     private File libRuntimeDirectory_;
     private File libStandaloneDirectory_;
@@ -27,6 +27,10 @@ public class DownloadOperation {
     }
 
     public void executeDownloadCompileDependencies() {
+        if (libCompileDirectory() == null) {
+            return;
+        }
+
         var compile_deps = dependencies().get(Scope.compile);
         if (compile_deps != null) {
             for (var dependency : compile_deps) {
@@ -37,6 +41,10 @@ public class DownloadOperation {
     }
 
     public void executeDownloadRuntimeDependencies() {
+        if (libRuntimeDirectory() == null) {
+            return;
+        }
+
         var runtime_deps = dependencies().get(Scope.runtime);
         if (runtime_deps != null) {
             for (var dependency : runtime_deps) {
@@ -47,6 +55,10 @@ public class DownloadOperation {
     }
 
     public void executeDownloadStandaloneDependencies() {
+        if (libStandaloneDirectory() == null) {
+            return;
+        }
+
         var standalone_deps = dependencies().get(Scope.standalone);
         if (standalone_deps != null) {
             for (var dependency : standalone_deps) {
@@ -57,6 +69,10 @@ public class DownloadOperation {
     }
 
     public void executeDownloadTestDependencies() {
+        if (libTestDirectory() == null) {
+            return;
+        }
+
         var test_deps = dependencies().get(Scope.test);
         if (test_deps != null) {
             for (var dependency : test_deps) {
@@ -71,7 +87,6 @@ public class DownloadOperation {
             .repositories(project.repositories())
             .libCompileDirectory(project.libCompileDirectory())
             .libRuntimeDirectory(project.libRuntimeDirectory())
-            .libStandaloneDirectory(project.libStandaloneDirectory())
             .libTestDirectory(project.libTestDirectory());
     }
 

@@ -46,7 +46,7 @@ public class WarOperation {
 
     public void executeCopyWebappDirectory(File destination)
     throws FileUtilsErrorException {
-        if (webappDirectory() != null && webappDirectory().exists()) {
+        if (webappDirectory() != null) {
             FileUtils.copyDirectory(webappDirectory(), destination);
         }
     }
@@ -82,9 +82,8 @@ public class WarOperation {
 
     public void executeCopyWebXmlFile(File webInfDirectory)
     throws FileUtilsErrorException {
-        var web_xml_file = webXmlFile();
-        if (web_xml_file != null) {
-            FileUtils.copy(web_xml_file, new File(webInfDirectory, "web.xml"));
+        if (webXmlFile() != null) {
+            FileUtils.copy(webXmlFile(), new File(webInfDirectory, "web.xml"));
         }
     }
 
@@ -97,7 +96,7 @@ public class WarOperation {
             .execute();
     }
 
-    public WarOperation fromProject(Project project) {
+    public WarOperation fromProject(WebProject project) {
         return libSourceDirectories(List.of(project.libCompileDirectory(), project.libRuntimeDirectory()))
             .jarSourceFiles(List.of(new NamedFile(project.jarFileName(), new File(project.buildDistDirectory(), project.jarFileName()))))
             .webappDirectory(project.srcMainWebappDirectory())

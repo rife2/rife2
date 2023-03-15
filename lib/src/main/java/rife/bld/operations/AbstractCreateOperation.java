@@ -17,7 +17,7 @@ import rife.validation.ValidityChecks;
 import java.io.File;
 import java.util.List;
 
-abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T>> {
+abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T, P>, P extends Project> {
     final String templateBase_;
 
     File workDirectory_ = new File(System.getProperty("user.dir"));
@@ -25,7 +25,7 @@ abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T>> {
     String projectName_;
     boolean downloadDependencies_;
 
-    Project project_;
+    P project_;
 
     String projectClassName_;
     String projectBuildName_;
@@ -66,7 +66,7 @@ abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T>> {
         }
     }
 
-    abstract Project createProjectBlueprint();
+    abstract P createProjectBlueprint();
 
     /**
      * Part of the {@link #execute} operation, configures the project.
@@ -205,9 +205,6 @@ abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T>> {
             TemplateFactory.XML.get(templateBase_ + "idea.libraries.runtime").getContent(),
             new File(ideaLibrariesDirectory_, "runtime.xml"));
         FileUtils.writeString(
-            TemplateFactory.XML.get(templateBase_ + "idea.libraries.standalone").getContent(),
-            new File(ideaLibrariesDirectory_, "standalone.xml"));
-        FileUtils.writeString(
             TemplateFactory.XML.get(templateBase_ + "idea.libraries.test").getContent(),
             new File(ideaLibrariesDirectory_, "test.xml"));
 
@@ -245,14 +242,6 @@ abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T>> {
             for (var dependency : test_dependencies) {
                 new DependencyResolver(project_.repositories(), dependency)
                     .downloadTransitivelyIntoDirectory(project_.libTestDirectory(), Scope.compile, Scope.runtime);
-            }
-        }
-
-        var standalone_dependencies = project_.dependencies().get(Scope.standalone);
-        if (standalone_dependencies != null) {
-            for (var dependency : project_.dependencies().get(Scope.standalone)) {
-                new DependencyResolver(project_.repositories(), dependency)
-                    .downloadTransitivelyIntoDirectory(project_.libStandaloneDirectory(), Scope.compile, Scope.runtime);
             }
         }
     }

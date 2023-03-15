@@ -4,10 +4,12 @@
  */
 package rife.bld.operations;
 
-import rife.bld.Project;
 import rife.bld.blueprints.Rife2ProjectBlueprint;
+import rife.bld.dependencies.DependencyResolver;
+import rife.bld.dependencies.Scope;
 import rife.template.TemplateFactory;
 import rife.tools.*;
+import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
 
@@ -17,7 +19,7 @@ import java.io.File;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Operation> {
+public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Operation, Rife2ProjectBlueprint> {
     protected File srcMainWebappCssDirectory_;
     protected File srcMainWebappWebInfDirectory_;
 
@@ -25,7 +27,7 @@ public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Ope
         super("bld.rife2_hello.");
     }
 
-    Project createProjectBlueprint() {
+    Rife2ProjectBlueprint createProjectBlueprint() {
         return new Rife2ProjectBlueprint(new File(workDirectory(), projectName()), packageName(), projectName());
     }
 
@@ -77,5 +79,27 @@ public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Ope
         web_xml_template.setValue("projectMain", projectMainName_);
         var project_web_xml_file = new File(srcMainWebappWebInfDirectory_, "web.xml");
         FileUtils.writeString(web_xml_template.getContent(), project_web_xml_file);
+    }
+
+    @Override
+    public void executePopulateIdeaProject()
+    throws FileUtilsErrorException {
+        super.executePopulateIdeaProject();
+        FileUtils.writeString(
+            TemplateFactory.XML.get(templateBase_ + "idea.libraries.standalone").getContent(),
+            new File(ideaLibrariesDirectory_, "standalone.xml"));
+    }
+
+    @Override
+    public void executeDownloadDependencies() {
+        super.executeDownloadDependencies();
+
+        var standalone_dependencies = project_.dependencies().get(Scope.standalone);
+        if (standalone_dependencies != null) {
+            for (var dependency : project_.dependencies().get(Scope.standalone)) {
+                new DependencyResolver(project_.repositories(), dependency)
+                    .downloadTransitivelyIntoDirectory(project_.libStandaloneDirectory(), Scope.compile, Scope.runtime);
+            }
+        }
     }
 }

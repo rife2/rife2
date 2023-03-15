@@ -42,6 +42,6 @@ public class Cli extends BuildExecutor {
 
     public static void main(String[] arguments)
     throws Exception {
-        new Cli().processArguments(arguments);
+        new Cli().start(arguments);
     }
 }

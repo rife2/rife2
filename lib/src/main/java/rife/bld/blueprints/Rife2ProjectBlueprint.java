@@ -5,7 +5,7 @@
 package rife.bld.blueprints;
 
 import rife.Version;
-import rife.bld.Project;
+import rife.bld.WebProject;
 import rife.bld.dependencies.VersionNumber;
 import rife.tools.StringUtils;
 
@@ -21,7 +21,7 @@ import static rife.bld.dependencies.Scope.*;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class Rife2ProjectBlueprint extends Project {
+public class Rife2ProjectBlueprint extends WebProject {
     public Rife2ProjectBlueprint(File work, String packageName, String projectName) {
         workDirectory = work;
 

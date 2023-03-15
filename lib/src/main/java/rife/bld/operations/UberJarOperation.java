@@ -68,11 +68,9 @@ public class UberJarOperation {
     public UberJarOperation fromProject(Project project) {
         var jars = new ArrayList<>(project.compileClasspathJars());
         jars.addAll(project.runtimeClasspathJars());
-        jars.addAll(project.standaloneClasspathJars());
         jars.add(new File(project.buildDistDirectory(), project.jarFileName()));
 
         return jarSourceFiles(jars)
-            .resourceSourceDirectories(List.of(new NamedFile("webapp", project.srcMainWebappDirectory())))
             .destinationDirectory(project.buildDistDirectory())
             .destinationFileName(project.uberJarFileName())
             .mainClass(project.uberJarMainClass());

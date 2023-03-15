@@ -15,7 +15,7 @@ import java.io.File;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class CreateBlankOperation extends AbstractCreateOperation<CreateBlankOperation> {
+public class CreateBlankOperation extends AbstractCreateOperation<CreateBlankOperation, Project> {
     public CreateBlankOperation() {
         super("bld.blank.");
     }

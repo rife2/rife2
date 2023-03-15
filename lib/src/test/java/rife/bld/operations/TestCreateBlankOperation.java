@@ -53,7 +53,6 @@ public class TestCreateBlankOperation {
                     /myapp/.idea/libraries/compile.xml
                     /myapp/.idea/libraries/project.xml
                     /myapp/.idea/libraries/runtime.xml
-                    /myapp/.idea/libraries/standalone.xml
                     /myapp/.idea/libraries/test.xml
                     /myapp/.idea/misc.xml
                     /myapp/.idea/modules.xml
@@ -67,7 +66,6 @@ public class TestCreateBlankOperation {
                     /myapp/lib/compile/rife2-1.5.0-20230313.213352-8.jar
                     /myapp/lib/project
                     /myapp/lib/runtime
-                    /myapp/lib/standalone
                     /myapp/lib/test
                     /myapp/lib/test/apiguardian-api-1.1.2.jar
                     /myapp/lib/test/junit-jupiter-5.9.2.jar
@@ -114,7 +112,6 @@ public class TestCreateBlankOperation {
                     /myapp/.idea/libraries/compile.xml
                     /myapp/.idea/libraries/project.xml
                     /myapp/.idea/libraries/runtime.xml
-                    /myapp/.idea/libraries/standalone.xml
                     /myapp/.idea/libraries/test.xml
                     /myapp/.idea/misc.xml
                     /myapp/.idea/modules.xml
@@ -137,7 +134,6 @@ public class TestCreateBlankOperation {
                     /myapp/lib/compile/rife2-1.5.0-20230313.213352-8.jar
                     /myapp/lib/project
                     /myapp/lib/runtime
-                    /myapp/lib/standalone
                     /myapp/lib/test
                     /myapp/lib/test/apiguardian-api-1.1.2.jar
                     /myapp/lib/test/junit-jupiter-5.9.2.jar
@@ -204,7 +200,6 @@ public class TestCreateBlankOperation {
                     /yourthing/.idea/libraries/compile.xml
                     /yourthing/.idea/libraries/project.xml
                     /yourthing/.idea/libraries/runtime.xml
-                    /yourthing/.idea/libraries/standalone.xml
                     /yourthing/.idea/libraries/test.xml
                     /yourthing/.idea/misc.xml
                     /yourthing/.idea/modules.xml
@@ -217,7 +212,6 @@ public class TestCreateBlankOperation {
                     /yourthing/lib/compile
                     /yourthing/lib/project
                     /yourthing/lib/runtime
-                    /yourthing/lib/standalone
                     /yourthing/lib/test
                     /yourthing/src
                     /yourthing/src/main

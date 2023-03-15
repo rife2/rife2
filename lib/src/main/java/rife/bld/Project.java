@@ -35,14 +35,12 @@ public class Project extends BuildExecutor {
     protected String jarFileName = null;
     protected String uberJarFileName = null;
     protected String uberJarMainClass = null;
-    protected String warFileName = null;
 
     protected File srcDirectory = null;
     protected File srcMainDirectory = null;
     protected File srcMainJavaDirectory = null;
     protected File srcMainResourcesDirectory = null;
     protected File srcMainResourcesTemplatesDirectory = null;
-    protected File srcMainWebappDirectory = null;
     protected File srcProjectDirectory = null;
     protected File srcProjectJavaDirectory = null;
     protected File srcTestJDirectory = null;
@@ -51,7 +49,6 @@ public class Project extends BuildExecutor {
     protected File libCompileDirectory = null;
     protected File libProjectDirectory = null;
     protected File libRuntimeDirectory = null;
-    protected File libStandaloneDirectory = null;
     protected File libTestDirectory = null;
     protected File buildDirectory = null;
     protected File buildDistDirectory = null;
@@ -100,13 +97,6 @@ public class Project extends BuildExecutor {
     throws Exception {
         jar();
         new UberJarOperation().fromProject(this).execute();
-    }
-
-    @BuildCommand(help = WarHelp.class)
-    public void war()
-    throws Exception {
-        jar();
-        new WarOperation().fromProject(this).execute();
     }
 
     @BuildCommand(help = RunHelp.class)
@@ -180,6 +170,15 @@ public class Project extends BuildExecutor {
         return result;
     }
 
+    @SafeVarargs
+    public static <E> List<E> combineLists(List<E>... lists) {
+        var result = new ArrayList<E>();
+        for (var list : lists) {
+            result.addAll(list);
+        }
+        return result;
+    }
+
     /*
      * Project directories
      */
@@ -206,10 +205,6 @@ public class Project extends BuildExecutor {
 
     public File srcMainResourcesTemplatesDirectory() {
         return Objects.requireNonNullElseGet(srcMainResourcesTemplatesDirectory, () -> new File(srcMainResourcesDirectory(), "templates"));
-    }
-
-    public File srcMainWebappDirectory() {
-        return Objects.requireNonNullElseGet(srcMainWebappDirectory, () -> new File(srcMainDirectory(), "webapp"));
     }
 
     public File srcProjectDirectory() {
@@ -242,10 +237,6 @@ public class Project extends BuildExecutor {
 
     public File libRuntimeDirectory() {
         return Objects.requireNonNullElseGet(libRuntimeDirectory, () -> new File(libDirectory(), "runtime"));
-    }
-
-    public File libStandaloneDirectory() {
-        return Objects.requireNonNullElseGet(libStandaloneDirectory, () -> new File(libDirectory(), "standalone"));
     }
 
     public File libTestDirectory() {
@@ -284,7 +275,6 @@ public class Project extends BuildExecutor {
         libCompileDirectory().mkdirs();
         libProjectDirectory().mkdirs();
         libRuntimeDirectory().mkdirs();
-        libStandaloneDirectory().mkdirs();
         libTestDirectory().mkdirs();
     }
 
@@ -390,15 +380,12 @@ public class Project extends BuildExecutor {
         return Objects.requireNonNullElseGet(uberJarFileName, () -> archiveBaseName() + "-" + version() + "-uber.jar");
     }
 
-    public String warFileName() {
-        return Objects.requireNonNullElseGet(warFileName, () -> archiveBaseName() + "-" + version() + ".war");
-    }
-
     /*
      * File collections
      */
 
-    private static final Pattern JAVA_FILE_PATTERN = Pattern.compile("^.*\\.java$");
+    public static final Pattern JAVA_FILE_PATTERN = Pattern.compile("^.*\\.java$");
+    public static final Pattern JAR_FILE_PATTERN = Pattern.compile("^.*\\.jar$");
 
     public List<File> mainSourceFiles() {
         // get all the main java sources
@@ -418,8 +405,6 @@ public class Project extends BuildExecutor {
      * Project classpaths
      */
 
-    private static final Pattern JAR_FILE_PATTERN = Pattern.compile("^.*\\.jar$");
-
     public List<File> compileClasspathJars() {
         // detect the jar files in the compile lib directory
         var dir_abs = libCompileDirectory().getAbsoluteFile();
@@ -435,15 +420,6 @@ public class Project extends BuildExecutor {
         var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
 
         // build the runtime classpath
-        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
-    }
-
-    public List<File> standaloneClasspathJars() {
-        // detect the jar files in the standalone lib directory
-        var dir_abs = libStandaloneDirectory().getAbsoluteFile();
-        var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
-
-        // build the standalone classpath
         return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
     }
 
@@ -467,21 +443,17 @@ public class Project extends BuildExecutor {
     }
 
     public List<String> runClasspath() {
-        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars());
+        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars());
         paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
         return paths;
     }
 
     public List<String> testClasspath() {
-        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars(), testClasspathJars());
+        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), testClasspathJars());
         paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
         paths.add(buildTestDirectory().getAbsolutePath());
         return paths;
-    }
-
-    public void start(String[] args) {
-        processArguments(args);
     }
 }
