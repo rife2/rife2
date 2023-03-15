@@ -85,6 +85,10 @@ public class CompileOperation {
      */
     public void executeBuildSources(List<String> classpath, List<File> sources, File destination)
     throws IOException {
+        if (sources.isEmpty()) {
+            return;
+        }
+
         var compiler = ToolProvider.getSystemJavaCompiler();
         try (var file_manager = compiler.getStandardFileManager(null, null, null)) {
             var compilation_units = file_manager.getJavaFileObjectsFromFiles(sources);
