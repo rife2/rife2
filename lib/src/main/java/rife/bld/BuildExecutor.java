@@ -97,7 +97,7 @@ public class BuildExecutor {
                 klass = klass.getSuperclass();
             }
 
-            buildCommands_ = Collections.unmodifiableMap(build_commands);
+            buildCommands_ = build_commands;
         }
 
         return buildCommands_;
