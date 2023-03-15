@@ -109,9 +109,9 @@ public class TestDownloadOperation {
 
             assertEquals("""
                     /lib
+                    /lib/bld
                     /lib/compile
                     /lib/compile/commons-lang3-3.12.0.jar
-                    /lib/project
                     /lib/runtime
                     /lib/runtime/commons-collections4-4.4.jar
                     /lib/standalone
@@ -123,12 +123,12 @@ public class TestDownloadOperation {
                     /lib/test/httpcore5-h2-5.2.jar
                     /lib/test/slf4j-api-1.7.36.jar
                     /src
+                    /src/bld
+                    /src/bld/java
                     /src/main
                     /src/main/java
                     /src/main/resources
                     /src/main/resources/templates
-                    /src/project
-                    /src/project/java
                     /src/test
                     /src/test/java""",
                 Files.walk(Path.of(tmp.getAbsolutePath()))

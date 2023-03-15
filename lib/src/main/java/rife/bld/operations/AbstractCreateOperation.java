@@ -33,8 +33,8 @@ abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T, P>, 
     String projectMainUberName_;
     String projectTestName_;
 
-    File javaPackageDirectory_;
-    File projectPackageDirectory_;
+    File bldPackageDirectory_;
+    File mainPackageDirectory_;
     File testPackageDirectory_;
     File ideaDirectory_;
     File ideaLibrariesDirectory_;
@@ -89,8 +89,8 @@ abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T, P>, 
         ideaRunConfigurationsDirectory_ = new File(ideaDirectory_, "runConfigurations");
 
         var package_dir = project_.pkg().replace('.', File.separatorChar);
-        javaPackageDirectory_ = new File(project_.srcMainJavaDirectory(), package_dir);
-        projectPackageDirectory_ = new File(project_.srcProjectJavaDirectory(), package_dir);
+        bldPackageDirectory_ = new File(project_.srcBldJavaDirectory(), package_dir);
+        mainPackageDirectory_ = new File(project_.srcMainJavaDirectory(), package_dir);
         testPackageDirectory_ = new File(project_.srcTestJavaDirectory(), package_dir);
     }
 
@@ -102,8 +102,8 @@ abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T, P>, 
     public void executeCreateProjectStructure() {
         project_.createProjectStructure();
 
-        javaPackageDirectory_.mkdirs();
-        projectPackageDirectory_.mkdirs();
+        bldPackageDirectory_.mkdirs();
+        mainPackageDirectory_.mkdirs();
         testPackageDirectory_.mkdirs();
 
         ideaDirectory_.mkdirs();
@@ -128,7 +128,7 @@ abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T, P>, 
         var site_template = TemplateFactory.TXT.get(templateBase_ + "project_main");
         site_template.setValue("package", project_.pkg());
         site_template.setValue("projectMain", projectMainName_);
-        var project_main_file = new File(javaPackageDirectory_, projectMainName_ + ".java");
+        var project_main_file = new File(mainPackageDirectory_, projectMainName_ + ".java");
         FileUtils.writeString(site_template.getContent(), project_main_file);
 
         // project test
@@ -164,7 +164,7 @@ abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T, P>, 
             build_template.setValue("name", entry.getKey().name());
             build_template.appendBlock("scopes", "scope");
         }
-        var project_build_file = new File(projectPackageDirectory_, projectBuildName_ + ".java");
+        var project_build_file = new File(bldPackageDirectory_, projectBuildName_ + ".java");
         FileUtils.writeString(build_template.getContent(), project_build_file);
 
         // build shell scripts
@@ -187,20 +187,20 @@ abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T, P>, 
             TemplateFactory.XML.get(templateBase_ + "idea.app_iml").getContent(),
             new File(ideaDirectory_, "app.iml"));
         FileUtils.writeString(
+            TemplateFactory.XML.get(templateBase_ + "idea.bld_iml").getContent(),
+            new File(ideaDirectory_, "bld.iml"));
+        FileUtils.writeString(
             TemplateFactory.XML.get(templateBase_ + "idea.misc").getContent(),
             new File(ideaDirectory_, "misc.xml"));
         FileUtils.writeString(
             TemplateFactory.XML.get(templateBase_ + "idea.modules").getContent(),
             new File(ideaDirectory_, "modules.xml"));
         FileUtils.writeString(
-            TemplateFactory.XML.get(templateBase_ + "idea.project_iml").getContent(),
-            new File(ideaDirectory_, "project.iml"));
+            TemplateFactory.XML.get(templateBase_ + "idea.libraries.bld").getContent(),
+            new File(ideaLibrariesDirectory_, "bld.xml"));
         FileUtils.writeString(
             TemplateFactory.XML.get(templateBase_ + "idea.libraries.compile").getContent(),
             new File(ideaLibrariesDirectory_, "compile.xml"));
-        FileUtils.writeString(
-            TemplateFactory.XML.get(templateBase_ + "idea.libraries.project").getContent(),
-            new File(ideaLibrariesDirectory_, "project.xml"));
         FileUtils.writeString(
             TemplateFactory.XML.get(templateBase_ + "idea.libraries.runtime").getContent(),
             new File(ideaLibrariesDirectory_, "runtime.xml"));

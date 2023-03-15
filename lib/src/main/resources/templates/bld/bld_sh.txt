@@ -31,9 +31,9 @@ join_by () {
 
 # Construct the classpath
 
-project_jars=$(join_by : $(find "lib/compile" "lib/project" -name "*.jar"))
+project_jars=$(join_by : $(find "lib/bld" "lib/compile" -name "*.jar"))
 
-CLASSPATH="${project_jars}:build/project:src/project/java"
+CLASSPATH="${project_jars}:src/bld/java"
 
 set -- \
         -classpath "$CLASSPATH" \

@@ -59,7 +59,7 @@ public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Ope
         main_uber_template.setValue("package", project_.pkg());
         main_uber_template.setValue("projectMain", projectMainName_);
         main_uber_template.setValue("projectMainUber", projectMainUberName_);
-        var project_main_uber_file = new File(javaPackageDirectory_, projectMainUberName_ + ".java");
+        var project_main_uber_file = new File(mainPackageDirectory_, projectMainUberName_ + ".java");
         FileUtils.writeString(main_uber_template.getContent(), project_main_uber_file);
 
         // project template

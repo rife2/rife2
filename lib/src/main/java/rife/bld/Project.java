@@ -37,24 +37,24 @@ public class Project extends BuildExecutor {
     protected String uberJarMainClass = null;
 
     protected File srcDirectory = null;
+    protected File srcBldDirectory = null;
+    protected File srcBldJavaDirectory = null;
     protected File srcMainDirectory = null;
     protected File srcMainJavaDirectory = null;
     protected File srcMainResourcesDirectory = null;
     protected File srcMainResourcesTemplatesDirectory = null;
-    protected File srcProjectDirectory = null;
-    protected File srcProjectJavaDirectory = null;
     protected File srcTestJDirectory = null;
     protected File srcTestJavaDirectory = null;
+    protected File libBldDirectory = null;
     protected File libDirectory = null;
     protected File libCompileDirectory = null;
-    protected File libProjectDirectory = null;
     protected File libRuntimeDirectory = null;
     protected File libStandaloneDirectory = null;
     protected File libTestDirectory = null;
     protected File buildDirectory = null;
+    protected File buildBldDirectory = null;
     protected File buildDistDirectory = null;
     protected File buildMainDirectory = null;
-    protected File buildProjectDirectory = null;
     protected File buildTemplatesDirectory = null;
     protected File buildTestDirectory = null;
 
@@ -192,6 +192,14 @@ public class Project extends BuildExecutor {
         return Objects.requireNonNullElseGet(srcDirectory, () -> new File(workDirectory(), "src"));
     }
 
+    public File srcBldDirectory() {
+        return Objects.requireNonNullElseGet(srcBldDirectory, () -> new File(srcDirectory(), "bld"));
+    }
+
+    public File srcBldJavaDirectory() {
+        return Objects.requireNonNullElseGet(srcBldJavaDirectory, () -> new File(srcBldDirectory(), "java"));
+    }
+
     public File srcMainDirectory() {
         return Objects.requireNonNullElseGet(srcMainDirectory, () -> new File(srcDirectory(), "main"));
     }
@@ -208,14 +216,6 @@ public class Project extends BuildExecutor {
         return Objects.requireNonNullElseGet(srcMainResourcesTemplatesDirectory, () -> new File(srcMainResourcesDirectory(), "templates"));
     }
 
-    public File srcProjectDirectory() {
-        return Objects.requireNonNullElseGet(srcProjectDirectory, () -> new File(srcDirectory(), "project"));
-    }
-
-    public File srcProjectJavaDirectory() {
-        return Objects.requireNonNullElseGet(srcProjectJavaDirectory, () -> new File(srcProjectDirectory(), "java"));
-    }
-
     public File srcTestJDirectory() {
         return Objects.requireNonNullElseGet(srcTestJDirectory, () -> new File(srcDirectory(), "test"));
     }
@@ -228,12 +228,12 @@ public class Project extends BuildExecutor {
         return Objects.requireNonNullElseGet(libDirectory, () -> new File(workDirectory(), "lib"));
     }
 
-    public File libCompileDirectory() {
-        return Objects.requireNonNullElseGet(libCompileDirectory, () -> new File(libDirectory(), "compile"));
+    public File libBldDirectory() {
+        return Objects.requireNonNullElseGet(libBldDirectory, () -> new File(libDirectory(), "bld"));
     }
 
-    public File libProjectDirectory() {
-        return Objects.requireNonNullElseGet(libProjectDirectory, () -> new File(libDirectory(), "project"));
+    public File libCompileDirectory() {
+        return Objects.requireNonNullElseGet(libCompileDirectory, () -> new File(libDirectory(), "compile"));
     }
 
     public File libRuntimeDirectory() {
@@ -252,16 +252,16 @@ public class Project extends BuildExecutor {
         return Objects.requireNonNullElseGet(buildDirectory, () -> new File(workDirectory(), "build"));
     }
 
+    public File buildBldDirectory() {
+        return Objects.requireNonNullElseGet(buildBldDirectory, () -> new File(buildDirectory(), "bld"));
+    }
+
     public File buildDistDirectory() {
         return Objects.requireNonNullElseGet(buildDistDirectory, () -> new File(buildDirectory(), "dist"));
     }
 
     public File buildMainDirectory() {
         return Objects.requireNonNullElseGet(buildMainDirectory, () -> new File(buildDirectory(), "main"));
-    }
-
-    public File buildProjectDirectory() {
-        return Objects.requireNonNullElseGet(buildProjectDirectory, () -> new File(buildDirectory(), "project"));
     }
 
     public File buildTemplatesDirectory() {
@@ -275,10 +275,10 @@ public class Project extends BuildExecutor {
     public void createProjectStructure() {
         srcMainJavaDirectory().mkdirs();
         srcMainResourcesTemplatesDirectory().mkdirs();
-        srcProjectJavaDirectory().mkdirs();
+        srcBldJavaDirectory().mkdirs();
         srcTestJavaDirectory().mkdirs();
         libCompileDirectory().mkdirs();
-        libProjectDirectory().mkdirs();
+        libBldDirectory().mkdirs();
         libRuntimeDirectory().mkdirs();
         libTestDirectory().mkdirs();
         if (libStandaloneDirectory() != null) {
@@ -287,9 +287,9 @@ public class Project extends BuildExecutor {
     }
 
     public void createBuildStructure() {
+        buildBldDirectory().mkdirs();
         buildDistDirectory().mkdirs();
         buildMainDirectory().mkdirs();
-        buildProjectDirectory().mkdirs();
         buildTestDirectory().mkdirs();
     }
 

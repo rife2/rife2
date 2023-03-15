@@ -75,23 +75,23 @@ public class TestCleanOperation {
             project.createBuildStructure();
             assertEquals("""
                     /build
+                    /build/bld
                     /build/dist
                     /build/main
-                    /build/project
                     /build/test
                     /lib
+                    /lib/bld
                     /lib/compile
-                    /lib/project
                     /lib/runtime
                     /lib/standalone
                     /lib/test
                     /src
+                    /src/bld
+                    /src/bld/java
                     /src/main
                     /src/main/java
                     /src/main/resources
                     /src/main/resources/templates
-                    /src/project
-                    /src/project/java
                     /src/test
                     /src/test/java""",
                 Files.walk(Path.of(tmp.getAbsolutePath()))
@@ -104,18 +104,18 @@ public class TestCleanOperation {
             assertEquals("""
                     /build
                     /lib
+                    /lib/bld
                     /lib/compile
-                    /lib/project
                     /lib/runtime
                     /lib/standalone
                     /lib/test
                     /src
+                    /src/bld
+                    /src/bld/java
                     /src/main
                     /src/main/java
                     /src/main/resources
                     /src/main/resources/templates
-                    /src/project
-                    /src/project/java
                     /src/test
                     /src/test/java""",
                 Files.walk(Path.of(tmp.getAbsolutePath()))
