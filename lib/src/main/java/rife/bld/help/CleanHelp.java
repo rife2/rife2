@@ -13,11 +13,11 @@ import rife.tools.StringUtils;
  * @since 1.5
  */
 public class CleanHelp implements CommandHelp {
-    public String getDescription() {
+    public String getSummary() {
         return "Cleans the build files";
     }
 
-    public String getHelp(String topic) {
+    public String getDescription(String topic) {
         return StringUtils.replace("""
             Cleans the build files.
                         

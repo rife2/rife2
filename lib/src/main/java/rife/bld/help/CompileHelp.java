@@ -13,11 +13,11 @@ import rife.tools.StringUtils;
  * @since 1.5
  */
 public class CompileHelp implements CommandHelp {
-    public String getDescription() {
+    public String getSummary() {
         return "Compiles the project";
     }
 
-    public String getHelp(String topic) {
+    public String getDescription(String topic) {
         return StringUtils.replace("""
             Compiles the project.
                         

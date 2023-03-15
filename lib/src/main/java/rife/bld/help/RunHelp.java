@@ -13,11 +13,11 @@ import rife.tools.StringUtils;
  * @since 1.5
  */
 public class RunHelp implements CommandHelp {
-    public String getDescription() {
+    public String getSummary() {
         return "Runs the project";
     }
 
-    public String getHelp(String topic) {
+    public String getDescription(String topic) {
         return StringUtils.replace("""
             Runs the project.
                         

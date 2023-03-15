@@ -13,11 +13,11 @@ import rife.tools.StringUtils;
  * @since 1.5
  */
 public class UberJarHelp implements CommandHelp {
-    public String getDescription() {
+    public String getSummary() {
         return "Creates an UberJar archive for the project";
     }
 
-    public String getHelp(String topic) {
+    public String getDescription(String topic) {
         return StringUtils.replace("""
             Creates an UberJar archive for the project.
             The standard uberjar command will automatically also execute

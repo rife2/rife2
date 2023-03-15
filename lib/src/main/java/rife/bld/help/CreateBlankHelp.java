@@ -13,11 +13,11 @@ import rife.tools.StringUtils;
  * @since 1.5
  */
 public class CreateBlankHelp implements CommandHelp {
-    public String getDescription() {
+    public String getSummary() {
         return "Creates a new blank project";
     }
 
-    public String getHelp(String topic) {
+    public String getDescription(String topic) {
         return StringUtils.replace("""
             Creates a new blank project.
                         

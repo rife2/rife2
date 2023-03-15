@@ -14,20 +14,20 @@ public interface CommandHelp {
     /**
      * Returns a short description about the command.
      *
-     * @return the short description, defaults to {@code ""}
+     * @return the short summary, defaults to {@code ""}
      * @since 1.5
      */
-    default String getDescription() {
+    default String getSummary() {
         return "";
     }
 
     /**
-     * Returns the full help text of a command.
+     * Returns the full help description of a command.
      *
-     * @return the full help text, defaults to {@code ""}
+     * @return the full help description, defaults to {@code ""}
      * @since 1.5
      */
-    default String getHelp(String topic) {
+    default String getDescription(String topic) {
         return "";
     }
 }

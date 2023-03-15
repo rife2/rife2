@@ -13,7 +13,7 @@ import static java.util.Comparator.comparingInt;
 
 public class HelpOperation {
     public static class Help implements CommandHelp {
-        public String getDescription() {
+        public String getSummary() {
             return "Provides help about any of the other commands";
         }
     }
@@ -39,15 +39,11 @@ public class HelpOperation {
         try {
             var commands = executor_.buildCommands();
             if (commands.containsKey(topic)) {
-                var method = commands.get(topic);
-                var annotation = method.getAnnotation(BuildCommand.class);
-                var build_help = annotation.help();
-                if (build_help != CommandHelp.class) {
-                    var help = build_help.getDeclaredConstructor().newInstance().getHelp(topic);
-                    if (!help.isEmpty()) {
-                        System.err.println(help);
-                        print_full_help = false;
-                    }
+                var command = commands.get(topic);
+                var help = command.getHelp().getDescription(topic);
+                if (!help.isEmpty()) {
+                    System.err.println(help);
+                    print_full_help = false;
                 }
             }
         } catch (Exception e) {
@@ -76,16 +72,8 @@ public class HelpOperation {
         for (var command : commands.entrySet()) {
             System.err.print("  ");
             System.err.printf("%-" + command_length + "s", command.getKey());
-            var method = command.getValue();
-            var annotation = method.getAnnotation(BuildCommand.class);
-            var build_help = annotation.help();
-            if (build_help != CommandHelp.class) {
-                try {
-                    System.err.print(build_help.getDeclaredConstructor().newInstance().getDescription());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            var build_help = command.getValue().getHelp();
+            System.err.print(build_help.getSummary());
             System.err.println();
         }
     }

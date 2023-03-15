@@ -13,11 +13,11 @@ import rife.tools.StringUtils;
  * @since 1.5
  */
 public class DownloadHelp implements CommandHelp {
-    public String getDescription() {
+    public String getSummary() {
         return "Downloads all dependencies of the project";
     }
 
-    public String getHelp(String topic) {
+    public String getDescription(String topic) {
         return StringUtils.replace("""
             Downloads all dependencies of the project
                         

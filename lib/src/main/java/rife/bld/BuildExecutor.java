@@ -7,20 +7,19 @@ package rife.bld;
 import rife.bld.operations.*;
 import rife.tools.ExceptionUtils;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 
 /**
  * Base class that executes build commands from a list of arguments.
  *
- * @see BuildCommand
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @see BuildCommand
+ * @see CommandDefinition
  * @since 1.5
  */
 public class BuildExecutor {
     private List<String> arguments_ = Collections.emptyList();
-    private Map<String, Method> buildCommands_ = null;
+    private Map<String, CommandDefinition> buildCommands_ = null;
 
     /**
      * Execute the build commands from the provided arguments.
@@ -73,28 +72,41 @@ public class BuildExecutor {
      * @see BuildCommand
      * @since 1.5
      */
-    public Map<String, Method> buildCommands() {
+    public Map<String, CommandDefinition> buildCommands() {
         if (buildCommands_ == null) {
-            var build_commands = new TreeMap<String, Method>();
+            var build_commands = new TreeMap<String, CommandDefinition>();
 
             Class<?> klass = getClass();
-            while (klass != null) {
-                for (var method : klass.getDeclaredMethods()) {
-                    if (method.getParameters().length == 0 && method.isAnnotationPresent(BuildCommand.class)) {
-                        method.setAccessible(true);
 
-                        var name = method.getName();
+            try {
+                while (klass != null) {
+                    for (var method : klass.getDeclaredMethods()) {
+                        if (method.getParameters().length == 0 && method.isAnnotationPresent(BuildCommand.class)) {
+                            method.setAccessible(true);
 
-                        var annotation_name = method.getAnnotation(BuildCommand.class).value();
-                        if (annotation_name != null && !annotation_name.isEmpty()) {
-                            name = annotation_name;
+                            var name = method.getName();
+
+                            var annotation = method.getAnnotation(BuildCommand.class);
+
+                            var annotation_name = annotation.value();
+                            if (annotation_name != null && !annotation_name.isEmpty()) {
+                                name = annotation_name;
+                            }
+
+                            var build_help = annotation.help();
+                            CommandHelp command_help = null;
+                            if (build_help != null) {
+                                build_help.getDeclaredConstructor().newInstance();
+                            }
+
+                            build_commands.put(name, new CommandAnnotated(method, command_help));
                         }
-
-                        build_commands.put(name, method);
                     }
-                }
 
-                klass = klass.getSuperclass();
+                    klass = klass.getSuperclass();
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
 
             buildCommands_ = build_commands;
@@ -115,15 +127,9 @@ public class BuildExecutor {
      */
     public boolean executeCommand(String command)
     throws Throwable {
-        var method = buildCommands().get(command);
-        if (method != null) {
-            try {
-                method.invoke(this);
-            } catch (IllegalAccessException | IllegalArgumentException e) {
-                throw e;
-            } catch (InvocationTargetException e) {
-                throw e.getCause();
-            }
+        var definition = buildCommands().get(command);
+        if (definition != null) {
+            definition.execute();
         } else {
             System.err.println("ERROR: unknown command '" + command + "'");
             System.err.println();
