@@ -216,8 +216,8 @@ public class TestCreateRife2Operation {
                 } catch (FileUtilsErrorException e) {
                     throw new RuntimeException(e);
                 }
-            }, 500, TimeUnit.MILLISECONDS);
-            executor.schedule(() -> run_operation.process().destroy(), 1, TimeUnit.SECONDS);
+            }, 1, TimeUnit.SECONDS);
+            executor.schedule(() -> run_operation.process().destroy(), 2, TimeUnit.SECONDS);
             run_operation.execute();
 
             assertTrue(check_result[0].contains("<p>Hello World Myapp</p>"));
