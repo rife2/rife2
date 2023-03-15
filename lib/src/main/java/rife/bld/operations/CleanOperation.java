@@ -65,7 +65,7 @@ public class CleanOperation {
      * A copy will be created to allow this list to be independently modifiable.
      *
      * @param directories the directories to clean
-     * @return this {@code CleanOperation} instance
+     * @return this operation instance
      * @since 1.5
      */
     public CleanOperation directories(List<File> directories) {

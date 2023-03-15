@@ -146,7 +146,7 @@ public class CompileOperation {
      * Provides the main build destination directory.
      *
      * @param directory the directory to use for the main build destination
-     * @return this {@code CompileOperation} instance
+     * @return this operation instance
      * @since 1.5
      */
     public CompileOperation buildMainDirectory(File directory) {
@@ -158,7 +158,7 @@ public class CompileOperation {
      * Provides the test build destination directory.
      *
      * @param directory the directory to use for the test build destination
-     * @return this {@code CompileOperation} instance
+     * @return this operation instance
      * @since 1.5
      */
     public CompileOperation buildTestDirectory(File directory) {
@@ -172,7 +172,7 @@ public class CompileOperation {
      * A copy will be created to allow this list to be independently modifiable.
      *
      * @param classpath the list of classpath entries
-     * @return this {@code CompileOperation} instance
+     * @return this operation instance
      * @since 1.5
      */
     public CompileOperation compileMainClasspath(List<String> classpath) {
@@ -186,7 +186,7 @@ public class CompileOperation {
      * A copy will be created to allow this list to be independently modifiable.
      *
      * @param classpath the list of classpath entries
-     * @return this {@code CompileOperation} instance
+     * @return this operation instance
      * @since 1.5
      */
     public CompileOperation compileTestClasspath(List<String> classpath) {
@@ -200,7 +200,7 @@ public class CompileOperation {
      * A copy will be created to allow this list to be independently modifiable.
      *
      * @param files the list of main files
-     * @return this {@code CompileOperation} instance
+     * @return this operation instance
      * @since 1.5
      */
     public CompileOperation mainSourceFiles(List<File> files) {
@@ -214,7 +214,7 @@ public class CompileOperation {
      * A copy will be created to allow this list to be independently modifiable.
      *
      * @param files the list of test files
-     * @return this {@code CompileOperation} instance
+     * @return this operation instance
      * @since 1.5
      */
     public CompileOperation testSourceFiles(List<File> files) {
@@ -228,7 +228,7 @@ public class CompileOperation {
      * A copy will be created to allow this list to be independently modifiable.
      *
      * @param options the list of compilation options
-     * @return this {@code CompileOperation} instance
+     * @return this operation instance
      * @since 1.5
      */
     public CompileOperation compileOptions(List<String> options) {

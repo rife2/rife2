@@ -49,6 +49,7 @@ public class Project extends BuildExecutor {
     protected File libCompileDirectory = null;
     protected File libProjectDirectory = null;
     protected File libRuntimeDirectory = null;
+    protected File libStandaloneDirectory = null;
     protected File libTestDirectory = null;
     protected File buildDirectory = null;
     protected File buildDistDirectory = null;
@@ -239,6 +240,10 @@ public class Project extends BuildExecutor {
         return Objects.requireNonNullElseGet(libRuntimeDirectory, () -> new File(libDirectory(), "runtime"));
     }
 
+    public File libStandaloneDirectory() {
+        return null;
+    }
+
     public File libTestDirectory() {
         return Objects.requireNonNullElseGet(libTestDirectory, () -> new File(libDirectory(), "test"));
     }
@@ -276,6 +281,9 @@ public class Project extends BuildExecutor {
         libProjectDirectory().mkdirs();
         libRuntimeDirectory().mkdirs();
         libTestDirectory().mkdirs();
+        if (libStandaloneDirectory() != null) {
+            libStandaloneDirectory().mkdirs();
+        }
     }
 
     public void createBuildStructure() {
@@ -423,6 +431,19 @@ public class Project extends BuildExecutor {
         return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
     }
 
+    public List<File> standaloneClasspathJars() {
+        if (libStandaloneDirectory() == null) {
+            return Collections.emptyList();
+        }
+
+        // detect the jar files in the standalone lib directory
+        var dir_abs = libStandaloneDirectory().getAbsoluteFile();
+        var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
+
+        // build the standalone classpath
+        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
+    }
+
     public List<File> testClasspathJars() {
         // detect the jar files in the test lib directory
         var dir_abs = libTestDirectory().getAbsoluteFile();
@@ -443,14 +464,14 @@ public class Project extends BuildExecutor {
     }
 
     public List<String> runClasspath() {
-        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars());
+        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars());
         paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
         return paths;
     }
 
     public List<String> testClasspath() {
-        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), testClasspathJars());
+        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars(), testClasspathJars());
         paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
         paths.add(buildTestDirectory().getAbsolutePath());
