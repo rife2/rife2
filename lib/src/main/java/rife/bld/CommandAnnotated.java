@@ -8,10 +8,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 class CommandAnnotated implements CommandDefinition {
+    private final BuildExecutor executor_;
     private final Method method_;
     private final CommandHelp help_;
 
-    CommandAnnotated(Method method, CommandHelp help) {
+    CommandAnnotated(BuildExecutor executor, Method method, CommandHelp help) {
+        executor_ = executor;
         method_ = method;
         if (help == null) {
             help = new CommandHelp() {};
@@ -22,7 +24,7 @@ class CommandAnnotated implements CommandDefinition {
     public void execute()
     throws Throwable {
         try {
-            method_.invoke(this);
+            method_.invoke(executor_);
         } catch (IllegalAccessException | IllegalArgumentException e) {
             throw e;
         } catch (InvocationTargetException e) {

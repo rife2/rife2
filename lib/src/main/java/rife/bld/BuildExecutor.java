@@ -96,10 +96,10 @@ public class BuildExecutor {
                             var build_help = annotation.help();
                             CommandHelp command_help = null;
                             if (build_help != null) {
-                                build_help.getDeclaredConstructor().newInstance();
+                                command_help = build_help.getDeclaredConstructor().newInstance();
                             }
 
-                            build_commands.put(name, new CommandAnnotated(method, command_help));
+                            build_commands.put(name, new CommandAnnotated(this, method, command_help));
                         }
                     }
 
