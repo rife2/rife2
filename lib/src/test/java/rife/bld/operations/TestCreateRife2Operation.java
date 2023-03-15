@@ -293,17 +293,14 @@ public class TestCreateRife2Operation {
                     .collect(Collectors.joining("\n")));
 
             var compile_operation = new CompileOperation() {
-                public void executeOutputDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics) {
+                public void executeProcessDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics) {
                     // don't output errors
                 }
             };
             compile_operation.fromProject(create_operation.project());
             compile_operation.execute();
             var diagnostics = compile_operation.diagnostics();
-            assertEquals(9, diagnostics.size());
-            for (var diagnostic : diagnostics) {
-                assertEquals("/yourthing/src/test/java/org/stuff/YourthingTest.java", diagnostic.getSource().toUri().getPath().substring(tmp.getAbsolutePath().length()));
-            }
+            assertEquals(16, diagnostics.size());
         } finally {
             FileUtils.deleteDirectory(tmp);
         }

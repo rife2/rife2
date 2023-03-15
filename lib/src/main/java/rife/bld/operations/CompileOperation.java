@@ -11,6 +11,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Compiles main and test sources in the relevant build directories.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
 public class CompileOperation {
     private File buildMainDirectory_;
     private File buildTestDirectory_;
@@ -19,8 +25,13 @@ public class CompileOperation {
     private List<File> mainSourceFiles_ = new ArrayList<>();
     private List<File> testSourceFiles_ = new ArrayList<>();
     private List<String> compileOptions_ = new ArrayList<>();
-    private List<Diagnostic<? extends JavaFileObject>> diagnostics_ = Collections.emptyList();
+    private final List<Diagnostic<? extends JavaFileObject>> diagnostics_ = new ArrayList<>();
 
+    /**
+     * Performs the compile operation.
+     *
+     * @since 1.5
+     */
     public void execute()
     throws Exception {
         executeCreateBuildDirectories();
@@ -28,53 +39,95 @@ public class CompileOperation {
         executeBuildTestSources();
     }
 
+    /**
+     * Part of the {@link #execute} operation, creates the build directories.
+     *
+     * @since 1.5
+     */
     public void executeCreateBuildDirectories() {
         buildMainDirectory().mkdirs();
         buildTestDirectory().mkdirs();
     }
 
+    /**
+     * Part of the {@link #execute} operation, builds the main sources.
+     *
+     * @since 1.5
+     */
     public void executeBuildMainSources()
     throws IOException {
         executeBuildSources(
-            Project.joinPaths(compileMainClasspath()),
+            compileMainClasspath(),
             mainSourceFiles(),
-            buildMainDirectory().getAbsolutePath());
+            buildMainDirectory());
     }
 
+    /**
+     * Part of the {@link #execute} operation, builds the test sources.
+     *
+     * @since 1.5
+     */
     public void executeBuildTestSources()
     throws IOException {
         executeBuildSources(
-            Project.joinPaths(compileTestClasspath()),
+            compileTestClasspath(),
             testSourceFiles(),
-            buildTestDirectory().getAbsolutePath());
+            buildTestDirectory());
     }
 
-    public void executeBuildSources(String classpath, List<File> sources, String destination)
+    /**
+     * Part of the {@link #execute} operation, build sources to a destination.
+     *
+     * @param classpath the classpath list used for the compilation
+     * @param sources the source files to compile
+     * @param destination the destination directory
+     * @since 1.5
+     */
+    public void executeBuildSources(List<String> classpath, List<File> sources, File destination)
     throws IOException {
         var compiler = ToolProvider.getSystemJavaCompiler();
         try (var file_manager = compiler.getStandardFileManager(null, null, null)) {
             var compilation_units = file_manager.getJavaFileObjectsFromFiles(sources);
             var diagnostics = new DiagnosticCollector<JavaFileObject>();
-            var options = new ArrayList<>(List.of("-d", destination, "-cp", classpath));
+            var options = new ArrayList<>(List.of("-d", destination.getAbsolutePath(), "-cp", Project.joinPaths(classpath)));
             options.addAll(compileOptions());
             var compilation_task = compiler.getTask(null, file_manager, diagnostics, options, null, compilation_units);
             if (!compilation_task.call()) {
-                diagnostics_ = diagnostics.getDiagnostics();
-                executeOutputDiagnostics(diagnostics);
+                diagnostics_.addAll(diagnostics.getDiagnostics());
+                executeProcessDiagnostics(diagnostics);
             }
         }
     }
 
-    public void executeOutputDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics) {
+    /**
+     * Part of the {@link #execute} operation, processes the compilation diagnostics.
+     *
+     * @param diagnostics the diagnostics to process
+     * @since 1.5
+     */
+    public void executeProcessDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics) {
         for (var diagnostic : diagnostics.getDiagnostics()) {
             System.err.print(executeFormatDiagnostic(diagnostic));
         }
     }
 
+    /**
+     * Part of the {@link #execute} operation, format a single diagnostic.
+     *
+     * @param diagnostic the diagnostic to format
+     * @return a string representation of the diagnostic
+     * @since 1.5
+     */
     public String executeFormatDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic) {
         return diagnostic.toString() + System.lineSeparator();
     }
 
+    /**
+     * Configures a compile operation from a {@link Project}.
+     *
+     * @param project the project to configure the compile operation from
+     * @since 1.5
+     */
     public CompileOperation fromProject(Project project) {
         return buildMainDirectory(project.buildMainDirectory())
             .buildTestDirectory(project.buildTestDirectory())
@@ -85,69 +138,186 @@ public class CompileOperation {
             .compileOptions(project.compileJavacOptions());
     }
 
+    /**
+     * Provides the main build destination directory.
+     *
+     * @param directory the directory to use for the main build destination
+     * @return this {@code CompileOperation} instance
+     * @since 1.5
+     */
     public CompileOperation buildMainDirectory(File directory) {
         buildMainDirectory_ = directory;
         return this;
     }
 
+    /**
+     * Provides the test build destination directory.
+     *
+     * @param directory the directory to use for the test build destination
+     * @return this {@code CompileOperation} instance
+     * @since 1.5
+     */
     public CompileOperation buildTestDirectory(File directory) {
         buildTestDirectory_ = directory;
         return this;
     }
 
+    /**
+     * Provides a list of entries for the main compilation classpath.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param classpath the list of classpath entries
+     * @return this {@code CompileOperation} instance
+     * @since 1.5
+     */
     public CompileOperation compileMainClasspath(List<String> classpath) {
         compileMainClasspath_ = new ArrayList<>(classpath);
         return this;
     }
 
+    /**
+     * Provides a list of entries for the test compilation classpath.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param classpath the list of classpath entries
+     * @return this {@code CompileOperation} instance
+     * @since 1.5
+     */
     public CompileOperation compileTestClasspath(List<String> classpath) {
         compileTestClasspath_ = new ArrayList<>(classpath);
         return this;
     }
 
+    /**
+     * Provides the list of main files that should be compiled.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param files the list of main files
+     * @return this {@code CompileOperation} instance
+     * @since 1.5
+     */
     public CompileOperation mainSourceFiles(List<File> files) {
         mainSourceFiles_ = new ArrayList<>(files);
         return this;
     }
 
+    /**
+     * Provides the list of test files that should be compiled.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param files the list of test files
+     * @return this {@code CompileOperation} instance
+     * @since 1.5
+     */
     public CompileOperation testSourceFiles(List<File> files) {
         testSourceFiles_ = new ArrayList<>(files);
         return this;
     }
 
+    /**
+     * Provides a list of compilation options to provide to the compiler.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param options the list of compilation options
+     * @return this {@code CompileOperation} instance
+     * @since 1.5
+     */
     public CompileOperation compileOptions(List<String> options) {
         compileOptions_ = new ArrayList<>(options);
         return this;
     }
 
+    /**
+     * Retrieves the main build destination directory.
+     *
+     * @return the main build destination
+     * @since 1.5
+     */
     public File buildMainDirectory() {
         return buildMainDirectory_;
     }
 
+    /**
+     * Retrieves the test build destination directory.
+     *
+     * @return the test build destination
+     * @since 1.5
+     */
     public File buildTestDirectory() {
         return buildTestDirectory_;
     }
 
+    /**
+     * Retrieves the list of entries for the main compilation classpath.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the main compilation classpath list
+     * @since 1.5
+     */
     public List<String> compileMainClasspath() {
         return compileMainClasspath_;
     }
 
+    /**
+     * Retrieves the list of entries for the test compilation classpath.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the test compilation classpath list
+     * @since 1.5
+     */
     public List<String> compileTestClasspath() {
         return compileTestClasspath_;
     }
 
+    /**
+     * Retrieves the list of main files that should be compiled.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the list of main files to compile
+     * @since 1.5
+     */
     public List<File> mainSourceFiles() {
         return mainSourceFiles_;
     }
 
+    /**
+     * Retrieves the list of test files that should be compiled.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the list of test files to compile
+     * @since 1.5
+     */
     public List<File> testSourceFiles() {
         return testSourceFiles_;
     }
 
+    /**
+     * Retrieves the list of compilation options for the compiler.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the list of compiler options
+     * @since 1.5
+     */
     public List<String> compileOptions() {
         return compileOptions_;
     }
 
+    /**
+     * Retrieves the list of diagnostics resulting from the compilation.
+     *
+     * @return the list of compilation diagnostics
+     * @since 1.5
+     */
     public List<Diagnostic<? extends JavaFileObject>> diagnostics() {
         return diagnostics_;
     }
