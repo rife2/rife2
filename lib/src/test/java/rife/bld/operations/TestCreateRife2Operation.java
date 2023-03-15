@@ -32,6 +32,31 @@ public class TestCreateRife2Operation {
     }
 
     @Test
+    void testPopulation()
+    throws Exception {
+        var workDirectory = Files.createTempDirectory("test").toFile();
+        try {
+            var downloadDependencies = true;
+            var packageName = "packageName";
+            var projectName = "projectName";
+
+            var operation = new CreateRife2Operation();
+            operation
+                .workDirectory(workDirectory)
+                .downloadDependencies(downloadDependencies)
+                .packageName(packageName)
+                .projectName(projectName);
+
+            assertEquals(workDirectory, operation.workDirectory());
+            assertEquals(downloadDependencies, operation.downloadDependencies());
+            assertEquals(packageName, operation.packageName());
+            assertEquals(projectName, operation.projectName());
+        } finally {
+            FileUtils.deleteDirectory(workDirectory);
+        }
+    }
+
+    @Test
     void testExecute()
     throws Exception {
         var tmp = Files.createTempDirectory("test").toFile();

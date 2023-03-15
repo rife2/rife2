@@ -10,6 +10,7 @@ import rife.tools.exceptions.FileUtilsErrorException;
 
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
+import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,6 +31,31 @@ public class TestCreateBlankOperation {
         assertFalse(operation.downloadDependencies());
         assertNull(operation.packageName());
         assertNull(operation.projectName());
+    }
+
+    @Test
+    void testPopulation()
+    throws Exception {
+        var workDirectory = Files.createTempDirectory("test").toFile();
+        try {
+            var downloadDependencies = true;
+            var packageName = "packageName";
+            var projectName = "projectName";
+
+            var operation = new CreateBlankOperation();
+            operation
+                .workDirectory(workDirectory)
+                .downloadDependencies(downloadDependencies)
+                .packageName(packageName)
+                .projectName(projectName);
+
+            assertEquals(workDirectory, operation.workDirectory());
+            assertEquals(downloadDependencies, operation.downloadDependencies());
+            assertEquals(packageName, operation.packageName());
+            assertEquals(projectName, operation.projectName());
+        } finally {
+            FileUtils.deleteDirectory(workDirectory);
+        }
     }
 
     @Test

@@ -34,6 +34,71 @@ public class TestCompileOperation {
     }
 
     @Test
+    void testPopulation() {
+        var buildMainDirectory = new File("buildMainDirectory");
+        var buildTestDirectory = new File("buildTestDirectory");
+        var compileMainClasspath1 = "compileMainClasspath1";
+        var compileMainClasspath2 = "compileMainClasspath2";
+        var compileTestClasspath1 = "compileTestClasspath1";
+        var compileTestClasspath2 = "compileTestClasspath2";
+        var mainSourceFile1 = new File("mainSourceFiles1");
+        var mainSourceFile2 = new File("mainSourceFiles2");
+        var testSourceFile1 = new File("testSourceFiles1");
+        var testSourceFile2 = new File("testSourceFiles2");
+        var compileOption1 = "compileOption1";
+        var compileOption2 = "compileOption2";
+
+        var operation1 = new CompileOperation()
+            .buildMainDirectory(buildMainDirectory)
+            .buildTestDirectory(buildTestDirectory)
+            .compileMainClasspath(List.of(compileMainClasspath1, compileMainClasspath2))
+            .compileTestClasspath(List.of(compileTestClasspath1, compileTestClasspath2))
+            .mainSourceFiles(List.of(mainSourceFile1, mainSourceFile2))
+            .testSourceFiles(List.of(testSourceFile1, testSourceFile2))
+            .compileOptions(List.of(compileOption1, compileOption2));
+
+        assertEquals(buildMainDirectory, operation1.buildMainDirectory());
+        assertEquals(buildTestDirectory, operation1.buildTestDirectory());
+        assertTrue(operation1.compileMainClasspath().contains(compileMainClasspath1));
+        assertTrue(operation1.compileMainClasspath().contains(compileMainClasspath2));
+        assertTrue(operation1.compileTestClasspath().contains(compileTestClasspath1));
+        assertTrue(operation1.compileTestClasspath().contains(compileTestClasspath2));
+        assertTrue(operation1.mainSourceFiles().contains(mainSourceFile1));
+        assertTrue(operation1.mainSourceFiles().contains(mainSourceFile2));
+        assertTrue(operation1.testSourceFiles().contains(testSourceFile1));
+        assertTrue(operation1.testSourceFiles().contains(testSourceFile2));
+        assertTrue(operation1.compileOptions().contains(compileOption1));
+        assertTrue(operation1.compileOptions().contains(compileOption2));
+
+        var operation2 = new CompileOperation()
+            .buildMainDirectory(buildMainDirectory)
+            .buildTestDirectory(buildTestDirectory);
+        operation2.compileMainClasspath().add(compileMainClasspath1);
+        operation2.compileMainClasspath().add(compileMainClasspath2);
+        operation2.compileTestClasspath().add(compileTestClasspath1);
+        operation2.compileTestClasspath().add(compileTestClasspath2);
+        operation2.mainSourceFiles().add(mainSourceFile1);
+        operation2.mainSourceFiles().add(mainSourceFile2);
+        operation2.testSourceFiles().add(testSourceFile1);
+        operation2.testSourceFiles().add(testSourceFile2);
+        operation2.compileOptions().add(compileOption1);
+        operation2.compileOptions().add(compileOption2);
+
+        assertEquals(buildMainDirectory, operation2.buildMainDirectory());
+        assertEquals(buildTestDirectory, operation2.buildTestDirectory());
+        assertTrue(operation2.compileMainClasspath().contains(compileMainClasspath1));
+        assertTrue(operation2.compileMainClasspath().contains(compileMainClasspath2));
+        assertTrue(operation2.compileTestClasspath().contains(compileTestClasspath1));
+        assertTrue(operation2.compileTestClasspath().contains(compileTestClasspath2));
+        assertTrue(operation2.mainSourceFiles().contains(mainSourceFile1));
+        assertTrue(operation2.mainSourceFiles().contains(mainSourceFile2));
+        assertTrue(operation2.testSourceFiles().contains(testSourceFile1));
+        assertTrue(operation2.testSourceFiles().contains(testSourceFile2));
+        assertTrue(operation2.compileOptions().contains(compileOption1));
+        assertTrue(operation2.compileOptions().contains(compileOption2));
+    }
+
+    @Test
     void testExecute()
     throws Exception {
         var tmp = Files.createTempDirectory("test").toFile();

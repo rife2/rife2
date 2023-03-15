@@ -24,6 +24,29 @@ public class TestCleanOperation {
     }
 
     @Test
+    void testPopulation() {
+        var dir1 = new File("dir1");
+        var dir2 = new File("dir2");
+        var dir3 = new File("dir3");
+
+        var operation1 = new CleanOperation();
+        operation1.directories(List.of(dir1, dir2, dir3));
+        assertFalse(operation1.directories().isEmpty());
+        assertTrue(operation1.directories().contains(dir1));
+        assertTrue(operation1.directories().contains(dir2));
+        assertTrue(operation1.directories().contains(dir3));
+
+        var operation2 = new CleanOperation();
+        operation2.directories().add(dir1);
+        operation2.directories().add(dir2);
+        operation2.directories().add(dir3);
+        assertFalse(operation2.directories().isEmpty());
+        assertTrue(operation2.directories().contains(dir1));
+        assertTrue(operation2.directories().contains(dir2));
+        assertTrue(operation2.directories().contains(dir3));
+    }
+
+    @Test
     void testExecute()
     throws Exception {
         var tmp = Files.createTempDirectory("test").toFile();

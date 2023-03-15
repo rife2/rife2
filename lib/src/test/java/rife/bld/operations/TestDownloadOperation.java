@@ -30,6 +30,54 @@ public class TestDownloadOperation {
     }
 
     @Test
+    void testPopulation() {
+        var repository1 = new Repository("repository1");
+        var repository2 = new Repository("repository2");
+        var dependency1 = new Dependency("group1", "artifact1");
+        var dependency2 = new Dependency("group2", "artifact2");
+        var dir1 = new File("dir1");
+        var dir2 = new File("dir2");
+        var dir3 = new File("dir3");
+        var dir4 = new File("dir4");
+
+        var operation1 = new DownloadOperation()
+            .repositories(List.of(repository1, repository2))
+            .libCompileDirectory(dir1)
+            .libRuntimeDirectory(dir2)
+            .libStandaloneDirectory(dir3)
+            .libTestDirectory(dir4);
+        var dependency_scopes = new DependencyScopes();
+        dependency_scopes.scope(Scope.compile).include(dependency1).include(dependency2);
+        operation1.dependencies(dependency_scopes);
+        assertTrue(operation1.repositories().contains(repository1));
+        assertTrue(operation1.repositories().contains(repository2));
+        assertTrue(operation1.dependencies().scope(Scope.compile).contains(dependency1));
+        assertTrue(operation1.dependencies().scope(Scope.compile).contains(dependency2));
+        assertEquals(dir1, operation1.libCompileDirectory());
+        assertEquals(dir2, operation1.libRuntimeDirectory());
+        assertEquals(dir3, operation1.libStandaloneDirectory());
+        assertEquals(dir4, operation1.libTestDirectory());
+
+        var operation2 = new DownloadOperation()
+            .libCompileDirectory(dir1)
+            .libRuntimeDirectory(dir2)
+            .libStandaloneDirectory(dir3)
+            .libTestDirectory(dir4);
+        operation2.repositories().add(repository1);
+        operation2.repositories().add(repository2);
+        operation2.dependencies().scope(Scope.compile).include(dependency1).include(dependency2);
+        operation2.dependencies(dependency_scopes);
+        assertTrue(operation2.repositories().contains(repository1));
+        assertTrue(operation2.repositories().contains(repository2));
+        assertTrue(operation2.dependencies().scope(Scope.compile).contains(dependency1));
+        assertTrue(operation2.dependencies().scope(Scope.compile).contains(dependency2));
+        assertEquals(dir1, operation2.libCompileDirectory());
+        assertEquals(dir2, operation2.libRuntimeDirectory());
+        assertEquals(dir3, operation2.libStandaloneDirectory());
+        assertEquals(dir4, operation2.libTestDirectory());
+    }
+
+    @Test
     void testExecution()
     throws Exception {
         var tmp = Files.createTempDirectory("test").toFile();
