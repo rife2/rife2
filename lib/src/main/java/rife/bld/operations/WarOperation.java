@@ -46,7 +46,9 @@ public class WarOperation {
 
     public void executeCopyWebappDirectory(File destination)
     throws FileUtilsErrorException {
-        FileUtils.copyDirectory(webappDirectory(), destination);
+        if (webappDirectory() != null && webappDirectory().exists()) {
+            FileUtils.copyDirectory(webappDirectory(), destination);
+        }
     }
 
     public void executeCopyWebInfLibJars(File webInfDirectory)

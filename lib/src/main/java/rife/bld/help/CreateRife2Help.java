@@ -12,7 +12,7 @@ import rife.tools.StringUtils;
  *
  * @since 1.5
  */
-public class CreateHelp implements CommandHelp {
+public class CreateRife2Help implements CommandHelp {
     public String getDescription() {
         return "Creates a new RIFE2 project";
     }

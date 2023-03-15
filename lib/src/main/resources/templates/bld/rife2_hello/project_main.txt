@@ -2,7 +2,7 @@ package {{v package/}};
 
 import rife.engine.*;
 
-public class {{v projectSite/}} extends Site {
+public class {{v projectMain/}} extends Site {
     public void setup() {
         var hello = get("/hello", c -> c.print(c.template("hello")));
         get("/", c -> c.redirect(hello));
@@ -11,6 +11,6 @@ public class {{v projectSite/}} extends Site {
     public static void main(String[] args) {
         new Server()
             .staticResourceBase("src/main/webapp")
-            .start(new {{v projectSite/}}());
+            .start(new {{v projectMain/}}());
     }
 }

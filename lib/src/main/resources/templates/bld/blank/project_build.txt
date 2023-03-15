@@ -6,17 +6,13 @@ import java.util.List;
 
 import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.*;
-import static rife.bld.operations.TemplateType.*;
 
 public class {{v projectBuild/}} extends Project {
     public {{v projectBuild/}}() {
         pkg = "{{v package/}}";
         name = "{{v project/}}";
         mainClass = "{{v package/}}.{{v projectMain/}}";
-        uberJarMainClass = "{{v package/}}.{{v projectMainUber/}}";
         version = version(0,1,0);
-
-        precompiledTemplateTypes = List.of(HTML);
 
         repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
 {{v scopes}}{{/v}}{{b scope}}        scope({{v name/}}){{v dependencies}}{{/v}};

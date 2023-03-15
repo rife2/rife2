@@ -4,7 +4,8 @@
  */
 package rife.bld;
 
-import rife.bld.help.CreateHelp;
+import rife.bld.help.CreateBlankHelp;
+import rife.bld.help.CreateRife2Help;
 import rife.bld.operations.*;
 
 /**
@@ -21,10 +22,22 @@ public class Cli extends BuildExecutor {
      * @throws Exception when an error occurred during the creation process
      * @since 1.5
      */
-    @BuildCommand(help = CreateHelp.class)
+    @BuildCommand(help = CreateRife2Help.class)
     public void create()
     throws Exception {
-        new CreateOperation().fromArguments(arguments()).execute();
+        new CreateRife2Operation().fromArguments(arguments()).execute();
+    }
+
+    /**
+     * The standard {@code create-blank} command.
+     *
+     * @throws Exception when an error occurred during the creation process
+     * @since 1.5
+     */
+    @BuildCommand(value = "create-blank", help = CreateBlankHelp.class)
+    public void createBlank()
+    throws Exception {
+        new CreateBlankOperation().fromArguments(arguments()).execute();
     }
 
     public static void main(String[] arguments)

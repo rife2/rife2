@@ -383,7 +383,7 @@ public class Project extends BuildExecutor {
     }
 
     public String uberJarMainClass() {
-        return Objects.requireNonNullElseGet(uberJarMainClass, () -> mainClass() + "Uber");
+        return Objects.requireNonNullElseGet(uberJarMainClass, this::mainClass);
     }
 
     public String uberJarFileName() {

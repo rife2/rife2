@@ -7,7 +7,7 @@
         <filter-class>rife.servlet.RifeFilter</filter-class>
         <init-param>
             <param-name>rifeSiteClass</param-name>
-            <param-value>{{v package/}}.{{v projectSite/}}</param-value>
+            <param-value>{{v package/}}.{{v projectMain/}}</param-value>
         </init-param>
     </filter>
 

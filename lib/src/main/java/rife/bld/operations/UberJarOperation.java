@@ -42,9 +42,11 @@ public class UberJarOperation {
     public void executeCollectSourceResources(File tmp_dir)
     throws FileUtilsErrorException {
         for (var named_file : resourceSourceDirectories()) {
-            var destination = new File(tmp_dir, named_file.name());
-            destination.mkdirs();
-            FileUtils.copyDirectory(named_file.file(), destination);
+            if (named_file.file().exists()) {
+                var destination = new File(tmp_dir, named_file.name());
+                destination.mkdirs();
+                FileUtils.copyDirectory(named_file.file(), destination);
+            }
         }
     }
 
