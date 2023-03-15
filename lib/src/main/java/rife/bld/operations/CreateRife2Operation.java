@@ -8,7 +8,6 @@ import rife.bld.Project;
 import rife.bld.blueprints.Rife2ProjectBlueprint;
 import rife.template.TemplateFactory;
 import rife.tools.*;
-import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
 

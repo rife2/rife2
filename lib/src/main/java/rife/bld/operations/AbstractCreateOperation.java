@@ -5,7 +5,6 @@
 package rife.bld.operations;
 
 import rife.bld.Project;
-import rife.bld.blueprints.BlankProjectBlueprint;
 import rife.bld.dependencies.DependencyResolver;
 import rife.bld.dependencies.Scope;
 import rife.bld.operations.exceptions.OperationOptionException;
@@ -19,27 +18,27 @@ import java.io.File;
 import java.util.List;
 
 abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T>> {
-    protected final String templateBase_;
+    final String templateBase_;
 
-    protected File workDirectory_ = new File(System.getProperty("user.dir"));
-    protected String packageName_;
-    protected String projectName_;
-    protected boolean downloadDependencies_;
+    File workDirectory_ = new File(System.getProperty("user.dir"));
+    String packageName_;
+    String projectName_;
+    boolean downloadDependencies_;
 
-    protected Project project_;
+    Project project_;
 
-    protected String projectClassName_;
-    protected String projectBuildName_;
-    protected String projectMainName_;
-    protected String projectMainUberName_;
-    protected String projectTestName_;
+    String projectClassName_;
+    String projectBuildName_;
+    String projectMainName_;
+    String projectMainUberName_;
+    String projectTestName_;
 
-    protected File javaPackageDirectory_;
-    protected File projectPackageDirectory_;
-    protected File testPackageDirectory_;
-    protected File ideaDirectory_;
-    protected File ideaLibrariesDirectory_;
-    protected File ideaRunConfigurationsDirectory_;
+    File javaPackageDirectory_;
+    File projectPackageDirectory_;
+    File testPackageDirectory_;
+    File ideaDirectory_;
+    File ideaLibrariesDirectory_;
+    File ideaRunConfigurationsDirectory_;
 
     protected AbstractCreateOperation(String templateBase) {
         templateBase_ = templateBase;
