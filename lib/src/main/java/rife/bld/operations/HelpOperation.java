@@ -11,21 +11,33 @@ import java.util.List;
 
 import static java.util.Comparator.comparingInt;
 
+/**
+ * Provides help about the build system commands.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
 public class HelpOperation {
-    public static class Help implements CommandHelp {
-        public String getSummary() {
-            return "Provides help about any of the other commands";
-        }
-    }
-
     private final BuildExecutor executor_;
     private final List<String> arguments_;
 
+    /**
+     * Creates a new help operation.
+     *
+     * @param executor the build executor that commands are running into
+     * @param arguments the arguments that were provided to the build executor
+     * @since 1.5
+     */
     public HelpOperation(BuildExecutor executor, List<String> arguments) {
         executor_ = executor;
         arguments_ = arguments;
     }
 
+    /**
+     * Performs the help operation.
+     *
+     * @since 1.5
+     */
     public void execute() {
         var topic = "";
         if (!arguments_.isEmpty()) {
@@ -51,11 +63,17 @@ public class HelpOperation {
         }
 
         if (print_full_help) {
-            executePrintFullHelp();
+            executePrintOverviewHelp();
         }
     }
 
-    public void executePrintFullHelp() {
+    /**
+     * Part of the {@link #execute} operation, prints the help overview
+     * with summaries of all build commands.
+     *
+     * @since 1.5
+     */
+    public void executePrintOverviewHelp() {
         var commands = executor_.buildCommands();
 
         System.err.println("""

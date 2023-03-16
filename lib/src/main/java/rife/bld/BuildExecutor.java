@@ -4,6 +4,7 @@
  */
 package rife.bld;
 
+import rife.bld.help.HelpHelp;
 import rife.bld.operations.*;
 import rife.tools.ExceptionUtils;
 
@@ -43,7 +44,7 @@ public class BuildExecutor {
                     break;
                 }
             } catch (Throwable e) {
-                new HelpOperation(this, arguments()).executePrintFullHelp();
+                new HelpOperation(this, arguments()).executePrintOverviewHelp();
                 System.err.println();
                 System.err.println(ExceptionUtils.getExceptionStackTrace(e));
             }
@@ -133,7 +134,7 @@ public class BuildExecutor {
         } else {
             System.err.println("ERROR: unknown command '" + command + "'");
             System.err.println();
-            new HelpOperation(this, arguments()).executePrintFullHelp();
+            new HelpOperation(this, arguments()).executePrintOverviewHelp();
             return false;
         }
         return true;
@@ -144,7 +145,7 @@ public class BuildExecutor {
      *
      * @since 1.5
      */
-    @BuildCommand(help = HelpOperation.Help.class)
+    @BuildCommand(help = HelpHelp.class)
     public void help() {
         new HelpOperation(this, arguments()).execute();
     }
