@@ -6,17 +6,10 @@ package rife.bld.operations;
 
 import org.junit.jupiter.api.Test;
 import rife.tools.FileUtils;
-import rife.tools.exceptions.FileUtilsErrorException;
 
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
-import java.io.File;
-import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -120,11 +113,7 @@ public class TestCreateBlankOperation {
                     /myapp/src/test/java/com
                     /myapp/src/test/java/com/example
                     /myapp/src/test/java/com/example/MyappTest.java""",
-                Files.walk(Path.of(tmp.getAbsolutePath()))
-                    .map(path -> path.toAbsolutePath().toString().substring(tmp.getAbsolutePath().length()))
-                    .filter(s -> !s.isEmpty())
-                    .sorted()
-                    .collect(Collectors.joining("\n")));
+                FileUtils.generateDirectoryListing(tmp));
 
             var compile_operation = new CompileOperation().fromProject(create_operation.project());
             compile_operation.execute();
@@ -188,11 +177,7 @@ public class TestCreateBlankOperation {
                     /myapp/src/test/java/com
                     /myapp/src/test/java/com/example
                     /myapp/src/test/java/com/example/MyappTest.java""",
-                Files.walk(Path.of(tmp.getAbsolutePath()))
-                    .map(path -> path.toAbsolutePath().toString().substring(tmp.getAbsolutePath().length()))
-                    .filter(s -> !s.isEmpty())
-                    .sorted()
-                    .collect(Collectors.joining("\n")));
+                FileUtils.generateDirectoryListing(tmp));
 
             final var run_operation = new RunOperation().fromProject(create_operation.project());
             final String[] check_result = new String[1];
@@ -257,11 +242,7 @@ public class TestCreateBlankOperation {
                     /yourthing/src/test/java/org
                     /yourthing/src/test/java/org/stuff
                     /yourthing/src/test/java/org/stuff/YourthingTest.java""",
-                Files.walk(Path.of(tmp.getAbsolutePath()))
-                    .map(path -> path.toAbsolutePath().toString().substring(tmp.getAbsolutePath().length()))
-                    .filter(s -> !s.isEmpty())
-                    .sorted()
-                    .collect(Collectors.joining("\n")));
+                FileUtils.generateDirectoryListing(tmp));
 
             var compile_operation = new CompileOperation() {
                 public void executeProcessDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics) {

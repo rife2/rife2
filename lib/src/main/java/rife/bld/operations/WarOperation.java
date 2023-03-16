@@ -13,9 +13,9 @@ import java.nio.file.*;
 import java.util.*;
 
 public class WarOperation {
-    private List<File> libSourceDirectories_ = new ArrayList<>();
-    private List<File> classesSourceDirectories_ = new ArrayList<>();
-    private List<NamedFile> jarSourceFiles_ = new ArrayList<>();
+    private final List<File> libSourceDirectories_ = new ArrayList<>();
+    private final List<File> classesSourceDirectories_ = new ArrayList<>();
+    private final List<NamedFile> jarSourceFiles_ = new ArrayList<>();
     private File webappDirectory_;
     private File webXmlFile_;
     private File destinationDirectory_;
@@ -105,7 +105,7 @@ public class WarOperation {
     }
 
     public WarOperation libSourceDirectories(List<File> sources) {
-        libSourceDirectories_ = new ArrayList<>(sources);
+        libSourceDirectories_.addAll(sources);
         return this;
     }
 
@@ -114,7 +114,7 @@ public class WarOperation {
     }
 
     public WarOperation classesSourceDirectories(List<File> sources) {
-        classesSourceDirectories_ = new ArrayList<>(sources);
+        classesSourceDirectories_.addAll(sources);
         return this;
     }
 
@@ -123,7 +123,7 @@ public class WarOperation {
     }
 
     public WarOperation jarSourceFiles(List<NamedFile> files) {
-        jarSourceFiles_ = new ArrayList<>(files);
+        jarSourceFiles_.addAll(files);
         return this;
     }
 

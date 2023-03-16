@@ -14,8 +14,8 @@ import java.util.*;
 import java.util.jar.Attributes;
 
 public class UberJarOperation {
-    private List<File> jarSourceFiles_ = new ArrayList<>();
-    private List<NamedFile> resourceSourceDirectories_ = new ArrayList<>();
+    private final List<File> jarSourceFiles_ = new ArrayList<>();
+    private final List<NamedFile> resourceSourceDirectories_ = new ArrayList<>();
     private File destinationDirectory_;
     private String destinationFileName_;
     private String mainClass_;
@@ -77,7 +77,7 @@ public class UberJarOperation {
     }
 
     public UberJarOperation jarSourceFiles(List<File> files) {
-        jarSourceFiles_ = new ArrayList<>(files);
+        jarSourceFiles_.addAll(files);
         return this;
     }
 
@@ -86,7 +86,7 @@ public class UberJarOperation {
     }
 
     public UberJarOperation resourceSourceDirectories(List<NamedFile> directories) {
-        resourceSourceDirectories_ = new ArrayList<>(directories);
+        resourceSourceDirectories_.addAll(directories);
         return this;
     }
 

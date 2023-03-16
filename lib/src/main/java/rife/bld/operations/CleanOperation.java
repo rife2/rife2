@@ -18,7 +18,7 @@ import java.util.*;
  * @since 1.5
  */
 public class CleanOperation {
-    private List<File> directories_ = new ArrayList<>();
+    private final List<File> directories_ = new ArrayList<>();
 
     /**
      * Performs the clean operation.
@@ -69,7 +69,7 @@ public class CleanOperation {
      * @since 1.5
      */
     public CleanOperation directories(List<File> directories) {
-        directories_ = new ArrayList<>(directories);
+        directories_.addAll(directories);
         return this;
     }
 

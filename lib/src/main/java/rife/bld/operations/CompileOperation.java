@@ -20,11 +20,11 @@ import java.util.*;
 public class CompileOperation {
     private File buildMainDirectory_;
     private File buildTestDirectory_;
-    private List<String> compileMainClasspath_ = new ArrayList<>();
-    private List<String> compileTestClasspath_ = new ArrayList<>();
-    private List<File> mainSourceFiles_ = new ArrayList<>();
-    private List<File> testSourceFiles_ = new ArrayList<>();
-    private List<String> compileOptions_ = new ArrayList<>();
+    private final List<String> compileMainClasspath_ = new ArrayList<>();
+    private final List<String> compileTestClasspath_ = new ArrayList<>();
+    private final List<File> mainSourceFiles_ = new ArrayList<>();
+    private final List<File> testSourceFiles_ = new ArrayList<>();
+    private final List<String> compileOptions_ = new ArrayList<>();
     private final List<Diagnostic<? extends JavaFileObject>> diagnostics_ = new ArrayList<>();
 
     /**
@@ -176,7 +176,7 @@ public class CompileOperation {
      * @since 1.5
      */
     public CompileOperation compileMainClasspath(List<String> classpath) {
-        compileMainClasspath_ = new ArrayList<>(classpath);
+        compileMainClasspath_.addAll(classpath);
         return this;
     }
 
@@ -190,7 +190,7 @@ public class CompileOperation {
      * @since 1.5
      */
     public CompileOperation compileTestClasspath(List<String> classpath) {
-        compileTestClasspath_ = new ArrayList<>(classpath);
+        compileTestClasspath_.addAll(classpath);
         return this;
     }
 
@@ -204,7 +204,7 @@ public class CompileOperation {
      * @since 1.5
      */
     public CompileOperation mainSourceFiles(List<File> files) {
-        mainSourceFiles_ = new ArrayList<>(files);
+        mainSourceFiles_.addAll(files);
         return this;
     }
 
@@ -218,7 +218,7 @@ public class CompileOperation {
      * @since 1.5
      */
     public CompileOperation testSourceFiles(List<File> files) {
-        testSourceFiles_ = new ArrayList<>(files);
+        testSourceFiles_.addAll(files);
         return this;
     }
 
@@ -232,7 +232,7 @@ public class CompileOperation {
      * @since 1.5
      */
     public CompileOperation compileOptions(List<String> options) {
-        compileOptions_ = new ArrayList<>(options);
+        compileOptions_.addAll(options);
         return this;
     }
 

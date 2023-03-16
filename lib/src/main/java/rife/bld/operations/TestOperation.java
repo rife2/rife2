@@ -13,10 +13,10 @@ import java.util.function.Consumer;
 
 public class TestOperation {
     private String javaTool_;
-    private List<String> testJavaOptions_ = new ArrayList<>();
-    private List<String> testClasspath_ = new ArrayList<>();
+    private final List<String> testJavaOptions_ = new ArrayList<>();
+    private final List<String> testClasspath_ = new ArrayList<>();
     private String testToolMainClass_;
-    private List<String> testToolOptions_ = new ArrayList<>();
+    private final List<String> testToolOptions_ = new ArrayList<>();
     private Consumer<String> testOutputConsumer_;
     private Consumer<String> testErrorConsumer_;
     private Process process_;
@@ -82,12 +82,12 @@ public class TestOperation {
     }
 
     public TestOperation testJavaOptions(List<String> options) {
-        testJavaOptions_ = new ArrayList<>(options);
+        testJavaOptions_.addAll(options);
         return this;
     }
 
     public TestOperation testClasspath(List<String> classpath) {
-        testClasspath_ = new ArrayList<>(classpath);
+        testClasspath_.addAll(classpath);
         return this;
     }
 
@@ -97,7 +97,7 @@ public class TestOperation {
     }
 
     public TestOperation testToolOptions(List<String> options) {
-        testToolOptions_ = new ArrayList<>(options);
+        testToolOptions_.addAll(options);
         return this;
     }
 

@@ -8,13 +8,13 @@ import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.*;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -592,5 +592,25 @@ public final class FileUtils {
         }
 
         return ext;
+    }
+
+    @SafeVarargs
+    public static List<String> combineToAbsolutePaths(List<File>... files) {
+        var result = new ArrayList<String>();
+        for (var list : files) {
+            for (var file : list) {
+                result.add(file.getAbsolutePath());
+            }
+        }
+        return result;
+    }
+
+    public static String generateDirectoryListing(File directory)
+    throws IOException {
+        return Files.walk(Path.of(directory.getAbsolutePath()))
+            .map(path -> path.toAbsolutePath().toString().substring(directory.getAbsolutePath().length()))
+            .filter(s -> !s.isEmpty())
+            .sorted()
+            .collect(Collectors.joining(System.lineSeparator()));
     }
 }

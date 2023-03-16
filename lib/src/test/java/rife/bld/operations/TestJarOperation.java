@@ -10,8 +10,10 @@ import rife.tools.FileUtils;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.*;
-import java.util.jar.*;
+import java.util.List;
+import java.util.Map;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -150,7 +152,6 @@ public class TestJarOperation {
             FileUtils.deleteDirectory(tmp);
         }
     }
-
 
     @Test
     void testFromProject()

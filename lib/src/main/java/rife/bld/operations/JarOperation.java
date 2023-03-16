@@ -20,13 +20,13 @@ import java.util.regex.Pattern;
  * @since 1.5
  */
 public class JarOperation {
-    private Map<Attributes.Name, Object> manifestAttributes_ = new HashMap<>();
-    private List<File> sourceDirectories_ = new ArrayList<>();
-    private List<NamedFile> sourceFiles_ = new ArrayList<>();
+    private final Map<Attributes.Name, Object> manifestAttributes_ = new HashMap<>();
+    private final List<File> sourceDirectories_ = new ArrayList<>();
+    private final List<NamedFile> sourceFiles_ = new ArrayList<>();
     private File destinationDirectory_;
     private String destinationFileName_;
-    private List<Pattern> included_ = new ArrayList<>();
-    private List<Pattern> excluded_ = new ArrayList<>();
+    private final List<Pattern> included_ = new ArrayList<>();
+    private final List<Pattern> excluded_ = new ArrayList<>();
 
     private final byte[] buffer_ = new byte[1024];
 
@@ -135,7 +135,7 @@ public class JarOperation {
      * @since 1.5
      */
     public JarOperation manifestAttributes(Map<Attributes.Name, Object> attributes) {
-        manifestAttributes_ = new HashMap<>(attributes);
+        manifestAttributes_.putAll(attributes);
         return this;
     }
 
@@ -147,7 +147,7 @@ public class JarOperation {
      * @since 1.5
      */
     public JarOperation sourceDirectories(List<File> sources) {
-        sourceDirectories_ = new ArrayList<>(sources);
+        sourceDirectories_.addAll(sources);
         return this;
     }
 
@@ -159,7 +159,7 @@ public class JarOperation {
      * @since 1.5
      */
     public JarOperation sourceFiles(List<NamedFile> sources) {
-        sourceFiles_ = new ArrayList<>(sources);
+        sourceFiles_.addAll(sources);
         return this;
     }
 
@@ -196,7 +196,7 @@ public class JarOperation {
      * @since 1.5
      */
     public JarOperation included(List<Pattern> included) {
-        included_ = new ArrayList<>(included);
+        included_.addAll(included);
         return this;
     }
 
@@ -209,7 +209,7 @@ public class JarOperation {
      * @since 1.5
      */
     public JarOperation excluded(List<Pattern> excluded) {
-        excluded_ = new ArrayList<>(excluded);
+        excluded_.addAll(excluded);
         return this;
     }
 

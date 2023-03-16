@@ -22,8 +22,8 @@ import java.util.List;
  * @since 1.5
  */
 public class DownloadOperation {
-    private List<Repository> repositories_ = new ArrayList<>();
-    private DependencyScopes dependencies_ = new DependencyScopes();
+    private final List<Repository> repositories_ = new ArrayList<>();
+    private final DependencyScopes dependencies_ = new DependencyScopes();
     private File libCompileDirectory_;
     private File libRuntimeDirectory_;
     private File libStandaloneDirectory_;
@@ -140,7 +140,7 @@ public class DownloadOperation {
      * @since 1.5
      */
     public DownloadOperation repositories(List<Repository> repositories) {
-        repositories_ = new ArrayList<>(repositories);
+        repositories_.addAll(repositories);
         return this;
     }
 
@@ -152,7 +152,7 @@ public class DownloadOperation {
      * @since 1.5
      */
     public DownloadOperation dependencies(DependencyScopes dependencies) {
-        dependencies_ = new DependencyScopes(dependencies);
+        dependencies_.include(dependencies);
         return this;
     }
 

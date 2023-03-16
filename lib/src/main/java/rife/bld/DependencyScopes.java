@@ -30,8 +30,25 @@ public class DependencyScopes extends LinkedHashMap<Scope, DependencySet> {
      * @since 1.5
      */
     public DependencyScopes(DependencyScopes other) {
-        for (var dep : other.entrySet()) {
-            put(dep.getKey(), new DependencySet(dep.getValue()));
+        for (var entry : other.entrySet()) {
+            put(entry.getKey(), new DependencySet(entry.getValue()));
+        }
+    }
+
+    /**
+     * Includes all the dependencies from another dependency scope map.
+     *
+     * @param other the other map to include dependencies from
+     * @since 1.5
+     */
+    public void include(DependencyScopes other) {
+        for (var entry : other.entrySet()) {
+            var dependencies = get(entry.getKey());
+            if (dependencies == null) {
+                dependencies = new DependencySet();
+                put(entry.getKey(), dependencies);
+            }
+            dependencies.addAll(entry.getValue());
         }
     }
 

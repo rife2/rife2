@@ -10,9 +10,7 @@ import rife.tools.FileUtils;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -117,11 +115,7 @@ public class TestCleanOperation {
                     /src/main/resources/templates
                     /src/test
                     /src/test/java""",
-                Files.walk(Path.of(tmp.getAbsolutePath()))
-                    .map(path -> path.toAbsolutePath().toString().substring(tmp.getAbsolutePath().length()))
-                    .filter(s -> !s.isEmpty())
-                    .sorted()
-                    .collect(Collectors.joining("\n")));
+                FileUtils.generateDirectoryListing(tmp));
 
             new CleanOperation().fromProject(project).execute();
             assertEquals("""
@@ -141,11 +135,7 @@ public class TestCleanOperation {
                     /src/main/resources/templates
                     /src/test
                     /src/test/java""",
-                Files.walk(Path.of(tmp.getAbsolutePath()))
-                    .map(path -> path.toAbsolutePath().toString().substring(tmp.getAbsolutePath().length()))
-                    .filter(s -> !s.isEmpty())
-                    .sorted()
-                    .collect(Collectors.joining("\n")));
+                FileUtils.generateDirectoryListing(tmp));
         } finally {
             FileUtils.deleteDirectory(tmp);
         }

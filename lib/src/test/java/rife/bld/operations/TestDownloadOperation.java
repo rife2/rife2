@@ -5,15 +5,14 @@
 package rife.bld.operations;
 
 import org.junit.jupiter.api.Test;
-import rife.bld.*;
+import rife.bld.DependencyScopes;
+import rife.bld.WebProject;
 import rife.bld.dependencies.*;
 import rife.tools.FileUtils;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -121,11 +120,7 @@ public class TestDownloadOperation {
                     /dir4/httpcore5-5.2.jar
                     /dir4/httpcore5-h2-5.2.jar
                     /dir4/slf4j-api-1.7.36.jar""",
-                Files.walk(Path.of(tmp.getAbsolutePath()))
-                    .map(path -> path.toAbsolutePath().toString().substring(tmp.getAbsolutePath().length()))
-                    .filter(s -> !s.isEmpty())
-                    .sorted()
-                    .collect(Collectors.joining("\n")));
+                FileUtils.generateDirectoryListing(tmp));
         } finally {
             FileUtils.deleteDirectory(tmp);
         }
@@ -179,11 +174,7 @@ public class TestDownloadOperation {
                     /src/main/resources/templates
                     /src/test
                     /src/test/java""",
-                Files.walk(Path.of(tmp.getAbsolutePath()))
-                    .map(path -> path.toAbsolutePath().toString().substring(tmp.getAbsolutePath().length()))
-                    .filter(s -> !s.isEmpty())
-                    .sorted()
-                    .collect(Collectors.joining("\n")));
+                FileUtils.generateDirectoryListing(tmp));
         } finally {
             FileUtils.deleteDirectory(tmp);
         }

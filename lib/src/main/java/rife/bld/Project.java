@@ -160,26 +160,6 @@ public class Project extends BuildExecutor {
         return StringUtils.join(paths, File.pathSeparator);
     }
 
-    @SafeVarargs
-    public static List<String> combineToAbsolutePaths(List<File>... files) {
-        var result = new ArrayList<String>();
-        for (var list : files) {
-            for (var file : list) {
-                result.add(file.getAbsolutePath());
-            }
-        }
-        return result;
-    }
-
-    @SafeVarargs
-    public static <E> List<E> combineLists(List<E>... lists) {
-        var result = new ArrayList<E>();
-        for (var list : lists) {
-            result.addAll(list);
-        }
-        return result;
-    }
-
     /*
      * Project directories
      */
@@ -454,24 +434,24 @@ public class Project extends BuildExecutor {
     }
 
     public List<String> compileMainClasspath() {
-        return Project.combineToAbsolutePaths(compileClasspathJars());
+        return FileUtils.combineToAbsolutePaths(compileClasspathJars());
     }
 
     public List<String> compileTestClasspath() {
-        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), testClasspathJars());
+        var paths = FileUtils.combineToAbsolutePaths(compileClasspathJars(), testClasspathJars());
         paths.add(buildMainDirectory().getAbsolutePath());
         return paths;
     }
 
     public List<String> runClasspath() {
-        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars());
+        var paths = FileUtils.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars());
         paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
         return paths;
     }
 
     public List<String> testClasspath() {
-        var paths = Project.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars(), testClasspathJars());
+        var paths = FileUtils.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars(), testClasspathJars());
         paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
         paths.add(buildTestDirectory().getAbsolutePath());

@@ -5,17 +5,13 @@
 package rife.bld.operations;
 
 import org.junit.jupiter.api.Test;
-import rife.bld.Project;
-import rife.bld.WebProject;
 import rife.tools.FileUtils;
 
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -16,8 +16,8 @@ import java.util.function.Consumer;
 public class RunOperation {
     private File workDirectory_ = new File(System.getProperty("user.dir"));
     private String javaTool_;
-    private List<String> runJavaOptions_ = new ArrayList<>();
-    private List<String> runClasspath_ = new ArrayList<>();
+    private final List<String> runJavaOptions_ = new ArrayList<>();
+    private final List<String> runClasspath_ = new ArrayList<>();
     private String mainClass_;
     private Consumer<String> runOutputConsumer_;
     private Consumer<String> runErrorConsumer_;
@@ -97,12 +97,12 @@ public class RunOperation {
     }
 
     public RunOperation runJavaOptions(List<String> options) {
-        runJavaOptions_ = new ArrayList<>(options);
+        runJavaOptions_.addAll(options);
         return this;
     }
 
     public RunOperation runClasspath(List<String> classpath) {
-        runClasspath_ = new ArrayList<>(classpath);
+        runClasspath_.addAll(classpath);
         return this;
     }
 
