@@ -13,6 +13,12 @@ import java.util.*;
 import java.util.jar.*;
 import java.util.regex.Pattern;
 
+/**
+ * Creates a JAR archive of the provided sources and directories.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
 public class JarOperation {
     private Map<Attributes.Name, Object> manifestAttributes_ = new HashMap<>();
     private List<File> sourceDirectories_ = new ArrayList<>();
@@ -24,17 +30,32 @@ public class JarOperation {
 
     private final byte[] buffer_ = new byte[1024];
 
+    /**
+     * Performs the jar operation.
+     *
+     * @since 1.5
+     */
     public void execute()
     throws Exception {
         executeCreateDestinationDirectory();
-        executeCreateJarFile();
+        executeCreateJarArchive();
     }
 
+    /**
+     * Part of the {@link #execute} operation, create the destination directory.
+     *
+     * @since 1.5
+     */
     public void executeCreateDestinationDirectory() {
         destinationDirectory().mkdirs();
     }
 
-    public void executeCreateJarFile()
+    /**
+     * Part of the {@link #execute} operation, create the jar archive.
+     *
+     * @since 1.5
+     */
+    public void executeCreateJarArchive()
     throws IOException {
         var out_file = new File(destinationDirectory(), destinationFileName());
         try (var jar = new JarOutputStream(new FileOutputStream(out_file), executeCreateManifest())) {
@@ -47,12 +68,19 @@ public class JarOperation {
                 }
             }
             for (var source_file : sourceFiles()) {
-                executeAddFileToJar(jar, source_file);
+                if (StringUtils.filter(source_file.file().getAbsolutePath(), included(), excluded())) {
+                    executeAddFileToJar(jar, source_file);
+                }
             }
             jar.flush();
         }
     }
 
+    /**
+     * Part of the {@link #execute} operation, create the manifest for the jar archive.
+     *
+     * @since 1.5
+     */
     public Manifest executeCreateManifest() {
         var manifest = new Manifest();
         var attributes = manifest.getMainAttributes();
@@ -65,6 +93,11 @@ public class JarOperation {
         return manifest;
     }
 
+    /**
+     * Part of the {@link #execute} operation, add a single file to the jar archive.
+     *
+     * @since 1.5
+     */
     private void executeAddFileToJar(JarOutputStream jar, NamedFile file)
     throws IOException {
         var entry = new JarEntry(file.name());
@@ -80,6 +113,12 @@ public class JarOperation {
         }
     }
 
+    /**
+     * Configures a jar operation from a {@link Project}.
+     *
+     * @param project the project to configure the compile operation from
+     * @since 1.5
+     */
     public JarOperation fromProject(Project project) {
         return manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
             .sourceDirectories(List.of(project.buildMainDirectory(), project.srcMainResourcesDirectory()))
@@ -88,65 +127,174 @@ public class JarOperation {
             .excluded(List.of(Pattern.compile("^\\Q" + project.srcMainResourcesTemplatesDirectory().getAbsolutePath() + "\\E.*")));
     }
 
+    /**
+     * Provides a map of attributes to put in the JAR manifest.
+     *
+     * @param attributes the attributes to put in the manifest
+     * @return this operation instance
+     * @since 1.5
+     */
     public JarOperation manifestAttributes(Map<Attributes.Name, Object> attributes) {
         manifestAttributes_ = new HashMap<>(attributes);
         return this;
     }
 
-    public Map<Attributes.Name, Object> manifestAttributes() {
-        return manifestAttributes_;
-    }
-
+    /**
+     * Provides the source directories that will be used for the JAR archive creation.
+     *
+     * @param sources the source directories
+     * @return this operation instance
+     * @since 1.5
+     */
     public JarOperation sourceDirectories(List<File> sources) {
         sourceDirectories_ = new ArrayList<>(sources);
         return this;
     }
 
-    public List<File> sourceDirectories() {
-        return sourceDirectories_;
-    }
-
+    /**
+     * Provides the source files that will be used for the JAR archive creation.
+     *
+     * @param sources the source files
+     * @return this operation instance
+     * @since 1.5
+     */
     public JarOperation sourceFiles(List<NamedFile> sources) {
         sourceFiles_ = new ArrayList<>(sources);
         return this;
     }
 
-    public List<NamedFile> sourceFiles() {
-        return sourceFiles_;
-    }
-
+    /**
+     * Provides the destination directory in which the JAR archive will be created.
+     *
+     * @param directory the JAR destination directory
+     * @return this operation instance
+     * @since 1.5
+     */
     public JarOperation destinationDirectory(File directory) {
         destinationDirectory_ = directory;
         return this;
     }
 
-    public File destinationDirectory() {
-        return destinationDirectory_;
-    }
-
+    /**
+     * Provides the destination file name that will be used for the JAR archive creation.
+     *
+     * @param name the JAR archive destination file name
+     * @return this operation instance
+     * @since 1.5
+     */
     public JarOperation destinationFileName(String name) {
         destinationFileName_ = name;
         return this;
     }
 
-    public String destinationFileName() {
-        return destinationFileName_;
-    }
-
+    /**
+     * Provides a list of patterns that will be evaluated to determine which files
+     * will be included in the JAR archive.
+     *
+     * @param included the list of inclusion patterns
+     * @return this operation instance
+     * @since 1.5
+     */
     public JarOperation included(List<Pattern> included) {
         included_ = new ArrayList<>(included);
         return this;
     }
 
-    public List<Pattern> included() {
-        return included_;
-    }
-
+    /**
+     * Provides a list of patterns that will be evaluated to determine which files
+     * will be excluded from the JAR archive.
+     *
+     * @param excluded the list of exclusion patterns
+     * @return this operation instance
+     * @since 1.5
+     */
     public JarOperation excluded(List<Pattern> excluded) {
         excluded_ = new ArrayList<>(excluded);
         return this;
     }
 
+    /**
+     * Retrieves the map of attributes that will be put in the JAR manifest.
+     * <p>
+     * This is a modifiable map that can be retrieved and changed.
+     *
+     * @return the manifest's attributes map
+     * @since 1.5
+     */
+    public Map<Attributes.Name, Object> manifestAttributes() {
+        return manifestAttributes_;
+    }
+
+    /**
+     * Retrieves the list of source directories that will be used for the
+     * JAR archive creation.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the JAR archive's source directories
+     * @since 1.5
+     */
+    public List<File> sourceDirectories() {
+        return sourceDirectories_;
+    }
+
+    /**
+     * Retrieves the list of source files that will be used for the
+     * JAR archive creation.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the JAR archive's source files
+     * @since 1.5
+     */
+    public List<NamedFile> sourceFiles() {
+        return sourceFiles_;
+    }
+
+    /**
+     * Retrieves the destination directory in which the JAR archive will
+     * be created.
+     *
+     * @return the JAR archive's destination directory
+     * @since 1.5
+     */
+    public File destinationDirectory() {
+        return destinationDirectory_;
+    }
+
+    /**
+     * Retrieves the destination file name that will be used for the JAR
+     * archive creation.
+     *
+     * @return the JAR archive's destination file name
+     * @since 1.5
+     */
+    public String destinationFileName() {
+        return destinationFileName_;
+    }
+
+    /**
+     * Retrieves the list of patterns that will be evaluated to determine which files
+     * will be included in the JAR archive.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the JAR's archive's inclusion patterns
+     * @since 1.5
+     */
+    public List<Pattern> included() {
+        return included_;
+    }
+
+    /**
+     * Retrieves the list of patterns that will be evaluated to determine which files
+     * will be excluded the JAR archive.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the JAR's archive's exclusion patterns
+     * @since 1.5
+     */
     public List<Pattern> excluded() {
         return excluded_;
     }

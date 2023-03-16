@@ -36,25 +36,25 @@ public class TestCreateBlankOperation {
     @Test
     void testPopulation()
     throws Exception {
-        var workDirectory = Files.createTempDirectory("test").toFile();
+        var work_directory = Files.createTempDirectory("test").toFile();
         try {
-            var downloadDependencies = true;
-            var packageName = "packageName";
-            var projectName = "projectName";
+            var download_dependencies = true;
+            var package_name = "packageName";
+            var project_name = "projectName";
 
             var operation = new CreateBlankOperation();
             operation
-                .workDirectory(workDirectory)
-                .downloadDependencies(downloadDependencies)
-                .packageName(packageName)
-                .projectName(projectName);
+                .workDirectory(work_directory)
+                .downloadDependencies(download_dependencies)
+                .packageName(package_name)
+                .projectName(project_name);
 
-            assertEquals(workDirectory, operation.workDirectory());
-            assertEquals(downloadDependencies, operation.downloadDependencies());
-            assertEquals(packageName, operation.packageName());
-            assertEquals(projectName, operation.projectName());
+            assertEquals(work_directory, operation.workDirectory());
+            assertEquals(download_dependencies, operation.downloadDependencies());
+            assertEquals(package_name, operation.packageName());
+            assertEquals(project_name, operation.projectName());
         } finally {
-            FileUtils.deleteDirectory(workDirectory);
+            FileUtils.deleteDirectory(work_directory);
         }
     }
 

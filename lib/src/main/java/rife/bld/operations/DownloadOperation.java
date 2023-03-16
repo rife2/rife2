@@ -206,6 +206,8 @@ public class DownloadOperation {
 
     /**
      * Retrieves the repositories in which the dependencies will be resolved.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
      *
      * @return the repositories used for dependency resolution
      * @since 1.5
@@ -216,6 +218,8 @@ public class DownloadOperation {
 
     /**
      * Retrieves the scoped dependencies that will be used for artifact download.
+     * <p>
+     * This is a modifiable structure that can be retrieved and changed.
      *
      * @return the scoped dependencies
      * @since 1.5
@@ -227,6 +231,7 @@ public class DownloadOperation {
     /**
      * Retrieves the {@code compile} scope download directory.
      *
+     * @return the {@code compile} scope download directory
      * @since 1.5
      */
     public File libCompileDirectory() {
@@ -236,6 +241,7 @@ public class DownloadOperation {
     /**
      * Retrieves the {@code runtime} scope download directory.
      *
+     * @return the {@code runtime} scope download directory
      * @since 1.5
      */
     public File libRuntimeDirectory() {
@@ -245,6 +251,7 @@ public class DownloadOperation {
     /**
      * Retrieves the {@code standalone} scope download directory.
      *
+     * @return the {@code standalone} scope download directory
      * @since 1.5
      */
     public File libStandaloneDirectory() {
@@ -254,6 +261,7 @@ public class DownloadOperation {
     /**
      * Retrieves the {@code test} scope download directory.
      *
+     * @return the {@code test} scope download directory
      * @since 1.5
      */
     public File libTestDirectory() {
