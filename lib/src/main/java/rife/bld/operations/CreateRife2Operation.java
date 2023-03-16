@@ -20,8 +20,8 @@ import java.io.File;
  * @since 1.5
  */
 public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Operation, Rife2ProjectBlueprint> {
-    protected File srcMainWebappCssDirectory_;
-    protected File srcMainWebappWebInfDirectory_;
+    File srcMainWebappCssDirectory_;
+    File srcMainWebappWebInfDirectory_;
 
     public CreateRife2Operation() {
         super("bld.rife2_hello.");
