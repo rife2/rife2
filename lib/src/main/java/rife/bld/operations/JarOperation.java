@@ -14,7 +14,7 @@ import java.util.jar.*;
 import java.util.regex.Pattern;
 
 /**
- * Creates a JAR archive of the provided sources and directories.
+ * Creates a jar archive of the provided sources and directories.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
@@ -116,7 +116,7 @@ public class JarOperation {
     /**
      * Configures a jar operation from a {@link Project}.
      *
-     * @param project the project to configure the compile operation from
+     * @param project the project to configure the jar operation from
      * @since 1.5
      */
     public JarOperation fromProject(Project project) {
@@ -128,7 +128,7 @@ public class JarOperation {
     }
 
     /**
-     * Provides a map of attributes to put in the JAR manifest.
+     * Provides a map of attributes to put in the jar manifest.
      *
      * @param attributes the attributes to put in the manifest
      * @return this operation instance
@@ -140,33 +140,33 @@ public class JarOperation {
     }
 
     /**
-     * Provides the source directories that will be used for the JAR archive creation.
+     * Provides the source directories that will be used for the jar archive creation.
      *
-     * @param sources the source directories
+     * @param directories the source directories
      * @return this operation instance
      * @since 1.5
      */
-    public JarOperation sourceDirectories(List<File> sources) {
-        sourceDirectories_.addAll(sources);
+    public JarOperation sourceDirectories(List<File> directories) {
+        sourceDirectories_.addAll(directories);
         return this;
     }
 
     /**
-     * Provides the source files that will be used for the JAR archive creation.
+     * Provides the source files that will be used for the jar archive creation.
      *
-     * @param sources the source files
+     * @param files the source files
      * @return this operation instance
      * @since 1.5
      */
-    public JarOperation sourceFiles(List<NamedFile> sources) {
-        sourceFiles_.addAll(sources);
+    public JarOperation sourceFiles(List<NamedFile> files) {
+        sourceFiles_.addAll(files);
         return this;
     }
 
     /**
-     * Provides the destination directory in which the JAR archive will be created.
+     * Provides the destination directory in which the jar archive will be created.
      *
-     * @param directory the JAR destination directory
+     * @param directory the jar destination directory
      * @return this operation instance
      * @since 1.5
      */
@@ -176,9 +176,9 @@ public class JarOperation {
     }
 
     /**
-     * Provides the destination file name that will be used for the JAR archive creation.
+     * Provides the destination file name that will be used for the jar archive creation.
      *
-     * @param name the JAR archive destination file name
+     * @param name the jar archive destination file name
      * @return this operation instance
      * @since 1.5
      */
@@ -189,7 +189,7 @@ public class JarOperation {
 
     /**
      * Provides a list of patterns that will be evaluated to determine which files
-     * will be included in the JAR archive.
+     * will be included in the jar archive.
      *
      * @param included the list of inclusion patterns
      * @return this operation instance
@@ -202,7 +202,7 @@ public class JarOperation {
 
     /**
      * Provides a list of patterns that will be evaluated to determine which files
-     * will be excluded from the JAR archive.
+     * will be excluded from the jar archive.
      *
      * @param excluded the list of exclusion patterns
      * @return this operation instance
@@ -214,7 +214,7 @@ public class JarOperation {
     }
 
     /**
-     * Retrieves the map of attributes that will be put in the JAR manifest.
+     * Retrieves the map of attributes that will be put in the jar manifest.
      * <p>
      * This is a modifiable map that can be retrieved and changed.
      *
@@ -227,11 +227,11 @@ public class JarOperation {
 
     /**
      * Retrieves the list of source directories that will be used for the
-     * JAR archive creation.
+     * jar archive creation.
      * <p>
      * This is a modifiable list that can be retrieved and changed.
      *
-     * @return the JAR archive's source directories
+     * @return the jar archive's source directories
      * @since 1.5
      */
     public List<File> sourceDirectories() {
@@ -240,11 +240,11 @@ public class JarOperation {
 
     /**
      * Retrieves the list of source files that will be used for the
-     * JAR archive creation.
+     * jar archive creation.
      * <p>
      * This is a modifiable list that can be retrieved and changed.
      *
-     * @return the JAR archive's source files
+     * @return the jar archive's source files
      * @since 1.5
      */
     public List<NamedFile> sourceFiles() {
@@ -252,10 +252,10 @@ public class JarOperation {
     }
 
     /**
-     * Retrieves the destination directory in which the JAR archive will
+     * Retrieves the destination directory in which the jar archive will
      * be created.
      *
-     * @return the JAR archive's destination directory
+     * @return the jar archive's destination directory
      * @since 1.5
      */
     public File destinationDirectory() {
@@ -263,10 +263,10 @@ public class JarOperation {
     }
 
     /**
-     * Retrieves the destination file name that will be used for the JAR
+     * Retrieves the destination file name that will be used for the jar
      * archive creation.
      *
-     * @return the JAR archive's destination file name
+     * @return the jar archive's destination file name
      * @since 1.5
      */
     public String destinationFileName() {
@@ -275,11 +275,11 @@ public class JarOperation {
 
     /**
      * Retrieves the list of patterns that will be evaluated to determine which files
-     * will be included in the JAR archive.
+     * will be included in the jar archive.
      * <p>
      * This is a modifiable list that can be retrieved and changed.
      *
-     * @return the JAR's archive's inclusion patterns
+     * @return the jar's archive's inclusion patterns
      * @since 1.5
      */
     public List<Pattern> included() {
@@ -288,11 +288,11 @@ public class JarOperation {
 
     /**
      * Retrieves the list of patterns that will be evaluated to determine which files
-     * will be excluded the JAR archive.
+     * will be excluded the jar archive.
      * <p>
      * This is a modifiable list that can be retrieved and changed.
      *
-     * @return the JAR's archive's exclusion patterns
+     * @return the jar's archive's exclusion patterns
      * @since 1.5
      */
     public List<Pattern> excluded() {

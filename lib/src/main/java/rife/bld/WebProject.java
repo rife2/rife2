@@ -24,7 +24,7 @@ public class WebProject extends Project {
         jar();
         var operation = new UberJarOperation()
             .fromProject(this)
-            .resourceSourceDirectories(List.of(new NamedFile("webapp", srcMainWebappDirectory())));
+            .sourceDirectories(List.of(new NamedFile("webapp", srcMainWebappDirectory())));
         operation.jarSourceFiles().addAll(standaloneClasspathJars());
         operation.execute();
     }

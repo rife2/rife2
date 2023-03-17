@@ -56,8 +56,10 @@ public class RunOperation {
         var args = new ArrayList<String>();
         args.add(javaTool());
         args.addAll(javaOptions());
-        args.add("-cp");
-        args.add(Project.joinPaths(classpath()));
+        if (!classpath().isEmpty()) {
+            args.add("-cp");
+            args.add(Project.joinPaths(classpath()));
+        }
         args.add(mainClass());
         return args;
     }
@@ -178,12 +180,12 @@ public class RunOperation {
     /**
      * Provides the main class to run with the java tool.
      *
-     * @param klass the main class to run
+     * @param name the main class to run
      * @return this operation instance
      * @since 1.5
      */
-    public RunOperation mainClass(String klass) {
-        mainClass_ = klass;
+    public RunOperation mainClass(String name) {
+        mainClass_ = name;
         return this;
     }
 
