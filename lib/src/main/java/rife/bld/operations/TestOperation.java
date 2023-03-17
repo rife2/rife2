@@ -58,7 +58,7 @@ public class TestOperation {
         args.add(javaTool());
         args.addAll(javaOptions());
         args.add("-cp");
-        args.add(Project.joinPaths(classpath()));
+        args.add(FileUtils.joinPaths(classpath()));
         args.add(mainClass());
         args.addAll(testToolOptions());
         return args;

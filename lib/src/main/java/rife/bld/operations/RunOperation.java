@@ -58,7 +58,7 @@ public class RunOperation {
         args.addAll(javaOptions());
         if (!classpath().isEmpty()) {
             args.add("-cp");
-            args.add(Project.joinPaths(classpath()));
+            args.add(FileUtils.joinPaths(classpath()));
         }
         args.add(mainClass());
         return args;

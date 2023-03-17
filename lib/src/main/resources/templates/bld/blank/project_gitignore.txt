@@ -14,3 +14,5 @@ derby.log
 *.project
 *.processors
 */bin/
+!bld-wrapper.jar
+!bld-wrapper.properties

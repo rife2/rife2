@@ -5,6 +5,7 @@
 package rife.bld.operations;
 
 import rife.bld.Project;
+import rife.tools.FileUtils;
 
 import javax.tools.*;
 import java.io.File;
@@ -97,7 +98,7 @@ public class CompileOperation {
         try (var file_manager = compiler.getStandardFileManager(null, null, null)) {
             var compilation_units = file_manager.getJavaFileObjectsFromFiles(sources);
             var diagnostics = new DiagnosticCollector<JavaFileObject>();
-            var options = new ArrayList<>(List.of("-d", destination.getAbsolutePath(), "-cp", Project.joinPaths(classpath)));
+            var options = new ArrayList<>(List.of("-d", destination.getAbsolutePath(), "-cp", FileUtils.joinPaths(classpath)));
             options.addAll(compileOptions());
             var compilation_task = compiler.getTask(null, file_manager, diagnostics, options, null, compilation_units);
             if (!compilation_task.call()) {

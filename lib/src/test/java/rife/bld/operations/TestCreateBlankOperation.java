@@ -80,9 +80,12 @@ public class TestCreateBlankOperation {
                     /myapp/\\.idea/runConfigurations
                     /myapp/\\.idea/runConfigurations/Run Main\\.xml
                     /myapp/\\.idea/runConfigurations/Run Tests\\.xml
+                    /myapp/bld\\.bat
                     /myapp/bld\\.sh
                     /myapp/lib
                     /myapp/lib/bld
+                    /myapp/lib/bld/bld-wrapper\\.jar
+                    /myapp/lib/bld/bld-wrapper\\.properties
                     /myapp/lib/compile
                     /myapp/lib/compile/rife2-.+\\.jar
                     /myapp/lib/runtime
@@ -134,6 +137,7 @@ public class TestCreateBlankOperation {
                     /myapp/\\.idea/runConfigurations
                     /myapp/\\.idea/runConfigurations/Run Main\\.xml
                     /myapp/\\.idea/runConfigurations/Run Tests\\.xml
+                    /myapp/bld\\.bat
                     /myapp/bld\\.sh
                     /myapp/build
                     /myapp/build/main
@@ -146,6 +150,8 @@ public class TestCreateBlankOperation {
                     /myapp/build/test/com/example/MyappTest\\.class
                     /myapp/lib
                     /myapp/lib/bld
+                    /myapp/lib/bld/bld-wrapper\\.jar
+                    /myapp/lib/bld/bld-wrapper\\.properties
                     /myapp/lib/compile
                     /myapp/lib/compile/rife2-.+\\.jar
                     /myapp/lib/runtime
@@ -218,9 +224,12 @@ public class TestCreateBlankOperation {
                     /yourthing/.idea/runConfigurations
                     /yourthing/.idea/runConfigurations/Run Main.xml
                     /yourthing/.idea/runConfigurations/Run Tests.xml
+                    /yourthing/bld.bat
                     /yourthing/bld.sh
                     /yourthing/lib
                     /yourthing/lib/bld
+                    /yourthing/lib/bld/bld-wrapper.jar
+                    /yourthing/lib/bld/bld-wrapper.properties
                     /yourthing/lib/compile
                     /yourthing/lib/runtime
                     /yourthing/lib/test

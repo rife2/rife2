@@ -4,10 +4,12 @@
  */
 package rife.bld.operations;
 
+import rife.Version;
 import rife.bld.Project;
 import rife.bld.dependencies.DependencyResolver;
 import rife.bld.dependencies.Scope;
 import rife.bld.operations.exceptions.OperationOptionException;
+import rife.bld.wrapper.Wrapper;
 import rife.template.TemplateFactory;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
@@ -180,11 +182,21 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         FileUtils.writeString(build_template.getContent(), project_build_file);
 
         // build shell scripts
+        var build_path = project_build_file.getPath().substring(project_.workDirectory().getPath().length() + 1);
+
         var build_sh_template = TemplateFactory.TXT.get("bld.bld_sh");
-        build_sh_template.setValue("projectBuildPath", project_build_file.getPath().substring(project_.workDirectory().getPath().length() + 1));
+        build_sh_template.setValue("projectBuildPath", build_path);
         var build_sh_file = new File(project_.workDirectory(), "bld.sh");
         FileUtils.writeString(build_sh_template.getContent(), build_sh_file);
         build_sh_file.setExecutable(true);
+
+        var build_bat_template = TemplateFactory.TXT.get("bld.bld_bat");
+        build_bat_template.setValue("projectBuildPath", build_path);
+        var build_bat_file = new File(project_.workDirectory(), "bld.bat");
+        FileUtils.writeString(build_bat_template.getContent(), build_bat_file);
+
+        // create the wrapper files
+        new Wrapper().createWrapperFiles(project_.libBldDirectory(), Version.getVersion());
     }
 
     /**

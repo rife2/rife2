@@ -8,11 +8,12 @@ import rife.bld.help.*;
 import rife.bld.operations.*;
 import rife.bld.dependencies.*;
 import rife.tools.FileUtils;
-import rife.tools.StringUtils;
 
 import java.io.File;
 import java.util.*;
-import java.util.regex.Pattern;
+
+import static rife.tools.FileUtils.JAR_FILE_PATTERN;
+import static rife.tools.FileUtils.JAVA_FILE_PATTERN;
 
 public class Project extends BuildExecutor {
     public File workDirectory = new File(System.getProperty("user.dir"));
@@ -154,10 +155,6 @@ public class Project extends BuildExecutor {
 
     public static Dependency dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type) {
         return new Dependency(groupId, artifactId, version, classifier, type);
-    }
-
-    public static String joinPaths(List<String> paths) {
-        return StringUtils.join(paths, File.pathSeparator);
     }
 
     /*
@@ -371,9 +368,6 @@ public class Project extends BuildExecutor {
     /*
      * File collections
      */
-
-    public static final Pattern JAVA_FILE_PATTERN = Pattern.compile("^.*\\.java$");
-    public static final Pattern JAR_FILE_PATTERN = Pattern.compile("^.*\\.jar$");
 
     public List<File> mainSourceFiles() {
         // get all the main java sources
