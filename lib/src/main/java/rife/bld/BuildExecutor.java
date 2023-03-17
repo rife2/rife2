@@ -6,6 +6,7 @@ package rife.bld;
 
 import rife.bld.help.HelpHelp;
 import rife.bld.operations.*;
+import rife.ioc.HierarchicalProperties;
 import rife.tools.ExceptionUtils;
 
 import java.util.*;
@@ -19,8 +20,28 @@ import java.util.*;
  * @since 1.5
  */
 public class BuildExecutor {
+    private final HierarchicalProperties properties_;
     private List<String> arguments_ = Collections.emptyList();
     private Map<String, CommandDefinition> buildCommands_ = null;
+
+    /**
+     * Creates a new build executor instance.
+     * @since 1.5
+     */
+    public BuildExecutor() {
+        properties_ = new HierarchicalProperties().parent(HierarchicalProperties.createSystemInstance());
+    }
+
+    /**
+     * Returns the properties uses by this conversation.
+     *
+     * @return the instance of {@code HierarchicalProperties} that is used
+     * by this build executor
+     * @since 1.5
+     */
+    public HierarchicalProperties properties() {
+        return properties_;
+    }
 
     /**
      * Execute the build commands from the provided arguments.
