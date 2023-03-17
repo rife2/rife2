@@ -196,6 +196,11 @@ public class Wrapper {
         bld_classpath.add(jarFile);
         args.add(FileUtils.joinPaths(FileUtils.combineToAbsolutePaths(bld_classpath)));
 
+        if (arguments.isEmpty() || !arguments.get(0).endsWith(".java")) {
+            args.add("-jar");
+            args.add(jarFile.getAbsolutePath());
+        }
+
         args.addAll(arguments);
 
         var process_builder = new ProcessBuilder(args);
