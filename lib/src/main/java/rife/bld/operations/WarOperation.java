@@ -12,6 +12,12 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
+/**
+ * Creates a war archive.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
 public class WarOperation {
     private final List<File> libSourceDirectories_ = new ArrayList<>();
     private final List<File> classesSourceDirectories_ = new ArrayList<>();
@@ -21,6 +27,11 @@ public class WarOperation {
     private File destinationDirectory_;
     private String destinationFileName_;
 
+    /**
+     * Performs the war operation.
+     *
+     * @since 1.5
+     */
     public void execute()
     throws Exception {
         var tmp_dir = Files.createTempDirectory("war").toFile();
@@ -38,12 +49,22 @@ public class WarOperation {
         }
     }
 
+    /**
+     * Part of the {@link #execute} operation, create the staging {@code WEB-INF} directory.
+     *
+     * @since 1.5
+     */
     public File executeCreateWebInfDirectory(File stagingDirectory) {
         var web_inf_dir = new File(stagingDirectory, "WEB-INF");
         web_inf_dir.mkdirs();
         return web_inf_dir;
     }
 
+    /**
+     * Part of the {@link #execute} operation, create the staging webapp directory.
+     *
+     * @since 1.5
+     */
     public void executeCopyWebappDirectory(File stagingDirectory)
     throws FileUtilsErrorException {
         if (webappDirectory() != null) {
@@ -51,6 +72,11 @@ public class WarOperation {
         }
     }
 
+    /**
+     * Part of the {@link #execute} operation, copy the staging {@code WEB-INF} jars.
+     *
+     * @since 1.5
+     */
     public void executeCopyWebInfLibJars(File stagingWebInfDirectory)
     throws FileUtilsErrorException {
         var web_inf_lib_dir = new File(stagingWebInfDirectory, "lib");
@@ -69,6 +95,11 @@ public class WarOperation {
         }
     }
 
+    /**
+     * Part of the {@link #execute} operation, copy the staging {@code WEB-INF} classes.
+     *
+     * @since 1.5
+     */
     public void executeCopyWebInfClassesFiles(File stagingWebInfDirectory)
     throws FileUtilsErrorException {
         var web_inf_classes_dir = new File(stagingWebInfDirectory, "classes");
@@ -80,6 +111,11 @@ public class WarOperation {
         }
     }
 
+    /**
+     * Part of the {@link #execute} operation, copy the staging {@code web.xml} file.
+     *
+     * @since 1.5
+     */
     public void executeCopyWebXmlFile(File stagingWebInfDirectory)
     throws FileUtilsErrorException {
         if (webXmlFile() != null) {
@@ -87,6 +123,11 @@ public class WarOperation {
         }
     }
 
+    /**
+     * Part of the {@link #execute} operation, create the war archive from the staging directory.
+     *
+     * @since 1.5
+     */
     public void executeCreateWarArchive(File stagingDirectory)
     throws Exception {
         new JarOperation()
@@ -96,6 +137,12 @@ public class WarOperation {
             .execute();
     }
 
+    /**
+     * Configures a war operation from a {@link Project}.
+     *
+     * @param project the project to configure the war operation from
+     * @since 1.5
+     */
     public WarOperation fromProject(WebProject project) {
         return libSourceDirectories(List.of(project.libCompileDirectory(), project.libRuntimeDirectory()))
             .jarSourceFiles(List.of(new NamedFile(project.jarFileName(), new File(project.buildDistDirectory(), project.jarFileName()))))
@@ -104,65 +151,164 @@ public class WarOperation {
             .destinationFileName(project.warFileName());
     }
 
-    public WarOperation libSourceDirectories(List<File> sources) {
-        libSourceDirectories_.addAll(sources);
+    /**
+     * Provides the lib source directories that will be used for the war archive creation.
+     *
+     * @param directories the lib source directories
+     * @return this operation instance
+     * @since 1.5
+     */
+    public WarOperation libSourceDirectories(List<File> directories) {
+        libSourceDirectories_.addAll(directories);
         return this;
     }
 
-    public List<File> libSourceDirectories() {
-        return libSourceDirectories_;
-    }
-
-    public WarOperation classesSourceDirectories(List<File> sources) {
-        classesSourceDirectories_.addAll(sources);
+    /**
+     * Provides the classes source directories that will be used for the war archive creation.
+     *
+     * @param directories the classes source directories
+     * @return this operation instance
+     * @since 1.5
+     */
+    public WarOperation classesSourceDirectories(List<File> directories) {
+        classesSourceDirectories_.addAll(directories);
         return this;
     }
 
-    public List<File> classesSourceDirectories() {
-        return classesSourceDirectories_;
-    }
-
+    /**
+     * Provides jar files that will be included in the war archive creation.
+     *
+     * @param files the jar source directories
+     * @return this operation instance
+     * @since 1.5
+     */
     public WarOperation jarSourceFiles(List<NamedFile> files) {
         jarSourceFiles_.addAll(files);
         return this;
     }
 
-    public List<NamedFile> jarSourceFiles() {
-        return jarSourceFiles_;
-    }
-
+    /**
+     * Provides web application directory that will provide resources for the war archive creation.
+     *
+     * @param directory the webapp directory
+     * @return this operation instance
+     * @since 1.5
+     */
     public WarOperation webappDirectory(File directory) {
         webappDirectory_ = directory;
         return this;
     }
 
-    public File webappDirectory() {
-        return webappDirectory_;
-    }
-
-    public WarOperation webXmlFile(File directory) {
-        webXmlFile_ = directory;
+    /**
+     * Provides web.xml file that will be used for the war archive creation.
+     *
+     * @param file the web.xml file
+     * @return this operation instance
+     * @since 1.5
+     */
+    public WarOperation webXmlFile(File file) {
+        webXmlFile_ = file;
         return this;
     }
 
-    public File webXmlFile() {
-        return webXmlFile_;
-    }
-
+    /**
+     * Provides the destination directory in which the war archive will be created.
+     *
+     * @param directory the war destination directory
+     * @return this operation instance
+     * @since 1.5
+     */
     public WarOperation destinationDirectory(File directory) {
         destinationDirectory_ = directory;
         return this;
     }
 
-    public File destinationDirectory() {
-        return destinationDirectory_;
-    }
-
+    /**
+     * Provides the destination file name that will be used for the war archive creation.
+     *
+     * @param name the war archive destination file name
+     * @return this operation instance
+     * @since 1.5
+     */
     public WarOperation destinationFileName(String name) {
         destinationFileName_ = name;
         return this;
     }
 
+    /**
+     * Retrieves the lib source directories that will be used for the war archive creation.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the lib source directories
+     * @since 1.5
+     */
+    public List<File> libSourceDirectories() {
+        return libSourceDirectories_;
+    }
+
+    /**
+     * Retrieves the classes source directories that will be used for the war archive creation.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the classes source directories
+     * @since 1.5
+     */
+    public List<File> classesSourceDirectories() {
+        return classesSourceDirectories_;
+    }
+
+    /**
+     * Retrieves jar files that will be included in the war archive creation.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the jar source directories
+     * @since 1.5
+     */
+    public List<NamedFile> jarSourceFiles() {
+        return jarSourceFiles_;
+    }
+
+    /**
+     * Retrieves web application directory that will provide resources for the war archive creation.
+     *
+     * @return the webapp directory
+     * @since 1.5
+     */
+    public File webappDirectory() {
+        return webappDirectory_;
+    }
+
+    /**
+     * Retrieves web.xml file that will be used for the war archive creation.
+     *
+     * @return the web.xml file
+     * @since 1.5
+     */
+    public File webXmlFile() {
+        return webXmlFile_;
+    }
+
+    /**
+     * Retrieves the destination directory in which the war archive will
+     * be created.
+     *
+     * @return the war archive's destination directory
+     * @since 1.5
+     */
+    public File destinationDirectory() {
+        return destinationDirectory_;
+    }
+
+    /**
+     * Retrieves the destination file name that will be used for the war
+     * archive creation.
+     *
+     * @return the war archive's destination file name
+     * @since 1.5
+     */
     public String destinationFileName() {
         return destinationFileName_;
     }

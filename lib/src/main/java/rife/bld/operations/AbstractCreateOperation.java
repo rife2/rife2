@@ -403,7 +403,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
      * @return the project creation blueprint instance
      * @since 1.5
      */
-    public Project project() {
+    public P project() {
         return project_;
     }
 }
