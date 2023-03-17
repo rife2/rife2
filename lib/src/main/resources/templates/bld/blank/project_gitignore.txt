@@ -1,6 +1,5 @@
 .gradle
 build
-lib
 .idea
 .vscode
 .DS_Store
@@ -14,5 +13,6 @@ derby.log
 *.project
 *.processors
 */bin/
+*/lib/
 !bld-wrapper.jar
 !bld-wrapper.properties
