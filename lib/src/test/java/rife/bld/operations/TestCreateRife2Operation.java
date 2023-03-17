@@ -222,13 +222,13 @@ public class TestCreateRife2Operation {
                     /myapp/src/test/java/com/example/MyappTest.java""",
                 FileUtils.generateDirectoryListing(tmp));
 
-            final var run_operation = new RunOperation().fromProject(create_operation.project());
-            final var executor = Executors.newSingleThreadScheduledExecutor();
-            final var checked_url = new URL("http://localhost:8080");
-            final String[] check_result = new String[1];
+            var run_operation = new RunOperation().fromProject(create_operation.project());
+            var executor = Executors.newSingleThreadScheduledExecutor();
+            var checked_url = new URL("http://localhost:8080");
+            var check_result = new StringBuilder();
             executor.schedule(() -> {
                 try {
-                    check_result[0] = FileUtils.readString(checked_url);
+                    check_result.append(FileUtils.readString(checked_url));
                 } catch (FileUtilsErrorException e) {
                     throw new RuntimeException(e);
                 }
@@ -236,7 +236,7 @@ public class TestCreateRife2Operation {
             executor.schedule(() -> run_operation.process().destroy(), 2, TimeUnit.SECONDS);
             run_operation.execute();
 
-            assertTrue(check_result[0].contains("<p>Hello World Myapp</p>"));
+            assertTrue(check_result.toString().contains("<p>Hello World Myapp</p>"));
         } finally {
             FileUtils.deleteDirectory(tmp);
         }

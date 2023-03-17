@@ -32,20 +32,20 @@ public class UberJarOperation {
         }
     }
 
-    public void executeCollectSourceJarContents(File tmp_dir)
+    public void executeCollectSourceJarContents(File stagingDirectory)
     throws FileUtilsErrorException {
         for (var jar : jarSourceFiles()) {
-            FileUtils.unzipFile(jar, tmp_dir);
+            FileUtils.unzipFile(jar, stagingDirectory);
         }
     }
 
-    public void executeCollectSourceResources(File tmp_dir)
+    public void executeCollectSourceResources(File stagingDirectory)
     throws FileUtilsErrorException {
         for (var named_file : resourceSourceDirectories()) {
             if (named_file.file().exists()) {
-                var destination = new File(tmp_dir, named_file.name());
-                destination.mkdirs();
-                FileUtils.copyDirectory(named_file.file(), destination);
+                var destination_file = new File(stagingDirectory, named_file.name());
+                destination_file.mkdirs();
+                FileUtils.copyDirectory(named_file.file(), destination_file);
             }
         }
     }

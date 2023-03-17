@@ -38,22 +38,22 @@ public class WarOperation {
         }
     }
 
-    public File executeCreateWebInfDirectory(File destination) {
-        var web_inf_dir = new File(destination, "WEB-INF");
+    public File executeCreateWebInfDirectory(File stagingDirectory) {
+        var web_inf_dir = new File(stagingDirectory, "WEB-INF");
         web_inf_dir.mkdirs();
         return web_inf_dir;
     }
 
-    public void executeCopyWebappDirectory(File destination)
+    public void executeCopyWebappDirectory(File stagingDirectory)
     throws FileUtilsErrorException {
         if (webappDirectory() != null) {
-            FileUtils.copyDirectory(webappDirectory(), destination);
+            FileUtils.copyDirectory(webappDirectory(), stagingDirectory);
         }
     }
 
-    public void executeCopyWebInfLibJars(File webInfDirectory)
+    public void executeCopyWebInfLibJars(File stagingWebInfDirectory)
     throws FileUtilsErrorException {
-        var web_inf_lib_dir = new File(webInfDirectory, "lib");
+        var web_inf_lib_dir = new File(stagingWebInfDirectory, "lib");
         if (!libSourceDirectories().isEmpty()) {
             web_inf_lib_dir.mkdirs();
             for (var dir : libSourceDirectories()) {
@@ -69,9 +69,9 @@ public class WarOperation {
         }
     }
 
-    public void executeCopyWebInfClassesFiles(File webInfDirectory)
+    public void executeCopyWebInfClassesFiles(File stagingWebInfDirectory)
     throws FileUtilsErrorException {
-        var web_inf_classes_dir = new File(webInfDirectory, "classes");
+        var web_inf_classes_dir = new File(stagingWebInfDirectory, "classes");
         if (!classesSourceDirectories().isEmpty()) {
             web_inf_classes_dir.mkdirs();
             for (var dir : classesSourceDirectories()) {
@@ -80,10 +80,10 @@ public class WarOperation {
         }
     }
 
-    public void executeCopyWebXmlFile(File webInfDirectory)
+    public void executeCopyWebXmlFile(File stagingWebInfDirectory)
     throws FileUtilsErrorException {
         if (webXmlFile() != null) {
-            FileUtils.copy(webXmlFile(), new File(webInfDirectory, "web.xml"));
+            FileUtils.copy(webXmlFile(), new File(stagingWebInfDirectory, "web.xml"));
         }
     }
 

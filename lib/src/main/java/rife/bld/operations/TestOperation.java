@@ -5,14 +5,19 @@
 package rife.bld.operations;
 
 import rife.bld.Project;
+import rife.bld.operations.exceptions.OperationOptionException;
 import rife.tools.FileUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class TestOperation {
-    private String javaTool_;
+    public static final String DEFAULT_JAVA_TOOL = "java";
+
+    private File workDirectory_ = new File(System.getProperty("user.dir"));
+    private String javaTool_ = DEFAULT_JAVA_TOOL;
     private final List<String> testJavaOptions_ = new ArrayList<>();
     private final List<String> testClasspath_ = new ArrayList<>();
     private String testToolMainClass_;
@@ -44,6 +49,7 @@ public class TestOperation {
     public Process executeStartProcess()
     throws Exception {
         var builder = new ProcessBuilder(executeConstructProcessCommandList());
+        builder.directory(workDirectory());
         if (testOutputConsumer() == null) {
             builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
         } else {
@@ -67,13 +73,29 @@ public class TestOperation {
     }
 
     public TestOperation fromProject(Project project) {
-        return javaTool(project.javaTool())
+        return workDirectory(project.workDirectory())
+            .javaTool(project.javaTool())
             .testJavaOptions(project.testJavaOptions())
             .testClasspath(project.testClasspath())
             .testToolMainClass(project.testToolMainClass())
             .testToolOptions(project.testToolOptions())
             .testOutputConsumer(System.out::print)
             .testErrorConsumer(System.err::print);
+    }
+
+    public TestOperation workDirectory(File directory) {
+        if (!directory.exists()) {
+            throw new OperationOptionException("ERROR: The work directory '" + directory + "' doesn't exist.");
+        }
+        if (!directory.isDirectory()) {
+            throw new OperationOptionException("ERROR: '" + directory + "' is not a directory.");
+        }
+        if (!directory.canWrite()) {
+            throw new OperationOptionException("ERROR: The work directory '" + directory + "' is not writable.");
+        }
+
+        workDirectory_ = directory;
+        return this;
     }
 
     public TestOperation javaTool(String tool) {
@@ -109,6 +131,10 @@ public class TestOperation {
     public TestOperation testErrorConsumer(Consumer<String> consumer) {
         testErrorConsumer_ = consumer;
         return this;
+    }
+
+    public File workDirectory() {
+        return workDirectory_;
     }
 
     public String javaTool() {

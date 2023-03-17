@@ -45,8 +45,12 @@ public class CompileOperation {
      * @since 1.5
      */
     public void executeCreateBuildDirectories() {
-        buildMainDirectory().mkdirs();
-        buildTestDirectory().mkdirs();
+        if (buildMainDirectory() != null) {
+            buildMainDirectory().mkdirs();
+        }
+        if (buildTestDirectory() != null) {
+            buildTestDirectory().mkdirs();
+        }
     }
 
     /**
@@ -85,7 +89,7 @@ public class CompileOperation {
      */
     public void executeBuildSources(List<String> classpath, List<File> sources, File destination)
     throws IOException {
-        if (sources.isEmpty()) {
+        if (sources.isEmpty() || destination == null) {
             return;
         }
 

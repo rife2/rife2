@@ -179,13 +179,14 @@ public class TestCreateBlankOperation {
                     /myapp/src/test/java/com/example/MyappTest.java""",
                 FileUtils.generateDirectoryListing(tmp));
 
-            final var run_operation = new RunOperation().fromProject(create_operation.project());
-            final String[] check_result = new String[1];
-            run_operation.runOutputConsumer(s -> check_result[0] = s);
-            run_operation.execute();
+            var check_result = new StringBuilder();
+            new RunOperation()
+                .fromProject(create_operation.project())
+                .runOutputConsumer(check_result::append)
+                .execute();
             assertEquals("""
                 Hello World!
-                """, check_result[0]);
+                """, check_result.toString());
         } finally {
             FileUtils.deleteDirectory(tmp);
         }
