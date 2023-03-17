@@ -24,11 +24,11 @@ public class RunOperation {
 
     private File workDirectory_ = new File(System.getProperty("user.dir"));
     private String javaTool_ = DEFAULT_JAVA_TOOL;
-    private final List<String> runJavaOptions_ = new ArrayList<>();
-    private final List<String> runClasspath_ = new ArrayList<>();
+    private final List<String> javaOptions_ = new ArrayList<>();
+    private final List<String> classpath_ = new ArrayList<>();
     private String mainClass_;
-    private Consumer<String> runOutputConsumer_;
-    private Consumer<String> runErrorConsumer_;
+    private Consumer<String> outputConsumer_;
+    private Consumer<String> errorConsumer_;
     private Process process_;
 
     /**
@@ -55,9 +55,9 @@ public class RunOperation {
     public List<String> executeConstructProcessCommandList() {
         var args = new ArrayList<String>();
         args.add(javaTool());
-        args.addAll(runJavaOptions());
+        args.addAll(javaOptions());
         args.add("-cp");
-        args.add(Project.joinPaths(runClasspath()));
+        args.add(Project.joinPaths(classpath()));
         args.add(mainClass());
         return args;
     }
@@ -71,12 +71,12 @@ public class RunOperation {
     throws Exception {
         var builder = new ProcessBuilder(executeConstructProcessCommandList());
         builder.directory(workDirectory());
-        if (runOutputConsumer() == null) {
+        if (outputConsumer() == null) {
             builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
         } else {
             builder.redirectOutput(ProcessBuilder.Redirect.PIPE);
         }
-        if (runErrorConsumer() == null) {
+        if (errorConsumer() == null) {
             builder.redirectError(ProcessBuilder.Redirect.INHERIT);
         } else {
             builder.redirectError(ProcessBuilder.Redirect.PIPE);
@@ -91,11 +91,11 @@ public class RunOperation {
      * @since 1.5
      */
     public void executeHandleProcessOutput(String output, String error) {
-        if (runOutputConsumer() != null) {
-            runOutputConsumer().accept(output);
+        if (outputConsumer() != null) {
+            outputConsumer().accept(output);
         }
-        if (runErrorConsumer() != null) {
-            runErrorConsumer().accept(error);
+        if (errorConsumer() != null) {
+            errorConsumer().accept(error);
         }
     }
 
@@ -108,8 +108,8 @@ public class RunOperation {
     public RunOperation fromProject(Project project) {
         return workDirectory(project.workDirectory())
             .javaTool(project.javaTool())
-            .runJavaOptions(project.runJavaOptions())
-            .runClasspath(project.runClasspath())
+            .javaOptions(project.runJavaOptions())
+            .classpath(project.runClasspath())
             .mainClass(project.mainClass());
     }
 
@@ -158,8 +158,8 @@ public class RunOperation {
      * @return this operation instance
      * @since 1.5
      */
-    public RunOperation runJavaOptions(List<String> options) {
-        runJavaOptions_.addAll(options);
+    public RunOperation javaOptions(List<String> options) {
+        javaOptions_.addAll(options);
         return this;
     }
 
@@ -170,8 +170,8 @@ public class RunOperation {
      * @return this operation instance
      * @since 1.5
      */
-    public RunOperation runClasspath(List<String> classpath) {
-        runClasspath_.addAll(classpath);
+    public RunOperation classpath(List<String> classpath) {
+        classpath_.addAll(classpath);
         return this;
     }
 
@@ -194,8 +194,8 @@ public class RunOperation {
      * @return this operation instance
      * @since 1.5
      */
-    public RunOperation runOutputConsumer(Consumer<String> consumer) {
-        runOutputConsumer_ = consumer;
+    public RunOperation outputConsumer(Consumer<String> consumer) {
+        outputConsumer_ = consumer;
         return this;
     }
 
@@ -206,8 +206,8 @@ public class RunOperation {
      * @return this operation instance
      * @since 1.5
      */
-    public RunOperation runErrorConsumer(Consumer<String> consumer) {
-        runErrorConsumer_ = consumer;
+    public RunOperation errorConsumer(Consumer<String> consumer) {
+        errorConsumer_ = consumer;
         return this;
     }
 
@@ -239,8 +239,8 @@ public class RunOperation {
      * @return the java tool's options
      * @since 1.5
      */
-    public List<String> runJavaOptions() {
-        return runJavaOptions_;
+    public List<String> javaOptions() {
+        return javaOptions_;
     }
 
     /**
@@ -251,8 +251,8 @@ public class RunOperation {
      * @return the run operation's classpath
      * @since 1.5
      */
-    public List<String> runClasspath() {
-        return runClasspath_;
+    public List<String> classpath() {
+        return classpath_;
     }
 
     /**
@@ -266,23 +266,23 @@ public class RunOperation {
     }
 
     /**
-     * Retrieves the consumer that will be used to capture the process output.
+     * Retrieves the consumer that is used to capture the process output.
      *
      * @return the output consumer
      * @since 1.5
      */
-    public Consumer<String> runOutputConsumer() {
-        return runOutputConsumer_;
+    public Consumer<String> outputConsumer() {
+        return outputConsumer_;
     }
 
     /**
-     * Retrieves the consumer that will be used to capture the process errors.
+     * Retrieves the consumer that is used to capture the process errors.
      *
      * @return the error consumer
      * @since 1.5
      */
-    public Consumer<String> runErrorConsumer() {
-        return runErrorConsumer_;
+    public Consumer<String> errorConsumer() {
+        return errorConsumer_;
     }
 
     /**

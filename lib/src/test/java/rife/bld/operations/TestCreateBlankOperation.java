@@ -182,7 +182,7 @@ public class TestCreateBlankOperation {
             var check_result = new StringBuilder();
             new RunOperation()
                 .fromProject(create_operation.project())
-                .runOutputConsumer(check_result::append)
+                .outputConsumer(check_result::append)
                 .execute();
             assertEquals("""
                 Hello World!

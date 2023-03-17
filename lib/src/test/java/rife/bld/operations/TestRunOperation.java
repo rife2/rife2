@@ -23,11 +23,11 @@ public class TestRunOperation {
         assertTrue(operation.workDirectory().isDirectory());
         assertTrue(operation.workDirectory().canWrite());
         assertEquals("java", operation.javaTool());
-        assertTrue(operation.runJavaOptions().isEmpty());
-        assertTrue(operation.runClasspath().isEmpty());
+        assertTrue(operation.javaOptions().isEmpty());
+        assertTrue(operation.classpath().isEmpty());
         assertNull(operation.mainClass());
-        assertNull(operation.runOutputConsumer());
-        assertNull(operation.runErrorConsumer());
+        assertNull(operation.outputConsumer());
+        assertNull(operation.errorConsumer());
         assertNull(operation.process());
     }
 
@@ -51,42 +51,42 @@ public class TestRunOperation {
             operation1
                 .workDirectory(work_directory)
                 .javaTool(java_tool)
-                .runJavaOptions(List.of(run_java_option1, run_java_option2))
-                .runClasspath(List.of(run_classpath1, run_classpath2))
+                .javaOptions(List.of(run_java_option1, run_java_option2))
+                .classpath(List.of(run_classpath1, run_classpath2))
                 .mainClass(main_class)
-                .runOutputConsumer(run_output_consumer)
-                .runErrorConsumer(run_error_consumer);
+                .outputConsumer(run_output_consumer)
+                .errorConsumer(run_error_consumer);
 
             assertEquals(work_directory, operation1.workDirectory());
             assertEquals(java_tool, operation1.javaTool());
-            assertTrue(operation1.runJavaOptions().contains(run_java_option1));
-            assertTrue(operation1.runJavaOptions().contains(run_java_option2));
-            assertTrue(operation1.runClasspath().contains(run_classpath1));
-            assertTrue(operation1.runClasspath().contains(run_classpath2));
+            assertTrue(operation1.javaOptions().contains(run_java_option1));
+            assertTrue(operation1.javaOptions().contains(run_java_option2));
+            assertTrue(operation1.classpath().contains(run_classpath1));
+            assertTrue(operation1.classpath().contains(run_classpath2));
             assertEquals(main_class, operation1.mainClass());
-            assertSame(run_output_consumer, operation1.runOutputConsumer());
-            assertSame(run_error_consumer, operation1.runErrorConsumer());
+            assertSame(run_output_consumer, operation1.outputConsumer());
+            assertSame(run_error_consumer, operation1.errorConsumer());
 
             var operation2 = new RunOperation();
             operation2.workDirectory(work_directory);
             operation2.javaTool(java_tool);
-            operation2.runJavaOptions().add(run_java_option1);
-            operation2.runJavaOptions().add(run_java_option2);
-            operation2.runClasspath().add(run_classpath1);
-            operation2.runClasspath().add(run_classpath2);
+            operation2.javaOptions().add(run_java_option1);
+            operation2.javaOptions().add(run_java_option2);
+            operation2.classpath().add(run_classpath1);
+            operation2.classpath().add(run_classpath2);
             operation2.mainClass(main_class);
-            operation2.runOutputConsumer(run_output_consumer);
-            operation2.runErrorConsumer(run_error_consumer);
+            operation2.outputConsumer(run_output_consumer);
+            operation2.errorConsumer(run_error_consumer);
 
             assertEquals(work_directory, operation2.workDirectory());
             assertEquals(java_tool, operation2.javaTool());
-            assertTrue(operation2.runJavaOptions().contains(run_java_option1));
-            assertTrue(operation2.runJavaOptions().contains(run_java_option2));
-            assertTrue(operation2.runClasspath().contains(run_classpath1));
-            assertTrue(operation2.runClasspath().contains(run_classpath2));
+            assertTrue(operation2.javaOptions().contains(run_java_option1));
+            assertTrue(operation2.javaOptions().contains(run_java_option2));
+            assertTrue(operation2.classpath().contains(run_classpath1));
+            assertTrue(operation2.classpath().contains(run_classpath2));
             assertEquals(main_class, operation2.mainClass());
-            assertSame(run_output_consumer, operation2.runOutputConsumer());
-            assertSame(run_error_consumer, operation2.runErrorConsumer());
+            assertSame(run_output_consumer, operation2.outputConsumer());
+            assertSame(run_error_consumer, operation2.errorConsumer());
         } finally {
             FileUtils.deleteDirectory(work_directory);
         }
@@ -124,8 +124,8 @@ public class TestRunOperation {
             var output = new StringBuilder();
             var run_operation = new RunOperation()
                 .mainClass("Source1")
-                .runClasspath(List.of(build_main.getAbsolutePath()))
-                .runOutputConsumer(output::append);
+                .classpath(List.of(build_main.getAbsolutePath()))
+                .outputConsumer(output::append);
             run_operation.execute();
 
             assertEquals("source1", output.toString());
@@ -152,7 +152,7 @@ public class TestRunOperation {
             var check_result = new StringBuilder();
             new RunOperation()
                 .fromProject(create_operation.project())
-                .runOutputConsumer(check_result::append)
+                .outputConsumer(check_result::append)
                 .execute();
             assertEquals("""
                 Hello World!
