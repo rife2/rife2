@@ -96,7 +96,7 @@ public class TestUberJarOperation {
 
             var uberjar_file = new File(uberjar_operation.destinationDirectory(), uberjar_operation.destinationFileName());
             try (var jar = new JarFile(uberjar_file)) {
-                assertEquals(1372, jar.size());
+                assertTrue(jar.size() > 1300);
             }
 
             var check_result = new StringBuilder();

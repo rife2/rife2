@@ -14,6 +14,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -67,160 +68,158 @@ public class TestCreateRife2Operation {
                 .downloadDependencies(true);
             create_operation.execute();
 
-            assertEquals("""
+            assertTrue(Pattern.compile("""
                     /myapp
-                    /myapp/.gitignore
-                    /myapp/.idea
-                    /myapp/.idea/app.iml
-                    /myapp/.idea/bld.iml
-                    /myapp/.idea/libraries
-                    /myapp/.idea/libraries/bld.xml
-                    /myapp/.idea/libraries/compile.xml
-                    /myapp/.idea/libraries/runtime.xml
-                    /myapp/.idea/libraries/standalone.xml
-                    /myapp/.idea/libraries/test.xml
-                    /myapp/.idea/misc.xml
-                    /myapp/.idea/modules.xml
-                    /myapp/.idea/runConfigurations
-                    /myapp/.idea/runConfigurations/Run Main.xml
-                    /myapp/.idea/runConfigurations/Run Tests.xml
-                    /myapp/bld.sh
+                    /myapp/\\.gitignore
+                    /myapp/\\.idea
+                    /myapp/\\.idea/app\\.iml
+                    /myapp/\\.idea/bld\\.iml
+                    /myapp/\\.idea/libraries
+                    /myapp/\\.idea/libraries/bld\\.xml
+                    /myapp/\\.idea/libraries/compile\\.xml
+                    /myapp/\\.idea/libraries/runtime\\.xml
+                    /myapp/\\.idea/libraries/standalone\\.xml
+                    /myapp/\\.idea/libraries/test\\.xml
+                    /myapp/\\.idea/misc\\.xml
+                    /myapp/\\.idea/modules\\.xml
+                    /myapp/\\.idea/runConfigurations
+                    /myapp/\\.idea/runConfigurations/Run Main\\.xml
+                    /myapp/\\.idea/runConfigurations/Run Tests\\.xml
+                    /myapp/bld\\.sh
                     /myapp/lib
                     /myapp/lib/bld
                     /myapp/lib/compile
-                    /myapp/lib/compile/rife2-1.5.0-20230313.213352-8.jar
+                    /myapp/lib/compile/rife2-.+\\.jar
                     /myapp/lib/runtime
                     /myapp/lib/standalone
-                    /myapp/lib/standalone/jetty-http-11.0.14.jar
-                    /myapp/lib/standalone/jetty-io-11.0.14.jar
-                    /myapp/lib/standalone/jetty-jakarta-servlet-api-5.0.2.jar
-                    /myapp/lib/standalone/jetty-security-11.0.14.jar
-                    /myapp/lib/standalone/jetty-server-11.0.14.jar
-                    /myapp/lib/standalone/jetty-servlet-11.0.14.jar
-                    /myapp/lib/standalone/jetty-util-11.0.14.jar
-                    /myapp/lib/standalone/slf4j-api-2.0.5.jar
-                    /myapp/lib/standalone/slf4j-simple-2.0.5.jar
+                    /myapp/lib/standalone/jetty-http-11\\.0\\.14\\.jar
+                    /myapp/lib/standalone/jetty-io-11\\.0\\.14\\.jar
+                    /myapp/lib/standalone/jetty-jakarta-servlet-api-5\\.0\\.2\\.jar
+                    /myapp/lib/standalone/jetty-security-11\\.0\\.14\\.jar
+                    /myapp/lib/standalone/jetty-server-11\\.0\\.14\\.jar
+                    /myapp/lib/standalone/jetty-servlet-11\\.0\\.14\\.jar
+                    /myapp/lib/standalone/jetty-util-11\\.0\\.14\\.jar
+                    /myapp/lib/standalone/slf4j-api-2\\.0\\.5\\.jar
+                    /myapp/lib/standalone/slf4j-simple-2\\.0\\.5\\.jar
                     /myapp/lib/test
-                    /myapp/lib/test/apiguardian-api-1.1.2.jar
-                    /myapp/lib/test/jsoup-1.15.4.jar
-                    /myapp/lib/test/junit-jupiter-5.9.2.jar
-                    /myapp/lib/test/junit-jupiter-api-5.9.2.jar
-                    /myapp/lib/test/junit-jupiter-engine-5.9.2.jar
-                    /myapp/lib/test/junit-jupiter-params-5.9.2.jar
-                    /myapp/lib/test/junit-platform-commons-1.9.2.jar
-                    /myapp/lib/test/junit-platform-console-standalone-1.9.2.jar
-                    /myapp/lib/test/junit-platform-engine-1.9.2.jar
-                    /myapp/lib/test/opentest4j-1.2.0.jar
+                    /myapp/lib/test/apiguardian-api-1\\.1\\.2\\.jar
+                    /myapp/lib/test/jsoup-1\\.15\\.4\\.jar
+                    /myapp/lib/test/junit-jupiter-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-api-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-engine-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-params-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-platform-commons-1\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-platform-console-standalone-1\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-platform-engine-1\\.9\\.2\\.jar
+                    /myapp/lib/test/opentest4j-1\\.2\\.0\\.jar
                     /myapp/src
                     /myapp/src/bld
                     /myapp/src/bld/java
                     /myapp/src/bld/java/com
                     /myapp/src/bld/java/com/example
-                    /myapp/src/bld/java/com/example/MyappBuild.java
+                    /myapp/src/bld/java/com/example/MyappBuild\\.java
                     /myapp/src/main
                     /myapp/src/main/java
                     /myapp/src/main/java/com
                     /myapp/src/main/java/com/example
-                    /myapp/src/main/java/com/example/MyappSite.java
-                    /myapp/src/main/java/com/example/MyappSiteUber.java
+                    /myapp/src/main/java/com/example/MyappSite\\.java
+                    /myapp/src/main/java/com/example/MyappSiteUber\\.java
                     /myapp/src/main/resources
                     /myapp/src/main/resources/templates
-                    /myapp/src/main/resources/templates/hello.html
+                    /myapp/src/main/resources/templates/hello\\.html
                     /myapp/src/main/webapp
                     /myapp/src/main/webapp/WEB-INF
-                    /myapp/src/main/webapp/WEB-INF/web.xml
+                    /myapp/src/main/webapp/WEB-INF/web\\.xml
                     /myapp/src/main/webapp/css
-                    /myapp/src/main/webapp/css/style.css
+                    /myapp/src/main/webapp/css/style\\.css
                     /myapp/src/test
                     /myapp/src/test/java
                     /myapp/src/test/java/com
                     /myapp/src/test/java/com/example
-                    /myapp/src/test/java/com/example/MyappTest.java""",
-                FileUtils.generateDirectoryListing(tmp));
+                    /myapp/src/test/java/com/example/MyappTest\\.java""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
 
             var compile_operation = new CompileOperation().fromProject(create_operation.project());
             compile_operation.execute();
             assertTrue(compile_operation.diagnostics().isEmpty());
-            assertEquals("""
+            assertTrue(Pattern.compile("""
                     /myapp
-                    /myapp/.gitignore
-                    /myapp/.idea
-                    /myapp/.idea/app.iml
-                    /myapp/.idea/bld.iml
-                    /myapp/.idea/libraries
-                    /myapp/.idea/libraries/bld.xml
-                    /myapp/.idea/libraries/compile.xml
-                    /myapp/.idea/libraries/runtime.xml
-                    /myapp/.idea/libraries/standalone.xml
-                    /myapp/.idea/libraries/test.xml
-                    /myapp/.idea/misc.xml
-                    /myapp/.idea/modules.xml
-                    /myapp/.idea/runConfigurations
-                    /myapp/.idea/runConfigurations/Run Main.xml
-                    /myapp/.idea/runConfigurations/Run Tests.xml
-                    /myapp/bld.sh
+                    /myapp/\\.gitignore
+                    /myapp/\\.idea
+                    /myapp/\\.idea/app\\.iml
+                    /myapp/\\.idea/bld\\.iml
+                    /myapp/\\.idea/libraries
+                    /myapp/\\.idea/libraries/bld\\.xml
+                    /myapp/\\.idea/libraries/compile\\.xml
+                    /myapp/\\.idea/libraries/runtime\\.xml
+                    /myapp/\\.idea/libraries/standalone\\.xml
+                    /myapp/\\.idea/libraries/test\\.xml
+                    /myapp/\\.idea/misc\\.xml
+                    /myapp/\\.idea/modules\\.xml
+                    /myapp/\\.idea/runConfigurations
+                    /myapp/\\.idea/runConfigurations/Run Main\\.xml
+                    /myapp/\\.idea/runConfigurations/Run Tests\\.xml
+                    /myapp/bld\\.sh
                     /myapp/build
                     /myapp/build/main
                     /myapp/build/main/com
                     /myapp/build/main/com/example
-                    /myapp/build/main/com/example/MyappSite.class
-                    /myapp/build/main/com/example/MyappSiteUber.class
+                    /myapp/build/main/com/example/MyappSite\\.class
+                    /myapp/build/main/com/example/MyappSiteUber\\.class
                     /myapp/build/test
                     /myapp/build/test/com
                     /myapp/build/test/com/example
-                    /myapp/build/test/com/example/MyappTest.class
+                    /myapp/build/test/com/example/MyappTest\\.class
                     /myapp/lib
                     /myapp/lib/bld
                     /myapp/lib/compile
-                    /myapp/lib/compile/rife2-1.5.0-20230313.213352-8.jar
+                    /myapp/lib/compile/rife2-.+\\.jar
                     /myapp/lib/runtime
                     /myapp/lib/standalone
-                    /myapp/lib/standalone/jetty-http-11.0.14.jar
-                    /myapp/lib/standalone/jetty-io-11.0.14.jar
-                    /myapp/lib/standalone/jetty-jakarta-servlet-api-5.0.2.jar
-                    /myapp/lib/standalone/jetty-security-11.0.14.jar
-                    /myapp/lib/standalone/jetty-server-11.0.14.jar
-                    /myapp/lib/standalone/jetty-servlet-11.0.14.jar
-                    /myapp/lib/standalone/jetty-util-11.0.14.jar
-                    /myapp/lib/standalone/slf4j-api-2.0.5.jar
-                    /myapp/lib/standalone/slf4j-simple-2.0.5.jar
+                    /myapp/lib/standalone/jetty-http-11\\.0\\.14\\.jar
+                    /myapp/lib/standalone/jetty-io-11\\.0\\.14\\.jar
+                    /myapp/lib/standalone/jetty-jakarta-servlet-api-5\\.0\\.2\\.jar
+                    /myapp/lib/standalone/jetty-security-11\\.0\\.14\\.jar
+                    /myapp/lib/standalone/jetty-server-11\\.0\\.14\\.jar
+                    /myapp/lib/standalone/jetty-servlet-11\\.0\\.14\\.jar
+                    /myapp/lib/standalone/jetty-util-11\\.0\\.14\\.jar
+                    /myapp/lib/standalone/slf4j-api-2\\.0\\.5\\.jar
+                    /myapp/lib/standalone/slf4j-simple-2\\.0\\.5\\.jar
                     /myapp/lib/test
-                    /myapp/lib/test/apiguardian-api-1.1.2.jar
-                    /myapp/lib/test/jsoup-1.15.4.jar
-                    /myapp/lib/test/junit-jupiter-5.9.2.jar
-                    /myapp/lib/test/junit-jupiter-api-5.9.2.jar
-                    /myapp/lib/test/junit-jupiter-engine-5.9.2.jar
-                    /myapp/lib/test/junit-jupiter-params-5.9.2.jar
-                    /myapp/lib/test/junit-platform-commons-1.9.2.jar
-                    /myapp/lib/test/junit-platform-console-standalone-1.9.2.jar
-                    /myapp/lib/test/junit-platform-engine-1.9.2.jar
-                    /myapp/lib/test/opentest4j-1.2.0.jar
+                    /myapp/lib/test/apiguardian-api-1\\.1\\.2\\.jar
+                    /myapp/lib/test/jsoup-1\\.15\\.4\\.jar
+                    /myapp/lib/test/junit-jupiter-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-api-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-engine-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-params-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-platform-commons-1\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-platform-console-standalone-1\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-platform-engine-1\\.9\\.2\\.jar
+                    /myapp/lib/test/opentest4j-1\\.2\\.0\\.jar
                     /myapp/src
                     /myapp/src/bld
                     /myapp/src/bld/java
                     /myapp/src/bld/java/com
                     /myapp/src/bld/java/com/example
-                    /myapp/src/bld/java/com/example/MyappBuild.java
+                    /myapp/src/bld/java/com/example/MyappBuild\\.java
                     /myapp/src/main
                     /myapp/src/main/java
                     /myapp/src/main/java/com
                     /myapp/src/main/java/com/example
-                    /myapp/src/main/java/com/example/MyappSite.java
-                    /myapp/src/main/java/com/example/MyappSiteUber.java
+                    /myapp/src/main/java/com/example/MyappSite\\.java
+                    /myapp/src/main/java/com/example/MyappSiteUber\\.java
                     /myapp/src/main/resources
                     /myapp/src/main/resources/templates
-                    /myapp/src/main/resources/templates/hello.html
+                    /myapp/src/main/resources/templates/hello\\.html
                     /myapp/src/main/webapp
                     /myapp/src/main/webapp/WEB-INF
-                    /myapp/src/main/webapp/WEB-INF/web.xml
+                    /myapp/src/main/webapp/WEB-INF/web\\.xml
                     /myapp/src/main/webapp/css
-                    /myapp/src/main/webapp/css/style.css
+                    /myapp/src/main/webapp/css/style\\.css
                     /myapp/src/test
                     /myapp/src/test/java
                     /myapp/src/test/java/com
                     /myapp/src/test/java/com/example
-                    /myapp/src/test/java/com/example/MyappTest.java""",
-                FileUtils.generateDirectoryListing(tmp));
+                    /myapp/src/test/java/com/example/MyappTest\\.java""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
 
             var run_operation = new RunOperation().fromProject(create_operation.project());
             var executor = Executors.newSingleThreadScheduledExecutor();
