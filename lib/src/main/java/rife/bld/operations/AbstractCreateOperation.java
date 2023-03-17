@@ -93,8 +93,8 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         // standard names
         projectClassName_ = StringUtils.capitalize(project_.name());
         projectBuildName_ = projectClassName_ + "Build";
-        projectMainName_ = projectClassName_;
-        projectMainUberName_ = projectClassName_;
+        projectMainName_ = projectClassName_ + "Main";
+        projectMainUberName_ = projectMainName_;
         projectTestName_ = projectClassName_ + "Test";
 
         // create the main project structure
