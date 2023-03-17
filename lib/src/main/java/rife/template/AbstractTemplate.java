@@ -8,6 +8,7 @@ import rife.config.RifeConfig;
 import rife.forms.FormBuilder;
 import rife.resources.ResourceFinder;
 import rife.template.exceptions.*;
+import rife.tools.Convert;
 import rife.tools.Localization;
 
 import java.io.IOException;
@@ -943,6 +944,20 @@ public abstract class AbstractTemplate implements Template {
         }
 
         return Collections.unmodifiableMap(attributes_);
+    }
+
+    public String getValueOrAttribute(String name) {
+        String value = null;
+        if (isValueSet(name)) {
+            value = getValue(name);
+        }
+        if (value == null && hasAttribute(name)) {
+            value = Convert.toString(getAttribute(name));
+        }
+        if (value == null && hasDefaultValue(name)) {
+            value = getDefaultValue(name);
+        }
+        return value;
     }
 
     final void initialize()

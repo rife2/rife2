@@ -1551,11 +1551,11 @@ public interface Template extends Cloneable {
     void setAttribute(String name, Object value);
 
     /**
-     * Sets the given attributes to the corresponding values.
+     * Sets the given attributes to the corresponding data.
      * Calling this method is equivalent to calling {@link #setAttribute
      * setAttribute} for each entry in the given map.
      *
-     * @param map a map of attribute name and values
+     * @param map a map of attribute names and data
      * @see #setAttribute
      * @see #removeAttribute
      * @see #hasAttribute
@@ -1592,10 +1592,10 @@ public interface Template extends Cloneable {
     boolean hasAttribute(String name);
 
     /**
-     * Returns the value of an attribute that was {@linkplain #setAttribute set}
+     * Returns the data of an attribute that was {@linkplain #setAttribute set}
      * in this template instance.
      *
-     * @return the attributes value; or {@code null} of no such attribute could be found
+     * @return the attribute's data; or {@code null} of no such attribute could be found
      * @see #setAttribute
      * @see #removeAttribute
      * @see #setAttributes
@@ -1606,7 +1606,7 @@ public interface Template extends Cloneable {
     Object getAttribute(String name);
 
     /**
-     * Returns the name and value of all attributes that
+     * Returns the name and data of all attributes that
      * have been {@linkplain #setAttribute set} in this template instance.
      *
      * @return the attributes currently set in this template
@@ -1618,6 +1618,22 @@ public interface Template extends Cloneable {
      * @since 1.5
      */
     Map<String, Object> getAttributes();
+
+    /**
+     * Returns the content of a value or the data of an attribute with
+     * a particular name.
+     * <p>
+     * If the value with the provided name has content, it will be returned.
+     * Otherwise, if an attribute with the provided name has data, the string presentation of that will be returned.
+     * If neither are present, and a default value was provided, that will be returned.
+     * Otherwise, {@code null} will be returned.
+     *
+     * @param name the name of the value or attribute
+     * @return the string presentation of the value or attribute with the provided name; or
+     * {@code null} if neither have data
+     * @since 1.5
+     */
+    String getValueOrAttribute(String name);
 
     /**
      * Returns a list of URL's that this template depends on, and their last
