@@ -17,7 +17,13 @@ import rife.validation.ValidityChecks;
 import java.io.File;
 import java.util.List;
 
-abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T, P>, P extends Project> {
+/**
+ * Provides the baseline foundation for creating a project structure.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
+public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T, P>, P extends Project> {
     final String templateBase_;
 
     File workDirectory_ = new File(System.getProperty("user.dir"));
@@ -66,7 +72,13 @@ abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T, P>, 
         }
     }
 
-    abstract P createProjectBlueprint();
+    /**
+     * Create a blueprint of the project.
+     *
+     * @return a blueprint for project creation
+     * @since 1.5
+     */
+    protected abstract P createProjectBlueprint();
 
     /**
      * Part of the {@link #execute} operation, configures the project.

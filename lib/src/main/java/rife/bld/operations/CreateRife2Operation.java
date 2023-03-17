@@ -27,7 +27,7 @@ public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Ope
         super("bld.rife2_hello.");
     }
 
-    Rife2ProjectBlueprint createProjectBlueprint() {
+    protected Rife2ProjectBlueprint createProjectBlueprint() {
         return new Rife2ProjectBlueprint(new File(workDirectory(), projectName()), packageName(), projectName());
     }
 

@@ -20,7 +20,7 @@ public class CreateBlankOperation extends AbstractCreateOperation<CreateBlankOpe
         super("bld.blank.");
     }
 
-    Project createProjectBlueprint() {
+    protected Project createProjectBlueprint() {
         return new BlankProjectBlueprint(new File(workDirectory(), projectName()), packageName(), projectName());
     }
 }
