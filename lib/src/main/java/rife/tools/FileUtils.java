@@ -447,7 +447,7 @@ public final class FileUtils {
         }
     }
 
-    public static String convertPathToSystemSeperator(String path) {
+    public static String convertPathToSystemSeparator(String path) {
         if (null == path) throw new IllegalArgumentException("path can't be null.");
 
         var path_parts = StringUtils.split(path, "/");
