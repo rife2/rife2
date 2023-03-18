@@ -15,6 +15,13 @@ import java.util.*;
 import static rife.tools.FileUtils.JAR_FILE_PATTERN;
 import static rife.tools.FileUtils.JAVA_FILE_PATTERN;
 
+/**
+ * Provides the configuration and commands of a Java project for the
+ * build system.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
 public class Project extends BuildExecutor {
     public File workDirectory = new File(System.getProperty("user.dir"));
     public String pkg = null;

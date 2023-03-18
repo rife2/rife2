@@ -10,7 +10,13 @@ import rife.bld.operations.*;
 import java.io.File;
 import java.util.*;
 
-public class WebProject extends Project {
+/**
+ * Provides the configuration and commands of a Java web project for the
+ * build system.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */public class WebProject extends Project {
     protected String warFileName = null;
     protected File srcMainWebappDirectory = null;
 
