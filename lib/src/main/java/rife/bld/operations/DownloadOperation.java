@@ -51,6 +51,7 @@ public class DownloadOperation {
             return;
         }
 
+        libCompileDirectory().mkdirs();
         var compile_deps = dependencies().get(Scope.compile);
         if (compile_deps != null) {
             for (var dependency : compile_deps) {
@@ -70,6 +71,7 @@ public class DownloadOperation {
             return;
         }
 
+        libRuntimeDirectory().mkdirs();
         var runtime_deps = dependencies().get(Scope.runtime);
         if (runtime_deps != null) {
             for (var dependency : runtime_deps) {
@@ -89,6 +91,7 @@ public class DownloadOperation {
             return;
         }
 
+        libStandaloneDirectory().mkdirs();
         var standalone_deps = dependencies().get(Scope.standalone);
         if (standalone_deps != null) {
             for (var dependency : standalone_deps) {
@@ -108,6 +111,7 @@ public class DownloadOperation {
             return;
         }
 
+        libTestDirectory().mkdirs();
         var test_deps = dependencies().get(Scope.test);
         if (test_deps != null) {
             for (var dependency : test_deps) {
