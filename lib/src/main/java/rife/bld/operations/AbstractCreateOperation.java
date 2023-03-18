@@ -219,9 +219,12 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         FileUtils.writeString(
             TemplateFactory.XML.get(templateBase_ + "idea.modules").getContent(),
             new File(ideaDirectory_, "modules.xml"));
-        FileUtils.writeString(
-            TemplateFactory.XML.get(templateBase_ + "idea.libraries.bld").getContent(),
-            new File(ideaLibrariesDirectory_, "bld.xml"));
+
+        var bld_xml_template = TemplateFactory.XML.get(templateBase_ + "idea.libraries.bld");
+        bld_xml_template.setValue("version", Version.getVersion());
+        var bld_xml_file =  new File(ideaLibrariesDirectory_, "bld.xml");
+        FileUtils.writeString(bld_xml_template.getContent(), bld_xml_file);
+
         FileUtils.writeString(
             TemplateFactory.XML.get(templateBase_ + "idea.libraries.compile").getContent(),
             new File(ideaLibrariesDirectory_, "compile.xml"));

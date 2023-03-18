@@ -2,9 +2,13 @@
   <library name="bld">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/lib/bld" />
+      <root url="jar://$USER_HOME$/.rife2/dist/rife2-{{v version/}}.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <excluded>
+      <root url="jar://$PROJECT_DIR$/lib/bld/bld-wrapper.jar!/" />
+    </excluded>
     <jarDirectory url="file://$PROJECT_DIR$/lib/bld" recursive="false" />
   </library>
 </component>
