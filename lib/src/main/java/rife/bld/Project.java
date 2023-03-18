@@ -94,13 +94,6 @@ public class Project extends BuildExecutor {
         new JarOperation().fromProject(this).execute();
     }
 
-    @BuildCommand(help = UberJarHelp.class)
-    public void uberjar()
-    throws Exception {
-        jar();
-        new UberJarOperation().fromProject(this).execute();
-    }
-
     @BuildCommand(help = RunHelp.class)
     public void run()
     throws Exception {
@@ -111,6 +104,19 @@ public class Project extends BuildExecutor {
     public void test()
     throws Exception {
         new TestOperation().fromProject(this).execute();
+    }
+
+    @BuildCommand(help = UberJarHelp.class)
+    public void uberjar()
+    throws Exception {
+        jar();
+        new UberJarOperation().fromProject(this).execute();
+    }
+
+    @BuildCommand(help = UpdatesHelp.class)
+    public void updates()
+    throws Exception {
+        new UpdatesOperation().fromProject(this).execute();
     }
 
     /*
