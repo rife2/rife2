@@ -4,14 +4,18 @@
  */
 package rife.ioc;
 
+import java.io.*;
 import java.util.*;
 
 import rife.ioc.exceptions.IncompatiblePropertyValueTypeException;
 import rife.ioc.exceptions.PropertyValueException;
+import rife.tools.Convert;
+import rife.tools.ExceptionUtils;
 import rife.validation.ValidityChecks;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.util.logging.Logger;
 
 /**
  * This class allows the creation of a hierarchical tree of named {@link
@@ -29,6 +33,17 @@ import java.text.StringCharacterIterator;
  * @since 1.0
  */
 public class HierarchicalProperties {
+    /**
+     * Providing a {@code RIFE2_PROPERTIES_FILE} environment variable, describes
+     * the path of a file that will be automatically read and parsed for
+     * additional properties. These properties will be inserted into the
+     * hierarchical properties hierarchy after the system environment variables
+     * and before the system properties.
+     *
+     * @since 1.5
+     */
+    public static final String SYSTEM_PROPERTY_FILE_NAME = "RIFE2_PROPERTIES_FILE";
+
     private LinkedHashMap<String, PropertyValue> properties_;
 
     private HierarchicalProperties parent_;
@@ -49,6 +64,23 @@ public class HierarchicalProperties {
     public static HierarchicalProperties createSystemInstance() {
         var system_properties = new HierarchicalProperties();
         system_properties.putAll(System.getenv());
+        if (system_properties.contains(SYSTEM_PROPERTY_FILE_NAME)) {
+            var properties_path = Convert.toString(system_properties.get(SYSTEM_PROPERTY_FILE_NAME)).trim();
+            if (!properties_path.isEmpty()) {
+                var properties_file = new File(properties_path);
+                if (!properties_file.exists() || !properties_file.canRead()) {
+                    Logger.getLogger("rife.ioc").warning("Couldn't find the properties file '" + properties_path + "' specified in the '" + SYSTEM_PROPERTY_FILE_NAME + "' environment variable.");
+                } else {
+                    var props = new Properties();
+                    try {
+                        props.load(new FileReader(properties_file));
+                    } catch (IOException e) {
+                        Logger.getLogger("rife.ioc").warning("Couldn't read the properties file '" + properties_path + "' specified in the '" + SYSTEM_PROPERTY_FILE_NAME + "' environment variable\n" + ExceptionUtils.getExceptionStackTrace(e));
+                    }
+                    system_properties.putAll(props);
+                }
+            }
+        }
         system_properties.putAll(System.getProperties());
         return system_properties;
     }
