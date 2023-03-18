@@ -36,7 +36,7 @@ public class DependencyResolver {
      * The repositories will be checked in the order they're listed.
      *
      * @param repositories the repositories to use for the resolution
-     * @param dependency the dependency to resolve
+     * @param dependency   the dependency to resolve
      * @since 1.5
      */
     public DependencyResolver(List<Repository> repositories, Dependency dependency) {

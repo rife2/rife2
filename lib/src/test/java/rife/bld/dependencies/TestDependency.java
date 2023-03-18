@@ -46,11 +46,26 @@ public class TestDependency {
         assertEquals("zip", dependency4.type());
     }
 
-   @Test
+    @Test
+    void testBaseDependency() {
+        var dependency1 = new Dependency("com.uwyn.rife2", "rife2");
+        assertEquals(dependency1, dependency1.getBaseDependency());
+
+        var dependency2 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0));
+        assertEquals(dependency2, dependency1.getBaseDependency());
+
+        var dependency3 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent");
+        assertNotEquals(dependency3, dependency1.getBaseDependency());
+
+        var dependency4 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "standalone", "zip");
+        assertNotEquals(dependency4, dependency1.getBaseDependency());
+    }
+
+    @Test
     void testToString() {
-       assertEquals("com.uwyn.rife2:rife2", new Dependency("com.uwyn.rife2", "rife2").toString());
-       assertEquals("com.uwyn.rife2:rife2:1.4.0", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)).toString());
-       assertEquals("com.uwyn.rife2:rife2:1.4.0:agent", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent").toString());
-       assertEquals("com.uwyn.rife2:rife2:1.4.0:standalone@zip", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "standalone", "zip").toString());
+        assertEquals("com.uwyn.rife2:rife2", new Dependency("com.uwyn.rife2", "rife2").toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)).toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0:agent", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent").toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0:standalone@zip", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "standalone", "zip").toString());
     }
 }

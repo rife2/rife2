@@ -38,6 +38,17 @@ public record Dependency(String groupId, String artifactId, VersionNumber versio
         this.type = (type == null ? "jar" : type);
     }
 
+    /**
+     * Returns the base dependency of this dependency, replacing the version number
+     * with an unknown version number.
+     *
+     * @return this dependency's base dependency
+     * @since 1.5
+     */
+    public Dependency getBaseDependency() {
+        return new Dependency(groupId, artifactId, VersionNumber.UNKNOWN, classifier, type);
+    }
+
     public String toString() {
         var result = new StringBuilder(groupId).append(":").append(artifactId);
         if (!version.equals(VersionNumber.UNKNOWN)) {
