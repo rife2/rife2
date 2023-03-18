@@ -8,7 +8,6 @@ import rife.bld.dependencies.Dependency;
 
 import java.io.File;
 import java.io.Serial;
-import java.util.Set;
 
 public class DependencyDownloadException extends DependencyException {
     @Serial private static final long serialVersionUID = -1606130902378889150L;

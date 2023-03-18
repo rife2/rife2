@@ -10,7 +10,8 @@ import rife.tools.FileUtils;
 import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Compiles main and test sources in the relevant build directories.

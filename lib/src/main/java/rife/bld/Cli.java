@@ -6,7 +6,8 @@ package rife.bld;
 
 import rife.bld.help.CreateBlankHelp;
 import rife.bld.help.CreateRife2Help;
-import rife.bld.operations.*;
+import rife.bld.operations.CreateBlankOperation;
+import rife.bld.operations.CreateRife2Operation;
 
 /**
  * Implements the RIFE2 CLI build executor that is available when running

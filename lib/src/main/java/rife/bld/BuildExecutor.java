@@ -5,7 +5,7 @@
 package rife.bld;
 
 import rife.bld.help.HelpHelp;
-import rife.bld.operations.*;
+import rife.bld.operations.HelpOperation;
 import rife.ioc.HierarchicalProperties;
 import rife.tools.ExceptionUtils;
 

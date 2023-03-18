@@ -4,11 +4,13 @@
  */
 package rife.bld;
 
-import rife.bld.help.*;
-import rife.bld.operations.*;
+import rife.bld.help.WarHelp;
+import rife.bld.operations.UberJarOperation;
+import rife.bld.operations.WarOperation;
 
 import java.io.File;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Provides the configuration and commands of a Java web project for the

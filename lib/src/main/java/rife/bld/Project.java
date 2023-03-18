@@ -4,9 +4,9 @@
  */
 package rife.bld;
 
+import rife.bld.dependencies.*;
 import rife.bld.help.*;
 import rife.bld.operations.*;
-import rife.bld.dependencies.*;
 import rife.tools.FileUtils;
 
 import java.io.File;
