@@ -28,7 +28,7 @@ public class BlankProjectBlueprint extends Project {
 
         pkg = packageName;
         name = projectName;
-        mainClass = packageName + "." + StringUtils.capitalize(projectName);
+        mainClass = packageName + "." + StringUtils.capitalize(projectName) + "Main";
         version = new VersionNumber(0,0,1);
 
         repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);

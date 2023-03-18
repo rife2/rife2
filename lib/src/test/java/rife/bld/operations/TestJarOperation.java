@@ -185,7 +185,7 @@ public class TestJarOperation {
 
             assertEquals("""
                 META-INF/MANIFEST.MF
-                tst/App.class
+                tst/AppMain.class
                 """, content.toString());
         } finally {
             FileUtils.deleteDirectory(tmp);

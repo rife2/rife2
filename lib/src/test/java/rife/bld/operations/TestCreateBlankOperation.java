@@ -109,7 +109,7 @@ public class TestCreateBlankOperation {
                     /myapp/src/main/java
                     /myapp/src/main/java/com
                     /myapp/src/main/java/com/example
-                    /myapp/src/main/java/com/example/Myapp\\.java
+                    /myapp/src/main/java/com/example/MyappMain\\.java
                     /myapp/src/main/resources
                     /myapp/src/main/resources/templates
                     /myapp/src/test
@@ -143,7 +143,7 @@ public class TestCreateBlankOperation {
                     /myapp/build/main
                     /myapp/build/main/com
                     /myapp/build/main/com/example
-                    /myapp/build/main/com/example/Myapp\\.class
+                    /myapp/build/main/com/example/MyappMain\\.class
                     /myapp/build/test
                     /myapp/build/test/com
                     /myapp/build/test/com/example
@@ -175,7 +175,7 @@ public class TestCreateBlankOperation {
                     /myapp/src/main/java
                     /myapp/src/main/java/com
                     /myapp/src/main/java/com/example
-                    /myapp/src/main/java/com/example/Myapp\\.java
+                    /myapp/src/main/java/com/example/MyappMain\\.java
                     /myapp/src/main/resources
                     /myapp/src/main/resources/templates
                     /myapp/src/test
@@ -243,7 +243,7 @@ public class TestCreateBlankOperation {
                     /yourthing/src/main/java
                     /yourthing/src/main/java/org
                     /yourthing/src/main/java/org/stuff
-                    /yourthing/src/main/java/org/stuff/Yourthing.java
+                    /yourthing/src/main/java/org/stuff/YourthingMain.java
                     /yourthing/src/main/resources
                     /yourthing/src/main/resources/templates
                     /yourthing/src/test
