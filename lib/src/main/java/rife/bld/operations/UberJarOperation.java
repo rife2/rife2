@@ -12,6 +12,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.jar.Attributes;
+import java.util.regex.Pattern;
 
 /**
  * Creates an uberjar archive of the provided jars and resources.
@@ -88,6 +89,7 @@ public class UberJarOperation {
             .sourceDirectories(List.of(stagingDirectory))
             .destinationDirectory(destinationDirectory())
             .destinationFileName(destinationFileName())
+            .excluded(List.of(Pattern.compile("(?:(?:^.*[/\\\\])|^)\\.DS_Store$")))
             .execute();
     }
 

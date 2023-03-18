@@ -11,6 +11,7 @@ import rife.tools.exceptions.FileUtilsErrorException;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Creates a war archive.
@@ -134,6 +135,7 @@ public class WarOperation {
             .sourceDirectories(List.of(stagingDirectory))
             .destinationDirectory(destinationDirectory())
             .destinationFileName(destinationFileName())
+            .excluded(List.of(Pattern.compile("(?:(?:^.*[/\\\\])|^)\\.DS_Store$")))
             .execute();
     }
 
