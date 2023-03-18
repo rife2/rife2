@@ -5,10 +5,8 @@
 package rife.bld.dependencies;
 
 import org.junit.jupiter.api.Test;
-import rife.tools.StringUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static rife.bld.dependencies.Scope.compile;
 
 public class TestDependency {
     @Test
@@ -49,16 +47,16 @@ public class TestDependency {
     @Test
     void testBaseDependency() {
         var dependency1 = new Dependency("com.uwyn.rife2", "rife2");
-        assertEquals(dependency1, dependency1.getBaseDependency());
+        assertEquals(dependency1, dependency1.baseDependency());
 
         var dependency2 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0));
-        assertEquals(dependency2, dependency1.getBaseDependency());
+        assertEquals(dependency2, dependency1.baseDependency());
 
         var dependency3 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent");
-        assertNotEquals(dependency3, dependency1.getBaseDependency());
+        assertNotEquals(dependency3, dependency1.baseDependency());
 
         var dependency4 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "standalone", "zip");
-        assertNotEquals(dependency4, dependency1.getBaseDependency());
+        assertNotEquals(dependency4, dependency1.baseDependency());
     }
 
     @Test

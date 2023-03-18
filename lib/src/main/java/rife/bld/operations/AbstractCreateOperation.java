@@ -6,8 +6,7 @@ package rife.bld.operations;
 
 import rife.Version;
 import rife.bld.Project;
-import rife.bld.dependencies.DependencyResolver;
-import rife.bld.dependencies.Scope;
+import rife.bld.dependencies.*;
 import rife.bld.operations.exceptions.OperationOptionException;
 import rife.bld.wrapper.Wrapper;
 import rife.template.TemplateFactory;
@@ -222,7 +221,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
 
         var bld_xml_template = TemplateFactory.XML.get(templateBase_ + "idea.libraries.bld");
         bld_xml_template.setValue("version", Version.getVersion());
-        var bld_xml_file =  new File(ideaLibrariesDirectory_, "bld.xml");
+        var bld_xml_file = new File(ideaLibrariesDirectory_, "bld.xml");
         FileUtils.writeString(bld_xml_template.getContent(), bld_xml_file);
 
         FileUtils.writeString(
@@ -258,18 +257,20 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
     public void executeDownloadDependencies() {
         var compile_dependencies = project_.dependencies().get(Scope.compile);
         if (compile_dependencies != null) {
+            var dependencies = new DependencySet();
             for (var dependency : compile_dependencies) {
-                new DependencyResolver(project_.repositories(), dependency)
-                    .downloadTransitivelyIntoDirectory(project_.libCompileDirectory(), Scope.compile);
+                dependencies.addAll(new DependencyResolver(project_.repositories(), dependency).getAllDependencies(Scope.compile));
             }
+            dependencies.downloadIntoDirectory(project_.repositories(), project_.libCompileDirectory());
         }
 
         var test_dependencies = project_.dependencies().get(Scope.test);
         if (test_dependencies != null) {
+            var dependencies = new DependencySet();
             for (var dependency : test_dependencies) {
-                new DependencyResolver(project_.repositories(), dependency)
-                    .downloadTransitivelyIntoDirectory(project_.libTestDirectory(), Scope.compile, Scope.runtime);
+                dependencies.addAll(new DependencyResolver(project_.repositories(), dependency).getAllDependencies(Scope.compile, Scope.runtime));
             }
+            dependencies.downloadIntoDirectory(project_.repositories(), project_.libTestDirectory());
         }
     }
 

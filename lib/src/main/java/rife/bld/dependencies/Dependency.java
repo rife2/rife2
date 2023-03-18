@@ -45,7 +45,7 @@ public record Dependency(String groupId, String artifactId, VersionNumber versio
      * @return this dependency's base dependency
      * @since 1.5
      */
-    public Dependency getBaseDependency() {
+    public Dependency baseDependency() {
         return new Dependency(groupId, artifactId, VersionNumber.UNKNOWN, classifier, type);
     }
 

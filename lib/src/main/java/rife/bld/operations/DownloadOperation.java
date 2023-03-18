@@ -4,7 +4,7 @@
  */
 package rife.bld.operations;
 
-import rife.bld.*;
+import rife.bld.Project;
 import rife.bld.dependencies.*;
 
 import java.io.File;
@@ -54,10 +54,11 @@ public class DownloadOperation {
         libCompileDirectory().mkdirs();
         var compile_deps = dependencies().get(Scope.compile);
         if (compile_deps != null) {
+            var dependencies = new DependencySet();
             for (var dependency : compile_deps) {
-                new DependencyResolver(repositories(), dependency)
-                    .downloadTransitivelyIntoDirectory(libCompileDirectory(), Scope.compile);
+                dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile));
             }
+            dependencies.downloadIntoDirectory(repositories(), libCompileDirectory());
         }
     }
 
@@ -74,10 +75,11 @@ public class DownloadOperation {
         libRuntimeDirectory().mkdirs();
         var runtime_deps = dependencies().get(Scope.runtime);
         if (runtime_deps != null) {
+            var dependencies = new DependencySet();
             for (var dependency : runtime_deps) {
-                new DependencyResolver(repositories(), dependency)
-                    .downloadTransitivelyIntoDirectory(libRuntimeDirectory(), Scope.runtime);
+                dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.runtime));
             }
+            dependencies.downloadIntoDirectory(repositories(), libRuntimeDirectory());
         }
     }
 
@@ -94,10 +96,11 @@ public class DownloadOperation {
         libStandaloneDirectory().mkdirs();
         var standalone_deps = dependencies().get(Scope.standalone);
         if (standalone_deps != null) {
+            var dependencies = new DependencySet();
             for (var dependency : standalone_deps) {
-                new DependencyResolver(repositories(), dependency)
-                    .downloadTransitivelyIntoDirectory(libStandaloneDirectory(), Scope.compile, Scope.runtime);
+                dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile, Scope.runtime));
             }
+            dependencies.downloadIntoDirectory(repositories(), libStandaloneDirectory());
         }
     }
 
@@ -114,10 +117,11 @@ public class DownloadOperation {
         libTestDirectory().mkdirs();
         var test_deps = dependencies().get(Scope.test);
         if (test_deps != null) {
+            var dependencies = new DependencySet();
             for (var dependency : test_deps) {
-                new DependencyResolver(repositories(), dependency)
-                    .downloadTransitivelyIntoDirectory(libTestDirectory(), Scope.compile, Scope.runtime);
+                dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile, Scope.runtime));
             }
+            dependencies.downloadIntoDirectory(repositories(), libTestDirectory());
         }
     }
 

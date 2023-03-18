@@ -5,8 +5,7 @@
 package rife.bld.operations;
 
 import rife.bld.blueprints.Rife2ProjectBlueprint;
-import rife.bld.dependencies.DependencyResolver;
-import rife.bld.dependencies.Scope;
+import rife.bld.dependencies.*;
 import rife.template.TemplateFactory;
 import rife.tools.*;
 import rife.tools.exceptions.FileUtilsErrorException;
@@ -96,10 +95,11 @@ public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Ope
 
         var standalone_dependencies = project_.dependencies().get(Scope.standalone);
         if (standalone_dependencies != null) {
+            var dependencies = new DependencySet();
             for (var dependency : project_.dependencies().get(Scope.standalone)) {
-                new DependencyResolver(project_.repositories(), dependency)
-                    .downloadTransitivelyIntoDirectory(project_.libStandaloneDirectory(), Scope.compile, Scope.runtime);
+                dependencies.addAll(new DependencyResolver(project_.repositories(), dependency).getAllDependencies(Scope.compile, Scope.runtime));
             }
+            dependencies.downloadIntoDirectory(project_.repositories(), project_.libStandaloneDirectory());
         }
     }
 }

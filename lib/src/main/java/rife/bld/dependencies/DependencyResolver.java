@@ -4,14 +4,13 @@
  */
 package rife.bld.dependencies;
 
-import rife.bld.DependencySet;
 import rife.bld.dependencies.exceptions.*;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.*;
-import java.net.*;
+import java.net.URL;
 import java.nio.channels.Channels;
 import java.util.*;
 
@@ -108,7 +107,7 @@ public class DependencyResolver {
 
     /**
      * Retrieves all the transitive dependencies of the resolved dependency for the
-     * provided scopes.
+     * provided scopes. This includes the dependency of this resolver also.
      * <p>
      * This can be a slow and expensive operation since querying continues through
      * the complete POM hierarchy until all transitive dependencies have been found.
@@ -119,8 +118,10 @@ public class DependencyResolver {
      * the provided repositories
      * @since 1.5
      */
-    public DependencySet getTransitiveDependencies(Scope... scopes) {
+    public DependencySet getAllDependencies(Scope... scopes) {
         var result = new DependencySet();
+        result.add(dependency_);
+
         var pom_dependencies = new ArrayList<>(getMavenPom().getDependencies(scopes));
         var exclusions = new Stack<Set<PomExclusion>>();
         getTransitiveDependencies(result, pom_dependencies, exclusions, scopes);
@@ -210,26 +211,26 @@ public class DependencyResolver {
     }
 
     /**
-     * Downloads the artifact for the resolved dependency and its transitive dependencies
-     * into the provided directory.
-     * <p>
-     * The destination directory must exist and be writable.
-     * <p>
-     * This can be a slow and expensive operation since querying continues through
-     * the complete POM hierarchy until all transitive dependencies have been downloaded.
+     * Retrieve the repositories that are used by this dependency resolver.
      *
-     * @param directory the directory to download the artifacts into
-     * @throws DependencyDownloadException when an error occurred during the download
+     * @return the dependency resolver's repositories
      * @since 1.5
      */
-    public void downloadTransitivelyIntoDirectory(File directory, Scope... scopes) {
-        downloadIntoDirectory(directory);
-        for (var dep : getTransitiveDependencies(scopes)) {
-            new DependencyResolver(repositories_, dep).downloadIntoDirectory(directory);
-        }
+    public List<Repository> repositories() {
+        return repositories_;
     }
 
-    Dependency convertPomDependency(PomDependency pomDependency) {
+    /**
+     * Retrieve the dependency that is resolved.
+     *
+     * @return the resolved dependency
+     * @since 1.5
+     */
+    public Dependency dependency() {
+        return dependency_;
+    }
+
+    private Dependency convertPomDependency(PomDependency pomDependency) {
         return new Dependency(
             pomDependency.groupId(),
             pomDependency.artifactId(),
@@ -238,7 +239,7 @@ public class DependencyResolver {
             pomDependency.type());
     }
 
-    void getTransitiveDependencies(DependencySet result, ArrayList<PomDependency> pomDependencies, Stack<Set<PomExclusion>> exclusions, Scope... scopes) {
+    private void getTransitiveDependencies(DependencySet result, ArrayList<PomDependency> pomDependencies, Stack<Set<PomExclusion>> exclusions, Scope... scopes) {
         var next_dependencies = getMavenPom().getDependencies(scopes);
 
         pomDependencies.forEach(next_dependencies::remove);
@@ -279,15 +280,15 @@ public class DependencyResolver {
         }
     }
 
-    List<String> getArtifactUrls() {
+    private List<String> getArtifactUrls() {
         return repositories_.stream().map(repository -> repository.getArtifactUrl(dependency_)).toList();
     }
 
-    List<String> getMetadataUrls() {
+    private List<String> getMetadataUrls() {
         return getArtifactUrls().stream().map(s -> s + MAVEN_METADATA_XML).toList();
     }
 
-    Xml2MavenMetadata getMavenMetadata() {
+    private Xml2MavenMetadata getMavenMetadata() {
         if (metadata_ == null) {
             var urls = getMetadataUrls();
             metadata_ = parseMavenMetadata(urls);
@@ -296,12 +297,12 @@ public class DependencyResolver {
         return metadata_;
     }
 
-    List<String> getSnapshotMetadataUrls() {
+    private List<String> getSnapshotMetadataUrls() {
         var version = resolveVersion();
         return getArtifactUrls().stream().map(s -> s + version + "/" + MAVEN_METADATA_XML).toList();
     }
 
-    Xml2MavenMetadata getSnapshotMavenMetadata() {
+    private Xml2MavenMetadata getSnapshotMavenMetadata() {
         if (snapshotMetadata_ == null) {
             var urls = getSnapshotMetadataUrls();
             snapshotMetadata_ = parseMavenMetadata(urls);
@@ -310,7 +311,7 @@ public class DependencyResolver {
         return snapshotMetadata_;
     }
 
-    Xml2MavenMetadata parseMavenMetadata(List<String> urls) {
+    private Xml2MavenMetadata parseMavenMetadata(List<String> urls) {
         String retrieved_url = null;
         String metadata = null;
         for (var url : urls) {
@@ -346,7 +347,7 @@ public class DependencyResolver {
         return xml;
     }
 
-    List<String> getPomUrls() {
+    private List<String> getPomUrls() {
         final var version = resolveVersion();
         final VersionNumber pom_version;
         if (version.qualifier().equals("SNAPSHOT")) {
@@ -396,7 +397,7 @@ public class DependencyResolver {
         return xml;
     }
 
-    List<String> getDownloadUrls() {
+    private List<String> getDownloadUrls() {
         final var version = resolveVersion();
         final VersionNumber pom_version;
         if (version.qualifier().equals("SNAPSHOT")) {

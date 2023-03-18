@@ -4,7 +4,6 @@
  */
 package rife.bld.operations;
 
-import rife.bld.DependencyScopes;
 import rife.bld.Project;
 import rife.bld.dependencies.*;
 
