@@ -793,7 +793,7 @@ public class TestDependencyResolver {
                 gwt-elemental-2.8.2.vaadin2.jar
                 httpclient-4.5.13.jar
                 httpcore-4.4.13.jar
-                jackson-annotations-2.14.2.jar
+                jackson-annotations-2.15.0-rc1.jar
                 jackson-core-2.14.1.jar
                 jackson-databind-2.14.1.jar
                 jackson-datatype-jsr310-2.14.1.jar

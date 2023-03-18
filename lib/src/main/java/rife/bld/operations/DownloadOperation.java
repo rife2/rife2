@@ -8,8 +8,7 @@ import rife.bld.Project;
 import rife.bld.dependencies.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Transitively downloads all the artifacts for dependencies into
@@ -47,19 +46,7 @@ public class DownloadOperation {
      * @since 1.5
      */
     public void executeDownloadCompileDependencies() {
-        if (libCompileDirectory() == null) {
-            return;
-        }
-
-        libCompileDirectory().mkdirs();
-        var compile_deps = dependencies().get(Scope.compile);
-        if (compile_deps != null) {
-            var dependencies = new DependencySet();
-            for (var dependency : compile_deps) {
-                dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile));
-            }
-            dependencies.downloadIntoDirectory(repositories(), libCompileDirectory());
-        }
+        executeDownloadScopedDependencies(Scope.compile, libCompileDirectory(), Scope.compile);
     }
 
     /**
@@ -68,19 +55,7 @@ public class DownloadOperation {
      * @since 1.5
      */
     public void executeDownloadRuntimeDependencies() {
-        if (libRuntimeDirectory() == null) {
-            return;
-        }
-
-        libRuntimeDirectory().mkdirs();
-        var runtime_deps = dependencies().get(Scope.runtime);
-        if (runtime_deps != null) {
-            var dependencies = new DependencySet();
-            for (var dependency : runtime_deps) {
-                dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.runtime));
-            }
-            dependencies.downloadIntoDirectory(repositories(), libRuntimeDirectory());
-        }
+        executeDownloadScopedDependencies(Scope.runtime, libRuntimeDirectory(), Scope.runtime);
     }
 
     /**
@@ -89,19 +64,7 @@ public class DownloadOperation {
      * @since 1.5
      */
     public void executeDownloadStandaloneDependencies() {
-        if (libStandaloneDirectory() == null) {
-            return;
-        }
-
-        libStandaloneDirectory().mkdirs();
-        var standalone_deps = dependencies().get(Scope.standalone);
-        if (standalone_deps != null) {
-            var dependencies = new DependencySet();
-            for (var dependency : standalone_deps) {
-                dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile, Scope.runtime));
-            }
-            dependencies.downloadIntoDirectory(repositories(), libStandaloneDirectory());
-        }
+        executeDownloadScopedDependencies(Scope.standalone, libStandaloneDirectory(), Scope.compile, Scope.runtime);
     }
 
     /**
@@ -110,18 +73,30 @@ public class DownloadOperation {
      * @since 1.5
      */
     public void executeDownloadTestDependencies() {
-        if (libTestDirectory() == null) {
+        executeDownloadScopedDependencies(Scope.test, libTestDirectory(), Scope.compile, Scope.runtime);
+    }
+
+    /**
+     * Part of the {@link #execute} operation, download the artifacts for a particular dependency scope.
+     *
+     * @param scope                the scope whose artifacts should be downloaded
+     * @param destinationDirectory the directory in which the artifacts should be downloaded
+     * @param transitiveScopes     the scopes to use to resolve the transitive dependencies
+     * @since 1.5
+     */
+    public void executeDownloadScopedDependencies(Scope scope, File destinationDirectory, Scope... transitiveScopes) {
+        if (destinationDirectory == null) {
             return;
         }
 
-        libTestDirectory().mkdirs();
-        var test_deps = dependencies().get(Scope.test);
-        if (test_deps != null) {
+        destinationDirectory.mkdirs();
+        var scoped_dependencies = dependencies().get(scope);
+        if (scoped_dependencies != null) {
             var dependencies = new DependencySet();
-            for (var dependency : test_deps) {
-                dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile, Scope.runtime));
+            for (var dependency : scoped_dependencies) {
+                dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(transitiveScopes));
             }
-            dependencies.downloadIntoDirectory(repositories(), libTestDirectory());
+            dependencies.downloadIntoDirectory(repositories(), destinationDirectory);
         }
     }
 
