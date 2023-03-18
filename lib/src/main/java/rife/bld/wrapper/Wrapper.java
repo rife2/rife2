@@ -28,12 +28,14 @@ import static rife.tools.FileUtils.JAR_FILE_PATTERN;
  * @since 1.5
  */
 public class Wrapper {
-    private static final String DOWNLOAD_LOCATION = "https://uwyn.com/";
+    private static final String DOWNLOAD_LOCATION = "https://repo1.maven.org/maven2/com/uwyn/rife2/rife2/${version}/";
+    private static final String RIFE2_FILENAME = "rife2-${version}.jar";
     private static final String RIFE_VERSION = "RIFE_VERSION";
     private static final File LIB_DIR = new File("lib", "bld");
     private static final String WRAPPER_PROPERTIES = "bld-wrapper.properties";
     private static final String WRAPPER_JAR = "bld-wrapper.jar";
     private static final String PROPERTY_VERSION = "rife2.version";
+    private static final String PROPERTY_DOWNLOAD_LOCATION = "rife2.downloadLocation";
     private static final File USER_DIR = new File(System.getProperty("user.home"), ".rife2");
     private static final File DISTRIBUTIONS_DIR = new File(USER_DIR, "dist");
 
@@ -54,7 +56,7 @@ public class Wrapper {
      * Creates the files required to use the wrapper.
      *
      * @param destinationDirectory the directory to put those files in
-     * @param version the RIFE2 version they should be using
+     * @param version              the RIFE2 version they should be using
      * @throws IOException when an error occurred during the creation of the wrapper files
      * @since 1.5
      */
@@ -132,10 +134,15 @@ public class Wrapper {
         }
     }
 
-    private int installAndLaunch(List<String> arguments)  {
+    private int installAndLaunch(List<String> arguments) {
         try {
             initWrapperProperties(getVersion());
-            var distribution = installDistribution();
+            File distribution;
+            try {
+                distribution = installDistribution();
+            } catch (IOException e) {
+                return -1;
+            }
             return launchMain(distribution, arguments);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -145,30 +152,56 @@ public class Wrapper {
     private void initWrapperProperties(String version)
     throws IOException {
         var config = new File(Wrapper.LIB_DIR, WRAPPER_PROPERTIES);
+        wrapperProperties_.put(PROPERTY_VERSION, version);
+        wrapperProperties_.put(PROPERTY_DOWNLOAD_LOCATION, DOWNLOAD_LOCATION);
         if (config.exists()) {
             wrapperProperties_.load(new FileReader(config));
-        } else {
-            wrapperProperties_.put(PROPERTY_VERSION, version);
         }
     }
 
-    private String getWrapperVersion() {
-        return wrapperProperties_.getProperty(PROPERTY_VERSION, "unknown");
+    private String getWrapperVersion()
+    throws IOException {
+        return wrapperProperties_.getProperty(PROPERTY_VERSION, getVersion());
     }
 
-    private static String downloadUrl(String version) {
-        return DOWNLOAD_LOCATION + rife2FileName(version);
+    private String getWrapperDownloadLocation() {
+        return wrapperProperties_.getProperty(PROPERTY_DOWNLOAD_LOCATION, DOWNLOAD_LOCATION);
     }
 
-    private static String rife2FileName(String version) {
-        return "rife2-" + version + ".jar";
+    private String downloadUrl(String version) {
+        var location = replaceVersion(getWrapperDownloadLocation(), version);
+        var result = new StringBuilder(location);
+        if (!location.endsWith("/")) {
+            result.append("/");
+        }
+        result.append(rife2FileName(version));
+        return result.toString();
+    }
+
+    private String rife2FileName(String version) {
+        return replaceVersion(RIFE2_FILENAME, version);
+    }
+
+    private String replaceVersion(String text, String version) {
+        return text.replaceAll("\\$\\{version}", version);
     }
 
     private File installDistribution()
     throws IOException {
-        Files.createDirectories(DISTRIBUTIONS_DIR.toPath());
+        try {
+            Files.createDirectories(DISTRIBUTIONS_DIR.toPath());
+        } catch (IOException e) {
+            System.err.println("Failed to create distribution directory " + DISTRIBUTIONS_DIR.getAbsolutePath() + ".");
+            throw e;
+        }
 
-        var version = getWrapperVersion();
+        String version;
+        try {
+            version = getWrapperVersion();
+        } catch (IOException e) {
+            System.err.println("Failed to retrieve wrapper version number.");
+            throw e;
+        }
         var distribution_file = new File(DISTRIBUTIONS_DIR, rife2FileName(version));
         if (!distribution_file.exists()) {
             download(distribution_file, version);
@@ -234,10 +267,14 @@ public class Wrapper {
                 System.out.print("done");
             }
         } catch (FileNotFoundException e) {
-            System.out.print("not found");
+            System.err.println("not found");
+            System.err.println("Failed to download file " + file + ".");
+            throw e;
         } catch (IOException e) {
-            System.err.println("Failed to download file " + file + " due to I/O issue: " + e.getMessage());
+            System.err.println("error");
+            System.err.println("Failed to download file " + file + " due to I/O issue.");
             Files.deleteIfExists(file.toPath());
+            throw e;
         } finally {
             System.out.println();
         }
