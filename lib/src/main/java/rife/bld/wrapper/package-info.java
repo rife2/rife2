@@ -6,4 +6,5 @@
 /**
  * Provides classes and interfaces for the build system wrapper.
  * @since 1.5
- */package rife.bld.wrapper;
+ */
+package rife.bld.wrapper;

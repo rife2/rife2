@@ -6,4 +6,5 @@
 /**
  * Provides utility classes for web development.
  * @since 1.1
- */package rife.web;
+ */
+package rife.web;
