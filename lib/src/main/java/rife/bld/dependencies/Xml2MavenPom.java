@@ -18,7 +18,7 @@ class Xml2MavenPom extends Xml2Data {
     private final Set<PomDependency> dependencies_ = new LinkedHashSet<>();
     private final Map<String, String> properties_ = new HashMap<>();
     private final Stack<String> elementStack_ = new Stack<>();
-    private Set<PomExclusion> exclusions_ = null;
+    private Set<DependencyExclusion> exclusions_ = null;
 
     private boolean collectProperties_ = false;
     private boolean collectDependencyManagement_ = false;
@@ -170,7 +170,7 @@ class Xml2MavenPom extends Xml2Data {
             case "exclusions" -> collectExclusions_ = false;
             case "exclusion" -> {
                 if (collectExclusions_) {
-                    exclusions_.add(new PomExclusion(lastExclusionGroupId_, lastExclusionArtifactId_));
+                    exclusions_.add(new DependencyExclusion(lastExclusionGroupId_, lastExclusionArtifactId_));
                 }
             }
             case "dependency" -> {

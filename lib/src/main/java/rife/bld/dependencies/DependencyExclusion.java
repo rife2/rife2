@@ -7,20 +7,28 @@ package rife.bld.dependencies;
 import java.util.Objects;
 
 /**
- * Contains the information to describe an exclusion within a Maven POM descriptor.
+ * Contains the information to describe a dependency exclusion.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-record PomExclusion(String groupId, String artifactId) {
+public record DependencyExclusion(String groupId, String artifactId) {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PomExclusion that = (PomExclusion) o;
+        DependencyExclusion that = (DependencyExclusion) o;
         return Objects.equals(groupId, that.groupId) && Objects.equals(artifactId, that.artifactId);
     }
 
     public int hashCode() {
         return Objects.hash(groupId, artifactId);
+    }
+
+    boolean matches(PomDependency dependency) {
+        return (groupId().equals("*") && artifactId().equals("*")) ||
+               (groupId().equals("*") && artifactId().equals(dependency.artifactId())) ||
+               (groupId().equals(dependency.groupId()) && artifactId().equals("*")) ||
+               (groupId().equals(dependency.groupId()) && artifactId().equals(dependency.artifactId()));
+
     }
 }

@@ -126,7 +126,7 @@ public class DependencyResolver {
         result.add(dependency_);
 
         var pom_dependencies = new ArrayList<>(getMavenPom().getDependencies(scopes));
-        var exclusions = new Stack<Set<PomExclusion>>();
+        var exclusions = new Stack<Set<DependencyExclusion>>();
         getTransitiveDependencies(result, pom_dependencies, exclusions, scopes);
         return result;
     }
@@ -300,29 +300,16 @@ public class DependencyResolver {
             pomDependency.type());
     }
 
-    private void getTransitiveDependencies(DependencySet result, ArrayList<PomDependency> pomDependencies, Stack<Set<PomExclusion>> exclusions, Scope... scopes) {
+    private void getTransitiveDependencies(DependencySet result, ArrayList<PomDependency> pomDependencies, Stack<Set<DependencyExclusion>> exclusions, Scope... scopes) {
         var next_dependencies = getMavenPom().getDependencies(scopes);
 
         pomDependencies.forEach(next_dependencies::remove);
 
-        var next_it = next_dependencies.iterator();
-        NextIterator:
-        while (next_it.hasNext()) {
-            var next_dependency = next_it.next();
-            for (var exclusionset : exclusions) {
-                if (exclusionset != null) {
-                    for (var exclusion : exclusionset) {
-                        if ((exclusion.groupId().equals("*") && exclusion.artifactId().equals("*")) ||
-                            (exclusion.groupId().equals("*") && exclusion.artifactId().equals(next_dependency.artifactId())) ||
-                            (exclusion.groupId().equals(next_dependency.groupId()) && exclusion.artifactId().equals("*")) ||
-                            (exclusion.groupId().equals(next_dependency.groupId()) && exclusion.artifactId().equals(next_dependency.artifactId()))) {
-                            next_it.remove();
-                            continue NextIterator;
-                        }
-                    }
-                }
-            }
-        }
+        next_dependencies.removeIf(next_dependency ->
+            exclusions.stream().anyMatch(set ->
+                set != null && set.stream().anyMatch(exclusion ->
+                    exclusion.matches(next_dependency))));
+
         pomDependencies.addAll(next_dependencies);
 
         while (!pomDependencies.isEmpty()) {
