@@ -19,6 +19,10 @@ var rifeAgentContinuationsName = "rife2-$rifeVersion-agent-continuations"
 val rifeAgentContinuationsJar by rootProject.extra { "$rifeAgentContinuationsName.jar" }
 var rifeStandaloneName = "rife2-$rifeVersion-standalone"
 val rifeStandaloneJar = "$rifeStandaloneName.jar"
+var rifeWrapperName = "bld-wrapper"
+val rifeWrapperJar = "$rifeWrapperName.jar"
+var rifeBldName = "rife2-$rifeVersion-bld"
+val rifeBldZip = "$rifeBldName.zip"
 
 group = "com.uwyn.rife2"
 version = rifeVersion
@@ -233,6 +237,39 @@ tasks {
         with(jar.get())
     }
 
+    register<Jar>("wrapperJar") {
+        dependsOn("jar")
+
+        archiveFileName.set(rifeWrapperJar)
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        from(sourceSets.main.get().output)
+        include(
+            "rife/bld/wrapper/**",
+            "rife/tools/FileUtils*",
+            "rife/tools/InnerClassException*",
+            "rife/tools/exceptions/FileUtils*",
+            "RIFE_VERSION"
+        )
+        manifest {
+            attributes["Main-Class"] = "rife.bld.wrapper.Wrapper"
+        }
+        with(jar.get())
+    }
+
+    register<Zip>("bldArchiveZip") {
+        dependsOn("wrapperJar")
+
+        archiveFileName.set(rifeBldZip)
+        from("build/libs") {
+            include(rifeWrapperJar)
+            rename { "rife2-bld/lib/$it" }
+        }
+        from("src/main/bld") {
+            rename { "rife2-bld/bin/$it" }
+
+        }
+    }
+
     withType<Test> {
         val apiKey = project.properties["testsBadgeApiKey"]
         useJUnitPlatform()
@@ -354,6 +391,13 @@ val standaloneArtifact = artifacts.add("archives", standaloneFile.get().asFile) 
     builtBy("standaloneJar")
 }
 
+val bldFile = layout.buildDirectory.file("distributions/$rifeBldZip")
+val bldArtifact = artifacts.add("archives", bldFile.get().asFile) {
+    type = "zip"
+    classifier = "bld"
+    builtBy("bldArchiveZip")
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
@@ -361,6 +405,7 @@ publishing {
             artifact(agentArtifact)
             artifact(agentContinuationsArtifact)
             artifact(standaloneArtifact)
+            artifact(bldArtifact)
             from(components["java"])
             pom {
                 name.set("RIFE2")
