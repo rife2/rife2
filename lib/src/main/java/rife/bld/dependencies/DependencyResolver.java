@@ -259,6 +259,38 @@ public class DependencyResolver {
         return dependency_;
     }
 
+    /**
+     * Retrieves all the potential artifact download URLs for the dependency
+     * within the provided repositories.
+     *
+     * @return a list of potential download URLs
+     * @since 1.5
+     */
+    public List<String> getDownloadUrls() {
+        final var version = resolveVersion();
+        final VersionNumber pom_version;
+        if (version.qualifier().equals("SNAPSHOT")) {
+            var metadata = getSnapshotMavenMetadata();
+            pom_version = metadata.getSnapshot();
+        } else {
+            pom_version = version;
+        }
+
+        return getArtifactUrls().stream().map(s -> {
+            var result = new StringBuilder(s);
+            result.append(version).append("/").append(dependency_.artifactId()).append("-").append(pom_version);
+            if (!dependency_.classifier().isEmpty()) {
+                result.append("-").append(dependency_.classifier());
+            }
+            var type = dependency_.type();
+            if (type == null) {
+                type = "jar";
+            }
+            result.append(".").append(type);
+            return result.toString();
+        }).toList();
+    }
+
     private Dependency convertPomDependency(PomDependency pomDependency) {
         return new Dependency(
             pomDependency.groupId(),
@@ -424,30 +456,5 @@ public class DependencyResolver {
         }
 
         return xml;
-    }
-
-    private List<String> getDownloadUrls() {
-        final var version = resolveVersion();
-        final VersionNumber pom_version;
-        if (version.qualifier().equals("SNAPSHOT")) {
-            var metadata = getSnapshotMavenMetadata();
-            pom_version = metadata.getSnapshot();
-        } else {
-            pom_version = version;
-        }
-
-        return getArtifactUrls().stream().map(s -> {
-            var result = new StringBuilder(s);
-            result.append(version).append("/").append(dependency_.artifactId()).append("-").append(pom_version);
-            if (!dependency_.classifier().isEmpty()) {
-                result.append("-").append(dependency_.classifier());
-            }
-            var type = dependency_.type();
-            if (type == null) {
-                type = "jar";
-            }
-            result.append(".").append(type);
-            return result.toString();
-        }).toList();
     }
 }

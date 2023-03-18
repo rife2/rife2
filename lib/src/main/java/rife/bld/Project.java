@@ -101,6 +101,12 @@ public class Project extends BuildExecutor {
         new JarOperation().fromProject(this).execute();
     }
 
+    @BuildCommand(help = PurgeHelp.class)
+    public void purge()
+    throws Exception {
+        new PurgeOperation().fromProject(this).execute();
+    }
+
     @BuildCommand(help = RunHelp.class)
     public void run()
     throws Exception {
