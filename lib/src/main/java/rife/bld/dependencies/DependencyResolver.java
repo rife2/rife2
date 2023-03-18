@@ -12,7 +12,10 @@ import rife.tools.exceptions.FileUtilsErrorException;
 import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
+import java.security.MessageDigest;
 import java.util.*;
+
+import static rife.tools.StringUtils.encodeHex;
 
 /**
  * Resolves a dependency within a list of Maven-compatible repositories.
@@ -177,27 +180,37 @@ public class DependencyResolver {
         if (!directory.canWrite()) throw new IllegalArgumentException("directory '" + directory + "' can't be written to");
         if (!directory.isDirectory()) throw new IllegalArgumentException("directory '" + directory + "' is not a directory");
 
-        String retrieved_url = null;
+        boolean retrieved = false;
         var urls = getDownloadUrls();
         for (var download_url : urls) {
             var download_filename = download_url.substring(download_url.lastIndexOf("/") + 1);
             var download_file = new File(directory, download_filename);
+            System.out.print("Downloading: " + download_url + " ... ");
+            System.out.flush();
             try {
-                System.out.print("Downloading: " + download_url + " ... ");
-                System.out.flush();
-                var url = new URL(download_url);
-                var readableByteChannel = Channels.newChannel(url.openStream());
-                try (var fileOutputStream = new FileOutputStream(download_file)) {
-                    var fileChannel = fileOutputStream.getChannel();
-                    fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+                if (download_file.exists() && download_file.canRead()) {
+                    if (checkHash(download_url, download_file, ".sha256", "SHA-256") ||
+                        checkHash(download_url, download_file, ".md5", "MD5")) {
+                        retrieved = true;
+                        System.out.print("exists");
+                        break;
+                    }
+                }
 
-                    retrieved_url = download_url;
-                    System.out.print("done");
-                    break;
+                if (!retrieved) {
+                    var url = new URL(download_url);
+                    var readableByteChannel = Channels.newChannel(url.openStream());
+                    try (var fileOutputStream = new FileOutputStream(download_file)) {
+                        var fileChannel = fileOutputStream.getChannel();
+                        fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+
+                        retrieved = true;
+                        System.out.print("done");
+                        break;
+                    }
                 }
             } catch (FileNotFoundException e) {
                 System.out.print("not found");
-                continue;
             } catch (IOException e) {
                 throw new DependencyDownloadException(dependency_, download_url, download_file, e);
             } finally {
@@ -205,9 +218,25 @@ public class DependencyResolver {
             }
         }
 
-        if (retrieved_url == null) {
+        if (!retrieved) {
             throw new ArtifactNotFoundException(dependency_, StringUtils.join(urls, ","));
         }
+    }
+
+    private static boolean checkHash(String downloadUrl, File downloadFile, String extension, String algorithm) {
+        try {
+            var hash_url = new URL(downloadUrl + extension);
+            var hash_url_sum = FileUtils.readString(hash_url);
+
+            var digest = MessageDigest.getInstance(algorithm);
+            digest.update(FileUtils.readBytes(downloadFile));
+            var hash_file_sum = encodeHex(digest.digest());
+
+            return hash_url_sum.equalsIgnoreCase(hash_file_sum);
+        } catch (Exception e) {
+            // no-op, the hash file couldn't be found or calculated, so it couldn't be checked
+        }
+        return false;
     }
 
     /**
