@@ -31,7 +31,6 @@ public class Wrapper {
     private static final String DOWNLOAD_LOCATION = "https://repo1.maven.org/maven2/com/uwyn/rife2/rife2/${version}/";
     private static final String RIFE2_FILENAME = "rife2-${version}.jar";
     private static final String RIFE_VERSION = "RIFE_VERSION";
-    private static final File LIB_DIR = new File("lib", "bld");
     private static final String WRAPPER_PROPERTIES = "bld-wrapper.properties";
     private static final String WRAPPER_JAR = "bld-wrapper.jar";
     private static final String PROPERTY_VERSION = "rife2.version";
@@ -39,6 +38,7 @@ public class Wrapper {
     private static final File USER_DIR = new File(System.getProperty("user.home"), ".rife2");
     private static final File DISTRIBUTIONS_DIR = new File(USER_DIR, "dist");
 
+    private File currentDir_ = new File(System.getProperty("user.dir"));
     private final Properties wrapperProperties_ = new Properties();
     private final byte[] buffer_ = new byte[1024];
 
@@ -49,7 +49,7 @@ public class Wrapper {
      * @since 1.5
      */
     public static void main(String[] arguments) {
-        System.exit(new Wrapper().installAndLaunch(Arrays.asList(arguments)));
+        System.exit(new Wrapper().installAndLaunch(new ArrayList<>(Arrays.asList(arguments))));
     }
 
     /**
@@ -135,6 +135,15 @@ public class Wrapper {
     }
 
     private int installAndLaunch(List<String> arguments) {
+        if (!arguments.isEmpty()) {
+            File current_file = null;
+            try {
+                current_file = new File(arguments.remove(0)).getCanonicalFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            currentDir_ = new File(current_file.getParent());
+        }
         try {
             initWrapperProperties(getVersion());
             File distribution;
@@ -149,13 +158,30 @@ public class Wrapper {
         }
     }
 
+    private Path getLibBldPath() {
+        return Path.of(currentDir_.getAbsolutePath(), "lib", "bld");
+    }
+
+    private Path getLibPath(String path) {
+        return Path.of(currentDir_.getAbsolutePath(), "..", "lib", path);
+    }
+
+    private Path getLibBldPath(String path) {
+        return Path.of(currentDir_.getAbsolutePath(), "lib", "bld", path);
+    }
+
     private void initWrapperProperties(String version)
     throws IOException {
-        var config = new File(Wrapper.LIB_DIR, WRAPPER_PROPERTIES);
         wrapperProperties_.put(PROPERTY_VERSION, version);
         wrapperProperties_.put(PROPERTY_DOWNLOAD_LOCATION, DOWNLOAD_LOCATION);
+        var config = getLibBldPath(WRAPPER_PROPERTIES).toFile();
         if (config.exists()) {
             wrapperProperties_.load(new FileReader(config));
+        } else {
+            config = getLibPath(WRAPPER_PROPERTIES).toFile();
+            if (config.exists()) {
+                wrapperProperties_.load(new FileReader(config));
+            }
         }
     }
 
@@ -244,7 +270,7 @@ public class Wrapper {
 
     private List<File> bldClasspathJars() {
         // detect the jar files in the compile lib directory
-        var dir_abs = LIB_DIR.getAbsoluteFile();
+        var dir_abs = getLibBldPath().toFile().getAbsoluteFile();
         var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, Pattern.compile(WRAPPER_JAR));
 
         // build the compilation classpath
