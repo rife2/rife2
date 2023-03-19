@@ -69,10 +69,13 @@ public class Wrapper {
     private void createWrapperProperties(File destinationDirectory, String version)
     throws IOException {
         var file = new File(destinationDirectory, WRAPPER_PROPERTIES);
-        var text = PROPERTY_VERSION + "=" + version + "\n";
+        if (file.exists()) {
+            wrapperProperties_.load(new FileReader(file));
+        }
+        wrapperProperties_.put(PROPERTY_VERSION, version);
         Files.createDirectories(file.getAbsoluteFile().toPath().getParent());
         Files.deleteIfExists(file.toPath());
-        Files.writeString(Paths.get(file.toURI()), text);
+        wrapperProperties_.store(new FileWriter(file), null);
     }
 
     private void createWrapperJar(File destinationDirectory)

@@ -4,10 +4,8 @@
  */
 package rife.bld;
 
-import rife.bld.help.CreateBlankHelp;
-import rife.bld.help.CreateRife2Help;
-import rife.bld.operations.CreateBlankOperation;
-import rife.bld.operations.CreateRife2Operation;
+import rife.bld.help.*;
+import rife.bld.operations.*;
 
 /**
  * Implements the RIFE2 CLI build executor that is available when running
@@ -39,6 +37,18 @@ public class Cli extends BuildExecutor {
     public void createBlank()
     throws Exception {
         new CreateBlankOperation().fromArguments(arguments()).execute();
+    }
+
+    /**
+     * The standard {@code upgrade} command.
+     *
+     * @throws Exception when an error occurred during the upgrade process
+     * @since 1.5
+     */
+    @BuildCommand(help = UpgradeHelp.class)
+    public void upgrade()
+    throws Exception {
+        new UpgradeOperation().fromArguments(arguments()).execute();
     }
 
     public static void main(String[] arguments)
