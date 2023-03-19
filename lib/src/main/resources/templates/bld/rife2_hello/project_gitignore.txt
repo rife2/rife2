@@ -1,16 +1,6 @@
 .gradle
-build
-.vscode
 .DS_Store
-embedded_dbs
-derby.log
-*.jar
-*.war
-*.prefs
-*.class*
-*.project
-*.processors
-*/bin/
+build
 */lib/
 !bld-wrapper.jar
 !bld-wrapper.properties
