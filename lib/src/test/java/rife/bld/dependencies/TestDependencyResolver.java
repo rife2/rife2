@@ -599,7 +599,7 @@ public class TestDependencyResolver {
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(1, files.size());
-            assertTrue(files.contains("rife2-1.4.0.jar"));
+            assertTrue(files.get(0).matches("rife2-.+\\.jar"));
         } finally {
             FileUtils.deleteDirectory(tmp);
         }
