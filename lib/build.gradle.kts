@@ -12,7 +12,7 @@ plugins {
     signing
 }
 
-val rifeVersion by rootProject.extra { "1.5.0" }
+val rifeVersion by rootProject.extra { "1.5.1-SNAPSHOT" }
 var rifeAgentName = "rife2-$rifeVersion-agent"
 val rifeAgentJar by rootProject.extra { "$rifeAgentName.jar" }
 var rifeAgentContinuationsName = "rife2-$rifeVersion-agent-continuations"
