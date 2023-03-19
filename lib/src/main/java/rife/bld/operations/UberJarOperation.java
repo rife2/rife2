@@ -10,6 +10,7 @@ import rife.tools.FileUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.jar.Attributes;
@@ -31,10 +32,12 @@ public class UberJarOperation {
     /**
      * Performs the uberjar operation.
      *
+     * @throws IOException when an exception occurred during the uberjar creation process
+     * @throws FileUtilsErrorException when an exception occurred during the uberjar creation process
      * @since 1.5
      */
     public void execute()
-    throws Exception {
+    throws IOException, FileUtilsErrorException {
         var tmp_dir = Files.createTempDirectory("uberjar").toFile();
         try {
             executeCollectSourceJarContents(tmp_dir);
@@ -79,7 +82,7 @@ public class UberJarOperation {
      * @since 1.5
      */
     public void executeCreateUberJarArchive(File stagingDirectory)
-    throws Exception {
+    throws IOException {
         var existing_manifest = new File(new File(stagingDirectory, "META-INF"), "MANIFEST.MF");
         existing_manifest.delete();
 

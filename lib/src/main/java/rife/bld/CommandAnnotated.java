@@ -25,8 +25,6 @@ class CommandAnnotated implements CommandDefinition {
     throws Throwable {
         try {
             method_.invoke(executor_);
-        } catch (IllegalAccessException | IllegalArgumentException e) {
-            throw e;
         } catch (InvocationTargetException e) {
             throw e.getCause();
         }

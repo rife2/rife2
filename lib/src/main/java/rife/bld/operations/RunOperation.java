@@ -5,13 +5,16 @@
 package rife.bld.operations;
 
 import rife.bld.Project;
+import rife.bld.operations.exceptions.ExitStatusException;
 import rife.bld.operations.exceptions.OperationOptionException;
 import rife.tools.FileUtils;
+import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Runs a Java application.
@@ -27,23 +30,31 @@ public class RunOperation {
     private final List<String> javaOptions_ = new ArrayList<>();
     private final List<String> classpath_ = new ArrayList<>();
     private String mainClass_;
-    private Consumer<String> outputConsumer_;
-    private Consumer<String> errorConsumer_;
+    private Function<String, Boolean> outputProcessor_;
+    private Function<String, Boolean> errorProcessor_;
     private Process process_;
 
     /**
      * Performs the run operation.
      *
-     * @throws Exception when an error occurred during the run operation
+     * @throws InterruptedException when the run operation was interrupted
+     * @throws IOException when an exception occurred during the execution of the process
+     * @throws FileUtilsErrorException when an exception occurred during the retrieval of the run operation output
+     * @throws ExitStatusException     when the exit status was changed during the operation
      * @since 1.5
      */
     public void execute()
-    throws Exception {
+    throws IOException, FileUtilsErrorException, InterruptedException, ExitStatusException {
         process_ = executeStartProcess();
-        process_.waitFor();
-        executeHandleProcessOutput(
+        int status = process_.waitFor();
+        if (!executeHandleProcessOutput(
             FileUtils.readString(process_.getInputStream()),
-            FileUtils.readString(process_.getErrorStream()));
+            FileUtils.readString(process_.getErrorStream()))) {
+            status = ExitStatusException.EXIT_FAILURE;
+        }
+        if (status != 0) {
+            throw new ExitStatusException(status);
+        }
     }
 
     /**
@@ -70,15 +81,15 @@ public class RunOperation {
      * @since 1.5
      */
     public Process executeStartProcess()
-    throws Exception {
+    throws IOException {
         var builder = new ProcessBuilder(executeConstructProcessCommandList());
         builder.directory(workDirectory());
-        if (outputConsumer() == null) {
+        if (outputProcessor() == null) {
             builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
         } else {
             builder.redirectOutput(ProcessBuilder.Redirect.PIPE);
         }
-        if (errorConsumer() == null) {
+        if (errorProcessor() == null) {
             builder.redirectError(ProcessBuilder.Redirect.INHERIT);
         } else {
             builder.redirectError(ProcessBuilder.Redirect.PIPE);
@@ -90,15 +101,19 @@ public class RunOperation {
      * Part of the {@link #execute} operation, handles providing the
      * output and error data to the configured consumers.
      *
-     * @since 1.5
+     * @return {@code true} when the process output was valid; or
+     * {@code false} when it was erroneous
+     * @since 1.5.1
      */
-    public void executeHandleProcessOutput(String output, String error) {
-        if (outputConsumer() != null) {
-            outputConsumer().accept(output);
+    public boolean executeHandleProcessOutput(String output, String error) {
+        boolean result = true;
+        if (outputProcessor() != null) {
+            result |= outputProcessor().apply(output);
         }
-        if (errorConsumer() != null) {
-            errorConsumer().accept(error);
+        if (errorProcessor() != null) {
+            result |= errorProcessor().apply(error);
         }
+        return result;
     }
 
     /**
@@ -190,26 +205,26 @@ public class RunOperation {
     }
 
     /**
-     * Provides the consumer that will be used to capture the process output.
+     * Provides the processor that will be used to handle the process output.
      *
-     * @param consumer the output consumer
+     * @param processor the output processor
      * @return this operation instance
-     * @since 1.5
+     * @since 1.5.1
      */
-    public RunOperation outputConsumer(Consumer<String> consumer) {
-        outputConsumer_ = consumer;
+    public RunOperation outputProcessor(Function<String, Boolean> processor) {
+        outputProcessor_ = processor;
         return this;
     }
 
     /**
-     * Provides the consumer that will be used to capture the process errors.
+     * Provides the processor that will be used to handle the process errors.
      *
-     * @param consumer the error consumer
+     * @param processor the error processor
      * @return this operation instance
-     * @since 1.5
+     * @since 1.5.1
      */
-    public RunOperation errorConsumer(Consumer<String> consumer) {
-        errorConsumer_ = consumer;
+    public RunOperation errorProcessor(Function<String, Boolean> processor) {
+        errorProcessor_ = processor;
         return this;
     }
 
@@ -268,23 +283,23 @@ public class RunOperation {
     }
 
     /**
-     * Retrieves the consumer that is used to capture the process output.
+     * Retrieves the processor that is used to handle the process output.
      *
-     * @return the output consumer
-     * @since 1.5
+     * @return the output processor
+     * @since 1.5.1
      */
-    public Consumer<String> outputConsumer() {
-        return outputConsumer_;
+    public Function<String, Boolean> outputProcessor() {
+        return outputProcessor_;
     }
 
     /**
-     * Retrieves the consumer that is used to capture the process errors.
+     * Retrieves the processor that is used to handle the process errors.
      *
-     * @return the error consumer
-     * @since 1.5
+     * @return the error processor
+     * @since 1.5.1
      */
-    public Consumer<String> errorConsumer() {
-        return errorConsumer_;
+    public Function<String, Boolean> errorProcessor() {
+        return errorProcessor_;
     }
 
     /**

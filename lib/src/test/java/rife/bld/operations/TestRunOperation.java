@@ -10,7 +10,7 @@ import rife.tools.FileUtils;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,8 +26,8 @@ public class TestRunOperation {
         assertTrue(operation.javaOptions().isEmpty());
         assertTrue(operation.classpath().isEmpty());
         assertNull(operation.mainClass());
-        assertNull(operation.outputConsumer());
-        assertNull(operation.errorConsumer());
+        assertNull(operation.outputProcessor());
+        assertNull(operation.errorProcessor());
         assertNull(operation.process());
     }
 
@@ -42,10 +42,8 @@ public class TestRunOperation {
             var run_classpath1 = "runClasspath1";
             var run_classpath2 = "runClasspath2";
             var main_class = "mainClass";
-            Consumer<String> run_output_consumer = (String) -> {
-            };
-            Consumer<String> run_error_consumer = (String) -> {
-            };
+            Function<String, Boolean> run_output_consumer = (String) -> true;
+            Function<String, Boolean> run_error_consumer = (String) -> true;
 
             var operation1 = new RunOperation();
             operation1
@@ -54,8 +52,8 @@ public class TestRunOperation {
                 .javaOptions(List.of(run_java_option1, run_java_option2))
                 .classpath(List.of(run_classpath1, run_classpath2))
                 .mainClass(main_class)
-                .outputConsumer(run_output_consumer)
-                .errorConsumer(run_error_consumer);
+                .outputProcessor(run_output_consumer)
+                .errorProcessor(run_error_consumer);
 
             assertEquals(work_directory, operation1.workDirectory());
             assertEquals(java_tool, operation1.javaTool());
@@ -64,8 +62,8 @@ public class TestRunOperation {
             assertTrue(operation1.classpath().contains(run_classpath1));
             assertTrue(operation1.classpath().contains(run_classpath2));
             assertEquals(main_class, operation1.mainClass());
-            assertSame(run_output_consumer, operation1.outputConsumer());
-            assertSame(run_error_consumer, operation1.errorConsumer());
+            assertSame(run_output_consumer, operation1.outputProcessor());
+            assertSame(run_error_consumer, operation1.errorProcessor());
 
             var operation2 = new RunOperation();
             operation2.workDirectory(work_directory);
@@ -75,8 +73,8 @@ public class TestRunOperation {
             operation2.classpath().add(run_classpath1);
             operation2.classpath().add(run_classpath2);
             operation2.mainClass(main_class);
-            operation2.outputConsumer(run_output_consumer);
-            operation2.errorConsumer(run_error_consumer);
+            operation2.outputProcessor(run_output_consumer);
+            operation2.errorProcessor(run_error_consumer);
 
             assertEquals(work_directory, operation2.workDirectory());
             assertEquals(java_tool, operation2.javaTool());
@@ -85,8 +83,8 @@ public class TestRunOperation {
             assertTrue(operation2.classpath().contains(run_classpath1));
             assertTrue(operation2.classpath().contains(run_classpath2));
             assertEquals(main_class, operation2.mainClass());
-            assertSame(run_output_consumer, operation2.outputConsumer());
-            assertSame(run_error_consumer, operation2.errorConsumer());
+            assertSame(run_output_consumer, operation2.outputProcessor());
+            assertSame(run_error_consumer, operation2.errorProcessor());
         } finally {
             FileUtils.deleteDirectory(work_directory);
         }
@@ -125,7 +123,10 @@ public class TestRunOperation {
             var run_operation = new RunOperation()
                 .mainClass("Source1")
                 .classpath(List.of(build_main.getAbsolutePath()))
-                .outputConsumer(output::append);
+                .outputProcessor(s -> {
+                    output.append(s);
+                    return true;
+                });
             run_operation.execute();
 
             assertEquals("source1", output.toString());
@@ -152,7 +153,10 @@ public class TestRunOperation {
             var check_result = new StringBuilder();
             new RunOperation()
                 .fromProject(create_operation.project())
-                .outputConsumer(check_result::append)
+                .outputProcessor(s -> {
+                    check_result.append(s);
+                    return true;
+                })
                 .execute();
             assertEquals("""
                 Hello World!

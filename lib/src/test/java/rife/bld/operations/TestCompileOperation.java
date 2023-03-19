@@ -5,6 +5,7 @@
 package rife.bld.operations;
 
 import org.junit.jupiter.api.Test;
+import rife.bld.operations.exceptions.ExitStatusException;
 import rife.tools.FileUtils;
 
 import javax.tools.DiagnosticCollector;
@@ -247,7 +248,7 @@ public class TestCompileOperation {
                 .compileTestClasspath(List.of(build_main.getAbsolutePath(), build_test.getAbsolutePath()))
                 .mainSourceFiles(List.of(source_file1, source_file2))
                 .testSourceFiles(List.of(source_file3));
-            operation.execute();
+            assertThrows(ExitStatusException.class, operation::execute);
             assertEquals(5, operation.diagnostics().size());
 
             var diagnostic1 = operation.diagnostics().get(0);

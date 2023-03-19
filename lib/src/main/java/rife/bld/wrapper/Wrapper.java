@@ -274,8 +274,12 @@ public class Wrapper {
             var options = new ArrayList<>(List.of("-d", buildBldDirectory().getAbsolutePath(), "-cp", classpath));
             var compilation_task = compiler.getTask(null, file_manager, diagnostics, options, null, compilation_units);
             if (!compilation_task.call()) {
-                for (var diagnostic : diagnostics.getDiagnostics()) {
-                    System.err.print(diagnostic.toString() + System.lineSeparator());
+                if (!diagnostics.getDiagnostics().isEmpty()) {
+                    for (var diagnostic : diagnostics.getDiagnostics()) {
+                        System.err.print(diagnostic.toString() + System.lineSeparator());
+                    }
+
+                    return 1;
                 }
             }
         }

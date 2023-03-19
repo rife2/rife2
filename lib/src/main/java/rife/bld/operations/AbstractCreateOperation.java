@@ -16,6 +16,7 @@ import rife.tools.exceptions.FileUtilsErrorException;
 import rife.validation.ValidityChecks;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -54,11 +55,12 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
     /**
      * Performs the creation operation.
      *
-     * @throws Exception when an error occurred during the creation operation
+     * @throws FileUtilsErrorException when an error occurred during the creation operation
+     * @throws IOException when an error occurred during the creation operation
      * @since 1.5
      */
     public void execute()
-    throws Exception {
+    throws FileUtilsErrorException, IOException {
         if (packageName() == null || projectName() == null) {
             System.err.println("ERROR: Missing package or project name.");
             return;
@@ -131,7 +133,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
      * @since 1.5
      */
     public void executePopulateProjectStructure()
-    throws Exception {
+    throws FileUtilsErrorException, IOException {
         // project gitignore
         FileUtils.writeString(
             TemplateFactory.TXT.get(templateBase_ + "project_gitignore").getContent(),

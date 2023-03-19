@@ -5,6 +5,7 @@
 package rife.bld.operations;
 
 import org.junit.jupiter.api.Test;
+import rife.bld.operations.exceptions.ExitStatusException;
 import rife.tools.FileUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
@@ -239,7 +240,7 @@ public class TestCreateRife2Operation {
                 }
             }, 1, TimeUnit.SECONDS);
             executor.schedule(() -> run_operation.process().destroy(), 2, TimeUnit.SECONDS);
-            run_operation.execute();
+            assertThrows(ExitStatusException.class, run_operation::execute);
 
             assertTrue(check_result.toString().contains("<p>Hello World Myapp</p>"));
         } finally {
@@ -318,7 +319,7 @@ public class TestCreateRife2Operation {
                 }
             };
             compile_operation.fromProject(create_operation.project());
-            compile_operation.execute();
+            assertThrows(ExitStatusException.class, compile_operation::execute);
             var diagnostics = compile_operation.diagnostics();
             assertEquals(16, diagnostics.size());
         } finally {

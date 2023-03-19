@@ -11,6 +11,7 @@ import rife.tools.FileUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Creates a new RIFE2 project structure.
@@ -50,7 +51,7 @@ public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Ope
 
     @Override
     public void executePopulateProjectStructure()
-    throws Exception {
+    throws FileUtilsErrorException, IOException {
         super.executePopulateProjectStructure();
 
         // project site uber

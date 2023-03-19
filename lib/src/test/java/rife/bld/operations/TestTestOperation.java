@@ -10,7 +10,7 @@ import rife.tools.FileUtils;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -27,8 +27,8 @@ public class TestTestOperation {
         assertTrue(operation.javaOptions().isEmpty());
         assertTrue(operation.classpath().isEmpty());
         assertNull(operation.mainClass());
-        assertNull(operation.outputConsumer());
-        assertNull(operation.errorConsumer());
+        assertNull(operation.outputProcessor());
+        assertNull(operation.errorProcessor());
         assertNull(operation.process());
     }
 
@@ -43,10 +43,8 @@ public class TestTestOperation {
             var test_classpath1 = "testClasspath1";
             var test_classpath2 = "testClasspath2";
             var test_tool_main_class = "testToolMainClass";
-            Consumer<String> test_output_consumer = (String) -> {
-            };
-            Consumer<String> test_error_consumer = (String) -> {
-            };
+            Function<String, Boolean> test_output_consumer = (String) -> true;
+            Function<String, Boolean> test_error_consumer = (String) -> true;
 
             var operation1 = new TestOperation();
             operation1
@@ -55,8 +53,8 @@ public class TestTestOperation {
                 .javaOptions(List.of(test_java_option1, test_java_option2))
                 .classpath(List.of(test_classpath1, test_classpath2))
                 .mainClass(test_tool_main_class)
-                .outputConsumer(test_output_consumer)
-                .errorConsumer(test_error_consumer);
+                .outputProcessor(test_output_consumer)
+                .errorProcessor(test_error_consumer);
 
             assertEquals(work_directory, operation1.workDirectory());
             assertEquals(java_tool, operation1.javaTool());
@@ -65,8 +63,8 @@ public class TestTestOperation {
             assertTrue(operation1.classpath().contains(test_classpath1));
             assertTrue(operation1.classpath().contains(test_classpath2));
             assertEquals(test_tool_main_class, operation1.mainClass());
-            assertSame(test_output_consumer, operation1.outputConsumer());
-            assertSame(test_error_consumer, operation1.errorConsumer());
+            assertSame(test_output_consumer, operation1.outputProcessor());
+            assertSame(test_error_consumer, operation1.errorProcessor());
 
             var operation2 = new TestOperation();
             operation2.workDirectory(work_directory);
@@ -76,8 +74,8 @@ public class TestTestOperation {
             operation2.classpath().add(test_classpath1);
             operation2.classpath().add(test_classpath2);
             operation2.mainClass(test_tool_main_class);
-            operation2.outputConsumer(test_output_consumer);
-            operation2.errorConsumer(test_error_consumer);
+            operation2.outputProcessor(test_output_consumer);
+            operation2.errorProcessor(test_error_consumer);
 
             assertEquals(work_directory, operation2.workDirectory());
             assertEquals(java_tool, operation2.javaTool());
@@ -86,8 +84,8 @@ public class TestTestOperation {
             assertTrue(operation2.classpath().contains(test_classpath1));
             assertTrue(operation2.classpath().contains(test_classpath2));
             assertEquals(test_tool_main_class, operation2.mainClass());
-            assertSame(test_output_consumer, operation2.outputConsumer());
-            assertSame(test_error_consumer, operation2.errorConsumer());
+            assertSame(test_output_consumer, operation2.outputProcessor());
+            assertSame(test_error_consumer, operation2.errorProcessor());
         } finally {
             FileUtils.deleteDirectory(work_directory);
         }
@@ -139,7 +137,10 @@ public class TestTestOperation {
             var test_operation = new TestOperation()
                 .mainClass("Source2")
                 .classpath(List.of(build_main.getAbsolutePath(), build_test.getAbsolutePath()))
-                .outputConsumer(output::append);
+                .outputProcessor(s -> {
+                    output.append(s);
+                    return true;
+                });
             test_operation.execute();
 
             assertEquals("true", output.toString());
@@ -166,7 +167,10 @@ public class TestTestOperation {
             var check_result = new StringBuilder();
             new TestOperation()
                 .fromProject(create_operation.project())
-                .outputConsumer(check_result::append)
+                .outputProcessor(s -> {
+                    check_result.append(s);
+                    return true;
+                })
                 .execute();
             assertTrue(check_result.toString().contains("""
                 [         2 containers found      ]

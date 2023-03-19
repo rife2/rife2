@@ -6,6 +6,7 @@ package rife.bld;
 
 import rife.bld.help.HelpHelp;
 import rife.bld.operations.HelpOperation;
+import rife.bld.operations.exceptions.ExitStatusException;
 import rife.ioc.HierarchicalProperties;
 import rife.tools.ExceptionUtils;
 
@@ -23,6 +24,7 @@ public class BuildExecutor {
     private final HierarchicalProperties properties_;
     private List<String> arguments_ = Collections.emptyList();
     private Map<String, CommandDefinition> buildCommands_ = null;
+    private int exitStatus_ = 0;
 
     /**
      * Creates a new build executor instance.
@@ -44,15 +46,36 @@ public class BuildExecutor {
     }
 
     /**
+     * Set the exist status to use at the end of the execution.
+     * 
+     * @param status sets the exit status
+     * @since 1.5.1
+     */
+    public void exitStatus(int status) {
+        exitStatus_ = status;
+    }
+
+    /**
+     * Retrieves the exit status.
+     *
+     * @return the exit status
+     * @since 1.5.1
+     */
+    public int exitStatus() {
+        return exitStatus_;
+    }
+
+    /**
      * Execute the build commands from the provided arguments.
      * <p>
      * While the build is executing, the arguments can be retrieved
      * using {@link #arguments()}.
      *
      * @param arguments the arguments to execute the build with
-     * @since 1.5
+     * @return the exist status
+     * @since 1.5.1
      */
-    public void start(String[] arguments) {
+    public int execute(String[] arguments) {
         arguments_ = new ArrayList<>(Arrays.asList(arguments));
 
         var show_help = arguments_.isEmpty();
@@ -65,6 +88,7 @@ public class BuildExecutor {
                     break;
                 }
             } catch (Throwable e) {
+                exitStatus(1);
                 new HelpOperation(this, arguments()).executePrintOverviewHelp();
                 System.err.println();
                 System.err.println(ExceptionUtils.getExceptionStackTrace(e));
@@ -74,6 +98,20 @@ public class BuildExecutor {
         if (show_help) {
             help();
         }
+        
+        return exitStatus_;
+    }
+
+    /**
+     * Starts the execution of the build. This method will call
+     * System.exit() when done with the appropriate exit status.
+     * 
+     * @param arguments the arguments to execute the build with
+     * @see #execute 
+     * @since 1.5.1
+     */
+    public void start(String[] arguments) {
+        System.exit(execute(arguments));
     }
 
     /**
@@ -151,7 +189,12 @@ public class BuildExecutor {
     throws Throwable {
         var definition = buildCommands().get(command);
         if (definition != null) {
-            definition.execute();
+            try {
+                definition.execute();
+            } catch (ExitStatusException e) {
+                exitStatus(e.getExitStatus());
+                return e.getExitStatus() == ExitStatusException.EXIT_SUCCESS;
+            }
         } else {
             System.err.println("ERROR: unknown command '" + command + "'");
             System.err.println();

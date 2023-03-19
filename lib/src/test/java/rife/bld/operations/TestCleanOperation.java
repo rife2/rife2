@@ -120,6 +120,7 @@ public class TestCleanOperation {
             new CleanOperation().fromProject(project).execute();
             assertEquals("""
                     /build
+                    /build/bld
                     /lib
                     /lib/bld
                     /lib/compile

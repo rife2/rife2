@@ -5,6 +5,7 @@
 package rife.bld.operations;
 
 import org.junit.jupiter.api.Test;
+import rife.bld.operations.exceptions.ExitStatusException;
 import rife.tools.FileUtils;
 
 import javax.tools.DiagnosticCollector;
@@ -187,7 +188,10 @@ public class TestCreateBlankOperation {
             var check_result = new StringBuilder();
             new RunOperation()
                 .fromProject(create_operation.project())
-                .outputConsumer(check_result::append)
+                .outputProcessor(s -> {
+                    check_result.append(s);
+                    return true;
+                })
                 .execute();
             assertEquals("""
                 Hello World!
@@ -259,7 +263,7 @@ public class TestCreateBlankOperation {
                 }
             };
             compile_operation.fromProject(create_operation.project());
-            compile_operation.execute();
+            assertThrows(ExitStatusException.class, compile_operation::execute);
             var diagnostics = compile_operation.diagnostics();
             assertEquals(4, diagnostics.size());
         } finally {

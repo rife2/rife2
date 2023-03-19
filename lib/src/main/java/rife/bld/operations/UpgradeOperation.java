@@ -3,6 +3,7 @@ package rife.bld.operations;
 import rife.Version;
 import rife.bld.wrapper.Wrapper;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -28,11 +29,11 @@ public class UpgradeOperation {
     /**
      * Performs the upgrade operation.
      *
-     * @throws Exception when an error occurred during the upgrade operation
+     * @throws IOException when an error occurred during the upgrade operation
      * @since 1.5
      */
     public void execute()
-    throws Exception {
+    throws IOException {
         // create the wrapper files
         new Wrapper().createWrapperFiles(Path.of("lib", "bld").toFile(), Version.getVersion());
     }

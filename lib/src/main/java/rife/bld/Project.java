@@ -116,7 +116,9 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = TestHelp.class)
     public void test()
     throws Exception {
-        new TestOperation().fromProject(this).execute();
+        new TestOperation()
+            .fromProject(this)
+            .execute();
     }
 
     @BuildCommand(help = UberJarHelp.class)

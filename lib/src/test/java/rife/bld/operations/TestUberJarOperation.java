@@ -103,7 +103,10 @@ public class TestUberJarOperation {
             new RunOperation()
                 .javaOptions(List.of("-jar"))
                 .mainClass(uberjar_file.getAbsolutePath())
-                .outputConsumer(check_result::append)
+                .outputProcessor(s -> {
+                    check_result.append(s);
+                    return true;
+                })
                 .execute();
             assertEquals("""
                 Hello World!

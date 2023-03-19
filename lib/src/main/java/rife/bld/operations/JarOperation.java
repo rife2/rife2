@@ -34,10 +34,11 @@ public class JarOperation {
     /**
      * Performs the jar operation.
      *
+     * @throws IOException when an exception occurred during the jar creation process
      * @since 1.5
      */
     public void execute()
-    throws Exception {
+    throws IOException {
         executeCreateDestinationDirectory();
         executeCreateJarArchive();
     }

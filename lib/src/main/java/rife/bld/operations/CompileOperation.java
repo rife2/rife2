@@ -5,6 +5,7 @@
 package rife.bld.operations;
 
 import rife.bld.Project;
+import rife.bld.operations.exceptions.ExitStatusException;
 import rife.tools.FileUtils;
 
 import javax.tools.*;
@@ -35,10 +36,13 @@ public class CompileOperation {
      * @since 1.5
      */
     public void execute()
-    throws Exception {
+    throws IOException, ExitStatusException {
         executeCreateBuildDirectories();
         executeBuildMainSources();
         executeBuildTestSources();
+        if (!diagnostics().isEmpty()) {
+            throw new ExitStatusException(ExitStatusException.EXIT_FAILURE);
+        }
     }
 
     /**
