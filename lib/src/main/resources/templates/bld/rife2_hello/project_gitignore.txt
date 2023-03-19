@@ -1,6 +1,10 @@
 .gradle
 .DS_Store
 build
-*/lib/
+lib/bld/**
+lib/compile/**
+lib/runtime/**
+lib/standalone/**
+lib/test/**
 !bld-wrapper.jar
 !bld-wrapper.properties
