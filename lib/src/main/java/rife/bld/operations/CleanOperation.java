@@ -54,7 +54,6 @@ public class CleanOperation {
      */
     public CleanOperation fromProject(Project project) {
         return directories(List.of(
-            project.buildBldDirectory(),
             project.buildDistDirectory(),
             project.buildMainDirectory(),
             project.buildTestDirectory()));
