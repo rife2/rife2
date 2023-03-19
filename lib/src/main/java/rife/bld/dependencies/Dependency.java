@@ -17,7 +17,7 @@ import java.util.Objects;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public record Dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type) {
+public record Dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type, ExclusionSet exclusions) {
     public Dependency(String groupId, String artifactId) {
         this(groupId, artifactId, null, null, null);
     }
@@ -31,11 +31,16 @@ public record Dependency(String groupId, String artifactId, VersionNumber versio
     }
 
     public Dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type) {
+        this(groupId, artifactId, version, classifier, type, null);
+    }
+
+    public Dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type, ExclusionSet exclusions) {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = (version == null ? VersionNumber.UNKNOWN : version);
         this.classifier = (classifier == null ? "" : classifier);
         this.type = (type == null ? "jar" : type);
+        this.exclusions = (exclusions == null ? new ExclusionSet() : exclusions);
     }
 
     /**
@@ -47,6 +52,19 @@ public record Dependency(String groupId, String artifactId, VersionNumber versio
      */
     public Dependency baseDependency() {
         return new Dependency(groupId, artifactId, VersionNumber.UNKNOWN, classifier, type);
+    }
+
+    /**
+     * Adds an exclusion to this dependency.
+     *
+     * @param groupId the exclusion group identifier, use {@code "*"} to exclude all groupIds
+     * @param artifactId the exclusion artifact identifier, use {@code "*"} to exclude all artifactIds
+     * @return this dependency instance
+     * @since 1.5
+     */
+    public Dependency exclude(String groupId, String artifactId) {
+        exclusions.add(new DependencyExclusion(groupId, artifactId));
+        return this;
     }
 
     public String toString() {

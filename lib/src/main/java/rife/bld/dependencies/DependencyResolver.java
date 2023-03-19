@@ -125,9 +125,11 @@ public class DependencyResolver {
         var result = new DependencySet();
         result.add(dependency_);
 
-        var pom_dependencies = new ArrayList<>(getMavenPom().getDependencies(scopes));
-        var exclusions = new Stack<Set<DependencyExclusion>>();
+        var pom_dependencies = new ArrayList<PomDependency>();
+        var exclusions = new Stack<ExclusionSet>();
+        exclusions.push(dependency_.exclusions());
         getTransitiveDependencies(result, pom_dependencies, exclusions, scopes);
+        exclusions.pop();
         return result;
     }
 
@@ -300,7 +302,7 @@ public class DependencyResolver {
             pomDependency.type());
     }
 
-    private void getTransitiveDependencies(DependencySet result, ArrayList<PomDependency> pomDependencies, Stack<Set<DependencyExclusion>> exclusions, Scope... scopes) {
+    private void getTransitiveDependencies(DependencySet result, List<PomDependency> pomDependencies, Stack<ExclusionSet> exclusions, Scope... scopes) {
         var next_dependencies = getMavenPom().getDependencies(scopes);
 
         pomDependencies.forEach(next_dependencies::remove);

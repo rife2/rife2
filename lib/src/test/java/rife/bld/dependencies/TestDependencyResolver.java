@@ -267,6 +267,64 @@ public class TestDependencyResolver {
     }
 
     @Test
+    void testGetCompileTransitiveDependenciesJettyExclusion() {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS),
+            new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14))
+                .exclude("org.slf4j", "slf4j-api"));
+        var dependencies = resolver.getAllDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(5, dependencies.size());
+        assertEquals("""
+            org.eclipse.jetty:jetty-server:11.0.14
+            org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api:5.0.2
+            org.eclipse.jetty:jetty-http:11.0.14
+            org.eclipse.jetty:jetty-io:11.0.14
+            org.eclipse.jetty:jetty-util:11.0.14""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
+    void testGetCompileTransitiveDependenciesJettyFullGroupExclusion() {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS),
+            new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14))
+                .exclude("org.eclipse.jetty", "*"));
+        var dependencies = resolver.getAllDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(3, dependencies.size());
+        assertEquals("""
+            org.eclipse.jetty:jetty-server:11.0.14
+            org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api:5.0.2
+            org.slf4j:slf4j-api:2.0.5""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
+    void testGetCompileTransitiveDependenciesJettyFullArtifactExclusion() {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS),
+            new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14))
+                .exclude("*", "jetty-http")
+                .exclude("*", "slf4j-api"));
+        var dependencies = resolver.getAllDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(4, dependencies.size());
+        assertEquals("""
+            org.eclipse.jetty:jetty-server:11.0.14
+            org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api:5.0.2
+            org.eclipse.jetty:jetty-io:11.0.14
+            org.eclipse.jetty:jetty-util:11.0.14""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
+    void testGetCompileTransitiveDependenciesJettyFullExclusion() {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS),
+            new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14))
+                .exclude("*", "*"));
+        var dependencies = resolver.getAllDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(1, dependencies.size());
+        assertEquals("""
+            org.eclipse.jetty:jetty-server:11.0.14""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
     void testGetCompileTransitiveDependenciesJettyAndSlfj() {
         var dependencies = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14))).getAllDependencies(compile);
         var dependencies2 = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.slf4j", "slf4j-simple", new VersionNumber(2, 0, 6))).getAllDependencies(compile, runtime);
