@@ -17,8 +17,6 @@ var rifeAgentName = "rife2-$rifeVersion-agent"
 val rifeAgentJar by rootProject.extra { "$rifeAgentName.jar" }
 var rifeAgentContinuationsName = "rife2-$rifeVersion-agent-continuations"
 val rifeAgentContinuationsJar by rootProject.extra { "$rifeAgentContinuationsName.jar" }
-var rifeStandaloneName = "rife2-$rifeVersion-standalone"
-val rifeStandaloneJar = "$rifeStandaloneName.jar"
 var rifeWrapperName = "bld-wrapper"
 val rifeWrapperJar = "$rifeWrapperName.jar"
 var rifeBldName = "rife2-$rifeVersion-bld"
@@ -217,26 +215,6 @@ tasks {
         }
     }
 
-    val standaloneDependencies = configurations
-        .testCompileClasspath.get().files;
-    register<Jar>("standaloneJar") {
-        dependsOn("jar")
-
-        archiveFileName.set(rifeStandaloneJar)
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        from(standaloneDependencies
-            .filter { it.toString().matches(".*((jetty[^/]+/11.*)|jakarta|slf4j|jsoup|junit|imagej|opentest4j|apiguardian|h2).*\\.jar".toRegex()) }
-            .map {
-                zipTree(it).matching { exclude (
-                    "IJ_Props.txt", "about.html", "about.jpg", "microscope.gif", "module-info.class",
-                    "META-INF/CHANGES*", "META-INF/LICENSE*", "META-INF/NOTICE*", "META-INF/README*") }
-            })
-        manifest {
-            attributes["Main-Class"] = "rife.bld.Cli"
-        }
-        with(jar.get())
-    }
-
     register<Jar>("wrapperJar") {
         dependsOn("jar")
 
@@ -384,13 +362,6 @@ val agentContinuationsArtifact = artifacts.add("archives", agentContinuationsFil
     builtBy("agentContinuationsJar")
 }
 
-val standaloneFile = layout.buildDirectory.file("libs/$rifeStandaloneJar")
-val standaloneArtifact = artifacts.add("archives", standaloneFile.get().asFile) {
-    type = "jar"
-    classifier = "standalone"
-    builtBy("standaloneJar")
-}
-
 val bldFile = layout.buildDirectory.file("distributions/$rifeBldZip")
 val bldArtifact = artifacts.add("archives", bldFile.get().asFile) {
     type = "zip"
@@ -404,7 +375,6 @@ publishing {
             artifactId = "rife2"
             artifact(agentArtifact)
             artifact(agentContinuationsArtifact)
-            artifact(standaloneArtifact)
             artifact(bldArtifact)
             from(components["java"])
             pom {
