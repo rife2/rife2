@@ -181,16 +181,16 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         FileUtils.writeString(build_template.getContent(), project_build_file);
 
         // build shell scripts
-        var build_path = project_build_file.getPath().substring(project_.workDirectory().getPath().length() + 1);
-
         var build_sh_template = TemplateFactory.TXT.get("bld.bld_sh");
-        build_sh_template.setValue("projectBuildPath", build_path);
+        build_sh_template.setValue("projectBuild", projectBuildName_);
+        build_sh_template.setValue("package", project_.pkg());
         var build_sh_file = new File(project_.workDirectory(), "bld.sh");
         FileUtils.writeString(build_sh_template.getContent(), build_sh_file);
         build_sh_file.setExecutable(true);
 
         var build_bat_template = TemplateFactory.TXT.get("bld.bld_bat");
-        build_bat_template.setValue("projectBuildPath", build_path);
+        build_bat_template.setValue("projectBuild", projectBuildName_);
+        build_bat_template.setValue("package", project_.pkg());
         var build_bat_file = new File(project_.workDirectory(), "bld.bat");
         FileUtils.writeString(build_bat_template.getContent(), build_bat_file);
 

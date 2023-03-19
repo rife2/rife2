@@ -8,6 +8,7 @@ import rife.tools.FileUtils;
 import rife.tools.InnerClassException;
 import rife.tools.exceptions.FileUtilsErrorException;
 
+import javax.tools.*;
 import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -18,6 +19,7 @@ import java.util.jar.*;
 import java.util.regex.Pattern;
 
 import static rife.tools.FileUtils.JAR_FILE_PATTERN;
+import static rife.tools.FileUtils.JAVA_FILE_PATTERN;
 
 /**
  * Wrapper implementation for the build system that ensures the RIFE2
@@ -161,27 +163,35 @@ public class Wrapper {
         }
     }
 
-    private Path getLibBldPath() {
-        return Path.of(currentDir_.getAbsolutePath(), "lib", "bld");
+    private File buildBldDirectory() {
+        return Path.of(currentDir_.getAbsolutePath(), "build", "bld").toFile();
     }
 
-    private Path getLibPath(String path) {
-        return Path.of(currentDir_.getAbsolutePath(), "..", "lib", path);
+    private File srcBldJavaDirectory() {
+        return Path.of(currentDir_.getAbsolutePath(), "src", "bld", "java").toFile();
     }
 
-    private Path getLibBldPath(String path) {
-        return Path.of(currentDir_.getAbsolutePath(), "lib", "bld", path);
+    private File libBldDirectory() {
+        return Path.of(currentDir_.getAbsolutePath(), "lib", "bld").toFile();
+    }
+
+    private File libDirectory(String path) {
+        return Path.of(currentDir_.getAbsolutePath(), "..", "lib", path).toFile();
+    }
+
+    private File libBldDirectory(String path) {
+        return Path.of(currentDir_.getAbsolutePath(), "lib", "bld", path).toFile();
     }
 
     private void initWrapperProperties(String version)
     throws IOException {
         wrapperProperties_.put(PROPERTY_VERSION, version);
         wrapperProperties_.put(PROPERTY_DOWNLOAD_LOCATION, DOWNLOAD_LOCATION);
-        var config = getLibBldPath(WRAPPER_PROPERTIES).toFile();
+        var config = libBldDirectory(WRAPPER_PROPERTIES);
         if (config.exists()) {
             wrapperProperties_.load(new FileReader(config));
         } else {
-            config = getLibPath(WRAPPER_PROPERTIES).toFile();
+            config = libDirectory(WRAPPER_PROPERTIES);
             if (config.exists()) {
                 wrapperProperties_.load(new FileReader(config));
             }
@@ -239,29 +249,89 @@ public class Wrapper {
     }
 
     private int launchMain(File jarFile, List<String> arguments)
-    throws IOException, InterruptedException {
-        List<String> args = new ArrayList<>();
-        args.add("java");
+    throws IOException, InterruptedException, FileUtilsErrorException {
+        if (arguments.isEmpty() || !arguments.get(0).equals("--build")) {
+            return launchMainCli(jarFile, arguments);
+        }
 
-        // jvm parameters must go before -jar
+        arguments.remove(0);
+
+        var build_bld_dir = buildBldDirectory();
+        if (build_bld_dir.exists()) {
+            FileUtils.deleteDirectory(buildBldDirectory());
+        }
+        buildBldDirectory().mkdirs();
+
+        var bld_classpath = bldClasspathJars();
+        bld_classpath.add(jarFile);
+        bld_classpath.add(buildBldDirectory());
+        var classpath = FileUtils.joinPaths(FileUtils.combineToAbsolutePaths(bld_classpath));
+
+        var compiler = ToolProvider.getSystemJavaCompiler();
+        try (var file_manager = compiler.getStandardFileManager(null, null, null)) {
+            var compilation_units = file_manager.getJavaFileObjectsFromFiles(bldSourceFiles());
+            var diagnostics = new DiagnosticCollector<JavaFileObject>();
+            var options = new ArrayList<>(List.of("-d", buildBldDirectory().getAbsolutePath(), "-cp", classpath));
+            var compilation_task = compiler.getTask(null, file_manager, diagnostics, options, null, compilation_units);
+            if (!compilation_task.call()) {
+                for (var diagnostic : diagnostics.getDiagnostics()) {
+                    System.err.print(diagnostic.toString() + System.lineSeparator());
+                }
+            }
+        }
+
+        var java_args = new ArrayList<String>();
+        java_args.add("java");
+        includeJvmParameters(arguments, java_args);
+        java_args.add("-cp");
+        java_args.add(classpath);
+        java_args.addAll(arguments);
+        var java_process = new ProcessBuilder(java_args);
+        java_process.inheritIO();
+        var process = java_process.start();
+
+        return process.waitFor();
+    }
+
+    private static void includeJvmParameters(List<String> arguments, List<String> javaArgs) {
         var i = arguments.iterator();
         while (i.hasNext()) {
             var arg = i.next();
             if (arg.matches("-D(.+?)=(.*)")) {
-                args.add(arg);
+                javaArgs.add(arg);
                 i.remove();
             }
         }
+    }
+
+    private List<File> bldClasspathJars() {
+        // detect the jar files in the compile lib directory
+        var dir_abs = libBldDirectory().getAbsoluteFile();
+        var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, Pattern.compile(WRAPPER_JAR));
+
+        // build the compilation classpath
+        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
+    }
+
+    public List<File> bldSourceFiles() {
+        // get all the bld java sources
+        var src_main_java_dir_abs = srcBldJavaDirectory().getAbsoluteFile();
+        return FileUtils.getFileList(src_main_java_dir_abs, JAVA_FILE_PATTERN, null)
+            .stream().map(file -> new File(src_main_java_dir_abs, file)).toList();
+    }
+
+
+    private int launchMainCli(File jarFile, List<String> arguments)
+    throws IOException, InterruptedException {
+        var args = new ArrayList<String>();
+        args.add("java");
+        includeJvmParameters(arguments, args);
 
         args.add("-cp");
-        var bld_classpath = bldClasspathJars();
-        bld_classpath.add(jarFile);
-        args.add(FileUtils.joinPaths(FileUtils.combineToAbsolutePaths(bld_classpath)));
+        args.add(jarFile.getAbsolutePath());
 
-        if (arguments.isEmpty() || !arguments.get(0).endsWith(".java")) {
-            args.add("-jar");
-            args.add(jarFile.getAbsolutePath());
-        }
+        args.add("-jar");
+        args.add(jarFile.getAbsolutePath());
 
         args.addAll(arguments);
 
@@ -269,15 +339,6 @@ public class Wrapper {
         process_builder.inheritIO();
         var process = process_builder.start();
         return process.waitFor();
-    }
-
-    private List<File> bldClasspathJars() {
-        // detect the jar files in the compile lib directory
-        var dir_abs = getLibBldPath().toFile().getAbsoluteFile();
-        var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, Pattern.compile(WRAPPER_JAR));
-
-        // build the compilation classpath
-        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
     }
 
     private void download(File file, String version)
