@@ -290,7 +290,7 @@ public class TemplateFactory extends EnumClass<String> {
      * template names to the characters that Java accepts for class names.
      * <p>
      * The characters that are invalid Java class name characters will be replaced
-     * by underscores, except for {@code /} and {@code \\}, which will be replaced
+     * by underscores, except for {@code /} and {@code \}, which will be replaced
      * by dots. The changes to the template name will propagate through to the template
      * source file name that RIFE2 is looking for.
      *
