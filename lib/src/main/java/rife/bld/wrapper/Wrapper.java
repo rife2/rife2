@@ -68,6 +68,28 @@ public class Wrapper {
         createWrapperJar(destinationDirectory);
     }
 
+    /**
+     * Upgraded the IDEA bld files that were generated with a preview version.
+     *
+     * @param destinationDirectory the directory with the IDEA files
+     * @param version              the RIFE2 version they should be using
+     * @throws IOException when an error occurred during the upgrade of the IDEA files
+     * @since 1.5.2
+     */
+    public void upgradeIdeaBldLibrary(File destinationDirectory, String version)
+    throws IOException {
+        var file = new File(destinationDirectory, Path.of("libraries", "bld.xml").toString());
+        if (file.exists()) {
+            try {
+                var content = FileUtils.readString(file);
+                content = content.replaceAll("rife2-[^\"/!]+\\.jar", "rife2-" + version + ".jar");
+                FileUtils.writeString(content, file);
+            } catch (FileUtilsErrorException e) {
+                throw new IOException(e);
+            }
+        }
+    }
+
     private void createWrapperProperties(File destinationDirectory, String version)
     throws IOException {
         var file = new File(destinationDirectory, WRAPPER_PROPERTIES);

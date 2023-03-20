@@ -3,6 +3,7 @@ package rife.bld.operations;
 import rife.Version;
 import rife.bld.wrapper.Wrapper;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -34,8 +35,8 @@ public class UpgradeOperation extends AbstractOperation<UpgradeOperation> {
      */
     public void execute()
     throws IOException {
-        // create the wrapper files
         new Wrapper().createWrapperFiles(Path.of("lib", "bld").toFile(), Version.getVersion());
+        new Wrapper().upgradeIdeaBldLibrary(new File(".idea"), Version.getVersion());
         if (!silent()) {
             System.out.println("The wrapper was successfully upgraded.");
         }
