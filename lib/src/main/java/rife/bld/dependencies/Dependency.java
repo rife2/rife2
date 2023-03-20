@@ -5,15 +5,16 @@
 package rife.bld.dependencies;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
  * Contains the information required to describe an artifact dependency in the build system.
  *
- * @param groupId the dependency group identifier
+ * @param groupId    the dependency group identifier
  * @param artifactId the dependency artifact identifier
- * @param version the dependency version
+ * @param version    the dependency version
  * @param classifier the dependency classier
- * @param type the dependency type
+ * @param type       the dependency type
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
@@ -43,6 +44,37 @@ public record Dependency(String groupId, String artifactId, VersionNumber versio
         this.exclusions = (exclusions == null ? new ExclusionSet() : exclusions);
     }
 
+    private static final Pattern DEPENDENCY_PATTERN = Pattern.compile("^(?<groupId>[^:@]+):(?<artifactId>[^:@]+)(?::(?<version>[^:@]+)(?::(?<classifier>[^:@]+))?)?(?:@(?<type>[^:@]+))?$");
+
+    /**
+     * Parses a dependency from a string representation.
+     * <p>
+     * If the string can't be successfully parsed, {@code null} will be returned.
+     *
+     * @param dependency the dependency string to parse
+     * @return a parsed instance of {@code Dependency}; or
+     * {@code null} when the string couldn't be parsed
+     * @since 1.5.2
+     */
+    public static Dependency parse(String dependency) {
+        if (dependency == null || dependency.isEmpty()) {
+            return null;
+        }
+
+        var matcher = DEPENDENCY_PATTERN.matcher(dependency);
+        if (!matcher.matches()) {
+            return null;
+        }
+
+        var groupId = matcher.group("groupId");
+        var artifactId = matcher.group("artifactId");
+        var version = VersionNumber.parse(matcher.group("version"));
+        var classifier = matcher.group("classifier");
+        var type = matcher.group("type");
+
+        return new Dependency(groupId, artifactId, version, classifier, type);
+    }
+
     /**
      * Returns the base dependency of this dependency, replacing the version number
      * with an unknown version number.
@@ -57,7 +89,7 @@ public record Dependency(String groupId, String artifactId, VersionNumber versio
     /**
      * Adds an exclusion to this dependency.
      *
-     * @param groupId the exclusion group identifier, use {@code "*"} to exclude all groupIds
+     * @param groupId    the exclusion group identifier, use {@code "*"} to exclude all groupIds
      * @param artifactId the exclusion artifact identifier, use {@code "*"} to exclude all artifactIds
      * @return this dependency instance
      * @since 1.5

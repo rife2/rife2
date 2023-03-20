@@ -66,4 +66,21 @@ public class TestDependency {
         assertEquals("com.uwyn.rife2:rife2:1.4.0:agent", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent").toString());
         assertEquals("com.uwyn.rife2:rife2:1.4.0:standalone@zip", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "standalone", "zip").toString());
     }
+
+    @Test
+    void testToParse() {
+        assertEquals("com.uwyn.rife2:rife2", Dependency.parse("com.uwyn.rife2:rife2").toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0", Dependency.parse("com.uwyn.rife2:rife2:1.4.0").toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0:agent", Dependency.parse("com.uwyn.rife2:rife2:1.4.0:agent").toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0:agent@zip", Dependency.parse("com.uwyn.rife2:rife2:1.4.0:agent@zip").toString());
+        assertEquals("com.uwyn.rife2:rife2@zip", Dependency.parse("com.uwyn.rife2:rife2@zip").toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0@zip", Dependency.parse("com.uwyn.rife2:rife2:1.4.0@zip").toString());
+
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2").toString(), Dependency.parse("com.uwyn.rife2:rife2").toString());
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)).toString(), Dependency.parse("com.uwyn.rife2:rife2:1.4.0").toString());
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent").toString(), Dependency.parse("com.uwyn.rife2:rife2:1.4.0:agent").toString());
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent", "zip").toString(), Dependency.parse("com.uwyn.rife2:rife2:1.4.0:agent@zip").toString());
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", null, null, "zip").toString(), Dependency.parse("com.uwyn.rife2:rife2@zip").toString());
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), null, "zip").toString(), Dependency.parse("com.uwyn.rife2:rife2:1.4.0@zip").toString());
+    }
 }

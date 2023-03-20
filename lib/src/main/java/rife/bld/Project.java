@@ -158,8 +158,8 @@ public class Project extends BuildExecutor {
         return new VersionNumber(major, minor, revision, qualifier);
     }
 
-    public static VersionNumber version(String version) {
-        return VersionNumber.parse(version);
+    public static VersionNumber version(String description) {
+        return VersionNumber.parse(description);
     }
 
     public DependencySet scope(Scope scope) {
@@ -180,6 +180,10 @@ public class Project extends BuildExecutor {
 
     public static Dependency dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type) {
         return new Dependency(groupId, artifactId, version, classifier, type);
+    }
+
+    public static Dependency dependency(String description) {
+        return Dependency.parse(description);
     }
 
     public static LocalDependency local(String path) {
