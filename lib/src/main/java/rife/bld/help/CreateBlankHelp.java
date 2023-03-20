@@ -21,7 +21,7 @@ public class CreateBlankHelp implements CommandHelp {
         return StringUtils.replace("""
             Creates a new blank project.
                         
-            Usage : ${topic} [package] [name]
+            Usage : ${topic} <package> <name>
               package  The package of the project to create
               name     The name of the project to create""", "${topic}", topic);
     }
