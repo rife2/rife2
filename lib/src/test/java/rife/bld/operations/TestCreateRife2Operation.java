@@ -277,7 +277,7 @@ public class TestCreateRife2Operation {
                     /yourthing/.idea/runConfigurations/Run Main.xml
                     /yourthing/.idea/runConfigurations/Run Tests.xml
                     /yourthing/bld.bat
-                    /yourthing/bld.sh
+                    /yourthing/bld
                     /yourthing/lib
                     /yourthing/lib/bld
                     /yourthing/lib/bld/bld-wrapper.jar
