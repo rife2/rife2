@@ -287,13 +287,34 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
      * @since 1.5
      */
     public T fromArguments(List<String> arguments) {
-        if (arguments.size() < 2) {
+        String package_name = null;
+        String project_name = null;
+        if (arguments.size() > 0) {
+            package_name = arguments.remove(0);
+        }
+        if (arguments.size() > 0) {
+            project_name = arguments.remove(0);
+        }
+        if ((package_name == null || project_name == null) && System.console() == null) {
             throw new OperationOptionException("ERROR: Expecting the package and project names as the arguments.");
         }
 
+        if (package_name == null || package_name.isEmpty()) {
+            System.out.println("Please enter a package name (for instance: cm.example):");
+            package_name = System.console().readLine();
+        } else {
+            System.out.println("Using package name: " + package_name);
+        }
+        if (project_name == null || project_name.isEmpty()) {
+            System.out.println("Please enter a project name (for instance: myapp):");
+            project_name = System.console().readLine();
+        } else {
+            System.out.println("Using project name: " + project_name);
+        }
+
         return workDirectory(new File(System.getProperty("user.dir")))
-            .packageName(arguments.remove(0))
-            .projectName(arguments.remove(0))
+            .packageName(package_name)
+            .projectName(project_name)
             .downloadDependencies(true);
     }
 
