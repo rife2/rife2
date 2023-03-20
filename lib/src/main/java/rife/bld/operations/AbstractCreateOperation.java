@@ -300,7 +300,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         }
 
         if (package_name == null || package_name.isEmpty()) {
-            System.out.println("Please enter a package name (for instance: cm.example):");
+            System.out.println("Please enter a package name (for instance: com.example):");
             package_name = System.console().readLine();
         } else {
             System.out.println("Using package name: " + package_name);
