@@ -18,7 +18,7 @@ import java.util.List;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class CleanOperation {
+public class CleanOperation extends AbstractOperation<CleanOperation> {
     private final List<File> directories_ = new ArrayList<>();
 
     /**
@@ -29,6 +29,9 @@ public class CleanOperation {
     public void execute() {
         for (var directory : directories()) {
             executeCleanDirectory(directory);
+        }
+        if (!silent()) {
+            System.out.println("Cleaning finished successfully.");
         }
     }
 

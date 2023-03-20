@@ -20,7 +20,7 @@ import java.util.List;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class CompileOperation {
+public class CompileOperation extends AbstractOperation<CompileOperation> {
     private File buildMainDirectory_;
     private File buildTestDirectory_;
     private final List<String> compileMainClasspath_ = new ArrayList<>();
@@ -42,6 +42,9 @@ public class CompileOperation {
         executeBuildTestSources();
         if (!diagnostics().isEmpty()) {
             throw new ExitStatusException(ExitStatusException.EXIT_FAILURE);
+        }
+        if (!silent()) {
+            System.out.println("Compilation finished successfully.");
         }
     }
 

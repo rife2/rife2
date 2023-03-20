@@ -25,7 +25,7 @@ import java.util.List;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T, P>, P extends Project> {
+public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<T, P>, P extends Project> extends AbstractOperation<AbstractCreateOperation<T, P>> {
     final String templateBase_;
 
     File workDirectory_ = new File(System.getProperty("user.dir"));
@@ -56,7 +56,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
      * Performs the creation operation.
      *
      * @throws FileUtilsErrorException when an error occurred during the creation operation
-     * @throws IOException when an error occurred during the creation operation
+     * @throws IOException             when an error occurred during the creation operation
      * @since 1.5
      */
     public void execute()
@@ -72,6 +72,9 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         executePopulateIdeaProject();
         if (downloadDependencies()) {
             executeDownloadDependencies();
+        }
+        if (!silent()) {
+            System.out.println("The project was successfully created at '" + project_.workDirectory() + "'.");
         }
     }
 

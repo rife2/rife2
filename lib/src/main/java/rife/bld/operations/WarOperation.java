@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class WarOperation {
+public class WarOperation extends AbstractOperation<WarOperation> {
     private final List<File> libSourceDirectories_ = new ArrayList<>();
     private final List<File> classesSourceDirectories_ = new ArrayList<>();
     private final List<NamedFile> jarSourceFiles_ = new ArrayList<>();
@@ -49,6 +49,10 @@ public class WarOperation {
             executeCopyWebXmlFile(web_inf_dir);
 
             executeCreateWarArchive(tmp_dir);
+
+            if (!silent()) {
+                System.out.println("The war archive was created at '" + new File(destinationDirectory(), destinationFileName()) + "'");
+            }
         } finally {
             FileUtils.deleteDirectory(tmp_dir);
         }
@@ -140,6 +144,7 @@ public class WarOperation {
             .destinationDirectory(destinationDirectory())
             .destinationFileName(destinationFileName())
             .excluded(List.of(Pattern.compile("(?:(?:^.*[/\\\\])|^)\\.DS_Store$")))
+            .silent(true)
             .execute();
     }
 

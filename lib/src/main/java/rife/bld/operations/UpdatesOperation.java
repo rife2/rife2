@@ -16,7 +16,7 @@ import java.util.List;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class UpdatesOperation {
+public class UpdatesOperation extends AbstractOperation<UpdatesOperation> {
     private final List<Repository> repositories_ = new ArrayList<>();
     private final DependencyScopes dependencies_ = new DependencyScopes();
     private DependencyScopes updates_ = new DependencyScopes();
@@ -41,7 +41,9 @@ public class UpdatesOperation {
         }
 
         if (result.isEmpty()) {
-            System.out.println("No dependency updates found.");
+            if (!silent()) {
+                System.out.println("No dependency updates found.");
+            }
         } else {
             System.out.println("The following dependency updates were found.");
             for (var entry : result.entrySet()) {

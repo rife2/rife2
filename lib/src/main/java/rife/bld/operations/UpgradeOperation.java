@@ -14,7 +14,7 @@ import java.util.List;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class UpgradeOperation {
+public class UpgradeOperation extends AbstractOperation<UpgradeOperation> {
     /**
      * Configures an upgrade operation from command-line arguments.
      *
@@ -36,5 +36,8 @@ public class UpgradeOperation {
     throws IOException {
         // create the wrapper files
         new Wrapper().createWrapperFiles(Path.of("lib", "bld").toFile(), Version.getVersion());
+        if (!silent()) {
+            System.out.println("The wrapper was successfully upgraded.");
+        }
     }
 }

@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class UberJarOperation {
+public class UberJarOperation extends AbstractOperation<UberJarOperation> {
     private final List<File> jarSourceFiles_ = new ArrayList<>();
     private final List<NamedFile> sourceDirectories_ = new ArrayList<>();
     private File destinationDirectory_;
@@ -43,6 +43,10 @@ public class UberJarOperation {
             executeCollectSourceJarContents(tmp_dir);
             executeCollectSourceResources(tmp_dir);
             executeCreateUberJarArchive(tmp_dir);
+
+            if (!silent()) {
+                System.out.println("The uberjar archive was created at '" + new File(destinationDirectory(), destinationFileName()) + "'");
+            }
         } finally {
             FileUtils.deleteDirectory(tmp_dir);
         }
@@ -94,6 +98,7 @@ public class UberJarOperation {
             .destinationDirectory(destinationDirectory())
             .destinationFileName(destinationFileName())
             .excluded(List.of(Pattern.compile("(?:(?:^.*[/\\\\])|^)\\.DS_Store$")))
+            .silent(true)
             .execute();
     }
 

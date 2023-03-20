@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class JarOperation {
+public class JarOperation extends AbstractOperation<JarOperation> {
     private final Map<Attributes.Name, Object> manifestAttributes_ = new HashMap<>();
     private final List<File> sourceDirectories_ = new ArrayList<>();
     private final List<NamedFile> sourceFiles_ = new ArrayList<>();
@@ -41,6 +41,10 @@ public class JarOperation {
     throws IOException {
         executeCreateDestinationDirectory();
         executeCreateJarArchive();
+
+        if (!silent()) {
+            System.out.println("The jar archive was created at '" + new File(destinationDirectory(), destinationFileName()) + "'");
+        }
     }
 
     /**

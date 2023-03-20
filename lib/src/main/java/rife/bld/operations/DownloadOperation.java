@@ -20,7 +20,7 @@ import java.util.*;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class DownloadOperation {
+public class DownloadOperation extends AbstractOperation<DownloadOperation> {
     private final List<Repository> repositories_ = new ArrayList<>();
     private final DependencyScopes dependencies_ = new DependencyScopes();
     private File libCompileDirectory_;
@@ -38,6 +38,9 @@ public class DownloadOperation {
         executeDownloadRuntimeDependencies();
         executeDownloadStandaloneDependencies();
         executeDownloadTestDependencies();
+        if (!silent()) {
+            System.out.println("Downloading finished successfully.");
+        }
     }
 
     /**

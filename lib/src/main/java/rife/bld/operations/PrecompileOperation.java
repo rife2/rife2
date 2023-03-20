@@ -19,7 +19,7 @@ import java.util.List;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class PrecompileOperation {
+public class PrecompileOperation extends AbstractOperation<PrecompileOperation> {
     private final List<TemplateType> templateTypes_ = new ArrayList<>();
     private final List<File> sourceDirectories_ = new ArrayList<>();
     private File destinationDirectory_;
@@ -31,6 +31,9 @@ public class PrecompileOperation {
      */
     public void execute() {
         executeCreateTemplateDeployer().execute();
+        if (!silent()) {
+            System.out.println("Pre-compilation finished successfully.");
+        }
     }
 
     /**
