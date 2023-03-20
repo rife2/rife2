@@ -21,7 +21,7 @@ public class JarHelp implements CommandHelp {
         return StringUtils.replace("""
             Creates a jar archive for the project.
             The standard jar command will automatically also execute
-            the clean, compile and precompile commands beforehand.
+            the compile and precompile commands beforehand.
                         
             Usage : ${topic}""", "${topic}", topic);
     }
