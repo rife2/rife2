@@ -95,7 +95,6 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = JarHelp.class)
     public void jar()
     throws Exception {
-        clean();
         compile();
         precompile();
         new JarOperation().fromProject(this).execute();
@@ -132,6 +131,11 @@ public class Project extends BuildExecutor {
     public void updates()
     throws Exception {
         new UpdatesOperation().fromProject(this).execute();
+    }
+
+    @BuildCommand(value = "version", help = VersionHelp.class)
+    public void printVersion() {
+        new VersionOperation().fromArguments(arguments()).execute();
     }
 
     /*

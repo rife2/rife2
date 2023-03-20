@@ -51,6 +51,16 @@ public class Cli extends BuildExecutor {
         new UpgradeOperation().fromArguments(arguments()).execute();
     }
 
+    /**
+     * The standard {@code version} command.
+     *
+     * @since 1.5.2
+     */
+    @BuildCommand(help = VersionHelp.class)
+    public void version() {
+        new VersionOperation().fromArguments(arguments()).execute();
+    }
+
     public static void main(String[] arguments)
     throws Exception {
         new Cli().start(arguments);
