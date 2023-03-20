@@ -21,7 +21,8 @@ import java.util.*;
  * @since 1.5
  */
 public class DependencySet extends AbstractSet<Dependency> implements Set<Dependency> {
-    private final LinkedHashMap<Dependency, Dependency> dependencies_ = new LinkedHashMap<>();
+    private final Map<Dependency, Dependency> dependencies_ = new LinkedHashMap<>();
+    private final Set<LocalDependency> localDependencies_ = new LinkedHashSet<>();
 
     /**
      * Creates an empty dependency set.
@@ -51,6 +52,31 @@ public class DependencySet extends AbstractSet<Dependency> implements Set<Depend
     public DependencySet include(Dependency dependency) {
         add(dependency);
         return this;
+    }
+
+    /**
+     * Includes a local dependency into the dependency set.
+     * <p>
+     * Local dependencies aren't resolved and point to a location on
+     * the file system.
+     *
+     * @param dependency the dependency to include
+     * @return this dependency set instance
+     * @since 1.5.2
+     */
+    public DependencySet include(LocalDependency dependency) {
+        localDependencies_.add(dependency);
+        return this;
+    }
+
+    /**
+     * Retrieves the local dependencies.
+     *
+     * @return the set of local dependencies
+     * @since 1.5.2
+     */
+    public Set<LocalDependency> localDependencies() {
+        return localDependencies_;
     }
 
     /**

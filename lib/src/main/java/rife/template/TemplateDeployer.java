@@ -98,7 +98,7 @@ public class TemplateDeployer {
             RifeConfig.template().setDefaultEncoding(encoding_);
             RifeConfig.template().setGenerateClasses(true);
 
-            ArrayList<String> files;
+            List<String> files;
             String classname;
 
             for (var template_factory : templateFactories_) {

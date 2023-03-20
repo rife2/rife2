@@ -182,6 +182,10 @@ public class Project extends BuildExecutor {
         return new Dependency(groupId, artifactId, version, classifier, type);
     }
 
+    public static LocalDependency local(String path) {
+        return new LocalDependency(path);
+    }
+
     /*
      * Project directories
      */
@@ -418,7 +422,11 @@ public class Project extends BuildExecutor {
         var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
 
         // build the compilation classpath
-        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
+        var classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
+        if (dependencies.containsKey(Scope.compile)) {
+            classpath.addAll(dependencies.get(Scope.compile).localDependencies().stream().map(dep -> new File(workDirectory(), dep.path())).toList());
+        }
+        return classpath;
     }
 
     public List<File> runtimeClasspathJars() {
@@ -427,20 +435,30 @@ public class Project extends BuildExecutor {
         var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
 
         // build the runtime classpath
-        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
+        var classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
+        if (dependencies.containsKey(Scope.runtime)) {
+            classpath.addAll(dependencies.get(Scope.runtime).localDependencies().stream().map(dep -> new File(workDirectory(), dep.path())).toList());
+        }
+        return classpath;
     }
 
     public List<File> standaloneClasspathJars() {
+        // build the standalone classpath
+        List<File> classpath;
         if (libStandaloneDirectory() == null) {
-            return Collections.emptyList();
+            classpath = new ArrayList<>();
+        } else {
+            // detect the jar files in the standalone lib directory
+            var dir_abs = libStandaloneDirectory().getAbsoluteFile();
+            var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
+
+            classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
         }
 
-        // detect the jar files in the standalone lib directory
-        var dir_abs = libStandaloneDirectory().getAbsoluteFile();
-        var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
-
-        // build the standalone classpath
-        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
+        if (dependencies.containsKey(Scope.standalone)) {
+            classpath.addAll(dependencies.get(Scope.standalone).localDependencies().stream().map(dep -> new File(workDirectory(), dep.path())).toList());
+        }
+        return classpath;
     }
 
     public List<File> testClasspathJars() {
@@ -449,7 +467,12 @@ public class Project extends BuildExecutor {
         var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
 
         // build the test classpath
-        return new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
+        var classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
+        classpath.addAll(dependencies.get(Scope.test).localDependencies().stream().map(dep -> new File(workDirectory(), dep.path())).toList());
+        if (dependencies.containsKey(Scope.test)) {
+            classpath.addAll(dependencies.get(Scope.test).localDependencies().stream().map(dep -> new File(workDirectory(), dep.path())).toList());
+        }
+        return classpath;
     }
 
     public List<String> compileMainClasspath() {
