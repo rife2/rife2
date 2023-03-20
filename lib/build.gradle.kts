@@ -240,10 +240,10 @@ tasks {
         archiveFileName.set(rifeBldZip)
         from("build/libs") {
             include(rifeWrapperJar)
-            rename { "rife2-bld/lib/$it" }
+            rename { "bld/lib/$it" }
         }
         from("src/main/bld") {
-            rename { "rife2-bld/bin/$it" }
+            rename { "bld/bin/$it" }
 
         }
     }
