@@ -86,8 +86,8 @@ public class TestCreateRife2Operation {
                     /myapp/\\.idea/runConfigurations
                     /myapp/\\.idea/runConfigurations/Run Main\\.xml
                     /myapp/\\.idea/runConfigurations/Run Tests\\.xml
+                    /myapp/bld
                     /myapp/bld\\.bat
-                    /myapp/bld\\.sh
                     /myapp/lib
                     /myapp/lib/bld
                     /myapp/lib/bld/bld-wrapper\\.jar
@@ -162,8 +162,8 @@ public class TestCreateRife2Operation {
                     /myapp/\\.idea/runConfigurations
                     /myapp/\\.idea/runConfigurations/Run Main\\.xml
                     /myapp/\\.idea/runConfigurations/Run Tests\\.xml
+                    /myapp/bld
                     /myapp/bld\\.bat
-                    /myapp/bld\\.sh
                     /myapp/build
                     /myapp/build/main
                     /myapp/build/main/com
@@ -276,8 +276,8 @@ public class TestCreateRife2Operation {
                     /yourthing/.idea/runConfigurations
                     /yourthing/.idea/runConfigurations/Run Main.xml
                     /yourthing/.idea/runConfigurations/Run Tests.xml
-                    /yourthing/bld.bat
                     /yourthing/bld
+                    /yourthing/bld.bat
                     /yourthing/lib
                     /yourthing/lib/bld
                     /yourthing/lib/bld/bld-wrapper.jar
