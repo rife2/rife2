@@ -12,7 +12,7 @@ import java.nio.file.Files;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestBldProject {
+public class TestProject {
     @Test
     void testInstantiation() {
         var project = new Project();

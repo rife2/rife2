@@ -425,9 +425,7 @@ public class Project extends BuildExecutor {
 
         // build the compilation classpath
         var classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
-        if (dependencies.containsKey(Scope.compile)) {
-            classpath.addAll(dependencies.get(Scope.compile).localDependencies().stream().map(dep -> new File(workDirectory(), dep.path())).toList());
-        }
+        addLocalDependencies(classpath, Scope.compile);
         return classpath;
     }
 
@@ -438,9 +436,7 @@ public class Project extends BuildExecutor {
 
         // build the runtime classpath
         var classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
-        if (dependencies.containsKey(Scope.runtime)) {
-            classpath.addAll(dependencies.get(Scope.runtime).localDependencies().stream().map(dep -> new File(workDirectory(), dep.path())).toList());
-        }
+        addLocalDependencies(classpath, Scope.runtime);
         return classpath;
     }
 
@@ -456,10 +452,7 @@ public class Project extends BuildExecutor {
 
             classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
         }
-
-        if (dependencies.containsKey(Scope.standalone)) {
-            classpath.addAll(dependencies.get(Scope.standalone).localDependencies().stream().map(dep -> new File(workDirectory(), dep.path())).toList());
-        }
+        addLocalDependencies(classpath, Scope.standalone);
         return classpath;
     }
 
@@ -470,10 +463,26 @@ public class Project extends BuildExecutor {
 
         // build the test classpath
         var classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
-        if (dependencies.containsKey(Scope.test)) {
-            classpath.addAll(dependencies.get(Scope.test).localDependencies().stream().map(dep -> new File(workDirectory(), dep.path())).toList());
-        }
+        addLocalDependencies(classpath, Scope.test);
         return classpath;
+    }
+
+    private void addLocalDependencies(List<File> classpath, Scope scope) {
+        if (dependencies.get(scope) == null) {
+            return;
+        }
+
+        for (var dependency : dependencies.get(scope).localDependencies()) {
+            var local_file = new File(workDirectory(), dependency.path());
+            if (local_file.exists()) {
+                if (local_file.isDirectory()) {
+                    var local_jar_files = FileUtils.getFileList(local_file.getAbsoluteFile(), JAR_FILE_PATTERN, null);
+                    classpath.addAll(new ArrayList<>(local_jar_files.stream().map(file -> new File(local_file, file)).toList()));
+                } else {
+                    classpath.add(local_file);
+                }
+            }
+        }
     }
 
     public List<String> compileMainClasspath() {

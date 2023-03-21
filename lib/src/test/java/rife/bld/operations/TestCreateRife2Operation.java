@@ -465,4 +465,146 @@ public class TestCreateRife2Operation {
             FileUtils.deleteDirectory(tmp);
         }
     }
+
+    @Test
+    void testExecuteLocalDependenciesFolders()
+    throws Exception {
+        var tmp = Files.createTempDirectory("test").toFile();
+        try {
+            var create_operation = new CreateRife2Operation()
+                .workDirectory(tmp)
+                .packageName("com.example")
+                .projectName("myapp")
+                .downloadDependencies(true);
+            create_operation.execute();
+
+            var project = create_operation.project();
+            var lib_local_compile = new File(project.libDirectory(), "local_compile");
+            lib_local_compile.mkdirs();
+            project.dependencies().scope(Scope.compile).include(new LocalDependency(Path.of("lib", "local_compile").toString()));
+            for (var lib : FileUtils.getFileList(project.libCompileDirectory())) {
+                new File(project.libCompileDirectory(), lib).renameTo(new File(lib_local_compile, lib));
+            }
+            var lib_local_standalone = new File(project.libDirectory(), "local_standalone");
+            lib_local_standalone.mkdirs();
+            project.dependencies().scope(Scope.standalone).include(new LocalDependency(Path.of("lib", "local_standalone").toString()));
+            for (var lib : FileUtils.getFileList(project.libStandaloneDirectory())) {
+                new File(project.libStandaloneDirectory(), lib).renameTo(new File(lib_local_standalone, lib));
+            }
+            var lib_local_test = new File(project.libDirectory(), "local_test");
+            lib_local_test.mkdirs();
+            project.dependencies().scope(Scope.test).include(new LocalDependency(Path.of("lib", "local_test").toString()));
+            for (var lib : FileUtils.getFileList(project.libTestDirectory())) {
+                new File(project.libTestDirectory(), lib).renameTo(new File(lib_local_test, lib));
+            }
+
+            var compile_operation = new CompileOperation().fromProject(create_operation.project());
+            compile_operation.execute();
+            assertTrue(compile_operation.diagnostics().isEmpty());
+            System.out.println(FileUtils.generateDirectoryListing(tmp));
+            assertTrue(Pattern.compile("""
+                /myapp
+                /myapp/\\.gitignore
+                /myapp/\\.idea
+                /myapp/\\.idea/app\\.iml
+                /myapp/\\.idea/bld\\.iml
+                /myapp/\\.idea/libraries
+                /myapp/\\.idea/libraries/bld\\.xml
+                /myapp/\\.idea/libraries/compile\\.xml
+                /myapp/\\.idea/libraries/runtime\\.xml
+                /myapp/\\.idea/libraries/standalone\\.xml
+                /myapp/\\.idea/libraries/test\\.xml
+                /myapp/\\.idea/misc\\.xml
+                /myapp/\\.idea/modules\\.xml
+                /myapp/\\.idea/runConfigurations
+                /myapp/\\.idea/runConfigurations/Run Main\\.xml
+                /myapp/\\.idea/runConfigurations/Run Tests\\.xml
+                /myapp/bld
+                /myapp/bld\\.bat
+                /myapp/build
+                /myapp/build/main
+                /myapp/build/main/com
+                /myapp/build/main/com/example
+                /myapp/build/main/com/example/MyappSite\\.class
+                /myapp/build/main/com/example/MyappSiteUber\\.class
+                /myapp/build/test
+                /myapp/build/test/com
+                /myapp/build/test/com/example
+                /myapp/build/test/com/example/MyappTest\\.class
+                /myapp/lib
+                /myapp/lib/bld
+                /myapp/lib/bld/bld-wrapper\\.jar
+                /myapp/lib/bld/bld-wrapper\\.properties
+                /myapp/lib/compile
+                /myapp/lib/local_compile
+                /myapp/lib/local_compile/rife2-.*\\.jar
+                /myapp/lib/local_standalone
+                /myapp/lib/local_standalone/jetty-http-11\\.0\\.14\\.jar
+                /myapp/lib/local_standalone/jetty-io-11\\.0\\.14\\.jar
+                /myapp/lib/local_standalone/jetty-jakarta-servlet-api-5\\.0\\.2\\.jar
+                /myapp/lib/local_standalone/jetty-security-11\\.0\\.14\\.jar
+                /myapp/lib/local_standalone/jetty-server-11\\.0\\.14\\.jar
+                /myapp/lib/local_standalone/jetty-servlet-11\\.0\\.14\\.jar
+                /myapp/lib/local_standalone/jetty-util-11\\.0\\.14\\.jar
+                /myapp/lib/local_standalone/slf4j-api-2\\.0\\.5\\.jar
+                /myapp/lib/local_standalone/slf4j-simple-2\\.0\\.5\\.jar
+                /myapp/lib/local_test
+                /myapp/lib/local_test/apiguardian-api-1\\.1\\.2\\.jar
+                /myapp/lib/local_test/jsoup-1\\.15\\.4\\.jar
+                /myapp/lib/local_test/junit-jupiter-5\\.9\\.2\\.jar
+                /myapp/lib/local_test/junit-jupiter-api-5\\.9\\.2\\.jar
+                /myapp/lib/local_test/junit-jupiter-engine-5\\.9\\.2\\.jar
+                /myapp/lib/local_test/junit-jupiter-params-5\\.9\\.2\\.jar
+                /myapp/lib/local_test/junit-platform-commons-1\\.9\\.2\\.jar
+                /myapp/lib/local_test/junit-platform-console-standalone-1\\.9\\.2\\.jar
+                /myapp/lib/local_test/junit-platform-engine-1\\.9\\.2\\.jar
+                /myapp/lib/local_test/opentest4j-1\\.2\\.0\\.jar
+                /myapp/lib/runtime
+                /myapp/lib/standalone
+                /myapp/lib/test
+                /myapp/src
+                /myapp/src/bld
+                /myapp/src/bld/java
+                /myapp/src/bld/java/com
+                /myapp/src/bld/java/com/example
+                /myapp/src/bld/java/com/example/MyappBuild\\.java
+                /myapp/src/main
+                /myapp/src/main/java
+                /myapp/src/main/java/com
+                /myapp/src/main/java/com/example
+                /myapp/src/main/java/com/example/MyappSite\\.java
+                /myapp/src/main/java/com/example/MyappSiteUber\\.java
+                /myapp/src/main/resources
+                /myapp/src/main/resources/templates
+                /myapp/src/main/resources/templates/hello\\.html
+                /myapp/src/main/webapp
+                /myapp/src/main/webapp/WEB-INF
+                /myapp/src/main/webapp/WEB-INF/web\\.xml
+                /myapp/src/main/webapp/css
+                /myapp/src/main/webapp/css/style\\.css
+                /myapp/src/test
+                /myapp/src/test/java
+                /myapp/src/test/java/com
+                /myapp/src/test/java/com/example
+                /myapp/src/test/java/com/example/MyappTest\\.java""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
+
+            var run_operation = new RunOperation().fromProject(create_operation.project());
+            var executor = Executors.newSingleThreadScheduledExecutor();
+            var checked_url = new URL("http://localhost:8080");
+            var check_result = new StringBuilder();
+            executor.schedule(() -> {
+                try {
+                    check_result.append(FileUtils.readString(checked_url));
+                } catch (FileUtilsErrorException e) {
+                    throw new RuntimeException(e);
+                }
+            }, 1, TimeUnit.SECONDS);
+            executor.schedule(() -> run_operation.process().destroy(), 2, TimeUnit.SECONDS);
+            assertThrows(ExitStatusException.class, run_operation::execute);
+
+            assertTrue(check_result.toString().contains("<p>Hello World Myapp</p>"));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
 }
