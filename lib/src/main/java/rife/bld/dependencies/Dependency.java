@@ -99,6 +99,23 @@ public record Dependency(String groupId, String artifactId, VersionNumber versio
         return this;
     }
 
+    /**
+     * Returns a filename that corresponds to the dependency information.
+     *
+     * @return a filename for the dependency
+     * @since 1.5.4
+     */
+    public String toFileName() {
+        var result = new StringBuilder(artifactId());
+        result.append("-").append(version());
+        if (!classifier().isEmpty()) {
+            result.append("-").append(classifier());
+        }
+        result.append(".").append(type());
+        return result.toString();
+
+    }
+
     public String toString() {
         var result = new StringBuilder(groupId).append(":").append(artifactId);
         if (!version.equals(VersionNumber.UNKNOWN)) {
