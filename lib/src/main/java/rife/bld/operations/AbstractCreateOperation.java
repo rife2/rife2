@@ -249,7 +249,6 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         // IDEA run tests
         var run_tests_template = TemplateFactory.XML.get(templateBase_ + "idea.runConfigurations.Run_Tests");
         run_tests_template.setValue("package", project_.pkg());
-        run_tests_template.setValue("projectTest", projectTestName_);
         var run_tests_file = new File(ideaRunConfigurationsDirectory_, "Run Tests.xml");
         FileUtils.writeString(run_tests_template.getContent(), run_tests_file);
     }
