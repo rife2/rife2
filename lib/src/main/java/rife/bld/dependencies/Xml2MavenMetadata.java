@@ -5,10 +5,11 @@
 package rife.bld.dependencies;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 import rife.xml.Xml2Data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
 
 class Xml2MavenMetadata extends Xml2Data {
     private VersionNumber latest_ = VersionNumber.UNKNOWN;
@@ -61,6 +62,36 @@ class Xml2MavenMetadata extends Xml2Data {
         }
 
         characterData_ = null;
+    }
+
+    private static final Pattern MILESTONE = Pattern.compile("^m\\d*$");
+    private static final Pattern BETA = Pattern.compile("^b\\d*$");
+    private static final Pattern ALPHA = Pattern.compile("^a\\d*$");
+
+    public void endDocument()
+    throws SAXException {
+        // determine latest stable version by removing pre-release qualifiers
+        var filtered_versions = new TreeSet<VersionNumber>();
+        filtered_versions.addAll(versions_.stream()
+            .filter(v -> {
+                if (v.qualifier() == null) return true;
+                var q = v.qualifier().toLowerCase();
+                return !q.startsWith("rc") &&
+                       !q.startsWith("cr") &&
+                       !q.contains("milestone") &&
+                       !MILESTONE.matcher(q).matches() &&
+                       !q.contains("beta") &&
+                       !BETA.matcher(q).matches() &&
+                       !q.contains("alpha") &&
+                       !ALPHA.matcher(q).matches();
+            }).toList());
+
+        // only replace the stable version from the metadata when
+        // something remained from the filtering, then use the
+        // last version in the sorted set
+        if (!filtered_versions.isEmpty()) {
+            latest_ = filtered_versions.last();
+        }
     }
 
     public void characters(char[] ch, int start, int length) {
