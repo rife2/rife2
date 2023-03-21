@@ -155,7 +155,7 @@ public class BuildExecutor {
 
                             var build_help = annotation.help();
                             CommandHelp command_help = null;
-                            if (build_help != null) {
+                            if (build_help != null && build_help != CommandHelp.class) {
                                 command_help = build_help.getDeclaredConstructor().newInstance();
                             }
 
