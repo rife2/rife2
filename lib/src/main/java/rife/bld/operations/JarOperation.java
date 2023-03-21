@@ -106,7 +106,7 @@ public class JarOperation extends AbstractOperation<JarOperation> {
      */
     private void executeAddFileToJar(JarOutputStream jar, NamedFile file)
     throws IOException {
-        var entry = new JarEntry(file.name());
+        var entry = new JarEntry(file.name().replace('\\', '/'));
         entry.setTime(file.file().lastModified());
         jar.putNextEntry(entry);
 
