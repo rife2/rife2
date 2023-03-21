@@ -115,9 +115,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = TestHelp.class)
     public void test()
     throws Exception {
-        new TestOperation()
-            .fromProject(this)
-            .execute();
+        new TestOperation().fromProject(this).execute();
     }
 
     @BuildCommand(help = UberJarHelp.class)
@@ -472,7 +470,6 @@ public class Project extends BuildExecutor {
 
         // build the test classpath
         var classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
-        classpath.addAll(dependencies.get(Scope.test).localDependencies().stream().map(dep -> new File(workDirectory(), dep.path())).toList());
         if (dependencies.containsKey(Scope.test)) {
             classpath.addAll(dependencies.get(Scope.test).localDependencies().stream().map(dep -> new File(workDirectory(), dep.path())).toList());
         }
