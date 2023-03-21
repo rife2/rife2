@@ -12,7 +12,7 @@ plugins {
     signing
 }
 
-val rifeVersion by rootProject.extra { "1.5.2-SNAPSHOT" }
+val rifeVersion by rootProject.extra { "1.5.2" }
 var rifeAgentName = "rife2-$rifeVersion-agent"
 val rifeAgentJar by rootProject.extra { "$rifeAgentName.jar" }
 var rifeAgentContinuationsName = "rife2-$rifeVersion-agent-continuations"
@@ -244,7 +244,6 @@ tasks {
         }
         from("src/main/bld") {
             rename { "bld/bin/$it" }
-
         }
     }
 

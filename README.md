@@ -123,7 +123,7 @@ application {
 }
 
 dependencies {
-    implementation("com.uwyn.rife2:rife2:1.5.1")
+    implementation("com.uwyn.rife2:rife2:1.5.2")
     runtimeOnly("org.eclipse.jetty:jetty-server:11.0.13")
     runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.13")
     implementation("org.slf4j:slf4j-simple:2.0.6")
@@ -321,4 +321,4 @@ me on [Discord](https://discord.gg/DZRYPtkb6J) or to connect with me on
 [Mastodon](https://uwyn.net/@gbevin).
 
 **Read more in the [full documentation](https://github.com/rife2/rife2/wiki)
-and  [RIFE2 Javadocs](https://rife2.github.io/rife2/).**
+and [RIFE2 Javadocs](https://rife2.github.io/rife2/).**
