@@ -12,6 +12,7 @@ import rife.tools.FileUtils;
 import java.io.File;
 import java.util.*;
 
+import static rife.bld.dependencies.Scope.runtime;
 import static rife.tools.FileUtils.JAR_FILE_PATTERN;
 import static rife.tools.FileUtils.JAVA_FILE_PATTERN;
 
@@ -139,6 +140,13 @@ public class Project extends BuildExecutor {
     /*
      * Useful methods
      */
+
+    public void useRife2Agent(VersionNumber version) {
+        var agent = new Dependency("com.uwyn.rife2", "rife2", version, "agent");
+        scope(runtime).include(agent);
+        runJavaOptions.add("-javaagent:" + new File(libRuntimeDirectory(), agent.toFileName()));
+        testJavaOptions.add("-javaagent:" + new File(libRuntimeDirectory(), agent.toFileName()));
+    }
 
     public static VersionNumber version(int major) {
         return new VersionNumber(major);
