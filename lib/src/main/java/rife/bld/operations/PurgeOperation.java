@@ -92,25 +92,26 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
             return;
         }
 
+        var all_dependencies = new DependencySet();
+
         var scoped_dependencies = dependencies().get(scope);
         if (scoped_dependencies != null) {
-            var all_dependencies = new DependencySet();
             for (var dependency : scoped_dependencies) {
                 all_dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(transitiveScopes));
             }
+        }
 
-            var filenames = new HashSet<String>();
-            for (var dependency : all_dependencies) {
-                for (var url : new DependencyResolver(repositories(), dependency).getDownloadUrls()) {
-                    filenames.add(url.substring(url.lastIndexOf("/") + 1));
-                }
+        var filenames = new HashSet<String>();
+        for (var dependency : all_dependencies) {
+            for (var url : new DependencyResolver(repositories(), dependency).getDownloadUrls()) {
+                filenames.add(url.substring(url.lastIndexOf("/") + 1));
             }
+        }
 
-            for (var file : destinationDirectory.listFiles()) {
-                if (!filenames.contains(file.getName())) {
-                    System.out.println("Deleting : " + file.getName());
-                    file.delete();
-                }
+        for (var file : destinationDirectory.listFiles()) {
+            if (!filenames.contains(file.getName())) {
+                System.out.println("Deleting : " + file.getName());
+                file.delete();
             }
         }
     }
