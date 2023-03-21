@@ -33,7 +33,7 @@ public class VersionOperation extends AbstractOperation<VersionOperation> {
      */
     public void execute() {
         if (!silent()) {
-            System.out.println("RIFE2 bld v" + Version.getVersion());
+            System.out.println("RIFE2 bld " + Version.getVersion());
         }
     }
 }

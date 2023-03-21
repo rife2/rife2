@@ -44,7 +44,7 @@ public class HelpOperation {
             topic = arguments_.remove(0);
         }
 
-        System.err.println("Welcome to RIFE2 bld v" + Version.getVersion() + ".");
+        System.err.println("Welcome to RIFE2 bld " + Version.getVersion() + ".");
         System.err.println();
 
         boolean print_full_help = true;
