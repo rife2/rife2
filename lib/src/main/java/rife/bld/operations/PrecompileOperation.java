@@ -32,7 +32,7 @@ public class PrecompileOperation extends AbstractOperation<PrecompileOperation> 
     public void execute() {
         executeCreateTemplateDeployer().execute();
         if (!silent()) {
-            System.out.println("Pre-compilation finished successfully.");
+            System.out.println("Template pre-compilation finished successfully.");
         }
     }
 
