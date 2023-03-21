@@ -41,6 +41,6 @@ public class Rife2ProjectBlueprint extends WebProject {
         scope(standalone)
             .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,14)))
             .include(dependency("org.eclipse.jetty", "jetty-servlet", version(11,0,14)))
-            .include(dependency("org.slf4j", "slf4j-simple", version(2,0,5)));
+            .include(dependency("org.slf4j", "slf4j-simple", version(2,0,7)));
     }
 }

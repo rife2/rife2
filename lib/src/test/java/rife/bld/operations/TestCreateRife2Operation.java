@@ -107,8 +107,8 @@ public class TestCreateRife2Operation {
                     /myapp/lib/standalone/jetty-server-11\\.0\\.14\\.jar
                     /myapp/lib/standalone/jetty-servlet-11\\.0\\.14\\.jar
                     /myapp/lib/standalone/jetty-util-11\\.0\\.14\\.jar
-                    /myapp/lib/standalone/slf4j-api-2\\.0\\.5\\.jar
-                    /myapp/lib/standalone/slf4j-simple-2\\.0\\.5\\.jar
+                    /myapp/lib/standalone/slf4j-api-2\\.0\\.7\\.jar
+                    /myapp/lib/standalone/slf4j-simple-2\\.0\\.7\\.jar
                     /myapp/lib/test
                     /myapp/lib/test/apiguardian-api-1\\.1\\.2\\.jar
                     /myapp/lib/test/jsoup-1\\.15\\.4\\.jar
@@ -193,8 +193,8 @@ public class TestCreateRife2Operation {
                     /myapp/lib/standalone/jetty-server-11\\.0\\.14\\.jar
                     /myapp/lib/standalone/jetty-servlet-11\\.0\\.14\\.jar
                     /myapp/lib/standalone/jetty-util-11\\.0\\.14\\.jar
-                    /myapp/lib/standalone/slf4j-api-2\\.0\\.5\\.jar
-                    /myapp/lib/standalone/slf4j-simple-2\\.0\\.5\\.jar
+                    /myapp/lib/standalone/slf4j-api-2\\.0\\.7\\.jar
+                    /myapp/lib/standalone/slf4j-simple-2\\.0\\.7\\.jar
                     /myapp/lib/test
                     /myapp/lib/test/apiguardian-api-1\\.1\\.2\\.jar
                     /myapp/lib/test/jsoup-1\\.15\\.4\\.jar
@@ -415,8 +415,8 @@ public class TestCreateRife2Operation {
                 /myapp/lib/local/junit-platform-engine-1\\.9\\.2\\.jar
                 /myapp/lib/local/opentest4j-1\\.2\\.0\\.jar
                 /myapp/lib/local/rife2-.*\\.jar
-                /myapp/lib/local/slf4j-api-2\\.0\\.5\\.jar
-                /myapp/lib/local/slf4j-simple-2\\.0\\.5\\.jar
+                /myapp/lib/local/slf4j-api-2\\.0\\.7\\.jar
+                /myapp/lib/local/slf4j-simple-2\\.0\\.7\\.jar
                 /myapp/lib/runtime
                 /myapp/lib/standalone
                 /myapp/lib/test
@@ -546,8 +546,8 @@ public class TestCreateRife2Operation {
                 /myapp/lib/local_standalone/jetty-server-11\\.0\\.14\\.jar
                 /myapp/lib/local_standalone/jetty-servlet-11\\.0\\.14\\.jar
                 /myapp/lib/local_standalone/jetty-util-11\\.0\\.14\\.jar
-                /myapp/lib/local_standalone/slf4j-api-2\\.0\\.5\\.jar
-                /myapp/lib/local_standalone/slf4j-simple-2\\.0\\.5\\.jar
+                /myapp/lib/local_standalone/slf4j-api-2\\.0\\.7\\.jar
+                /myapp/lib/local_standalone/slf4j-simple-2\\.0\\.7\\.jar
                 /myapp/lib/local_test
                 /myapp/lib/local_test/apiguardian-api-1\\.1\\.2\\.jar
                 /myapp/lib/local_test/jsoup-1\\.15\\.4\\.jar

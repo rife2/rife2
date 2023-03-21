@@ -123,12 +123,12 @@ application {
 }
 
 dependencies {
-    implementation("com.uwyn.rife2:rife2:1.5.3")
-    runtimeOnly("org.eclipse.jetty:jetty-server:11.0.13")
-    runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.13")
-    implementation("org.slf4j:slf4j-simple:2.0.6")
+    implementation("com.uwyn.rife2:rife2:1.5.4")
+    runtimeOnly("org.eclipse.jetty:jetty-server:11.0.14")
+    runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.14")
+    implementation("org.slf4j:slf4j-simple:2.0.7")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-    testImplementation("org.jsoup:jsoup:1.15.3")
+    testImplementation("org.jsoup:jsoup:1.15.4")
 }
 ```
 
