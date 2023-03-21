@@ -219,10 +219,6 @@ public class DependencyResolver {
                 System.out.println();
             }
         }
-
-        if (!retrieved) {
-            throw new ArtifactNotFoundException(dependency_, StringUtils.join(urls, ","));
-        }
     }
 
     private static boolean checkHash(String downloadUrl, File downloadFile, String extension, String algorithm) {
