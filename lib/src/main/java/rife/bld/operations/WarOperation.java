@@ -33,7 +33,7 @@ public class WarOperation extends AbstractOperation<WarOperation> {
     /**
      * Performs the war operation.
      *
-     * @throws IOException when an exception occurred during the war creation process
+     * @throws IOException             when an exception occurred during the war creation process
      * @throws FileUtilsErrorException when an exception occurred war the uberjar creation process
      * @since 1.5
      */
@@ -155,8 +155,17 @@ public class WarOperation extends AbstractOperation<WarOperation> {
      * @since 1.5
      */
     public WarOperation fromProject(WebProject project) {
-        return libSourceDirectories(List.of(project.libCompileDirectory(), project.libRuntimeDirectory()))
-            .jarSourceFiles(List.of(new NamedFile(project.jarFileName(), new File(project.buildDistDirectory(), project.jarFileName()))))
+        var jar_source_files = new ArrayList<NamedFile>();
+        jar_source_files.add(new NamedFile(project.jarFileName(), new File(project.buildDistDirectory(), project.jarFileName())));
+
+        var class_path_jars = new ArrayList<File>();
+        class_path_jars.addAll(project.compileClasspathJars());
+        class_path_jars.addAll(project.runtimeClasspathJars());
+        for (var jar_file : class_path_jars) {
+            jar_source_files.add(new NamedFile(jar_file.getName(), jar_file));
+        }
+
+        return jarSourceFiles(jar_source_files)
             .webappDirectory(project.srcMainWebappDirectory())
             .destinationDirectory(project.buildDistDirectory())
             .destinationFileName(project.warFileName());
