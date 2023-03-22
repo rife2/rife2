@@ -17,7 +17,7 @@ import java.util.*;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-record PomDependency(String groupId, String artifactId, String version, String classifier, String type, String scope, String optional, ExclusionSet exclusions) {
+record PomDependency(PomDependency parent, String groupId, String artifactId, String version, String classifier, String type, String scope, String optional, ExclusionSet exclusions) {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

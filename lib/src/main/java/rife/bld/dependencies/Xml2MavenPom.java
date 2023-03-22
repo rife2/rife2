@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 class Xml2MavenPom extends Xml2Data {
+    private final PomDependency parent_;
     private final List<Repository> repositories_;
     private Map<Scope, Set<PomDependency>> resolvedDependencies_ = null;
 
@@ -37,7 +38,8 @@ class Xml2MavenPom extends Xml2Data {
     private String lastExclusionGroupId_ = null;
     private String lastExclusionArtifactId_ = null;
 
-    Xml2MavenPom(List<Repository> repositories) {
+    Xml2MavenPom(PomDependency parent, List<Repository> repositories) {
+        parent_ = parent;
         repositories_ = repositories;
     }
 
@@ -79,6 +81,7 @@ class Xml2MavenPom extends Xml2Data {
                     }
 
                     var resolved_dependency = new PomDependency(
+                        dependency.parent(),
                         resolveProperties(dependency.groupId()),
                         resolveProperties(dependency.artifactId()),
                         resolveProperties(version),
@@ -150,7 +153,7 @@ class Xml2MavenPom extends Xml2Data {
             case "parent" -> {
                 if (isChildOfProject()) {
                     var parent_dependency = new Dependency(lastGroupId_, lastArtifactId_, VersionNumber.parse(lastVersion_));
-                    var parent = new DependencyResolver(repositories_, parent_dependency).getMavenPom();
+                    var parent = new DependencyResolver(repositories_, parent_dependency).getMavenPom(parent_);
 
                     parent.properties_.keySet().removeAll(properties_.keySet());
                     properties_.putAll(parent.properties_);
@@ -174,7 +177,7 @@ class Xml2MavenPom extends Xml2Data {
                 }
             }
             case "dependency" -> {
-                var dependency = new PomDependency(lastGroupId_, lastArtifactId_, lastVersion_, lastClassifier_, lastType_, lastScope_, lastOptional_, exclusions_);
+                var dependency = new PomDependency(parent_, lastGroupId_, lastArtifactId_, lastVersion_, lastClassifier_, lastType_, lastScope_, lastOptional_, exclusions_);
                 if (collectDependencyManagement_) {
                     dependencyManagement_.put(dependency, dependency);
                 } else if (collectDependencies_) {

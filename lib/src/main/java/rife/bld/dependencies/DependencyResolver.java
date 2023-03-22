@@ -100,7 +100,7 @@ public class DependencyResolver {
      * @since 1.5
      */
     public DependencySet getDirectDependencies(Scope... scopes) {
-        var pom_dependencies = getMavenPom().getDependencies(scopes);
+        var pom_dependencies = getMavenPom(convertDependency(dependency_)).getDependencies(scopes);
         var result = new DependencySet();
         for (var dependency : pom_dependencies) {
             result.add(convertPomDependency(dependency));
@@ -125,12 +125,65 @@ public class DependencyResolver {
         var result = new DependencySet();
         result.add(dependency_);
 
-        var pom_dependencies = new ArrayList<PomDependency>();
-        var exclusions = new Stack<ExclusionSet>();
-        exclusions.push(dependency_.exclusions());
-        getTransitiveDependencies(result, pom_dependencies, exclusions, scopes);
-        exclusions.pop();
+        var dependency_queue = new ArrayList<PomDependency>();
+
+        var parent = convertDependency(dependency_);
+        var next_dependencies = getMavenPom(parent).getDependencies(scopes);
+
+        while (parent != null && next_dependencies != null) {
+            // remove any next dependencies that are already queued
+            dependency_queue.forEach(next_dependencies::remove);
+            // remove any next dependencies that match the current exclusion context
+            final var exclusion_context = parent;
+            next_dependencies.removeIf(it -> matchesExclusions(exclusion_context, it));
+            // add all next dependencies to the queue
+            dependency_queue.addAll(next_dependencies);
+
+            // unless we find a next set of dependencies to add, stop resolving
+            parent = null;
+            next_dependencies = null;
+
+            // iterate through the dependency queue until we find one that isn't
+            // part of the results yet
+            while (!dependency_queue.isEmpty()) {
+                var candidate = dependency_queue.remove(0);
+                var dependency = convertPomDependency(candidate);
+                if (!result.contains(dependency)) {
+                    result.add(dependency);
+
+                    // we found a dependency that was added to the result, get its
+                    // dependencies so that they can be added to the queue after
+                    // filtering
+                    parent = candidate;
+                    next_dependencies = new DependencyResolver(repositories_, dependency).getMavenPom(parent).getDependencies(scopes);
+                    break;
+                }
+            }
+        }
         return result;
+    }
+
+    private boolean matchesExclusions(PomDependency context, PomDependency checked) {
+        while (context != null) {
+            if (context.exclusions() != null) {
+                for (var exclusion : context.exclusions()) {
+                    if (exclusion.matches(checked)) {
+                        return true;
+                    }
+                }
+            }
+            context = context.parent();
+        }
+
+        if (dependency_.exclusions() != null) {
+            for (var exclusion : dependency_.exclusions()) {
+                if (exclusion.matches(checked)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -289,41 +342,18 @@ public class DependencyResolver {
         }).toList();
     }
 
+    private PomDependency convertDependency(Dependency dependency) {
+        return new PomDependency(null, dependency.groupId(), dependency.artifactId(), dependency.version().toString(), dependency.type(), dependency.type(), "compile", "false", dependency.exclusions());
+    }
+
     private Dependency convertPomDependency(PomDependency pomDependency) {
         return new Dependency(
             pomDependency.groupId(),
             pomDependency.artifactId(),
             VersionNumber.parse(pomDependency.version()),
             pomDependency.classifier(),
-            pomDependency.type());
-    }
-
-    private void getTransitiveDependencies(DependencySet result, List<PomDependency> pomDependencies, Stack<ExclusionSet> exclusions, Scope... scopes) {
-        var next_dependencies = getMavenPom().getDependencies(scopes);
-
-        pomDependencies.forEach(next_dependencies::remove);
-
-        next_dependencies.removeIf(next_dependency ->
-            exclusions.stream().anyMatch(set ->
-                set != null && set.stream().anyMatch(exclusion ->
-                    exclusion.matches(next_dependency))));
-
-        pomDependencies.addAll(next_dependencies);
-
-        while (!pomDependencies.isEmpty()) {
-            var it = pomDependencies.iterator();
-            var pom_dependency = it.next();
-            it.remove();
-
-            var dependency = convertPomDependency(pom_dependency);
-            if (!result.contains(dependency)) {
-                result.add(dependency);
-
-                exclusions.push(pom_dependency.exclusions());
-                new DependencyResolver(repositories_, dependency).getTransitiveDependencies(result, pomDependencies, exclusions, scopes);
-                exclusions.pop();
-            }
-        }
+            pomDependency.type(),
+            pomDependency.exclusions());
     }
 
     private List<String> getArtifactUrls() {
@@ -406,7 +436,7 @@ public class DependencyResolver {
         return getArtifactUrls().stream().map(s -> s + version + "/" + dependency_.artifactId() + "-" + pom_version + ".pom").toList();
     }
 
-    Xml2MavenPom getMavenPom() {
+    Xml2MavenPom getMavenPom(PomDependency parent) {
         String retrieved_url = null;
         String pom = null;
         var urls = getPomUrls();
@@ -435,7 +465,7 @@ public class DependencyResolver {
             throw new ArtifactNotFoundException(dependency_, StringUtils.join(urls, ", "));
         }
 
-        var xml = new Xml2MavenPom(repositories_);
+        var xml = new Xml2MavenPom(parent, repositories_);
         if (!xml.processXml(pom)) {
             throw new DependencyXmlParsingErrorException(dependency_, retrieved_url, xml.getErrors());
         }
