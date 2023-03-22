@@ -93,7 +93,6 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      * @param destinationDirectory the directory from which the artifacts should be purged
      * @param resolvedScopes       the scopes whose dependencies should be resolved
      * @param transitiveScopes     the scopes to use to resolve the transitive dependencies
-     * @param transitiveScopes     the scopes to use to resolve the transitive dependencies
      * @since 1.5.5
      */
     public void executePurgeScopedDependencies(File destinationDirectory, Scope[] resolvedScopes, Scope[] transitiveScopes, DependencySet excluded) {
