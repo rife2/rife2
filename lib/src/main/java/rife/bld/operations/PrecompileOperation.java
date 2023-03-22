@@ -30,6 +30,9 @@ public class PrecompileOperation extends AbstractOperation<PrecompileOperation> 
      * @since 1.5
      */
     public void execute() {
+        if (destinationDirectory() != null) {
+            destinationDirectory().mkdirs();
+        }
         executeCreateTemplateDeployer().execute();
         if (!silent()) {
             System.out.println("Template pre-compilation finished successfully.");

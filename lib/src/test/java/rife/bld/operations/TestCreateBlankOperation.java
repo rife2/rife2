@@ -92,7 +92,6 @@ public class TestCreateBlankOperation {
                     /myapp/lib/bld/bld-wrapper\\.jar
                     /myapp/lib/bld/bld-wrapper\\.properties
                     /myapp/lib/compile
-                    /myapp/lib/compile/rife2-.+\\.jar
                     /myapp/lib/runtime
                     /myapp/lib/test
                     /myapp/lib/test/apiguardian-api-1\\.1\\.2\\.jar
@@ -158,7 +157,6 @@ public class TestCreateBlankOperation {
                     /myapp/lib/bld/bld-wrapper\\.jar
                     /myapp/lib/bld/bld-wrapper\\.properties
                     /myapp/lib/compile
-                    /myapp/lib/compile/rife2-.+\\.jar
                     /myapp/lib/runtime
                     /myapp/lib/test
                     /myapp/lib/test/apiguardian-api-1\\.1\\.2\\.jar
@@ -344,7 +342,6 @@ public class TestCreateBlankOperation {
                 /myapp/lib/local/junit-platform-console-standalone-1\\.9\\.2\\.jar
                 /myapp/lib/local/junit-platform-engine-1\\.9\\.2\\.jar
                 /myapp/lib/local/opentest4j-1\\.2\\.0\\.jar
-                /myapp/lib/local/rife2-.*\\.jar
                 /myapp/lib/runtime
                 /myapp/lib/test
                 /myapp/src
@@ -444,7 +441,6 @@ public class TestCreateBlankOperation {
                 /myapp/lib/bld/bld-wrapper\\.properties
                 /myapp/lib/compile
                 /myapp/lib/local_compile
-                /myapp/lib/local_compile/rife2-.*\\.jar
                 /myapp/lib/local_test
                 /myapp/lib/local_test/apiguardian-api-1\\.1\\.2\\.jar
                 /myapp/lib/local_test/junit-jupiter-5\\.9\\.2\\.jar

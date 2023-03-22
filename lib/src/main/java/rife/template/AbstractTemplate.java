@@ -1008,7 +1008,6 @@ public abstract class AbstractTemplate implements Template {
                     return true;
                 }
             }
-
         } catch (TemplateException e) {
             return false;
         }

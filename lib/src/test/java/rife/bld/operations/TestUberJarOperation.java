@@ -6,11 +6,16 @@ package rife.bld.operations;
 
 import org.junit.jupiter.api.Test;
 import rife.bld.NamedFile;
+import rife.bld.operations.exceptions.ExitStatusException;
 import rife.tools.FileUtils;
+import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.jar.JarFile;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -71,7 +76,7 @@ public class TestUberJarOperation {
     }
 
     @Test
-    void testFromProject()
+    void testFromProjectBlank()
     throws Exception {
         var tmp = Files.createTempDirectory("test").toFile();
         try {
@@ -96,7 +101,7 @@ public class TestUberJarOperation {
 
             var uberjar_file = new File(uberjar_operation.destinationDirectory(), uberjar_operation.destinationFileName());
             try (var jar = new JarFile(uberjar_file)) {
-                assertTrue(jar.size() > 1300);
+                assertEquals(2, jar.size());
             }
 
             var check_result = new StringBuilder();
@@ -112,6 +117,51 @@ public class TestUberJarOperation {
                 Hello World!
                 """, check_result.toString());
 
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
+    @Test
+    void testFromProjectWeb()
+    throws Exception {
+        var tmp = Files.createTempDirectory("web").toFile();
+        try {
+            var create_operation = new CreateRife2Operation()
+                .workDirectory(tmp)
+                .packageName("tst")
+                .projectName("app")
+                .downloadDependencies(true);
+            create_operation.execute();
+
+            new CompileOperation()
+                .fromProject(create_operation.project())
+                .execute();
+
+            create_operation.project().uberjar();
+
+            var uberjar_file = new File(create_operation.project().buildDistDirectory(), create_operation.project().uberJarFileName());
+            try (var jar = new JarFile(uberjar_file)) {
+                assertTrue(jar.size() > 1300);
+            }
+
+            var check_result = new StringBuilder();
+            var run_operation = new RunOperation()
+                .javaOptions(List.of("-jar"))
+                .mainClass(uberjar_file.getAbsolutePath());
+            var executor = Executors.newSingleThreadScheduledExecutor();
+            var checked_url = new URL("http://localhost:8080");
+            executor.schedule(() -> {
+                try {
+                    check_result.append(FileUtils.readString(checked_url));
+                } catch (FileUtilsErrorException e) {
+                    throw new RuntimeException(e);
+                }
+            }, 1, TimeUnit.SECONDS);
+            executor.schedule(() -> run_operation.process().destroy(), 2, TimeUnit.SECONDS);
+            assertThrows(ExitStatusException.class, run_operation::execute);
+
+            assertTrue(check_result.toString().contains("<p>Hello World App</p>"));
         } finally {
             FileUtils.deleteDirectory(tmp);
         }

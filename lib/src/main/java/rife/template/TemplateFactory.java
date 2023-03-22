@@ -347,7 +347,7 @@ public class TemplateFactory extends EnumClass<String> {
         }
     }
 
-    public Class parse(String name, String encoding)
+    public synchronized Class parse(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
@@ -413,7 +413,11 @@ public class TemplateFactory extends EnumClass<String> {
         return initializer_;
     }
 
-    private TemplateClassLoader getClassLoader() {
+    public synchronized void resetClassLoader() {
+        lastClassloader_ = null;
+    }
+
+    private synchronized TemplateClassLoader getClassLoader() {
         if (null == lastClassloader_) {
             setClassLoader(new TemplateClassLoader(this, getClass().getClassLoader()));
         }

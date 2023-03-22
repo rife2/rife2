@@ -7,6 +7,7 @@ package rife.bld.blueprints;
 import rife.Version;
 import rife.bld.WebProject;
 import rife.bld.dependencies.VersionNumber;
+import rife.bld.operations.TemplateType;
 import rife.tools.StringUtils;
 
 import java.io.File;
@@ -30,6 +31,8 @@ public class Rife2ProjectBlueprint extends WebProject {
         name = projectName;
         mainClass = packageName + "." + StringUtils.capitalize(projectName) + "Site";
         version = new VersionNumber(0,0,1);
+
+        precompiledTemplateTypes = List.of(TemplateType.HTML);
 
         repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
         scope(compile)

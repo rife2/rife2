@@ -102,30 +102,37 @@ public class TemplateDeployer {
             String classname;
 
             for (var template_factory : templateFactories_) {
-                for (var directory : directories_) {
-                    var group = new ResourceFinderGroup()
-                        .add(new ResourceFinderDirectories(new File[]{directory}))
-                        .add(ResourceFinderClasspath.instance());
-                    template_factory.setResourceFinder(group);
-                    files = FileUtils.getFileList(directory,
-                        Pattern.compile(".*\\" + template_factory.getParser().getExtension() + "$"),
-                        Pattern.compile(".*(SCCS|CVS|\\.svn|\\.git).*"));
+                var previous_resourcefinder = template_factory.getResourceFinder();
+                try {
+                    template_factory.resetClassLoader();
 
-                    for (var file : files) {
-                        if (!StringUtils.filter(file, include_, exclude_)) {
-                            continue;
-                        }
+                    for (var directory : directories_) {
+                        var group = new ResourceFinderGroup()
+                            .add(new ResourceFinderDirectories(new File[]{directory}))
+                            .add(ResourceFinderClasspath.instance());
+                        template_factory.setResourceFinder(group);
+                        files = FileUtils.getFileList(directory,
+                            Pattern.compile(".*\\" + template_factory.getParser().getExtension() + "$"),
+                            Pattern.compile(".*(SCCS|CVS|\\.svn|\\.git).*"));
 
-                        if (verbose_) {
-                            System.out.print(directory.getPath() + " : " + file + " ... ");
-                        }
-                        classname = file.replace(File.separatorChar, '.');
-                        classname = classname.substring(0, classname.length() - template_factory.getParser().getExtension().length());
-                        template_factory.parse(classname, null);
-                        if (verbose_) {
-                            System.out.println("done.");
+                        for (var file : files) {
+                            if (!StringUtils.filter(file, include_, exclude_)) {
+                                continue;
+                            }
+
+                            if (verbose_) {
+                                System.out.print(directory.getPath() + " : " + file + " ... ");
+                            }
+                            classname = file.replace(File.separatorChar, '.');
+                            classname = classname.substring(0, classname.length() - template_factory.getParser().getExtension().length());
+                            template_factory.parse(classname, null);
+                            if (verbose_) {
+                                System.out.println("done.");
+                            }
                         }
                     }
+                } finally {
+                    template_factory.setResourceFinder(previous_resourcefinder);
                 }
             }
         } finally {

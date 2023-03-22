@@ -501,7 +501,6 @@ public class TestCreateRife2Operation {
             var compile_operation = new CompileOperation().fromProject(create_operation.project());
             compile_operation.execute();
             assertTrue(compile_operation.diagnostics().isEmpty());
-            System.out.println(FileUtils.generateDirectoryListing(tmp));
             assertTrue(Pattern.compile("""
                 /myapp
                 /myapp/\\.gitignore

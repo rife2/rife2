@@ -33,8 +33,6 @@ public class BlankProjectBlueprint extends Project {
         version = new VersionNumber(0,0,1);
 
         repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
-        scope(compile)
-            .include(dependency("com.uwyn.rife2", "rife2", Version.getVersionNumber()));
         scope(test)
             .include(dependency("org.junit.jupiter", "junit-jupiter", version(5,9,2)))
             .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1,9,2)));
