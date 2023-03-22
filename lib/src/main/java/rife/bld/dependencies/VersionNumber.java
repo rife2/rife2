@@ -218,8 +218,8 @@ public record VersionNumber(Integer major, Integer minor, Integer revision, Stri
     public int hashCode() {
         int result = majorInt();
         result = 31 * result + minorInt();
-        result = 31 * result + minorInt();
-        result = 31 * result + Objects.hashCode(qualifier);
+        result = 31 * result + revisionInt();
+        result = 31 * result + Objects.hashCode(qualifier.toLowerCase());
         return result;
     }
 }
