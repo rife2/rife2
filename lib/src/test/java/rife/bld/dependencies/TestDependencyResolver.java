@@ -824,7 +824,6 @@ public class TestDependencyResolver {
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
             resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
-            ;
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(88, files.size());

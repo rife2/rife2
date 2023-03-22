@@ -49,7 +49,7 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      * @since 1.5
      */
     public void executeDownloadCompileDependencies() {
-        executeDownloadScopedDependencies(Scope.compile, libCompileDirectory(), Scope.compile);
+        executeDownloadScopedDependencies(libCompileDirectory(), new Scope[]{Scope.compile}, new Scope[]{Scope.compile}, null);
     }
 
     /**
@@ -58,7 +58,14 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      * @since 1.5
      */
     public void executeDownloadRuntimeDependencies() {
-        executeDownloadScopedDependencies(Scope.runtime, libRuntimeDirectory(), Scope.runtime);
+        DependencySet excluded = null;
+        var compile_dependencies = dependencies().get(Scope.compile);
+        if (compile_dependencies != null) {
+            for (var dependency : compile_dependencies) {
+                excluded = new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile);
+            }
+        }
+        executeDownloadScopedDependencies(libRuntimeDirectory(), new Scope[]{Scope.compile, Scope.runtime}, new Scope[]{Scope.runtime}, excluded);
     }
 
     /**
@@ -67,7 +74,7 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      * @since 1.5
      */
     public void executeDownloadStandaloneDependencies() {
-        executeDownloadScopedDependencies(Scope.standalone, libStandaloneDirectory(), Scope.compile, Scope.runtime);
+        executeDownloadScopedDependencies(libStandaloneDirectory(), new Scope[]{Scope.standalone}, new Scope[]{Scope.compile, Scope.runtime}, null);
     }
 
     /**
@@ -76,31 +83,39 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      * @since 1.5
      */
     public void executeDownloadTestDependencies() {
-        executeDownloadScopedDependencies(Scope.test, libTestDirectory(), Scope.compile, Scope.runtime);
+        executeDownloadScopedDependencies(libTestDirectory(), new Scope[]{Scope.test}, new Scope[]{Scope.compile, Scope.runtime}, null);
     }
 
     /**
      * Part of the {@link #execute} operation, download the artifacts for a particular dependency scope.
      *
-     * @param scope                the scope whose artifacts should be downloaded
      * @param destinationDirectory the directory in which the artifacts should be downloaded
+     * @param resolvedScopes       the scopes whose dependencies should be resolved
      * @param transitiveScopes     the scopes to use to resolve the transitive dependencies
-     * @since 1.5
+     * @param excluded             dependencies should be removed because they likely already exist elsewhere
+     * @since 1.5.5
      */
-    public void executeDownloadScopedDependencies(Scope scope, File destinationDirectory, Scope... transitiveScopes) {
+    public void executeDownloadScopedDependencies(File destinationDirectory, Scope[] resolvedScopes, Scope[] transitiveScopes, DependencySet excluded) {
         if (destinationDirectory == null) {
             return;
         }
 
         destinationDirectory.mkdirs();
-        var scoped_dependencies = dependencies().get(scope);
-        if (scoped_dependencies != null) {
-            var dependencies = new DependencySet();
-            for (var dependency : scoped_dependencies) {
-                dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(transitiveScopes));
+
+        var dependencies = new DependencySet();
+        for (var scope : resolvedScopes) {
+            var scoped_dependencies = dependencies().get(scope);
+            if (scoped_dependencies != null) {
+                for (var dependency : scoped_dependencies) {
+                    dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(transitiveScopes));
+                }
             }
-            dependencies.downloadIntoDirectory(repositories(), destinationDirectory);
         }
+        if (excluded != null) {
+            dependencies.removeAll(excluded);
+        }
+
+        dependencies.downloadIntoDirectory(repositories(), destinationDirectory);
     }
 
     /**

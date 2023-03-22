@@ -178,4 +178,46 @@ public class TestDownloadOperation {
             FileUtils.deleteDirectory(tmp);
         }
     }
+
+    @Test
+    void testFromProject2()
+    throws Exception {
+        var tmp = Files.createTempDirectory("test").toFile();
+        try {
+            var project = new WebProject();
+            project.workDirectory = tmp;
+            project.pkg = "test.pkg";
+            project.createProjectStructure();
+            project.repositories().add(Repository.MAVEN_CENTRAL);
+            project.dependencies().scope(Scope.compile)
+                .include(new Dependency("com.stripe", "stripe-java", new VersionNumber(20,136,0)));
+
+            var operation = new DownloadOperation()
+                .fromProject(project);
+
+            operation.execute();
+
+            assertEquals("""
+                    /lib
+                    /lib/bld
+                    /lib/compile
+                    /lib/compile/stripe-java-20.136.0.jar
+                    /lib/runtime
+                    /lib/runtime/gson-2.9.0.jar
+                    /lib/standalone
+                    /lib/test
+                    /src
+                    /src/bld
+                    /src/bld/java
+                    /src/main
+                    /src/main/java
+                    /src/main/resources
+                    /src/main/resources/templates
+                    /src/test
+                    /src/test/java""",
+                FileUtils.generateDirectoryListing(tmp));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
 }

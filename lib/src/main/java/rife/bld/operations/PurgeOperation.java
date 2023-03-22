@@ -49,7 +49,7 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      * @since 1.5
      */
     public void executePurgeCompileDependencies() {
-        executePurgeScopedDependencies(Scope.compile, libCompileDirectory(), Scope.compile);
+        executePurgeScopedDependencies(libCompileDirectory(), new Scope[]{Scope.compile}, new Scope[]{Scope.compile}, null);
     }
 
     /**
@@ -58,7 +58,15 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      * @since 1.5
      */
     public void executePurgeRuntimeDependencies() {
-        executePurgeScopedDependencies(Scope.runtime, libRuntimeDirectory(), Scope.runtime);
+        DependencySet excluded = null;
+        var compile_dependencies = dependencies().get(Scope.compile);
+        if (compile_dependencies != null) {
+            for (var dependency : compile_dependencies) {
+                excluded = new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile);
+            }
+        }
+
+        executePurgeScopedDependencies(libRuntimeDirectory(), new Scope[]{Scope.compile, Scope.runtime}, new Scope[]{Scope.runtime}, excluded);
     }
 
     /**
@@ -67,7 +75,7 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      * @since 1.5
      */
     public void executePurgeStandaloneDependencies() {
-        executePurgeScopedDependencies(Scope.standalone, libStandaloneDirectory(), Scope.compile, Scope.runtime);
+        executePurgeScopedDependencies(libStandaloneDirectory(), new Scope[]{Scope.standalone}, new Scope[]{Scope.compile, Scope.runtime}, null);
     }
 
     /**
@@ -76,29 +84,34 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      * @since 1.5
      */
     public void executePurgeTestDependencies() {
-        executePurgeScopedDependencies(Scope.test, libTestDirectory(), Scope.compile, Scope.runtime);
+        executePurgeScopedDependencies(libTestDirectory(), new Scope[]{Scope.test}, new Scope[]{Scope.compile, Scope.runtime}, null);
     }
 
     /**
      * Part of the {@link #execute} operation, purge the artifacts for a particular dependency scope.
      *
-     * @param scope                the scope whose artifacts should be purged
      * @param destinationDirectory the directory from which the artifacts should be purged
+     * @param resolvedScopes       the scopes whose dependencies should be resolved
      * @param transitiveScopes     the scopes to use to resolve the transitive dependencies
-     * @since 1.5
+     * @param transitiveScopes     the scopes to use to resolve the transitive dependencies
+     * @since 1.5.5
      */
-    public void executePurgeScopedDependencies(Scope scope, File destinationDirectory, Scope... transitiveScopes) {
+    public void executePurgeScopedDependencies(File destinationDirectory, Scope[] resolvedScopes, Scope[] transitiveScopes, DependencySet excluded) {
         if (destinationDirectory == null) {
             return;
         }
 
         var all_dependencies = new DependencySet();
-
-        var scoped_dependencies = dependencies().get(scope);
-        if (scoped_dependencies != null) {
-            for (var dependency : scoped_dependencies) {
-                all_dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(transitiveScopes));
+        for (var scope : resolvedScopes) {
+            var scoped_dependencies = dependencies().get(scope);
+            if (scoped_dependencies != null) {
+                for (var dependency : scoped_dependencies) {
+                    all_dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(transitiveScopes));
+                }
             }
+        }
+        if (excluded != null) {
+            all_dependencies.removeAll(excluded);
         }
 
         var filenames = new HashSet<String>();
