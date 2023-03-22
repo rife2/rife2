@@ -4,7 +4,6 @@
  */
 package rife.bld.blueprints;
 
-import rife.Version;
 import rife.bld.Project;
 import rife.bld.dependencies.VersionNumber;
 import rife.tools.StringUtils;
@@ -14,7 +13,6 @@ import java.util.List;
 
 import static rife.bld.dependencies.Repository.MAVEN_CENTRAL;
 import static rife.bld.dependencies.Repository.SONATYPE_SNAPSHOTS;
-import static rife.bld.dependencies.Scope.compile;
 import static rife.bld.dependencies.Scope.test;
 
 /**
