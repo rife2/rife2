@@ -54,7 +54,6 @@ public class Project extends BuildExecutor {
     protected File srcMainResourcesTemplatesDirectory = null;
     protected File srcTestJDirectory = null;
     protected File srcTestJavaDirectory = null;
-    protected File libBldDirectory = null;
     protected File libDirectory = null;
     protected File libCompileDirectory = null;
     protected File libRuntimeDirectory = null;
@@ -244,8 +243,8 @@ public class Project extends BuildExecutor {
         return Objects.requireNonNullElseGet(libDirectory, () -> new File(workDirectory(), "lib"));
     }
 
-    public File libBldDirectory() {
-        return Objects.requireNonNullElseGet(libBldDirectory, () -> new File(libDirectory(), "bld"));
+    public final File libBldDirectory() {
+        return new File(new File(workDirectory(), "lib"), "bld");
     }
 
     public File libCompileDirectory() {

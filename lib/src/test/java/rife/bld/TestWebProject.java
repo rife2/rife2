@@ -86,7 +86,6 @@ public class TestWebProject {
         assertNotNull(project.srcTestJDirectory());
         assertNull(project.srcTestJavaDirectory);
         assertNotNull(project.srcTestJavaDirectory());
-        assertNull(project.libBldDirectory);
         assertNotNull(project.libBldDirectory());
         assertNull(project.libDirectory);
         assertNotNull(project.libDirectory());
