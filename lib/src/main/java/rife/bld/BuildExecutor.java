@@ -11,6 +11,7 @@ import rife.ioc.HierarchicalProperties;
 import rife.tools.ExceptionUtils;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Base class that executes build commands from a list of arguments.
@@ -188,6 +189,39 @@ public class BuildExecutor {
     public boolean executeCommand(String command)
     throws Throwable {
         var definition = buildCommands().get(command);
+
+        // try to find a match for the provided command amongst
+        // the ones that are known
+        if (definition == null) {
+            // try to find starting matching options
+            var matches = new ArrayList<>(buildCommands().keySet().stream()
+                .filter(c -> c.toLowerCase().startsWith(command.toLowerCase()))
+                .toList());
+
+            if (matches.isEmpty()) {
+                // try to find fuzzy matching options
+                var fuzzy_regexp = new StringBuilder("^.*");
+                for (var ch : command.toCharArray()) {
+                    fuzzy_regexp.append("\\Q");
+                    fuzzy_regexp.append(ch);
+                    fuzzy_regexp.append("\\E.*");
+                }
+                fuzzy_regexp.append("$");
+                var fuzzy_pattern = Pattern.compile(fuzzy_regexp.toString());
+                matches.addAll(buildCommands().keySet().stream()
+                    .filter(c -> fuzzy_pattern.matcher(c.toLowerCase()).matches())
+                    .toList());
+            }
+
+            // only proceed if exactly one match was found
+            if (matches.size() == 1) {
+                var matched_command = matches.get(0);
+                System.out.println("Executing matched command: " + matched_command);
+                definition = buildCommands().get(matched_command);
+            }
+        }
+
+        // execute the command if we found one
         if (definition != null) {
             try {
                 definition.execute();

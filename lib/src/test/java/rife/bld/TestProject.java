@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import rife.bld.dependencies.VersionNumber;
 import rife.tools.FileUtils;
 
+import java.io.File;
 import java.nio.file.Files;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -119,27 +120,46 @@ public class TestProject {
         assertNotNull(project.testClasspath());
     }
 
+
+    static class CustomProject extends Project {
+        StringBuilder result_;
+
+        CustomProject(File tmp, StringBuilder result) {
+            result_ = result;
+            workDirectory = tmp;
+            pkg = "test.pkg";
+            name = "my_project";
+            version = new VersionNumber(0, 0, 1);
+        }
+
+        @BuildCommand
+        public void newcommand() {
+            result_.append("newcommand");
+        }
+    }
+
     @Test
     void testCustomCommand()
     throws Exception {
         var tmp = Files.createTempDirectory("test").toFile();
         try {
             var result = new StringBuilder();
-            var project = new Project() {
-                @BuildCommand
-                public void newcommand() {
-                    result.append("newcommand");
-                }
-            };
-            project.workDirectory = tmp;
-            project.pkg = "test.pkg";
-            project.name = "my_project";
-            project.version = new VersionNumber(0, 0, 1);
+            var project = new CustomProject(tmp, result);
 
             project.execute(new String[]{"newcommand"});
             assertEquals("newcommand", result.toString());
         } finally {
             FileUtils.deleteDirectory(tmp);
+        }
+    }
+
+    static class CustomProjectLambda extends Project {
+        CustomProjectLambda(File tmp, StringBuilder result) {
+            buildCommands().put("newcommand", () -> result.append("newcommand"));
+            workDirectory = tmp;
+            pkg = "test.pkg";
+            name = "my_project";
+            version = new VersionNumber(0, 0, 1);
         }
     }
 
@@ -149,15 +169,30 @@ public class TestProject {
         var tmp = Files.createTempDirectory("test").toFile();
         try {
             var result = new StringBuilder();
-            var project = new Project();
-            project.buildCommands().put("newcommand", () -> result.append("newcommand"));
-            project.workDirectory = tmp;
-            project.pkg = "test.pkg";
-            project.name = "my_project";
-            project.version = new VersionNumber(0, 0, 1);
-
+            var project = new CustomProjectLambda(tmp, result);
             project.execute(new String[]{"newcommand"});
             assertEquals("newcommand", result.toString());
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
+    @Test
+    void testCommandMatch()
+    throws Exception {
+        var tmp = Files.createTempDirectory("test").toFile();
+        var result = new StringBuilder();
+        var project = new CustomProjectLambda(tmp, result);
+        project.execute(new String[]{"ne", "nc", "n"});
+        assertEquals("newcommand" +
+                     "newcommand" +
+                     "newcommand", result.toString());
+
+        result = new StringBuilder();
+        project.execute(new String[]{"c"});
+        assertEquals("", result.toString());
+
+        try {
         } finally {
             FileUtils.deleteDirectory(tmp);
         }

@@ -184,7 +184,7 @@ public class TestPurgeOperation {
         }
     }
 
-    public static class TestProject extends WebProject {
+    static class TestProject extends WebProject {
         public TestProject(File tmp) {
             workDirectory = tmp;
             pkg = "test.pkg";
