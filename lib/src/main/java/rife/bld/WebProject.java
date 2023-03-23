@@ -26,6 +26,11 @@ import java.util.Objects;
      * Standard build commands
      */
 
+    /**
+     * Standard build command, creates an UberJar archive for the web project.
+     *
+     * @since 1.5
+     */
     @Override
     public void uberjar()
     throws Exception {
@@ -37,6 +42,11 @@ import java.util.Objects;
         operation.execute();
     }
 
+    /**
+     * Standard build command, creates a war archive for the web project.
+     *
+     * @since 1.5
+     */
     @BuildCommand(help = WarHelp.class)
     public void war()
     throws Exception {
@@ -53,6 +63,12 @@ import java.util.Objects;
         return Objects.requireNonNullElseGet(libStandaloneDirectory, () -> new File(libDirectory(), "standalone"));
     }
 
+    /**
+     * Returns the project main webapp directory.
+     * Defaults to {@code "webapp"} relative to {@link #srcMainDirectory()}.
+     *
+     * @since 1.5
+     */
     public File srcMainWebappDirectory() {
         return Objects.requireNonNullElseGet(srcMainWebappDirectory, () -> new File(srcMainDirectory(), "webapp"));
     }
@@ -61,6 +77,12 @@ import java.util.Objects;
      * Project options
      */
 
+    /**
+     * Returns filename to use for the main war archive creation.
+     * By default, appends the version and the {@code war} extension to the {@link #archiveBaseName()}.
+     *
+     * @since 1.5.0
+     */
     public String warFileName() {
         return Objects.requireNonNullElseGet(warFileName, () -> archiveBaseName() + "-" + version() + ".war");
     }

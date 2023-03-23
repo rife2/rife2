@@ -39,6 +39,7 @@ public class TestProject {
         assertNotNull(project.precompiledTemplateTypes);
         assertTrue(project.precompiledTemplateTypes.isEmpty());
         assertTrue(project.precompiledTemplateTypes().isEmpty());
+        assertNull(project.javaRelease);
         assertNotNull(project.compileJavacOptions);
         assertTrue(project.compileJavacOptions.isEmpty());
         assertTrue(project.compileJavacOptions().isEmpty());

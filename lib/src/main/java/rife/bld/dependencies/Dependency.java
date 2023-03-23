@@ -48,6 +48,8 @@ public record Dependency(String groupId, String artifactId, VersionNumber versio
 
     /**
      * Parses a dependency from a string representation.
+     * The format is {@code groupId:artifactId:version:classifier@type}.
+     * The {@code version}, {@code classifier} and {@code type} are optional.
      * <p>
      * If the string can't be successfully parsed, {@code null} will be returned.
      *

@@ -14,12 +14,12 @@ import rife.tools.StringUtils;
  */
 public class PrecompileHelp implements CommandHelp {
     public String getSummary() {
-        return "Compiles RIFE2 templates to class files";
+        return "Pre-compiles RIFE2 templates to class files";
     }
 
     public String getDescription(String topic) {
         return StringUtils.replace("""
-            Compiles RIFE2 templates to class files
+            Pre-compiles RIFE2 templates to class files
                         
             Usage : ${topic}""", "${topic}", topic);
     }
