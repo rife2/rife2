@@ -10,6 +10,7 @@ import rife.bld.WebProject;
 import rife.bld.dependencies.*;
 import rife.tools.FileUtils;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -102,14 +103,19 @@ public class TestUpdatesOperation {
         }
     }
 
+    public static class TestProject extends WebProject {
+        public TestProject(File tmp) {
+            workDirectory = tmp;
+            pkg = "test.pkg";
+        }
+    }
+
     @Test
     void testFromProject()
     throws Exception {
         var tmp = Files.createTempDirectory("test").toFile();
         try {
-            var project = new WebProject();
-            project.workDirectory = tmp;
-            project.pkg = "test.pkg";
+            var project = new TestProject(tmp);
             project.createProjectStructure();
             project.repositories().add(Repository.MAVEN_CENTRAL);
             project.dependencies().scope(Scope.compile)

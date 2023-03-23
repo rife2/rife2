@@ -24,11 +24,11 @@ import static rife.tools.FileUtils.JAVA_FILE_PATTERN;
  * @since 1.5
  */
 public class Project extends BuildExecutor {
-    public File workDirectory = new File(System.getProperty("user.dir"));
-    public String pkg = null;
-    public String name = null;
-    public VersionNumber version = null;
-    public String mainClass = null;
+    protected File workDirectory = new File(System.getProperty("user.dir"));
+    protected String pkg = null;
+    protected String name = null;
+    protected VersionNumber version = null;
+    protected String mainClass = null;
 
     protected List<Repository> repositories = new ArrayList<>();
     protected DependencyScopes dependencies = new DependencyScopes();

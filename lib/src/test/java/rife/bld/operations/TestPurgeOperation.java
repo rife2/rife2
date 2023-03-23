@@ -184,14 +184,19 @@ public class TestPurgeOperation {
         }
     }
 
+    public static class TestProject extends WebProject {
+        public TestProject(File tmp) {
+            workDirectory = tmp;
+            pkg = "test.pkg";
+        }
+    }
+
     @Test
     void testFromProject()
     throws Exception {
         var tmp = Files.createTempDirectory("test").toFile();
         try {
-            var project1 = new WebProject();
-            project1.workDirectory = tmp;
-            project1.pkg = "test.pkg";
+            var project1 = new TestProject(tmp);
             project1.createProjectStructure();
             project1.repositories().add(Repository.MAVEN_CENTRAL);
             project1.dependencies().scope(Scope.compile)
@@ -203,9 +208,7 @@ public class TestPurgeOperation {
             project1.dependencies().scope(Scope.test)
                 .include(new Dependency("org.apache.httpcomponents.client5", "httpclient5", new VersionNumber(5, 0)));
 
-            var project2 = new WebProject();
-            project2.workDirectory = tmp;
-            project2.pkg = "test.pkg";
+            var project2 = new TestProject(tmp);
             project2.createProjectStructure();
             project2.repositories().add(Repository.MAVEN_CENTRAL);
             project2.dependencies().scope(Scope.compile)
