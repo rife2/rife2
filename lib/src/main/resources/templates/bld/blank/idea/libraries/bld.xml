@@ -4,7 +4,9 @@
       <root url="file://$PROJECT_DIR$/lib/bld" />
       <root url="jar://$USER_HOME$/.rife2/dist/rife2-{{v version/}}.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="https://rife2.github.io/rife2/index.html" />
+    </JAVADOC>
     <SOURCES />
     <excluded>
       <root url="jar://$PROJECT_DIR$/lib/bld/bld-wrapper.jar!/" />
