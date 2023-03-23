@@ -19,7 +19,19 @@ import java.util.Objects;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */public class WebProject extends Project {
+    /**
+     * The main war archive creation.
+     *
+     * @see #warFileName()
+     * @since 1.5.0
+     */
     protected String warFileName = null;
+    /**
+     * The main webapp directory.
+     *
+     * @see #srcMainWebappDirectory()
+     * @since 1.5
+     */
     protected File srcMainWebappDirectory = null;
 
     /*

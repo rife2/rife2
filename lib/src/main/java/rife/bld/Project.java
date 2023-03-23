@@ -25,47 +25,281 @@ import static rife.tools.FileUtils.JAVA_FILE_PATTERN;
  * @since 1.5
  */
 public class Project extends BuildExecutor {
+    /**
+     * The work directory of the project.
+     *
+     * @see #workDirectory()
+     * @since 1.5
+     */
     protected File workDirectory = new File(System.getProperty("user.dir"));
+    /**
+     * The project's package.
+     *
+     * @see #pkg()
+     * @since 1.5
+     */
     protected String pkg = null;
+    /**
+     * The project's name.
+     *
+     * @see #name()
+     * @since 1.5
+     */
     protected String name = null;
+    /**
+     * The project's version.
+     *
+     * @see #version()
+     * @since 1.5
+     */
     protected VersionNumber version = null;
+    /**
+     * The project's main class.
+     *
+     * @see #mainClass()
+     * @since 1.5
+     */
     protected String mainClass = null;
 
+    /**
+     * The project's repositories.
+     *
+     * @see #repositories()
+     * @since 1.5
+     */
     protected List<Repository> repositories = new ArrayList<>();
+    /**
+     * The project's dependencies.
+     *
+     * @see #dependencies()
+     * @since 1.5
+     */
     protected DependencyScopes dependencies = new DependencyScopes();
 
+    /**
+     * The project's precompiled template types.
+     *
+     * @see #precompiledTemplateTypes()
+     * @since 1.5
+     */
     protected List<TemplateType> precompiledTemplateTypes = new ArrayList<>();
+    /**
+     * The project's Java release version for compilation.
+     *
+     * @see #compileJavacOptions()
+     * @since 1.5.6
+     */
     protected Integer javaRelease = null;
+    /**
+     * The project's javac options for compilation.
+     *
+     * @see #compileJavacOptions()
+     * @since 1.5
+     */
     protected List<String> compileJavacOptions = new ArrayList<>();
+    /**
+     * The tool that is used for running the java main class.
+     *
+     * @see #javaTool()
+     * @since 1.5
+     */
     protected String javaTool = null;
+    /**
+     * The project's java options for the run command.
+     *
+     * @see #runJavaOptions()
+     * @since 1.5
+     */
     protected List<String> runJavaOptions = new ArrayList<>();
+    /**
+     * The project's java options for the test command.
+     *
+     * @see #testJavaOptions()
+     * @since 1.5
+     */
     protected List<String> testJavaOptions = new ArrayList<>();
+    /**
+     * The project's test tool main class.
+     *
+     * @see #testToolMainClass()
+     * @since 1.5
+     */
     protected String testToolMainClass;
+    /**
+     * The project's test tool options.
+     *
+     * @see #testToolOptions()
+     * @since 1.5
+     */
     protected List<String> testToolOptions = new ArrayList<>();
+    /**
+     * The base name that is used for creating archives.
+     *
+     * @see #archiveBaseName()
+     * @since 1.5
+     */
     protected String archiveBaseName = null;
+    /**
+     * The filename to use for the main jar archive creation.
+     *
+     * @see #jarFileName()
+     * @since 1.5
+     */
     protected String jarFileName = null;
+    /**
+     * The filename to use for the uber jar archive creation.
+     *
+     * @see #uberJarFileName()
+     * @since 1.5
+     */
     protected String uberJarFileName = null;
+    /**
+     * The main class to run the UberJar with.
+     *
+     * @see #uberJarMainClass()
+     * @since 1.5
+     */
     protected String uberJarMainClass = null;
 
+    /**
+     * The source code directory.
+     *
+     * @see #srcDirectory()
+     * @since 1.5
+     */
     protected File srcDirectory = null;
+    /**
+     * The bld source code directory.
+     *
+     * @see #srcBldDirectory()
+     * @since 1.5
+     */
     protected File srcBldDirectory = null;
+    /**
+     * The build java source code directory.
+     *
+     * @see #srcBldJavaDirectory()
+     * @since 1.5
+     */
     protected File srcBldJavaDirectory = null;
+    /**
+     * The main source code directory.
+     *
+     * @see #srcMainDirectory()
+     * @since 1.5
+     */
     protected File srcMainDirectory = null;
+    /**
+     * The main java source code directory.
+     *
+     * @see #srcMainJavaDirectory()
+     * @since 1.5
+     */
     protected File srcMainJavaDirectory = null;
+    /**
+     * The main resources source code directory.
+     *
+     * @see #srcMainResourcesDirectory()
+     * @since 1.5
+     */
     protected File srcMainResourcesDirectory = null;
+    /**
+     * The main template resources source code directory.
+     *
+     * @see #srcMainResourcesTemplatesDirectory()
+     * @since 1.5
+     */
     protected File srcMainResourcesTemplatesDirectory = null;
+    /**
+     * The test source code directory.
+     *
+     * @see #srcTestJDirectory()
+     * @since 1.5
+     */
     protected File srcTestJDirectory = null;
+    /**
+     * The test java source code directory.
+     *
+     * @see #srcTestJavaDirectory()
+     * @since 1.5
+     */
     protected File srcTestJavaDirectory = null;
+    /**
+     * The lib directory.
+     *
+     * @see #libDirectory()
+     * @since 1.5
+     */
     protected File libDirectory = null;
+    /**
+     * The compile lib directory.
+     *
+     * @see #libCompileDirectory()
+     * @since 1.5
+     */
     protected File libCompileDirectory = null;
+    /**
+     * The runtime lib directory.
+     *
+     * @see #libRuntimeDirectory()
+     * @since 1.5
+     */
     protected File libRuntimeDirectory = null;
+    /**
+     * The standalone lib directory.
+     *
+     * @see #libStandaloneDirectory()
+     * @since 1.5
+     */
     protected File libStandaloneDirectory = null;
+    /**
+     * The test lib directory.
+     *
+     * @see #libTestDirectory()
+     * @since 1.5
+     */
     protected File libTestDirectory = null;
+    /**
+     * The build directory.
+     *
+     * @see #buildDirectory()
+     * @since 1.5
+     */
     protected File buildDirectory = null;
+    /**
+     * The bld build directory.
+     *
+     * @see #buildBldDirectory()
+     * @since 1.5
+     */
     protected File buildBldDirectory = null;
+    /**
+     * The dist build directory.
+     *
+     * @see #buildDistDirectory()
+     * @since 1.5
+     */
     protected File buildDistDirectory = null;
+    /**
+     * The main build directory.
+     *
+     * @see #buildMainDirectory()
+     * @since 1.5
+     */
     protected File buildMainDirectory = null;
+    /**
+     * The templates build directory.
+     *
+     * @see #buildTemplatesDirectory()
+     * @since 1.5
+     */
     protected File buildTemplatesDirectory = null;
+    /**
+     * The test build directory.
+     *
+     * @see #buildTestDirectory()
+     * @since 1.5
+     */
     protected File buildTestDirectory = null;
 
     /*
@@ -638,6 +872,54 @@ public class Project extends BuildExecutor {
      */
 
     /**
+     * Returns the project's package.
+     *
+     * @since 1.5
+     */
+    public String pkg() {
+        if (pkg == null) {
+            throw new IllegalStateException("The pkg variable has to be set.");
+        }
+        return pkg;
+    }
+
+    /**
+     * Returns the project's name.
+     *
+     * @since 1.5
+     */
+    public String name() {
+        if (name == null) {
+            throw new IllegalStateException("The name variable has to be set.");
+        }
+        return name;
+    }
+
+    /**
+     * Returns the project's version.
+     *
+     * @since 1.5
+     */
+    public VersionNumber version() {
+        if (version == null) {
+            throw new IllegalStateException("The version variable has to be set.");
+        }
+        return version;
+    }
+
+    /**
+     * Returns the project's main class.
+     *
+     * @since 1.5
+     */
+    public String mainClass() {
+        if (mainClass == null) {
+            throw new IllegalStateException("The mainClass variable has to be set.");
+        }
+        return mainClass;
+    }
+
+    /**
      * Returns the list of repositories for this project.
      * <p>
      * This list can be modified to change the repositories that the project uses.
@@ -664,59 +946,11 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns the project's package.
-     *
-     * @since 1.5.0
-     */
-    public String pkg() {
-        if (pkg == null) {
-            throw new IllegalStateException("The pkg variable has to be set.");
-        }
-        return pkg;
-    }
-
-    /**
-     * Returns the project's name.
-     *
-     * @since 1.5.0
-     */
-    public String name() {
-        if (name == null) {
-            throw new IllegalStateException("The name variable has to be set.");
-        }
-        return name;
-    }
-
-    /**
-     * Returns the project's version.
-     *
-     * @since 1.5.0
-     */
-    public VersionNumber version() {
-        if (version == null) {
-            throw new IllegalStateException("The version variable has to be set.");
-        }
-        return version;
-    }
-
-    /**
-     * Returns the project's main class.
-     *
-     * @since 1.5.0
-     */
-    public String mainClass() {
-        if (mainClass == null) {
-            throw new IllegalStateException("The mainClass variable has to be set.");
-        }
-        return mainClass;
-    }
-
-    /**
      * Returns the project's dependencies.
      * <p>
      * This collection can be modified to change the dependencies that the project uses.
      *
-     * @since 1.5.0
+     * @since 1.5
      */
     public DependencyScopes dependencies() {
         if (dependencies == null) {
@@ -730,7 +964,7 @@ public class Project extends BuildExecutor {
      * <p>
      * This list can be modified to change the template types that are precompiled in the project.
      *
-     * @since 1.5.0
+     * @since 1.5
      */
     public List<TemplateType> precompiledTemplateTypes() {
         if (precompiledTemplateTypes == null) {
@@ -756,7 +990,7 @@ public class Project extends BuildExecutor {
      * <p>
      * This list can be modified to change the javac options for the project.
      *
-     * @since 1.5.0
+     * @since 1.5
      */
     public List<String> compileJavacOptions() {
         if (compileJavacOptions == null) {
@@ -785,7 +1019,7 @@ public class Project extends BuildExecutor {
     /**
      * Returns the tool that is used for running the java main class.
      *
-     * @since 1.5.0
+     * @since 1.5
      */
     public String javaTool() {
         return Objects.requireNonNullElse(javaTool, "java");
@@ -796,7 +1030,7 @@ public class Project extends BuildExecutor {
      * <p>
      * This list can be modified to change the java run command options for the project.
      *
-     * @since 1.5.0
+     * @since 1.5
      */
     public List<String> runJavaOptions() {
         if (runJavaOptions == null) {
@@ -822,7 +1056,7 @@ public class Project extends BuildExecutor {
      * <p>
      * This list can be modified to change the java test command options for the project.
      *
-     * @since 1.5.0
+     * @since 1.5
      */
     public List<String> testJavaOptions() {
         if (testJavaOptions == null) {
@@ -847,7 +1081,7 @@ public class Project extends BuildExecutor {
      * Returns the project's test tool main class.
      * By default, this returns the tool to run JUnit 5 tests.
      *
-     * @since 1.5.0
+     * @since 1.5
      */
     public String testToolMainClass() {
         return Objects.requireNonNullElse(testToolMainClass, "org.junit.platform.console.ConsoleLauncher");
@@ -860,7 +1094,7 @@ public class Project extends BuildExecutor {
      * <p>
      * This list can be modified to change the test tool options for the project.
      *
-     * @since 1.5.0
+     * @since 1.5
      */
     public List<String> testToolOptions() {
         if (testToolOptions == null || testToolOptions.isEmpty()) {
@@ -893,40 +1127,40 @@ public class Project extends BuildExecutor {
      * Returns the base name that is used for creating archives.
      * By default, this returns the lower-cased project name.
      *
-     * @since 1.5.0
+     * @since 1.5
      */
     public String archiveBaseName() {
         return Objects.requireNonNullElseGet(archiveBaseName, () -> name().toLowerCase(Locale.ENGLISH));
     }
 
     /**
-     * Returns filename to use for the main jar archive creation.
+     * Returns the filename to use for the main jar archive creation.
      * By default, appends the version and the {@code jar} extension to the {@link #archiveBaseName()}.
      *
-     * @since 1.5.0
+     * @since 1.5
      */
     public String jarFileName() {
         return Objects.requireNonNullElseGet(jarFileName, () -> archiveBaseName() + "-" + version() + ".jar");
     }
 
     /**
-     * Returns main class to run the UberJar with.
-     * By default, returns the same as {@link #mainClass()}.
-     *
-     * @since 1.5.0
-     */
-    public String uberJarMainClass() {
-        return Objects.requireNonNullElseGet(uberJarMainClass, this::mainClass);
-    }
-
-    /**
-     * Returns filename to use for the uber jar archive creation.
+     * Returns the filename to use for the uber jar archive creation.
      * By default, appends the version, the {@code "-uber"} suffix and the {@code jar} extension to the {@link #archiveBaseName()}.
      *
-     * @since 1.5.0
+     * @since 1.5
      */
     public String uberJarFileName() {
         return Objects.requireNonNullElseGet(uberJarFileName, () -> archiveBaseName() + "-" + version() + "-uber.jar");
+    }
+
+    /**
+     * Returns main class to run the UberJar with.
+     * By default, returns the same as {@link #mainClass()}.
+     *
+     * @since 1.5
+     */
+    public String uberJarMainClass() {
+        return Objects.requireNonNullElseGet(uberJarMainClass, this::mainClass);
     }
 
     /*
@@ -981,7 +1215,7 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns all the jar files that are int the runtime scope classpath.
+     * Returns all the jar files that are in the runtime scope classpath.
      * <p>
      * By default, this collects all the jar files in the {@link #libRuntimeDirectory()}
      * and adds all the jar files from the runtime scope local dependencies.
@@ -1000,7 +1234,7 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns all the jar files that are int the standalone scope classpath.
+     * Returns all the jar files that are in the standalone scope classpath.
      * <p>
      * By default, this collects all the jar files in the {@link #libStandaloneDirectory()}
      * and adds all the jar files from the standalone scope local dependencies.
@@ -1024,7 +1258,7 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns all the jar files that are int the test scope classpath.
+     * Returns all the jar files that are in the test scope classpath.
      * <p>
      * By default, this collects all the jar files in the {@link #libTestDirectory()}
      * and adds all the jar files from the test scope local dependencies.
