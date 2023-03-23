@@ -62,7 +62,7 @@ public class Project extends BuildExecutor {
     protected String mainClass = null;
 
     /**
-     * The project's repositories.
+     * The project's repositories for dependency resolution.
      *
      * @see #repositories()
      * @since 1.5
@@ -176,7 +176,7 @@ public class Project extends BuildExecutor {
      */
     protected File srcBldDirectory = null;
     /**
-     * The build java source code directory.
+     * The bld java source code directory.
      *
      * @see #srcBldJavaDirectory()
      * @since 1.5
@@ -213,10 +213,10 @@ public class Project extends BuildExecutor {
     /**
      * The test source code directory.
      *
-     * @see #srcTestJDirectory()
+     * @see #srcTestDirectory()
      * @since 1.5
      */
-    protected File srcTestJDirectory = null;
+    protected File srcTestDirectory = null;
     /**
      * The test java source code directory.
      *
@@ -232,28 +232,28 @@ public class Project extends BuildExecutor {
      */
     protected File libDirectory = null;
     /**
-     * The compile lib directory.
+     * The compile scope lib directory.
      *
      * @see #libCompileDirectory()
      * @since 1.5
      */
     protected File libCompileDirectory = null;
     /**
-     * The runtime lib directory.
+     * The runtime scope lib directory.
      *
      * @see #libRuntimeDirectory()
      * @since 1.5
      */
     protected File libRuntimeDirectory = null;
     /**
-     * The standalone lib directory.
+     * The standalone scope lib directory.
      *
      * @see #libStandaloneDirectory()
      * @since 1.5
      */
     protected File libStandaloneDirectory = null;
     /**
-     * The test lib directory.
+     * The standalone scope lib directory.
      *
      * @see #libTestDirectory()
      * @since 1.5
@@ -648,7 +648,7 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns the project build java source code directory.
+     * Returns the project bld java source code directory.
      * Defaults to {@code "java"} relative to {@link #srcBldDirectory()}.
      *
      * @since 1.5
@@ -703,18 +703,18 @@ public class Project extends BuildExecutor {
      *
      * @since 1.5
      */
-    public File srcTestJDirectory() {
-        return Objects.requireNonNullElseGet(srcTestJDirectory, () -> new File(srcDirectory(), "test"));
+    public File srcTestDirectory() {
+        return Objects.requireNonNullElseGet(srcTestDirectory, () -> new File(srcDirectory(), "test"));
     }
 
     /**
      * Returns the project test java source code directory.
-     * Defaults to {@code "java"} relative to {@link #srcTestJDirectory()}.
+     * Defaults to {@code "java"} relative to {@link #srcTestDirectory()}.
      *
      * @since 1.5
      */
     public File srcTestJavaDirectory() {
-        return Objects.requireNonNullElseGet(srcTestJavaDirectory, () -> new File(srcTestJDirectory(), "java"));
+        return Objects.requireNonNullElseGet(srcTestJavaDirectory, () -> new File(srcTestDirectory(), "java"));
     }
 
     /**
@@ -737,7 +737,7 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns the project compile lib directory.
+     * Returns the project compile scope lib directory.
      * Defaults to {@code "compile"} relative to {@link #libDirectory()}.
      *
      * @since 1.5
@@ -747,7 +747,7 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns the project runtime lib directory.
+     * Returns the project runtime scope lib directory.
      * Defaults to {@code "runtime"} relative to {@link #libDirectory()}.
      *
      * @since 1.5
@@ -757,7 +757,7 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns the project standalone lib directory.
+     * Returns the project standalone scope lib directory.
      * Defaults to {@code null}.
      *
      * @since 1.5
@@ -767,7 +767,7 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns the project test lib directory.
+     * Returns the project test scope lib directory.
      * Defaults to {@code "test"} relative to {@link #libDirectory()}.
      *
      * @since 1.5
