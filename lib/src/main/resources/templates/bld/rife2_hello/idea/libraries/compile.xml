@@ -4,7 +4,10 @@
       <root url="file://$PROJECT_DIR$/lib/compile" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/lib/compile" />
+    </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/lib/compile" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/compile" recursive="false" type="SOURCES" />
   </library>
 </component>

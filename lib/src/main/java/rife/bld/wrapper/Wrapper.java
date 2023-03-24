@@ -32,6 +32,7 @@ import static rife.tools.FileUtils.JAVA_FILE_PATTERN;
 public class Wrapper {
     private static final String DOWNLOAD_LOCATION = "https://repo1.maven.org/maven2/com/uwyn/rife2/rife2/${version}/";
     private static final String RIFE2_FILENAME = "rife2-${version}.jar";
+    private static final String RIFE2_SOURCES_FILENAME = "rife2-${version}-sources.jar";
     private static final String RIFE_VERSION = "RIFE_VERSION";
     private static final String WRAPPER_PROPERTIES = "bld-wrapper.properties";
     private static final String WRAPPER_JAR = "bld-wrapper.jar";
@@ -68,8 +69,11 @@ public class Wrapper {
         createWrapperJar(destinationDirectory);
     }
 
+    private static final Pattern RIFE2_JAR_PATTERN = Pattern.compile("rife2-[^\"/!]+(?<!sources)\\.jar");
+    private static final Pattern RIFE2_SOURCES_JAR_PATTERN = Pattern.compile("rife2-[^\"/!]+-sources\\.jar");
+
     /**
-     * Upgraded the IDEA bld files that were generated with a preview version.
+     * Upgraded the IDEA bld files that were generated with a previous version.
      *
      * @param destinationDirectory the directory with the IDEA files
      * @param version              the RIFE2 version they should be using
@@ -82,7 +86,8 @@ public class Wrapper {
         if (file.exists()) {
             try {
                 var content = FileUtils.readString(file);
-                content = content.replaceAll("rife2-[^\"/!]+\\.jar", "rife2-" + version + ".jar");
+                content = RIFE2_JAR_PATTERN.matcher(content).replaceAll("rife2-" + version + ".jar");
+                content = RIFE2_SOURCES_JAR_PATTERN.matcher(content).replaceAll("rife2-" + version + "-sources.jar");
                 FileUtils.writeString(content, file);
             } catch (FileUtilsErrorException e) {
                 throw new IOException(e);
@@ -233,18 +238,22 @@ public class Wrapper {
         return wrapperProperties_.getProperty(PROPERTY_DOWNLOAD_LOCATION, DOWNLOAD_LOCATION);
     }
 
-    private String downloadUrl(String version) {
+    private String downloadUrl(String version, String fileName) {
         var location = replaceVersion(getWrapperDownloadLocation(), version);
         var result = new StringBuilder(location);
         if (!location.endsWith("/")) {
             result.append("/");
         }
-        result.append(rife2FileName(version));
+        result.append(fileName);
         return result.toString();
     }
 
     private String rife2FileName(String version) {
         return replaceVersion(RIFE2_FILENAME, version);
+    }
+
+    private String rife2SourcesFileName(String version) {
+        return replaceVersion(RIFE2_SOURCES_FILENAME, version);
     }
 
     private String replaceVersion(String text, String version) {
@@ -267,21 +276,25 @@ public class Wrapper {
             System.err.println("Failed to retrieve wrapper version number.");
             throw e;
         }
-        var distribution_file = new File(DISTRIBUTIONS_DIR, rife2FileName(version));
+        var filename = rife2FileName(version);
+        var distribution_file = new File(DISTRIBUTIONS_DIR, filename);
         if (!distribution_file.exists()) {
-            download(distribution_file, version);
+            download(distribution_file, downloadUrl(version, filename));
+        }
+        var sources_filename = rife2SourcesFileName(version);
+        var distribution_sources_file = new File(DISTRIBUTIONS_DIR, sources_filename);
+        if (!distribution_sources_file.exists()) {
+            download(distribution_sources_file, downloadUrl(version, sources_filename));
         }
         return distribution_file;
     }
 
-    private void download(File file, String version)
+    private void download(File file, String downloadUrl)
     throws IOException {
-        var download_url = downloadUrl(version);
-
         try {
-            System.out.print("Downloading: " + download_url + " ... ");
+            System.out.print("Downloading: " + downloadUrl + " ... ");
             System.out.flush();
-            var url = new URL(download_url);
+            var url = new URL(downloadUrl);
             var readableByteChannel = Channels.newChannel(url.openStream());
             try (var fileOutputStream = new FileOutputStream(file)) {
                 var fileChannel = fileOutputStream.getChannel();

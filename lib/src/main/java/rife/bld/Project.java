@@ -175,13 +175,6 @@ public class Project extends BuildExecutor {
      * @since 1.5.6
      */
     protected Boolean downloadJavadoc = null;
-    /**
-     * Indicates whether IDE projects should be auto-updated.
-     *
-     * @see #updateProjects()
-     * @since 1.5.6
-     */
-    protected Boolean updateProjects = null;
 
     /**
      * The source code directory.
@@ -1229,17 +1222,6 @@ public class Project extends BuildExecutor {
      */
     public boolean downloadJavadoc() {
         return Objects.requireNonNullElse(downloadJavadoc, Boolean.FALSE);
-    }
-
-    /**
-     * Returns whether supported IDE projects that can be found, will be
-     * automatically updated for new dependencies.
-     * By default, returns {@code true}.
-     *
-     * @since 1.5.6
-     */
-    public boolean updateProjects() {
-        return Objects.requireNonNullElse(updateProjects, Boolean.TRUE);
     }
 
     /*

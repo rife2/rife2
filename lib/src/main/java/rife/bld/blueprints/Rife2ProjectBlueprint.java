@@ -32,10 +32,9 @@ public class Rife2ProjectBlueprint extends WebProject {
         mainClass = packageName + "." + StringUtils.capitalize(projectName) + "Site";
         version = new VersionNumber(0,0,1);
 
-        downloadSources = true;
-
         precompiledTemplateTypes = List.of(TemplateType.HTML);
 
+        downloadSources = true;
         repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
         scope(compile)
             .include(dependency("com.uwyn.rife2", "rife2", Version.getVersionNumber()));

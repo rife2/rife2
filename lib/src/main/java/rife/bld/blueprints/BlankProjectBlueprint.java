@@ -31,7 +31,6 @@ public class BlankProjectBlueprint extends Project {
         version = new VersionNumber(0,0,1);
 
         downloadSources = true;
-
         repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
         scope(test)
             .include(dependency("org.junit.jupiter", "junit-jupiter", version(5,9,2)))
