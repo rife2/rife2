@@ -89,18 +89,4 @@ public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Ope
             TemplateFactory.XML.get(templateBase_ + "idea.libraries.standalone").getContent(),
             new File(ideaLibrariesDirectory_, "standalone.xml"));
     }
-
-    @Override
-    public void executeDownloadDependencies() {
-        super.executeDownloadDependencies();
-
-        var standalone_dependencies = project_.dependencies().get(Scope.standalone);
-        if (standalone_dependencies != null) {
-            var dependencies = new DependencySet();
-            for (var dependency : project_.dependencies().get(Scope.standalone)) {
-                dependencies.addAll(new DependencyResolver(project_.repositories(), dependency).getAllDependencies(Scope.compile, Scope.runtime));
-            }
-            dependencies.downloadIntoDirectory(project_.repositories(), project_.libStandaloneDirectory());
-        }
-    }
 }
