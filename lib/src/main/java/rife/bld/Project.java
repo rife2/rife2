@@ -183,6 +183,13 @@ public class Project extends BuildExecutor {
      */
     protected File srcBldJavaDirectory = null;
     /**
+     * The bld resources source code directory.
+     *
+     * @see #srcBldResourcesDirectory()
+     * @since 1.5.6
+     */
+    protected File srcBldResourcesDirectory = null;
+    /**
      * The main source code directory.
      *
      * @see #srcMainDirectory()
@@ -658,6 +665,16 @@ public class Project extends BuildExecutor {
     }
 
     /**
+     * Returns the project bld resources source code directory.
+     * Defaults to {@code "resources"} relative to {@link #srcMainDirectory()}.
+     *
+     * @since 1.5.5
+     */
+    public File srcBldResourcesDirectory() {
+        return Objects.requireNonNullElseGet(srcBldResourcesDirectory, () -> new File(srcBldDirectory(), "resources"));
+    }
+
+    /**
      * Returns the project main source code directory.
      * Defaults to {@code "main"} relative to {@link #srcDirectory()}.
      *
@@ -842,17 +859,24 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     public void createProjectStructure() {
-        srcMainJavaDirectory().mkdirs();
-        srcMainResourcesTemplatesDirectory().mkdirs();
+        srcDirectory().mkdirs();
+        srcBldDirectory().mkdirs();
         srcBldJavaDirectory().mkdirs();
+        srcBldResourcesDirectory().mkdirs();
+        srcMainDirectory().mkdirs();
+        srcMainJavaDirectory().mkdirs();
+        srcMainResourcesDirectory().mkdirs();
+        srcMainResourcesTemplatesDirectory().mkdirs();
+        srcTestDirectory().mkdirs();
         srcTestJavaDirectory().mkdirs();
-        libCompileDirectory().mkdirs();
+        libDirectory().mkdirs();
         libBldDirectory().mkdirs();
+        libCompileDirectory().mkdirs();
         libRuntimeDirectory().mkdirs();
-        libTestDirectory().mkdirs();
         if (libStandaloneDirectory() != null) {
             libStandaloneDirectory().mkdirs();
         }
+        libTestDirectory().mkdirs();
     }
 
     /**
@@ -861,9 +885,11 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     public void createBuildStructure() {
+        buildDirectory().mkdirs();
         buildBldDirectory().mkdirs();
         buildDistDirectory().mkdirs();
         buildMainDirectory().mkdirs();
+        buildTemplatesDirectory().mkdirs();
         buildTestDirectory().mkdirs();
     }
 

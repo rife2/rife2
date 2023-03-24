@@ -254,6 +254,7 @@ public class TestPurgeOperation {
                     /src
                     /src/bld
                     /src/bld/java
+                    /src/bld/resources
                     /src/main
                     /src/main/java
                     /src/main/resources
@@ -284,6 +285,7 @@ public class TestPurgeOperation {
                     /src
                     /src/bld
                     /src/bld/java
+                    /src/bld/resources
                     /src/main
                     /src/main/java
                     /src/main/resources

@@ -193,6 +193,10 @@ public class Wrapper {
         return Path.of(currentDir_.getAbsolutePath(), "src", "bld", "java").toFile();
     }
 
+    private File srcBldResourcesDirectory() {
+        return Path.of(currentDir_.getAbsolutePath(), "src", "bld", "resources").toFile();
+    }
+
     private File libBldDirectory() {
         return Path.of(currentDir_.getAbsolutePath(), "lib", "bld").toFile();
     }
@@ -270,12 +274,65 @@ public class Wrapper {
         return distribution_file;
     }
 
+    private void download(File file, String version)
+    throws IOException {
+        var download_url = downloadUrl(version);
+
+        try {
+            System.out.print("Downloading: " + download_url + " ... ");
+            System.out.flush();
+            var url = new URL(download_url);
+            var readableByteChannel = Channels.newChannel(url.openStream());
+            try (var fileOutputStream = new FileOutputStream(file)) {
+                var fileChannel = fileOutputStream.getChannel();
+                fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+
+                System.out.print("done");
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("not found");
+            System.err.println("Failed to download file " + file + ".");
+            throw e;
+        } catch (IOException e) {
+            System.err.println("error");
+            System.err.println("Failed to download file " + file + " due to I/O issue.");
+            Files.deleteIfExists(file.toPath());
+            throw e;
+        } finally {
+            System.out.println();
+        }
+    }
+
     private int launchMain(File jarFile, List<String> arguments)
     throws IOException, InterruptedException, FileUtilsErrorException {
         if (arguments.isEmpty() || !arguments.get(0).equals("--build")) {
             return launchMainCli(jarFile, arguments);
         }
+        return launchMainBuild(jarFile, arguments);
+    }
 
+    private int launchMainCli(File jarFile, List<String> arguments)
+    throws IOException, InterruptedException {
+        var args = new ArrayList<String>();
+        args.add("java");
+        includeJvmParameters(arguments, args);
+
+        args.add("-cp");
+        args.add(jarFile.getAbsolutePath());
+
+        args.add("-jar");
+        args.add(jarFile.getAbsolutePath());
+
+        args.addAll(arguments);
+
+        var process_builder = new ProcessBuilder(args);
+        process_builder.inheritIO();
+        var process = process_builder.start();
+        return process.waitFor();
+    }
+
+    private int launchMainBuild(File jarFile, List<String> arguments)
+    throws FileUtilsErrorException, IOException, InterruptedException {
         arguments.remove(0);
 
         var build_bld_dir = buildBldDirectory();
@@ -287,6 +344,7 @@ public class Wrapper {
         var bld_classpath = bldClasspathJars();
         bld_classpath.add(jarFile);
         bld_classpath.add(buildBldDirectory());
+        bld_classpath.add(srcBldResourcesDirectory());
         var classpath = FileUtils.joinPaths(FileUtils.combineToAbsolutePaths(bld_classpath));
 
         var compiler = ToolProvider.getSystemJavaCompiler();
@@ -344,55 +402,5 @@ public class Wrapper {
         var src_main_java_dir_abs = srcBldJavaDirectory().getAbsoluteFile();
         return FileUtils.getFileList(src_main_java_dir_abs, JAVA_FILE_PATTERN, null)
             .stream().map(file -> new File(src_main_java_dir_abs, file)).toList();
-    }
-
-
-    private int launchMainCli(File jarFile, List<String> arguments)
-    throws IOException, InterruptedException {
-        var args = new ArrayList<String>();
-        args.add("java");
-        includeJvmParameters(arguments, args);
-
-        args.add("-cp");
-        args.add(jarFile.getAbsolutePath());
-
-        args.add("-jar");
-        args.add(jarFile.getAbsolutePath());
-
-        args.addAll(arguments);
-
-        var process_builder = new ProcessBuilder(args);
-        process_builder.inheritIO();
-        var process = process_builder.start();
-        return process.waitFor();
-    }
-
-    private void download(File file, String version)
-    throws IOException {
-        var download_url = downloadUrl(version);
-
-        try {
-            System.out.print("Downloading: " + download_url + " ... ");
-            System.out.flush();
-            var url = new URL(download_url);
-            var readableByteChannel = Channels.newChannel(url.openStream());
-            try (var fileOutputStream = new FileOutputStream(file)) {
-                var fileChannel = fileOutputStream.getChannel();
-                fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-
-                System.out.print("done");
-            }
-        } catch (FileNotFoundException e) {
-            System.err.println("not found");
-            System.err.println("Failed to download file " + file + ".");
-            throw e;
-        } catch (IOException e) {
-            System.err.println("error");
-            System.err.println("Failed to download file " + file + " due to I/O issue.");
-            Files.deleteIfExists(file.toPath());
-            throw e;
-        } finally {
-            System.out.println();
-        }
     }
 }

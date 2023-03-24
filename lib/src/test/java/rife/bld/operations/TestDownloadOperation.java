@@ -172,6 +172,7 @@ public class TestDownloadOperation {
                     /src
                     /src/bld
                     /src/bld/java
+                    /src/bld/resources
                     /src/main
                     /src/main/java
                     /src/main/resources
@@ -212,6 +213,7 @@ public class TestDownloadOperation {
                     /src
                     /src/bld
                     /src/bld/java
+                    /src/bld/resources
                     /src/main
                     /src/main/java
                     /src/main/resources

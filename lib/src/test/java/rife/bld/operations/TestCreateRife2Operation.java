@@ -126,6 +126,7 @@ public class TestCreateRife2Operation {
                     /myapp/src/bld/java/com
                     /myapp/src/bld/java/com/example
                     /myapp/src/bld/java/com/example/MyappBuild\\.java
+                    /myapp/src/bld/resources
                     /myapp/src/main
                     /myapp/src/main/java
                     /myapp/src/main/java/com
@@ -212,6 +213,7 @@ public class TestCreateRife2Operation {
                     /myapp/src/bld/java/com
                     /myapp/src/bld/java/com/example
                     /myapp/src/bld/java/com/example/MyappBuild\\.java
+                    /myapp/src/bld/resources
                     /myapp/src/main
                     /myapp/src/main/java
                     /myapp/src/main/java/com
@@ -296,6 +298,7 @@ public class TestCreateRife2Operation {
                     /yourthing/src/bld/java/org
                     /yourthing/src/bld/java/org/stuff
                     /yourthing/src/bld/java/org/stuff/YourthingBuild.java
+                    /yourthing/src/bld/resources
                     /yourthing/src/main
                     /yourthing/src/main/java
                     /yourthing/src/main/java/org
@@ -426,6 +429,7 @@ public class TestCreateRife2Operation {
                 /myapp/src/bld/java/com
                 /myapp/src/bld/java/com/example
                 /myapp/src/bld/java/com/example/MyappBuild\\.java
+                /myapp/src/bld/resources
                 /myapp/src/main
                 /myapp/src/main/java
                 /myapp/src/main/java/com
@@ -567,6 +571,7 @@ public class TestCreateRife2Operation {
                 /myapp/src/bld/java/com
                 /myapp/src/bld/java/com/example
                 /myapp/src/bld/java/com/example/MyappBuild\\.java
+                /myapp/src/bld/resources
                 /myapp/src/main
                 /myapp/src/main/java
                 /myapp/src/main/java/com
