@@ -1701,13 +1701,11 @@ public final class StringUtils {
             return null;
         }
 
-        var new_string = new StringBuilder();
-        while (count > 0) {
-            new_string.append(source);
-            count--;
+        if (count > 0) {
+            return source.repeat(count);
+        } else {
+            return "";
         }
-
-        return new_string.toString();
     }
 
     /**
@@ -1748,10 +1746,7 @@ public final class StringUtils {
         }
 
         var strings = new ArrayList<String>();
-
-        while (iterator.hasNext()) {
-            strings.add(iterator.next());
-        }
+        iterator.forEachRemaining(strings::add);
 
         var string_array = new String[strings.size()];
         strings.toArray(string_array);
@@ -2137,15 +2132,15 @@ public final class StringUtils {
 
     /**
      * Creates a new {@code String} object, containing the elements of a
-     * supplied array, joined by a given a.
+     * supplied array, joined by a given separator.
      *
-     * @param array The char array containing the values to join.
-     * @param a     The a used to join the string elements.
+     * @param array     The char array containing the values to join.
+     * @param separator The separator used to join the string elements.
      * @return A new {@code String} with the join result.
      * @since 1.0
      */
-    public static String join(char[] array, String a) {
-        return join(array, a, null);
+    public static String join(char[] array, String separator) {
+        return join(array, separator, null);
     }
 
     /**
@@ -2411,18 +2406,15 @@ public final class StringUtils {
             return source;
         }
 
-        if (source.length() > 1 &&
-            Character.isUpperCase(source.charAt(0))) {
-            return source;
+        if (source.length() == 1) {
+            return source.toUpperCase(Localization.getLocale());
+        } else {
+            return source.substring(0, 1).toUpperCase(Localization.getLocale()) + source.substring(1);
         }
-
-        var chars = source.toCharArray();
-        chars[0] = Character.toUpperCase(chars[0]);
-        return new String(chars);
     }
 
     /**
-     * Ensure that the first character of the provided string lower case.
+     * Ensure that the first character of the provided string is lower case.
      *
      * @param source The {@code String} to uncapitalize.
      * @return The uncapitalized {@code String}.
@@ -2433,14 +2425,11 @@ public final class StringUtils {
             return source;
         }
 
-        if (source.length() > 1 &&
-            Character.isLowerCase(source.charAt(0))) {
-            return source;
+        if (source.length() == 1) {
+            return source.toLowerCase(Localization.getLocale());
+        } else {
+            return source.substring(0, 1).toLowerCase(Localization.getLocale()) + source.substring(1);
         }
-
-        var chars = source.toCharArray();
-        chars[0] = Character.toLowerCase(chars[0]);
-        return new String(chars);
     }
 
     private static String convertUrl(String source, Pattern pattern, boolean shorten, boolean sanitize, boolean no_follow) {
