@@ -1295,7 +1295,7 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns all the class path entries for compiling the main sources.
+     * Returns all the classpath entries for compiling the main sources.
      * <p>
      * By default, this converts the files from {@link #compileClasspathJars()} to absolute paths.
      *
@@ -1306,7 +1306,7 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns all the class path entries for compiling the test sources.
+     * Returns all the classpath entries for compiling the test sources.
      * <p>
      * By default, this converts the files from {@link #compileClasspathJars()} and
      * {@link #testClasspathJars()} to absolute paths, as well as the {@link #buildMainDirectory()}
@@ -1320,7 +1320,7 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns all the class path entries for running the application.
+     * Returns all the classpath entries for running the application.
      * <p>
      * By default, this converts the files from {@link #compileClasspathJars()},
      * {@link #runtimeClasspathJars()} and {@link #standaloneClasspathJars()} to absolute paths,
@@ -1336,7 +1336,7 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns all the class path entries for testing the application.
+     * Returns all the classpath entries for testing the application.
      * <p>
      * By default, this converts the files from {@link #compileClasspathJars()},
      * {@link #runtimeClasspathJars()} {@link #standaloneClasspathJars()} and {@link #testClasspathJars()}
