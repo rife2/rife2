@@ -168,20 +168,20 @@ class TemplateClassLoader extends ClassLoader {
             // setup everything to perform the conversion of the template to java sources
             // and to compile it into a java class
             var generation_path = RifeConfig.template().getGenerationPath() + File.separatorChar;
-            var packagedir = generation_path + template_package;
-            var filename_class = packagedir + File.separator + template_classname + ".class";
-            var file_packagedir = new File(packagedir);
+            var package_dir = generation_path + template_package;
+            var filename_class = package_dir + File.separator + template_classname + ".class";
+            var file_package_dir = new File(package_dir);
             var file_class = new File(filename_class);
 
             // prepare the package directory
-            if (!file_packagedir.exists()) {
-                if (!file_packagedir.mkdirs()) {
-                    throw new ClassNotFoundException("Couldn't create the template package directory : '" + packagedir + "'.");
+            if (!file_package_dir.exists()) {
+                if (!file_package_dir.mkdirs()) {
+                    throw new ClassNotFoundException("Couldn't create the template package directory : '" + package_dir + "'.");
                 }
-            } else if (!file_packagedir.isDirectory()) {
-                throw new ClassNotFoundException("The template package directory '" + packagedir + "' exists but is not a directory.");
-            } else if (!file_packagedir.canWrite()) {
-                throw new ClassNotFoundException("The template package directory '" + packagedir + "' is not writable.");
+            } else if (!file_package_dir.isDirectory()) {
+                throw new ClassNotFoundException("The template package directory '" + package_dir + "' exists but is not a directory.");
+            } else if (!file_package_dir.canWrite()) {
+                throw new ClassNotFoundException("The template package directory '" + package_dir + "' is not writable.");
             }
 
             try {

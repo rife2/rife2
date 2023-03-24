@@ -139,8 +139,14 @@ class EngineTemplateProcessor {
                 var attr_value_id = captured_groups[0];
                 if (!template_.isValueSet(attr_value_id)) {
                     var attr_name = captured_groups[1];
-                    if (attribute_names.contains(attr_name)) {
-                        var attr_value = String.valueOf(context_.attribute(attr_name));
+                    String attr_value = null;
+                    if (template_.hasAttribute(attr_name)) {
+                        attr_value = String.valueOf(template_.getAttribute(attr_name));
+                    }
+                    else if (attribute_names.contains(attr_name)) {
+                        attr_value = String.valueOf(context_.attribute(attr_name));
+                    }
+                    if (attr_value != null) {
                         template_.setValue(attr_value_id, encoder_.encode(attr_value));
                         setValues.add(attr_value_id);
                     }

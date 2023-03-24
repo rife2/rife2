@@ -12,13 +12,15 @@ plugins {
     signing
 }
 
-val rifeVersion by rootProject.extra { "1.5.0-SNAPSHOT" }
+val rifeVersion by rootProject.extra { "1.5.6-SNAPSHOT" }
 var rifeAgentName = "rife2-$rifeVersion-agent"
 val rifeAgentJar by rootProject.extra { "$rifeAgentName.jar" }
 var rifeAgentContinuationsName = "rife2-$rifeVersion-agent-continuations"
 val rifeAgentContinuationsJar by rootProject.extra { "$rifeAgentContinuationsName.jar" }
-var rifeStandaloneName = "rife2-$rifeVersion-standalone"
-val rifeStandaloneJar = "$rifeStandaloneName.jar"
+var rifeWrapperName = "bld-wrapper"
+val rifeWrapperJar = "$rifeWrapperName.jar"
+var rifeBldName = "rife2-$rifeVersion-bld"
+val rifeBldZip = "$rifeBldName.zip"
 
 group = "com.uwyn.rife2"
 version = rifeVersion
@@ -213,24 +215,36 @@ tasks {
         }
     }
 
-    val standaloneDependencies = configurations
-        .testCompileClasspath.get().files;
-    register<Jar>("standaloneJar") {
+    register<Jar>("wrapperJar") {
         dependsOn("jar")
 
-        archiveFileName.set(rifeStandaloneJar)
+        archiveFileName.set(rifeWrapperJar)
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        from(standaloneDependencies
-            .filter { it.toString().matches(".*((jetty[^/]+/11.*)|jakarta|slf4j|jsoup|junit|imagej|opentest4j|apiguardian|h2).*\\.jar".toRegex()) }
-            .map {
-                zipTree(it).matching { exclude (
-                    "IJ_Props.txt", "about.html", "about.jpg", "microscope.gif", "module-info.class",
-                    "META-INF/CHANGES*", "META-INF/LICENSE*", "META-INF/NOTICE*", "META-INF/README*") }
-            })
+        from(sourceSets.main.get().output)
+        include(
+            "rife/bld/wrapper/**",
+            "rife/tools/FileUtils*",
+            "rife/tools/InnerClassException*",
+            "rife/tools/exceptions/FileUtils*",
+            "RIFE_VERSION"
+        )
         manifest {
-            attributes["Main-Class"] = "rife.bld.Cli"
+            attributes["Main-Class"] = "rife.bld.wrapper.Wrapper"
         }
         with(jar.get())
+    }
+
+    register<Zip>("bldArchiveZip") {
+        dependsOn("wrapperJar")
+
+        archiveFileName.set(rifeBldZip)
+        from("build/libs") {
+            include(rifeWrapperJar)
+            rename { "bld/lib/$it" }
+        }
+        from("src/main/bld") {
+            rename { "bld/bin/$it" }
+        }
     }
 
     withType<Test> {
@@ -347,11 +361,11 @@ val agentContinuationsArtifact = artifacts.add("archives", agentContinuationsFil
     builtBy("agentContinuationsJar")
 }
 
-val standaloneFile = layout.buildDirectory.file("libs/$rifeStandaloneJar")
-val standaloneArtifact = artifacts.add("archives", standaloneFile.get().asFile) {
-    type = "jar"
-    classifier = "standalone"
-    builtBy("standaloneJar")
+val bldFile = layout.buildDirectory.file("distributions/$rifeBldZip")
+val bldArtifact = artifacts.add("archives", bldFile.get().asFile) {
+    type = "zip"
+    classifier = "bld"
+    builtBy("bldArchiveZip")
 }
 
 publishing {
@@ -360,7 +374,7 @@ publishing {
             artifactId = "rife2"
             artifact(agentArtifact)
             artifact(agentContinuationsArtifact)
-            artifact(standaloneArtifact)
+            artifact(bldArtifact)
             from(components["java"])
             pom {
                 name.set("RIFE2")

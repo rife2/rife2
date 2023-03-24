@@ -8,9 +8,10 @@ import org.junit.jupiter.api.Test;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
+import java.io.File;
 import java.nio.file.Files;
-import java.util.Collections;
-import java.util.List;
+import java.nio.file.Path;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static rife.bld.dependencies.Repository.*;
@@ -22,6 +23,9 @@ public class TestDependencyResolver {
     void testInstantiation() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)));
         assertNotNull(resolver);
+        assertTrue(resolver.repositories().contains(MAVEN_CENTRAL));
+        assertTrue(resolver.repositories().contains(SONATYPE_SNAPSHOTS));
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)), resolver.dependency());
     }
 
     @Test
@@ -86,15 +90,15 @@ public class TestDependencyResolver {
     @Test
     void testGetCompileDependenciesRIFE2() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2"));
-        var dependencies = resolver.getDependencies(compile);
+        var dependencies = resolver.getDirectDependencies(compile);
         assertNotNull(dependencies);
         assertEquals(0, dependencies.size());
     }
 
     @Test
     void testGetCompileDependenciesRIFE2Snapshot() {
-        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1,4,0,"SNAPSHOT")));
-        var dependencies = resolver.getDependencies(compile);
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0, "SNAPSHOT")));
+        var dependencies = resolver.getDirectDependencies(compile);
         assertNotNull(dependencies);
         assertEquals(0, dependencies.size());
     }
@@ -102,7 +106,7 @@ public class TestDependencyResolver {
     @Test
     void testGetCompileDependenciesJetty() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
-        var dependencies = resolver.getDependencies(compile);
+        var dependencies = resolver.getDirectDependencies(compile);
         assertNotNull(dependencies);
         assertEquals(4, dependencies.size());
         assertEquals("""
@@ -115,7 +119,7 @@ public class TestDependencyResolver {
     @Test
     void testGetCompileRuntimeDependenciesJunit() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.junit.jupiter", "junit-jupiter", new VersionNumber(5, 9, 2)));
-        var dependencies_compile = resolver.getDependencies(compile, runtime);
+        var dependencies_compile = resolver.getDirectDependencies(compile, runtime);
         assertNotNull(dependencies_compile);
         assertEquals(3, dependencies_compile.size());
         assertEquals("""
@@ -127,7 +131,7 @@ public class TestDependencyResolver {
     @Test
     void testGetCompileDependenciesSpringBoot() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.springframework.boot", "spring-boot-starter", new VersionNumber(3, 0, 4)));
-        var dependencies = resolver.getDependencies(compile);
+        var dependencies = resolver.getDirectDependencies(compile);
         assertNotNull(dependencies);
         assertEquals(6, dependencies.size());
         assertEquals("""
@@ -142,7 +146,7 @@ public class TestDependencyResolver {
     @Test
     void testGetCompileDependenciesMaven() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.apache.maven", "maven-core", new VersionNumber(3, 9, 0)));
-        var dependencies = resolver.getDependencies(compile);
+        var dependencies = resolver.getDirectDependencies(compile);
         assertNotNull(dependencies);
         assertEquals(26, dependencies.size());
         assertEquals("""
@@ -177,7 +181,7 @@ public class TestDependencyResolver {
     @Test
     void testGetCompileDependenciesPlay() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.typesafe.play", "play_2.13", new VersionNumber(2, 8, 19)));
-        var dependencies = resolver.getDependencies(compile);
+        var dependencies = resolver.getDirectDependencies(compile);
         assertNotNull(dependencies);
         assertEquals(25, dependencies.size());
         assertEquals("""
@@ -211,7 +215,7 @@ public class TestDependencyResolver {
     @Test
     void testGetCompileDependenciesVaadin() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.vaadin", "vaadin", new VersionNumber(23, 3, 7)));
-        var dependencies = resolver.getDependencies(compile);
+        var dependencies = resolver.getDirectDependencies(compile);
         assertNotNull(dependencies);
         assertEquals(9, dependencies.size());
         assertEquals("""
@@ -229,26 +233,31 @@ public class TestDependencyResolver {
     @Test
     void testGetCompileTransitiveDependenciesRIFE2() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2"));
-        var dependencies = resolver.getTransitiveDependencies(compile);
+        var dependencies = resolver.getAllDependencies(compile);
         assertNotNull(dependencies);
-        assertEquals(0, dependencies.size());
+        assertEquals(1, dependencies.size());
+        assertEquals("""
+            com.uwyn.rife2:rife2""", StringUtils.join(dependencies, "\n"));
     }
 
     @Test
     void testGetCompileTransitiveDependenciesRIFE2Snapshot() {
-        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1,4,0,"SNAPSHOT")));
-        var dependencies = resolver.getTransitiveDependencies(compile);
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0, "SNAPSHOT")));
+        var dependencies = resolver.getAllDependencies(compile);
         assertNotNull(dependencies);
-        assertEquals(0, dependencies.size());
+        assertEquals(1, dependencies.size());
+        assertEquals("""
+            com.uwyn.rife2:rife2:1.4.0-SNAPSHOT""", StringUtils.join(dependencies, "\n"));
     }
 
     @Test
     void testGetCompileTransitiveDependenciesJetty() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
-        var dependencies = resolver.getTransitiveDependencies(compile);
+        var dependencies = resolver.getAllDependencies(compile);
         assertNotNull(dependencies);
-        assertEquals(5, dependencies.size());
+        assertEquals(6, dependencies.size());
         assertEquals("""
+            org.eclipse.jetty:jetty-server:11.0.14
             org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api:5.0.2
             org.eclipse.jetty:jetty-http:11.0.14
             org.eclipse.jetty:jetty-io:11.0.14
@@ -257,12 +266,91 @@ public class TestDependencyResolver {
     }
 
     @Test
+    void testGetCompileTransitiveDependenciesJettyExclusion() {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS),
+            new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14))
+                .exclude("org.slf4j", "slf4j-api"));
+        var dependencies = resolver.getAllDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(5, dependencies.size());
+        assertEquals("""
+            org.eclipse.jetty:jetty-server:11.0.14
+            org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api:5.0.2
+            org.eclipse.jetty:jetty-http:11.0.14
+            org.eclipse.jetty:jetty-io:11.0.14
+            org.eclipse.jetty:jetty-util:11.0.14""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
+    void testGetCompileTransitiveDependenciesJettyFullGroupExclusion() {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS),
+            new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14))
+                .exclude("org.eclipse.jetty", "*"));
+        var dependencies = resolver.getAllDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(3, dependencies.size());
+        assertEquals("""
+            org.eclipse.jetty:jetty-server:11.0.14
+            org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api:5.0.2
+            org.slf4j:slf4j-api:2.0.5""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
+    void testGetCompileTransitiveDependenciesJettyFullArtifactExclusion() {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS),
+            new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14))
+                .exclude("*", "jetty-http")
+                .exclude("*", "slf4j-api"));
+        var dependencies = resolver.getAllDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(4, dependencies.size());
+        assertEquals("""
+            org.eclipse.jetty:jetty-server:11.0.14
+            org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api:5.0.2
+            org.eclipse.jetty:jetty-io:11.0.14
+            org.eclipse.jetty:jetty-util:11.0.14""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
+    void testGetCompileTransitiveDependenciesJettyFullExclusion() {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS),
+            new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14))
+                .exclude("*", "*"));
+        var dependencies = resolver.getAllDependencies(compile);
+        assertNotNull(dependencies);
+        assertEquals(1, dependencies.size());
+        assertEquals("""
+            org.eclipse.jetty:jetty-server:11.0.14""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
+    void testGetCompileTransitiveDependenciesJettyAndSlfj() {
+        var dependencies = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14))).getAllDependencies(compile);
+        var dependencies2 = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.slf4j", "slf4j-simple", new VersionNumber(2, 0, 6))).getAllDependencies(compile, runtime);
+        assertNotNull(dependencies);
+        assertNotNull(dependencies2);
+        assertEquals(6, dependencies.size());
+        assertEquals(2, dependencies2.size());
+        dependencies.addAll(dependencies2);
+        assertEquals(7, dependencies.size());
+        assertEquals("""
+            org.eclipse.jetty:jetty-server:11.0.14
+            org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api:5.0.2
+            org.eclipse.jetty:jetty-http:11.0.14
+            org.eclipse.jetty:jetty-io:11.0.14
+            org.eclipse.jetty:jetty-util:11.0.14
+            org.slf4j:slf4j-simple:2.0.6
+            org.slf4j:slf4j-api:2.0.6""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
     void testGetCompileRuntimeTransitiveDependenciesJunit() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.junit.jupiter", "junit-jupiter", new VersionNumber(5, 9, 2)));
-        var dependencies_compile = resolver.getTransitiveDependencies(compile, runtime);
+        var dependencies_compile = resolver.getAllDependencies(compile, runtime);
         assertNotNull(dependencies_compile);
-        assertEquals(7, dependencies_compile.size());
+        assertEquals(8, dependencies_compile.size());
         assertEquals("""
+            org.junit.jupiter:junit-jupiter:5.9.2
             org.junit.jupiter:junit-jupiter-api:5.9.2
             org.junit.jupiter:junit-jupiter-params:5.9.2
             org.junit.jupiter:junit-jupiter-engine:5.9.2
@@ -270,20 +358,22 @@ public class TestDependencyResolver {
             org.junit.platform:junit-platform-commons:1.9.2
             org.apiguardian:apiguardian-api:1.1.2
             org.junit.platform:junit-platform-engine:1.9.2""", StringUtils.join(dependencies_compile, "\n"));
-        var dependencies_runtime = resolver.getTransitiveDependencies(runtime);
+        var dependencies_runtime = resolver.getAllDependencies(runtime);
         assertNotNull(dependencies_runtime);
-        assertEquals(1, dependencies_runtime.size());
+        assertEquals(2, dependencies_runtime.size());
         assertEquals("""
+            org.junit.jupiter:junit-jupiter:5.9.2
             org.junit.jupiter:junit-jupiter-engine:5.9.2""", StringUtils.join(dependencies_runtime, "\n"));
     }
 
     @Test
     void testGetCompileTransitiveDependenciesSpringBoot() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.springframework.boot", "spring-boot-starter", new VersionNumber(3, 0, 4)));
-        var dependencies = resolver.getTransitiveDependencies(compile);
+        var dependencies = resolver.getAllDependencies(compile);
         assertNotNull(dependencies);
-        assertEquals(17, dependencies.size());
+        assertEquals(18, dependencies.size());
         assertEquals("""
+            org.springframework.boot:spring-boot-starter:3.0.4
             org.springframework.boot:spring-boot:3.0.4
             org.springframework.boot:spring-boot-autoconfigure:3.0.4
             org.springframework.boot:spring-boot-starter-logging:3.0.4
@@ -306,10 +396,11 @@ public class TestDependencyResolver {
     @Test
     void testGetCompileTransitiveDependenciesMaven() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.apache.maven", "maven-core", new VersionNumber(3, 9, 0)));
-        var dependencies = resolver.getTransitiveDependencies(compile);
+        var dependencies = resolver.getAllDependencies(compile);
         assertNotNull(dependencies);
-        assertEquals(31, dependencies.size());
+        assertEquals(32, dependencies.size());
         assertEquals("""
+            org.apache.maven:maven-core:3.9.0
             org.apache.maven:maven-model:3.9.0
             org.apache.maven:maven-settings:3.9.0
             org.apache.maven:maven-settings-builder:3.9.0
@@ -346,10 +437,11 @@ public class TestDependencyResolver {
     @Test
     void testGetCompileTransitiveDependenciesPlay() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.typesafe.play", "play_2.13", new VersionNumber(2, 8, 19)));
-        var dependencies = resolver.getTransitiveDependencies(compile);
+        var dependencies = resolver.getAllDependencies(compile);
         assertNotNull(dependencies);
-        assertEquals(47, dependencies.size());
+        assertEquals(48, dependencies.size());
         assertEquals("""
+            com.typesafe.play:play_2.13:2.8.19
             org.scala-lang:scala-library:2.13.10
             com.typesafe.play:build-link:2.8.19
             com.typesafe.play:play-streams_2.13:2.8.19
@@ -402,10 +494,11 @@ public class TestDependencyResolver {
     @Test
     void testGetCompileTransitiveDependenciesVaadin() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.vaadin", "vaadin", new VersionNumber(23, 3, 7)));
-        var dependencies = resolver.getTransitiveDependencies(compile);
+        var dependencies = resolver.getAllDependencies(compile);
         assertNotNull(dependencies);
-        assertEquals(87, dependencies.size());
+        assertEquals(88, dependencies.size());
         assertEquals("""
+            com.vaadin:vaadin:23.3.7
             com.vaadin:vaadin-core:23.3.7
             com.vaadin:vaadin-board-flow:23.3.7
             com.vaadin:vaadin-charts-flow:23.3.7
@@ -501,11 +594,11 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2"));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadTransitivelyIntoFolder(tmp, compile);
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(1, files.size());
-            assertTrue(files.contains("rife2-1.4.0.jar"));
+            assertTrue(files.get(0).matches("rife2-.+\\.jar"));
         } finally {
             FileUtils.deleteDirectory(tmp);
         }
@@ -514,10 +607,10 @@ public class TestDependencyResolver {
     @Test
     void testDownloadDependencySnapshot()
     throws Exception {
-        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1,4,0,"SNAPSHOT")));
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0, "SNAPSHOT")));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadTransitivelyIntoFolder(tmp, compile);
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(1, files.size());
@@ -533,7 +626,7 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadTransitivelyIntoFolder(tmp, compile);
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
             var files = FileUtils.getFileList(tmp);
             assertEquals(6, files.size());
             Collections.sort(files);
@@ -555,7 +648,7 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.junit.jupiter", "junit-jupiter", new VersionNumber(5, 9, 2)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadTransitivelyIntoFolder(tmp, compile, runtime);
+            resolver.getAllDependencies(compile, runtime).downloadIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(8, files.size());
@@ -580,7 +673,7 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.springframework.boot", "spring-boot-starter", new VersionNumber(3, 0, 4)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadTransitivelyIntoFolder(tmp, compile);
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(18, files.size());
@@ -615,7 +708,7 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.apache.maven", "maven-core", new VersionNumber(3, 9, 0)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadTransitivelyIntoFolder(tmp, compile);
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(32, files.size());
@@ -664,7 +757,7 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.typesafe.play", "play_2.13", new VersionNumber(2, 8, 19)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadTransitivelyIntoFolder(tmp, compile);
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(48, files.size());
@@ -729,7 +822,7 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.vaadin", "vaadin", new VersionNumber(23, 3, 7)));
         var tmp = Files.createTempDirectory("downloads").toFile();
         try {
-            resolver.downloadTransitivelyIntoFolder(tmp, compile);
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(88, files.size());
@@ -827,4 +920,54 @@ public class TestDependencyResolver {
             FileUtils.deleteDirectory(tmp);
         }
     }
+
+    @Test
+    void testDownloadCheckExisting()
+    throws Exception {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
+        var tmp = Files.createTempDirectory("downloads").toFile();
+        try {
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+
+            var modification_map = new HashMap<String, Long>();
+            Files.walk(Path.of(tmp.getAbsolutePath()))
+                .map(path -> path.toAbsolutePath().toString())
+                .filter(s -> !s.equals(tmp.getAbsolutePath()))
+                .forEach(it -> modification_map.put(it, new File(it).lastModified()));
+
+            // re-download and check the modification time didn't change
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+            Files.walk(Path.of(tmp.getAbsolutePath()))
+                .map(path -> path.toAbsolutePath().toString())
+                .filter(s -> !s.equals(tmp.getAbsolutePath()))
+                .forEach(it -> assertEquals(modification_map.get(it), new File(it).lastModified()));
+
+            // delete one file and check that this is downloaded again
+            var first = modification_map.keySet().stream().findFirst().get();
+            var first_file = new File(first);
+            first_file.delete();
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+            assertNotEquals(first_file.lastModified(), modification_map.get(first));
+            modification_map.put(first, first_file.lastModified());
+            Files.walk(Path.of(tmp.getAbsolutePath()))
+                .map(path -> path.toAbsolutePath().toString())
+                .filter(s -> !s.equals(tmp.getAbsolutePath()))
+                .forEach(it -> assertEquals(modification_map.get(it), new File(it).lastModified()));
+
+            // change one file and check that this is downloaded again
+            FileUtils.writeString("stuff", first_file);
+            var before_download_modified = first_file.lastModified();
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+            assertNotEquals(first_file.lastModified(), before_download_modified);
+            modification_map.put(first, first_file.lastModified());
+            Files.walk(Path.of(tmp.getAbsolutePath()))
+                .map(path -> path.toAbsolutePath().toString())
+                .filter(s -> !s.equals(tmp.getAbsolutePath()))
+                .forEach(it -> assertEquals(modification_map.get(it), new File(it).lastModified()));
+
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
 }

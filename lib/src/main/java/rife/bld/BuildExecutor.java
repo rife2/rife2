@@ -4,51 +4,79 @@
  */
 package rife.bld;
 
-import rife.bld.operations.*;
+import rife.bld.help.HelpHelp;
+import rife.bld.operations.HelpOperation;
+import rife.bld.operations.exceptions.ExitStatusException;
+import rife.ioc.HierarchicalProperties;
 import rife.tools.ExceptionUtils;
 
-import java.lang.reflect.Method;
 import java.util.*;
+import java.util.regex.Pattern;
 
+/**
+ * Base class that executes build commands from a list of arguments.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @see BuildCommand
+ * @see CommandDefinition
+ * @since 1.5
+ */
 public class BuildExecutor {
+    private final HierarchicalProperties properties_;
     private List<String> arguments_ = Collections.emptyList();
-    private Map<String, Method> buildCommands_ = null;
+    private Map<String, CommandDefinition> buildCommands_ = null;
+    private int exitStatus_ = 0;
 
-    public List<String> arguments() {
-        return arguments_;
+    /**
+     * Creates a new build executor instance.
+     * @since 1.5
+     */
+    public BuildExecutor() {
+        properties_ = new HierarchicalProperties().parent(HierarchicalProperties.createSystemInstance());
     }
 
-    public Map<String, Method> buildCommands() {
-        if (buildCommands_ == null) {
-            var build_commands = new TreeMap<String, Method>();
-
-            Class<?> klass = getClass();
-            while (klass != null) {
-                for (var method : klass.getDeclaredMethods()) {
-                    if (method.getParameters().length == 0 && method.isAnnotationPresent(BuildCommand.class)) {
-                        method.setAccessible(true);
-
-                        var name = method.getName();
-
-                        var annotation_name = method.getAnnotation(BuildCommand.class).value();
-                        if (annotation_name != null && !annotation_name.isEmpty()) {
-                            name = annotation_name;
-                        }
-
-                        build_commands.put(name, method);
-                    }
-                }
-
-                klass = klass.getSuperclass();
-            }
-
-            buildCommands_ = build_commands;
-        }
-
-        return buildCommands_;
+    /**
+     * Returns the properties uses by this conversation.
+     *
+     * @return the instance of {@code HierarchicalProperties} that is used
+     * by this build executor
+     * @since 1.5
+     */
+    public HierarchicalProperties properties() {
+        return properties_;
     }
 
-    public void processArguments(String[] arguments) {
+    /**
+     * Set the exist status to use at the end of the execution.
+     * 
+     * @param status sets the exit status
+     * @since 1.5.1
+     */
+    public void exitStatus(int status) {
+        exitStatus_ = status;
+    }
+
+    /**
+     * Retrieves the exit status.
+     *
+     * @return the exit status
+     * @since 1.5.1
+     */
+    public int exitStatus() {
+        return exitStatus_;
+    }
+
+    /**
+     * Execute the build commands from the provided arguments.
+     * <p>
+     * While the build is executing, the arguments can be retrieved
+     * using {@link #arguments()}.
+     *
+     * @param arguments the arguments to execute the build with
+     * @return the exist status
+     * @since 1.5.1
+     */
+    public int execute(String[] arguments) {
         arguments_ = new ArrayList<>(Arrays.asList(arguments));
 
         var show_help = arguments_.isEmpty();
@@ -57,11 +85,13 @@ public class BuildExecutor {
             var command = arguments_.remove(0);
 
             try {
-                if (executeCommand(command)) {
+                if (!executeCommand(command)) {
                     break;
                 }
-            } catch (Exception e) {
-                show_help = true;
+            } catch (Throwable e) {
+                exitStatus(1);
+                new HelpOperation(this, arguments()).executePrintOverviewHelp();
+                System.err.println();
                 System.err.println(ExceptionUtils.getExceptionStackTrace(e));
             }
         }
@@ -69,24 +99,152 @@ public class BuildExecutor {
         if (show_help) {
             help();
         }
+        
+        return exitStatus_;
     }
 
+    /**
+     * Starts the execution of the build. This method will call
+     * System.exit() when done with the appropriate exit status.
+     * 
+     * @param arguments the arguments to execute the build with
+     * @see #execute 
+     * @since 1.5.1
+     */
+    public void start(String[] arguments) {
+        System.exit(execute(arguments));
+    }
+
+    /**
+     * Retrieves the list of arguments that are being processed.
+     *
+     * @return the list of arguments
+     * @since 1.5
+     */
+    public List<String> arguments() {
+        return arguments_;
+    }
+
+    /**
+     * Retrieves the commands that can be executed by this {@code BuildExecutor}.
+     *
+     * @return a map containing the name of the build command and the method that
+     * corresponds to execution
+     * @see BuildCommand
+     * @since 1.5
+     */
+    public Map<String, CommandDefinition> buildCommands() {
+        if (buildCommands_ == null) {
+            var build_commands = new TreeMap<String, CommandDefinition>();
+
+            Class<?> klass = getClass();
+
+            try {
+                while (klass != null) {
+                    for (var method : klass.getDeclaredMethods()) {
+                        if (method.getParameters().length == 0 && method.isAnnotationPresent(BuildCommand.class)) {
+                            method.setAccessible(true);
+
+                            var name = method.getName();
+
+                            var annotation = method.getAnnotation(BuildCommand.class);
+
+                            var annotation_name = annotation.value();
+                            if (annotation_name != null && !annotation_name.isEmpty()) {
+                                name = annotation_name;
+                            }
+
+                            var build_help = annotation.help();
+                            CommandHelp command_help = null;
+                            if (build_help != null && build_help != CommandHelp.class) {
+                                command_help = build_help.getDeclaredConstructor().newInstance();
+                            }
+
+                            build_commands.put(name, new CommandAnnotated(this, method, command_help));
+                        }
+                    }
+
+                    klass = klass.getSuperclass();
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            buildCommands_ = build_commands;
+        }
+
+        return buildCommands_;
+    }
+
+    /**
+     * Performs the execution of a single command.
+     *
+     * @param command the name of the command to execute
+     * @return {@code true} when the command was found and executed; or
+     * {@code false} if the command couldn't be found
+     * @throws Throwable when an exception occurred during the command execution
+     * @see BuildCommand
+     * @since 1.5
+     */
     public boolean executeCommand(String command)
-    throws Exception {
-        var method = buildCommands().get(command);
-        if (method != null) {
-            method.invoke(this);
+    throws Throwable {
+        var definition = buildCommands().get(command);
+
+        // try to find a match for the provided command amongst
+        // the ones that are known
+        if (definition == null) {
+            // try to find starting matching options
+            var matches = new ArrayList<>(buildCommands().keySet().stream()
+                .filter(c -> c.toLowerCase().startsWith(command.toLowerCase()))
+                .toList());
+
+            if (matches.isEmpty()) {
+                // try to find fuzzy matching options
+                var fuzzy_regexp = new StringBuilder("^.*");
+                for (var ch : command.toCharArray()) {
+                    fuzzy_regexp.append("\\Q");
+                    fuzzy_regexp.append(ch);
+                    fuzzy_regexp.append("\\E.*");
+                }
+                fuzzy_regexp.append("$");
+                var fuzzy_pattern = Pattern.compile(fuzzy_regexp.toString());
+                matches.addAll(buildCommands().keySet().stream()
+                    .filter(c -> fuzzy_pattern.matcher(c.toLowerCase()).matches())
+                    .toList());
+            }
+
+            // only proceed if exactly one match was found
+            if (matches.size() == 1) {
+                var matched_command = matches.get(0);
+                System.out.println("Executing matched command: " + matched_command);
+                definition = buildCommands().get(matched_command);
+            }
+        }
+
+        // execute the command if we found one
+        if (definition != null) {
+            try {
+                definition.execute();
+            } catch (ExitStatusException e) {
+                exitStatus(e.getExitStatus());
+                return e.getExitStatus() == ExitStatusException.EXIT_SUCCESS;
+            }
         } else {
             System.err.println("ERROR: unknown command '" + command + "'");
-            System.out.println();
-            new HelpOperation(this, arguments_).printFullHelp();
-            return true;
+            System.err.println();
+            new HelpOperation(this, arguments()).executePrintOverviewHelp();
+            return false;
         }
-        return false;
+        return true;
     }
 
-    @BuildCommand(help = HelpOperation.Help.class)
+    /**
+     * The standard {@code help} command.
+     *
+     * @since 1.5
+     */
+    @BuildCommand(help = HelpHelp.class)
     public void help() {
-        new HelpOperation(this, arguments_).execute();
+        new HelpOperation(this, arguments()).execute();
     }
 }

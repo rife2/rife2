@@ -4,10 +4,20 @@
  */
 package rife.bld.dependencies;
 
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
-record PomDependency(String groupId, String artifactId, String version, String classifier, String type, String scope, String optional, Set<PomExclusion> exclusions) {
+/**
+ * Contains the information required to describe a dependency with all
+ * the details stored in a Maven POM descriptor.
+ * <p>
+ * This is used by the {@linkplain DependencyResolver} while traversing
+ * the dependency graph, eventually resulting into fully resolved
+ * {@linkplain Dependency} instances.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
+record PomDependency(PomDependency parent, String groupId, String artifactId, String version, String classifier, String type, String scope, String optional, ExclusionSet exclusions) {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

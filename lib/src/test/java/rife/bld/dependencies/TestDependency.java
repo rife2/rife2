@@ -5,10 +5,8 @@
 package rife.bld.dependencies;
 
 import org.junit.jupiter.api.Test;
-import rife.tools.StringUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static rife.bld.dependencies.Scope.compile;
 
 public class TestDependency {
     @Test
@@ -37,20 +35,60 @@ public class TestDependency {
         assertEquals("agent", dependency3.classifier());
         assertEquals("jar", dependency3.type());
 
-        var dependency4 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "standalone", "zip");
+        var dependency4 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "bld", "zip");
         assertNotNull(dependency4);
         assertEquals("com.uwyn.rife2", dependency4.groupId());
         assertEquals("rife2", dependency4.artifactId());
         assertEquals(new VersionNumber(1, 4, 0), dependency4.version());
-        assertEquals("standalone", dependency4.classifier());
+        assertEquals("bld", dependency4.classifier());
         assertEquals("zip", dependency4.type());
     }
 
-   @Test
+    @Test
+    void testBaseDependency() {
+        var dependency1 = new Dependency("com.uwyn.rife2", "rife2");
+        assertEquals(dependency1, dependency1.baseDependency());
+
+        var dependency2 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0));
+        assertEquals(dependency2, dependency1.baseDependency());
+
+        var dependency3 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent");
+        assertNotEquals(dependency3, dependency1.baseDependency());
+
+        var dependency4 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "bld", "zip");
+        assertNotEquals(dependency4, dependency1.baseDependency());
+    }
+
+    @Test
     void testToString() {
-       assertEquals("com.uwyn.rife2:rife2", new Dependency("com.uwyn.rife2", "rife2").toString());
-       assertEquals("com.uwyn.rife2:rife2:1.4.0", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)).toString());
-       assertEquals("com.uwyn.rife2:rife2:1.4.0:agent", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent").toString());
-       assertEquals("com.uwyn.rife2:rife2:1.4.0:standalone@zip", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "standalone", "zip").toString());
+        assertEquals("com.uwyn.rife2:rife2", new Dependency("com.uwyn.rife2", "rife2").toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)).toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0:agent", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent").toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0:bld@zip", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "bld", "zip").toString());
+    }
+
+    @Test
+    void testToFileName() {
+        assertEquals("rife2-0.0.0.jar", new Dependency("com.uwyn.rife2", "rife2").toFileName());
+        assertEquals("rife2-1.4.0.jar", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)).toFileName());
+        assertEquals("rife2-1.4.0-agent.jar", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent").toFileName());
+        assertEquals("rife2-1.4.0-bld.zip", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "bld", "zip").toFileName());
+    }
+
+    @Test
+    void testToParse() {
+        assertEquals("com.uwyn.rife2:rife2", Dependency.parse("com.uwyn.rife2:rife2").toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0", Dependency.parse("com.uwyn.rife2:rife2:1.4.0").toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0:agent", Dependency.parse("com.uwyn.rife2:rife2:1.4.0:agent").toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0:agent@zip", Dependency.parse("com.uwyn.rife2:rife2:1.4.0:agent@zip").toString());
+        assertEquals("com.uwyn.rife2:rife2@zip", Dependency.parse("com.uwyn.rife2:rife2@zip").toString());
+        assertEquals("com.uwyn.rife2:rife2:1.4.0@zip", Dependency.parse("com.uwyn.rife2:rife2:1.4.0@zip").toString());
+
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2").toString(), Dependency.parse("com.uwyn.rife2:rife2").toString());
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)).toString(), Dependency.parse("com.uwyn.rife2:rife2:1.4.0").toString());
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent").toString(), Dependency.parse("com.uwyn.rife2:rife2:1.4.0:agent").toString());
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent", "zip").toString(), Dependency.parse("com.uwyn.rife2:rife2:1.4.0:agent@zip").toString());
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", null, null, "zip").toString(), Dependency.parse("com.uwyn.rife2:rife2@zip").toString());
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), null, "zip").toString(), Dependency.parse("com.uwyn.rife2:rife2:1.4.0@zip").toString());
     }
 }

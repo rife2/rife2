@@ -20,6 +20,12 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+/**
+ * Factory for creating RIFE2 template instances.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.0
+ */
 public class TemplateFactory extends EnumClass<String> {
     public static TemplateFactory HTML = new TemplateFactory(TemplateConfig.XML,
         ResourceFinderClasspath.instance(),
@@ -256,11 +262,46 @@ public class TemplateFactory extends EnumClass<String> {
         return getMember(TemplateFactory.class, identifier);
     }
 
+    /**
+     * Creates a new {@code Template} instance for this factory using the
+     * default encoding.
+     * <p>
+     * Please read {@link #get(String, String)} for important additional information.
+     *
+     * @param name the name of the template
+     * @return the new template instance
+     * @throws TemplateException when an error occurred during the parsing or instantiation
+     * of the template
+     * @see #get(String, String)
+     * @since 1.0
+     */
     public Template get(String name)
     throws TemplateException {
         return get(name, null);
     }
 
+    /**
+     * Creates a new {@code Template} instance for this factory using the
+     * default encoding.
+     * <p>
+     * RIFE2's templates are parsed and converted into JVM bytecode. Each template
+     * effectively becomes a highly optimized Java class that is loaded by
+     * the regular classloader. This limits the characters that can be used for
+     * template names to the characters that Java accepts for class names.
+     * <p>
+     * The characters that are invalid Java class name characters will be replaced
+     * by underscores, except for {@code /} and {@code \}, which will be replaced
+     * by dots. The changes to the template name will propagate through to the template
+     * source file name that RIFE2 is looking for.
+     *
+     * @param name the name of the template
+     * @param encoding the text encoding of the template file
+     * @return the new template instance
+     * @throws TemplateException when an error occurred during the parsing or instantiation
+     * of the template
+     * @see #get(String)
+     * @since 1.0
+     */
     public Template get(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
@@ -306,7 +347,7 @@ public class TemplateFactory extends EnumClass<String> {
         }
     }
 
-    public Class parse(String name, String encoding)
+    public synchronized Class parse(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
         if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
@@ -372,7 +413,11 @@ public class TemplateFactory extends EnumClass<String> {
         return initializer_;
     }
 
-    private TemplateClassLoader getClassLoader() {
+    public synchronized void resetClassLoader() {
+        lastClassloader_ = null;
+    }
+
+    private synchronized TemplateClassLoader getClassLoader() {
         if (null == lastClassloader_) {
             setClassLoader(new TemplateClassLoader(this, getClass().getClassLoader()));
         }

@@ -4,71 +4,89 @@
  */
 package rife.bld.operations;
 
-import rife.bld.*;
+import rife.bld.NamedFile;
+import rife.bld.Project;
 import rife.tools.FileUtils;
-import rife.tools.StringUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.jar.Attributes;
+import java.util.regex.Pattern;
 
-public class UberJarOperation {
-    public static class Help implements BuildHelp {
-        public String getDescription() {
-            return "Creates an UberJar archive for a RIFE2 application";
-        }
-
-        public String getHelp(String topic) {
-            return StringUtils.replace("""
-                Creates an UberJar archive for a RIFE2 application.
-                The standard uberjar command will automatically also execute
-                the jar command beforehand.
-                            
-                Usage : ${topic}""", "${topic}", topic);
-        }
-    }
-
-    private List<File> jarSourceFiles_ = new ArrayList<>();
-    private List<NamedFile> resourceSourceDirectories_ = new ArrayList<>();
+/**
+ * Creates an uberjar archive of the provided jars and resources.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
+public class UberJarOperation extends AbstractOperation<UberJarOperation> {
+    private final List<File> jarSourceFiles_ = new ArrayList<>();
+    private final List<NamedFile> sourceDirectories_ = new ArrayList<>();
     private File destinationDirectory_;
     private String destinationFileName_;
     private String mainClass_;
 
-    public UberJarOperation() {
-    }
-
+    /**
+     * Performs the uberjar operation.
+     *
+     * @throws IOException when an exception occurred during the uberjar creation process
+     * @throws FileUtilsErrorException when an exception occurred during the uberjar creation process
+     * @since 1.5
+     */
     public void execute()
-    throws Exception {
+    throws IOException, FileUtilsErrorException {
         var tmp_dir = Files.createTempDirectory("uberjar").toFile();
         try {
-            collectSourceJarContents(tmp_dir);
-            collectSourceResources(tmp_dir);
-            createUberJarArchive(tmp_dir);
+            executeCollectSourceJarContents(tmp_dir);
+            executeCollectSourceResources(tmp_dir);
+            executeCreateUberJarArchive(tmp_dir);
+
+            if (!silent()) {
+                System.out.println("The uberjar archive was created at '" + new File(destinationDirectory(), destinationFileName()) + "'");
+            }
         } finally {
             FileUtils.deleteDirectory(tmp_dir);
         }
     }
 
-    public void collectSourceJarContents(File tmp_dir)
+    /**
+     * Part of the {@link #execute} operation, collect the contents of all the source jars.
+     *
+     * @since 1.5
+     */
+    public void executeCollectSourceJarContents(File stagingDirectory)
     throws FileUtilsErrorException {
         for (var jar : jarSourceFiles()) {
-            FileUtils.unzipFile(jar, tmp_dir);
+            FileUtils.unzipFile(jar, stagingDirectory);
         }
     }
 
-    public void collectSourceResources(File tmp_dir)
+    /**
+     * Part of the {@link #execute} operation, collect the source resources.
+     *
+     * @since 1.5
+     */
+    public void executeCollectSourceResources(File stagingDirectory)
     throws FileUtilsErrorException {
-        for (var named_file : resourceSourceDirectories()) {
-            var destination = new File(tmp_dir, named_file.name());
-            destination.mkdirs();
-            FileUtils.copyDirectory(named_file.file(), destination);
+        for (var named_file : sourceDirectories()) {
+            if (named_file.file().exists()) {
+                var destination_file = new File(stagingDirectory, named_file.name());
+                destination_file.mkdirs();
+                FileUtils.copyDirectory(named_file.file(), destination_file);
+            }
         }
     }
 
-    public void createUberJarArchive(File stagingDirectory)
-    throws Exception {
+    /**
+     * Part of the {@link #execute} operation, create the uberjar archive.
+     *
+     * @since 1.5
+     */
+    public void executeCreateUberJarArchive(File stagingDirectory)
+    throws IOException {
         var existing_manifest = new File(new File(stagingDirectory, "META-INF"), "MANIFEST.MF");
         existing_manifest.delete();
 
@@ -79,63 +97,142 @@ public class UberJarOperation {
             .sourceDirectories(List.of(stagingDirectory))
             .destinationDirectory(destinationDirectory())
             .destinationFileName(destinationFileName())
+            .excluded(List.of(Pattern.compile("(?:(?:^.*[/\\\\])|^)\\.DS_Store$")))
+            .silent(true)
             .execute();
     }
 
+    /**
+     * Configures an uberjar operation from a {@link Project}.
+     *
+     * @param project the project to configure the uberjar operation from
+     * @since 1.5
+     */
     public UberJarOperation fromProject(Project project) {
         var jars = new ArrayList<>(project.compileClasspathJars());
         jars.addAll(project.runtimeClasspathJars());
-        jars.addAll(project.standaloneClasspathJars());
         jars.add(new File(project.buildDistDirectory(), project.jarFileName()));
 
         return jarSourceFiles(jars)
-            .resourceSourceDirectories(List.of(new NamedFile("webapp", project.srcMainWebappDirectory())))
             .destinationDirectory(project.buildDistDirectory())
             .destinationFileName(project.uberJarFileName())
             .mainClass(project.uberJarMainClass());
     }
 
+    /**
+     * Provides the source jar files that will be used for the uberjar archive creation.
+     *
+     * @param files the jar source files
+     * @return this operation instance
+     * @since 1.5
+     */
     public UberJarOperation jarSourceFiles(List<File> files) {
-        jarSourceFiles_ = new ArrayList<>(files);
+        jarSourceFiles_.addAll(files);
         return this;
     }
 
-    public List<File> jarSourceFiles() {
-        return jarSourceFiles_;
-    }
-
-    public UberJarOperation resourceSourceDirectories(List<NamedFile> directories) {
-        resourceSourceDirectories_ = new ArrayList<>(directories);
+    /**
+     * Provides the source directories that will be used for the uberjar archive creation.
+     *
+     * @param directories the source directories
+     * @return this operation instance
+     * @since 1.5
+     */
+    public UberJarOperation sourceDirectories(List<NamedFile> directories) {
+        sourceDirectories_.addAll(directories);
         return this;
     }
 
-    public List<NamedFile> resourceSourceDirectories() {
-        return resourceSourceDirectories_;
-    }
-
+    /**
+     * Provides the destination directory in which the uberjar archive will be created.
+     *
+     * @param directory the uberjar destination directory
+     * @return this operation instance
+     * @since 1.5
+     */
     public UberJarOperation destinationDirectory(File directory) {
         destinationDirectory_ = directory;
         return this;
     }
 
-    public File destinationDirectory() {
-        return destinationDirectory_;
-    }
-
+    /**
+     * Provides the destination file name that will be used for the uberjar archive creation.
+     *
+     * @param name the uberjar archive destination file name
+     * @return this operation instance
+     * @since 1.5
+     */
     public UberJarOperation destinationFileName(String name) {
         destinationFileName_ = name;
         return this;
     }
 
-    public String destinationFileName() {
-        return destinationFileName_;
-    }
-
+    /**
+     * Provides the main class to run from the uberjar archive.
+     *
+     * @param name the main class to run
+     * @return this operation instance
+     * @since 1.5
+     */
     public UberJarOperation mainClass(String name) {
         mainClass_ = name;
         return this;
     }
 
+    /**
+     * Retrieves the list of jar source files that will be used for the
+     * uberjar archive creation.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the uberjar archive's jar source files
+     * @since 1.5
+     */
+    public List<File> jarSourceFiles() {
+        return jarSourceFiles_;
+    }
+
+    /**
+     * Retrieves the list of source directories that will be used for the
+     * uberjar archive creation.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the uberjar archive's source directories
+     * @since 1.5
+     */
+    public List<NamedFile> sourceDirectories() {
+        return sourceDirectories_;
+    }
+
+    /**
+     * Retrieves the destination directory in which the uberjar archive will
+     * be created.
+     *
+     * @return the uberjar archive's destination directory
+     * @since 1.5
+     */
+    public File destinationDirectory() {
+        return destinationDirectory_;
+    }
+
+    /**
+     * Retrieves the destination file name that will be used for the uberjar
+     * archive creation.
+     *
+     * @return the uberjar archive's destination file name
+     * @since 1.5
+     */
+    public String destinationFileName() {
+        return destinationFileName_;
+    }
+
+    /**
+     * Retrieves the main class to run from the uberjar archive.
+     *
+     * @return the main class to run
+     * @since 1.5
+     */
     public String mainClass() {
         return mainClass_;
     }

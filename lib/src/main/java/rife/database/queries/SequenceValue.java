@@ -19,8 +19,8 @@ public class SequenceValue extends AbstractQuery implements Cloneable, ReadQuery
     private String name_ = null;
     private Operation operation_ = null;
 
-    public static final Operation NEXT = new Operation("NEXT");
-    public static final Operation CURRENT = new Operation("CURRENT");
+    public static final Operation NEXT = Operation.NEXT;
+    public static final Operation CURRENT = Operation.CURRENT;
 
     public SequenceValue(Datasource datasource) {
         super(datasource);
@@ -106,6 +106,9 @@ public class SequenceValue extends AbstractQuery implements Cloneable, ReadQuery
     }
 
     public static class Operation extends EnumClass<String> {
+        public static final Operation NEXT = new Operation("NEXT");
+        public static final Operation CURRENT = new Operation("CURRENT");
+
         Operation(String identifier) {
             super(identifier);
         }

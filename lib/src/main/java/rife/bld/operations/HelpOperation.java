@@ -5,49 +5,57 @@
 package rife.bld.operations;
 
 import rife.Version;
-import rife.bld.*;
+import rife.bld.BuildExecutor;
 
 import java.util.List;
 
 import static java.util.Comparator.comparingInt;
 
+/**
+ * Provides help about the build system commands.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
 public class HelpOperation {
-    public static class Help implements BuildHelp {
-        public String getDescription() {
-            return "Provides help about any of the other commands";
-        }
-    }
-
     private final BuildExecutor executor_;
     private final List<String> arguments_;
 
+    /**
+     * Creates a new help operation.
+     *
+     * @param executor the build executor that commands are running into
+     * @param arguments the arguments that were provided to the build executor
+     * @since 1.5
+     */
     public HelpOperation(BuildExecutor executor, List<String> arguments) {
         executor_ = executor;
         arguments_ = arguments;
     }
 
+    /**
+     * Performs the help operation.
+     *
+     * @since 1.5
+     */
     public void execute() {
         var topic = "";
         if (!arguments_.isEmpty()) {
             topic = arguments_.remove(0);
         }
 
-        System.err.println("Welcome to the RIFE2 v" + Version.getVersion() + " CLI.");
+        System.err.println("Welcome to RIFE2 bld " + Version.getVersion() + ".");
         System.err.println();
 
         boolean print_full_help = true;
         try {
             var commands = executor_.buildCommands();
             if (commands.containsKey(topic)) {
-                var method = commands.get(topic);
-                var annotation = method.getAnnotation(BuildCommand.class);
-                var build_help = annotation.help();
-                if (build_help != BuildHelp.class) {
-                    var help = build_help.getDeclaredConstructor().newInstance().getHelp(topic);
-                    if (!help.isEmpty()) {
-                        System.err.println(help);
-                        print_full_help = false;
-                    }
+                var command = commands.get(topic);
+                var help = command.getHelp().getDescription(topic);
+                if (!help.isEmpty()) {
+                    System.err.println(help);
+                    print_full_help = false;
                 }
             }
         } catch (Exception e) {
@@ -55,23 +63,24 @@ public class HelpOperation {
         }
 
         if (print_full_help) {
-            try {
-                printFullHelp();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            executePrintOverviewHelp();
         }
     }
 
-    public void printFullHelp()
-    throws Exception {
+    /**
+     * Part of the {@link #execute} operation, prints the help overview
+     * with summaries of all build commands.
+     *
+     * @since 1.5
+     */
+    public void executePrintOverviewHelp() {
         var commands = executor_.buildCommands();
 
         System.err.println("""
             The RIFE2 CLI provides its features through a series of commands that
             perform specific tasks. The help command provides more information about
             the other commands.
-            
+                        
             Usage : help [command]
 
             The following commands are supported.
@@ -81,12 +90,8 @@ public class HelpOperation {
         for (var command : commands.entrySet()) {
             System.err.print("  ");
             System.err.printf("%-" + command_length + "s", command.getKey());
-            var method = command.getValue();
-            var annotation = method.getAnnotation(BuildCommand.class);
-            var build_help = annotation.help();
-            if (build_help != BuildHelp.class) {
-                System.err.print(build_help.getDeclaredConstructor().newInstance().getDescription());
-            }
+            var build_help = command.getValue().getHelp();
+            System.err.print(build_help.getSummary());
             System.err.println();
         }
     }

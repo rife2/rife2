@@ -52,15 +52,13 @@ import java.util.logging.Logger;
  */
 public class OrdinalManager implements Cloneable {
     /**
-     * Has to be used to indicate an upwards direction for the {@link
-     * #move(Direction, int) move} method.
+     * @see Direction#UP
      */
-    public static final Direction UP = new Direction("up");
+    public static final Direction UP = Direction.UP;
     /**
-     * Has to be used to indicate a downwards direction for the {@link
-     * #move(Direction, int) move} method.
+     * @see Direction#DOWN
      */
-    public static final Direction DOWN = new Direction("down");
+    public static final Direction DOWN = Direction.DOWN;
 
     private final Datasource datasource_;
     private final DbQueryManager dbQueryManager_;
@@ -788,6 +786,17 @@ public class OrdinalManager implements Cloneable {
     }
 
     public static class Direction extends EnumClass<String> {
+        /**
+         * Has to be used to indicate an upwards direction for the {@link
+         * #move(Direction, int) move} method.
+         */
+        public static final Direction UP = new Direction("up");
+        /**
+         * Has to be used to indicate a downwards direction for the {@link
+         * #move(Direction, int) move} method.
+         */
+        public static final Direction DOWN = new Direction("down");
+
         private Direction(String identifier) {
             super(identifier);
         }

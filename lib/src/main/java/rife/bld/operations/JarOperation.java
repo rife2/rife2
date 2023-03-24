@@ -4,7 +4,8 @@
  */
 package rife.bld.operations;
 
-import rife.bld.*;
+import rife.bld.NamedFile;
+import rife.bld.Project;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
@@ -13,65 +14,80 @@ import java.util.*;
 import java.util.jar.*;
 import java.util.regex.Pattern;
 
-public class JarOperation {
-    public static class Help implements BuildHelp {
-        public String getDescription() {
-            return "Creates a jar archive for a RIFE2 application";
-        }
-
-        public String getHelp(String topic) {
-            return StringUtils.replace("""
-                Creates a jar archive for a RIFE2 application.
-                The standard jar command will automatically also execute
-                the clean, compile and precompile commands beforehand.
-                            
-                Usage : ${topic}""", "${topic}", topic);
-        }
-    }
-
-    private Map<Attributes.Name, Object> manifestAttributes_ = new HashMap();
-    private List<File> sourceDirectories_ = new ArrayList<>();
-    private List<NamedFile> sourceFiles_ = new ArrayList<>();
+/**
+ * Creates a jar archive of the provided sources and directories.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5
+ */
+public class JarOperation extends AbstractOperation<JarOperation> {
+    private final Map<Attributes.Name, Object> manifestAttributes_ = new HashMap<>();
+    private final List<File> sourceDirectories_ = new ArrayList<>();
+    private final List<NamedFile> sourceFiles_ = new ArrayList<>();
     private File destinationDirectory_;
     private String destinationFileName_;
-    private List<Pattern> included_ = new ArrayList<>();
-    private List<Pattern> excluded_ = new ArrayList<>();
+    private final List<Pattern> included_ = new ArrayList<>();
+    private final List<Pattern> excluded_ = new ArrayList<>();
 
     private final byte[] buffer_ = new byte[1024];
 
-    public JarOperation() {
-    }
-
+    /**
+     * Performs the jar operation.
+     *
+     * @throws IOException when an exception occurred during the jar creation process
+     * @since 1.5
+     */
     public void execute()
-    throws Exception {
-        createDestinationDirectory();
-        createJarFile();
+    throws IOException {
+        executeCreateDestinationDirectory();
+        executeCreateJarArchive();
+
+        if (!silent()) {
+            System.out.println("The jar archive was created at '" + new File(destinationDirectory(), destinationFileName()) + "'");
+        }
     }
 
-    public void createDestinationDirectory() {
+    /**
+     * Part of the {@link #execute} operation, create the destination directory.
+     *
+     * @since 1.5
+     */
+    public void executeCreateDestinationDirectory() {
         destinationDirectory().mkdirs();
     }
 
-    public void createJarFile()
+    /**
+     * Part of the {@link #execute} operation, create the jar archive.
+     *
+     * @since 1.5
+     */
+    public void executeCreateJarArchive()
     throws IOException {
         var out_file = new File(destinationDirectory(), destinationFileName());
-        try (var jar = new JarOutputStream(new FileOutputStream(out_file), createManifest())) {
+        try (var jar = new JarOutputStream(new FileOutputStream(out_file), executeCreateManifest())) {
             for (var source_dir : sourceDirectories()) {
                 for (var file_name : FileUtils.getFileList(source_dir)) {
                     var file = new File(source_dir, file_name);
                     if (StringUtils.filter(file.getAbsolutePath(), included(), excluded())) {
-                        addFileToJar(jar, new NamedFile(file_name, file));
+                        executeAddFileToJar(jar, new NamedFile(file_name, file));
                     }
                 }
             }
             for (var source_file : sourceFiles()) {
-                addFileToJar(jar, source_file);
+                if (StringUtils.filter(source_file.file().getAbsolutePath(), included(), excluded())) {
+                    executeAddFileToJar(jar, source_file);
+                }
             }
             jar.flush();
         }
     }
 
-    public Manifest createManifest() {
+    /**
+     * Part of the {@link #execute} operation, create the manifest for the jar archive.
+     *
+     * @since 1.5
+     */
+    public Manifest executeCreateManifest() {
         var manifest = new Manifest();
         var attributes = manifest.getMainAttributes();
         // don't use putAll since Attributes does an instanceof check
@@ -83,9 +99,14 @@ public class JarOperation {
         return manifest;
     }
 
-    private void addFileToJar(JarOutputStream jar, NamedFile file)
+    /**
+     * Part of the {@link #execute} operation, add a single file to the jar archive.
+     *
+     * @since 1.5
+     */
+    private void executeAddFileToJar(JarOutputStream jar, NamedFile file)
     throws IOException {
-        var entry = new JarEntry(file.name());
+        var entry = new JarEntry(file.name().replace('\\', '/'));
         entry.setTime(file.file().lastModified());
         jar.putNextEntry(entry);
 
@@ -98,6 +119,12 @@ public class JarOperation {
         }
     }
 
+    /**
+     * Configures a jar operation from a {@link Project}.
+     *
+     * @param project the project to configure the jar operation from
+     * @since 1.5
+     */
     public JarOperation fromProject(Project project) {
         return manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
             .sourceDirectories(List.of(project.buildMainDirectory(), project.srcMainResourcesDirectory()))
@@ -106,65 +133,174 @@ public class JarOperation {
             .excluded(List.of(Pattern.compile("^\\Q" + project.srcMainResourcesTemplatesDirectory().getAbsolutePath() + "\\E.*")));
     }
 
+    /**
+     * Provides a map of attributes to put in the jar manifest.
+     *
+     * @param attributes the attributes to put in the manifest
+     * @return this operation instance
+     * @since 1.5
+     */
     public JarOperation manifestAttributes(Map<Attributes.Name, Object> attributes) {
-        manifestAttributes_ = new HashMap<>(attributes);
+        manifestAttributes_.putAll(attributes);
         return this;
     }
 
-    public Map<Attributes.Name, Object> manifestAttributes() {
-        return manifestAttributes_;
-    }
-
-    public JarOperation sourceDirectories(List<File> sources) {
-        sourceDirectories_ = new ArrayList<>(sources);
+    /**
+     * Provides the source directories that will be used for the jar archive creation.
+     *
+     * @param directories the source directories
+     * @return this operation instance
+     * @since 1.5
+     */
+    public JarOperation sourceDirectories(List<File> directories) {
+        sourceDirectories_.addAll(directories);
         return this;
     }
 
-    public List<File> sourceDirectories() {
-        return sourceDirectories_;
-    }
-
-    public JarOperation sourceFiles(List<NamedFile> sources) {
-        sourceFiles_ = new ArrayList<>(sources);
+    /**
+     * Provides the source files that will be used for the jar archive creation.
+     *
+     * @param files the source files
+     * @return this operation instance
+     * @since 1.5
+     */
+    public JarOperation sourceFiles(List<NamedFile> files) {
+        sourceFiles_.addAll(files);
         return this;
     }
 
-    public List<NamedFile> sourceFiles() {
-        return sourceFiles_;
-    }
-
+    /**
+     * Provides the destination directory in which the jar archive will be created.
+     *
+     * @param directory the jar destination directory
+     * @return this operation instance
+     * @since 1.5
+     */
     public JarOperation destinationDirectory(File directory) {
         destinationDirectory_ = directory;
         return this;
     }
 
-    public File destinationDirectory() {
-        return destinationDirectory_;
-    }
-
+    /**
+     * Provides the destination file name that will be used for the jar archive creation.
+     *
+     * @param name the jar archive destination file name
+     * @return this operation instance
+     * @since 1.5
+     */
     public JarOperation destinationFileName(String name) {
         destinationFileName_ = name;
         return this;
     }
 
+    /**
+     * Provides a list of patterns that will be evaluated to determine which files
+     * will be included in the jar archive.
+     *
+     * @param included the list of inclusion patterns
+     * @return this operation instance
+     * @since 1.5
+     */
+    public JarOperation included(List<Pattern> included) {
+        included_.addAll(included);
+        return this;
+    }
+
+    /**
+     * Provides a list of patterns that will be evaluated to determine which files
+     * will be excluded from the jar archive.
+     *
+     * @param excluded the list of exclusion patterns
+     * @return this operation instance
+     * @since 1.5
+     */
+    public JarOperation excluded(List<Pattern> excluded) {
+        excluded_.addAll(excluded);
+        return this;
+    }
+
+    /**
+     * Retrieves the map of attributes that will be put in the jar manifest.
+     * <p>
+     * This is a modifiable map that can be retrieved and changed.
+     *
+     * @return the manifest's attributes map
+     * @since 1.5
+     */
+    public Map<Attributes.Name, Object> manifestAttributes() {
+        return manifestAttributes_;
+    }
+
+    /**
+     * Retrieves the list of source directories that will be used for the
+     * jar archive creation.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the jar archive's source directories
+     * @since 1.5
+     */
+    public List<File> sourceDirectories() {
+        return sourceDirectories_;
+    }
+
+    /**
+     * Retrieves the list of source files that will be used for the
+     * jar archive creation.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the jar archive's source files
+     * @since 1.5
+     */
+    public List<NamedFile> sourceFiles() {
+        return sourceFiles_;
+    }
+
+    /**
+     * Retrieves the destination directory in which the jar archive will
+     * be created.
+     *
+     * @return the jar archive's destination directory
+     * @since 1.5
+     */
+    public File destinationDirectory() {
+        return destinationDirectory_;
+    }
+
+    /**
+     * Retrieves the destination file name that will be used for the jar
+     * archive creation.
+     *
+     * @return the jar archive's destination file name
+     * @since 1.5
+     */
     public String destinationFileName() {
         return destinationFileName_;
     }
 
-    public JarOperation included(List<Pattern> included) {
-        included_ = new ArrayList<>(included);
-        return this;
-    }
-
+    /**
+     * Retrieves the list of patterns that will be evaluated to determine which files
+     * will be included in the jar archive.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the jar's archive's inclusion patterns
+     * @since 1.5
+     */
     public List<Pattern> included() {
         return included_;
     }
 
-    public JarOperation excluded(List<Pattern> excluded) {
-        excluded_ = new ArrayList<>(excluded);
-        return this;
-    }
-
+    /**
+     * Retrieves the list of patterns that will be evaluated to determine which files
+     * will be excluded the jar archive.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the jar's archive's exclusion patterns
+     * @since 1.5
+     */
     public List<Pattern> excluded() {
         return excluded_;
     }

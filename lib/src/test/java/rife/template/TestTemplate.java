@@ -1132,4 +1132,37 @@ public class TestTemplate {
         assertSame(template, template.getAttributes().get("template"));
         assertSame(cal, template.getAttributes().get("cal"));
     }
+
+    @Test
+    void testGetValueOrAttribute() {
+        var template1 = TemplateFactory.HTML.get("values");
+
+        assertNull(template1.getValue("VALUE1"));
+        assertNull(template1.getAttribute("VALUE1"));
+        assertNull(template1.getValueOrAttribute("VALUE1"));
+
+        template1.setValue("VALUE1", "CONTENT");
+        template1.setAttribute("VALUE1", new StringBuilder("DATA"));
+
+        assertEquals("CONTENT", template1.getValueOrAttribute("VALUE1"));
+        template1.removeValue("VALUE1");
+        assertEquals("DATA", template1.getValueOrAttribute("VALUE1"));
+        template1.removeAttribute("VALUE1");
+        assertNull(template1.getValueOrAttribute("VALUE1"));
+
+        var template2 = TemplateFactory.HTML.get("defaultvalues_in");
+
+        assertEquals("default1", template2.getValue("VALUE1"));
+        assertNull(template2.getAttribute("VALUE1"));
+        assertEquals("default1", template2.getValueOrAttribute("VALUE1"));
+        
+        template2.setValue("VALUE1", "CONTENT");
+        template2.setAttribute("VALUE1", new StringBuilder("DATA"));
+
+        assertEquals("CONTENT", template2.getValueOrAttribute("VALUE1"));
+        template2.removeValue("VALUE1");
+        assertEquals("DATA", template2.getValueOrAttribute("VALUE1"));
+        template2.removeAttribute("VALUE1");
+        assertEquals("default1", template2.getValueOrAttribute("VALUE1"));
+    }
 }

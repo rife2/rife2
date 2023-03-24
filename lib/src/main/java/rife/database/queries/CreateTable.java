@@ -13,8 +13,6 @@ import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.tools.ClassUtils;
 import rife.tools.StringUtils;
-import rife.validation.Constrained;
-import rife.validation.ConstrainedBean;
 import rife.validation.ConstrainedProperty;
 import rife.validation.ConstrainedUtils;
 
@@ -44,14 +42,14 @@ public class CreateTable extends AbstractQuery implements Cloneable {
     private List<UniqueConstraint> uniqueConstraints_ = null;
     private List<CheckConstraint> checkConstraints_ = null;
 
-    public static final Nullable NULL = new Nullable("NULL");
-    public static final Nullable NOTNULL = new Nullable("NOTNULL");
+    public static final Nullable NULL = Nullable.NULL;
+    public static final Nullable NOTNULL = Nullable.NOTNULL;
 
-    public static final ViolationAction NOACTION = new ViolationAction("NOACTION");
-    public static final ViolationAction RESTRICT = new ViolationAction("RESTRICT");
-    public static final ViolationAction CASCADE = new ViolationAction("CASCADE");
-    public static final ViolationAction SETNULL = new ViolationAction("SETNULL");
-    public static final ViolationAction SETDEFAULT = new ViolationAction("SETDEFAULT");
+    public static final ViolationAction NOACTION = ViolationAction.NOACTION;
+    public static final ViolationAction RESTRICT = ViolationAction.RESTRICT;
+    public static final ViolationAction CASCADE = ViolationAction.CASCADE;
+    public static final ViolationAction SETNULL = ViolationAction.SETNULL;
+    public static final ViolationAction SETDEFAULT = ViolationAction.SETDEFAULT;
 
     public CreateTable(Datasource datasource) {
         super(datasource);
@@ -1137,12 +1135,21 @@ public class CreateTable extends AbstractQuery implements Cloneable {
     }
 
     public static class ViolationAction extends EnumClass<String> {
+        public static final ViolationAction NOACTION = new ViolationAction("NOACTION");
+        public static final ViolationAction RESTRICT = new ViolationAction("RESTRICT");
+        public static final ViolationAction CASCADE = new ViolationAction("CASCADE");
+        public static final ViolationAction SETNULL = new ViolationAction("SETNULL");
+        public static final ViolationAction SETDEFAULT = new ViolationAction("SETDEFAULT");
+
         ViolationAction(String identifier) {
             super(identifier);
         }
     }
 
     public static class Nullable extends EnumClass<String> {
+        public static final Nullable NULL = new Nullable("NULL");
+        public static final Nullable NOTNULL = new Nullable("NOTNULL");
+
         Nullable(String identifier) {
             super(identifier);
         }

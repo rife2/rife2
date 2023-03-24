@@ -8,13 +8,13 @@ import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.*;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -22,19 +22,22 @@ import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public final class FileUtils {
+    public static final Pattern JAVA_FILE_PATTERN = Pattern.compile("^.*\\.java$");
+    public static final Pattern JAR_FILE_PATTERN = Pattern.compile("^.*\\.jar$");
+
     private FileUtils() {
         // no-op
     }
 
-    public static ArrayList<String> getFileList(File file) {
+    public static List<String> getFileList(File file) {
         return getFileList(file, null, null, true);
     }
 
-    public static ArrayList<String> getFileList(File file, Pattern included, Pattern excluded) {
+    public static List<String> getFileList(File file, Pattern included, Pattern excluded) {
         return getFileList(file, new Pattern[]{included}, new Pattern[]{excluded}, true);
     }
 
-    public static ArrayList<String> getFileList(File file, List<Pattern> included, List<Pattern> excluded) {
+    public static List<String> getFileList(File file, List<Pattern> included, List<Pattern> excluded) {
         var included_array = new Pattern[included.size()];
         var excluded_array = new Pattern[excluded.size()];
         included.toArray(included_array);
@@ -42,9 +45,9 @@ public final class FileUtils {
         return getFileList(file, included_array, excluded_array, true);
     }
 
-    private static ArrayList<String> getFileList(File file, Pattern[] included, Pattern[] excluded, boolean root) {
+    private static List<String> getFileList(File file, Pattern[] included, Pattern[] excluded, boolean root) {
         if (null == file) {
-            return new ArrayList<String>();
+            return new ArrayList<>();
         }
 
         var file_list = new ArrayList<String>();
@@ -58,7 +61,7 @@ public final class FileUtils {
                     for (var file_name : dir) {
                         if (root) {
                             // if the file is not accepted, don't process it further
-                            if (!StringUtils.filter(file_name, included, excluded)) {
+                            if (!filter(file_name, included, excluded)) {
                                 continue;
                             }
 
@@ -83,7 +86,7 @@ public final class FileUtils {
             var file_name = file.getName();
 
             if (root) {
-                if (StringUtils.filter(file_name, included, excluded)) {
+                if (filter(file_name, included, excluded)) {
                     file_list.add(file_name);
                 }
             } else {
@@ -92,6 +95,42 @@ public final class FileUtils {
         }
 
         return file_list;
+    }
+
+    // added to remove dependency on StringUtils for the use of the build system wrapper
+    private static boolean filter(String name, Pattern[] included, Pattern[] excluded) {
+        if (null == name) {
+            return false;
+        }
+
+        var accepted = false;
+
+        // retain only the includes
+        if (null == included || included.length == 0) {
+            accepted = true;
+        } else {
+            for (var pattern : included) {
+                if (pattern != null &&
+                    pattern.matcher(name).matches()) {
+                    accepted = true;
+                    break;
+                }
+            }
+        }
+
+        // remove the excludes
+        if (accepted &&
+            excluded != null) {
+            for (var pattern : excluded) {
+                if (pattern != null &&
+                    pattern.matcher(name).matches()) {
+                    accepted = false;
+                    break;
+                }
+            }
+        }
+
+        return accepted;
     }
 
     public static void moveFile(File source, File target)
@@ -447,13 +486,6 @@ public final class FileUtils {
         }
     }
 
-    public static String convertPathToSystemSeperator(String path) {
-        if (null == path) throw new IllegalArgumentException("path can't be null.");
-
-        var path_parts = StringUtils.split(path, "/");
-        return StringUtils.join(path_parts, File.separator);
-    }
-
     public static void deleteFile(File file) {
         if (null == file) throw new IllegalArgumentException("file can't be null.");
 
@@ -592,5 +624,29 @@ public final class FileUtils {
         }
 
         return ext;
+    }
+
+    @SafeVarargs
+    public static List<String> combineToAbsolutePaths(List<File>... files) {
+        var result = new ArrayList<String>();
+        for (var list : files) {
+            for (var file : list) {
+                result.add(file.getAbsolutePath());
+            }
+        }
+        return result;
+    }
+
+    public static String generateDirectoryListing(File directory)
+    throws IOException {
+        return Files.walk(Path.of(directory.getAbsolutePath()))
+            .map(path -> path.toAbsolutePath().toString().substring(directory.getAbsolutePath().length()))
+            .filter(s -> !s.isEmpty())
+            .sorted()
+            .collect(Collectors.joining(System.lineSeparator()));
+    }
+
+    public static String joinPaths(List<String> paths) {
+        return String.join(File.pathSeparator, paths);
     }
 }

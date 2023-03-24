@@ -16,7 +16,6 @@ import rife.datastructures.EnumClass;
 import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.tools.StringUtils;
-import rife.validation.Constrained;
 import rife.validation.ConstrainedBean;
 import rife.validation.ConstrainedUtils;
 
@@ -50,16 +49,16 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
 
     private Class constrainedClass_ = null;
 
-    public static final JoinCondition NATURAL = new JoinCondition("NATURAL");
-    public static final JoinCondition ON = new JoinCondition("ON");
-    public static final JoinCondition USING = new JoinCondition("USING");
+    public static final JoinCondition NATURAL = JoinCondition.NATURAL;
+    public static final JoinCondition ON = JoinCondition.ON;
+    public static final JoinCondition USING = JoinCondition.USING;
 
-    public static final JoinType LEFT = new JoinType("LEFT");
-    public static final JoinType RIGHT = new JoinType("RIGHT");
-    public static final JoinType FULL = new JoinType("FULL");
+    public static final JoinType LEFT = JoinType.LEFT;
+    public static final JoinType RIGHT = JoinType.RIGHT;
+    public static final JoinType FULL = JoinType.FULL;
 
-    public static final OrderByDirection ASC = new OrderByDirection("ASC");
-    public static final OrderByDirection DESC = new OrderByDirection("DESC");
+    public static final OrderByDirection ASC = OrderByDirection.ASC;
+    public static final OrderByDirection DESC = OrderByDirection.DESC;
 
     public Select(Datasource datasource) {
         this(datasource, null);
@@ -863,18 +862,29 @@ public class Select extends AbstractWhereQuery<Select> implements Cloneable, Rea
     }
 
     public static class JoinCondition extends EnumClass<String> {
+        public static final JoinCondition NATURAL = new JoinCondition("NATURAL");
+        public static final JoinCondition ON = new JoinCondition("ON");
+        public static final JoinCondition USING = new JoinCondition("USING");
+
         JoinCondition(String identifier) {
             super(identifier);
         }
     }
 
     public static class JoinType extends EnumClass<String> {
+        public static final JoinType LEFT = new JoinType("LEFT");
+        public static final JoinType RIGHT = new JoinType("RIGHT");
+        public static final JoinType FULL = new JoinType("FULL");
+
         JoinType(String identifier) {
             super(identifier);
         }
     }
 
     public static class OrderByDirection extends EnumClass<String> {
+        public static final OrderByDirection ASC = new OrderByDirection("ASC");
+        public static final OrderByDirection DESC = new OrderByDirection("DESC");
+
         OrderByDirection(String identifier) {
             super(identifier);
         }

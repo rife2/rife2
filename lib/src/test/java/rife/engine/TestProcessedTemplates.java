@@ -59,7 +59,11 @@ public class TestProcessedTemplates {
                     c.setAttribute("attribute1", "value1");
                     c.setAttribute("another_attribute", "value2");
                 });
-                get("/template/html", c -> c.print(c.template("filtered_tags_attribute")));
+                get("/template/html", c -> {
+                    var t = c.template("filtered_tags_attribute");
+                    t.setAttribute("another_attribute", "value2b");
+                    c.print(t);
+                });
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -67,7 +71,7 @@ public class TestProcessedTemplates {
                 var response = page.getWebResponse();
                 assertEquals("text/html", response.getContentType());
                 assertEquals("This is an attribute value 'value1'.\n" +
-                             "This is another attribute value 'value2'.\n", response.getContentAsString());
+                             "This is another attribute value 'value2b'.\n", response.getContentAsString());
             }
         }
     }
@@ -81,7 +85,11 @@ public class TestProcessedTemplates {
                     c.setAttribute("attribute1", "value1");
                     c.setAttribute("another_attribute", "value2");
                 });
-                get("/template/txt", c -> c.print(c.templateTxt("filtered_tags_attribute")));
+                get("/template/txt", c -> {
+                    var t = c.templateTxt("filtered_tags_attribute");
+                    t.setAttribute("another_attribute", "value2b");
+                    c.print(t);
+                });
             }
         })) {
             try (final var webClient = new WebClient()) {
@@ -89,7 +97,7 @@ public class TestProcessedTemplates {
                 var response = page.getWebResponse();
                 assertEquals("text/plain", response.getContentType());
                 assertEquals("This is an attribute value 'value1'.\n" +
-                             "This is another attribute value 'value2'.\n", response.getContentAsString());
+                             "This is another attribute value 'value2b'.\n", response.getContentAsString());
             }
         }
     }

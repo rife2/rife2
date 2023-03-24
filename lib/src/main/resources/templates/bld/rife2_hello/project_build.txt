@@ -1,6 +1,6 @@
 package {{v package/}};
 
-import rife.bld.Project;
+import rife.bld.WebProject;
 
 import java.util.List;
 
@@ -8,16 +8,17 @@ import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.*;
 import static rife.bld.operations.TemplateType.*;
 
-public class {{v projectBuild/}} extends Project {
-    public void setup() {
-        repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
+public class {{v projectBuild/}} extends WebProject {
+    public {{v projectBuild/}}() {
         pkg = "{{v package/}}";
         name = "{{v project/}}";
-        mainClass = "{{v package/}}.{{v projectSite/}}";
+        mainClass = "{{v package/}}.{{v projectMain/}}";
+        uberJarMainClass = "{{v package/}}.{{v projectMainUber/}}";
         version = version(0,1,0);
 
         precompiledTemplateTypes = List.of(HTML);
 
+        repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
 {{v scopes}}{{/v}}{{b scope}}        scope({{v name/}}){{v dependencies}}{{/v}};
 {{b dependency}}
             .include(dependency("{{v groupId/}}", "{{v artifactId/}}", version({{v version/}}))){{/b}}{{/b}}    }
