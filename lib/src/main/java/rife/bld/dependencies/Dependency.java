@@ -19,6 +19,9 @@ import java.util.regex.Pattern;
  * @since 1.5
  */
 public record Dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type, ExclusionSet exclusions) {
+    public static final String CLASSIFIER_SOURCES = "sources";
+    public static final String CLASSIFIER_JAVADOC = "javadoc";
+
     public Dependency(String groupId, String artifactId) {
         this(groupId, artifactId, null, null, null);
     }
@@ -99,6 +102,17 @@ public record Dependency(String groupId, String artifactId, VersionNumber versio
     public Dependency exclude(String groupId, String artifactId) {
         exclusions.add(new DependencyExclusion(groupId, artifactId));
         return this;
+    }
+
+    /**
+     * Returns a new dependency with the same data, except for the provided classifier.
+     *
+     * @param classifier the classifier to use for the new dependency
+     * @return the new dependency with the changed classifier
+     * @since 1.5.6
+     */
+    public Dependency withClassifier(String classifier) {
+        return new Dependency(groupId, artifactId, version, classifier, type);
     }
 
     /**

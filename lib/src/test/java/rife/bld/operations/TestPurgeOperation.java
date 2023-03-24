@@ -184,10 +184,219 @@ public class TestPurgeOperation {
         }
     }
 
+    @Test
+    void testExecutionAdditionalSourcesJavadoc()
+    throws Exception {
+        var tmp = Files.createTempDirectory("test").toFile();
+        try {
+            var dir1 = new File(tmp, "dir1");
+            var dir2 = new File(tmp, "dir2");
+            var dir3 = new File(tmp, "dir3");
+            var dir4 = new File(tmp, "dir4");
+            dir1.mkdirs();
+            dir2.mkdirs();
+            dir3.mkdirs();
+            dir4.mkdirs();
+
+            var operation_download1 = new DownloadOperation()
+                .repositories(List.of(Repository.MAVEN_CENTRAL))
+                .libCompileDirectory(dir1)
+                .libRuntimeDirectory(dir2)
+                .libStandaloneDirectory(dir3)
+                .libTestDirectory(dir4)
+                .downloadJavadoc(true)
+                .downloadSources(true);
+            operation_download1.dependencies().scope(Scope.compile)
+                .include(new Dependency("org.apache.commons", "commons-lang3", new VersionNumber(3, 1)));
+            operation_download1.dependencies().scope(Scope.runtime)
+                .include(new Dependency("org.apache.commons", "commons-collections4", new VersionNumber(4, 3)));
+            operation_download1.dependencies().scope(Scope.standalone)
+                .include(new Dependency("org.slf4j", "slf4j-simple", new VersionNumber(2, 0, 0)));
+            operation_download1.dependencies().scope(Scope.test)
+                .include(new Dependency("org.apache.httpcomponents.client5", "httpclient5", new VersionNumber(5, 0)));
+
+            operation_download1.execute();
+
+            var operation_download2 = new DownloadOperation()
+                .repositories(List.of(Repository.MAVEN_CENTRAL))
+                .libCompileDirectory(dir1)
+                .libRuntimeDirectory(dir2)
+                .libStandaloneDirectory(dir3)
+                .libTestDirectory(dir4)
+                .downloadJavadoc(true)
+                .downloadSources(true);
+            operation_download2.dependencies().scope(Scope.compile)
+                .include(new Dependency("org.apache.commons", "commons-lang3", new VersionNumber(3, 12, 0)));
+            operation_download2.dependencies().scope(Scope.runtime)
+                .include(new Dependency("org.apache.commons", "commons-collections4", new VersionNumber(4, 4)));
+            operation_download2.dependencies().scope(Scope.standalone)
+                .include(new Dependency("org.slf4j", "slf4j-simple", new VersionNumber(2, 0, 6)));
+            operation_download2.dependencies().scope(Scope.test)
+                .include(new Dependency("org.apache.httpcomponents.client5", "httpclient5", new VersionNumber(5, 2, 1)));
+
+            operation_download2.execute();
+
+            assertEquals("""
+                    /dir1
+                    /dir1/commons-lang3-3.1-javadoc.jar
+                    /dir1/commons-lang3-3.1-sources.jar
+                    /dir1/commons-lang3-3.1.jar
+                    /dir1/commons-lang3-3.12.0-javadoc.jar
+                    /dir1/commons-lang3-3.12.0-sources.jar
+                    /dir1/commons-lang3-3.12.0.jar
+                    /dir2
+                    /dir2/commons-collections4-4.3-javadoc.jar
+                    /dir2/commons-collections4-4.3-sources.jar
+                    /dir2/commons-collections4-4.3.jar
+                    /dir2/commons-collections4-4.4-javadoc.jar
+                    /dir2/commons-collections4-4.4-sources.jar
+                    /dir2/commons-collections4-4.4.jar
+                    /dir3
+                    /dir3/slf4j-api-2.0.0-javadoc.jar
+                    /dir3/slf4j-api-2.0.0-sources.jar
+                    /dir3/slf4j-api-2.0.0.jar
+                    /dir3/slf4j-api-2.0.6-javadoc.jar
+                    /dir3/slf4j-api-2.0.6-sources.jar
+                    /dir3/slf4j-api-2.0.6.jar
+                    /dir3/slf4j-simple-2.0.0-javadoc.jar
+                    /dir3/slf4j-simple-2.0.0-sources.jar
+                    /dir3/slf4j-simple-2.0.0.jar
+                    /dir3/slf4j-simple-2.0.6-javadoc.jar
+                    /dir3/slf4j-simple-2.0.6-sources.jar
+                    /dir3/slf4j-simple-2.0.6.jar
+                    /dir4
+                    /dir4/commons-codec-1.13-javadoc.jar
+                    /dir4/commons-codec-1.13-sources.jar
+                    /dir4/commons-codec-1.13.jar
+                    /dir4/httpclient5-5.0-javadoc.jar
+                    /dir4/httpclient5-5.0-sources.jar
+                    /dir4/httpclient5-5.0.jar
+                    /dir4/httpclient5-5.2.1-javadoc.jar
+                    /dir4/httpclient5-5.2.1-sources.jar
+                    /dir4/httpclient5-5.2.1.jar
+                    /dir4/httpcore5-5.0-javadoc.jar
+                    /dir4/httpcore5-5.0-sources.jar
+                    /dir4/httpcore5-5.0.jar
+                    /dir4/httpcore5-5.2-javadoc.jar
+                    /dir4/httpcore5-5.2-sources.jar
+                    /dir4/httpcore5-5.2.jar
+                    /dir4/httpcore5-h2-5.0-javadoc.jar
+                    /dir4/httpcore5-h2-5.0-sources.jar
+                    /dir4/httpcore5-h2-5.0.jar
+                    /dir4/httpcore5-h2-5.2-javadoc.jar
+                    /dir4/httpcore5-h2-5.2-sources.jar
+                    /dir4/httpcore5-h2-5.2.jar
+                    /dir4/slf4j-api-1.7.25-javadoc.jar
+                    /dir4/slf4j-api-1.7.25-sources.jar
+                    /dir4/slf4j-api-1.7.25.jar
+                    /dir4/slf4j-api-1.7.36-javadoc.jar
+                    /dir4/slf4j-api-1.7.36-sources.jar
+                    /dir4/slf4j-api-1.7.36.jar""",
+                FileUtils.generateDirectoryListing(tmp));
+
+            var operation_purge = new PurgeOperation()
+                .repositories(List.of(Repository.MAVEN_CENTRAL))
+                .libCompileDirectory(dir1)
+                .libRuntimeDirectory(dir2)
+                .libStandaloneDirectory(dir3)
+                .libTestDirectory(dir4)
+                .preserveSources(true)
+                .preserveJavadoc(true);
+            operation_purge.dependencies().scope(Scope.compile)
+                .include(new Dependency("org.apache.commons", "commons-lang3", new VersionNumber(3, 12, 0)));
+            operation_purge.dependencies().scope(Scope.runtime)
+                .include(new Dependency("org.apache.commons", "commons-collections4", new VersionNumber(4, 4)));
+            operation_purge.dependencies().scope(Scope.standalone)
+                .include(new Dependency("org.slf4j", "slf4j-simple", new VersionNumber(2, 0, 6)));
+            operation_purge.dependencies().scope(Scope.test)
+                .include(new Dependency("org.apache.httpcomponents.client5", "httpclient5", new VersionNumber(5, 2, 1)));
+
+            operation_purge.execute();
+
+            assertEquals("""
+                    /dir1
+                    /dir1/commons-lang3-3.12.0-javadoc.jar
+                    /dir1/commons-lang3-3.12.0-sources.jar
+                    /dir1/commons-lang3-3.12.0.jar
+                    /dir2
+                    /dir2/commons-collections4-4.4-javadoc.jar
+                    /dir2/commons-collections4-4.4-sources.jar
+                    /dir2/commons-collections4-4.4.jar
+                    /dir3
+                    /dir3/slf4j-api-2.0.6-javadoc.jar
+                    /dir3/slf4j-api-2.0.6-sources.jar
+                    /dir3/slf4j-api-2.0.6.jar
+                    /dir3/slf4j-simple-2.0.6-javadoc.jar
+                    /dir3/slf4j-simple-2.0.6-sources.jar
+                    /dir3/slf4j-simple-2.0.6.jar
+                    /dir4
+                    /dir4/httpclient5-5.2.1-javadoc.jar
+                    /dir4/httpclient5-5.2.1-sources.jar
+                    /dir4/httpclient5-5.2.1.jar
+                    /dir4/httpcore5-5.2-javadoc.jar
+                    /dir4/httpcore5-5.2-sources.jar
+                    /dir4/httpcore5-5.2.jar
+                    /dir4/httpcore5-h2-5.2-javadoc.jar
+                    /dir4/httpcore5-h2-5.2-sources.jar
+                    /dir4/httpcore5-h2-5.2.jar
+                    /dir4/slf4j-api-1.7.36-javadoc.jar
+                    /dir4/slf4j-api-1.7.36-sources.jar
+                    /dir4/slf4j-api-1.7.36.jar""",
+                FileUtils.generateDirectoryListing(tmp));
+
+            operation_purge
+                .preserveJavadoc(false).execute();
+
+            assertEquals("""
+                    /dir1
+                    /dir1/commons-lang3-3.12.0-sources.jar
+                    /dir1/commons-lang3-3.12.0.jar
+                    /dir2
+                    /dir2/commons-collections4-4.4-sources.jar
+                    /dir2/commons-collections4-4.4.jar
+                    /dir3
+                    /dir3/slf4j-api-2.0.6-sources.jar
+                    /dir3/slf4j-api-2.0.6.jar
+                    /dir3/slf4j-simple-2.0.6-sources.jar
+                    /dir3/slf4j-simple-2.0.6.jar
+                    /dir4
+                    /dir4/httpclient5-5.2.1-sources.jar
+                    /dir4/httpclient5-5.2.1.jar
+                    /dir4/httpcore5-5.2-sources.jar
+                    /dir4/httpcore5-5.2.jar
+                    /dir4/httpcore5-h2-5.2-sources.jar
+                    /dir4/httpcore5-h2-5.2.jar
+                    /dir4/slf4j-api-1.7.36-sources.jar
+                    /dir4/slf4j-api-1.7.36.jar""",
+                FileUtils.generateDirectoryListing(tmp));
+
+            operation_purge
+                .preserveSources(false).execute();
+
+            assertEquals("""
+                    /dir1
+                    /dir1/commons-lang3-3.12.0.jar
+                    /dir2
+                    /dir2/commons-collections4-4.4.jar
+                    /dir3
+                    /dir3/slf4j-api-2.0.6.jar
+                    /dir3/slf4j-simple-2.0.6.jar
+                    /dir4
+                    /dir4/httpclient5-5.2.1.jar
+                    /dir4/httpcore5-5.2.jar
+                    /dir4/httpcore5-h2-5.2.jar
+                    /dir4/slf4j-api-1.7.36.jar""",
+                FileUtils.generateDirectoryListing(tmp));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
     static class TestProject extends WebProject {
         public TestProject(File tmp) {
             workDirectory = tmp;
             pkg = "test.pkg";
+            downloadSources = true;
         }
     }
 
@@ -231,25 +440,42 @@ public class TestPurgeOperation {
                     /lib
                     /lib/bld
                     /lib/compile
+                    /lib/compile/commons-lang3-3.1-sources.jar
                     /lib/compile/commons-lang3-3.1.jar
+                    /lib/compile/commons-lang3-3.12.0-sources.jar
                     /lib/compile/commons-lang3-3.12.0.jar
                     /lib/runtime
+                    /lib/runtime/commons-collections4-4.3-sources.jar
                     /lib/runtime/commons-collections4-4.3.jar
+                    /lib/runtime/commons-collections4-4.4-sources.jar
                     /lib/runtime/commons-collections4-4.4.jar
                     /lib/standalone
+                    /lib/standalone/slf4j-api-2.0.0-sources.jar
                     /lib/standalone/slf4j-api-2.0.0.jar
+                    /lib/standalone/slf4j-api-2.0.6-sources.jar
                     /lib/standalone/slf4j-api-2.0.6.jar
+                    /lib/standalone/slf4j-simple-2.0.0-sources.jar
                     /lib/standalone/slf4j-simple-2.0.0.jar
+                    /lib/standalone/slf4j-simple-2.0.6-sources.jar
                     /lib/standalone/slf4j-simple-2.0.6.jar
                     /lib/test
+                    /lib/test/commons-codec-1.13-sources.jar
                     /lib/test/commons-codec-1.13.jar
+                    /lib/test/httpclient5-5.0-sources.jar
                     /lib/test/httpclient5-5.0.jar
+                    /lib/test/httpclient5-5.2.1-sources.jar
                     /lib/test/httpclient5-5.2.1.jar
+                    /lib/test/httpcore5-5.0-sources.jar
                     /lib/test/httpcore5-5.0.jar
+                    /lib/test/httpcore5-5.2-sources.jar
                     /lib/test/httpcore5-5.2.jar
+                    /lib/test/httpcore5-h2-5.0-sources.jar
                     /lib/test/httpcore5-h2-5.0.jar
+                    /lib/test/httpcore5-h2-5.2-sources.jar
                     /lib/test/httpcore5-h2-5.2.jar
+                    /lib/test/slf4j-api-1.7.25-sources.jar
                     /lib/test/slf4j-api-1.7.25.jar
+                    /lib/test/slf4j-api-1.7.36-sources.jar
                     /lib/test/slf4j-api-1.7.36.jar
                     /src
                     /src/bld
@@ -271,16 +497,24 @@ public class TestPurgeOperation {
                     /lib
                     /lib/bld
                     /lib/compile
+                    /lib/compile/commons-lang3-3.12.0-sources.jar
                     /lib/compile/commons-lang3-3.12.0.jar
                     /lib/runtime
+                    /lib/runtime/commons-collections4-4.4-sources.jar
                     /lib/runtime/commons-collections4-4.4.jar
                     /lib/standalone
+                    /lib/standalone/slf4j-api-2.0.6-sources.jar
                     /lib/standalone/slf4j-api-2.0.6.jar
+                    /lib/standalone/slf4j-simple-2.0.6-sources.jar
                     /lib/standalone/slf4j-simple-2.0.6.jar
                     /lib/test
+                    /lib/test/httpclient5-5.2.1-sources.jar
                     /lib/test/httpclient5-5.2.1.jar
+                    /lib/test/httpcore5-5.2-sources.jar
                     /lib/test/httpcore5-5.2.jar
+                    /lib/test/httpcore5-h2-5.2-sources.jar
                     /lib/test/httpcore5-h2-5.2.jar
+                    /lib/test/slf4j-api-1.7.36-sources.jar
                     /lib/test/slf4j-api-1.7.36.jar
                     /src
                     /src/bld

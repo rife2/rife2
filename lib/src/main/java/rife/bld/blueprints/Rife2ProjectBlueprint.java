@@ -32,6 +32,8 @@ public class Rife2ProjectBlueprint extends WebProject {
         mainClass = packageName + "." + StringUtils.capitalize(projectName) + "Site";
         version = new VersionNumber(0,0,1);
 
+        downloadSources = true;
+
         precompiledTemplateTypes = List.of(TemplateType.HTML);
 
         repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);

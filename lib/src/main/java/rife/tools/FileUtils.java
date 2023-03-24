@@ -45,6 +45,10 @@ public final class FileUtils {
         return getFileList(file, included_array, excluded_array, true);
     }
 
+    public static List<String> getFileList(File file, Pattern[] included, Pattern[] excluded) {
+        return getFileList(file, included, excluded, true);
+    }
+
     private static List<String> getFileList(File file, Pattern[] included, Pattern[] excluded, boolean root) {
         if (null == file) {
             return new ArrayList<>();
@@ -64,7 +68,6 @@ public final class FileUtils {
                             if (!filter(file_name, included, excluded)) {
                                 continue;
                             }
-
                         } else {
                             file_name = file.getName() + File.separator + file_name;
                         }

@@ -60,6 +60,21 @@ public class TestDependency {
     }
 
     @Test
+    void testWithClassifier() {
+        var dependency1 = new Dependency("com.uwyn.rife2", "rife2");
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", VersionNumber.UNKNOWN, "sources"), dependency1.withClassifier("sources"));
+
+        var dependency2 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0));
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "sources"), dependency2.withClassifier("sources"));
+
+        var dependency3 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "agent");
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "sources"), dependency3.withClassifier("sources"));
+
+        var dependency4 = new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "bld", "zip");
+        assertEquals(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0), "sources", "zip"), dependency4.withClassifier("sources"));
+    }
+
+    @Test
     void testToString() {
         assertEquals("com.uwyn.rife2:rife2", new Dependency("com.uwyn.rife2", "rife2").toString());
         assertEquals("com.uwyn.rife2:rife2:1.4.0", new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)).toString());

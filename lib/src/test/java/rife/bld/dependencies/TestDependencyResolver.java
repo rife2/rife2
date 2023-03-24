@@ -14,6 +14,8 @@ import java.nio.file.Path;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static rife.bld.dependencies.Dependency.CLASSIFIER_JAVADOC;
+import static rife.bld.dependencies.Dependency.CLASSIFIER_SOURCES;
 import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.compile;
 import static rife.bld.dependencies.Scope.runtime;
@@ -605,6 +607,38 @@ public class TestDependencyResolver {
     }
 
     @Test
+    void testDownloadDependencySources()
+    throws Exception {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2"));
+        var tmp = Files.createTempDirectory("downloads").toFile();
+        try {
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES);
+
+            var files = FileUtils.getFileList(tmp);
+            assertEquals(2, files.size());
+            assertTrue(files.get(0).matches("rife2-.+\\.jar"));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
+    @Test
+    void testDownloadDependencySourcesJavadoc()
+    throws Exception {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2"));
+        var tmp = Files.createTempDirectory("downloads").toFile();
+        try {
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
+
+            var files = FileUtils.getFileList(tmp);
+            assertEquals(3, files.size());
+            assertTrue(files.get(0).matches("rife2-.+\\.jar"));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
+    @Test
     void testDownloadDependencySnapshot()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0, "SNAPSHOT")));
@@ -615,6 +649,41 @@ public class TestDependencyResolver {
             var files = FileUtils.getFileList(tmp);
             assertEquals(1, files.size());
             assertTrue(files.contains("rife2-1.4.0-20230303.130437-4.jar"));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
+    @Test
+    void testDownloadDependencySnapshotSources()
+    throws Exception {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0, "SNAPSHOT")));
+        var tmp = Files.createTempDirectory("downloads").toFile();
+        try {
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES);
+
+            var files = FileUtils.getFileList(tmp);
+            assertEquals(2, files.size());
+            assertTrue(files.contains("rife2-1.4.0-20230303.130437-4.jar"));
+            assertTrue(files.contains("rife2-1.4.0-20230303.130437-4-sources.jar"));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
+    @Test
+    void testDownloadDependencySnapshotSourcesJavadoc()
+    throws Exception {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0, "SNAPSHOT")));
+        var tmp = Files.createTempDirectory("downloads").toFile();
+        try {
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
+
+            var files = FileUtils.getFileList(tmp);
+            assertEquals(3, files.size());
+            assertTrue(files.contains("rife2-1.4.0-20230303.130437-4.jar"));
+            assertTrue(files.contains("rife2-1.4.0-20230303.130437-4-javadoc.jar"));
+            assertTrue(files.contains("rife2-1.4.0-20230303.130437-4-sources.jar"));
         } finally {
             FileUtils.deleteDirectory(tmp);
         }
@@ -636,6 +705,68 @@ public class TestDependencyResolver {
                 jetty-jakarta-servlet-api-5.0.2.jar
                 jetty-server-11.0.14.jar
                 jetty-util-11.0.14.jar
+                slf4j-api-2.0.5.jar""", StringUtils.join(files, "\n"));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
+    @Test
+    void testDownloadDependencyJettySources()
+    throws Exception {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
+        var tmp = Files.createTempDirectory("downloads").toFile();
+        try {
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES);
+            var files = FileUtils.getFileList(tmp);
+            assertEquals(12, files.size());
+            Collections.sort(files);
+            assertEquals("""
+                jetty-http-11.0.14-sources.jar
+                jetty-http-11.0.14.jar
+                jetty-io-11.0.14-sources.jar
+                jetty-io-11.0.14.jar
+                jetty-jakarta-servlet-api-5.0.2-sources.jar
+                jetty-jakarta-servlet-api-5.0.2.jar
+                jetty-server-11.0.14-sources.jar
+                jetty-server-11.0.14.jar
+                jetty-util-11.0.14-sources.jar
+                jetty-util-11.0.14.jar
+                slf4j-api-2.0.5-sources.jar
+                slf4j-api-2.0.5.jar""", StringUtils.join(files, "\n"));
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
+    @Test
+    void testDownloadDependencyJettySourcesJavadoc()
+    throws Exception {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
+        var tmp = Files.createTempDirectory("downloads").toFile();
+        try {
+            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
+            var files = FileUtils.getFileList(tmp);
+            assertEquals(18, files.size());
+            Collections.sort(files);
+            assertEquals("""
+                jetty-http-11.0.14-javadoc.jar
+                jetty-http-11.0.14-sources.jar
+                jetty-http-11.0.14.jar
+                jetty-io-11.0.14-javadoc.jar
+                jetty-io-11.0.14-sources.jar
+                jetty-io-11.0.14.jar
+                jetty-jakarta-servlet-api-5.0.2-javadoc.jar
+                jetty-jakarta-servlet-api-5.0.2-sources.jar
+                jetty-jakarta-servlet-api-5.0.2.jar
+                jetty-server-11.0.14-javadoc.jar
+                jetty-server-11.0.14-sources.jar
+                jetty-server-11.0.14.jar
+                jetty-util-11.0.14-javadoc.jar
+                jetty-util-11.0.14-sources.jar
+                jetty-util-11.0.14.jar
+                slf4j-api-2.0.5-javadoc.jar
+                slf4j-api-2.0.5-sources.jar
                 slf4j-api-2.0.5.jar""", StringUtils.join(files, "\n"));
         } finally {
             FileUtils.deleteDirectory(tmp);

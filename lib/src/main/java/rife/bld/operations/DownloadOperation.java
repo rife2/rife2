@@ -6,9 +6,13 @@ package rife.bld.operations;
 
 import rife.bld.Project;
 import rife.bld.dependencies.*;
+import rife.tools.ArrayUtils;
 
 import java.io.File;
 import java.util.*;
+
+import static rife.bld.dependencies.Dependency.CLASSIFIER_JAVADOC;
+import static rife.bld.dependencies.Dependency.CLASSIFIER_SOURCES;
 
 /**
  * Transitively downloads all the artifacts for dependencies into
@@ -27,6 +31,8 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
     private File libRuntimeDirectory_;
     private File libStandaloneDirectory_;
     private File libTestDirectory_;
+    private boolean downloadSources_ = false;
+    private boolean downloadJavadoc_ = false;
 
     /**
      * Performs the download operation.
@@ -115,7 +121,17 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
             dependencies.removeAll(excluded);
         }
 
-        dependencies.downloadIntoDirectory(repositories(), destinationDirectory);
+        var additional_classifiers = new String[0];
+
+        if (downloadSources_ || downloadJavadoc_) {
+            var classifiers = new ArrayList<String>();
+            if (downloadSources_) classifiers.add(CLASSIFIER_SOURCES);
+            if (downloadJavadoc_) classifiers.add(CLASSIFIER_JAVADOC);
+
+            additional_classifiers = classifiers.toArray(new String[0]);
+        }
+
+        dependencies.downloadIntoDirectory(repositories(), destinationDirectory, additional_classifiers);
     }
 
     /**
@@ -130,7 +146,9 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
             .libCompileDirectory(project.libCompileDirectory())
             .libRuntimeDirectory(project.libRuntimeDirectory())
             .libStandaloneDirectory(project.libStandaloneDirectory())
-            .libTestDirectory(project.libTestDirectory());
+            .libTestDirectory(project.libTestDirectory())
+            .downloadSources(project.downloadSources())
+            .downloadJavadoc(project.downloadJavadoc());
     }
 
     /**
@@ -206,6 +224,32 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
     }
 
     /**
+     * Indicates whether the sources classifier should also be downloaded.
+     *
+     * @param flag {@code true} if the sources classifier should be downloaded; or
+     *             {@code false} otherwise
+     * @return this operation instance
+     * @since 1.5.6
+     */
+    public DownloadOperation downloadSources(boolean flag) {
+        downloadSources_ = flag;
+        return this;
+    }
+
+    /**
+     * Indicates whether the javadoc classifier should also be downloaded.
+     *
+     * @param flag {@code true} if the javadoc classifier should be downloaded; or
+     *             {@code false} otherwise
+     * @return this operation instance
+     * @since 1.5.6
+     */
+    public DownloadOperation downloadJavadoc(boolean flag) {
+        downloadJavadoc_ = flag;
+        return this;
+    }
+
+    /**
      * Retrieves the repositories in which the dependencies will be resolved.
      * <p>
      * This is a modifiable list that can be retrieved and changed.
@@ -267,5 +311,27 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      */
     public File libTestDirectory() {
         return libTestDirectory_;
+    }
+
+    /**
+     * Retrieves whether the sources classifier should also be downloaded.
+     *
+     * @return {@code true} if the sources classifier should be downloaded; or
+     * {@code false} otherwise
+     * @since 1.5.6
+     */
+    public boolean downloadSources() {
+        return downloadSources_;
+    }
+
+    /**
+     * Retrieves whether the javadoc classifier should also be downloaded.
+     *
+     * @return {@code true} if the sources classifier should be downloaded; or
+     * {@code false} otherwise
+     * @since 1.5.6
+     */
+    public boolean downloadJavadoc() {
+        return downloadJavadoc_;
     }
 }

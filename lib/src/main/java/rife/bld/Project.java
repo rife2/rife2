@@ -12,6 +12,7 @@ import rife.tools.FileUtils;
 
 import java.io.File;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static rife.bld.dependencies.Scope.runtime;
 import static rife.tools.FileUtils.JAR_FILE_PATTERN;
@@ -160,6 +161,27 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     protected String uberJarMainClass = null;
+    /**
+     * Indicates whether sources should be downloaded for the dependencies.
+     *
+     * @see #downloadSources()
+     * @since 1.5.6
+     */
+    protected Boolean downloadSources = null;
+    /**
+     * Indicates whether javadocs should be downloaded for the dependencies.
+     *
+     * @see #downloadJavadoc()
+     * @since 1.5.6
+     */
+    protected Boolean downloadJavadoc = null;
+    /**
+     * Indicates whether IDE projects should be auto-updated.
+     *
+     * @see #updateProjects()
+     * @since 1.5.6
+     */
+    protected Boolean updateProjects = null;
 
     /**
      * The source code directory.
@@ -1189,6 +1211,37 @@ public class Project extends BuildExecutor {
         return Objects.requireNonNullElseGet(uberJarMainClass, this::mainClass);
     }
 
+    /**
+     * Returns whether sources should be downloaded for the dependencies.
+     * By default, returns {@code false}.
+     *
+     * @since 1.5.6
+     */
+    public boolean downloadSources() {
+        return Objects.requireNonNullElse(downloadSources, Boolean.FALSE);
+    }
+
+    /**
+     * Returns whether javadocs should be downloaded for the dependencies.
+     * By default, returns {@code false}.
+     *
+     * @since 1.5.6
+     */
+    public boolean downloadJavadoc() {
+        return Objects.requireNonNullElse(downloadJavadoc, Boolean.FALSE);
+    }
+
+    /**
+     * Returns whether supported IDE projects that can be found, will be
+     * automatically updated for new dependencies.
+     * By default, returns {@code true}.
+     *
+     * @since 1.5.6
+     */
+    public boolean updateProjects() {
+        return Objects.requireNonNullElse(updateProjects, Boolean.TRUE);
+    }
+
     /*
      * File collections
      */
@@ -1221,6 +1274,11 @@ public class Project extends BuildExecutor {
      * Project classpaths
      */
 
+    private static final Pattern JAR_EXCLUDE_SOURCES_PATTERN = Pattern.compile("^.*-sources\\.jar$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern JAR_EXCLUDE_JAVADOC_PATTERN = Pattern.compile("^.*-javadoc\\.jar$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern[] INCLUDED_JARS = new Pattern[]{JAR_FILE_PATTERN};
+    private static final Pattern[] EXCLUDED_JARS = new Pattern[]{JAR_EXCLUDE_SOURCES_PATTERN, JAR_EXCLUDE_JAVADOC_PATTERN};
+
     /**
      * Returns all the jar files that are in the compile scope classpath.
      * <p>
@@ -1232,7 +1290,7 @@ public class Project extends BuildExecutor {
     public List<File> compileClasspathJars() {
         // detect the jar files in the compile lib directory
         var dir_abs = libCompileDirectory().getAbsoluteFile();
-        var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
+        var jar_files = FileUtils.getFileList(dir_abs, INCLUDED_JARS, EXCLUDED_JARS);
 
         // build the compilation classpath
         var classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
@@ -1251,7 +1309,7 @@ public class Project extends BuildExecutor {
     public List<File> runtimeClasspathJars() {
         // detect the jar files in the runtime lib directory
         var dir_abs = libRuntimeDirectory().getAbsoluteFile();
-        var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
+        var jar_files = FileUtils.getFileList(dir_abs, INCLUDED_JARS, EXCLUDED_JARS);
 
         // build the runtime classpath
         var classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
@@ -1275,7 +1333,7 @@ public class Project extends BuildExecutor {
         } else {
             // detect the jar files in the standalone lib directory
             var dir_abs = libStandaloneDirectory().getAbsoluteFile();
-            var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
+            var jar_files = FileUtils.getFileList(dir_abs, INCLUDED_JARS, EXCLUDED_JARS);
 
             classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
         }
@@ -1294,7 +1352,7 @@ public class Project extends BuildExecutor {
     public List<File> testClasspathJars() {
         // detect the jar files in the test lib directory
         var dir_abs = libTestDirectory().getAbsoluteFile();
-        var jar_files = FileUtils.getFileList(dir_abs, JAR_FILE_PATTERN, null);
+        var jar_files = FileUtils.getFileList(dir_abs, INCLUDED_JARS, EXCLUDED_JARS);
 
         // build the test classpath
         var classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
@@ -1311,7 +1369,7 @@ public class Project extends BuildExecutor {
             var local_file = new File(workDirectory(), dependency.path());
             if (local_file.exists()) {
                 if (local_file.isDirectory()) {
-                    var local_jar_files = FileUtils.getFileList(local_file.getAbsoluteFile(), JAR_FILE_PATTERN, null);
+                    var local_jar_files = FileUtils.getFileList(local_file.getAbsoluteFile(), INCLUDED_JARS, EXCLUDED_JARS);
                     classpath.addAll(new ArrayList<>(local_jar_files.stream().map(file -> new File(local_file, file)).toList()));
                 } else {
                     classpath.add(local_file);

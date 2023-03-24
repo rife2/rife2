@@ -94,14 +94,23 @@ public class TestCreateBlankOperation {
                     /myapp/lib/compile
                     /myapp/lib/runtime
                     /myapp/lib/test
+                    /myapp/lib/test/apiguardian-api-1\\.1\\.2-sources\\.jar
                     /myapp/lib/test/apiguardian-api-1\\.1\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-5\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-jupiter-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-api-5\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-jupiter-api-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-engine-5\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-jupiter-engine-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-params-5\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-jupiter-params-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-platform-commons-1\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-platform-commons-1\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-platform-console-standalone-1\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-platform-console-standalone-1\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-platform-engine-1\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-platform-engine-1\\.9\\.2\\.jar
+                    /myapp/lib/test/opentest4j-1\\.2\\.0-sources\\.jar
                     /myapp/lib/test/opentest4j-1\\.2\\.0\\.jar
                     /myapp/src
                     /myapp/src/bld
@@ -160,14 +169,23 @@ public class TestCreateBlankOperation {
                     /myapp/lib/compile
                     /myapp/lib/runtime
                     /myapp/lib/test
+                    /myapp/lib/test/apiguardian-api-1\\.1\\.2-sources\\.jar
                     /myapp/lib/test/apiguardian-api-1\\.1\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-5\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-jupiter-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-api-5\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-jupiter-api-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-engine-5\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-jupiter-engine-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-jupiter-params-5\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-jupiter-params-5\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-platform-commons-1\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-platform-commons-1\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-platform-console-standalone-1\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-platform-console-standalone-1\\.9\\.2\\.jar
+                    /myapp/lib/test/junit-platform-engine-1\\.9\\.2-sources\\.jar
                     /myapp/lib/test/junit-platform-engine-1\\.9\\.2\\.jar
+                    /myapp/lib/test/opentest4j-1\\.2\\.0-sources\\.jar
                     /myapp/lib/test/opentest4j-1\\.2\\.0\\.jar
                     /myapp/src
                     /myapp/src/bld
@@ -292,17 +310,22 @@ public class TestCreateBlankOperation {
             var lib_local = new File(project.libDirectory(), "local");
             lib_local.mkdirs();
             for (var lib : FileUtils.getFileList(project.libCompileDirectory())) {
-                project.dependencies().scope(Scope.compile).include(new LocalDependency(Path.of("lib", "local", lib).toString()));
+                if (!lib.endsWith("-sources.jar")) {
+                    project.dependencies().scope(Scope.compile).include(new LocalDependency(Path.of("lib", "local", lib).toString()));
+                }
                 new File(project.libCompileDirectory(), lib).renameTo(new File(lib_local, lib));
             }
             for (var lib : FileUtils.getFileList(project.libTestDirectory())) {
-                project.dependencies().scope(Scope.test).include(new LocalDependency(Path.of("lib", "local", lib).toString()));
+                if (!lib.endsWith("-sources.jar")) {
+                    project.dependencies().scope(Scope.test).include(new LocalDependency(Path.of("lib", "local", lib).toString()));
+                }
                 new File(project.libTestDirectory(), lib).renameTo(new File(lib_local, lib));
             }
 
             var compile_operation = new CompileOperation().fromProject(create_operation.project());
             compile_operation.execute();
             assertTrue(compile_operation.diagnostics().isEmpty());
+            System.out.println(FileUtils.generateDirectoryListing(tmp));
             assertTrue(Pattern.compile("""
                 /myapp
                 /myapp/\\.gitignore
@@ -336,14 +359,23 @@ public class TestCreateBlankOperation {
                 /myapp/lib/bld/bld-wrapper\\.properties
                 /myapp/lib/compile
                 /myapp/lib/local
+                /myapp/lib/local/apiguardian-api-1\\.1\\.2-sources\\.jar
                 /myapp/lib/local/apiguardian-api-1\\.1\\.2\\.jar
+                /myapp/lib/local/junit-jupiter-5\\.9\\.2-sources\\.jar
                 /myapp/lib/local/junit-jupiter-5\\.9\\.2\\.jar
+                /myapp/lib/local/junit-jupiter-api-5\\.9\\.2-sources\\.jar
                 /myapp/lib/local/junit-jupiter-api-5\\.9\\.2\\.jar
+                /myapp/lib/local/junit-jupiter-engine-5\\.9\\.2-sources\\.jar
                 /myapp/lib/local/junit-jupiter-engine-5\\.9\\.2\\.jar
+                /myapp/lib/local/junit-jupiter-params-5\\.9\\.2-sources\\.jar
                 /myapp/lib/local/junit-jupiter-params-5\\.9\\.2\\.jar
+                /myapp/lib/local/junit-platform-commons-1\\.9\\.2-sources\\.jar
                 /myapp/lib/local/junit-platform-commons-1\\.9\\.2\\.jar
+                /myapp/lib/local/junit-platform-console-standalone-1\\.9\\.2-sources\\.jar
                 /myapp/lib/local/junit-platform-console-standalone-1\\.9\\.2\\.jar
+                /myapp/lib/local/junit-platform-engine-1\\.9\\.2-sources\\.jar
                 /myapp/lib/local/junit-platform-engine-1\\.9\\.2\\.jar
+                /myapp/lib/local/opentest4j-1\\.2\\.0-sources\\.jar
                 /myapp/lib/local/opentest4j-1\\.2\\.0\\.jar
                 /myapp/lib/runtime
                 /myapp/lib/test
@@ -446,14 +478,23 @@ public class TestCreateBlankOperation {
                 /myapp/lib/compile
                 /myapp/lib/local_compile
                 /myapp/lib/local_test
+                /myapp/lib/local_test/apiguardian-api-1\\.1\\.2-sources\\.jar
                 /myapp/lib/local_test/apiguardian-api-1\\.1\\.2\\.jar
+                /myapp/lib/local_test/junit-jupiter-5\\.9\\.2-sources\\.jar
                 /myapp/lib/local_test/junit-jupiter-5\\.9\\.2\\.jar
+                /myapp/lib/local_test/junit-jupiter-api-5\\.9\\.2-sources\\.jar
                 /myapp/lib/local_test/junit-jupiter-api-5\\.9\\.2\\.jar
+                /myapp/lib/local_test/junit-jupiter-engine-5\\.9\\.2-sources\\.jar
                 /myapp/lib/local_test/junit-jupiter-engine-5\\.9\\.2\\.jar
+                /myapp/lib/local_test/junit-jupiter-params-5\\.9\\.2-sources\\.jar
                 /myapp/lib/local_test/junit-jupiter-params-5\\.9\\.2\\.jar
+                /myapp/lib/local_test/junit-platform-commons-1\\.9\\.2-sources\\.jar
                 /myapp/lib/local_test/junit-platform-commons-1\\.9\\.2\\.jar
+                /myapp/lib/local_test/junit-platform-console-standalone-1\\.9\\.2-sources\\.jar
                 /myapp/lib/local_test/junit-platform-console-standalone-1\\.9\\.2\\.jar
+                /myapp/lib/local_test/junit-platform-engine-1\\.9\\.2-sources\\.jar
                 /myapp/lib/local_test/junit-platform-engine-1\\.9\\.2\\.jar
+                /myapp/lib/local_test/opentest4j-1\\.2\\.0-sources\\.jar
                 /myapp/lib/local_test/opentest4j-1\\.2\\.0\\.jar
                 /myapp/lib/runtime
                 /myapp/lib/test

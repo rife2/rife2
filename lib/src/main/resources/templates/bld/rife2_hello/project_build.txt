@@ -18,6 +18,7 @@ public class {{v projectBuild/}} extends WebProject {
 
         precompiledTemplateTypes = List.of(HTML);
 
+        downloadSources = true;
         repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
 {{v scopes}}{{/v}}{{b scope}}        scope({{v name/}}){{v dependencies}}{{/v}};
 {{b dependency}}

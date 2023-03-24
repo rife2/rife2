@@ -259,23 +259,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
      * @since 1.5
      */
     public void executeDownloadDependencies() {
-        var compile_dependencies = project_.dependencies().get(Scope.compile);
-        if (compile_dependencies != null) {
-            var dependencies = new DependencySet();
-            for (var dependency : compile_dependencies) {
-                dependencies.addAll(new DependencyResolver(project_.repositories(), dependency).getAllDependencies(Scope.compile));
-            }
-            dependencies.downloadIntoDirectory(project_.repositories(), project_.libCompileDirectory());
-        }
-
-        var test_dependencies = project_.dependencies().get(Scope.test);
-        if (test_dependencies != null) {
-            var dependencies = new DependencySet();
-            for (var dependency : test_dependencies) {
-                dependencies.addAll(new DependencyResolver(project_.repositories(), dependency).getAllDependencies(Scope.compile, Scope.runtime));
-            }
-            dependencies.downloadIntoDirectory(project_.repositories(), project_.libTestDirectory());
-        }
+        new DownloadOperation().fromProject(project_).execute();
     }
 
     /**

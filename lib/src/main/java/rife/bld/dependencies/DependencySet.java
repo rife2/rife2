@@ -90,8 +90,31 @@ public class DependencySet extends AbstractSet<Dependency> implements Set<Depend
      * @since 1.5
      */
     public void downloadIntoDirectory(List<Repository> repositories, File directory) {
+        downloadIntoDirectory(repositories, directory, (String[]) null);
+    }
+
+    /**
+     * Downloads the artifact for the dependencies into the provided directory,
+     * including other classifiers.
+     * <p>
+     * The destination directory must exist and be writable.
+     *
+     * @param repositories the repositories to use for the download
+     * @param directory    the directory to download the artifacts into
+     * @param classifiers  the additional classifiers to download the artifact for
+     * @throws DependencyDownloadException when an error occurred during the download
+     * @since 1.5
+     */
+    public void downloadIntoDirectory(List<Repository> repositories, File directory, String... classifiers) {
         for (var dependency : this) {
             new DependencyResolver(repositories, dependency).downloadIntoDirectory(directory);
+            if (classifiers != null) {
+                for (var classifier : classifiers) {
+                    if (classifier != null) {
+                        new DependencyResolver(repositories, dependency.withClassifier(classifier)).downloadIntoDirectory(directory);
+                    }
+                }
+            }
         }
     }
 

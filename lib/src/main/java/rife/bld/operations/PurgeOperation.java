@@ -10,6 +10,9 @@ import rife.bld.dependencies.*;
 import java.io.File;
 import java.util.*;
 
+import static rife.bld.dependencies.Dependency.CLASSIFIER_JAVADOC;
+import static rife.bld.dependencies.Dependency.CLASSIFIER_SOURCES;
+
 /**
  * Transitively checks all the artifacts for dependencies in the directories
  * that are separated out by scope, any files that aren't required will be deleted.
@@ -27,6 +30,8 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
     private File libRuntimeDirectory_;
     private File libStandaloneDirectory_;
     private File libTestDirectory_;
+    private boolean preserveSources_ = false;
+    private boolean preserveJavadoc_ = false;
 
     /**
      * Performs the purge operation.
@@ -115,8 +120,12 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
 
         var filenames = new HashSet<String>();
         for (var dependency : all_dependencies) {
-            for (var url : new DependencyResolver(repositories(), dependency).getDownloadUrls()) {
-                filenames.add(url.substring(url.lastIndexOf("/") + 1));
+            addDownloadUrls(filenames, dependency);
+            if (preserveSources_) {
+                addDownloadUrls(filenames, dependency.withClassifier(CLASSIFIER_SOURCES));
+            }
+            if (preserveJavadoc_) {
+                addDownloadUrls(filenames, dependency.withClassifier(CLASSIFIER_JAVADOC));
             }
         }
 
@@ -125,6 +134,12 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
                 System.out.println("Deleting : " + file.getName());
                 file.delete();
             }
+        }
+    }
+
+    private void addDownloadUrls(HashSet<String> filenames, Dependency dependency) {
+        for (var url : new DependencyResolver(repositories(), dependency).getDownloadUrls()) {
+            filenames.add(url.substring(url.lastIndexOf("/") + 1));
         }
     }
 
@@ -140,7 +155,35 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
             .libCompileDirectory(project.libCompileDirectory())
             .libRuntimeDirectory(project.libRuntimeDirectory())
             .libStandaloneDirectory(project.libStandaloneDirectory())
-            .libTestDirectory(project.libTestDirectory());
+            .libTestDirectory(project.libTestDirectory())
+            .preserveSources(project.downloadSources())
+            .preserveJavadoc(project.downloadJavadoc());
+    }
+
+    /**
+     * Indicates whether the sources classifier files should be preserved.
+     *
+     * @param flag {@code true} if the sources classifier files should be preserved; or
+     *             {@code false} otherwise
+     * @return this operation instance
+     * @since 1.5.6
+     */
+    public PurgeOperation preserveSources(boolean flag) {
+        preserveSources_ = flag;
+        return this;
+    }
+
+    /**
+     * Indicates whether the javadoc classifier files should be preserved.
+     *
+     * @param flag {@code true} if the javadoc classifier files should be preserved; or
+     *             {@code false} otherwise
+     * @return this operation instance
+     * @since 1.5.6
+     */
+    public PurgeOperation preserveJavadoc(boolean flag) {
+        preserveJavadoc_ = flag;
+        return this;
     }
 
     /**
@@ -277,5 +320,27 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      */
     public File libTestDirectory() {
         return libTestDirectory_;
+    }
+
+    /**
+     * Retrieves whether the sources classifier files should be preserved.
+     *
+     * @return {@code true} if the sources classifier should be preserved; or
+     * {@code false} otherwise
+     * @since 1.5.6
+     */
+    public boolean preserveSources() {
+        return preserveSources_;
+    }
+
+    /**
+     * Retrieves whether the javadoc classifier files should be preserved.
+     *
+     * @return {@code true} if the javadoc classifier should be preserved; or
+     * {@code false} otherwise
+     * @since 1.5.6
+     */
+    public boolean preserveJavadoc() {
+        return preserveJavadoc_;
     }
 }
