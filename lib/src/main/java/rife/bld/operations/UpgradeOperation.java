@@ -37,6 +37,7 @@ public class UpgradeOperation extends AbstractOperation<UpgradeOperation> {
     throws IOException {
         new Wrapper().createWrapperFiles(Path.of("lib", "bld").toFile(), Version.getVersion());
         new Wrapper().upgradeIdeaBldLibrary(new File(".idea"), Version.getVersion());
+        new Wrapper().upgradeVscodeSettings(new File(".vscode"), Version.getVersion());
         if (!silent()) {
             System.out.println("The wrapper was successfully upgraded to " + Version.getVersion() + ".");
         }

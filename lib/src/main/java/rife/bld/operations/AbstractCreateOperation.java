@@ -47,6 +47,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
     File ideaDirectory_;
     File ideaLibrariesDirectory_;
     File ideaRunConfigurationsDirectory_;
+    File vscodeDirectory_;
 
     protected AbstractCreateOperation(String templateBase) {
         templateBase_ = templateBase;
@@ -70,6 +71,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         executeCreateProjectStructure();
         executePopulateProjectStructure();
         executePopulateIdeaProject();
+        executePopulateVscodeProject();
         if (downloadDependencies()) {
             executeDownloadDependencies();
         }
@@ -105,6 +107,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         ideaDirectory_ = new File(project_.workDirectory(), ".idea");
         ideaLibrariesDirectory_ = new File(ideaDirectory_, "libraries");
         ideaRunConfigurationsDirectory_ = new File(ideaDirectory_, "runConfigurations");
+        vscodeDirectory_ = new File(project_.workDirectory(), ".vscode");
 
         var package_dir = project_.pkg().replace('.', File.separatorChar);
         bldPackageDirectory_ = new File(project_.srcBldJavaDirectory(), package_dir);
@@ -127,6 +130,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         ideaDirectory_.mkdirs();
         ideaLibrariesDirectory_.mkdirs();
         ideaRunConfigurationsDirectory_.mkdirs();
+        vscodeDirectory_.mkdirs();
     }
 
 
@@ -251,6 +255,25 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         run_tests_template.setValue("package", project_.pkg());
         var run_tests_file = new File(ideaRunConfigurationsDirectory_, "Run Tests.xml");
         FileUtils.writeString(run_tests_template.getContent(), run_tests_file);
+    }
+
+    /**
+     * Part of the {@link #execute} operation, populates the vscode project structure.
+     *
+     * @since 1.5.6
+     */
+    public void executePopulateVscodeProject()
+    throws FileUtilsErrorException {
+        FileUtils.writeString(
+            TemplateFactory.JSON.get(templateBase_ + "vscode.launch").getContent(),
+            new File(vscodeDirectory_, "launch.json"));
+
+        var settings_template = TemplateFactory.JSON.get(templateBase_ + "vscode.settings");
+        if (settings_template.hasValueId("version")) {
+            settings_template.setValue("version", Version.getVersion());
+        }
+        var settings_file = new File(vscodeDirectory_, "settings.json");
+        FileUtils.writeString(settings_template.getContent(), settings_file);
     }
 
     /**

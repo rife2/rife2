@@ -95,6 +95,28 @@ public class Wrapper {
         }
     }
 
+    /**
+     * Upgraded the vscode settings files that were generated with a previous version.
+     *
+     * @param destinationDirectory the directory with the vscode files
+     * @param version              the RIFE2 version they should be using
+     * @throws IOException when an error occurred during the upgrade of the IDEA files
+     * @since 1.5.6
+     */
+    public void upgradeVscodeSettings(File destinationDirectory, String version)
+    throws IOException {
+        var file = new File(destinationDirectory, Path.of("settings.json").toString());
+        if (file.exists()) {
+            try {
+                var content = FileUtils.readString(file);
+                content = RIFE2_JAR_PATTERN.matcher(content).replaceAll("rife2-" + version + ".jar");
+                FileUtils.writeString(content, file);
+            } catch (FileUtilsErrorException e) {
+                throw new IOException(e);
+            }
+        }
+    }
+
     private void createWrapperProperties(File destinationDirectory, String version)
     throws IOException {
         var file = new File(destinationDirectory, WRAPPER_PROPERTIES);

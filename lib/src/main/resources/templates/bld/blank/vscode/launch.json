@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Run Main",
+            "request": "launch",
+            "mainClass": "rife.bld.wrapper.Wrapper",
+            "args": ["${workspaceFolder}/bld", "--build", "com.example.MyappBuild", "compile", "run"],
+            "classPaths": ["${workspaceFolder}/lib/bld/bld-wrapper.jar"]
+        },
+        {
+            "type": "java",
+            "name": "Run Test",
+            "request": "launch",
+            "mainClass": "rife.bld.wrapper.Wrapper",
+            "args": ["${workspaceFolder}/bld", "--build", "com.example.MyappBuild", "compile", "test"],
+            "classPaths": ["${workspaceFolder}/lib/bld/bld-wrapper.jar"]
+        },
+        {
+            "type": "java",
+            "name": "Clean",
+            "request": "launch",
+            "mainClass": "rife.bld.wrapper.Wrapper",
+            "args": ["${workspaceFolder}/bld", "--build", "com.example.MyappBuild", "clean"],
+            "classPaths": ["${workspaceFolder}/lib/bld/bld-wrapper.jar"]
+        }
+    ]
+}
