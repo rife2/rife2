@@ -6,7 +6,7 @@
             "name": "Run Main",
             "request": "launch",
             "mainClass": "rife.bld.wrapper.Wrapper",
-            "args": ["${workspaceFolder}/bld", "--build", "com.example.MyappBuild", "compile", "run"],
+            "args": ["${workspaceFolder}/bld", "--build", "{{v package/}}.{{v projectBuild/}}", "compile", "run"],
             "classPaths": ["${workspaceFolder}/lib/bld/bld-wrapper.jar"]
         },
         {
@@ -14,7 +14,7 @@
             "name": "Run Test",
             "request": "launch",
             "mainClass": "rife.bld.wrapper.Wrapper",
-            "args": ["${workspaceFolder}/bld", "--build", "com.example.MyappBuild", "compile", "test"],
+            "args": ["${workspaceFolder}/bld", "--build", "{{v package/}}.{{v projectBuild/}}", "compile", "test"],
             "classPaths": ["${workspaceFolder}/lib/bld/bld-wrapper.jar"]
         },
         {
@@ -22,7 +22,7 @@
             "name": "Clean",
             "request": "launch",
             "mainClass": "rife.bld.wrapper.Wrapper",
-            "args": ["${workspaceFolder}/bld", "--build", "com.example.MyappBuild", "clean"],
+            "args": ["${workspaceFolder}/bld", "--build", "{{v package/}}.{{v projectBuild/}}", "clean"],
             "classPaths": ["${workspaceFolder}/lib/bld/bld-wrapper.jar"]
         }
     ]
