@@ -90,12 +90,15 @@ public class TestCreateRife2Operation {
                     /myapp/\\.idea/runConfigurations
                     /myapp/\\.idea/runConfigurations/Run Main\\.xml
                     /myapp/\\.idea/runConfigurations/Run Tests\\.xml
+                    /myapp/\\.vscode
+                    /myapp/\\.vscode/launch\\.json
+                    /myapp/\\.vscode/settings\\.json
                     /myapp/bld
                     /myapp/bld\\.bat
                     /myapp/lib
                     /myapp/lib/bld
                     /myapp/lib/bld/bld-wrapper\\.jar
-                    /myapp/lib/bld/bld-wrapper\\.properties                    
+                    /myapp/lib/bld/bld-wrapper\\.properties
                     /myapp/lib/compile
                     /myapp/lib/compile/rife2-.+-sources\\.jar
                     /myapp/lib/compile/rife2-.+\\.jar
@@ -187,6 +190,9 @@ public class TestCreateRife2Operation {
                     /myapp/\\.idea/runConfigurations
                     /myapp/\\.idea/runConfigurations/Run Main\\.xml
                     /myapp/\\.idea/runConfigurations/Run Tests\\.xml
+                    /myapp/\\.vscode
+                    /myapp/\\.vscode/launch\\.json
+                    /myapp/\\.vscode/settings\\.json
                     /myapp/bld
                     /myapp/bld\\.bat
                     /myapp/build
@@ -322,6 +328,9 @@ public class TestCreateRife2Operation {
                     /yourthing/.idea/runConfigurations
                     /yourthing/.idea/runConfigurations/Run Main.xml
                     /yourthing/.idea/runConfigurations/Run Tests.xml
+                    /yourthing/.vscode
+                    /yourthing/.vscode/launch.json
+                    /yourthing/.vscode/settings.json
                     /yourthing/bld
                     /yourthing/bld.bat
                     /yourthing/lib
@@ -428,6 +437,9 @@ public class TestCreateRife2Operation {
                 /myapp/\\.idea/runConfigurations
                 /myapp/\\.idea/runConfigurations/Run Main\\.xml
                 /myapp/\\.idea/runConfigurations/Run Tests\\.xml
+                /myapp/\\.vscode
+                /myapp/\\.vscode/launch\\.json
+                /myapp/\\.vscode/settings\\.json
                 /myapp/bld
                 /myapp/bld\\.bat
                 /myapp/build
@@ -588,6 +600,9 @@ public class TestCreateRife2Operation {
                 /myapp/\\.idea/runConfigurations
                 /myapp/\\.idea/runConfigurations/Run Main\\.xml
                 /myapp/\\.idea/runConfigurations/Run Tests\\.xml
+                /myapp/\\.vscode
+                /myapp/\\.vscode/launch\\.json
+                /myapp/\\.vscode/settings\\.json
                 /myapp/bld
                 /myapp/bld\\.bat
                 /myapp/build
