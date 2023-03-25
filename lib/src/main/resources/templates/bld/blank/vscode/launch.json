@@ -5,25 +5,20 @@
             "type": "java",
             "name": "Run Main",
             "request": "launch",
-            "mainClass": "rife.bld.wrapper.Wrapper",
-            "args": ["${workspaceFolder}/bld", "--build", "{{v package/}}.{{v projectBuild/}}", "compile", "run"],
-            "classPaths": ["${workspaceFolder}/lib/bld/bld-wrapper.jar"]
+            "mainClass": "{{v package/}}.{{v projectMain/}}"
         },
         {
             "type": "java",
-            "name": "Run Test",
+            "name": "Run Tests",
             "request": "launch",
-            "mainClass": "rife.bld.wrapper.Wrapper",
-            "args": ["${workspaceFolder}/bld", "--build", "{{v package/}}.{{v projectBuild/}}", "compile", "test"],
-            "classPaths": ["${workspaceFolder}/lib/bld/bld-wrapper.jar"]
-        },
-        {
-            "type": "java",
-            "name": "Clean",
-            "request": "launch",
-            "mainClass": "rife.bld.wrapper.Wrapper",
-            "args": ["${workspaceFolder}/bld", "--build", "{{v package/}}.{{v projectBuild/}}", "clean"],
-            "classPaths": ["${workspaceFolder}/lib/bld/bld-wrapper.jar"]
+            "mainClass": "org.junit.platform.console.ConsoleLauncher",
+            "args": [
+                "--details=verbose",
+                "--scan-classpath",
+                "--disable-banner",
+                "--disable-ansi-colors",
+                "--exclude-engine=junit-platform-suite",
+                "--exclude-engine=junit-vintage"]
         }
     ]
 }

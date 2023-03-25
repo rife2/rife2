@@ -265,8 +265,8 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
     public void executePopulateVscodeProject()
     throws FileUtilsErrorException {
         var launch_template = TemplateFactory.JSON.get(templateBase_ + "vscode.launch");
-        launch_template.setValue("projectBuild", projectBuildName_);
         launch_template.setValue("package", project_.pkg());
+        launch_template.setValue("projectMain", projectMainName_);
         var launch_file = new File(vscodeDirectory_, "launch.json");
         FileUtils.writeString(launch_template.getContent(), launch_file);
 
