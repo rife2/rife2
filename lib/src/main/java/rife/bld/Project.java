@@ -55,6 +55,20 @@ public class Project extends BuildExecutor {
      */
     protected VersionNumber version = null;
     /**
+     * The project's groupId.
+     *
+     * @see #groupId()
+     * @since 1.5.7
+     */
+    protected String groupId = null;
+    /**
+     * The project's artifactId.
+     *
+     * @see #artifactId()
+     * @since 1.5.7
+     */
+    protected String artifactId = null;
+    /**
      * The project's main class.
      *
      * @see #mainClass()
@@ -934,6 +948,34 @@ public class Project extends BuildExecutor {
             throw new IllegalStateException("The name variable has to be set.");
         }
         return name;
+    }
+
+    /**
+     * Returns the project's groupId.
+     * <p>
+     * If the groupId isn't specified, the value of {@link #pkg()} will be used.
+     *
+     * @since 1.5.7
+     */
+    public String groupId() {
+        if (groupId == null) {
+            return pkg();
+        }
+        return groupId;
+    }
+
+    /**
+     * Returns the project's artifactId.
+     * <p>
+     * If the artifactId isn't specified, the value of {@link #name()} will be used.
+     *
+     * @since 1.5.7
+     */
+    public String artifactId() {
+        if (artifactId == null) {
+            return name();
+        }
+        return artifactId;
     }
 
     /**

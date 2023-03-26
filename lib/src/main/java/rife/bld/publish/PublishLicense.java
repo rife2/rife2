@@ -4,7 +4,7 @@
  */
 package rife.bld.publish;
 
-public class PomLicense {
+public class PublishLicense {
     private String name_;
     private String url_;
 
@@ -12,7 +12,7 @@ public class PomLicense {
         return name_;
     }
 
-    public PomLicense name(String name) {
+    public PublishLicense name(String name) {
         setName(name);
         return this;
     }
@@ -25,7 +25,7 @@ public class PomLicense {
         return url_;
     }
 
-    public PomLicense url(String url) {
+    public PublishLicense url(String url) {
         setUrl(url);
         return this;
     }

@@ -4,7 +4,7 @@
  */
 package rife.bld.publish;
 
-public class PomScm {
+public class PublishScm {
     private String connection_;
     private String developerConnection_;
     private String url_;
@@ -13,7 +13,7 @@ public class PomScm {
         return connection_;
     }
 
-    public PomScm connection(String connection) {
+    public PublishScm connection(String connection) {
         setConnection(connection);
         return this;
     }
@@ -26,7 +26,7 @@ public class PomScm {
         return developerConnection_;
     }
 
-    public PomScm developerConnection(String developerConnection) {
+    public PublishScm developerConnection(String developerConnection) {
         setDeveloperConnection(developerConnection);
         return this;
     }
@@ -39,7 +39,7 @@ public class PomScm {
         return url_;
     }
 
-    public PomScm url(String url) {
+    public PublishScm url(String url) {
         setUrl(url);
         return this;
     }

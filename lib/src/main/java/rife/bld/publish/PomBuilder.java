@@ -9,19 +9,16 @@ import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.tools.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PomBuilder {
-    private PomInfo info_ = null;
+    private PublishInfo info_ = null;
     private DependencyScopes dependencies_ = new DependencyScopes();
 
-    public PomBuilder info(PomInfo info) {
+    public PomBuilder info(PublishInfo info) {
         info_ = info;
         return this;
     }
 
-    public PomInfo info() {
+    public PublishInfo info() {
         return info_;
     }
 

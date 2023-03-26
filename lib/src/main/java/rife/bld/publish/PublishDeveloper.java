@@ -4,7 +4,7 @@
  */
 package rife.bld.publish;
 
-public class PomDeveloper {
+public class PublishDeveloper {
     private String id_;
     private String name_;
     private String email_;
@@ -14,7 +14,7 @@ public class PomDeveloper {
         return id_;
     }
 
-    public PomDeveloper id(String id) {
+    public PublishDeveloper id(String id) {
         setId(id);
         return this;
     }
@@ -27,7 +27,7 @@ public class PomDeveloper {
         return name_;
     }
 
-    public PomDeveloper name(String name) {
+    public PublishDeveloper name(String name) {
         setName(name);
         return this;
     }
@@ -40,7 +40,7 @@ public class PomDeveloper {
         return email_;
     }
 
-    public PomDeveloper email(String email) {
+    public PublishDeveloper email(String email) {
         setEmail(email);
         return this;
     }
@@ -53,7 +53,7 @@ public class PomDeveloper {
         return url_;
     }
 
-    public PomDeveloper url(String url) {
+    public PublishDeveloper url(String url) {
         setUrl(url);
         return this;
     }

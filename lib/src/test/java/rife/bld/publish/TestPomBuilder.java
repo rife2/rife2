@@ -38,10 +38,10 @@ public class TestPomBuilder {
     @Test
     void testMainInfoBuild() {
         var builder = new PomBuilder()
-            .info(new PomInfo()
+            .info(new PublishInfo()
                 .groupId("com.example")
                 .artifactId("myapp")
-                .version("1.2.3-SNAPSHOT")
+                .version(VersionNumber.parse("1.2.3-SNAPSHOT"))
                 .name("the thing")
                 .description("the thing but longer")
                 .url("https://the.thing"));
@@ -63,9 +63,9 @@ public class TestPomBuilder {
     @Test
     void testLicensesInfoBuild() {
         var builder = new PomBuilder()
-            .info(new PomInfo()
-                .license(new PomLicense().name("license1").url("https://license1.com"))
-                .license(new PomLicense().name("license2").url("https://license2.com")));
+            .info(new PublishInfo()
+                .license(new PublishLicense().name("license1").url("https://license1.com"))
+                .license(new PublishLicense().name("license2").url("https://license2.com")));
         assertEquals("""
             <?xml version="1.0" encoding="UTF-8"?>
             <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
@@ -94,10 +94,10 @@ public class TestPomBuilder {
     @Test
     void testDevelopersInfoBuild() {
         var builder = new PomBuilder()
-            .info(new PomInfo()
-                .developer(new PomDeveloper().id("id1").name("name1").email("email1").url("url1"))
-                .developer(new PomDeveloper().id("id2").name("name2"))
-                .developer(new PomDeveloper().id("id3").name("name3").url("url3")));
+            .info(new PublishInfo()
+                .developer(new PublishDeveloper().id("id1").name("name1").email("email1").url("url1"))
+                .developer(new PublishDeveloper().id("id2").name("name2"))
+                .developer(new PublishDeveloper().id("id3").name("name3").url("url3")));
         assertEquals("""
             <?xml version="1.0" encoding="UTF-8"?>
             <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
@@ -136,8 +136,8 @@ public class TestPomBuilder {
     @Test
     void testScmInfoBuild() {
         var builder = new PomBuilder()
-            .info(new PomInfo()
-                .scm(new PomScm().connection("conn1").developerConnection("devconn1").url("url1")));
+            .info(new PublishInfo()
+                .scm(new PublishScm().connection("conn1").developerConnection("devconn1").url("url1")));
         assertEquals("""
             <?xml version="1.0" encoding="UTF-8"?>
             <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
@@ -161,19 +161,19 @@ public class TestPomBuilder {
     @Test
     void testFullInfoBuild() {
         var builder = new PomBuilder()
-            .info(new PomInfo()
+            .info(new PublishInfo()
                 .groupId("com.example")
                 .artifactId("myapp")
-                .version("1.2.3-SNAPSHOT")
+                .version(VersionNumber.parse("1.2.3-SNAPSHOT"))
                 .name("the thing")
                 .description("the thing but longer")
                 .url("https://the.thing")
-                .license(new PomLicense().name("license1").url("https://license1.com"))
-                .license(new PomLicense().name("license2").url("https://license2.com"))
-                .developer(new PomDeveloper().id("id1").name("name1").email("email1").url("url1"))
-                .developer(new PomDeveloper().id("id2").name("name2"))
-                .developer(new PomDeveloper().id("id3").name("name3").url("url3"))
-                .scm(new PomScm().connection("conn1").developerConnection("devconn1").url("url1")));
+                .license(new PublishLicense().name("license1").url("https://license1.com"))
+                .license(new PublishLicense().name("license2").url("https://license2.com"))
+                .developer(new PublishDeveloper().id("id1").name("name1").email("email1").url("url1"))
+                .developer(new PublishDeveloper().id("id2").name("name2"))
+                .developer(new PublishDeveloper().id("id3").name("name3").url("url3"))
+                .scm(new PublishScm().connection("conn1").developerConnection("devconn1").url("url1")));
         assertEquals("""
             <?xml version="1.0" encoding="UTF-8"?>
             <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
@@ -435,19 +435,19 @@ public class TestPomBuilder {
     @Test
     void testComplete() {
         var builder = new PomBuilder()
-            .info(new PomInfo()
+            .info(new PublishInfo()
                 .groupId("com.example")
                 .artifactId("myapp")
-                .version("1.2.3-SNAPSHOT")
+                .version(VersionNumber.parse("1.2.3-SNAPSHOT"))
                 .name("the thing")
                 .description("the thing but longer")
                 .url("https://the.thing")
-                .license(new PomLicense().name("license1").url("https://license1.com"))
-                .license(new PomLicense().name("license2").url("https://license2.com"))
-                .developer(new PomDeveloper().id("id1").name("name1").email("email1").url("url1"))
-                .developer(new PomDeveloper().id("id2").name("name2"))
-                .developer(new PomDeveloper().id("id3").name("name3").url("url3"))
-                .scm(new PomScm().connection("conn1").developerConnection("devconn1").url("url1")));
+                .license(new PublishLicense().name("license1").url("https://license1.com"))
+                .license(new PublishLicense().name("license2").url("https://license2.com"))
+                .developer(new PublishDeveloper().id("id1").name("name1").email("email1").url("url1"))
+                .developer(new PublishDeveloper().id("id2").name("name2"))
+                .developer(new PublishDeveloper().id("id3").name("name3").url("url3"))
+                .scm(new PublishScm().connection("conn1").developerConnection("devconn1").url("url1")));
         builder.dependencies().scope(Scope.compile)
             .include(new Dependency("com.uwyn.rife2", "rife2"))
             .include(new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 5, 5), "bld", "zip"))

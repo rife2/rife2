@@ -4,26 +4,28 @@
  */
 package rife.bld.publish;
 
+import rife.bld.dependencies.VersionNumber;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class PomInfo {
+public class PublishInfo {
     private String groupId_ = null;
     private String artifactId_ = null;
-    private String version_ = null;
+    private VersionNumber version_ = null;
     private String name_ = null;
     private String description_ = null;
     private String url_ = null;
 
-    private final List<PomLicense> licenses_ = new ArrayList<>();
-    private final List<PomDeveloper> developers_ = new ArrayList<>();
-    private PomScm scm_ = null;
+    private final List<PublishLicense> licenses_ = new ArrayList<>();
+    private final List<PublishDeveloper> developers_ = new ArrayList<>();
+    private PublishScm scm_ = null;
 
     public String getGroupId() {
         return groupId_;
     }
 
-    public PomInfo groupId(String groupId) {
+    public PublishInfo groupId(String groupId) {
         setGroupId(groupId);
         return this;
     }
@@ -36,7 +38,7 @@ public class PomInfo {
         return artifactId_;
     }
 
-    public PomInfo artifactId(String artifactId) {
+    public PublishInfo artifactId(String artifactId) {
         setArtifactId(artifactId);
         return this;
     }
@@ -45,16 +47,16 @@ public class PomInfo {
         artifactId_ = artifactId;
     }
 
-    public String getVersion() {
+    public VersionNumber getVersion() {
         return version_;
     }
 
-    public PomInfo version(String version) {
+    public PublishInfo version(VersionNumber version) {
         setVersion(version);
         return this;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(VersionNumber version) {
         version_ = version;
     }
 
@@ -62,7 +64,7 @@ public class PomInfo {
         return name_;
     }
 
-    public PomInfo name(String name) {
+    public PublishInfo name(String name) {
         setName(name);
         return this;
     }
@@ -75,7 +77,7 @@ public class PomInfo {
         return description_;
     }
 
-    public PomInfo description(String description) {
+    public PublishInfo description(String description) {
         setDescription(description);
         return this;
     }
@@ -88,7 +90,7 @@ public class PomInfo {
         return url_;
     }
 
-    public PomInfo url(String url) {
+    public PublishInfo url(String url) {
         setUrl(url);
         return this;
     }
@@ -97,40 +99,40 @@ public class PomInfo {
         url_ = url;
     }
 
-    public PomInfo developer(PomDeveloper developer) {
+    public PublishInfo developer(PublishDeveloper developer) {
         developers_.add(developer);
         return this;
     }
 
-    public PomInfo developers(List<PomDeveloper> developers) {
+    public PublishInfo developers(List<PublishDeveloper> developers) {
         developers_.addAll(developers);
         return this;
     }
 
-    public List<PomDeveloper> developers() {
+    public List<PublishDeveloper> developers() {
         return developers_;
     }
 
-    public PomInfo license(PomLicense license) {
+    public PublishInfo license(PublishLicense license) {
         licenses_.add(license);
         return this;
     }
 
-    public PomInfo licenses(List<PomLicense> licenses) {
+    public PublishInfo licenses(List<PublishLicense> licenses) {
         licenses_.addAll(licenses);
         return this;
     }
 
-    public List<PomLicense> licenses() {
+    public List<PublishLicense> licenses() {
         return licenses_;
     }
 
-    public PomInfo scm(PomScm scm) {
+    public PublishInfo scm(PublishScm scm) {
         scm_ = scm;
         return this;
     }
 
-    public PomScm scm() {
+    public PublishScm scm() {
         return scm_;
     }
 }
