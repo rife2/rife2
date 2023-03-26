@@ -566,6 +566,7 @@ public final class StringUtils {
     }
 
     static final BitSet UNRESERVED_URI_CHARS;
+
     static {
         // see https://www.rfc-editor.org/rfc/rfc3986#page-13
         // and https://url.spec.whatwg.org/#application-x-www-form-urlencoded-percent-encode-set
@@ -591,7 +592,7 @@ public final class StringUtils {
     /**
      * Appends the hexadecimal digit of the provided number.
      *
-     * @param out the string builder to append to
+     * @param out    the string builder to append to
      * @param number the number who's first digit will be appended in hexadecimal
      * @since 1.0
      */
@@ -625,7 +626,7 @@ public final class StringUtils {
         byte[] bytes_buffer = null;
         var bytes_pos = 0;
         var i = 0;
-        while(i < length) {
+        while (i < length) {
             ch = source.charAt(i);
 
             if (ch == '%') {
@@ -652,7 +653,7 @@ public final class StringUtils {
                         throw new IllegalArgumentException("StringUtils.decodeUrl: Illegal escape value");
                     }
 
-                    bytes_buffer[bytes_pos++] = (byte)v;
+                    bytes_buffer[bytes_pos++] = (byte) v;
 
                     i += 2;
                 } catch (NumberFormatException e) {
@@ -1214,7 +1215,7 @@ public final class StringUtils {
             if (index > 3) {
                 if ((i + 1) < bytes.length) {
                     next_byte =
-                            (bytes[i + 1] >= 0) ? bytes[i + 1] : (bytes[i + 1] + 256);
+                        (bytes[i + 1] >= 0) ? bytes[i + 1] : (bytes[i + 1] + 256);
                 } else {
                     next_byte = 0;
                 }
@@ -2938,5 +2939,25 @@ public final class StringUtils {
         }
 
         return buffer.toString();
+    }
+
+    /**
+     * Removes all blank lines from text.
+     *
+     * @param text the text to strip blank lines from
+     * @return the text without any blank lines
+     * @since 1.5.7
+     */
+    public static String stripBlankLines(String text) {
+        var result = new StringBuilder();
+        var tokenizer = new StringTokenizer(text, "\r\n", false);
+        while (tokenizer.hasMoreTokens()) {
+            var line = tokenizer.nextToken();
+            if (!line.isBlank()) {
+                result.append(line);
+                result.append("\n");
+            }
+        }
+        return result.toString();
     }
 }

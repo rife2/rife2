@@ -25,7 +25,7 @@ public class TestStringUtils {
     void testEncodeURL() {
         assertNull(StringUtils.encodeUrl(null));
         assertEquals("a%20test%20%26", StringUtils.encodeUrl("a test &"));
-        String valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.";
+        var valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.";
         assertSame(valid, StringUtils.encodeUrl(valid));
         assertEquals("%21abcdefghijklmnopqrstuvwxyz%25%25ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.%7E%3D", StringUtils.encodeUrl("!abcdefghijklmnopqrstuvwxyz%%ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~="));
         assertEquals("%25%23ok%C3%A9k%C3%89%C8%A2%20smile%21%F0%9F%98%81", StringUtils.encodeUrl("%#okékÉȢ smile!😁"));
@@ -35,7 +35,7 @@ public class TestStringUtils {
     void testDecodeURL() {
         assertNull(StringUtils.decodeUrl(null));
         assertEquals("a test &", StringUtils.decodeUrl("a%20test%20%26"));
-        String valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.";
+        var valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.";
         assertSame(valid, StringUtils.decodeUrl(valid));
         assertEquals("!abcdefghijklmnopqrstuvwxyz%%ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.~=", StringUtils.decodeUrl("%21abcdefghijklmnopqrstuvwxyz%25%25ABCDEFGHIJKLMNOPQRSTUVQXYZ0123456789-_.%7E%3D"));
         assertEquals("%#okékÉȢ smile!😁", StringUtils.decodeUrl("%25%23ok%C3%A9k%C3%89%C8%A2%20smile%21%F0%9F%98%81"));
@@ -169,8 +169,8 @@ public class TestStringUtils {
         assertEquals(StringUtils.split("one", null).size(), 1);
         assertEquals(StringUtils.split("one", null).get(0), "one");
 
-        String string_to_split = "onextwoxthreeXfour";
-        List<String> string_parts = StringUtils.split(string_to_split, "x");
+        var string_to_split = "onextwoxthreeXfour";
+        var string_parts = StringUtils.split(string_to_split, "x");
 
         assertNotNull(string_parts);
         assertEquals(string_parts.get(0), "one");
@@ -184,8 +184,8 @@ public class TestStringUtils {
 
     @Test
     void testSplitCase() {
-        String string_to_split = "oneaAatwoAAAthree";
-        List<String> string_parts = StringUtils.split(string_to_split, "aaa", false);
+        var string_to_split = "oneaAatwoAAAthree";
+        var string_parts = StringUtils.split(string_to_split, "aaa", false);
 
         assertNotNull(string_parts);
         assertEquals(string_parts.get(0), "one");
@@ -195,8 +195,8 @@ public class TestStringUtils {
 
     @Test
     void testSplitToArray() {
-        String string_to_split = "onextwoxthreeXfour";
-        String[] string_parts = StringUtils.splitToArray(string_to_split, "x");
+        var string_to_split = "onextwoxthreeXfour";
+        var string_parts = StringUtils.splitToArray(string_to_split, "x");
 
         assertNotNull(string_parts);
         assertEquals(string_parts[0], "one");
@@ -206,8 +206,8 @@ public class TestStringUtils {
 
     @Test
     void testSplitToArrayCase() {
-        String string_to_split = "oneaAatwoAAAthree";
-        String[] string_parts = StringUtils.splitToArray(string_to_split, "aaa", false);
+        var string_to_split = "oneaAatwoAAAthree";
+        var string_parts = StringUtils.splitToArray(string_to_split, "aaa", false);
 
         assertNotNull(string_parts);
         assertEquals(string_parts[0], "one");
@@ -217,8 +217,8 @@ public class TestStringUtils {
 
     @Test
     void testSplitToIntArray() {
-        String string_to_split = "1x5x10xezfzefx50x100X200";
-        int[] string_parts = StringUtils.splitToIntArray(string_to_split, "x");
+        var string_to_split = "1x5x10xezfzefx50x100X200";
+        var string_parts = StringUtils.splitToIntArray(string_to_split, "x");
         assertNotNull(string_parts);
         assertEquals(1, string_parts[0]);
         assertEquals(5, string_parts[1]);
@@ -228,8 +228,8 @@ public class TestStringUtils {
 
     @Test
     void testSplitToIntArrayCase() {
-        String string_to_split = "1xXx5XXX10xxxezfzefXxX50";
-        int[] string_parts = StringUtils.splitToIntArray(string_to_split, "XXX", false);
+        var string_to_split = "1xXx5XXX10xxxezfzefXxX50";
+        var string_parts = StringUtils.splitToIntArray(string_to_split, "XXX", false);
         assertNotNull(string_parts);
         assertEquals(1, string_parts[0]);
         assertEquals(5, string_parts[1]);
@@ -239,8 +239,8 @@ public class TestStringUtils {
 
     @Test
     void testSplitToByteArray() {
-        String string_to_split = "sdfsdx5x1078456x50x100X200";
-        byte[] string_parts = StringUtils.splitToByteArray(string_to_split, "x");
+        var string_to_split = "sdfsdx5x1078456x50x100X200";
+        var string_parts = StringUtils.splitToByteArray(string_to_split, "x");
         assertNotNull(string_parts);
         assertEquals(5, string_parts[0]);
         assertEquals(50, string_parts[1]);
@@ -248,8 +248,8 @@ public class TestStringUtils {
 
     @Test
     void testSplitToByteArrayCase() {
-        String string_to_split = "sdfsd_A_5_a_1078456_A_50";
-        byte[] string_parts = StringUtils.splitToByteArray(string_to_split, "_a_", false);
+        var string_to_split = "sdfsd_A_5_a_1078456_A_50";
+        var string_parts = StringUtils.splitToByteArray(string_to_split, "_a_", false);
         assertNotNull(string_parts);
         assertEquals(5, string_parts[0]);
         assertEquals(50, string_parts[1]);
@@ -330,11 +330,11 @@ public class TestStringUtils {
     void testToStringArray() {
         assertEquals(StringUtils.toStringArray(null).length, 0);
 
-        Vector<String> strings = new Vector<String>();
+        var strings = new Vector<String>();
         strings.add("one");
         strings.add("two");
         strings.add("three");
-        String[] string_array = {"one", "two", "three"};
+        var string_array = new String[]{"one", "two", "three"};
 
         String[] string_array_new = null;
         string_array_new = StringUtils.toStringArray(strings.iterator());
@@ -348,8 +348,8 @@ public class TestStringUtils {
     void testToArrayList() {
         assertEquals(StringUtils.toArrayList(null).size(), 0);
 
-        String[] string_array = {"one", "two", "three"};
-        List<String> string_arraylist = StringUtils.toArrayList(string_array);
+        var string_array = new String[]{"one", "two", "three"};
+        var string_arraylist = StringUtils.toArrayList(string_array);
         assertEquals(string_array.length, string_arraylist.size());
         assertEquals(string_array[0], string_arraylist.get(0));
         assertEquals(string_array[1], string_arraylist.get(1));
@@ -362,11 +362,11 @@ public class TestStringUtils {
         assertEquals("", StringUtils.join(new ArrayList<String>(), ""));
         assertEquals("", StringUtils.join(new ArrayList<String>(), null));
 
-        ArrayList<String> strings = new ArrayList<String>();
+        var strings = new ArrayList<String>();
         strings.add("one");
         strings.add("two");
         strings.add("three");
-        String joined_string = StringUtils.join(strings, ",");
+        var joined_string = StringUtils.join(strings, ",");
         assertNotNull(joined_string);
         assertEquals(joined_string, "one,two,three");
     }
@@ -377,8 +377,8 @@ public class TestStringUtils {
         assertEquals("", StringUtils.join(new String[0], ""));
         assertEquals("", StringUtils.join(new String[0], null));
 
-        String[] string_array = {"one", "two", "three"};
-        String joined_string = StringUtils.join(string_array, ",");
+        var string_array = new String[]{"one", "two", "three"};
+        var joined_string = StringUtils.join(string_array, ",");
         assertNotNull(joined_string);
         assertEquals(joined_string, "one,two,three");
 
@@ -389,8 +389,8 @@ public class TestStringUtils {
 
     @Test
     void testJoinStringArrayEncode() {
-        String[] string_array = {"one\"", "two", "thr\"ee"};
-        String joined_string = StringUtils.join(string_array, ",", "'", true);
+        var string_array = new String[]{"one\"", "two", "thr\"ee"};
+        var joined_string = StringUtils.join(string_array, ",", "'", true);
         assertNotNull(joined_string);
         assertEquals(joined_string, "'one\\\"','two','thr\\\"ee'");
     }
@@ -401,8 +401,8 @@ public class TestStringUtils {
         assertEquals("", StringUtils.join(new boolean[0], ""));
         assertEquals("", StringUtils.join(new boolean[0], null));
 
-        boolean[] boolean_array = {true, false, false, true};
-        String joined_string = StringUtils.join(boolean_array, ",");
+        var boolean_array = new boolean[]{true, false, false, true};
+        var joined_string = StringUtils.join(boolean_array, ",");
         assertNotNull(joined_string);
         assertEquals(joined_string, "true,false,false,true");
     }
@@ -414,7 +414,7 @@ public class TestStringUtils {
         assertEquals("", StringUtils.join(new byte[0], null));
 
         byte[] byte_array = {1, 6, 3, 5};
-        String joined_string = StringUtils.join(byte_array, ",");
+        var joined_string = StringUtils.join(byte_array, ",");
         assertNotNull(joined_string);
         assertEquals(joined_string, "1,6,3,5");
     }
@@ -426,7 +426,7 @@ public class TestStringUtils {
         assertEquals("", StringUtils.join(new short[0], null));
 
         short[] short_array = {8, 3, 9, 6, 4};
-        String joined_string = StringUtils.join(short_array, ",");
+        var joined_string = StringUtils.join(short_array, ",");
         assertNotNull(joined_string);
         assertEquals(joined_string, "8,3,9,6,4");
     }
@@ -437,8 +437,8 @@ public class TestStringUtils {
         assertEquals("", StringUtils.join(new char[0], ""));
         assertEquals("", StringUtils.join(new char[0], null));
 
-        char[] short_array = {'k', 'L', 's', 'O'};
-        String joined_string = StringUtils.join(short_array, ",");
+        var short_array = new char[]{'k', 'L', 's', 'O'};
+        var joined_string = StringUtils.join(short_array, ",");
         assertNotNull(joined_string);
         assertEquals(joined_string, "k,L,s,O");
         joined_string = StringUtils.join(short_array, ",", "'");
@@ -452,8 +452,8 @@ public class TestStringUtils {
         assertEquals("", StringUtils.join(new int[0], ""));
         assertEquals("", StringUtils.join(new int[0], null));
 
-        int[] int_array = {1, 5, 10, 50};
-        String joined_string = StringUtils.join(int_array, ",");
+        var int_array = new int[]{1, 5, 10, 50};
+        var joined_string = StringUtils.join(int_array, ",");
         assertNotNull(joined_string);
         assertEquals(joined_string, "1,5,10,50");
     }
@@ -464,8 +464,8 @@ public class TestStringUtils {
         assertEquals("", StringUtils.join(new long[0], ""));
         assertEquals("", StringUtils.join(new long[0], null));
 
-        long[] long_array = {78L, 98934L, 232L, 97834L};
-        String joined_string = StringUtils.join(long_array, ",");
+        var long_array = new long[]{78L, 98934L, 232L, 97834L};
+        var joined_string = StringUtils.join(long_array, ",");
         assertNotNull(joined_string);
         assertEquals(joined_string, "78,98934,232,97834");
     }
@@ -476,8 +476,8 @@ public class TestStringUtils {
         assertEquals("", StringUtils.join(new float[0], ""));
         assertEquals("", StringUtils.join(new float[0], null));
 
-        float[] float_array = {23.1f, 76.3f, 3.87f};
-        String joined_string = StringUtils.join(float_array, ",");
+        var float_array = new float[]{23.1f, 76.3f, 3.87f};
+        var joined_string = StringUtils.join(float_array, ",");
         assertNotNull(joined_string);
         assertEquals(joined_string, "23.1,76.3,3.87");
     }
@@ -488,8 +488,8 @@ public class TestStringUtils {
         assertEquals("", StringUtils.join(new double[0], ""));
         assertEquals("", StringUtils.join(new double[0], null));
 
-        double[] double_array = {1.2d, 5.7d, 10.12d, 50.98d};
-        String joined_string = StringUtils.join(double_array, ",");
+        var double_array = new double[]{1.2d, 5.7d, 10.12d, 50.98d};
+        var joined_string = StringUtils.join(double_array, ",");
         assertNotNull(joined_string);
         assertEquals(joined_string, "1.2,5.7,10.12,50.98");
     }
@@ -499,19 +499,19 @@ public class TestStringUtils {
         assertEquals(0, StringUtils.indicesOf(null, "one").length);
         assertEquals(0, StringUtils.indicesOf("onetwoonethreefouroneONE", null).length);
 
-        int[] indices1 = StringUtils.indicesOf("onetwoonethreefouroneONE", "one");
+        var indices1 = StringUtils.indicesOf("onetwoonethreefouroneONE", "one");
         assertEquals(indices1.length, 3);
         assertEquals(indices1[0], 0);
         assertEquals(indices1[1], 6);
         assertEquals(indices1[2], 18);
 
-        int[] indices2 = StringUtils.indicesOf("onetwoonethreefouroneO", "one");
+        var indices2 = StringUtils.indicesOf("onetwoonethreefouroneO", "one");
         assertEquals(indices2.length, 3);
         assertEquals(indices2[0], 0);
         assertEquals(indices2[1], 6);
         assertEquals(indices2[2], 18);
 
-        int[] indices3 = StringUtils.indicesOf("101010101", "1");
+        var indices3 = StringUtils.indicesOf("101010101", "1");
         assertEquals(indices3.length, 5);
         assertEquals(indices3[0], 0);
         assertEquals(indices3[1], 2);
@@ -522,7 +522,7 @@ public class TestStringUtils {
 
     @Test
     void testIndicesOfCase() {
-        int[] indices = StringUtils.indicesOf("oNEtwoONEthreefourOne", "one", false);
+        var indices = StringUtils.indicesOf("oNEtwoONEthreefourOne", "one", false);
         assertEquals(indices.length, 3);
         assertEquals(indices[0], 0);
         assertEquals(indices[1], 6);
@@ -531,10 +531,10 @@ public class TestStringUtils {
 
     @Test
     void testGetMatchingRegexp() {
-        Pattern pattern1 = Pattern.compile("reg(.*)lar");
-        Pattern pattern2 = Pattern.compile("exp(.*)ion");
+        var pattern1 = Pattern.compile("reg(.*)lar");
+        var pattern2 = Pattern.compile("exp(.*)ion");
 
-        ArrayList<Pattern> regexps = new ArrayList<Pattern>();
+        var regexps = new ArrayList<Pattern>();
         regexps.add(pattern1);
         regexps.add(pattern2);
 
@@ -545,10 +545,10 @@ public class TestStringUtils {
 
     @Test
     void testGetRegexpMatch() {
-        String value1 = "regular";
-        String value2 = "expression";
+        var value1 = "regular";
+        var value2 = "expression";
 
-        ArrayList<String> values = new ArrayList<String>();
+        var values = new ArrayList<String>();
         values.add(value1);
         values.add(value2);
 
@@ -610,7 +610,7 @@ public class TestStringUtils {
     void testConvertBbcode() {
         assertNull(StringUtils.convertBbcode(null));
 
-        String source =
+        var source =
             """
                 [B]text[/B]text[b]text[/b]text
                 [U]text[/U]text[u]text[/u]text\r
@@ -797,7 +797,7 @@ public class TestStringUtils {
     void testGetDocumentPosition() {
         DocumentPosition position;
 
-        String document1 = """
+        var document1 = """
             0123456789
             9012345678
 
@@ -883,14 +883,14 @@ public class TestStringUtils {
 
         assertNull(StringUtils.getDocumentPosition(document1, 59));
 
-        String document2 = "0123456789\r" +
-                           "9012345678\r" +
-                           "\r" +
-                           "\r" +
-                           "8901234567\r" +
-                           "7890123456\r" +
-                           "\r" +
-                           "6789012345\r";
+        var document2 = "0123456789\r" +
+                        "9012345678\r" +
+                        "\r" +
+                        "\r" +
+                        "8901234567\r" +
+                        "7890123456\r" +
+                        "\r" +
+                        "6789012345\r";
 
         assertNull(StringUtils.getDocumentPosition(null, 1));
         assertNull(StringUtils.getDocumentPosition(document2, -2));
@@ -967,7 +967,7 @@ public class TestStringUtils {
 
         assertNull(StringUtils.getDocumentPosition(document2, 59));
 
-        String document3 = """
+        var document3 = """
             0123456789\r
             9012345678\r
             \r
@@ -1068,13 +1068,13 @@ public class TestStringUtils {
 
     @Test
     void testWordWrap() {
-        String buffer = """
+        var buffer = """
             Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Suspendisse nisi enim, rutrum eget, condimentum quis, malesuada cursus, magna. Fusce suscipit, lorem accumsan hendrerit convallis, purus sem feugiat nulla, a consequat turpis nisi sed ipsum. Duis iaculis suscipit quam. Praesent placerat nibh lobortis nulla. Morbi scelerisque. Etiam et libero. Aliquam viverra tortor eget lectus. Cras quis sem id massa tempor imperdiet. Morbi posuere purus sit amet tortor. Curabitur venenatis ultrices elit. Integer vitae neque. Suspendisse at ipsum sed orci interdum dictum. Praesent condimentum augue et diam. Nunc a neque. Quisque arcu.
             Praesent diam dolor, gravida eget, faucibus in, aliquet sed, elit. Sed lacinia lorem eu leo condimentum lacinia. Proin egestas. Sed porta magna. Nunc ut est. Sed vitae sem. Nunc tempor mattis felis. Nunc urna magna, aliquet quis, consequat ut, ullamcorper eget, libero. Mauris eu dui. Integer ante nibh, lobortis ut, sagittis eu, pretium sed, quam. Praesent fringilla nisi non metus mollis cursus. Ut convallis. Pellentesque imperdiet rhoncus nulla. Fusce tempor. Sed mollis. Fusce feugiat. Proin porttitor nulla sit amet velit.
 
             Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed eu est. Duis viverra orci non nisi mollis feugiat. Morbi ut felis. Phasellus placerat elit ac ligula. Vivamus vitae augue. Curabitur pharetra porta risus. Nullam eget est nec arcu bibendum condimentum. Quisque sed pede vitae odio tristique interdum. Aenean magna dolor, sagittis eu, vestibulum ut, varius luctus, erat. Duis tempus libero non lacus. Sed sapien enim, elementum at, laoreet vel, adipiscing sed, purus. Vestibulum magna. Quisque in pede. Proin vitae ligula. Aenean accumsan blandit magna. Nullam cursus tellus in urna. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.""";
 
-        String result =
+        var result =
             """
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Suspendisse nisi enim,
                 rutrum eget, condimentum quis, malesuada cursus, magna. Fusce suscipit, lorem\s
@@ -1105,5 +1105,43 @@ public class TestStringUtils {
                 mus.""";
 
         assertEquals(result, StringUtils.wordWrap(buffer, 80, null));
+    }
+
+    @Test
+    void testStripBlankLines() {
+        assertEquals("""
+            """, StringUtils.stripBlankLines("""
+            """));
+
+        assertEquals("""
+            """, StringUtils.stripBlankLines("""
+            
+            
+            
+            
+            """));
+
+        assertEquals("""
+            aaa
+            bbb
+            ccc
+            """, StringUtils.stripBlankLines("""
+            
+            aaa
+            bbb
+            
+            ccc
+            
+            """));
+
+        assertEquals("""
+            aaa
+            bbb
+            """, StringUtils.stripBlankLines("""
+            aaa
+            
+            
+            bbb
+            """));
     }
 }
