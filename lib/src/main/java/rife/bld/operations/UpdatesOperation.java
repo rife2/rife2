@@ -58,9 +58,9 @@ public class UpdatesOperation extends AbstractOperation<UpdatesOperation> {
     }
 
     /**
-     * Configures a compile operation from a {@link Project}.
+     * Configures an updates operation from a {@link Project}.
      *
-     * @param project the project to configure the compile operation from
+     * @param project the project to configure the updates operation from
      * @since 1.5
      */
     public UpdatesOperation fromProject(Project project) {
