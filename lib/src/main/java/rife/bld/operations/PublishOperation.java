@@ -6,9 +6,15 @@ package rife.bld.operations;
 
 import rife.bld.Project;
 import rife.bld.dependencies.*;
+import rife.bld.publish.MetadataBuilder;
 import rife.bld.publish.PublishInfo;
+import rife.tools.StringUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,12 +30,34 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     private final PublishInfo info_ = new PublishInfo();
     private final List<File> artifacts_ = new ArrayList<>();
 
+    private static String basicAuthentication(String username, String password) {
+        var valueToEncode = username + ":" + password;
+        return "Basic " + StringUtils.encodeBase64(valueToEncode.getBytes());
+    }
+
     /**
      * Performs the publish operation.
      *
      * @since 1.5.7
      */
     public void execute() {
+        try {
+            var client = HttpClient.newHttpClient();
+            var builder = HttpRequest.newBuilder()
+                .PUT(HttpRequest.BodyPublishers.ofString(new MetadataBuilder().info(info()).build()))
+                .uri(URI.create(repository().getArtifactUrl(info().groupId(), info().artifactId()) + "maven-metadata.xml"));
+            if (repository().username() != null && repository().password() != null) {
+                builder.header("Authorization", basicAuthentication(repository().username(), repository().password()));
+            }
+            var request = builder.build();
+            var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                // TODO
+            }
+
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

@@ -41,6 +41,9 @@ java {
 repositories {
     mavenLocal()
     mavenCentral()
+    maven {
+        url = uri("https://maven.reposilite.com/releases")
+    }
 }
 
 dependencies {
@@ -65,6 +68,7 @@ dependencies {
     testImplementation("org.apache.derby:derby:10.16.1.1")
     testImplementation("org.apache.derby:derbytools:10.16.1.1")
     testImplementation("com.oracle.database.jdbc:ojdbc11:21.9.0.0")
+    testImplementation("com.reposilite:reposilite:3.4.0")
 }
 
 configurations[JavaPlugin.API_CONFIGURATION_NAME].let { apiConfiguration ->

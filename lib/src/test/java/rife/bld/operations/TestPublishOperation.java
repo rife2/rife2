@@ -4,6 +4,7 @@
  */
 package rife.bld.operations;
 
+import com.reposilite.ReposiliteLauncherKt;
 import org.junit.jupiter.api.Test;
 import rife.bld.WebProject;
 import rife.bld.dependencies.*;
@@ -47,18 +48,41 @@ public class TestPublishOperation {
     void testExecution()
     throws Exception {
         var tmp = Files.createTempDirectory("test").toFile();
+        var tmp2 = Files.createTempDirectory("test").toFile();
         try {
-            var operation = new PublishOperation();
-            operation.execute();
-        } finally {
-            FileUtils.deleteDirectory(tmp);
-        }
-    }
+            var repository = ReposiliteLauncherKt.createWithParameters(
+                "-wd", tmp2.getAbsolutePath(),
+                "-p", "8081",
+                "--token", "manager:passwd");
+            repository.launch();
 
-    static class TestProject extends WebProject {
-        public TestProject(File tmp) {
-            workDirectory = tmp;
-            pkg = "test.pkg";
+            // wait for full startup
+            Thread.sleep(4000);
+
+            var create_operation = new CreateBlankOperation()
+                .workDirectory(tmp)
+                .packageName("test.pkg")
+                .projectName("myapp")
+                .downloadDependencies(true);
+            create_operation.execute();
+
+            new CompileOperation()
+                .fromProject(create_operation.project())
+                .execute();
+
+            var jar_operation = new JarOperation()
+                .fromProject(create_operation.project());
+            jar_operation.execute();
+
+            var operation = new PublishOperation()
+                .fromProject(create_operation.project())
+                .repository(new Repository("http://localhost:8081/releases", "manager", "passwd"));
+            operation.execute();
+
+            repository.shutdown();
+        } finally {
+            FileUtils.deleteDirectory(tmp2);
+            FileUtils.deleteDirectory(tmp);
         }
     }
 
