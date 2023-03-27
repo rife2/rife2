@@ -52,9 +52,7 @@ public class RunOperation {
             FileUtils.readString(process_.getErrorStream()))) {
             status = ExitStatusException.EXIT_FAILURE;
         }
-        if (status != 0) {
-            throw new ExitStatusException(status);
-        }
+        ExitStatusException.throwOnFailure(status);
     }
 
     /**

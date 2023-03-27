@@ -28,4 +28,18 @@ public class ExitStatusException extends Exception {
     public int getExitStatus() {
         return exitStatus_;
     }
+
+    /**
+     * Throws an {@code ExitStatusException} when the status is a failure.
+     *
+     * @param status the status to check
+     * @throws ExitStatusException when the provided status is different from {@code EXIT_SUCCESS}
+     * @since 1.5.7
+     */
+    public static void throwOnFailure(int status)
+    throws ExitStatusException {
+        if (status != EXIT_SUCCESS) {
+            throw new ExitStatusException(status);
+        }
+    }
 }
