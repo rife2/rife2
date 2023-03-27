@@ -21,82 +21,58 @@ public class PublishInfo {
     private final List<PublishDeveloper> developers_ = new ArrayList<>();
     private PublishScm scm_ = null;
 
-    public String getGroupId() {
+    public String groupId() {
         return groupId_;
     }
 
     public PublishInfo groupId(String groupId) {
-        setGroupId(groupId);
+        groupId_ = groupId;
         return this;
     }
 
-    public void setGroupId(String groupId) {
-        groupId_ = groupId;
-    }
-
-    public String getArtifactId() {
+    public String artifactId() {
         return artifactId_;
     }
 
     public PublishInfo artifactId(String artifactId) {
-        setArtifactId(artifactId);
+        artifactId_ = artifactId;
         return this;
     }
 
-    public void setArtifactId(String artifactId) {
-        artifactId_ = artifactId;
-    }
-
-    public VersionNumber getVersion() {
+    public VersionNumber version() {
         return version_;
     }
 
     public PublishInfo version(VersionNumber version) {
-        setVersion(version);
+        version_ = version;
         return this;
     }
 
-    public void setVersion(VersionNumber version) {
-        version_ = version;
-    }
-
-    public String getName() {
+    public String name() {
         return name_;
     }
 
     public PublishInfo name(String name) {
-        setName(name);
+        name_ = name;
         return this;
     }
 
-    public void setName(String name) {
-        name_ = name;
-    }
-
-    public String getDescription() {
+    public String description() {
         return description_;
     }
 
     public PublishInfo description(String description) {
-        setDescription(description);
+        description_ = description;
         return this;
     }
 
-    public void setDescription(String description) {
-        description_ = description;
-    }
-
-    public String getUrl() {
+    public String url() {
         return url_;
     }
 
     public PublishInfo url(String url) {
-        setUrl(url);
-        return this;
-    }
-
-    public void setUrl(String url) {
         url_ = url;
+        return this;
     }
 
     public PublishInfo developer(PublishDeveloper developer) {

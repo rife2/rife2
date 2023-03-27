@@ -10,55 +10,39 @@ public class PublishDeveloper {
     private String email_;
     private String url_;
 
-    public String getId() {
+    public String id() {
         return id_;
     }
 
     public PublishDeveloper id(String id) {
-        setId(id);
+        id_ = id;
         return this;
     }
 
-    public void setId(String id) {
-        this.id_ = id;
-    }
-
-    public String getName() {
+    public String name() {
         return name_;
     }
 
     public PublishDeveloper name(String name) {
-        setName(name);
+        name_ = name;
         return this;
     }
 
-    public void setName(String name) {
-        this.name_ = name;
-    }
-
-    public String getEmail() {
+    public String email() {
         return email_;
     }
 
     public PublishDeveloper email(String email) {
-        setEmail(email);
+        email_ = email;
         return this;
     }
 
-    public void setEmail(String email) {
-        this.email_ = email;
-    }
-
-    public String getUrl() {
+    public String url() {
         return url_;
     }
 
     public PublishDeveloper url(String url) {
-        setUrl(url);
+        url_ = url;
         return this;
-    }
-
-    public void setUrl(String url) {
-        this.url_ = url;
     }
 }

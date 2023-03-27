@@ -9,42 +9,30 @@ public class PublishScm {
     private String developerConnection_;
     private String url_;
 
-    public String getConnection() {
+    public String connection() {
         return connection_;
     }
 
     public PublishScm connection(String connection) {
-        setConnection(connection);
+        connection_ = connection;
         return this;
     }
 
-    public void setConnection(String connection) {
-        this.connection_ = connection;
-    }
-
-    public String getDeveloperConnection() {
+    public String developerConnection() {
         return developerConnection_;
     }
 
     public PublishScm developerConnection(String developerConnection) {
-        setDeveloperConnection(developerConnection);
+        developerConnection_ = developerConnection;
         return this;
     }
 
-    public void setDeveloperConnection(String developerConnection) {
-        this.developerConnection_ = developerConnection;
-    }
-
-    public String getUrl() {
+    public String url() {
         return url_;
     }
 
     public PublishScm url(String url) {
-        setUrl(url);
+        url_ = url;
         return this;
-    }
-
-    public void setUrl(String url) {
-        this.url_ = url;
     }
 }

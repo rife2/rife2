@@ -8,29 +8,21 @@ public class PublishLicense {
     private String name_;
     private String url_;
 
-    public String getName() {
+    public String name() {
         return name_;
     }
 
     public PublishLicense name(String name) {
-        setName(name);
+        name_ = name;
         return this;
     }
 
-    public void setName(String name) {
-        this.name_ = name;
-    }
-
-    public String getUrl() {
+    public String url() {
         return url_;
     }
 
     public PublishLicense url(String url) {
-        setUrl(url);
+        url_ = url;
         return this;
-    }
-
-    public void setUrl(String url) {
-        this.url_ = url;
     }
 }

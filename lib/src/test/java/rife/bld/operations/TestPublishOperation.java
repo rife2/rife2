@@ -20,6 +20,18 @@ public class TestPublishOperation {
     void testInstantiation() {
         var operation = new PublishOperation();
         assertNull(operation.repository());
+        assertTrue(operation.dependencies().isEmpty());
+        assertNotNull(operation.info());
+        assertNull(operation.info().groupId());
+        assertNull(operation.info().artifactId());
+        assertNull(operation.info().version());
+        assertNull(operation.info().name());
+        assertNull(operation.info().description());
+        assertNull(operation.info().url());
+        assertTrue(operation.info().licenses().isEmpty());
+        assertTrue(operation.info().developers().isEmpty());
+        assertNull(operation.info().scm());
+        assertTrue(operation.artifacts().isEmpty());
     }
 
     @Test

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId><!--v groupId--><!--/v--></groupId>
+  <artifactId><!--v artifactId--><!--/v--></artifactId>
+  <versioning>
+    <latest><!--v version--><!--/v--></latest>
+    <release><!--v version/--></release>
+    <versions>
+      <version><!--v version/--></version>
+    </versions>
+    <lastUpdated><!--v timestamp--><!--/v--></lastUpdated>
+  </versioning>
+</metadata>

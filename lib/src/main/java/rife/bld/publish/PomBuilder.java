@@ -9,6 +9,8 @@ import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.tools.StringUtils;
 
+import java.util.Objects;
+
 public class PomBuilder {
     private PublishInfo info_ = null;
     private DependencyScopes dependencies_ = new DependencyScopes();
@@ -36,11 +38,17 @@ public class PomBuilder {
 
         var info = info();
         if (info != null) {
-            t.setBean(info);
+            t.setValueEncoded("groupId", Objects.requireNonNullElse(info.groupId(), ""));
+            t.setValueEncoded("artifactId", Objects.requireNonNullElse(info.artifactId(), ""));
+            t.setValueEncoded("version", Objects.requireNonNullElse(info.version(), ""));
+            t.setValueEncoded("name", Objects.requireNonNullElse(info.name(), ""));
+            t.setValueEncoded("description", Objects.requireNonNullElse(info.description(), ""));
+            t.setValueEncoded("url", Objects.requireNonNullElse(info.url(), ""));
 
             if (!info.licenses().isEmpty()) {
                 for (var license : info.licenses()) {
-                    t.setBean(license, "license-");
+                    t.setValueEncoded("license-name", Objects.requireNonNullElse(license.name(), ""));
+                    t.setValueEncoded("license-url", Objects.requireNonNullElse(license.url(), ""));
                     t.appendBlock("licenses", "license");
                 }
                 t.setBlock("licenses-tag");
@@ -48,14 +56,20 @@ public class PomBuilder {
 
             if (!info.developers().isEmpty()) {
                 for (var developer : info.developers()) {
-                    t.setBean(developer, "developer-");
+                    t.setValueEncoded("developer-id", Objects.requireNonNullElse(developer.id(), ""));
+                    t.setValueEncoded("developer-name", Objects.requireNonNullElse(developer.name(), ""));
+                    t.setValueEncoded("developer-email", Objects.requireNonNullElse(developer.email(), ""));
+                    t.setValueEncoded("developer-url", Objects.requireNonNullElse(developer.url(), ""));
                     t.appendBlock("developers", "developer");
                 }
                 t.setBlock("developers-tag");
             }
 
             if (info.scm() != null) {
-                t.setBean(info.scm(), "scm-");
+                var scm = info.scm();
+                t.setValueEncoded("scm-connection", Objects.requireNonNullElse(scm.connection(), ""));
+                t.setValueEncoded("scm-developerConnection", Objects.requireNonNullElse(scm.developerConnection(), ""));
+                t.setValueEncoded("scm-url", Objects.requireNonNullElse(scm.url(), ""));
                 t.setBlock("scm-tag");
             }
         }
