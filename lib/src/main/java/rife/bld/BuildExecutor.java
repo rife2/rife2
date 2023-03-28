@@ -92,7 +92,22 @@ public class BuildExecutor {
                 exitStatus(1);
                 new HelpOperation(this, arguments()).executePrintOverviewHelp();
                 System.err.println();
-                System.err.println(ExceptionUtils.getExceptionStackTrace(e));
+                boolean first = true;
+                var e2 = e;
+                while (e2 != null) {
+                    if (e2.getMessage() != null) {
+                        if (!first) {
+                            System.err.print("> ");
+                        }
+                        System.err.println(e2.getMessage());
+                        first = false;
+                    }
+                    e2 = e2.getCause();
+                }
+
+                if (first) {
+                    System.err.println(ExceptionUtils.getExceptionStackTrace(e));
+                }
             }
         }
 

@@ -18,12 +18,12 @@ public class UploadException extends RuntimeException {
     private final String url_;
 
     public UploadException(String url, int status) {
-        super("An error occurred during while uploading to '" + url + "' : status code " + status);
+        super("An error occurred while uploading to '" + url + "' : HTTP status code " + status);
         url_ = url;
     }
 
     public UploadException(String url, Throwable cause) {
-        super("An error occurred during while uploading to '" + url + "'", cause);
+        super("An error occurred while uploading to '" + url + "'", cause);
         url_ = url;
     }
 
