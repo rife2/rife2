@@ -10,6 +10,7 @@ import rife.tools.StringUtils;
 /**
  * Provides help for the precompile command.
  *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
 public class PrecompileHelp implements CommandHelp {

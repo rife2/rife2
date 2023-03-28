@@ -175,6 +175,9 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
         if (info_.version() == null) {
             info_.version(project.version());
         }
+        if (info_.name() == null) {
+            info_.name(project.name());
+        }
         return this;
     }
 

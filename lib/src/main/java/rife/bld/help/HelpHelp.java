@@ -9,6 +9,7 @@ import rife.bld.CommandHelp;
 /**
  * Provides help for the help command.
  *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
 public class HelpHelp implements CommandHelp {

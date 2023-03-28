@@ -10,6 +10,7 @@ import rife.tools.StringUtils;
 /**
  * Provides help for the run command.
  *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
 public class RunHelp implements CommandHelp {

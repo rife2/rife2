@@ -10,6 +10,7 @@ import rife.tools.StringUtils;
 /**
  * Provides help for the test command.
  *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
 public class TestHelp implements CommandHelp {

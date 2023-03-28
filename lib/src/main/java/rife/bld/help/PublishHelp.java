@@ -10,6 +10,7 @@ import rife.tools.StringUtils;
 /**
  * Provides help for the publish command.
  *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5.7
  */
 public class PublishHelp implements CommandHelp {
