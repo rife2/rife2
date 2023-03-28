@@ -7,6 +7,7 @@ package rife.bld;
 import rife.bld.dependencies.*;
 import rife.bld.help.*;
 import rife.bld.operations.*;
+import rife.bld.publish.PublishInfo;
 import rife.tools.Convert;
 import rife.tools.FileUtils;
 
@@ -55,20 +56,6 @@ public class Project extends BuildExecutor {
      */
     protected VersionNumber version = null;
     /**
-     * The project's groupId.
-     *
-     * @see #groupId()
-     * @since 1.5.7
-     */
-    protected String groupId = null;
-    /**
-     * The project's artifactId.
-     *
-     * @see #artifactId()
-     * @since 1.5.7
-     */
-    protected String artifactId = null;
-    /**
      * The project's main class.
      *
      * @see #mainClass()
@@ -84,19 +71,26 @@ public class Project extends BuildExecutor {
      */
     protected List<Repository> repositories = new ArrayList<>();
     /**
-     * The project's default repository for publishing artifacts.
-     *
-     * @see #publicationRepository()
-     * @since 1.5.7
-     */
-    protected Repository publicationRepository = null;
-    /**
      * The project's dependencies.
      *
      * @see #dependencies()
      * @since 1.5
      */
     protected DependencyScopes dependencies = new DependencyScopes();
+    /**
+     * The project's default repository for publishing artifacts.
+     *
+     * @see #publishRepository()
+     * @since 1.5.7
+     */
+    protected Repository publishRepository = null;
+    /**
+     * The project's publishing information.
+     *
+     * @see #publishInfo()
+     * @since 1.5.7
+     */
+    protected PublishInfo publishInfo = null;
 
     /**
      * The project's precompiled template types.
@@ -983,34 +977,6 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns the project's groupId.
-     * <p>
-     * If the groupId isn't specified, the value of {@link #pkg()} will be used.
-     *
-     * @since 1.5.7
-     */
-    public String groupId() {
-        if (groupId == null) {
-            return pkg();
-        }
-        return groupId;
-    }
-
-    /**
-     * Returns the project's artifactId.
-     * <p>
-     * If the artifactId isn't specified, the lowercase value of {@link #name()} will be used.
-     *
-     * @since 1.5.7
-     */
-    public String artifactId() {
-        if (artifactId == null) {
-            return name().toLowerCase();
-        }
-        return artifactId;
-    }
-
-    /**
      * Returns the project's version.
      *
      * @since 1.5
@@ -1049,15 +1015,6 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns the default publication repository for this project.
-     *
-     * @since 1.5.7
-     */
-    public Repository publicationRepository() {
-        return publicationRepository;
-    }
-
-    /**
      * Adds repositories to this project.
      *
      * @param repositories the repositories to add
@@ -1081,6 +1038,24 @@ public class Project extends BuildExecutor {
             dependencies = new DependencyScopes();
         }
         return dependencies;
+    }
+
+    /**
+     * Returns the default publication repository for this project.
+     *
+     * @since 1.5.7
+     */
+    public Repository publishRepository() {
+        return publishRepository;
+    }
+
+    /**
+     * Returns the publishing info for this project.
+     *
+     * @since 1.5.7
+     */
+    public PublishInfo publishInfo() {
+        return publishInfo;
     }
 
     /**

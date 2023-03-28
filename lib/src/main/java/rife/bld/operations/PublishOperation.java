@@ -33,7 +33,7 @@ import static rife.tools.StringUtils.encodeHexLower;
 public class PublishOperation extends AbstractOperation<PublishOperation> {
     private Repository repository_;
     private final DependencyScopes dependencies_ = new DependencyScopes();
-    private final PublishInfo info_ = new PublishInfo();
+    private PublishInfo info_ = new PublishInfo();
     private final List<File> artifacts_ = new ArrayList<>();
 
     /**
@@ -159,13 +159,22 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @since 1.5.7
      */
     public PublishOperation fromProject(Project project) {
-        repository(project.publicationRepository());
+        repository(project.publishRepository());
         dependencies().include(project.dependencies());
         artifacts(List.of(new File(project.buildDistDirectory(), project.jarFileName())));
-        info()
-            .groupId(project.groupId())
-            .artifactId(project.artifactId())
-            .version(project.version());
+        var info = project.publishInfo();
+        if (info != null) {
+            info_ = info;
+        }
+        if (info_.groupId() == null) {
+            info_.groupId(project.pkg());
+        }
+        if (info_.artifactId() == null) {
+            info_.artifactId(project.name().toLowerCase());
+        }
+        if (info_.version() == null) {
+            info_.version(project.version());
+        }
         return this;
     }
 

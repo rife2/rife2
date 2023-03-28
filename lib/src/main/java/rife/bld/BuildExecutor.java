@@ -29,6 +29,7 @@ public class BuildExecutor {
 
     /**
      * Creates a new build executor instance.
+     *
      * @since 1.5
      */
     public BuildExecutor() {
@@ -48,7 +49,7 @@ public class BuildExecutor {
 
     /**
      * Set the exist status to use at the end of the execution.
-     * 
+     *
      * @param status sets the exit status
      * @since 1.5.1
      */
@@ -114,16 +115,16 @@ public class BuildExecutor {
         if (show_help) {
             help();
         }
-        
+
         return exitStatus_;
     }
 
     /**
      * Starts the execution of the build. This method will call
      * System.exit() when done with the appropriate exit status.
-     * 
+     *
      * @param arguments the arguments to execute the build with
-     * @see #execute 
+     * @see #execute
      * @since 1.5.1
      */
     public void start(String[] arguments) {
@@ -161,21 +162,22 @@ public class BuildExecutor {
                             method.setAccessible(true);
 
                             var name = method.getName();
+                            if (!build_commands.containsKey(name)) {
+                                var annotation = method.getAnnotation(BuildCommand.class);
 
-                            var annotation = method.getAnnotation(BuildCommand.class);
+                                var annotation_name = annotation.value();
+                                if (annotation_name != null && !annotation_name.isEmpty()) {
+                                    name = annotation_name;
+                                }
 
-                            var annotation_name = annotation.value();
-                            if (annotation_name != null && !annotation_name.isEmpty()) {
-                                name = annotation_name;
+                                var build_help = annotation.help();
+                                CommandHelp command_help = null;
+                                if (build_help != null && build_help != CommandHelp.class) {
+                                    command_help = build_help.getDeclaredConstructor().newInstance();
+                                }
+
+                                build_commands.put(name, new CommandAnnotated(this, method, command_help));
                             }
-
-                            var build_help = annotation.help();
-                            CommandHelp command_help = null;
-                            if (build_help != null && build_help != CommandHelp.class) {
-                                command_help = build_help.getDeclaredConstructor().newInstance();
-                            }
-
-                            build_commands.put(name, new CommandAnnotated(this, method, command_help));
                         }
                     }
 

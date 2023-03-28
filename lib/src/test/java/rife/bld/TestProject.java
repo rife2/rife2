@@ -26,10 +26,6 @@ public class TestProject {
         assertThrows(IllegalStateException.class, project::pkg);
         assertNull(project.name);
         assertThrows(IllegalStateException.class, project::name);
-        assertNull(project.groupId);
-        assertThrows(IllegalStateException.class, project::groupId);
-        assertNull(project.artifactId);
-        assertThrows(IllegalStateException.class, project::artifactId);
         assertNull(project.version);
         assertThrows(IllegalStateException.class, project::version);
         assertNull(project.mainClass);
@@ -37,10 +33,12 @@ public class TestProject {
 
         assertNotNull(project.repositories);
         assertTrue(project.repositories.isEmpty());
-        assertNull(project.publicationRepository);
-        assertNull(project.publicationRepository());
         assertNotNull(project.dependencies);
         assertTrue(project.dependencies.isEmpty());
+        assertNull(project.publishRepository);
+        assertNull(project.publishRepository());
+        assertNull(project.publishInfo);
+        assertNull(project.publishInfo());
 
         assertNotNull(project.precompiledTemplateTypes);
         assertTrue(project.precompiledTemplateTypes.isEmpty());

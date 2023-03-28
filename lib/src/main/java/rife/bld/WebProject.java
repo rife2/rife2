@@ -4,9 +4,8 @@
  */
 package rife.bld;
 
-import rife.bld.help.WarHelp;
-import rife.bld.operations.UberJarOperation;
-import rife.bld.operations.WarOperation;
+import rife.bld.help.*;
+import rife.bld.operations.*;
 
 import java.io.File;
 import java.util.List;
@@ -18,7 +17,8 @@ import java.util.Objects;
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
- */public class WebProject extends Project {
+ */
+public class WebProject extends Project {
     /**
      * The main war archive creation.
      *
@@ -64,6 +64,23 @@ import java.util.Objects;
     throws Exception {
         jar();
         new WarOperation().fromProject(this).execute();
+    }
+
+    /**
+     * Standard publish-web command, uploads artifacts to the publication repository.
+     *
+     * @since 1.5.7
+     */
+    @BuildCommand(help = PublishWebHelp.class)
+    public void publish()
+    throws Exception {
+        uberjar();
+        new WarOperation().fromProject(this).execute();
+
+        var operation = new PublishOperation().fromProject(this);
+        operation.artifacts().add(new File(buildDistDirectory(), uberJarFileName()));
+        operation.artifacts().add(new File(buildDistDirectory(), warFileName()));
+        operation.execute();
     }
 
     /*
