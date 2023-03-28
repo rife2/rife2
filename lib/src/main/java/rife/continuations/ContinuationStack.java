@@ -284,13 +284,13 @@ public class ContinuationStack {
     public synchronized void outputState() {
         ContinuationDebug.LOGGER.finest("");
         ContinuationDebug.LOGGER.finest("STACK : " + this);
-        ContinuationDebug.LOGGER.finest("mPositionMapping[" + positionMapping_.length + "] = " + join(positionMapping_, ","));
-        ContinuationDebug.LOGGER.finest("mTypeMapping[" + typeMapping_.length + "]     = " + join(typeMapping_, ","));
-        ContinuationDebug.LOGGER.finest("mIntStack[" + intStack_.length + "]        = " + join(intStack_, ","));
-        ContinuationDebug.LOGGER.finest("mLongStack[" + longStack_.length + "]        = " + join(longStack_, ","));
-        ContinuationDebug.LOGGER.finest("mFloatStack[" + floatStack_.length + "]       = " + join(floatStack_, ","));
-        ContinuationDebug.LOGGER.finest("mDoubleStack[" + doubleStack_.length + "]      = " + join(doubleStack_, ","));
-        ContinuationDebug.LOGGER.finest("mReferenceStack[" + referenceStack_.length + "]   = " + join(referenceStack_, ","));
+        ContinuationDebug.LOGGER.finest("positionMapping_[" + positionMapping_.length + "] = " + join(positionMapping_, ","));
+        ContinuationDebug.LOGGER.finest("typeMapping_[" + typeMapping_.length + "]     = " + join(typeMapping_, ","));
+        ContinuationDebug.LOGGER.finest("intStack_[" + intStack_.length + "]        = " + join(intStack_, ","));
+        ContinuationDebug.LOGGER.finest("longStack_[" + longStack_.length + "]        = " + join(longStack_, ","));
+        ContinuationDebug.LOGGER.finest("floatStack_[" + floatStack_.length + "]       = " + join(floatStack_, ","));
+        ContinuationDebug.LOGGER.finest("doubleStack_[" + doubleStack_.length + "]      = " + join(doubleStack_, ","));
+        ContinuationDebug.LOGGER.finest("referenceStack_[" + referenceStack_.length + "]   = " + join(referenceStack_, ","));
     }
 
     // adding a join method here to remove a viral dependency on the StringUtils class
