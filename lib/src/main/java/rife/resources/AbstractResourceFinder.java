@@ -31,7 +31,7 @@ public abstract class AbstractResourceFinder implements ResourceFinder {
             return null;
         }
 
-        URL resource = getResource(name);
+        var resource = getResource(name);
         if (null == resource) {
             return null;
         }
@@ -50,7 +50,7 @@ public abstract class AbstractResourceFinder implements ResourceFinder {
             return null;
         }
 
-        URL resource = getResource(name);
+        var resource = getResource(name);
         if (null == resource) {
             return null;
         }
@@ -69,7 +69,7 @@ public abstract class AbstractResourceFinder implements ResourceFinder {
             return -1;
         }
 
-        URL resource = getResource(name);
+        var resource = getResource(name);
         if (null == resource) {
             return -1;
         }

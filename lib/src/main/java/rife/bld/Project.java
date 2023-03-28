@@ -84,6 +84,13 @@ public class Project extends BuildExecutor {
      */
     protected List<Repository> repositories = new ArrayList<>();
     /**
+     * The project's default repository for publishing artifacts.
+     *
+     * @see #publicationRepository()
+     * @since 1.5.7
+     */
+    protected Repository publicationRepository = null;
+    /**
      * The project's dependencies.
      *
      * @see #dependencies()
@@ -463,6 +470,18 @@ public class Project extends BuildExecutor {
         new VersionOperation().fromArguments(arguments()).execute();
     }
 
+    /**
+     * Standard publish command, uploads artifacts to the publication repository.
+     *
+     * @since 1.5.7
+     */
+    @BuildCommand(help = PublishHelp.class)
+    public void publish()
+    throws Exception {
+        jar();
+        new PublishOperation().fromProject(this).execute();
+    }
+
     /*
      * Useful methods
      */
@@ -490,6 +509,19 @@ public class Project extends BuildExecutor {
      */
     public static Repository repository(String url) {
         return new Repository(url);
+    }
+
+    /**
+     * Creates a new repository instance with basic username and password authentication.
+     *
+     * @param url      the repository URL
+     * @param username the repository username
+     * @param password the repository password
+     * @return a newly created {@code Repository} instance
+     * @since 1.5.7
+     */
+    public static Repository repository(String url, String username, String password) {
+        return new Repository(url, username, password);
     }
 
     /**
@@ -967,13 +999,13 @@ public class Project extends BuildExecutor {
     /**
      * Returns the project's artifactId.
      * <p>
-     * If the artifactId isn't specified, the value of {@link #name()} will be used.
+     * If the artifactId isn't specified, the lowercase value of {@link #name()} will be used.
      *
      * @since 1.5.7
      */
     public String artifactId() {
         if (artifactId == null) {
-            return name();
+            return name().toLowerCase();
         }
         return artifactId;
     }
@@ -1014,6 +1046,15 @@ public class Project extends BuildExecutor {
             repositories = new ArrayList<>();
         }
         return repositories;
+    }
+
+    /**
+     * Returns the default publication repository for this project.
+     *
+     * @since 1.5.7
+     */
+    public Repository publicationRepository() {
+        return publicationRepository;
     }
 
     /**

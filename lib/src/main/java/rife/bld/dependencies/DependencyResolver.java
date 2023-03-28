@@ -15,7 +15,7 @@ import java.nio.channels.Channels;
 import java.security.MessageDigest;
 import java.util.*;
 
-import static rife.tools.StringUtils.encodeHex;
+import static rife.tools.StringUtils.encodeHexLower;
 
 /**
  * Resolves a dependency within a list of Maven-compatible repositories.
@@ -281,9 +281,7 @@ public class DependencyResolver {
 
             var digest = MessageDigest.getInstance(algorithm);
             digest.update(FileUtils.readBytes(downloadFile));
-            var hash_file_sum = encodeHex(digest.digest());
-
-            return hash_url_sum.equalsIgnoreCase(hash_file_sum);
+            return hash_url_sum.equals(encodeHexLower(digest.digest()));
         } catch (Exception e) {
             // no-op, the hash file couldn't be found or calculated, so it couldn't be checked
         }

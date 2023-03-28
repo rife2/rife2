@@ -37,6 +37,8 @@ public class TestProject {
 
         assertNotNull(project.repositories);
         assertTrue(project.repositories.isEmpty());
+        assertNull(project.publicationRepository);
+        assertNull(project.publicationRepository());
         assertNotNull(project.dependencies);
         assertTrue(project.dependencies.isEmpty());
 

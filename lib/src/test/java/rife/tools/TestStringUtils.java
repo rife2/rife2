@@ -7,6 +7,7 @@ package rife.tools;
 import org.junit.jupiter.api.Test;
 import rife.datastructures.DocumentPosition;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -60,6 +61,20 @@ public class TestStringUtils {
         } catch (Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
+    }
+
+    @Test
+    void testEncodeHex() {
+        assertNull(StringUtils.encodeHex(null));
+        assertEquals(StringUtils.encodeHex("".getBytes(StandardCharsets.UTF_8)), "");
+        assertEquals(StringUtils.encodeHex("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()".getBytes(StandardCharsets.UTF_8)), "4142434445464748494A4B4C4D4E4F505152535455565758595A6162636465666768696A6B6C6D6E6F707172737475767778797A3031323334353637383921402324255E262A2829");
+    }
+
+    @Test
+    void testEncodeHexLower() {
+        assertNull(StringUtils.encodeHexLower(null));
+        assertEquals(StringUtils.encodeHexLower("".getBytes(StandardCharsets.UTF_8)), "");
+        assertEquals(StringUtils.encodeHexLower("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()".getBytes(StandardCharsets.UTF_8)), "4142434445464748494a4b4c4d4e4f505152535455565758595a6162636465666768696a6b6c6d6e6f707172737475767778797a3031323334353637383921402324255e262a2829");
     }
 
     @Test
@@ -1115,10 +1130,10 @@ public class TestStringUtils {
 
         assertEquals("""
             """, StringUtils.stripBlankLines("""
-            
-            
-            
-            
+                        
+                        
+                        
+                        
             """));
 
         assertEquals("""
@@ -1126,12 +1141,12 @@ public class TestStringUtils {
             bbb
             ccc
             """, StringUtils.stripBlankLines("""
-            
+                        
             aaa
             bbb
-            
+                        
             ccc
-            
+                        
             """));
 
         assertEquals("""
@@ -1139,8 +1154,8 @@ public class TestStringUtils {
             bbb
             """, StringUtils.stripBlankLines("""
             aaa
-            
-            
+                        
+                        
             bbb
             """));
     }

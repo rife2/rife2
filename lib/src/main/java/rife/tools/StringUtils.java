@@ -36,6 +36,7 @@ public final class StringUtils {
     public static Charset CHARSET_US_ASCII = Charset.forName(StringUtils.ENCODING_US_ASCII);
 
     public static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
+    public static final char[] HEX_DIGITS_LOWER = "0123456789abcdef".toCharArray();
 
     enum BbcodeOption {
         SHORTEN_URL, SANITIZE_URL, CONVERT_BARE_URLS, NO_FOLLOW_LINKS
@@ -598,6 +599,17 @@ public final class StringUtils {
      */
     public static void appendHexDigit(StringBuilder out, int number) {
         out.append(HEX_DIGITS[number & 0x0F]);
+    }
+
+    /**
+     * Appends the lowercase hexadecimal digit of the provided number.
+     *
+     * @param out    the string builder to append to
+     * @param number the number who's first digit will be appended in hexadecimal
+     * @since 1.5.7
+     */
+    public static void appendHexDigitLower(StringBuilder out, int number) {
+        out.append(HEX_DIGITS_LOWER[number & 0x0F]);
     }
 
     private static void appendUrlEncodedByte(StringBuilder out, int ch) {
@@ -1166,17 +1178,39 @@ public final class StringUtils {
     }
 
     /**
-     * Generates a hexadecimal string for the provided byte array.
+     * Generates an uppercase hexadecimal string for the provided byte array.
      *
      * @param bytes the byte array to convert to a hex string
      * @return the converted hexadecimal string
      * @since 1.0
      */
     public static String encodeHex(byte[] bytes) {
+        if (bytes == null) {
+            return null;
+        }
         var out = new StringBuilder();
         for (var b : bytes) {
             appendHexDigit(out, b >> 4);
             appendHexDigit(out, b);
+        }
+        return out.toString();
+    }
+
+    /**
+     * Generates a lowercase hexadecimal string for the provided byte array.
+     *
+     * @param bytes the byte array to convert to a hex string
+     * @return the converted hexadecimal string
+     * @since 1.5.7
+     */
+    public static String encodeHexLower(byte[] bytes) {
+        if (bytes == null) {
+            return null;
+        }
+        var out = new StringBuilder();
+        for (var b : bytes) {
+            appendHexDigitLower(out, b >> 4);
+            appendHexDigitLower(out, b);
         }
         return out.toString();
     }

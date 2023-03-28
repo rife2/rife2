@@ -5,6 +5,8 @@
 package rife.tools;
 
 public final class HttpUtils {
+    public static final String HEADER_AUTHORIZATION = "Authorization";
+
     public static final String CHARSET = "charset=";
 
     private HttpUtils() {
@@ -34,6 +36,19 @@ public final class HttpUtils {
         }
 
         return contentType;
+    }
+
+    /**
+     * Generates the header value for basic HTTP authorization.
+     *
+     * @param username the authenticated username
+     * @param password the authenticated password
+     * @return the header value for basic HTTP authorization
+     * @since 1.5.7
+     */
+    public static String basicAuthorizationHeader(String username, String password) {
+        var valueToEncode = username + ":" + password;
+        return "Basic " + StringUtils.encodeBase64(valueToEncode.getBytes());
     }
 }
 
