@@ -4,6 +4,8 @@
  */
 package rife.bld.operations.exceptions;
 
+import rife.tools.HttpUtils;
+
 import java.io.Serial;
 
 /**
@@ -18,7 +20,7 @@ public class UploadException extends RuntimeException {
     private final String url_;
 
     public UploadException(String url, int status) {
-        super("An error occurred while uploading to '" + url + "' : HTTP status code " + status);
+        super("An error occurred while uploading to '" + url + "'\nHTTP status code " + status + " : " + HttpUtils.statusReason(status));
         url_ = url;
     }
 
