@@ -237,11 +237,9 @@ public final class FileUtils {
         if (null == target) throw new IllegalArgumentException("target can't be null.");
 
         try {
-            var file_output_stream = new FileOutputStream(target);
-
-            copy(inputStream, file_output_stream);
-
-            file_output_stream.close();
+            try (var file_output_stream = new FileOutputStream(target)) {
+                copy(inputStream, file_output_stream);
+            }
         } catch (IOException e) {
             throw new FileUtilsErrorException("Error while copying an input stream to file '" + target.getAbsolutePath() + "'.", e);
         }
@@ -253,11 +251,9 @@ public final class FileUtils {
         if (null == outputStream) throw new IllegalArgumentException("outputStream can't be null.");
 
         try {
-            var file_input_stream = new FileInputStream(source);
-
-            copy(file_input_stream, outputStream);
-
-            file_input_stream.close();
+            try (var file_input_stream = new FileInputStream(source)) {
+                copy(file_input_stream, outputStream);
+            }
         } catch (IOException e) {
             throw new FileUtilsErrorException("Error while copying file '" + source.getAbsolutePath() + "' to an output stream.", e);
         }
@@ -269,13 +265,10 @@ public final class FileUtils {
         if (null == target) throw new IllegalArgumentException("target can't be null.");
 
         try {
-            var file_input_stream = new FileInputStream(source);
-            var file_output_stream = new FileOutputStream(target);
-
-            copy(file_input_stream, file_output_stream);
-
-            file_output_stream.close();
-            file_input_stream.close();
+            try (var file_input_stream = new FileInputStream(source);
+                 var file_output_stream = new FileOutputStream(target)) {
+                copy(file_input_stream, file_output_stream);
+            }
         } catch (IOException e) {
             throw new FileUtilsErrorException("Error while copying file '" + source.getAbsolutePath() + "' to file '" + target.getAbsolutePath() + "'.", e);
         }
@@ -391,15 +384,13 @@ public final class FileUtils {
         try {
             var connection = source.openConnection();
             connection.setUseCaches(false);
-            var input_stream = connection.getInputStream();
-            String content = null;
-            if (null == encoding) {
-                content = readString(input_stream);
-            } else {
-                content = readString(input_stream, encoding);
+            try (var input_stream = connection.getInputStream()) {
+                if (null == encoding) {
+                    return readString(input_stream);
+                } else {
+                    return readString(input_stream, encoding);
+                }
             }
-            input_stream.close();
-            return content;
         } catch (IOException e) {
             throw new FileUtilsErrorException("Error while reading url '" + source + ".", e);
         }
@@ -412,10 +403,9 @@ public final class FileUtils {
         try {
             var connection = source.openConnection();
             connection.setUseCaches(false);
-            var input_stream = connection.getInputStream();
-            var content = readBytes(input_stream);
-            input_stream.close();
-            return content;
+            try (var input_stream = connection.getInputStream()) {
+                return readBytes(input_stream);
+            }
         } catch (IOException e) {
             throw new FileUtilsErrorException("Error while reading url '" + source + ".", e);
         }
@@ -431,15 +421,13 @@ public final class FileUtils {
         if (null == source) throw new IllegalArgumentException("source can't be null.");
 
         try {
-            var file_input_stream = new FileInputStream(source);
-            String content = null;
-            if (null == encoding) {
-                content = readString(file_input_stream);
-            } else {
-                content = readString(file_input_stream, encoding);
+            try (var file_input_stream = new FileInputStream(source)) {
+                if (null == encoding) {
+                    return readString(file_input_stream);
+                } else {
+                    return readString(file_input_stream, encoding);
+                }
             }
-            file_input_stream.close();
-            return content;
         } catch (IOException e) {
             throw new FileUtilsErrorException("Error while reading url '" + source.getAbsolutePath() + ".", e);
         }
@@ -450,10 +438,9 @@ public final class FileUtils {
         if (null == source) throw new IllegalArgumentException("source can't be null.");
 
         try {
-            var file_input_stream = new FileInputStream(source);
-            var content = readBytes(file_input_stream);
-            file_input_stream.close();
-            return content;
+            try (var file_input_stream = new FileInputStream(source)) {
+                return readBytes(file_input_stream);
+            }
         } catch (IOException e) {
             throw new FileUtilsErrorException("Error while reading file '" + source.getAbsolutePath() + ".", e);
         }
@@ -465,10 +452,10 @@ public final class FileUtils {
         if (null == destination) throw new IllegalArgumentException("destination can't be null.");
 
         try {
-            var file_output_stream = new FileOutputStream(destination);
-            file_output_stream.write(content);
-            file_output_stream.flush();
-            file_output_stream.close();
+            try (var file_output_stream = new FileOutputStream(destination)) {
+                file_output_stream.write(content);
+                file_output_stream.flush();
+            }
         } catch (IOException e) {
             throw new FileUtilsErrorException("Error while write a string to '" + destination.getAbsolutePath() + ".", e);
         }
@@ -480,10 +467,10 @@ public final class FileUtils {
         if (null == destination) throw new IllegalArgumentException("destination can't be null.");
 
         try {
-            var file_writer = new FileWriter(destination);
-            file_writer.write(content, 0, content.length());
-            file_writer.flush();
-            file_writer.close();
+            try (var file_writer = new FileWriter(destination)) {
+                file_writer.write(content, 0, content.length());
+                file_writer.flush();
+            }
         } catch (IOException e) {
             throw new FileUtilsErrorException("Error while write a string to '" + destination.getAbsolutePath() + ".", e);
         }

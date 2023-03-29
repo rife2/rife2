@@ -14,17 +14,20 @@ import java.util.regex.Pattern;
  * <p>
  * When the version number is undefined, {@link VersionNumber#UNKNOWN} should be used.
  *
- * @param major the major version component
- * @param minor the minor version component
- * @param revision the revision of the version
+ * @param major     the major version component
+ * @param minor     the minor version component
+ * @param revision  the revision of the version
  * @param qualifier a string qualifier for the version
  * @param separator the separator used to separate the qualifier from the version number
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
 public record VersionNumber(Integer major, Integer minor, Integer revision, String qualifier, String separator) implements Comparable<VersionNumber> {
+    private static final String SNAPSHOT_VERSION = "SNAPSHOT";
+
     /**
      * Singleton to use when the version is not specified.
+     *
      * @since 1.5
      */
     public static final VersionNumber UNKNOWN = new VersionNumber(0, 0, 0, "");
@@ -89,8 +92,8 @@ public record VersionNumber(Integer major, Integer minor, Integer revision, Stri
     /**
      * Constructs a version number with major, minor and revision components.
      *
-     * @param major the major version component
-     * @param minor the minor version component
+     * @param major    the major version component
+     * @param minor    the minor version component
      * @param revision the version revision component
      * @since 1.5
      */
@@ -101,9 +104,9 @@ public record VersionNumber(Integer major, Integer minor, Integer revision, Stri
     /**
      * Constructs a complete version number with qualifier, the separator will default to "{@code -}".
      *
-     * @param major the major version component
-     * @param minor the minor version component
-     * @param revision the version revision component
+     * @param major     the major version component
+     * @param minor     the minor version component
+     * @param revision  the version revision component
      * @param qualifier the version qualifier
      * @since 1.5
      */
@@ -114,9 +117,9 @@ public record VersionNumber(Integer major, Integer minor, Integer revision, Stri
     /**
      * Constructs a complete version number with qualifier.
      *
-     * @param major the major version component
-     * @param minor the minor version component
-     * @param revision the version revision component
+     * @param major     the major version component
+     * @param minor     the minor version component
+     * @param revision  the version revision component
      * @param qualifier the version qualifier
      * @param separator the separator for the version qualifier
      * @since 1.5
@@ -167,6 +170,17 @@ public record VersionNumber(Integer major, Integer minor, Integer revision, Stri
      */
     public int revisionInt() {
         return revision == null ? 0 : revision;
+    }
+
+    /**
+     * Indicates whether this is a snapshot version.
+     *
+     * @return {@code true} if this is a snapshot version; or
+     * {@code false} otherwise
+     * @since 1.5.8
+     */
+    public boolean isSnapshot() {
+        return qualifier().toUpperCase().contains(SNAPSHOT_VERSION);
     }
 
     public int compareTo(VersionNumber other) {

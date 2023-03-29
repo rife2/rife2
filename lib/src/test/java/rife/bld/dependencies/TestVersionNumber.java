@@ -47,6 +47,18 @@ public class TestVersionNumber {
     }
 
     @Test
+    void testIsSnapshot() {
+        assertFalse(new VersionNumber(1, 0, 0, null).isSnapshot());
+        assertFalse(new VersionNumber(1, 2, 3, null).isSnapshot());
+        assertTrue(new VersionNumber(1, 0, 0, "rc1-SNAPSHOT").isSnapshot());
+        assertTrue(new VersionNumber(1, 2, 0, "rc1-SNAPSHOT").isSnapshot());
+        assertTrue(new VersionNumber(1, 2, 3, "rc1-SNAPSHOT").isSnapshot());
+        assertFalse(new VersionNumber(11, 22, 33, "eap").isSnapshot());
+        assertFalse(new VersionNumber(11, 0, 0, "fortyfour").isSnapshot());
+        assertTrue(new VersionNumber(1, 2, 3, "4-rc1-SNAPSHOT").isSnapshot());
+    }
+
+    @Test
     void testInvalidParsed() {
         assertEquals(VersionNumber.parse(null), VersionNumber.UNKNOWN);
         assertEquals(VersionNumber.parse(""), VersionNumber.UNKNOWN);

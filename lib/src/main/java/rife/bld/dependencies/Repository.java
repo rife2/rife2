@@ -4,10 +4,6 @@
  */
 package rife.bld.dependencies;
 
-import rife.engine.UrlBuilder;
-
-import java.net.*;
-
 /**
  * Contains the information required to locate a Maven-compatible repository.
  *
@@ -32,10 +28,10 @@ public record Repository(String url, String username, String password) {
     }
 
     /**
-     * Constructs the artifact URL for a dependency if it would be located in this repository.
+     * Constructs the URL for a dependency if it would be located in this repository.
      *
      * @param dependency the dependency to create the URL for
-     * @return the constructed artifact URL
+     * @return the constructed URL
      * @since 1.5
      */
     public String getArtifactUrl(Dependency dependency) {
@@ -43,11 +39,11 @@ public record Repository(String url, String username, String password) {
     }
 
     /**
-     * Constructs the artifact URL for a dependency if it would be located in this repository.
+     * Constructs the URL for a dependency if it would be located in this repository.
      *
      * @param groupId    the groupId dependency to create the URL for
      * @param artifactId the artifactId dependency to create the URL for
-     * @return the constructed artifact URL
+     * @return the constructed URL
      * @since 1.5.7
      */
     public String getArtifactUrl(String groupId, String artifactId) {

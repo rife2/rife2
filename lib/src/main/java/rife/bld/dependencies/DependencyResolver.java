@@ -14,7 +14,10 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.security.MessageDigest;
 import java.util.*;
+import java.util.stream.Collectors;
 
+import static rife.tools.HttpUtils.HEADER_AUTHORIZATION;
+import static rife.tools.HttpUtils.basicAuthorizationHeader;
 import static rife.tools.StringUtils.encodeHexLower;
 
 /**
@@ -220,11 +223,11 @@ public class DependencyResolver {
     }
 
     /**
-     * Downloads the artifact for the resolved dependency into the provided directory.
+     * Downloads the url for the resolved dependency into the provided directory.
      * <p>
      * The destination directory must exist and be writable.
      *
-     * @param directory the directory to download the dependency artifact into
+     * @param directory the directory to download the dependency url into
      * @throws DependencyDownloadException when an error occurred during the download
      * @since 1.5
      */
@@ -236,16 +239,16 @@ public class DependencyResolver {
         if (!directory.isDirectory()) throw new IllegalArgumentException("directory '" + directory + "' is not a directory");
 
         boolean retrieved = false;
-        var urls = getDownloadUrls();
-        for (var download_url : urls) {
-            var download_filename = download_url.substring(download_url.lastIndexOf("/") + 1);
+        var artifacts = getDownloadArtifacts();
+        for (var artifact : artifacts) {
+            var download_filename = artifact.url().substring(artifact.url().lastIndexOf("/") + 1);
             var download_file = new File(directory, download_filename);
-            System.out.print("Downloading: " + download_url + " ... ");
+            System.out.print("Downloading: " + artifact.url() + " ... ");
             System.out.flush();
             try {
                 if (download_file.exists() && download_file.canRead()) {
-                    if (checkHash(download_url, download_file, ".sha256", "SHA-256") ||
-                        checkHash(download_url, download_file, ".md5", "MD5")) {
+                    if (checkHash(artifact, download_file, ".sha256", "SHA-256") ||
+                        checkHash(artifact, download_file, ".md5", "MD5")) {
                         retrieved = true;
                         System.out.print("exists");
                         break;
@@ -253,32 +256,38 @@ public class DependencyResolver {
                 }
 
                 if (!retrieved) {
-                    var url = new URL(download_url);
-                    var readableByteChannel = Channels.newChannel(url.openStream());
-                    try (var fileOutputStream = new FileOutputStream(download_file)) {
-                        var fileChannel = fileOutputStream.getChannel();
-                        fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+                    var connection = new URL(artifact.url()).openConnection();
+                    connection.setUseCaches(false);
+                    if (artifact.repository().username() != null && artifact.repository().password() != null) {
+                        connection.setRequestProperty(
+                            HEADER_AUTHORIZATION,
+                            basicAuthorizationHeader(artifact.repository().username(), artifact.repository().password()));
+                    }
+                    try (var input_stream = connection.getInputStream()) {
+                        var readableByteChannel = Channels.newChannel(input_stream);
+                        try (var fileOutputStream = new FileOutputStream(download_file)) {
+                            var fileChannel = fileOutputStream.getChannel();
+                            fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 
-                        retrieved = true;
-                        System.out.print("done");
-                        break;
+                            retrieved = true;
+                            System.out.print("done");
+                            break;
+                        }
                     }
                 }
             } catch (FileNotFoundException e) {
                 System.out.print("not found");
             } catch (IOException e) {
-                throw new DependencyDownloadException(dependency_, download_url, download_file, e);
+                throw new DependencyDownloadException(dependency_, artifact.url(), download_file, e);
             } finally {
                 System.out.println();
             }
         }
     }
 
-    private static boolean checkHash(String downloadUrl, File downloadFile, String extension, String algorithm) {
+    private static boolean checkHash(RepositoryArtifact artifact, File downloadFile, String extension, String algorithm) {
         try {
-            var hash_url = new URL(downloadUrl + extension);
-            var hash_url_sum = FileUtils.readString(hash_url);
-
+            var hash_url_sum = readString(artifact.appendPath(extension));
             var digest = MessageDigest.getInstance(algorithm);
             digest.update(FileUtils.readBytes(downloadFile));
             return hash_url_sum.equals(encodeHexLower(digest.digest()));
@@ -309,13 +318,17 @@ public class DependencyResolver {
     }
 
     /**
-     * Retrieves all the potential artifact download URLs for the dependency
+     * Retrieves all the potential url download URLs for the dependency
      * within the provided repositories.
      *
      * @return a list of potential download URLs
      * @since 1.5
      */
     public List<String> getDownloadUrls() {
+        return getDownloadArtifacts().stream().map(RepositoryArtifact::url).toList();
+    }
+
+    private List<RepositoryArtifact> getDownloadArtifacts() {
         final var version = resolveVersion();
         final VersionNumber pom_version;
         if (version.qualifier().equals("SNAPSHOT")) {
@@ -325,8 +338,8 @@ public class DependencyResolver {
             pom_version = version;
         }
 
-        return getArtifactUrls().stream().map(s -> {
-            var result = new StringBuilder(s);
+        return getArtifactUrls().stream().map(a -> {
+            var result = new StringBuilder();
             result.append(version).append("/").append(dependency_.artifactId()).append("-").append(pom_version);
             if (!dependency_.classifier().isEmpty()) {
                 result.append("-").append(dependency_.classifier());
@@ -336,7 +349,8 @@ public class DependencyResolver {
                 type = "jar";
             }
             result.append(".").append(type);
-            return result.toString();
+
+            return a.appendPath(result.toString());
         }).toList();
     }
 
@@ -354,12 +368,12 @@ public class DependencyResolver {
             pomDependency.exclusions());
     }
 
-    private List<String> getArtifactUrls() {
-        return repositories_.stream().map(repository -> repository.getArtifactUrl(dependency_)).toList();
+    private List<RepositoryArtifact> getArtifactUrls() {
+        return repositories_.stream().map(repository -> new RepositoryArtifact(repository, repository.getArtifactUrl(dependency_))).toList();
     }
 
-    private List<String> getMetadataUrls() {
-        return getArtifactUrls().stream().map(s -> s + MAVEN_METADATA_XML).toList();
+    private List<RepositoryArtifact> getMetadataUrls() {
+        return getArtifactUrls().stream().map(a -> a.appendPath(MAVEN_METADATA_XML)).toList();
     }
 
     private Xml2MavenMetadata getMavenMetadata() {
@@ -371,9 +385,9 @@ public class DependencyResolver {
         return metadata_;
     }
 
-    private List<String> getSnapshotMetadataUrls() {
+    private List<RepositoryArtifact> getSnapshotMetadataUrls() {
         var version = resolveVersion();
-        return getArtifactUrls().stream().map(s -> s + version + "/" + MAVEN_METADATA_XML).toList();
+        return getArtifactUrls().stream().map(a -> a.appendPath(version + "/" + MAVEN_METADATA_XML)).toList();
     }
 
     private Xml2MavenMetadata getSnapshotMavenMetadata() {
@@ -385,32 +399,30 @@ public class DependencyResolver {
         return snapshotMetadata_;
     }
 
-    private Xml2MavenMetadata parseMavenMetadata(List<String> urls) {
+    private Xml2MavenMetadata parseMavenMetadata(List<RepositoryArtifact> artifacts) {
         String retrieved_url = null;
         String metadata = null;
-        for (var url : urls) {
+        for (var artifact : artifacts) {
             try {
-                var content = FileUtils.readString(new URL(url));
+                var content = readString(artifact);
                 if (content == null) {
-                    throw new ArtifactNotFoundException(dependency_, url);
+                    throw new ArtifactNotFoundException(dependency_, artifact.url());
                 }
 
-                retrieved_url = url;
+                retrieved_url = artifact.url();
                 metadata = content;
 
                 break;
-            } catch (IOException e) {
-                throw new ArtifactRetrievalErrorException(dependency_, url, e);
             } catch (FileUtilsErrorException e) {
                 if (e.getCause() instanceof FileNotFoundException) {
                     continue;
                 }
-                throw new ArtifactRetrievalErrorException(dependency_, url, e);
+                throw new ArtifactRetrievalErrorException(dependency_, artifact.url(), e);
             }
         }
 
         if (metadata == null) {
-            throw new ArtifactNotFoundException(dependency_, StringUtils.join(urls, ", "));
+            throw new ArtifactNotFoundException(dependency_, artifacts.stream().map(RepositoryArtifact::url).collect(Collectors.joining(",")));
         }
 
         var xml = new Xml2MavenMetadata();
@@ -421,7 +433,7 @@ public class DependencyResolver {
         return xml;
     }
 
-    private List<String> getPomUrls() {
+    private List<RepositoryArtifact> getPomUrls() {
         final var version = resolveVersion();
         final VersionNumber pom_version;
         if (version.qualifier().equals("SNAPSHOT")) {
@@ -431,36 +443,34 @@ public class DependencyResolver {
             pom_version = version;
         }
 
-        return getArtifactUrls().stream().map(s -> s + version + "/" + dependency_.artifactId() + "-" + pom_version + ".pom").toList();
+        return getArtifactUrls().stream().map(a -> a.appendPath(version + "/" + dependency_.artifactId() + "-" + pom_version + ".pom")).toList();
     }
 
     Xml2MavenPom getMavenPom(PomDependency parent) {
         String retrieved_url = null;
         String pom = null;
-        var urls = getPomUrls();
-        for (var url : urls) {
+        var artifacts = getPomUrls();
+        for (var artifact : artifacts) {
             try {
-                var content = FileUtils.readString(new URL(url));
+                var content = readString(artifact);
                 if (content == null) {
-                    throw new ArtifactNotFoundException(dependency_, url);
+                    throw new ArtifactNotFoundException(dependency_, artifact.url());
                 }
 
-                retrieved_url = url;
+                retrieved_url = artifact.url();
                 pom = content;
 
                 break;
-            } catch (IOException e) {
-                throw new ArtifactRetrievalErrorException(dependency_, url, e);
             } catch (FileUtilsErrorException e) {
                 if (e.getCause() instanceof FileNotFoundException) {
                     continue;
                 }
-                throw new ArtifactRetrievalErrorException(dependency_, url, e);
+                throw new ArtifactRetrievalErrorException(dependency_, artifact.url(), e);
             }
         }
 
         if (pom == null) {
-            throw new ArtifactNotFoundException(dependency_, StringUtils.join(urls, ", "));
+            throw new ArtifactNotFoundException(dependency_, artifacts.stream().map(RepositoryArtifact::url).collect(Collectors.joining(",")));
         }
 
         var xml = new Xml2MavenPom(parent, repositories_);
@@ -469,5 +479,23 @@ public class DependencyResolver {
         }
 
         return xml;
+    }
+
+    private static String readString(RepositoryArtifact artifact)
+    throws FileUtilsErrorException {
+        try {
+            var connection = new URL(artifact.url()).openConnection();
+            connection.setUseCaches(false);
+            if (artifact.repository().username() != null && artifact.repository().password() != null) {
+                connection.setRequestProperty(
+                    HEADER_AUTHORIZATION,
+                    basicAuthorizationHeader(artifact.repository().username(), artifact.repository().password()));
+            }
+            try (var input_stream = connection.getInputStream()) {
+                return FileUtils.readString(input_stream);
+            }
+        } catch (IOException e) {
+            throw new FileUtilsErrorException("Error while reading URL '" + artifact.url() + ".", e);
+        }
     }
 }

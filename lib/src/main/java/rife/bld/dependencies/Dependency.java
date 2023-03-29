@@ -8,10 +8,10 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * Contains the information required to describe an artifact dependency in the build system.
+ * Contains the information required to describe an url dependency in the build system.
  *
  * @param groupId    the dependency group identifier
- * @param artifactId the dependency artifact identifier
+ * @param artifactId the dependency url identifier
  * @param version    the dependency version
  * @param classifier the dependency classier
  * @param type       the dependency type
@@ -95,7 +95,7 @@ public record Dependency(String groupId, String artifactId, VersionNumber versio
      * Adds an exclusion to this dependency.
      *
      * @param groupId    the exclusion group identifier, use {@code "*"} to exclude all groupIds
-     * @param artifactId the exclusion artifact identifier, use {@code "*"} to exclude all artifactIds
+     * @param artifactId the exclusion url identifier, use {@code "*"} to exclude all artifactIds
      * @return this dependency instance
      * @since 1.5
      */

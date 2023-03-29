@@ -80,7 +80,7 @@ public class DependencySet extends AbstractSet<Dependency> implements Set<Depend
     }
 
     /**
-     * Downloads the artifact for the dependencies into the provided directory.
+     * Downloads the url for the dependencies into the provided directory.
      * <p>
      * The destination directory must exist and be writable.
      *
@@ -94,14 +94,14 @@ public class DependencySet extends AbstractSet<Dependency> implements Set<Depend
     }
 
     /**
-     * Downloads the artifact for the dependencies into the provided directory,
+     * Downloads the url for the dependencies into the provided directory,
      * including other classifiers.
      * <p>
      * The destination directory must exist and be writable.
      *
      * @param repositories the repositories to use for the download
      * @param directory    the directory to download the artifacts into
-     * @param classifiers  the additional classifiers to download the artifact for
+     * @param classifiers  the additional classifiers to download the url for
      * @throws DependencyDownloadException when an error occurred during the download
      * @since 1.5
      */
