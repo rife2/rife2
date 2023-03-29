@@ -32,8 +32,8 @@ public class DependencyResolver {
     private final List<Repository> repositories_;
     private final Dependency dependency_;
 
-    private Xml2MavenMetadata metadata_ = null;
-    private Xml2MavenMetadata snapshotMetadata_ = null;
+    private MavenMetadata metadata_ = null;
+    private MavenMetadata snapshotMetadata_ = null;
 
     /**
      * Creates a new resolver for a particular dependency.
@@ -328,10 +328,44 @@ public class DependencyResolver {
         return getDownloadArtifacts().stream().map(RepositoryArtifact::url).toList();
     }
 
+    /**
+     * Returns the main Maven metadata for this dependency
+     *
+     * @return this dependency's metadata
+     * @since 1.5.8
+     */
+    public MavenMetadata getMavenMetadata() {
+        if (metadata_ == null) {
+            var urls = getMetadataUrls();
+            metadata_ = parseMavenMetadata(urls);
+        }
+
+        return metadata_;
+    }
+
+    /**
+     * THe Maven metadata with snapshot information when this is a snapshot version.
+     *
+     * @return Maven metadata if this is a snapshot dependency version; or
+     * {@code null} if this version is not a snapshot
+     * @since 1.5.8
+     */
+    public MavenMetadata getSnapshotMavenMetadata() {
+        if (snapshotMetadata_ == null) {
+            final var version = resolveVersion();
+            if (version.isSnapshot()) {
+                var urls = getSnapshotMetadataUrls();
+                snapshotMetadata_ = parseMavenMetadata(urls);
+            }
+        }
+
+        return snapshotMetadata_;
+    }
+
     private List<RepositoryArtifact> getDownloadArtifacts() {
         final var version = resolveVersion();
         final VersionNumber pom_version;
-        if (version.qualifier().equals("SNAPSHOT")) {
+        if (version.isSnapshot()) {
             var metadata = getSnapshotMavenMetadata();
             pom_version = metadata.getSnapshot();
         } else {
@@ -376,30 +410,12 @@ public class DependencyResolver {
         return getArtifactUrls().stream().map(a -> a.appendPath(MAVEN_METADATA_XML)).toList();
     }
 
-    private Xml2MavenMetadata getMavenMetadata() {
-        if (metadata_ == null) {
-            var urls = getMetadataUrls();
-            metadata_ = parseMavenMetadata(urls);
-        }
-
-        return metadata_;
-    }
-
     private List<RepositoryArtifact> getSnapshotMetadataUrls() {
         var version = resolveVersion();
         return getArtifactUrls().stream().map(a -> a.appendPath(version + "/" + MAVEN_METADATA_XML)).toList();
     }
 
-    private Xml2MavenMetadata getSnapshotMavenMetadata() {
-        if (snapshotMetadata_ == null) {
-            var urls = getSnapshotMetadataUrls();
-            snapshotMetadata_ = parseMavenMetadata(urls);
-        }
-
-        return snapshotMetadata_;
-    }
-
-    private Xml2MavenMetadata parseMavenMetadata(List<RepositoryArtifact> artifacts) {
+    private MavenMetadata parseMavenMetadata(List<RepositoryArtifact> artifacts) {
         String retrieved_url = null;
         String metadata = null;
         for (var artifact : artifacts) {
@@ -436,7 +452,7 @@ public class DependencyResolver {
     private List<RepositoryArtifact> getPomUrls() {
         final var version = resolveVersion();
         final VersionNumber pom_version;
-        if (version.qualifier().equals("SNAPSHOT")) {
+        if (version.isSnapshot()) {
             var metadata = getSnapshotMavenMetadata();
             pom_version = metadata.getSnapshot();
         } else {

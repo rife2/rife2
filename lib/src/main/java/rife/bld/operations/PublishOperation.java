@@ -17,6 +17,9 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.security.*;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +34,8 @@ import static rife.tools.StringUtils.encodeHexLower;
  * @since 1.5.7
  */
 public class PublishOperation extends AbstractOperation<PublishOperation> {
+    private static final DateTimeFormatter SNAPSHOT_TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd.HHmmss");
+
     private Repository repository_;
     private final DependencyScopes dependencies_ = new DependencyScopes();
     private PublishInfo info_ = new PublishInfo();
@@ -48,22 +53,29 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
 
         var client = HttpClient.newHttpClient();
 
+        var info_version = info().version();
+
         // upload artifacts
         for (var artifact : artifacts()) {
             uploadFileArtifact(client,
                 artifact,
-                info().version() + "/" + artifact.getName());
+                info_version + "/" + artifact.getName());
         }
 
         // generate and upload pom
         uploadStringArtifact(client,
             new PomBuilder().info(info()).dependencies(dependencies()).build(),
-            info().version() + "/" + info().artifactId() + "-" + info().version() + ".pom");
+            info_version + "/" + info().artifactId() + "-" + info_version + ".pom");
 
         // upload metadata
         uploadStringArtifact(client,
             new MetadataBuilder().info(info()).build(),
             "maven-metadata.xml");
+    }
+
+    private String createSnapshotTimestamp() {
+        var moment = ZonedDateTime.now();
+        return SNAPSHOT_TIMESTAMP_FORMATTER.format(moment.withZoneSameInstant(ZoneId.of("UTC")));
     }
 
     private void uploadStringArtifact(HttpClient client, String content, String path)

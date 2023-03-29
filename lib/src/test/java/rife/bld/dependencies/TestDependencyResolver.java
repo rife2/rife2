@@ -90,6 +90,24 @@ public class TestDependencyResolver {
     }
 
     @Test
+    void testMetadata() {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0)));
+        var metadata = resolver.getMavenMetadata();
+        assertNotNull(metadata);
+        assertTrue(metadata.getLatest().compareTo(resolver.dependency().version()) > 0);
+        assertNull(resolver.getSnapshotMavenMetadata());
+    }
+
+    @Test
+    void testSnapshotMetadata() {
+        var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0, "SNAPSHOT")));
+        var metadata = resolver.getSnapshotMavenMetadata();
+        assertNotNull(metadata);
+        assertEquals("20230303.130437", metadata.getSnapshotTimestamp());
+        assertEquals(4, metadata.getSnapshotBuildNumber());
+    }
+
+    @Test
     void testGetCompileDependenciesRIFE2() {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2"));
         var dependencies = resolver.getDirectDependencies(compile);

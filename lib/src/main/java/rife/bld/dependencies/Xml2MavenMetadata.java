@@ -11,15 +11,7 @@ import rife.xml.Xml2Data;
 import java.util.*;
 import java.util.regex.Pattern;
 
-/**
- * Parses a Maven metadata XML document and extracts the information.
- * This filters out all pre-release versions and only includes release versions
- * and snapshots.
- *
- * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.5.8
- */
-public class Xml2MavenMetadata extends Xml2Data {
+class Xml2MavenMetadata extends Xml2Data implements MavenMetadata {
     private VersionNumber latest_ = VersionNumber.UNKNOWN;
     private VersionNumber release_ = VersionNumber.UNKNOWN;
     private final List<VersionNumber> versions_;
@@ -27,54 +19,33 @@ public class Xml2MavenMetadata extends Xml2Data {
 
     private StringBuilder characterData_ = null;
 
-    private String lastTimestamp_ = null;
-    private String lastBuildNumber_ = null;
+    private String snapshotTimestamp_ = null;
+    private Integer snapshotBuildNumber_ = null;
 
-    /**
-     * Creates a new instance.
-     *
-     * @since 1.5.8
-     */
     public Xml2MavenMetadata() {
         versions_ = new ArrayList<>();
     }
 
-    /**
-     * Returns latest version number in the metadata.
-     *
-     * @return the latest version number
-     * @since 1.5.8
-     */
     public VersionNumber getLatest() {
         return latest_;
     }
 
-    /**
-     * Returns release version number in the metadata.
-     *
-     * @return the release version number
-     * @since 1.5.8
-     */
     public VersionNumber getRelease() {
         return release_;
     }
 
-    /**
-     * Returns snapshot version number in the metadata.
-     *
-     * @return the snapshot version number
-     * @since 1.5.8
-     */
     public VersionNumber getSnapshot() {
         return snapshot_;
     }
 
-    /**
-     * Returns all the release or snapshot versions in the metadata.
-     *
-     * @return the version number list
-     * @since 1.5.8
-     */
+    public String getSnapshotTimestamp() {
+        return snapshotTimestamp_;
+    }
+
+    public Integer getSnapshotBuildNumber() {
+        return snapshotBuildNumber_;
+    }
+
     public List<VersionNumber> getVersions() {
         return versions_;
     }
@@ -88,13 +59,11 @@ public class Xml2MavenMetadata extends Xml2Data {
             case "latest" -> latest_ = VersionNumber.parse(characterData_.toString());
             case "release" -> release_ = VersionNumber.parse(characterData_.toString());
             case "version" -> versions_.add(VersionNumber.parse(characterData_.toString()));
-            case "timestamp" -> lastTimestamp_ = characterData_.toString();
-            case "buildNumber" -> lastBuildNumber_ = characterData_.toString();
+            case "timestamp" -> snapshotTimestamp_ = characterData_.toString();
+            case "buildNumber" -> snapshotBuildNumber_ = Integer.parseInt(characterData_.toString());
             case "snapshot" -> {
                 var version = versions_.get(0);
-                snapshot_ = new VersionNumber(version.major(), version.minor(), version.revision(), lastTimestamp_ + "-" + lastBuildNumber_);
-                lastTimestamp_ = null;
-                lastBuildNumber_ = null;
+                snapshot_ = new VersionNumber(version.major(), version.minor(), version.revision(), snapshotTimestamp_ + "-" + snapshotBuildNumber_);
             }
         }
 
