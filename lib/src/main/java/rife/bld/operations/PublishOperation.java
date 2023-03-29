@@ -6,6 +6,7 @@ package rife.bld.operations;
 
 import rife.bld.Project;
 import rife.bld.dependencies.*;
+import rife.bld.dependencies.exceptions.ArtifactNotFoundException;
 import rife.bld.operations.exceptions.OperationOptionException;
 import rife.bld.operations.exceptions.UploadException;
 import rife.bld.publish.*;
@@ -19,10 +20,10 @@ import java.nio.file.Files;
 import java.security.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static rife.bld.publish.MetadataBuilder.SNAPSHOT_TIMESTAMP_FORMATTER;
 import static rife.tools.HttpUtils.HEADER_AUTHORIZATION;
 import static rife.tools.HttpUtils.basicAuthorizationHeader;
 import static rife.tools.StringUtils.encodeHexLower;
@@ -34,12 +35,11 @@ import static rife.tools.StringUtils.encodeHexLower;
  * @since 1.5.7
  */
 public class PublishOperation extends AbstractOperation<PublishOperation> {
-    private static final DateTimeFormatter SNAPSHOT_TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd.HHmmss");
-
+    private ZonedDateTime moment_ = null;
     private Repository repository_;
     private final DependencyScopes dependencies_ = new DependencyScopes();
     private PublishInfo info_ = new PublishInfo();
-    private final List<File> artifacts_ = new ArrayList<>();
+    private final List<PublishArtifact> artifacts_ = new ArrayList<>();
 
     /**
      * Performs the publish operation.
@@ -51,31 +51,88 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
             throw new OperationOptionException("ERROR: the publication repository should be specified");
         }
 
+        var moment = moment_;
+        if (moment == null) {
+            moment = ZonedDateTime.now();
+        }
+
+        var current_versions = new ArrayList<VersionNumber>();
+        var resolver = new DependencyResolver(List.of(repository()), new Dependency(info().groupId(), info().artifactId(), info().version()));
+        try {
+            current_versions.addAll(resolver.getMavenMetadata().getVersions());
+        } catch (ArtifactNotFoundException e) {
+            // no existing versions could be found
+        }
+
         var client = HttpClient.newHttpClient();
 
         var info_version = info().version();
+        var actual_version = info_version;
+        String snapshot_qualifier = null;
+        // treat a snapshot version differently
+        if (info_version.isSnapshot()) {
+            var snapshot_timestamp = SNAPSHOT_TIMESTAMP_FORMATTER.format(moment.withZoneSameInstant(ZoneId.of("UTC")));
+            ;
+
+            // determine with build number to use
+            var snapshot_build_number = 1;
+            try {
+                var snapshot_meta = resolver.getSnapshotMavenMetadata();
+                snapshot_build_number = snapshot_meta.getSnapshotBuildNumber() + 1;
+            } catch (ArtifactNotFoundException e) {
+                // start the build number from the beginning
+            }
+
+            // adapt the actual version that's use by the artifacts
+            snapshot_qualifier = snapshot_timestamp + "-" + snapshot_build_number;
+            actual_version = info_version.withQualifier(snapshot_qualifier);
+
+            // include version information about each artifact in this snapshot
+            var metadata = new MetadataBuilder();
+            for (var artifact : artifacts()) {
+                metadata.snapshotVersions().add(new SnapshotVersion(artifact.classifier(), artifact.type(), actual_version.toString(), moment));
+            }
+            metadata.snapshotVersions().add(new SnapshotVersion(null, "pom", actual_version.toString(), moment));
+
+            // upload snapshot metadata
+            uploadStringArtifact(client, metadata
+                    .info(info())
+                    .updated(moment)
+                    .snapshot(moment, snapshot_build_number)
+                    .build(),
+                info_version + "/maven-metadata.xml");
+        }
 
         // upload artifacts
         for (var artifact : artifacts()) {
+            var artifact_name = new StringBuilder(info().artifactId()).append("-").append(actual_version);
+            if (!artifact.classifier().isEmpty()) {
+                artifact_name.append("-").append(artifact.classifier());
+            }
+            var type = artifact.type();
+            if (type == null) {
+                type = "jar";
+            }
+            artifact_name.append(".").append(type);
+
             uploadFileArtifact(client,
-                artifact,
-                info_version + "/" + artifact.getName());
+                artifact.file(),
+                info_version + "/" + artifact_name);
         }
 
         // generate and upload pom
         uploadStringArtifact(client,
             new PomBuilder().info(info()).dependencies(dependencies()).build(),
-            info_version + "/" + info().artifactId() + "-" + info_version + ".pom");
+            info_version + "/" + info().artifactId() + "-" + actual_version + ".pom");
 
         // upload metadata
         uploadStringArtifact(client,
-            new MetadataBuilder().info(info()).build(),
+            new MetadataBuilder()
+                .info(info())
+                .updated(moment)
+                .otherVersions(current_versions)
+                .build(),
             "maven-metadata.xml");
-    }
-
-    private String createSnapshotTimestamp() {
-        var moment = ZonedDateTime.now();
-        return SNAPSHOT_TIMESTAMP_FORMATTER.format(moment.withZoneSameInstant(ZoneId.of("UTC")));
     }
 
     private void uploadStringArtifact(HttpClient client, String content, String path)
@@ -173,7 +230,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     public PublishOperation fromProject(Project project) {
         repository(project.publishRepository());
         dependencies().include(project.dependencies());
-        artifacts(List.of(new File(project.buildDistDirectory(), project.jarFileName())));
+        artifacts(List.of(new PublishArtifact(new File(project.buildDistDirectory(), project.jarFileName()), "", "jar")));
         var info = project.publishInfo();
         if (info != null) {
             info_ = info;
@@ -191,6 +248,31 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
             info_.name(project.name());
         }
         return this;
+    }
+
+    /**
+     * Provides the moment of publication.
+     * <p>
+     * If this is not provided, the publication will use the current data and time.
+     *
+     * @param moment the publication moment
+     * @return this operation instance
+     * @since 1.5.8
+     */
+    public PublishOperation moment(ZonedDateTime moment) {
+        moment_ = moment;
+        return this;
+    }
+
+    /**
+     * Retrieves the moment of publication.
+     *
+     * @return the moment of publication; or
+     * {@code null} if it wasn't provided
+     * @since 1.5.8
+     */
+    public ZonedDateTime moment() {
+        return moment_;
     }
 
     /**
@@ -224,7 +306,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @return this operation instance
      * @since 1.5.7
      */
-    public PublishOperation artifacts(List<File> artifacts) {
+    public PublishOperation artifacts(List<PublishArtifact> artifacts) {
         artifacts_.addAll(artifacts);
         return this;
     }
@@ -271,7 +353,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @return the list of artifacts to publish
      * @since 1.5.7
      */
-    public List<File> artifacts() {
+    public List<PublishArtifact> artifacts() {
         return artifacts_;
     }
 }

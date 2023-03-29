@@ -9,6 +9,7 @@ import rife.bld.dependencies.*;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,16 +26,10 @@ public class TestMetadataBuilder {
         var builder = new MetadataBuilder();
         assertEquals("""
             <?xml version="1.0" encoding="UTF-8"?>
-            <metadata>
+            <metadata modelVersion="1.1.0">
               <groupId></groupId>
               <artifactId></artifactId>
               <versioning>
-                <latest></latest>
-                <release></release>
-                <versions>
-                  <version></version>
-                </versions>
-                <lastUpdated></lastUpdated>
               </versioning>
             </metadata>
             """, builder.build());
@@ -49,7 +44,7 @@ public class TestMetadataBuilder {
                 .version(VersionNumber.parse("1.2.3-SNAPSHOT")));
         assertEquals("""
             <?xml version="1.0" encoding="UTF-8"?>
-            <metadata>
+            <metadata modelVersion="1.1.0">
               <groupId>com.example</groupId>
               <artifactId>myapp</artifactId>
               <versioning>
@@ -58,7 +53,6 @@ public class TestMetadataBuilder {
                 <versions>
                   <version>1.2.3-SNAPSHOT</version>
                 </versions>
-                <lastUpdated></lastUpdated>
               </versioning>
             </metadata>
             """, builder.build());
@@ -70,16 +64,31 @@ public class TestMetadataBuilder {
             .updated(ZonedDateTime.of(2023, 3, 27, 8, 56, 17, 123, ZoneId.of("America/New_York")));
         assertEquals("""
             <?xml version="1.0" encoding="UTF-8"?>
-            <metadata>
+            <metadata modelVersion="1.1.0">
               <groupId></groupId>
               <artifactId></artifactId>
               <versioning>
-                <latest></latest>
-                <release></release>
-                <versions>
-                  <version></version>
-                </versions>
                 <lastUpdated>20230327125617</lastUpdated>
+              </versioning>
+            </metadata>
+            """, builder.build());
+    }
+
+    @Test
+    void testOtherVersionsBuild() {
+        var builder = new MetadataBuilder()
+            .otherVersions(List.of(new VersionNumber(6,0,1), new VersionNumber(3,0,2), new VersionNumber(1,0,3), new VersionNumber(3,0,2)));
+        assertEquals("""
+            <?xml version="1.0" encoding="UTF-8"?>
+            <metadata modelVersion="1.1.0">
+              <groupId></groupId>
+              <artifactId></artifactId>
+              <versioning>
+                <versions>
+                  <version>6.0.1</version>
+                  <version>3.0.2</version>
+                  <version>1.0.3</version>
+                </versions>
               </versioning>
             </metadata>
             """, builder.build());
@@ -92,10 +101,11 @@ public class TestMetadataBuilder {
                 .groupId("com.example")
                 .artifactId("myapp")
                 .version(VersionNumber.parse("1.2.3-SNAPSHOT")))
+            .otherVersions(List.of(new VersionNumber(6,0,1), new VersionNumber(3,0,2), new VersionNumber(1,0,3), new VersionNumber(3,0,2)))
             .updated(ZonedDateTime.of(2023, 3, 27, 8, 56, 17, 123, ZoneId.of("America/New_York")));
         assertEquals("""
             <?xml version="1.0" encoding="UTF-8"?>
-            <metadata>
+            <metadata modelVersion="1.1.0">
               <groupId>com.example</groupId>
               <artifactId>myapp</artifactId>
               <versioning>
@@ -103,8 +113,86 @@ public class TestMetadataBuilder {
                 <release>1.2.3-SNAPSHOT</release>
                 <versions>
                   <version>1.2.3-SNAPSHOT</version>
+                  <version>6.0.1</version>
+                  <version>3.0.2</version>
+                  <version>1.0.3</version>
                 </versions>
                 <lastUpdated>20230327125617</lastUpdated>
+              </versioning>
+            </metadata>
+            """, builder.build());
+    }
+
+    @Test
+    void testSnapshot() {
+        var builder = new MetadataBuilder()
+            .info(new PublishInfo()
+                .groupId("com.example")
+                .artifactId("myapp")
+                .version(VersionNumber.parse("1.2.3-SNAPSHOT")))
+            .snapshot(ZonedDateTime.of(2023, 3, 27, 8, 56, 17, 123, ZoneId.of("America/New_York")), 5);
+        assertEquals("""
+            <?xml version="1.0" encoding="UTF-8"?>
+            <metadata modelVersion="1.1.0">
+              <groupId>com.example</groupId>
+              <artifactId>myapp</artifactId>
+              <version>1.2.3-SNAPSHOT</version>
+              <versioning>
+                <snapshot>
+                  <timestamp>20230327.125617</timestamp>
+                  <buildNumber>5</buildNumber>
+                </snapshot>
+              </versioning>
+            </metadata>
+            """, builder.build());
+    }
+
+    @Test
+    void testSnapshotVersions() {
+        var moment = ZonedDateTime.of(2023, 3, 27, 8, 56, 17, 123, ZoneId.of("America/New_York"));
+        var moment2 = ZonedDateTime.of(2023, 3, 27, 8, 56, 17, 123, ZoneId.of("America/New_York"));
+        var moment3 = ZonedDateTime.of(2023, 5, 27, 8, 56, 17, 123, ZoneId.of("America/New_York"));
+        var builder = new MetadataBuilder()
+            .info(new PublishInfo()
+                .groupId("com.example")
+                .artifactId("myapp")
+                .version(VersionNumber.parse("1.2.3-SNAPSHOT")))
+            .snapshot(moment, 5)
+            .snapshotVersions(List.of(
+                new SnapshotVersion("classifier1", "ext1", "123", moment2),
+                new SnapshotVersion("classifier2", "ext2", "456", moment3),
+                new SnapshotVersion("classifier3", "ext3", "789", moment2)));
+        assertEquals("""
+            <?xml version="1.0" encoding="UTF-8"?>
+            <metadata modelVersion="1.1.0">
+              <groupId>com.example</groupId>
+              <artifactId>myapp</artifactId>
+              <version>1.2.3-SNAPSHOT</version>
+              <versioning>
+                <snapshot>
+                  <timestamp>20230327.125617</timestamp>
+                  <buildNumber>5</buildNumber>
+                </snapshot>
+                <snapshotVersions>
+                  <snapshotVersion>
+                    <classifier>classifier1</classifier>
+                    <extension>ext1</extension>
+                    <value>123</value>
+                    <updated>20230327125617</updated>
+                  </snapshotVersion>
+                  <snapshotVersion>
+                    <classifier>classifier2</classifier>
+                    <extension>ext2</extension>
+                    <value>456</value>
+                    <updated>20230527125617</updated>
+                  </snapshotVersion>
+                  <snapshotVersion>
+                    <classifier>classifier3</classifier>
+                    <extension>ext3</extension>
+                    <value>789</value>
+                    <updated>20230327125617</updated>
+                  </snapshotVersion>
+                </snapshotVersions>
               </versioning>
             </metadata>
             """, builder.build());

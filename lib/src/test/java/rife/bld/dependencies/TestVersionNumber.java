@@ -136,4 +136,11 @@ public class TestVersionNumber {
         assertEquals(new VersionNumber(1, 2, 3, null).getBaseVersion(), new VersionNumber(1, 2, 3, null));
         assertEquals(new VersionNumber(1, 2, 3, "beta").getBaseVersion(), new VersionNumber(1, 2, 3, null));
     }
+
+    @Test
+    void testWithQualifier() {
+        assertEquals(new VersionNumber(1, 2, 3, null).withQualifier("SNAPSHOT"), new VersionNumber(1, 2, 3, "SNAPSHOT"));
+        assertEquals(new VersionNumber(1, 2, 3, "beta").withQualifier("SNAPSHOT"), new VersionNumber(1, 2, 3, "SNAPSHOT"));
+        assertEquals(new VersionNumber(1, 2, 4, "beta").withQualifier(null), new VersionNumber(1, 2, 4, null));
+    }
 }

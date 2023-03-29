@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  * @since 1.5
  */
 public record VersionNumber(Integer major, Integer minor, Integer revision, String qualifier, String separator) implements Comparable<VersionNumber> {
-    private static final String SNAPSHOT_VERSION = "SNAPSHOT";
+    public static final String SNAPSHOT_QUALIFIER = "SNAPSHOT";
 
     /**
      * Singleton to use when the version is not specified.
@@ -143,6 +143,16 @@ public record VersionNumber(Integer major, Integer minor, Integer revision, Stri
     }
 
     /**
+     * Retrieves the version number with a different qualifier.
+     *
+     * @return this version number with a different qualifier
+     * @since 1.5.8
+     */
+    public VersionNumber withQualifier(String qualifier) {
+        return new VersionNumber(major, minor, revision, qualifier);
+    }
+
+    /**
      * Returns a primitive integer for the major version component.
      *
      * @return the major version component as an {@code int}
@@ -180,7 +190,7 @@ public record VersionNumber(Integer major, Integer minor, Integer revision, Stri
      * @since 1.5.8
      */
     public boolean isSnapshot() {
-        return qualifier().toUpperCase().contains(SNAPSHOT_VERSION);
+        return qualifier().toUpperCase().contains(SNAPSHOT_QUALIFIER);
     }
 
     public int compareTo(VersionNumber other) {

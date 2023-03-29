@@ -6,6 +6,7 @@ package rife.bld;
 
 import rife.bld.help.*;
 import rife.bld.operations.*;
+import rife.bld.publish.PublishArtifact;
 
 import java.io.File;
 import java.util.List;
@@ -78,8 +79,8 @@ public class WebProject extends Project {
         new WarOperation().fromProject(this).execute();
 
         var operation = new PublishOperation().fromProject(this);
-        operation.artifacts().add(new File(buildDistDirectory(), uberJarFileName()));
-        operation.artifacts().add(new File(buildDistDirectory(), warFileName()));
+        operation.artifacts().add(new PublishArtifact(new File(buildDistDirectory(), uberJarFileName()), "uber", "jar"));
+        operation.artifacts().add(new PublishArtifact(new File(buildDistDirectory(), warFileName()), "", "war"));
         operation.execute();
     }
 

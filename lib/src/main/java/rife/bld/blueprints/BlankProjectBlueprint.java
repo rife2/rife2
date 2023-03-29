@@ -23,12 +23,16 @@ import static rife.bld.dependencies.Scope.test;
  */
 public class BlankProjectBlueprint extends Project {
     public BlankProjectBlueprint(File work, String packageName, String projectName) {
+        this(work, packageName, projectName, new VersionNumber(0,0,1));
+    }
+
+    public BlankProjectBlueprint(File work, String packageName, String projectName, VersionNumber versionNumber) {
         workDirectory = work;
 
         pkg = packageName;
         name = projectName;
         mainClass = packageName + "." + StringUtils.capitalize(projectName) + "Main";
-        version = new VersionNumber(0,0,1);
+        version = versionNumber;
 
         downloadSources = true;
         repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);

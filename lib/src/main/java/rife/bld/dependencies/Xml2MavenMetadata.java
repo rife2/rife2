@@ -11,7 +11,13 @@ import rife.xml.Xml2Data;
 import java.util.*;
 import java.util.regex.Pattern;
 
-class Xml2MavenMetadata extends Xml2Data implements MavenMetadata {
+/**
+ * Parses an XML document to generate {@link MavenMetadata}.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5.8
+ */
+public class Xml2MavenMetadata extends Xml2Data implements MavenMetadata {
     private VersionNumber latest_ = VersionNumber.UNKNOWN;
     private VersionNumber release_ = VersionNumber.UNKNOWN;
     private final List<VersionNumber> versions_;
@@ -62,8 +68,10 @@ class Xml2MavenMetadata extends Xml2Data implements MavenMetadata {
             case "timestamp" -> snapshotTimestamp_ = characterData_.toString();
             case "buildNumber" -> snapshotBuildNumber_ = Integer.parseInt(characterData_.toString());
             case "snapshot" -> {
-                var version = versions_.get(0);
-                snapshot_ = new VersionNumber(version.major(), version.minor(), version.revision(), snapshotTimestamp_ + "-" + snapshotBuildNumber_);
+                if (!versions_.isEmpty()) {
+                    var version = versions_.get(0);
+                    snapshot_ = new VersionNumber(version.major(), version.minor(), version.revision(), snapshotTimestamp_ + "-" + snapshotBuildNumber_);
+                }
             }
         }
 
