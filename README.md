@@ -8,7 +8,7 @@
 
 <br>
 
-<p align="center"><img src="https://github.com/rife2/rife2/raw/main/rife2_logo.png" width="200"></p>
+<p align="center"><img src="https://github.com/rife2/rife2/raw/main/images/rife2_logo.png" width="200"></p>
 
 # Welcome
 
