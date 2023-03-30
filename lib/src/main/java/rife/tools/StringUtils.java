@@ -2985,9 +2985,9 @@ public final class StringUtils {
     public static String stripBlankLines(String text) {
         var result = new StringBuilder();
         var tokenizer = new StringTokenizer(text, "\r\n", true);
-        boolean non_blank = false;
-        boolean added_cr = false;
-        boolean added_nl = false;
+        var non_blank = false;
+        var added_cr = false;
+        var added_nl = false;
         while (tokenizer.hasMoreTokens()) {
             var token = tokenizer.nextToken();
             if (!added_cr && token.equals("\r")) {
