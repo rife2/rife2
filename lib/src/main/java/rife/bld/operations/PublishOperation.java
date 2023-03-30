@@ -6,7 +6,7 @@ package rife.bld.operations;
 
 import rife.bld.Project;
 import rife.bld.dependencies.*;
-import rife.bld.dependencies.exceptions.ArtifactNotFoundException;
+import rife.bld.dependencies.exceptions.DependencyException;
 import rife.bld.operations.exceptions.OperationOptionException;
 import rife.bld.operations.exceptions.UploadException;
 import rife.bld.publish.*;
@@ -90,8 +90,10 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
             var resolver = new DependencyResolver(List.of(repository()), new Dependency(info().groupId(), info().artifactId(), info().version()));
             var snapshot_meta = resolver.getSnapshotMavenMetadata();
             snapshot_build_number = snapshot_meta.getSnapshotBuildNumber() + 1;
-        } catch (ArtifactNotFoundException e) {
+        } catch (DependencyException e) {
             // start the build number from the beginning
+            System.out.println("Unable to retrieve previous snapshot metadata, using first build number.");
+            System.out.println("This is expected for a first publication or for publication to a staging repository.");
         }
 
         // adapt the actual version that's use by the artifacts
@@ -164,8 +166,10 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
         var resolver = new DependencyResolver(List.of(repository()), new Dependency(info().groupId(), info().artifactId(), info().version()));
         try {
             current_versions.addAll(resolver.getMavenMetadata().getVersions());
-        } catch (ArtifactNotFoundException e) {
+        } catch (DependencyException e) {
             // no existing versions could be found
+            System.out.println("Unable to retrieve previous artifact metadata, proceeding with empty version list.");
+            System.out.println("This is expected for a first publication or for publication to a staging repository.");
         }
 
         // upload metadata
