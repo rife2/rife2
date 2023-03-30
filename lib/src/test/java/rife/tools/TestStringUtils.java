@@ -1124,39 +1124,56 @@ public class TestStringUtils {
 
     @Test
     void testStripBlankLines() {
-        assertEquals("""
-            """, StringUtils.stripBlankLines("""
-            """));
+        assertEquals("", StringUtils.stripBlankLines(""));
 
-        assertEquals("""
-            """, StringUtils.stripBlankLines("""
-                        
-                        
-                        
-                        
-            """));
+        assertEquals("", StringUtils.stripBlankLines(
+            "\n" +
+            "\n" +
+            "\n" +
+            "\n"));
 
-        assertEquals("""
-            aaa
-            bbb
-            ccc
-            """, StringUtils.stripBlankLines("""
-                        
-            aaa
-            bbb
-                        
-            ccc
-                        
-            """));
+        assertEquals(
+            "aaa\n" +
+            "bbb\n" +
+            "ccc\n", StringUtils.stripBlankLines(
+                "\n" +
+                "aaa\n" +
+                "bbb\n" +
+                "\n" +
+                "ccc\n" +
+                "\n"));
 
-        assertEquals("""
-            aaa
-            bbb
-            """, StringUtils.stripBlankLines("""
-            aaa
-                        
-                        
-            bbb
-            """));
+        assertEquals(
+            "aaa\n" +
+            "bbb\n", StringUtils.stripBlankLines(
+                "aaa\n" +
+                "\n" +
+                "\n" +
+                "bbb\n"));
+
+        assertEquals("", StringUtils.stripBlankLines(
+            "            \r\n" +
+            "\n" +
+            "            \r\n" +
+            "            \r\n"));
+
+        assertEquals(
+            "aaa\r\n" +
+            "bbb\n" +
+            "ccc\r\n", StringUtils.stripBlankLines(
+                "\n" +
+                "aaa\r\n" +
+                "bbb\n" +
+                "            \r\n" +
+                "ccc\r\n" +
+                "            \r\n"));
+
+        assertEquals(
+            "aaa\r\n" +
+            "bbb\n", StringUtils.stripBlankLines(
+                "aaa\r\n" +
+                "\n" +
+                "            \r\n" +
+                "bbb\n"));
     }
 }

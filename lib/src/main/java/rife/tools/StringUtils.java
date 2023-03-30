@@ -2984,12 +2984,29 @@ public final class StringUtils {
      */
     public static String stripBlankLines(String text) {
         var result = new StringBuilder();
-        var tokenizer = new StringTokenizer(text, "\r\n", false);
+        var tokenizer = new StringTokenizer(text, "\r\n", true);
+        boolean non_blank = false;
+        boolean added_cr = false;
+        boolean added_nl = false;
         while (tokenizer.hasMoreTokens()) {
-            var line = tokenizer.nextToken();
-            if (!line.isBlank()) {
-                result.append(line);
-                result.append("\n");
+            var token = tokenizer.nextToken();
+            if (!added_cr && token.equals("\r")) {
+                if (non_blank) {
+                    result.append(token);
+                    added_cr = true;
+                }
+            } else if (!added_nl && token.equals("\n")) {
+                if (non_blank) {
+                    result.append(token);
+                    added_nl = true;
+                }
+            } else if (!token.isBlank()) {
+                result.append(token);
+                non_blank = true;
+                added_cr = false;
+                added_nl = false;
+            } else {
+                non_blank = false;
             }
         }
         return result.toString();
