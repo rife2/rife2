@@ -4,12 +4,12 @@
  */
 package rife.bld.wrapper;
 
-import rife.tools.FileUtils;
-import rife.tools.InnerClassException;
+import rife.tools.*;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import javax.tools.*;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.charset.StandardCharsets;
@@ -30,20 +30,30 @@ import static rife.tools.FileUtils.JAVA_FILE_PATTERN;
  * @since 1.5
  */
 public class Wrapper {
-    private static final String DOWNLOAD_LOCATION = "https://repo1.maven.org/maven2/com/uwyn/rife2/rife2/${version}/";
-    private static final String RIFE2_FILENAME = "rife2-${version}.jar";
-    private static final String RIFE2_SOURCES_FILENAME = "rife2-${version}-sources.jar";
-    private static final String RIFE_VERSION = "RIFE_VERSION";
-    private static final String WRAPPER_PROPERTIES = "bld-wrapper.properties";
-    private static final String WRAPPER_JAR = "bld-wrapper.jar";
-    private static final String PROPERTY_VERSION = "rife2.version";
-    private static final String PROPERTY_DOWNLOAD_LOCATION = "rife2.downloadLocation";
-    private static final File USER_DIR = new File(System.getProperty("user.home"), ".rife2");
-    private static final File DISTRIBUTIONS_DIR = new File(USER_DIR, "dist");
+    static final String MAVEN_CENTRAL = "https://repo1.maven.org/maven2/";
+    static final String DOWNLOAD_LOCATION = MAVEN_CENTRAL + "com/uwyn/rife2/rife2/${version}/";
+    static final String RIFE2_FILENAME = "rife2-${version}.jar";
+    static final String RIFE2_SOURCES_FILENAME = "rife2-${version}-sources.jar";
+    static final String RIFE_VERSION = "RIFE_VERSION";
+    static final String WRAPPER_PREFIX = "bld-wrapper";
+    static final String WRAPPER_PROPERTIES = WRAPPER_PREFIX + ".properties";
+    static final String WRAPPER_JAR = WRAPPER_PREFIX + ".jar";
+    static final String PROPERTY_VERSION = "rife2.version";
+    static final String PROPERTY_DOWNLOAD_LOCATION = "rife2.downloadLocation";
+    static final String PROPERTY_REPOSITORIES = "bld.repositories";
+    static final String PROPERTY_EXTENSION_PREFIX = "bld.extension";
+    static final File USER_DIR = new File(System.getProperty("user.home"), ".rife2");
+    static final File DISTRIBUTIONS_DIR = new File(USER_DIR, "dist");
 
     private File currentDir_ = new File(System.getProperty("user.dir"));
+
     private final Properties wrapperProperties_ = new Properties();
+    private File wrapperPropertiesFile_ = null;
+    private final Set<String> repositories_ = new LinkedHashSet<>();
+    private final Set<String> extensions_ = new LinkedHashSet<>();
+
     private final byte[] buffer_ = new byte[1024];
+    private WrapperClassLoader classloader_;
 
     /**
      * Launches the wrapper.
@@ -120,7 +130,11 @@ public class Wrapper {
     private void createWrapperProperties(File destinationDirectory, String version)
     throws IOException {
         var file = new File(destinationDirectory, WRAPPER_PROPERTIES);
+        wrapperProperties_.put(PROPERTY_REPOSITORIES, MAVEN_CENTRAL);
+        wrapperProperties_.put(PROPERTY_EXTENSION_PREFIX, "");
+        wrapperProperties_.put(PROPERTY_DOWNLOAD_LOCATION, "");
         if (file.exists()) {
+            wrapperPropertiesFile_ = file;
             wrapperProperties_.load(new FileReader(file));
         }
         wrapperProperties_.put(PROPERTY_VERSION, version);
@@ -136,13 +150,19 @@ public class Wrapper {
         manifest.getMainAttributes().put(Attributes.Name.MAIN_CLASS, getClass().getName());
 
         try (var jar = new JarOutputStream(new FileOutputStream(new File(destinationDirectory, WRAPPER_JAR)), manifest)) {
-            addFileToJar(jar, Wrapper.class.getName().replace('.', '/') + ".class");
-            addFileToJar(jar, FileUtils.class.getName().replace('.', '/') + ".class");
-            addFileToJar(jar, FileUtilsErrorException.class.getName().replace('.', '/') + ".class");
-            addFileToJar(jar, InnerClassException.class.getName().replace('.', '/') + ".class");
+            addClassToJar(jar, Wrapper.class);
+            addClassToJar(jar, WrapperClassLoader.class);
+            addClassToJar(jar, FileUtils.class);
+            addClassToJar(jar, FileUtilsErrorException.class);
+            addClassToJar(jar, InnerClassException.class);
             addFileToJar(jar, RIFE_VERSION);
             jar.flush();
         }
+    }
+
+    private void addClassToJar(JarOutputStream jar, Class klass)
+    throws IOException {
+        addFileToJar(jar, klass.getName().replace('.', '/') + ".class");
     }
 
     private void addFileToJar(JarOutputStream jar, String name)
@@ -206,6 +226,7 @@ public class Wrapper {
             } catch (IOException e) {
                 return -1;
             }
+            resolveExtensions();
             return launchMain(distribution, arguments);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -238,15 +259,44 @@ public class Wrapper {
 
     private void initWrapperProperties(String version)
     throws IOException {
+        // ensure required properties are available
+        wrapperProperties_.put(PROPERTY_REPOSITORIES, MAVEN_CENTRAL);
         wrapperProperties_.put(PROPERTY_VERSION, version);
-        wrapperProperties_.put(PROPERTY_DOWNLOAD_LOCATION, DOWNLOAD_LOCATION);
+        if (wrapperProperties_.getProperty(DOWNLOAD_LOCATION) == null) {
+            wrapperProperties_.put(PROPERTY_DOWNLOAD_LOCATION, DOWNLOAD_LOCATION);
+        }
+
+        // retrieve properties from possible locations
         var config = libBldDirectory(WRAPPER_PROPERTIES);
         if (config.exists()) {
+            wrapperPropertiesFile_ = config;
             wrapperProperties_.load(new FileReader(config));
         } else {
             config = libDirectory(WRAPPER_PROPERTIES);
             if (config.exists()) {
+                wrapperPropertiesFile_ = config;
                 wrapperProperties_.load(new FileReader(config));
+            }
+        }
+
+        // extract repositories
+        if (wrapperProperties_.containsKey(PROPERTY_REPOSITORIES)) {
+            for (var repository : wrapperProperties_.getProperty(PROPERTY_REPOSITORIES).split(",")) {
+                repository = repository.trim();
+                if (!repository.isBlank()) {
+                    repositories_.add(repository);
+                }
+            }
+        }
+        // extract wrapper extension specifications
+        for (var property : wrapperProperties_.entrySet()) {
+            if (property.getKey().toString().startsWith(PROPERTY_EXTENSION_PREFIX)) {
+                for (var extension : property.getValue().toString().split(",")) {
+                    extension = extension.trim();
+                    if (!extension.isBlank()) {
+                        extensions_.add(extension);
+                    }
+                }
             }
         }
     }
@@ -301,17 +351,22 @@ public class Wrapper {
         var filename = rife2FileName(version);
         var distribution_file = new File(DISTRIBUTIONS_DIR, filename);
         if (!distribution_file.exists()) {
-            download(distribution_file, downloadUrl(version, filename));
+            downloadDistribution(distribution_file, downloadUrl(version, filename));
         }
         var sources_filename = rife2SourcesFileName(version);
         var distribution_sources_file = new File(DISTRIBUTIONS_DIR, sources_filename);
         if (!distribution_sources_file.exists()) {
-            download(distribution_sources_file, downloadUrl(version, sources_filename));
+            downloadDistribution(distribution_sources_file, downloadUrl(version, sources_filename));
         }
+
+        // find the wrapper classloader in the hierarchy and add the RIFE2 jar to it
+        classloader_ = new WrapperClassLoader();
+        classloader_.add(distribution_file.toURI().toURL());
+
         return distribution_file;
     }
 
-    private void download(File file, String downloadUrl)
+    private void downloadDistribution(File file, String downloadUrl)
     throws IOException {
         try {
             System.out.print("Downloading: " + downloadUrl + " ... ");
@@ -335,6 +390,25 @@ public class Wrapper {
             throw e;
         } finally {
             System.out.println();
+        }
+    }
+
+    private void resolveExtensions() {
+        if (null == classloader_ ||
+            null == wrapperPropertiesFile_) {
+            return;
+        }
+
+        try {
+            var resolver_class = classloader_.loadClass("rife.bld.wrapper.WrapperExtensionResolver");
+            var constructor = resolver_class.getConstructor(File.class, File.class, Collection.class, Collection.class);
+            var update_method = resolver_class.getDeclaredMethod("updateExtensions");
+            var resolver = constructor.newInstance(wrapperPropertiesFile_, libBldDirectory(), repositories_, extensions_);
+            update_method.invoke(resolver);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e.getCause());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
