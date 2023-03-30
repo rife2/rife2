@@ -307,7 +307,11 @@ public class Wrapper {
     }
 
     private String getWrapperDownloadLocation() {
-        return wrapperProperties_.getProperty(PROPERTY_DOWNLOAD_LOCATION, DOWNLOAD_LOCATION);
+        var location = wrapperProperties_.getProperty(PROPERTY_DOWNLOAD_LOCATION, DOWNLOAD_LOCATION);
+        if (location.trim().isBlank()) {
+            return DOWNLOAD_LOCATION;
+        }
+        return location;
     }
 
     private String downloadUrl(String version, String fileName) {
