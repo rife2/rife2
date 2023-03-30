@@ -129,7 +129,7 @@ public class TestPublishOperation {
             // created an updated publication
             var create_operation2 = new CreateBlankOperation() {
                 protected Project createProjectBlueprint() {
-                    return new BlankProjectBlueprint(new File(workDirectory(), projectName()), packageName(), projectName(), new VersionNumber(1,0,0));
+                    return new BlankProjectBlueprint(new File(workDirectory(), projectName()), packageName(), projectName(), new VersionNumber(1, 0, 0));
                 }
             }
                 .workDirectory(tmp2)
@@ -235,7 +235,7 @@ public class TestPublishOperation {
             // create a first publication
             var create_operation1 = new CreateBlankOperation() {
                 protected Project createProjectBlueprint() {
-                    return new BlankProjectBlueprint(new File(workDirectory(), projectName()), packageName(), projectName(), new VersionNumber(1,2,3,"SNAPSHOT"));
+                    return new BlankProjectBlueprint(new File(workDirectory(), projectName()), packageName(), projectName(), new VersionNumber(1, 2, 3, "SNAPSHOT"));
                 }
             }
                 .workDirectory(tmp1)
@@ -303,7 +303,7 @@ public class TestPublishOperation {
             maven_snapshot_metadata1.processXml(FileUtils.readString(new URL("http://localhost:8081/releases/test/pkg/myapp/1.2.3-SNAPSHOT/maven-metadata.xml")));
             assertEquals(create_operation1.project().version(), maven_snapshot_metadata1.getLatest());
             assertEquals(VersionNumber.UNKNOWN, maven_snapshot_metadata1.getRelease());
-            assertEquals(new VersionNumber(1,2,3,"20230329.225432-1"), maven_snapshot_metadata1.getSnapshot());
+            assertEquals(new VersionNumber(1, 2, 3, "20230329.225432-1"), maven_snapshot_metadata1.getSnapshot());
             assertEquals("20230329.225432", maven_snapshot_metadata1.getSnapshotTimestamp());
             assertEquals(1, maven_snapshot_metadata1.getSnapshotBuildNumber());
             assertEquals(1, maven_snapshot_metadata1.getVersions().size());
@@ -312,7 +312,7 @@ public class TestPublishOperation {
             // created an updated publication
             var create_operation2 = new CreateBlankOperation() {
                 protected Project createProjectBlueprint() {
-                    return new BlankProjectBlueprint(new File(workDirectory(), projectName()), packageName(), projectName(), new VersionNumber(1,2,3,"SNAPSHOT"));
+                    return new BlankProjectBlueprint(new File(workDirectory(), projectName()), packageName(), projectName(), new VersionNumber(1, 2, 3, "SNAPSHOT"));
                 }
             }
                 .workDirectory(tmp2)
@@ -381,7 +381,7 @@ public class TestPublishOperation {
             maven_snapshot_metadata2.processXml(FileUtils.readString(new URL("http://localhost:8081/releases/test/pkg/myapp/1.2.3-SNAPSHOT/maven-metadata.xml")));
             assertEquals(create_operation2.project().version(), maven_snapshot_metadata2.getLatest());
             assertEquals(VersionNumber.UNKNOWN, maven_snapshot_metadata2.getRelease());
-            assertEquals(new VersionNumber(1,2,3,"20230330.171729-2"), maven_snapshot_metadata2.getSnapshot());
+            assertEquals(new VersionNumber(1, 2, 3, "20230330.171729-2"), maven_snapshot_metadata2.getSnapshot());
             assertEquals("20230330.171729", maven_snapshot_metadata2.getSnapshotTimestamp());
             assertEquals(2, maven_snapshot_metadata2.getSnapshotBuildNumber());
             assertEquals(1, maven_snapshot_metadata2.getVersions().size());

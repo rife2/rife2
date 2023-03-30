@@ -10,6 +10,8 @@ import rife.bld.dependencies.exceptions.ArtifactNotFoundException;
 import rife.bld.operations.exceptions.OperationOptionException;
 import rife.bld.operations.exceptions.UploadException;
 import rife.bld.publish.*;
+import rife.tools.FileUtils;
+import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.*;
 import java.net.*;
@@ -35,6 +37,8 @@ import static rife.tools.StringUtils.encodeHexLower;
  * @since 1.5.7
  */
 public class PublishOperation extends AbstractOperation<PublishOperation> {
+    private final HttpClient client_ = HttpClient.newHttpClient();
+
     private ZonedDateTime moment_ = null;
     private Repository repository_;
     private final DependencyScopes dependencies_ = new DependencyScopes();
@@ -56,56 +60,73 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
             moment = ZonedDateTime.now();
         }
 
-        var current_versions = new ArrayList<VersionNumber>();
-        var resolver = new DependencyResolver(List.of(repository()), new Dependency(info().groupId(), info().artifactId(), info().version()));
-        try {
-            current_versions.addAll(resolver.getMavenMetadata().getVersions());
-        } catch (ArtifactNotFoundException e) {
-            // no existing versions could be found
-        }
+        var actual_version = info().version();
 
-        var client = HttpClient.newHttpClient();
-
-        var info_version = info().version();
-        var actual_version = info_version;
-        String snapshot_qualifier = null;
         // treat a snapshot version differently
-        if (info_version.isSnapshot()) {
-            var snapshot_timestamp = SNAPSHOT_TIMESTAMP_FORMATTER.format(moment.withZoneSameInstant(ZoneId.of("UTC")));
-            ;
-
-            // determine with build number to use
-            var snapshot_build_number = 1;
-            try {
-                var snapshot_meta = resolver.getSnapshotMavenMetadata();
-                snapshot_build_number = snapshot_meta.getSnapshotBuildNumber() + 1;
-            } catch (ArtifactNotFoundException e) {
-                // start the build number from the beginning
-            }
-
-            // adapt the actual version that's use by the artifacts
-            snapshot_qualifier = snapshot_timestamp + "-" + snapshot_build_number;
-            actual_version = info_version.withQualifier(snapshot_qualifier);
-
-            // include version information about each artifact in this snapshot
-            var metadata = new MetadataBuilder();
-            for (var artifact : artifacts()) {
-                metadata.snapshotVersions().add(new SnapshotVersion(artifact.classifier(), artifact.type(), actual_version.toString(), moment));
-            }
-            metadata.snapshotVersions().add(new SnapshotVersion(null, "pom", actual_version.toString(), moment));
-
-            // upload snapshot metadata
-            uploadStringArtifact(client, metadata
-                    .info(info())
-                    .updated(moment)
-                    .snapshot(moment, snapshot_build_number)
-                    .build(),
-                info_version + "/maven-metadata.xml");
+        if (info().version().isSnapshot()) {
+            actual_version = executeUploadSnapshotMetadata(moment);
         }
 
+        executeUploadArtifacts(actual_version);
+        executeUploadPom(actual_version);
+        executeUploadMetadata(moment);
+    }
+
+    /**
+     * Part of the {@link #execute} operation, uploads snapshot metadata if this
+     * is a snapshot version.
+     *
+     * @param moment the timestamp at which the operation started executing
+     * @return the adapted version number with the snapshot timestamp and build number
+     * @since 1.5.8
+     */
+    public VersionNumber executeUploadSnapshotMetadata(ZonedDateTime moment) {
+        VersionNumber actual_version;
+        var snapshot_timestamp = SNAPSHOT_TIMESTAMP_FORMATTER.format(moment.withZoneSameInstant(ZoneId.of("UTC")));
+
+        // determine with build number to use
+        var snapshot_build_number = 1;
+        try {
+            var resolver = new DependencyResolver(List.of(repository()), new Dependency(info().groupId(), info().artifactId(), info().version()));
+            var snapshot_meta = resolver.getSnapshotMavenMetadata();
+            snapshot_build_number = snapshot_meta.getSnapshotBuildNumber() + 1;
+        } catch (ArtifactNotFoundException e) {
+            // start the build number from the beginning
+        }
+
+        // adapt the actual version that's use by the artifacts
+        var snapshot_qualifier = snapshot_timestamp + "-" + snapshot_build_number;
+        actual_version = info().version().withQualifier(snapshot_qualifier);
+
+        // include version information about each artifact in this snapshot
+        var metadata = new MetadataBuilder();
+        for (var artifact : artifacts()) {
+            metadata.snapshotVersions().add(new SnapshotVersion(artifact.classifier(), artifact.type(), actual_version.toString(), moment));
+        }
+        metadata.snapshotVersions().add(new SnapshotVersion(null, "pom", actual_version.toString(), moment));
+
+        // upload snapshot metadata
+        executeUploadStringArtifact(
+            metadata
+                .info(info())
+                .updated(moment)
+                .snapshot(moment, snapshot_build_number)
+                .build(),
+            info().version() + "/maven-metadata.xml");
+        return actual_version;
+    }
+
+    /**
+     * Part of the {@link #execute} operation, uploads all the artifacts
+     * in this publish operation.
+     *
+     * @param actualVersion the version that was potentially adapted if this is a snapshot
+     * @since 1.5.8
+     */
+    public void executeUploadArtifacts(VersionNumber actualVersion) {
         // upload artifacts
         for (var artifact : artifacts()) {
-            var artifact_name = new StringBuilder(info().artifactId()).append("-").append(actual_version);
+            var artifact_name = new StringBuilder(info().artifactId()).append("-").append(actualVersion);
             if (!artifact.classifier().isEmpty()) {
                 artifact_name.append("-").append(artifact.classifier());
             }
@@ -115,18 +136,40 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
             }
             artifact_name.append(".").append(type);
 
-            uploadFileArtifact(client,
-                artifact.file(),
-                info_version + "/" + artifact_name);
+            executeUploadFileArtifact(artifact.file(), info().version() + "/" + artifact_name);
+        }
+    }
+
+    /**
+     * Part of the {@link #execute} operation, uploads the Maven POM.
+     *
+     * @param actualVersion the version that was potentially adapted if this is a snapshot
+     * @since 1.5.8
+     */
+    public void executeUploadPom(VersionNumber actualVersion) {
+        // generate and upload pom
+        executeUploadStringArtifact(
+            new PomBuilder().info(info()).dependencies(dependencies()).build(),
+            info().version() + "/" + info().artifactId() + "-" + actualVersion + ".pom");
+    }
+
+    /**
+     * Part of the {@link #execute} operation, uploads the artifact metadata.
+     *
+     * @param moment the timestamp at which the operation started executing
+     * @since 1.5.8
+     */
+    public void executeUploadMetadata(ZonedDateTime moment) {
+        var current_versions = new ArrayList<VersionNumber>();
+        var resolver = new DependencyResolver(List.of(repository()), new Dependency(info().groupId(), info().artifactId(), info().version()));
+        try {
+            current_versions.addAll(resolver.getMavenMetadata().getVersions());
+        } catch (ArtifactNotFoundException e) {
+            // no existing versions could be found
         }
 
-        // generate and upload pom
-        uploadStringArtifact(client,
-            new PomBuilder().info(info()).dependencies(dependencies()).build(),
-            info_version + "/" + info().artifactId() + "-" + actual_version + ".pom");
-
         // upload metadata
-        uploadStringArtifact(client,
+        executeUploadStringArtifact(
             new MetadataBuilder()
                 .info(info())
                 .updated(moment)
@@ -135,20 +178,53 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
             "maven-metadata.xml");
     }
 
-    private void uploadStringArtifact(HttpClient client, String content, String path)
+    /**
+     * Part of the {@link #execute} operation, uploads a single artifact with
+     * hashes and a potential signature.
+     *
+     * @param content the content of the file that needs to be uploaded
+     * @param path    the path of the artifact within the artifact folder
+     * @since 1.5.8
+     */
+    public void executeUploadStringArtifact(String content, String path)
     throws UploadException {
         try {
-            uploadArtifact(client, BodyPublishers.ofString(content), path);
-            uploadArtifact(client, BodyPublishers.ofString(generateHash(content, "MD5")), path + ".md5");
-            uploadArtifact(client, BodyPublishers.ofString(generateHash(content, "SHA-1")), path + ".sha1");
-            uploadArtifact(client, BodyPublishers.ofString(generateHash(content, "SHA-256")), path + ".sha256");
-            uploadArtifact(client, BodyPublishers.ofString(generateHash(content, "SHA-512")), path + ".sha512");
-        } catch (NoSuchAlgorithmException e) {
+            executeUploadFile(BodyPublishers.ofString(content), path);
+            executeUploadFile(BodyPublishers.ofString(generateHash(content, "MD5")), path + ".md5");
+            executeUploadFile(BodyPublishers.ofString(generateHash(content, "SHA-1")), path + ".sha1");
+            executeUploadFile(BodyPublishers.ofString(generateHash(content, "SHA-256")), path + ".sha256");
+            executeUploadFile(BodyPublishers.ofString(generateHash(content, "SHA-512")), path + ".sha512");
+
+            if (info().signKey() != null) {
+                var tmp_file = File.createTempFile(path, "gpg");
+                FileUtils.writeString(content, tmp_file);
+                try {
+                    executeUploadFile(BodyPublishers.ofString(executeSignFile(tmp_file)), path + ".asc");
+                } finally {
+                    tmp_file.delete();
+                }
+            }
+        } catch (NoSuchAlgorithmException | IOException | FileUtilsErrorException e) {
             throw new UploadException(path, e);
         }
     }
 
-    private void uploadFileArtifact(HttpClient client, File file, String path)
+    private String generateHash(String content, String algorithm)
+    throws NoSuchAlgorithmException {
+        var digest = MessageDigest.getInstance(algorithm);
+        digest.update(content.getBytes(StandardCharsets.UTF_8));
+        return encodeHexLower(digest.digest());
+    }
+
+    /**
+     * Part of the {@link #execute} operation, uploads a single artifact with
+     * hashes and a potential signature.
+     *
+     * @param file the file that needs to be uploaded
+     * @param path the path of the artifact within the artifact folder
+     * @since 1.5.8
+     */
+    public void executeUploadFileArtifact(File file, String path)
     throws UploadException {
         try {
             var digest_md5 = MessageDigest.getInstance("MD5");
@@ -166,25 +242,56 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
                     digest_sha512.update(buffer, 0, return_value);
                 }
 
-                uploadArtifact(client, BodyPublishers.ofFile(file.toPath()), path);
-                uploadArtifact(client, BodyPublishers.ofString(encodeHexLower(digest_md5.digest())), path + ".md5");
-                uploadArtifact(client, BodyPublishers.ofString(encodeHexLower(digest_sha1.digest())), path + ".sha1");
-                uploadArtifact(client, BodyPublishers.ofString(encodeHexLower(digest_sha256.digest())), path + ".sha256");
-                uploadArtifact(client, BodyPublishers.ofString(encodeHexLower(digest_sha512.digest())), path + ".sha512");
+                executeUploadFile(BodyPublishers.ofFile(file.toPath()), path);
+                executeUploadFile(BodyPublishers.ofString(encodeHexLower(digest_md5.digest())), path + ".md5");
+                executeUploadFile(BodyPublishers.ofString(encodeHexLower(digest_sha1.digest())), path + ".sha1");
+                executeUploadFile(BodyPublishers.ofString(encodeHexLower(digest_sha256.digest())), path + ".sha256");
+                executeUploadFile(BodyPublishers.ofString(encodeHexLower(digest_sha512.digest())), path + ".sha512");
+                if (info().signKey() != null) {
+                    executeUploadFile(BodyPublishers.ofString(executeSignFile(file)), path + ".asc");
+                }
             }
-        } catch (IOException | NoSuchAlgorithmException e) {
+        } catch (IOException | NoSuchAlgorithmException | FileUtilsErrorException e) {
             throw new UploadException(path, e);
         }
     }
 
-    private static String generateHash(String content, String algorithm)
-    throws NoSuchAlgorithmException {
-        var digest = MessageDigest.getInstance(algorithm);
-        digest.update(content.getBytes(StandardCharsets.UTF_8));
-        return encodeHexLower(digest.digest());
+    /**
+     * Part of the {@link #execute} operation, generates the signature of a file.
+     *
+     * @param file the file whose signature will be generated
+     * @since 1.5.8
+     */
+    public String executeSignFile(File file)
+    throws IOException, FileUtilsErrorException {
+        var gpg_path = info().signGpgPath();
+        if (gpg_path == null) {
+            gpg_path = "gpg";
+        }
+        var gpg_arguments = new ArrayList<>(List.of(
+            gpg_path,
+            "--pinentry-mode=loopback",
+            "--no-tty", "--batch", "--detach-sign", "--armor", "-o-",
+            "--local-user", info().signKey()));
+        if (info().signPassphrase() != null) {
+            gpg_arguments.addAll(List.of("--passphrase", info().signPassphrase()));
+        }
+        gpg_arguments.add(file.getAbsolutePath());
+        var builder = new ProcessBuilder(gpg_arguments);
+        builder.redirectOutput(ProcessBuilder.Redirect.PIPE);
+        builder.redirectError(ProcessBuilder.Redirect.PIPE);
+        var process = builder.start();
+        return FileUtils.readString(process.getInputStream());
     }
 
-    private void uploadArtifact(HttpClient client, HttpRequest.BodyPublisher body, String path)
+    /**
+     * Part of the {@link #execute} operation, uploads a file.
+     *
+     * @param body the body of the file to upload
+     * @param path the path of the file within the artifact folder
+     * @since 1.5.8
+     */
+    public void executeUploadFile(HttpRequest.BodyPublisher body, String path)
     throws UploadException {
         var url = repository().getArtifactUrl(info().groupId(), info().artifactId()) + path;
         System.out.print("Uploading: " + url + " ... ");
@@ -200,7 +307,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
 
             HttpResponse<String> response;
             try {
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                response = client_.send(request, HttpResponse.BodyHandlers.ofString());
             } catch (IOException e) {
                 System.out.print("I/O error");
                 throw new UploadException(url, e);

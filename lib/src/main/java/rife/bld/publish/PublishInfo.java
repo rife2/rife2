@@ -22,6 +22,9 @@ public class PublishInfo {
     private String name_ = null;
     private String description_ = null;
     private String url_ = null;
+    private String signGpgPath_ = null;
+    private String signKey_ = null;
+    private String signPassphrase_ = null;
 
     private final List<PublishLicense> licenses_ = new ArrayList<>();
     private final List<PublishDeveloper> developers_ = new ArrayList<>();
@@ -157,6 +160,81 @@ public class PublishInfo {
      */
     public String url() {
         return url_;
+    }
+
+    /**
+     * Provides the custompath to the {@code gpg} executable used for signing.
+     * <p>
+     * By default, {@code gpg} will be used.
+     *
+     * @param path the {@code gpg} executable path
+     * @return this {@code PublishInfo} instance
+     * @since 1.5.8
+     */
+    public PublishInfo signGpgPath(String path) {
+        signGpgPath_ = path;
+        return this;
+    }
+
+    /**
+     * Retrieves the custom path of the {@code gpg} executable.
+     *
+     * @return the custom path of the {@code gpg} executable; or
+     * {@code null} if no custom path was set
+     * @since 1.5.8
+     */
+    public String signGpgPath() {
+        return signGpgPath_;
+    }
+
+    /**
+     * Provides the sign key used to create a signature for each published artifact.
+     * <p>
+     * When the sign key is provided, signing will activate.
+     * When the sign key is not set, publishing will proceed without signed artifacts.
+     *
+     * @param key the sign key
+     * @return this {@code PublishInfo} instance
+     * @since 1.5.8
+     */
+    public PublishInfo signKey(String key) {
+        signKey_ = key;
+        return this;
+    }
+
+    /**
+     * Retrieves the sign key.
+     *
+     * @return the sign key; or
+     * {@code null} if no sign key was provided
+     * @since 1.5.8
+     */
+    public String signKey() {
+        return signKey_;
+    }
+
+    /**
+     * Provides the passphrase used to create a signature for each published artifact.
+     * <p>
+     * If a GPG agent is running locally, the passphrase might not be necessary.
+     *
+     * @param passphrase the passphrase used for signing
+     * @return this {@code PublishInfo} instance
+     * @since 1.5.8
+     */
+    public PublishInfo signPassphrase(String passphrase) {
+        signPassphrase_ = passphrase;
+        return this;
+    }
+
+    /**
+     * Retrieves the passphrase used to create a signature for each published artifact.
+     * @return the passphrase; or
+     * {@code null} if no passphrase was provided
+     * @since 1.5.8
+     */
+    public String signPassphrase() {
+        return signPassphrase_;
     }
 
     /**
