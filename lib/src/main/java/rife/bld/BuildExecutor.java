@@ -162,14 +162,14 @@ public class BuildExecutor {
                             method.setAccessible(true);
 
                             var name = method.getName();
+                            var annotation = method.getAnnotation(BuildCommand.class);
+
+                            var annotation_name = annotation.value();
+                            if (annotation_name != null && !annotation_name.isEmpty()) {
+                                name = annotation_name;
+                            }
+
                             if (!build_commands.containsKey(name)) {
-                                var annotation = method.getAnnotation(BuildCommand.class);
-
-                                var annotation_name = annotation.value();
-                                if (annotation_name != null && !annotation_name.isEmpty()) {
-                                    name = annotation_name;
-                                }
-
                                 var build_help = annotation.help();
                                 CommandHelp command_help = null;
                                 if (build_help != null && build_help != CommandHelp.class) {
