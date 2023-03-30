@@ -4,6 +4,7 @@
  */
 package rife.bld.operations;
 
+import rife.Version;
 import rife.bld.Project;
 import rife.bld.dependencies.*;
 import rife.bld.dependencies.exceptions.DependencyException;
@@ -26,8 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static rife.bld.publish.MetadataBuilder.SNAPSHOT_TIMESTAMP_FORMATTER;
-import static rife.tools.HttpUtils.HEADER_AUTHORIZATION;
-import static rife.tools.HttpUtils.basicAuthorizationHeader;
+import static rife.tools.HttpUtils.*;
 import static rife.tools.StringUtils.encodeHexLower;
 
 /**
@@ -303,7 +303,11 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
         try {
             var builder = HttpRequest.newBuilder()
                 .PUT(body)
-                .uri(URI.create(url));
+                .uri(URI.create(url))
+                .header(HEADER_USER_AGENT, "bld/" + Version.getVersion() +
+                                           " (" + System.getProperty("os.name") + "; " + System.getProperty("os.version") + "; " + System.getProperty("os.arch") + ") " +
+                                           "RIFE2/" + Version.getVersion() +
+                                           " (" + System.getProperty("java.vendor") + " " + System.getProperty("java.vm.name") + "; " + System.getProperty("java.version") + "; " + System.getProperty("java.vm.version") + ")");
             if (repository().username() != null && repository().password() != null) {
                 builder.header(HEADER_AUTHORIZATION, basicAuthorizationHeader(repository().username(), repository().password()));
             }

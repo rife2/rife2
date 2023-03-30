@@ -9,6 +9,7 @@ import java.util.Map;
 
 public final class HttpUtils {
     public static final String HEADER_AUTHORIZATION = "Authorization";
+    public static final String HEADER_USER_AGENT = "User-Agent";
 
     public static final String CHARSET = "charset=";
 
