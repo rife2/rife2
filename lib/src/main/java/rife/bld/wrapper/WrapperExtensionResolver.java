@@ -24,17 +24,17 @@ import java.util.*;
  * @since 1.5.8
  */
 public class WrapperExtensionResolver {
-    private final File wrapperPropertiesFile_;
+    private final File hashFile_;
     private final String fingerPrintHash_;
-    private final File libBldDirectory_;
+    private final File destinationDirectory_;
     private final List<Repository> repositories_ = new ArrayList<>();
     private final DependencySet dependencies_ = new DependencySet();
 
     private boolean headerPrinted_ = false;
 
-    public WrapperExtensionResolver(File wrapperPropertiesFile, File libBldDirectory, Collection<String> repositories, Collection<String> extensions) {
-        wrapperPropertiesFile_ = wrapperPropertiesFile;
-        libBldDirectory_ = libBldDirectory;
+    public WrapperExtensionResolver(File hashFile, File destinationDirectory, Collection<String> repositories, Collection<String> extensions) {
+        hashFile_ = hashFile;
+        destinationDirectory_ = destinationDirectory;
         repositories_.addAll(repositories.stream().map(Repository::new).toList());
         dependencies_.addAll(extensions.stream().map(Dependency::parse).toList());
         fingerPrintHash_ = createHash(repositories, extensions);
@@ -71,15 +71,14 @@ public class WrapperExtensionResolver {
 
     private boolean validateHash() {
         try {
-            var hash_file = new File(wrapperPropertiesFile_.getAbsolutePath() + ".hash");
-            if (hash_file.exists()) {
-                var hash = FileUtils.readString(hash_file);
+            if (hashFile_.exists()) {
+                var hash = FileUtils.readString(hashFile_);
                 if (hash.equals(fingerPrintHash_)) {
                     return true;
                 }
-                hash_file.delete();
+                hashFile_.delete();
             }
-            FileUtils.writeString(fingerPrintHash_, hash_file);
+            FileUtils.writeString(fingerPrintHash_, hashFile_);
             return false;
         } catch (FileUtilsErrorException e) {
             throw new RuntimeException(e);
@@ -97,7 +96,7 @@ public class WrapperExtensionResolver {
         if (!dependencies.isEmpty()) {
             ensurePrintedHeader();
 
-            dependencies.downloadIntoDirectory(repositories_, libBldDirectory_);
+            dependencies.downloadIntoDirectory(repositories_, destinationDirectory_);
 
             for (var dependency : dependencies) {
                 for (var url : new DependencyResolver(repositories_, dependency).getDownloadUrls()) {
@@ -110,7 +109,7 @@ public class WrapperExtensionResolver {
     }
 
     private void purgeExtensionDependencies(Set<String> filenames) {
-        for (var file : libBldDirectory_.listFiles()) {
+        for (var file : destinationDirectory_.listFiles()) {
             if (file.getName().startsWith(Wrapper.WRAPPER_PREFIX)) {
                 continue;
             }

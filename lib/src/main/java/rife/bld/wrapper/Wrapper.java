@@ -403,7 +403,7 @@ public class Wrapper {
             var resolver_class = classloader_.loadClass("rife.bld.wrapper.WrapperExtensionResolver");
             var constructor = resolver_class.getConstructor(File.class, File.class, Collection.class, Collection.class);
             var update_method = resolver_class.getDeclaredMethod("updateExtensions");
-            var resolver = constructor.newInstance(wrapperPropertiesFile_, libBldDirectory(), repositories_, extensions_);
+            var resolver = constructor.newInstance(new File(wrapperPropertiesFile_.getAbsolutePath() + ".hash"), libBldDirectory(), repositories_, extensions_);
             update_method.invoke(resolver);
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e.getCause());
