@@ -8,22 +8,21 @@ import rife.bld.CommandHelp;
 import rife.tools.StringUtils;
 
 /**
- * Provides help for the publish command.
+ * Provides help for the jar-javadoc command.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.5.7
+ * @since 1.5.10
  */
-public class PublishHelp implements CommandHelp {
+public class JarJavadocHelp implements CommandHelp {
     public String getSummary() {
-        return "Publishes the artifacts of your project";
+        return "Creates a javadoc jar archive for the project";
     }
 
     public String getDescription(String topic) {
         return StringUtils.replace("""
-            Publishes the artifacts of the project to the publication
-            repository.
-            The standard publish command will automatically also execute
-            the jar, jar-sources and jar-javadoc commands beforehand.
+            Creates a javadoc jar archive for the project.
+            The standard jar-javadoc command will automatically also execute
+            the javadoc command beforehand.
                         
             Usage : ${topic}""", "${topic}", topic);
     }

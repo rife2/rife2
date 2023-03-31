@@ -13,6 +13,7 @@ import rife.tools.FileUtils;
 
 import java.io.File;
 import java.util.*;
+import java.util.jar.Attributes;
 import java.util.regex.Pattern;
 
 import static rife.bld.dependencies.Scope.runtime;
@@ -169,6 +170,20 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     protected String jarFileName = null;
+    /**
+     * The filename to use for the sources jar archive creation.
+     *
+     * @see #sourcesJarFileName()
+     * @since 1.5.10
+     */
+    protected String sourcesJarFileName = null;
+    /**
+     * The filename to use for the javadoc jar archive creation.
+     *
+     * @see #javadocJarFileName()
+     * @since 1.5.10
+     */
+    protected String javadocJarFileName = null;
     /**
      * The filename to use for the uber jar archive creation.
      *
@@ -424,6 +439,37 @@ public class Project extends BuildExecutor {
     }
 
     /**
+     * Standard build command, creates a sources jar archive for the project.
+     *
+     * @since 1.5.10
+     */
+    @BuildCommand(value = "jar-sources", help = JarSourcesHelp.class)
+    public void jarSources()
+    throws Exception {
+        new JarOperation().manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
+            .sourceDirectories(List.of(srcMainJavaDirectory()))
+            .destinationDirectory(buildDistDirectory())
+            .destinationFileName(sourcesJarFileName())
+            .execute();
+    }
+
+    /**
+     * Standard build command, creates a javadoc jar archive for the project.
+     *
+     * @since 1.5.10
+     */
+    @BuildCommand(value = "jar-javadoc", help = JarJavadocHelp.class)
+    public void jarJavadoc()
+    throws Exception {
+        javadoc();
+        new JarOperation().manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
+            .sourceDirectories(List.of(buildJavadocDirectory()))
+            .destinationDirectory(buildDistDirectory())
+            .destinationFileName(javadocJarFileName())
+            .execute();
+    }
+
+    /**
      * Standard build command, purges all unused artifacts from the project.
      *
      * @since 1.5
@@ -498,6 +544,8 @@ public class Project extends BuildExecutor {
     public void publish()
     throws Exception {
         jar();
+        jarSources();
+        jarJavadoc();
         new PublishOperation().fromProject(this).execute();
     }
 
@@ -1307,6 +1355,26 @@ public class Project extends BuildExecutor {
      */
     public String jarFileName() {
         return Objects.requireNonNullElseGet(jarFileName, () -> archiveBaseName() + "-" + version() + ".jar");
+    }
+
+    /**
+     * Returns the filename to use for the sources jar archive creation.
+     * By default, appends the version, {@code "sources"} and the {@code jar} extension to the {@link #archiveBaseName()}.
+     *
+     * @since 1.5.10
+     */
+    public String sourcesJarFileName() {
+        return Objects.requireNonNullElseGet(sourcesJarFileName, () -> archiveBaseName() + "-" + version() + "-sources" + ".jar");
+    }
+
+    /**
+     * Returns the filename to use for the javadoc jar archive creation.
+     * By default, appends the version, {@code "javadoc"} and the {@code jar} extension to the {@link #archiveBaseName()}.
+     *
+     * @since 1.5.10
+     */
+    public String javadocJarFileName() {
+        return Objects.requireNonNullElseGet(javadocJarFileName, () -> archiveBaseName() + "-" + version() + "-javadoc" + ".jar");
     }
 
     /**

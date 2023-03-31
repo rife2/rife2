@@ -22,8 +22,9 @@ public class PublishWebHelp implements CommandHelp {
         return StringUtils.replace("""
             Publishes the artifacts of the web project to the publication
             repository.
-            The standard publish command will automatically also execute
-            the jar, uberjar and war commands beforehand.
+            The standard web publish command will automatically also execute
+            the jar, jar-sources, jar-javadoc, uberjar and war commands
+            beforehand.
                         
             Usage : ${topic}""", "${topic}", topic);
     }

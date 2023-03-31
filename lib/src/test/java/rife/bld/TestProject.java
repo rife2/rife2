@@ -67,6 +67,10 @@ public class TestProject {
         assertThrows(IllegalStateException.class, project::archiveBaseName);
         assertNull(project.jarFileName);
         assertThrows(IllegalStateException.class, project::jarFileName);
+        assertNull(project.sourcesJarFileName);
+        assertThrows(IllegalStateException.class, project::sourcesJarFileName);
+        assertNull(project.javadocJarFileName);
+        assertThrows(IllegalStateException.class, project::javadocJarFileName);
         assertNull(project.uberJarFileName);
         assertThrows(IllegalStateException.class, project::uberJarFileName);
         assertNull(project.uberJarMainClass);

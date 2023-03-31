@@ -77,6 +77,8 @@ public class WebProject extends Project {
     throws Exception {
         uberjar();
         new WarOperation().fromProject(this).execute();
+        jarSources();
+        jarJavadoc();
 
         var operation = new PublishOperation().fromProject(this);
         operation.artifacts().add(new PublishArtifact(new File(buildDistDirectory(), uberJarFileName()), "uber", "jar"));

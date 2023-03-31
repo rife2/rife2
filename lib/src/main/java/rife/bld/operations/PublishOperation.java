@@ -60,6 +60,8 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
             moment = ZonedDateTime.now();
         }
 
+        executeValidateArtifacts();
+
         var actual_version = info().version();
 
         // treat a snapshot version differently
@@ -73,6 +75,21 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
         if (!silent()) {
             System.out.println("Publishing finished successfully.");
         }
+    }
+
+    /**
+     * Part of the {@link #execute} operation, validates the publishing artifacts.
+     *
+     * @since 1.5.10
+     */
+    public void executeValidateArtifacts() {
+        artifacts().removeIf(artifact -> {
+            if (!artifact.file().exists()) {
+                System.out.println("WARNING: Missing artifact file '" + artifact.file() + "', skipping.");
+                return true;
+            }
+            return false;
+        });
     }
 
     /**
@@ -348,7 +365,10 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     public PublishOperation fromProject(Project project) {
         repository(project.publishRepository());
         dependencies().include(project.dependencies());
-        artifacts(List.of(new PublishArtifact(new File(project.buildDistDirectory(), project.jarFileName()), "", "jar")));
+        artifacts(List.of(
+            new PublishArtifact(new File(project.buildDistDirectory(), project.jarFileName()), "", "jar"),
+            new PublishArtifact(new File(project.buildDistDirectory(), project.sourcesJarFileName()), "sources", "jar"),
+            new PublishArtifact(new File(project.buildDistDirectory(), project.javadocJarFileName()), "javadoc", "jar")));
         var info = project.publishInfo();
         if (info != null) {
             info_ = info;
