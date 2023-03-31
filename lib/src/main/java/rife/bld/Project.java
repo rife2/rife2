@@ -372,6 +372,22 @@ public class Project extends BuildExecutor {
      * Standard build commands
      */
 
+    private final CleanOperation cleanOperation_ = new CleanOperation();
+    private final CompileOperation compileOperation_ = new CompileOperation();
+    private final DownloadOperation downloadOperation_ = new DownloadOperation();
+    private final JavadocOperation javadocOperation_ = new JavadocOperation();
+    private final PrecompileOperation precompileOperation_ = new PrecompileOperation();
+    private final JarOperation jarOperation_ = new JarOperation();
+    private final JarOperation jarSourcesOperation_ = new JarOperation();
+    private final JarOperation jarJavadocOperation_ = new JarOperation();
+    private final PurgeOperation purgeOperation_ = new PurgeOperation();
+    private final RunOperation runOperation_ = new RunOperation();
+    private final TestOperation testOperation_ = new TestOperation();
+    private final UberJarOperation uberJarOperation_ = new UberJarOperation();
+    private final UpdatesOperation updatesOperation_ = new UpdatesOperation();
+    private final PublishOperation publishOperation_ = new PublishOperation();
+    private final VersionOperation versionOperation_ = new VersionOperation();
+
     /**
      * Standard build command, cleans the build files.
      *
@@ -380,7 +396,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = CleanHelp.class)
     public void clean()
     throws Exception {
-        new CleanOperation().fromProject(this).execute();
+        cleanOperation_.executeOnce(o -> o.fromProject(this));
     }
 
     /**
@@ -391,7 +407,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = CompileHelp.class)
     public void compile()
     throws Exception {
-        new CompileOperation().fromProject(this).execute();
+        compileOperation_.executeOnce(o -> o.fromProject(this));
     }
 
     /**
@@ -400,8 +416,9 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     @BuildCommand(help = DownloadHelp.class)
-    public void download() {
-        new DownloadOperation().fromProject(this).execute();
+    public void download()
+    throws Exception {
+        downloadOperation_.executeOnce(o -> o.fromProject(this));
     }
 
     /**
@@ -412,7 +429,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = JavadocHelp.class)
     public void javadoc()
     throws Exception {
-        new JavadocOperation().fromProject(this).execute();
+        javadocOperation_.executeOnce(o -> o.fromProject(this));
     }
 
     /**
@@ -421,8 +438,9 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     @BuildCommand(help = PrecompileHelp.class)
-    public void precompile() {
-        new PrecompileOperation().fromProject(this).execute();
+    public void precompile()
+    throws Exception {
+        precompileOperation_.executeOnce(o -> o.fromProject(this));
     }
 
     /**
@@ -435,7 +453,7 @@ public class Project extends BuildExecutor {
     throws Exception {
         compile();
         precompile();
-        new JarOperation().fromProject(this).execute();
+        jarOperation_.executeOnce(o -> o.fromProject(this));
     }
 
     /**
@@ -446,11 +464,11 @@ public class Project extends BuildExecutor {
     @BuildCommand(value = "jar-sources", help = JarSourcesHelp.class)
     public void jarSources()
     throws Exception {
-        new JarOperation().manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
+        jarSourcesOperation_.executeOnce(o -> o
+            .manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
             .sourceDirectories(List.of(srcMainJavaDirectory()))
             .destinationDirectory(buildDistDirectory())
-            .destinationFileName(sourcesJarFileName())
-            .execute();
+            .destinationFileName(sourcesJarFileName()));
     }
 
     /**
@@ -462,11 +480,10 @@ public class Project extends BuildExecutor {
     public void jarJavadoc()
     throws Exception {
         javadoc();
-        new JarOperation().manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
+        jarJavadocOperation_.executeOnce(o -> o.manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
             .sourceDirectories(List.of(buildJavadocDirectory()))
             .destinationDirectory(buildDistDirectory())
-            .destinationFileName(javadocJarFileName())
-            .execute();
+            .destinationFileName(javadocJarFileName()));
     }
 
     /**
@@ -477,7 +494,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = PurgeHelp.class)
     public void purge()
     throws Exception {
-        new PurgeOperation().fromProject(this).execute();
+        purgeOperation_.executeOnce(o -> o.fromProject(this));
     }
 
     /**
@@ -488,7 +505,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = RunHelp.class)
     public void run()
     throws Exception {
-        new RunOperation().fromProject(this).execute();
+        runOperation_.executeOnce(o -> o.fromProject(this));
     }
 
     /**
@@ -499,7 +516,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = TestHelp.class)
     public void test()
     throws Exception {
-        new TestOperation().fromProject(this).execute();
+        testOperation_.executeOnce(o -> o.fromProject(this));
     }
 
     /**
@@ -511,7 +528,7 @@ public class Project extends BuildExecutor {
     public void uberjar()
     throws Exception {
         jar();
-        new UberJarOperation().fromProject(this).execute();
+        uberJarOperation_.executeOnce(o -> o.fromProject(this));
     }
 
     /**
@@ -522,7 +539,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = UpdatesHelp.class)
     public void updates()
     throws Exception {
-        new UpdatesOperation().fromProject(this).execute();
+        updatesOperation_.executeOnce(o -> o.fromProject(this));
     }
 
     /**
@@ -531,8 +548,9 @@ public class Project extends BuildExecutor {
      * @since 1.5.2
      */
     @BuildCommand(value = "version", help = VersionHelp.class)
-    public void printVersion() {
-        new VersionOperation().fromArguments(arguments()).execute();
+    public void printVersion()
+    throws Exception {
+        versionOperation_.executeOnce(o -> o.fromArguments(arguments()));
     }
 
     /**
@@ -546,7 +564,7 @@ public class Project extends BuildExecutor {
         jar();
         jarSources();
         jarJavadoc();
-        new PublishOperation().fromProject(this).execute();
+        publishOperation_.executeOnce(o -> o.fromProject(this));
     }
 
     /*

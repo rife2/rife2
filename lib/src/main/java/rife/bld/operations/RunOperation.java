@@ -22,7 +22,7 @@ import java.util.function.Function;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class RunOperation {
+public class RunOperation extends AbstractOperation<PurgeOperation> {
     public static final String DEFAULT_JAVA_TOOL = "java";
 
     private File workDirectory_ = new File(System.getProperty("user.dir"));
@@ -43,7 +43,7 @@ public class RunOperation {
      * @throws ExitStatusException     when the exit status was changed during the operation
      * @since 1.5
      */
-    public void execute()
+    protected void execute()
     throws IOException, FileUtilsErrorException, InterruptedException, ExitStatusException {
         process_ = executeStartProcess();
         int status = process_.waitFor();

@@ -39,7 +39,7 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      *
      * @since 1.5
      */
-    public void execute() {
+    protected void execute() {
         executeDownloadCompileDependencies();
         executeDownloadRuntimeDependencies();
         executeDownloadStandaloneDependencies();

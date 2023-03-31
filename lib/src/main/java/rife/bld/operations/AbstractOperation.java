@@ -4,6 +4,8 @@
  */
 package rife.bld.operations;
 
+import java.util.function.Consumer;
+
 /**
  * Provides common features across all operations
  *
@@ -12,6 +14,7 @@ package rife.bld.operations;
  */
 public abstract class AbstractOperation<T extends AbstractOperation<T>> {
     private boolean silent_ = false;
+    private boolean executed_ = false;
 
     /**
      * Changes whether the operation should be silent or not.
@@ -25,7 +28,7 @@ public abstract class AbstractOperation<T extends AbstractOperation<T>> {
      */
     public T silent(boolean silent) {
         silent_ = silent;
-        return (T)this;
+        return (T) this;
     }
 
     /**
@@ -38,4 +41,36 @@ public abstract class AbstractOperation<T extends AbstractOperation<T>> {
     public boolean silent() {
         return silent_;
     }
+
+    /**
+     * Ensures that this operation instance is executed once and only once.
+     * <p>
+     * A setup lambda can be provided that is called when the only execution takes place.
+     *
+     * @param setup the setup lambda that will be called with the only execution, the instance
+     *              of this operation will be provided as the lambda argument
+     * @throws Exception when an exception was thrown by the {@link #execute()} call
+     * @since 1.5.10
+     */
+    public void executeOnce(Consumer<T> setup)
+    throws Exception {
+        if (executed_) {
+            return;
+        }
+        executed_ = true;
+
+        if (setup != null) {
+            setup.accept((T)this);
+        }
+        execute();
+    }
+
+    /**
+     * Performs the operation execution that can be wrapped by the {@code #executeOnce} call.
+     *
+     * @throws Exception when an exception occurs during the execution
+     * @since 1.5.10
+     */
+    protected abstract void execute()
+    throws Exception;
 }

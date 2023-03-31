@@ -37,7 +37,7 @@ public class WarOperation extends AbstractOperation<WarOperation> {
      * @throws FileUtilsErrorException when an exception occurred war the uberjar creation process
      * @since 1.5
      */
-    public void execute()
+    protected void execute()
     throws IOException, FileUtilsErrorException {
         var tmp_dir = Files.createTempDirectory("war").toFile();
 

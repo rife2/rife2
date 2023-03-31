@@ -38,7 +38,7 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      *
      * @since 1.5
      */
-    public void execute() {
+    protected void execute() {
         executePurgeCompileDependencies();
         executePurgeRuntimeDependencies();
         executePurgeStandaloneDependencies();

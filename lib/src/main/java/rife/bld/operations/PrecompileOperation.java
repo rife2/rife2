@@ -29,7 +29,7 @@ public class PrecompileOperation extends AbstractOperation<PrecompileOperation> 
      *
      * @since 1.5
      */
-    public void execute() {
+    protected void execute() {
         if (destinationDirectory() != null) {
             destinationDirectory().mkdirs();
         }

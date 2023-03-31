@@ -15,6 +15,11 @@ import rife.bld.operations.*;
  * @since 1.5
  */
 public class Cli extends BuildExecutor {
+    private final CreateRife2Operation createRife2Operation_ = new CreateRife2Operation();
+    private final CreateBlankOperation createBlankOperation_ = new CreateBlankOperation();
+    private final UpgradeOperation upgradeOperation_ = new UpgradeOperation();
+    private final VersionOperation versionOperation_ = new VersionOperation();
+
     /**
      * The standard {@code create} command.
      *
@@ -24,7 +29,7 @@ public class Cli extends BuildExecutor {
     @BuildCommand(help = CreateRife2Help.class)
     public void create()
     throws Exception {
-        new CreateRife2Operation().fromArguments(arguments()).execute();
+        createRife2Operation_.executeOnce(o -> o.fromArguments(arguments()));
     }
 
     /**
@@ -36,7 +41,7 @@ public class Cli extends BuildExecutor {
     @BuildCommand(value = "create-blank", help = CreateBlankHelp.class)
     public void createBlank()
     throws Exception {
-        new CreateBlankOperation().fromArguments(arguments()).execute();
+        createBlankOperation_.executeOnce(o -> o.fromArguments(arguments()));
     }
 
     /**
@@ -48,7 +53,7 @@ public class Cli extends BuildExecutor {
     @BuildCommand(help = UpgradeHelp.class)
     public void upgrade()
     throws Exception {
-        new UpgradeOperation().fromArguments(arguments()).execute();
+        upgradeOperation_.executeOnce(o -> o.fromArguments(arguments()));
     }
 
     /**
@@ -57,8 +62,9 @@ public class Cli extends BuildExecutor {
      * @since 1.5.2
      */
     @BuildCommand(help = VersionHelp.class)
-    public void version() {
-        new VersionOperation().fromArguments(arguments()).execute();
+    public void version()
+    throws Exception {
+        versionOperation_.executeOnce(o -> o.fromArguments(arguments()));
     }
 
     public static void main(String[] arguments)
