@@ -360,7 +360,11 @@ public class Wrapper {
         var sources_filename = rife2SourcesFileName(version);
         var distribution_sources_file = new File(DISTRIBUTIONS_DIR, sources_filename);
         if (!distribution_sources_file.exists()) {
-            downloadDistribution(distribution_sources_file, downloadUrl(version, sources_filename));
+            try {
+                downloadDistribution(distribution_sources_file, downloadUrl(version, sources_filename));
+            } catch (IOException e) {
+                // this is not critical, ignore
+            }
         }
 
         // find the wrapper classloader in the hierarchy and add the RIFE2 jar to it
