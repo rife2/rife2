@@ -248,6 +248,7 @@ public class DependencyResolver {
                     if (source.exists()) {
                         FileUtils.copy(source, download_file);
                         System.out.print("done");
+                        break;
                     } else {
                         System.out.print("not found");
                     }
