@@ -96,6 +96,7 @@ public class WrapperExtensionResolver {
         if (!dependencies.isEmpty()) {
             ensurePrintedHeader();
 
+            dependencies.removeIf(dependency -> dependency.baseDependency().equals(new Dependency("com.uwyn.rife2", "rife2")));
             dependencies.downloadIntoDirectory(repositories_, destinationDirectory_);
 
             for (var dependency : dependencies) {
