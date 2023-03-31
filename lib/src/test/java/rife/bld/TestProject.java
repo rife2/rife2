@@ -47,6 +47,8 @@ public class TestProject {
         assertNotNull(project.compileJavacOptions);
         assertTrue(project.compileJavacOptions.isEmpty());
         assertTrue(project.compileJavacOptions().isEmpty());
+        assertTrue(project.javadocOptions.isEmpty());
+        assertTrue(project.javadocOptions().isEmpty());
         assertNull(project.javaTool);
         assertNotNull(project.javaTool());
         assertEquals("java", project.javaTool());
@@ -105,6 +107,8 @@ public class TestProject {
         assertNotNull(project.buildBldDirectory());
         assertNull(project.buildDistDirectory);
         assertNotNull(project.buildDistDirectory());
+        assertNull(project.buildJavadocDirectory);
+        assertNotNull(project.buildJavadocDirectory());
         assertNull(project.buildMainDirectory);
         assertNotNull(project.buildMainDirectory());
         assertNull(project.buildTemplatesDirectory);

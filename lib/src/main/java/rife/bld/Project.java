@@ -114,6 +114,13 @@ public class Project extends BuildExecutor {
      */
     protected List<String> compileJavacOptions = new ArrayList<>();
     /**
+     * The project's javadoc options for compilation.
+     *
+     * @see #javadocOptions()
+     * @since 1.5.10
+     */
+    protected List<String> javadocOptions = new ArrayList<>();
+    /**
      * The tool that is used for running the java main class.
      *
      * @see #javaTool()
@@ -317,6 +324,13 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     protected File buildDistDirectory = null;
+    /**
+     * The javadoc build directory.
+     *
+     * @see #buildJavadocDirectory()
+     * @since 1.5.10
+     */
+    protected File buildJavadocDirectory = null;
     /**
      * The main build directory.
      *
@@ -879,6 +893,16 @@ public class Project extends BuildExecutor {
     }
 
     /**
+     * Returns the project javadoc build directory.
+     * Defaults to {@code "javadoc"} relative to {@link #buildDirectory()}.
+     *
+     * @since 1.5.10
+     */
+    public File buildJavadocDirectory() {
+        return Objects.requireNonNullElseGet(buildJavadocDirectory, () -> new File(buildDirectory(), "javadoc"));
+    }
+
+    /**
      * Returns the project main build directory.
      * Defaults to {@code "main"} relative to {@link #buildDirectory()}.
      *
@@ -943,6 +967,7 @@ public class Project extends BuildExecutor {
         buildDirectory().mkdirs();
         buildBldDirectory().mkdirs();
         buildDistDirectory().mkdirs();
+        buildJavadocDirectory().mkdirs();
         buildMainDirectory().mkdirs();
         buildTemplatesDirectory().mkdirs();
         buildTestDirectory().mkdirs();
@@ -1112,6 +1137,37 @@ public class Project extends BuildExecutor {
     public void compileJavacOptions(String... options) {
         for (var option : options) {
             compileJavacOptions().add(option);
+        }
+    }
+
+    /**
+     * Returns the project's javadoc options.
+     * <p>
+     * This list can be modified to change the javadoc options for the project.
+     *
+     * @since 1.5.10
+     */
+    public List<String> javadocOptions() {
+        if (javadocOptions == null) {
+            javadocOptions = new ArrayList<>();
+        }
+        if (javaRelease != null &&
+            !javadocOptions.contains("--release")) {
+            javadocOptions.add("--release");
+            javadocOptions.add(Convert.toString(javaRelease));
+        }
+        return javadocOptions;
+    }
+
+    /**
+     * Adds javadoc options to this project.
+     *
+     * @param options the options to add
+     * @since 1.5.6
+     */
+    public void javadocOptions(String... options) {
+        for (var option : options) {
+            javadocOptions().add(option);
         }
     }
 

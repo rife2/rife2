@@ -103,6 +103,7 @@ public class TestCleanOperation {
                     /build
                     /build/bld
                     /build/dist
+                    /build/javadoc
                     /build/main
                     /build/test
                     /lib
