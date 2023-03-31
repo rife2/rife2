@@ -70,6 +70,9 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
         executeUploadArtifacts(actual_version);
         executeUploadPom(actual_version);
         executeUploadMetadata(moment);
+        if (!silent()) {
+            System.out.println("Publishing finished successfully.");
+        }
     }
 
     /**
