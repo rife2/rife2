@@ -56,10 +56,7 @@ public class CleanOperation extends AbstractOperation<CleanOperation> {
      * @since 1.5
      */
     public CleanOperation fromProject(Project project) {
-        return directories(List.of(
-            project.buildDistDirectory(),
-            project.buildMainDirectory(),
-            project.buildTestDirectory()));
+        return directories(List.of(project.buildDirectory()));
     }
 
     /**
