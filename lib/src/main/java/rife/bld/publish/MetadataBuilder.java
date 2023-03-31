@@ -27,6 +27,7 @@ public class MetadataBuilder {
     private final SortedSet<VersionNumber> otherVersions_ = new TreeSet<>(Collections.reverseOrder());
     private ZonedDateTime snapshotTimestamp_ = null;
     private Integer snapshotBuildNumber_ = null;
+    private boolean snapshotLocal_ = false;
     private final List<SnapshotVersion> snapshotVersions_ = new ArrayList<>();
 
     /**
@@ -109,6 +110,7 @@ public class MetadataBuilder {
     public MetadataBuilder snapshot(ZonedDateTime timestamp, Integer buildNumber) {
         snapshotTimestamp_ = timestamp;
         snapshotBuildNumber_ = buildNumber;
+        snapshotLocal_ = false;
         return this;
     }
 
@@ -132,6 +134,31 @@ public class MetadataBuilder {
      */
     public Integer snapshotBuildNumber() {
         return snapshotBuildNumber_;
+    }
+
+    /**
+     * Indicates this is local snapshot metadata, this will switch it to
+     * snapshot formatting, which is different from main artifact metadata.
+     *
+     * @return this {@code MetadataBuilder} instance
+     * @since 1.5.8
+     */
+    public MetadataBuilder snapshotLocal() {
+        snapshotTimestamp_ = null;
+        snapshotBuildNumber_ = null;
+        snapshotLocal_ = true;
+        return this;
+    }
+
+    /**
+     * Indicates whether this is a local snapshot.
+     *
+     * @return {@code true} if this is a local snapshot; or
+     * {@code false} otherwise
+     * @since 1.5.10
+     */
+    public boolean isSnapshotLocal() {
+        return snapshotLocal_;
     }
 
     /**
@@ -172,13 +199,17 @@ public class MetadataBuilder {
             t.setValueEncoded("groupId", Objects.requireNonNullElse(info.groupId(), ""));
             t.setValueEncoded("artifactId", Objects.requireNonNullElse(info.artifactId(), ""));
         }
-        if (snapshotTimestamp() != null && snapshotBuildNumber() != null) {
+        if (snapshotLocal_ || (snapshotTimestamp() != null && snapshotBuildNumber() != null)) {
             t.setValueEncoded("mainVersion", Objects.requireNonNullElse(info.version(), ""));
             t.setBlock("mainVersion-tag");
 
-            t.setValueEncoded("snapshot-timestamp", SNAPSHOT_TIMESTAMP_FORMATTER.format(snapshotTimestamp().withZoneSameInstant(ZoneId.of("UTC"))));
-            t.setValueEncoded("snapshot-buildNumber", snapshotBuildNumber());
-            t.setBlock("snapshot-tag");
+            if (snapshotLocal_) {
+                t.setBlock("snapshot-tag", "snapshot-local-tag");
+            } else {
+                t.setValueEncoded("snapshot-timestamp", SNAPSHOT_TIMESTAMP_FORMATTER.format(snapshotTimestamp().withZoneSameInstant(ZoneId.of("UTC"))));
+                t.setValueEncoded("snapshot-buildNumber", snapshotBuildNumber());
+                t.setBlock("snapshot-tag");
+            }
 
             if (!snapshotVersions().isEmpty()) {
                 for (var snapshot_version : snapshotVersions()) {

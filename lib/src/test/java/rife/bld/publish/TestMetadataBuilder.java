@@ -197,4 +197,54 @@ public class TestMetadataBuilder {
             </metadata>
             """, builder.build());
     }
+
+    @Test
+    void testLocalSnapshotVersions() {
+        var moment = ZonedDateTime.of(2023, 3, 27, 8, 56, 17, 123, ZoneId.of("America/New_York"));
+        var moment2 = ZonedDateTime.of(2023, 3, 27, 8, 56, 17, 123, ZoneId.of("America/New_York"));
+        var moment3 = ZonedDateTime.of(2023, 5, 27, 8, 56, 17, 123, ZoneId.of("America/New_York"));
+        var builder = new MetadataBuilder()
+            .info(new PublishInfo()
+                .groupId("com.example")
+                .artifactId("myapp")
+                .version(VersionNumber.parse("1.2.3-SNAPSHOT")))
+            .snapshotLocal()
+            .snapshotVersions(List.of(
+                new SnapshotVersion("classifier1", "ext1", "123", moment2),
+                new SnapshotVersion("classifier2", "ext2", "456", moment3),
+                new SnapshotVersion("classifier3", "ext3", "789", moment2)));
+        assertEquals("""
+            <?xml version="1.0" encoding="UTF-8"?>
+            <metadata modelVersion="1.1.0">
+              <groupId>com.example</groupId>
+              <artifactId>myapp</artifactId>
+              <version>1.2.3-SNAPSHOT</version>
+              <versioning>
+                <snapshot>
+                  <localCopy>true</localCopy>
+                </snapshot>
+                <snapshotVersions>
+                  <snapshotVersion>
+                    <classifier>classifier1</classifier>
+                    <extension>ext1</extension>
+                    <value>123</value>
+                    <updated>20230327125617</updated>
+                  </snapshotVersion>
+                  <snapshotVersion>
+                    <classifier>classifier2</classifier>
+                    <extension>ext2</extension>
+                    <value>456</value>
+                    <updated>20230527125617</updated>
+                  </snapshotVersion>
+                  <snapshotVersion>
+                    <classifier>classifier3</classifier>
+                    <extension>ext3</extension>
+                    <value>789</value>
+                    <updated>20230327125617</updated>
+                  </snapshotVersion>
+                </snapshotVersions>
+              </versioning>
+            </metadata>
+            """, builder.build());
+    }
 }

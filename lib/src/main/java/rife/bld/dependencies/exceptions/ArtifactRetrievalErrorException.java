@@ -9,23 +9,23 @@ import rife.bld.dependencies.Dependency;
 import java.io.Serial;
 
 public class ArtifactRetrievalErrorException extends DependencyException {
-    @Serial private static final long serialVersionUID = 339863133681418524L;
+    @Serial private static final long serialVersionUID = 5570184718213503548L;
 
     private final Dependency dependency_;
-    private final String url_;
+    private final String location_;
 
-    public ArtifactRetrievalErrorException(Dependency dependency, String url, Throwable e) {
-        super("Unexpected error while retrieving artifact for dependency '" + dependency + "' from '" + url + "'", e);
+    public ArtifactRetrievalErrorException(Dependency dependency, String location, Throwable e) {
+        super("Unexpected error while retrieving artifact for dependency '" + dependency + "' from '" + location + "'", e);
 
         dependency_ = dependency;
-        url_ = url;
+        location_ = location;
     }
 
     public Dependency getDependency() {
         return dependency_;
     }
 
-    public String getUrl() {
-        return url_;
+    public String getLocation() {
+        return location_;
     }
 }

@@ -59,7 +59,7 @@ public class WrapperExtensionResolver {
         }
 
         // collect and download the extensions dependencies
-        var filenames = downloadExtensionDependencies();
+        var filenames = transferExtensionDependencies();
 
         // purge the files that are not part of the latest extensions anymore
         purgeExtensionDependencies(filenames);
@@ -85,7 +85,7 @@ public class WrapperExtensionResolver {
         }
     }
 
-    private Set<String> downloadExtensionDependencies() {
+    private Set<String> transferExtensionDependencies() {
         var filenames = new HashSet<String>();
         var dependencies = new DependencySet();
         for (var d : dependencies_) {
@@ -97,11 +97,11 @@ public class WrapperExtensionResolver {
             ensurePrintedHeader();
 
             dependencies.removeIf(dependency -> dependency.baseDependency().equals(new Dependency("com.uwyn.rife2", "rife2")));
-            dependencies.downloadIntoDirectory(repositories_, destinationDirectory_);
+            dependencies.transferIntoDirectory(repositories_, destinationDirectory_);
 
             for (var dependency : dependencies) {
-                for (var url : new DependencyResolver(repositories_, dependency).getDownloadUrls()) {
-                    filenames.add(url.substring(url.lastIndexOf("/") + 1));
+                for (var location : new DependencyResolver(repositories_, dependency).getTransferLocations()) {
+                    filenames.add(location.substring(location.lastIndexOf("/") + 1));
                 }
             }
         }

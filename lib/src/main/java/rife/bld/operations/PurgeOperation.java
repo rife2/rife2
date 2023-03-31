@@ -120,12 +120,12 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
 
         var filenames = new HashSet<String>();
         for (var dependency : all_dependencies) {
-            addDownloadUrls(filenames, dependency);
+            addTransferLocations(filenames, dependency);
             if (preserveSources_) {
-                addDownloadUrls(filenames, dependency.withClassifier(CLASSIFIER_SOURCES));
+                addTransferLocations(filenames, dependency.withClassifier(CLASSIFIER_SOURCES));
             }
             if (preserveJavadoc_) {
-                addDownloadUrls(filenames, dependency.withClassifier(CLASSIFIER_JAVADOC));
+                addTransferLocations(filenames, dependency.withClassifier(CLASSIFIER_JAVADOC));
             }
         }
 
@@ -137,9 +137,9 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
         }
     }
 
-    private void addDownloadUrls(HashSet<String> filenames, Dependency dependency) {
-        for (var url : new DependencyResolver(repositories(), dependency).getDownloadUrls()) {
-            filenames.add(url.substring(url.lastIndexOf("/") + 1));
+    private void addTransferLocations(HashSet<String> filenames, Dependency dependency) {
+        for (var location : new DependencyResolver(repositories(), dependency).getTransferLocations()) {
+            filenames.add(location.substring(location.lastIndexOf("/") + 1));
         }
     }
 

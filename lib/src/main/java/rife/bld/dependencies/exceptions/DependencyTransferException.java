@@ -9,18 +9,18 @@ import rife.bld.dependencies.Dependency;
 import java.io.File;
 import java.io.Serial;
 
-public class DependencyDownloadException extends DependencyException {
-    @Serial private static final long serialVersionUID = -1606130902378889150L;
+public class DependencyTransferException extends DependencyException {
+    @Serial private static final long serialVersionUID = 2128741620203670830L;
 
     private final Dependency dependency_;
-    private final String url_;
+    private final String location_;
     private final File destination_;
 
-    public DependencyDownloadException(Dependency dependency, String url, File destination, Throwable e) {
-        super("Unable to download dependency '" + dependency + "' from '" + url + "' into '" + destination + "'", e);
+    public DependencyTransferException(Dependency dependency, String location, File destination, Throwable e) {
+        super("Unable to transfer dependency '" + dependency + "' from '" + location + "' into '" + destination + "'", e);
 
         dependency_ = dependency;
-        url_ = url;
+        location_ = location;
         destination_ = destination;
     }
 
@@ -28,8 +28,8 @@ public class DependencyDownloadException extends DependencyException {
         return dependency_;
     }
 
-    public String getUrl() {
-        return url_;
+    public String getLocation() {
+        return location_;
     }
 
     public File getDestination() {

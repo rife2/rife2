@@ -4,7 +4,7 @@
  */
 package rife.bld.dependencies;
 
-import rife.bld.dependencies.exceptions.DependencyDownloadException;
+import rife.bld.dependencies.exceptions.DependencyTransferException;
 
 import java.io.File;
 import java.util.*;
@@ -80,38 +80,38 @@ public class DependencySet extends AbstractSet<Dependency> implements Set<Depend
     }
 
     /**
-     * Downloads the url for the dependencies into the provided directory.
+     * Transfers the artifacts for the dependencies into the provided directory.
      * <p>
      * The destination directory must exist and be writable.
      *
-     * @param repositories the repositories to use for the download
-     * @param directory    the directory to download the artifacts into
-     * @throws DependencyDownloadException when an error occurred during the download
-     * @since 1.5
+     * @param repositories the repositories to use for the transfer
+     * @param directory    the directory to transfer the artifacts into
+     * @throws DependencyTransferException when an error occurred during the transfer
+     * @since 1.5.10
      */
-    public void downloadIntoDirectory(List<Repository> repositories, File directory) {
-        downloadIntoDirectory(repositories, directory, (String[]) null);
+    public void transferIntoDirectory(List<Repository> repositories, File directory) {
+        transferIntoDirectory(repositories, directory, (String[]) null);
     }
 
     /**
-     * Downloads the url for the dependencies into the provided directory,
+     * Transfers the artifacts for the dependencies into the provided directory,
      * including other classifiers.
      * <p>
      * The destination directory must exist and be writable.
      *
      * @param repositories the repositories to use for the download
      * @param directory    the directory to download the artifacts into
-     * @param classifiers  the additional classifiers to download the url for
-     * @throws DependencyDownloadException when an error occurred during the download
-     * @since 1.5
+     * @param classifiers  the additional classifiers to transfer
+     * @throws DependencyTransferException when an error occurred during the transfer
+     * @since 1.5.10
      */
-    public void downloadIntoDirectory(List<Repository> repositories, File directory, String... classifiers) {
+    public void transferIntoDirectory(List<Repository> repositories, File directory, String... classifiers) {
         for (var dependency : this) {
-            new DependencyResolver(repositories, dependency).downloadIntoDirectory(directory);
+            new DependencyResolver(repositories, dependency).transferIntoDirectory(directory);
             if (classifiers != null) {
                 for (var classifier : classifiers) {
                     if (classifier != null) {
-                        new DependencyResolver(repositories, dependency.withClassifier(classifier)).downloadIntoDirectory(directory);
+                        new DependencyResolver(repositories, dependency.withClassifier(classifier)).transferIntoDirectory(directory);
                     }
                 }
             }

@@ -70,7 +70,11 @@ public class Xml2MavenMetadata extends Xml2Data implements MavenMetadata {
             case "snapshot" -> {
                 if (!versions_.isEmpty()) {
                     var version = versions_.get(0);
-                    snapshot_ = new VersionNumber(version.major(), version.minor(), version.revision(), snapshotTimestamp_ + "-" + snapshotBuildNumber_);
+                    var qualifier = VersionNumber.SNAPSHOT_QUALIFIER;
+                    if (snapshotTimestamp_ != null && snapshotBuildNumber_ != null) {
+                        qualifier = snapshotTimestamp_ + "-" + snapshotBuildNumber_;
+                    }
+                    snapshot_ = new VersionNumber(version.major(), version.minor(), version.revision(), qualifier);
                 }
             }
         }

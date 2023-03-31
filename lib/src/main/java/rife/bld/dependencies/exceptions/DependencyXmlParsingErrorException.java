@@ -11,17 +11,17 @@ import java.io.Serial;
 import java.util.Set;
 
 public class DependencyXmlParsingErrorException extends DependencyException {
-    @Serial private static final long serialVersionUID = 6036121359540018004L;
+    @Serial private static final long serialVersionUID = -1050469071912675264L;
 
     private final Dependency dependency_;
-    private final String url_;
+    private final String location_;
     private final Set<String> errors_;
 
-    public DependencyXmlParsingErrorException(Dependency dependency, String url, Set<String> errors) {
-        super("Unable to parse artifact document for dependency '" + dependency + "' from '" + url + "' :\n" + StringUtils.join(errors, "\n"));
+    public DependencyXmlParsingErrorException(Dependency dependency, String location, Set<String> errors) {
+        super("Unable to parse artifact document for dependency '" + dependency + "' from '" + location + "' :\n" + StringUtils.join(errors, "\n"));
 
         dependency_ = dependency;
-        url_ = url;
+        location_ = location;
         errors_ = errors;
     }
 
@@ -29,8 +29,8 @@ public class DependencyXmlParsingErrorException extends DependencyException {
         return dependency_;
     }
 
-    public String getUrl() {
-        return url_;
+    public String getLocation() {
+        return location_;
     }
 
     public Set<String> getErrors() {

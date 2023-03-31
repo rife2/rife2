@@ -4,8 +4,8 @@
  */
 package rife.bld.dependencies;
 
-record RepositoryArtifact(Repository repository, String url) {
+record RepositoryArtifact(Repository repository, String location) {
     RepositoryArtifact appendPath(String path) {
-        return new RepositoryArtifact(repository, url + path);
+        return new RepositoryArtifact(repository, location + path);
     }
 }

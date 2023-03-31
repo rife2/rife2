@@ -31,6 +31,11 @@
       <buildNumber><!--v snapshot-buildNumber--><!--/v--></buildNumber>
     </snapshot>
     <!--/b-->
+    <!--b snapshot-local-tag-->
+    <snapshot>
+      <localCopy>true</localCopy>
+    </snapshot>
+    <!--/b-->
 
     <!--v lastUpdated-tag--><!--/v-->
     <!--b lastUpdated-tag-->

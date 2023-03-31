@@ -609,12 +609,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependency()
+    void testTransferDependency()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2"));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(1, files.size());
@@ -625,12 +625,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependencySources()
+    void testTransferDependencySources()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2"));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(2, files.size());
@@ -641,12 +641,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependencySourcesJavadoc()
+    void testTransferDependencySourcesJavadoc()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2"));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(3, files.size());
@@ -657,12 +657,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependencySnapshot()
+    void testTransferDependencySnapshot()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0, "SNAPSHOT")));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(1, files.size());
@@ -673,12 +673,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependencySnapshotSources()
+    void testTransferDependencySnapshotSources()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0, "SNAPSHOT")));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(2, files.size());
@@ -690,12 +690,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependencySnapshotSourcesJavadoc()
+    void testTransferDependencySnapshotSourcesJavadoc()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0, "SNAPSHOT")));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(3, files.size());
@@ -708,12 +708,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependencyJetty()
+    void testTransferDependencyJetty()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp);
             var files = FileUtils.getFileList(tmp);
             assertEquals(6, files.size());
             Collections.sort(files);
@@ -730,12 +730,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependencyJettySources()
+    void testTransferDependencyJettySources()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES);
             var files = FileUtils.getFileList(tmp);
             assertEquals(12, files.size());
             Collections.sort(files);
@@ -758,12 +758,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependencyJettySourcesJavadoc()
+    void testTransferDependencyJettySourcesJavadoc()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
             var files = FileUtils.getFileList(tmp);
             assertEquals(18, files.size());
             Collections.sort(files);
@@ -792,12 +792,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependenciesJunit()
+    void testTransferDependenciesJunit()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.junit.jupiter", "junit-jupiter", new VersionNumber(5, 9, 2)));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile, runtime).downloadIntoDirectory(resolver.repositories(), tmp);
+            resolver.getAllDependencies(compile, runtime).transferIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(8, files.size());
@@ -817,12 +817,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependencySpringBoot()
+    void testTransferDependencySpringBoot()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.springframework.boot", "spring-boot-starter", new VersionNumber(3, 0, 4)));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(18, files.size());
@@ -852,12 +852,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependencyMaven()
+    void testTransferDependencyMaven()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.apache.maven", "maven-core", new VersionNumber(3, 9, 0)));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(32, files.size());
@@ -901,12 +901,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependencyPlay()
+    void testTransferDependencyPlay()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.typesafe.play", "play_2.13", new VersionNumber(2, 8, 19)));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(48, files.size());
@@ -966,12 +966,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadDependencyVaadin()
+    void testTransferDependencyVaadin()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.vaadin", "vaadin", new VersionNumber(23, 3, 7)));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp);
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(88, files.size());
@@ -1071,12 +1071,12 @@ public class TestDependencyResolver {
     }
 
     @Test
-    void testDownloadCheckExisting()
+    void testTransferCheckExisting()
     throws Exception {
         var resolver = new DependencyResolver(List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
-        var tmp = Files.createTempDirectory("downloads").toFile();
+        var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp);
 
             var modification_map = new HashMap<String, Long>();
             Files.walk(Path.of(tmp.getAbsolutePath()))
@@ -1084,18 +1084,18 @@ public class TestDependencyResolver {
                 .filter(s -> !s.equals(tmp.getAbsolutePath()))
                 .forEach(it -> modification_map.put(it, new File(it).lastModified()));
 
-            // re-download and check the modification time didn't change
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+            // re-transfer and check the modification time didn't change
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp);
             Files.walk(Path.of(tmp.getAbsolutePath()))
                 .map(path -> path.toAbsolutePath().toString())
                 .filter(s -> !s.equals(tmp.getAbsolutePath()))
                 .forEach(it -> assertEquals(modification_map.get(it), new File(it).lastModified()));
 
-            // delete one file and check that this is downloaded again
+            // delete one file and check that this is transfered again
             var first = modification_map.keySet().stream().findFirst().get();
             var first_file = new File(first);
             first_file.delete();
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp);
             assertNotEquals(first_file.lastModified(), modification_map.get(first));
             modification_map.put(first, first_file.lastModified());
             Files.walk(Path.of(tmp.getAbsolutePath()))
@@ -1103,11 +1103,11 @@ public class TestDependencyResolver {
                 .filter(s -> !s.equals(tmp.getAbsolutePath()))
                 .forEach(it -> assertEquals(modification_map.get(it), new File(it).lastModified()));
 
-            // change one file and check that this is downloaded again
+            // change one file and check that this is transfered again
             FileUtils.writeString("stuff", first_file);
-            var before_download_modified = first_file.lastModified();
-            resolver.getAllDependencies(compile).downloadIntoDirectory(resolver.repositories(), tmp);
-            assertNotEquals(first_file.lastModified(), before_download_modified);
+            var before_transfer_modified = first_file.lastModified();
+            resolver.getAllDependencies(compile).transferIntoDirectory(resolver.repositories(), tmp);
+            assertNotEquals(first_file.lastModified(), before_transfer_modified);
             modification_map.put(first, first_file.lastModified());
             Files.walk(Path.of(tmp.getAbsolutePath()))
                 .map(path -> path.toAbsolutePath().toString())

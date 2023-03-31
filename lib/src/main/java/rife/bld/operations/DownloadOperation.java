@@ -131,7 +131,7 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
             additional_classifiers = classifiers.toArray(new String[0]);
         }
 
-        dependencies.downloadIntoDirectory(repositories(), destinationDirectory, additional_classifiers);
+        dependencies.transferIntoDirectory(repositories(), destinationDirectory, additional_classifiers);
     }
 
     /**
