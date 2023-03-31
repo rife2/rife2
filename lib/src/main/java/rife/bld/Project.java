@@ -390,6 +390,17 @@ public class Project extends BuildExecutor {
     }
 
     /**
+     * Standard build command, generates javadoc.
+     *
+     * @since 1.5.10
+     */
+    @BuildCommand(help = JavadocHelp.class)
+    public void javadoc()
+    throws Exception {
+        new JavadocOperation().fromProject(this).execute();
+    }
+
+    /**
      * Standard build command, pre-compiles RIFE2 templates to class files.
      *
      * @since 1.5
