@@ -8,11 +8,13 @@ import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -38,11 +40,7 @@ public final class FileUtils {
     }
 
     public static List<String> getFileList(File file, List<Pattern> included, List<Pattern> excluded) {
-        var included_array = new Pattern[included.size()];
-        var excluded_array = new Pattern[excluded.size()];
-        included.toArray(included_array);
-        excluded.toArray(excluded_array);
-        return getFileList(file, included_array, excluded_array, true);
+        return getFileList(file, included.toArray(new Pattern[0]), excluded.toArray(new Pattern[0]), true);
     }
 
     public static List<String> getFileList(File file, Pattern[] included, Pattern[] excluded) {
@@ -331,7 +329,7 @@ public final class FileUtils {
     throws FileUtilsErrorException {
         if (null == inputStream) throw new IllegalArgumentException("inputStream can't be null.");
 
-        return readStream(inputStream).toString();
+        return readStream(inputStream).toString(StandardCharsets.UTF_8);
     }
 
     public static String readString(Reader reader)
@@ -640,10 +638,36 @@ public final class FileUtils {
         return String.join(File.pathSeparator, paths);
     }
 
-
     public static List<File> getJavaFileList(File directory) {
         var dir_abs = directory.getAbsoluteFile();
         return FileUtils.getFileList(dir_abs, JAVA_FILE_PATTERN, null)
             .stream().map(file -> new File(dir_abs, file)).toList();
+    }
+
+    public static void transformFiles(File directory, Function<String, String> transformer)
+    throws FileUtilsErrorException {
+        transformFiles(directory, null, (Pattern[]) null, transformer);
+    }
+
+    public static void transformFiles(File directory, Pattern included, Pattern excluded, Function<String, String> transformer)
+    throws FileUtilsErrorException {
+        transformFiles(directory, new Pattern[]{included}, new Pattern[]{excluded}, transformer);
+    }
+
+    public static void transformFiles(File directory, List<Pattern> included, List<Pattern> excluded, Function<String, String> transformer)
+    throws FileUtilsErrorException {
+        transformFiles(directory, included.toArray(new Pattern[0]), excluded.toArray(new Pattern[0]), transformer);
+    }
+
+    public static void transformFiles(File directory, Pattern[] included, Pattern[] excluded, Function<String, String> transformer)
+    throws FileUtilsErrorException {
+        for (var entry : FileUtils.getFileList(directory, included, excluded)) {
+            var file = new File(directory, entry);
+            var contents = FileUtils.readString(file);
+            var transformed = transformer.apply(contents);
+            if (!transformed.equals(contents)) {
+                FileUtils.writeString(transformed, file);
+            }
+        }
     }
 }
