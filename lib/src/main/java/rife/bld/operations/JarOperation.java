@@ -37,7 +37,7 @@ public class JarOperation extends AbstractOperation<JarOperation> {
      * @throws IOException when an exception occurred during the jar creation process
      * @since 1.5
      */
-    protected void execute()
+    public void execute()
     throws IOException {
         executeCreateDestinationDirectory();
         executeCreateJarArchive();

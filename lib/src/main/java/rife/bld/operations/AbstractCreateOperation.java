@@ -60,7 +60,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
      * @throws IOException             when an error occurred during the creation operation
      * @since 1.5
      */
-    protected void execute()
+    public void execute()
     throws FileUtilsErrorException, IOException {
         if (packageName() == null || projectName() == null) {
             System.err.println("ERROR: Missing package or project name.");

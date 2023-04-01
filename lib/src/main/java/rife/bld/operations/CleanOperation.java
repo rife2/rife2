@@ -26,7 +26,7 @@ public class CleanOperation extends AbstractOperation<CleanOperation> {
      *
      * @since 1.5
      */
-    protected void execute() {
+    public void execute() {
         for (var directory : directories()) {
             executeCleanDirectory(directory);
         }

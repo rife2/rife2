@@ -50,7 +50,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      *
      * @since 1.5.7
      */
-    protected void execute() {
+    public void execute() {
         if (repository() == null) {
             throw new OperationOptionException("ERROR: the publication repository should be specified");
         }

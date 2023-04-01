@@ -37,7 +37,7 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
      *
      * @since 1.5.10
      */
-    protected void execute()
+    public void execute()
     throws IOException, ExitStatusException {
         executeCreateBuildDirectories();
         executeBuildSources();

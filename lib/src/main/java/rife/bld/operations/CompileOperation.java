@@ -37,7 +37,7 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
      *
      * @since 1.5
      */
-    protected void execute()
+    public void execute()
     throws IOException, ExitStatusException {
         executeCreateBuildDirectories();
         executeBuildMainSources();

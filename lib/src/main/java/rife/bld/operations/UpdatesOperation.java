@@ -26,7 +26,7 @@ public class UpdatesOperation extends AbstractOperation<UpdatesOperation> {
      *
      * @since 1.5
      */
-    protected void execute() {
+    public void execute() {
         var result = new DependencyScopes();
         for (var entry : dependencies_.entrySet()) {
             var scope = entry.getKey();

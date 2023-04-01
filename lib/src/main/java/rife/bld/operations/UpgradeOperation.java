@@ -33,7 +33,7 @@ public class UpgradeOperation extends AbstractOperation<UpgradeOperation> {
      * @throws IOException when an error occurred during the upgrade operation
      * @since 1.5
      */
-    protected void execute()
+    public void execute()
     throws IOException {
         new Wrapper().createWrapperFiles(Path.of("lib", "bld").toFile(), Version.getVersion());
         new Wrapper().upgradeIdeaBldLibrary(new File(".idea"), Version.getVersion());

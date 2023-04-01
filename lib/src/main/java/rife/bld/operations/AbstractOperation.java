@@ -71,6 +71,6 @@ public abstract class AbstractOperation<T extends AbstractOperation<T>> {
      * @throws Exception when an exception occurs during the execution
      * @since 1.5.10
      */
-    protected abstract void execute()
+    public abstract void execute()
     throws Exception;
 }

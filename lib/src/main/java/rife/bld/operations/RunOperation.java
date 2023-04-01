@@ -43,7 +43,7 @@ public class RunOperation extends AbstractOperation<RunOperation> {
      * @throws ExitStatusException     when the exit status was changed during the operation
      * @since 1.5
      */
-    protected void execute()
+    public void execute()
             throws IOException, FileUtilsErrorException, InterruptedException, ExitStatusException {
         process_ = executeStartProcess();
         int status = process_.waitFor();
