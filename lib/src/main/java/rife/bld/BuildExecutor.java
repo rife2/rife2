@@ -11,6 +11,7 @@ import rife.ioc.HierarchicalProperties;
 import rife.tools.ExceptionUtils;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 /**
@@ -25,6 +26,8 @@ public class BuildExecutor {
     private final HierarchicalProperties properties_;
     private List<String> arguments_ = Collections.emptyList();
     private Map<String, CommandDefinition> buildCommands_ = null;
+    private final AtomicReference<String> currentCommandName_ = new AtomicReference<>();
+    private final AtomicReference<CommandDefinition> currentCommandDefinition_ = new AtomicReference<>();
     private int exitStatus_ = 0;
 
     /**
@@ -205,6 +208,7 @@ public class BuildExecutor {
      */
     public boolean executeCommand(String command)
     throws Throwable {
+        var matched_command = command;
         var definition = buildCommands().get(command);
 
         // try to find a match for the provided command amongst
@@ -232,7 +236,7 @@ public class BuildExecutor {
 
             // only proceed if exactly one match was found
             if (matches.size() == 1) {
-                var matched_command = matches.get(0);
+                matched_command = matches.get(0);
                 System.out.println("Executing matched command: " + matched_command);
                 definition = buildCommands().get(matched_command);
             }
@@ -241,10 +245,15 @@ public class BuildExecutor {
         // execute the command if we found one
         if (definition != null) {
             try {
+                currentCommandName_.set(matched_command);
+                currentCommandDefinition_.set(definition);
                 definition.execute();
             } catch (ExitStatusException e) {
                 exitStatus(e.getExitStatus());
                 return e.getExitStatus() == ExitStatusException.EXIT_SUCCESS;
+            } finally {
+                currentCommandDefinition_.set(null);
+                currentCommandName_.set(null);
             }
         } else {
             System.err.println("ERROR: unknown command '" + command + "'");
@@ -253,6 +262,28 @@ public class BuildExecutor {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Retrieves the name of the currently executing command.
+     *
+     * @return the name of the current command; or
+     * {@code null} if no command is currently executing
+     * @since 1.5.12
+     */
+    public String getCurrentCommandName() {
+        return currentCommandName_.get();
+    }
+
+    /**
+     * Retrieves the definition of the currently executing command.
+     *
+     * @return the definition of the current command; or
+     * {@code null} if no command is currently executing
+     * @since 1.5.12
+     */
+    public CommandDefinition getCurrentCommandDefinition() {
+        return currentCommandDefinition_.get();
     }
 
     /**

@@ -147,6 +147,8 @@ public class TestProject {
 
         @BuildCommand
         public void newcommand() {
+            assertEquals("newcommand", getCurrentCommandName());
+            assertNotNull(getCurrentCommandDefinition());
             result_.append("newcommand");
         }
     }
@@ -159,7 +161,14 @@ public class TestProject {
             var result = new StringBuilder();
             var project = new CustomProject(tmp, result);
 
+            assertNull(project.getCurrentCommandName());
+            assertNull(project.getCurrentCommandDefinition());
+
             project.execute(new String[]{"newcommand"});
+
+            assertNull(project.getCurrentCommandName());
+            assertNull(project.getCurrentCommandDefinition());
+
             assertEquals("newcommand", result.toString());
         } finally {
             FileUtils.deleteDirectory(tmp);
@@ -168,7 +177,11 @@ public class TestProject {
 
     static class CustomProjectLambda extends Project {
         CustomProjectLambda(File tmp, StringBuilder result) {
-            buildCommands().put("newcommand", () -> result.append("newcommand"));
+            buildCommands().put("newcommand2", () -> {
+                assertEquals("newcommand2", getCurrentCommandName());
+                assertNotNull(getCurrentCommandDefinition());
+                result.append("newcommand2");
+            });
             workDirectory = tmp;
             pkg = "test.pkg";
             name = "my_project";
@@ -183,8 +196,16 @@ public class TestProject {
         try {
             var result = new StringBuilder();
             var project = new CustomProjectLambda(tmp, result);
+
+            assertNull(project.getCurrentCommandName());
+            assertNull(project.getCurrentCommandDefinition());
+
             project.execute(new String[]{"newcommand"});
-            assertEquals("newcommand", result.toString());
+
+            assertNull(project.getCurrentCommandName());
+            assertNull(project.getCurrentCommandDefinition());
+
+            assertEquals("newcommand2", result.toString());
         } finally {
             FileUtils.deleteDirectory(tmp);
         }
@@ -197,9 +218,9 @@ public class TestProject {
         var result = new StringBuilder();
         var project = new CustomProjectLambda(tmp, result);
         project.execute(new String[]{"ne", "nc", "n"});
-        assertEquals("newcommand" +
-                     "newcommand" +
-                     "newcommand", result.toString());
+        assertEquals("newcommand2" +
+                     "newcommand2" +
+                     "newcommand2", result.toString());
 
         result = new StringBuilder();
         project.execute(new String[]{"c"});
