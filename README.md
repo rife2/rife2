@@ -123,7 +123,7 @@ application {
 }
 
 dependencies {
-    implementation("com.uwyn.rife2:rife2:1.5.10")
+    implementation("com.uwyn.rife2:rife2:1.5.11")
     runtimeOnly("org.eclipse.jetty:jetty-server:11.0.14")
     runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.14")
     implementation("org.slf4j:slf4j-simple:2.0.7")
