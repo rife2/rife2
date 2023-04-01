@@ -451,6 +451,7 @@ public class Wrapper {
         args.addAll(arguments);
 
         var process_builder = new ProcessBuilder(args);
+        process_builder.directory(currentDir_);
         process_builder.inheritIO();
         var process = process_builder.start();
         return process.waitFor();
@@ -495,9 +496,10 @@ public class Wrapper {
         java_args.add("-cp");
         java_args.add(classpath);
         java_args.addAll(arguments);
-        var java_process = new ProcessBuilder(java_args);
-        java_process.inheritIO();
-        var process = java_process.start();
+        var process_builder = new ProcessBuilder(java_args);
+        process_builder.directory(currentDir_);
+        process_builder.inheritIO();
+        var process = process_builder.start();
 
         return process.waitFor();
     }
