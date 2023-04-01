@@ -195,15 +195,15 @@ public final class FileUtils {
         }
 
         var file_list = source.list();
+        if (file_list != null) {
+            for (var element : file_list) {
+                var current_file = new File(source.getAbsolutePath() + File.separator + element);
 
-        assert file_list != null;
-        for (var element : file_list) {
-            var current_file = new File(source.getAbsolutePath() + File.separator + element);
-
-            if (current_file.isDirectory()) {
-                deleteDirectory(current_file);
-            } else {
-                deleteFile(current_file);
+                if (current_file.isDirectory()) {
+                    deleteDirectory(current_file);
+                } else {
+                    deleteFile(current_file);
+                }
             }
         }
 
