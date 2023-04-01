@@ -25,6 +25,21 @@ public class TestRepository {
     }
 
     @Test
+    void testToString() {
+        var repository1 = new Repository("http://my.repo");
+        assertEquals("http://my.repo", repository1.toString());
+
+        var repository2 = new Repository("http://your.repo", null, "pass1");
+        assertEquals("http://your.repo", repository2.toString());
+
+        var repository3 = new Repository("http://your.repo", "user1", null);
+        assertEquals("http://your.repo:24c9e15e52afc47c225b757e7bee1f9d", repository3.toString());
+
+        var repository4 = new Repository("http://your.repo", "user1", "pass1");
+        assertEquals("http://your.repo:24c9e15e52afc47c225b757e7bee1f9d:a722c63db8ec8625af6cf71cb8c2d939", repository4.toString());
+    }
+
+    @Test
     void testWithCredentials() {
         var repository1 = new Repository("http://my.repo");
         assertNotNull(repository1);

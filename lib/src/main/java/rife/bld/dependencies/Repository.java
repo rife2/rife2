@@ -5,8 +5,10 @@
 package rife.bld.dependencies;
 
 import rife.ioc.HierarchicalProperties;
+import rife.tools.StringEncryptor;
 
 import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Contains the information required to locate a Maven-compatible repository.
@@ -125,5 +127,23 @@ public record Repository(String location, String username, String password) {
         } else {
             return "maven-metadata.xml";
         }
+    }
+
+    public String toString() {
+        var result = new StringBuilder(location);
+        if (username() != null) {
+            result.append(":");
+            try {
+                result.append(StringEncryptor.MD5HLO.performEncryption(username(), null));
+                if (password() != null) {
+                    result.append(":");
+                    result.append(StringEncryptor.MD5HLO.performEncryption(password(), null));
+                }
+            } catch (NoSuchAlgorithmException e) {
+                // should never happen
+                throw new RuntimeException(e);
+            }
+        }
+        return result.toString();
     }
 }
