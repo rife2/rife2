@@ -81,6 +81,7 @@ public class Wrapper {
 
     private static final Pattern RIFE2_JAR_PATTERN = Pattern.compile("rife2-[^\"/!]+(?<!sources)\\.jar");
     private static final Pattern RIFE2_SOURCES_JAR_PATTERN = Pattern.compile("rife2-[^\"/!]+-sources\\.jar");
+    private static final Pattern PROPERTY_VERSION_PATTERN = Pattern.compile(".*rife2\\.version.*");
 
     /**
      * Upgraded the IDEA bld files that were generated with a previous version.
@@ -130,17 +131,23 @@ public class Wrapper {
     private void createWrapperProperties(File destinationDirectory, String version)
     throws IOException {
         var file = new File(destinationDirectory, WRAPPER_PROPERTIES);
-        wrapperProperties_.put(PROPERTY_REPOSITORIES, MAVEN_CENTRAL);
-        wrapperProperties_.put(PROPERTY_EXTENSION_PREFIX, "");
-        wrapperProperties_.put(PROPERTY_DOWNLOAD_LOCATION, "");
         if (file.exists()) {
-            wrapperPropertiesFile_ = file;
-            wrapperProperties_.load(new FileReader(file));
+            try {
+                var contents = FileUtils.readString(file);
+                contents = PROPERTY_VERSION_PATTERN.matcher(contents).replaceAll(PROPERTY_VERSION + "=" + version);
+                FileUtils.writeString(contents, file);
+            } catch (FileUtilsErrorException e) {
+                throw new IOException(e);
+            }
+        } else {
+            wrapperProperties_.put(PROPERTY_REPOSITORIES, MAVEN_CENTRAL);
+            wrapperProperties_.put(PROPERTY_EXTENSION_PREFIX, "");
+            wrapperProperties_.put(PROPERTY_DOWNLOAD_LOCATION, "");
+            wrapperProperties_.put(PROPERTY_VERSION, version);
+            Files.createDirectories(file.getAbsoluteFile().toPath().getParent());
+            Files.deleteIfExists(file.toPath());
+            wrapperProperties_.store(new FileWriter(file), null);
         }
-        wrapperProperties_.put(PROPERTY_VERSION, version);
-        Files.createDirectories(file.getAbsoluteFile().toPath().getParent());
-        Files.deleteIfExists(file.toPath());
-        wrapperProperties_.store(new FileWriter(file), null);
     }
 
     private void createWrapperJar(File destinationDirectory)
