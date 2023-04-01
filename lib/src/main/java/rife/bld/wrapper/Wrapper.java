@@ -42,6 +42,7 @@ public class Wrapper {
     static final String PROPERTY_DOWNLOAD_LOCATION = "rife2.downloadLocation";
     static final String PROPERTY_REPOSITORIES = "bld.repositories";
     static final String PROPERTY_EXTENSION_PREFIX = "bld.extension";
+    static final String PROPERTY_EXTENSIONS = "bld.extensions";
     static final File USER_DIR = new File(System.getProperty("user.home"), ".rife2");
     static final File DISTRIBUTIONS_DIR = new File(USER_DIR, "dist");
 
@@ -141,7 +142,7 @@ public class Wrapper {
             }
         } else {
             wrapperProperties_.put(PROPERTY_REPOSITORIES, MAVEN_CENTRAL);
-            wrapperProperties_.put(PROPERTY_EXTENSION_PREFIX, "");
+            wrapperProperties_.put(PROPERTY_EXTENSIONS, "");
             wrapperProperties_.put(PROPERTY_DOWNLOAD_LOCATION, "");
             wrapperProperties_.put(PROPERTY_VERSION, version);
             Files.createDirectories(file.getAbsoluteFile().toPath().getParent());
