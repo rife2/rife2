@@ -26,6 +26,8 @@ public class TestCompileOperation {
         assertTrue(operation.compileTestClasspath().isEmpty());
         assertTrue(operation.mainSourceFiles().isEmpty());
         assertTrue(operation.testSourceFiles().isEmpty());
+        assertTrue(operation.testSourceDirectories().isEmpty());
+        assertTrue(operation.testSourceDirectories().isEmpty());
         assertTrue(operation.compileOptions().isEmpty());
         assertTrue(operation.diagnostics().isEmpty());
     }
@@ -42,6 +44,10 @@ public class TestCompileOperation {
         var main_source_file2 = new File("mainSourceFile2");
         var test_source_file1 = new File("testSourceFile1");
         var test_source_file2 = new File("testSourceFile2");
+        var main_source_directory1 = new File("mainSourceDirectory1");
+        var main_source_directory2 = new File("mainSourceDirectory2");
+        var test_source_directory1 = new File("testSourceDirectory1");
+        var test_source_directory2 = new File("testSourceDirectory2");
         var compile_option1 = "compileOption1";
         var compile_option2 = "compileOption2";
 
@@ -52,6 +58,8 @@ public class TestCompileOperation {
             .compileTestClasspath(List.of(compile_test_classpath1, compile_test_classpath2))
             .mainSourceFiles(List.of(main_source_file1, main_source_file2))
             .testSourceFiles(List.of(test_source_file1, test_source_file2))
+            .mainSourceDirectories(List.of(main_source_directory1, main_source_directory2))
+            .testSourceDirectories(List.of(test_source_directory1, test_source_directory2))
             .compileOptions(List.of(compile_option1, compile_option2));
 
         assertEquals(build_main_directory, operation1.buildMainDirectory());
@@ -64,6 +72,10 @@ public class TestCompileOperation {
         assertTrue(operation1.mainSourceFiles().contains(main_source_file2));
         assertTrue(operation1.testSourceFiles().contains(test_source_file1));
         assertTrue(operation1.testSourceFiles().contains(test_source_file2));
+        assertTrue(operation1.mainSourceDirectories().contains(main_source_directory1));
+        assertTrue(operation1.mainSourceDirectories().contains(main_source_directory2));
+        assertTrue(operation1.testSourceDirectories().contains(test_source_directory1));
+        assertTrue(operation1.testSourceDirectories().contains(test_source_directory2));
         assertTrue(operation1.compileOptions().contains(compile_option1));
         assertTrue(operation1.compileOptions().contains(compile_option2));
 
@@ -78,6 +90,10 @@ public class TestCompileOperation {
         operation2.mainSourceFiles().add(main_source_file2);
         operation2.testSourceFiles().add(test_source_file1);
         operation2.testSourceFiles().add(test_source_file2);
+        operation2.mainSourceDirectories().add(main_source_directory1);
+        operation2.mainSourceDirectories().add(main_source_directory2);
+        operation2.testSourceDirectories().add(test_source_directory1);
+        operation2.testSourceDirectories().add(test_source_directory2);
         operation2.compileOptions().add(compile_option1);
         operation2.compileOptions().add(compile_option2);
 
@@ -91,6 +107,10 @@ public class TestCompileOperation {
         assertTrue(operation2.mainSourceFiles().contains(main_source_file2));
         assertTrue(operation2.testSourceFiles().contains(test_source_file1));
         assertTrue(operation2.testSourceFiles().contains(test_source_file2));
+        assertTrue(operation2.mainSourceDirectories().contains(main_source_directory1));
+        assertTrue(operation2.mainSourceDirectories().contains(main_source_directory2));
+        assertTrue(operation2.testSourceDirectories().contains(test_source_directory1));
+        assertTrue(operation2.testSourceDirectories().contains(test_source_directory2));
         assertTrue(operation2.compileOptions().contains(compile_option1));
         assertTrue(operation2.compileOptions().contains(compile_option2));
     }

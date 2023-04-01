@@ -27,6 +27,8 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
     private final List<String> compileTestClasspath_ = new ArrayList<>();
     private final List<File> mainSourceFiles_ = new ArrayList<>();
     private final List<File> testSourceFiles_ = new ArrayList<>();
+    private final List<File> mainSourceDirectories_ = new ArrayList<>();
+    private final List<File> testSourceDirectories_ = new ArrayList<>();
     private final List<String> compileOptions_ = new ArrayList<>();
     private final List<Diagnostic<? extends JavaFileObject>> diagnostics_ = new ArrayList<>();
 
@@ -69,9 +71,13 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
      */
     public void executeBuildMainSources()
     throws IOException {
+        var sources = new ArrayList<>(mainSourceFiles());
+        for (var directory : mainSourceDirectories()) {
+            sources.addAll(FileUtils.getJavaFileList(directory));
+        }
         executeBuildSources(
             compileMainClasspath(),
-            mainSourceFiles(),
+            sources,
             buildMainDirectory());
     }
 
@@ -82,17 +88,21 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
      */
     public void executeBuildTestSources()
     throws IOException {
+        var sources = new ArrayList<>(testSourceFiles());
+        for (var directory : testSourceDirectories()) {
+            sources.addAll(FileUtils.getJavaFileList(directory));
+        }
         executeBuildSources(
             compileTestClasspath(),
-            testSourceFiles(),
+            sources,
             buildTestDirectory());
     }
 
     /**
      * Part of the {@link #execute} operation, build sources to a destination.
      *
-     * @param classpath the classpath list used for the compilation
-     * @param sources the source files to compile
+     * @param classpath   the classpath list used for the compilation
+     * @param sources     the source files to compile
      * @param destination the destination directory
      * @since 1.5
      */
@@ -236,6 +246,34 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
     }
 
     /**
+     * Provides the list of main source directories that should be compiled.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param directories the list of main source directories
+     * @return this operation instance
+     * @since 1.5.10
+     */
+    public CompileOperation mainSourceDirectories(List<File> directories) {
+        mainSourceDirectories_.addAll(directories);
+        return this;
+    }
+
+    /**
+     * Provides the list of test source directories that should be compiled.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param directories the list of test source directories
+     * @return this operation instance
+     * @since 1.5.10
+     */
+    public CompileOperation testSourceDirectories(List<File> directories) {
+        testSourceDirectories_.addAll(directories);
+        return this;
+    }
+
+    /**
      * Provides a list of compilation options to provide to the compiler.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.
@@ -315,6 +353,30 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
      */
     public List<File> testSourceFiles() {
         return testSourceFiles_;
+    }
+
+    /**
+     * Retrieves the list of main source directories that should be compiled.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the list of main source directories to compile
+     * @since 1.5.10
+     */
+    public List<File> mainSourceDirectories() {
+        return mainSourceDirectories_;
+    }
+
+    /**
+     * Retrieves the list of test source directories that should be compiled.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the list of test source directories to compile
+     * @since 1.5.10
+     */
+    public List<File> testSourceDirectories() {
+        return testSourceDirectories_;
     }
 
     /**

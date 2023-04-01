@@ -29,6 +29,12 @@ public final class FileUtils {
         // no-op
     }
 
+    public static List<File> getJavaFileList(File directory) {
+        var dir_abs = directory.getAbsoluteFile();
+        return FileUtils.getFileList(dir_abs, JAVA_FILE_PATTERN, null)
+            .stream().map(file -> new File(dir_abs, file)).toList();
+    }
+
     public static List<String> getFileList(File file) {
         return getFileList(file, null, null, true);
     }

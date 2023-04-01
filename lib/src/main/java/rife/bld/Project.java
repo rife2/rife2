@@ -1445,10 +1445,7 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     public List<File> mainSourceFiles() {
-        // get all the main java sources
-        var src_main_java_dir_abs = srcMainJavaDirectory().getAbsoluteFile();
-        return FileUtils.getFileList(src_main_java_dir_abs, JAVA_FILE_PATTERN, null)
-            .stream().map(file -> new File(src_main_java_dir_abs, file)).toList();
+        return FileUtils.getJavaFileList(srcMainJavaDirectory());
     }
 
     /**
@@ -1457,10 +1454,7 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     public List<File> testSourceFiles() {
-        // get all the test java sources
-        var src_test_java_dir_abs = srcTestJavaDirectory().getAbsoluteFile();
-        return FileUtils.getFileList(src_test_java_dir_abs, JAVA_FILE_PATTERN, null)
-            .stream().map(file -> new File(src_test_java_dir_abs, file)).toList();
+        return FileUtils.getJavaFileList(srcTestJavaDirectory());
     }
 
     /*
