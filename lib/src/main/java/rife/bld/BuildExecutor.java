@@ -41,17 +41,23 @@ public class BuildExecutor {
      * @since 1.5
      */
     public BuildExecutor() {
-        properties_ = setupProperties();
-
+        properties_ = setupProperties(workDirectory());
         Repository.resolveMavenLocal(properties());
     }
 
-    private HierarchicalProperties setupProperties() {
+    /**
+     * Creates a properties hierarchy for bld execution.
+     *
+     * @param workDirectory the directory where the project build files are location
+     * @return the properties hierarchy
+     * @since 1.5.12
+     */
+    public static HierarchicalProperties setupProperties(File workDirectory) {
         final HierarchicalProperties properties = new HierarchicalProperties();
         HierarchicalProperties local_properties = null;
         var system_properties = HierarchicalProperties.createSystemInstance();
 
-        var local_properties_file = new File(workDirectory(), "local.properties");
+        var local_properties_file = new File(workDirectory, "local.properties");
 
         if (local_properties_file.exists() && local_properties_file.isFile() && local_properties_file.canRead()) {
             var local = new Properties();
@@ -60,7 +66,7 @@ public class BuildExecutor {
                 local_properties = new HierarchicalProperties();
                 local_properties.putAll(local);
             } catch (IOException e) {
-                Logger.getLogger("rife.bld").warning("WARNING: unable to parse " + local_properties_file + " as a properties file:\n" + e.getMessage());
+                Logger.getLogger("rife.bld").warning("Unable to parse " + local_properties_file + " as a properties file:\n" + e.getMessage());
             }
         }
 
