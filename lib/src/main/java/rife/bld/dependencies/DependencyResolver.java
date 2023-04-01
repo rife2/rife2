@@ -229,7 +229,7 @@ public class DependencyResolver {
      * @since 1.5.10
      */
     public void transferIntoDirectory(File directory)
-            throws DependencyTransferException {
+    throws DependencyTransferException {
         if (directory == null) throw new IllegalArgumentException("directory can't be null");
         if (!directory.exists()) throw new IllegalArgumentException("directory '" + directory + "' doesn't exit");
         if (!directory.canWrite())
@@ -258,7 +258,7 @@ public class DependencyResolver {
                     try {
                         if (download_file.exists() && download_file.canRead()) {
                             if (checkHash(artifact, download_file, ".sha256", "SHA-256") ||
-                                    checkHash(artifact, download_file, ".md5", "MD5")) {
+                                checkHash(artifact, download_file, ".md5", "MD5")) {
                                 retrieved = true;
                                 System.out.print("exists");
                                 break;
@@ -270,8 +270,8 @@ public class DependencyResolver {
                             connection.setUseCaches(false);
                             if (artifact.repository().username() != null && artifact.repository().password() != null) {
                                 connection.setRequestProperty(
-                                        HEADER_AUTHORIZATION,
-                                        basicAuthorizationHeader(artifact.repository().username(), artifact.repository().password()));
+                                    HEADER_AUTHORIZATION,
+                                    basicAuthorizationHeader(artifact.repository().username(), artifact.repository().password()));
                             }
                             try (var input_stream = connection.getInputStream()) {
                                 var readableByteChannel = Channels.newChannel(input_stream);
@@ -406,12 +406,12 @@ public class DependencyResolver {
 
     private Dependency convertPomDependency(PomDependency pomDependency) {
         return new Dependency(
-                pomDependency.groupId(),
-                pomDependency.artifactId(),
-                VersionNumber.parse(pomDependency.version()),
-                pomDependency.classifier(),
-                pomDependency.type(),
-                pomDependency.exclusions());
+            pomDependency.groupId(),
+            pomDependency.artifactId(),
+            VersionNumber.parse(pomDependency.version()),
+            pomDependency.classifier(),
+            pomDependency.type(),
+            pomDependency.exclusions());
     }
 
     private List<RepositoryArtifact> getArtifactLocations() {
@@ -510,7 +510,7 @@ public class DependencyResolver {
     }
 
     private static String readString(RepositoryArtifact artifact)
-            throws FileUtilsErrorException {
+    throws FileUtilsErrorException {
         if (artifact.repository().isLocal()) {
             return FileUtils.readString(new File(artifact.location()));
         } else {
@@ -519,8 +519,8 @@ public class DependencyResolver {
                 connection.setUseCaches(false);
                 if (artifact.repository().username() != null && artifact.repository().password() != null) {
                     connection.setRequestProperty(
-                            HEADER_AUTHORIZATION,
-                            basicAuthorizationHeader(artifact.repository().username(), artifact.repository().password()));
+                        HEADER_AUTHORIZATION,
+                        basicAuthorizationHeader(artifact.repository().username(), artifact.repository().password()));
                 }
                 try (var input_stream = connection.getInputStream()) {
                     return FileUtils.readString(input_stream);
