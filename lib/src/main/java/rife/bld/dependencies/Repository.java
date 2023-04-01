@@ -4,6 +4,8 @@
  */
 package rife.bld.dependencies;
 
+import rife.ioc.HierarchicalProperties;
+
 import java.nio.file.Path;
 
 /**
@@ -16,11 +18,29 @@ import java.nio.file.Path;
  * @since 1.5
  */
 public record Repository(String location, String username, String password) {
-    public static final Repository MAVEN_LOCAL = new Repository(Path.of(System.getProperty("user.home"), ".m2", "repository").toUri().toString());
+    public static Repository MAVEN_LOCAL = null;
     public static final Repository MAVEN_CENTRAL = new Repository("https://repo1.maven.org/maven2/");
     public static final Repository SONATYPE_RELEASES = new Repository("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/");
     public static final Repository SONATYPE_SNAPSHOTS = new Repository("https://s01.oss.sonatype.org/content/repositories/snapshots/");
     public static final Repository APACHE = new Repository("https://repo.maven.apache.org/maven2/");
+
+    private static final String MAVEN_LOCAL_REPO_PROPERTY = "maven.repo.local";
+
+    /**
+     * This method will be called as soon as hierarchical properties
+     * are initialized in the build executor. It is not intended to be called
+     * manually.
+     *
+     * @param properties the hierarchical properties to use for resolving
+     *                   the maven local repository
+     * @since 1.5.12
+     */
+    public static void resolveMavenLocal(HierarchicalProperties properties) {
+        var maven_local = properties.getValueString(
+            MAVEN_LOCAL_REPO_PROPERTY,
+            Path.of(properties.getValueString("user.home"), ".m2", "repository").toUri().toString());
+        MAVEN_LOCAL = new Repository(maven_local);
+    }
 
     /**
      * Creates a new repository with only a location.
@@ -40,7 +60,7 @@ public record Repository(String location, String username, String password) {
      * @since 1.5.10
      */
     public boolean isLocal() {
-        return location.startsWith("/") || location.startsWith("file:");
+        return location().startsWith("/") || location().startsWith("file:");
     }
 
     /**
@@ -79,15 +99,15 @@ public record Repository(String location, String username, String password) {
         var group_path = groupId.replace(".", "/");
         var result = new StringBuilder();
         if (isLocal()) {
-            if (location.startsWith("file://")) {
-                result.append(location.substring("file://".length()));
+            if (location().startsWith("file://")) {
+                result.append(location().substring("file://".length()));
             } else {
-                result.append(location);
+                result.append(location());
             }
         } else {
-            result.append(location);
+            result.append(location());
         }
-        if (!location.endsWith("/")) {
+        if (!location().endsWith("/")) {
             result.append("/");
         }
         return result.append(group_path).append("/").append(artifactId).append("/").toString();

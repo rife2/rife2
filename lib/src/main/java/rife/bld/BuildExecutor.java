@@ -4,14 +4,19 @@
  */
 package rife.bld;
 
+import rife.bld.dependencies.Repository;
 import rife.bld.help.HelpHelp;
 import rife.bld.operations.HelpOperation;
 import rife.bld.operations.exceptions.ExitStatusException;
 import rife.ioc.HierarchicalProperties;
 import rife.tools.ExceptionUtils;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -36,7 +41,37 @@ public class BuildExecutor {
      * @since 1.5
      */
     public BuildExecutor() {
-        properties_ = new HierarchicalProperties().parent(HierarchicalProperties.createSystemInstance());
+        properties_ = setupProperties();
+
+        Repository.resolveMavenLocal(properties());
+    }
+
+    private HierarchicalProperties setupProperties() {
+        final HierarchicalProperties properties = new HierarchicalProperties();
+        HierarchicalProperties local_properties = null;
+        var system_properties = HierarchicalProperties.createSystemInstance();
+
+        var local_properties_file = new File(workDirectory(), "local.properties");
+
+        if (local_properties_file.exists() && local_properties_file.isFile() && local_properties_file.canRead()) {
+            var local = new Properties();
+            try {
+                local.load(new FileReader(local_properties_file));
+                local_properties = new HierarchicalProperties();
+                local_properties.putAll(local);
+            } catch (IOException e) {
+                Logger.getLogger("rife.bld").warning("WARNING: unable to parse " + local_properties_file + " as a properties file:\n" + e.getMessage());
+            }
+        }
+
+        if (local_properties != null) {
+            local_properties.parent(system_properties);
+            properties.parent(local_properties);
+        } else {
+            properties.parent(system_properties);
+        }
+
+        return properties;
     }
 
     /**
@@ -48,6 +83,17 @@ public class BuildExecutor {
      */
     public HierarchicalProperties properties() {
         return properties_;
+    }
+
+    /**
+     * Returns the work directory of the project.
+     * Defaults to this process's user working directory, which when running
+     * through the bld wrapper corresponds to the top-level project directory.
+     *
+     * @since 1.5.12
+     */
+    public File workDirectory() {
+        return new File(System.getProperty("user.dir"));
     }
 
     /**

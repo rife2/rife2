@@ -771,13 +771,12 @@ public class Project extends BuildExecutor {
      */
 
     /**
-     * Returns the work directory of the project.
-     * Defaults to this process's user working directory.
+     * {@inheritDoc}
      *
      * @since 1.5
      */
     public File workDirectory() {
-        return Objects.requireNonNullElseGet(workDirectory, () -> new File(System.getProperty("user.dir")));
+        return Objects.requireNonNullElseGet(workDirectory, super::workDirectory);
     }
 
     /**
