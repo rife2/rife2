@@ -10,19 +10,22 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import static rife.tools.StringUtils.encodeBase64;
-import static rife.tools.StringUtils.encodeHex;
+import static rife.tools.StringUtils.*;
 
 public abstract class StringEncryptor extends EnumClass<String> {
     private static final String IDENTIFIER_HEX_SUFFIX = "HEX";
+    private static final String IDENTIFIER_HLO_SUFFIX = "HLO";
 
     private static final String IDENTIFIER_OBF = "OBF";
     private static final String IDENTIFIER_MD5 = "MD5";
     private static final String IDENTIFIER_MD5HEX = IDENTIFIER_MD5 + IDENTIFIER_HEX_SUFFIX;
+    private static final String IDENTIFIER_MD5HLO = IDENTIFIER_MD5 + IDENTIFIER_HLO_SUFFIX;
     private static final String IDENTIFIER_SHA = "SHA";
     private static final String IDENTIFIER_SHAHEX = IDENTIFIER_SHA + IDENTIFIER_HEX_SUFFIX;
+    private static final String IDENTIFIER_SHAHLO = IDENTIFIER_SHA + IDENTIFIER_HLO_SUFFIX;
     private static final String IDENTIFIER_WHIRLPOOL = "WRP";
     private static final String IDENTIFIER_WHIRLPOOLHEX = IDENTIFIER_WHIRLPOOL + IDENTIFIER_HEX_SUFFIX;
+    private static final String IDENTIFIER_WHIRLPOOLHLO = IDENTIFIER_WHIRLPOOL + IDENTIFIER_HLO_SUFFIX;
     private static final String IDENTIFIER_DRUPAL = "$S$";
 
     private static final String PREFIX_SEPARATOR_SUFFIX = ":";
@@ -53,6 +56,14 @@ public abstract class StringEncryptor extends EnumClass<String> {
             return encodeHex(digest.digest());
         }
     };
+    public static final StringEncryptor SHAHLO = new StringEncryptor(IDENTIFIER_SHAHLO, PREFIX_SEPARATOR_SUFFIX) {
+        public String performEncryption(String value, String encryptedValue)
+        throws NoSuchAlgorithmException {
+            var digest = MessageDigest.getInstance("SHA");
+            digest.update(value.getBytes(StandardCharsets.UTF_8));
+            return encodeHexLower(digest.digest());
+        }
+    };
     public static final StringEncryptor WHIRLPOOL = new StringEncryptor(IDENTIFIER_WHIRLPOOL, PREFIX_SEPARATOR_SUFFIX) {
         public String performEncryption(String value, String encryptedValue) {
             var whirlpool = new Whirlpool();
@@ -73,6 +84,16 @@ public abstract class StringEncryptor extends EnumClass<String> {
             return encodeHex(digest);
         }
     };
+    public static final StringEncryptor WHIRLPOOLHLO = new StringEncryptor(IDENTIFIER_WHIRLPOOLHLO, PREFIX_SEPARATOR_SUFFIX) {
+        public String performEncryption(String value, String encryptedValue) {
+            var whirlpool = new Whirlpool();
+            whirlpool.NESSIEinit();
+            whirlpool.NESSIEadd(value);
+            var digest = new byte[Whirlpool.DIGESTBYTES];
+            whirlpool.NESSIEfinalize(digest);
+            return encodeHexLower(digest);
+        }
+    };
     public static final StringEncryptor MD5 = new StringEncryptor(IDENTIFIER_MD5, PREFIX_SEPARATOR_SUFFIX) {
         public String performEncryption(String value, String encryptedValue)
         throws NoSuchAlgorithmException {
@@ -87,6 +108,14 @@ public abstract class StringEncryptor extends EnumClass<String> {
             var digest = MessageDigest.getInstance("MD5");
             digest.update(value.getBytes(StandardCharsets.UTF_8));
             return encodeHex(digest.digest());
+        }
+    };
+    public static final StringEncryptor MD5HLO = new StringEncryptor(IDENTIFIER_MD5HLO, PREFIX_SEPARATOR_SUFFIX) {
+        public String performEncryption(String value, String encryptedValue)
+        throws NoSuchAlgorithmException {
+            var digest = MessageDigest.getInstance("MD5");
+            digest.update(value.getBytes(StandardCharsets.UTF_8));
+            return encodeHexLower(digest.digest());
         }
     };
     public static final StringEncryptor OBF = new StringEncryptor(IDENTIFIER_OBF, PREFIX_SEPARATOR_SUFFIX) {
