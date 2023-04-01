@@ -13,8 +13,6 @@ import rife.tools.Convert;
 import rife.tools.ExceptionUtils;
 import rife.validation.ValidityChecks;
 
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
 import java.util.logging.Logger;
 
 /**
@@ -146,7 +144,7 @@ public class HierarchicalProperties {
      */
     public Map<String, PropertyValue> getLocalMap() {
         if (null == properties_) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
 
         return properties_;
