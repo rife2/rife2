@@ -22,7 +22,7 @@ import java.util.function.Function;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class RunOperation extends AbstractOperation<PurgeOperation> {
+public class RunOperation extends AbstractOperation<RunOperation> {
     public static final String DEFAULT_JAVA_TOOL = "java";
 
     private File workDirectory_ = new File(System.getProperty("user.dir"));
@@ -37,19 +37,19 @@ public class RunOperation extends AbstractOperation<PurgeOperation> {
     /**
      * Performs the run operation.
      *
-     * @throws InterruptedException when the run operation was interrupted
-     * @throws IOException when an exception occurred during the execution of the process
+     * @throws InterruptedException    when the run operation was interrupted
+     * @throws IOException             when an exception occurred during the execution of the process
      * @throws FileUtilsErrorException when an exception occurred during the retrieval of the run operation output
      * @throws ExitStatusException     when the exit status was changed during the operation
      * @since 1.5
      */
     protected void execute()
-    throws IOException, FileUtilsErrorException, InterruptedException, ExitStatusException {
+            throws IOException, FileUtilsErrorException, InterruptedException, ExitStatusException {
         process_ = executeStartProcess();
         int status = process_.waitFor();
         if (!executeHandleProcessOutput(
-            FileUtils.readString(process_.getInputStream()),
-            FileUtils.readString(process_.getErrorStream()))) {
+                FileUtils.readString(process_.getInputStream()),
+                FileUtils.readString(process_.getErrorStream()))) {
             status = ExitStatusException.EXIT_FAILURE;
         }
         ExitStatusException.throwOnFailure(status);
@@ -79,7 +79,7 @@ public class RunOperation extends AbstractOperation<PurgeOperation> {
      * @since 1.5
      */
     public Process executeStartProcess()
-    throws IOException {
+            throws IOException {
         var builder = new ProcessBuilder(executeConstructProcessCommandList());
         builder.directory(workDirectory());
         if (outputProcessor() == null) {
@@ -122,10 +122,10 @@ public class RunOperation extends AbstractOperation<PurgeOperation> {
      */
     public RunOperation fromProject(Project project) {
         return workDirectory(project.workDirectory())
-            .javaTool(project.javaTool())
-            .javaOptions(project.runJavaOptions())
-            .classpath(project.runClasspath())
-            .mainClass(project.mainClass());
+                .javaTool(project.javaTool())
+                .javaOptions(project.runJavaOptions())
+                .classpath(project.runClasspath())
+                .mainClass(project.mainClass());
     }
 
     /**

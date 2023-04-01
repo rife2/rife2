@@ -22,7 +22,7 @@ import java.util.function.Function;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class TestOperation extends AbstractOperation<PurgeOperation> {
+public class TestOperation extends AbstractOperation<TestOperation> {
     public static final String DEFAULT_JAVA_TOOL = "java";
 
     private File workDirectory_ = new File(System.getProperty("user.dir"));
