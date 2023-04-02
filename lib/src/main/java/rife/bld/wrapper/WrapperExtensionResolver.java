@@ -47,19 +47,7 @@ public class WrapperExtensionResolver {
         hashFile_ = hashFile;
         destinationDirectory_ = destinationDirectory;
         for (var repository : repositories) {
-            if (repository.equalsIgnoreCase("MAVEN_LOCAL")) {
-                repositories_.add(Repository.MAVEN_LOCAL);
-            } else if (repository.equalsIgnoreCase("MAVEN_CENTRAL")) {
-                repositories_.add(Repository.MAVEN_CENTRAL);
-            } else if (repository.equalsIgnoreCase("SONATYPE_RELEASES")) {
-                repositories_.add(Repository.SONATYPE_RELEASES);
-            } else if (repository.equalsIgnoreCase("SONATYPE_SNAPSHOTS")) {
-                repositories_.add(Repository.SONATYPE_SNAPSHOTS);
-            } else if (repository.equalsIgnoreCase("APACHE")) {
-                repositories_.add(Repository.APACHE);
-            } else {
-                repositories_.add(Repository.resolveRepository(properties, repository));
-            }
+            repositories_.add(Repository.resolveRepository(properties, repository));
         }
         dependencies_.addAll(extensions.stream().map(Dependency::parse).toList());
         downloadSources_ = downloadSources;

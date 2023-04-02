@@ -25,6 +25,7 @@ public record Repository(String location, String username, String password) {
     public static final Repository SONATYPE_RELEASES = new Repository("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/");
     public static final Repository SONATYPE_SNAPSHOTS = new Repository("https://s01.oss.sonatype.org/content/repositories/snapshots/");
     public static final Repository APACHE = new Repository("https://repo.maven.apache.org/maven2/");
+    public static final Repository RIFE2 = new Repository("https://repo.rife2.com/releases/");
 
     private static final String MAVEN_LOCAL_REPO_PROPERTY = "maven.repo.local";
 
@@ -63,12 +64,26 @@ public record Repository(String location, String username, String password) {
      * If the {@code bld.repo.myrepo} property isn't found, the {@code locationOrName}
      * parameter will be used as a location instead.
      *
-     * @param properties the hierarchical properties to look into
+     * @param properties     the hierarchical properties to look into
      * @param locationOrName the text to resolve a repository name or to be used as a location
      * @return the repository instance
      * @since 1.5.12
      */
     public static Repository resolveRepository(HierarchicalProperties properties, String locationOrName) {
+        if (locationOrName.equalsIgnoreCase("MAVEN_LOCAL")) {
+            return Repository.MAVEN_LOCAL;
+        } else if (locationOrName.equalsIgnoreCase("MAVEN_CENTRAL")) {
+            return Repository.MAVEN_CENTRAL;
+        } else if (locationOrName.equalsIgnoreCase("SONATYPE_RELEASES")) {
+            return Repository.SONATYPE_RELEASES;
+        } else if (locationOrName.equalsIgnoreCase("SONATYPE_SNAPSHOTS")) {
+            return Repository.SONATYPE_SNAPSHOTS;
+        } else if (locationOrName.equalsIgnoreCase("APACHE")) {
+            return Repository.APACHE;
+        } else if (locationOrName.equalsIgnoreCase("RIFE2")) {
+            return Repository.RIFE2;
+        }
+
         if (properties != null && properties.contains(PROPERTY_BLD_REPO_PREFIX + locationOrName)) {
             var location = properties.getValueString(PROPERTY_BLD_REPO_PREFIX + locationOrName);
             var username = properties.getValueString(PROPERTY_BLD_REPO_PREFIX + locationOrName + PROPERTY_BLD_REPO_USERNAME_SUFFIX);
