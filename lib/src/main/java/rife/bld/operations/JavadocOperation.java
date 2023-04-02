@@ -4,7 +4,6 @@
  */
 package rife.bld.operations;
 
-import rife.bld.NamedFile;
 import rife.bld.Project;
 import rife.bld.operations.exceptions.ExitStatusException;
 import rife.tools.FileUtils;
@@ -27,7 +26,7 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
     private File buildDirectory_;
     private final List<String> classpath_ = new ArrayList<>();
     private final List<File> sourceFiles_ = new ArrayList<>();
-    private final List<String> javadocOptions_ = new ArrayList<>();
+    private final JavadocOptions javadocOptions_ = new JavadocOptions();
     private final List<Diagnostic<? extends JavaFileObject>> diagnostics_ = new ArrayList<>();
     private final List<Pattern> included_ = new ArrayList<>();
     private final List<Pattern> excluded_ = new ArrayList<>();
@@ -266,7 +265,7 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
      * @return the list of javadoc options
      * @since 1.5.10
      */
-    public List<String> javadocOptions() {
+    public JavadocOptions javadocOptions() {
         return javadocOptions_;
     }
 

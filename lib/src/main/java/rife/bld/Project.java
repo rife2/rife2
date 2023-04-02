@@ -119,7 +119,7 @@ public class Project extends BuildExecutor {
      * @see #javadocOptions()
      * @since 1.5.10
      */
-    protected List<String> javadocOptions = new ArrayList<>();
+    protected JavadocOptions javadocOptions = new JavadocOptions();
     /**
      * The tool that is used for running the java main class.
      *
@@ -1231,14 +1231,12 @@ public class Project extends BuildExecutor {
      *
      * @since 1.5.10
      */
-    public List<String> javadocOptions() {
+    public JavadocOptions javadocOptions() {
         if (javadocOptions == null) {
-            javadocOptions = new ArrayList<>();
+            javadocOptions = new JavadocOptions();
         }
-        if (javaRelease != null &&
-            !javadocOptions.contains("--release")) {
-            javadocOptions.add("--release");
-            javadocOptions.add(Convert.toString(javaRelease));
+        if (javaRelease != null) {
+            javadocOptions.release(javaRelease);
         }
         return javadocOptions;
     }
