@@ -43,8 +43,8 @@ public class Wrapper {
     static final String PROPERTY_REPOSITORIES = "bld.repositories";
     static final String PROPERTY_EXTENSION_PREFIX = "bld.extension";
     static final String PROPERTY_EXTENSIONS = "bld.extensions";
-    static final File USER_DIR = new File(System.getProperty("user.home"), ".rife2");
-    static final File DISTRIBUTIONS_DIR = new File(USER_DIR, "dist");
+    static final File RIFE2_USER_DIR = new File(System.getProperty("user.home"), ".rife2");
+    static final File DISTRIBUTIONS_DIR = new File(RIFE2_USER_DIR, "dist");
 
     private File currentDir_ = new File(System.getProperty("user.dir"));
 
@@ -417,9 +417,9 @@ public class Wrapper {
 
         try {
             var resolver_class = classloader_.loadClass("rife.bld.wrapper.WrapperExtensionResolver");
-            var constructor = resolver_class.getConstructor(File.class, File.class, Collection.class, Collection.class);
+            var constructor = resolver_class.getConstructor(File.class, File.class, File.class, Collection.class, Collection.class);
             var update_method = resolver_class.getDeclaredMethod("updateExtensions");
-            var resolver = constructor.newInstance(new File(wrapperPropertiesFile_.getAbsolutePath() + ".hash"), libBldDirectory(), repositories_, extensions_);
+            var resolver = constructor.newInstance(currentDir_, new File(wrapperPropertiesFile_.getAbsolutePath() + ".hash"), libBldDirectory(), repositories_, extensions_);
             update_method.invoke(resolver);
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e.getCause());

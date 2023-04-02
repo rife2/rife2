@@ -28,6 +28,10 @@ public record Repository(String location, String username, String password) {
 
     private static final String MAVEN_LOCAL_REPO_PROPERTY = "maven.repo.local";
 
+    public static final String PROPERTY_BLD_REPO_PREFIX = "bld.repo.";
+    public static final String PROPERTY_BLD_REPO_USERNAME_SUFFIX = ".username";
+    public static final String PROPERTY_BLD_REPO_PASSWORD_SUFFIX = ".password";
+
     /**
      * This method will be called as soon as hierarchical properties
      * are initialized in the build executor. It is not intended to be called
@@ -38,10 +42,41 @@ public record Repository(String location, String username, String password) {
      * @since 1.5.12
      */
     public static void resolveMavenLocal(HierarchicalProperties properties) {
+        var user_home = properties.getValueString("user.home");
+        if (user_home == null) {
+            user_home = System.getProperty("user.home");
+        }
         var maven_local = properties.getValueString(
             MAVEN_LOCAL_REPO_PROPERTY,
-            Path.of(properties.getValueString("user.home"), ".m2", "repository").toUri().toString());
+            Path.of(user_home, ".m2", "repository").toString());
         MAVEN_LOCAL = new Repository(maven_local);
+    }
+
+    /**
+     * Resolves the repository in the provided hierarchical properties.
+     * <p>
+     * For instance, using the name {@code myrepo} will look for the following properties:<br>
+     * {@code bld.repo.myrepo}<br>
+     * {@code bld.repo.myrepo.username} (optional)<br>
+     * {@code bld.repo.myrepo.password} (optional)
+     * <p>
+     * If the {@code bld.repo.myrepo} property isn't found, the {@code locationOrName}
+     * parameter will be used as a location instead.
+     *
+     * @param properties the hierarchical properties to look into
+     * @param locationOrName the text to resolve a repository name or to be used as a location
+     * @return the repository instance
+     * @since 1.5.12
+     */
+    public static Repository resolveRepository(HierarchicalProperties properties, String locationOrName) {
+        if (properties != null && properties.contains(PROPERTY_BLD_REPO_PREFIX + locationOrName)) {
+            var location = properties.getValueString(PROPERTY_BLD_REPO_PREFIX + locationOrName);
+            var username = properties.getValueString(PROPERTY_BLD_REPO_PREFIX + locationOrName + PROPERTY_BLD_REPO_USERNAME_SUFFIX);
+            var password = properties.getValueString(PROPERTY_BLD_REPO_PREFIX + locationOrName + PROPERTY_BLD_REPO_PASSWORD_SUFFIX);
+            return new Repository(location, username, password);
+        }
+
+        return new Repository(locationOrName);
     }
 
     /**

@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 
 import static rife.bld.dependencies.Scope.runtime;
 import static rife.tools.FileUtils.JAR_FILE_PATTERN;
-import static rife.tools.FileUtils.JAVA_FILE_PATTERN;
 
 /**
  * Provides the configuration and commands of a Java project for the
@@ -587,26 +586,35 @@ public class Project extends BuildExecutor {
 
     /**
      * Creates a new repository instance.
+     * <p>
+     * Instead of providing the repository location, it's also possible to provide a name
+     * that will be used to look up the repository credentials in the hierarchical
+     * properties.
+     * <p>
+     * For instance, using the name {@code myrepo} will look for the following properties:<br>
+     * {@code bld.repo.myrepo}<br>
+     * {@code bld.repo.myrepo.username} (optional)<br>
+     * {@code bld.repo.myrepo.password} (optional)
      *
-     * @param url the repository URL
+     * @param locationOrName the repository location or name
      * @return a newly created {@code Repository} instance
      * @since 1.5.6
      */
-    public static Repository repository(String url) {
-        return new Repository(url);
+    public Repository repository(String locationOrName) {
+        return Repository.resolveRepository(properties(), locationOrName);
     }
 
     /**
      * Creates a new repository instance with basic username and password authentication.
      *
-     * @param url      the repository URL
+     * @param location the repository location
      * @param username the repository username
      * @param password the repository password
      * @return a newly created {@code Repository} instance
      * @since 1.5.7
      */
-    public static Repository repository(String url, String username, String password) {
-        return new Repository(url, username, password);
+    public Repository repository(String location, String username, String password) {
+        return new Repository(location, username, password);
     }
 
     /**
@@ -616,7 +624,7 @@ public class Project extends BuildExecutor {
      * @return a newly created {@code VersionNumber} instance
      * @since 1.5
      */
-    public static VersionNumber version(int major) {
+    public VersionNumber version(int major) {
         return new VersionNumber(major);
     }
 
@@ -628,7 +636,7 @@ public class Project extends BuildExecutor {
      * @return a newly created {@code VersionNumber} instance
      * @since 1.5
      */
-    public static VersionNumber version(int major, int minor) {
+    public VersionNumber version(int major, int minor) {
         return new VersionNumber(major, minor);
     }
 
@@ -641,7 +649,7 @@ public class Project extends BuildExecutor {
      * @return a newly created {@code VersionNumber} instance
      * @since 1.5
      */
-    public static VersionNumber version(int major, int minor, int revision) {
+    public VersionNumber version(int major, int minor, int revision) {
         return new VersionNumber(major, minor, revision);
     }
 
@@ -655,7 +663,7 @@ public class Project extends BuildExecutor {
      * @return a newly created {@code VersionNumber} instance
      * @since 1.5
      */
-    public static VersionNumber version(int major, int minor, int revision, String qualifier) {
+    public VersionNumber version(int major, int minor, int revision, String qualifier) {
         return new VersionNumber(major, minor, revision, qualifier);
     }
 
@@ -667,7 +675,7 @@ public class Project extends BuildExecutor {
      * {@link VersionNumber#UNKNOWN} if the description couldn't be parsed
      * @since 1.5
      */
-    public static VersionNumber version(String description) {
+    public VersionNumber version(String description) {
         return VersionNumber.parse(description);
     }
 
@@ -691,7 +699,7 @@ public class Project extends BuildExecutor {
      * @return a newly created {@code Dependency} instance
      * @since 1.5
      */
-    public static Dependency dependency(String groupId, String artifactId) {
+    public Dependency dependency(String groupId, String artifactId) {
         return new Dependency(groupId, artifactId);
     }
 
@@ -704,7 +712,7 @@ public class Project extends BuildExecutor {
      * @return a newly created {@code Dependency} instance
      * @since 1.5
      */
-    public static Dependency dependency(String groupId, String artifactId, VersionNumber version) {
+    public Dependency dependency(String groupId, String artifactId, VersionNumber version) {
         return new Dependency(groupId, artifactId, version);
     }
 
@@ -718,7 +726,7 @@ public class Project extends BuildExecutor {
      * @return a newly created {@code Dependency} instance
      * @since 1.5
      */
-    public static Dependency dependency(String groupId, String artifactId, VersionNumber version, String classifier) {
+    public Dependency dependency(String groupId, String artifactId, VersionNumber version, String classifier) {
         return new Dependency(groupId, artifactId, version, classifier);
     }
 
@@ -733,7 +741,7 @@ public class Project extends BuildExecutor {
      * @return a newly created {@code Dependency} instance
      * @since 1.5
      */
-    public static Dependency dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type) {
+    public Dependency dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type) {
         return new Dependency(groupId, artifactId, version, classifier, type);
     }
 
@@ -749,7 +757,7 @@ public class Project extends BuildExecutor {
      * {@code null} when the string couldn't be parsed
      * @since 1.5.2
      */
-    public static Dependency dependency(String description) {
+    public Dependency dependency(String description) {
         return Dependency.parse(description);
     }
 
@@ -762,7 +770,7 @@ public class Project extends BuildExecutor {
      * @since 1.5.2
      */
 
-    public static LocalDependency local(String path) {
+    public LocalDependency local(String path) {
         return new LocalDependency(path);
     }
 

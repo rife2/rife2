@@ -8,6 +8,7 @@ import rife.bld.dependencies.Repository;
 import rife.bld.help.HelpHelp;
 import rife.bld.operations.HelpOperation;
 import rife.bld.operations.exceptions.ExitStatusException;
+import rife.bld.wrapper.Wrapper;
 import rife.ioc.HierarchicalProperties;
 import rife.tools.ExceptionUtils;
 
@@ -28,6 +29,10 @@ import java.util.regex.Pattern;
  * @since 1.5
  */
 public class BuildExecutor {
+    public static final File RIFE2_USER_DIR = new File(System.getProperty("user.home"), ".rife2");
+    public static final String BLD_PROPERTIES = "bld.properties";
+    public static final String LOCAL_PROPERTIES = "local.properties";
+
     private final HierarchicalProperties properties_;
     private List<String> arguments_ = Collections.emptyList();
     private Map<String, CommandDefinition> buildCommands_ = null;
@@ -53,29 +58,42 @@ public class BuildExecutor {
      * @since 1.5.12
      */
     public static HierarchicalProperties setupProperties(File workDirectory) {
-        final HierarchicalProperties properties = new HierarchicalProperties();
-        HierarchicalProperties local_properties = null;
         var system_properties = HierarchicalProperties.createSystemInstance();
+        HierarchicalProperties bld_properties = null;
+        HierarchicalProperties local_properties = null;
+        final HierarchicalProperties properties = new HierarchicalProperties();
 
-        var local_properties_file = new File(workDirectory, "local.properties");
-
-        if (local_properties_file.exists() && local_properties_file.isFile() && local_properties_file.canRead()) {
-            var local = new Properties();
+        var bld_properties_file = new File(RIFE2_USER_DIR, BLD_PROPERTIES);
+        if (bld_properties_file.exists() && bld_properties_file.isFile() && bld_properties_file.canRead()) {
             try {
+                var bld = new Properties();
+                bld.load(new FileReader(bld_properties_file));
+                bld_properties = new HierarchicalProperties();
+                bld_properties.putAll(bld);
+
+                bld_properties.parent(system_properties);
+            } catch (IOException e) {
+                Logger.getLogger("rife.bld").warning("Unable to parse " + bld_properties_file + " as a properties file:\n" + e.getMessage());
+            }
+        }
+
+        var local_properties_file = new File(workDirectory, LOCAL_PROPERTIES);
+        if (local_properties_file.exists() && local_properties_file.isFile() && local_properties_file.canRead()) {
+            try {
+                var local = new Properties();
                 local.load(new FileReader(local_properties_file));
                 local_properties = new HierarchicalProperties();
                 local_properties.putAll(local);
+
+                local_properties.parent(Objects.requireNonNullElse(bld_properties, system_properties));
             } catch (IOException e) {
                 Logger.getLogger("rife.bld").warning("Unable to parse " + local_properties_file + " as a properties file:\n" + e.getMessage());
             }
         }
 
-        if (local_properties != null) {
-            local_properties.parent(system_properties);
-            properties.parent(local_properties);
-        } else {
-            properties.parent(system_properties);
-        }
+        properties.parent(
+            Objects.requireNonNullElse(local_properties,
+                Objects.requireNonNullElse(bld_properties, system_properties)));
 
         return properties;
     }

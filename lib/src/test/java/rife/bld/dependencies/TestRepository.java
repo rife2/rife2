@@ -5,6 +5,9 @@
 package rife.bld.dependencies;
 
 import org.junit.jupiter.api.Test;
+import rife.ioc.HierarchicalProperties;
+
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -80,5 +83,40 @@ public class TestRepository {
         assertFalse(new Repository("http://my.repo").isLocal());
         assertTrue(new Repository("file:///local/repo").isLocal());
         assertTrue(new Repository("//local/repo").isLocal());
+    }
+
+    @Test
+    void testResolveMavenLocal() {
+        var properties = new HierarchicalProperties();
+
+        assertNull(Repository.MAVEN_LOCAL);
+
+        Repository.resolveMavenLocal(properties);
+        assertEquals(Path.of(System.getProperty("user.home"), ".m2", "repository").toString(), Repository.MAVEN_LOCAL.location());
+
+        properties.put("user.home", "/other/home");
+        Repository.resolveMavenLocal(properties);
+        assertEquals(Path.of("/other/home", ".m2", "repository").toString(), Repository.MAVEN_LOCAL.location());
+
+        properties.put("maven.repo.local", "/different/local");
+        Repository.resolveMavenLocal(properties);
+        assertEquals("/different/local", Repository.MAVEN_LOCAL.location());
+    }
+
+    @Test
+    void testResolveRepository() {
+        var properties = new HierarchicalProperties();
+
+        assertEquals(new Repository("myrepo"), Repository.resolveRepository(properties, "myrepo"));
+        assertEquals(new Repository("https://some.repo"), Repository.resolveRepository(properties, "https://some.repo"));
+
+        properties.put("bld.repo.therepo", "https://the.repo/is/here");
+        assertEquals(new Repository("https://the.repo/is/here"), Repository.resolveRepository(properties, "therepo"));
+
+        properties.put("bld.repo.therepo.username", "theuser");
+        assertEquals(new Repository("https://the.repo/is/here", "theuser", null), Repository.resolveRepository(properties, "therepo"));
+
+        properties.put("bld.repo.therepo.password", "thepassword");
+        assertEquals(new Repository("https://the.repo/is/here", "theuser", "thepassword"), Repository.resolveRepository(properties, "therepo"));
     }
 }

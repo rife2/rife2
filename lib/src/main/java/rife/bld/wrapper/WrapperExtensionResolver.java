@@ -4,6 +4,7 @@
  */
 package rife.bld.wrapper;
 
+import rife.bld.BuildExecutor;
 import rife.bld.dependencies.*;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
@@ -32,17 +33,21 @@ public class WrapperExtensionResolver {
 
     private boolean headerPrinted_ = false;
 
-    public WrapperExtensionResolver(File hashFile, File destinationDirectory, Collection<String> repositories, Collection<String> extensions) {
+    public WrapperExtensionResolver(File currentDir, File hashFile, File destinationDirectory, Collection<String> repositories, Collection<String> extensions) {
+        var properties = BuildExecutor.setupProperties(currentDir);
+
         hashFile_ = hashFile;
         destinationDirectory_ = destinationDirectory;
-        repositories_.addAll(repositories.stream().map(Repository::new).toList());
+        for (var repository : repositories) {
+            repositories_.add(Repository.resolveRepository(properties, repository));
+        }
         dependencies_.addAll(extensions.stream().map(Dependency::parse).toList());
-        fingerPrintHash_ = createHash(repositories, extensions);
+        fingerPrintHash_ = createHash(repositories_.stream().map(Objects::toString).toList(), extensions);
     }
 
     private String createHash(Collection<String> repositories, Collection<String> extensions) {
         try {
-            var fingerprint = String.join("\n", repositories) + String.join("\n", extensions);
+            var fingerprint = String.join("\n", repositories) + "\n" + String.join("\n", extensions);
             var digest = MessageDigest.getInstance("SHA-1");
             digest.update(fingerprint.getBytes(StandardCharsets.UTF_8));
             return StringUtils.encodeHexLower(digest.digest());
@@ -64,6 +69,8 @@ public class WrapperExtensionResolver {
         // purge the files that are not part of the latest extensions anymore
         purgeExtensionDependencies(filenames);
 
+        writeHash();
+
         if (headerPrinted_) {
             System.out.println();
         }
@@ -78,8 +85,15 @@ public class WrapperExtensionResolver {
                 }
                 hashFile_.delete();
             }
-            FileUtils.writeString(fingerPrintHash_, hashFile_);
             return false;
+        } catch (FileUtilsErrorException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void writeHash() {
+        try {
+            FileUtils.writeString(fingerPrintHash_, hashFile_);
         } catch (FileUtilsErrorException e) {
             throw new RuntimeException(e);
         }
