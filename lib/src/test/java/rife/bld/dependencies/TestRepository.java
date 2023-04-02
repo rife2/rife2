@@ -89,6 +89,7 @@ public class TestRepository {
     void testResolveMavenLocal() {
         var properties = new HierarchicalProperties();
 
+        Repository.MAVEN_LOCAL = null;
         assertNull(Repository.MAVEN_LOCAL);
 
         Repository.resolveMavenLocal(properties);
