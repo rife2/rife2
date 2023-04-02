@@ -26,6 +26,22 @@ public @interface BuildCommand {
     String value() default "";
 
     /**
+     * When provided, specifies a short description about the command.
+     *
+     * @return the short summary, defaults to {@code ""}
+     * @since 1.5.12
+     */
+    String summary() default "";
+
+    /**
+     * When provided, specifies the full help description of a command.
+     *
+     * @return the full help description, defaults to {@code ""}
+     * @since 1.5.12
+     */
+    String description() default "";
+
+    /**
      * When provided, specifies a class that provides help about the
      * build command.
      *

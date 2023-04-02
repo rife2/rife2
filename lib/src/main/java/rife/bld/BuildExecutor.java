@@ -249,6 +249,19 @@ public class BuildExecutor {
                                     command_help = build_help.getDeclaredConstructor().newInstance();
                                 }
 
+                                var summary = annotation.summary();
+                                var description = annotation.description();
+                                if ((summary != null && !summary.isBlank()) ||
+                                    (description != null && !description.isBlank())) {
+                                    if (summary == null) summary = "";
+                                    if (description == null) description = "";
+                                    if (command_help != null) {
+                                        if (summary.isBlank()) summary = command_help.getSummary();
+                                        if (description.isBlank()) description = command_help.getDescription(name);
+                                        command_help = new AnnotatedCommandHelp(summary, description);
+                                    }
+                                }
+
                                 build_commands.put(name, new CommandAnnotated(this, method, command_help));
                             }
                         }
@@ -264,6 +277,26 @@ public class BuildExecutor {
         }
 
         return buildCommands_;
+    }
+
+    private static class AnnotatedCommandHelp implements CommandHelp {
+        private final String summary_;
+        private final String description_;
+
+        AnnotatedCommandHelp(String summary, String description) {
+            summary_ = summary;
+            description_ = description;
+        }
+
+        @Override
+        public String getSummary() {
+            return summary_;
+        }
+
+        @Override
+        public String getDescription(String topic) {
+            return description_;
+        }
     }
 
     /**
