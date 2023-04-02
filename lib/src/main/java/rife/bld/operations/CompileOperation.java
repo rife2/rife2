@@ -29,7 +29,7 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
     private final List<File> testSourceFiles_ = new ArrayList<>();
     private final List<File> mainSourceDirectories_ = new ArrayList<>();
     private final List<File> testSourceDirectories_ = new ArrayList<>();
-    private final List<String> compileOptions_ = new ArrayList<>();
+    private final CompileOptions compileOptions_ = new CompileOptions();
     private final List<Diagnostic<? extends JavaFileObject>> diagnostics_ = new ArrayList<>();
 
     /**
@@ -387,7 +387,7 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
      * @return the list of compiler options
      * @since 1.5
      */
-    public List<String> compileOptions() {
+    public CompileOptions compileOptions() {
         return compileOptions_;
     }
 

@@ -8,7 +8,6 @@ import rife.bld.dependencies.*;
 import rife.bld.help.*;
 import rife.bld.operations.*;
 import rife.bld.publish.PublishInfo;
-import rife.tools.Convert;
 import rife.tools.FileUtils;
 
 import java.io.File;
@@ -112,7 +111,7 @@ public class Project extends BuildExecutor {
      * @see #compileJavacOptions()
      * @since 1.5
      */
-    protected List<String> compileJavacOptions = new ArrayList<>();
+    protected CompileOptions compileJavacOptions = new CompileOptions();
     /**
      * The project's javadoc options for compilation.
      *
@@ -1200,14 +1199,12 @@ public class Project extends BuildExecutor {
      *
      * @since 1.5
      */
-    public List<String> compileJavacOptions() {
+    public CompileOptions compileJavacOptions() {
         if (compileJavacOptions == null) {
-            compileJavacOptions = new ArrayList<>();
+            compileJavacOptions = new CompileOptions();
         }
-        if (javaRelease != null &&
-            !compileJavacOptions.contains("--release")) {
-            compileJavacOptions.add("--release");
-            compileJavacOptions.add(Convert.toString(javaRelease));
+        if (javaRelease != null) {
+            javadocOptions.release(javaRelease);
         }
         return compileJavacOptions;
     }

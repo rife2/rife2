@@ -261,7 +261,7 @@ public class JavadocOptions extends ArrayList<String> {
      */
     public JavadocOptions showMembers(Level option) {
         add("--show-members");
-        add(option.toString().toLowerCase());
+        add(option.name().toLowerCase());
         return this;
     }
 
@@ -274,7 +274,7 @@ public class JavadocOptions extends ArrayList<String> {
      */
     public JavadocOptions showModuleContent(ModuleContent option) {
         add("--show-module-contents");
-        add(option.toString().toLowerCase());
+        add(option.name().toLowerCase());
         return this;
     }
 
@@ -287,7 +287,7 @@ public class JavadocOptions extends ArrayList<String> {
      */
     public JavadocOptions showPackages(ModulePackages option) {
         add("--show-packages");
-        add(option.toString().toLowerCase());
+        add(option.name().toLowerCase());
         return this;
     }
 
@@ -304,7 +304,7 @@ public class JavadocOptions extends ArrayList<String> {
      */
     public JavadocOptions showTypes(Level option) {
         add("--show-types");
-        add(option.toString().toLowerCase());
+        add(option.name().toLowerCase());
         return this;
     }
 
@@ -604,7 +604,7 @@ public class JavadocOptions extends ArrayList<String> {
      */
     public JavadocOptions overrideMethods(Override option) {
         add("--override-methods");
-        add(option.toString().toLowerCase());
+        add(option.name().toLowerCase());
         return this;
     }
 
