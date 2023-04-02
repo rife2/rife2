@@ -16,6 +16,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+import static rife.bld.dependencies.Dependency.CLASSIFIER_JAVADOC;
+import static rife.bld.dependencies.Dependency.CLASSIFIER_SOURCES;
+
 /**
  * Resolves, downloads and purges the bld extension dependencies.
  * <p>
@@ -30,10 +33,14 @@ public class WrapperExtensionResolver {
     private final File destinationDirectory_;
     private final List<Repository> repositories_ = new ArrayList<>();
     private final DependencySet dependencies_ = new DependencySet();
+    private final boolean downloadSources_;
+    private final boolean downloadJavadoc_;
 
     private boolean headerPrinted_ = false;
 
-    public WrapperExtensionResolver(File currentDir, File hashFile, File destinationDirectory, Collection<String> repositories, Collection<String> extensions) {
+    public WrapperExtensionResolver(File currentDir, File hashFile, File destinationDirectory,
+                                    Collection<String> repositories, Collection<String> extensions,
+                                    boolean downloadSources, boolean downloadJavadoc) {
         var properties = BuildExecutor.setupProperties(currentDir);
         Repository.resolveMavenLocal(properties);
 
@@ -55,12 +62,14 @@ public class WrapperExtensionResolver {
             }
         }
         dependencies_.addAll(extensions.stream().map(Dependency::parse).toList());
-        fingerPrintHash_ = createHash(repositories_.stream().map(Objects::toString).toList(), extensions);
+        downloadSources_ = downloadSources;
+        downloadJavadoc_ = downloadJavadoc;
+        fingerPrintHash_ = createHash(repositories_.stream().map(Objects::toString).toList(), extensions, downloadSources, downloadJavadoc);
     }
 
-    private String createHash(Collection<String> repositories, Collection<String> extensions) {
+    private String createHash(Collection<String> repositories, Collection<String> extensions, boolean downloadSources, boolean downloadJavadoc) {
         try {
-            var fingerprint = String.join("\n", repositories) + "\n" + String.join("\n", extensions);
+            var fingerprint = String.join("\n", repositories) + "\n" + String.join("\n", extensions) + "\n" + downloadSources + "\n" + downloadJavadoc;
             var digest = MessageDigest.getInstance("SHA-1");
             digest.update(fingerprint.getBytes(StandardCharsets.UTF_8));
             return StringUtils.encodeHexLower(digest.digest());
@@ -124,16 +133,35 @@ public class WrapperExtensionResolver {
             ensurePrintedHeader();
 
             dependencies.removeIf(dependency -> dependency.baseDependency().equals(new Dependency("com.uwyn.rife2", "rife2")));
-            dependencies.transferIntoDirectory(repositories_, destinationDirectory_);
+
+            var additional_classifiers = new String[0];
+            if (downloadSources_ || downloadJavadoc_) {
+                var classifiers = new ArrayList<String>();
+                if (downloadSources_) classifiers.add(CLASSIFIER_SOURCES);
+                if (downloadJavadoc_) classifiers.add(CLASSIFIER_JAVADOC);
+
+                additional_classifiers = classifiers.toArray(new String[0]);
+            }
+            dependencies.transferIntoDirectory(repositories_, destinationDirectory_, additional_classifiers);
 
             for (var dependency : dependencies) {
-                for (var location : new DependencyResolver(repositories_, dependency).getTransferLocations()) {
-                    filenames.add(location.substring(location.lastIndexOf("/") + 1));
+                addTransferLocations(filenames, dependency);
+                if (downloadSources_) {
+                    addTransferLocations(filenames, dependency.withClassifier(CLASSIFIER_SOURCES));
+                }
+                if (downloadJavadoc_) {
+                    addTransferLocations(filenames, dependency.withClassifier(CLASSIFIER_JAVADOC));
                 }
             }
         }
 
         return filenames;
+    }
+
+    private void addTransferLocations(HashSet<String> filenames, Dependency dependency) {
+        for (var location : new DependencyResolver(repositories_, dependency).getTransferLocations()) {
+            filenames.add(location.substring(location.lastIndexOf("/") + 1));
+        }
     }
 
     private void purgeExtensionDependencies(Set<String> filenames) {

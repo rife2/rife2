@@ -43,6 +43,8 @@ public class Wrapper {
     static final String PROPERTY_REPOSITORIES = "bld.repositories";
     static final String PROPERTY_EXTENSION_PREFIX = "bld.extension";
     static final String PROPERTY_EXTENSIONS = "bld.extensions";
+    static final String PROPERTY_DOWNLOAD_EXTENSION_SOURCES = "bld.downloadExtensionSources";
+    static final String PROPERTY_DOWNLOAD_EXTENSION_JAVADOC = "bld.downloadExtensionJavadoc";
     static final File RIFE2_USER_DIR = new File(System.getProperty("user.home"), ".rife2");
     static final File DISTRIBUTIONS_DIR = new File(RIFE2_USER_DIR, "dist");
 
@@ -52,6 +54,8 @@ public class Wrapper {
     private File wrapperPropertiesFile_ = null;
     private final Set<String> repositories_ = new LinkedHashSet<>();
     private final Set<String> extensions_ = new LinkedHashSet<>();
+    private boolean downloadExtensionSources_ = false;
+    private boolean downloadExtensionJavadoc_ = false;
 
     private final byte[] buffer_ = new byte[1024];
     private WrapperClassLoader classloader_;
@@ -141,13 +145,24 @@ public class Wrapper {
                 throw new IOException(e);
             }
         } else {
-            wrapperProperties_.put(PROPERTY_REPOSITORIES, MAVEN_CENTRAL);
-            wrapperProperties_.put(PROPERTY_EXTENSIONS, "");
-            wrapperProperties_.put(PROPERTY_DOWNLOAD_LOCATION, "");
-            wrapperProperties_.put(PROPERTY_VERSION, version);
+            var properties_blueprint = """
+                bld.downloadExtensionJavadoc=false
+                bld.downloadExtensionSources=true
+                bld.extensions=
+                bld.repositories=${repository}
+                rife2.downloadLocation=
+                rife2.version=${version}
+                """
+                .replace("${repository}", MAVEN_CENTRAL)
+                .replace("${version}", version);
+
             Files.createDirectories(file.getAbsoluteFile().toPath().getParent());
             Files.deleteIfExists(file.toPath());
-            wrapperProperties_.store(new FileWriter(file), null);
+            try {
+                FileUtils.writeString(properties_blueprint, file);
+            } catch (FileUtilsErrorException e) {
+                throw new IOException(e);
+            }
         }
     }
 
@@ -307,6 +322,9 @@ public class Wrapper {
                 }
             }
         }
+        // check whether extension sources or javadoc should be downloaded
+        downloadExtensionSources_ = Boolean.parseBoolean(wrapperProperties_.getProperty(PROPERTY_DOWNLOAD_EXTENSION_SOURCES, "false"));
+        downloadExtensionJavadoc_ = Boolean.parseBoolean(wrapperProperties_.getProperty(PROPERTY_DOWNLOAD_EXTENSION_JAVADOC, "false"));
     }
 
     private String getWrapperVersion()
@@ -417,9 +435,11 @@ public class Wrapper {
 
         try {
             var resolver_class = classloader_.loadClass("rife.bld.wrapper.WrapperExtensionResolver");
-            var constructor = resolver_class.getConstructor(File.class, File.class, File.class, Collection.class, Collection.class);
+            var constructor = resolver_class.getConstructor(File.class, File.class, File.class, Collection.class, Collection.class, boolean.class, boolean.class);
             var update_method = resolver_class.getDeclaredMethod("updateExtensions");
-            var resolver = constructor.newInstance(currentDir_, new File(wrapperPropertiesFile_.getAbsolutePath() + ".hash"), libBldDirectory(), repositories_, extensions_);
+            var resolver = constructor.newInstance(currentDir_, new File(wrapperPropertiesFile_.getAbsolutePath() + ".hash"), libBldDirectory(),
+                repositories_, extensions_,
+                downloadExtensionSources_, downloadExtensionJavadoc_);
             update_method.invoke(resolver);
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e.getCause());
