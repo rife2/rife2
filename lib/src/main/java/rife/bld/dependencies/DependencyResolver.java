@@ -450,7 +450,7 @@ public class DependencyResolver {
         }
 
         if (metadata == null) {
-            throw new ArtifactNotFoundException(dependency_, artifacts.stream().map(RepositoryArtifact::location).collect(Collectors.joining(",")));
+            throw new ArtifactNotFoundException(dependency_, artifacts.stream().map(RepositoryArtifact::location).collect(Collectors.joining(", ")));
         }
 
         var xml = new Xml2MavenMetadata();
@@ -498,7 +498,7 @@ public class DependencyResolver {
         }
 
         if (pom == null) {
-            throw new ArtifactNotFoundException(dependency_, artifacts.stream().map(RepositoryArtifact::location).collect(Collectors.joining(",")));
+            throw new ArtifactNotFoundException(dependency_, artifacts.stream().map(RepositoryArtifact::location).collect(Collectors.joining(", ")));
         }
 
         var xml = new Xml2MavenPom(parent, repositories_);
