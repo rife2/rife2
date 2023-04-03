@@ -59,7 +59,7 @@ jobs:
 
     strategy:
       matrix:
-        java-version: [ 17, 19 ]
+        java-version: [ 17, 19, 20 ]
 
     steps:
       - name: Checkout source repository
@@ -70,7 +70,7 @@ jobs:
       - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
+          distribution: 'zulu'
           java-version: ${{ matrix.java-version }}
 
       - name: Grant execute permission for gradlew
