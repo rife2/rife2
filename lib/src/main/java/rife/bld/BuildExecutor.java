@@ -8,7 +8,6 @@ import rife.bld.dependencies.Repository;
 import rife.bld.help.HelpHelp;
 import rife.bld.operations.HelpOperation;
 import rife.bld.operations.exceptions.ExitStatusException;
-import rife.bld.wrapper.Wrapper;
 import rife.ioc.HierarchicalProperties;
 import rife.tools.ExceptionUtils;
 
@@ -359,9 +358,9 @@ public class BuildExecutor {
                 currentCommandName_.set(null);
             }
         } else {
-            System.err.println("ERROR: unknown command '" + command + "'");
-            System.err.println();
             new HelpOperation(this, arguments()).executePrintOverviewHelp();
+            System.err.println();
+            System.err.println("ERROR: unknown command '" + command + "'");
             return false;
         }
         return true;
