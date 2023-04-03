@@ -70,6 +70,13 @@ public record Repository(String location, String username, String password) {
      * @since 1.5.12
      */
     public static Repository resolveRepository(HierarchicalProperties properties, String locationOrName) {
+        if (properties != null && properties.contains(PROPERTY_BLD_REPO_PREFIX + locationOrName)) {
+            var location = properties.getValueString(PROPERTY_BLD_REPO_PREFIX + locationOrName);
+            var username = properties.getValueString(PROPERTY_BLD_REPO_PREFIX + locationOrName + PROPERTY_BLD_REPO_USERNAME_SUFFIX);
+            var password = properties.getValueString(PROPERTY_BLD_REPO_PREFIX + locationOrName + PROPERTY_BLD_REPO_PASSWORD_SUFFIX);
+            return new Repository(location, username, password);
+        }
+
         if (locationOrName.equalsIgnoreCase("MAVEN_LOCAL")) {
             return Repository.MAVEN_LOCAL;
         } else if (locationOrName.equalsIgnoreCase("MAVEN_CENTRAL")) {
@@ -82,13 +89,6 @@ public record Repository(String location, String username, String password) {
             return Repository.APACHE;
         } else if (locationOrName.equalsIgnoreCase("RIFE2")) {
             return Repository.RIFE2;
-        }
-
-        if (properties != null && properties.contains(PROPERTY_BLD_REPO_PREFIX + locationOrName)) {
-            var location = properties.getValueString(PROPERTY_BLD_REPO_PREFIX + locationOrName);
-            var username = properties.getValueString(PROPERTY_BLD_REPO_PREFIX + locationOrName + PROPERTY_BLD_REPO_USERNAME_SUFFIX);
-            var password = properties.getValueString(PROPERTY_BLD_REPO_PREFIX + locationOrName + PROPERTY_BLD_REPO_PASSWORD_SUFFIX);
-            return new Repository(location, username, password);
         }
 
         return new Repository(locationOrName);
