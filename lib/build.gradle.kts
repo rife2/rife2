@@ -12,7 +12,7 @@ plugins {
     signing
 }
 
-val rifeVersion by rootProject.extra { "1.5.12-SNAPSHOT" }
+val rifeVersion by rootProject.extra { "1.5.12" }
 var rifeAgentName = "rife2-$rifeVersion-agent"
 val rifeAgentJar by rootProject.extra { "$rifeAgentName.jar" }
 var rifeAgentContinuationsName = "rife2-$rifeVersion-agent-continuations"
@@ -419,10 +419,10 @@ publishing {
             repositories {
                 maven {
                     credentials {
-                        username = project.properties["ossrhUsername"].toString()
-                        password = project.properties["ossrhPassword"].toString()
+                        username = project.properties["rife2.username"].toString()
+                        password = project.properties["rife2.Password"].toString()
                     }
-                    val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                    val releasesRepoUrl = uri("https://repo.rife2.com/releases")
                     val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
                     url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
                 }
