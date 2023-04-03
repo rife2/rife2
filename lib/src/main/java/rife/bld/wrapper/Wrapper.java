@@ -470,7 +470,6 @@ public class Wrapper {
         args.addAll(arguments);
 
         var process_builder = new ProcessBuilder(args);
-        process_builder.directory(currentDir_);
         process_builder.inheritIO();
         var process = process_builder.start();
         return process.waitFor();
