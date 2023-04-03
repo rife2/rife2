@@ -164,7 +164,7 @@ public class BuildExecutor {
                 }
             } catch (Throwable e) {
                 exitStatus(1);
-                new HelpOperation(this, arguments()).executePrintOverviewHelp();
+
                 System.err.println();
                 boolean first = true;
                 var e2 = e;
