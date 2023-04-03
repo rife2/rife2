@@ -419,10 +419,10 @@ publishing {
             repositories {
                 maven {
                     credentials {
-                        username = project.properties["rife2.username"].toString()
-                        password = project.properties["rife2.Password"].toString()
+                        username = project.properties["ossrhUsername"].toString()
+                        password = project.properties["ossrhPassword"].toString()
                     }
-                    val releasesRepoUrl = uri("https://repo.rife2.com/releases")
+                    val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
                     val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
                     url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
                 }
