@@ -5,17 +5,19 @@
 package rife.bld;
 
 import org.junit.jupiter.api.Test;
-import rife.Version;
 import rife.bld.dependencies.VersionNumber;
 import rife.tools.FileUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.PrintStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static rife.bld.dependencies.Repository.MAVEN_CENTRAL;
-import static rife.bld.dependencies.Repository.SONATYPE_SNAPSHOTS;
 import static rife.bld.dependencies.Scope.*;
 
 public class TestProject {
@@ -179,6 +181,43 @@ public class TestProject {
         }
     }
 
+    static class CustomProjectInlineHelp extends Project {
+        CustomProjectInlineHelp(File tmp) {
+            workDirectory = tmp;
+            pkg = "test.pkg";
+            name = "my_project";
+            version = new VersionNumber(0, 0, 1);
+        }
+
+        @BuildCommand(summary = "mysummary", description = "mydescription")
+        public void newcommand() {
+        }
+    }
+
+    @Test
+    void testCustomCommandInlineHelp()
+    throws Exception {
+        var tmp = Files.createTempDirectory("test").toFile();
+        var orig_err = System.err;
+        try {
+            var out = new ByteArrayOutputStream();
+            System.setErr(new PrintStream(out, true, StandardCharsets.UTF_8));
+
+            var project = new CustomProjectInlineHelp(tmp);
+            project.execute(new String[]{""});
+
+            assertTrue(out.toString(StandardCharsets.UTF_8).contains("newcommand   mysummary"));
+            out.reset();
+
+            project.execute(new String[]{"help", "newcommand"});
+            assertTrue(out.toString(StandardCharsets.UTF_8).contains("mydescription"));
+
+        } finally {
+            System.setErr(orig_err);
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
     static class CustomProjectLambda extends Project {
         CustomProjectLambda(File tmp, StringBuilder result) {
             buildCommands().put("newcommand2", () -> {
@@ -244,15 +283,15 @@ public class TestProject {
 
             repositories = List.of(MAVEN_CENTRAL);
             scope(compile)
-                .include(dependency("com.uwyn.rife2", "rife2", version(1,5,11)));
+                .include(dependency("com.uwyn.rife2", "rife2", version(1, 5, 11)));
             scope(test)
-                .include(dependency("org.jsoup", "jsoup", version(1,15,4)))
-                .include(dependency("org.junit.jupiter", "junit-jupiter", version(5,9,2)))
-                .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1,9,2)));
+                .include(dependency("org.jsoup", "jsoup", version(1, 15, 4)))
+                .include(dependency("org.junit.jupiter", "junit-jupiter", version(5, 9, 2)))
+                .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1, 9, 2)));
             scope(standalone)
-                .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,14)))
-                .include(dependency("org.eclipse.jetty", "jetty-servlet", version(11,0,14)))
-                .include(dependency("org.slf4j", "slf4j-simple", version(2,0,7)));
+                .include(dependency("org.eclipse.jetty", "jetty-server", version(11, 0, 14)))
+                .include(dependency("org.eclipse.jetty", "jetty-servlet", version(11, 0, 14)))
+                .include(dependency("org.slf4j", "slf4j-simple", version(2, 0, 7)));
         }
 
         public void enableAutoDownloadPurge() {
@@ -262,13 +301,13 @@ public class TestProject {
         public void increaseRife2Version() {
             scope(compile).clear();
             scope(compile)
-                .include(dependency("com.uwyn.rife2", "rife2", version(1,5,12)));
+                .include(dependency("com.uwyn.rife2", "rife2", version(1, 5, 12)));
         }
 
         public void increaseRife2VersionMore() {
             scope(compile).clear();
             scope(compile)
-                .include(dependency("com.uwyn.rife2", "rife2", version(1,5,15)));
+                .include(dependency("com.uwyn.rife2", "rife2", version(1, 5, 15)));
         }
     }
 
