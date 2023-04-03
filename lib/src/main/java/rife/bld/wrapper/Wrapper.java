@@ -436,7 +436,7 @@ public class Wrapper {
         try {
             var resolver_class = classloader_.loadClass("rife.bld.wrapper.WrapperExtensionResolver");
             var constructor = resolver_class.getConstructor(File.class, File.class, File.class, Collection.class, Collection.class, boolean.class, boolean.class);
-            var update_method = resolver_class.getDeclaredMethod("updateExtensions");
+            var update_method = resolver_class.getMethod("updateExtensions");
             var resolver = constructor.newInstance(currentDir_, new File(wrapperPropertiesFile_.getAbsolutePath() + ".hash"), libBldDirectory(),
                 repositories_, extensions_,
                 downloadExtensionSources_, downloadExtensionJavadoc_);
