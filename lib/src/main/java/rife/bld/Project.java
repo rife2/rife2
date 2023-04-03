@@ -119,7 +119,7 @@ public class Project extends BuildExecutor {
      */
     protected CompileOptions compileJavacOptions = new CompileOptions();
     /**
-     * The project's javadoc options for compilation.
+     * The project's javadoc options.
      *
      * @see #javadocOptions()
      * @since 1.5.10
