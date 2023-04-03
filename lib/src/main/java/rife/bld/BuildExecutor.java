@@ -257,8 +257,8 @@ public class BuildExecutor {
                                     if (command_help != null) {
                                         if (summary.isBlank()) summary = command_help.getSummary();
                                         if (description.isBlank()) description = command_help.getDescription(name);
-                                        command_help = new AnnotatedCommandHelp(summary, description);
                                     }
+                                    command_help = new AnnotatedCommandHelp(summary, description);
                                 }
 
                                 build_commands.put(name, new CommandAnnotated(this, method, command_help));
