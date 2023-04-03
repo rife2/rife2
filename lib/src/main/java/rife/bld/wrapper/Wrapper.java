@@ -249,7 +249,6 @@ public class Wrapper {
             } catch (IOException e) {
                 return -1;
             }
-            resolveExtensions();
             return launchMain(distribution, arguments);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -479,6 +478,8 @@ public class Wrapper {
 
     private int launchMainBuild(File jarFile, List<String> arguments)
     throws FileUtilsErrorException, IOException, InterruptedException {
+        resolveExtensions();
+
         arguments.remove(0);
 
         var build_bld_dir = buildBldDirectory();

@@ -133,23 +133,23 @@ public class WrapperExtensionResolver {
             dependencies.transferIntoDirectory(repositories_, destinationDirectory_, additional_classifiers);
 
             for (var dependency : dependencies) {
-                for (var location : new DependencyResolver(repositories_, dependency).getTransferLocations()) {
-                    filenames.add(location.substring(location.lastIndexOf("/") + 1));
-                }
+                addTransferLocations(filenames, dependency);
                 if (downloadSources_) {
-                    for (var location : new DependencyResolver(repositories_, dependency.withClassifier(CLASSIFIER_SOURCES)).getTransferLocations()) {
-                        filenames.add(location.substring(location.lastIndexOf("/") + 1));
-                    }
+                    addTransferLocations(filenames, dependency.withClassifier(CLASSIFIER_SOURCES));
                 }
                 if (downloadJavadoc_) {
-                    for (var location : new DependencyResolver(repositories_, dependency.withClassifier(CLASSIFIER_JAVADOC)).getTransferLocations()) {
-                        filenames.add(location.substring(location.lastIndexOf("/") + 1));
-                    }
+                    addTransferLocations(filenames, dependency.withClassifier(CLASSIFIER_JAVADOC));
                 }
             }
         }
 
         return filenames;
+    }
+
+    private void addTransferLocations(HashSet<String> filenames, Dependency dependency) {
+        for (var location : new DependencyResolver(repositories_, dependency).getTransferLocations()) {
+            filenames.add(location.substring(location.lastIndexOf("/") + 1));
+        }
     }
 
     private void purgeExtensionDependencies(Set<String> filenames) {
