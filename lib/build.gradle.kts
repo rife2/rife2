@@ -12,7 +12,7 @@ plugins {
     signing
 }
 
-val rifeVersion by rootProject.extra { "1.5.13" }
+val rifeVersion by rootProject.extra { "1.5.14-SNAPSHOT" }
 var rifeAgentName = "rife2-$rifeVersion-agent"
 val rifeAgentJar by rootProject.extra { "$rifeAgentName.jar" }
 var rifeAgentContinuationsName = "rife2-$rifeVersion-agent-continuations"
@@ -238,10 +238,11 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         from(sourceSets.main.get().output)
         include(
-            "rife/bld/wrapper/**",
-            "rife/tools/FileUtils*",
-            "rife/tools/InnerClassException*",
-            "rife/tools/exceptions/FileUtils*",
+            "rife/bld/wrapper/Wrapper.class",
+            "rife/bld/wrapper/WrapperClassLoader.class",
+            "rife/tools/FileUtils.class",
+            "rife/tools/exceptions/FileUtilsErrorException.class",
+            "rife/tools/InnerClassException.class",
             "RIFE_VERSION"
         )
         manifest {
