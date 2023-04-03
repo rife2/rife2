@@ -115,7 +115,7 @@ public class CompileOptions extends ArrayList<String> {
     }
 
     /**
-     * Provide source compatibility with specified release
+     * Compile for the specified Java SE release.
      *
      * @return this list of options
      * @since 1.5.12

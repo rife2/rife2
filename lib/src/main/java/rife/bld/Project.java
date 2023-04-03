@@ -1204,7 +1204,7 @@ public class Project extends BuildExecutor {
             compileJavacOptions = new CompileOptions();
         }
         if (javaRelease != null) {
-            javadocOptions.release(javaRelease);
+            compileJavacOptions.release(javaRelease);
         }
         return compileJavacOptions;
     }
