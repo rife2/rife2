@@ -679,7 +679,7 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Retrieves the dependency set for a particular scope, intializing it
+     * Retrieves the dependency set for a particular scope, initializing it
      * if it doesn't exist yet.
      *
      * @param scope the scope to retrieve dependencies for
@@ -700,6 +700,48 @@ public class Project extends BuildExecutor {
      */
     public Dependency dependency(String groupId, String artifactId) {
         return new Dependency(groupId, artifactId);
+    }
+
+    /**
+     * Creates a new dependency instance.
+     *
+     * @param groupId    the dependency group identifier
+     * @param artifactId the dependency artifact identifier
+     * @param version    the dependency version
+     * @return a newly created {@code Dependency} instance
+     * @since 1.5.16
+     */
+    public Dependency dependency(String groupId, String artifactId, String version) {
+        return new Dependency(groupId, artifactId, version(version));
+    }
+
+    /**
+     * Creates a new dependency instance.
+     *
+     * @param groupId    the dependency group identifier
+     * @param artifactId the dependency artifact identifier
+     * @param version    the dependency version
+     * @param classifier the dependency classifier
+     * @return a newly created {@code Dependency} instance
+     * @since 1.5.16
+     */
+    public Dependency dependency(String groupId, String artifactId, String version, String classifier) {
+        return new Dependency(groupId, artifactId, version(version), classifier);
+    }
+
+    /**
+     * Creates a new dependency instance.
+     *
+     * @param groupId    the dependency group identifier
+     * @param artifactId the dependency artifact identifier
+     * @param version    the dependency version
+     * @param classifier the dependency classifier
+     * @param type       the dependency type
+     * @return a newly created {@code Dependency} instance
+     * @since 1.5.16
+     */
+    public Dependency dependency(String groupId, String artifactId, String version, String classifier, String type) {
+        return new Dependency(groupId, artifactId, version(version), classifier, type);
     }
 
     /**
