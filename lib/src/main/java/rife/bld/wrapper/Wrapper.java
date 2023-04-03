@@ -35,6 +35,7 @@ public class Wrapper {
     static final String RIFE2_FILENAME = "rife2-${version}.jar";
     static final String RIFE2_SOURCES_FILENAME = "rife2-${version}-sources.jar";
     static final String RIFE_VERSION = "RIFE_VERSION";
+    static final String BLD_BUILD_HASH = "bld-build.hash";
     static final String WRAPPER_PREFIX = "bld-wrapper";
     static final String WRAPPER_PROPERTIES = WRAPPER_PREFIX + ".properties";
     static final String WRAPPER_JAR = WRAPPER_PREFIX + ".jar";

@@ -62,6 +62,7 @@ public class WrapperExtensionResolver {
             digest.update(fingerprint.getBytes(StandardCharsets.UTF_8));
             return StringUtils.encodeHexLower(digest.digest());
         } catch (NoSuchAlgorithmException e) {
+            // should not happen
             throw new RuntimeException(e);
         }
     }
@@ -154,7 +155,8 @@ public class WrapperExtensionResolver {
 
     private void purgeExtensionDependencies(Set<String> filenames) {
         for (var file : destinationDirectory_.listFiles()) {
-            if (file.getName().startsWith(Wrapper.WRAPPER_PREFIX)) {
+            if (file.getName().startsWith(Wrapper.WRAPPER_PREFIX) ||
+                file.getName().equals(Wrapper.BLD_BUILD_HASH)) {
                 continue;
             }
             if (!filenames.contains(file.getName())) {

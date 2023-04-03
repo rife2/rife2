@@ -9,8 +9,14 @@ import rife.bld.help.*;
 import rife.bld.operations.*;
 import rife.bld.publish.PublishInfo;
 import rife.tools.FileUtils;
+import rife.tools.StringEncryptor;
+import rife.tools.StringUtils;
+import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.jar.Attributes;
 import java.util.regex.Pattern;
@@ -196,6 +202,13 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     protected String uberJarMainClass = null;
+    /**
+     * Indicates whether dependencies should be automatically downloaded and purged when changes are detected.
+     *
+     * @see #autoDownloadPurge()
+     * @since 1.5.16
+     */
+    protected Boolean autoDownloadPurge = null;
     /**
      * Indicates whether sources should be downloaded for the dependencies.
      *
@@ -1460,6 +1473,16 @@ public class Project extends BuildExecutor {
     }
 
     /**
+     * Indicates whether dependencies should be automatically downloaded and purged when changes are detected.
+     * By default, returns {@code false}.
+     *
+     * @since 1.5.6
+     */
+    public boolean autoDownloadPurge() {
+        return Objects.requireNonNullElse(autoDownloadPurge, Boolean.FALSE);
+    }
+
+    /**
      * Returns whether sources should be downloaded for the dependencies.
      * By default, returns {@code false}.
      *
@@ -1667,4 +1690,90 @@ public class Project extends BuildExecutor {
         paths.add(buildTestDirectory().getAbsolutePath());
         return paths;
     }
+
+    @Override
+    public int execute(String[] arguments) {
+        if (autoDownloadPurge()) {
+            performAutoDownloadPurge();
+        }
+
+        return super.execute(arguments);
+    }
+
+    private static final String BLD_BUILD_HASH = "bld-build.hash";
+
+    private void performAutoDownloadPurge() {
+        // verify and update the fingerprint hash file,
+        // don't download and purge if the hash is identical
+        var hash_file = new File(libBldDirectory(), BLD_BUILD_HASH);
+        var hash = createHash();
+        if (validateHash(hash_file, hash)) {
+            return;
+        }
+
+        try {
+            download();
+            purge();
+
+            writeHash(hash_file, hash);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String createHash() {
+        var finger_print = new StringBuilder();
+        for (var repository : repositories()) {
+            finger_print.append(repository.toString());
+            finger_print.append("\n");
+        }
+        for (var entry : dependencies().entrySet()) {
+            finger_print.append(entry.getKey());
+            finger_print.append("\n");
+            if (entry.getValue() != null) {
+                for (var dependency : entry.getValue()) {
+                    finger_print.append(dependency.toString());
+                    finger_print.append("\n");
+                }
+            }
+        }
+        finger_print.append(downloadSources());
+        finger_print.append("\n");
+        finger_print.append(downloadJavadoc());
+        finger_print.append("\n");
+
+        try {
+            var digest = MessageDigest.getInstance("SHA-1");
+            digest.update(finger_print.toString().getBytes(StandardCharsets.UTF_8));
+            return StringUtils.encodeHexLower(digest.digest());
+        } catch (NoSuchAlgorithmException e) {
+            // should not happen
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean validateHash(File hashFile, String hash) {
+        try {
+            if (hashFile.exists()) {
+                var current_hash = FileUtils.readString(hashFile);
+                if (current_hash.equals(hash)) {
+                    return true;
+                }
+                hashFile.delete();
+            }
+            return false;
+        } catch (FileUtilsErrorException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void writeHash(File hashFile, String hash) {
+        try {
+            hashFile.getParentFile().mkdirs();
+            FileUtils.writeString(hash, hashFile);
+        } catch (FileUtilsErrorException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

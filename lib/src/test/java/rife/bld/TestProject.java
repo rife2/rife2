@@ -5,13 +5,18 @@
 package rife.bld;
 
 import org.junit.jupiter.api.Test;
+import rife.Version;
 import rife.bld.dependencies.VersionNumber;
 import rife.tools.FileUtils;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static rife.bld.dependencies.Repository.MAVEN_CENTRAL;
+import static rife.bld.dependencies.Repository.SONATYPE_SNAPSHOTS;
+import static rife.bld.dependencies.Scope.*;
 
 public class TestProject {
     @Test
@@ -133,7 +138,6 @@ public class TestProject {
         assertNotNull(project.testClasspath());
     }
 
-
     static class CustomProject extends Project {
         StringBuilder result_;
 
@@ -215,18 +219,153 @@ public class TestProject {
     void testCommandMatch()
     throws Exception {
         var tmp = Files.createTempDirectory("test").toFile();
-        var result = new StringBuilder();
-        var project = new CustomProjectLambda(tmp, result);
-        project.execute(new String[]{"ne", "nc", "n"});
-        assertEquals("newcommand2" +
-                     "newcommand2" +
-                     "newcommand2", result.toString());
-
-        result = new StringBuilder();
-        project.execute(new String[]{"c"});
-        assertEquals("", result.toString());
-
         try {
+            var result = new StringBuilder();
+            var project = new CustomProjectLambda(tmp, result);
+            project.execute(new String[]{"ne", "nc", "n"});
+            assertEquals("newcommand2" +
+                "newcommand2" +
+                "newcommand2", result.toString());
+
+            result = new StringBuilder();
+            project.execute(new String[]{"c"});
+            assertEquals("", result.toString());
+        } finally {
+            FileUtils.deleteDirectory(tmp);
+        }
+    }
+
+    static class CustomProjectAutoPurge extends Project {
+        CustomProjectAutoPurge(File tmp) {
+            workDirectory = tmp;
+            pkg = "test.pkg";
+            name = "my_project";
+            version = new VersionNumber(0, 0, 1);
+
+            repositories = List.of(MAVEN_CENTRAL);
+            scope(compile)
+                .include(dependency("com.uwyn.rife2", "rife2", version(1,5,11)));
+            scope(test)
+                .include(dependency("org.jsoup", "jsoup", version(1,15,4)))
+                .include(dependency("org.junit.jupiter", "junit-jupiter", version(5,9,2)))
+                .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1,9,2)));
+            scope(standalone)
+                .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,14)))
+                .include(dependency("org.eclipse.jetty", "jetty-servlet", version(11,0,14)))
+                .include(dependency("org.slf4j", "slf4j-simple", version(2,0,7)));
+        }
+
+        public void enableAutoDownloadPurge() {
+            autoDownloadPurge = true;
+        }
+
+        public void increaseRife2Version() {
+            scope(compile).clear();
+            scope(compile)
+                .include(dependency("com.uwyn.rife2", "rife2", version(1,5,12)));
+        }
+
+        public void increaseRife2VersionMore() {
+            scope(compile).clear();
+            scope(compile)
+                .include(dependency("com.uwyn.rife2", "rife2", version(1,5,15)));
+        }
+    }
+
+    @Test
+    void testAutoDownloadPurge()
+    throws Exception {
+        var tmp = Files.createTempDirectory("test").toFile();
+        try {
+            var project = new CustomProjectAutoPurge(tmp);
+            project.execute(new String[]{"version"});
+
+            assertEquals("", FileUtils.generateDirectoryListing(tmp));
+
+            project = new CustomProjectAutoPurge(tmp);
+            project.enableAutoDownloadPurge();
+            project.execute(new String[]{"version"});
+
+            assertEquals("""
+                /lib
+                /lib/bld
+                /lib/bld/bld-build.hash
+                /lib/compile
+                /lib/compile/rife2-1.5.11.jar
+                /lib/runtime
+                /lib/test
+                /lib/test/apiguardian-api-1.1.2.jar
+                /lib/test/jsoup-1.15.4.jar
+                /lib/test/junit-jupiter-5.9.2.jar
+                /lib/test/junit-jupiter-api-5.9.2.jar
+                /lib/test/junit-jupiter-engine-5.9.2.jar
+                /lib/test/junit-jupiter-params-5.9.2.jar
+                /lib/test/junit-platform-commons-1.9.2.jar
+                /lib/test/junit-platform-console-standalone-1.9.2.jar
+                /lib/test/junit-platform-engine-1.9.2.jar
+                /lib/test/opentest4j-1.2.0.jar""", FileUtils.generateDirectoryListing(tmp));
+
+            FileUtils.deleteDirectory(new File(tmp, "lib/compile"));
+            FileUtils.deleteDirectory(new File(tmp, "lib/runtime"));
+            FileUtils.deleteDirectory(new File(tmp, "lib/test"));
+            assertEquals("""
+                /lib
+                /lib/bld
+                /lib/bld/bld-build.hash""", FileUtils.generateDirectoryListing(tmp));
+
+            project = new CustomProjectAutoPurge(tmp);
+            project.enableAutoDownloadPurge();
+            project.execute(new String[]{"version"});
+            assertEquals("""
+                /lib
+                /lib/bld
+                /lib/bld/bld-build.hash""", FileUtils.generateDirectoryListing(tmp));
+
+            project = new CustomProjectAutoPurge(tmp);
+            project.enableAutoDownloadPurge();
+            project.increaseRife2Version();
+            project.execute(new String[]{"version"});
+            assertEquals("""
+                /lib
+                /lib/bld
+                /lib/bld/bld-build.hash
+                /lib/compile
+                /lib/compile/rife2-1.5.12.jar
+                /lib/runtime
+                /lib/test
+                /lib/test/apiguardian-api-1.1.2.jar
+                /lib/test/jsoup-1.15.4.jar
+                /lib/test/junit-jupiter-5.9.2.jar
+                /lib/test/junit-jupiter-api-5.9.2.jar
+                /lib/test/junit-jupiter-engine-5.9.2.jar
+                /lib/test/junit-jupiter-params-5.9.2.jar
+                /lib/test/junit-platform-commons-1.9.2.jar
+                /lib/test/junit-platform-console-standalone-1.9.2.jar
+                /lib/test/junit-platform-engine-1.9.2.jar
+                /lib/test/opentest4j-1.2.0.jar""", FileUtils.generateDirectoryListing(tmp));
+
+            project = new CustomProjectAutoPurge(tmp);
+            project.enableAutoDownloadPurge();
+            project.increaseRife2VersionMore();
+            project.execute(new String[]{"version"});
+            assertEquals("""
+                /lib
+                /lib/bld
+                /lib/bld/bld-build.hash
+                /lib/compile
+                /lib/compile/rife2-1.5.15.jar
+                /lib/runtime
+                /lib/test
+                /lib/test/apiguardian-api-1.1.2.jar
+                /lib/test/jsoup-1.15.4.jar
+                /lib/test/junit-jupiter-5.9.2.jar
+                /lib/test/junit-jupiter-api-5.9.2.jar
+                /lib/test/junit-jupiter-engine-5.9.2.jar
+                /lib/test/junit-jupiter-params-5.9.2.jar
+                /lib/test/junit-platform-commons-1.9.2.jar
+                /lib/test/junit-platform-console-standalone-1.9.2.jar
+                /lib/test/junit-platform-engine-1.9.2.jar
+                /lib/test/opentest4j-1.2.0.jar""", FileUtils.generateDirectoryListing(tmp));
         } finally {
             FileUtils.deleteDirectory(tmp);
         }
