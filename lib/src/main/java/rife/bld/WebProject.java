@@ -52,11 +52,10 @@ public class WebProject extends Project {
     public void uberjar()
     throws Exception {
         jar();
-        uberJarOperation_.executeOnce(o -> {
-            o.fromProject(this);
-            o.sourceDirectories(List.of(new NamedFile("webapp", srcMainWebappDirectory())));
-            o.jarSourceFiles().addAll(standaloneClasspathJars());
-
+        uberJarOperation_.executeOnce(() -> {
+            uberJarOperation_.fromProject(this);
+            uberJarOperation_.sourceDirectories(List.of(new NamedFile("webapp", srcMainWebappDirectory())));
+            uberJarOperation_.jarSourceFiles().addAll(standaloneClasspathJars());
         });
     }
 
@@ -69,7 +68,7 @@ public class WebProject extends Project {
     public void war()
     throws Exception {
         jar();
-        warOperation_.executeOnce(o -> o.fromProject(this));
+        warOperation_.executeOnce(() -> warOperation_.fromProject(this));
     }
 
     /**
@@ -85,10 +84,10 @@ public class WebProject extends Project {
         jarJavadoc();
         uberjar();
         war();
-        publishOperation_.executeOnce(o -> {
-            o.fromProject(this);
-            o.artifacts().add(new PublishArtifact(new File(buildDistDirectory(), uberJarFileName()), "uber", "jar"));
-            o.artifacts().add(new PublishArtifact(new File(buildDistDirectory(), warFileName()), "", "war"));
+        publishOperation_.executeOnce(() -> {
+            publishOperation_.fromProject(this);
+            publishOperation_.artifacts().add(new PublishArtifact(new File(buildDistDirectory(), uberJarFileName()), "uber", "jar"));
+            publishOperation_.artifacts().add(new PublishArtifact(new File(buildDistDirectory(), warFileName()), "", "war"));
         });
     }
 

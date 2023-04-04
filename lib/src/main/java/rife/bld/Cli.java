@@ -29,7 +29,7 @@ public class Cli extends BuildExecutor {
     @BuildCommand(help = CreateRife2Help.class)
     public void create()
     throws Exception {
-        createRife2Operation_.executeOnce(o -> o.fromArguments(arguments()));
+        createRife2Operation_.executeOnce(() -> createRife2Operation_.fromArguments(arguments()));
     }
 
     /**
@@ -41,7 +41,7 @@ public class Cli extends BuildExecutor {
     @BuildCommand(value = "create-blank", help = CreateBlankHelp.class)
     public void createBlank()
     throws Exception {
-        createBlankOperation_.executeOnce(o -> o.fromArguments(arguments()));
+        createBlankOperation_.executeOnce(() -> createBlankOperation_.fromArguments(arguments()));
     }
 
     /**
@@ -53,7 +53,7 @@ public class Cli extends BuildExecutor {
     @BuildCommand(help = UpgradeHelp.class)
     public void upgrade()
     throws Exception {
-        upgradeOperation_.executeOnce(o -> o.fromArguments(arguments()));
+        upgradeOperation_.executeOnce(() -> upgradeOperation_.fromArguments(arguments()));
     }
 
     /**
@@ -64,7 +64,7 @@ public class Cli extends BuildExecutor {
     @BuildCommand(help = VersionHelp.class)
     public void version()
     throws Exception {
-        versionOperation_.executeOnce(o -> o.fromArguments(arguments()));
+        versionOperation_.executeOnce(() -> versionOperation_.fromArguments(arguments()));
     }
 
     public static void main(String[] arguments)

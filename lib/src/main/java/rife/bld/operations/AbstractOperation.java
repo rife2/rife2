@@ -44,15 +44,27 @@ public abstract class AbstractOperation<T extends AbstractOperation<T>> {
 
     /**
      * Ensures that this operation instance is executed once and only once.
+     *
+     * @throws Exception when an exception was thrown by the {@link #execute()} call
+     * @see #executeOnce(Runnable)
+     * @since 1.5.17
+     */
+    public void executeOnce()
+    throws Exception {
+        executeOnce(null);
+    }
+
+    /**
+     * Ensures that this operation instance is executed once and only once.
      * <p>
      * A setup lambda can be provided that is called when the only execution takes place.
      *
-     * @param setup the setup lambda that will be called with the only execution, the instance
-     *              of this operation will be provided as the lambda argument
+     * @param setup the setup lambda that will be called with the only execution
      * @throws Exception when an exception was thrown by the {@link #execute()} call
-     * @since 1.5.10
+     * @see #executeOnce()
+     * @since 1.5.17
      */
-    public void executeOnce(Consumer<T> setup)
+    public void executeOnce(Runnable setup)
     throws Exception {
         if (executed_) {
             return;
@@ -60,7 +72,7 @@ public abstract class AbstractOperation<T extends AbstractOperation<T>> {
         executed_ = true;
 
         if (setup != null) {
-            setup.accept((T)this);
+            setup.run();
         }
         execute();
     }
