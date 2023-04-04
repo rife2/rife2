@@ -85,9 +85,9 @@ public class TestMetadataBuilder {
               <artifactId></artifactId>
               <versioning>
                 <versions>
-                  <version>6.0.1</version>
-                  <version>3.0.2</version>
                   <version>1.0.3</version>
+                  <version>3.0.2</version>
+                  <version>6.0.1</version>
                 </versions>
               </versioning>
             </metadata>
@@ -112,10 +112,10 @@ public class TestMetadataBuilder {
                 <latest>1.2.3-SNAPSHOT</latest>
                 <release>1.2.3-SNAPSHOT</release>
                 <versions>
-                  <version>1.2.3-SNAPSHOT</version>
-                  <version>6.0.1</version>
-                  <version>3.0.2</version>
                   <version>1.0.3</version>
+                  <version>1.2.3-SNAPSHOT</version>
+                  <version>3.0.2</version>
+                  <version>6.0.1</version>
                 </versions>
                 <lastUpdated>20230327125617</lastUpdated>
               </versioning>

@@ -24,7 +24,7 @@ public class MetadataBuilder {
 
     private PublishInfo info_ = null;
     private ZonedDateTime timestamp_ = null;
-    private final SortedSet<VersionNumber> otherVersions_ = new TreeSet<>(Collections.reverseOrder());
+    private final Set<VersionNumber> otherVersions_ = new HashSet<>();
     private ZonedDateTime snapshotTimestamp_ = null;
     private Integer snapshotBuildNumber_ = null;
     private boolean snapshotLocal_ = false;
@@ -228,19 +228,17 @@ public class MetadataBuilder {
                 t.setBlock("snapshotVersions-tag");
             }
         } else {
+            var versions = new TreeSet<>(otherVersions());
             if (info != null && info.version() != null) {
                 t.setValueEncoded("latestVersion", Objects.requireNonNullElse(info.version(), ""));
                 t.setValueEncoded("releaseVersion", Objects.requireNonNullElse(info.version(), ""));
                 t.setBlock("versionLatest-tag");
 
-                t.setValueEncoded("version", info.version());
-                t.appendBlock("versions", "version");
+                versions.add(info.version());
             }
-            for (var version : otherVersions()) {
-                if (info == null || info.version() == null || !version.equals(info.version())) {
-                    t.setValueEncoded("version", version);
-                    t.appendBlock("versions", "version");
-                }
+            for (var version : versions) {
+                t.setValueEncoded("version", version);
+                t.appendBlock("versions", "version");
             }
             if (t.isValueSet("versions")) {
                 t.setBlock("versions-tag");
