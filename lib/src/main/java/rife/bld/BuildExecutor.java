@@ -58,9 +58,12 @@ public class BuildExecutor {
      */
     public static HierarchicalProperties setupProperties(File workDirectory) {
         var system_properties = HierarchicalProperties.createSystemInstance();
+
+        var java_properties = system_properties;
+        system_properties = java_properties.getParent();
+
         HierarchicalProperties bld_properties = null;
         HierarchicalProperties local_properties = null;
-        final HierarchicalProperties properties = new HierarchicalProperties();
 
         var bld_properties_file = new File(RIFE2_USER_DIR, BLD_PROPERTIES);
         if (bld_properties_file.exists() && bld_properties_file.isFile() && bld_properties_file.canRead()) {
@@ -90,10 +93,12 @@ public class BuildExecutor {
             }
         }
 
-        properties.parent(
+        java_properties.parent(
             Objects.requireNonNullElse(local_properties,
                 Objects.requireNonNullElse(bld_properties, system_properties)));
 
+        final HierarchicalProperties properties = new HierarchicalProperties();
+        properties.parent(java_properties);
         return properties;
     }
 
@@ -106,6 +111,40 @@ public class BuildExecutor {
      */
     public HierarchicalProperties properties() {
         return properties_;
+    }
+
+    /**
+     * Retrieve a property from the {@link #properties()}.
+     *
+     * @param name the name of the property
+     * @return the requested property; or {@code null} if it doesn't exist
+     * @since 1.5.15
+     */
+    public String property(String name) {
+        return properties().getValueString(name);
+    }
+
+    /**
+     * Retrieve a property from the {@link #properties()} with a default value.
+     *
+     * @param name         the name of the property
+     * @param defaultValue the value that should be used as a fallback
+     * @return the requested property; or the default value if it doesn't exist
+     * @since 1.5.15
+     */
+    public String property(String name, String defaultValue) {
+        return properties().getValueString(name, defaultValue);
+    }
+
+    /**
+     * Checks for the existence of a property in {@link #properties()}.
+     *
+     * @param name the name of the property
+     * @return {@code true} if the property exists; or {@code false} otherwise
+     * @since 1.5.15
+     */
+    public boolean hasProperty(String name) {
+        return properties().contains(name);
     }
 
     /**

@@ -60,8 +60,11 @@ public class HierarchicalProperties {
      * @since 1.4.1
      */
     public static HierarchicalProperties createSystemInstance() {
+        var env_properties = new HierarchicalProperties();
+        env_properties.putAll(System.getenv());
+
         var system_properties = new HierarchicalProperties();
-        system_properties.putAll(System.getenv());
+        system_properties.parent(env_properties);
         if (system_properties.contains(SYSTEM_PROPERTY_FILE_NAME)) {
             var properties_path = Convert.toString(system_properties.get(SYSTEM_PROPERTY_FILE_NAME)).trim();
             if (!properties_path.isEmpty()) {
@@ -79,8 +82,11 @@ public class HierarchicalProperties {
                 }
             }
         }
-        system_properties.putAll(System.getProperties());
-        return system_properties;
+
+        var java_properties = new HierarchicalProperties();
+        java_properties.parent(system_properties);
+        java_properties.putAll(System.getProperties());
+        return java_properties;
     }
 
     private HierarchicalProperties(HierarchicalProperties shadow) {
@@ -109,7 +115,7 @@ public class HierarchicalProperties {
         var original = this;
         var shadow = result;
         while (original.getParent() != null &&
-               original.getParent() != limit) {
+            original.getParent() != limit) {
             shadow.setParent(new HierarchicalProperties(original.getParent()));
             original = original.getParent();
             shadow = shadow.getParent();
