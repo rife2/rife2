@@ -77,21 +77,15 @@ public record Repository(String location, String username, String password) {
             return new Repository(location, username, password);
         }
 
-        if (locationOrName.equalsIgnoreCase("MAVEN_LOCAL")) {
-            return Repository.MAVEN_LOCAL;
-        } else if (locationOrName.equalsIgnoreCase("MAVEN_CENTRAL")) {
-            return Repository.MAVEN_CENTRAL;
-        } else if (locationOrName.equalsIgnoreCase("SONATYPE_RELEASES")) {
-            return Repository.SONATYPE_RELEASES;
-        } else if (locationOrName.equalsIgnoreCase("SONATYPE_SNAPSHOTS")) {
-            return Repository.SONATYPE_SNAPSHOTS;
-        } else if (locationOrName.equalsIgnoreCase("APACHE")) {
-            return Repository.APACHE;
-        } else if (locationOrName.equalsIgnoreCase("RIFE2")) {
-            return Repository.RIFE2;
-        }
-
-        return new Repository(locationOrName);
+        return switch (locationOrName) {
+            case "MAVEN_LOCAL" -> Repository.MAVEN_LOCAL;
+            case "MAVEN_CENTRAL" -> Repository.MAVEN_CENTRAL;
+            case "SONATYPE_RELEASES" -> Repository.SONATYPE_RELEASES;
+            case "SONATYPE_SNAPSHOTS" -> Repository.SONATYPE_SNAPSHOTS;
+            case "APACHE" -> Repository.APACHE;
+            case "RIFE2" -> Repository.RIFE2;
+            default -> new Repository(locationOrName);
+        };
     }
 
     /**
