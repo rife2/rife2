@@ -103,7 +103,7 @@ Out-of-container testing is a first-class citizen in RIFE2, directly interacting
 with your `Site` class to simulate full request-response interactions,
 without having to spin up a servlet container.
 
-Let's test the example above with JUnit 5:
+This is how you could test the example above with JUnit 5:
 
 ```java
 class HelloTest {
@@ -113,41 +113,6 @@ class HelloTest {
     }
 }
 ```
-
-Here's an example snippet that should help you compile and run this example with
-Gradle. Please make sure to adapt the artifact versions to the latest ones.
-
-```kotlin
-application {
-    mainClass.set("HelloWorld")
-}
-
-dependencies {
-    implementation("com.uwyn.rife2:rife2:1.5.17")
-    runtimeOnly("org.eclipse.jetty:jetty-server:11.0.14")
-    runtimeOnly("org.eclipse.jetty:jetty-servlet:11.0.14")
-    implementation("org.slf4j:slf4j-simple:2.0.7")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-    testImplementation("org.jsoup:jsoup:1.15.4")
-}
-```
-
-RIFE2 doesn't publish dependencies for _jsoup_ nor _Jetty_ because neither of
-them should be packaged with a production deployment.
-
-You will want to:
-* depend on `org.jsoup:jsoup` if you want to parse HTML pages in RIFE2's web
-  testing API
-* depend on `org.eclipse.jetty` if you're launching the embedded server like in
-  these examples
-
-RIFE2 also provides a GitHub template repository to help you get started, you
-can find it here: https://github.com/rife2/rife2-hello
-
-Simply click `Use this template` and you're ready to go!
-
-Once you've got everything set up, give it a try and visit
-[http://localhost:8080/hello](http://localhost:8080/hello)
 
 ## Type-safe Links and URLs
 
