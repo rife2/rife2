@@ -150,11 +150,10 @@ public class Wrapper {
                 bld.downloadExtensionJavadoc=false
                 bld.downloadExtensionSources=true
                 bld.extensions=
-                bld.repositories=${repository}
+                bld.repositories=MAVEN_CENTRAL,RIFE2
                 rife2.downloadLocation=
                 rife2.version=${version}
                 """
-                .replace("${repository}", MAVEN_CENTRAL)
                 .replace("${version}", version);
 
             Files.createDirectories(file.getAbsoluteFile().toPath().getParent());
