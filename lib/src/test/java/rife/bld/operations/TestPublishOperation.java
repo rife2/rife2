@@ -4,8 +4,9 @@
  */
 package rife.bld.operations;
 
-import com.reposilite.ReposiliteLauncherKt;
 import org.json.JSONObject;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import rife.bld.Project;
 import rife.bld.blueprints.BlankProjectBlueprint;
@@ -25,6 +26,28 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPublishOperation {
+    static File reposiliteJar_ = null;
+
+    @BeforeAll
+    static void downloadReposilite()
+    throws Exception {
+        reposiliteJar_ = File.createTempFile("reposilite", "jar");
+        reposiliteJar_.deleteOnExit();
+        System.out.print("Downloading: https://maven.reposilite.com/releases/com/reposilite/reposilite/3.4.0/reposilite-3.4.0-all.jar ...");
+        System.out.flush();
+        FileUtils.copy(new URL("https://maven.reposilite.com/releases/com/reposilite/reposilite/3.4.0/reposilite-3.4.0-all.jar").openStream(), reposiliteJar_);
+        System.out.println("done");
+    }
+
+    @AfterAll
+    static void deleteReposilite()
+    throws Exception {
+        if (reposiliteJar_ != null) {
+            reposiliteJar_.delete();
+            reposiliteJar_ = null;
+        }
+    }
+
     @Test
     void testInstantiation() {
         var operation = new PublishOperation();
@@ -78,11 +101,13 @@ public class TestPublishOperation {
         var tmp2 = Files.createTempDirectory("test2").toFile();
         var tmp_reposilite = Files.createTempDirectory("test").toFile();
         try {
-            var repository = ReposiliteLauncherKt.createWithParameters(
+            var process_builder = new ProcessBuilder(
+                "java", "-jar", reposiliteJar_.getAbsolutePath(),
                 "-wd", tmp_reposilite.getAbsolutePath(),
                 "-p", "8081",
                 "--token", "manager:passwd");
-            repository.launch();
+            process_builder.directory(tmp_reposilite);
+            var process = process_builder.start();
 
             // wait for full startup
             Thread.sleep(2000);
@@ -226,7 +251,7 @@ public class TestPublishOperation {
             assertEquals("myapp-1.0.0.pom.sha512", version_files_json2.getJSONObject(8).get("name"));
             assertEquals("myapp-1.0.0.pom", version_files_json2.getJSONObject(9).get("name"));
 
-            repository.shutdown();
+            process.destroy();
         } finally {
             FileUtils.deleteDirectory(tmp_reposilite);
             FileUtils.deleteDirectory(tmp2);
@@ -342,11 +367,13 @@ public class TestPublishOperation {
         var tmp2 = Files.createTempDirectory("test2").toFile();
         var tmp_reposilite = Files.createTempDirectory("test").toFile();
         try {
-            var repository = ReposiliteLauncherKt.createWithParameters(
+            var process_builder = new ProcessBuilder(
+                "java", "-jar", reposiliteJar_.getAbsolutePath(),
                 "-wd", tmp_reposilite.getAbsolutePath(),
                 "-p", "8081",
                 "--token", "manager:passwd");
-            repository.launch();
+            process_builder.directory(tmp_reposilite);
+            var process = process_builder.start();
 
             // wait for full startup
             Thread.sleep(2000);
@@ -510,7 +537,7 @@ public class TestPublishOperation {
             assertEquals(1, maven_snapshot_metadata2.getVersions().size());
             assertTrue(maven_snapshot_metadata2.getVersions().contains(create_operation2.project().version()));
 
-            repository.shutdown();
+            process.destroy();
         } finally {
             FileUtils.deleteDirectory(tmp_reposilite);
             FileUtils.deleteDirectory(tmp2);
