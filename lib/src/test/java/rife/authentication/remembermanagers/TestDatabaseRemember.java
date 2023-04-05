@@ -32,6 +32,8 @@ public class TestDatabaseRemember {
             assertTrue(remember.install());
         } catch (RememberManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
+        } finally {
+            remember.remove();
         }
     }
 
@@ -40,6 +42,7 @@ public class TestDatabaseRemember {
     void testRemove(Datasource datasource) {
         var remember = DatabaseRememberFactory.instance(datasource);
 
+        remember.install();
         try {
             assertTrue(remember.remove());
         } catch (RememberManagerException e) {

@@ -32,6 +32,8 @@ public class TestDatabaseSessions {
             assertTrue(sessions.install());
         } catch (SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
+        } finally {
+            sessions.remove();
         }
     }
 
@@ -40,6 +42,7 @@ public class TestDatabaseSessions {
     void testRemove(Datasource datasource) {
         var sessions = DatabaseSessionsFactory.instance(datasource);
 
+        sessions.install();
         try {
             assertTrue(sessions.remove());
         } catch (SessionManagerException e) {

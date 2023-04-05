@@ -110,7 +110,7 @@ public class TestPublishOperation {
             var process = process_builder.start();
 
             // wait for full startup
-            Thread.sleep(2000);
+            Thread.sleep(4000);
 
             // verify the version doesn't exist
             assertThrows(FileUtilsErrorException.class, () -> FileUtils.readString(new URL("http://localhost:8081/api/maven/details/releases/test/pkg/myapp")));
@@ -376,7 +376,7 @@ public class TestPublishOperation {
             var process = process_builder.start();
 
             // wait for full startup
-            Thread.sleep(2000);
+            Thread.sleep(4000);
 
             // verify the version doesn't exist
             assertThrows(FileUtilsErrorException.class, () -> FileUtils.readString(new URL("http://localhost:8081/api/maven/details/releases/test/pkg/myapp")));
