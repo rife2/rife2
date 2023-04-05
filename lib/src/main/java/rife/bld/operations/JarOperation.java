@@ -43,7 +43,7 @@ public class JarOperation extends AbstractOperation<JarOperation> {
         executeCreateJarArchive();
 
         if (!silent()) {
-            System.out.println("The jar archive was created at '" + new File(destinationDirectory(), destinationFileName()) + "'");
+            System.out.println("The jar archive was created at '" + destinationFile() + "'");
         }
     }
 
@@ -377,6 +377,16 @@ public class JarOperation extends AbstractOperation<JarOperation> {
      */
     public String destinationFileName() {
         return destinationFileName_;
+    }
+
+    /**
+     * Retrieves the destination file where the jar archive will be created.
+     *
+     * @return the jar archive's destination file
+     * @since 1.5.18
+     */
+    public File destinationFile() {
+        return new File(destinationDirectory(), destinationFileName());
     }
 
     /**

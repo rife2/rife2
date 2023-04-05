@@ -65,6 +65,7 @@ public class TestJarOperation {
         assertTrue(operation1.sourceFiles().contains(source_file2));
         assertEquals(destination_directory, operation1.destinationDirectory());
         assertEquals(destination_fileName, operation1.destinationFileName());
+        assertEquals(new File(destination_directory, destination_fileName), operation1.destinationFile());
         assertTrue(operation1.included().contains(included1));
         assertTrue(operation1.included().contains(included2));
         assertTrue(operation1.excluded().contains(excluded1));

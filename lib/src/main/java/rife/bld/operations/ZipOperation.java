@@ -42,7 +42,7 @@ public class ZipOperation extends AbstractOperation<ZipOperation> {
         executeCreateZipArchive();
 
         if (!silent()) {
-            System.out.println("The zip archive was created at '" + new File(destinationDirectory(), destinationFileName()) + "'");
+            System.out.println("The zip archive was created at '" + destinationFile() + "'");
         }
     }
 
@@ -305,6 +305,16 @@ public class ZipOperation extends AbstractOperation<ZipOperation> {
      */
     public String destinationFileName() {
         return destinationFileName_;
+    }
+
+    /**
+     * Retrieves the destination file where the zip archive will be created.
+     *
+     * @return the zip archive's destination file
+     * @since 1.5.18
+     */
+    public File destinationFile() {
+        return new File(destinationDirectory(), destinationFileName());
     }
 
     /**
