@@ -9,6 +9,7 @@ package rife.authentication.sessionmanagers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.authentication.exceptions.SessionManagerException;
+import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.database.TestDatasources;
 import rife.tools.ExceptionUtils;
@@ -38,6 +39,9 @@ public class TestPurgingDatabaseSessions {
         } catch (SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
+            sessions.setSessionDuration(RifeConfig.authentication().getSessionDuration());
+            sessions.setSessionPurgeFrequency(RifeConfig.authentication().getSessionPurgeFrequency());
+            sessions.setSessionPurgeScale(RifeConfig.authentication().getSessionPurgeScale());
             try {
                 sessions.remove();
             } catch (SessionManagerException e) {
@@ -73,6 +77,9 @@ public class TestPurgingDatabaseSessions {
         } catch (InterruptedException | SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
+            sessions.setSessionDuration(RifeConfig.authentication().getSessionDuration());
+            sessions.setSessionPurgeFrequency(RifeConfig.authentication().getSessionPurgeFrequency());
+            sessions.setSessionPurgeScale(RifeConfig.authentication().getSessionPurgeScale());
             try {
                 sessions.remove();
             } catch (SessionManagerException e) {

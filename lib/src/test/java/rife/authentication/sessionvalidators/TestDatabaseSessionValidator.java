@@ -16,6 +16,7 @@ import rife.authentication.exceptions.SessionManagerException;
 import rife.authentication.exceptions.SessionValidatorException;
 import rife.authentication.sessionmanagers.DatabaseSessions;
 import rife.authentication.sessionmanagers.DatabaseSessionsFactory;
+import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.database.TestDatasources;
 import rife.tools.ExceptionUtils;
@@ -69,6 +70,7 @@ public class TestDatabaseSessionValidator {
         } catch (InterruptedException | SessionValidatorException | SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
+            sessions.setSessionDuration(RifeConfig.authentication().getSessionDuration());
             try {
                 sessions.remove();
             } catch (SessionManagerException e) {
@@ -123,6 +125,7 @@ public class TestDatabaseSessionValidator {
             e.printStackTrace();
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
+            sessions.setSessionDuration(RifeConfig.authentication().getSessionDuration());
             try {
                 sessions.remove();
             } catch (SessionManagerException e) {
