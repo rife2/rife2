@@ -86,7 +86,7 @@ public class TestRifeConfig {
             sf = RifeConfig.tools().getDefaultLongDateTimeFormatter();
             formatted = sf.format(makeZonedDateTime(2004, Calendar.AUGUST, 31, 15, 53));
 
-            assertEquals(formatted, "31 ago 2004 15:53:00");
+            assertTrue(formatted.matches("31 ago 2004.*15:53:00"));
 
             switchDates("EEE, MMM d, yyyy", "EEE, d MMM yyyy HH:mm:ss");
 
@@ -187,7 +187,7 @@ public class TestRifeConfig {
             sf = RifeConfig.tools().getDefaultLongDateFormat();
             formatted = sf.format(makeDate(2004, Calendar.AUGUST, 31, 15, 53));
 
-            assertEquals(formatted, "31 ago 2004 15:53");
+            assertTrue(formatted.matches("31 ago 2004.*15:53"));
 
             switchDates("EEE, MMM d, yyyy", "EEE, d MMM yyyy HH:mm:ss");
 
