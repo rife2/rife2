@@ -21,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestResourceFinderDirectories {
     public static String mainResourcesPath() {
-        return System.getenv("project.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources";
+        return "src" + File.separator + "main" + File.separator + "resources";
     }
 
     public static String testResourcesPath() {
-        return System.getenv("project.dir") + File.separator + "src" + File.separator + "test" + File.separator + "resources";
+        return "src" + File.separator + "test" + File.separator + "resources";
     }
 
     @Test
