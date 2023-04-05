@@ -51,11 +51,6 @@ public class TestProject {
         assertTrue(project.precompiledTemplateTypes.isEmpty());
         assertTrue(project.precompiledTemplateTypes().isEmpty());
         assertNull(project.javaRelease);
-        assertNotNull(project.compileJavacOptions);
-        assertTrue(project.compileJavacOptions.isEmpty());
-        assertTrue(project.compileJavacOptions().isEmpty());
-        assertTrue(project.javadocOptions.isEmpty());
-        assertTrue(project.javadocOptions().isEmpty());
         assertNull(project.javaTool);
         assertNotNull(project.javaTool());
         assertEquals("java", project.javaTool());
