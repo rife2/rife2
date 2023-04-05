@@ -9,7 +9,6 @@ import rife.bld.help.*;
 import rife.bld.operations.*;
 import rife.bld.publish.PublishInfo;
 import rife.tools.FileUtils;
-import rife.tools.StringEncryptor;
 import rife.tools.StringUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
@@ -294,6 +293,13 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     protected File srcTestJavaDirectory = null;
+    /**
+     * The test resources source code directory.
+     *
+     * @see #srcTestResourcesDirectory()
+     * @since 1.5.18
+     */
+    protected File srcTestResourcesDirectory = null;
     /**
      * The lib directory.
      *
@@ -932,6 +938,16 @@ public class Project extends BuildExecutor {
     }
 
     /**
+     * Returns the project test resources source code directory.
+     * Defaults to {@code "resources"} relative to {@link #srcTestDirectory()}.
+     *
+     * @since 1.5.18
+     */
+    public File srcTestResourcesDirectory() {
+        return Objects.requireNonNullElseGet(srcTestResourcesDirectory, () -> new File(srcTestDirectory(), "resources"));
+    }
+
+    /**
      * Returns the project test java source code directory.
      * Defaults to {@code "java"} relative to {@link #srcTestDirectory()}.
      *
@@ -1086,6 +1102,7 @@ public class Project extends BuildExecutor {
         srcMainResourcesTemplatesDirectory().mkdirs();
         srcTestDirectory().mkdirs();
         srcTestJavaDirectory().mkdirs();
+        srcTestResourcesDirectory().mkdirs();
         libDirectory().mkdirs();
         libBldDirectory().mkdirs();
         libCompileDirectory().mkdirs();
@@ -1687,6 +1704,7 @@ public class Project extends BuildExecutor {
     public List<String> testClasspath() {
         var paths = FileUtils.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars(), testClasspathJars());
         paths.add(srcMainResourcesDirectory().getAbsolutePath());
+        paths.add(srcTestResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
         paths.add(buildTestDirectory().getAbsolutePath());
         return paths;

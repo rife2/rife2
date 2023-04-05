@@ -486,7 +486,8 @@ public class TestPurgeOperation {
                     /src/main/resources
                     /src/main/resources/templates
                     /src/test
-                    /src/test/java""",
+                    /src/test/java
+                    /src/test/resources""",
                 FileUtils.generateDirectoryListing(tmp));
 
             new PurgeOperation()
@@ -525,7 +526,8 @@ public class TestPurgeOperation {
                     /src/main/resources
                     /src/main/resources/templates
                     /src/test
-                    /src/test/java""",
+                    /src/test/java
+                    /src/test/resources""",
                 FileUtils.generateDirectoryListing(tmp));
         } finally {
             FileUtils.deleteDirectory(tmp);

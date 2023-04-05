@@ -168,7 +168,8 @@ public class TestCreateRife2Operation {
                     /myapp/src/test/java
                     /myapp/src/test/java/com
                     /myapp/src/test/java/com/example
-                    /myapp/src/test/java/com/example/MyappTest\\.java""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
+                    /myapp/src/test/java/com/example/MyappTest\\.java
+                    /myapp/src/test/resources""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
 
             var compile_operation = new CompileOperation().fromProject(create_operation.project());
             compile_operation.execute();
@@ -278,7 +279,8 @@ public class TestCreateRife2Operation {
                     /myapp/src/test/java
                     /myapp/src/test/java/com
                     /myapp/src/test/java/com/example
-                    /myapp/src/test/java/com/example/MyappTest\\.java""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
+                    /myapp/src/test/java/com/example/MyappTest\\.java
+                    /myapp/src/test/resources""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
 
             var run_operation = new RunOperation().fromProject(create_operation.project());
             var executor = Executors.newSingleThreadScheduledExecutor();
@@ -366,7 +368,8 @@ public class TestCreateRife2Operation {
                     /yourthing/src/test/java
                     /yourthing/src/test/java/org
                     /yourthing/src/test/java/org/stuff
-                    /yourthing/src/test/java/org/stuff/YourthingTest.java""",
+                    /yourthing/src/test/java/org/stuff/YourthingTest.java
+                    /yourthing/src/test/resources""",
                 FileUtils.generateDirectoryListing(tmp));
 
             var compile_operation = new CompileOperation() {
@@ -526,7 +529,8 @@ public class TestCreateRife2Operation {
                 /myapp/src/test/java
                 /myapp/src/test/java/com
                 /myapp/src/test/java/com/example
-                /myapp/src/test/java/com/example/MyappTest\\.java""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
+                /myapp/src/test/java/com/example/MyappTest\\.java
+                /myapp/src/test/resources""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
 
             var run_operation = new RunOperation().fromProject(create_operation.project());
             var executor = Executors.newSingleThreadScheduledExecutor();
@@ -691,7 +695,8 @@ public class TestCreateRife2Operation {
                 /myapp/src/test/java
                 /myapp/src/test/java/com
                 /myapp/src/test/java/com/example
-                /myapp/src/test/java/com/example/MyappTest\\.java""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
+                /myapp/src/test/java/com/example/MyappTest\\.java
+                /myapp/src/test/resources""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
 
             var run_operation = new RunOperation().fromProject(create_operation.project());
             var executor = Executors.newSingleThreadScheduledExecutor();

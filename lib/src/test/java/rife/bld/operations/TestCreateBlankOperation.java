@@ -133,7 +133,8 @@ public class TestCreateBlankOperation {
                     /myapp/src/test/java
                     /myapp/src/test/java/com
                     /myapp/src/test/java/com/example
-                    /myapp/src/test/java/com/example/MyappTest\\.java""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
+                    /myapp/src/test/java/com/example/MyappTest\\.java
+                    /myapp/src/test/resources""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
 
             var compile_operation = new CompileOperation().fromProject(create_operation.project());
             compile_operation.execute();
@@ -211,7 +212,8 @@ public class TestCreateBlankOperation {
                     /myapp/src/test/java
                     /myapp/src/test/java/com
                     /myapp/src/test/java/com/example
-                    /myapp/src/test/java/com/example/MyappTest\\.java""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
+                    /myapp/src/test/java/com/example/MyappTest\\.java
+                    /myapp/src/test/resources""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
 
             var check_result = new StringBuilder();
             new RunOperation()
@@ -286,7 +288,8 @@ public class TestCreateBlankOperation {
                     /yourthing/src/test/java
                     /yourthing/src/test/java/org
                     /yourthing/src/test/java/org/stuff
-                    /yourthing/src/test/java/org/stuff/YourthingTest.java""",
+                    /yourthing/src/test/java/org/stuff/YourthingTest.java
+                    /yourthing/src/test/resources""",
                 FileUtils.generateDirectoryListing(tmp));
 
             var compile_operation = new CompileOperation() {
@@ -409,7 +412,8 @@ public class TestCreateBlankOperation {
                 /myapp/src/test/java
                 /myapp/src/test/java/com
                 /myapp/src/test/java/com/example
-                /myapp/src/test/java/com/example/MyappTest\\.java""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
+                /myapp/src/test/java/com/example/MyappTest\\.java
+                /myapp/src/test/resources""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
 
             var check_result = new StringBuilder();
             new RunOperation()
@@ -531,7 +535,8 @@ public class TestCreateBlankOperation {
                 /myapp/src/test/java
                 /myapp/src/test/java/com
                 /myapp/src/test/java/com/example
-                /myapp/src/test/java/com/example/MyappTest\\.java""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
+                /myapp/src/test/java/com/example/MyappTest\\.java
+                /myapp/src/test/resources""").matcher(FileUtils.generateDirectoryListing(tmp)).matches());
 
             var check_result = new StringBuilder();
             new RunOperation()

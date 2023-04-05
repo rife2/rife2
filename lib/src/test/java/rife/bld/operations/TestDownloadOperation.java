@@ -255,7 +255,8 @@ public class TestDownloadOperation {
                     /src/main/resources
                     /src/main/resources/templates
                     /src/test
-                    /src/test/java""",
+                    /src/test/java
+                    /src/test/resources""",
                 FileUtils.generateDirectoryListing(tmp));
         } finally {
             FileUtils.deleteDirectory(tmp);
@@ -298,7 +299,8 @@ public class TestDownloadOperation {
                     /src/main/resources
                     /src/main/resources/templates
                     /src/test
-                    /src/test/java""",
+                    /src/test/java
+                    /src/test/resources""",
                 FileUtils.generateDirectoryListing(tmp));
         } finally {
             FileUtils.deleteDirectory(tmp);
