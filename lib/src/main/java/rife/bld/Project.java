@@ -146,20 +146,6 @@ public class Project extends BuildExecutor {
      */
     protected List<String> testJavaOptions = new ArrayList<>();
     /**
-     * The project's test tool main class.
-     *
-     * @see #testToolMainClass()
-     * @since 1.5
-     */
-    protected String testToolMainClass;
-    /**
-     * The project's test tool options.
-     *
-     * @see #testToolOptions()
-     * @since 1.5
-     */
-    protected List<String> testToolOptions = new ArrayList<>();
-    /**
      * The base name that is used for creating archives.
      *
      * @see #archiveBaseName()
@@ -1531,52 +1517,6 @@ public class Project extends BuildExecutor {
     public void testJavaOptions(String... options) {
         for (var option : options) {
             testJavaOptions().add(option);
-        }
-    }
-
-    /**
-     * Returns the project's test tool main class.
-     * By default, this returns the tool to run JUnit 5 tests.
-     *
-     * @since 1.5
-     */
-    public String testToolMainClass() {
-        return Objects.requireNonNullElse(testToolMainClass, "org.junit.platform.console.ConsoleLauncher");
-
-    }
-
-    /**
-     * Returns the project's test tool options.
-     * By default, these include a good selection for running tests with JUnit 5.
-     * <p>
-     * This list can be modified to change the test tool options for the project.
-     *
-     * @since 1.5
-     */
-    public List<String> testToolOptions() {
-        if (testToolOptions == null || testToolOptions.isEmpty()) {
-            var result = new ArrayList<String>();
-            result.add("--details=verbose");
-            result.add("--scan-classpath");
-            result.add("--disable-banner");
-            result.add("--disable-ansi-colors");
-            result.add("--exclude-engine=junit-platform-suite");
-            result.add("--exclude-engine=junit-vintage");
-            testToolOptions = result;
-        }
-
-        return testToolOptions;
-    }
-
-    /**
-     * Adds test tool options to this project.
-     *
-     * @param options the options to add
-     * @since 1.5.6
-     */
-    public void testToolOptions(String... options) {
-        for (var option : options) {
-            testToolOptions().add(option);
         }
     }
 

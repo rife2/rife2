@@ -43,6 +43,8 @@ public class TestTestOperation {
             var test_classpath1 = "testClasspath1";
             var test_classpath2 = "testClasspath2";
             var test_tool_main_class = "testToolMainClass";
+            var test_tool_option1 = "testToolOption1";
+            var test_tool_option2 = "testToolOption2";
             Function<String, Boolean> test_output_consumer = (String) -> true;
             Function<String, Boolean> test_error_consumer = (String) -> true;
 
@@ -51,6 +53,7 @@ public class TestTestOperation {
                 .workDirectory(work_directory)
                 .javaTool(java_tool)
                 .javaOptions(List.of(test_java_option1, test_java_option2))
+                .testToolOptions(List.of(test_tool_option1, test_tool_option2))
                 .classpath(List.of(test_classpath1, test_classpath2))
                 .mainClass(test_tool_main_class)
                 .outputProcessor(test_output_consumer)
@@ -60,6 +63,8 @@ public class TestTestOperation {
             assertEquals(java_tool, operation1.javaTool());
             assertTrue(operation1.javaOptions().contains(test_java_option1));
             assertTrue(operation1.javaOptions().contains(test_java_option2));
+            assertTrue(operation1.testToolOptions().contains(test_tool_option1));
+            assertTrue(operation1.testToolOptions().contains(test_tool_option2));
             assertTrue(operation1.classpath().contains(test_classpath1));
             assertTrue(operation1.classpath().contains(test_classpath2));
             assertEquals(test_tool_main_class, operation1.mainClass());
@@ -71,6 +76,8 @@ public class TestTestOperation {
             operation2.javaTool(java_tool);
             operation2.javaOptions().add(test_java_option1);
             operation2.javaOptions().add(test_java_option2);
+            operation2.testToolOptions().add(test_tool_option1);
+            operation2.testToolOptions().add(test_tool_option2);
             operation2.classpath().add(test_classpath1);
             operation2.classpath().add(test_classpath2);
             operation2.mainClass(test_tool_main_class);
@@ -81,6 +88,8 @@ public class TestTestOperation {
             assertEquals(java_tool, operation2.javaTool());
             assertTrue(operation2.javaOptions().contains(test_java_option1));
             assertTrue(operation2.javaOptions().contains(test_java_option2));
+            assertTrue(operation2.testToolOptions().contains(test_tool_option1));
+            assertTrue(operation2.testToolOptions().contains(test_tool_option2));
             assertTrue(operation2.classpath().contains(test_classpath1));
             assertTrue(operation2.classpath().contains(test_classpath2));
             assertEquals(test_tool_main_class, operation2.mainClass());
@@ -89,10 +98,13 @@ public class TestTestOperation {
 
             var operation3 = new TestOperation();
             operation3
-                .classpath(test_classpath1, test_classpath2);
+                .classpath(test_classpath1, test_classpath2)
+                .testToolOptions(test_tool_option1, test_tool_option2);
 
             assertTrue(operation3.classpath().contains(test_classpath1));
             assertTrue(operation3.classpath().contains(test_classpath2));
+            assertTrue(operation3.testToolOptions().contains(test_tool_option1));
+            assertTrue(operation3.testToolOptions().contains(test_tool_option2));
         } finally {
             FileUtils.deleteDirectory(work_directory);
         }

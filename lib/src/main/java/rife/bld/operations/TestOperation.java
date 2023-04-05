@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -24,6 +25,7 @@ import java.util.function.Function;
  */
 public class TestOperation extends AbstractOperation<TestOperation> {
     public static final String DEFAULT_JAVA_TOOL = "java";
+    public static final String DEFAULT_TEST_TOOL_JUNIT5 = "org.junit.platform.console.ConsoleLauncher";
 
     private File workDirectory_ = new File(System.getProperty("user.dir"));
     private String javaTool_ = DEFAULT_JAVA_TOOL;
@@ -68,8 +70,24 @@ public class TestOperation extends AbstractOperation<TestOperation> {
         args.addAll(javaOptions());
         args.add("-cp");
         args.add(FileUtils.joinPaths(classpath()));
-        args.add(mainClass());
-        args.addAll(testToolOptions());
+
+        var main_class = mainClass();
+        if (main_class == null) {
+            main_class = DEFAULT_TEST_TOOL_JUNIT5;
+        }
+        args.add(main_class);
+
+        var test_tool_options = testToolOptions();
+        if (test_tool_options.isEmpty() && main_class.equals(DEFAULT_TEST_TOOL_JUNIT5)) {
+            test_tool_options.add("--details=verbose");
+            test_tool_options.add("--scan-classpath");
+            test_tool_options.add("--disable-banner");
+            test_tool_options.add("--disable-ansi-colors");
+            test_tool_options.add("--exclude-engine=junit-platform-suite");
+            test_tool_options.add("--exclude-engine=junit-vintage");
+        }
+
+        args.addAll(test_tool_options);
         return args;
     }
 
@@ -124,9 +142,7 @@ public class TestOperation extends AbstractOperation<TestOperation> {
         return workDirectory(project.workDirectory())
             .javaTool(project.javaTool())
             .javaOptions(project.testJavaOptions())
-            .classpath(project.testClasspath())
-            .mainClass(project.testToolMainClass())
-            .testToolOptions(project.testToolOptions());
+            .classpath(project.testClasspath());
     }
 
     /**
@@ -218,9 +234,23 @@ public class TestOperation extends AbstractOperation<TestOperation> {
     }
 
     /**
-     * Provides the options to provide to the test tool.
+     * Provides options to provide to the test tool.
      *
-     * @param options the test tool's options
+     * @param options test tool options
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public TestOperation testToolOptions(String... options) {
+        testToolOptions_.addAll(List.of(options));
+        return this;
+    }
+
+    /**
+     * Provides options to provide to the test tool.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param options test tool options
      * @return this operation instance
      * @since 1.5
      */

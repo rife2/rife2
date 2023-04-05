@@ -50,11 +50,6 @@ public class TestWebProject {
         assertNotNull(project.testJavaOptions);
         assertTrue(project.testJavaOptions.isEmpty());
         assertTrue(project.testJavaOptions().isEmpty());
-        assertNull(project.testToolMainClass);
-        assertEquals("org.junit.platform.console.ConsoleLauncher", project.testToolMainClass());
-        assertNotNull(project.testToolOptions);
-        assertTrue(project.testToolOptions.isEmpty());
-        assertFalse(project.testToolOptions().isEmpty());
         assertNull(project.archiveBaseName);
         assertThrows(IllegalStateException.class, project::archiveBaseName);
         assertNull(project.jarFileName);
