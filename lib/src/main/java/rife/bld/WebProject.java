@@ -39,9 +39,17 @@ public class WebProject extends Project {
      * Standard build commands
      */
 
-    private final UberJarOperation uberJarOperation_ = new UberJarOperation();
     private final WarOperation warOperation_ = new WarOperation();
-    private final PublishOperation publishOperation_ = new PublishOperation();
+
+    /**
+     * Retrieves the project's default war operation.
+     *
+     * @return the default war operation instance
+     * @since 1.5.18
+     */
+    protected WarOperation warOperation() {
+        return warOperation_;
+    }
 
     /**
      * Standard build command, creates an UberJar archive for the web project.
@@ -52,10 +60,10 @@ public class WebProject extends Project {
     public void uberjar()
     throws Exception {
         jar();
-        uberJarOperation_.executeOnce(() -> {
-            uberJarOperation_.fromProject(this);
-            uberJarOperation_.sourceDirectories(List.of(new NamedFile("webapp", srcMainWebappDirectory())));
-            uberJarOperation_.jarSourceFiles().addAll(standaloneClasspathJars());
+        uberJarOperation().executeOnce(() -> {
+            uberJarOperation().fromProject(this);
+            uberJarOperation().sourceDirectories(List.of(new NamedFile("webapp", srcMainWebappDirectory())));
+            uberJarOperation().jarSourceFiles().addAll(standaloneClasspathJars());
         });
     }
 
@@ -68,7 +76,7 @@ public class WebProject extends Project {
     public void war()
     throws Exception {
         jar();
-        warOperation_.executeOnce(() -> warOperation_.fromProject(this));
+        warOperation().executeOnce(() -> warOperation().fromProject(this));
     }
 
     /**
@@ -84,10 +92,10 @@ public class WebProject extends Project {
         jarJavadoc();
         uberjar();
         war();
-        publishOperation_.executeOnce(() -> {
-            publishOperation_.fromProject(this);
-            publishOperation_.artifacts().add(new PublishArtifact(new File(buildDistDirectory(), uberJarFileName()), "uber", "jar"));
-            publishOperation_.artifacts().add(new PublishArtifact(new File(buildDistDirectory(), warFileName()), "", "war"));
+        publishOperation().executeOnce(() -> {
+            publishOperation().fromProject(this);
+            publishOperation().artifacts().add(new PublishArtifact(new File(buildDistDirectory(), uberJarFileName()), "uber", "jar"));
+            publishOperation().artifacts().add(new PublishArtifact(new File(buildDistDirectory(), warFileName()), "", "war"));
         });
     }
 

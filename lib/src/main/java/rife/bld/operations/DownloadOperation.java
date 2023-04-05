@@ -160,7 +160,21 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
     /**
      * Provides repositories to resolve the dependencies against.
      *
-     * @param repositories the repositories against which dependencies will be resolved
+     * @param repositories repositories against which dependencies will be resolved
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public DownloadOperation repositories(Repository... repositories) {
+        repositories_.addAll(List.of(repositories));
+        return this;
+    }
+
+    /**
+     * Provides a list of repositories to resolve the dependencies against.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param repositories a list of repositories against which dependencies will be resolved
      * @return this operation instance
      * @since 1.5
      */

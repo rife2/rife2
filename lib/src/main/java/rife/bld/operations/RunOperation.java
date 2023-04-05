@@ -179,9 +179,23 @@ public class RunOperation extends AbstractOperation<RunOperation> {
     }
 
     /**
-     * Provides the classpath to use for the run operation.
+     * Provides classpath entries to use for the run operation.
      *
-     * @param classpath the run operation's classpath
+     * @param classpath classpath entries for the run operation
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public RunOperation classpath(String... classpath) {
+        classpath_.addAll(List.of(classpath));
+        return this;
+    }
+
+    /**
+     * Provides a list of classpath entries to use for the run operation.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param classpath a list of classpath entries for the run operation
      * @return this operation instance
      * @since 1.5
      */

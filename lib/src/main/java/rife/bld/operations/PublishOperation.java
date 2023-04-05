@@ -539,9 +539,23 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     }
 
     /**
-     * Provides the artifacts that will be published.
+     * Provides artifacts that will be published.
      *
-     * @param artifacts the artifacts to publish
+     * @param artifacts artifacts to publish
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public PublishOperation artifacts(PublishArtifact... artifacts) {
+        artifacts_.addAll(List.of(artifacts));
+        return this;
+    }
+
+    /**
+     * Provides a list of artifacts that will be published.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param artifacts a list of artifacts to publish
      * @return this operation instance
      * @since 1.5.7
      */

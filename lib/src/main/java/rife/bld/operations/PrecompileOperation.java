@@ -86,9 +86,23 @@ public class PrecompileOperation extends AbstractOperation<PrecompileOperation> 
     }
 
     /**
-     * Provides the template types that will be pre-compiled.
+     * Provides template types that will be pre-compiled.
      *
-     * @param types the pre-compiled template types
+     * @param types pre-compiled template types
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public PrecompileOperation templateTypes(TemplateType... types) {
+        templateTypes_.addAll(List.of(types));
+        return this;
+    }
+
+    /**
+     * Provides a list of template types that will be pre-compiled.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param types a list of pre-compiled template types
      * @return this operation instance
      * @since 1.5
      */
@@ -98,9 +112,23 @@ public class PrecompileOperation extends AbstractOperation<PrecompileOperation> 
     }
 
     /**
-     * Provides the source directories that will be used for the template pre-compilation.
+     * Provides source directories that will be used for the template pre-compilation.
      *
-     * @param sources the source directories
+     * @param sources source directories
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public PrecompileOperation sourceDirectories(File... sources) {
+        sourceDirectories_.addAll(List.of(sources));
+        return this;
+    }
+
+    /**
+     * Provides a list of source directories that will be used for the template pre-compilation.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param sources a list of source directories
      * @return this operation instance
      * @since 1.5
      */

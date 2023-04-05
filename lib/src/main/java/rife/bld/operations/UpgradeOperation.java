@@ -17,17 +17,6 @@ import java.util.List;
  */
 public class UpgradeOperation extends AbstractOperation<UpgradeOperation> {
     /**
-     * Configures an upgrade operation from command-line arguments.
-     *
-     * @param arguments the arguments that will be considered
-     * @return this operation instance
-     * @since 1.5
-     */
-    public UpgradeOperation fromArguments(List<String> arguments) {
-        return this;
-    }
-
-    /**
      * Performs the upgrade operation.
      *
      * @throws IOException when an error occurred during the upgrade operation

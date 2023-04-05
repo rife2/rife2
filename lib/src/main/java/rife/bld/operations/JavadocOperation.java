@@ -13,6 +13,7 @@ import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -26,6 +27,7 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
     private File buildDirectory_;
     private final List<String> classpath_ = new ArrayList<>();
     private final List<File> sourceFiles_ = new ArrayList<>();
+    private final List<File> sourceDirectories_ = new ArrayList<>();
     private final JavadocOptions javadocOptions_ = new JavadocOptions();
     private final List<Diagnostic<? extends JavaFileObject>> diagnostics_ = new ArrayList<>();
     private final List<Pattern> included_ = new ArrayList<>();
@@ -66,9 +68,13 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
      */
     protected void executeBuildSources()
     throws IOException {
+        var sources = new ArrayList<>(sourceFiles());
+        for (var directory : sourceDirectories()) {
+            sources.addAll(FileUtils.getJavaFileList(directory));
+        }
         executeBuildSources(
             classpath(),
-            sourceFiles(),
+            sources,
             buildDirectory());
     }
 
@@ -139,6 +145,7 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
     public JavadocOperation fromProject(Project project) {
         return buildDirectory(project.buildJavadocDirectory())
             .classpath(project.compileMainClasspath())
+            .classpath(project.buildMainDirectory().getAbsolutePath())
             .sourceFiles(project.mainSourceFiles())
             .javadocOptions(project.javadocOptions());
     }
@@ -156,11 +163,23 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
     }
 
     /**
-     * Provides the list of entries for the javadoc classpath.
+     * Provides entries for the javadoc classpath.
+     *
+     * @param classpath classpath entries
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JavadocOperation classpath(String... classpath) {
+        classpath_.addAll(Arrays.asList(classpath));
+        return this;
+    }
+
+    /**
+     * Provides a list of entries for the javadoc classpath.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.
      *
-     * @param classpath the list of classpath entries
+     * @param classpath a list of classpath entries
      * @return this operation instance
      * @since 1.5.10
      */
@@ -170,16 +189,54 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
     }
 
     /**
-     * Provides the list of files for which documentation should be generation.
+     * Provides files for which documentation should be generated.
+     *
+     * @param files source files
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JavadocOperation sourceFiles(File... files) {
+        sourceFiles_.addAll(Arrays.asList(files));
+        return this;
+    }
+
+    /**
+     * Provides a list of files for which documentation should be generated.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.
      *
-     * @param files the list of source files
+     * @param files a list of source files
      * @return this operation instance
      * @since 1.5.10
      */
     public JavadocOperation sourceFiles(List<File> files) {
         sourceFiles_.addAll(files);
+        return this;
+    }
+
+    /**
+     * Provides directories for which documentation should be generated.
+     *
+     * @param directories source directories
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JavadocOperation sourceDirectories(File... directories) {
+        sourceDirectories_.addAll(Arrays.asList(directories));
+        return this;
+    }
+
+    /**
+     * Provides a list of directories for which documentation should be generated.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param directories a list of source directories
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JavadocOperation sourceDirectories(List<File> directories) {
+        sourceDirectories_.addAll(directories);
         return this;
     }
 
@@ -198,8 +255,23 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
     }
 
     /**
+     * Provides patterns that will be evaluated to determine which files
+     * will be included in the javadoc generation.
+     *
+     * @param included inclusion patterns
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JavadocOperation included(Pattern... included) {
+        included_.addAll(Arrays.asList(included));
+        return this;
+    }
+
+    /**
      * Provides a list of patterns that will be evaluated to determine which files
      * will be included in the javadoc generation.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
      *
      * @param included the list of inclusion patterns
      * @return this operation instance
@@ -211,8 +283,23 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
     }
 
     /**
+     * Provides patterns that will be evaluated to determine which files
+     * will be excluded from the javadoc generation.
+     *
+     * @param excluded exclusion patterns
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JavadocOperation excluded(Pattern... excluded) {
+        excluded_.addAll(Arrays.asList(excluded));
+        return this;
+    }
+
+    /**
      * Provides a list of patterns that will be evaluated to determine which files
      * will be excluded from the javadoc generation.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
      *
      * @param excluded the list of exclusion patterns
      * @return this operation instance
@@ -255,6 +342,18 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
      */
     public List<File> sourceFiles() {
         return sourceFiles_;
+    }
+
+    /**
+     * Retrieves the list of directories for which documentation should be generated.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
+     *
+     * @return the list of source directories documentation is generated for
+     * @since 1.5.18
+     */
+    public List<File> sourceDirectories() {
+        return sourceDirectories_;
     }
 
     /**

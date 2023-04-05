@@ -62,11 +62,23 @@ public class CleanOperation extends AbstractOperation<CleanOperation> {
     }
 
     /**
+     * Provides directories to clean.
+     *
+     * @param directories directories to clean
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public CleanOperation directories(File... directories) {
+        directories_.addAll(List.of(directories));
+        return this;
+    }
+
+    /**
      * Provides a list of directories to clean.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.
      *
-     * @param directories the directories to clean
+     * @param directories a list of directories to clean
      * @return this operation instance
      * @since 1.5
      */

@@ -15,17 +15,6 @@ import java.util.List;
  */
 public class VersionOperation extends AbstractOperation<VersionOperation> {
     /**
-     * Configures a version operation from command-line arguments.
-     *
-     * @param arguments the arguments that will be considered
-     * @return this operation instance
-     * @since 1.5.2
-     */
-    public VersionOperation fromArguments(List<String> arguments) {
-        return this;
-    }
-
-    /**
      * Performs the version operation.
      *
      * @throws IOException when an error occurred during the upgrade operation

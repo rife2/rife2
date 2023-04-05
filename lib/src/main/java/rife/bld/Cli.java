@@ -53,7 +53,7 @@ public class Cli extends BuildExecutor {
     @BuildCommand(help = UpgradeHelp.class)
     public void upgrade()
     throws Exception {
-        upgradeOperation_.executeOnce(() -> upgradeOperation_.fromArguments(arguments()));
+        upgradeOperation_.executeOnce();
     }
 
     /**
@@ -64,7 +64,7 @@ public class Cli extends BuildExecutor {
     @BuildCommand(help = VersionHelp.class)
     public void version()
     throws Exception {
-        versionOperation_.executeOnce(() -> versionOperation_.fromArguments(arguments()));
+        versionOperation_.executeOnce();
     }
 
     public static void main(String[] arguments)

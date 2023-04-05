@@ -96,6 +96,29 @@ public class TestJarOperation {
         assertTrue(operation2.included().contains(included2));
         assertTrue(operation2.excluded().contains(excluded1));
         assertTrue(operation2.excluded().contains(excluded2));
+
+        var operation3 = new JarOperation()
+            .manifestAttribute(manifest_attribute_1a, manifest_attribute_1b)
+            .manifestAttribute(manifest_attribute_2a, manifest_Attribute_2b)
+            .sourceDirectories(source_directory1, source_directory2)
+            .sourceFiles(source_file1, source_file2)
+            .destinationDirectory(destination_directory)
+            .destinationFileName(destination_fileName)
+            .included(included1, included2)
+            .excluded(excluded1, excluded2);
+
+        assertEquals(manifest_attribute_1b, operation3.manifestAttributes().get(manifest_attribute_1a));
+        assertEquals(manifest_Attribute_2b, operation3.manifestAttributes().get(manifest_attribute_2a));
+        assertTrue(operation3.sourceDirectories().contains(source_directory1));
+        assertTrue(operation3.sourceDirectories().contains(source_directory2));
+        assertTrue(operation3.sourceFiles().contains(source_file1));
+        assertTrue(operation3.sourceFiles().contains(source_file2));
+        assertEquals(destination_directory, operation3.destinationDirectory());
+        assertEquals(destination_fileName, operation3.destinationFileName());
+        assertTrue(operation3.included().contains(included1));
+        assertTrue(operation3.included().contains(included2));
+        assertTrue(operation3.excluded().contains(excluded1));
+        assertTrue(operation3.excluded().contains(excluded2));
     }
 
     @Test

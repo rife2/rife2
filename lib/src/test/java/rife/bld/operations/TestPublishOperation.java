@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import rife.bld.Project;
 import rife.bld.blueprints.BlankProjectBlueprint;
 import rife.bld.dependencies.*;
-import rife.bld.publish.PublishInfo;
+import rife.bld.publish.PublishArtifact;
 import rife.tools.FileUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,11 +49,26 @@ public class TestPublishOperation {
         var repository = new Repository("repository1");
         var moment = ZonedDateTime.now();
 
+        var artifact1 = new PublishArtifact(new File("file1"), "classifier1", "type1");
+        var artifact2 = new PublishArtifact(new File("file2"), "classifier2", "type2");
+
         var operation1 = new PublishOperation()
             .repository(repository)
-            .moment(moment);
+            .moment(moment)
+            .artifacts(List.of(artifact1, artifact2));
         assertEquals(repository, operation1.repository());
         assertEquals(moment, operation1.moment());
+        operation1.artifacts().contains(artifact1);
+        operation1.artifacts().contains(artifact2);
+
+        var operation2 = new PublishOperation()
+            .repository(repository)
+            .moment(moment)
+            .artifacts(artifact1, artifact2);
+        assertEquals(repository, operation2.repository());
+        assertEquals(moment, operation2.moment());
+        operation2.artifacts().contains(artifact1);
+        operation2.artifacts().contains(artifact2);
     }
 
     @Test

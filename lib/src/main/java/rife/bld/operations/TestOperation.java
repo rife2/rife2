@@ -180,9 +180,23 @@ public class TestOperation extends AbstractOperation<TestOperation> {
     }
 
     /**
-     * Provides the classpath to use for the test operation.
+     * Provides classpath entries to use for the test operation.
      *
-     * @param classpath the test operation's classpath
+     * @param classpath classpath entries for the test operation
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public TestOperation classpath(String... classpath) {
+        classpath_.addAll(List.of(classpath));
+        return this;
+    }
+
+    /**
+     * Provides a list of classpath entries to use for the test operation.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param classpath a list of classpath entries for the test operation
      * @return this operation instance
      * @since 1.5
      */

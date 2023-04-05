@@ -90,11 +90,12 @@ public class JarOperation extends AbstractOperation<JarOperation> {
     protected Manifest executeCreateManifest() {
         var manifest = new Manifest();
         var attributes = manifest.getMainAttributes();
-        // don't use putAll since Attributes does an instanceof check
-        // on the map being passed in, causing it to fail if it's not
-        // and instance of Attributes
         for (var entry : manifestAttributes().entrySet()) {
+            // don't use putAll since Attributes does an instanceof check
+            // on the map being passed in, causing it to fail if it's not
+            // and instance of Attributes
             attributes.put(entry.getKey(), entry.getValue());
+            // ^^^ READ above, don't use putAll
         }
         return manifest;
     }
@@ -134,7 +135,22 @@ public class JarOperation extends AbstractOperation<JarOperation> {
     }
 
     /**
+     * Provides an attribute to put in the jar manifest.
+     *
+     * @param name  the attribute name to put in the manifest
+     * @param value the attribute value to put in the manifest
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JarOperation manifestAttribute(Attributes.Name name, Object value) {
+        manifestAttributes_.put(name, value);
+        return this;
+    }
+
+    /**
      * Provides a map of attributes to put in the jar manifest.
+     * <p>
+     * A copy will be created to allow this map to be independently modifiable.
      *
      * @param attributes the attributes to put in the manifest
      * @return this operation instance
@@ -146,9 +162,23 @@ public class JarOperation extends AbstractOperation<JarOperation> {
     }
 
     /**
-     * Provides the source directories that will be used for the jar archive creation.
+     * Provides source directories that will be used for the jar archive creation.
      *
-     * @param directories the source directories
+     * @param directories source directories
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JarOperation sourceDirectories(File... directories) {
+        sourceDirectories_.addAll(List.of(directories));
+        return this;
+    }
+
+    /**
+     * Provides a list of source directories that will be used for the jar archive creation.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param directories a list of source directories
      * @return this operation instance
      * @since 1.5
      */
@@ -158,9 +188,23 @@ public class JarOperation extends AbstractOperation<JarOperation> {
     }
 
     /**
-     * Provides the source files that will be used for the jar archive creation.
+     * Provides source files that will be used for the jar archive creation.
      *
-     * @param files the source files
+     * @param files source files
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JarOperation sourceFiles(NamedFile... files) {
+        sourceFiles_.addAll(List.of(files));
+        return this;
+    }
+
+    /**
+     * Provides a list of source files that will be used for the jar archive creation.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param files a list of source files
      * @return this operation instance
      * @since 1.5
      */
@@ -194,10 +238,25 @@ public class JarOperation extends AbstractOperation<JarOperation> {
     }
 
     /**
-     * Provides a list of patterns that will be evaluated to determine which files
+     * Provides patterns that will be evaluated to determine which files
      * will be included in the jar archive.
      *
-     * @param included the list of inclusion patterns
+     * @param included inclusion patterns
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JarOperation included(Pattern... included) {
+        included_.addAll(List.of(included));
+        return this;
+    }
+
+    /**
+     * Provides a list of patterns that will be evaluated to determine which files
+     * will be included in the jar archive.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param included a list of inclusion patterns
      * @return this operation instance
      * @since 1.5
      */
@@ -207,10 +266,25 @@ public class JarOperation extends AbstractOperation<JarOperation> {
     }
 
     /**
-     * Provides a list of patterns that will be evaluated to determine which files
+     * Provides patterns that will be evaluated to determine which files
      * will be excluded from the jar archive.
      *
-     * @param excluded the list of exclusion patterns
+     * @param excluded exclusion patterns
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JarOperation excluded(Pattern... excluded) {
+        excluded_.addAll(List.of(excluded));
+        return this;
+    }
+
+    /**
+     * Provides a list of patterns that will be evaluated to determine which files
+     * will be excluded from the jar archive.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param excluded a list of exclusion patterns
      * @return this operation instance
      * @since 1.5
      */

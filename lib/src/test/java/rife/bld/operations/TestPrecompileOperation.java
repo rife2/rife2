@@ -51,6 +51,17 @@ public class TestPrecompileOperation {
         assertTrue(operation2.sourceDirectories().contains(source_directory1));
         assertTrue(operation2.sourceDirectories().contains(source_directory2));
         assertEquals(destination_directory, operation2.destinationDirectory());
+
+        var operation3 = new PrecompileOperation()
+            .templateTypes(TemplateType.HTML, TemplateType.JSON)
+            .sourceDirectories(source_directory1, source_directory2)
+            .destinationDirectory(destination_directory);
+
+        assertTrue(operation3.templateTypes().contains(TemplateType.HTML));
+        assertTrue(operation3.templateTypes().contains(TemplateType.JSON));
+        assertTrue(operation3.sourceDirectories().contains(source_directory1));
+        assertTrue(operation3.sourceDirectories().contains(source_directory2));
+        assertEquals(destination_directory, operation3.destinationDirectory());
     }
 
     @Test

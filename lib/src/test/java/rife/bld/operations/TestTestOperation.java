@@ -86,6 +86,13 @@ public class TestTestOperation {
             assertEquals(test_tool_main_class, operation2.mainClass());
             assertSame(test_output_consumer, operation2.outputProcessor());
             assertSame(test_error_consumer, operation2.errorProcessor());
+
+            var operation3 = new TestOperation();
+            operation3
+                .classpath(test_classpath1, test_classpath2);
+
+            assertTrue(operation3.classpath().contains(test_classpath1));
+            assertTrue(operation3.classpath().contains(test_classpath2));
         } finally {
             FileUtils.deleteDirectory(work_directory);
         }

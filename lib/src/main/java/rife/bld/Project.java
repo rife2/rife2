@@ -406,6 +406,156 @@ public class Project extends BuildExecutor {
     private final VersionOperation versionOperation_ = new VersionOperation();
 
     /**
+     * Retrieves the project's default clean operation.
+     *
+     * @return the default clean operation instance
+     * @since 1.5.18
+     */
+    protected CleanOperation cleanOperation() {
+        return cleanOperation_;
+    }
+
+    /**
+     * Retrieves the project's default compile operation.
+     *
+     * @return the default compile operation instance
+     * @since 1.5.18
+     */
+    protected CompileOperation compileOperation() {
+        return compileOperation_;
+    }
+
+    /**
+     * Retrieves the project's default download operation.
+     *
+     * @return the default download operation instance
+     * @since 1.5.18
+     */
+    protected DownloadOperation downloadOperation() {
+        return downloadOperation_;
+    }
+
+    /**
+     * Retrieves the project's default javadoc operation.
+     *
+     * @return the default javadoc operation instance
+     * @since 1.5.18
+     */
+    protected JavadocOperation javadocOperation() {
+        return javadocOperation_;
+    }
+
+    /**
+     * Retrieves the project's default precompile operation.
+     *
+     * @return the default precompile operation instance
+     * @since 1.5.18
+     */
+    protected PrecompileOperation precompileOperation() {
+        return precompileOperation_;
+    }
+
+    /**
+     * Retrieves the project's default jar operation.
+     *
+     * @return the default jar operation instance
+     * @since 1.5.18
+     */
+    protected JarOperation jarOperation() {
+        return jarOperation_;
+    }
+
+    /**
+     * Retrieves the project's default jar operation for sources.
+     *
+     * @return the default jar operation instance for sources
+     * @since 1.5.18
+     */
+    protected JarOperation jarSourcesOperation() {
+        return jarSourcesOperation_;
+    }
+
+    /**
+     * Retrieves the project's default jar operation for javadoc.
+     *
+     * @return the default jar operation instance for javadoc
+     * @since 1.5.18
+     */
+    protected JarOperation jarJavadocOperation() {
+        return jarJavadocOperation_;
+    }
+
+    /**
+     * Retrieves the project's default purge operation.
+     *
+     * @return the default purge operation instance
+     * @since 1.5.18
+     */
+    protected PurgeOperation purgeOperation() {
+        return purgeOperation_;
+    }
+
+    /**
+     * Retrieves the project's default run operation.
+     *
+     * @return the default run operation instance
+     * @since 1.5.18
+     */
+    protected RunOperation runOperation() {
+        return runOperation_;
+    }
+
+    /**
+     * Retrieves the project's default test operation.
+     *
+     * @return the default test operation instance
+     * @since 1.5.18
+     */
+    protected TestOperation testOperation() {
+        return testOperation_;
+    }
+
+    /**
+     * Retrieves the project's default uberjar operation.
+     *
+     * @return the default uberjar operation instance
+     * @since 1.5.18
+     */
+    protected UberJarOperation uberJarOperation() {
+        return uberJarOperation_;
+    }
+
+    /**
+     * Retrieves the project's default updates operation.
+     *
+     * @return the default updates operation instance
+     * @since 1.5.18
+     */
+    protected UpdatesOperation updatesOperation() {
+        return updatesOperation_;
+    }
+
+    /**
+     * Retrieves the project's default publish operation.
+     *
+     * @return the default publish operation instance
+     * @since 1.5.18
+     */
+    protected PublishOperation publishOperation() {
+        return publishOperation_;
+    }
+
+    /**
+     * Retrieves the project's default version operation.
+     *
+     * @return the default version operation instance
+     * @since 1.5.18
+     */
+    protected VersionOperation versionOperation() {
+        return versionOperation_;
+    }
+
+    /**
      * Standard build command, cleans the build files.
      *
      * @since 1.5
@@ -413,7 +563,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = CleanHelp.class)
     public void clean()
     throws Exception {
-        cleanOperation_.executeOnce(() -> cleanOperation_.fromProject(this));
+        cleanOperation().executeOnce(() -> cleanOperation().fromProject(this));
     }
 
     /**
@@ -424,7 +574,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = CompileHelp.class)
     public void compile()
     throws Exception {
-        compileOperation_.executeOnce(() -> compileOperation_.fromProject(this));
+        compileOperation().executeOnce(() -> compileOperation().fromProject(this));
     }
 
     /**
@@ -435,7 +585,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = DownloadHelp.class)
     public void download()
     throws Exception {
-        downloadOperation_.executeOnce(() -> downloadOperation_.fromProject(this));
+        downloadOperation().executeOnce(() -> downloadOperation().fromProject(this));
     }
 
     /**
@@ -446,7 +596,8 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = JavadocHelp.class)
     public void javadoc()
     throws Exception {
-        javadocOperation_.executeOnce(() -> javadocOperation_.fromProject(this));
+        compile();
+        javadocOperation().executeOnce(() -> javadocOperation().fromProject(this));
     }
 
     /**
@@ -457,7 +608,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = PrecompileHelp.class)
     public void precompile()
     throws Exception {
-        precompileOperation_.executeOnce(() -> precompileOperation_.fromProject(this));
+        precompileOperation().executeOnce(() -> precompileOperation().fromProject(this));
     }
 
     /**
@@ -470,7 +621,7 @@ public class Project extends BuildExecutor {
     throws Exception {
         compile();
         precompile();
-        jarOperation_.executeOnce(() -> jarOperation_.fromProject(this));
+        jarOperation().executeOnce(() -> jarOperation().fromProject(this));
     }
 
     /**
@@ -481,7 +632,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(value = "jar-sources", help = JarSourcesHelp.class)
     public void jarSources()
     throws Exception {
-        jarSourcesOperation_.executeOnce(() -> jarSourcesOperation_
+        jarSourcesOperation().executeOnce(() -> jarSourcesOperation()
             .manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
             .sourceDirectories(List.of(srcMainJavaDirectory()))
             .destinationDirectory(buildDistDirectory())
@@ -497,7 +648,7 @@ public class Project extends BuildExecutor {
     public void jarJavadoc()
     throws Exception {
         javadoc();
-        jarJavadocOperation_.executeOnce(() -> jarJavadocOperation_.manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
+        jarJavadocOperation().executeOnce(() -> jarJavadocOperation().manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
             .sourceDirectories(List.of(buildJavadocDirectory()))
             .destinationDirectory(buildDistDirectory())
             .destinationFileName(javadocJarFileName()));
@@ -511,7 +662,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = PurgeHelp.class)
     public void purge()
     throws Exception {
-        purgeOperation_.executeOnce(() -> purgeOperation_.fromProject(this));
+        purgeOperation().executeOnce(() -> purgeOperation().fromProject(this));
     }
 
     /**
@@ -522,7 +673,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = RunHelp.class)
     public void run()
     throws Exception {
-        runOperation_.executeOnce(() -> runOperation_.fromProject(this));
+        runOperation().executeOnce(() -> runOperation().fromProject(this));
     }
 
     /**
@@ -533,7 +684,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = TestHelp.class)
     public void test()
     throws Exception {
-        testOperation_.executeOnce(() -> testOperation_.fromProject(this));
+        testOperation().executeOnce(() -> testOperation().fromProject(this));
     }
 
     /**
@@ -545,7 +696,7 @@ public class Project extends BuildExecutor {
     public void uberjar()
     throws Exception {
         jar();
-        uberJarOperation_.executeOnce(() -> uberJarOperation_.fromProject(this));
+        uberJarOperation().executeOnce(() -> uberJarOperation().fromProject(this));
     }
 
     /**
@@ -556,7 +707,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(help = UpdatesHelp.class)
     public void updates()
     throws Exception {
-        updatesOperation_.executeOnce(() -> updatesOperation_.fromProject(this));
+        updatesOperation().executeOnce(() -> updatesOperation().fromProject(this));
     }
 
     /**
@@ -567,7 +718,7 @@ public class Project extends BuildExecutor {
     @BuildCommand(value = "version", help = VersionHelp.class)
     public void printVersion()
     throws Exception {
-        versionOperation_.executeOnce(() -> versionOperation_.fromArguments(arguments()));
+        versionOperation().executeOnce();
     }
 
     /**
@@ -581,7 +732,7 @@ public class Project extends BuildExecutor {
         jar();
         jarSources();
         jarJavadoc();
-        publishOperation_.executeOnce(() -> publishOperation_.fromProject(this));
+        publishOperation().executeOnce(() -> publishOperation().fromProject(this));
     }
 
     /*

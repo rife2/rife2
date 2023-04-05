@@ -120,9 +120,23 @@ public class UberJarOperation extends AbstractOperation<UberJarOperation> {
     }
 
     /**
-     * Provides the source jar files that will be used for the uberjar archive creation.
+     * Provides source jar files that will be used for the uberjar archive creation.
      *
-     * @param files the jar source files
+     * @param files source files
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public UberJarOperation jarSourceFiles(File... files) {
+        jarSourceFiles_.addAll(List.of(files));
+        return this;
+    }
+
+    /**
+     * Provides a list of source jar files that will be used for the uberjar archive creation.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param files a list of jar source files
      * @return this operation instance
      * @since 1.5
      */
@@ -132,9 +146,23 @@ public class UberJarOperation extends AbstractOperation<UberJarOperation> {
     }
 
     /**
-     * Provides the source directories that will be used for the uberjar archive creation.
+     * Provides source directories that will be used for the uberjar archive creation.
      *
-     * @param directories the source directories
+     * @param directories source directories
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public UberJarOperation sourceDirectories(NamedFile... directories) {
+        sourceDirectories_.addAll(List.of(directories));
+        return this;
+    }
+
+    /**
+     * Provides a list of source directories that will be used for the uberjar archive creation.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param directories a list of source directories
      * @return this operation instance
      * @since 1.5
      */

@@ -50,6 +50,11 @@ public class TestUpdatesOperation {
         assertTrue(operation2.repositories().contains(repository2));
         assertTrue(operation2.dependencies().scope(Scope.compile).contains(dependency1));
         assertTrue(operation2.dependencies().scope(Scope.compile).contains(dependency2));
+
+        var operation3 = new UpdatesOperation()
+            .repositories(repository1, repository2);
+        assertTrue(operation3.repositories().contains(repository1));
+        assertTrue(operation3.repositories().contains(repository2));
     }
 
     @Test

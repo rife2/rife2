@@ -73,6 +73,11 @@ public class TestPurgeOperation {
         assertEquals(dir2, operation2.libRuntimeDirectory());
         assertEquals(dir3, operation2.libStandaloneDirectory());
         assertEquals(dir4, operation2.libTestDirectory());
+
+        var operation3 = new PurgeOperation()
+            .repositories(repository1, repository2);
+        assertTrue(operation3.repositories().contains(repository1));
+        assertTrue(operation3.repositories().contains(repository2));
     }
 
     @Test

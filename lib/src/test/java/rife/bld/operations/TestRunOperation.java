@@ -85,6 +85,13 @@ public class TestRunOperation {
             assertEquals(main_class, operation2.mainClass());
             assertSame(run_output_consumer, operation2.outputProcessor());
             assertSame(run_error_consumer, operation2.errorProcessor());
+
+            var operation3 = new RunOperation();
+            operation3
+                .classpath(run_classpath1, run_classpath2);
+
+            assertTrue(operation3.classpath().contains(run_classpath1));
+            assertTrue(operation3.classpath().contains(run_classpath2));
         } finally {
             FileUtils.deleteDirectory(work_directory);
         }

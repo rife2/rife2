@@ -113,6 +113,34 @@ public class TestCompileOperation {
         assertTrue(operation2.testSourceDirectories().contains(test_source_directory2));
         assertTrue(operation2.compileOptions().contains(compile_option1));
         assertTrue(operation2.compileOptions().contains(compile_option2));
+
+        var operation3 = new CompileOperation()
+            .buildMainDirectory(build_main_directory)
+            .buildTestDirectory(build_test_directory)
+            .compileMainClasspath(compile_main_classpath1, compile_main_classpath2)
+            .compileTestClasspath(compile_test_classpath1, compile_test_classpath2)
+            .mainSourceFiles(main_source_file1, main_source_file2)
+            .testSourceFiles(test_source_file1, test_source_file2)
+            .mainSourceDirectories(main_source_directory1, main_source_directory2)
+            .testSourceDirectories(test_source_directory1, test_source_directory2)
+            .compileOptions(List.of(compile_option1, compile_option2));
+
+        assertEquals(build_main_directory, operation3.buildMainDirectory());
+        assertEquals(build_test_directory, operation3.buildTestDirectory());
+        assertTrue(operation3.compileMainClasspath().contains(compile_main_classpath1));
+        assertTrue(operation3.compileMainClasspath().contains(compile_main_classpath2));
+        assertTrue(operation3.compileTestClasspath().contains(compile_test_classpath1));
+        assertTrue(operation3.compileTestClasspath().contains(compile_test_classpath2));
+        assertTrue(operation3.mainSourceFiles().contains(main_source_file1));
+        assertTrue(operation3.mainSourceFiles().contains(main_source_file2));
+        assertTrue(operation3.testSourceFiles().contains(test_source_file1));
+        assertTrue(operation3.testSourceFiles().contains(test_source_file2));
+        assertTrue(operation3.mainSourceDirectories().contains(main_source_directory1));
+        assertTrue(operation3.mainSourceDirectories().contains(main_source_directory2));
+        assertTrue(operation3.testSourceDirectories().contains(test_source_directory1));
+        assertTrue(operation3.testSourceDirectories().contains(test_source_directory2));
+        assertTrue(operation3.compileOptions().contains(compile_option1));
+        assertTrue(operation3.compileOptions().contains(compile_option2));
     }
 
     @Test

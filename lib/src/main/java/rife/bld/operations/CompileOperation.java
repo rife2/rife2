@@ -12,6 +12,7 @@ import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -190,11 +191,23 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
     }
 
     /**
+     * Provides entries for the main compilation classpath.
+     *
+     * @param classpath classpath entries
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public CompileOperation compileMainClasspath(String... classpath) {
+        compileMainClasspath_.addAll(Arrays.asList(classpath));
+        return this;
+    }
+
+    /**
      * Provides a list of entries for the main compilation classpath.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.
      *
-     * @param classpath the list of classpath entries
+     * @param classpath a list of classpath entries
      * @return this operation instance
      * @since 1.5
      */
@@ -204,11 +217,23 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
     }
 
     /**
+     * Provides entries for the test compilation classpath.
+     *
+     * @param classpath classpath entries
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public CompileOperation compileTestClasspath(String... classpath) {
+        compileTestClasspath_.addAll(Arrays.asList(classpath));
+        return this;
+    }
+
+    /**
      * Provides a list of entries for the test compilation classpath.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.
      *
-     * @param classpath the list of classpath entries
+     * @param classpath a list of classpath entries
      * @return this operation instance
      * @since 1.5
      */
@@ -218,11 +243,23 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
     }
 
     /**
-     * Provides the list of main files that should be compiled.
+     * Provides main files that should be compiled.
+     *
+     * @param files main files
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public CompileOperation mainSourceFiles(File... files) {
+        mainSourceFiles_.addAll(Arrays.asList(files));
+        return this;
+    }
+
+    /**
+     * Provides a list of main files that should be compiled.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.
      *
-     * @param files the list of main files
+     * @param files a list of main files
      * @return this operation instance
      * @since 1.5
      */
@@ -232,11 +269,23 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
     }
 
     /**
-     * Provides the list of test files that should be compiled.
+     * Provides test files that should be compiled.
+     *
+     * @param files test files
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public CompileOperation testSourceFiles(File... files) {
+        testSourceFiles_.addAll(Arrays.asList(files));
+        return this;
+    }
+
+    /**
+     * Provides a list of test files that should be compiled.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.
      *
-     * @param files the list of test files
+     * @param files a list of test files
      * @return this operation instance
      * @since 1.5
      */
@@ -246,11 +295,23 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
     }
 
     /**
-     * Provides the list of main source directories that should be compiled.
+     * Provides main source directories that should be compiled.
+     *
+     * @param directories main source directories
+     * @return this operation instance
+     * @since 1.5.10
+     */
+    public CompileOperation mainSourceDirectories(File... directories) {
+        mainSourceDirectories_.addAll(List.of(directories));
+        return this;
+    }
+
+    /**
+     * Provides a list of main source directories that should be compiled.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.
      *
-     * @param directories the list of main source directories
+     * @param directories a list of main source directories
      * @return this operation instance
      * @since 1.5.10
      */
@@ -260,11 +321,23 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
     }
 
     /**
-     * Provides the list of test source directories that should be compiled.
+     * Provides test source directories that should be compiled.
+     *
+     * @param directories test source directories
+     * @return this operation instance
+     * @since 1.5.10
+     */
+    public CompileOperation testSourceDirectories(File... directories) {
+        testSourceDirectories_.addAll(List.of(directories));
+        return this;
+    }
+
+    /**
+     * Provides a list of test source directories that should be compiled.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.
      *
-     * @param directories the list of test source directories
+     * @param directories a list of test source directories
      * @return this operation instance
      * @since 1.5.10
      */

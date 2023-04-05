@@ -42,6 +42,13 @@ public class TestCleanOperation {
         assertTrue(operation2.directories().contains(dir1));
         assertTrue(operation2.directories().contains(dir2));
         assertTrue(operation2.directories().contains(dir3));
+
+        var operation3 = new CleanOperation();
+        operation3.directories(dir1, dir2, dir3);
+        assertFalse(operation3.directories().isEmpty());
+        assertTrue(operation3.directories().contains(dir1));
+        assertTrue(operation3.directories().contains(dir2));
+        assertTrue(operation3.directories().contains(dir3));
     }
 
     @Test

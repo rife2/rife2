@@ -172,9 +172,23 @@ public class WarOperation extends AbstractOperation<WarOperation> {
     }
 
     /**
-     * Provides the lib source directories that will be used for the war archive creation.
+     * Provides lib source directories that will be used for the war archive creation.
      *
-     * @param directories the lib source directories
+     * @param directories lib source directories
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public WarOperation libSourceDirectories(File... directories) {
+        libSourceDirectories_.addAll(List.of(directories));
+        return this;
+    }
+
+    /**
+     * Provides a list of lib source directories that will be used for the war archive creation.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param directories a list of lib source directories
      * @return this operation instance
      * @since 1.5
      */
@@ -184,9 +198,23 @@ public class WarOperation extends AbstractOperation<WarOperation> {
     }
 
     /**
-     * Provides the classes source directories that will be used for the war archive creation.
+     * Provides classes source directories that will be used for the war archive creation.
      *
-     * @param directories the classes source directories
+     * @param directories classes source directories
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public WarOperation classesSourceDirectories(File... directories) {
+        classesSourceDirectories_.addAll(List.of(directories));
+        return this;
+    }
+
+    /**
+     * Provides a list of classes source directories that will be used for the war archive creation.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param directories a list of classes source directories
      * @return this operation instance
      * @since 1.5
      */
@@ -198,7 +226,21 @@ public class WarOperation extends AbstractOperation<WarOperation> {
     /**
      * Provides jar files that will be included in the war archive creation.
      *
-     * @param files the jar source directories
+     * @param files jar source directories
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public WarOperation jarSourceFiles(NamedFile... files) {
+        jarSourceFiles_.addAll(List.of(files));
+        return this;
+    }
+
+    /**
+     * Provides a list of jar files that will be included in the war archive creation.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param files a list of jar source directories
      * @return this operation instance
      * @since 1.5
      */

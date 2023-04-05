@@ -85,6 +85,26 @@ public class TestWarOperation {
         assertEquals(web_xml_file, operation2.webXmlFile());
         assertEquals(destination_directory, operation2.destinationDirectory());
         assertEquals(destination_fileName, operation2.destinationFileName());
+
+        var operation3 = new WarOperation()
+            .libSourceDirectories(lib_source_directory1, lib_source_directory2)
+            .classesSourceDirectories(classes_source_directory1, classes_source_directory2)
+            .jarSourceFiles(jar_source_file1, jar_source_file2)
+            .webappDirectory(webapp_directory)
+            .webXmlFile(web_xml_file)
+            .destinationDirectory(destination_directory)
+            .destinationFileName(destination_fileName);
+
+        assertTrue(operation3.libSourceDirectories().contains(lib_source_directory1));
+        assertTrue(operation3.libSourceDirectories().contains(lib_source_directory2));
+        assertTrue(operation3.classesSourceDirectories().contains(classes_source_directory1));
+        assertTrue(operation3.classesSourceDirectories().contains(classes_source_directory2));
+        assertTrue(operation3.jarSourceFiles().contains(jar_source_file1));
+        assertTrue(operation3.jarSourceFiles().contains(jar_source_file2));
+        assertEquals(webapp_directory, operation3.webappDirectory());
+        assertEquals(web_xml_file, operation3.webXmlFile());
+        assertEquals(destination_directory, operation3.destinationDirectory());
+        assertEquals(destination_fileName, operation3.destinationFileName());
     }
 
     @Test

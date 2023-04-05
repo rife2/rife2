@@ -73,6 +73,21 @@ public class TestUberJarOperation {
         assertTrue(operation2.sourceDirectories().contains(resource_source_directory2));
         assertEquals(destination_directory, operation2.destinationDirectory());
         assertEquals(destination_fileName, operation2.destinationFileName());
+
+        var operation3 = new UberJarOperation()
+            .jarSourceFiles(jar_source_file1, jar_source_file2)
+            .sourceDirectories(resource_source_directory1, resource_source_directory2)
+            .destinationDirectory(destination_directory)
+            .destinationFileName(destination_fileName)
+            .mainClass(main_class);
+
+        assertTrue(operation3.jarSourceFiles().contains(jar_source_file1));
+        assertTrue(operation3.jarSourceFiles().contains(jar_source_file2));
+        assertTrue(operation3.sourceDirectories().contains(resource_source_directory1));
+        assertTrue(operation3.sourceDirectories().contains(resource_source_directory2));
+        assertEquals(destination_directory, operation3.destinationDirectory());
+        assertEquals(destination_fileName, operation3.destinationFileName());
+        assertEquals(main_class, operation3.mainClass());
     }
 
     @Test

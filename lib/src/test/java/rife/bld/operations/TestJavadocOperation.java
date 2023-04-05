@@ -37,6 +37,8 @@ public class TestJavadocOperation {
         var classpath2 = "classpath2";
         var source_file1 = new File("sourceFile1");
         var source_file2 = new File("sourceFile2");
+        var source_dir1 = new File("sourceDir1");
+        var source_dir2 = new File("sourceDir2");
         var javadoc_option1 = "javadocOption1";
         var javadoc_option2 = "javadocOption2";
         var included1 = Pattern.compile("included1");
@@ -48,6 +50,7 @@ public class TestJavadocOperation {
             .buildDirectory(build_directory)
             .classpath(List.of(classpath1, classpath2))
             .sourceFiles(List.of(source_file1, source_file2))
+            .sourceDirectories(List.of(source_dir1, source_dir2))
             .javadocOptions(List.of(javadoc_option1, javadoc_option2))
             .included(List.of(included1, included2))
             .excluded(List.of(excluded1, excluded2));
@@ -57,6 +60,8 @@ public class TestJavadocOperation {
         assertTrue(operation1.classpath().contains(classpath2));
         assertTrue(operation1.sourceFiles().contains(source_file1));
         assertTrue(operation1.sourceFiles().contains(source_file2));
+        assertTrue(operation1.sourceDirectories().contains(source_dir1));
+        assertTrue(operation1.sourceDirectories().contains(source_dir2));
         assertTrue(operation1.javadocOptions().contains(javadoc_option1));
         assertTrue(operation1.javadocOptions().contains(javadoc_option2));
         assertTrue(operation1.included().contains(included1));
@@ -70,6 +75,8 @@ public class TestJavadocOperation {
         operation2.classpath().add(classpath2);
         operation2.sourceFiles().add(source_file1);
         operation2.sourceFiles().add(source_file2);
+        operation2.sourceDirectories().add(source_dir1);
+        operation2.sourceDirectories().add(source_dir2);
         operation2.javadocOptions().add(javadoc_option1);
         operation2.javadocOptions().add(javadoc_option2);
         operation2.included().add(included1);
@@ -82,12 +89,37 @@ public class TestJavadocOperation {
         assertTrue(operation2.classpath().contains(classpath2));
         assertTrue(operation2.sourceFiles().contains(source_file1));
         assertTrue(operation2.sourceFiles().contains(source_file2));
+        assertTrue(operation2.sourceDirectories().contains(source_dir1));
+        assertTrue(operation2.sourceDirectories().contains(source_dir2));
         assertTrue(operation2.javadocOptions().contains(javadoc_option1));
         assertTrue(operation2.javadocOptions().contains(javadoc_option2));
         assertTrue(operation2.included().contains(included1));
         assertTrue(operation2.included().contains(included2));
         assertTrue(operation2.excluded().contains(excluded1));
         assertTrue(operation2.excluded().contains(excluded2));
+
+        var operation3 = new JavadocOperation()
+            .buildDirectory(build_directory)
+            .classpath(classpath1, classpath2)
+            .sourceFiles(source_file1, source_file2)
+            .sourceDirectories(source_dir1, source_dir2)
+            .javadocOptions(List.of(javadoc_option1, javadoc_option2))
+            .included(included1, included2)
+            .excluded(excluded1, excluded2);
+
+        assertEquals(build_directory, operation3.buildDirectory());
+        assertTrue(operation3.classpath().contains(classpath1));
+        assertTrue(operation3.classpath().contains(classpath2));
+        assertTrue(operation3.sourceFiles().contains(source_file1));
+        assertTrue(operation3.sourceFiles().contains(source_file2));
+        assertTrue(operation3.sourceDirectories().contains(source_dir1));
+        assertTrue(operation3.sourceDirectories().contains(source_dir2));
+        assertTrue(operation3.javadocOptions().contains(javadoc_option1));
+        assertTrue(operation3.javadocOptions().contains(javadoc_option2));
+        assertTrue(operation3.included().contains(included1));
+        assertTrue(operation3.included().contains(included2));
+        assertTrue(operation3.excluded().contains(excluded1));
+        assertTrue(operation3.excluded().contains(excluded2));
     }
 
     @Test
