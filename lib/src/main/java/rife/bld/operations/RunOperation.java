@@ -30,6 +30,7 @@ public class RunOperation extends AbstractOperation<RunOperation> {
     private final List<String> javaOptions_ = new ArrayList<>();
     private final List<String> classpath_ = new ArrayList<>();
     private String mainClass_;
+    private final List<String> runOptions_ = new ArrayList<>();
     private Function<String, Boolean> outputProcessor_;
     private Function<String, Boolean> errorProcessor_;
     private Process process_;
@@ -70,6 +71,7 @@ public class RunOperation extends AbstractOperation<RunOperation> {
             args.add(FileUtils.joinPaths(classpath()));
         }
         args.add(mainClass());
+        args.addAll(runOptions());
         return args;
     }
 
@@ -217,6 +219,32 @@ public class RunOperation extends AbstractOperation<RunOperation> {
     }
 
     /**
+     * Provides options for the run operation
+     *
+     * @param options run options
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public RunOperation runOptions(String... options) {
+        runOptions_.addAll(List.of(options));
+        return this;
+    }
+
+    /**
+     * Provides options for the run operation
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param options run options
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public RunOperation runOptions(List<String> options) {
+        runOptions_.addAll(options);
+        return this;
+    }
+
+    /**
      * Provides the processor that will be used to handle the process output.
      *
      * @param processor the output processor
@@ -292,6 +320,16 @@ public class RunOperation extends AbstractOperation<RunOperation> {
      */
     public String mainClass() {
         return mainClass_;
+    }
+
+    /**
+     * Retrieves the run options
+     *
+     * @return the run options
+     * @since 1.5.18
+     */
+    public List<String> runOptions() {
+        return runOptions_;
     }
 
     /**

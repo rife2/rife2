@@ -26,6 +26,7 @@ public class TestRunOperation {
         assertTrue(operation.javaOptions().isEmpty());
         assertTrue(operation.classpath().isEmpty());
         assertNull(operation.mainClass());
+        assertTrue(operation.runOptions().isEmpty());
         assertNull(operation.outputProcessor());
         assertNull(operation.errorProcessor());
         assertNull(operation.process());
@@ -41,6 +42,8 @@ public class TestRunOperation {
             var run_java_option2 = "runJavaOption2";
             var run_classpath1 = "runClasspath1";
             var run_classpath2 = "runClasspath2";
+            var run_option1 = "runOption1";
+            var run_option2 = "runOption2";
             var main_class = "mainClass";
             Function<String, Boolean> run_output_consumer = (String) -> true;
             Function<String, Boolean> run_error_consumer = (String) -> true;
@@ -52,6 +55,7 @@ public class TestRunOperation {
                 .javaOptions(List.of(run_java_option1, run_java_option2))
                 .classpath(List.of(run_classpath1, run_classpath2))
                 .mainClass(main_class)
+                .runOptions(List.of(run_option1, run_option2))
                 .outputProcessor(run_output_consumer)
                 .errorProcessor(run_error_consumer);
 
@@ -62,6 +66,8 @@ public class TestRunOperation {
             assertTrue(operation1.classpath().contains(run_classpath1));
             assertTrue(operation1.classpath().contains(run_classpath2));
             assertEquals(main_class, operation1.mainClass());
+            assertTrue(operation1.runOptions().contains(run_option1));
+            assertTrue(operation1.runOptions().contains(run_option2));
             assertSame(run_output_consumer, operation1.outputProcessor());
             assertSame(run_error_consumer, operation1.errorProcessor());
 
@@ -73,6 +79,8 @@ public class TestRunOperation {
             operation2.classpath().add(run_classpath1);
             operation2.classpath().add(run_classpath2);
             operation2.mainClass(main_class);
+            operation2.runOptions().add(run_option1);
+            operation2.runOptions().add(run_option2);
             operation2.outputProcessor(run_output_consumer);
             operation2.errorProcessor(run_error_consumer);
 
@@ -83,15 +91,20 @@ public class TestRunOperation {
             assertTrue(operation2.classpath().contains(run_classpath1));
             assertTrue(operation2.classpath().contains(run_classpath2));
             assertEquals(main_class, operation2.mainClass());
+            assertTrue(operation2.runOptions().contains(run_option1));
+            assertTrue(operation2.runOptions().contains(run_option2));
             assertSame(run_output_consumer, operation2.outputProcessor());
             assertSame(run_error_consumer, operation2.errorProcessor());
 
             var operation3 = new RunOperation();
             operation3
-                .classpath(run_classpath1, run_classpath2);
+                .classpath(run_classpath1, run_classpath2)
+                .runOptions(run_option1, run_option2);
 
             assertTrue(operation3.classpath().contains(run_classpath1));
             assertTrue(operation3.classpath().contains(run_classpath2));
+            assertTrue(operation3.runOptions().contains(run_option1));
+            assertTrue(operation3.runOptions().contains(run_option2));
         } finally {
             FileUtils.deleteDirectory(work_directory);
         }
