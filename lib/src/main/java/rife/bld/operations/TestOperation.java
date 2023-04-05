@@ -80,7 +80,6 @@ public class TestOperation extends AbstractOperation<TestOperation> {
         var test_tool_options = testToolOptions();
         if (test_tool_options.isEmpty() && main_class.equals(DEFAULT_TEST_TOOL_JUNIT5)) {
             test_tool_options.add("--config=junit.jupiter.testclass.order.default=org.junit.jupiter.api.ClassOrderer$ClassName");
-            test_tool_options.add("--config=junit.jupiter.testmethod.order.default=org.junit.jupiter.api.MethodOrderer$MethodName");
             test_tool_options.add("--details=verbose");
             test_tool_options.add("--scan-classpath");
             test_tool_options.add("--disable-banner");

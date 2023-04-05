@@ -147,8 +147,8 @@ public class TestJarOperation {
                     new NamedFile("src6.txt", source6)))
                 .destinationDirectory(destination_dir)
                 .destinationFileName(destination_name)
-                .included(List.of(Pattern.compile(".*source.*\\.text")))
-                .excluded(List.of(Pattern.compile(".*source5.*")))
+                .included("source.*\\.text")
+                .excluded("source5.*")
                 .execute();
 
             var jar_archive = new File(destination_dir, destination_name);

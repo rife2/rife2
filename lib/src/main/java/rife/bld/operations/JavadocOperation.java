@@ -94,7 +94,7 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
 
         var filtered_sources = new ArrayList<File>();
         for (var source : sources) {
-            if (StringUtils.filter(source.getAbsolutePath(), included(), excluded())) {
+            if (StringUtils.filter(source.getAbsolutePath(), included(), excluded(), false)) {
                 filtered_sources.add(source);
             }
         }
@@ -258,7 +258,20 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
     }
 
     /**
-     * Provides patterns that will be evaluated to determine which files
+     * Provides regex patterns that will be found to determine which files
+     * will be included in the javadoc generation.
+     *
+     * @param included inclusion patterns
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JavadocOperation included(String... included) {
+        included_.addAll(Arrays.stream(included).map(Pattern::compile).toList());
+        return this;
+    }
+
+    /**
+     * Provides patterns that will be found to determine which files
      * will be included in the javadoc generation.
      *
      * @param included inclusion patterns
@@ -271,7 +284,7 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
     }
 
     /**
-     * Provides a list of patterns that will be evaluated to determine which files
+     * Provides a list of patterns that will be found to determine which files
      * will be included in the javadoc generation.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.
@@ -286,7 +299,20 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
     }
 
     /**
-     * Provides patterns that will be evaluated to determine which files
+     * Provides regex patterns that will be found to determine which files
+     * will be excluded from the javadoc generation.
+     *
+     * @param excluded exclusion patterns
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JavadocOperation excluded(String... excluded) {
+        excluded_.addAll(Arrays.stream(excluded).map(Pattern::compile).toList());
+        return this;
+    }
+
+    /**
+     * Provides patterns that will be found to determine which files
      * will be excluded from the javadoc generation.
      *
      * @param excluded exclusion patterns
@@ -299,7 +325,7 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
     }
 
     /**
-     * Provides a list of patterns that will be evaluated to determine which files
+     * Provides a list of patterns that will be found to determine which files
      * will be excluded from the javadoc generation.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.

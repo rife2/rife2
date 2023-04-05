@@ -2351,6 +2351,22 @@ public final class StringUtils {
      * @since 1.0
      */
     public static boolean filter(String name, Pattern included, Pattern excluded) {
+        return filter(name, included, excluded, true);
+    }
+
+    /**
+     * Checks if the name filters through an including and an excluding
+     * regular expression.
+     *
+     * @param name     The {@code String} that will be filtered.
+     * @param included The regular expressions that needs to succeed
+     * @param excluded The regular expressions that needs to fail
+     * @param matches  Indicates whether it should be a full match or a contains
+     * @return {@code true} if the name filtered through correctly; or
+     * <p>{@code false} otherwise.
+     * @since 1.5.18
+     */
+    public static boolean filter(String name, Pattern included, Pattern excluded, boolean matches) {
         Pattern[] included_array = null;
         if (included != null) {
             included_array = new Pattern[]{included};
@@ -2361,7 +2377,7 @@ public final class StringUtils {
             excluded_array = new Pattern[]{excluded};
         }
 
-        return filter(name, included_array, excluded_array);
+        return filter(name, included_array, excluded_array, matches);
     }
 
     /**
@@ -2376,11 +2392,27 @@ public final class StringUtils {
      * @since 1.5
      */
     public static boolean filter(String name, List<Pattern> included, List<Pattern> excluded) {
+        return filter(name, included, excluded, true);
+    }
+
+    /**
+     * Checks if the name filters through a series of including and excluding
+     * regular expressions.
+     *
+     * @param name     The {@code String} that will be filtered.
+     * @param included A list of regular expressions that need to succeed
+     * @param excluded A list of regular expressions that need to fail
+     * @param matches  Indicates whether it should be a full match or a contains
+     * @return {@code true} if the name filtered through correctly; or
+     * <p>{@code false} otherwise.
+     * @since 1.5.18
+     */
+    public static boolean filter(String name, List<Pattern> included, List<Pattern> excluded, boolean matches) {
         var included_array = new Pattern[included.size()];
         var excluded_array = new Pattern[excluded.size()];
         included.toArray(included_array);
         excluded.toArray(excluded_array);
-        return filter(name, included_array, excluded_array);
+        return filter(name, included_array, excluded_array, matches);
     }
 
     /**
@@ -2395,6 +2427,22 @@ public final class StringUtils {
      * @since 1.0
      */
     public static boolean filter(String name, Pattern[] included, Pattern[] excluded) {
+        return filter(name, included, excluded, true);
+    }
+
+    /**
+     * Checks if the name filters through a series of including and excluding
+     * regular expressions.
+     *
+     * @param name     The {@code String} that will be filtered.
+     * @param included An array of regular expressions that need to succeed
+     * @param excluded An array of regular expressions that need to fail
+     * @param matches  Indicates whether it should be a full match or a contains
+     * @return {@code true} if the name filtered through correctly; or
+     * <p>{@code false} otherwise.
+     * @since 1.5.18
+     */
+    public static boolean filter(String name, Pattern[] included, Pattern[] excluded, boolean matches) {
         if (null == name) {
             return false;
         }
@@ -2406,10 +2454,13 @@ public final class StringUtils {
             accepted = true;
         } else {
             for (var pattern : included) {
-                if (pattern != null &&
-                    pattern.matcher(name).matches()) {
-                    accepted = true;
-                    break;
+                if (pattern != null) {
+                    var matcher = pattern.matcher(name);
+                    if ((matches && matcher.matches()) ||
+                        (!matches && matcher.find())) {
+                        accepted = true;
+                        break;
+                    }
                 }
             }
         }
@@ -2418,10 +2469,13 @@ public final class StringUtils {
         if (accepted &&
             excluded != null) {
             for (var pattern : excluded) {
-                if (pattern != null &&
-                    pattern.matcher(name).matches()) {
-                    accepted = false;
-                    break;
+                if (pattern != null) {
+                    var matcher = pattern.matcher(name);
+                    if ((matches && matcher.matches()) ||
+                        (!matches && matcher.find())) {
+                        accepted = false;
+                        break;
+                    }
                 }
             }
         }

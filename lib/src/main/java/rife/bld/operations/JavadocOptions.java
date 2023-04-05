@@ -623,11 +623,11 @@ public class JavadocOptions extends ArrayList<String> {
      * Read overview documentation from HTML file
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public JavadocOptions overview(String html) {
+    public JavadocOptions overview(File htmlFile) {
         add("-overview");
-        add(html);
+        add(htmlFile.getAbsolutePath());
         return this;
     }
 

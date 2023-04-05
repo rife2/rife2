@@ -190,7 +190,7 @@ public class TestJavadocOperation {
     }
 
     @Test
-    void testIncludeExcluse()
+    void testIncludeExclude()
     throws Exception {
         var tmp = Files.createTempDirectory("test").toFile();
         try {
@@ -243,8 +243,8 @@ public class TestJavadocOperation {
                 .buildDirectory(build)
                 .classpath(List.of(build.getAbsolutePath()))
                 .sourceFiles(List.of(source_file1, source_file2, source_file3))
-                .included(List.of(Pattern.compile(".*Source([12]).*")))
-                .excluded(List.of(Pattern.compile(".*Source1.*")));
+                .included("Source([12])")
+                .excluded("Source1");
             operation.execute();
             assertTrue(operation.diagnostics().isEmpty());
 

@@ -606,6 +606,39 @@ public class TestStringUtils {
     }
 
     @Test
+    void testFilterSingularNonMatching() {
+        assertFalse(StringUtils.filter(null, null, (Pattern) null));
+
+        assertTrue(StringUtils.filter("test", null, Pattern.compile("a"), false));
+        assertFalse(StringUtils.filter("test", null, Pattern.compile("t"), false));
+
+        assertTrue(StringUtils.filter("test", Pattern.compile("e"), null, false));
+        assertFalse(StringUtils.filter("test", Pattern.compile("x"), null, false));
+
+        assertTrue(StringUtils.filter("test", Pattern.compile("e"), Pattern.compile("a"), false));
+        assertFalse(StringUtils.filter("test", Pattern.compile("e"), Pattern.compile("t"), false));
+        assertFalse(StringUtils.filter("test", Pattern.compile("x"), Pattern.compile("a"), false));
+    }
+
+    @Test
+    void testFilterMultipleNonMatching() {
+        assertFalse(StringUtils.filter(null, null, (Pattern[]) null));
+
+        assertTrue(StringUtils.filter("test", null, new Pattern[]{Pattern.compile("a"), Pattern.compile("b")}, false));
+        assertFalse(StringUtils.filter("test", null, new Pattern[]{Pattern.compile("a"), Pattern.compile("t")}, false));
+        assertFalse(StringUtils.filter("test", null, new Pattern[]{Pattern.compile("e"), Pattern.compile("t")}, false));
+
+        assertTrue(StringUtils.filter("test", new Pattern[]{Pattern.compile("e"), Pattern.compile("s")}, null, false));
+        assertTrue(StringUtils.filter("test", new Pattern[]{Pattern.compile("a"), Pattern.compile("s")}, null, false));
+        assertFalse(StringUtils.filter("test", new Pattern[]{Pattern.compile("a"), Pattern.compile("b")}, null, false));
+
+        assertTrue(StringUtils.filter("test", new Pattern[]{Pattern.compile("e"), Pattern.compile("s")}, new Pattern[]{Pattern.compile("a"), Pattern.compile("b")}, false));
+        assertTrue(StringUtils.filter("test", new Pattern[]{Pattern.compile("a"), Pattern.compile("s")}, new Pattern[]{Pattern.compile("a"), Pattern.compile("b")}, false));
+        assertFalse(StringUtils.filter("test", new Pattern[]{Pattern.compile("e"), Pattern.compile("s")}, new Pattern[]{Pattern.compile("a"), Pattern.compile("t")}, false));
+        assertFalse(StringUtils.filter("test", new Pattern[]{Pattern.compile("x"), Pattern.compile("b")}, new Pattern[]{Pattern.compile("a"), Pattern.compile("t")}, false));
+    }
+
+    @Test
     void testCapitalize() {
         assertNull(StringUtils.capitalize(null));
         assertEquals("", StringUtils.capitalize(""));

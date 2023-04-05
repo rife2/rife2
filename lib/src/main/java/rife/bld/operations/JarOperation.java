@@ -68,13 +68,13 @@ public class JarOperation extends AbstractOperation<JarOperation> {
             for (var source_dir : sourceDirectories()) {
                 for (var file_name : FileUtils.getFileList(source_dir)) {
                     var file = new File(source_dir, file_name);
-                    if (StringUtils.filter(file.getAbsolutePath(), included(), excluded())) {
+                    if (StringUtils.filter(file.getAbsolutePath(), included(), excluded(), false)) {
                         executeAddFileToJar(jar, new NamedFile(file_name, file));
                     }
                 }
             }
             for (var source_file : sourceFiles()) {
-                if (StringUtils.filter(source_file.file().getAbsolutePath(), included(), excluded())) {
+                if (StringUtils.filter(source_file.file().getAbsolutePath(), included(), excluded(), false)) {
                     executeAddFileToJar(jar, source_file);
                 }
             }
@@ -238,7 +238,20 @@ public class JarOperation extends AbstractOperation<JarOperation> {
     }
 
     /**
-     * Provides patterns that will be evaluated to determine which files
+     * Provides regex patterns that will be found to determine which files
+     * will be included in the javadoc generation.
+     *
+     * @param included inclusion patterns
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JarOperation included(String... included) {
+        included_.addAll(Arrays.stream(included).map(Pattern::compile).toList());
+        return this;
+    }
+
+    /**
+     * Provides patterns that will be found to determine which files
      * will be included in the jar archive.
      *
      * @param included inclusion patterns
@@ -251,7 +264,7 @@ public class JarOperation extends AbstractOperation<JarOperation> {
     }
 
     /**
-     * Provides a list of patterns that will be evaluated to determine which files
+     * Provides a list of patterns that will be found to determine which files
      * will be included in the jar archive.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.
@@ -266,7 +279,20 @@ public class JarOperation extends AbstractOperation<JarOperation> {
     }
 
     /**
-     * Provides patterns that will be evaluated to determine which files
+     * Provides regex patterns that will be found to determine which files
+     * will be excluded from the javadoc generation.
+     *
+     * @param excluded exclusion patterns
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public JarOperation excluded(String... excluded) {
+        excluded_.addAll(Arrays.stream(excluded).map(Pattern::compile).toList());
+        return this;
+    }
+
+    /**
+     * Provides patterns that will be found to determine which files
      * will be excluded from the jar archive.
      *
      * @param excluded exclusion patterns
@@ -279,7 +305,7 @@ public class JarOperation extends AbstractOperation<JarOperation> {
     }
 
     /**
-     * Provides a list of patterns that will be evaluated to determine which files
+     * Provides a list of patterns that will be found to determine which files
      * will be excluded from the jar archive.
      * <p>
      * A copy will be created to allow this list to be independently modifiable.
