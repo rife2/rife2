@@ -157,13 +157,16 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
      * @since 1.5
      */
     public CompileOperation fromProject(Project project) {
-        return buildMainDirectory(project.buildMainDirectory())
+        var operation = buildMainDirectory(project.buildMainDirectory())
             .buildTestDirectory(project.buildTestDirectory())
             .compileMainClasspath(project.compileMainClasspath())
             .compileTestClasspath(project.compileTestClasspath())
             .mainSourceFiles(project.mainSourceFiles())
-            .testSourceFiles(project.testSourceFiles())
-            .compileOptions(project.compileJavacOptions());
+            .testSourceFiles(project.testSourceFiles());
+        if (project.javaRelease() != null && !compileOptions().containsRelease()) {
+            compileOptions().release(project.javaRelease());
+        }
+        return operation;
     }
 
     /**

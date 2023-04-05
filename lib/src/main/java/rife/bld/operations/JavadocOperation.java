@@ -143,11 +143,14 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
      * @since 1.5.10
      */
     public JavadocOperation fromProject(Project project) {
-        return buildDirectory(project.buildJavadocDirectory())
+        var operation = buildDirectory(project.buildJavadocDirectory())
             .classpath(project.compileMainClasspath())
             .classpath(project.buildMainDirectory().getAbsolutePath())
-            .sourceFiles(project.mainSourceFiles())
-            .javadocOptions(project.javadocOptions());
+            .sourceFiles(project.mainSourceFiles());
+        if (project.javaRelease() != null && !javadocOptions().containsRelease()) {
+            javadocOptions().release(project.javaRelease());
+        }
+        return operation;
     }
 
     /**

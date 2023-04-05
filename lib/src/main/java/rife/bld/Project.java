@@ -106,24 +106,10 @@ public class Project extends BuildExecutor {
     /**
      * The project's Java release version for compilation.
      *
-     * @see #compileJavacOptions()
+     * @see #javaRelease()
      * @since 1.5.6
      */
     protected Integer javaRelease = null;
-    /**
-     * The project's javac options for compilation.
-     *
-     * @see #compileJavacOptions()
-     * @since 1.5
-     */
-    protected CompileOptions compileJavacOptions = new CompileOptions();
-    /**
-     * The project's javadoc options.
-     *
-     * @see #javadocOptions()
-     * @since 1.5.10
-     */
-    protected JavadocOptions javadocOptions = new JavadocOptions();
     /**
      * The tool that is used for running the java main class.
      *
@@ -1402,61 +1388,12 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns the project's javac options for compilation.
-     * <p>
-     * This list can be modified to change the javac options for the project.
+     * Returns the java release targets for this project.
      *
-     * @since 1.5
+     * @since 1.5.18
      */
-    public CompileOptions compileJavacOptions() {
-        if (compileJavacOptions == null) {
-            compileJavacOptions = new CompileOptions();
-        }
-        if (javaRelease != null) {
-            compileJavacOptions.release(javaRelease);
-        }
-        return compileJavacOptions;
-    }
-
-    /**
-     * Adds javac compilation options to this project.
-     *
-     * @param options the options to add
-     * @since 1.5.6
-     */
-    public void compileJavacOptions(String... options) {
-        for (var option : options) {
-            compileJavacOptions().add(option);
-        }
-    }
-
-    /**
-     * Returns the project's javadoc options.
-     * <p>
-     * This list can be modified to change the javadoc options for the project.
-     *
-     * @since 1.5.10
-     */
-    public JavadocOptions javadocOptions() {
-        if (javadocOptions == null) {
-            javadocOptions = new JavadocOptions();
-        }
-        if (javaRelease != null) {
-            javadocOptions.release(javaRelease);
-        }
-        return javadocOptions;
-    }
-
-    /**
-     * Adds javadoc options to this project.
-     *
-     * @param options the options to add
-     * @since 1.5.6
-     */
-    public void javadocOptions(String... options) {
-        for (var option : options) {
-            javadocOptions().add(option);
-        }
+    public Integer javaRelease() {
+        return javaRelease;
     }
 
     /**
@@ -1786,14 +1723,14 @@ public class Project extends BuildExecutor {
      * Returns all the classpath entries for testing the application.
      * <p>
      * By default, this converts the files from {@link #compileClasspathJars()},
-     * {@link #runtimeClasspathJars()} {@link #standaloneClasspathJars()} and {@link #testClasspathJars()}
+     * {@link #runtimeClasspathJars()}  and {@link #testClasspathJars()}
      * to absolute paths, as well as the {@link #srcMainResourcesDirectory()},
      * {@link #buildMainDirectory()} and {@link #buildTestDirectory()}
      *
      * @since 1.5
      */
     public List<String> testClasspath() {
-        var paths = FileUtils.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars(), testClasspathJars());
+        var paths = FileUtils.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), testClasspathJars());
         paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(srcTestResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());

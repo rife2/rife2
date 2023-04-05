@@ -237,6 +237,17 @@ public class JavadocOptions extends ArrayList<String> {
     }
 
     /**
+     * Indicates whether the Java SE release was set.
+     *
+     * @return {@code true} if the release was set; or
+     * {@code false} otherwise
+     * @since 1.5.18
+     */
+    public boolean containsRelease() {
+        return contains("-release");
+    }
+
+    /**
      * Provide source compatibility with specified release
      *
      * @return this list of options
