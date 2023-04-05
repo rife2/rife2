@@ -142,7 +142,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
                 .info(info())
                 .updated(moment)
                 .build(),
-            info().version() + "/" + repository().getMetadataName());
+            info().version() + "/" + repository().getMetadataName(), true);
         return actual_version;
     }
 
@@ -180,7 +180,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
         // generate and upload pom
         executePublishStringArtifact(
             new PomBuilder().info(info()).dependencies(dependencies()).build(),
-            info().version() + "/" + info().artifactId() + "-" + actualVersion + ".pom");
+            info().version() + "/" + info().artifactId() + "-" + actualVersion + ".pom", true);
     }
 
     /**
@@ -207,7 +207,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
                 .updated(moment)
                 .otherVersions(current_versions)
                 .build(),
-            repository().getMetadataName());
+            repository().getMetadataName(), false);
     }
 
     /**
@@ -216,9 +216,10 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      *
      * @param content the content of the file that needs to be published
      * @param path    the path of the artifact within the artifact folder
-     * @since 1.5.8
+     * @param sign    indicates whether the artifact should be signed
+     * @since 1.5.18
      */
-    public void executePublishStringArtifact(String content, String path)
+    public void executePublishStringArtifact(String content, String path, boolean sign)
     throws UploadException {
         try {
             executeTransferArtifact(content, path);
@@ -229,7 +230,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
                 executeTransferArtifact(generateHash(content, "SHA-512"), path + ".sha512");
             }
 
-            if (info().signKey() != null) {
+            if (sign && info().signKey() != null) {
                 var tmp_file = File.createTempFile(path, "gpg");
                 FileUtils.writeString(content, tmp_file);
                 try {
