@@ -44,6 +44,9 @@ public class TestVersionNumber {
         assertEquals(VersionNumber.parse("1.0.0.0.0.0.0"), new VersionNumber(1, 0, 0, "0.0.0.0"));
         assertEquals(VersionNumber.parse("1.2.3.4-rc1-SNAPSHOT"), new VersionNumber(1, 2, 3, "4-rc1-SNAPSHOT"));
         assertEquals(VersionNumber.parse("1.2.3.4.rc1-SNAPSHOT"), new VersionNumber(1, 2, 3, "4.rc1-SNAPSHOT"));
+
+        assertEquals(VersionNumber.parse("1.2.3_4"), new VersionNumber(1, 2, 0, "3_4"));
+        assertEquals(VersionNumber.parse("1.54b"), new VersionNumber(1, 0, 0, "54b"));
     }
 
     @Test
@@ -72,7 +75,6 @@ public class TestVersionNumber {
         assertEquals(VersionNumber.parse("a.1"), VersionNumber.UNKNOWN);
         assertEquals(VersionNumber.parse("1_2"), VersionNumber.UNKNOWN);
         assertEquals(VersionNumber.parse("1_2_2"), VersionNumber.UNKNOWN);
-        assertEquals(VersionNumber.parse("1.2.3_4"), VersionNumber.UNKNOWN);
     }
 
     @Test
