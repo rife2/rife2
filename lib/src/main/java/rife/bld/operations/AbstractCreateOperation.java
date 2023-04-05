@@ -6,7 +6,6 @@ package rife.bld.operations;
 
 import rife.Version;
 import rife.bld.Project;
-import rife.bld.dependencies.*;
 import rife.bld.operations.exceptions.OperationOptionException;
 import rife.bld.wrapper.Wrapper;
 import rife.template.TemplateFactory;
@@ -93,7 +92,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
      *
      * @since 1.5
      */
-    public void executeConfigure() {
+    protected void executeConfigure() {
         project_ = createProjectBlueprint();
 
         // standard names
@@ -120,7 +119,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
      *
      * @since 1.5
      */
-    public void executeCreateProjectStructure() {
+    protected void executeCreateProjectStructure() {
         project_.createProjectStructure();
 
         bldPackageDirectory_.mkdirs();
@@ -139,7 +138,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
      *
      * @since 1.5
      */
-    public void executePopulateProjectStructure()
+    protected void executePopulateProjectStructure()
     throws FileUtilsErrorException, IOException {
         // project gitignore
         FileUtils.writeString(
@@ -212,7 +211,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
      *
      * @since 1.5
      */
-    public void executePopulateIdeaProject()
+    protected void executePopulateIdeaProject()
     throws FileUtilsErrorException {
         // IDEA project files
         FileUtils.writeString(
@@ -262,7 +261,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
      *
      * @since 1.5.6
      */
-    public void executePopulateVscodeProject()
+    protected void executePopulateVscodeProject()
     throws FileUtilsErrorException {
         var launch_template = TemplateFactory.JSON.get(templateBase_ + "vscode.launch");
         launch_template.setValue("package", project_.pkg());
@@ -283,7 +282,7 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
      *
      * @since 1.5
      */
-    public void executeDownloadDependencies() {
+    protected void executeDownloadDependencies() {
         new DownloadOperation().fromProject(project_).execute();
     }
 

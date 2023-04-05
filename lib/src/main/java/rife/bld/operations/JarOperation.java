@@ -52,7 +52,7 @@ public class JarOperation extends AbstractOperation<JarOperation> {
      *
      * @since 1.5
      */
-    public void executeCreateDestinationDirectory() {
+    protected void executeCreateDestinationDirectory() {
         destinationDirectory().mkdirs();
     }
 
@@ -61,7 +61,7 @@ public class JarOperation extends AbstractOperation<JarOperation> {
      *
      * @since 1.5
      */
-    public void executeCreateJarArchive()
+    protected void executeCreateJarArchive()
     throws IOException {
         var out_file = new File(destinationDirectory(), destinationFileName());
         try (var jar = new JarOutputStream(new FileOutputStream(out_file), executeCreateManifest())) {
@@ -87,7 +87,7 @@ public class JarOperation extends AbstractOperation<JarOperation> {
      *
      * @since 1.5
      */
-    public Manifest executeCreateManifest() {
+    protected Manifest executeCreateManifest() {
         var manifest = new Manifest();
         var attributes = manifest.getMainAttributes();
         // don't use putAll since Attributes does an instanceof check
@@ -104,7 +104,7 @@ public class JarOperation extends AbstractOperation<JarOperation> {
      *
      * @since 1.5
      */
-    private void executeAddFileToJar(JarOutputStream jar, NamedFile file)
+    protected void executeAddFileToJar(JarOutputStream jar, NamedFile file)
     throws IOException {
         var entry = new JarEntry(file.name().replace('\\', '/'));
         entry.setTime(file.file().lastModified());

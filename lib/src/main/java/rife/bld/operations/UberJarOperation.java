@@ -57,7 +57,7 @@ public class UberJarOperation extends AbstractOperation<UberJarOperation> {
      *
      * @since 1.5
      */
-    public void executeCollectSourceJarContents(File stagingDirectory)
+    protected void executeCollectSourceJarContents(File stagingDirectory)
     throws FileUtilsErrorException {
         for (var jar : jarSourceFiles()) {
             FileUtils.unzipFile(jar, stagingDirectory);
@@ -69,7 +69,7 @@ public class UberJarOperation extends AbstractOperation<UberJarOperation> {
      *
      * @since 1.5
      */
-    public void executeCollectSourceResources(File stagingDirectory)
+    protected void executeCollectSourceResources(File stagingDirectory)
     throws FileUtilsErrorException {
         for (var named_file : sourceDirectories()) {
             if (named_file.file().exists()) {
@@ -85,7 +85,7 @@ public class UberJarOperation extends AbstractOperation<UberJarOperation> {
      *
      * @since 1.5
      */
-    public void executeCreateUberJarArchive(File stagingDirectory)
+    protected void executeCreateUberJarArchive(File stagingDirectory)
     throws IOException {
         var existing_manifest = new File(new File(stagingDirectory, "META-INF"), "MANIFEST.MF");
         existing_manifest.delete();

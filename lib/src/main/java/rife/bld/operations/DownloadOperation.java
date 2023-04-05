@@ -54,8 +54,8 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      *
      * @since 1.5
      */
-    public void executeDownloadCompileDependencies() {
-        executeDownloadScopedDependencies(libCompileDirectory(), new Scope[]{Scope.compile}, new Scope[]{Scope.compile}, null);
+    protected void executeDownloadCompileDependencies() {
+        executeDownloadScopedDependencies(libCompileDirectory(), new Scope[]{Scope.provided, Scope.compile}, new Scope[]{Scope.compile}, null);
     }
 
     /**
@@ -63,15 +63,21 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      *
      * @since 1.5
      */
-    public void executeDownloadRuntimeDependencies() {
-        DependencySet excluded = null;
+    protected void executeDownloadRuntimeDependencies() {
+        var excluded = new DependencySet();
+        var provided_dependencies = dependencies().get(Scope.provided);
+        if (provided_dependencies != null) {
+            for (var dependency : provided_dependencies) {
+                excluded.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile));
+            }
+        }
         var compile_dependencies = dependencies().get(Scope.compile);
         if (compile_dependencies != null) {
             for (var dependency : compile_dependencies) {
-                excluded = new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile);
+                excluded.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile));
             }
         }
-        executeDownloadScopedDependencies(libRuntimeDirectory(), new Scope[]{Scope.compile, Scope.runtime}, new Scope[]{Scope.runtime}, excluded);
+        executeDownloadScopedDependencies(libRuntimeDirectory(), new Scope[]{Scope.provided, Scope.compile, Scope.runtime}, new Scope[]{Scope.runtime}, excluded);
     }
 
     /**
@@ -79,7 +85,7 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      *
      * @since 1.5
      */
-    public void executeDownloadStandaloneDependencies() {
+    protected void executeDownloadStandaloneDependencies() {
         executeDownloadScopedDependencies(libStandaloneDirectory(), new Scope[]{Scope.standalone}, new Scope[]{Scope.compile, Scope.runtime}, null);
     }
 
@@ -88,7 +94,7 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      *
      * @since 1.5
      */
-    public void executeDownloadTestDependencies() {
+    protected void executeDownloadTestDependencies() {
         executeDownloadScopedDependencies(libTestDirectory(), new Scope[]{Scope.test}, new Scope[]{Scope.compile, Scope.runtime}, null);
     }
 
@@ -101,7 +107,7 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      * @param excluded             dependencies should be removed because they likely already exist elsewhere
      * @since 1.5.5
      */
-    public void executeDownloadScopedDependencies(File destinationDirectory, Scope[] resolvedScopes, Scope[] transitiveScopes, DependencySet excluded) {
+    protected void executeDownloadScopedDependencies(File destinationDirectory, Scope[] resolvedScopes, Scope[] transitiveScopes, DependencySet excluded) {
         if (destinationDirectory == null) {
             return;
         }

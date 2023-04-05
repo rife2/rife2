@@ -82,7 +82,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      *
      * @since 1.5.10
      */
-    public void executeValidateArtifacts() {
+    protected void executeValidateArtifacts() {
         artifacts().removeIf(artifact -> {
             if (!artifact.file().exists()) {
                 System.out.println("WARNING: Missing artifact file '" + artifact.file() + "', skipping.");
@@ -100,7 +100,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @return the adapted version number with the snapshot timestamp and build number
      * @since 1.5.10
      */
-    public VersionNumber executePublishSnapshotMetadata(ZonedDateTime moment) {
+    protected VersionNumber executePublishSnapshotMetadata(ZonedDateTime moment) {
         var metadata = new MetadataBuilder();
 
         VersionNumber actual_version;
@@ -153,7 +153,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @param actualVersion the version that was potentially adapted if this is a snapshot
      * @since 1.5.10
      */
-    public void executePublishArtifacts(VersionNumber actualVersion) {
+    protected void executePublishArtifacts(VersionNumber actualVersion) {
         // upload artifacts
         for (var artifact : artifacts()) {
             var artifact_name = new StringBuilder(info().artifactId()).append("-").append(actualVersion);
@@ -176,7 +176,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @param actualVersion the version that was potentially adapted if this is a snapshot
      * @since 1.5.10
      */
-    public void executePublishPom(VersionNumber actualVersion) {
+    protected void executePublishPom(VersionNumber actualVersion) {
         // generate and upload pom
         executePublishStringArtifact(
             new PomBuilder().info(info()).dependencies(dependencies()).build(),
@@ -189,7 +189,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @param moment the timestamp at which the operation started executing
      * @since 1.5.8
      */
-    public void executePublishMetadata(ZonedDateTime moment) {
+    protected void executePublishMetadata(ZonedDateTime moment) {
         var current_versions = new ArrayList<VersionNumber>();
         var resolver = new DependencyResolver(List.of(repository()), new Dependency(info().groupId(), info().artifactId(), info().version()));
         try {
@@ -219,7 +219,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @param sign    indicates whether the artifact should be signed
      * @since 1.5.18
      */
-    public void executePublishStringArtifact(String content, String path, boolean sign)
+    protected void executePublishStringArtifact(String content, String path, boolean sign)
     throws UploadException {
         try {
             executeTransferArtifact(content, path);
@@ -244,7 +244,16 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
         }
     }
 
-    private String generateHash(String content, String algorithm)
+    /**
+     * Generates the hash for a particular string and algorithm.
+     *
+     * @param content   the string to generate the hash for
+     * @param algorithm the hashing algorithm to use
+     * @return the generates hash, encoded in lowercase hex
+     * @throws NoSuchAlgorithmException when the hashing algorithm couldn't be found
+     * @since 1.5.18
+     */
+    protected String generateHash(String content, String algorithm)
     throws NoSuchAlgorithmException {
         var digest = MessageDigest.getInstance(algorithm);
         digest.update(content.getBytes(StandardCharsets.UTF_8));
@@ -259,7 +268,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @param path the path of the artifact within the artifact folder
      * @since 1.5.8
      */
-    public void executePublishFileArtifact(File file, String path)
+    protected void executePublishFileArtifact(File file, String path)
     throws UploadException {
         try {
             var digest_md5 = MessageDigest.getInstance("MD5");
@@ -299,7 +308,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @param file the file whose signature will be generated
      * @since 1.5.8
      */
-    public String executeSignFile(File file)
+    protected String executeSignFile(File file)
     throws IOException, FileUtilsErrorException {
         var gpg_path = info().signGpgPath();
         if (gpg_path == null) {
@@ -328,7 +337,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @param path the path of the file within the artifact folder
      * @since 1.5.10
      */
-    public void executeTransferArtifact(File file, String path)
+    protected void executeTransferArtifact(File file, String path)
     throws FileUtilsErrorException, IOException {
         if (repository().isLocal()) {
             executeStoreArtifact(file, path);
@@ -344,7 +353,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @param path the path of the file within the artifact folder
      * @since 1.5.10
      */
-    public void executeTransferArtifact(String content, String path)
+    protected void executeTransferArtifact(String content, String path)
     throws FileUtilsErrorException, IOException {
         if (repository().isLocal()) {
             executeStoreArtifact(content, path);
@@ -360,7 +369,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @param path the path of the file within the artifact folder
      * @since 1.5.10
      */
-    public void executeStoreArtifact(File file, String path)
+    protected void executeStoreArtifact(File file, String path)
     throws FileUtilsErrorException {
         var location = repository().getArtifactLocation(info().groupId(), info().artifactId()) + path;
         System.out.print("Storing: " + location + " ... ");
@@ -384,7 +393,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @param path the path of the file within the artifact folder
      * @since 1.5.10
      */
-    public void executeStoreArtifact(String content, String path)
+    protected void executeStoreArtifact(String content, String path)
     throws FileUtilsErrorException {
         var location = repository().getArtifactLocation(info().groupId(), info().artifactId()) + path;
         System.out.print("Storing: " + location + " ... ");
@@ -408,7 +417,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @param path the path of the file within the artifact folder
      * @since 1.5.10
      */
-    public void executeUploadArtifact(HttpRequest.BodyPublisher body, String path) {
+    protected void executeUploadArtifact(HttpRequest.BodyPublisher body, String path) {
         var url = repository().getArtifactLocation(info().groupId(), info().artifactId()) + path;
         System.out.print("Uploading: " + url + " ... ");
         System.out.flush();

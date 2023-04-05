@@ -53,8 +53,8 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      *
      * @since 1.5
      */
-    public void executePurgeCompileDependencies() {
-        executePurgeScopedDependencies(libCompileDirectory(), new Scope[]{Scope.compile}, new Scope[]{Scope.compile}, null);
+    protected void executePurgeCompileDependencies() {
+        executePurgeScopedDependencies(libCompileDirectory(), new Scope[]{Scope.provided, Scope.compile}, new Scope[]{Scope.compile}, null);
     }
 
     /**
@@ -62,16 +62,21 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      *
      * @since 1.5
      */
-    public void executePurgeRuntimeDependencies() {
-        DependencySet excluded = null;
+    protected void executePurgeRuntimeDependencies() {
+        var excluded = new DependencySet();
+        var provided_dependencies = dependencies().get(Scope.provided);
+        if (provided_dependencies != null) {
+            for (var dependency : provided_dependencies) {
+                excluded.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile));
+            }
+        }
         var compile_dependencies = dependencies().get(Scope.compile);
         if (compile_dependencies != null) {
             for (var dependency : compile_dependencies) {
-                excluded = new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile);
+                excluded.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile));
             }
         }
-
-        executePurgeScopedDependencies(libRuntimeDirectory(), new Scope[]{Scope.compile, Scope.runtime}, new Scope[]{Scope.runtime}, excluded);
+        executePurgeScopedDependencies(libRuntimeDirectory(), new Scope[]{Scope.provided, Scope.compile, Scope.runtime}, new Scope[]{Scope.runtime}, excluded);
     }
 
     /**
@@ -79,7 +84,7 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      *
      * @since 1.5
      */
-    public void executePurgeStandaloneDependencies() {
+    protected void executePurgeStandaloneDependencies() {
         executePurgeScopedDependencies(libStandaloneDirectory(), new Scope[]{Scope.standalone}, new Scope[]{Scope.compile, Scope.runtime}, null);
     }
 
@@ -88,7 +93,7 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      *
      * @since 1.5
      */
-    public void executePurgeTestDependencies() {
+    protected void executePurgeTestDependencies() {
         executePurgeScopedDependencies(libTestDirectory(), new Scope[]{Scope.test}, new Scope[]{Scope.compile, Scope.runtime}, null);
     }
 
@@ -100,7 +105,7 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      * @param transitiveScopes     the scopes to use to resolve the transitive dependencies
      * @since 1.5.5
      */
-    public void executePurgeScopedDependencies(File destinationDirectory, Scope[] resolvedScopes, Scope[] transitiveScopes, DependencySet excluded) {
+    protected void executePurgeScopedDependencies(File destinationDirectory, Scope[] resolvedScopes, Scope[] transitiveScopes, DependencySet excluded) {
         if (destinationDirectory == null) {
             return;
         }

@@ -55,7 +55,7 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
      *
      * @since 1.5
      */
-    public void executeCreateBuildDirectories() {
+    protected void executeCreateBuildDirectories() {
         if (buildMainDirectory() != null) {
             buildMainDirectory().mkdirs();
         }
@@ -69,7 +69,7 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
      *
      * @since 1.5
      */
-    public void executeBuildMainSources()
+    protected void executeBuildMainSources()
     throws IOException {
         var sources = new ArrayList<>(mainSourceFiles());
         for (var directory : mainSourceDirectories()) {
@@ -86,7 +86,7 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
      *
      * @since 1.5
      */
-    public void executeBuildTestSources()
+    protected void executeBuildTestSources()
     throws IOException {
         var sources = new ArrayList<>(testSourceFiles());
         for (var directory : testSourceDirectories()) {
@@ -106,7 +106,7 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
      * @param destination the destination directory
      * @since 1.5
      */
-    public void executeBuildSources(List<String> classpath, List<File> sources, File destination)
+    protected void executeBuildSources(List<String> classpath, List<File> sources, File destination)
     throws IOException {
         if (sources.isEmpty() || destination == null) {
             return;
@@ -132,7 +132,7 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
      * @param diagnostics the diagnostics to process
      * @since 1.5
      */
-    public void executeProcessDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics) {
+    protected void executeProcessDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics) {
         for (var diagnostic : diagnostics.getDiagnostics()) {
             System.err.print(executeFormatDiagnostic(diagnostic));
         }
@@ -145,7 +145,7 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
      * @return a string representation of the diagnostic
      * @since 1.5
      */
-    public String executeFormatDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic) {
+    protected String executeFormatDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic) {
         return diagnostic.toString() + System.lineSeparator();
     }
 

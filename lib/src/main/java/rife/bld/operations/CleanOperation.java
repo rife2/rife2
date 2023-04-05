@@ -41,7 +41,7 @@ public class CleanOperation extends AbstractOperation<CleanOperation> {
      * @param directory the directory to clean.
      * @since 1.5
      */
-    public void executeCleanDirectory(File directory) {
+    protected void executeCleanDirectory(File directory) {
         try {
             FileUtils.deleteDirectory(directory);
         } catch (FileUtilsErrorException e) {

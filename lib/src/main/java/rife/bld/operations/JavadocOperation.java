@@ -53,7 +53,7 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
      *
      * @since 1.5.10
      */
-    public void executeCreateBuildDirectories() {
+    protected void executeCreateBuildDirectories() {
         if (buildDirectory() != null) {
             buildDirectory().mkdirs();
         }
@@ -64,7 +64,7 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
      *
      * @since 1.5.10
      */
-    public void executeBuildSources()
+    protected void executeBuildSources()
     throws IOException {
         executeBuildSources(
             classpath(),
@@ -80,7 +80,7 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
      * @param destination the destination directory
      * @since 1.5.10
      */
-    public void executeBuildSources(List<String> classpath, List<File> sources, File destination)
+    protected void executeBuildSources(List<String> classpath, List<File> sources, File destination)
     throws IOException {
         if (sources.isEmpty() || destination == null) {
             return;
@@ -113,7 +113,7 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
      * @param diagnostics the diagnostics to process
      * @since 1.5.10
      */
-    public void executeProcessDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics) {
+    protected void executeProcessDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics) {
         for (var diagnostic : diagnostics.getDiagnostics()) {
             System.err.print(executeFormatDiagnostic(diagnostic));
         }
@@ -126,7 +126,7 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
      * @return a string representation of the diagnostic
      * @since 1.5.10
      */
-    public String executeFormatDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic) {
+    protected String executeFormatDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic) {
         return diagnostic.toString() + System.lineSeparator();
     }
 

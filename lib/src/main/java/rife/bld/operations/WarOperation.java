@@ -63,7 +63,7 @@ public class WarOperation extends AbstractOperation<WarOperation> {
      *
      * @since 1.5
      */
-    public File executeCreateWebInfDirectory(File stagingDirectory) {
+    protected File executeCreateWebInfDirectory(File stagingDirectory) {
         var web_inf_dir = new File(stagingDirectory, "WEB-INF");
         web_inf_dir.mkdirs();
         return web_inf_dir;
@@ -74,7 +74,7 @@ public class WarOperation extends AbstractOperation<WarOperation> {
      *
      * @since 1.5
      */
-    public void executeCopyWebappDirectory(File stagingDirectory)
+    protected void executeCopyWebappDirectory(File stagingDirectory)
     throws FileUtilsErrorException {
         if (webappDirectory() != null) {
             FileUtils.copyDirectory(webappDirectory(), stagingDirectory);
@@ -86,7 +86,7 @@ public class WarOperation extends AbstractOperation<WarOperation> {
      *
      * @since 1.5
      */
-    public void executeCopyWebInfLibJars(File stagingWebInfDirectory)
+    protected void executeCopyWebInfLibJars(File stagingWebInfDirectory)
     throws FileUtilsErrorException {
         var web_inf_lib_dir = new File(stagingWebInfDirectory, "lib");
         if (!libSourceDirectories().isEmpty()) {
@@ -109,7 +109,7 @@ public class WarOperation extends AbstractOperation<WarOperation> {
      *
      * @since 1.5
      */
-    public void executeCopyWebInfClassesFiles(File stagingWebInfDirectory)
+    protected void executeCopyWebInfClassesFiles(File stagingWebInfDirectory)
     throws FileUtilsErrorException {
         var web_inf_classes_dir = new File(stagingWebInfDirectory, "classes");
         if (!classesSourceDirectories().isEmpty()) {
@@ -125,7 +125,7 @@ public class WarOperation extends AbstractOperation<WarOperation> {
      *
      * @since 1.5
      */
-    public void executeCopyWebXmlFile(File stagingWebInfDirectory)
+    protected void executeCopyWebXmlFile(File stagingWebInfDirectory)
     throws FileUtilsErrorException {
         if (webXmlFile() != null) {
             FileUtils.copy(webXmlFile(), new File(stagingWebInfDirectory, "web.xml"));
@@ -137,7 +137,7 @@ public class WarOperation extends AbstractOperation<WarOperation> {
      *
      * @since 1.5
      */
-    public void executeCreateWarArchive(File stagingDirectory)
+    protected void executeCreateWarArchive(File stagingDirectory)
     throws IOException {
         new JarOperation()
             .sourceDirectories(List.of(stagingDirectory))

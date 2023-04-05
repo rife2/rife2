@@ -32,7 +32,7 @@ public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Ope
     }
 
     @Override
-    public void executeConfigure() {
+    protected void executeConfigure() {
         super.executeConfigure();
 
         projectMainName_ = projectClassName_ + "Site";
@@ -42,7 +42,7 @@ public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Ope
     }
 
     @Override
-    public void executeCreateProjectStructure() {
+    protected void executeCreateProjectStructure() {
         super.executeCreateProjectStructure();
 
         srcMainWebappCssDirectory_.mkdirs();
@@ -50,7 +50,7 @@ public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Ope
     }
 
     @Override
-    public void executePopulateProjectStructure()
+    protected void executePopulateProjectStructure()
     throws FileUtilsErrorException, IOException {
         super.executePopulateProjectStructure();
 
@@ -82,7 +82,7 @@ public class CreateRife2Operation extends AbstractCreateOperation<CreateRife2Ope
     }
 
     @Override
-    public void executePopulateIdeaProject()
+    protected void executePopulateIdeaProject()
     throws FileUtilsErrorException {
         super.executePopulateIdeaProject();
         FileUtils.writeString(

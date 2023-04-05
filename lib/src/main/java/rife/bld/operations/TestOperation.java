@@ -62,7 +62,7 @@ public class TestOperation extends AbstractOperation<TestOperation> {
      *
      * @since 1.5
      */
-    public List<String> executeConstructProcessCommandList() {
+    protected List<String> executeConstructProcessCommandList() {
         var args = new ArrayList<String>();
         args.add(javaTool());
         args.addAll(javaOptions());
@@ -78,7 +78,7 @@ public class TestOperation extends AbstractOperation<TestOperation> {
      *
      * @since 1.5
      */
-    public Process executeStartProcess()
+    protected Process executeStartProcess()
     throws IOException {
         var builder = new ProcessBuilder(executeConstructProcessCommandList());
         builder.directory(workDirectory());
@@ -103,7 +103,7 @@ public class TestOperation extends AbstractOperation<TestOperation> {
      * {@code false} when it was erroneous
      * @since 1.5.1
      */
-    public boolean executeHandleProcessOutput(String output, String error) {
+    protected boolean executeHandleProcessOutput(String output, String error) {
         boolean result = true;
         if (outputProcessor() != null) {
             result |= outputProcessor().apply(output);

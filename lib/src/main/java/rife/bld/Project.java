@@ -1549,6 +1549,7 @@ public class Project extends BuildExecutor {
         // build the compilation classpath
         var classpath = new ArrayList<>(jar_files.stream().map(file -> new File(dir_abs, file)).toList());
         addLocalDependencies(classpath, Scope.compile);
+        addLocalDependencies(classpath, Scope.provided);
         return classpath;
     }
 

@@ -45,7 +45,7 @@ public class PrecompileOperation extends AbstractOperation<PrecompileOperation> 
      *
      * @since 1.5
      */
-    public List<TemplateFactory> executeGetTemplateFactories() {
+    protected List<TemplateFactory> executeGetTemplateFactories() {
         var template_factories = new ArrayList<TemplateFactory>();
         for (var type : templateTypes()) {
             var factory = TemplateFactory.getFactory(type.identifier());
@@ -65,7 +65,7 @@ public class PrecompileOperation extends AbstractOperation<PrecompileOperation> 
      *
      * @since 1.5
      */
-    public TemplateDeployer executeCreateTemplateDeployer() {
+    protected TemplateDeployer executeCreateTemplateDeployer() {
         return new TemplateDeployer()
             .verbose(true)
             .directoryPaths(FileUtils.combineToAbsolutePaths(sourceDirectories()))
